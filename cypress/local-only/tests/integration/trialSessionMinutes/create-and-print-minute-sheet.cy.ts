@@ -429,8 +429,9 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
       });
 
       it('Can open Seriatim Memorandum Brief section', () => {
-        cy.get('#briefType').select('Seriatim Memorandum Brief');
-        cy.get('#briefType').should('have.value', 'Seriatim Memorandum Brief');
+        cy.get('#briefType').select('Simultaneous Brief');
+        cy.get('#briefType').should('have.value', 'Simultaneous Brief');
+        cy.get('#openingNote').should('not.have.value');
       });
     });
 

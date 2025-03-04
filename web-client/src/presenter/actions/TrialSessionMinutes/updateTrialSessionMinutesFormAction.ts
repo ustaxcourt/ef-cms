@@ -80,29 +80,6 @@ export const handleBriefTypeChange = ({ store, value }) => {
         partyType: '',
       },
     },
-    [BRIEF_TYPE_OPTIONS.seriatimMemorandum]: {
-      answering: {
-        dueDate: '',
-        note: '',
-        partyType: '',
-      },
-      opening: {
-        dueDate: '',
-        note: '',
-        partyType: '',
-      },
-      reply: {
-        dueDate: '',
-        note: '',
-        partyType: '',
-      },
-      surReply: {
-        dueDate: '',
-        note: '',
-        partyType: '',
-      },
-    },
-
     [BRIEF_TYPE_OPTIONS.simultaneousSupplemental]: {
       simultaneousSupplemental: {
         dueDate: '',
@@ -127,20 +104,6 @@ export const handleBriefTypeChange = ({ store, value }) => {
         dueDate: '',
         note: '',
         partyType: '',
-      },
-    },
-    [BRIEF_TYPE_OPTIONS.simultaneousMemorandum]: {
-      answering: {
-        dueDate: '',
-        note: '',
-      },
-      opening: {
-        dueDate: '',
-        note: '',
-      },
-      surReply: {
-        dueDate: '',
-        note: '',
       },
     },
     [BRIEF_TYPE_OPTIONS.simultaneousMemoranda]: {
