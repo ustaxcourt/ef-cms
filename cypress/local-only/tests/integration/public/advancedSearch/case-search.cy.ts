@@ -55,6 +55,32 @@ describe('Case Search', () => {
         },
       );
     });
+
+    it.only('should show partial matches for petitioner name and secondary contact', () => {
+      const primaryLastName = faker.person.lastName();
+      const secondaryLastName = faker.person.lastName();
+      const secondaryName = `Terrance ${secondaryLastName}`;
+      const primaryName = `Jade ${primaryLastName}`;
+
+      createAndServePaperPetitionMyselfAndSpouse({
+        secondaryContactName: secondaryName,
+        primaryContactName: primaryName,
+      }).then(({ docketNumber }) => {
+        cy.visit('/');
+        cy.get('[data-testid=petitioner-name]').clear();
+        cy.get('[data-testid=petitioner-name]').type(primaryLastName);
+        cy.get('[data-testid=submit-case-search-by-name-button]').click();
+        cy.get(
+          `[data-testid=advanced-case-search-result-${docketNumber}]`,
+        ).find(`[data-testid=advanced-case-search-result-order-${0}]`);
+
+        cy.get('[data-testid=petitioner-name]').clear();
+        cy.get('[data-testid=petitioner-name]').type(secondaryLastName);        cy.get('[data-testid=submit-case-search-by-name-button]').click();
+        cy.get(
+          `[data-testid=advanced-case-search-result-${docketNumber}]`,
+        ).find(`[data-testid=advanced-case-search-result-order-${0}]`);
+      });
+    });
   });
 
   describe('case - by docket number', () => {

@@ -210,10 +210,13 @@ export function createAndServePaperPetition(
 
 export function createAndServePaperPetitionMyselfAndSpouse(
   {
+    primaryContactName = 'John',
     secondaryContactName = 'John Spouse',
   }: Partial<{
+    primaryContactName: string;
     secondaryContactName: string;
   }> = {
+    primaryContactName: 'John',
     secondaryContactName: 'John Spouse',
   },
 ): Cypress.Chainable<{
@@ -225,7 +228,7 @@ export function createAndServePaperPetitionMyselfAndSpouse(
   cy.get('[data-testid="start-a-petition"]').click();
 
   cy.get('#party-type').select('Petitioner & spouse');
-  cy.get('[data-testid="contact-primary-name"]').type('John');
+  cy.get('[data-testid="contact-primary-name"]').type(primaryContactName);
   cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
   cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
   cy.get('[data-testid="contactPrimary.state"]').select('AK');
