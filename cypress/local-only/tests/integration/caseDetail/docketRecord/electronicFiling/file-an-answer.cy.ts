@@ -1,5 +1,4 @@
 import { attachFile } from '../../../../../../helpers/file/upload-file';
-import { navigateTo as navigateToDashboard } from '../../../../../support/pages/dashboard';
 import { selectTypeaheadInput } from '../../../../../../helpers/components/typeAhead/select-typeahead-input';
 import { loginAsIrsPractitioner } from 'cypress/helpers/authentication/login-as-helpers';
 
@@ -49,7 +48,7 @@ describe('Filing an Answer', function () {
     // eslint-disable-next-line cypress/no-unnecessary-waiting
     cy.wait(SLEEP);
 
-    navigateToDashboard('irspractitioner');
+    loginAsIrsPractitioner('irsPractitioner@example.com');
     cy.get('table#case-list').find('a').should('contain', '104-18');
   });
 });
