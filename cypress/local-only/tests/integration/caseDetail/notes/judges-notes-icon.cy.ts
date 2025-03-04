@@ -9,20 +9,19 @@ import {
 } from '../../../../support/pages/document-qc';
 import { fillInCreateCaseFromPaperForm } from '../../../../support/pages/create-paper-petition';
 
-import {
-  getCreateACaseButton,
-  navigateTo as navigateToDocumentQC,
-} from '../../../../support/pages/document-qc';
+import { getCreateACaseButton } from '../../../../support/pages/document-qc';
 import {
   loginAsColvin,
   loginAsColvinChambers,
   loginAsDocketClerk,
+  loginAsPetitionsClerk,
 } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Notes Icon triggered by Judges Notes', () => {
   let newDocketNumber: string;
   beforeEach(() => {
-    navigateToDocumentQC('petitionsclerk');
+    loginAsPetitionsClerk();
+    cy.visit('/document-qc');
 
     getCreateACaseButton().click();
     cy.get('#tab-parties').should('have.attr', 'aria-selected');
