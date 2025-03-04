@@ -17,6 +17,7 @@ import {
 } from '../../../support/pages/dashboard';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
+  login,
   loginAsAdc,
   loginAsDocketClerk,
   loginAsPetitionsClerk,
@@ -56,7 +57,7 @@ describe('Messages', () => {
     describe('Docket clerk creates and sends a message on a "New" case', () => {
       it('should go to case detail and open the dialog to create a new message', () => {
         loginAsDocketClerk();
-        cy.visit('/case-detail/102-20')
+        cy.visit('/case-detail/102-20');
         createMessage();
         selectSection('ADC');
         selectRecipient('Test ADC');
@@ -417,18 +418,19 @@ describe('Messages', () => {
   describe('Message Filters', () => {
     describe('Display', () => {
       [
-        'adc',
-        'judgecolvin',
-        'docketclerk',
-        'admissionsclerk',
-        'colvinschambers',
-        'trialclerk',
-        'reportersoffice',
-        'petitionsclerk',
-        'general',
+        'adc@example.com',
+        'judgecolvin@example.com',
+        'docketclerk@example.com',
+        'admissionsclerk@example.com',
+        'colvinschambers@example.com',
+        'trialclerk@example.com',
+        'reportersoffice@example.com',
+        'petitionsclerk@example.com',
+        'general@example.com',
       ].forEach(account => {
         it(`should display the filters for Court User "${account}"`, () => {
-          cy.login(account, '/messages/my/inbox');
+          login({ email: account });
+          cy.visit('/messages/my/inbox');
           cy.get('[data-testid="table-filters-component"]').should(
             'be.visible',
           );
