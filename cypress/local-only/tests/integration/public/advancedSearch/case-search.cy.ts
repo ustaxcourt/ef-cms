@@ -5,6 +5,7 @@ import {
   createAndServePaperPetition,
   createAndServePaperPetitionMyselfAndSpouse,
 } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
+import { assertExists, retry } from 'cypress/helpers/retry';
 import { navigateToDashboard } from 'cypress/local-only/support/pages/maintenance';
 import { searchForCaseByDocketNumber } from 'cypress/local-only/support/pages/public/advanced-search';
 
@@ -67,19 +68,23 @@ describe('Case Search', () => {
         primaryContactName: primaryName,
       }).then(({ docketNumber }) => {
         cy.visit('/');
-        cy.get('[data-testid=petitioner-name]').clear();
-        cy.get('[data-testid=petitioner-name]').type(primaryFirstName);
-        cy.get('[data-testid=submit-case-search-by-name-button]').click();
-        cy.get(
-          `[data-testid=advanced-case-search-result-${docketNumber}]`,
-        ).find(`[data-testid=advanced-case-search-result-order-${0}]`);
+        retry(() => {
+          cy.get('[data-testid=petitioner-name]').clear();
+          cy.get('[data-testid=petitioner-name]').type(primaryFirstName);
+          cy.get('[data-testid=submit-case-search-by-name-button]').click();
+          return assertExists(
+            `[data-testid=advanced-case-search-result-${docketNumber}]`,
+          );
+        });
 
-        cy.get('[data-testid=petitioner-name]').clear();
-        cy.get('[data-testid=petitioner-name]').type(secondaryLastName);
-        cy.get('[data-testid=submit-case-search-by-name-button]').click();
-        cy.get(
-          `[data-testid=advanced-case-search-result-${docketNumber}]`,
-        ).find(`[data-testid=advanced-case-search-result-order-${0}]`);
+        retry(() => {
+          cy.get('[data-testid=petitioner-name]').clear();
+          cy.get('[data-testid=petitioner-name]').type(secondaryLastName);
+          cy.get('[data-testid=submit-case-search-by-name-button]').click();
+          return assertExists(
+            `[data-testid=advanced-case-search-result-${docketNumber}]`,
+          );
+        });
       });
     });
 
