@@ -5,7 +5,7 @@ import { petitionsClerkServesPetition } from '../../../../helpers/documentQC/pet
 import { respondentModifiesContactInfo } from '../../../../helpers/myAccount/respondent-modifies-contact-info';
 
 const BAR_NUMBER = 'WN7777';
-const USER = 'irspractitioner2';
+const USER = 'irspractitioner2@example.com';
 
 describe('a respondent modifies their address', () => {
   it('should generate a notice of change address for all cases associated with the respondent', function () {

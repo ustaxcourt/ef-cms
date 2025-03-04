@@ -9,7 +9,10 @@ import { createAPetitioner } from '../../../helpers/accountCreation/create-a-pet
 import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
-import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
+import {
+  login,
+  loginAsPetitioner,
+} from '../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { v4 } from 'uuid';
@@ -32,13 +35,13 @@ describe('Petitioner Updates e-mail', () => {
     Then they should be alerted that they need to confirm their new email
   */
   it('should alert the petitioner that they need to verify their new email address when the user changes their email but does not verify their new email', () => {
-    const username = `cypress_test_account+old${v4()}`;
-    const email = `${username}@example.com`;
+    // const username = `cypress_test_account+old${v4()}`;
+    const email = `cypress_test_account+old${v4()}@example.com`;
     const password = getCypressEnv().defaultAccountPass;
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
-    cy.login(username);
+    login({ email });
     cy.get('[data-testid="account-menu-button"]').click();
     cy.get('[data-testid="my-account-link"]').click();
     const newUsername = `cypress_test_account+new${v4()}`;
@@ -66,21 +69,19 @@ describe('Petitioner Updates e-mail', () => {
     And they should NOT be able to log in using their old email
   */
   it('should allow a petitioner to login with their updated email and have all associated cases updated with the new email when the user changes their email address and verifies it', () => {
-    const username = `cypress_test_account+${v4()}`;
-    const email = `${username}@example.com`;
+    const email = `cypress_test_account+${v4()}@example.com`;
     const password = getCypressEnv().defaultAccountPass;
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
 
-    cy.login(username);
+    login({ email });
 
     externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
-      const updatedUsername = `cypress_test_account+${v4()}`;
-      const updatedEmail = `${updatedUsername}@example.com`;
-      cy.login(username);
+      const updatedEmail = `cypress_test_account+${v4()}@example.com`;
+      login({ email });
       goToMyAccount();
       clickChangeEmail();
       changeEmailTo(updatedEmail);
@@ -100,7 +101,7 @@ describe('Petitioner Updates e-mail', () => {
           'Your email address is verified. You can now log in to DAWSON.',
         );
       cy.url().should('contain', '/login');
-      cy.login(updatedUsername);
+      login({ email: updatedEmail });
 
       cy.get('[data-testid="my-cases-link"]');
       cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
@@ -143,16 +144,14 @@ describe('Petitioner Updates e-mail', () => {
   });
 
   it('should show error alert and not update the petitioner email address when they enter the incorrect email confirmation code', () => {
-    const username = `cypress_test_account+${v4()}`;
-    const email = `${username}@example.com`;
+    const email = `cypress_test_account+${v4()}@example.com`;
     const password = getCypressEnv().defaultAccountPass;
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
 
-    const updatedUsername = `cypress_test_account+${v4()}`;
-    const updatedEmail = `${updatedUsername}@example.com`;
-    cy.login(username);
+    const updatedEmail = `cypress_test_account+${v4()}@example.com`;
+    login({ email });
     goToMyAccount();
     clickChangeEmail();
     changeEmailTo(updatedEmail);

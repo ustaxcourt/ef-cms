@@ -1,7 +1,10 @@
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
-import { loginAsAdmissionsClerk } from '../../../../helpers/authentication/login-as-helpers';
+import {
+  login,
+  loginAsAdmissionsClerk,
+} from '../../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
 
@@ -96,8 +99,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
     Then their email should be updated on their associated cases
   */
   it('should update the practitioner`s email address when the admissions clerk enters one that is NOT already associated with a DAWSON account', () => {
-    const practitionerUserName = `cypress_test_account+${v4()}`;
-    const practitionerEmail = `${practitionerUserName}@example.com`;
+    const practitionerEmail = `cypress_test_account+${v4()}@example.com`;
     loginAsAdmissionsClerk('admissionsclerk1@example.com');
     cy.get('[data-testid="messages-banner"]');
     cy.get('[data-testid="search-link"]').click();
@@ -169,7 +171,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           );
           logout();
 
-          cy.login(practitionerUserName);
+          login({ email: practitionerEmail });
           cy.get('[data-testid="my-cases-link"]');
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
@@ -210,7 +212,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           );
           logout();
 
-          cy.login(practitionerUserName);
+          login({ email: practitionerEmail });
           cy.task('getEmailVerificationToken', {
             email: practitionerEmail,
           }).then(verificationToken => {
@@ -222,7 +224,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
               'contain.text',
               'Your email address is verified. You can now log in to DAWSON.',
             );
-          cy.login(updatedPractitionerUserName);
+          login({ email: updatedPractitionerEmail });
           cy.get('[data-testid="my-cases-link"]');
           cy.task('waitForPractitionerEmailUpdate', {
             docketNumber,

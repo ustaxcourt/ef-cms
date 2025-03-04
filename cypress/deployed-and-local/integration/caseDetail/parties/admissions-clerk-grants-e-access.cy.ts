@@ -5,6 +5,7 @@ import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 import { logout } from '../../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
 import {
+  login,
   loginAsAdmissionsClerk,
   loginAsDocketClerk1,
 } from 'cypress/helpers/authentication/login-as-helpers';
@@ -174,8 +175,7 @@ describe('Admissions Clerk Grants E-Access', () => {
     And view their case
   */
   it('should allow a practitioner to login and view their case when an admissions clerk grants e-access to a practitioner', () => {
-    const practitionerUserName = `cypress_test_account+${v4()}`;
-    const practitionerEmail = `${practitionerUserName}@example.com`;
+    const practitionerEmail = `cypress_test_account+${v4()}@example.com`;
     loginAsAdmissionsClerk('admissionsclerk1@example.com');
     cy.get('[data-testid="messages-banner"]');
     cy.get('[data-testid="search-link"]').click();
@@ -237,7 +237,7 @@ describe('Admissions Clerk Grants E-Access', () => {
           cy.get('[data-testid="practitioner-representing-0"]').click();
           cy.get('[data-testid="modal-button-confirm"]').click();
           logout();
-          cy.login(practitionerUserName);
+          login({ email: practitionerEmail });
           cy.get('[data-testid="my-cases-link"]');
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
