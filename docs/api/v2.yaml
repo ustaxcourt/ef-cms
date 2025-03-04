@@ -247,6 +247,8 @@ components:
           type: string
         state:
           type: string
+        country:
+          type: string
         postalCode:
           type: string
     DocketEntry:
