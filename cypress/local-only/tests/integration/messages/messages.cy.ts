@@ -17,6 +17,7 @@ import {
 } from '../../../support/pages/dashboard';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
+  loginAsAdc,
   loginAsDocketClerk,
   loginAsPetitionsClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
@@ -25,7 +26,8 @@ describe('Messages', () => {
   describe('Message filtering', () => {
     describe('Docket clerk completes qc and sends a message', () => {
       it('should go to section document QC inbox, complete an item needing qc, and send a message', () => {
-        cy.login('docketclerk', '/document-qc/section/inbox');
+        loginAsDocketClerk();
+        cy.visit('/document-qc/section/inbox');
         cy.get('.big-blue-header').should('exist');
         goToDocumentNeedingQC();
         openCompleteAndSendMessageDialog();
@@ -39,7 +41,8 @@ describe('Messages', () => {
 
     describe('Docket clerk creates and sends a message on a "Calendared" case', () => {
       it('should go to case detail and open the dialog to create a new message', () => {
-        cy.login('docketclerk', '/case-detail/103-20');
+        loginAsDocketClerk();
+        cy.visit('/case-detail/103-20');
         createMessage();
         selectSection('ADC');
         selectRecipient('Test ADC');
@@ -52,7 +55,8 @@ describe('Messages', () => {
 
     describe('Docket clerk creates and sends a message on a "New" case', () => {
       it('should go to case detail and open the dialog to create a new message', () => {
-        cy.login('docketclerk', '/case-detail/102-20');
+        loginAsDocketClerk();
+        cy.visit('/case-detail/102-20')
         createMessage();
         selectSection('ADC');
         selectRecipient('Test ADC');
@@ -65,7 +69,7 @@ describe('Messages', () => {
 
     describe('ADC views messages', () => {
       it('should be able to filter messages', () => {
-        cy.login('adc');
+        loginAsAdc();
         getCaseStatusFilter();
         selectsCaseStatusFilterNew();
         messagesShouldBeFiltered();
@@ -517,7 +521,7 @@ function sendMessagesToCompletedTab(DOCKET_CLERK_ID: string) {
     cy.get('[data-testid="success-alert"]').should('exist');
   }
 
-  cy.login('docketclerk');
+  loginAsDocketClerk();
   cy.get('[data-testid="all-messages-checkbox"]').click();
   cy.get('[data-testid="message-batch-mark-as-complete"]').click();
   cy.get('[data-testid="message-detail-success-alert"]').should('exist');
