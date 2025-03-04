@@ -73,7 +73,7 @@ describe('File a petition: Intro', () => {
   describe('Practitioner', () => {
     describe('Welcome Page', () => {
       beforeEach(() => {
-        cy.login('privatePractitioner3');
+        loginAsPrivatePractitioner('privatePractitioner3@example.com')
       });
       it('should display correct welcome message text for practitioner', () => {
         cy.get('[data-testid="warning-alert-title"]').should(
