@@ -73,15 +73,18 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
 
   describe('Fill out minute sheet form', function () {
     describe('Fill out trial session metadata', function () {
-      it('Can see auto filled inputs in Metadata section', function () {
+      before(function () {
         loginAsTrialClerk();
         cy.visit('/trial-sessions');
         cy.get(
           `[data-testid="trial-location-link-${this.trialSessionId}"]`,
         ).click();
-        cy.get(
-          `[data-testid="minute-sheet-button-${this.docketNumber}"]`,
-        ).click();
+        cy.get(`[data-testid="minute-sheet-button-${this.docketNumber}"]`)
+          .invoke('removeAttr', 'target')
+          .click();
+      });
+
+      it('Can see auto filled inputs in Metadata section', function () {
         cy.get('#judge').contains('Lewis R. Carluzzo');
         cy.get('#trialClerk').should('have.value', 'Test trialclerk1');
       });
@@ -521,9 +524,9 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
         cy.get(
           `[data-testid="trial-location-link-${this.trialSessionId}"]`,
         ).click();
-        cy.get(
-          `[data-testid="minute-sheet-button-${this.docketNumber}"]`,
-        ).click();
+        cy.get(`[data-testid="minute-sheet-button-${this.docketNumber}"]`)
+          .invoke('removeAttr', 'target')
+          .click();
         cy.get('#remoteSession').should('be.checked');
         cy.get('#courtReporter').should('have.value', 'Test Court Reporter');
       });
