@@ -292,7 +292,7 @@ describe('initializeMinuteSheet', () => {
       caseDetail: {
         ...MOCK_CASE,
         petitioners: [mockCasePetitioner],
-        privatePractitioners: [{ representing: ['123'] }],
+        privatePractitioners: [],
       },
       formattedTrialSession: mockFormattedTrialSession,
       currentUser: { ...mockValidUser, email: 'test@example.com' },
@@ -542,7 +542,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       });
     });
 
-    it('should give petitioners as counsel role they have representation', () => {
+    it('should give list private practitioner names with counsel role and not the petitioner name when a petitioner has representation', () => {
       const result = getPetitionersFromCase({
         petitioners: [
           {
@@ -551,13 +551,13 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
             name: 'Test Petitioner',
           },
         ],
-        privatePractitioners: [{ representing: ['123'] }],
+        privatePractitioners: [{ name: 'Lawyer X', representing: ['123'] }],
       } as any);
 
       const entries = Object.values(result);
       expect(entries).toHaveLength(1);
       expect(entries[0]).toMatchObject({
-        name: 'Test Petitioner',
+        name: 'Lawyer X',
         role: PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.counsel],
       });
     });
@@ -567,11 +567,11 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
         petitioners: [
           {
             contactId: '123',
-            contactType: CONTACT_TYPES.primary,
+            contactType: 'Super Petitioner',
             name: 'Test Petitioner',
           },
         ],
-        privatePractitioners: [{ representing: ['123'] }],
+        privatePractitioners: [],
       } as any);
 
       const entries = Object.values(result);
@@ -591,7 +591,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
             name: 'Test Petitioner',
           },
         ],
-        privatePractitioners: [{ representing: ['123'] }],
+        privatePractitioners: [],
       } as any);
 
       const entries = Object.values(result);
@@ -601,6 +601,47 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
         role: PETITIONER_ROLE_OPTIONS_INVERTED[
           PETITIONER_ROLE_OPTIONS.intervenor
         ],
+      });
+    });
+
+    it('should not include an intervenor party when they have representation', () => {
+      const result = getPetitionersFromCase({
+        petitioners: [
+          {
+            contactId: '123',
+            contactType: CONTACT_TYPES.intervenor,
+            name: 'Test Petitioner',
+          },
+        ],
+        privatePractitioners: [
+          { name: 'Practitioner X', representing: ['123'] },
+        ],
+      } as any);
+
+      const entries = Object.values(result);
+      expect(entries).toHaveLength(1);
+      expect(entries[0]).toMatchObject({
+        name: 'Practitioner X',
+        role: PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.counsel],
+      });
+    });
+
+    it('should handle an undefined privatePractitioners property as if no petitioner has representation', () => {
+      const result = getPetitionersFromCase({
+        petitioners: [
+          {
+            contactId: '123',
+            contactType: CONTACT_TYPES.petitioner,
+            name: 'Test Petitioner',
+          },
+        ],
+      } as any);
+
+      const entries = Object.values(result);
+      expect(entries).toHaveLength(1);
+      expect(entries[0]).toMatchObject({
+        name: 'Test Petitioner',
+        role: PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.proSe],
       });
     });
   });
