@@ -75,7 +75,7 @@ resource "aws_wafv2_web_acl" "apis" {
 
     statement {
       rate_based_statement {
-        limit                 = 300
+        limit                 = 600
         evaluation_window_sec = 60
         aggregate_key_type    = "CONSTANT"
 
