@@ -1264,7 +1264,7 @@ export const CONTACT_TYPES = {
   petitioner: 'petitioner',
   primary: 'primary',
   secondary: 'secondary',
-} as const;
+};
 
 export const CONTACT_TYPE_TITLES = {
   intervenor: 'Intervenor',
