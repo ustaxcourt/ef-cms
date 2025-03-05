@@ -11,6 +11,7 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
   MINUTE_ENTRIES_MAP,
+  MINUTE_SHEET_EVENT_CODES,
   MOTION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
@@ -657,6 +658,10 @@ export class DocketEntry extends JoiValidationEntity {
 
   static isNotice(eventCode: string): boolean {
     return DOCUMENT_NOTICE_EVENT_CODES.includes(eventCode);
+  }
+
+  static isMinuteSheet(eventCode: string): boolean {
+    return MINUTE_SHEET_EVENT_CODES.includes(eventCode);
   }
 
   static isSearchable(eventCode: string): boolean {

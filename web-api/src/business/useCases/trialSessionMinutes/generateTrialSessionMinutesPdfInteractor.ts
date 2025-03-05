@@ -17,6 +17,7 @@ import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getDownloadPolicyUrl } from '@web-api/persistence/s3/getDownloadPolicyUrl';
+import { generateMinuteSheetFilename } from '@web-api/business/useCaseHelper/trialSessionMinutes/generateMinuteSheetFilename';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -72,6 +73,7 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   const { url } = await getDownloadPolicyUrl({
     applicationContext,
     key: docketEntryId,
+    filename: generateMinuteSheetFilename({ trialSession }),
   });
 
   const documentTitle = `Minutes`;
