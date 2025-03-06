@@ -16,7 +16,10 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -267,27 +270,8 @@ export const determineEntitiesToLock = (
   ttl: 900,
 });
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  originalRequest,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'add_paper_filing',
-      },
-      userId: authorizedUser.userId,
-    });
-  }
-};
-
 export const addPaperFilingInteractor = withLocking(
   addPaperFiling,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

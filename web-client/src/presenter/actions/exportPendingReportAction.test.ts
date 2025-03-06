@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { exportPendingReportAction } from '@web-client/presenter/actions/exportPendingReportAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 
 describe('exportPendingReportAction', () => {
   const judgeName = 'Buch';
@@ -25,6 +26,7 @@ describe('exportPendingReportAction', () => {
         presenter,
       },
       state: {
+        [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {},
         pendingReports: {
           selectedJudge: judgeName,
         },

@@ -9,7 +9,6 @@ import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
   serveCourtIssuedDocumentInteractor,
 } from './serveCourtIssuedDocumentInteractor';
 import { docketClerkUser } from '@shared/test/mockUsers';
@@ -50,36 +49,6 @@ describe('determineEntitiesToLock', () => {
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|333-20');
-  });
-});
-
-describe('handleLockError', () => {
-  const mockClientConnectionId = '987654';
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
-  });
-
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: mockClientConnectionId,
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockDocketClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'serve_court_issued_document',
-    });
   });
 });
 
@@ -145,31 +114,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
           mockDocketClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        serveCourtIssuedDocumentInteractor(
-          applicationContext,
-          mockRequest,
-          mockDocketClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockClientConnectionId,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'serve_court_issued_document',
-        },
-        userId: mockDocketClerkUser.userId,
-      });
 
       expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });
