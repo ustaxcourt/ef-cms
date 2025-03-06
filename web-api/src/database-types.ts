@@ -1,7 +1,9 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
+import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 
 export interface Database {
   dwCase: CaseTable;
+  dwMinuteSheet: MinuteSheetTable;
   dwCaseCorrespondence: CaseCorrespondenceTable;
   dwCaseDeadline: CaseDeadlineTable;
   dwCaseWorksheet: CaseWorksheetTable;
@@ -132,3 +134,13 @@ export interface UserCaseNoteTable {
 export type UserCaseNoteKysely = Selectable<UserCaseNoteTable>;
 export type NewUserCaseNoteKysely = Insertable<UserCaseNoteTable>;
 export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
+
+export interface MinuteSheetTable {
+  trialSessionId: string;
+  docketNumber: string;
+  content: MinuteSheet;
+}
+
+export type MinuteSheetKysely = Selectable<MinuteSheetTable>;
+export type NewMinuteSheetKysely = Insertable<MinuteSheetTable>;
+export type UpdateMinuteSheetKysely = Updateable<MinuteSheetTable>;
