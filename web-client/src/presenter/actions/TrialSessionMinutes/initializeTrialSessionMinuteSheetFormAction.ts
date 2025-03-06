@@ -422,7 +422,6 @@ export const getTransformedPendingItemDetails = (
 };
 
 export const transformFiledBy = (pendingItem): string => {
-  console.log('pendingItem', pendingItem);
   if (DocketEntry.isOrder(pendingItem.eventCode))
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court];
 
