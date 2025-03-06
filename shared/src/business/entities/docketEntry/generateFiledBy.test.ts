@@ -137,6 +137,19 @@ describe('generateFiledBy', () => {
     expect(filedByResult).toEqual('Intvs. Bob & Bill');
   });
 
+  it('should generate correct filedbyBy when an intervenor and a petitioner are the filers', () => {
+    const mockIntervenor = { ...mockPetitioners[0], contactType: 'intervenor' };
+    const filedByResult = generateFiledBy({
+      docketEntry: {
+        ...mockDocketEntry,
+        filers: [mockPrimaryContactId, mockSecondaryContactId],
+      },
+      petitioners: [mockPetitioners[1], mockIntervenor],
+    });
+
+    expect(filedByResult).toEqual('Petr. Bill & Intv. Bob');
+  });
+
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false when values are present', () => {
     const filedByResult = generateFiledBy({
       docketEntry: {
