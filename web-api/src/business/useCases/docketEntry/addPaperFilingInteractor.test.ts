@@ -26,8 +26,10 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
-updateCase.mockImplementation(c => c.caseToUpdate);
+const updateCase = jest.mocked(updateCaseMock);
+updateCase.mockImplementation(({ caseToUpdate }) =>
+  Promise.resolve(caseToUpdate),
+);
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';

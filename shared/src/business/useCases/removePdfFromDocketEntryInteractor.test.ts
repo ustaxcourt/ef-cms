@@ -19,11 +19,14 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
+import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 
 describe('removePdfFromDocketEntryInteractor', () => {
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   const MOCK_CASE = {
     caseCaption: 'Caption',
@@ -83,7 +86,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       name: 'docket clerk',
     });
 
-    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(rawCaseEntity(MOCK_CASE));
 
     applicationContext
       .getPersistenceGateway()

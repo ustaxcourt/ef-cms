@@ -5,10 +5,13 @@ import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } fr
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('getCaseExistsInteractor', () => {
-  const getCaseMetadataByDocketNumber =
-    getCaseMetadataByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const getCaseMetadataByDocketNumber = jest.mocked(
+    getCaseMetadataByDocketNumberMock,
+  );
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   it('should format the given docket number before querying persistence, removing leading zeroes and suffix', async () => {
     getCaseMetadataByDocketNumber.mockResolvedValue(MOCK_CASE);

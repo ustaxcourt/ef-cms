@@ -12,7 +12,7 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 import { getReadyForTrialCases as getReadyForTrialCasesMock } from '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
+const updateCase = jest.mocked(updateCaseMock);
 const getReadyForTrialCases = getReadyForTrialCasesMock as jest.Mock;
 
 describe('checkForReadyForTrialCasesInteractor', () => {
@@ -21,7 +21,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   beforeAll(() => {
     getReadyForTrialCases.mockImplementation(() => mockCasesReadyForTrial);
 
-    updateCase.mockResolvedValue({});
+    updateCase.mockResolvedValue({} as RawCase);
   });
 
   beforeEach(() => {
@@ -44,7 +44,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   it('should not check case if no case is found', async () => {
     getCaseByDocketNumber.mockResolvedValue(undefined);
 
-    updateCase.mockResolvedValue({});
+    updateCase.mockResolvedValue({} as RawCase);
 
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
@@ -58,7 +58,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   it("should only check cases that are 'general docket - not at issue'", async () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
-    updateCase.mockResolvedValue({});
+    updateCase.mockResolvedValue({} as RawCase);
 
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
@@ -84,7 +84,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocket,
     });
 
-    updateCase.mockResolvedValue({});
+    updateCase.mockResolvedValue({} as RawCase);
 
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
 
@@ -107,7 +107,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocket,
     });
 
-    updateCase.mockResolvedValue({});
+    updateCase.mockResolvedValue({} as RawCase);
 
     mockCasesReadyForTrial = [
       { docketNumber: '101-20' },
@@ -134,7 +134,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocket,
     });
 
-    updateCase.mockResolvedValue({});
+    updateCase.mockResolvedValue({} as RawCase);
 
     mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
     getReadyForTrialCases.mockResolvedValue([{ docketNumber: '101-20' }]);
@@ -156,7 +156,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocket,
     });
 
-    updateCase.mockResolvedValue({});
+    updateCase.mockResolvedValue({} as RawCase);
 
     mockCasesReadyForTrial = [
       { docketNumber: '101-20' },

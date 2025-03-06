@@ -43,8 +43,10 @@ describe('fileExternalDocumentInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = applicationContext.getUniqueId();
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   let caseRecord;
   let mockLock;

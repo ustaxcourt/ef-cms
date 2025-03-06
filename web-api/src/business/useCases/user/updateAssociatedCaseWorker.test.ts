@@ -72,8 +72,10 @@ const mockCase = {
 };
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
-updateCase.mockImplementation(c => c.caseToUpdate);
+const updateCase = jest.mocked(updateCaseMock);
+updateCase.mockImplementation(({ caseToUpdate }) =>
+  Promise.resolve(caseToUpdate),
+);
 
 describe('updateAssociatedCaseWorker', () => {
   it('should log an error when the practitioner is not found on one of their associated cases by userId', async () => {

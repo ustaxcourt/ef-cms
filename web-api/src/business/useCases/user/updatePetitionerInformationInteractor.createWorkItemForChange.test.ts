@@ -21,8 +21,10 @@ import { updatePetitionerOnCase as updatePetitionerOnCaseMock } from '@web-api/p
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
-updateCase.mockImplementation(c => c.caseToUpdate);
+const updateCase = jest.mocked(updateCaseMock);
+updateCase.mockImplementation(({ caseToUpdate }) =>
+  Promise.resolve(caseToUpdate),
+);
 const updatePetitionerOnCase = updatePetitionerOnCaseMock as jest.Mock;
 updatePetitionerOnCase.mockImplementation(({ petitioner }) => petitioner);
 

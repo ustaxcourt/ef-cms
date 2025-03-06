@@ -15,8 +15,10 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 describe('sealCaseInteractor', () => {
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   beforeAll(() => {
     applicationContext

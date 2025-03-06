@@ -23,8 +23,10 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
-updateCase.mockImplementation(c => c.caseToUpdate);
+const updateCase = jest.mocked(updateCaseMock);
+updateCase.mockImplementation(({ caseToUpdate }) =>
+  Promise.resolve(caseToUpdate),
+);
 
 describe('updateCounselOnCaseInteractor', () => {
   const mockPrivatePractitioners = [
@@ -261,7 +263,7 @@ describe('updateCounselOnCaseInteractor', () => {
     );
 
     const updatedPractitioner =
-      updateCase.mock.calls[0][0].caseToUpdate.irsPractitioners.find(
+      updateCase.mock.calls[0][0].caseToUpdate.irsPractitioners?.find(
         p => p.userId === '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
       );
     expect(updatedPractitioner.email).toBeUndefined();

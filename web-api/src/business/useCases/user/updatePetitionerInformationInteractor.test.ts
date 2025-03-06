@@ -39,8 +39,10 @@ jest.mock('@web-api/business/useCases/addCoverToPdf');
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
   const PRIMARY_CONTACT_ID = MOCK_CASE.petitioners[0].contactId;
 
   const mockPetitioners = [
@@ -436,7 +438,7 @@ describe('updatePetitionerInformationInteractor', () => {
     const updatedOtherFiler = updatedPetitioners.find(
       p => p.contactId === otherFilerToUpdate.contactId,
     );
-    expect(updatedOtherFiler.contactType).toBe(CONTACT_TYPES.otherPetitioner);
+    expect(updatedOtherFiler?.contactType).toBe(CONTACT_TYPES.otherPetitioner);
   });
 
   it('should throw an error when attempting to update countryType to an invalid value', async () => {

@@ -21,8 +21,10 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
-updateCase.mockImplementation(c => c.caseToUpdate);
+const updateCase = jest.mocked(updateCaseMock);
+updateCase.mockImplementation(({ caseToUpdate }) =>
+  Promise.resolve(caseToUpdate),
+);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;

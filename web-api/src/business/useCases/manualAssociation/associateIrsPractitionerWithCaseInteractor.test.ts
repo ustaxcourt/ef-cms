@@ -17,7 +17,7 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
 
   const caseRecord = {
     caseCaption: 'Caption',
