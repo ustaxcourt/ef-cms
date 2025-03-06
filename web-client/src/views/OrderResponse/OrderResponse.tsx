@@ -12,7 +12,7 @@ import React, { useEffect, useRef } from 'react';
 export const OrderResponse = connect(
   {
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
-    applyStampFormHelper: state.applyStampFormHelper,
+    motionOrderResponseFormHelper: state.motionOrderResponseFormHelper,
     clearDueDateSequence: sequences.clearDueDateSequence,
     clearOptionalFieldsStampFormSequence:
       sequences.clearOptionalFieldsStampFormSequence,
@@ -31,9 +31,7 @@ export const OrderResponse = connect(
     validationErrors: state.validationErrors,
   },
   function OrderResponse({
-    applyStampFormChangeSequence,
-    applyStampFormHelper,
-    clearDueDateSequence,
+    motionOrderResponseFormHelper,
     clearOptionalFieldsStampFormSequence,
     constants,
     form,
@@ -117,242 +115,24 @@ export const OrderResponse = connect(
                 <div className="grid-header grid-row padding-left-205">
                   Order Response
                 </div>
-                <div className="stamp-order-form">
+                <div className="motion-order-response-form">
                   <FormGroup
-                    className={applyStampFormHelper.dispositionErrorClass}
+                    className={
+                      motionOrderResponseFormHelper.dispositionErrorClass
+                    }
                     errorText={validationErrors.disposition}
                   >
-                    {[
-                      constants.MOTION_DISPOSITIONS.GRANTED,
-                      constants.MOTION_DISPOSITIONS.DENIED,
-                    ].map(option => (
-                      <div
-                        className={`usa-radio ${
-                          option === constants.MOTION_DISPOSITIONS.DENIED
-                            ? 'margin-bottom-0'
-                            : ''
-                        }`}
-                        key={option}
-                      >
-                        <input
-                          aria-label={`disposition-${option}`}
-                          checked={form.disposition === option}
-                          className="usa-radio__input"
-                          id={`motion-disposition-${option}`}
-                          name="disposition"
-                          type="radio"
-                          value={option}
-                          onChange={e => {
-                            applyStampFormChangeSequence({
-                              key: e.target.name,
-                              value: e.target.value,
-                            });
-                          }}
-                        />
-                        <label
-                          className="usa-radio__label"
-                          data-testid={`motion-disposition-${option}`}
-                          htmlFor={`motion-disposition-${option}`}
-                        >
-                          {option}
-                        </label>
-                      </div>
-                    ))}
-                    <FormGroup className="grid-container stamp-form-group denied-checkboxes">
-                      <div className="display-inline-block grid-col-6">
-                        <input
-                          checked={form.deniedAsMoot || false}
-                          className="usa-checkbox__input"
-                          disabled={
-                            form.disposition !==
-                            constants.MOTION_DISPOSITIONS.DENIED
-                          }
-                          id="deniedAsMoot"
-                          name="deniedAsMoot"
-                          type="checkbox"
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            });
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor="deniedAsMoot"
-                          id="denied-as-moot-label"
-                        >
-                          As moot
-                        </label>
-                      </div>
-                      <div className="display-inline-block grid-col-auto">
-                        <input
-                          checked={form.deniedWithoutPrejudice || false}
-                          className="usa-checkbox__input"
-                          disabled={
-                            form.disposition !==
-                            constants.MOTION_DISPOSITIONS.DENIED
-                          }
-                          id="deniedWithoutPrejudice"
-                          name="deniedWithoutPrejudice"
-                          type="checkbox"
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            });
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor="deniedWithoutPrejudice"
-                          id="denied-without-prejudice-label"
-                        >
-                          Without prejudice
-                        </label>
-                      </div>
-                    </FormGroup>
-                  </FormGroup>
-                  <hr className="border-top-2px border-base-lighter" />
-
-                  <FormGroup className="stamp-form-group">
                     <label
                       className="usa-label"
                       htmlFor="stricken-from-trial-session-radio"
                     >
-                      Select any that apply{' '}
-                      <span className="usa-hint">(optional)</span>
+                      Response Date <span className="usa-hint">(Required)</span>
                     </label>
-                    <div className="usa-radio usa-radio__inline">
-                      <input
-                        aria-label="stricken from trial session"
-                        checked={form.strickenFromTrialSession || false}
-                        className="usa-radio__input"
-                        id="stricken-from-trial-session"
-                        name="strickenFromTrialSession"
-                        type="radio"
-                        value={constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-radio__label"
-                        htmlFor={'stricken-from-trial-session'}
-                      >
-                        {constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
-                      </label>
-                    </div>
-                  </FormGroup>
-                  <hr className="narrow-hr" />
-                  <FormGroup className="stamp-form-group">
-                    {Object.entries(constants.JURISDICTIONAL_OPTIONS).map(
-                      ([key, value]) => (
-                        <div className="usa-radio" key={key}>
-                          <input
-                            aria-describedby="jurisdictionalOption"
-                            aria-label={`jurisdictionalOption-${key}`}
-                            checked={form.jurisdictionalOption === value}
-                            className="usa-radio__input"
-                            id={`jurisdictionalOption-${key}`}
-                            name="jurisdictionalOption"
-                            type="radio"
-                            value={value}
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                          <label
-                            aria-label={value}
-                            className="usa-radio__label"
-                            htmlFor={`jurisdictionalOption-${key}`}
-                            id={`jurisdictionalOption-${key}-label`}
-                          >
-                            {value}
-                          </label>
-                        </div>
-                      ),
-                    )}
-                  </FormGroup>
-                  <hr className="narrow-hr" />
-                  <FormGroup
-                    className={applyStampFormHelper.dateErrorClass}
-                    errorText={validationErrors.date}
-                  >
-                    <div className="usa-radio" key="statusReportDueDate">
-                      <input
-                        aria-describedby="dueDateMessage"
-                        aria-label="status report due date"
-                        checked={
-                          form.dueDateMessage ===
-                          'The parties shall file a status report by'
-                        }
-                        className="usa-radio__input"
-                        id="dueDateMessage-statusReportDueDate"
-                        name="dueDateMessage"
-                        type="radio"
-                        value="The parties shall file a status report by"
-                        onChange={e => {
-                          clearDueDateSequence();
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-radio__label"
-                        htmlFor="dueDateMessage-statusReportDueDate"
-                        id="dueDateMessage-statusReportDueDate-label"
-                      >
-                        The parties shall file a status report by:
-                      </label>
-                    </div>
-                    <div
-                      className="usa-radio"
-                      key="statusReportOrStipDecisionDueDate"
-                    >
-                      <input
-                        aria-label="status report stip decision due date"
-                        checked={
-                          form.dueDateMessage ===
-                          'The parties shall file a status report or proposed stipulated decision by'
-                        }
-                        className="usa-radio__input"
-                        id="dueDateMessage-statusReportOrStipDecisionDueDate"
-                        name="dueDateMessage"
-                        type="radio"
-                        value="The parties shall file a status report or proposed stipulated decision by"
-                        onChange={e => {
-                          clearDueDateSequence();
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-radio__label"
-                        data-testid="status-report-or-stip-decision-due-date"
-                        htmlFor="dueDateMessage-statusReportOrStipDecisionDueDate"
-                      >
-                        The parties shall file a status report or proposed
-                        stipulated decision by:
-                      </label>
-                    </div>
-
                     <DateSelector
                       defaultValue={form.date}
-                      disabled={!form.dueDateMessage}
                       formGroupClassNames="display-inline-block padding-0 margin-left-5"
                       id="due-date-input-statusReportDueDate"
-                      minDate={applyStampFormHelper.minDate}
+                      minDate={motionOrderResponseFormHelper.minDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
@@ -364,7 +144,89 @@ export const OrderResponse = connect(
                       }}
                     />
                   </FormGroup>
-                  <hr className="narrow-hr" />
+                  <hr className="border-top-2px border-base-lighter" />
+                  {/* TODO 10586: update IDs and classnames */}
+                  <FormGroup
+                    className={
+                      motionOrderResponseFormHelper.dispositionErrorClass
+                    }
+                  >
+                    <label
+                      className="usa-label"
+                      htmlFor="motion-order-reply-radio"
+                    >
+                      Select One <span className="usa-hint">(Required)</span>
+                    </label>
+                    <div className="usa-radio usa-radio__inline">
+                      <input
+                        aria-label="order reply"
+                        checked={form.strickenFromTrialSession || false}
+                        className="usa-radio__input"
+                        id="motion-order-reply"
+                        name="motionOrderReply"
+                        type="radio"
+                        value={constants.ORDER_REPLY_OPTIONS.REPLY}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label
+                        className="usa-radio__label"
+                        htmlFor={'motion-order-reply'}
+                      >
+                        {constants.ORDER_REPLY_OPTIONS.REPLY}
+                      </label>
+                    </div>
+                    <div className="usa-radio usa-radio__inline">
+                      <input
+                        aria-label="order reply s/r"
+                        checked={form.strickenFromTrialSession || false}
+                        className="usa-radio__input"
+                        id="motion-order-reply-sr"
+                        name="motionOrderReplySr"
+                        type="radio"
+                        value={constants.ORDER_REPLY_OPTIONS.REPLY_SR}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label
+                        className="usa-radio__label"
+                        htmlFor={'motion-order-reply-sr'}
+                      >
+                        {constants.ORDER_REPLY_OPTIONS.REPLY_SR}
+                      </label>
+                    </div>
+                  </FormGroup>
+
+                  <FormGroup
+                    className={motionOrderResponseFormHelper.dateErrorClass}
+                    errorText={validationErrors.date}
+                  >
+                    <DateSelector
+                      defaultValue={form.date}
+                      disabled={!form.dueDateMessage}
+                      formGroupClassNames="display-inline-block padding-0 margin-left-5"
+                      id="due-date-input-statusReportDueDate"
+                      minDate={motionOrderResponseFormHelper.minDate}
+                      placeHolderText="MM/DD/YYYY"
+                      onChange={e => {
+                        formatAndUpdateDateFromDatePickerSequence({
+                          key: 'date',
+                          toFormat: constants.DATE_FORMATS.MMDDYY,
+                          value: e.target.value,
+                        });
+                        validateStampSequence();
+                      }}
+                    />
+                  </FormGroup>
+                  <hr className="border-top-2px border-base-lighter" />
                   <FormGroup
                     className="stamp-form-group"
                     errorText={validationErrors.customText}
@@ -375,17 +237,16 @@ export const OrderResponse = connect(
                         htmlFor="custom-text"
                         id="custom-text-label"
                       >
-                        Custom order text{' '}
-                        <span className="usa-hint">(optional)</span>
+                        Additional order text{' '}
                       </label>
                       <textarea
-                        aria-describedby="custom-text-label"
-                        aria-label="custom text"
+                        aria-describedby="additional-text-label"
+                        aria-label="additional text"
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"
-                        id="custom-text"
-                        maxLength={constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS}
-                        name="customText"
+                        id="additional-text"
+                        maxLength={constants.MAX_ORDER_RESPONSE_TEXT_CHARACTERS}
+                        name="additionalText"
                         value={form.customText}
                         onChange={e => {
                           updateFormValueSequence({
@@ -396,32 +257,32 @@ export const OrderResponse = connect(
                       ></textarea>
                       <CharactersRemainingHint
                         maxCharacters={
-                          constants.MAX_STAMP_CUSTOM_TEXT_CHARACTERS
+                          constants.MAX_ORDER_RESPONSE_TEXT_CHARACTERS
                         }
                         stringToCount={form.customText}
                       />
                     </div>
                   </FormGroup>
-                  <Button
-                    link
-                    className="margin-left-205"
-                    data-testid="clear-optional-fields"
-                    onClick={e => {
-                      e.preventDefault();
-                      clearOptionalFieldsStampFormSequence();
-                    }}
-                  >
-                    Clear Optional Fields
-                  </Button>
                 </div>
               </div>
+              <Button
+                link
+                className="margin-left-205"
+                data-testid="clear-all-fields"
+                onClick={e => {
+                  e.preventDefault();
+                  clearOptionalFieldsStampFormSequence();
+                }}
+              >
+                Clear All
+              </Button>
             </div>
             <div className="grid-col-7">
               <div className="margin-bottom-1 display-flex flex-justify-end">
                 <Button
                   className="margin-right-0"
                   data-testid="save-signature-button"
-                  disabled={!applyStampFormHelper.canSaveStampOrder}
+                  disabled={!motionOrderResponseFormHelper.canSaveOrderRespones}
                   id="save-signature-button"
                   onClick={() => submitStampMotionSequence()}
                 >
