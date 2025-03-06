@@ -44,6 +44,7 @@ import {
 } from '../utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
+import { generateFiledByExtracted } from './temp/generateFiledByExtracted';
 
 type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
 
@@ -303,7 +304,13 @@ export class DocketEntry extends JoiValidationEntity {
       this.signedAt = rawDocketEntry.signedAt || createISODateString();
     }
 
-    this.generateFiledBy(petitioners);
+    // 10419 work in progress
+    // this.generateFiledBy(petitioners);
+    const filedByString = generateFiledByExtracted({
+      docketEntry: this,
+      petitioners,
+    });
+    if (filedByString) this.filedBy = filedByString;
   }
 
   private initForUnfilteredForInternalUsers(rawDocketEntry) {
