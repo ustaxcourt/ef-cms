@@ -8,6 +8,7 @@ export const PartiesFiling = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
+    user: state.user,
     formattedCaseDetail: state.formattedCaseDetail,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
@@ -18,6 +19,7 @@ export const PartiesFiling = connect(
     fileDocumentHelper,
     form,
     formattedCaseDetail,
+    user,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
   }) {
@@ -30,13 +32,14 @@ export const PartiesFiling = connect(
           <FormGroup errorText={fileDocumentHelper.partyValidationError}>
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="with-hint" id="who-legend">
-                Who are you filing the document(s) for?
+                Who are you filing the document(s) on behalf of?
               </legend>
               <span className="usa-hint">Check all that apply.</span>
               {formattedCaseDetail.petitioners.map(petitioner => (
                 <div className="usa-checkbox" key={petitioner.contactId}>
                   <input
                     checked={form.filersMap[petitioner.contactId] || false}
+                    disabled={petitioner.contactId === user.userId}
                     className="usa-checkbox__input"
                     id={`filing-${petitioner.contactId}`}
                     name={`filersMap.${petitioner.contactId}`}
