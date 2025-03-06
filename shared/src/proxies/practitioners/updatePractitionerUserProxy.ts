@@ -11,11 +11,15 @@ import { put } from '../requests';
  */
 export const updatePractitionerUserInteractor = (
   applicationContext,
-  { barNumber, user },
+  {
+    barNumber,
+    user,
+    clientConnectionId,
+  }: { barNumber: string; user: any; clientConnectionId: string },
 ) => {
   return put({
     applicationContext,
-    body: { user },
+    body: { user, clientConnectionId },
     endpoint: `/async/practitioners/${barNumber}`,
   });
 };
