@@ -15,9 +15,11 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 
 describe('prioritizeCaseInteractor', () => {
   let mockLock;
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   beforeAll(() => {
     applicationContext
@@ -138,12 +140,10 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should not call createCaseTrialSortMappingRecords if the case is missing a trial city', async () => {
-    getCaseByDocketNumber.mockReturnValue(
-      Promise.resolve({
-        ...MOCK_CASE,
-        preferredTrialCity: null,
-      }),
-    );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      preferredTrialCity: undefined,
+    });
 
     await prioritizeCaseInteractor(
       applicationContext,

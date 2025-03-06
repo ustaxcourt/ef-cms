@@ -24,7 +24,7 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
-const updateCase = updateCaseMock as jest.Mock;
+const updateCase = jest.mocked(updateCaseMock);
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
@@ -58,7 +58,9 @@ describe('createCaseDeadlineInteractor', () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
       new CaseDeadline(MOCK_CASE_DEADLINE),
     ]);
-    updateCase.mockImplementation(c => c.caseToUpdate);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('throws an error if the user is not valid or authorized', async () => {

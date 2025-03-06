@@ -19,7 +19,7 @@ describe('getReconciliationReportInteractor', () => {
     getCasesMetadataByDocketNumbersMock as jest.Mock;
 
   beforeAll(() => {
-    getCasesMetadataByDocketNumbers.mockReturnValue([
+    getCasesMetadataByDocketNumbers.mockResolvedValue([
       {
         caseCaption: mockCaseCaption,
         docketNumber: '135-20',

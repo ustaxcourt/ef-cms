@@ -22,8 +22,7 @@ import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsM
 const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
-updateCase.mockImplementation(c => c.caseToUpdate);
+const updateCase = jest.mocked(updateCaseMock);
 
 describe('removeCasePendingItemInteractor', () => {
   let mockLock;
@@ -39,13 +38,10 @@ describe('removeCasePendingItemInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    // Set up the mocked getCaseByDocketNumber to return a Promise resolving to MOCK_CASE.
     getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
-    // Assign the mocked function to the persistence gateway.
-    applicationContext.getPersistenceGateway().getCaseByDocketNumber =
-      getCaseByDocketNumber;
-
-    updateCase.mockImplementation(v => v);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('should throw an unauthorized error if user is unauthorized for updating a case', async () => {

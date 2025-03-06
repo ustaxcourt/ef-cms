@@ -35,8 +35,7 @@ describe('removeCaseFromTrialInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getCaseMetadataByDocketNumber =
     getCaseMetadataByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
 
   beforeAll(() => {
     applicationContext
@@ -62,7 +61,9 @@ describe('removeCaseFromTrialInteractor', () => {
     getCaseByDocketNumber.mockResolvedValue(mockCase);
     getCaseMetadataByDocketNumber.mockResolvedValue(mockCase);
 
-    updateCase.mockImplementation(v => v.caseToUpdate);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('should throw an error when the user is unauthorized to remove a case from a trial session', async () => {

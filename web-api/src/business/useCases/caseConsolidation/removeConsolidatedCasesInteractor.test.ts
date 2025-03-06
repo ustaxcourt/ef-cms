@@ -17,7 +17,7 @@ let mockCases;
 let mockLock;
 const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
+const updateCase = jest.mocked(updateCaseMock);
 const getCasesByLeadDocketNumber = getCasesByLeadDocketNumberMock as jest.Mock;
 
 describe('removeConsolidatedCasesInteractor', () => {
@@ -70,7 +70,9 @@ describe('removeConsolidatedCasesInteractor', () => {
         .map(key => mockCases[key])
         .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
     });
-    updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {

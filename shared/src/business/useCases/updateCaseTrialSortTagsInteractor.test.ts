@@ -1,10 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
-  mockDocketClerkUser,
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
@@ -83,12 +81,6 @@ describe('Update case trial sort tags', () => {
   it('should throw an error if the entity returned from persistence is invalid', async () => {
     mockCase.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
     getCaseByDocketNumber.mockResolvedValue(omit(mockCase, 'docketNumber'));
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(
-        ({ caseToUpdate }) =>
-          new Case(caseToUpdate, { authorizedUser: mockDocketClerkUser }),
-      );
 
     await expect(
       updateCaseTrialSortTagsInteractor(

@@ -21,7 +21,7 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 
 describe('addPetitionerToCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
   let mockContact;
   let mockLock;
 
@@ -49,7 +49,9 @@ describe('addPetitionerToCaseInteractor', () => {
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocket,
     });
-    updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('should throw an unauthorized error when the user is not authorized to add petitioner to case', async () => {
@@ -67,7 +69,7 @@ describe('addPetitionerToCaseInteractor', () => {
   });
 
   it('should throw an error if case status is new', async () => {
-    getCaseByDocketNumber.mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.new,
     });
@@ -127,7 +129,7 @@ describe('addPetitionerToCaseInteractor', () => {
   });
 
   it('should update the case caption', async () => {
-    getCaseByDocketNumber.mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocket,
     });
