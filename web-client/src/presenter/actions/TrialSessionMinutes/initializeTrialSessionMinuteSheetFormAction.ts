@@ -36,6 +36,7 @@ import {
 } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { GetUserResponse } from '@shared/business/useCases/getUserInteractor';
 import { Judge } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 export const initializeTrialSessionMinuteSheetFormAction = ({
   get,
@@ -216,40 +217,9 @@ export const getRespondentsFromCase = (
 export const getPetitionersFromCase = (
   caseDetail: RawCase,
 ): KeyedPartyFormFieldsByRenderKey => {
-  const { petitioners } = caseDetail;
-
   const keyedPartyFormFieldsByRenderKey = {};
 
-  const petitionersWithCounselUserIds: string[] = [];
-  caseDetail.privatePractitioners?.forEach(practitioner => {
-    petitionersWithCounselUserIds.push(...practitioner.representing);
-  });
-
-  if (petitioners && petitioners.length > 0) {
-    petitioners.forEach(petitioner => {
-      let role;
-      if (petitioner.contactType === CONTACT_TYPES.petitioner) {
-        role = petitionersWithCounselUserIds.includes(petitioner.contactId)
-          ? PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.counsel]
-          : PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.proSe];
-      } else if (PETITIONER_ROLE_OPTIONS[petitioner.contactType]) {
-        role =
-          PETITIONER_ROLE_OPTIONS_INVERTED[
-            PETITIONER_ROLE_OPTIONS[petitioner.contactType]
-          ];
-      } else {
-        role = PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.other];
-      }
-
-      const renderKey = uuidv4();
-      keyedPartyFormFieldsByRenderKey[renderKey] = {
-        datesOfAppearance: '',
-        name: petitioner.name,
-        renderKey,
-        role,
-      };
-    });
-  } else {
+  if (!caseDetail.petitioners || caseDetail.petitioners.length === 0) {
     const renderKey = uuidv4();
     keyedPartyFormFieldsByRenderKey[renderKey] = {
       datesOfAppearance: '',
@@ -257,9 +227,93 @@ export const getPetitionersFromCase = (
       renderKey,
       role: '',
     };
+
+    return keyedPartyFormFieldsByRenderKey;
   }
 
+  [
+    ...getNamesAndRolesOfNonPetitionerParties(
+      caseDetail.petitioners,
+      caseDetail.privatePractitioners,
+    ),
+    ...getNamesAndRolesOfProSePetitioners(
+      caseDetail.petitioners,
+      caseDetail.privatePractitioners,
+    ),
+    ...getNamesAndRolesOfPrivatePractitionerParties(
+      caseDetail.privatePractitioners || [],
+    ),
+  ].forEach(({ name, role }) => {
+    const renderKey = uuidv4();
+    keyedPartyFormFieldsByRenderKey[renderKey] = {
+      datesOfAppearance: '',
+      name,
+      renderKey,
+      role,
+    };
+  });
+
   return keyedPartyFormFieldsByRenderKey;
+};
+
+const getNamesAndRolesOfNonPetitionerParties = (
+  contacts,
+  privatePractitioners,
+): Array<{ name: string; role: string }> => {
+  return contacts
+    .filter(contact => {
+      return (
+        contact.contactType !== CONTACT_TYPES.petitioner &&
+        !privatePractitioners?.some(practitioner =>
+          practitioner.representing.includes(contact.contactId),
+        )
+      );
+    })
+    .map(otherContact => {
+      const role = PETITIONER_ROLE_OPTIONS[otherContact.contactType]
+        ? PETITIONER_ROLE_OPTIONS_INVERTED[
+            PETITIONER_ROLE_OPTIONS[otherContact.contactType]
+          ]
+        : PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.other];
+
+      return {
+        name: otherContact.name,
+        role,
+      };
+    });
+};
+
+const getNamesAndRolesOfProSePetitioners = (
+  contacts,
+  privatePractitioners,
+): Array<{ name: string; role: string }> => {
+  return contacts
+    .filter(contact => {
+      return (
+        contact.contactType === CONTACT_TYPES.petitioner &&
+        !privatePractitioners?.some(practitioner =>
+          practitioner.representing.includes(contact.contactId),
+        )
+      );
+    })
+    .map(petitioner => ({
+      name: petitioner.name,
+      role: PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.proSe],
+    }));
+};
+
+const getNamesAndRolesOfPrivatePractitionerParties = (
+  privatePractitioners: RawPractitioner[],
+): Array<{
+  name: string;
+  role: string;
+}> => {
+  return privatePractitioners
+    .filter(privatePractitioner => !!privatePractitioner)
+    .map(privatePractitioner => ({
+      name: privatePractitioner.name,
+      role: PETITIONER_ROLE_OPTIONS_INVERTED[PETITIONER_ROLE_OPTIONS.counsel],
+    }));
 };
 
 export const getPendingItemsFromCase = ({
@@ -284,7 +338,7 @@ export const getPendingItemsFromCase = ({
       keyedActionFilingFormFieldsByRenderKey[renderKey] = {
         date: formatDateString(pendingItem.createdAt, FORMATS.YYYYMMDD),
         documentType: transformedPendingItemDetails.documentType,
-        filedBy: transformFiledBy(caseDetail, pendingItem),
+        filedBy: transformFiledBy(pendingItem),
         note: transformedPendingItemDetails.description,
         objection: transformedPendingItemDetails.objection,
         renderKey,
@@ -367,27 +421,27 @@ export const getTransformedPendingItemDetails = (
   };
 };
 
-export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
+export const transformFiledBy = (pendingItem): string => {
   if (DocketEntry.isOrder(pendingItem.eventCode))
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court];
 
-  const isPetitioner = pendingItem.filers.some(id =>
-    caseDetail.petitioners.some(petitioner => id === petitioner.contactId),
-  );
-  const isRespondent = pendingItem.filers.some(id =>
-    caseDetail.irsPractitioners?.some(
-      practitioner => id === practitioner.userId,
-    ),
-  );
+  const { filedBy } = pendingItem;
 
-  if (isPetitioner && isRespondent)
-    return ACTION_FILED_BY_OPTIONS_INVERTED[
-      ACTION_FILED_BY_OPTIONS.petitionerAndRespondent
-    ];
-  if (isPetitioner)
-    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner];
-  if (isRespondent)
+  if (filedBy.startsWith('Resp. &')) {
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.joint];
+  }
+
+  if (filedBy === 'Resp.') {
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.respondent];
+  }
+
+  if (filedBy.includes('Intv')) {
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.other];
+  }
+
+  if (filedBy.startsWith('Petrs.') || filedBy.startsWith('Petr.')) {
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner];
+  }
 
   return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.other];
 };
