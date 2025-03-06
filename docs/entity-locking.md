@@ -128,26 +128,26 @@ export const updateSomethingInteractor = withLocking(
 
 ### Advanced Handling on Failure
 
-You may wish for a function to be called if you fail to acquire a lock. One use case for this is if an asynchronous lambda fails to acquire a lock, you will need to send a websocket message to the user in order to retry the request or process the failure.
+You may wish for a function to be called if you fail to acquire a lock. One use case for this is if an asynchronous lambda fails to acquire a lock, you will need to send a websocket message to the user to notify them to wait and try again.
+
 
 ```typescript
 // define a function to call when acquiring a lock fails
-const handleLockError = async (
-  applicationContext: IApplicationContext,
-  originalRequest: any,
-  authorizedUser: UnknownAuthUser
+
+export const asyncHandleLockError = async (
+  applicationContext: ServerApplicationContext,
+  { clientConnectionId }: { clientConnectionId: string },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  if(authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'update_something',
-      },
-      userId: user.userId,
-    });
-  }
+  if (!authorizedUser?.userId || !clientConnectionId) return;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'async_service_unavailable_error',
+    },
+    userId: authorizedUser?.userId,
+  });
 };
 ```
 
@@ -157,7 +157,7 @@ Then, pass that function into the attempt to acquire a lock:
 await applicationContext.getUseCaseHelpers().acquireLock({
   applicationContext,
   identifier: 'case|123-20',
-  onLockError: handleLockError,
+  onLockError: asyncHandleLockError,
 });
 ```
 
@@ -167,7 +167,7 @@ Or provide it as the third parameter in the `withLocking` wrapper:
 export const updateSomethingInteractor = withLocking(
   updateSomething,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );
 ```
 
@@ -181,7 +181,7 @@ try {
   });
 } catch (err) {
   if (err instanceof ServiceUnavailableError) {
-    await handleLockError(applicationContext, {
+    await asyncHandleLockError(applicationContext, {
       docketNumber
     });
   }
@@ -214,29 +214,6 @@ await applicationContext.getUseCaseHelpers().acquireLock({
   identifier: 'case|123-20',
   ttl: 900, // default is 30
 });
-```
-
-### Synchronous API Retries
-
-The proxy layer is configured to auto retry 5 times for any `PUT`, `POST`, or `DELETE` calls that fail due to a 504 error being returned by the API Gateway. Check out [`requests.ts`](shared/src/proxies/requests.ts).
-
-### Asynchronous API Retries
-
-These requests immediately return a `200`, and so you will need to rely on websocket messages to perform a retry of your request. The above [Advanced Handling](#advanced-handling-on-failure) will help show you how to initiate the websocket message.
-
-To process those websocket messages, [`socketRouter`](web-client/src/providers/socketRouter.ts) routes messages with the action `retry_async_request` to [`retryAsyncRequestSequence`](web-client/src/presenter/sequences/retryAsyncRequestSequence.ts). This sequence calls an action that waits a few seconds, and then it calls [`retryAsyncRequestAction`](web-client/src/presenter/sequences/retryAsyncRequestSequence.ts) to perform the retry attempt.
-
-Simply add your specific `requestToRetry` to the `switch` statement, and it will call the interactor with the original request:
-
-```typescript
-// retryAsyncRequestAction.ts
-
-  switch (props.requestToRetry) {
-    // ...
-    case 'update_something':
-      func = applicationContext.getUseCases().updateSomethingInteractor;
-      break;
-  }
 ```
 
 ## Feature Flag
