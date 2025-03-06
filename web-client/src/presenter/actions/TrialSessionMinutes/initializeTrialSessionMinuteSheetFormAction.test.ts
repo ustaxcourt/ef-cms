@@ -647,46 +647,72 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
   });
 
   describe('transformFiledBy', () => {
-    const mockCase = {
-      irsPractitioners: [{ userId: 'irs1' }],
-      petitioners: [{ contactId: 'pet1' }],
-    } as any;
+    beforeEach(() => {
+      mockIsOrder.mockReturnValue(false);
+    });
 
     it('should return "petitioner" when filed by petitioner only', () => {
-      const result = transformFiledBy(mockCase, {
-        filers: ['pet1'],
+      const result = transformFiledBy({
+        filedBy: 'Petr. Bob',
+      });
+      expect(result).toBe('petitioner');
+    });
+
+    it('should return "petitioner" when filed by multiple petitioners', () => {
+      const result = transformFiledBy({
+        filedBy: 'Petrs. Bob & Bill',
       });
       expect(result).toBe('petitioner');
     });
 
     it('should return "respondent" when filed by respondent only', () => {
-      const result = transformFiledBy(mockCase, {
-        filers: ['irs1'],
+      const result = transformFiledBy({
+        filedBy: 'Resp.',
       });
       expect(result).toBe('respondent');
     });
 
-    it('should return "petitionerAndRespondent" when filed by both', () => {
-      const result = transformFiledBy(mockCase, {
-        filers: ['pet1', 'irs1'],
+    it('should return "joint" when filed by both', () => {
+      const result = transformFiledBy({
+        filedBy: 'Resp. & Petr. Bob',
       });
-      expect(result).toBe('petitionerAndRespondent');
+      expect(result).toBe('joint');
     });
 
-    it('should return "other" when filed by neither', () => {
-      const result = transformFiledBy(mockCase, {
-        filers: ['unknown'],
+    it('should return "other" when filed by an intervenor', () => {
+      const result = transformFiledBy({
+        filedBy: 'Intv. Alice',
       });
       expect(result).toBe('other');
     });
 
     it('should return "court" when the pending item is an order', () => {
-      (DocketEntry.isOrder as jest.Mock).mockReturnValue(true);
-      const result = transformFiledBy(mockCase, {
-        filers: ['unknown'],
+      mockIsOrder.mockReturnValue(true);
+      const result = transformFiledBy({
         eventCode: 'O',
       });
       expect(result).toBe('court');
+    });
+
+    it('should return "other" when filed by multiple intervenors', () => {
+      const result = transformFiledBy({
+        filedBy: 'Intvs. Alice & Bob',
+      });
+      expect(result).toBe('other');
+    });
+
+    it('should return "other" when filed by both an intervenor and a petitioner', () => {
+      const result = transformFiledBy({
+        filedBy: 'Petr. Bob & Intv. Alice',
+      });
+      expect(result).toBe('other');
+    });
+
+    it('should return "other" when filed by a private practitioner', () => {
+      const result = transformFiledBy({
+        filedBy: 'Bob the Private Practitioner',
+      });
+      expect(result).toBe('other');
     });
   });
 
@@ -697,6 +723,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
           {
             createdAt: '2018-11-21T05:00:00.000Z',
             documentType: 'Motion',
+            filedBy: 'Petr. Bob',
             filers: ['pet1'],
           },
         ],

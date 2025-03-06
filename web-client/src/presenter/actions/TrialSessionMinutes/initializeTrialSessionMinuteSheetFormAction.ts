@@ -338,7 +338,7 @@ export const getPendingItemsFromCase = ({
       keyedActionFilingFormFieldsByRenderKey[renderKey] = {
         date: formatDateString(pendingItem.createdAt, FORMATS.YYYYMMDD),
         documentType: transformedPendingItemDetails.documentType,
-        filedBy: transformFiledBy(caseDetail, pendingItem),
+        filedBy: transformFiledBy(pendingItem),
         note: transformedPendingItemDetails.description,
         objection: transformedPendingItemDetails.objection,
         renderKey,
@@ -421,27 +421,28 @@ export const getTransformedPendingItemDetails = (
   };
 };
 
-export const transformFiledBy = (caseDetail: RawCase, pendingItem): string => {
+export const transformFiledBy = (pendingItem): string => {
+  console.log('pendingItem', pendingItem);
   if (DocketEntry.isOrder(pendingItem.eventCode))
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court];
 
-  const isPetitioner = pendingItem.filers.some(id =>
-    caseDetail.petitioners.some(petitioner => id === petitioner.contactId),
-  );
-  const isRespondent = pendingItem.filers.some(id =>
-    caseDetail.irsPractitioners?.some(
-      practitioner => id === practitioner.userId,
-    ),
-  );
+  const { filedBy } = pendingItem;
 
-  if (isPetitioner && isRespondent)
-    return ACTION_FILED_BY_OPTIONS_INVERTED[
-      ACTION_FILED_BY_OPTIONS.petitionerAndRespondent
-    ];
-  if (isPetitioner)
-    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner];
-  if (isRespondent)
+  if (filedBy.startsWith('Resp. &')) {
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.joint];
+  }
+
+  if (filedBy === 'Resp.') {
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.respondent];
+  }
+
+  if (filedBy.includes('Intv')) {
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.other];
+  }
+
+  if (filedBy.startsWith('Petrs.') || filedBy.startsWith('Petr.')) {
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner];
+  }
 
   return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.other];
 };
