@@ -542,6 +542,11 @@ describe('completeDocketEntryQCInteractor', () => {
           hasOtherFilingParty: true,
           isPaper: true,
           otherFilingParty: 'Bert Brooks',
+          previousDocument: {
+            docketEntryId: 'e3f2c8f4-8c56-4d3e-9f23-7b2a6a9d55e1',
+            documentTitle: 'DocumentTitle',
+            documentType: 'Amended',
+          },
           scenario: 'Nonstandard H',
           secondaryDocument: {
             documentType: 'Notice of Change of Address',
@@ -564,6 +569,11 @@ describe('completeDocketEntryQCInteractor', () => {
       secondaryDocument: {
         documentType: 'Notice of Change of Address',
         eventCode: 'A',
+      },
+      previousDocument: {
+        docketEntryId: 'e3f2c8f4-8c56-4d3e-9f23-7b2a6a9d55e1',
+        documentTitle: 'DocumentTitle',
+        documentType: 'Amended',
       },
     });
   });

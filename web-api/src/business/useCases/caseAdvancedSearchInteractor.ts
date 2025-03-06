@@ -24,6 +24,7 @@ export type CaseAdvancedSearchParamsRequestType = {
   petitionerState?: AbbreviatedStates;
   endDate?: string;
   startDate?: string;
+  caseType?: Record<string, string>;
 };
 
 export type CaseSearchResult = {
@@ -43,6 +44,7 @@ export const caseAdvancedSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
+    caseType,
   }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
 ): Promise<CaseSearchResult[]> => {
@@ -81,6 +83,7 @@ export const caseAdvancedSearchInteractor = async (
       petitionerName,
       petitionerState,
       startDate: searchStartDate,
+      caseType,
     },
   });
 

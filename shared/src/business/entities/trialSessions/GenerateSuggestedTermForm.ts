@@ -1,49 +1,116 @@
-import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
-import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
+import { GenerateSuggestedTermModal } from '@shared/business/entities/trialSessions/GenerateSuggestedTermModal';
 
-export class GenerateSuggestedTermForm extends JoiValidationEntity {
-  public termStartDate: string;
-  public termEndDate: string;
-  public termName: string;
+export class GenerateSuggestedTermForm extends GenerateSuggestedTermModal {
+  public maxSessionsPerLocation: number;
+  public maxSessionsPerWeek: number;
+  public smallCaseMinimumQuantity: number;
+  public smallCaseMaxQuantity: number;
+  public regularCaseMinimumQuantity: number;
+  public regularCaseMaxQuantity: number;
+  public hybridCaseMinimumQuantity: number;
+  public hybridCaseMaxQuantity: number;
 
-  constructor(rawProps) {
-    super('GenerateSuggestedTermForm');
-    this.termStartDate = rawProps.termStartDate;
-    this.termEndDate = rawProps.termEndDate;
-    this.termName = rawProps.termName;
+  constructor(rawProps: any) {
+    super(rawProps, 'GenerateSuggestedTermForm');
+    this.maxSessionsPerLocation = rawProps.maxSessionsPerLocation;
+    this.maxSessionsPerWeek = rawProps.maxSessionsPerWeek;
+    this.smallCaseMinimumQuantity = rawProps.smallCaseMinimumQuantity;
+    this.smallCaseMaxQuantity = rawProps.smallCaseMaxQuantity;
+    this.regularCaseMinimumQuantity = rawProps.regularCaseMinimumQuantity;
+    this.regularCaseMaxQuantity = rawProps.regularCaseMaxQuantity;
+    this.hybridCaseMinimumQuantity = rawProps.hybridCaseMinimumQuantity;
+    this.hybridCaseMaxQuantity = rawProps.hybridCaseMaxQuantity;
   }
 
   getValidationRules() {
     return {
-      termEndDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.min(
-        joi.ref('termStartDate'),
-      )
-        .greater('now')
+      ...GenerateSuggestedTermModal.VALIDATION_RULES,
+      maxSessionsPerLocation: joi
+        .number()
+        .integer()
+        .min(0)
         .required()
         .messages({
-          '*': 'Enter date in format MM/DD/YYYY.',
-          'any.ref': 'Enter a start date',
-          'date.greater': 'End date cannot be in the past. Enter a valid date.',
-          'date.min':
-            'End date cannot be prior to start date. Enter a valid end date.',
+          'number.base': 'Max sessions per location must be a number.',
+          'number.integer': 'Max sessions per location must be a whole number.',
+          'number.min': 'Max sessions per location cannot be negative.',
         }),
-      termName: JoiValidationConstants.STRING.required()
-        .max(100)
-        .description('The name of the term being created.')
-        .messages({
-          '*': 'Enter a term name',
-          'string.max': 'Term name must be 100 characters or fewer.',
-        }),
-      termStartDate: JoiValidationConstants.DATE_RANGE_PICKER_DATE.greater(
-        'now',
-      )
+      maxSessionsPerWeek: joi.number().integer().min(0).required().messages({
+        'number.base': 'Max sessions per week must be a number.',
+        'number.integer': 'Max sessions per week must be a whole number.',
+        'number.min': 'Max sessions per week cannot be negative.',
+      }),
+      smallCaseMinimumQuantity: joi
+        .number()
+        .integer()
+        .min(0)
         .required()
         .messages({
-          '*': 'Enter date in format MM/DD/YYYY.',
-          'date.greater':
-            'Start date cannot be in the past. Enter a valid date.',
+          'number.base': 'Small case minimum quantity must be a number.',
+          'number.integer':
+            'Small case minimum quantity must be a whole number.',
+          'number.min': 'Small case minimum quantity cannot be negative.',
+        }),
+      smallCaseMaxQuantity: joi
+        .number()
+        .integer()
+        .min(joi.ref('smallCaseMinimumQuantity'))
+        .required()
+        .messages({
+          'number.base': 'Small case max quantity must be a number.',
+          'number.integer': 'Small case max quantity must be a whole number.',
+          'number.min':
+            'Small case max quantity must be greater than or equal to the Small case minimum quantity.',
+        }),
+      regularCaseMinimumQuantity: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages({
+          'number.base': 'Regular case minimum quantity must be a number.',
+          'number.integer':
+            'Regular case minimum quantity must be a whole number.',
+          'number.min': 'Regular case minimum quantity cannot be negative.',
+        }),
+      regularCaseMaxQuantity: joi
+        .number()
+        .integer()
+        .min(joi.ref('regularCaseMinimumQuantity'))
+        .required()
+        .messages({
+          'number.base': 'Regular case max quantity must be a number.',
+          'number.integer': 'Regular case max quantity must be a whole number.',
+          'number.min':
+            'Regular case max quantity must be greater than or equal to the Regular case minimum quantity.',
+        }),
+      hybridCaseMinimumQuantity: joi
+        .number()
+        .integer()
+        .min(0)
+        .required()
+        .messages({
+          'number.base': 'Hybrid case minimum quantity must be a number.',
+          'number.integer':
+            'Hybrid case minimum quantity must be a whole number.',
+          'number.min': 'Hybrid case minimum quantity cannot be negative.',
+        }),
+      hybridCaseMaxQuantity: joi
+        .number()
+        .integer()
+        .min(joi.ref('hybridCaseMinimumQuantity'))
+        .required()
+        .messages({
+          'number.base': 'Hybrid case max quantity must be a number.',
+          'number.integer': 'Hybrid case max quantity must be a whole number.',
+          'number.min':
+            'Hybrid case max quantity must be greater than or equal to the Hybrid case minimum quantity.',
         }),
     };
   }
 }
+
+export type RawGenerateSuggestedTermForm = ExcludeMethods<
+  Omit<GenerateSuggestedTermForm, 'entityName'>
+>;

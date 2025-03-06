@@ -1084,6 +1084,20 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session-detail/*/case/*/minutes',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
+        (trialSessionId, docketNumber) => {
+          setPageTitle('Trial session minutes');
+          return app.getSequence('goToTrialSessionMinutesSequence')({
+            docketNumber,
+            trialSessionId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/trial-session-detail/*',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
@@ -1119,6 +1133,17 @@ const router = {
             term: term.toLocaleLowerCase(),
             year,
           });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/trial-session/term-builder',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        () => {
+          setPageTitle('Trial session term generator');
+          return app.getSequence('gotoTrialSessionTermBuilderSequence')();
         },
       ),
     );

@@ -1,7 +1,10 @@
 jest.mock('@web-api/persistence/elasticsearch/caseAdvancedSearch');
 
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MAX_SEARCH_RESULTS } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  MAX_SEARCH_RESULTS,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { caseAdvancedSearchInteractor } from './caseAdvancedSearchInteractor';
 import {
@@ -43,7 +46,10 @@ describe('caseAdvancedSearchInteractor', () => {
     await expect(
       caseAdvancedSearchInteractor(
         applicationContext,
-        { petitionerName: 'Janae Jacobs' },
+        {
+          petitionerName: 'Janae Jacobs',
+          caseType: { [CASE_TYPES_MAP.cdp]: CASE_TYPES_MAP.cdp },
+        },
         mockPetitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
@@ -56,6 +62,7 @@ describe('caseAdvancedSearchInteractor', () => {
       applicationContext,
       {
         petitionerName: 'Paul Billings',
+        caseType: { [CASE_TYPES_MAP.cdp]: CASE_TYPES_MAP.cdp },
       },
       mockPetitionsClerkUser,
     );
