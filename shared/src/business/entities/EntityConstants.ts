@@ -1796,3 +1796,10 @@ export const TROUBLESHOOTING_INFO = {
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
+
+export const ORDER_REPLY_OPTIONS = {
+  REPLY: 'Order Reply',
+  REPLY_SR: 'Order Reply/SR',
+};
+
+export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 256;
