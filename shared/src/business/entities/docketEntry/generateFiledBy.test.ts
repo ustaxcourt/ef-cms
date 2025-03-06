@@ -1,5 +1,5 @@
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
-import { generateFiledByExtracted } from './generateFiledByExtracted';
+import { generateFiledBy } from './generateFiledBy';
 import { NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP } from '../EntityConstants';
 
 let mockDocketEntry;
@@ -12,13 +12,13 @@ const mockPetitioners = [
   { contactId: mockSecondaryContactId, name: 'Bill' },
 ];
 
-describe('generateFiledByExtracted', () => {
+describe('generateFiledBy', () => {
   beforeEach(() => {
     mockDocketEntry = MOCK_DOCUMENTS[0];
   });
 
   it('should generate correct filedBy string for a single petitioner in filers', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
@@ -30,7 +30,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should include the value provided for other filing party when one is provided', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
@@ -43,7 +43,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should generate correct filedBy string for single petitioner in filers that is not the primary', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockSecondaryContactId],
@@ -55,7 +55,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should include "Resp." in the filedBy text when the respondent is selected as one of the filers', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
@@ -68,7 +68,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should generate correct filedBy string for single petitioner in filers, partyIrsPractitioner, and otherFilingParty', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
@@ -82,7 +82,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should generate correct filedBy string for only otherFilingParty', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         otherFilingParty: mockOtherFilingParty,
@@ -94,7 +94,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should generate correct filedBy string for multiple petitioners in filers', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId, mockSecondaryContactId],
@@ -110,7 +110,7 @@ describe('generateFiledByExtracted', () => {
       ...pet,
       contactType: 'intervenor',
     }));
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
@@ -126,7 +126,7 @@ describe('generateFiledByExtracted', () => {
       ...pet,
       contactType: 'intervenor',
     }));
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId, mockSecondaryContactId],
@@ -138,7 +138,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false when values are present', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         partyIrsPractitioner: true,
@@ -157,7 +157,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should not generate a filedBy value when the docket entry is an auto-generated notice of contact change', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         documentType: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
@@ -174,7 +174,7 @@ describe('generateFiledByExtracted', () => {
 
   it('should generate filed by when the docket entry is a non-auto-generated notice of contact change and is not served', () => {
     const nonNoticeOfContactChangeEventCode: string = 'O';
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         eventCode: nonNoticeOfContactChangeEventCode,
@@ -189,7 +189,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should ignore filers array when the filer is a private practitioner', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
@@ -207,7 +207,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should not include private practitioners that are not party private practitioners when there are multiple private practitioners', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
@@ -229,7 +229,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should include otherFilingParty when privatePractitioner is filing and otherFilingPart is included', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         otherFilingParty: 'Other Filing Party',
@@ -250,7 +250,7 @@ describe('generateFiledByExtracted', () => {
   it('should not update filedBy when the docket entry has been served', () => {
     const mockFiledBy: string =
       'This filed by should not be updated by the constructor';
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filedBy: mockFiledBy,
@@ -265,7 +265,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it('should include two petitioners from the petitioner array when those two petitioners have the same contaceId', () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [mockPrimaryContactId],
@@ -280,7 +280,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it("should return the passed in docketEntry's filedBy value when none of the filers are a petitioner", () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: ['id that does not match any contact'],
@@ -295,7 +295,7 @@ describe('generateFiledByExtracted', () => {
   });
 
   it("should return the passed in docketEntry's filedBy value when there are not filing parties", () => {
-    const filedByResult = generateFiledByExtracted({
+    const filedByResult = generateFiledBy({
       docketEntry: {
         ...mockDocketEntry,
         filers: [],

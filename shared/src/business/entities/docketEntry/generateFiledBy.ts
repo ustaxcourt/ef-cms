@@ -9,7 +9,7 @@ const formatPartyNames = (names: string[], prefix: string): string => {
     : `${prefix}s. ${joinedNames}`;
 };
 
-export const generateFiledByExtracted = ({
+export const generateFiledBy = ({
   docketEntry,
   petitioners,
 }: {
