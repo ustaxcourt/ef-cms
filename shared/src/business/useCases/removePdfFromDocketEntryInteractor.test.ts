@@ -34,7 +34,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     createdAt: applicationContext.getUtilities().createISODateString(),
     correspondence: [],
     consolidatedCases: [],
-    petitionPaymentStatus: PAYMENT_STATUS.PAID,
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
     receivedAt: applicationContext.getUtilities().createISODateString(),
     sortableDocketNumber: 56789,
     hearings: [],
