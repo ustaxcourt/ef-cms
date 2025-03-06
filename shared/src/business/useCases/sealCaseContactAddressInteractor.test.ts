@@ -15,11 +15,10 @@ import {
 import { sealCaseContactAddressInteractor } from './sealCaseContactAddressInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 
 describe('sealCaseContactAddressInteractor', () => {
   let mockLock;
-  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCase = jest.mocked(updateCaseMock);
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
@@ -64,11 +63,12 @@ describe('sealCaseContactAddressInteractor', () => {
   it('should throw an exception of `Cannot seal contact` even when otherFilers or otherPetitioners are undefined or null', async () => {
     const caseWithoutOthers = {
       ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+      caption: MOCK_CASE_WITH_SECONDARY_OTHERS.caseCaption,
       otherFilers: null,
       otherPetitioners: null,
     };
 
-    getCaseByDocketNumber.mockResolvedValue(rawCaseEntity(caseWithoutOthers));
+    getCaseByDocketNumber.mockResolvedValue(caseWithoutOthers);
 
     await expect(
       sealCaseContactAddressInteractor(
@@ -97,9 +97,7 @@ describe('sealCaseContactAddressInteractor', () => {
   });
 
   it('should call updateCase with `isSealedAddress` on contactSecondary and return the updated case', async () => {
-    getCaseByDocketNumber.mockResolvedValue(
-      rawCaseEntity(MOCK_CASE_WITH_SECONDARY_OTHERS),
-    );
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE_WITH_SECONDARY_OTHERS);
 
     const result = await sealCaseContactAddressInteractor(
       applicationContext,
@@ -115,9 +113,7 @@ describe('sealCaseContactAddressInteractor', () => {
   });
 
   it('should call updateCase with `isSealedAddress` on otherFilers[1] and return the updated case', async () => {
-    getCaseByDocketNumber.mockResolvedValue(
-      rawCaseEntity(MOCK_CASE_WITH_SECONDARY_OTHERS),
-    );
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE_WITH_SECONDARY_OTHERS);
 
     const result = await sealCaseContactAddressInteractor(
       applicationContext,

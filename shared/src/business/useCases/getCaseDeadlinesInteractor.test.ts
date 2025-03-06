@@ -18,15 +18,13 @@ import {
 import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 
 const getCaseDeadlinesByDateRange = jest.mocked(
   getCaseDeadlinesByDateRangeMock,
 );
 
-const getCasesMetadataByDocketNumbers = jest.mocked(
-  getCasesMetadataByDocketNumbersMock,
-);
+const getCasesMetadataByDocketNumbers =
+  getCasesMetadataByDocketNumbersMock as jest.Mock;
 const updateCase = jest.mocked(updateCaseMock);
 updateCase.mockImplementation(({ caseToUpdate }) =>
   Promise.resolve(caseToUpdate),
@@ -115,9 +113,7 @@ describe('getCaseDeadlinesInteractor', () => {
       foundDeadlines: mockDeadlines as CaseDeadline[],
       totalCount: 2,
     });
-    getCasesMetadataByDocketNumbers.mockResolvedValue(
-      mockCases.map(c => rawCaseEntity(c)),
-    );
+    getCasesMetadataByDocketNumbers.mockResolvedValue(mockCases);
   });
 
   it('throws an error when the user is not valid or authorized', async () => {
