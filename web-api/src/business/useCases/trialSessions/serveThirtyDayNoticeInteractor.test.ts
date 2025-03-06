@@ -46,6 +46,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
+    applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById.mockResolvedValueOnce(trialSession);
+
     await expect(
       serveThirtyDayNoticeInteractor(
         applicationContext,
@@ -59,6 +63,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
   });
 
   it('should throw an invalid request error when no trial session id is provided', async () => {
+    applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById.mockResolvedValue(trialSession);
+
     await expect(
       serveThirtyDayNoticeInteractor(
         applicationContext,

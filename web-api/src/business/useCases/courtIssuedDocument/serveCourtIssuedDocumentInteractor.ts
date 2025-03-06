@@ -1,16 +1,19 @@
-import { Case } from '@shared/business/entities/cases/Case';
-import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} from '@shared/authorization/authorizationClientService';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const serveCourtIssuedDocument = async (
@@ -95,10 +98,7 @@ export const serveCourtIssuedDocument = async (
 
   docketEntryToServe.numberOfPages = await applicationContext
     .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId,
-    });
+    .countPagesInDocument({ applicationContext, docketEntryId });
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -125,9 +125,7 @@ export const serveCourtIssuedDocument = async (
             filingDate: createISODateString(),
             isOnDocketRecord: true,
           },
-          {
-            authorizedUser,
-          },
+          { authorizedUser },
         );
 
         return fileAndServeDocumentOnOneCase({
@@ -184,10 +182,7 @@ export const serveCourtIssuedDocument = async (
     clientConnectionId,
     message: {
       action: 'serve_document_complete',
-      alertSuccess: {
-        message: successMessage,
-        overwritable: false,
-      },
+      alertSuccess: { message: successMessage, overwritable: false },
       pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
     },
     userId: user.userId,
@@ -199,10 +194,7 @@ export const determineEntitiesToLock = (
   {
     docketNumbers = [],
     subjectCaseDocketNumber,
-  }: {
-    docketNumbers?: string[];
-    subjectCaseDocketNumber;
-  },
+  }: { docketNumbers?: string[]; subjectCaseDocketNumber },
 ) => ({
   identifiers: [...new Set([...docketNumbers, subjectCaseDocketNumber])].map(
     item => `case|${item}`,
@@ -210,27 +202,8 @@ export const determineEntitiesToLock = (
   ttl: 15 * 60,
 });
 
-export const handleLockError = async (
-  applicationContext: ServerApplicationContext,
-  originalRequest,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'serve_court_issued_document',
-      },
-      userId: authorizedUser?.userId,
-    });
-  }
-};
-
 export const serveCourtIssuedDocumentInteractor = withLocking(
   serveCourtIssuedDocument,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

@@ -22,9 +22,6 @@ note: we have 3 package.json files, be sure to update them all
    > **Why am I seeing a medium severity for `quill`?**
    > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
-   > **Why am I seeing a high severity for `cross-spawn`?**
-   > We use pdf2pic to generate pdf to images which depends on gm (GraphicsMagick and ImageMagick for node). This issue has existed for over two weeks as of 11/22/2024. Our risk factor for this issue should be low. It doesn't appear that we can force gm from 4.0.0 to 6.0.6 or 7.0.5.
-
    > **Why am I seeing a high severity for `pdfjs-dist`?**
    > [See below](#pdfjs-dist).
 
@@ -52,12 +49,12 @@ note: we have 3 package.json files, be sure to update them all
 
 4. Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-regex search the entire project for `version = ">= \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+regex search the entire project for `version = "~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
  - ./shared/admin-tools/glue/glue_migrations/main.tf
  - ./shared/admin-tools/glue/remote_role/main.tf
 
-	> version = ">= <LATEST_VERSION>"
+	> version = "~>~ <LATEST_VERSION>"
 
 5. Check through the list of caveats to see if any of the documented issues have been resolved.
 
@@ -68,6 +65,10 @@ regex search the entire project for `version = ">= \d+.\d+.\d+"` and make sure i
 ### React and ReactDOM
 
 - cerebral version 5.2.1 and @cerebral/react version 4.2.1 are not compatible with React and ReactDOM version 19. Keep these pinned at version 18 for the time being. See https://github.com/cerebral/cerebral/pull/1441.
+
+### cerebral and @cerebral/react
+
+- New versions of cerebral (5.2.1 to 5.2.2) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and 4.2.1 respectively for the time being.
 
 ### @fortawesome
 
@@ -87,9 +88,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
 - The high-severity security issue "vulnerable to arbitrary JavaScript execution" has been addressed by us here: https://github.com/flexion/ef-cms/issues/10407 and can therefore be ignored.
-
-### @uswds/uswds
-- Keep pinned on 3.7.1, upgrading to 3.8.0+ will cause DAWSON UI issues with icon spacing and break Cypress Snapshots in the Cypress UI (as you hover over each step after initial run, it loses styles, making it harder to debug issues).
 
 ### ws, 3rd party dependency of Cerebral
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
