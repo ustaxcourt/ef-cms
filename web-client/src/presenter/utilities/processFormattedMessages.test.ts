@@ -200,24 +200,37 @@ describe('processFormattedMessages', () => {
       ]);
     });
 
-    it('should reverse the order of messages if sortOrder is descending', () => {
-      const result = sortFormattedMessages(messages, {
-        sortField: 'UNKNOWN',
+    it('should maintain the same order when the docket numbers are the same', () => {
+      const aMessage = {
+        completedAt: '2019-01-02T16:29:13.122Z',
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: DOCKET_NUMBER_1,
+        message: 'Message 1 sameDocket',
+        parentMessageId: PARENT_MESSAGE_ID,
+        subject: 'AAAA',
+      };
+      messages = [
+        aMessage,
+        { ...aMessage, message: 'Message 2 sameDocket' },
+        { ...aMessage, message: 'Message 3 sameDocket' },
+      ];
+
+      const result1 = sortFormattedMessages(messages, {
+        sortField: 'docketNumber',
         sortOrder: DESCENDING,
       });
 
-      expect(result).toMatchObject([
+      expect(result1).toMatchObject([
         {
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: DOCKET_NUMBER_2,
+          message: 'Message 1 sameDocket',
+          docketNumber: DOCKET_NUMBER_1,
         },
         {
-          createdAt: '2019-01-02T17:29:13.122Z',
-          docketNumber: DOCKET_NUMBER_3,
-          parentMessageId: PARENT_MESSAGE_ID,
+          message: 'Message 2 sameDocket',
+          docketNumber: DOCKET_NUMBER_1,
         },
         {
-          createdAt: '2019-01-01T16:29:13.122Z',
+          message: 'Message 3 sameDocket',
           docketNumber: DOCKET_NUMBER_1,
         },
       ]);
@@ -308,6 +321,26 @@ describe('processFormattedMessages', () => {
           subject: 'CCCC',
         },
       ]);
+    });
+
+    it('should consistently return messages sorted in descending order when provided with desc as the sort direction', () => {
+      const formattedCaseMessages = [
+        { createdAt: '2025-02-14T18:13:48.341Z', docketNumber: '101-25' },
+        { createdAt: '2020-08-18T18:07:36.333Z', docketNumber: '104-19' },
+        { createdAt: '2025-02-14T18:14:32.069Z', docketNumber: '101-25' },
+      ];
+
+      const firstSort = sortFormattedMessages(formattedCaseMessages, {
+        sortField: 'createdAt',
+        sortOrder: 'desc',
+      });
+
+      const secondSort = sortFormattedMessages(formattedCaseMessages, {
+        sortField: 'createdAt',
+        sortOrder: 'desc',
+      });
+
+      expect(secondSort).toEqual(firstSort);
     });
   });
 
