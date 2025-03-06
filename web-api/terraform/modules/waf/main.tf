@@ -64,13 +64,11 @@ resource "aws_wafv2_web_acl" "apis" {
     priority = 2
 
     action {
-      # count {}
-
       block {
         custom_response {
           response_code = 429
         }
-      } // change to `block {}` when confident in ruleset
+      }
     }
 
     statement {

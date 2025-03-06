@@ -8,6 +8,9 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
+import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
+import { isEmpty } from 'lodash';
 
 export const CaseSearchByName = connect(
   {
@@ -47,7 +50,7 @@ export const CaseSearchByName = connect(
         >
           <h3>Search by Name</h3>
         </div>
-        <div className="blue-container advanced-search__form-container">
+        <div className="blue-container height-full display-flex flex-column">
           <form>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-12">
@@ -360,7 +363,7 @@ export const CaseSearchByName = connect(
             </div>
 
             <NonMobile>
-              <div className="grid-row grid-gap margin-bottom-2">
+              <div className="grid-row grid-gap">
                 <DateRangePickerComponent
                   omitFormGroupClass
                   endDateErrorText={validationErrors.endDate}
@@ -434,6 +437,62 @@ export const CaseSearchByName = connect(
                 />
               </div>
             </Mobile>
+
+            <div>
+              <label
+                className="usa-label"
+                htmlFor="case-type-filter"
+                id="case-type-filter-label"
+              >
+                Case Type
+              </label>
+              <SelectSearch
+                aria-labelledby="case-type-filter-label"
+                data-testid="case-type-selection"
+                name="caseType"
+                className="maxw-mobile-lg"
+                placeholder="- Select one or more -"
+                inputId="case-type-filter"
+                value={{
+                  label: '- Select one or more -',
+                  value: '',
+                }}
+                options={caseSearchByNameHelper.caseTypeOptions}
+                onChange={e => {
+                  if (e?.value) {
+                    const currentCaseTypeFilters =
+                      advancedSearchForm.caseSearchByName?.caseType || {};
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'caseType',
+                      value: { ...currentCaseTypeFilters, [e.value]: e.value },
+                    });
+                  }
+                }}
+              />
+            </div>
+            {!isEmpty(advancedSearchForm.caseSearchByName?.caseType) && (
+              <div className="padding-1"></div>
+            )}
+            <div>
+              {Object.values(
+                advancedSearchForm.caseSearchByName?.caseType || {},
+              ).map((caseType: any) => (
+                <PillButton
+                  key={caseType}
+                  text={caseType}
+                  onRemove={() => {
+                    delete advancedSearchForm.caseSearchByName.caseType[
+                      caseType
+                    ];
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'caseType',
+                      value: advancedSearchForm.caseSearchByName.caseType,
+                    });
+                  }}
+                />
+              ))}
+            </div>
+            <div className="padding-2"></div>
 
             <div className="grid-row">
               <div className="button-container">

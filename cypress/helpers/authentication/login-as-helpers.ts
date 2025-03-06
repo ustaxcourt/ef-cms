@@ -123,6 +123,11 @@ export function loginAsIrsSuperUser() {
   cy.get('[data-testid="advanced-search-link"]').should('exist');
 }
 
+export function loginAsTrialClerk() {
+  login({ email: 'trialClerk1@example.com' });
+  cy.get('[data-testid="trial-session-link"]').should('exist');
+}
+
 // We created this new login function because our current login function was too generically
 // waiting for the account menu button, resulting in visiting a route before the page was fully loaded.
 // We need to deprecate usage of cy.login and have all tests login through helper functions so we properly await
