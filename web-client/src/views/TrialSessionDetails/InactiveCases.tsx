@@ -60,6 +60,8 @@ export const InactiveCases = connect(
                       <Button
                         link
                         href={item.minuteSheetRoute}
+                        rel="noreferrer noopener"
+                        target="_blank"
                         icon="pencil-alt"
                       >
                         Minutes

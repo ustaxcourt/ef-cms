@@ -7,7 +7,7 @@ const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 describe('Document QC UI Smoketests', () => {
   describe('login and view the document QC page', () => {
     it("should fetch the user's inbox upon navigation", () => {
-      loginAsAdmissionsClerk('testAdmissionsClerk');
+      loginAsAdmissionsClerk('testAdmissionsClerk@example.com');
 
       cy.get('.button-switch-box')
         .contains('Switch to Section Messages')

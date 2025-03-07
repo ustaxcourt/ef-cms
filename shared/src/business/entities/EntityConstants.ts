@@ -478,6 +478,12 @@ export const INTERNAL_DOCUMENTS_ARRAY = flatten(
   Object.values(INTERNAL_FILING_EVENTS),
 );
 
+export const MINUTE_SHEET_EVENT_CODES = [
+  ...COURT_ISSUED_EVENTS.filter(d => d.scenario === 'Type F').map(
+    d => d.eventCode,
+  ),
+];
+
 export const MOTION_EVENT_CODES = [
   ...INTERNAL_FILING_EVENTS['Motion'].map(entry => {
     return entry.eventCode;
