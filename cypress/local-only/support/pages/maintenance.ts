@@ -1,7 +1,3 @@
-export const navigateTo = (username: string) => {
-  cy.login(username, '/');
-};
-
 export const navigateToDashboard = () => {
   cy.visit('/');
 };
