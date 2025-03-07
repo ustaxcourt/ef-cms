@@ -11,6 +11,7 @@ import classNames from 'classnames';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { isEmpty } from 'lodash';
+import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 
 export const CaseSearchByName = connect(
   {
@@ -107,8 +108,6 @@ export const CaseSearchByName = connect(
                       <NonMobile>
                         <div className="usa-radio usa-radio__inline">
                           <input
-                            aria-describedby="all-country-selection"
-                            aria-labelledby="all-country-selection"
                             checked={
                               advancedSearchForm.caseSearchByName
                                 .countryType === 'all'
@@ -116,13 +115,13 @@ export const CaseSearchByName = connect(
                             className="usa-radio__input"
                             data-testid="all-country-selection"
                             id="all-country-selection"
-                            name="all"
+                            name="country"
                             type="radio"
-                            value="All"
+                            value="all"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -136,21 +135,19 @@ export const CaseSearchByName = connect(
                         </div>
                         <div className="usa-radio usa-radio__inline">
                           <input
-                            aria-describedby="scan-mode-radios-legend"
-                            aria-labelledby="upload-mode-upload"
                             checked={
                               advancedSearchForm.caseSearchByName
                                 .countryType === 'domestic'
                             }
                             className="usa-radio__input"
                             id="united-states-country-selection"
-                            name="domestic"
+                            name="country"
                             type="radio"
-                            value="United States"
+                            value="domestic"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -164,21 +161,19 @@ export const CaseSearchByName = connect(
                         </div>
                         <div className="usa-radio usa-radio__inline">
                           <input
-                            aria-describedby="scan-mode-radios-legend"
-                            aria-labelledby="upload-mode-upload"
                             checked={
                               advancedSearchForm.caseSearchByName
                                 .countryType === 'international'
                             }
                             className="usa-radio__input"
                             id="international-country-selection"
-                            name="international"
+                            name="country"
                             type="radio"
                             value="international"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -204,13 +199,13 @@ export const CaseSearchByName = connect(
                             className="usa-radio__input"
                             data-testid="all-country-selection"
                             id="all-country-selection"
-                            name="all"
+                            name="country"
                             type="radio"
-                            value="All"
+                            value="all"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -232,13 +227,13 @@ export const CaseSearchByName = connect(
                             }
                             className="usa-radio__input"
                             id="united-states-country-selection"
-                            name="domestic"
+                            name="country"
                             type="radio"
                             value="United States"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -260,13 +255,13 @@ export const CaseSearchByName = connect(
                             }
                             className="usa-radio__input"
                             id="international-country-selection"
-                            name="international"
+                            name="country"
                             type="radio"
                             value="international"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -438,6 +433,43 @@ export const CaseSearchByName = connect(
               </div>
             </Mobile>
 
+            <div>
+              <fieldset className="usa-fieldset">
+                <legend className="usa-legend">Case Procedure</legend>
+                {Object.values({ all: 'All', ...PROCEDURE_TYPES_MAP }).map(
+                  procedureType => (
+                    <div
+                      className="usa-radio tablet:display-inline tablet:padding-right-4"
+                      key={procedureType}
+                    >
+                      <input
+                        checked={
+                          advancedSearchForm.caseSearchByName.procedureType ===
+                          procedureType
+                        }
+                        className="usa-radio__input"
+                        id={`caseProcedureType-${procedureType}`}
+                        name="procedureType"
+                        type="radio"
+                        onChange={e => {
+                          updateCaseAdvancedSearchByNameFormValueSequence({
+                            key: 'procedureType',
+                            value: e.target.value,
+                          });
+                        }}
+                        value={procedureType}
+                      />
+                      <label
+                        className="usa-radio__label"
+                        htmlFor={`caseProcedureType-${procedureType}`}
+                      >
+                        {procedureType}
+                      </label>
+                    </div>
+                  ),
+                )}
+              </fieldset>
+            </div>
             <div>
               <label
                 className="usa-label"
