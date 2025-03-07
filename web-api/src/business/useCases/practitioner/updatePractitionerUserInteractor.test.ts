@@ -7,11 +7,12 @@ import {
   mockAdmissionsClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';
+import { updatePractitionerUser } from './updatePractitionerUserInteractor';
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 
-describe('updatePractitionerUserInteractor', () => {
+describe('updatePractitionerUser', () => {
   let mockPractitioner = MOCK_PRACTITIONER;
+  const clientConnectionId = 'c05024b1-f746-4360-a294-29179ac24ccd';
 
   beforeEach(() => {
     mockPractitioner = { ...MOCK_PRACTITIONER };
@@ -35,11 +36,12 @@ describe('updatePractitionerUserInteractor', () => {
 
   it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {
     await expect(
-      updatePractitionerUserInteractor(
+      updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
           user: mockPractitioner,
+          clientConnectionId,
         },
         mockPetitionerUser,
       ),
@@ -52,11 +54,12 @@ describe('updatePractitionerUserInteractor', () => {
       .getPractitionerByBarNumber.mockResolvedValue(undefined);
 
     await expect(
-      updatePractitionerUserInteractor(
+      updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'AB1111',
           bypassDocketEntry: false,
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             barNumber: 'AB1111',
@@ -78,11 +81,12 @@ describe('updatePractitionerUserInteractor', () => {
       });
 
     await expect(
-      updatePractitionerUserInteractor(
+      updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'AB1111',
           bypassDocketEntry: false,
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             barNumber: 'AB1111',
@@ -102,10 +106,11 @@ describe('updatePractitionerUserInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           barNumber: 'AB2222',
@@ -125,10 +130,11 @@ describe('updatePractitionerUserInteractor', () => {
   });
 
   it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           barNumber: 'AB2222',
@@ -152,10 +158,11 @@ describe('updatePractitionerUserInteractor', () => {
     mockPractitioner.email = undefined;
     mockPractitioner.pendingEmail = 'pendingEmail@example.com';
 
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           barNumber: 'AB2222',
@@ -183,10 +190,11 @@ describe('updatePractitionerUserInteractor', () => {
         email: undefined,
       });
 
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           confirmEmail: 'admissionsclerk@example.com',
@@ -213,10 +221,11 @@ describe('updatePractitionerUserInteractor', () => {
         email: undefined,
       });
 
-    await updatePractitionerUserInteractor(
+    await updatePractitionerUser(
       applicationContext,
       {
         barNumber: 'AB1111',
+        clientConnectionId,
         user: {
           ...mockPractitioner,
           email: undefined,
@@ -242,11 +251,12 @@ describe('updatePractitionerUserInteractor', () => {
   describe('updating email', () => {
     it('should throw unauthorized error when the logged in user does not have permission to manage emails', async () => {
       await expect(
-        updatePractitionerUserInteractor(
+        updatePractitionerUser(
           applicationContext,
           {
             barNumber: 'pt101',
             user: mockPractitioner,
+            clientConnectionId,
           },
           mockPetitionerUser,
         ),
@@ -259,10 +269,11 @@ describe('updatePractitionerUserInteractor', () => {
         .isEmailAvailable.mockReturnValue(false);
 
       await expect(
-        updatePractitionerUserInteractor(
+        updatePractitionerUser(
           applicationContext,
           {
             barNumber: 'pt101',
+            clientConnectionId,
             user: {
               ...mockPractitioner,
               confirmEmail: 'exists@example.com',
@@ -275,10 +286,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should update the user with the new user.updatedEmail value', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -298,10 +310,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it("should send the verification email when the user's email is being changed", async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -322,10 +335,11 @@ describe('updatePractitionerUserInteractor', () => {
 
     it("should NOT send the verification email when the user's email is being added for the first time", async () => {
       mockPractitioner.email = undefined;
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -341,10 +355,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the email is being updated', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -358,10 +373,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes are being updated', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             practitionerNotes: 'wow, real good notes',
@@ -374,10 +390,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes and email are being updated', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -392,10 +409,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the address1', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
@@ -413,10 +431,11 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the practitioner name', async () => {
-      await updatePractitionerUserInteractor(
+      await updatePractitionerUser(
         applicationContext,
         {
           barNumber: 'pt101',
+          clientConnectionId,
           user: {
             ...mockPractitioner,
             confirmEmail: 'free-email-to-use@example.com',
