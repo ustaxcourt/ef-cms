@@ -25,7 +25,8 @@ describe('Judge`s chambers stamps an order', () => {
     petitionerCreatesElectronicCaseWithSpouse().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
-      cy.login('docketclerk1', `case-detail/${docketNumber}`);
+      loginAsDocketClerk1();
+      cy.visit(`/case-detail/${docketNumber}`);
 
       // File Motion for Continuance
       cy.get('[data-testid="case-detail-menu-button"]').click();

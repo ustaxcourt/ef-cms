@@ -261,6 +261,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Application to Take Deposition of [Name]',
@@ -446,6 +450,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Evidence',
@@ -1253,6 +1261,22 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText2: '',
       ordinalField: '',
       allowStamp: true,
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
+    },
+    {
+      documentTitle: 'Motion to Appoint an Interpreter',
+      documentType: 'Motion to Appoint an Interpreter',
+      category: 'Motion',
+      eventCode: 'M045A',
+      scenario: 'Standard',
+      labelPreviousDocument: '',
+      labelFreeText: '',
+      labelFreeText2: '',
+      ordinalField: '',
+      allowStamp: true,
     },
     {
       documentTitle: 'Motion to Appoint New Tax Matters Partner',
@@ -1265,6 +1289,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText2: '',
       ordinalField: '',
       allowStamp: true,
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Motion to Appoint Tax Matters Partner',
@@ -1374,6 +1402,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText2: '',
       ordinalField: '',
       allowStamp: true,
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Motion to Certify for Interlocutory Appeal',
@@ -1386,6 +1418,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText2: '',
       ordinalField: '',
       allowStamp: true,
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Motion to Change or Correct Docket Entry',
@@ -1856,6 +1892,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText2: '',
       ordinalField: '',
       allowStamp: true,
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Motion to Proceed Anonymously',
@@ -2104,6 +2144,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText2: '',
       ordinalField: '',
       allowStamp: true,
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Motion to Stay Proceedings',
@@ -2422,6 +2466,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Notice of Concession',
@@ -2577,6 +2625,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Notice of No Objection to [Document Name]',
@@ -2632,6 +2684,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle:
@@ -2677,6 +2733,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Notice of Termination Assessment',
@@ -2964,6 +3024,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Seriatim Opening Brief',
@@ -2986,6 +3050,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Seriatim Reply Brief',
@@ -3008,6 +3076,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Seriatim Sur-Reply Brief',
@@ -3030,6 +3102,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
   ],
   'Simultaneous Brief': [
@@ -3065,6 +3141,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Simultaneous Memoranda of Law',
@@ -3098,6 +3178,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
     {
       documentTitle: 'Simultaneous Reply Brief',
@@ -3142,6 +3226,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: '',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
   ],
   Statement: [
@@ -3417,6 +3505,10 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       labelFreeText: 'Who signed this?',
       labelFreeText2: '',
       ordinalField: '',
+      deprecated: {
+        deprecatedOn: '02/2025',
+        deprecationReson: `10587: This document was duplicative, extraneous, or no longer used by the Court`,
+      },
     },
   ],
 };

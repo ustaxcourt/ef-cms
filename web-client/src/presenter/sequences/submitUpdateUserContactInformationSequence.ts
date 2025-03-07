@@ -3,7 +3,6 @@ import { setScrollToErrorNotificationAction } from '@web-client/presenter/action
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
-import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { updateUserContactInformationAction } from '../actions/updateUserContactInformationAction';
 import { validateUserContactAction } from '../actions/validateUserContactAction';
@@ -18,10 +17,6 @@ export const submitUpdateUserContactInformationSequence = [
       setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
-    success: [
-      setWaitingForResponseAction,
-      setupCurrentPageAction('Interstitial'),
-      updateUserContactInformationAction,
-    ],
+    success: [setWaitingForResponseAction, updateUserContactInformationAction],
   },
 ];
