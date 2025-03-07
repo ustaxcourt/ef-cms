@@ -11,24 +11,28 @@ export const caseSearchByNameHelper = (): {
   const today = formatNow(FORMATS.YYYYMMDD);
   const caseTypeOptions = [
     {
-      label: CASE_TYPES_MAP.djExemptOrg,
-      value: CASE_TYPES_MAP.djExemptOrg,
+      label: CASE_TYPES_MAP.deficiency,
+      value: CASE_TYPES_MAP.deficiency,
     },
     {
-      label: CASE_TYPES_MAP.djRetirementPlan,
-      value: CASE_TYPES_MAP.djRetirementPlan,
-    },
-    {
-      label: CASE_TYPES_MAP.cdp,
+      label: 'L - Collection (Lien/Levy)',
       value: CASE_TYPES_MAP.cdp,
     },
     {
-      label: CASE_TYPES_MAP.passport,
+      label: 'P - Passport',
       value: CASE_TYPES_MAP.passport,
     },
     {
-      label: CASE_TYPES_MAP.whistleblower,
+      label: 'R - Declaratory Judgment (Retirement Plan)',
+      value: CASE_TYPES_MAP.djRetirementPlan,
+    },
+    {
+      label: 'W - Whistleblower',
       value: CASE_TYPES_MAP.whistleblower,
+    },
+    {
+      label: 'X - Declaratory Judgment (Exempt Organization)',
+      value: CASE_TYPES_MAP.djExemptOrg,
     },
   ];
   return {
