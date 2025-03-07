@@ -6,7 +6,7 @@ const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Trial Sessions UI Smoketests', () => {
   it('should fetch the open trial sessions upon navigation', () => {
-    loginAsAdmissionsClerk('testAdmissionsClerk');
+    loginAsAdmissionsClerk('testAdmissionsClerk@example.com');
     cy.intercept({
       hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
       method: 'GET',
