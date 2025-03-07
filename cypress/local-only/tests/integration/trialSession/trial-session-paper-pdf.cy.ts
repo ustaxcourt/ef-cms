@@ -1,10 +1,12 @@
 import { fillInCreateCaseFromPaperForm } from '../../../support/pages/create-paper-petition';
 import { getCreateACaseButton } from '../../../support/pages/document-qc';
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
   it('should create a trial session, add a case, and generate a pdf for paper service', () => {
-    cy.login('petitionsclerk', 'trial-sessions');
+    loginAsPetitionsClerk();
+    cy.visit('/trial-sessions');
 
     cy.get('[data-testid="add-trial-session-button"]').click();
     cy.contains('Location-based').click();
