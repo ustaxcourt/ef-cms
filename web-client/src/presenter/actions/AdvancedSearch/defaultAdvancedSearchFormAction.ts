@@ -15,6 +15,7 @@ export const defaultAdvancedSearchFormAction = ({
   if (!advancedSearchForm.caseSearchByName) {
     store.set(state.advancedSearchForm.caseSearchByName, {
       countryType: ALL_COUNTRY_TYPE,
+      procedureType: 'All'
     });
   }
   if (!advancedSearchForm.practitionerSearchByBarNumber) {

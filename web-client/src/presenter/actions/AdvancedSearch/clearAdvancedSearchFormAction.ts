@@ -26,9 +26,11 @@ export const clearAdvancedSearchFormAction = ({
     };
     lastKeysOfPages?: Array<string | number>;
     total?: number;
+    procedureType?: string;
   };
   if (formType === 'caseSearchByName') {
     defaultForm.countryType = ALL_COUNTRY_TYPE;
+    defaultForm.procedureType = 'All';
   }
   if (formType === 'orderSearch' || formType === 'opinionSearch') {
     defaultForm.keyword = '';
