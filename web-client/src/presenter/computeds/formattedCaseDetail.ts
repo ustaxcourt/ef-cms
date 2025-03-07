@@ -99,7 +99,7 @@ export const formattedCaseDetail = (
   result.petitioners = applicationContext
     .getUtilities()
     .getFormattedPartiesNameAndTitle({ petitioners: result.petitioners })
-    .map(petitioner => ({
+    ?.map(petitioner => ({
       ...petitioner,
       isCurrentUser: petitioner.contactId === user.userId,
     }));
