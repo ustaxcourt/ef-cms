@@ -2,13 +2,18 @@ import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
 import {
   COUNTRY_TYPES,
   CountryTypes,
+  ProcedureType,
 } from '@shared/business/entities/EntityConstants';
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareFormDataForCaseSearchApi = (
-  form: Omit<CaseAdvancedSearchParamsRequestType, 'countryType'> & {
+  form: Omit<
+    CaseAdvancedSearchParamsRequestType,
+    'countryType' | 'procedureType'
+  > & {
     countryType: typeof ALL_COUNTRY_TYPE | CountryTypes;
+    procedureType: 'All' | ProcedureType;
   },
 ): CaseAdvancedSearchParamsRequestType => {
   return {
@@ -20,6 +25,8 @@ export const prepareFormDataForCaseSearchApi = (
       form.countryType === COUNTRY_TYPES.INTERNATIONAL
         ? undefined
         : form.petitionerState,
+    procedureType:
+      form.procedureType === 'All' ? undefined : form.procedureType,
   };
 };
 

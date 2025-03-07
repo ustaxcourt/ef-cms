@@ -17,6 +17,7 @@ export const casePublicSearchInteractor = async (
     petitionerState,
     startDate,
     caseType,
+    procedureType
   }: CaseAdvancedSearchParamsRequestType,
 ): Promise<{ results: CaseSearchResult[] }> => {
   let searchStartDate;
@@ -53,6 +54,7 @@ export const casePublicSearchInteractor = async (
         petitionerState,
         startDate: searchStartDate,
         caseType,
+        procedureType
       },
     });
 };

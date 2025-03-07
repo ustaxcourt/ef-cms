@@ -2,6 +2,7 @@ import {
   AbbrevatedStates,
   CountryTypes,
   MAX_SEARCH_RESULTS,
+  ProcedureType,
   US_STATES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import {
@@ -24,6 +25,7 @@ export type CaseAdvancedSearchParamsRequestType = {
   endDate?: string;
   startDate?: string;
   caseType?: Record<string, string>;
+  procedureType?: ProcedureType;
 };
 
 export type CaseSearchResult = {
@@ -44,6 +46,7 @@ export const caseAdvancedSearchInteractor = async (
     petitionerState,
     startDate,
     caseType,
+    procedureType
   }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
 ): Promise<CaseSearchResult[]> => {
@@ -85,6 +88,7 @@ export const caseAdvancedSearchInteractor = async (
         petitionerState,
         startDate: searchStartDate,
         caseType,
+        procedureType
       },
     });
 

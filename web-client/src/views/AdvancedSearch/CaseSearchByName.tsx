@@ -396,7 +396,7 @@ export const CaseSearchByName = connect(
             </NonMobile>
 
             <Mobile>
-              <div className="grid-row grid-gap margin-bottom-2">
+              <div className="grid-row grid-gap">
                 <DateRangePickerComponent
                   omitFormGroupClass
                   endDateErrorText={validationErrors.endDate}
@@ -435,7 +435,7 @@ export const CaseSearchByName = connect(
 
             <div>
               <fieldset className="usa-fieldset">
-                <legend className="usa-legend">Case Procedure</legend>
+                <legend className="usa-legend">Case procedure</legend>
                 {Object.values({ all: 'All', ...PROCEDURE_TYPES_MAP }).map(
                   procedureType => (
                     <div
@@ -476,7 +476,7 @@ export const CaseSearchByName = connect(
                 htmlFor="case-type-filter"
                 id="case-type-filter-label"
               >
-                Case Type
+                Case type
               </label>
               <SelectSearch
                 aria-labelledby="case-type-filter-label"
@@ -496,7 +496,7 @@ export const CaseSearchByName = connect(
                       advancedSearchForm.caseSearchByName?.caseType || {};
                     updateCaseAdvancedSearchByNameFormValueSequence({
                       key: 'caseType',
-                      value: { ...currentCaseTypeFilters, [e.value]: e.value },
+                      value: { ...currentCaseTypeFilters, [e.label]: e.value },
                     });
                   }
                 }}
@@ -506,15 +506,15 @@ export const CaseSearchByName = connect(
               <div className="padding-1"></div>
             )}
             <div>
-              {Object.values(
+              {Object.entries(
                 advancedSearchForm.caseSearchByName?.caseType || {},
-              ).map((caseType: any) => (
+              ).map(([label, caseType]: [string, any]) => (
                 <PillButton
                   key={caseType}
-                  text={caseType}
+                  text={label}
                   onRemove={() => {
                     delete advancedSearchForm.caseSearchByName.caseType[
-                      caseType
+                      label
                     ];
                     updateCaseAdvancedSearchByNameFormValueSequence({
                       key: 'caseType',
