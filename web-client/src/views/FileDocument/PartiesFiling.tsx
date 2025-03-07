@@ -8,7 +8,6 @@ export const PartiesFiling = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
-    user: state.user,
     formattedCaseDetail: state.formattedCaseDetail,
     updateFileDocumentWizardFormValueSequence:
       sequences.updateFileDocumentWizardFormValueSequence,
@@ -19,7 +18,6 @@ export const PartiesFiling = connect(
     fileDocumentHelper,
     form,
     formattedCaseDetail,
-    user,
     updateFileDocumentWizardFormValueSequence,
     validateExternalDocumentInformationSequence,
   }) {
@@ -39,7 +37,7 @@ export const PartiesFiling = connect(
                 <div className="usa-checkbox" key={petitioner.contactId}>
                   <input
                     checked={form.filersMap[petitioner.contactId] || false}
-                    disabled={petitioner.contactId === user.userId}
+                    disabled={petitioner.isCurrentUser}
                     className="usa-checkbox__input"
                     id={`filing-${petitioner.contactId}`}
                     name={`filersMap.${petitioner.contactId}`}
