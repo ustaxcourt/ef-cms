@@ -21,10 +21,11 @@ import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { isLeadCase } from '@shared/business/entities/cases/Case';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
 import { encode } from 'he';
 
 export type FormattedMinuteSheet = {
+  caseTitle: string;
   courtReporter: string;
   docketNumbers: string[];
   docketNumberWithSuffix?: string;
@@ -35,7 +36,6 @@ export type FormattedMinuteSheet = {
   trialLocation: string;
   trialStartDate: string;
   formattedDocketNumbers: string;
-  petitioners: string;
   petitionerAppearances: string[];
   called: string;
   notCalled: string;
@@ -118,7 +118,7 @@ export const formatMinuteSheet = ({
     petitionerWitnesses: formatWitnesses(
       minuteSheet.evidence.petitionerWitnesses,
     ),
-    petitioners: formatPetitioners(aCase),
+    caseTitle: formatCaseTitle(aCase),
     pretrialConference: formatPretrialConference(
       sanitizeMinuteSheetForm(pretrialConference),
     ),
@@ -219,12 +219,9 @@ export const formatWitnesses = (
   return Object.values(witnessesSection).filter(witness => !!witness.name);
 };
 
-export const formatPetitioners = (aCase: RawCase) => {
-  const petitioners = aCase.petitioners
-    .map(petitioner => petitioner.name)
-    .join(', ');
-
-  return isLeadCase(aCase) ? `${petitioners} et al.` : petitioners;
+export const formatCaseTitle = (aCase: RawCase) => {
+  const caseTitle = Case.getCaseTitle(Case.getCaseCaption(aCase));
+  return isLeadCase(aCase) ? `${caseTitle}, et al.` : caseTitle;
 };
 
 export const formatRemoteSession = (isRemoteSession: boolean) =>

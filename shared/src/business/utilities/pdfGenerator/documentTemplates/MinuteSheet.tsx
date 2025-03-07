@@ -24,9 +24,9 @@ export const MinuteSheet = ({
         </div>
         <div className="minute-sheet-field">
           <div>
-            <strong>Petitioner(s)</strong>
+            <strong>Case caption</strong>
           </div>
-          <div>{formattedMinuteSheet.petitioners}</div>
+          <div>{formattedMinuteSheet.caseTitle}</div>
         </div>
       </div>
       <hr />

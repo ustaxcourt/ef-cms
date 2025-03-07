@@ -20,13 +20,13 @@ import {
 import {
   formatActionsAndFilings,
   formatCalledSection,
+  formatCaseTitle,
   formatExhibits,
   formatJurisdictionContinued,
   formatJurisdictionRetained,
   formatMinuteSheet,
   formatMotions,
   formatPetitionerAppearances,
-  formatPetitioners,
   formatPretrialConference,
   formatRecalledRows,
   formatRemoteSession,
@@ -70,6 +70,7 @@ describe('formatMinuteSheet', () => {
       expect(result).toMatchObject({
         actionsAndFilings: [],
         called: '',
+        caseTitle: 'Test Petitioner',
         courtReporter: '',
         docketNumberWithSuffix: '101-18',
         docketNumbers: ['101-18'],
@@ -83,7 +84,6 @@ describe('formatMinuteSheet', () => {
         notCalled: '',
         petitionerAppearances: [],
         petitionerWitnesses: [],
-        petitioners: 'Test Petitioner',
         pretrialConference: '',
         recalled: [],
         remoteSession: 'No',
@@ -1180,72 +1180,19 @@ describe('formatMinuteSheet', () => {
       });
     });
 
-    describe('formatPetitioners', () => {
-      const mockPetitioner1: TPetitioner = {
-        address1: '123 Main St',
-        city: 'Somewhere',
-        contactId: '1234-5678',
-        contactType: 'primary',
-        countryType: 'domestic',
-        entityName: '',
-        isAddressSealed: false,
-        name: 'John Doe',
-        phone: '123-456-7890',
-        postalCode: '12345',
-        sealedAndUnavailable: false,
-        state: 'CA',
-      };
-
-      const mockPetitioner2: TPetitioner = {
-        address1: '456 Oak Ave',
-        city: 'Elsewhere',
-        contactId: '8765-4321',
-        contactType: 'primary',
-        countryType: 'domestic',
-        entityName: '',
-        isAddressSealed: false,
-        name: 'Jane Smith',
-        phone: '098-765-4321',
-        postalCode: '54321',
-        sealedAndUnavailable: false,
-        state: 'NY',
-      };
-
-      it('should join multiple petitioner names with commas', () => {
-        const testCase = {
-          ...MOCK_CASE,
-          petitioners: [mockPetitioner1, mockPetitioner2],
-        };
-        const result = formatPetitioners(testCase);
-        expect(result).toBe('John Doe, Jane Smith');
+    describe('formatCaseTitle', () => {
+      it('should format the case title', () => {
+        const result = formatCaseTitle(MOCK_CASE);
+        expect(result).toBe('Test Petitioner');
       });
 
-      it('should return single petitioner name without comma', () => {
-        const testCase = {
-          ...MOCK_CASE,
-          petitioners: [mockPetitioner1],
-        };
-        const result = formatPetitioners(testCase);
-        expect(result).toBe('John Doe');
-      });
-
-      it('should return empty string when no appearances', () => {
-        const testCase = {
-          ...MOCK_CASE,
-          petitioners: [],
-        };
-        const result = formatPetitioners(testCase);
-        expect(result).toBe('');
-      });
-
-      it('should append "et al." when the case is the lead case for a group of consolidated cases and there is one lead petitioner', () => {
+      it('should format the case title for a lead case', () => {
         const testCase = {
           ...MOCK_CASE,
           leadDocketNumber: MOCK_CASE.docketNumber,
-          petitioners: [mockPetitioner1],
         };
-        const result = formatPetitioners(testCase);
-        expect(result).toBe('John Doe et al.');
+        const result = formatCaseTitle(testCase);
+        expect(result).toBe('Test Petitioner, et al.');
       });
     });
 
