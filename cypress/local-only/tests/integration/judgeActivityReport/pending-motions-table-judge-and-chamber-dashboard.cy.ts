@@ -1,6 +1,11 @@
+import {
+  loginAsColvin,
+  loginAsColvinChambers,
+} from 'cypress/helpers/authentication/login-as-helpers';
+
 describe('Pending Motions Table', () => {
   it('should display the pending motion table for Judge Colvin', () => {
-    cy.login('judgecolvin');
+    loginAsColvin();
     cy.get('[data-testid="pending-motions-tab"]').click();
     cy.get('[data-testid^="pending-motion-row-"]')
       .as('pendingMotions')
@@ -51,7 +56,7 @@ describe('Pending Motions Table', () => {
   });
 
   it("should display the pending motion table for Judge Colvin Chamber's", () => {
-    cy.login('colvinschambers');
+    loginAsColvinChambers();
     cy.get('[data-testid="pending-motions-tab"]').click();
     cy.get('[data-testid^="pending-motion-row-"]')
       .as('pendingMotions')
