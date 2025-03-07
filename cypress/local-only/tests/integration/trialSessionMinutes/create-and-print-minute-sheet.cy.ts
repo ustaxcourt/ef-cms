@@ -6,10 +6,7 @@ import {
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
-import {
-  getCaseDetailTab,
-  navigateTo as navigateToCaseDetail,
-} from '../../../support/pages/case-detail';
+import { getCaseDetailTab } from '../../../support/pages/case-detail';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 import { attachFile } from 'cypress/helpers/file/upload-file';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
@@ -20,9 +17,8 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
     createAndServePaperPetition({ trialLocation: 'Birmingham, Alabama' }).then(
       ({ docketNumber }) => {
         loginAsIrsPractitioner();
-        navigateToCaseDetail('irspractitioner', docketNumber);
+        cy.visit(`case-detail/${docketNumber}`);
         getCaseDetailTab('case-information').click();
-
         cy.get('[data-testid="button-first-irs-document"]').click();
         selectTypeaheadInput('complete-doc-document-type-search', 'Answer');
         cy.get('button#submit-document').click();
