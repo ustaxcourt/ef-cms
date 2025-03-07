@@ -87,6 +87,8 @@ export const OpenCases = connect(
                         data-testId={`minute-sheet-button-${item.docketNumber}`}
                         link
                         href={item.minuteSheetRoute}
+                        rel="noreferrer noopener"
+                        target="_blank"
                         icon="pencil-alt"
                       >
                         Minutes

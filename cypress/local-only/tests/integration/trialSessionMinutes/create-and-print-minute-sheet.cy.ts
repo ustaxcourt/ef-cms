@@ -6,10 +6,7 @@ import {
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
-import {
-  getCaseDetailTab,
-  navigateTo as navigateToCaseDetail,
-} from '../../../support/pages/case-detail';
+import { getCaseDetailTab } from '../../../support/pages/case-detail';
 import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
 import { attachFile } from 'cypress/helpers/file/upload-file';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
@@ -20,7 +17,7 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
     createAndServePaperPetition({ trialLocation: 'Birmingham, Alabama' }).then(
       ({ docketNumber }) => {
         loginAsIrsPractitioner();
-        navigateToCaseDetail('irspractitioner', docketNumber);
+        cy.visit(`case-detail/${docketNumber}`);
         getCaseDetailTab('case-information').click();
 
         cy.get('[data-testid="button-first-irs-document"]').click();
@@ -73,15 +70,18 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
 
   describe('Fill out minute sheet form', function () {
     describe('Fill out trial session metadata', function () {
-      it('Can see auto filled inputs in Metadata section', function () {
+      before(function () {
         loginAsTrialClerk();
         cy.visit('/trial-sessions');
         cy.get(
           `[data-testid="trial-location-link-${this.trialSessionId}"]`,
         ).click();
-        cy.get(
-          `[data-testid="minute-sheet-button-${this.docketNumber}"]`,
-        ).click();
+        cy.get(`[data-testid="minute-sheet-button-${this.docketNumber}"]`)
+          .invoke('removeAttr', 'target')
+          .click();
+      });
+
+      it('Can see auto filled inputs in Metadata section', function () {
         cy.get('#judge').contains('Lewis R. Carluzzo');
         cy.get('#trialClerk').should('have.value', 'Test trialclerk1');
       });
@@ -521,9 +521,9 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
         cy.get(
           `[data-testid="trial-location-link-${this.trialSessionId}"]`,
         ).click();
-        cy.get(
-          `[data-testid="minute-sheet-button-${this.docketNumber}"]`,
-        ).click();
+        cy.get(`[data-testid="minute-sheet-button-${this.docketNumber}"]`)
+          .invoke('removeAttr', 'target')
+          .click();
         cy.get('#remoteSession').should('be.checked');
         cy.get('#courtReporter').should('have.value', 'Test Court Reporter');
       });

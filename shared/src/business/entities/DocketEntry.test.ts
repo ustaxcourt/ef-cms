@@ -640,4 +640,16 @@ describe('DocketEntry entity', () => {
       expect(result).toBe(false);
     });
   });
+
+  describe('isMinuteSheet', () => {
+    it('should return true when the eventCode is a minute sheet type', () => {
+      const result = DocketEntry.isMinuteSheet('TRL');
+      expect(result).toBe(true);
+    });
+
+    it('should return false when the eventCode is not a minute sheet type', () => {
+      const result = DocketEntry.isMinuteSheet('O');
+      expect(result).toBe(false);
+    });
+  });
 });
