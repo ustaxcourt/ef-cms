@@ -6,7 +6,6 @@ import {
 
 import {
   getCreateACaseButton,
-  navigateTo as navigateToDocumentQC,
 } from '../../../support/pages/document-qc';
 
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
@@ -16,6 +15,7 @@ import {
   createAndServePaperPetitionMyselfAndSpouse,
 } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { unchecksOrdersAndNoticesBoxesInCase } from '../../../support/pages/unchecks-orders-and-notices-boxes-in-case';
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Petition clerk creates a paper filing', function () {
   describe('Create and submit a paper petition', () => {
@@ -25,7 +25,8 @@ describe('Petition clerk creates a paper filing', function () {
       });
     });
     it('should create a paper petition', () => {
-      navigateToDocumentQC('petitionsclerk');
+      loginAsPetitionsClerk();
+      cy.visit('/document-qc');
 
       getCreateACaseButton().click();
       cy.get('#tab-parties').should('have.attr', 'aria-selected');
