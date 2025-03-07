@@ -1237,6 +1237,16 @@ describe('formatMinuteSheet', () => {
         const result = formatPetitioners(testCase);
         expect(result).toBe('');
       });
+
+      it('should append "et al." when the case is the lead case for a group of consolidated cases and there is one lead petitioner', () => {
+        const testCase = {
+          ...MOCK_CASE,
+          leadDocketNumber: MOCK_CASE.docketNumber,
+          petitioners: [mockPetitioner1],
+        };
+        const result = formatPetitioners(testCase);
+        expect(result).toBe('John Doe et al.');
+      });
     });
 
     describe('formatRemoteSession', () => {

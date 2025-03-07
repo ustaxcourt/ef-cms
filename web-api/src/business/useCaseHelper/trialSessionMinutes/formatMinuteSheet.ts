@@ -21,6 +21,7 @@ import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { encode } from 'he';
 
 export type FormattedMinuteSheet = {
@@ -218,8 +219,13 @@ export const formatWitnesses = (
   return Object.values(witnessesSection).filter(witness => !!witness.name);
 };
 
-export const formatPetitioners = (aCase: RawCase) =>
-  aCase.petitioners.map(petitioner => petitioner.name).join(', ');
+export const formatPetitioners = (aCase: RawCase) => {
+  const petitioners = aCase.petitioners
+    .map(petitioner => petitioner.name)
+    .join(', ');
+
+  return isLeadCase(aCase) ? `${petitioners} et al.` : petitioners;
+};
 
 export const formatRemoteSession = (isRemoteSession: boolean) =>
   isRemoteSession ? 'Yes' : 'No';
