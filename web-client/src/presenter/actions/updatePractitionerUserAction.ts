@@ -14,6 +14,7 @@ export const updatePractitionerUserAction = async ({
   path,
 }: ActionProps) => {
   const user = get(state.form);
+  const clientConnectionId = get(state.clientConnectionId);
 
   try {
     await applicationContext
@@ -21,12 +22,9 @@ export const updatePractitionerUserAction = async ({
       .updatePractitionerUserInteractor(applicationContext, {
         barNumber: user.barNumber,
         user,
+        clientConnectionId,
       });
-    return path.success({
-      alertSuccess: {
-        message: 'Practitioner updated.',
-      },
-    });
+    return path.success({ alertSuccess: { message: 'Practitioner updated.' } });
   } catch (err) {
     return path.error({
       alertError: {

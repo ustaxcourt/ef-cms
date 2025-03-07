@@ -17,6 +17,8 @@ import {
 } from '../../../support/pages/dashboard';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
+  login,
+  loginAsAdc,
   loginAsDocketClerk,
   loginAsPetitionsClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
@@ -25,7 +27,8 @@ describe('Messages', () => {
   describe('Message filtering', () => {
     describe('Docket clerk completes qc and sends a message', () => {
       it('should go to section document QC inbox, complete an item needing qc, and send a message', () => {
-        cy.login('docketclerk', '/document-qc/section/inbox');
+        loginAsDocketClerk();
+        cy.visit('/document-qc/section/inbox');
         cy.get('.big-blue-header').should('exist');
         goToDocumentNeedingQC();
         openCompleteAndSendMessageDialog();
@@ -39,7 +42,8 @@ describe('Messages', () => {
 
     describe('Docket clerk creates and sends a message on a "Calendared" case', () => {
       it('should go to case detail and open the dialog to create a new message', () => {
-        cy.login('docketclerk', '/case-detail/103-20');
+        loginAsDocketClerk();
+        cy.visit('/case-detail/103-20');
         createMessage();
         selectSection('ADC');
         selectRecipient('Test ADC');
@@ -52,7 +56,8 @@ describe('Messages', () => {
 
     describe('Docket clerk creates and sends a message on a "New" case', () => {
       it('should go to case detail and open the dialog to create a new message', () => {
-        cy.login('docketclerk', '/case-detail/102-20');
+        loginAsDocketClerk();
+        cy.visit('/case-detail/102-20');
         createMessage();
         selectSection('ADC');
         selectRecipient('Test ADC');
@@ -65,7 +70,7 @@ describe('Messages', () => {
 
     describe('ADC views messages', () => {
       it('should be able to filter messages', () => {
-        cy.login('adc');
+        loginAsAdc();
         getCaseStatusFilter();
         selectsCaseStatusFilterNew();
         messagesShouldBeFiltered();
@@ -413,18 +418,19 @@ describe('Messages', () => {
   describe('Message Filters', () => {
     describe('Display', () => {
       [
-        'adc',
-        'judgecolvin',
-        'docketclerk',
-        'admissionsclerk',
-        'colvinschambers',
-        'trialclerk',
-        'reportersoffice',
-        'petitionsclerk',
-        'general',
+        'adc@example.com',
+        'judgecolvin@example.com',
+        'docketclerk@example.com',
+        'admissionsclerk@example.com',
+        'colvinschambers@example.com',
+        'trialclerk@example.com',
+        'reportersoffice@example.com',
+        'petitionsclerk@example.com',
+        'general@example.com',
       ].forEach(account => {
         it(`should display the filters for Court User "${account}"`, () => {
-          cy.login(account, '/messages/my/inbox');
+          login({ email: account });
+          cy.visit('/messages/my/inbox');
           cy.get('[data-testid="table-filters-component"]').should(
             'be.visible',
           );
@@ -517,7 +523,7 @@ function sendMessagesToCompletedTab(DOCKET_CLERK_ID: string) {
     cy.get('[data-testid="success-alert"]').should('exist');
   }
 
-  cy.login('docketclerk');
+  loginAsDocketClerk();
   cy.get('[data-testid="all-messages-checkbox"]').click();
   cy.get('[data-testid="message-batch-mark-as-complete"]').click();
   cy.get('[data-testid="message-detail-success-alert"]').should('exist');
