@@ -95,6 +95,7 @@ const completeDocketEntryQC = async (
     otherIteration: entryMetadata.otherIteration,
     partyIrsPractitioner: entryMetadata.partyIrsPractitioner,
     pending: entryMetadata.pending,
+    previousDocument: entryMetadata.previousDocument,
     receivedAt: entryMetadata.receivedAt,
     scenario: entryMetadata.scenario,
     secondaryDocument: entryMetadata.secondaryDocument,

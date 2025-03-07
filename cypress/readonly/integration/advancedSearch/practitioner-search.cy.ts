@@ -6,7 +6,7 @@ const DEPLOYING_COLOR = Cypress.env('DEPLOYING_COLOR');
 
 describe('Practitioner Search', () => {
   it('should do a practitioner search by name and bar number', () => {
-    loginAsAdmissionsClerk('testAdmissionsClerk');
+    loginAsAdmissionsClerk('testAdmissionsClerk@example.com');
 
     cy.get('.advanced').contains('Advanced').click();
 
