@@ -258,6 +258,7 @@ export const indexCaseEntity = ({
     sk: `case|${caseRecord.docketNumber}`,
     entityName: 'Case',
     caseCaption: caseRecord.caption,
+    caseType: caseRecord.caseType,
     docketNumber: caseRecord.docketNumber,
     docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
       docketNumber: caseRecord.docketNumber,
