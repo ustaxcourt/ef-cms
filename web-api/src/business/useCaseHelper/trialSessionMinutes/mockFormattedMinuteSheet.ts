@@ -3,6 +3,7 @@ import { FormattedMinuteSheet } from './formatMinuteSheet';
 export const mockFormattedMinuteSheet: FormattedMinuteSheet = {
   actionsAndFilings: [{ content: 'Action 1 content' }],
   called: '01/01/2024; Test note',
+  caseTitle: 'John Doe',
   courtReporter: 'Jane Smith',
   docketNumberWithSuffix: '123-45',
   docketNumbers: ['123-45', '123-46'],
@@ -27,7 +28,6 @@ export const mockFormattedMinuteSheet: FormattedMinuteSheet = {
   notCalled: '01/02/2024; Not called note',
   petitionerAppearances: ['John Petitioner - 01/01/2024'],
   petitionerWitnesses: [{ name: 'Witness One' }],
-  petitioners: 'John Petitioner',
   pretrialConference: '01/03/2024; Pretrial note',
   recalled: [{ content: 'Recall 1 content' }],
   remoteSession: 'Yes',
