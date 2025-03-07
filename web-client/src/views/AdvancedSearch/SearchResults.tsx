@@ -123,7 +123,7 @@ export const SearchResults = connect(
           </Button>
         )}
         {advancedSearchHelper.showNoMatches && (
-          <div id="no-search-results">
+          <div id="no-search-results" data-testid="no-search-results">
             <h1 className="margin-top-4">No Matches Found</h1>
             <Hint wider>
               Tips for improving your search:
