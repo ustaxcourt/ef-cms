@@ -98,7 +98,11 @@ export const formattedCaseDetail = (
 
   result.petitioners = applicationContext
     .getUtilities()
-    .getFormattedPartiesNameAndTitle({ petitioners: result.petitioners });
+    .getFormattedPartiesNameAndTitle({ petitioners: result.petitioners })
+    .map(petitioner => ({
+      ...petitioner,
+      isCurrentUser: petitioner.contactId === user.userId,
+    }));
 
   result.consolidatedCases = result.consolidatedCases || [];
 
