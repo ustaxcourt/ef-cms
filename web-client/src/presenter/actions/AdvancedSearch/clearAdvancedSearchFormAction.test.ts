@@ -68,7 +68,7 @@ describe('clearAdvancedSearchFormAction', () => {
     });
 
     expect(result.state.advancedSearchForm).toEqual({
-      caseSearchByName: { countryType: ALL_COUNTRY_TYPE },
+      caseSearchByName: { countryType: ALL_COUNTRY_TYPE, procedureType: 'All' },
       currentPage: 83,
       orderSearch: { keyword: '' },
       practitionerSearchByName: {

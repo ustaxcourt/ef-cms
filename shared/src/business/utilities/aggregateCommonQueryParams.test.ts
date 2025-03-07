@@ -233,7 +233,7 @@ describe('aggregateCommonQueryParams', () => {
     expect(result).toMatchObject({
       commonQuery: [
         { match: { 'entityName.S': 'Case' } },
-        { math: { 'procedureType.S': Object.values(queryParams.caseType) } },
+        { match: { 'procedureType.S': PROCEDURE_TYPES_MAP.regular } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],

@@ -32,7 +32,7 @@ export const unauthedUserSearchesByMeta = (cerebralTest, overrides = {}) => {
       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
     ).toBeUndefined();
     expect(cerebralTest.getState('advancedSearchForm')).toEqual({
-      caseSearchByName: { countryType: ALL_COUNTRY_TYPE },
+      caseSearchByName: { countryType: ALL_COUNTRY_TYPE, procedureType: 'All' },
       currentPage: 1,
     });
   });
