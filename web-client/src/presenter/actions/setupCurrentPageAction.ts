@@ -25,7 +25,6 @@ export const setupCurrentPageAction =
     }
 
     store.set(state.currentPage, page);
-    console.log('Setting current page to', page);
     await new Promise(resolve => {
       setTimeout(resolve, 0);
     });

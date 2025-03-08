@@ -30,8 +30,8 @@ export const motionOrderResponseFormHelper = (
 
   const validationErrors = get(state.validationErrors);
   const dateErrorClass = !validationErrors.date
-    ? 'stamp-form-group'
-    : 'stamp-form-group-error';
+    ? 'order-response-form-group'
+    : 'order-response-form-group-error';
 
   const dispositionErrorClass = !validationErrors.disposition
     ? 'order-response-form-group'

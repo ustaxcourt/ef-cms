@@ -56,7 +56,6 @@ export const caseDetailHeaderHelper = (
     state.screenMetadata.isDirectlyAssociated,
   );
   const currentPage = get(state.currentPage);
-  console.log('Case Detail Header Helper');
 
   const isCaseSealed = applicationContext
     .getUtilities()
