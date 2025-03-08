@@ -7,15 +7,18 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
 import {
   getContactPrimary,
   getContactSecondary,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
@@ -85,9 +88,7 @@ describe('associatePrivatePractitionerToCase', () => {
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping if already there', async () => {
@@ -200,12 +201,10 @@ describe('associatePrivatePractitionerToCase', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockResolvedValueOnce(true);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
-        ...caseRecord,
-        privatePractitioners: [],
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseRecord,
+      privatePractitioners: [],
+    });
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -230,12 +229,10 @@ describe('associatePrivatePractitionerToCase', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockResolvedValueOnce(true);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
-        ...caseRecord,
-        privatePractitioners: [{ userId: MOCK_PRACTITIONER.userId }],
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseRecord,
+      privatePractitioners: [{ userId: MOCK_PRACTITIONER.userId }],
+    });
 
     await associatePrivatePractitionerToCase({
       applicationContext,

@@ -1203,7 +1203,7 @@ export const ALL_STATE_OPTIONS = {
   Other: 'Other',
 };
 
-export type AbbrevatedStates =
+export type AbbreviatedStates =
   | keyof typeof US_STATES
   | keyof typeof US_STATES_OTHER;
 

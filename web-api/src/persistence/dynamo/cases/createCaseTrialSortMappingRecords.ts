@@ -1,24 +1,21 @@
 import { deleteCaseTrialSortMappingRecords } from './deleteCaseTrialSortMappingRecords';
-import { batchWrite, query, queryFull } from '../../dynamodbClientService';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
-import {
-  CaseRecord,
-  IrsPractitionerOnCaseRecord,
-  PrivatePractitionerOnCaseRecord,
-  PutRequest,
-} from '@web-api/persistence/dynamo/dynamoTypes';
-import { isCaseItem } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
+import { batchWrite, query } from '../../dynamodbClientService';
+import { PutRequest } from '@web-api/persistence/dynamo/dynamoTypes';
 import {
   generateTrialSortTags,
   isInConsolidatedGroup,
 } from '@shared/business/entities/cases/Case';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getCasesInConsolidatedGroup } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
+import { NotFoundError } from '@web-api/errors/errors';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
 export const createCaseTrialSortMappingRecords = async ({
   applicationContext,
   caseSortTags,
   docketNumber,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   caseSortTags: { hybrid: string; nonHybrid: string };
   docketNumber: string;
 }): Promise<void> => {
@@ -43,33 +40,22 @@ export const createCaseTrialSortMappingRecords = async ({
     });
   }
 
-  const theCase = await getCaseByDocketNumber({
-    applicationContext,
+  const theCase = await getCaseMetadataByDocketNumber({
     docketNumber,
   });
+
+  if (!theCase) {
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
+  }
+
   const isConsolidatedCase = isInConsolidatedGroup(theCase);
-  const casesToUpdate: (RawCase | CaseRecord)[] = [];
+  let casesToUpdate: RawCase[];
   if (isConsolidatedCase) {
-    const consolidatedCaseItems = await queryFull<
-      IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
-    >({
-      ExpressionAttributeNames: {
-        '#gsi1pk': 'gsi1pk',
-      },
-      ExpressionAttributeValues: {
-        ':gsi1pk': `leadCase|${theCase.leadDocketNumber!}`,
-      },
-      IndexName: 'gsi1',
-      KeyConditionExpression: '#gsi1pk = :gsi1pk',
-      applicationContext,
+    casesToUpdate = await getCasesInConsolidatedGroup({
+      leadDocketNumber: theCase.leadDocketNumber!,
     });
-    consolidatedCaseItems
-      .filter((item): item is CaseRecord => isCaseItem(item))
-      .forEach(c => {
-        casesToUpdate.push(c);
-      });
   } else {
-    casesToUpdate.push(theCase);
+    casesToUpdate = [theCase];
   }
 
   const hasBlockedCase = casesToUpdate.some(c => {

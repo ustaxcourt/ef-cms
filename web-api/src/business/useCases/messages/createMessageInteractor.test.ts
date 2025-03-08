@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
@@ -9,12 +10,14 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createMessageInteractor } from './createMessageInteractor';
 import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
-
-const createMessage = createMessageMock as jest.Mock;
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const createMessage = createMessageMock as jest.Mock;
 
 describe('createMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -67,13 +70,11 @@ describe('createMessageInteractor', () => {
         userId: 'd90c8a79-9628-4ca9-97c6-02a161a02904',
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        caseCaption: 'Roslindis Angelino, Petitioner',
-        docketNumberWithSuffix: '123-45S',
-        status: CASE_STATUS_TYPES.generalDocket,
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      caseCaption: 'Roslindis Angelino, Petitioner',
+      docketNumberWithSuffix: '123-45S',
+      status: CASE_STATUS_TYPES.generalDocket,
+    });
 
     await createMessageInteractor(
       applicationContext,

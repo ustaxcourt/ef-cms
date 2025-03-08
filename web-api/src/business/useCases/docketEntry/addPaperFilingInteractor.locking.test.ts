@@ -1,15 +1,24 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import {
   addPaperFilingInteractor,
   determineEntitiesToLock,
 } from './addPaperFilingInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { docketClerkUser } from '@shared/test/mockUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getCasesInConsolidatedGroup as getCasesInConsolidatedGroupMock } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCaseMetadataByDocketNumber =
+  getCaseMetadataByDocketNumberMock as jest.Mock;
+const getCasesInConsolidatedGroup =
+  getCasesInConsolidatedGroupMock as jest.Mock;
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -74,9 +83,9 @@ describe('addPaperFilingInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getCaseMetadataByDocketNumber.mockResolvedValue(mockCase);
+    getCasesInConsolidatedGroup.mockResolvedValue([mockCase]);
   });
 
   describe('locked', () => {
@@ -93,9 +102,7 @@ describe('addPaperFilingInteractor', () => {
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
+      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });
   });
 
