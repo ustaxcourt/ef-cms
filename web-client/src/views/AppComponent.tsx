@@ -247,8 +247,6 @@ export const AppComponent = connect(
     const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
-    console.log('AppComponent currentpage:', currentPage);
-    console.log('CurrentPage:', CurrentPage);
     const IsPageWithBlueBackground = pagesWithBlueBackground[currentPage];
 
     return (
