@@ -112,9 +112,12 @@ export const OrderResponse = connect(
               </Button>
 
               <div className="border border-base-lighter">
-                <div className="grid-header grid-row padding-left-205">
+                <label
+                  className="grid-header grid-row padding-left-205" // TODO 10586: update classnames
+                  htmlFor="motion-order-response-form"
+                >
                   Order Response
-                </div>
+                </label>
                 <div className="motion-order-response-form">
                   <FormGroup
                     className={
@@ -124,14 +127,14 @@ export const OrderResponse = connect(
                   >
                     <label
                       className="usa-label"
-                      htmlFor="stricken-from-trial-session-radio"
+                      htmlFor="due-date-input-orderResponseDueDate" // TODO 10586: update IDs
                     >
                       Response Date <span className="usa-hint">(Required)</span>
                     </label>
                     <DateSelector
                       defaultValue={form.date}
-                      formGroupClassNames="display-inline-block padding-0 margin-left-5"
-                      id="due-date-input-statusReportDueDate"
+                      formGroupClassNames="display-inline-block order-response-date-selector"
+                      id="due-date-input-orderResponseDueDate"
                       minDate={motionOrderResponseFormHelper.minDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
@@ -157,7 +160,7 @@ export const OrderResponse = connect(
                     >
                       Select One <span className="usa-hint">(Required)</span>
                     </label>
-                    <div className="usa-radio usa-radio__inline">
+                    <div className="usa-radio">
                       <input
                         aria-label="order reply"
                         checked={form.strickenFromTrialSession || false}
@@ -180,7 +183,7 @@ export const OrderResponse = connect(
                         {constants.ORDER_REPLY_OPTIONS.REPLY}
                       </label>
                     </div>
-                    <div className="usa-radio usa-radio__inline">
+                    <div className="usa-radio">
                       <input
                         aria-label="order reply s/r"
                         checked={form.strickenFromTrialSession || false}
@@ -209,11 +212,17 @@ export const OrderResponse = connect(
                     className={motionOrderResponseFormHelper.dateErrorClass}
                     errorText={validationErrors.date}
                   >
+                    <label
+                      className="usa-label"
+                      htmlFor="due-date-input-motionOrderResponseDueDate"
+                    >
+                      Due date <span className="usa-hint">(Required)</span>
+                    </label>
                     <DateSelector
                       defaultValue={form.date}
                       disabled={!form.dueDateMessage}
-                      formGroupClassNames="display-inline-block padding-0 margin-left-5"
-                      id="due-date-input-statusReportDueDate"
+                      formGroupClassNames="display-inline-block order-response-date-selector"
+                      id="due-date-input-motionOrderResponseDueDate"
                       minDate={motionOrderResponseFormHelper.minDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
@@ -228,7 +237,7 @@ export const OrderResponse = connect(
                   </FormGroup>
                   <hr className="border-top-2px border-base-lighter" />
                   <FormGroup
-                    className="stamp-form-group"
+                    className="order-response-form-group"
                     errorText={validationErrors.customText}
                   >
                     <div>
@@ -267,7 +276,7 @@ export const OrderResponse = connect(
               </div>
               <Button
                 link
-                className="margin-left-205"
+                className="margin-left-205 order-response-clear-button"
                 data-testid="clear-all-fields"
                 onClick={e => {
                   e.preventDefault();
