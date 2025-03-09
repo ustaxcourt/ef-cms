@@ -1,9 +1,9 @@
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 import {
   disengageMaintenance,
   engageMaintenance,
   getMaintenanceModal,
   getMaintenancePageContent,
-  navigateTo as loginAs,
 } from '../../../support/pages/maintenance';
 
 describe('Maintenance mode', () => {
@@ -12,7 +12,7 @@ describe('Maintenance mode', () => {
   });
 
   it('should display a maintenance modal when the user is logged in and maintenance mode is engaged', () => {
-    loginAs('petitionsclerk');
+    loginAsPetitionsClerk();
     engageMaintenance();
     getMaintenanceModal().should('exist');
 

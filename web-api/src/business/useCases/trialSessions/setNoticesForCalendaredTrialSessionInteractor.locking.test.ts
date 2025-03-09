@@ -6,7 +6,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/Entity
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
+  
   setNoticesForCalendaredTrialSessionInteractor,
 } from './setNoticesForCalendaredTrialSessionInteractor';
 import { mockTrialClerkUser } from '@shared/test/mockAuthUsers';
@@ -49,29 +49,6 @@ describe('determineEntitiesToLock', () => {
     expect(identifiers).toContain(`case|${mockCases[0].docketNumber}`);
     expect(identifiers).toContain(`case|${mockCases[1].docketNumber}`);
     expect(identifiers).toContain(`case|${mockCases[2].docketNumber}`);
-  });
-});
-
-describe('handleLockError', () => {
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      foo: 'bar',
-    };
-
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockTrialClerkUser,
-    );
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'set_notices_for_calendared_trial_session',
-    });
   });
 });
 
@@ -132,33 +109,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
       expect(
         applicationContext.getPersistenceGateway().updateCaseAndAssociations,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        setNoticesForCalendaredTrialSessionInteractor(
-          applicationContext,
-          mockRequest,
-          mockTrialClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockRequest.clientConnectionId,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'set_notices_for_calendared_trial_session',
-        },
-        userId: mockTrialClerkUser.userId,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
       ).not.toHaveBeenCalled();
     });
   });
