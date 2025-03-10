@@ -1,24 +1,25 @@
+import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
+import {
+  DOCUMENT_RELATIONSHIPS,
+  DOCUMENT_SERVED_MESSAGES,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '@shared/authorization/authorizationClientService';
-import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import {
-  DOCUMENT_RELATIONSHIPS,
-  ROLES,
-  DOCUMENT_SERVED_MESSAGES,
-} from '@shared/business/entities/EntityConstants';
-import { WorkItem } from '@shared/business/entities/WorkItem';
-import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -75,12 +76,10 @@ export const addPaperFiling = async (
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
-    const rawCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const rawCase = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
     let caseEntity = new Case(rawCase, { authorizedUser });
 

@@ -1,18 +1,21 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { strikeDocketEntryInteractor } from './strikeDocketEntryInteractor';
 
 describe('strikeDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   beforeEach(() => {
     caseRecord = {
@@ -60,12 +63,10 @@ describe('strikeDocketEntryInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+    getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
-  it('should throw an error if not authorized', async () => {
+  it('should throw an error when not authorized', async () => {
     await expect(
       strikeDocketEntryInteractor(
         applicationContext,
@@ -78,7 +79,7 @@ describe('strikeDocketEntryInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should throw an error if the docket record is not found on the case', async () => {
+  it('should throw an error when the docket record is not found on the case', async () => {
     await expect(
       strikeDocketEntryInteractor(
         applicationContext,
@@ -101,9 +102,7 @@ describe('strikeDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getUserById,
     ).toHaveBeenCalled();
@@ -116,7 +115,7 @@ describe('strikeDocketEntryInteractor', () => {
     ).toMatchObject({ strickenAt: expect.anything() });
   });
 
-  it('should throw an error if the document is not on the docket record', async () => {
+  it('should throw an error when the document is not on the docket record', async () => {
     caseRecord.docketEntries[0].isOnDocketRecord = false;
 
     await expect(
