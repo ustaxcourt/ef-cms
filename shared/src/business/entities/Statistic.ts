@@ -12,13 +12,13 @@ import joi from 'joi';
  * @constructor
  */
 export class Statistic extends JoiValidationEntity {
-  public determinationDeficiencyAmount: string;
-  public determinationTotalPenalties: string;
+  public determinationDeficiencyAmount?: string;
+  public determinationTotalPenalties?: string;
   public irsDeficiencyAmount: string;
   public irsTotalPenalties: string;
-  public lastDateOfPeriod: string;
-  public year: string;
-  public yearOrPeriod: string;
+  public lastDateOfPeriod?: string;
+  public year?: string;
+  public yearOrPeriod?: string;
   public statisticId: string;
   public penalties: any[];
 
