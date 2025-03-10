@@ -298,7 +298,6 @@ export const indexCaseEntity = ({
     trialLocation: caseRecord.trialLocation,
     entityName: 'Case',
     caseCaption: caseRecord.caption,
-    caseType: caseRecord.caseType,
     docketNumber: caseRecord.docketNumber,
     docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
       docketNumber: caseRecord.docketNumber,
