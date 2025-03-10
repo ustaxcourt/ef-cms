@@ -12,7 +12,13 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const createCaseDeadline = async (
   applicationContext: ServerApplicationContext,
-  { caseDeadline }: { caseDeadline: CaseDeadline },
+  {
+    caseDeadline,
+    handlingConsolidatedCases = false,
+  }: {
+    caseDeadline: CaseDeadline;
+    handlingConsolidatedCases?: boolean;
+  },
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
@@ -50,6 +56,30 @@ export const createCaseDeadline = async (
       authorizedUser,
       caseToUpdate: updatedCaseEntity,
     });
+
+  const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
+  if (!handlingConsolidatedCases && docketNumber === leadDocketNumber) {
+    const ADD_DEADLINE_TO_CONSOLIDATED_CASES = consolidatedCases
+      .filter(
+        ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
+      )
+      .map(({ docketNumber: ccDocketNumber }) => {
+        return createCaseDeadline(
+          applicationContext,
+          {
+            caseDeadline: {
+              ...caseDeadline,
+              docketNumber: ccDocketNumber,
+              consolidatedCaseDeadlineId: newCaseDeadline.caseDeadlineId,
+            } as CaseDeadline,
+            handlingConsolidatedCases: true,
+          },
+          authorizedUser,
+        );
+      });
+
+    await Promise.all(ADD_DEADLINE_TO_CONSOLIDATED_CASES);
+  }
 
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
