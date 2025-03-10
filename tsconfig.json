@@ -25,6 +25,9 @@
       "@web-client/*": [
         "web-client/src/*"
       ],
+      "@web-client-public/*": [
+        "web-client-public/src/*"
+      ],
       "@web-api/*": [
         "web-api/src/*"
       ],

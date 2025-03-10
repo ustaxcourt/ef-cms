@@ -1,0 +1,13 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "baseUrl": "../",
+    "paths": {
+      "@web-client/*": ["web-client/src/*"],
+      "@web-client-public/*": ["web-client-public/src/*"],
+      "@web-api/*": ["web-api/src/*"],
+      "@shared/*": ["shared/src/*"],
+    }
+  },
+  "include": ["src", "src/router-types.d.ts"]
+}

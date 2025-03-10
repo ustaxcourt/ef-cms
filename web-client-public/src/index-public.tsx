@@ -32,7 +32,7 @@ const routeTree = rootRoute.addChildren([
 
 const queryClient = new QueryClient(); // Need to modify default behavior of retrying failed requests
 
-const router = createRouter({
+export const routerPublic = createRouter({
   defaultPreload: 'intent',
   defaultStaleTime: 5000,
   routeTree,
@@ -41,13 +41,6 @@ const router = createRouter({
   },
 });
 
-// Register things for typesafety
-declare module '@tanstack/react-router' {
-  interface Register {
-    router: typeof router;
-  }
-}
-
 const rootElement = window.document.getElementById('app-public')!;
 
 if (!rootElement.innerHTML) {
@@ -55,7 +48,7 @@ if (!rootElement.innerHTML) {
 
   root.render(
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <RouterProvider router={routerPublic} />
     </QueryClientProvider>,
   );
 }
