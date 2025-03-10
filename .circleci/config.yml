@@ -277,7 +277,7 @@ jobs:
       - run:
           name: Run Postgres Migration
           command: |
-            NODE_ENV=production npm run migration:postgres
+            npm run migration:postgres
       - run:
           name: Restore Postgres User Permissions
           command: |

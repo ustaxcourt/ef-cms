@@ -64,7 +64,7 @@ function clearToken(region: string) {
 }
 
 async function getToken(region: string, host: string) {
-  if (environment.nodeEnv !== 'production') {
+  if (environment.rds.pool.host === 'localhost') {
     return environment.rds.pool.password;
   }
   const token = tokens[region];
