@@ -493,32 +493,32 @@ export const CaseSearchByName = connect(
                 onChange={e => {
                   if (e?.value) {
                     const currentCaseTypeFilters =
-                      advancedSearchForm.caseSearchByName?.caseType || {};
+                      advancedSearchForm.caseSearchByName?.caseTypes || {};
                     updateCaseAdvancedSearchByNameFormValueSequence({
-                      key: 'caseType',
+                      key: 'caseTypes',
                       value: { ...currentCaseTypeFilters, [e.label]: e.value },
                     });
                   }
                 }}
               />
             </div>
-            {!isEmpty(advancedSearchForm.caseSearchByName?.caseType) && (
+            {!isEmpty(advancedSearchForm.caseSearchByName?.caseTypes) && (
               <div className="padding-1"></div>
             )}
             <div>
               {Object.entries(
-                advancedSearchForm.caseSearchByName?.caseType || {},
+                advancedSearchForm.caseSearchByName?.caseTypes || {},
               ).map(([label, caseType]: [string, any]) => (
                 <PillButton
                   key={caseType}
                   text={label}
                   onRemove={() => {
-                    delete advancedSearchForm.caseSearchByName.caseType[
+                    delete advancedSearchForm.caseSearchByName.caseTypes[
                       label
                     ];
                     updateCaseAdvancedSearchByNameFormValueSequence({
-                      key: 'caseType',
-                      value: advancedSearchForm.caseSearchByName.caseType,
+                      key: 'caseTypes',
+                      value: advancedSearchForm.caseSearchByName.caseTypes,
                     });
                   }}
                 />
