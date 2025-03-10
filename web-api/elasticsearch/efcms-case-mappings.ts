@@ -62,6 +62,9 @@ export const efcmsCaseMappings: Property = {
     'highPriority.BOOL': {
       type: 'boolean',
     },
+    'indexedTimestamp.N': {
+      type: 'text',
+    },
     'irsPractitioners.L.M.email.S': {
       type: 'keyword',
     },
@@ -135,6 +138,9 @@ export const efcmsCaseMappings: Property = {
       type: 'date',
     },
     'trialLocation.S': {
+      type: 'keyword',
+    },
+    'userId.S': {
       type: 'keyword',
     },
   },
