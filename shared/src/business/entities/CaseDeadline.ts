@@ -9,7 +9,7 @@ export class CaseDeadline extends JoiValidationEntity {
   public associatedJudge: string;
   public associatedJudgeId: string;
   public caseDeadlineId: string;
-  public consolidatedCaseDeadlineId: string;
+  public consolidatedCaseDeadlineId?: string;
   public createdAt: string;
   public deadlineDate: string;
   public description: string;
