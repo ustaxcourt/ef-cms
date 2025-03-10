@@ -6,8 +6,10 @@ import {
 
 export const generateMinuteSheetFilename = ({
   trialSession,
+  caseDetail,
 }: {
   trialSession: RawTrialSession;
+  caseDetail: RawCase;
 }): string => {
   const location = trialSession.trialLocation
     ?.split(',')
@@ -20,5 +22,5 @@ export const generateMinuteSheetFilename = ({
     FORMATS.MMDDYYYY_UNDERSCORED,
   );
 
-  return `Minutes-${location ? location + ' ' : ''}${date}`;
+  return `${caseDetail.docketNumber} Minutes-${location ? location + ' ' : ''}${date}.pdf`;
 };
