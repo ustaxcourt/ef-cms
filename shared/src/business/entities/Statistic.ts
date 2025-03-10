@@ -192,3 +192,7 @@ const itemizeTotalPenalties = function (
     });
   }
 };
+
+declare global {
+  type RawStatistic = ExcludeMethods<Statistic>;
+}

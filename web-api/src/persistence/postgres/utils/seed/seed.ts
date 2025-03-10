@@ -14,7 +14,6 @@ import { cases450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures
 import { caseDeadlines } from '@web-api/persistence/postgres/utils/seed/fixtures/caseDeadlines';
 import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixtures/caseWorksheets';
 import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspodence';
-import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
 import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/petitionerToCaseMappings';
 import { statisticPenalties } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/statisticPenalties';
@@ -22,46 +21,32 @@ import { workItems } from './fixtures/workItems';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
+import { getDbWriter } from '@web-api/database';
 
 export const seed = async () => {
-  const insertMessages = getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwMessage')
-        .values(messages)
-        .onConflict(oc => oc.column('messageId').doNothing()) // ensure doesn't fail if exists
-        .execute(),
-    table: null,
+  const insertMessages = pgInsertInto({
+    table: 'dwMessage',
+    values: messages,
+    onConflictColumns: ['messageId'],
   });
 
-  const insertCaseDeadline = getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwCaseDeadline')
-        .values(caseDeadlines)
-        .onConflict(oc => oc.column('caseDeadlineId').doNothing()) // ensure doesn't fail if exists
-        .execute(),
-    table: null,
+  const insertCaseDeadline = pgInsertInto({
+    table: 'dwCaseDeadline',
+    values: caseDeadlines,
+    onConflictColumns: ['caseDeadlineId'],
   });
 
-  const insertCorrespondence = getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwCaseCorrespondence')
-        .values(correspondence)
-        .onConflict(oc => oc.column('correspondenceId').doNothing()) // ensure doesn't fail if exists
-        .execute(),
-    table: null,
+  const insertCorrespondence = pgInsertInto({
+    table: 'dwCaseCorrespondence',
+    values: correspondence,
+    onConflictColumns: ['correspondenceId'],
   });
 
-  const insertCaseWorksheet = getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwCaseWorksheet')
-        .values(caseWorksheets)
-        .onConflict(oc => oc.column('docketNumber').doNothing()) // ensure doesn't fail if exists
-        .execute(),
-    table: null,
+  const insertCaseWorksheet = pgInsertInto({
+    table: 'dwCaseWorksheet',
+    values: caseWorksheets,
+    onConflictColumns: ['docketNumber'],
   });
 
   const insertWorkItem = await getDbWriter({
@@ -74,14 +59,10 @@ export const seed = async () => {
     table: null,
   });
 
-  await getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwPetitionerOnCase')
-        .values(petitionerToCaseMappings)
-        .onConflict(oc => oc.columns(['contactId', 'docketNumber']).doNothing())
-        .execute(),
-    table: null,
+  await pgInsertInto({
+    table: 'dwPetitionerOnCase',
+    values: petitionerToCaseMappings,
+    onConflictColumns: ['contactId', 'docketNumber'],
   });
 
   // Seed the cases
@@ -101,41 +82,27 @@ export const seed = async () => {
   await upsertCases(cases);
 
   // Attach the case status updates to their respective cases
-  await getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwCaseStatusUpdate')
-        .values(
-          caseStatusUpdates.map(s => ({
-            ...s,
-            statusUpdateId: s.statusUpdateId ? s.statusUpdateId : getUniqueId(),
-            date: calculateDate({ dateString: s.date }),
-          })),
-        )
-        .onConflict(oc => oc.columns(['statusUpdateId']).doNothing())
-        .execute(),
-    table: null,
+  await pgInsertInto({
+    table: 'dwCaseStatusUpdate',
+    values: caseStatusUpdates.map(s => ({
+      ...s,
+      statusUpdateId: s.statusUpdateId ? s.statusUpdateId : getUniqueId(),
+      date: calculateDate({ dateString: s.date }),
+    })),
+    onConflictColumns: ['statusUpdateId'],
   });
 
   // Attach the case statistics to their respective cases
-  await getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwCaseStatistic')
-        .values(caseStatistics)
-        .onConflict(oc => oc.column('statisticId').doNothing())
-        .execute(),
-    table: null,
+  await pgInsertInto({
+    table: 'dwCaseStatistic',
+    values: caseStatistics,
+    onConflictColumns: ['statisticId'],
   });
 
-  await getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwStatisticPenalty')
-        .values(statisticPenalties)
-        .onConflict(oc => oc.column('penaltyId').doNothing())
-        .execute(),
-    table: null,
+  await pgInsertInto({
+    table: 'dwStatisticPenalty',
+    values: statisticPenalties,
+    onConflictColumns: ['penaltyId'],
   });
 
   await Promise.all([

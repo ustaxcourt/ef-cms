@@ -19,7 +19,6 @@ export const DW_MESSAGE_COLUMNS = [
   'isCompleted',
   'isRead',
   'isRepliedTo',
-  'leadDocketNumber',
   'message',
   'messageId',
   'parentMessageId',
