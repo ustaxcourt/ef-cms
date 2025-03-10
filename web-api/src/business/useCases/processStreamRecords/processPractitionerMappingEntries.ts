@@ -9,6 +9,7 @@ import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { get, query } from '@web-api/persistence/dynamodbClientService';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -127,12 +128,33 @@ const getCaseDataFromPostgres = async ({
   }
 
   const marshalledCase = marshall(
-    {
+    transformNullToUndefined({
       pk: `case|${caseMetadataWithCounsel.docketNumber}`,
       sk: `case|${caseMetadataWithCounsel.docketNumber}`,
       entityName: 'Case',
       caseCaption: caseMetadataWithCounsel.caseCaption,
+      associatedJudge: caseMetadataWithCounsel.associatedJudge,
+      associatedJudgeId: caseMetadataWithCounsel.associatedJudgeId,
+      automaticBlocked: caseMetadataWithCounsel.automaticBlocked,
+      automaticBlockedDate: caseMetadataWithCounsel.automaticBlockedDate,
+      automaticBlockedReason: caseMetadataWithCounsel.automaticBlockedReason,
+      blocked: caseMetadataWithCounsel.blocked,
+      blockedDate: caseMetadataWithCounsel.blockedDate,
+      blockedReason: caseMetadataWithCounsel.blockedReason,
       caseType: caseMetadataWithCounsel.caseType,
+      closedDate: caseMetadataWithCounsel.closedDate,
+      createdAt: caseMetadataWithCounsel.createdAt,
+      hasPendingItems: caseMetadataWithCounsel.hasPendingItems,
+      highPriority: caseMetadataWithCounsel.highPriority,
+      isPaper: caseMetadataWithCounsel.isPaper,
+      leadDocket: caseMetadataWithCounsel.leadDocketNumber,
+      preferredTrialCity: caseMetadataWithCounsel.preferredTrialCity,
+      procedureType: caseMetadataWithCounsel.procedureType,
+      sealedDate: caseMetadataWithCounsel.sealedDate,
+      sortableDocketNumber: caseMetadataWithCounsel.sortableDocketNumber,
+      status: caseMetadataWithCounsel.status,
+      trialDate: caseMetadataWithCounsel.trialDate,
+      trialLocation: caseMetadataWithCounsel.trialLocation,
       docketNumber: caseMetadataWithCounsel.docketNumber,
       docketNumberWithSuffix: caseMetadataWithCounsel.docketNumberWithSuffix,
       isSealed: caseMetadataWithCounsel.isSealed,
@@ -140,7 +162,7 @@ const getCaseDataFromPostgres = async ({
       receivedAt: caseMetadataWithCounsel.receivedAt,
       privatePractitioners: caseMetadataWithCounsel.privatePractitioners,
       irsPractitioners: caseMetadataWithCounsel.irsPractitioners,
-    },
+    }),
     { removeUndefinedValues: true },
   );
   return marshalledCase;
