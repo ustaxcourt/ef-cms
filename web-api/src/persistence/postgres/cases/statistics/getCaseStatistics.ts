@@ -32,16 +32,16 @@ export const getCaseStatistics = async ({
         } = row;
         if (!acc[statisticId]) {
           acc[statisticId] = {
-            determinationDeficiencyAmount: determinationDeficiencyAmount || '',
-            determinationTotalPenalties: determinationTotalPenalties || '',
+            determinationDeficiencyAmount:
+              determinationDeficiencyAmount || undefined,
+            determinationTotalPenalties:
+              determinationTotalPenalties || undefined,
             irsDeficiencyAmount,
             irsTotalPenalties,
-            lastDateOfPeriod: lastDateOfPeriod
-              ? lastDateOfPeriod.toISOString()
-              : '',
+            lastDateOfPeriod: lastDateOfPeriod?.toISOString(),
             penalties: [],
             statisticId,
-            year: year ? year.toString() : '',
+            year: year?.toString(),
             yearOrPeriod,
           };
         }
