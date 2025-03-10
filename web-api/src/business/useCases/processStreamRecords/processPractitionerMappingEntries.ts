@@ -9,6 +9,7 @@ import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { get, query } from '@web-api/persistence/dynamodbClientService';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -127,7 +128,7 @@ const getCaseDataFromPostgres = async ({
   }
 
   const marshalledCase = marshall(
-    {
+    transformNullToUndefined({
       pk: `case|${caseMetadataWithCounsel.docketNumber}`,
       sk: `case|${caseMetadataWithCounsel.docketNumber}`,
       entityName: 'Case',
@@ -161,7 +162,7 @@ const getCaseDataFromPostgres = async ({
       receivedAt: caseMetadataWithCounsel.receivedAt,
       privatePractitioners: caseMetadataWithCounsel.privatePractitioners,
       irsPractitioners: caseMetadataWithCounsel.irsPractitioners,
-    },
+    }),
     { removeUndefinedValues: true },
   );
   return marshalledCase;
