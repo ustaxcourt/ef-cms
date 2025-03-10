@@ -72,6 +72,7 @@ export interface CaseDeadlineTable {
   associatedJudge: string;
   associatedJudgeId?: string;
   caseDeadlineId: string;
+  consolidatedCaseDeadlineId?: string;
   createdAt: Date;
   deadlineDate: Date;
   description: string;
