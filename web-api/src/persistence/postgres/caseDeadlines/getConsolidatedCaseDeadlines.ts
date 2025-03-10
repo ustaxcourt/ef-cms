@@ -1,9 +1,9 @@
 import {
-  CaseDeadline,
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
 import { getDbReader } from '@web-api/database';
 import { CaseDeadlineTable } from '@web-api/database-types';
+import { caseDeadlineEntity } from '@web-api/persistence/postgres/caseDeadlines/mapper';
 
 export const getConsolidatedCaseDeadlines = async (
   consolidatedCaseDeadlineId: string,
@@ -18,6 +18,7 @@ export const getConsolidatedCaseDeadlines = async (
       .where('c.leadDocketNumber', '=', leadDocketNumber)
       .execute();
 
-    return RECORDS.map(r => new CaseDeadline(r).toRawObject());
+		//TODO: UPDATE TYPES TO HANDLE NULL VALUES INSTEAD OF CALLING NEW DB ENTITY
+    return RECORDS.map(r => caseDeadlineEntity(r).toRawObject());
   });
 };
