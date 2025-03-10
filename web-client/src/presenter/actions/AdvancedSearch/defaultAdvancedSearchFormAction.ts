@@ -1,4 +1,4 @@
-import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
+import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const defaultAdvancedSearchFormAction = ({
@@ -14,8 +14,8 @@ export const defaultAdvancedSearchFormAction = ({
   }
   if (!advancedSearchForm.caseSearchByName) {
     store.set(state.advancedSearchForm.caseSearchByName, {
-      countryType: ALL_COUNTRY_TYPE,
-      procedureType: 'All'
+      countryType: ALL_SELECTION,
+      procedureType: ALL_SELECTION,
     });
   }
   if (!advancedSearchForm.practitionerSearchByBarNumber) {
