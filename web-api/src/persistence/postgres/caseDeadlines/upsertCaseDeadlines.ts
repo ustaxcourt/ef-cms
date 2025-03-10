@@ -27,6 +27,9 @@ export const upsertCaseDeadlines = async (
             description: cd.ref('excluded.description'),
             docketNumber: cd.ref('excluded.docketNumber'),
             sortableDocketNumber: cd.ref('excluded.sortableDocketNumber'),
+            consolidatedCaseDeadlineId: cd.ref(
+              'excluded.consolidatedCaseDeadlineId',
+            ),
           };
         }),
       )
