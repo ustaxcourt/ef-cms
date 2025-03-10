@@ -256,6 +256,46 @@ export const indexCaseEntity = ({
   return marshall({
     pk: `case|${caseRecord.docketNumber}`,
     sk: `case|${caseRecord.docketNumber}`,
+    associatedJudge: caseRecord.associatedJudge,
+    associatedJudgeId: caseRecord.associatedJudgeId,
+    automaticBlocked: caseRecord.automaticBlocked,
+    automaticBlockedDate:
+      caseRecord.automaticBlockedDate instanceof Date
+        ? caseRecord.automaticBlockedDate?.toISOString()
+        : caseRecord.automaticBlockedDate,
+    automaticBlockedReason: caseRecord.automaticBlockedReason,
+    blocked: caseRecord.blocked,
+    blockedDate:
+      caseRecord.blockedDate instanceof Date
+        ? caseRecord.blockedDate?.toISOString()
+        : caseRecord.blockedDate,
+    blockedReason: caseRecord.blockedReason,
+    caseType: caseRecord.caseType,
+    closedDate:
+      caseRecord.closedDate instanceof Date
+        ? caseRecord.closedDate?.toISOString()
+        : caseRecord.closedDate,
+    createdAt:
+      caseRecord.createdAt instanceof Date
+        ? caseRecord.createdAt?.toISOString()
+        : caseRecord.createdAt,
+    hasPendingItems: caseRecord.hasPendingItems,
+    highPriority: caseRecord.highPriority,
+    isPaper: caseRecord.isPaper,
+    leadDocket: caseRecord.leadDocketNumber,
+    preferredTrialCity: caseRecord.preferredTrialCity,
+    procedureType: caseRecord.procedureType,
+    sealedDate:
+      caseRecord.sealedDate instanceof Date
+        ? caseRecord.sealedDate?.toISOString()
+        : caseRecord.sealedDate,
+    sortableDocketNumber: caseRecord.sortableDocketNumber,
+    status: caseRecord.status,
+    trialDate:
+      caseRecord.trialDate instanceof Date
+        ? caseRecord.trialDate?.toISOString()
+        : caseRecord.trialDate,
+    trialLocation: caseRecord.trialLocation,
     entityName: 'Case',
     caseCaption: caseRecord.caption,
     caseType: caseRecord.caseType,
