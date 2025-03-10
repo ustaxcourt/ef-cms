@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { isEmpty } from 'lodash';
-import { PROCEDURE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 
 export const CaseSearchByName = connect(
   {
@@ -110,14 +110,14 @@ export const CaseSearchByName = connect(
                           <input
                             checked={
                               advancedSearchForm.caseSearchByName
-                                .countryType === 'all'
+                                .countryType === ALL_SELECTION
                             }
                             className="usa-radio__input"
                             data-testid="all-country-selection"
                             id="all-country-selection"
                             name="country"
                             type="radio"
-                            value="all"
+                            value={ALL_SELECTION}
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
@@ -194,14 +194,14 @@ export const CaseSearchByName = connect(
                             aria-labelledby="all-country-selection"
                             checked={
                               advancedSearchForm.caseSearchByName
-                                .countryType === 'all'
+                                .countryType === ALL_SELECTION
                             }
                             className="usa-radio__input"
                             data-testid="all-country-selection"
                             id="all-country-selection"
                             name="country"
                             type="radio"
-                            value="all"
+                            value={ALL_SELECTION}
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
@@ -436,19 +436,19 @@ export const CaseSearchByName = connect(
             <div>
               <fieldset className="usa-fieldset">
                 <legend className="usa-legend">Case procedure</legend>
-                {Object.values({ all: 'All', ...PROCEDURE_TYPES_MAP }).map(
+                {caseSearchByNameHelper.caseProcedureOptions.map(
                   procedureType => (
                     <div
                       className="usa-radio tablet:display-inline tablet:padding-right-4"
-                      key={procedureType}
+                      key={procedureType.value}
                     >
                       <input
                         checked={
                           advancedSearchForm.caseSearchByName.procedureType ===
-                          procedureType
+                          procedureType.value
                         }
                         className="usa-radio__input"
-                        id={`caseProcedureType-${procedureType}`}
+                        id={`caseProcedureType-${procedureType.value}`}
                         name="procedureType"
                         type="radio"
                         onChange={e => {
@@ -457,13 +457,13 @@ export const CaseSearchByName = connect(
                             value: e.target.value,
                           });
                         }}
-                        value={procedureType}
+                        value={procedureType.value}
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor={`caseProcedureType-${procedureType}`}
+                        htmlFor={`caseProcedureType-${procedureType.value}`}
                       >
-                        {procedureType}
+                        {procedureType.label}
                       </label>
                     </div>
                   ),
@@ -493,32 +493,32 @@ export const CaseSearchByName = connect(
                 onChange={e => {
                   if (e?.value) {
                     const currentCaseTypeFilters =
-                      advancedSearchForm.caseSearchByName?.caseType || {};
+                      advancedSearchForm.caseSearchByName?.caseTypes || {};
                     updateCaseAdvancedSearchByNameFormValueSequence({
-                      key: 'caseType',
+                      key: 'caseTypes',
                       value: { ...currentCaseTypeFilters, [e.label]: e.value },
                     });
                   }
                 }}
               />
             </div>
-            {!isEmpty(advancedSearchForm.caseSearchByName?.caseType) && (
+            {!isEmpty(advancedSearchForm.caseSearchByName?.caseTypes) && (
               <div className="padding-1"></div>
             )}
             <div>
               {Object.entries(
-                advancedSearchForm.caseSearchByName?.caseType || {},
+                advancedSearchForm.caseSearchByName?.caseTypes || {},
               ).map(([label, caseType]: [string, any]) => (
                 <PillButton
                   key={caseType}
                   text={label}
                   onRemove={() => {
-                    delete advancedSearchForm.caseSearchByName.caseType[
+                    delete advancedSearchForm.caseSearchByName.caseTypes[
                       label
                     ];
                     updateCaseAdvancedSearchByNameFormValueSequence({
-                      key: 'caseType',
-                      value: advancedSearchForm.caseSearchByName.caseType,
+                      key: 'caseTypes',
+                      value: advancedSearchForm.caseSearchByName.caseTypes,
                     });
                   }}
                 />
