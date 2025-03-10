@@ -1,5 +1,6 @@
 import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import {
+  CaseType,
   COUNTRY_TYPES,
   CountryTypes,
   ProcedureType,
@@ -14,6 +15,7 @@ export const prepareFormDataForCaseSearchApi = (
   > & {
     countryType: typeof ALL_SELECTION | CountryTypes;
     procedureType: typeof ALL_SELECTION | ProcedureType;
+    caseTypes: Record<string, CaseType>;
   },
 ): CaseAdvancedSearchParamsRequestType => {
   return {
@@ -27,6 +29,7 @@ export const prepareFormDataForCaseSearchApi = (
         : form.petitionerState,
     procedureType:
       form.procedureType === ALL_SELECTION ? undefined : form.procedureType,
+    caseTypes: form.caseTypes ? Object.values(form.caseTypes) : undefined,
   };
 };
 
