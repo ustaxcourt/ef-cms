@@ -190,7 +190,6 @@ function TermBuilderInput({
     <input
       autoCapitalize="none"
       name={propertyName}
-      placeholder="Number"
       type="number"
       value={currentValue}
       onChange={e => {
