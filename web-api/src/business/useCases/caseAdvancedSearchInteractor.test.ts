@@ -48,7 +48,7 @@ describe('caseAdvancedSearchInteractor', () => {
         applicationContext,
         {
           petitionerName: 'Janae Jacobs',
-          caseType: { [CASE_TYPES_MAP.cdp]: CASE_TYPES_MAP.cdp },
+          caseTypes: [CASE_TYPES_MAP.cdp],
         },
         mockPetitionerUser,
       ),
@@ -62,7 +62,7 @@ describe('caseAdvancedSearchInteractor', () => {
       applicationContext,
       {
         petitionerName: 'Paul Billings',
-        caseType: { [CASE_TYPES_MAP.cdp]: CASE_TYPES_MAP.cdp },
+        caseTypes: [CASE_TYPES_MAP.cdp],
       },
       mockPetitionsClerkUser,
     );

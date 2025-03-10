@@ -12,7 +12,8 @@ export const aggregateCommonQueryParams = ({
   petitionerName,
   petitionerState,
   startDate,
-  caseType,
+  caseTypes,
+  procedureType,
 }: CaseAdvancedSearchParamsRequestType) => {
   const commonQuery: QueryContainer[] = [];
   const exactMatchesQuery: QueryContainer[] = [];
@@ -84,8 +85,12 @@ export const aggregateCommonQueryParams = ({
 
   commonQuery.push({ match: { 'entityName.S': 'Case' } });
 
-  if (caseType) {
-    commonQuery.push({ terms: { 'caseType.S': Object.values(caseType) } });
+  if (caseTypes) {
+    commonQuery.push({ terms: { 'caseType.S': caseTypes } });
+  }
+
+  if (procedureType) {
+    commonQuery.push({ match: { 'procedureType.S': procedureType } });
   }
 
   return { commonQuery, exactMatchesQuery, nonExactMatchesQuery };

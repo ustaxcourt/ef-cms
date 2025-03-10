@@ -2,6 +2,7 @@ import {
   AbbreviatedStates,
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
+  PROCEDURE_TYPES_MAP,
   US_STATES,
 } from '../entities/EntityConstants';
 import {
@@ -208,14 +209,31 @@ describe('aggregateCommonQueryParams', () => {
   it('should include search params for caseType if present in query', () => {
     const queryParams = {
       petitionerName: '',
-      caseType: { [CASE_TYPES_MAP.cdp]: CASE_TYPES_MAP.cdp },
+      caseTypes: [CASE_TYPES_MAP.cdp],
     };
 
     const result = aggregateCommonQueryParams(queryParams);
     expect(result).toMatchObject({
       commonQuery: [
         { match: { 'entityName.S': 'Case' } },
-        { terms: { 'caseType.S': Object.values(queryParams.caseType) } },
+        { terms: { 'caseType.S': queryParams.caseTypes } },
+      ],
+      exactMatchesQuery: [],
+      nonExactMatchesQuery: [],
+    });
+  });
+
+  it('should include search params for procedureType if present in query', () => {
+    const queryParams = {
+      petitionerName: '',
+      procedureType: PROCEDURE_TYPES_MAP.regular,
+    };
+
+    const result = aggregateCommonQueryParams(queryParams);
+    expect(result).toMatchObject({
+      commonQuery: [
+        { match: { 'entityName.S': 'Case' } },
+        { match: { 'procedureType.S': PROCEDURE_TYPES_MAP.regular } },
       ],
       exactMatchesQuery: [],
       nonExactMatchesQuery: [],
