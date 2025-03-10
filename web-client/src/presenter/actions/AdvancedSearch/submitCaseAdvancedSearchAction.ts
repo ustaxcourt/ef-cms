@@ -1,4 +1,4 @@
-import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
+import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import {
   COUNTRY_TYPES,
   CountryTypes,
@@ -12,21 +12,21 @@ export const prepareFormDataForCaseSearchApi = (
     CaseAdvancedSearchParamsRequestType,
     'countryType' | 'procedureType'
   > & {
-    countryType: typeof ALL_COUNTRY_TYPE | CountryTypes;
-    procedureType: 'All' | ProcedureType;
+    countryType: typeof ALL_SELECTION | CountryTypes;
+    procedureType: typeof ALL_SELECTION | ProcedureType;
   },
 ): CaseAdvancedSearchParamsRequestType => {
   return {
     ...form,
     countryType:
-      form.countryType === ALL_COUNTRY_TYPE ? undefined : form.countryType,
+      form.countryType === ALL_SELECTION ? undefined : form.countryType,
     petitionerState:
-      form.countryType === ALL_COUNTRY_TYPE ||
+      form.countryType === ALL_SELECTION ||
       form.countryType === COUNTRY_TYPES.INTERNATIONAL
         ? undefined
         : form.petitionerState,
     procedureType:
-      form.procedureType === 'All' ? undefined : form.procedureType,
+      form.procedureType === ALL_SELECTION ? undefined : form.procedureType,
   };
 };
 

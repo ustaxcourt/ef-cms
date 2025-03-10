@@ -1,5 +1,5 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
-import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
+import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 
 const { COUNTRY_TYPES } = applicationContext.getConstants();
@@ -32,7 +32,7 @@ export const unauthedUserSearchesByMeta = (cerebralTest, overrides = {}) => {
       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.CASE}`),
     ).toBeUndefined();
     expect(cerebralTest.getState('advancedSearchForm')).toEqual({
-      caseSearchByName: { countryType: ALL_COUNTRY_TYPE, procedureType: 'All' },
+      caseSearchByName: { countryType: ALL_SELECTION, procedureType: ALL_SELECTION },
       currentPage: 1,
     });
   });
