@@ -6,6 +6,7 @@ import {
 import { OpensearchSyncMessage } from '@web-api/gateways/opensearch/opensearchSyncRouter';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
+import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { indexCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
@@ -78,12 +79,10 @@ export const opensearchCaseSync = async ({
       eventName: 'MODIFY',
     });
 
-    const { failedRecords } = await applicationContext
-      .getPersistenceGateway()
-      .bulkIndexRecords({
-        applicationContext,
-        records: flattenDeep(caseRecords),
-      });
+    const { failedRecords } = await bulkIndexRecords({
+      applicationContext,
+      records: flattenDeep(caseRecords),
+    });
 
     if (failedRecords.length > 0) {
       getLogger().error(
