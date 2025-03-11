@@ -4,12 +4,15 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
   consolidatedCaseDeadlineId: string,
+  leadDocketNumber: string,
 ): Promise<RawCaseDeadline[]> => {
   const RECORDS = await getDbReader(reader =>
     reader
-      .selectFrom('dwCaseDeadline')
-      .where('consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId)
+      .selectFrom('dwCaseDeadline as cd')
+      .innerJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
       .selectAll()
+      .where('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId)
+      .where('c.leadDocketNumber', '=', leadDocketNumber)
       .execute(),
   );
 
