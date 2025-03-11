@@ -50,6 +50,7 @@ export const MOCK_TRIAL_REGULAR: RawTrialSession = {
   sessionStatus: SESSION_STATUS_TYPES.open,
   sessionType: SESSION_TYPES.regular,
   startDate: '2001-12-01T00:00:00.000Z',
+  startTime: '10:00',
   term: 'Fall',
   termYear: '2025',
   trialLocation: 'Birmingham, Alabama',
