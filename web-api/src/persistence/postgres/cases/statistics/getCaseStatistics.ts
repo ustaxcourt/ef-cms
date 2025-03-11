@@ -1,3 +1,4 @@
+import { RawStatistic } from '@shared/business/entities/Statistic';
 import { getDbReader } from '@web-api/database';
 
 export const getCaseStatistics = async ({
