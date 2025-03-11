@@ -254,8 +254,15 @@ const getAllCypressTestAccounts = async (
 export const deleteAllCypressTestAccounts = async (): Promise<null> => {
   const userPoolId = await getUserPoolId();
   if (!userPoolId) return null;
-  const accounts = await getAllCypressTestAccounts(userPoolId);
-  await Promise.all(accounts.map(user => deleteAccount(user, userPoolId)));
+  try {
+    const accounts = await getAllCypressTestAccounts(userPoolId);
+    await Promise.all(accounts.map(user => deleteAccount(user, userPoolId)));
+  } catch (e) {
+    console.error(
+      'Error deleting all cognito accounts. Ignoring error as this error does not mean the test should fail.',
+      e,
+    );
+  }
   return null;
 };
 

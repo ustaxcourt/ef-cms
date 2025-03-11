@@ -41,8 +41,10 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 
 describe('serveCaseToIrsInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
   const clientConnectionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockParams = {
     clientConnectionId,

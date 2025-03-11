@@ -19,8 +19,10 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 describe('sealCaseContactAddressInteractor', () => {
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -61,6 +63,7 @@ describe('sealCaseContactAddressInteractor', () => {
   it('should throw an exception of `Cannot seal contact` even when otherFilers or otherPetitioners are undefined or null', async () => {
     const caseWithoutOthers = {
       ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+      caption: MOCK_CASE_WITH_SECONDARY_OTHERS.caseCaption,
       otherFilers: null,
       otherPetitioners: null,
     };

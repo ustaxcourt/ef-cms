@@ -24,8 +24,10 @@ describe('updateCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
   let mockUserById;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   const caseRecord = {
     caseCaption: 'Caption',

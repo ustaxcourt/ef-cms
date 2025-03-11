@@ -30,8 +30,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
-updateCase.mockImplementation(c => c.caseToUpdate);
+const updateCase = jest.mocked(updateCaseMock);
 
 const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
 const updateMessage = updateMessageMock as jest.Mock;
@@ -46,7 +45,6 @@ const getCaseDeadlinesByDocketNumber =
 const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
-  const updateCaseMock = jest.fn();
   let validMockCase;
 
   beforeAll(() => {
@@ -85,8 +83,9 @@ describe('updateCaseAndAssociations', () => {
     );
 
     getCaseByDocketNumber.mockResolvedValue(validMockCase);
-
-    updateCase.mockImplementation(updateCaseMock);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   beforeEach(() => {
@@ -123,9 +122,11 @@ describe('updateCaseAndAssociations', () => {
       caseToUpdate: validMockCase,
     });
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCaseMock).toHaveBeenCalled();
-    const updateArgs = updateCaseMock.mock.calls[0][0];
+    expect(updateCase).toHaveBeenCalled();
+    const updateArgs = updateCase.mock.calls[0][0];
 
+    // TODO: isValidated is not typed
+    // @ts-ignore
     expect(updateArgs.caseToUpdate.isValidated).toBe(true);
   });
 

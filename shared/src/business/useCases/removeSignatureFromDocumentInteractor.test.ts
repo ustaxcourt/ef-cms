@@ -34,7 +34,7 @@ describe('removeSignatureFromDocumentInteractor', () => {
       ],
     };
 
-    getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
   });
 
   it('should throw an error when user is undefined', async () => {

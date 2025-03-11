@@ -19,7 +19,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
+const updateCase = jest.mocked(updateCaseMock);
 
 describe('setTrialSessionCalendarInteractor', () => {
   const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
@@ -55,7 +55,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL);
-    updateCase.mockResolvedValue({});
+    updateCase.mockResolvedValue({} as RawCase);
     applicationContext
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(v => v.trialSessionToUpdate);

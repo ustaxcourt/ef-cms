@@ -6,6 +6,7 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
+  PAYMENT_STATUS,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_LOCK } from '@shared/test/mockLock';
@@ -21,14 +22,22 @@ import {
 import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
 
 describe('removePdfFromDocketEntryInteractor', () => {
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
-  const MOCK_CASE = {
+  const MOCK_CASE: RawCase = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.other,
     createdAt: applicationContext.getUtilities().createISODateString(),
+    correspondence: [],
+    consolidatedCases: [],
+    petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+    receivedAt: applicationContext.getUtilities().createISODateString(),
+    sortableDocketNumber: 56789,
+    hearings: [],
     docketEntries: [
       {
         docketEntryId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -58,6 +67,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       {
         address1: '123 Main St',
         city: 'Somewhere',
+        contactId: '60c62fa0-fd90-5244-b7c7-9cb2302d7688',
         contactType: CONTACT_TYPES.primary,
         countryType: COUNTRY_TYPES.DOMESTIC,
         email: 'fieri@example.com',
@@ -66,11 +76,10 @@ describe('removePdfFromDocketEntryInteractor', () => {
         postalCode: '12345',
         state: 'CA',
       },
-    ],
+    ] as TPetitioner[],
     preferredTrialCity: 'Washington, District of Columbia',
     procedureType: 'Regular',
     status: CASE_STATUS_TYPES.new,
-    userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
   };
 
   let mockLock;

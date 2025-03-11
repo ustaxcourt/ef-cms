@@ -16,14 +16,16 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 
 describe('archiveDraftDocumentInteractor', () => {
   let mockLock;
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCase = jest.mocked(updateCaseMock);
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   beforeEach(() => {
@@ -74,7 +76,7 @@ describe('archiveDraftDocumentInteractor', () => {
   });
 
   it('should update work items when there is a workItem found on the document', async () => {
-    getCaseByDocketNumber.mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       docketEntries: [
         ...MOCK_CASE.docketEntries,

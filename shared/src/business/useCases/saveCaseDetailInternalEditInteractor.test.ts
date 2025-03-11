@@ -28,9 +28,11 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 
 describe('saveCaseDetailInternalEditInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   const mockCase = {
     ...MOCK_CASE,
@@ -77,7 +79,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       userId: mockPetitionsClerkUser.userId,
     });
 
-    getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
   });
 
   it('should throw an error if caseToUpdate is not passed in', async () => {
@@ -218,7 +220,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
     };
 
-    getCaseByDocketNumber.mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...mockCase,
       docketEntries: [...mockCase.docketEntries, mockRQT],
       isPaper: true,
@@ -298,7 +300,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
   });
 
   it('should remove contactSecondary if changing from a party type with primary and secondary to a party type with only primary', async () => {
-    getCaseByDocketNumber.mockReturnValue(mockCaseWithContactSecondary);
+    getCaseByDocketNumber.mockResolvedValue(mockCaseWithContactSecondary);
 
     const result = await saveCaseDetailInternalEditInteractor(
       applicationContext,
@@ -335,7 +337,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       ],
     };
 
-    getCaseByDocketNumber.mockReturnValue(
+    getCaseByDocketNumber.mockResolvedValue(
       mockCaseWithContactSecondaryRepresented,
     );
 
@@ -367,7 +369,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       isPaper: false,
       receivedAt: '2021-01-01T16:00:00.000Z',
     };
-    getCaseByDocketNumber.mockReturnValue({ ...currentCaseDetail });
+    getCaseByDocketNumber.mockResolvedValue({ ...currentCaseDetail });
 
     const result = await saveCaseDetailInternalEditInteractor(
       applicationContext,

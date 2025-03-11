@@ -91,7 +91,7 @@ export const StartCaseInternal = connect(
               </div>
             </div>
             <div className="grid-row grid-gap margin-top-3">
-              <div className="grid-col-5">
+              <div className="grid-col-5 button-container">
                 <Button
                   data-testid="submit-paper-petition"
                   id="submit-case"

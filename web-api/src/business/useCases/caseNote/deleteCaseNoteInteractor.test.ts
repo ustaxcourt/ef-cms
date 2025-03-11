@@ -17,7 +17,7 @@ describe('deleteCaseNoteInteractor', () => {
   let mockLock;
   let mockUser: AuthUser;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
 
   beforeAll(() => {
     applicationContext
@@ -54,7 +54,9 @@ describe('deleteCaseNoteInteractor', () => {
       caseNote: 'My Procedural Note',
     });
 
-    updateCase.mockImplementation(c => c.caseToUpdate);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
     applicationContext.getUniqueId.mockReturnValue(
       '09c66c94-7480-4915-8f10-2f2e6e0bf4ad',
     );

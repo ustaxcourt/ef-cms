@@ -3,30 +3,42 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   fileAndServeCourtIssuedDocumentInteractor,
-  handleLockError,
 } from './fileAndServeCourtIssuedDocumentInteractor';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
-updateCase.mockImplementation(c => c.caseToUpdate);
+const updateCase = jest.mocked(updateCaseMock);
+updateCase.mockImplementation(({ caseToUpdate }) =>
+  Promise.resolve(caseToUpdate),
+);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
   beforeEach(() => {
     mockParams = {
       applicationContext,
       docketNumbers: [],
       subjectCaseDocketNumber: '123-20',
     };
+
+    fileAndServeDocumentOnOneCase.mockImplementation(({ caseEntity }) =>
+      Promise.resolve(caseEntity),
+    );
   });
 
   it('should return an object that includes the documentMetadata.docketNumber in the identifiers', () => {
@@ -47,37 +59,6 @@ describe('determineEntitiesToLock', () => {
     expect(
       determineEntitiesToLock(applicationContext, mockParams).identifiers,
     ).toContain('case|333-20');
-  });
-});
-
-describe('handleLockError', () => {
-  const mockClientConnectionId = '987654';
-
-  it('should not send a notification if there is no authorizedUser', async () => {
-    await handleLockError(applicationContext, { foo: 'bar' }, undefined);
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should send a notification to the user with "retry_file_and_serve_court_issued_document" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      clientConnectionId: mockClientConnectionId,
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockDocketClerkUser,
-    );
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'file_and_serve_court_issued_document',
-    });
   });
 });
 
@@ -144,31 +125,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           mockDocketClerkUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        fileAndServeCourtIssuedDocumentInteractor(
-          applicationContext,
-          mockRequest,
-          mockDocketClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockClientConnectionId,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'file_and_serve_court_issued_document',
-        },
-        userId: mockDocketClerkUser.userId,
-      });
 
       expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });

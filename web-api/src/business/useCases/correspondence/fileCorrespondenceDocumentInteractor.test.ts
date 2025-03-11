@@ -23,7 +23,7 @@ const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
   const mockCase = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
@@ -71,7 +71,9 @@ describe('fileCorrespondenceDocumentInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
 
-    updateCase.mockImplementation(caseToUpdate => caseToUpdate);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('should throw an Unauthorized error when the user role does not have theCASE_CORRESPONDENCE permission', async () => {

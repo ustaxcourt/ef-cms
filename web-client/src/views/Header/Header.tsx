@@ -308,7 +308,7 @@ export const Header = connect(
                   <Button
                     iconRight
                     link
-                    className="usa-nav__close float-right margin-right-0 padding-top-0"
+                    className="usa-nav__close float-right margin-right-0 padding-top-0 ustc-close"
                     icon="times-circle"
                     onClick={() => toggleMobileMenuSequence()}
                   >

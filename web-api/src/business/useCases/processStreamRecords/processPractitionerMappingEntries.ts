@@ -6,12 +6,10 @@ import type {
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
-import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { get, query } from '@web-api/persistence/dynamodbClientService';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -36,7 +34,7 @@ export const processPractitionerMappingEntries = async ({
       // After case records have been moved into postgres, we need to get the case data associated with the practitioner from postgres.
       // However, when we try to fetch case data here during the initial blue-green migration re-indexing step (to get case records
       // into postgres in the first place), the case data might not yet have been moved over to postgres. Therefore, we fallback to the case data from Dynamo.
-      // TODO after 10502: Only rely on postgres by lining getCaseDataFromPostgres here.
+      // TODO after 10502: Only rely on postgres by in-lining getCaseDataFromPostgres here.
       let caseRecord: any;
       try {
         caseRecord = await getCaseDataFromPostgres({
@@ -46,7 +44,7 @@ export const processPractitionerMappingEntries = async ({
       } catch (e) {
         getLogger().warn(
           `Failed to find case ${practitionerMappingData.pk.S} in postgres in processPractitionerMappingEntries: ${e}.
-          If this occurred as part of re-indexing during a blue-green migration, it is safe to ignore.`,
+          If this occurred in a test or as part of re-indexing during a blue-green migration, it is safe to ignore.`,
         );
         caseRecord = await exports.getCaseDataFromDynamo({
           applicationContext,
@@ -129,34 +127,42 @@ const getCaseDataFromPostgres = async ({
     throw Error(`Unable to index ${docketNumber} case data not found`);
   }
 
-  const petitionersOnCase = await getPetitionersOnCase({
-    docketNumber: caseMetadataWithCounsel.docketNumber,
-  });
-
-  const privatePractitioners = await getPrivatePractitionersOnCase({
-    applicationContext,
-    docketNumber: caseMetadataWithCounsel.docketNumber,
-  });
-
-  const irsPractitioners = await getIrsPractitionersOnCase({
-    applicationContext,
-    docketNumber: caseMetadataWithCounsel.docketNumber,
-  });
-
   const marshalledCase = marshall(
-    {
+    transformNullToUndefined({
       pk: `case|${caseMetadataWithCounsel.docketNumber}`,
       sk: `case|${caseMetadataWithCounsel.docketNumber}`,
       entityName: 'Case',
       caseCaption: caseMetadataWithCounsel.caseCaption,
+      associatedJudge: caseMetadataWithCounsel.associatedJudge,
+      associatedJudgeId: caseMetadataWithCounsel.associatedJudgeId,
+      automaticBlocked: caseMetadataWithCounsel.automaticBlocked,
+      automaticBlockedDate: caseMetadataWithCounsel.automaticBlockedDate,
+      automaticBlockedReason: caseMetadataWithCounsel.automaticBlockedReason,
+      blocked: caseMetadataWithCounsel.blocked,
+      blockedDate: caseMetadataWithCounsel.blockedDate,
+      blockedReason: caseMetadataWithCounsel.blockedReason,
+      caseType: caseMetadataWithCounsel.caseType,
+      closedDate: caseMetadataWithCounsel.closedDate,
+      createdAt: caseMetadataWithCounsel.createdAt,
+      hasPendingItems: caseMetadataWithCounsel.hasPendingItems,
+      highPriority: caseMetadataWithCounsel.highPriority,
+      isPaper: caseMetadataWithCounsel.isPaper,
+      leadDocket: caseMetadataWithCounsel.leadDocketNumber,
+      preferredTrialCity: caseMetadataWithCounsel.preferredTrialCity,
+      procedureType: caseMetadataWithCounsel.procedureType,
+      sealedDate: caseMetadataWithCounsel.sealedDate,
+      sortableDocketNumber: caseMetadataWithCounsel.sortableDocketNumber,
+      status: caseMetadataWithCounsel.status,
+      trialDate: caseMetadataWithCounsel.trialDate,
+      trialLocation: caseMetadataWithCounsel.trialLocation,
       docketNumber: caseMetadataWithCounsel.docketNumber,
       docketNumberWithSuffix: caseMetadataWithCounsel.docketNumberWithSuffix,
       isSealed: caseMetadataWithCounsel.isSealed,
-      petitioners: petitionersOnCase || [],
+      petitioners: caseMetadataWithCounsel.petitioners || [],
       receivedAt: caseMetadataWithCounsel.receivedAt,
-      privatePractitioners,
-      irsPractitioners,
-    },
+      privatePractitioners: caseMetadataWithCounsel.privatePractitioners,
+      irsPractitioners: caseMetadataWithCounsel.irsPractitioners,
+    }),
     { removeUndefinedValues: true },
   );
   return marshalledCase;

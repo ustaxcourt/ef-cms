@@ -1,6 +1,12 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock(
+  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+);
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { blockCaseFromTrialInteractor } from './blockCaseFromTrialInteractor';
@@ -9,10 +15,17 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('blockCaseFromTrialInteractor', () => {
   let mockLock;
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const deleteCaseTrialSortMappingRecords = jest.mocked(
+    deleteCaseTrialSortMappingRecordsMock,
+  );
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -20,12 +33,10 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   beforeEach(() => {
-    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockImplementation(
-        ({ caseToUpdate }) => caseToUpdate,
-      );
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    updateCaseAndAssociations.mockImplementation(
+      ({ caseToUpdate }) => caseToUpdate,
+    );
     mockLock = undefined;
   });
 
@@ -43,13 +54,9 @@ describe('blockCaseFromTrialInteractor', () => {
       blocked: true,
       blockedReason: 'just because',
     });
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+      deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
   });
 

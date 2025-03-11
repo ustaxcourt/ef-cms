@@ -324,7 +324,7 @@ export const CaseAssociationRequestReview = connect(
                   </div>
                 )}
 
-                <div className="margin-top-4">
+                <div className="margin-top-4 button-container">
                   <Button
                     className="margin-bottom-1"
                     data-testid="submit-represent-a-party-button"

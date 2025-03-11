@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+);
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CHIEF_JUDGE,
@@ -21,12 +24,18 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
-const updateCase = updateCaseMock as jest.Mock;
-
-const getCaseDeadlinesByDocketNumber =
-  getCaseDeadlinesByDocketNumberMock as jest.Mock;
+const updateCase = jest.mocked(updateCaseMock);
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
+import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('createCaseDeadlineInteractor', () => {
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
+  const deleteCaseTrialSortMappingRecords = jest.mocked(
+    deleteCaseTrialSortMappingRecordsMock,
+  );
   const mockCaseDeadline = {
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
@@ -47,8 +56,11 @@ describe('createCaseDeadlineInteractor', () => {
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
-      { deadline: 'something' },
+      new CaseDeadline(MOCK_CASE_DEADLINE),
     ]);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
@@ -82,10 +94,7 @@ describe('createCaseDeadlineInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('creates a case deadline, marks the case as automatically blocked, and calls deleteCaseTrialSortMappingRecords when there are already pending items on the case', async () => {
@@ -110,10 +119,7 @@ describe('createCaseDeadlineInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

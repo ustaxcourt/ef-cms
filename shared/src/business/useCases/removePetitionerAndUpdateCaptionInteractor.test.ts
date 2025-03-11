@@ -29,8 +29,10 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
   let petitionerToRemove;
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
 
@@ -247,7 +249,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     );
 
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.privatePractitioners[0]
+      updateCase.mock.calls[0][0].caseToUpdate.privatePractitioners?.[0]
         .representing,
     ).toEqual([otherPetitioner.contactId]);
   });

@@ -1,22 +1,29 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
 
   const mockClientConnectionId = '987654';
   const mockDocketEntryId = '225d5474-b02b-4137-a78e-2043f7a0f806';
@@ -42,11 +49,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
 
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementation(
-        ({ caseEntity }) => caseEntity,
-      );
+    fileAndServeDocumentOnOneCase.mockImplementation(
+      ({ caseEntity }) => caseEntity,
+    );
 
     applicationContext
       .getUseCaseHelpers()
@@ -165,8 +170,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.draftOrderState,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .draftOrderState,
     ).toBeNull();
   });
 
@@ -200,8 +205,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.filingDate,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .filingDate,
     ).toBe(mockToday);
   });
 
@@ -231,8 +236,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.filingDate,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .filingDate,
     ).toBe(mockOriginalFilingDate);
   });
 
@@ -260,8 +265,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isDraft,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity.isDraft,
     ).toBe(false);
   });
 
@@ -289,8 +293,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isFileAttached,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .isFileAttached,
     ).toBe(true);
   });
 
@@ -318,8 +322,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isOnDocketRecord,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .isOnDocketRecord,
     ).toBe(true);
   });
 
@@ -336,8 +340,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.numberOfPages,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .numberOfPages,
     ).toBe(mockNumberOfPages + 1);
   });
 
@@ -365,8 +369,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.processingStatus,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .processingStatus,
     ).toBe(DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE);
   });
 
@@ -395,12 +399,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(1);
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].caseEntity.docketNumber,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].caseEntity.docketNumber,
     ).toBe(mockCase.docketNumber);
   });
 
@@ -428,12 +429,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(1);
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].caseEntity.docketNumber,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].caseEntity.docketNumber,
     ).toBe(mockCase.docketNumber);
   });
 
@@ -487,13 +485,13 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[0][0].docketEntryEntity.isPendingService,
+      fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity
+        .isPendingService,
     ).toBeTruthy();
 
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
-        .calls[1][0].docketEntryEntity.isPendingService,
+      fileAndServeDocumentOnOneCase.mock.calls[1][0].docketEntryEntity
+        .isPendingService,
     ).toBeFalsy();
   });
 

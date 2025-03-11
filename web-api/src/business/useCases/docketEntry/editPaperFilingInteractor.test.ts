@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
 import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
@@ -19,13 +22,18 @@ import {
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
-
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
+  const fileAndServeDocumentOnOneCase = jest.mocked(
+    fileAndServeDocumentOnOneCaseMock,
+  );
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
   const mockServedDocketEntryId = '08ecbf7e-b316-46bb-9a66-b7474823d202';
   const mockWorkItemId = 'a956aa05-19cb-4fc3-ba10-d97c1c567c12';
@@ -309,6 +317,10 @@ describe('editPaperFilingInteractor', () => {
     describe('Single Docketing', () => {
       describe('Happy Path', () => {
         it('should update only allowed editable fields on a docket entry document', async () => {
+          fileAndServeDocumentOnOneCase.mockImplementation(
+            ({ caseEntity }) => caseEntity,
+          );
+
           await editPaperFilingInteractor(
             applicationContext,
             {
@@ -335,9 +347,7 @@ describe('editPaperFilingInteractor', () => {
           );
 
           const updatedDocketEntry =
-            updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
-              d => d.docketEntryId === mockDocketEntryId,
-            );
+            fileAndServeDocumentOnOneCase.mock.calls[0][0].docketEntryEntity;
 
           expect(updatedDocketEntry).toMatchObject({
             docketEntryId: mockDocketEntryId,
@@ -489,10 +499,9 @@ describe('editPaperFilingInteractor', () => {
             caseRecord.docketNumber,
             ...mockConsolidatedGroupDocketNumbers,
           ].length;
-          expect(
-            applicationContext.getUseCaseHelpers()
-              .fileAndServeDocumentOnOneCase,
-          ).toHaveBeenCalledTimes(expectedCount);
+          expect(fileAndServeDocumentOnOneCase).toHaveBeenCalledTimes(
+            expectedCount,
+          );
         });
 
         it('should send a message to the user with a paper service pdf url when at least one party in the consolidated group has paper service', async () => {

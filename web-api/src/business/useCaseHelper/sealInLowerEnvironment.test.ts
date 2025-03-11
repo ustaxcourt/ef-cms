@@ -9,7 +9,7 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 
 describe('sealInLowerEnvironment', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
   beforeAll(() => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     updateCase.mockImplementation(({ caseToUpdate }) => {

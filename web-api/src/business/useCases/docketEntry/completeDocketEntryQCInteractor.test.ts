@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+);
 import {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -19,17 +22,23 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
+  const deleteCaseTrialSortMappingRecords = jest.mocked(
+    deleteCaseTrialSortMappingRecordsMock,
+  );
 
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
   let mockLock;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   beforeAll(() => {
     applicationContext
@@ -533,6 +542,11 @@ describe('completeDocketEntryQCInteractor', () => {
           hasOtherFilingParty: true,
           isPaper: true,
           otherFilingParty: 'Bert Brooks',
+          previousDocument: {
+            docketEntryId: 'e3f2c8f4-8c56-4d3e-9f23-7b2a6a9d55e1',
+            documentTitle: 'DocumentTitle',
+            documentType: 'Amended',
+          },
           scenario: 'Nonstandard H',
           secondaryDocument: {
             documentType: 'Notice of Change of Address',
@@ -556,6 +570,11 @@ describe('completeDocketEntryQCInteractor', () => {
         documentType: 'Notice of Change of Address',
         eventCode: 'A',
       },
+      previousDocument: {
+        docketEntryId: 'e3f2c8f4-8c56-4d3e-9f23-7b2a6a9d55e1',
+        documentTitle: 'DocumentTitle',
+        documentType: 'Amended',
+      },
     });
   });
 
@@ -576,10 +595,7 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
     expect(caseDetail.automaticBlocked).toBeTruthy();
   });
 

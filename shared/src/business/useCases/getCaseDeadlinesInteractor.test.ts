@@ -17,14 +17,18 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 
-const getCaseDeadlinesByDateRange =
-  getCaseDeadlinesByDateRangeMock as jest.Mock;
+const getCaseDeadlinesByDateRange = jest.mocked(
+  getCaseDeadlinesByDateRangeMock,
+);
 
 const getCasesMetadataByDocketNumbers =
   getCasesMetadataByDocketNumbersMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
-updateCase.mockImplementation(c => c.caseToUpdate);
+const updateCase = jest.mocked(updateCaseMock);
+updateCase.mockImplementation(({ caseToUpdate }) =>
+  Promise.resolve(caseToUpdate),
+);
 
 describe('getCaseDeadlinesInteractor', () => {
   const mockDeadlines = [
@@ -54,6 +58,7 @@ describe('getCaseDeadlinesInteractor', () => {
       associatedJudgeId: 'a36a8e68-4f9a-499d-8a8c-703e21799b19',
       caseCaption: 'A caption, Petitioner',
       caseType: CASE_TYPES_MAP.cdp,
+      createdAt: '2018-11-21T20:49:28.192Z',
       docketNumber: '101-19',
       docketNumberSuffix: 'L',
       docketNumberWithSuffix: '101-19L',
@@ -89,6 +94,7 @@ describe('getCaseDeadlinesInteractor', () => {
         postalCode: '12345',
         state: 'CA',
       },
+      createdAt: '2018-11-21T20:49:28.192Z',
       docketNumber: '102-19',
       docketNumberSuffix: 'L',
       docketNumberWithSuffix: '102-19L',
@@ -104,7 +110,7 @@ describe('getCaseDeadlinesInteractor', () => {
   beforeEach(() => {
     applicationContext.environment.stage = 'local';
     getCaseDeadlinesByDateRange.mockResolvedValue({
-      foundDeadlines: mockDeadlines,
+      foundDeadlines: mockDeadlines as CaseDeadline[],
       totalCount: 2,
     });
     getCasesMetadataByDocketNumbers.mockResolvedValue(mockCases);

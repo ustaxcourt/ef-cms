@@ -14,13 +14,15 @@ describe('updateOtherStatisticsInteractor', () => {
   let mockLock;
   let authorizedUser: UnknownAuthUser;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   beforeEach(() => {

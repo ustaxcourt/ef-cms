@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+);
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -25,16 +28,25 @@ import {
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-
-const getCaseDeadlinesByDocketNumber =
-  getCaseDeadlinesByDocketNumberMock as jest.Mock;
+import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
+import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 describe('fileExternalDocumentInteractor', () => {
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
+  const deleteCaseTrialSortMappingRecords = jest.mocked(
+    deleteCaseTrialSortMappingRecordsMock,
+  );
+
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = applicationContext.getUniqueId();
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = updateCaseMock as jest.Mock;
-  updateCase.mockImplementation(c => c.caseToUpdate);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   let caseRecord;
   let mockLock;
@@ -486,17 +498,12 @@ describe('fileExternalDocumentInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
-    getCaseDeadlinesByDocketNumber.mockReturnValue([
-      {
-        deadlineDate: 'something',
-      },
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      new CaseDeadline(MOCK_CASE_DEADLINE),
     ]);
 
     await fileExternalDocumentInteractor(
@@ -520,10 +527,7 @@ describe('fileExternalDocumentInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should not sendServedPartiesEmails if docketEntryId is undefined', async () => {

@@ -16,9 +16,9 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 let mockCases;
 let mockLock;
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const getCasesByLeadDocketNumber = getCasesByLeadDocketNumberMock as jest.Mock;
-const updateCase = updateCaseMock as jest.Mock;
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+const getCasesByLeadDocketNumber = jest.mocked(getCasesByLeadDocketNumberMock);
+const updateCase = jest.mocked(updateCaseMock);
 
 describe('addConsolidatedCaseInteractor', () => {
   beforeAll(() => {
@@ -72,14 +72,18 @@ describe('addConsolidatedCaseInteractor', () => {
     };
 
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-      return mockCases[docketNumber];
+      return Promise.resolve(mockCases[docketNumber]);
     });
     getCasesByLeadDocketNumber.mockImplementation(({ leadDocketNumber }) => {
-      return Object.keys(mockCases)
-        .map(key => mockCases[key])
-        .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
+      return Promise.resolve(
+        Object.keys(mockCases)
+          .map(key => mockCases[key])
+          .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber),
+      );
     });
-    updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {

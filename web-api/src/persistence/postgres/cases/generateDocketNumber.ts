@@ -20,8 +20,8 @@ const incrementCounter = async (year: string): Promise<number> => {
       writer
         .selectFrom('dwCase')
         .where('docketNumber', 'like', `%-${twoDigitYear}`)
-        .select('docketNumber')
-        .orderBy('docketNumber', 'desc')
+        .select(['docketNumber', 'sortableDocketNumber'])
+        .orderBy('sortableDocketNumber', 'desc')
         .executeTakeFirst(),
     table: null,
   });
