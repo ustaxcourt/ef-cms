@@ -102,9 +102,10 @@ export async function getDeleteCaseDeadlineInteractorLockInfo(
   identifiers: string[];
   ttl?: number;
 }> {
-  const { leadDocketNumber } = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const { leadDocketNumber } = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const IDENTIFIERS = [`case|${docketNumber}`];
   if (!leadDocketNumber) {

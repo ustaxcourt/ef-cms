@@ -90,7 +90,7 @@ export async function getcreateCaseDeadlineLockInfo(
   ttl?: number;
 }> {
   const { docketNumber, leadDocketNumber, consolidatedCases } =
-    await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+    await getCaseByDocketNumber({
       applicationContext,
       docketNumber: caseDeadline.docketNumber,
     });
