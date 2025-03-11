@@ -36,6 +36,7 @@ const testFormattedMinuteSheet: FormattedMinuteSheet = {
     },
   ],
   called: '01/15/2024; Transcript ordered',
+  caseTitle: 'John Smith',
   courtReporter: 'Jane Smith',
   docketNumbers: ['123-45S', '123-46S'],
   docketNumberWithSuffix: '123-45S',
@@ -60,7 +61,6 @@ const testFormattedMinuteSheet: FormattedMinuteSheet = {
   ],
   notCalled: '',
   petitionerAppearances: ['John Smith (Petitioner) - Present all days'],
-  petitioners: 'John Smith',
   petitionerWitnesses: [{ name: 'Alice Johnson' }],
   pretrialConference:
     '01/14/2024; <em>All parties present</em>; Transcript ordered',
