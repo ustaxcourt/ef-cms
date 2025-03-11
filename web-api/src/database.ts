@@ -156,6 +156,7 @@ function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   });
 }
 
+// Prefer pgInsertInto, pgUpdateTable, pgDeleteFrom, etc.
 export async function getDbWriter<T>({
   cb,
   table,

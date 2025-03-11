@@ -3,7 +3,6 @@ import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
 import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
-import { getDbReader } from '@web-api/database';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
@@ -11,6 +10,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
+import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
+import { getCaseStatusHistory } from '@web-api/persistence/postgres/cases/getCaseStatusHistory';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -34,63 +35,13 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const dbCaseStatusHistory = await getDbReader(reader =>
-    reader
-      .selectFrom('dwCaseStatusUpdate')
-      .where('docketNumber', '=', docketNumber)
-      .orderBy('date asc')
-      .selectAll()
-      .execute(),
-  );
-  const caseStatusHistory = dbCaseStatusHistory.map(update => {
-    return { ...update, date: update.date.toISOString() };
-  });
+  const caseStatusHistory = await getCaseStatusHistory({ docketNumber });
 
-  const dbCaseStatistics = await getDbReader(reader =>
-    reader
-      .selectFrom('dwCaseStatistic as cs')
-      .where('docketNumber', '=', docketNumber)
-      .leftJoin('dwStatisticPenalty as sp', 'sp.statisticId', 'cs.statisticId')
-      .selectAll()
-      .select('cs.statisticId')
-      .execute(),
-  );
-
-  const dbCaseCorrespondences = await getCaseCorrespondenceByDocketNumber({
+  const caseCorrespondences = await getCaseCorrespondenceByDocketNumber({
     docketNumber,
   });
 
-  // Group penalties by statisticId
-  const statisticsWithPenalties = dbCaseStatistics.reduce((acc, row) => {
-    const {
-      determinationDeficiencyAmount,
-      determinationTotalPenalties,
-      irsDeficiencyAmount,
-      irsTotalPenalties,
-      lastDateOfPeriod,
-      statisticId,
-      year,
-      yearOrPeriod,
-      ...penaltyData
-    } = row;
-    if (!acc[statisticId]) {
-      acc[statisticId] = {
-        determinationDeficiencyAmount,
-        determinationTotalPenalties,
-        irsDeficiencyAmount,
-        irsTotalPenalties,
-        lastDateOfPeriod,
-        penalties: [],
-        statisticId,
-        year,
-        yearOrPeriod,
-      };
-    }
-    if (penaltyData.penaltyId) {
-      acc[statisticId].penalties.push(penaltyData);
-    }
-    return acc;
-  }, {});
+  const statisticsWithPenalties = await getCaseStatistics({ docketNumber });
 
   const workItems = await getWorkItemsByDocketNumber({
     docketNumber,
@@ -135,7 +86,7 @@ export const getCaseByDocketNumber = async ({
         sk: `case|${dbCaseMetadata.docketNumber}`,
         statistics: Object.values(statisticsWithPenalties),
       },
-      ...dbCaseCorrespondences.map(correspondenceItem => ({
+      ...caseCorrespondences.map(correspondenceItem => ({
         ...correspondenceItem,
         pk: `case|${docketNumber}`,
         sk: `correspondence|${correspondenceItem.correspondenceId}`,
