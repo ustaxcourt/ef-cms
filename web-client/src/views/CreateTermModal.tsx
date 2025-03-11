@@ -31,7 +31,7 @@ export const CreateTermModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className="create-term-modal"
-        confirmLabel="Create Term"
+        confirmLabel="Continue"
         confirmSequence={confirmSequence}
         title="Create Term"
         onModalMount={() => setIsModalMounted(true)}

@@ -9,10 +9,10 @@ import { setAlertWarningAction } from '@web-client/presenter/actions/setAlertWar
 import { showProgressSequenceDecorator } from '@web-client/presenter/utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
 import { validateCreateTermFormAction } from '@web-client/presenter/actions/TrialSession/validateCreateTermFormAction';
-import { clearErrorAlertsAction } from '@web-client/presenter/actions/clearErrorAlertsAction';
+import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsAction';
 
 export const submitCreateTermFormSequence = [
-  clearErrorAlertsAction,
+  clearAlertsAction,
   startShowValidationAction,
   validateCreateTermFormAction,
   {
