@@ -62,7 +62,10 @@ export const deleteCaseDeadline = async (
   const { leadDocketNumber } = caseToUpdate;
   if (!handlingConsolidatedCases && docketNumber === leadDocketNumber) {
     const CONSOLIDATED_CASE_DEADLINE =
-      await getCaseDeadlinesByConsolidatedCaseDeadlineId(caseDeadlineId);
+      await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+        caseDeadlineId,
+        leadDocketNumber,
+      );
 
     const DELETE_DEADLINE_TO_CONSOLIDATED_CASES =
       CONSOLIDATED_CASE_DEADLINE.filter(
@@ -85,7 +88,7 @@ export const deleteCaseDeadline = async (
 };
 
 export async function getDeleteCaseDeadlineInteractorLockInfo(
-  _applicationContext: ServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseDeadlineId,
     docketNumber,
@@ -97,15 +100,22 @@ export async function getDeleteCaseDeadlineInteractorLockInfo(
   identifiers: string[];
   ttl?: number;
 }> {
-  const IDENTIFIERS = [`case|${docketNumber}`];
-  const CONSOLIDATED_CASE_DEADLINE =
-    await getCaseDeadlinesByConsolidatedCaseDeadlineId(caseDeadlineId);
+  const { leadDocketNumber } = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  if (!CONSOLIDATED_CASE_DEADLINE.length) {
+  const IDENTIFIERS = [`case|${docketNumber}`];
+  if (!leadDocketNumber) {
     return {
       identifiers: IDENTIFIERS,
     };
   }
+
+  const CONSOLIDATED_CASE_DEADLINE =
+    await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+      caseDeadlineId,
+      leadDocketNumber,
+    );
 
   CONSOLIDATED_CASE_DEADLINE.forEach(({ docketNumber: cdlDocketNumber }) => {
     IDENTIFIERS.push(`case|${cdlDocketNumber}`);
