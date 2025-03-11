@@ -1,8 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
@@ -11,6 +12,8 @@ import { sealDocketEntryInteractor } from './sealDocketEntryInteractor';
 
 describe('sealDocketEntryInteractor', () => {
   const answerDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  getCaseByDocketNumber.mockResolvedValue({});
 
   it('should require a value for dockeEntrySealedTo', async () => {
     await expect(
@@ -59,9 +62,7 @@ describe('sealDocketEntryInteractor', () => {
   });
 
   it('should throw an error when an invalid option is provided for docketEntrySealedTo', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     await expect(
       sealDocketEntryInteractor(
@@ -79,9 +80,7 @@ describe('sealDocketEntryInteractor', () => {
   });
 
   it('should mark the docket entry as sealed and save', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     const sealedDocketEntry = await sealDocketEntryInteractor(
       applicationContext,
       {

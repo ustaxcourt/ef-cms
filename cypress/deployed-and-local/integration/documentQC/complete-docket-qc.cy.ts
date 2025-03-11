@@ -1,10 +1,10 @@
-/* eslint-disable promise/no-nesting */
 import { assertExists, retry } from '../../../helpers/retry';
 import { attachSamplePdfFile } from '../../../helpers/file/upload-file';
 import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 import {
   loginAsAdmissionsClerk,
+  loginAsCaseServicesSupervisor,
   loginAsPetitioner,
 } from '../../../helpers/authentication/login-as-helpers';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
@@ -54,7 +54,7 @@ describe('Document QC Complete', () => {
       });
 
       retry(() => {
-        cy.login('caseServicesSupervisor1', '/messages/my/inbox');
+        loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
         cy.get('table.usa-table');
         return assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
           docketNumber,
@@ -103,10 +103,8 @@ describe('Document QC Complete', () => {
   });
 
   it('should have the served case document qc assigned and completed', () => {
-    cy.login(
-      'caseServicesSupervisor1',
-      '/document-qc/section/inbox/selectedSection?section=docket',
-    );
+    loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
+    cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
     cy.get<string>('@DOCKET_NUMBER').then(docketNumber => {
       cy.get(`[data-testid="work-item-${docketNumber}"]`)
         .find('[data-testid="checkbox-assign-work-item"]')
@@ -120,10 +118,8 @@ describe('Document QC Complete', () => {
         );
 
         retry(() => {
-          cy.login(
-            'caseServicesSupervisor1',
-            '/document-qc/section/inbox/selectedSection?section=docket',
-          );
+          loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
+          cy.visit('/document-qc/section/inbox/selectedSection?section=docket');
           cy.get('table.usa-table');
           return cy.get('body').then(body => {
             const workItem = body.find(
@@ -160,8 +156,8 @@ describe('Document QC Complete', () => {
   it('should have the unserved case in the petition qc assigned', () => {
     cy.get<string>('@UNSERVED_DOCKET_NUMBER').then(unservedDocketNumber => {
       retry(() => {
-        cy.login(
-          'caseServicesSupervisor1',
+        loginAsCaseServicesSupervisor('caseServicesSupervisor1@example.com');
+        cy.visit(
           '/document-qc/section/inbox/selectedSection?section=petitions',
         );
         cy.get('[data-testid="section-work-queue-inbox"]').should('be.visible');
@@ -214,7 +210,7 @@ function assertMessageRecordCountForDocketNumberAndSubject(
 ) {
   cy.get(`[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`).then(
     $elements => {
-      const parentElements = $elements.map((index, element) =>
+      const parentElements = $elements.map((_index, element) =>
         Cypress.$(element).parent(),
       );
 
@@ -241,7 +237,7 @@ function assertMessageRecordCountForDocketNumberAndSubjectEscapeHatch(
       `[data-testid="messages-${inboxType}-inbox-docketNumber-cell"]`,
     );
 
-    const parentElements = $elements.map((index, element) =>
+    const parentElements = $elements.map((_index, element) =>
       Cypress.$(element).parent(),
     );
 

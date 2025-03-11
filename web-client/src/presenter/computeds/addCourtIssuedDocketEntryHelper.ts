@@ -1,6 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { Get } from 'cerebral';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const addCourtIssuedDocketEntryHelper = (
@@ -12,11 +13,9 @@ export const addCourtIssuedDocketEntryHelper = (
     SYSTEM_GENERATED_DOCUMENT_TYPES,
     USER_ROLES,
   } = applicationContext.getConstants();
-  const caseDetail = applicationContext
-    .getUtilities()
-    .setServiceIndicatorsForCase({
-      ...get(state.caseDetail),
-    });
+  const caseDetail = setServiceIndicatorsForPetitionersOnCase({
+    ...get(state.caseDetail),
+  });
 
   const form = get(state.form);
 

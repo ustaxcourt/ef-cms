@@ -6,18 +6,22 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addPetitionerToCaseInteractor } from './addPetitionerToCaseInteractor';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('addPetitionerToCaseInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
   let mockContact;
   let mockLock;
 
@@ -41,12 +45,13 @@ describe('addPetitionerToCaseInteractor', () => {
       state: 'CO',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.generalDocket,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.generalDocket,
+    });
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('should throw an unauthorized error when the user is not authorized to add petitioner to case', async () => {
@@ -64,12 +69,10 @@ describe('addPetitionerToCaseInteractor', () => {
   });
 
   it('should throw an error if case status is new', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.new,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.new,
+    });
 
     await expect(
       addPetitionerToCaseInteractor(
@@ -103,8 +106,7 @@ describe('addPetitionerToCaseInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.petitioners[1],
+      updateCase.mock.calls[0][0].caseToUpdate.petitioners[1],
     ).toMatchObject({
       ...mockContact,
       countryType: COUNTRY_TYPES.INTERNATIONAL,
@@ -127,12 +129,10 @@ describe('addPetitionerToCaseInteractor', () => {
   });
 
   it('should update the case caption', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.generalDocket,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.generalDocket,
+    });
 
     const mockUpdatedCaption = 'An updated caption';
 
@@ -146,10 +146,9 @@ describe('addPetitionerToCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.caseCaption,
-    ).toEqual(mockUpdatedCaption);
+    expect(updateCase.mock.calls[0][0].caseToUpdate.caseCaption).toEqual(
+      mockUpdatedCaption,
+    );
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
@@ -167,9 +166,7 @@ describe('addPetitionerToCaseInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

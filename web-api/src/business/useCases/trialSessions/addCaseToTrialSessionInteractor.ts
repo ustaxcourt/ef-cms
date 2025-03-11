@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { NotFoundError } from '../../../errors/errors';
+import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -8,6 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -50,12 +51,10 @@ export const addCaseToTrialSession = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const caseDetails = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetails = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseDetails, { authorizedUser });
 

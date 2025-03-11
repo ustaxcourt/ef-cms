@@ -6,7 +6,6 @@ import {
 
 import {
   getCreateACaseButton,
-  navigateTo as navigateToDocumentQC,
 } from '../../../support/pages/document-qc';
 
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
@@ -16,6 +15,7 @@ import {
   createAndServePaperPetitionMyselfAndSpouse,
 } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { unchecksOrdersAndNoticesBoxesInCase } from '../../../support/pages/unchecks-orders-and-notices-boxes-in-case';
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Petition clerk creates a paper filing', function () {
   describe('Create and submit a paper petition', () => {
@@ -25,7 +25,8 @@ describe('Petition clerk creates a paper filing', function () {
       });
     });
     it('should create a paper petition', () => {
-      navigateToDocumentQC('petitionsclerk');
+      loginAsPetitionsClerk();
+      cy.visit('/document-qc');
 
       getCreateACaseButton().click();
       cy.get('#tab-parties').should('have.attr', 'aria-selected');
@@ -82,9 +83,11 @@ describe('Petition clerk creates a paper filing', function () {
   describe('Cancel case', () => {
     it('should route to the Document QC inbox when user confirms to cancel', () => {
       createPaperPetition().then(() => {
-        cy.get('button#cancel-create-case').scrollIntoView().click();
+        cy.get('button#cancel-create-case').scrollIntoView();
+        cy.get('button#cancel-create-case').click();
         cy.get('div.modal-header').should('exist');
-        cy.get('button.modal-button-confirm').scrollIntoView().click();
+        cy.get('button.modal-button-confirm').scrollIntoView();
+        cy.get('button.modal-button-confirm').click();
         cy.url().should('include', 'document-qc/my/inbox');
       });
     });

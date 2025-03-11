@@ -13,6 +13,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 export const serveCourtIssuedDocument = async (
@@ -42,12 +43,10 @@ export const serveCourtIssuedDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const subjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectCaseDocketNumber,
-    });
+  const subjectCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: subjectCaseDocketNumber,
+  });
 
   if (!subjectCase.docketNumber) {
     throw new NotFoundError(`Case ${subjectCaseDocketNumber} was not found.`);
@@ -110,9 +109,10 @@ export const serveCourtIssuedDocument = async (
 
   try {
     for (const docketNumber of docketNumbers) {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({ applicationContext, docketNumber });
+      const caseToUpdate = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
@@ -166,31 +166,27 @@ export const serveCourtIssuedDocument = async (
     }
   }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .saveDocumentFromLambda({
-      applicationContext,
-      document: stampedPdf,
-      key: docketEntryId,
-    });
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: stampedPdf,
+    key: docketEntryId,
+  });
 
   const successMessage =
     docketNumbers.length > 0
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.GENERIC;
 
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'serve_document_complete',
-        alertSuccess: { message: successMessage, overwritable: false },
-        pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
-      },
-      userId: user.userId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_document_complete',
+      alertSuccess: { message: successMessage, overwritable: false },
+      pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
+    },
+    userId: user.userId,
+  });
 };
 
 export const determineEntitiesToLock = (

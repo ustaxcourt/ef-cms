@@ -4,6 +4,30 @@ import { NewMessageKysely, UpdateMessageKysely } from '@web-api/database-types';
 import { RawMessage } from '@shared/business/entities/Message';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
+export const DW_MESSAGE_COLUMNS = [
+  'attachments',
+  'completedAt',
+  'completedBy',
+  'completedBySection',
+  'completedByUserId',
+  'completedMessage',
+  'createdAt',
+  'docketNumber',
+  'from',
+  'fromSection',
+  'fromUserId',
+  'isCompleted',
+  'isRead',
+  'isRepliedTo',
+  'message',
+  'messageId',
+  'parentMessageId',
+  'subject',
+  'to',
+  'toSection',
+  'toUserId',
+];
+
 function pickFields(message) {
   return {
     attachments: JSON.stringify(message.attachments),

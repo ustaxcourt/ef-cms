@@ -12,9 +12,8 @@ export const getCaseDeadlinesLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await getCaseDeadlinesInteractor(
-      applicationContext,
       {
         ...event.queryStringParameters,
       },

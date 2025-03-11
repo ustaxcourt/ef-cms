@@ -9,17 +9,19 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_ACTIVE_LOCK } from '../../../../../shared/src/test/mockLock';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_ACTIVE_LOCK } from '@shared/test/mockLock';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import {
   mockCaseServicesSupervisorUser,
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('completeDocketEntryQCInteractor', () => {
@@ -31,6 +33,12 @@ describe('completeDocketEntryQCInteractor', () => {
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
   let mockLock;
+
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   beforeAll(() => {
     applicationContext
@@ -87,9 +95,7 @@ describe('completeDocketEntryQCInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
 
     applicationContext.getChromiumBrowser().newPage.mockReturnValue({
       addStyleTag: () => {},
@@ -141,12 +147,8 @@ describe('completeDocketEntryQCInteractor', () => {
       ),
     ).resolves.not.toThrow();
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
@@ -158,12 +160,8 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
     expect(result.paperServiceParties.length).toEqual(0);
   });
@@ -428,19 +426,17 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('serves the document for parties with paper service if a notice of docket change is generated', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseRecord,
-        isPaper: true,
-        mailingDate: '2019-03-01T21:40:46.415Z',
-        petitioners: [
-          {
-            ...caseRecord.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...caseRecord,
+      isPaper: true,
+      mailingDate: '2019-03-01T21:40:46.415Z',
+      petitioners: [
+        {
+          ...caseRecord.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
+    });
 
     const mockNumberOfPages = 999;
     applicationContext
@@ -475,30 +471,24 @@ describe('completeDocketEntryQCInteractor', () => {
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
 
   it('generates a document for paper service if the document is a Notice of Change of Address and the case has paper service parties', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...caseRecord,
-        isPaper: true,
-        mailingDate: '2019-03-01T21:40:46.415Z',
-        petitioners: [
-          {
-            ...caseRecord.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...caseRecord,
+      isPaper: true,
+      mailingDate: '2019-03-01T21:40:46.415Z',
+      petitioners: [
+        {
+          ...caseRecord.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
+    });
 
     const result = await completeDocketEntryQCInteractor(
       applicationContext,
@@ -512,12 +502,8 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
@@ -535,12 +521,8 @@ describe('completeDocketEntryQCInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual(undefined);
     expect(result.paperServiceParties.length).toEqual(0);
   });
@@ -560,6 +542,11 @@ describe('completeDocketEntryQCInteractor', () => {
           hasOtherFilingParty: true,
           isPaper: true,
           otherFilingParty: 'Bert Brooks',
+          previousDocument: {
+            docketEntryId: 'e3f2c8f4-8c56-4d3e-9f23-7b2a6a9d55e1',
+            documentTitle: 'DocumentTitle',
+            documentType: 'Amended',
+          },
           scenario: 'Nonstandard H',
           secondaryDocument: {
             documentType: 'Notice of Change of Address',
@@ -571,8 +558,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[0],
+      updateCase.mock.calls[0][0].caseToUpdate.docketEntries[0],
     ).toMatchObject({
       documentTitle: 'My Edited Document',
       documentType: 'Notice of Change of Address',
@@ -583,6 +569,11 @@ describe('completeDocketEntryQCInteractor', () => {
       secondaryDocument: {
         documentType: 'Notice of Change of Address',
         eventCode: 'A',
+      },
+      previousDocument: {
+        docketEntryId: 'e3f2c8f4-8c56-4d3e-9f23-7b2a6a9d55e1',
+        documentTitle: 'DocumentTitle',
+        documentType: 'Amended',
       },
     });
   });

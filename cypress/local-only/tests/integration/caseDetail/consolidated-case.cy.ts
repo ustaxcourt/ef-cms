@@ -1,10 +1,11 @@
+import { loginAsDocketClerk } from 'cypress/helpers/authentication/login-as-helpers';
 import { attachFile } from '../../../../helpers/file/upload-file';
 import { getCaseDetailTab } from '../../../support/pages/case-detail';
 
 describe('Docket clerk views consolidated case', function () {
   describe('case detail header', () => {
     it('should display lead case tag on the lead case in a consolidated group', () => {
-      cy.login('docketclerk');
+      loginAsDocketClerk();
       cy.visit('/case-detail/111-19');
       cy.get('#lead-case-tag').should('exist');
     });

@@ -5,6 +5,17 @@ import {
 import { NewCaseDeadlineKysely } from '@web-api/database-types';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
+export const DW_CASE_DEADLINE_COLUMNS = [
+  'associatedJudge',
+  'associatedJudgeId',
+  'caseDeadlineId',
+  'createdAt',
+  'deadlineDate',
+  'description',
+  'docketNumber',
+  'sortableDocketNumber',
+];
+
 function pickFields(deadline): NewCaseDeadlineKysely {
   return {
     associatedJudge: deadline.associatedJudge,

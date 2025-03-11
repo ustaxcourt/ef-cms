@@ -1,87 +1,90 @@
-import React from 'react';
+import React, { forwardRef, Ref } from 'react';
 import classNames from 'classnames';
 
-export const FormGroup = ({
-  children,
-  className,
-  confirmationText,
-  errorMessageId,
-  errorText,
-  formGroupRef,
-  grow,
-  id,
-  omitFormGroupClass,
-}: {
-  children: React.ReactNode;
-  className?: string;
-  confirmationText?: string;
-  errorText?: string | string[];
-  errorMessageId?: string;
-  formGroupRef?: React.RefObject<HTMLInputElement>;
-  id?: string;
-  grow?: boolean;
-  omitFormGroupClass?: boolean;
-}) => {
-  let hasError = false;
-  const hasConfirmation = !!confirmationText;
+export const FormGroup = forwardRef(
+  (
+    {
+      children,
+      className,
+      confirmationText,
+      errorMessageId,
+      errorText,
+      grow,
+      id,
+      omitFormGroupClass,
+    }: {
+      children: React.ReactNode;
+      className?: string;
+      confirmationText?: string;
+      errorText?: string | string[];
+      errorMessageId?: string;
+      id?: string;
+      grow?: boolean;
+      omitFormGroupClass?: boolean;
+    },
+    ref: Ref<HTMLDivElement>,
+  ) => {
+    let hasError = false;
+    const hasConfirmation = !!confirmationText;
 
-  if (Array.isArray(errorText)) {
-    hasError = errorText.some(text => !!text);
-  } else {
-    hasError = !!errorText;
-  }
+    if (Array.isArray(errorText)) {
+      hasError = errorText.some(text => !!text);
+    } else {
+      hasError = !!errorText;
+    }
 
-  const renderMultipleErrors = (errorTextArr: string[]) => {
-    return errorTextArr.map((text: string, index: number) => {
+    const renderMultipleErrors = (errorTextArr: string[]) => {
+      return errorTextArr.map((text: string, index: number) => {
+        return (
+          text && (
+            <span
+              className="usa-error-message"
+              data-testid={`${errorMessageId}-${index}`}
+              key={text}
+            >
+              {text}
+            </span>
+          )
+        );
+      });
+    };
+
+    const renderSingleError = () => {
       return (
-        text && (
-          <span
-            className="usa-error-message"
-            data-testid={`${errorMessageId}-${index}`}
-            key={text}
-          >
-            {text}
+        errorText && (
+          <span className="usa-error-message" data-testid={errorMessageId}>
+            {errorText}
           </span>
         )
       );
-    });
-  };
+    };
+    const renderSingleConfirmation = () => {
+      return (
+        confirmationText && (
+          <span className="ustc-confirmation-message">{confirmationText}</span>
+        )
+      );
+    };
 
-  const renderSingleError = () => {
     return (
-      errorText && (
-        <span className="usa-error-message" data-testid={errorMessageId}>
-          {errorText}
-        </span>
-      )
+      <div
+        className={classNames(
+          !omitFormGroupClass && 'usa-form-group',
+          hasConfirmation && 'ustc-form-group--confirmation',
+          hasError && 'usa-form-group--error',
+          grow && 'maxw-none',
+          className,
+        )}
+        id={id}
+        ref={ref}
+      >
+        {children}
+        {Array.isArray(errorText) && renderMultipleErrors(errorText)}
+        {!Array.isArray(errorText) && renderSingleError()}
+        {hasConfirmation && renderSingleConfirmation()}
+      </div>
     );
-  };
-  const renderSingleConfirmation = () => {
-    return (
-      confirmationText && (
-        <span className="ustc-confirmation-message">{confirmationText}</span>
-      )
-    );
-  };
-
-  return (
-    <div
-      className={classNames(
-        !omitFormGroupClass && 'usa-form-group',
-        hasConfirmation && 'ustc-form-group--confirmation',
-        hasError && 'usa-form-group--error',
-        grow && 'maxw-none',
-        className,
-      )}
-      id={id}
-      ref={formGroupRef}
-    >
-      {children}
-      {Array.isArray(errorText) && renderMultipleErrors(errorText)}
-      {!Array.isArray(errorText) && renderSingleError()}
-      {hasConfirmation && renderSingleConfirmation()}
-    </div>
-  );
-};
+  },
+);
 
 FormGroup.displayName = 'FormGroup';
