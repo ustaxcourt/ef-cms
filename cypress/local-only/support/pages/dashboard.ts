@@ -1,7 +1,3 @@
-export const navigateTo = username => {
-  cy.login(username, '/');
-};
-
 export const viewMyOutbox = () => {
   cy.get('button#individual-sent-tab').click();
 };
