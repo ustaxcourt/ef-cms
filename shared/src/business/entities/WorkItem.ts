@@ -1,5 +1,3 @@
-import { CASE_STATUS_TYPES, CHIEF_JUDGE } from './EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { WORK_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { createISODateString } from '../utilities/DateHandler';
@@ -22,7 +20,7 @@ export class WorkItem extends JoiValidationEntity {
   public docketEntry: any; // 10103: Should this be removed? Instead point at the docketEntryId?
   public docketNumber: string;
   // public hideFromPendingMessages?: boolean; 10103: I only see us setting this value. never reading it.
-  public highPriority?: boolean;
+  // public highPriority?: boolean; // 10103: belongs to another entity
   public inProgress?: boolean;
   // public isInitializeCase?: boolean; 10103: I only see us setting this value. never reading it.
   public isRead?: boolean;
@@ -36,22 +34,11 @@ export class WorkItem extends JoiValidationEntity {
   public updatedAt: string;
   public workItemId: string;
 
-  constructor(rawWorkItem, { caseEntity }: { caseEntity?: Case } = {}) {
+  constructor(rawWorkItem) {
     super('WorkItem');
 
     this.assigneeId = rawWorkItem.assigneeId;
     this.assigneeName = rawWorkItem.assigneeName;
-    this.associatedJudge =
-      caseEntity && caseEntity.associatedJudge
-        ? caseEntity.associatedJudge
-        : rawWorkItem.associatedJudge || CHIEF_JUDGE;
-    this.associatedJudgeId =
-      caseEntity && caseEntity.associatedJudgeId
-        ? caseEntity.associatedJudgeId
-        : rawWorkItem.associatedJudgeId || undefined;
-    this.caseIsInProgress = rawWorkItem.caseIsInProgress;
-    this.caseStatus = caseEntity ? caseEntity.status : rawWorkItem.caseStatus;
-    this.caseTitle = rawWorkItem.caseTitle;
     this.completedAt = rawWorkItem.completedAt;
     this.completedBy = rawWorkItem.completedBy;
     this.completedByUserId = rawWorkItem.completedByUserId;
@@ -77,27 +64,12 @@ export class WorkItem extends JoiValidationEntity {
     ]);
 
     this.docketNumber = rawWorkItem.docketNumber;
-    this.leadDocketNumber = caseEntity
-      ? caseEntity.leadDocketNumber
-      : rawWorkItem.leadDocketNumber;
-    this.docketNumberWithSuffix = caseEntity
-      ? caseEntity.docketNumberWithSuffix
-      : `${rawWorkItem.docketNumber}${
-          rawWorkItem.docketNumberSuffix ? rawWorkItem.docketNumberSuffix : ''
-        }`;
-    this.highPriority =
-      rawWorkItem.highPriority ||
-      caseEntity?.status === CASE_STATUS_TYPES.calendared;
     this.inProgress = rawWorkItem.inProgress;
     this.isRead = rawWorkItem.isRead;
     this.section = rawWorkItem.section;
     this.sentBy = rawWorkItem.sentBy;
     this.sentBySection = rawWorkItem.sentBySection;
     this.sentByUserId = rawWorkItem.sentByUserId;
-    this.trialDate = caseEntity ? caseEntity.trialDate : rawWorkItem.trialDate;
-    this.trialLocation = caseEntity
-      ? caseEntity.trialLocation
-      : rawWorkItem.trialLocation;
     this.updatedAt = rawWorkItem.updatedAt || createISODateString();
     this.workItemId = rawWorkItem.workItemId || getUniqueId();
   }
@@ -127,10 +99,6 @@ export class WorkItem extends JoiValidationEntity {
     });
 
     return this;
-  }
-
-  setStatus(caseStatus: string): void {
-    this.caseStatus = caseStatus;
   }
 
   setAsCompleted({

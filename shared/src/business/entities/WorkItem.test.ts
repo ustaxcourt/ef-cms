@@ -3,9 +3,7 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
 } from './EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
 import { WorkItem } from './WorkItem';
-import { cloneDeep } from 'lodash';
 
 describe('WorkItem', () => {
   describe('isValid', () => {
@@ -27,22 +25,6 @@ describe('WorkItem', () => {
 
     it('Creates a valid workitem', () => {
       const workItem = new WorkItem(aValidWorkItem);
-      expect(workItem.isValid()).toBeTruthy();
-    });
-
-    it('Creates a valid workitem when using setStatus', () => {
-      const workItem = new WorkItem({
-        assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-        assigneeName: 'bob',
-        caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
-        docketNumber: '101-18',
-        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-        section: DOCKET_SECTION,
-        sentBy: 'bob',
-      });
-      workItem.setStatus(CASE_STATUS_TYPES.new);
-      expect(workItem.caseStatus).toEqual(CASE_STATUS_TYPES.new);
       expect(workItem.isValid()).toBeTruthy();
     });
 
@@ -97,37 +79,6 @@ describe('WorkItem', () => {
       });
       expect(workItem.isValid()).toBe(true);
     });
-
-    it('should set properties on WorkItem that pertain to the Case when a Case entity is passed into the constructor', () => {
-      aValidWorkItem.associatedJudge = 'This should be overwritten';
-      aValidWorkItem.associatedJudgeId = 'This Id should be overwritten';
-      aValidWorkItem.caseStatus = CASE_STATUS_TYPES.closed;
-      aValidWorkItem.leadDocketNumber = '100-23';
-      aValidWorkItem.docketNumberWithSuffix = '123-23';
-      aValidWorkItem.trialDate = 'This should be overwritten';
-      aValidWorkItem.trialLocation = 'This should be overwritten';
-      const mockCase = cloneDeep(MOCK_CASE);
-      mockCase.associatedJudge = 'Some Judge';
-      mockCase.associatedJudgeId = '71a7c6d4-3e37-4f9f-87b0-1e6714bb43a9';
-      mockCase.status = CASE_STATUS_TYPES.generalDocket;
-      mockCase.leadDocketNumber = undefined;
-      mockCase.docketNumberWithSuffix = '123-23S';
-      mockCase.trialDate = '2018-11-21T20:49:28.192Z';
-      mockCase.trialLocation = 'Seattle, WA';
-
-      const workItem = new WorkItem(aValidWorkItem, { caseEntity: mockCase });
-
-      expect(workItem.isValid()).toBeTruthy();
-      expect(workItem.associatedJudge).toBe(mockCase.associatedJudge);
-      expect(workItem.associatedJudgeId).toBe(mockCase.associatedJudgeId);
-      expect(workItem.caseStatus).toBe(mockCase.status);
-      expect(workItem.leadDocketNumber).toBe(mockCase.leadDocketNumber);
-      expect(workItem.docketNumberWithSuffix).toBe(
-        mockCase.docketNumberWithSuffix,
-      );
-      expect(workItem.trialDate).toBe(mockCase.trialDate);
-      expect(workItem.trialLocation).toBe(mockCase.trialLocation);
-    });
   });
 
   it('assigns user provided to `assignUser`', () => {
@@ -152,35 +103,6 @@ describe('WorkItem', () => {
     };
     workItem.assignToUser(assignment);
     expect(workItem.toRawObject()).toMatchObject(assignment);
-  });
-
-  it('is set high priority if case is calendared or overridden', () => {
-    let workItem = new WorkItem({
-      assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-      assigneeName: 'bob',
-      caseStatus: CASE_STATUS_TYPES.new,
-      caseTitle: 'Johnny Joe Jacobson',
-      docketEntry: {},
-      docketNumber: '101-18',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      section: DOCKET_SECTION,
-      sentBy: 'bob',
-    });
-    expect(workItem.highPriority).toBe(false);
-
-    workItem = new WorkItem({
-      assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-      assigneeName: 'bob',
-      caseStatus: CASE_STATUS_TYPES.new,
-      caseTitle: 'Johnny Joe Jacobson',
-      docketEntry: {},
-      docketNumber: '101-18',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      highPriority: true,
-      section: DOCKET_SECTION,
-      sentBy: 'bob',
-    });
-    expect(workItem.highPriority).toBe(true);
   });
 
   it('creates a workItem containing a docketEntry with only the picked fields', () => {
