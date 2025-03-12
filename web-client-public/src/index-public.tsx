@@ -13,6 +13,7 @@ import { publicTrialSessionsRoute } from 'web-client-public/src/routes/trial-ses
 import { publicTrialSessionDetailsRoute } from '@web-client-public/routes/trial-session-detail/PublicTrialSessionDetails';
 import { healthCheckRoute } from 'web-client-public/src/routes/health/HealthCheck';
 import { maintenanceRoute } from 'web-client-public/src/routes/maintenance/Maintenance';
+import { publicSearchRoute } from '@web-client-public/routes/__/PublicSearch';
 
 const catchAllRouteInFile = createRoute({
   getParentRoute: () => rootRoute,
@@ -21,6 +22,7 @@ const catchAllRouteInFile = createRoute({
 
 const routeTree = rootRoute.addChildren([
   publicDefaultLayoutRoute.addChildren([
+    publicSearchRoute,
     todaysOpinionsRoute,
     publicTrialSessionsRoute,
     publicTrialSessionDetailsRoute,

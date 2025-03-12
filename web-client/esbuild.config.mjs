@@ -1,5 +1,5 @@
 /* eslint-disable custom-rules-plugin/no-new-dates*/
-import esbuildHelper from './esbuildHelper.mjs';
+import esbuildHelper from '../esbuildHelper.mjs';
 import fs from 'fs';
 
 const replaceHtmlFile = liveReload => {
@@ -25,8 +25,8 @@ const replaceHtmlFile = liveReload => {
 };
 
 esbuildHelper({
-  entryPoint: 'index.ts',
-  indexName: 'index.html',
+  entryPoint: 'web-client/src/index.ts',
+  indexName: 'web-client/src/index.html',
   outdir: 'dist',
   reloadServerPort: 37527,
   replaceHtmlFile,

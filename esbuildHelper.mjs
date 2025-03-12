@@ -64,7 +64,7 @@ export default async function ({
       }, {}),
     },
     entryNames: '[name].[hash]',
-    entryPoints: [`web-client/src/${entryPoint}`],
+    entryPoints: [entryPoint],
     format: 'esm',
     loader: {
       '.html': 'text',
@@ -148,7 +148,7 @@ export default async function ({
             to: ['.'],
           },
           {
-            from: [`web-client/src/${indexName}`],
+            from: [indexName],
             keepStructure: true,
             to: ['.'],
           },
