@@ -1,8 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
