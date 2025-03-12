@@ -24,7 +24,7 @@ type TPetitioner = {
   serviceIndicator?: string;
   state: string;
   title?: string;
-  hasConsentedToEService?: boolean;
+  hasConsentedToElectronicService?: boolean;
 };
 
 interface IValidateRawCollection<I> {
