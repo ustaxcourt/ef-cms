@@ -32,7 +32,9 @@ export const petitionsClerkViewsDeadlineReportForSingleCase = (
 
     await cerebralTest.runSequence('updateDateRangeForDeadlinesSequence');
 
-    const deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
+    const deadlines = cerebralTest.getState(
+      'caseDeadlineReport.caseDeadlinesForCurrentPage',
+    );
 
     const deadlinesForThisCase = deadlines.filter(
       d => d.docketNumber === cerebralTest.docketNumber,
