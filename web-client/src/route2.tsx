@@ -3,7 +3,7 @@ import { rootRoute } from '@web-client/private-index';
 import React from 'react';
 
 function Route2Component() {
-  return <Link to='/route2'></Link>
+  return <Link to="/route2"></Link>;
 }
 
 export const route2 = createRoute({

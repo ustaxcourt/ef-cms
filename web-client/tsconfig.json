@@ -9,5 +9,5 @@
       "@shared/*": ["shared/src/*"],
     }
   },
-  "include": ["src", "src/router-types.d.ts"]
+  "include": ["src"]
 }
