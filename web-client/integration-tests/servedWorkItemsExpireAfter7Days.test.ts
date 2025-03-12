@@ -76,7 +76,6 @@ describe('verify old served work items do not show up in the outbox', () => {
       },
       docketNumber: caseDetail.docketNumber,
       docketNumberSuffix: null,
-      isInitializeCase: false,
       section: IRS_SYSTEM_SECTION,
       sentBy: 'Test petitionsclerk1',
       sentBySection: PETITIONS_SECTION,

@@ -42,7 +42,6 @@ describe('saveCaseDetailInternalEditInteractor', () => {
         workItem: {
           docketEntry: MOCK_CASE.docketEntries[0],
           docketNumber: MOCK_CASE.docketNumber,
-          isInitializeCase: true,
           section: PETITIONS_SECTION,
           sentBy: 'petitioner',
           workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',

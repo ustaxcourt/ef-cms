@@ -480,7 +480,6 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
   entityName: JoiValidationConstants.STRING.valid('WorkItem').required(),
   highPriority: joi.boolean().optional(),
   inProgress: joi.boolean().optional(),
-  isInitializeCase: joi.boolean().optional(),
   isRead: joi.boolean().optional(),
   leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
   section: JoiValidationConstants.STRING.required(),

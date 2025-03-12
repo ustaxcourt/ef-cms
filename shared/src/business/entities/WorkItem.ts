@@ -19,7 +19,7 @@ export class WorkItem extends JoiValidationEntity {
   public completedByUserId?: string;
   public completedMessage?: string;
   public createdAt: string;
-  public docketEntry: any;
+  public docketEntry: any; // 10103: Should this be removed? Instead point at the docketEntryId?
   public docketNumber: string;
   // public hideFromPendingMessages?: boolean; 10103: I only see us setting this value. never reading it.
   public highPriority?: boolean;
@@ -89,7 +89,6 @@ export class WorkItem extends JoiValidationEntity {
       rawWorkItem.highPriority ||
       caseEntity?.status === CASE_STATUS_TYPES.calendared;
     this.inProgress = rawWorkItem.inProgress;
-    this.isInitializeCase = rawWorkItem.isInitializeCase;
     this.isRead = rawWorkItem.isRead;
     this.section = rawWorkItem.section;
     this.sentBy = rawWorkItem.sentBy;

@@ -95,7 +95,6 @@ export const MOCK_WORK_ITEM: RawWorkItem = Object.freeze({
   entityName: 'WorkItem',
   highPriority: false,
   inProgress: false,
-  isInitializeCase: false,
   section: DOCKET_SECTION,
   sentBy: 'Test Docketclerk',
   sentBySection: CHAMBERS_SECTION,

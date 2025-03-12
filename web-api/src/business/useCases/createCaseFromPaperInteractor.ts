@@ -48,7 +48,6 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
       },
       docketNumber: caseToAdd.docketNumber,
       docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
-      isInitializeCase: true,
       section: user.section,
       sentBy: user.name,
       sentBySection: user.section,
