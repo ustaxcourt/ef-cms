@@ -16,11 +16,11 @@ export const caseSearchByNameHelper = (): {
   const today = formatNow(FORMATS.YYYYMMDD);
   const caseTypeOptions = [
     {
-      label: CASE_TYPES_MAP.deficiency,
+      label: 'None',
       value: CASE_TYPES_MAP.deficiency,
     },
     {
-      label: `L - ${CASE_TYPES_MAP.cdp}`,
+      label: `L - Lien/Levy`,
       value: CASE_TYPES_MAP.cdp,
     },
     {

@@ -476,7 +476,7 @@ export const CaseSearchByName = connect(
                 htmlFor="case-type-filter"
                 id="case-type-filter-label"
               >
-                Case type
+                Case type (i.e., docket suffix)
               </label>
               <SelectSearch
                 aria-labelledby="case-type-filter-label"
