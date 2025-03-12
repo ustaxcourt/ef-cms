@@ -9,11 +9,11 @@ import { pick } from 'lodash';
 export class WorkItem extends JoiValidationEntity {
   public assigneeId?: string;
   public assigneeName?: string;
-  public associatedJudge: string;
-  public associatedJudgeId?: string;
-  public caseIsInProgress?: boolean;
-  public caseStatus: string;
-  public caseTitle?: string;
+  // public associatedJudge: string; // 10103: belongs to another entity
+  // public associatedJudgeId?: string; // 10103: belongs to another entity
+  // public caseIsInProgress?: boolean; // 10103: belongs to another entity
+  // public caseStatus: string; // 10103: belongs to another entity
+  // public caseTitle?: string; // 10103: belongs to another entity
   public completedAt?: string;
   public completedBy?: string;
   public completedByUserId?: string;
@@ -21,19 +21,18 @@ export class WorkItem extends JoiValidationEntity {
   public createdAt: string;
   public docketEntry: any;
   public docketNumber: string;
-  public docketNumberWithSuffix?: string;
-  public hideFromPendingMessages?: boolean;
+  // public hideFromPendingMessages?: boolean; 10103: I only see us setting this value. never reading it.
   public highPriority?: boolean;
   public inProgress?: boolean;
-  public isInitializeCase?: boolean;
+  // public isInitializeCase?: boolean; 10103: I only see us setting this value. never reading it.
   public isRead?: boolean;
-  public leadDocketNumber?: string;
+  // public leadDocketNumber?: string; // 10103: belongs to another entity
   public section: string;
   public sentBy: string;
   public sentBySection?: string;
   public sentByUserId?: string;
-  public trialDate?: string;
-  public trialLocation?: string;
+  // public trialDate?: string; // 10103: belongs to another entity
+  // public trialLocation?: string; // 10103: belongs to another entity
   public updatedAt: string;
   public workItemId: string;
 
