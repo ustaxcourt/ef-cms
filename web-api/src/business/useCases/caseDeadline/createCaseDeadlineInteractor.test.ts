@@ -126,7 +126,7 @@ describe('createCaseDeadlineInteractor', () => {
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
-    mockCase.associatedJudgeId = 'dabbad02-18d0	-43ec-bafb-654e83405416';
+    mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
 
     mockLock = MOCK_LOCK;
 
