@@ -22931,7 +22931,6 @@
         "sentBySection": "docket",
         "createdAt": "2020-04-14T03:01:49.855Z",
         "assigneeName": "Test Docketclerk1",
-        "hideFromPendingMessages": true,
         "docketNumber": "104-20",
         "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
         "updatedAt": "2020-04-14T03:01:49.855Z"
@@ -22965,7 +22964,6 @@
     "sentBySection": "docket",
     "createdAt": "2020-04-14T03:01:49.855Z",
     "assigneeName": "Test Docketclerk1",
-    "hideFromPendingMessages": true,
     "sk": "2020-04-14T03:01:49.855Z",
     "pk": "user-outbox|2805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "104-20",

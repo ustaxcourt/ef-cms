@@ -43,7 +43,6 @@ export const fileAndServeDocumentOnOneCase = async ({
         },
         docketNumber: caseEntity.docketNumber,
         docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        hideFromPendingMessages: true,
         inProgress: true,
         section: DOCKET_SECTION,
         sentBy: user.name,

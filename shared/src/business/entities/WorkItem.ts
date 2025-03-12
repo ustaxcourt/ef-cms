@@ -85,7 +85,6 @@ export class WorkItem extends JoiValidationEntity {
       : `${rawWorkItem.docketNumber}${
           rawWorkItem.docketNumberSuffix ? rawWorkItem.docketNumberSuffix : ''
         }`;
-    this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
     this.highPriority =
       rawWorkItem.highPriority ||
       caseEntity?.status === CASE_STATUS_TYPES.calendared;
