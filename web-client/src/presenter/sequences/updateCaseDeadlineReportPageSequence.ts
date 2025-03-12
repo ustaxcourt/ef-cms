@@ -8,4 +8,4 @@ export const updateCaseDeadlineReportPageSequence =
     clearCaseDeadlinesAction,
     getCaseDeadlinesAction,
     setCaseDeadlinesAction,
-  ]) as unknown as (props: { code?: string }) => void;
+  ]) as unknown as (props: { selectedPage: number }) => void;

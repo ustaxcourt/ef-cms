@@ -6,9 +6,10 @@ describe('clearCaseDeadlinesAction', () => {
     const result = await runAction(clearCaseDeadlinesAction, {
       state: {
         caseDeadlineReport: {
-          caseDeadlines: [
+          caseDeadlinesForCurrentPage: [
             { caseDeadlineId: '06829d43-dec6-46f4-b850-592d31923665' },
           ],
+          caseDeadlinesTotalCount: 1,
         },
       },
     });
