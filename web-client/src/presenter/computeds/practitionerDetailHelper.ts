@@ -37,7 +37,7 @@ export const practitionerDetailHelper = (
     emailFormatted,
     firmNameFormatted: practitionerDetail.firmName || 'None',
     pendingEmailFormatted,
-    showEAccessFlag: isInternalUser && practitionerDetail.hasEAccess,
+    showEAccessFlag: isInternalUser && practitionerDetail.hasElectronicAccess,
     showEditLink: permissions.ADD_EDIT_PRACTITIONER_USER,
     showPrintCaseListLink: isInternalUser,
   };

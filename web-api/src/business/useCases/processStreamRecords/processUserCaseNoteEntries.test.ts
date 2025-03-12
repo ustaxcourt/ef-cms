@@ -1,13 +1,11 @@
 import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processUserCaseNoteEntries } from '@web-api/business/useCases/processStreamRecords/processUserCaseNoteEntries';
-import { upsertUserCaseNotes } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNotes';
+import { upsertUserCaseNotes as upsertUserCaseNotesMock } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNotes';
+
+const upsertUserCaseNotes = upsertUserCaseNotesMock as jest.Mock;
 
 describe('processUserCaseNoteEntries', () => {
-  beforeEach(() => {
-    (upsertUserCaseNotes as jest.Mock).mockResolvedValue(undefined);
-  });
-
   it('should attempt to store the user case notes using the upsert method', async () => {
     const mockUserCaseNoteRecord = {
       dynamodb: {

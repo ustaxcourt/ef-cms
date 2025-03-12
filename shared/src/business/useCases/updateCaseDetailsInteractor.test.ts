@@ -20,10 +20,17 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('updateCaseDetailsInteractor', () => {
   let mockCase, generalDocketReadyForTrialCase;
   let mockLock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   beforeAll(() => {
     applicationContext
@@ -39,9 +46,7 @@ describe('updateCaseDetailsInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
   });
 
   it('should throw an error when the user is unauthorized to update a case', async () => {
@@ -121,9 +126,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.petitionPaymentWaivedDate).toBe(null);
     expect(result.petitionPaymentMethod).toBe(null);
     expect(result.petitionPaymentDate).toBe(null);
@@ -145,9 +148,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.petitionPaymentWaivedDate).toBe(null);
     expect(result.petitionPaymentDate).toEqual('2019-11-30T09:10:11.000Z');
     expect(result.petitionPaymentMethod).toEqual('check');
@@ -168,9 +169,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.petitionPaymentDate).toBe(null);
     expect(result.petitionPaymentMethod).toBe(null);
     expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.WAIVED);
@@ -180,12 +179,10 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should create a docket entry when the petition payment status was changed from unpaid to waived', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+    });
 
     const result = await updateCaseDetailsInteractor(
       applicationContext,
@@ -209,12 +206,10 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should create a docket entry the petition payment status was changed from unpaid to paid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+    });
 
     const result = await updateCaseDetailsInteractor(
       applicationContext,
@@ -239,12 +234,10 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should NOT create a docket entry the petition payment status was NOT changed from unpaid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+    });
 
     const result = await updateCaseDetailsInteractor(
       applicationContext,
@@ -264,9 +257,7 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should call createCaseTrialSortMappingRecords when the updated case is ready for trial and preferred trial city has been changed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(generalDocketReadyForTrialCase);
+    getCaseByDocketNumber.mockResolvedValue(generalDocketReadyForTrialCase);
 
     const result = await updateCaseDetailsInteractor(
       applicationContext,
@@ -284,20 +275,16 @@ describe('updateCaseDetailsInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
   });
 
   it('should call createCaseTrialSortMappingRecords when the updated case is high priority and preferred trial city has been changed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...generalDocketReadyForTrialCase,
-        highPriority: true,
-        highPriorityReason: 'roll out',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...generalDocketReadyForTrialCase,
+      highPriority: true,
+      highPriorityReason: 'roll out',
+    });
 
     const result = await updateCaseDetailsInteractor(
       applicationContext,
@@ -316,23 +303,19 @@ describe('updateCaseDetailsInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
   });
 
   it('should call createCaseTrialSortMappingRecords when the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...generalDocketReadyForTrialCase,
-        automaticBlocked: true,
-        automaticBlockedDate: '2019-11-30T09:10:11.000Z',
-        automaticBlockedReason: 'Pending Item',
-        highPriority: true,
-        highPriorityReason: 'roll out',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...generalDocketReadyForTrialCase,
+      automaticBlocked: true,
+      automaticBlockedDate: '2019-11-30T09:10:11.000Z',
+      automaticBlockedReason: 'Pending Item',
+      highPriority: true,
+      highPriorityReason: 'roll out',
+    });
 
     await updateCaseDetailsInteractor(
       applicationContext,
@@ -355,12 +338,10 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should call createCaseTrialSortMappingRecords when the case type has been changed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...generalDocketReadyForTrialCase,
-        caseType: CASE_TYPES_MAP.cdp,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...generalDocketReadyForTrialCase,
+      caseType: CASE_TYPES_MAP.cdp,
+    });
 
     await updateCaseDetailsInteractor(
       applicationContext,
@@ -381,12 +362,10 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should call createCaseTrialSortMappingRecords when the case procedure type has been changed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...generalDocketReadyForTrialCase,
-        procedureType: 'Regular',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...generalDocketReadyForTrialCase,
+      procedureType: 'Regular',
+    });
 
     await updateCaseDetailsInteractor(
       applicationContext,
@@ -407,13 +386,11 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should call createCaseTrialSortMappingRecords when the case procedure type is changed and old case did not need trial sort mapping records because no trial location was selected', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...generalDocketReadyForTrialCase,
-        preferredTrialCity: undefined,
-        procedureType: 'Regular',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...generalDocketReadyForTrialCase,
+      preferredTrialCity: undefined,
+      procedureType: 'Regular',
+    });
 
     await updateCaseDetailsInteractor(
       applicationContext,
@@ -434,12 +411,10 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('should NOT call createCaseTrialSortMappingRecords when there are no changes that would alter the trial sort tags', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...generalDocketReadyForTrialCase,
-        procedureType: 'Regular',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...generalDocketReadyForTrialCase,
+      procedureType: 'Regular',
+    });
 
     await updateCaseDetailsInteractor(
       applicationContext,
@@ -459,12 +434,10 @@ describe('updateCaseDetailsInteractor', () => {
   });
 
   it('does not allow fields that do not exist on the editableFields list to be updated on the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...generalDocketReadyForTrialCase,
-        highPriorityReason: 'roll out',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...generalDocketReadyForTrialCase,
+      highPriorityReason: 'roll out',
+    });
 
     await updateCaseDetailsInteractor(
       applicationContext,
@@ -509,9 +482,7 @@ describe('updateCaseDetailsInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

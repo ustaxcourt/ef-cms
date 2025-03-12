@@ -49,8 +49,10 @@ export const createProspectiveTrialSessions = ({
       !citiesFromLastTwoTerms.includes(city);
 
     const remainingCaseCounts = {
-      regular: caseCountsAndSessionsByCity[city].remainingRegularCases,
-      small: caseCountsAndSessionsByCity[city].remainingSmallCases,
+      [SESSION_TYPES.regular]:
+        caseCountsAndSessionsByCity[city].remainingRegularCases,
+      [SESSION_TYPES.small]:
+        caseCountsAndSessionsByCity[city].remainingSmallCases,
     };
 
     const regularSessionConfig = {
@@ -65,15 +67,17 @@ export const createProspectiveTrialSessions = ({
       sessionType: SESSION_TYPES.small,
     };
 
-    let primarySessionConfig;
-    let secondarySessionConfig;
-    if (remainingCaseCounts.regular >= remainingCaseCounts.small) {
-      primarySessionConfig = regularSessionConfig;
-      secondarySessionConfig = smallSessionConfig;
-    } else {
-      primarySessionConfig = smallSessionConfig;
-      secondarySessionConfig = regularSessionConfig;
-    }
+    const hybridSessionConfig = {
+      max: calendaringConfig.hybridCaseMaxQuantity,
+      min: calendaringConfig.hybridCaseMinimumQuantity,
+      sessionType: SESSION_TYPES.hybrid,
+    };
+
+    const [primarySessionConfig, secondarySessionConfig] =
+      remainingCaseCounts[SESSION_TYPES.regular] >=
+      remainingCaseCounts[SESSION_TYPES.small]
+        ? [regularSessionConfig, smallSessionConfig]
+        : [smallSessionConfig, regularSessionConfig];
 
     scheduleCases({
       caseCountsAndSessionsByCity,
@@ -82,6 +86,7 @@ export const createProspectiveTrialSessions = ({
       schedulingConfig: primarySessionConfig,
       trialLocation: city,
     });
+
     scheduleCases({
       caseCountsAndSessionsByCity,
       cityWasNotVisitedInLastTwoTerms,
@@ -90,24 +95,18 @@ export const createProspectiveTrialSessions = ({
       trialLocation: city,
     });
 
-    // Since the min of reg cases is 40, and the min of small cases is 40,
-    // and the sum of these two values is below the hybrid case max of 100,
-    // we can safely assume that if the combination of remaining regular
-    // cases and remaining small cases is above the minimum of 50, we can
-    // assign all of those remaining cases to a hybrid session.
     if (
-      remainingCaseCounts.regular + remainingCaseCounts.small >=
+      remainingCaseCounts[SESSION_TYPES.regular] +
+        remainingCaseCounts[SESSION_TYPES.small] >=
       calendaringConfig.hybridCaseMinimumQuantity
     ) {
-      addProspectiveTrialSession({
+      scheduleCases({
         caseCountsAndSessionsByCity,
         cityWasNotVisitedInLastTwoTerms,
-        sessionType: SESSION_TYPES.hybrid,
+        remainingCaseCounts,
+        schedulingConfig: hybridSessionConfig,
         trialLocation: city,
       });
-
-      remainingCaseCounts.regular = 0;
-      remainingCaseCounts.small = 0;
     }
 
     // Are there any cities that have not been visited in the last two terms
@@ -122,10 +121,12 @@ export const createProspectiveTrialSessions = ({
     if (
       cityWasNotVisitedInLastTwoTerms &&
       caseCountsAndSessionsByCity[city].prospectiveSessions.length === 0 &&
-      (remainingCaseCounts.regular > 0 || remainingCaseCounts.small > 0)
+      (remainingCaseCounts[SESSION_TYPES.regular] > 0 ||
+        remainingCaseCounts[SESSION_TYPES.small] > 0)
     ) {
-      const containsRegularCase = remainingCaseCounts.regular > 0;
-      const containsSmallCase = remainingCaseCounts.small > 0;
+      const containsRegularCase =
+        remainingCaseCounts[SESSION_TYPES.regular] > 0;
+      const containsSmallCase = remainingCaseCounts[SESSION_TYPES.small] > 0;
       const lowVolumeSessionType =
         containsRegularCase && containsSmallCase
           ? SESSION_TYPES.hybrid
@@ -140,8 +141,8 @@ export const createProspectiveTrialSessions = ({
         trialLocation: city,
       });
 
-      remainingCaseCounts.regular = 0;
-      remainingCaseCounts.small = 0;
+      remainingCaseCounts[SESSION_TYPES.regular] = 0;
+      remainingCaseCounts[SESSION_TYPES.small] = 0;
     }
   }
 
@@ -165,33 +166,50 @@ const scheduleCases = ({
   trialLocation: string;
   cityWasNotVisitedInLastTwoTerms: boolean;
   caseCountsAndSessionsByCity: CaseCountsAndSessionsByCity;
-  remainingCaseCounts: { small: number; regular: number };
+  remainingCaseCounts: {
+    [SESSION_TYPES.small]: number;
+    [SESSION_TYPES.regular]: number;
+  };
 }): void => {
-  while (
-    remainingCaseCounts[schedulingConfig.sessionType.toLowerCase()] >=
-    schedulingConfig.min
-  ) {
-    if (
-      caseCountsAndSessionsByCity[trialLocation].prospectiveSessions.length <
-      schedulingConfig.max
-    ) {
-      addProspectiveTrialSession({
-        caseCountsAndSessionsByCity,
-        cityWasNotVisitedInLastTwoTerms,
-        sessionType: schedulingConfig.sessionType,
-        trialLocation,
-      });
-    }
+  const [primaryType, secondaryType] =
+    remainingCaseCounts[SESSION_TYPES.regular] >=
+    remainingCaseCounts[SESSION_TYPES.small]
+      ? [SESSION_TYPES.regular, SESSION_TYPES.small]
+      : [SESSION_TYPES.small, SESSION_TYPES.regular];
 
-    if (
-      remainingCaseCounts[schedulingConfig.sessionType.toLowerCase()] -
-        schedulingConfig.max >
-      0
-    ) {
-      remainingCaseCounts[schedulingConfig.sessionType.toLowerCase()] -=
-        schedulingConfig.max;
+  const isHybrid = schedulingConfig.sessionType === SESSION_TYPES.hybrid;
+  const getRemainingCases = (type: TrialSessionTypes) =>
+    remainingCaseCounts[type] || 0;
+
+  while (
+    (isHybrid
+      ? getRemainingCases(SESSION_TYPES.regular) +
+        getRemainingCases(SESSION_TYPES.small)
+      : getRemainingCases(schedulingConfig.sessionType)) >= schedulingConfig.min
+  ) {
+    addProspectiveTrialSession({
+      caseCountsAndSessionsByCity,
+      cityWasNotVisitedInLastTwoTerms,
+      sessionType: schedulingConfig.sessionType,
+      trialLocation,
+    });
+
+    if (!isHybrid) {
+      remainingCaseCounts[schedulingConfig.sessionType] = Math.max(
+        getRemainingCases(schedulingConfig.sessionType) - schedulingConfig.max,
+        0,
+      );
     } else {
-      remainingCaseCounts[schedulingConfig.sessionType.toLowerCase()] = 0;
+      if (getRemainingCases(primaryType) > schedulingConfig.max) {
+        remainingCaseCounts[primaryType] -= schedulingConfig.max;
+      } else {
+        const remainder = schedulingConfig.max - getRemainingCases(primaryType);
+        remainingCaseCounts[primaryType] = 0;
+        remainingCaseCounts[secondaryType] = Math.max(
+          getRemainingCases(secondaryType) - remainder,
+          0,
+        );
+      }
     }
   }
 };

@@ -1,5 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { formatCaseTitle } from '@web-api/business/useCases/generateCoverSheetData';
+import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 
 /**
  * Formats consolidated cases coversheet data
@@ -16,23 +17,17 @@ export const formatConsolidatedCaseCoversheetData = async ({
   docketEntryEntity,
   useInitialData,
 }) => {
-  let consolidatedCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByLeadDocketNumber({
-      applicationContext,
-      leadDocketNumber: caseEntity.leadDocketNumber,
-    });
+  let consolidatedCases = await getCasesByLeadDocketNumber({
+    applicationContext,
+    leadDocketNumber: caseEntity.leadDocketNumber,
+  });
 
-  consolidatedCases.sort(
-    (a, b) =>
-      Case.getSortableDocketNumber(a.docketNumber) -
-      Case.getSortableDocketNumber(b.docketNumber),
-  );
+  consolidatedCases = Case.sortByDocketNumber(consolidatedCases);
 
   let caseTitle;
   let caseCaptionExtension;
-  consolidatedCases = consolidatedCases
-    .map(consolidatedCase => {
+  const consolidatedCasesFiltered = consolidatedCases
+    ?.map(consolidatedCase => {
       if (consolidatedCase.docketNumber === caseEntity.leadDocketNumber) {
         ({ caseCaptionExtension, caseTitle } = formatCaseTitle({
           applicationContext,
@@ -52,8 +47,8 @@ export const formatConsolidatedCaseCoversheetData = async ({
     })
     .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined);
 
-  if (consolidatedCases.length > 1) {
-    coverSheetData.consolidatedCases = consolidatedCases;
+  if (consolidatedCasesFiltered.length > 1) {
+    coverSheetData.consolidatedCases = consolidatedCasesFiltered;
     coverSheetData.caseTitle = caseTitle;
     coverSheetData.caseCaptionExtension = caseCaptionExtension;
   }

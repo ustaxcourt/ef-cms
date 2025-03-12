@@ -16,7 +16,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, invert } from 'lodash';
-import { getBlockedCases } from '@web-api/persistence/elasticsearch/getBlockedCases';
+import { getBlockedCasesForTrialLocation } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 
 export const getTrialSessionPlanningReportDataInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -169,9 +169,8 @@ const getTrialLocation = async (
       trialCity: trialCityStateStripped,
     });
 
-  const blockedCasesResult = await getBlockedCases({
-    trialLocation: trialCityState,
-  });
+  const blockedCasesResult =
+    await getBlockedCasesForTrialLocation(trialCityState);
 
   const smallCaseCount = eligibleCasesSmall.length;
   const regularCaseCount = eligibleCasesRegular.length;

@@ -1,19 +1,23 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 jest.mock('../addCoverToPdf');
 import { addCoverToPdf } from '../addCoverToPdf';
 import {
   determineEntitiesToLock,
   serveExternallyFiledDocumentInteractor,
-} from '../../../../../web-api/src/business/useCases/document/serveExternallyFiledDocumentInteractor';
+} from '@web-api/business/useCases/document/serveExternallyFiledDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
+import { testPdfDoc } from '@shared/business/test/getFakeFile';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -92,9 +96,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockDocketClerkUser);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
   });
 
   describe('locked', () => {
@@ -111,9 +113,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
+      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });
   });
 
