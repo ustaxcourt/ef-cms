@@ -102,4 +102,15 @@ describe('formatPendingItem', () => {
       isLeadCase: false,
     });
   });
+
+  it('should use documentType when documentTitle not available', () => {
+    pendingItem.leadDocketNumber = '100-19';
+
+    const result = formatPendingItem({
+      ...pendingItem,
+      documentTitle: '',
+    });
+
+    expect(result.formattedName).toBe(pendingItem.documentType);
+  });
 });

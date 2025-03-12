@@ -3,7 +3,7 @@ import {
   GENERIC_ORDER_DOCUMENT_TYPE,
   REPORT_PAMPHLET_DOCUMENT_TYPE,
 } from './CourtIssuedDocumentConstants';
-import { getTextByCount } from '../../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('CourtIssuedDocumentTypeA', () => {
   describe('constructor', () => {

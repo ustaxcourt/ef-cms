@@ -1,13 +1,14 @@
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { get } from '../../dynamodbClientService';
-import { getCaseByDocketNumber } from '../cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { map } from 'lodash';
 
 export const getCalendaredCasesForTrialSession = async ({
   applicationContext,
   trialSessionId,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   trialSessionId: string;
 }): Promise<(RawCase & TCaseOrder)[]> => {
   const trialSession = await get({
@@ -35,7 +36,7 @@ export const getCalendaredCasesForTrialSession = async ({
     return {
       ...order,
       ...casesByDocketNumber.find(
-        aCase => aCase.docketNumber === order.docketNumber,
+        aCase => aCase?.docketNumber === order.docketNumber,
       ),
     };
   });

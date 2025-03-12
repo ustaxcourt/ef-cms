@@ -95,7 +95,7 @@ export const publicTrialSessionDetailsHelper = (
 };
 
 const formatPublicCase = (
-  calendaredCase: RawPublicCase,
+  calendaredCase: RawCase | RawPublicCase,
 ): TrialSessionPublicCaseRow => {
   const { isSealed } = calendaredCase;
   const inConsolidatedGroup = isInConsolidatedGroup(calendaredCase);
@@ -121,7 +121,7 @@ const formatPublicCase = (
     inConsolidatedGroup,
     irsPractitioners: calendaredCase.irsPractitioners,
     isLeadCase: isTheLeadCase,
-    isSealed,
+    isSealed: !!isSealed,
     privatePractitioners: calendaredCase.privatePractitioners,
   };
 };

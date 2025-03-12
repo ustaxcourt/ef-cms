@@ -72,13 +72,12 @@ import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLam
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
-import { getCaseForPublicDocketSearchLambda } from './lambdas/public-api/getCaseForPublicDocketSearchLambda';
 import { getHealthCheckLambda } from './lambdas/health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getPractitionerByBarNumberLambda } from '@web-api/lambdas/practitioners/getPractitionerByBarNumberLambda';
 import { getPractitionersByNameLambda } from '@web-api/lambdas/practitioners/getPractitionersByNameLambda';
 import { getPublicCaseExistsLambda } from './lambdas/public-api/getPublicCaseExistsLambda';
-import { getPublicCaseLambda } from './lambdas/public-api/getPublicCaseLambda';
+import { getPublicCaseLambda } from '@web-api/lambdas/public-api/getPublicCaseLambda';
 import { getPublicDocumentDownloadUrlLambda } from './lambdas/public-api/getPublicDocumentDownloadUrlLambda';
 import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambda';
 import { getPublicTrialSessionDetailsLambda } from '@web-api/lambdas/public-api/getPublicTrialSessionDetailsLambda';
@@ -149,10 +148,6 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
       key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
     }),
     lambdaWrapper(opinionPublicSearchLambda),
-  );
-  app.get(
-    '/public-api/docket-number-search/:docketNumber',
-    lambdaWrapper(getCaseForPublicDocketSearchLambda),
   );
   app.get(
     '/public-api/practitioners',

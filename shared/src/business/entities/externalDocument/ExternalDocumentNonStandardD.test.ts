@@ -3,7 +3,7 @@ import {
   calculateISODate,
   createISODateString,
 } from '../../utilities/DateHandler';
-import { getTextByCount } from '../../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('ExternalDocumentNonStandardD', () => {
   describe('validation', () => {

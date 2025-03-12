@@ -1,26 +1,27 @@
 import {
-  AbbrevatedStates,
+  AbbreviatedStates,
   CountryTypes,
   MAX_SEARCH_RESULTS,
   US_STATES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { caseSearchFilter } from '../../../../shared/src/business/utilities/caseFilter';
+import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
-} from '../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
+import { caseAdvancedSearch } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
   countryType?: CountryTypes;
-  petitionerState?: AbbrevatedStates;
+  petitionerState?: AbbreviatedStates;
   endDate?: string;
   startDate?: string;
 };
@@ -72,23 +73,21 @@ export const caseAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const foundCases = await applicationContext
-    .getPersistenceGateway()
-    .caseAdvancedSearch({
-      applicationContext,
-      searchTerms: {
-        countryType,
-        endDate: searchEndDate,
-        petitionerName,
-        petitionerState,
-        startDate: searchStartDate,
-      },
-    });
+  const foundCases = await caseAdvancedSearch({
+    applicationContext,
+    searchTerms: {
+      countryType,
+      endDate: searchEndDate,
+      petitionerName,
+      petitionerState,
+      startDate: searchStartDate,
+    },
+  });
 
-  const filteredCases = caseSearchFilter(foundCases, authorizedUser).slice(
-    0,
-    MAX_SEARCH_RESULTS,
-  );
+  const filteredCases = filterCaseSearchResultsNotAccessibleToUser(
+    foundCases,
+    authorizedUser,
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return filteredCases.map(filteredCase => {
     return {

@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { waitForLoadingComponentToHide, waitForModalsToHide } from '../helpers';
@@ -56,7 +56,7 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
     });
 
     expect(cerebralTest.getState('caseDetail.irsNoticeDate')).toEqual(
-      '2017-12-24T00:00:00.000-05:00',
+      '2017-12-24T05:00:00.000Z',
     );
     expect(cerebralTest.getState('caseDetail.status')).toEqual(
       CASE_STATUS_TYPES.generalDocket,

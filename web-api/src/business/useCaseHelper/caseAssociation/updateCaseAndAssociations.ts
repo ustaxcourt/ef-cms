@@ -1,19 +1,20 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
-import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
-import { Message } from '../../../../../shared/src/business/entities/Message';
-import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { Correspondence } from '@shared/business/entities/Correspondence';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { Message } from '@shared/business/entities/Message';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { isEmpty } from 'lodash';
+import { updateCase } from '@web-api/persistence/postgres/cases/updateCase';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
-import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { isEmpty } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
@@ -397,21 +398,18 @@ export const updateCaseAndAssociations = async ({
   caseToUpdate: any;
   includeCorrespondenceAndWorkItems?: boolean;
 }): Promise<RawCase> => {
-  const caseEntity: Case = caseToUpdate.validate
+  const newCaseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
     : new Case(caseToUpdate, {
         authorizedUser,
       });
 
-  const oldCaseEntity = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: caseToUpdate.docketNumber,
-      includeCorrespondenceAndWorkItems,
-    });
+  const oldCaseEntity = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: caseToUpdate.docketNumber,
+  });
 
-  const validRawCaseEntity = caseEntity.validate().toRawObject();
+  const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
 
   const validRawOldCaseEntity = new Case(oldCaseEntity, {
     authorizedUser,
@@ -439,7 +437,7 @@ export const updateCaseAndAssociations = async ({
     fn({
       applicationContext,
       authorizedUser,
-      caseToUpdate: validRawCaseEntity,
+      caseToUpdate: validNewRawCaseEntity,
       oldCase: validRawOldCaseEntity,
     }),
   );
@@ -454,10 +452,7 @@ export const updateCaseAndAssociations = async ({
 
   await Promise.all(persistenceRequests);
 
-  await upsertCase({ rawCase: validRawCaseEntity });
-
-  return applicationContext.getPersistenceGateway().updateCase({
-    applicationContext,
-    caseToUpdate: validRawCaseEntity,
+  return updateCase({
+    caseToUpdate: validNewRawCaseEntity,
   });
 };

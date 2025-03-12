@@ -1,6 +1,10 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeOfTrialLocationInteractor } from '@web-api/business/useCases/trialSessions/generateNoticeOfChangeOfTrialLocationInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('generateNoticeOfChangeOfTrialLocationInteractor', () => {
   const TEST_DOCKET_NUMBER = 'TEST_DOCKET_NUMBER';
@@ -13,9 +17,7 @@ describe('generateNoticeOfChangeOfTrialLocationInteractor', () => {
   const MOCK_ARRAY_BUFFER = 'MOCK_ARRAY_BUFFER';
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCKED_CASE);
+    getCaseByDocketNumber.mockReturnValue(MOCKED_CASE);
 
     applicationContext
       .getDocumentGenerators()
@@ -41,9 +43,7 @@ describe('generateNoticeOfChangeOfTrialLocationInteractor', () => {
 
     expect(results).toEqual(MOCK_ARRAY_BUFFER);
 
-    const getCaseByDocketNumberCalls =
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
-        .calls;
+    const getCaseByDocketNumberCalls = getCaseByDocketNumber.mock.calls;
     expect(getCaseByDocketNumberCalls.length).toEqual(1);
     expect(getCaseByDocketNumberCalls[0][0].docketNumber).toEqual(
       TEST_DOCKET_NUMBER,
