@@ -36,6 +36,8 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   --region "us-east-1" \
   --output text)
 
+# 10606 TODO this is where we'll need to add RUM stuff for env switcher. 
+
 {
   echo "AWS_REGION='${REGION}'"
   echo "BOUNCE_ALERT_TEMPLATE='bounce_alert_${ENV}'"
