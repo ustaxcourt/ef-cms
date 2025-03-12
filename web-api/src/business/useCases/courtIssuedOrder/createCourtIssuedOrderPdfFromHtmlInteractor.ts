@@ -6,11 +6,12 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -36,12 +37,10 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetail = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
   const { docketNumberWithSuffix } = caseDetail;
@@ -70,7 +69,7 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
       ),
       caseCaptionExtension,
       caseTitle,
-      docketNumberWithSuffix,
+      docketNumberWithSuffix: docketNumberWithSuffix || docketNumber,
       nameOfClerk,
       orderContent: contentHtml,
       orderTitle: documentTitle,

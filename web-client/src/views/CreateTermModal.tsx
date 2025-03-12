@@ -10,7 +10,7 @@ import React, { useState } from 'react';
 export const CreateTermModal = connect(
   {
     cancelSequence: sequences.clearModalFormSequence,
-    confirmSequence: sequences.submitCreateTermModalSequence,
+    confirmSequence: sequences.navigateToTermBuilderPageSequence,
     modal: state.modal,
     todaysDate: state.todaysDate,
     updateModalValueSequence: sequences.updateModalValueSequence,
@@ -31,7 +31,7 @@ export const CreateTermModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className="create-term-modal"
-        confirmLabel="Create Term"
+        confirmLabel="Continue"
         confirmSequence={confirmSequence}
         title="Create Term"
         onModalMount={() => setIsModalMounted(true)}

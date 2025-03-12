@@ -25,7 +25,7 @@ export const getCaseDeadlinesByDateRange = async ({
         .where('cd.deadlineDate', '<=', endDate);
 
       if (judge) {
-        deadlineQuery = deadlineQuery.where('associatedJudge', '=', judge);
+        deadlineQuery = deadlineQuery.where('cd.associatedJudge', '=', judge);
       }
 
       deadlineQuery = deadlineQuery

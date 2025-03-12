@@ -1,14 +1,23 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import {
   FormattedPendingMotionWithWorksheet,
   getPendingMotionDocketEntriesForCurrentJudgeInteractor,
 } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockJudgeUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getConsolidatedCasesCount as getConsolidatedCasesCountMock } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
+import { getAllPendingMotionDocketEntriesForJudge as getAllPendingMotionDocketEntriesForJudgeMock } from '@web-api/persistence/postgres/docketEntries/reports/getAllPendingMotionDocketEntriesForJudge';
+
+const getConsolidatedCasesCount = getConsolidatedCasesCountMock as jest.Mock;
+
+const getAllPendingMotionDocketEntriesForJudge =
+  getAllPendingMotionDocketEntriesForJudgeMock as jest.Mock;
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -33,26 +42,13 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
   };
   const getDocketEntryWorksheetsByDocketEntryIdsResults: RawDocketEntryWorksheet[] =
     [];
-  const CASE_BY_DOCKET_NUMBER: { [key: string]: any } = {};
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getAllPendingMotionDocketEntriesForJudge.mockReturnValue(
-        getAllPendingMotionDocketEntriesForJudgeResults,
-      );
+    getAllPendingMotionDocketEntriesForJudge.mockResolvedValue(
+      getAllPendingMotionDocketEntriesForJudgeResults,
+    );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseMetadataByDocketNumber.mockImplementation(
-        ({ docketNumber }: { docketNumber: string }) => {
-          return CASE_BY_DOCKET_NUMBER[docketNumber];
-        },
-      );
-
-    applicationContext
-      .getPersistenceGateway()
-      .getConsolidatedCasesCount.mockResolvedValue(1);
+    getConsolidatedCasesCount.mockResolvedValue(1);
 
     applicationContext
       .getPersistenceGateway()
@@ -92,6 +88,12 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       eventCode: 'M218',
       filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
+      daysSinceCreated: 8607,
+      consolidatedGroupCount: 999,
+      judge: 'Colvin',
+      caseCaption: 'TEST_CASE_CAPTION',
+      docketNumberWithSuffix: 'docketNumberWithSuffix',
+      leadDocketNumber: DOCKET_NUMBER,
     });
 
     getDocketEntryWorksheetsByDocketEntryIdsResults.push({
@@ -100,20 +102,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       primaryIssue: 'SOME PRIMARY ISSUE',
       statusOfMatter: 'SOME STATUS OF MATTER',
     });
-
-    CASE_BY_DOCKET_NUMBER[DOCKET_NUMBER] = {
-      associatedJudge: 'Colvin',
-      caseCaption: 'TEST_CASE_CAPTION',
-      consolidatedCases: [],
-      docketNumber: DOCKET_NUMBER,
-      docketNumberWithSuffix: 'docketNumberWithSuffix',
-      leadDocketNumber: DOCKET_NUMBER,
-    };
-
-    const EXPECTED_CONSOLIDATED_CASE = 999;
-    applicationContext
-      .getPersistenceGateway()
-      .getConsolidatedCasesCount.mockResolvedValue(EXPECTED_CONSOLIDATED_CASE);
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
@@ -125,15 +113,14 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       );
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judgeIds,
+      getAllPendingMotionDocketEntriesForJudge.mock.calls[0][0].judgeIds,
     ).toEqual(['judgeId']);
 
     expect(results.docketEntries.length).toEqual(1);
 
     const expectedDocketEntry: FormattedPendingMotionWithWorksheet = {
       caseCaption: 'TEST_CASE_CAPTION',
-      consolidatedGroupCount: EXPECTED_CONSOLIDATED_CASE,
+      consolidatedGroupCount: 999,
       daysSinceCreated: 8607,
       docketEntryId: '1234-5678-9123-4567-8912',
       docketEntryWorksheet: {
@@ -155,19 +142,27 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
   it('should only return the lead case when a motion is mass sent using consolidated cases', async () => {
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
+      daysSinceCreated: 8607,
       docketEntryId: LEAD_DOCKET_ENTRY_ID,
       docketNumber: LEAD_DOCKET_NUMBER,
       eventCode: 'M218',
       filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
+      caseCaption: 'TEST_CASE_CAPTION',
+      consolidatedGroupCount: 1,
+      leadDocketNumber: LEAD_DOCKET_NUMBER,
     });
 
     getAllPendingMotionDocketEntriesForJudgeResults.results.push({
+      daysSinceCreated: 8607,
       docketEntryId: LEAD_DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
       eventCode: 'M218',
       filingDate: '2000-04-29T15:52:05.725Z',
       pending: true,
+      caseCaption: 'TEST_CASE_CAPTION',
+      consolidatedGroupCount: 1,
+      leadDocketNumber: LEAD_DOCKET_NUMBER,
     });
 
     getDocketEntryWorksheetsByDocketEntryIdsResults.push({
@@ -192,20 +187,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
         filingDate: '2000-04-29T15:52:05.725Z',
         pending: true,
       });
-
-    CASE_BY_DOCKET_NUMBER[DOCKET_NUMBER] = {
-      caseCaption: 'TEST_CASE_CAPTION',
-      consolidatedCases: [],
-      docketNumber: DOCKET_NUMBER,
-      leadDocketNumber: LEAD_DOCKET_NUMBER,
-    };
-
-    CASE_BY_DOCKET_NUMBER[LEAD_DOCKET_NUMBER] = {
-      caseCaption: 'TEST_CASE_CAPTION',
-      consolidatedCases: [],
-      docketNumber: LEAD_DOCKET_NUMBER,
-      leadDocketNumber: LEAD_DOCKET_NUMBER,
-    };
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(

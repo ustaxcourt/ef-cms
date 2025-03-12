@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { fetchPendingItems } from '@web-api/persistence/postgres/cases/reports/fetchPendingItems';
 
 export const pendingItemCaseSource = [
   'associatedJudge',
@@ -47,8 +48,8 @@ export const fetchPendingItemsInteractor = async (
     throw new Error('judge is required');
   }
 
-  //depends on fetchPendingItems returning a list already sorted by receivedAt
-  return await applicationContext.getPersistenceGateway().fetchPendingItems({
+  // depends on fetchPendingItems returning a list already sorted by receivedAt
+  return await fetchPendingItems({
     applicationContext,
     judge,
   });
