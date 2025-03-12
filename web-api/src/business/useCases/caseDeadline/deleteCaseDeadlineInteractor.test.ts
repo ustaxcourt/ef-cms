@@ -66,8 +66,11 @@ describe('deleteCaseDeadlineInteractor', () => {
         mockPetitionsClerkUser,
       ),
     ).rejects.toThrow(ServiceUnavailableError);
+<<<<<<< HEAD
 
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
+=======
+>>>>>>> 10576-story
   });
 
   it('should acquire and remove the lock on the case', async () => {
