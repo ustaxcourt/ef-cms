@@ -78,7 +78,7 @@ export const addConsolidatedCase = async (
     allCasesToConsolidate.push(caseToConsolidateWith);
   }
 
-  const newLeadCase = Case.findLeadCaseForCases(allCasesToConsolidate);
+  const newLeadCase = Case.findLeadCaseForCases(allCasesToConsolidate)!;
 
   const casesToUpdate = allCasesToConsolidate.filter(filterCaseToUpdate => {
     return filterCaseToUpdate.leadDocketNumber !== newLeadCase.docketNumber;
