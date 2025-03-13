@@ -13,6 +13,7 @@ import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments } from './cl
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;
@@ -186,7 +187,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should delete any case deadlines', async () => {
+  it('should delete any case deadlines and automatic block information', async () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
@@ -199,6 +200,19 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     ]);
     deleteCaseDeadline.mockResolvedValue({} as any);
 
+    mockCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        docketEntries: MOCK_DOCUMENTS[0],
+        automaticBlocked: true,
+        automaticBlockedReason: 'something, something',
+        automaticBlockedDate: 'yesterday',
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity: mockCaseEntity,
@@ -208,5 +222,9 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     expect(deleteCaseDeadline).toHaveBeenCalledWith({
       caseDeadlineId: '123',
     });
+
+    expect(mockCaseEntity.automaticBlocked).toEqual(false);
+    expect(mockCaseEntity.automaticBlockedReason).toBeUndefined();
+    expect(mockCaseEntity.automaticBlockedDate).toBeUndefined();
   });
 });
