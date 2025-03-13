@@ -8,6 +8,8 @@ export const getCaseStatistics = async ({
 }: {
   docketNumber: string;
 }): Promise<RawStatistic[]> => {
+  // We want statistics ordered first by date, then by most recently updated first
+  // We want penalties ordered by most recently updated last
   const statistics = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseStatistic as cs')
@@ -15,8 +17,10 @@ export const getCaseStatistics = async ({
       .leftJoin('dwStatisticPenalty as sp', 'sp.statisticId', 'cs.statisticId')
       .selectAll('cs')
       .select(
-        sql`jsonb_agg(to_jsonb(sp) ORDER BY sp.penalty_number)`.as('penalties'),
+        sql`jsonb_agg(to_jsonb(sp) ORDER BY sp.updated_at)`.as('penalties'),
       )
+      .orderBy('cs.year')
+      .orderBy('cs.updatedAt', 'desc')
       .groupBy(['cs.docketNumber', 'cs.statisticId'])
       .execute(),
   );
