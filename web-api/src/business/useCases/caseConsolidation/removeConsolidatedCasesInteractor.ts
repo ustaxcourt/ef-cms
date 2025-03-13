@@ -174,21 +174,19 @@ async function updateConsolidatedCaseDeadlineReferenceId(
     const newLeadCaseDeadlineId =
       NEW_LEAD_CASE_DEADLINE?.caseDeadlineId || undefined;
 
-    const UPDATE_CHILDREN_TASKS = CHILD_DEADLINES.map(
-      async (childCaseDeadline: RawCaseDeadline) => {
-        await upsertCaseDeadlines([
-          {
-            ...childCaseDeadline,
-            consolidatedCaseDeadlineId:
-              childCaseDeadline.docketNumber === newLeadDocketNumber
-                ? undefined
-                : newLeadCaseDeadlineId,
-          },
-        ]);
+    const UPDATED_CHILD_CASE_DEADLINES: RawCaseDeadline[] = CHILD_DEADLINES.map(
+      (childCaseDeadline: RawCaseDeadline) => {
+        return {
+          ...childCaseDeadline,
+          consolidatedCaseDeadlineId:
+            childCaseDeadline.docketNumber === newLeadDocketNumber
+              ? undefined
+              : newLeadCaseDeadlineId,
+        } as RawCaseDeadline;
       },
     );
 
-    await Promise.all(UPDATE_CHILDREN_TASKS);
+    await upsertCaseDeadlines(UPDATED_CHILD_CASE_DEADLINES);
   });
 
   await Promise.all(TASKS);
