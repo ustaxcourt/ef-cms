@@ -1,5 +1,9 @@
 import { Statistic } from '@shared/business/entities/Statistic';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
+import {
+  calculateDate,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
+import { getUpdatedAtWithIndexBasedIncrement } from '@web-api/persistence/postgres/cases/statistics/helper';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const createCaseStatistic = async ({
@@ -24,6 +28,7 @@ export const createCaseStatistic = async ({
         statisticId: statistic.statisticId,
         year: statistic.year ? parseInt(statistic.year) : null,
         yearOrPeriod: statistic.yearOrPeriod,
+        updatedAt: calculateDate({ dateString: formatNow() }),
       },
     ],
   });
@@ -36,7 +41,7 @@ export const createCaseStatistic = async ({
       penaltyId: p.penaltyId,
       penaltyType: p.penaltyType,
       statisticId: statistic.statisticId,
-      penaltyNumber: index + 1,
+      updatedAt: getUpdatedAtWithIndexBasedIncrement({ index }),
     })),
     onConflictColumns: ['penaltyId'],
   });

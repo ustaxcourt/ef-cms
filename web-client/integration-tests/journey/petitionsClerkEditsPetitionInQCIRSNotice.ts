@@ -343,9 +343,8 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
       state: cerebralTest.getState(),
     });
 
-    expect(reviewUiHelper.formattedStatistics).toHaveLength(11);
     expect(reviewUiHelper.formattedStatistics).toEqual(
-      expect.arrayContaining([
+      [
         expect.objectContaining({
           formattedIrsDeficiencyAmount: '$1,000.00',
           formattedIrsTotalPenalties: '$105.01',
@@ -423,7 +422,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
           irsTotalPenalties: '110.00',
           year: '2019',
         }),
-      ]),
+      ].reverse(),
     );
   });
 };
