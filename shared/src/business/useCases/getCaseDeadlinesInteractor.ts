@@ -1,5 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { CaseDeadline } from '@shared/business//entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

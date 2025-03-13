@@ -38,22 +38,8 @@ export const casePublicSearch = async ({
     bool: {
       must: [...exactMatchesQuery, ...commonQuery],
       must_not: [
-        {
-          exists: {
-            field: 'sealedDate',
-          },
-        },
-        {
-          bool: {
-            must: [
-              {
-                term: {
-                  'isSealed.BOOL': true,
-                },
-              },
-            ],
-          },
-        },
+        { exists: { field: 'sealedDate' } },
+        { bool: { must: [{ term: { 'isSealed.BOOL': true } }] } },
       ],
     },
   };
