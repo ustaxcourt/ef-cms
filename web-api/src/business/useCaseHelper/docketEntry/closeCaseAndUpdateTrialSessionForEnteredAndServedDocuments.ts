@@ -32,6 +32,7 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
         });
       }),
     );
+    caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
 
     await applicationContext
       .getPersistenceGateway()
