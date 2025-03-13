@@ -208,6 +208,7 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
+import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 
 export const app = express();
 
@@ -334,6 +335,10 @@ app.use(expressLogger);
     lambdaWrapper(getCaseDeadlinesForCaseLambda),
   );
   app.get('/case-deadlines', lambdaWrapper(getCaseDeadlinesLambda));
+  app.get(
+    '/consolidated-case-deadlines/:consolidatedCaseDeadlineId',
+    lambdaWrapper(getConsolidatedCaseDeadlinesLambda),
+  );
 }
 
 /**

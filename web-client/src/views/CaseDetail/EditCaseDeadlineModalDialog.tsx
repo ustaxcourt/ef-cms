@@ -6,11 +6,13 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { ConsolidatedCaseGroupInfo } from '@web-client/views/CaseDetail/CaseDeadline/ConsolidatedCaseGroupInfo';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 
 export const EditCaseDeadlineModalDialog = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
     caseDetail: state.caseDetail,
+    consolidatedCases: state[STATE_KEYS.CONSOLIDATED_CASE_DEADLINES],
     dismissModalSequence: sequences.dismissModalSequence,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
@@ -24,6 +26,7 @@ export const EditCaseDeadlineModalDialog = connect(
   function EditCaseDeadlineModalDialog({
     DATE_FORMATS,
     caseDetail,
+    consolidatedCases,
     dismissModalSequence,
     form,
     formatAndUpdateDateFromDatePickerSequence,
@@ -33,7 +36,7 @@ export const EditCaseDeadlineModalDialog = connect(
     validateCaseDeadlineSequence,
     validationErrors,
   }) {
-    const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
+    const { docketNumber, leadDocketNumber } = caseDetail;
     return (
       <ModalDialog
         cancelLabel="Cancel"

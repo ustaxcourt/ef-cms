@@ -4,6 +4,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import { ConsolidatedCaseGroupInfo } from '@web-client/views/CaseDetail/CaseDeadline/ConsolidatedCaseGroupInfo';
 import React from 'react';
+import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 
 export const DeleteCaseDeadlineModalDialog = connect(
   {
@@ -11,14 +12,16 @@ export const DeleteCaseDeadlineModalDialog = connect(
     confirmSequence: sequences.deleteCaseDeadlineSequence,
     form: state.form,
     caseDetail: state.caseDetail,
+    consolidatedCases: state[STATE_KEYS.CONSOLIDATED_CASE_DEADLINES],
   },
   function DeleteCaseDeadlineModalDialog({
     cancelSequence,
     confirmSequence,
     form,
     caseDetail,
+    consolidatedCases,
   }) {
-    const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
+    const { docketNumber, leadDocketNumber } = caseDetail;
     return (
       <ModalDialog
         cancelLabel="No, Cancel"

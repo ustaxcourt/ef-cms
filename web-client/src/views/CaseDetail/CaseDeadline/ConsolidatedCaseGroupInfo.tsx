@@ -9,7 +9,11 @@ export function ConsolidatedCaseGroupInfo({
   option: 'add' | 'edit' | 'delete';
   docketNumber: string;
   leadDocketNumber: string | undefined;
-  consolidatedCases: { docketNumber: string; caseCaption: string }[];
+  consolidatedCases: {
+    docketNumber: string;
+    caseCaption: string;
+    caption: string;
+  }[];
 }) {
   const isLeadCase = docketNumber === leadDocketNumber;
   if (!isLeadCase) return;
@@ -30,10 +34,10 @@ export function ConsolidatedCaseGroupInfo({
       <p>{TEXT_DICT[option]}</p>
       {consolidatedCases
         .filter(({ docketNumber }) => docketNumber !== leadDocketNumber)
-        .map(({ docketNumber, caseCaption }) => {
+        .map(({ docketNumber, caseCaption, caption }) => {
           return (
             <p key={docketNumber}>
-              {docketNumber} {caseCaption}
+              {docketNumber} {caseCaption || caption}
             </p>
           );
         })}
