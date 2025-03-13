@@ -1,5 +1,6 @@
 import { Statistic } from '@shared/business/entities/Statistic';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { getUpdatedAtWithIndexBasedIncrement } from '@web-api/persistence/postgres/cases/statistics/helper';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { flatten, isEmpty } from 'lodash';
 
@@ -14,7 +15,7 @@ export const upsertCaseStatistics = async ({
 }) => {
   await pgInsertInto({
     table: 'dwCaseStatistic',
-    values: statistics.map(s => ({
+    values: statistics.map((s, index) => ({
       docketNumber,
       statisticId: s.statisticId,
       determinationDeficiencyAmount: s.determinationDeficiencyAmount || null,
@@ -26,6 +27,9 @@ export const upsertCaseStatistics = async ({
         : null,
       year: s.year ? parseInt(s.year) : null,
       yearOrPeriod: s.yearOrPeriod,
+      // We want to maintain the order of statistics
+      // We add a slight offset in case of duplicate timestamps
+      updatedAt: getUpdatedAtWithIndexBasedIncrement({ index }),
     })),
     onConflictColumns: ['statisticId'],
   });
@@ -53,7 +57,7 @@ export const upsertCaseStatistics = async ({
       penaltyId: p.penaltyId,
       penaltyType: p.penaltyType,
       statisticId: p.statisticId,
-      penaltyNumber: index + 1,
+      updatedAt: getUpdatedAtWithIndexBasedIncrement({ index }),
     })),
     onConflictColumns: ['penaltyId'],
   });
