@@ -11,7 +11,17 @@ describe('caseSearchByNameHelper', () => {
     const caseTypeOptions = [
       {
         label: 'None',
-        value: CASE_TYPES_MAP.deficiency,
+        value: [
+          CASE_TYPES_MAP.deficiency,
+          CASE_TYPES_MAP.disclosure,
+          CASE_TYPES_MAP.innocentSpouse,
+          CASE_TYPES_MAP.interestAbatement,
+          CASE_TYPES_MAP.other,
+          CASE_TYPES_MAP.partnershipSection1101,
+          CASE_TYPES_MAP.partnershipSection6226,
+          CASE_TYPES_MAP.partnershipSection6228,
+          CASE_TYPES_MAP.workerClassification,
+        ],
       },
       {
         label: `L - Lien/Levy`,

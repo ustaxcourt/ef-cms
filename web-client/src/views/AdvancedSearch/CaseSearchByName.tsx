@@ -508,9 +508,9 @@ export const CaseSearchByName = connect(
             <div>
               {Object.entries(
                 advancedSearchForm.caseSearchByName?.caseTypes || {},
-              ).map(([label, caseType]: [string, any]) => (
+              ).map(([label, _caseType]: [string, any]) => (
                 <PillButton
-                  key={caseType}
+                  key={label}
                   text={label}
                   onRemove={() => {
                     delete advancedSearchForm.caseSearchByName.caseTypes[

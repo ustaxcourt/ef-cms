@@ -4,20 +4,35 @@ import {
   FORMATS,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import {
+  CASE_TYPES,
   CASE_TYPES_MAP,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
 
+export const ALL_DEFICIENCY_CASES = 'ALL_DEFICIENCY_CASES';
+
 export const caseSearchByNameHelper = (): {
   today: string;
-  caseTypeOptions: { label: string; value: string }[];
+  caseTypeOptions: { label: string; value: string | string[] }[];
   caseProcedureOptions: { label: string; value: string }[];
 } => {
+  const allDeficiencyTypes = CASE_TYPES.filter(ct => {
+    const notADeficiency: string[] = [
+      CASE_TYPES_MAP.cdp,
+      CASE_TYPES_MAP.passport,
+      CASE_TYPES_MAP.djRetirementPlan,
+      CASE_TYPES_MAP.djRetirementPlan,
+      CASE_TYPES_MAP.whistleblower,
+      CASE_TYPES_MAP.djExemptOrg,
+    ];
+    return !notADeficiency.includes(ct);
+  });
+
   const today = formatNow(FORMATS.YYYYMMDD);
   const caseTypeOptions = [
     {
       label: 'None',
-      value: CASE_TYPES_MAP.deficiency,
+      value: allDeficiencyTypes, //10569: The court wants "None" to signify all deficiency types or anything without a docket Number suffix relating to case type.
     },
     {
       label: `L - Lien/Levy`,
