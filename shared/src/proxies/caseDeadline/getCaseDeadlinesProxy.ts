@@ -11,13 +11,14 @@ import { get } from '../requests';
  */
 export const getCaseDeadlinesInteractor = (
   applicationContext,
-  { endDate, judge, startDate },
+  { endDate, from, judge, startDate },
 ) => {
   return get({
     applicationContext,
     endpoint: '/case-deadlines',
     params: {
       endDate,
+      from,
       judge,
       startDate,
     },

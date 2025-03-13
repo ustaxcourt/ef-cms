@@ -510,6 +510,7 @@ import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/upd
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseCheckboxSequence } from './sequences/updateCaseCheckboxSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
+import { updateCaseDeadlineReportPageSequence } from './sequences/updateCaseDeadlineReportPageSequence';
 import { updateCaseDetailsSequence } from './sequences/updateCaseDetailsSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
@@ -1433,6 +1434,7 @@ export const presenterSequences = {
     updateCaseAssociationFormValueSequence as unknown as Function,
   updateCaseCheckboxSequence: updateCaseCheckboxSequence as unknown as Function,
   updateCaseDeadlineSequence: updateCaseDeadlineSequence as unknown as Function,
+  updateCaseDeadlineReportPageSequence,
   updateCaseDetailsSequence: updateCaseDetailsSequence as unknown as Function,
   updateCaseNoteSequence: updateCaseNoteSequence as unknown as Function,
   updateCasePartyTypeSequence:
