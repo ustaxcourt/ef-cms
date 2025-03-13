@@ -2,7 +2,7 @@ import { clearCaseDeadlinesAction } from './clearCaseDeadlinesAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
 describe('clearCaseDeadlinesAction', () => {
-  it('unsets state.caseDeadlineReport.caseDeadlines', async () => {
+  it('unsets state.caseDeadlineReport', async () => {
     const result = await runAction(clearCaseDeadlinesAction, {
       state: {
         caseDeadlineReport: {

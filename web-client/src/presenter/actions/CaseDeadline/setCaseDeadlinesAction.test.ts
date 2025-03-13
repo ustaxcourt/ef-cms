@@ -3,7 +3,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setCaseDeadlinesAction } from './setCaseDeadlinesAction';
 
 describe('setCaseDeadlinesAction', () => {
-  it('sets state.caseDeadlineReport.caseDeadlines to the props.caseDeadlines passed in', async () => {
+  it('sets state.caseDeadlineReport.caseDeadlinesForCurrentPage to the props.caseDeadlines passed in', async () => {
     const caseDeadlines = [
       { caseDeadlineId: '123', deadlineDate: '2018-03-01T00:00:00.000Z' },
     ];
