@@ -22,7 +22,6 @@ import {
   PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
-  Role,
   SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
@@ -758,7 +757,7 @@ export class Case extends JoiValidationEntity {
     if (rawCase.docketNumber) {
       this.docketNumber = Case.formatDocketNumber(rawCase.docketNumber);
     }
-    this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
+    this.docketNumberSuffix = getDocketNumberSuffix(rawCase) || undefined;
     this.filingType = rawCase.filingType;
     this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
     this.irsNoticeDate = rawCase.irsNoticeDate;
@@ -1116,7 +1115,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} practitionerToRemove the practitioner user object to remove from the case
    */
   removePrivatePractitioner(practitionerToRemove) {
-    const index = this.privatePractitioners.findIndex(
+    const index = (this.privatePractitioners || []).findIndex(
       practitioner => practitioner.userId === practitionerToRemove.userId,
     );
     if (index > -1) this.privatePractitioners?.splice(index, 1);
@@ -2067,13 +2066,13 @@ export class Case extends JoiValidationEntity {
     );
   }
 
-  userHasAccessToCase(user: { userId: string; role: Role }): boolean {
+  userHasAccessToCase(user: AuthUser): boolean {
     return Case.userHasAccessToCase(this, user);
   }
 
   static userHasAccessToCase(
     rawCase: RawCase | RawPublicCase,
-    user: { userId: string; role: Role },
+    user: AuthUser,
   ): boolean {
     return rawCase.leadDocketNumber
       ? isUserPartOfGroup({
