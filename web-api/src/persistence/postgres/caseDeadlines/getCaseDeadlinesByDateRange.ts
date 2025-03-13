@@ -59,6 +59,6 @@ export const getCaseDeadlinesByDateRange = async ({
     foundDeadlines: caseDeadlines.map(caseDeadline =>
       caseDeadlineEntity(caseDeadline),
     ),
-    totalCount,
+    totalCount: Number(totalCount),
   };
 };
