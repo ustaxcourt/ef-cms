@@ -108,7 +108,7 @@ export class Case extends JoiValidationEntity {
   public closedDate?: string;
   public createdAt: string;
   public docketNumber: string;
-  public docketNumberSuffix?: string;
+  public docketNumberSuffix?: string | null;
   public filingType?: string;
   public hasVerifiedIrsNotice?: boolean;
   public irsNoticeDate?: string;
@@ -757,7 +757,7 @@ export class Case extends JoiValidationEntity {
     if (rawCase.docketNumber) {
       this.docketNumber = Case.formatDocketNumber(rawCase.docketNumber);
     }
-    this.docketNumberSuffix = getDocketNumberSuffix(rawCase) || undefined;
+    this.docketNumberSuffix = getDocketNumberSuffix(rawCase);
     this.filingType = rawCase.filingType;
     this.hasVerifiedIrsNotice = rawCase.hasVerifiedIrsNotice;
     this.irsNoticeDate = rawCase.irsNoticeDate;
