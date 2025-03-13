@@ -14,9 +14,13 @@ export const setupIndexes = async ({
   const overriddenNumberOfReplicasIfNonProd: number = Number(
     process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS,
   );
+  const overriddenNumberOfShardsIfNonProd: number = Number(
+    process.env.OVERRIDE_ES_NUMBER_OF_SHARDS,
+  );
   const esSettings = settings({
     environment: environmentName,
     overriddenNumberOfReplicasIfNonProd,
+    overriddenNumberOfShardsIfNonProd,
   });
 
   await Promise.all(
