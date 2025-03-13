@@ -5,11 +5,16 @@ export const deleteCaseStatistic = async ({
 }: {
   statisticId: string;
 }): Promise<number> => {
-  const result = await pgDeleteFrom({
+  const statisticsDeletionResult = await pgDeleteFrom({
     table: 'dwCaseStatistic',
     where: cb => cb.where('statisticId', '=', statisticId),
   });
 
-  // Rows affected
-  return result.length;
+  await pgDeleteFrom({
+    table: 'dwStatisticPenalty',
+    where: cb => cb.where('statisticId', '=', statisticId),
+  });
+
+  // Num statistics deleted
+  return statisticsDeletionResult.length;
 };

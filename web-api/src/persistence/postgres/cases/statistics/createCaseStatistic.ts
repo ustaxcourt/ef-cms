@@ -27,4 +27,17 @@ export const createCaseStatistic = async ({
       },
     ],
   });
+
+  await pgInsertInto({
+    table: 'dwStatisticPenalty',
+    values: statistic.penalties.map((p, index) => ({
+      name: p.name,
+      penaltyAmount: p.penaltyAmount,
+      penaltyId: p.penaltyId,
+      penaltyType: p.penaltyType,
+      statisticId: statistic.statisticId,
+      penaltyNumber: index + 1,
+    })),
+    onConflictColumns: ['penaltyId'],
+  });
 };

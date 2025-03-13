@@ -13,7 +13,7 @@ import { environment } from '@web-api/environment';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'delete-case-items - Delete from dynamodb case-item entities ' +
+    'delete-cases - Delete from dynamodb case entities ' +
     'that have been migrated to postgres',
   environment: {
     env: 'ENV',
@@ -23,7 +23,7 @@ const scriptConfig: ScriptConfig = {
 };
 parseArgsAndEnvVars(scriptConfig);
 
-const caseItemsPageSize = 10000;
+const casePageSize = 10000;
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
@@ -36,7 +36,7 @@ const getCasesToDelete = async (offset: number) => {
       .selectFrom('dwCase')
       .select(['docketNumber'])
       .orderBy('docketNumber')
-      .limit(caseItemsPageSize)
+      .limit(casePageSize)
       .offset(offset)
       .execute(),
   );
@@ -46,10 +46,10 @@ let totalItemsDeleted = 0;
 
 async function main() {
   let offset = 0;
-  let caseItemsToDelete = await getCasesToDelete(offset);
+  let dynamoCasesToDelete = await getCasesToDelete(offset);
 
-  while (!isEmpty(caseItemsToDelete)) {
-    const dynamoItemsToDelete = caseItemsToDelete.map(c => ({
+  while (!isEmpty(dynamoCasesToDelete)) {
+    const dynamoItemsToDelete = dynamoCasesToDelete.map(c => ({
       DeleteRequest: {
         Key: {
           pk: `case|${c.docketNumber}`,
@@ -62,11 +62,11 @@ async function main() {
       dynamoDbDocClient,
       environment.dynamoDbTableName,
     );
-    console.log(`Total work items deleted so far: ${totalItemsDeleted}`);
-    offset += caseItemsPageSize;
-    caseItemsToDelete = await getCasesToDelete(offset);
+    console.log(`Total cases deleted so far: ${totalItemsDeleted}`);
+    offset += casePageSize;
+    dynamoCasesToDelete = await getCasesToDelete(offset);
   }
-  console.log('Done deleting work items from Dynamo');
+  console.log('Done deleting cases from Dynamo');
 }
 
 main().catch(console.error);
