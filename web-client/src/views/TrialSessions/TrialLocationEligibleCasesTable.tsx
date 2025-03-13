@@ -1,5 +1,4 @@
 import { connect } from '@web-client/presenter/shared.cerebral';
-// import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';

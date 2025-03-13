@@ -7,13 +7,13 @@ import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamo
 import { query } from '@web-api/persistence/dynamodbClientService';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
-export const getEligibleCasesForCity = async ({
+export const getEligibleCasesForTrialCity = async ({
   applicationContext,
   trialCity,
 }: {
   trialCity: string;
   applicationContext: ServerApplicationContext;
-}): Promise<RawEligibleCase[] | undefined> => {
+}): Promise<RawEligibleCase[]> => {
   const dbCases = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
@@ -24,14 +24,39 @@ export const getEligibleCasesForCity = async ({
         'docketNumberSuffix',
         'docketNumberWithSuffix',
         'leadDocketNumber',
+        'procedureType',
         'highPriority',
         'qcCompleteForTrial',
         'isSealed',
       ])
       .where('preferredTrialCity', '=', trialCity)
       .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
-      .where('blocked', '!=', true)
-      .where('automaticBlocked', '!=', true)
+      .where(eb =>
+        eb.and([
+          eb.or([
+            eb('automaticBlocked', '=', false),
+            eb('automaticBlocked', 'is', null),
+          ]),
+          eb.or([eb('blocked', '=', false), eb('blocked', 'is', null)]),
+          // eb.or([
+          eb.not(
+            eb.exists(sq =>
+              sq
+                .selectFrom('dwCase as c2')
+                .select('c2.leadDocketNumber')
+                .where('c2.preferredTrialCity', '=', trialCity)
+                .whereRef('c2.leadDocketNumber', '=', 'dwCase.leadDocketNumber')
+                .where(qb =>
+                  qb.or([
+                    qb('c2.automaticBlocked', '=', true),
+                    qb('c2.blocked', '=', true),
+                  ]),
+                ),
+            ),
+          ),
+          // ]),
+        ]),
+      )
       .execute(),
   );
 
@@ -79,5 +104,5 @@ export const getEligibleCasesForCity = async ({
       : undefined;
   });
 
-  return casesForReturn;
+  return casesForReturn || [];
 };

@@ -13,6 +13,7 @@ export const getBlockedCasesLambda = (event, authorizedUser: UnknownAuthUser) =>
     return await getBlockedCasesInteractor(
       {
         trialLocation: event.pathParameters.trialLocation,
+        filterStatusForTrialLocation: event.queryStringParameters,
       },
       authorizedUser,
     );

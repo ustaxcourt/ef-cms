@@ -1,6 +1,6 @@
 import { query } from '../../dynamodbClientService';
 
-export const getEligibleCasesForTrialCity = async ({
+export const getEligibleCasesForTrialCityDeprecated = async ({
   applicationContext,
   procedureType,
   trialCity,
