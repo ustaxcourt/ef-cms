@@ -6,6 +6,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import { casePublicSearchInteractor } from '@web-api/business/useCases/public/casePublicSearchInteractor';
 import { casePublicSearch as casePublicSearchMock } from '@web-api/persistence/elasticsearch/casePublicSearch';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 
 const casePublicSearch = casePublicSearchMock as jest.Mock;
 casePublicSearch.mockResolvedValue([]);
@@ -18,6 +19,7 @@ describe('casePublicSearchInteractor', () => {
       petitionerName: 'test person',
       petitionerState: 'NY',
       startDate: '01/01/2001',
+      caseTypes: [CASE_TYPES_MAP.cdp],
     };
 
     await casePublicSearchInteractor(applicationContext, requestParams as any);
