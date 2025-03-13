@@ -4,6 +4,7 @@ import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginato
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
+import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 
 export const TrialLocationBlockedTable = connect(
   {
@@ -67,7 +68,9 @@ export const TrialLocationBlockedTable = connect(
                         shouldIndent={blockedCase.shouldIndent}
                       />
                     </td>
-                    <td>{blockedCase.docketNumberWithSuffix}</td>
+                    <td>
+                      <CaseLink formattedCase={blockedCase} />
+                    </td>
                     <td>{blockedCase.blockedDateEarliest}</td>
                     <td>{blockedCase.caseTitle}</td>
                     <td>{blockedCase.status}</td>

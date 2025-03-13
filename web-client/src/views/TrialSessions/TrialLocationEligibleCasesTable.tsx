@@ -6,7 +6,6 @@ import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences, state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
-import classNames from 'classnames';
 
 export const TrialLocationEligibleCasesTable = connect(
   {
@@ -79,13 +78,7 @@ export const TrialLocationEligibleCasesTable = connect(
                         />
                       </td>
                       <td>
-                        <span
-                          className={classNames({
-                            'margin-left-2': eligibleCase.shouldIndent,
-                          })}
-                        >
-                          <CaseLink formattedCase={eligibleCase} />
-                        </span>
+                        <CaseLink formattedCase={eligibleCase} />
                       </td>
                       <td>{eligibleCase.caseTitle}</td>
                       <td>

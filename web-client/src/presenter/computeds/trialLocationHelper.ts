@@ -1,8 +1,4 @@
-import {
-  CASE_STATUS_TYPES,
-  CaseStatus,
-  HIGH_PRIORITY_SUFFIXES,
-} from '@shared/business/entities/EntityConstants';
+import { HIGH_PRIORITY_SUFFIXES } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { Get } from 'cerebral';
 import {
@@ -13,8 +9,9 @@ import {
 } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
 import { compareCasesByDocketNumber } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
-import { setFormattedBlockDates } from '@web-client/presenter/computeds/blockedCasesReportHelper';
+import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
+import { BlockedFormattedCase } from '@web-client/presenter/computeds/blockedCasesReportHelper';
 
 export const trialLocationHelper = (
   get: Get,
@@ -35,20 +32,10 @@ export const trialLocationHelper = (
 
   const blockedCases = get(state.blockedCases);
 
-  const statusFilter: CaseStatus[] = [
-    CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    CASE_STATUS_TYPES.generalDocket,
-    CASE_STATUS_TYPES.assignedCase,
-    CASE_STATUS_TYPES.assignedMotion,
-  ];
-
-  const filteredBlockedCases = blockedCases.filter(blockedCase =>
-    statusFilter.includes(blockedCase.status),
-  );
-  const formattedBlockedCases = filteredBlockedCases
+  const formattedBlockedCases = blockedCases
     .sort(compareCasesByDocketNumber)
     .map(blockedCase =>
-      setConsolidationFlagsForDisplay(blockedCase, filteredBlockedCases),
+      setConsolidationFlagsForDisplay(blockedCase, blockedCases),
     )
     .map(blockedCase => {
       const updatedCase = {
@@ -105,4 +92,44 @@ export const trialLocationHelper = (
     totalPagesBlocked: Math.ceil(formattedBlockedCases.length / pageSize),
     totalPagesEligible: Math.ceil(sortedEligibleCases.length / pageSize),
   };
+};
+
+const setFormattedBlockDates = (
+  blockedCase: RawCase & {
+    inConsolidatedGroup: boolean;
+    consolidatedIconTooltipText: string;
+    shouldIndent: boolean;
+    isLeadCase: boolean;
+  },
+): BlockedFormattedCase => {
+  const blockedFormattedCase: BlockedFormattedCase = {
+    ...blockedCase,
+    blockedDateEarliest: '',
+    caseTitle: '',
+  };
+
+  if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
+    if (blockedCase.blockedDate < blockedCase.automaticBlockedDate!) {
+      blockedFormattedCase.blockedDateEarliest = formatDateString(
+        blockedCase.blockedDate,
+        'MMDDYY',
+      );
+    } else {
+      blockedFormattedCase.blockedDateEarliest = formatDateString(
+        blockedCase.automaticBlockedDate!,
+        'MMDDYY',
+      );
+    }
+  } else if (blockedCase.blocked) {
+    blockedFormattedCase.blockedDateEarliest = formatDateString(
+      blockedCase.blockedDate!,
+      'MMDDYY',
+    );
+  } else if (blockedCase.automaticBlocked) {
+    blockedFormattedCase.blockedDateEarliest = formatDateString(
+      blockedCase.automaticBlockedDate!,
+      'MMDDYY',
+    );
+  }
+  return blockedFormattedCase;
 };
