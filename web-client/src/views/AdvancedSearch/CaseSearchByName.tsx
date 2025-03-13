@@ -489,7 +489,12 @@ export const CaseSearchByName = connect(
                   label: '- Select one or more -',
                   value: '',
                 }}
-                options={caseSearchByNameHelper.caseTypeOptions}
+                options={
+                  caseSearchByNameHelper.caseTypeOptions as {
+                    label: string;
+                    value: string;
+                  }[]
+                }
                 onChange={e => {
                   if (e?.value) {
                     const currentCaseTypeFilters =
@@ -513,9 +518,7 @@ export const CaseSearchByName = connect(
                   key={label}
                   text={label}
                   onRemove={() => {
-                    delete advancedSearchForm.caseSearchByName.caseTypes[
-                      label
-                    ];
+                    delete advancedSearchForm.caseSearchByName.caseTypes[label];
                     updateCaseAdvancedSearchByNameFormValueSequence({
                       key: 'caseTypes',
                       value: advancedSearchForm.caseSearchByName.caseTypes,
