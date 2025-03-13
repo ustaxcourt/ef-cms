@@ -11,7 +11,7 @@ import {
   EXHIBIT_STATUS_OPTIONS,
   MINUTE_SHEET_FORM_SECTION_MAP,
 } from '@shared/business/entities/EntityConstants';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 export const ExhibitsFieldset = ({
   addRowHandler,
@@ -26,6 +26,37 @@ export const ExhibitsFieldset = ({
   exhibitsFormState: MinuteSheetFormState['exhibitsSection'];
   removeRowHandler: RemoveRowHandler;
 }) => {
+  const textareaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>(
+    {},
+  );
+
+  const adjustHeight = (key: string) => {
+    const textarea = textareaRefs.current[key];
+    if (textarea) {
+      // Save existing styles because we need to reset them in order to get
+      // an accurate measurement of the height of the textarea element.
+      const previousStyles = {
+        minHeight: textarea.style.minHeight,
+        height: textarea.style.height,
+        overflow: textarea.style.overflow,
+      };
+
+      textarea.style.height = '0';
+      textarea.style.minHeight = '0';
+      textarea.style.overflow = 'hidden';
+
+      textarea.style.minHeight = previousStyles.minHeight;
+      textarea.style.overflow = previousStyles.overflow;
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    Object.keys(exhibitsFormState.exhibits).forEach(key => {
+      adjustHeight(key);
+    });
+  }, []);
+
   return (
     <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2">
@@ -41,16 +72,18 @@ export const ExhibitsFieldset = ({
         >
           <div className="grid-col-5">
             <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-              <input
-                className="usa-input maxw-full"
+              <textarea
+                className="usa-input margin-top-0 maxw-full textarea-resize-vertical"
                 id={`exhibit-description-${rowIndex}`}
                 data-testid={`exhibit-description-${rowIndex}`}
                 name={`exhibit-description-${rowIndex}`}
                 aria-label={`exhibit-description-${rowIndex}`}
-                type="text"
+                ref={el => {
+                  textareaRefs.current[row.renderKey] = el;
+                }}
                 value={exhibitsFormState.exhibits[row.renderKey].description}
                 onBlur={() => onBlurHandler()}
-                onChange={e =>
+                onChange={e => {
                   onChangeHandler({
                     name: 'exhibits',
                     rowInfo: {
@@ -59,8 +92,10 @@ export const ExhibitsFieldset = ({
                     },
                     section: MINUTE_SHEET_FORM_SECTION_MAP.exhibitsSection,
                     value: e.target.value,
-                  })
-                }
+                  });
+                  adjustHeight(row.renderKey);
+                }}
+                style={{ overflow: 'hidden' }}
               />
             </FormGroup>
           </div>
