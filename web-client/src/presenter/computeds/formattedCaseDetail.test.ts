@@ -204,4 +204,22 @@ describe('formattedCaseDetail', () => {
       displayName: 'John Johnson, Participant',
     });
   });
+
+  it('should set isCurrentUser to true if the contactId matches the user.userId', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          petitioners: [
+            {
+              contactId: petitionsClerkUser.userId,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.petitioners[0].isCurrentUser).toBeTruthy();
+  });
 });
