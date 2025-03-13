@@ -22,7 +22,6 @@ export const getEligibleCasesForTrialCity = async ({
         'caseType',
         'docketNumber',
         'docketNumberSuffix',
-        'docketNumberWithSuffix',
         'leadDocketNumber',
         'procedureType',
         'highPriority',

@@ -21,7 +21,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('createdAt', 'timestamptz')
     .addColumn('damages', 'numeric')
     .addColumn('docketEntries', 'jsonb')
-    .addColumn('docketNumberWithSuffix', 'varchar')
     .addColumn('filingType', 'varchar')
     .addColumn('hasPendingItems', 'boolean')
     .addColumn('hasVerifiedIrsNotice', 'boolean')

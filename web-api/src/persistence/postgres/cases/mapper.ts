@@ -323,5 +323,8 @@ export const convertDbRowToRawEligibleCase = (dbCase: any): RawEligibleCase => {
   return {
     ...dbCase,
     caseCaption: dbCase.caption,
+    docketNumberWithSuffix:
+      dbCase.docketNumber +
+      (dbCase.docketNumberSuffix ? dbCase.docketNumberSuffix : ''),
   };
 };

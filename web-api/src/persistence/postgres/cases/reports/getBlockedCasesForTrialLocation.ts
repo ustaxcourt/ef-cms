@@ -59,7 +59,6 @@ export const getBlockedCasesForTrialLocation = async (
         'caption',
         'docketNumber',
         'docketNumberSuffix',
-        'docketNumberWithSuffix',
         'leadDocketNumber',
         'status',
         'procedureType',
