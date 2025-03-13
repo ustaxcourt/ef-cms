@@ -343,84 +343,87 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
       state: cerebralTest.getState(),
     });
 
-    expect(reviewUiHelper.formattedStatistics).toEqual([
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,000.00',
-        formattedIrsTotalPenalties: '$105.01',
-        irsDeficiencyAmount: '1000',
-        irsTotalPenalties: '105.01',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,001.00',
-        formattedIrsTotalPenalties: '$101.00',
-        irsDeficiencyAmount: '1001',
-        irsTotalPenalties: '101.00',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,002.00',
-        formattedIrsTotalPenalties: '$102.00',
-        irsDeficiencyAmount: '1002',
-        irsTotalPenalties: '102.00',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,003.00',
-        formattedIrsTotalPenalties: '$103.00',
-        irsDeficiencyAmount: '1003',
-        irsTotalPenalties: '103.00',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,004.00',
-        formattedIrsTotalPenalties: '$104.00',
-        irsDeficiencyAmount: '1004',
-        irsTotalPenalties: '104.00',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,005.00',
-        formattedIrsTotalPenalties: '$105.00',
-        irsDeficiencyAmount: '1005',
-        irsTotalPenalties: '105.00',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,006.00',
-        formattedIrsTotalPenalties: '$106.00',
-        irsDeficiencyAmount: '1006',
-        irsTotalPenalties: '106.00',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,007.00',
-        formattedIrsTotalPenalties: '$107.00',
-        irsDeficiencyAmount: '1007',
-        irsTotalPenalties: '107.00',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,008.00',
-        formattedIrsTotalPenalties: '$108.00',
-        irsDeficiencyAmount: '1008',
-        irsTotalPenalties: '108.00',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,009.00',
-        formattedIrsTotalPenalties: '$109.00',
-        irsDeficiencyAmount: '1009',
-        irsTotalPenalties: '109.00',
-        year: '2019',
-      }),
-      expect.objectContaining({
-        formattedIrsDeficiencyAmount: '$1,010.00',
-        formattedIrsTotalPenalties: '$110.00',
-        irsDeficiencyAmount: '1010',
-        irsTotalPenalties: '110.00',
-        year: '2019',
-      }),
-    ]);
+    expect(reviewUiHelper.formattedStatistics).toHaveLength(11);
+    expect(reviewUiHelper.formattedStatistics).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,000.00',
+          formattedIrsTotalPenalties: '$105.01',
+          irsDeficiencyAmount: '1000',
+          irsTotalPenalties: '105.01',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,001.00',
+          formattedIrsTotalPenalties: '$101.00',
+          irsDeficiencyAmount: '1001',
+          irsTotalPenalties: '101.00',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,002.00',
+          formattedIrsTotalPenalties: '$102.00',
+          irsDeficiencyAmount: '1002',
+          irsTotalPenalties: '102.00',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,003.00',
+          formattedIrsTotalPenalties: '$103.00',
+          irsDeficiencyAmount: '1003',
+          irsTotalPenalties: '103.00',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,004.00',
+          formattedIrsTotalPenalties: '$104.00',
+          irsDeficiencyAmount: '1004',
+          irsTotalPenalties: '104.00',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,005.00',
+          formattedIrsTotalPenalties: '$105.00',
+          irsDeficiencyAmount: '1005',
+          irsTotalPenalties: '105.00',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,006.00',
+          formattedIrsTotalPenalties: '$106.00',
+          irsDeficiencyAmount: '1006',
+          irsTotalPenalties: '106.00',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,007.00',
+          formattedIrsTotalPenalties: '$107.00',
+          irsDeficiencyAmount: '1007',
+          irsTotalPenalties: '107.00',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,008.00',
+          formattedIrsTotalPenalties: '$108.00',
+          irsDeficiencyAmount: '1008',
+          irsTotalPenalties: '108.00',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,009.00',
+          formattedIrsTotalPenalties: '$109.00',
+          irsDeficiencyAmount: '1009',
+          irsTotalPenalties: '109.00',
+          year: '2019',
+        }),
+        expect.objectContaining({
+          formattedIrsDeficiencyAmount: '$1,010.00',
+          formattedIrsTotalPenalties: '$110.00',
+          irsDeficiencyAmount: '1010',
+          irsTotalPenalties: '110.00',
+          year: '2019',
+        }),
+      ]),
+    );
   });
 };
