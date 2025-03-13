@@ -5,7 +5,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { ConsolidatgedCaseGroupInfo } from '@web-client/views/CaseDetail/CaseDeadline/ConsolidatgedCaseGroupInfo';
+import { ConsolidatedCaseGroupInfo } from '@web-client/views/CaseDetail/CaseDeadline/ConsolidatedCaseGroupInfo';
 
 export const CreateCaseDeadlineModalDialog = connect(
   {
@@ -80,7 +80,7 @@ export const CreateCaseDeadlineModalDialog = connect(
             />
           </FormGroup>
 
-          <ConsolidatgedCaseGroupInfo
+          <ConsolidatedCaseGroupInfo
             option="add"
             docketNumber={docketNumber}
             leadDocketNumber={leadDocketNumber}

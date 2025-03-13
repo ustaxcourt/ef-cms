@@ -4,17 +4,18 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
   consolidatedCaseDeadlineId: string,
-  leadDocketNumber: string,
+  leadDocketNumber?: string, // Make leadDocketNumber optional
 ): Promise<RawCaseDeadline[]> => {
-  const RECORDS = await getDbReader(reader =>
-    reader
+  const RECORDS = await getDbReader(reader => {
+    const query = reader
       .selectFrom('dwCaseDeadline as cd')
       .innerJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
       .selectAll()
-      .where('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId)
-      .where('c.leadDocketNumber', '=', leadDocketNumber)
-      .execute(),
-  );
+      .where('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId);
+
+    if (!leadDocketNumber) return query.execute();
+    return query.where('c.leadDocketNumber', '=', leadDocketNumber).execute();
+  });
 
   return RECORDS.map(r => caseDeadlineEntity(r).toRawObject());
 };
