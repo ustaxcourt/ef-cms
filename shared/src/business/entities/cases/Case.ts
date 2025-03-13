@@ -292,7 +292,8 @@ export class Case extends JoiValidationEntity {
    * @param {Array} cases the cases to check for lead case computation
    * @returns {Case} the lead Case entity
    */
-  static findLeadCaseForCases(cases) {
+  static findLeadCaseForCases(cases: RawCase[]): RawCase | undefined {
+    if (!cases.length) return undefined;
     const casesOrdered = Case.sortByDocketNumber([...cases]);
     return casesOrdered.shift();
   }
