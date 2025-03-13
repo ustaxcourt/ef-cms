@@ -184,9 +184,7 @@ export const getBriefDetails = (briefDetails: BriefDetailsType) => {
       const briefDetail = briefDetails[briefSubtype];
       let stringSubtype = [
         briefDetail.partyType ? briefDetail.partyType : '',
-        briefDetail.dueDate
-          ? `Due ${formatDateString(briefDetail.dueDate, FORMATS.MMDDYYYY)}`
-          : '',
+        briefDetail.dueDate ? `Due ${briefDetail.dueDate}` : '',
         briefDetail.note ? `<em>${briefDetail.note}</em>` : '',
       ]
         .filter(stringBriefSubtype => !!stringBriefSubtype)
@@ -232,7 +230,7 @@ export const formatCalledSection = (
 ): string => {
   if (!calendarCall) return '';
   return [
-    formatDateString(calendarCall.date, FORMATS.MMDDYYYY),
+    calendarCall.date,
     calendarCall.note && `<em>${calendarCall.note}</em>`,
     calendarCall.transcriptOrdered ? 'Transcript ordered' : '',
   ]
@@ -284,10 +282,7 @@ export const formatJurisdictionRetained = (
   retained: MinuteSheet['jurisdiction']['retained'],
 ): string => {
   if (!retained?.date) return '';
-  return [
-    `${formatDateString(retained.date, FORMATS.MMDDYYYY)}`,
-    retained.note ? `<em>${retained.note}</em>` : '',
-  ]
+  return [retained.date, retained.note ? `<em>${retained.note}</em>` : '']
     .filter(Boolean)
     .join('; ');
 };
@@ -296,10 +291,7 @@ export const formatJurisdictionContinued = (
   continued: MinuteSheet['jurisdiction']['continued'],
 ): string => {
   if (!continued?.date) return '';
-  return [
-    `${formatDateString(continued.date, FORMATS.MMDDYYYY)}`,
-    continued.note ? `<em>${continued.note}</em>` : '',
-  ]
+  return [continued.date, continued.note ? `<em>${continued.note}</em>` : '']
     .filter(Boolean)
     .join('; ');
 };
@@ -311,10 +303,9 @@ export const formatStatusReportOrdered = (
   const orderedFor =
     STATUS_REPORT_ORDERED_FOR_OPTIONS[statusReport.orderedFor] || '';
   return [
-    formatDateString(statusReport.date, FORMATS.MMDDYYYY),
+    statusReport.date,
     orderedFor && `Ordered for ${orderedFor}`,
-    statusReport.dueDate &&
-      `Due ${formatDateString(statusReport.dueDate, FORMATS.MMDDYYYY)}`,
+    statusReport.dueDate && `Due ${statusReport.dueDate}`,
     statusReport.note && `<em>${statusReport.note}</em>`,
   ]
     .filter(substring => !!substring)
@@ -326,9 +317,8 @@ export const formatStipulatedDecision = (
 ): string => {
   if (!stipulatedDecision) return '';
   return [
-    formatDateString(stipulatedDecision.date, FORMATS.MMDDYYYY),
-    stipulatedDecision.dueDate &&
-      `Due ${formatDateString(stipulatedDecision.dueDate, FORMATS.MMDDYYYY)}`,
+    stipulatedDecision.date,
+    stipulatedDecision.dueDate && `Due ${stipulatedDecision.dueDate}`,
     stipulatedDecision.note && `<em>${stipulatedDecision.note}</em>`,
   ]
     .filter(Boolean)
@@ -342,7 +332,7 @@ export const formatMotions = (
     .map(motion => ({
       content: [
         `${motion.oralMotion ? 'Oral ' : ''}${MOTION_TYPE_OPTIONS[motion.type] || ''}`,
-        formatDateString(motion.date, FORMATS.MMDDYYYY),
+        motion.date,
         MOTION_FILED_BY_OPTIONS[motion.filedBy]
           ? `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`
           : '',
@@ -366,7 +356,7 @@ export const formatActionsAndFilings = (
   return actionsAndFilings
     .map(action => ({
       content: [
-        formatDateString(action.date, FORMATS.MMDDYYYY),
+        action.date,
         [
           ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]
             ? `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}`
@@ -391,9 +381,7 @@ export const formatActionsAndFilings = (
 export const formatTrialBrief = (trialBrief: MinuteSheet['brief']) => {
   return {
     benchOpinionRendered: [
-      trialBrief.benchOpinionDate
-        ? formatDateString(trialBrief.benchOpinionDate, FORMATS.MMDDYYYY)
-        : '',
+      trialBrief.benchOpinionDate ? trialBrief.benchOpinionDate : '',
       trialBrief.transcriptOrdered ? 'Transcript ordered' : '',
       trialBrief.note ? `<em>${trialBrief.note}</em>` : '',
     ]
@@ -401,9 +389,7 @@ export const formatTrialBrief = (trialBrief: MinuteSheet['brief']) => {
       .join('; '),
     briefDetails: getBriefDetails(trialBrief.details),
     briefType: trialBrief.type || '',
-    dateSubmitted: trialBrief.dateSubmitted
-      ? formatDateString(trialBrief.dateSubmitted, FORMATS.MMDDYYYY)
-      : '',
+    dateSubmitted: trialBrief.dateSubmitted ? trialBrief.dateSubmitted : '',
     totalTrialHours: trialBrief.hoursOfTrial
       ? `${trialBrief.hoursOfTrial}`
       : '',

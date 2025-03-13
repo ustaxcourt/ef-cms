@@ -245,7 +245,7 @@ describe('formatMinuteSheet', () => {
 
       it('should format date only when only date is provided', () => {
         const section = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: '',
           transcriptOrdered: false,
         };
@@ -255,7 +255,7 @@ describe('formatMinuteSheet', () => {
 
       it('should format date and note when provided', () => {
         const section = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: 'Test note',
           transcriptOrdered: false,
         };
@@ -265,7 +265,7 @@ describe('formatMinuteSheet', () => {
 
       it('should format date and transcript ordered when transcript is ordered', () => {
         const section = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: '',
           transcriptOrdered: true,
         };
@@ -275,7 +275,7 @@ describe('formatMinuteSheet', () => {
 
       it('should format all fields when all are provided', () => {
         const section = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: 'Test note',
           transcriptOrdered: true,
         };
@@ -540,7 +540,7 @@ describe('formatMinuteSheet', () => {
 
       it('should format jurisdiction retained without continued status', () => {
         const section: MinuteSheet['jurisdiction']['retained'] = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: 'test note',
         };
         const result = formatJurisdictionRetained(section);
@@ -549,7 +549,7 @@ describe('formatMinuteSheet', () => {
 
       it('should handle empty note', () => {
         const section: MinuteSheet['jurisdiction']['retained'] = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: '',
         };
         const result = formatJurisdictionRetained(section);
@@ -560,8 +560,8 @@ describe('formatMinuteSheet', () => {
     describe('formatStatusReportOrdered', () => {
       it('should format with all fields present', () => {
         const section: MinuteSheet['orders']['statusReport'] = {
-          date: '2023-01-15',
-          dueDate: '2023-02-15',
+          date: '01/15/2023',
+          dueDate: '02/15/2023',
           note: 'test note',
           orderedFor: 'joint' as StatusReportOrderedForOption,
         };
@@ -573,7 +573,7 @@ describe('formatMinuteSheet', () => {
 
       it('should format without optional fields', () => {
         const section: MinuteSheet['orders']['statusReport'] = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           dueDate: '',
           note: '',
           orderedFor: '' as StatusReportOrderedForOption,
@@ -586,7 +586,7 @@ describe('formatMinuteSheet', () => {
         Object.entries(STATUS_REPORT_ORDERED_FOR_OPTIONS).forEach(
           ([key, value]) => {
             const section = {
-              date: '2023-01-15',
+              date: '01/15/2023',
               dueDate: '',
               note: '',
               orderedFor: key as StatusReportOrderedForOption,
@@ -606,8 +606,8 @@ describe('formatMinuteSheet', () => {
     describe('formatStipulatedDecision', () => {
       it('should format with all fields present', () => {
         const section: MinuteSheet['orders']['stipulatedDecision'] = {
-          date: '2023-01-15',
-          dueDate: '2023-02-15',
+          date: '01/15/2023',
+          dueDate: '02/15/2023',
           note: 'test note',
         };
         const result = formatStipulatedDecision(section);
@@ -616,7 +616,7 @@ describe('formatMinuteSheet', () => {
 
       it('should format with only required fields', () => {
         const section = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           dueDate: '',
           note: '',
         };
@@ -640,7 +640,7 @@ describe('formatMinuteSheet', () => {
       it('should format a single motion correctly', () => {
         const motionsSection: MinuteSheet['proceedings']['motions'] = [
           {
-            date: '2023-01-15',
+            date: '01/15/2023',
             type: 'motionToDismiss' as MotionTypeOption,
             filedBy: 'petitioner' as MotionFiledByOption,
             status: 'granted' as MotionStatusOption,
@@ -662,7 +662,7 @@ describe('formatMinuteSheet', () => {
       it('should format an oral motion correctly', () => {
         const motionsSection: MinuteSheet['proceedings']['motions'] = [
           {
-            date: '2023-01-15',
+            date: '01/15/2023',
             filedBy: 'petitioner' as MotionFiledByOption,
             note: 'test note',
             objection: '' as MotionObjectionOption,
@@ -684,7 +684,7 @@ describe('formatMinuteSheet', () => {
       it('should filter out motions without required fields', () => {
         const motionsSection: MinuteSheet['proceedings']['motions'] = [
           {
-            date: '2023-01-15',
+            date: '01/15/2023',
             filedBy: '' as MotionFiledByOption,
             note: '',
             objection: '' as MotionObjectionOption,
@@ -710,7 +710,7 @@ describe('formatMinuteSheet', () => {
         const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
           [
             {
-              date: '2023-01-15',
+              date: '01/15/2023',
               documentType: 'filing',
               filedBy: 'petitioner',
               status: 'filed',
@@ -732,7 +732,7 @@ describe('formatMinuteSheet', () => {
         const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
           [
             {
-              date: '2023-01-15',
+              date: '01/15/2023',
               documentType: 'filing',
               filedBy: 'petitioner',
               status: 'filed',
@@ -770,7 +770,7 @@ describe('formatMinuteSheet', () => {
         const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
           [
             {
-              date: '2023-01-15',
+              date: '01/15/2023',
               documentType: 'motion',
               filedBy: 'petitioner',
               status: 'filed',
@@ -792,7 +792,7 @@ describe('formatMinuteSheet', () => {
         const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
           [
             {
-              date: '2023-01-15',
+              date: '01/15/2023',
               documentType: 'motion',
               filedBy: 'petitioner',
               status: 'filed',
@@ -818,14 +818,14 @@ describe('formatMinuteSheet', () => {
           type: 'seriatimBrief' as BriefTypeOption,
           details: {
             opening: {
-              dueDate: '2023-02-15',
+              dueDate: '02/15/2023',
               note: 'Opening brief note',
               partyType: 'petitioner',
             },
           },
-          dateSubmitted: '2023-01-01',
+          dateSubmitted: '01/01/2023',
           hoursOfTrial: 5,
-          benchOpinionDate: '2023-01-15',
+          benchOpinionDate: '01/15/2023',
           transcriptOrdered: true,
           note: 'bench opinion note',
         };
@@ -868,7 +868,7 @@ describe('formatMinuteSheet', () => {
           details: {},
           dateSubmitted: '',
           hoursOfTrial: 0,
-          benchOpinionDate: '2023-01-15',
+          benchOpinionDate: '01/15/2023',
           transcriptOrdered: true,
           note: 'bench opinion note',
         };
@@ -884,7 +884,7 @@ describe('formatMinuteSheet', () => {
           details: {},
           dateSubmitted: '',
           hoursOfTrial: 0,
-          benchOpinionDate: '2023-01-15',
+          benchOpinionDate: '01/15/2023',
           transcriptOrdered: false,
           note: '',
         };
@@ -938,24 +938,24 @@ describe('formatMinuteSheet', () => {
     describe('formatPretrialConference', () => {
       it('should format with all fields present', () => {
         const section: MinuteSheet['caseRecord']['pretrialConference'] = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: 'test note',
           transcriptOrdered: true,
         };
         const result = formatPretrialConference(section);
         expect(result).toBe(
-          '2023-01-15; <em>test note</em>; Transcript ordered',
+          '01/15/2023; <em>test note</em>; Transcript ordered',
         );
       });
 
       it('should handle empty optional fields', () => {
         const section: MinuteSheet['caseRecord']['pretrialConference'] = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: '',
           transcriptOrdered: false,
         };
         const result = formatPretrialConference(section);
-        expect(result).toBe('2023-01-15');
+        expect(result).toBe('01/15/2023');
       });
 
       it('should return empty string when no date', () => {
@@ -972,26 +972,26 @@ describe('formatMinuteSheet', () => {
     describe('formatTrialHearing', () => {
       it('should format with all fields present', () => {
         const section: MinuteSheet['caseRecord']['trialHearing'] = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: 'test note',
           transcriptOrdered: true,
           trialHearingType: 'trial' as TrialHearingOption,
         };
         const result = formatTrialHearing(section);
         expect(result).toBe(
-          '2023-01-15; Trial; <em>test note</em>; Transcript ordered',
+          '01/15/2023; Trial; <em>test note</em>; Transcript ordered',
         );
       });
 
       it('should handle empty optional fields', () => {
         const section: MinuteSheet['caseRecord']['trialHearing'] = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: '',
           transcriptOrdered: false,
           trialHearingType: undefined,
         };
         const result = formatTrialHearing(section);
-        expect(result).toBe('2023-01-15');
+        expect(result).toBe('01/15/2023');
       });
     });
 
@@ -1047,12 +1047,12 @@ describe('formatMinuteSheet', () => {
       it('should format seriatim brief details', () => {
         const briefDetails: MinuteSheet['brief']['details'] = {
           opening: {
-            dueDate: '2023-02-15',
+            dueDate: '02/15/2023',
             note: 'Opening note',
             partyType: 'petitioner',
           },
           reply: {
-            dueDate: '2023-03-15',
+            dueDate: '03/15/2023',
             note: 'Reply note',
             partyType: 'respondent',
           },
@@ -1072,7 +1072,7 @@ describe('formatMinuteSheet', () => {
       it('should handle brief details with missing optional fields', () => {
         const briefDetails: MinuteSheet['brief']['details'] = {
           opening: {
-            dueDate: '2023-02-15',
+            dueDate: '02/15/2023',
             note: '',
             partyType: '',
           },
@@ -1220,7 +1220,7 @@ describe('formatMinuteSheet', () => {
 
       it('should format jurisdiction continued with date and note', () => {
         const section: MinuteSheet['jurisdiction']['continued'] = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: 'test note',
         };
         const result = formatJurisdictionContinued(section);
@@ -1229,7 +1229,7 @@ describe('formatMinuteSheet', () => {
 
       it('should format jurisdiction continued with date only', () => {
         const section: MinuteSheet['jurisdiction']['continued'] = {
-          date: '2023-01-15',
+          date: '01/15/2023',
           note: '',
         };
         const result = formatJurisdictionContinued(section);
