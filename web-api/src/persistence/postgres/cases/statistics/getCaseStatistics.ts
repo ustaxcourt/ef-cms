@@ -1,5 +1,7 @@
+import { Penalty } from '@shared/business/entities/Penalty';
 import { RawStatistic } from '@shared/business/entities/Statistic';
 import { getDbReader } from '@web-api/database';
+import { sql } from 'kysely';
 
 export const getCaseStatistics = async ({
   docketNumber,
@@ -11,48 +13,23 @@ export const getCaseStatistics = async ({
       .selectFrom('dwCaseStatistic as cs')
       .where('docketNumber', '=', docketNumber)
       .leftJoin('dwStatisticPenalty as sp', 'sp.statisticId', 'cs.statisticId')
-      .selectAll()
-      .select('cs.statisticId')
+      .selectAll('cs')
+      .select(
+        sql`jsonb_agg(to_jsonb(sp) ORDER BY sp.penalty_number)`.as('penalties'),
+      )
+      .groupBy(['cs.docketNumber', 'cs.statisticId'])
       .execute(),
   );
 
-  // Group penalties by statisticId
-  const statisticsWithPenalties: Record<string, RawStatistic> =
-    statistics.reduce(
-      (acc, row) => {
-        const {
-          determinationDeficiencyAmount,
-          determinationTotalPenalties,
-          irsDeficiencyAmount,
-          irsTotalPenalties,
-          lastDateOfPeriod,
-          statisticId,
-          year,
-          yearOrPeriod,
-          ...penaltyData
-        } = row;
-        if (!acc[statisticId]) {
-          acc[statisticId] = {
-            determinationDeficiencyAmount:
-              determinationDeficiencyAmount || undefined,
-            determinationTotalPenalties:
-              determinationTotalPenalties || undefined,
-            irsDeficiencyAmount,
-            irsTotalPenalties,
-            lastDateOfPeriod: lastDateOfPeriod?.toISOString(),
-            penalties: [],
-            statisticId,
-            year: year?.toString(),
-            yearOrPeriod,
-          };
-        }
-        if (penaltyData.penaltyId) {
-          acc[statisticId].penalties.push(penaltyData);
-        }
-        return acc;
-      },
-      {} as Record<string, RawStatistic>,
-    );
-
-  return Object.values(statisticsWithPenalties);
+  return Object.values(
+    statistics.map(s => ({
+      ...s,
+      penalties: (s.penalties as Penalty[]) || [],
+      year: s.year?.toString(),
+      determinationTotalPenalties: s.determinationTotalPenalties || undefined,
+      determinationDeficiencyAmount:
+        s.determinationDeficiencyAmount || undefined,
+      lastDateOfPeriod: s.lastDateOfPeriod?.toISOString(),
+    })),
+  );
 };

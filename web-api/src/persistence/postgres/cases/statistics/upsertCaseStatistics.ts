@@ -31,19 +31,29 @@ export const upsertCaseStatistics = async ({
   });
 
   // Upsert related penalties
-  const penalties = flatten(statistics.map(s => s.penalties));
+  const penalties = flatten(
+    statistics.map((s, index) =>
+      // We had cases in which the statisticId of the penalty did not match its parent statistic, so we use statistic.statisticId
+      s.penalties.map(p => ({
+        ...p,
+        statsticId: s.statisticId,
+        penaltyNumber: index + 1,
+      })),
+    ),
+  );
   if (isEmpty(penalties)) {
     return;
   }
 
   await pgInsertInto({
     table: 'dwStatisticPenalty',
-    values: penalties.map(p => ({
+    values: penalties.map((p, index) => ({
       name: p.name,
       penaltyAmount: p.penaltyAmount,
       penaltyId: p.penaltyId,
       penaltyType: p.penaltyType,
       statisticId: p.statisticId,
+      penaltyNumber: index + 1,
     })),
     onConflictColumns: ['penaltyId'],
   });

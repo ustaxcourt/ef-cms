@@ -29,12 +29,13 @@ export const updateCaseStatistic = async ({
   // Upsert related penalties
   await pgInsertInto({
     table: 'dwStatisticPenalty',
-    values: statistic.penalties.map(p => ({
+    values: statistic.penalties.map((p, index) => ({
       name: p.name,
       penaltyAmount: p.penaltyAmount,
       penaltyId: p.penaltyId,
       penaltyType: p.penaltyType,
-      statisticId: p.statisticId,
+      statisticId: statistic.statisticId,
+      penaltyNumber: index + 1,
     })),
     onConflictColumns: ['penaltyId'],
   });
