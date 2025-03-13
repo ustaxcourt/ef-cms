@@ -115,6 +115,7 @@ export const updateCaseContext = async (
           });
         }),
       );
+      newCase.updateAutomaticBlocked({ hasCaseDeadline: false });
     }
 
     if (newCase.isReadyForTrial() && !oldCase.trialSessionId) {
