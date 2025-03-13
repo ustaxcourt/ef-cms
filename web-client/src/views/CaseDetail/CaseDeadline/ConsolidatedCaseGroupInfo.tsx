@@ -1,6 +1,6 @@
 import React from 'react';
 
-export function ConsolidatgedCaseGroupInfo({
+export function ConsolidatedCaseGroupInfo({
   option,
   docketNumber,
   leadDocketNumber,
