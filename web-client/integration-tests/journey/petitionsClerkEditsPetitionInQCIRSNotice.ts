@@ -4,6 +4,10 @@ import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { statisticsFormHelper as statisticsFormHelperComputed } from '../../src/presenter/computeds/statisticsFormHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';
+import {
+  MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES,
+  MAX_NUMBER_DEFICIENCY_STATISTICS,
+} from '@shared/business/entities/EntityConstants';
 
 const caseDetailEditHelper = withAppContextDecorator(
   caseDetailEditHelperComputed,
@@ -96,13 +100,13 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     expect(statistics.length).toEqual(1);
     expect(statisticsUiHelper.showAddMoreStatisticsButton).toEqual(true);
 
-    // Add 11 more statistics (reaching the maximum number of 12)
-    for (let i = 1; i < 12; i++) {
+    // Add the maximum number of statistics
+    for (let i = 1; i < MAX_NUMBER_DEFICIENCY_STATISTICS; i++) {
       await cerebralTest.runSequence('addStatisticToFormSequence');
     }
     statistics = cerebralTest.getState('form.statistics');
 
-    expect(statistics.length).toEqual(12);
+    expect(statistics.length).toEqual(MAX_NUMBER_DEFICIENCY_STATISTICS);
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
       state: cerebralTest.getState(),
@@ -114,7 +118,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     await cerebralTest.runSequence('addStatisticToFormSequence');
     statistics = cerebralTest.getState('form.statistics');
 
-    expect(statistics.length).toEqual(12);
+    expect(statistics.length).toEqual(MAX_NUMBER_DEFICIENCY_STATISTICS);
 
     // Attempt to submit without required statistics fields
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
@@ -214,8 +218,8 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
     expect(modal.showModal).toEqual('CalculatePenaltiesModal');
     expect(statisticsUiHelper.showAddAnotherPenaltyButton).toEqual(true);
 
-    // Add 9 more penalty inputs in the modal (reaching the maximum number of 10)
-    for (let i = 1; i < 10; i++) {
+    // Add the maximum number of penalties
+    for (let i = 1; i < MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES; i++) {
       await cerebralTest.runSequence('addPenaltyInputSequence');
     }
 
@@ -225,7 +229,9 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     modal = cerebralTest.getState('modal');
 
-    expect(modal.penalties.length).toEqual(10); // contains 9 additional elements in penalties array
+    expect(modal.penalties.length).toEqual(
+      MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES,
+    ); // contains 9 additional elements in penalties array
     expect(statisticsUiHelper.showAddAnotherPenaltyButton).toEqual(false); // UI should not allow additional to be created
 
     // Attempt to add penalty inputs in modal after max is reached
@@ -233,7 +239,9 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     modal = cerebralTest.getState('modal');
 
-    expect(modal.penalties.length).toEqual(10);
+    expect(modal.penalties.length).toEqual(
+      MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES,
+    );
 
     // Add some penalties and calculate the sum
     await cerebralTest.runSequence('updateModalValueSequence', {
@@ -278,14 +286,14 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
       ],
     });
 
-    // Add 11 more statistics (reaching the maximum number of 12) back to form - they were removed
+    // Add maximum number of statistics back to form - they were removed
     // before by empty statistic filtering
-    for (let i = 1; i < 12; i++) {
+    for (let i = 1; i < MAX_NUMBER_DEFICIENCY_STATISTICS; i++) {
       await cerebralTest.runSequence('addStatisticToFormSequence');
     }
     statistics = cerebralTest.getState('form.statistics');
 
-    expect(statistics.length).toEqual(12);
+    expect(statistics.length).toEqual(MAX_NUMBER_DEFICIENCY_STATISTICS);
 
     statisticsUiHelper = runCompute(statisticsFormHelper, {
       state: cerebralTest.getState(),
@@ -293,7 +301,7 @@ export const petitionsClerkEditsPetitionInQCIRSNotice = cerebralTest => {
 
     // Fill out all statistics values except the last one and submit
     // -- the last one should be removed from the form because it was not filled in
-    for (let i = 0; i < 11; i++) {
+    for (let i = 0; i < MAX_NUMBER_DEFICIENCY_STATISTICS - 1; i++) {
       await cerebralTest.runSequence('updateFormValueSequence', {
         key: `statistics.${i}.year`,
         value: 2019,
