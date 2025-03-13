@@ -17,17 +17,22 @@ import {
 import { updateCaseContextInteractor } from './updateCaseContextInteractor';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('updateCaseContextInteractor', () => {
   const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+    getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
@@ -44,9 +49,7 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should call updateCase with the updated case status and return the updated case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+    getCaseByDocketNumber.mockResolvedValue(Promise.resolve(MOCK_CASE));
 
     const result = await updateCaseContextInteractor(
       applicationContext,
@@ -83,11 +86,9 @@ describe('updateCaseContextInteractor', () => {
   it('should call updateCase and remove the case from trial if the old case status was calendared and the new case status is CAV', async () => {
     const rachaelId = 'dabbad00-18d0-43ec-bafb-654e83405416';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve(MOCK_CASE_WITH_TRIAL_SESSION),
-      );
+    getCaseByDocketNumber.mockResolvedValue(
+      Promise.resolve(MOCK_CASE_WITH_TRIAL_SESSION),
+    );
 
     applicationContext
       .getPersistenceGateway()
@@ -129,12 +130,10 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should call updateCase and deleteCaseTrialSortMappingRecords if the old case status was Ready for Trial and the new status is different', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
 
     const result = await updateCaseContextInteractor(
       applicationContext,
@@ -174,12 +173,10 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should remove automatic block information if case status is closed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE_WITHOUT_PENDING,
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE_WITHOUT_PENDING,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
 
     const result = await updateCaseContextInteractor(
       applicationContext,
@@ -212,15 +209,11 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should call updateCase but not createCaseTrialSortMappingRecords if the case status is being updated to Ready for Trial and is already assigned to a trial session', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          trialDate: '2019-03-01T21:40:46.415Z',
-          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        }),
-      );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      trialDate: '2019-03-01T21:40:46.415Z',
+      trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
 
     applicationContext.getUseCaseHelpers().updateCaseAndAssociations = jest
       .fn()
@@ -248,14 +241,12 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should only update the associated judge without changing the status if only the associated judge is passed in', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        associatedJudge: 'Judge Buch',
-        associatedJudgeId: 'buch-id',
-        status: CASE_STATUS_TYPES.submitted,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      associatedJudge: 'Judge Buch',
+      associatedJudgeId: 'buch-id',
+      status: CASE_STATUS_TYPES.submitted,
+    });
 
     const result = await updateCaseContextInteractor(
       applicationContext,
@@ -307,14 +298,10 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should not call createCaseTrialSortMappingRecords if the case is missing a trial city', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          preferredTrialCity: null,
-        }),
-      );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      preferredTrialCity: null,
+    });
 
     await updateCaseContextInteractor(
       applicationContext,

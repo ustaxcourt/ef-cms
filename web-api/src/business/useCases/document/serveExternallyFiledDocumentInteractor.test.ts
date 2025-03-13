@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
@@ -5,15 +6,18 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
+import { docketClerkUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
@@ -39,9 +43,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         { docketEntryId: mockDocketEntryId, documentTitle: 'something cool' },
       ],
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockReturnValue(mockCase);
 
     applicationContext
       .getPersistenceGateway()
@@ -91,17 +93,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should throw an error when the docket entry has already been served', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            servedAt: '2018-03-01T05:00:00.000Z',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          servedAt: '2018-03-01T05:00:00.000Z',
+        },
+      ],
+    });
 
     await expect(
       serveExternallyFiledDocumentInteractor(
@@ -118,17 +118,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should throw an error when the docket entry is already pending service', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            isPendingService: true,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          isPendingService: true,
+        },
+      ],
+    });
 
     await expect(
       serveExternallyFiledDocumentInteractor(
@@ -149,18 +147,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should set the docket entry`s draftOrderState to null', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            draftOrderState: 'abc',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          draftOrderState: 'abc',
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -185,19 +181,17 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       .getUtilities()
       .createISODateString.mockReturnValue(mockToday);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            eventCode: 'A',
-            filingDate: 'abc',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          eventCode: 'A',
+          filingDate: 'abc',
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -219,18 +213,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should retain the docket entry`s filing date when the document is a simultaneous document type', async () => {
     const mockOriginalFilingDate = '1993/02/05';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-            filingDate: mockOriginalFilingDate,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+          filingDate: mockOriginalFilingDate,
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -250,18 +242,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should mark the docket entry as NOT a draft', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            isDraft: true,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          isDraft: true,
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -280,18 +270,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should set isFileAttached to true on the docket entry', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            isFileAttached: false,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          isFileAttached: false,
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -311,18 +299,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should mark the docket entry as on the docket record', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            isOnDocketRecord: false,
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          isOnDocketRecord: false,
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -360,18 +346,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should set the docket entry`s processing status as completed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            processingStatus: 'abc',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          processingStatus: 'abc',
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -393,18 +377,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should only serve the docket entry on the subjectCase when the subject docket entry is a simultaneous document type', async () => {
     const mockMemberCaseDocketNumber = '999-15';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -426,17 +408,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should only serve the docket entry on the subjectCase when the subject docket entry has a simultaneous document title', async () => {
     const mockMemberCaseDocketNumber = '999-15';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'Simultaneous doc title',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'Simultaneous doc title',
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -456,18 +436,15 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   it('should add a coversheet to the docket entry', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce({
-        ...mockCase,
-        docketEntries: [
-          {
-            docketEntryId: mockDocketEntryId,
-            documentTitle: 'fake title',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockReturnValueOnce(mockCase).mockReturnValueOnce({
+      ...mockCase,
+      docketEntries: [
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'fake title',
+        },
+      ],
+    });
 
     await serveExternallyFiledDocumentInteractor(
       applicationContext,
@@ -488,9 +465,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should set isPendingService to truthy when filing the subject docket entry', async () => {
     const memberCaseDocketNumber = '999-16';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(mockCase)
+    getCaseByDocketNumber
+      .mockReturnValueOnce(mockCase)
       .mockReturnValueOnce(mockCase)
       .mockReturnValueOnce({
         ...mockCase,

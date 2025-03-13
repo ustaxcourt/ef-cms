@@ -8,6 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 /**
  * deleteTrialSession
@@ -61,12 +62,10 @@ export const deleteTrialSessionInteractor = async (
     });
 
     for (const order of trialSessionEntity.caseOrder) {
-      const myCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: order.docketNumber,
-        });
+      const myCase = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: order.docketNumber,
+      });
 
       const caseEntity = new Case(myCase, { authorizedUser });
 

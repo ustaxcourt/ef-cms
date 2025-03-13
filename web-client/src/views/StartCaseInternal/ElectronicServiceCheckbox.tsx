@@ -23,10 +23,10 @@ export const ElectronicServiceConsentCheckbox = connect(
         omitFormGroupClass={true}
       >
         <input
-          checked={data[contactType].hasConsentedToEService || false}
+          checked={data[contactType].hasConsentedToElectronicService || false}
           className="usa-checkbox__input"
           id={`electronic-service-consent-${contactType}`}
-          name={`${contactType}.hasConsentedToEService`}
+          name={`${contactType}.hasConsentedToElectronicService`}
           type="checkbox"
           onChange={e => {
             updateFormValueSequence({
