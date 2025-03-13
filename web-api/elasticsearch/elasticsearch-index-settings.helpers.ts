@@ -47,6 +47,7 @@ export const setupIndexes = async ({
               index: {
                 max_result_window: esSettings.index!.max_result_window,
                 number_of_replicas: esSettings.index!.number_of_replicas,
+                number_of_shards: esSettings.index!.number_of_shards,
               },
             },
             index,
