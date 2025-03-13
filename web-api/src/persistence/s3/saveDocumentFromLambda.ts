@@ -1,4 +1,5 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { WithImplicitCoercion } from 'buffer';
 
 export const saveDocumentFromLambda = async ({
   applicationContext,

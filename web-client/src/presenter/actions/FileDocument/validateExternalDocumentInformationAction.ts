@@ -15,10 +15,12 @@ export const validateExternalDocumentInformationAction = ({
   path,
 }: ActionProps) => {
   const documentMetadata = get(state.form);
+  const currentUser = get(state.user);
 
   const errors = applicationContext
     .getUseCases()
     .validateExternalDocumentInformationInteractor({
+      currentUser,
       documentMetadata,
     });
 

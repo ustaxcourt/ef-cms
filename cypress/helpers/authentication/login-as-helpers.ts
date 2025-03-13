@@ -132,6 +132,11 @@ export function loginAsIrsSuperUser() {
   cy.get('[data-testid="advanced-search-link"]').should('exist');
 }
 
+export function loginAsTrialClerk() {
+  login({ email: 'trialClerk1@example.com' });
+  cy.get('[data-testid="trial-session-link"]').should('exist');
+}
+
 // Try to use the above account specific logins as they wait for specific content.
 export function login({ email }: { email: string }) {
   cy.clearAllCookies();

@@ -3,8 +3,8 @@ export const petitionsClerkEditOtherStatisticToCase = cerebralTest => {
     await cerebralTest.runSequence('gotoEditOtherStatisticsSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
-    expect(cerebralTest.getState('caseDetail.damages')).toEqual(5678);
-    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual(1234);
+    expect(cerebralTest.getState('caseDetail.damages')).toEqual('5678');
+    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual('1234');
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'litigationCosts',
@@ -13,6 +13,6 @@ export const petitionsClerkEditOtherStatisticToCase = cerebralTest => {
 
     await cerebralTest.runSequence('submitEditOtherStatisticsSequence');
 
-    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual(99);
+    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual('99');
   });
 };

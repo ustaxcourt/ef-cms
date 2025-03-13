@@ -3,7 +3,7 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
-import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
