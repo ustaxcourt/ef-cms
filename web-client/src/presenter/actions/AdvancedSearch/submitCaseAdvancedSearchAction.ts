@@ -15,7 +15,7 @@ export const prepareFormDataForCaseSearchApi = (
   > & {
     countryType: typeof ALL_SELECTION | CountryTypes;
     procedureType: typeof ALL_SELECTION | ProcedureType;
-    caseTypes: Record<string, CaseType>;
+    caseTypes: Record<string, CaseType | CaseType[]>;
   },
 ): CaseAdvancedSearchParamsRequestType => {
   return {
@@ -29,7 +29,9 @@ export const prepareFormDataForCaseSearchApi = (
         : form.petitionerState,
     procedureType:
       form.procedureType === ALL_SELECTION ? undefined : form.procedureType,
-    caseTypes: form.caseTypes ? Object.values(form.caseTypes) : undefined,
+    caseTypes: form.caseTypes
+      ? Object.values(form.caseTypes).flat()
+      : undefined,
   };
 };
 
