@@ -101,9 +101,7 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
 
     describe('Fill out CaseMetadata section', function () {
       it('Can fill out Calendar Called date, note, and check Transcript ordered', function () {
-        cy.get(
-          '.usa-date-picker__wrapper > [data-testid="calledDate-picker"]',
-        ).type('2/21/2024');
+        cy.get('[data-testid="calledDate"]').type('2/21/2024');
         cy.get('[data-testid="calledNote"]').type('Called note');
         cy.get('[data-testid="calledTranscriptOrdered"]').check({
           force: true,
@@ -171,12 +169,9 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
 
     describe('Fill out JurisdictionFieldset section', function () {
       it('Can fill out Jurisdiction Retained date and note', function () {
-        cy.get('#jurisdictionRetainedDate-picker').type('10/06/2023');
+        cy.get('#jurisdictionRetainedDate').type('10/06/2023');
         cy.get('#jurisdictionRetainedNote').type('Jurisdiction retained note');
-        cy.get('#jurisdictionRetainedDate-picker').should(
-          'have.value',
-          '10/06/2023',
-        );
+        cy.get('#jurisdictionRetainedDate').should('have.value', '10/06/2023');
         cy.get('#jurisdictionRetainedNote').should(
           'have.value',
           'Jurisdiction retained note',
@@ -184,12 +179,9 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
       });
 
       it('Can fill out Continued date and note', function () {
-        cy.get('#jurisdictionContinuedDate-picker').type('10/07/2023');
+        cy.get('#jurisdictionContinuedDate').type('10/07/2023');
         cy.get('#continuedNote').type('Continued note');
-        cy.get('#jurisdictionContinuedDate-picker').should(
-          'have.value',
-          '10/07/2023',
-        );
+        cy.get('#jurisdictionContinuedDate').should('have.value', '10/07/2023');
         cy.get('#continuedNote').should('have.value', 'Continued note');
       });
     });

@@ -1,4 +1,3 @@
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   BRIEF_TYPE_OPTIONS,
@@ -79,33 +78,35 @@ export const TrialBriefFieldset = ({
     <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap align-items-center margin-bottom-2">
         <div className="grid-col-auto">
-          <DateSelector
-            formatDateOnChange
-            defaultValue={trialBriefFormState.dateSubmitted}
-            formGroupClassNames="margin-bottom-0"
-            id="trialBriefDateSubmitted"
-            label="Date submitted"
-            placeHolderText="MM/DD/YYYY"
-            onBlur={() => onBlurHandler()}
-            onChange={e =>
-              onChangeHandler({
-                name: 'dateSubmitted',
-                section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
-                value: e.target.value,
-              })
-            }
-          />
+          <FormGroup className="margin-bottom-0">
+            <label className="usa-label" htmlFor="trialBriefDateSubmitted">
+              Date submitted
+            </label>
+            <input
+              className="usa-input"
+              id="trialBriefDateSubmitted"
+              data-testid="trialBriefDateSubmitted"
+              name="trialBriefDateSubmitted"
+              type="text"
+              value={trialBriefFormState.dateSubmitted}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'dateSubmitted',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
         </div>
         <div className="grid-col-2">
-          <label
-            className="usa-label margin-right-2"
-            htmlFor="trialBriefTotalTrialHours"
-          >
-            Total Trial Hours
-          </label>
-          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+          <FormGroup className="margin-bottom-0">
+            <label className="usa-label" htmlFor="trialBriefTotalTrialHours">
+              Total Trial Hours
+            </label>
             <input
-              className="usa-input display-inline-block maxw-full"
+              className="usa-input"
               id="trialBriefTotalTrialHours"
               name="trialBriefTotalTrialHours"
               type="text"
@@ -122,22 +123,27 @@ export const TrialBriefFieldset = ({
           </FormGroup>
         </div>
         <div className="grid-col-auto">
-          <DateSelector
-            formatDateOnChange
-            defaultValue={trialBriefFormState.dateBenchOpinionRendered}
-            formGroupClassNames="margin-bottom-0"
-            id="dateBenchOpinionRendered"
-            label="Bench Opinion rendered"
-            placeHolderText="MM/DD/YYYY"
-            onBlur={() => onBlurHandler()}
-            onChange={e =>
-              onChangeHandler({
-                name: 'dateBenchOpinionRendered',
-                section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
-                value: e.target.value,
-              })
-            }
-          />
+          <FormGroup className="margin-bottom-0">
+            <label className="usa-label" htmlFor="dateBenchOpinionRendered">
+              Bench Opinion rendered
+            </label>
+            <input
+              className="usa-input"
+              id="dateBenchOpinionRendered"
+              data-testid="dateBenchOpinionRendered"
+              name="dateBenchOpinionRendered"
+              type="text"
+              value={trialBriefFormState.dateBenchOpinionRendered}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'dateBenchOpinionRendered',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
         </div>
         <div className="grid-col-2">
           <div style={{ marginBottom: '28px' }}></div>
@@ -168,13 +174,13 @@ export const TrialBriefFieldset = ({
             </div>
           </FormGroup>
         </div>
-        <div className="grid-col-3">
-          <label className="usa-label margin-right-2" htmlFor="trialBriefNote">
-            Note
-          </label>
-          <FormGroup className="margin-bottom-0 display-flex align-items-center">
+        <div className="grid-col-fill">
+          <FormGroup className="margin-bottom-0">
+            <label className="usa-label" htmlFor="trialBriefNote">
+              Note
+            </label>
             <input
-              className="usa-input display-inline-block"
+              className="usa-input"
               id="trialBriefNote"
               name="trialBriefNote"
               type="text"
@@ -193,15 +199,12 @@ export const TrialBriefFieldset = ({
       </div>
       <div className="grid-row grid-gap">
         <div className="grid-col-2">
-          <label
-            className="margin-right-2 display-inline-block"
-            htmlFor="briefType"
-          >
-            Brief type
-          </label>
-          <FormGroup className="margin-bottom-0 display-flex align-items-center">
+          <FormGroup>
+            <label className="usa-label" htmlFor="briefType">
+              Brief type
+            </label>
             <select
-              className="usa-select display-inline-block"
+              className="usa-select"
               id="briefType"
               name="briefType"
               value={trialBriefFormState.briefType}
