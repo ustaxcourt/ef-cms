@@ -33,7 +33,7 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { AuthUser, UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from './User';
 import { WorkItem } from './WorkItem';
 import {
@@ -695,7 +695,7 @@ export class DocketEntry extends JoiValidationEntity {
       visibilityChangeDate,
     }: {
       rawCase: RawCase | RawPublicCase;
-      user: { userId: string; role: Role };
+      user: AuthUser;
       isTerminalUser: boolean;
       visibilityChangeDate: string;
     },
