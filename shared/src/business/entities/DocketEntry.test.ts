@@ -11,7 +11,10 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { A_VALID_DOCKET_ENTRY, MOCK_PETITIONERS } from '@shared/business/entities/DocketEntryTestFixtures';
+import {
+  A_VALID_DOCKET_ENTRY,
+  MOCK_PETITIONERS,
+} from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('DocketEntry entity', () => {
   it('defaults stampData to an empty object when no stamp data is passed in', () => {
@@ -618,6 +621,35 @@ describe('DocketEntry entity', () => {
       expect(docketEntryEntity.strickenByUserId).toBeFalsy();
       expect(docketEntryEntity.userId).toBeFalsy();
       expect(docketEntryEntity.workItem).toBeFalsy();
+    });
+  });
+
+  describe('isNotice', () => {
+    it('should return true when the eventCode is a notice type', () => {
+      const result = DocketEntry.isNotice('NOT');
+      expect(result).toBe(true);
+    });
+
+    it('should return false when the eventCode is not a notice type', () => {
+      const result = DocketEntry.isNotice('O');
+      expect(result).toBe(false);
+    });
+
+    it('should return false when the eventCode is empty', () => {
+      const result = DocketEntry.isNotice('');
+      expect(result).toBe(false);
+    });
+  });
+
+  describe('isMinuteSheet', () => {
+    it('should return true when the eventCode is a minute sheet type', () => {
+      const result = DocketEntry.isMinuteSheet('TRL');
+      expect(result).toBe(true);
+    });
+
+    it('should return false when the eventCode is not a minute sheet type', () => {
+      const result = DocketEntry.isMinuteSheet('O');
+      expect(result).toBe(false);
     });
   });
 });

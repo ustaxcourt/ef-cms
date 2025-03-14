@@ -8,12 +8,12 @@ import { getCaseInventoryReport } from '@web-api/persistence/postgres/cases/repo
 export const getCaseInventoryReportInteractor = async (
   {
     associatedJudge,
-    from,
+    selectedPage,
     pageSize,
     status,
   }: {
     associatedJudge?: string;
-    from?: string;
+    selectedPage?: string;
     pageSize?: number;
     status?: string;
   },
@@ -29,7 +29,7 @@ export const getCaseInventoryReportInteractor = async (
 
   return await getCaseInventoryReport({
     associatedJudge,
-    page: from ? Number(from) : 0,
+    page: selectedPage ? Number(selectedPage) : 0,
     pageSize,
     status,
   });

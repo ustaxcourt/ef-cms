@@ -193,6 +193,4 @@ const itemizeTotalPenalties = function (
   }
 };
 
-declare global {
-  type RawStatistic = ExcludeMethods<Statistic>;
-}
+export type RawStatistic = ExcludeMethods<Statistic>;
