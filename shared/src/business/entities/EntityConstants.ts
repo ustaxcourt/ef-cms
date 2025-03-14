@@ -1800,6 +1800,6 @@ export const DOCUMENT_UPLOAD_MODES = {
 };
 
 export const SCANNER_DOCUMENT_TYPES = {
-  petition: 'petitionFile',
+  petitionFile: 'petitionFile',
   primaryDocumentFile: 'primaryDocumentFile',
 };

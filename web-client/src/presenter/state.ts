@@ -9,6 +9,7 @@ import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambe
 import {
   DOCUMENT_UPLOAD_MODES,
   PRACTICE_TYPE,
+  SCAN_MODES,
   SCANNER_DOCUMENT_TYPES,
   SERVICE_INDICATOR_TYPES,
   STATE_KEYS,
@@ -832,7 +833,8 @@ export const baseState = {
       {
         index: number;
         pages: Uint8Array<ArrayBuffer>[];
-        scanMode: keyof typeof DOCUMENT_UPLOAD_MODES;
+        scanMode: (typeof SCAN_MODES)[keyof typeof SCAN_MODES];
+        scanModeLabel: string;
       }[]
     >,
     currentPageIndex: 0, // batches from scanning
@@ -841,7 +843,8 @@ export const baseState = {
     configScriptLoaded: false,
     isScanning: false,
     scanMode: undefined,
-    scannerSourceName: undefined,
+    scannerSourceIndex: undefined as unknown as number,
+    scannerSourceName: undefined as unknown as string,
     selectedBatchIndex: 0,
     sources: [] as string[],
   },

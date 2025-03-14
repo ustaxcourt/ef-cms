@@ -23,7 +23,7 @@ const gotoStartCaseInternal = [
   setStartInternalCaseDefaultTabAction,
   setDefaultStartCaseInternalFormAction,
   setDocumentUploadModeAction(DOCUMENT_UPLOAD_MODES.scan),
-  setDocumentSelectedForScanAction(SCANNER_DOCUMENT_TYPES.petition),
+  setDocumentSelectedForScanAction(SCANNER_DOCUMENT_TYPES.petitionFile),
   setupCurrentPageAction('StartCaseInternal'),
 ];
 

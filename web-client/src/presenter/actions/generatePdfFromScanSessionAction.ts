@@ -25,7 +25,7 @@ export const generatePdfFromScanSessionAction = async ({
 
   const batches = get(state.scanner.batches[documentSelectedForScan]);
 
-  const imgData = [];
+  const imgData: Uint8Array<ArrayBuffer>[] = [];
   batches.forEach(batch => batch.pages.forEach(page => imgData.push(page)));
 
   // this blocks the browser

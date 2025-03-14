@@ -31,7 +31,7 @@ export const scanBatchPreviewerHelper = (
     return btoa(binstr);
   };
 
-  if (batches.length && currentPageIndex !== null) {
+  if (batches.length && currentPageIndex !== null && selectedBatch) {
     const page = selectedBatch.pages[currentPageIndex];
     const b64encoded = bufferToBase64(page);
     selectPageImage = b64encoded;
@@ -62,7 +62,7 @@ export const scanBatchPreviewerHelper = (
     selectedPageImage: selectPageImage,
     showScannerSourceModal:
       get(state.modal.showModal) === 'SelectScannerSourceModal',
-    totalPages: selectedBatch.pages.length,
+    totalPages: selectedBatch?.pages.length || 0,
     uploadMode: documentUploadMode,
   };
 };

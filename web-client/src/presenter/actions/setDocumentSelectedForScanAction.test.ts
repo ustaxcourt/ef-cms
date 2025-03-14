@@ -5,13 +5,13 @@ import { SCANNER_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstant
 describe('setDocumentSelectedForScanAction', () => {
   it('sets state.currentViewMetadata.documentSelectedForScan to the value passed into the action', async () => {
     const { state } = await runAction(
-      setDocumentSelectedForScanAction(SCANNER_DOCUMENT_TYPES.petition),
+      setDocumentSelectedForScanAction(SCANNER_DOCUMENT_TYPES.petitionFile),
       {
         state: {},
       },
     );
     expect(state.currentViewMetadata.documentSelectedForScan).toEqual(
-      SCANNER_DOCUMENT_TYPES.petition,
+      SCANNER_DOCUMENT_TYPES.petitionFile,
     );
   });
 });
