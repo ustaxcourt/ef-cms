@@ -1,10 +1,10 @@
 import { ROLE_PERMISSIONS } from './authorizationClientService';
-import { docketClerk1User } from '../test/mockUsers';
 import { getUserPermissions } from './getUserPermissions';
+import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('getUserPermissions', () => {
   it('returns an object containing ROLE_PERMISSIONS and a boolean value based on the given user role', () => {
-    const permissions = getUserPermissions(docketClerk1User);
+    const permissions = getUserPermissions(mockDocketClerkUser);
 
     const permissionsKeys = Object.keys(permissions!);
     expect(permissionsKeys.length).toEqual(

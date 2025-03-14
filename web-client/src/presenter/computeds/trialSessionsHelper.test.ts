@@ -13,7 +13,6 @@ import {
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { cloneDeep } from 'lodash';
 import {
-  docketClerk1User,
   judgeColvin,
   judgeUser,
   legacyJudgeUser,
@@ -27,6 +26,7 @@ import {
 } from './trialSessionsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { mockDocketClerkUser, mockJudgeUser } from '@shared/test/mockAuthUsers';
 
 const trialSessionsHelper = withAppContextDecorator(
   trialSessionsHelperComputed,
@@ -74,7 +74,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [judgeUser, judgeColvin],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -87,7 +87,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [judgeUser, judgeColvin],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -103,7 +103,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [judgeUser, judgeColvin],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -117,7 +117,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [judgeUser, judgeColvin],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -133,7 +133,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [judgeUser, judgeColvin],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -150,7 +150,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [judgeUser, judgeColvin],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -167,7 +167,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           legacyAndCurrentJudges: [judgeUser, legacyJudgeUser],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -196,7 +196,7 @@ describe('trialSessionsHelper', () => {
         state: {
           judges: [judgeUser],
           legacyAndCurrentJudges: [legacyJudgeUser],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -232,7 +232,7 @@ describe('trialSessionsHelper', () => {
         state: {
           judges: [judgeUser],
           legacyAndCurrentJudges: [legacyJudgeUser],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -256,7 +256,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges,
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -268,7 +268,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [judgeUser],
-          permissions: getUserPermissions(judgeUser),
+          permissions: getUserPermissions(mockJudgeUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -282,7 +282,7 @@ describe('trialSessionsHelper', () => {
       const result = runCompute(trialSessionsHelper, {
         state: {
           judges: [judgeUser],
-          permissions: getUserPermissions(docketClerk1User),
+          permissions: getUserPermissions(mockDocketClerkUser),
           trialSessionsPage: trialSessionsPageState,
         },
       });
@@ -310,7 +310,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -334,7 +334,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser, judgeColvin],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -358,7 +358,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -377,7 +377,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser, judgeColvin],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -396,7 +396,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -418,7 +418,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -440,7 +440,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -465,7 +465,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -491,7 +491,7 @@ describe('trialSessionsHelper', () => {
           state: {
             judges: [judgeUser],
             legacyAndCurrentJudges: [legacyJudgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -517,7 +517,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -541,7 +541,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -565,7 +565,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -587,7 +587,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -609,7 +609,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -633,7 +633,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -654,7 +654,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -674,7 +674,7 @@ describe('trialSessionsHelper', () => {
           state: {
             judgeUser: {},
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -697,7 +697,7 @@ describe('trialSessionsHelper', () => {
               userId: '1',
             },
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -727,7 +727,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -750,7 +750,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -776,7 +776,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
@@ -799,7 +799,7 @@ describe('trialSessionsHelper', () => {
         const result = runCompute(trialSessionsHelper, {
           state: {
             judges: [judgeUser],
-            permissions: getUserPermissions(docketClerk1User),
+            permissions: getUserPermissions(mockDocketClerkUser),
             trialSessionsPage: trialSessionsPageState,
           },
         });
