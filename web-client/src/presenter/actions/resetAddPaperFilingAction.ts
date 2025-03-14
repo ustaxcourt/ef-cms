@@ -1,3 +1,7 @@
+import {
+  DOCUMENT_UPLOAD_MODES,
+  SCANNER_DOCUMENT_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -13,9 +17,12 @@ export const resetAddPaperFilingAction = ({ store }: ActionProps) => {
   store.set(state.form.filers, []);
   store.set(state.form.practitioner, []);
   store.set(state.wizardStep, 'PrimaryDocumentForm');
-  store.set(state.currentViewMetadata.documentUploadMode, 'scan');
+  store.set(
+    state.currentViewMetadata.documentUploadMode,
+    DOCUMENT_UPLOAD_MODES.scan,
+  );
   store.set(
     state.currentViewMetadata.documentSelectedForScan,
-    'primaryDocumentFile',
+    SCANNER_DOCUMENT_TYPES.primaryDocumentFile,
   );
 };

@@ -1793,3 +1793,13 @@ export const TROUBLESHOOTING_INFO = {
 
 export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
 export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
+
+export const DOCUMENT_UPLOAD_MODES = {
+  scan: 'scan',
+  preview: 'preview',
+};
+
+export const SCANNER_DOCUMENT_TYPES = {
+  petition: 'petitionFile',
+  primaryDocumentFile: 'primaryDocumentFile',
+};

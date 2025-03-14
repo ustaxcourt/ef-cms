@@ -20,7 +20,7 @@ export const scanBatchPreviewerHelper = (
     : { pages: [] };
   const currentPageIndex = get(state.scanner.currentPageIndex);
   const documentUploadMode = get(state.currentViewMetadata.documentUploadMode);
-  let selectPageImage = null;
+  let selectPageImage: string | null = null;
 
   const bufferToBase64 = buf => {
     const binstr = Array.prototype.map

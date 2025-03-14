@@ -1,5 +1,6 @@
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setupEditPaperFilingAction } from './setupEditPaperFilingAction';
+import { SCANNER_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 
 describe('setupEditPaperFilingAction', () => {
   it('should set state.isEditingDocketEntry to true', async () => {
@@ -32,7 +33,7 @@ describe('setupEditPaperFilingAction', () => {
     });
 
     expect(state.currentViewMetadata.documentSelectedForScan).toEqual(
-      'primaryDocumentFile',
+      SCANNER_DOCUMENT_TYPES.primaryDocumentFile,
     );
   });
 });

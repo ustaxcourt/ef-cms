@@ -19,6 +19,10 @@ export const generatePdfFromScanSessionAction = async ({
     state.currentViewMetadata.documentSelectedForScan,
   );
 
+  if (!documentSelectedForScan) {
+    return { file: undefined };
+  }
+
   const batches = get(state.scanner.batches[documentSelectedForScan]);
 
   const imgData = [];

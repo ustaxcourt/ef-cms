@@ -17,6 +17,10 @@ export const validateFileSizeAction = ({
   const { MAX_FILE_SIZE_MB } = applicationContext.getConstants();
   const { file } = props;
 
+  if (!file) {
+    return path.invalid();
+  }
+
   const fileSizeValidation = validateFileSize({
     file,
     megabyteLimit: MAX_FILE_SIZE_MB,

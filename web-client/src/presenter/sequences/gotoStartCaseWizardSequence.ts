@@ -12,14 +12,18 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { takePathForRoles } from './takePathForRoles';
+import {
+  DOCUMENT_UPLOAD_MODES,
+  SCANNER_DOCUMENT_TYPES,
+} from '@shared/business/entities/EntityConstants';
 
 const { USER_ROLES } = getConstants();
 
 const gotoStartCaseInternal = [
   setStartInternalCaseDefaultTabAction,
   setDefaultStartCaseInternalFormAction,
-  setDocumentUploadModeAction('scan'),
-  setDocumentSelectedForScanAction('petitionFile'),
+  setDocumentUploadModeAction(DOCUMENT_UPLOAD_MODES.scan),
+  setDocumentSelectedForScanAction(SCANNER_DOCUMENT_TYPES.petition),
   setupCurrentPageAction('StartCaseInternal'),
 ];
 

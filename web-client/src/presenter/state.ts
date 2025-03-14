@@ -7,7 +7,9 @@ import { IrsNoticeForm } from '@shared/business/entities/startCase/IrsNoticeForm
 import { JudgeActivityReportState } from '@web-client/ustc-ui/Utils/types';
 import { JudgeChambersInfo } from '@web-client/presenter/actions/getJudgesChambersAction';
 import {
+  DOCUMENT_UPLOAD_MODES,
   PRACTICE_TYPE,
+  SCANNER_DOCUMENT_TYPES,
   SERVICE_INDICATOR_TYPES,
   STATE_KEYS,
 } from '@shared/business/entities/EntityConstants';
@@ -670,8 +672,9 @@ export const baseState = {
     documentDetail: {
       tab: '',
     },
-    documentSelectedForScan: null,
-    documentUploadMode: 'scan',
+    documentSelectedForScan: null as keyof typeof SCANNER_DOCUMENT_TYPES | null,
+    documentUploadMode:
+      DOCUMENT_UPLOAD_MODES.scan as keyof typeof DOCUMENT_UPLOAD_MODES,
     messageId: '',
     startCaseInternal: {
       tab: '',
@@ -709,6 +712,7 @@ export const baseState = {
   individualInboxCount: 0,
   irsNoticeUploadFormInfo: [] as CreateCaseIrsForm[],
   irsPractitioners: [] as RawUser[],
+  isEditingDocketEntry: false,
   isTerminalUser: false,
   judgeActivityReport: {
     judgeActivityReportData: {},
@@ -823,12 +827,23 @@ export const baseState = {
     batchIndexToDelete: null,
     batchIndexToRescan: null, // batch index for re-scanning
     batchToDeletePageCount: null,
-    batches: [],
+    batches: {} as Record<
+      keyof typeof SCANNER_DOCUMENT_TYPES,
+      {
+        index: number;
+        pages: Uint8Array<ArrayBuffer>[];
+        scanMode: keyof typeof DOCUMENT_UPLOAD_MODES;
+      }[]
+    >,
     currentPageIndex: 0, // batches from scanning
+    dynamScriptClass: '',
+    initiateScriptLoaded: false,
+    configScriptLoaded: false,
     isScanning: false,
     scanMode: undefined,
     scannerSourceName: undefined,
     selectedBatchIndex: 0,
+    sources: [] as string[],
   },
   screenMetadata: {} as any,
   searchResults: {} as any,
@@ -881,6 +896,7 @@ export const baseState = {
   validationErrors: {} as Record<string, any>,
   viewerDocumentToDisplay: undefined as unknown as ViewerDocument,
   viewerDraftDocumentToDisplay: undefined as unknown as ViewerDocument,
+  wizardStep: undefined as string | undefined,
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},

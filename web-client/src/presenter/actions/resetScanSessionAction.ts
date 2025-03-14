@@ -13,7 +13,9 @@ export const resetScanSessionAction = ({ get, store }: ActionProps) => {
     state.currentViewMetadata.documentSelectedForScan,
   );
   const scans = get(state.scanner.batches);
-  delete scans[documentSelectedForScan];
+  if (documentSelectedForScan) {
+    delete scans[documentSelectedForScan];
+  }
   store.set(state.scanner.batches, scans);
   store.set(state.scanner.isScanning, false);
 };

@@ -1,84 +1,139 @@
-let DWObject = null;
-let dynamsoftLoader = null;
+// Dynamsoft does not offer types, as far as I can tell. This type is therefore based on Dynamsoft's documentation as of 2025 March.
+type WebTwainObjectType = {
+  readonly SourceCount: number;
+  readonly HowManyImagesInBuffer: number;
+  readonly ErrorCode: number;
+  readonly ErrorString: string;
+  readonly DataSourceStatus: number;
+  readonly IfFeederLoaded: boolean;
+  OpenSource: () => boolean;
+  AcquireImage: (
+    successCallBack: () => void,
+    failureCallBack: (errorCode: number, errorString: string) => void,
+  ) => void;
+  GetSourceNameItems: (index: number) => string;
+  RemoveAllImages: () => boolean;
+  CloseSource: () => boolean;
+  SelectSourceByIndex: (index: number) => boolean;
+  RegisterEvent: (name: string, callback: (...arg: any[]) => void) => boolean;
+  UnregisterEvent: (
+    name: string,
+    callback?: (...arg: any[]) => void,
+  ) => boolean;
+  ConvertToBlob(
+    indices: number[],
+    type: number, // a Dynamsoft-specific enum
+    successCallback: (result: Blob, indices: number[], type: number) => void,
+    failureCallBack: (errorCode: number, errorString: string) => void,
+  ): void;
+  IfDisableSourceAfterAcquire: boolean;
+  IfShowUI: boolean;
+  IfShowIndicator: boolean;
+  IfShowProgressBar: boolean;
+  Resolution: number;
+  IfDuplexEnabled: boolean;
+  IfFeederEnabled: boolean;
+  PixelType: number; // a Dynamsoft-specific enum
+  PageSize: number; // a Dynamsoft-specific enum
+};
+
+type DynamsoftWindow = Window & typeof globalThis & { Dynamsoft: any };
+let DWObject: WebTwainObjectType | null = null; // Dynamsoft does not offer good types
+let dynamsoftLoader: Promise<unknown> | null = null;
 
 export const getScannerInterface = () => {
   const completeScanSession = () => {
-    DWObject.RemoveAllImages();
-    DWObject.CloseSource();
+    DWObject?.RemoveAllImages();
+    DWObject?.CloseSource();
     return Promise.resolve(true);
   };
 
-  const getScanCount = () => DWObject.HowManyImagesInBuffer;
+  const getScanCount = () => DWObject?.HowManyImagesInBuffer;
 
   const getSources = () => {
+    if (!DWObject) {
+      return [];
+    }
     const count = DWObject.SourceCount;
-    const sources = [];
+    const sources: string[] = [];
     for (let i = 0; i < count; i++) {
       sources.push(DWObject.GetSourceNameItems(i));
     }
     return sources;
   };
 
-  const getScanError = () => {
+  const getScanError = (): { code: number; message: string } | undefined => {
+    if (!DWObject) {
+      return undefined;
+    }
     return {
       code: DWObject.ErrorCode,
       message: DWObject.ErrorString,
     };
   };
 
-  const loadDynamsoft = ({ applicationContext }) => {
+  const getInjectableDynamsoftScript = (
+    dynamScriptClass: string,
+  ): HTMLScriptElement => {
+    const dynamsoftScript = window.document.createElement('script');
+    dynamsoftScript.type = 'text/javascript';
+    dynamsoftScript.async = true;
+    dynamsoftScript.setAttribute('class', dynamScriptClass);
+    return dynamsoftScript;
+  };
+
+  const loadDynamsoft = async ({ applicationContext }) => {
     if (!dynamsoftLoader) {
-      dynamsoftLoader = new Promise(resolve => {
+      dynamsoftLoader = (async () => {
         const dynamScriptClass = 'dynam-scanner-injection';
 
-        // Create a script element to inject into the header
-        const initiateScript = window.document.createElement('script');
-        initiateScript.type = 'text/javascript';
-        initiateScript.async = true;
-        initiateScript.setAttribute('class', dynamScriptClass);
-
-        // Reduce duplicating the above code
-        const configScript = initiateScript.cloneNode();
-
-        let leftToLoad = 2;
-
-        const handleScriptOnLoad = () => {
-          leftToLoad--;
-          if (leftToLoad <= 0) {
-            const interval = setInterval(() => {
-              const { Dynamsoft } = window;
-              Dynamsoft.DWT.ScanDirectly = true;
-              DWObject = Dynamsoft.DWT.GetWebTwain('dwtcontrolContainer');
-              if (!DWObject) return;
-
-              clearInterval(interval);
-              resolve(dynamScriptClass);
-            }, 100);
-          }
-        };
-
-        // Set some state when the scripts are loaded
-        initiateScript.onload = handleScriptOnLoad;
-        configScript.onload = handleScriptOnLoad;
-
-        // Handle script load errors?
-
-        // Get the scanner resources URI based on applicationContext
+        // Create script elements
+        const initiateScript = getInjectableDynamsoftScript(dynamScriptClass);
+        const configScript = getInjectableDynamsoftScript(dynamScriptClass);
         const scannerResourceUri = applicationContext.getScannerResourceUri();
-
         initiateScript.src = `${scannerResourceUri}/dynamsoft.webtwain.initiate.js`;
         configScript.src = `${scannerResourceUri}/dynamsoft.webtwain.config.js`;
 
-        // Inject scripts into <head />
-        window.document
-          .getElementsByTagName('head')[0]
-          .appendChild(initiateScript);
-        window.document
-          .getElementsByTagName('head')[0]
-          .appendChild(configScript);
-      });
-    }
+        // Load scripts
+        const loadScript = script =>
+          new Promise((resolve, reject) => {
+            script.onload = resolve;
+            script.onerror = () =>
+              reject(new Error(`Failed to load script: ${script.src}`));
+            window.document.head.appendChild(script);
+          });
+        await Promise.all([
+          loadScript(initiateScript),
+          loadScript(configScript),
+        ]);
 
+        // Poll for the DWObject readiness with a timeout
+        await new Promise<void>((resolve, reject) => {
+          const maxAttempts = 100; // 10 seconds
+          let attempts = 0;
+          const interval = setInterval(() => {
+            const { Dynamsoft } = window as DynamsoftWindow;
+            if (Dynamsoft) {
+              Dynamsoft.DWT.ScanDirectly = true;
+              DWObject = Dynamsoft.DWT.GetWebTwain('dwtcontrolContainer');
+              if (DWObject) {
+                clearInterval(interval);
+                return resolve();
+              }
+            }
+            attempts++;
+            if (attempts >= maxAttempts) {
+              clearInterval(interval);
+              return reject(
+                new Error('Timed out waiting for Dynamsoft to load'),
+              );
+            }
+          }, 100);
+        });
+
+        return dynamScriptClass;
+      })();
+    }
     return dynamsoftLoader;
   };
 
@@ -87,25 +142,27 @@ export const getScannerInterface = () => {
     // 1	The Data Source is opened
     // 2	The Data Source is enabled
     // 3	The Data Source is acquiring images
-    return DWObject.DataSourceStatus;
+    return DWObject?.DataSourceStatus;
   };
 
-  const setSourceByIndex = index => {
-    return DWObject.SelectSourceByIndex(index) > -1;
+  const setSourceByIndex = (index): boolean => {
+    return DWObject?.SelectSourceByIndex(index) || false;
   };
 
-  const getSourceNameByIndex = index => {
+  const getSourceNameByIndex = (index: number): string | undefined => {
     const sources = getSources();
+    if (!sources.length) {
+      return undefined;
+    }
     return sources[index];
   };
 
-  const setSourceByName = sourceName => {
+  const setSourceByName = (sourceName: string): boolean => {
     const sources = getSources();
     const index = sources.indexOf(sourceName);
     if (index > -1) {
       return setSourceByIndex(index);
     } else {
-      // Handle case where a named sources isn't found
       return false;
     }
   };
@@ -115,26 +172,40 @@ export const getScannerInterface = () => {
     ret.DWObject = DWObject;
   };
 
-  const startScanSession = ({ applicationContext, scanMode }) => {
+  const startScanSession = ({
+    applicationContext,
+    scanMode,
+  }): Promise<{
+    error: Error | null;
+    scannedBuffer: Uint8Array<ArrayBuffer>[] | null;
+  }> => {
     const { SCAN_MODES } = applicationContext.getConstants();
     const duplexEnabled = scanMode === SCAN_MODES.DUPLEX;
     const feederEnabled = scanMode !== SCAN_MODES.FLATBED;
 
     return new Promise((resolve, reject) => {
       const onScanFinished = () => {
-        const count = DWObject.HowManyImagesInBuffer;
+        if (!DWObject) {
+          reject(new Error('Dynamsoft is not loaded'));
+          return;
+        }
+        const count = DWObject.HowManyImagesInBuffer || 0;
         if (count === 0) {
           reject(new Error('no images in buffer'));
           return;
         }
-        const promises = [];
-        const response = { error: null, scannedBuffer: null };
+        const promises: Promise<Blob>[] = [];
+        const response: {
+          error: Error | null;
+          scannedBuffer: Uint8Array<ArrayBuffer>[] | null;
+        } = { error: null, scannedBuffer: null };
         for (let index = 0; index < count; index++) {
           promises.push(
             new Promise((resolveImage, rejectImage) => {
-              DWObject.ConvertToBlob(
+              DWObject?.ConvertToBlob(
                 [index],
-                window.Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
+                (window as DynamsoftWindow).Dynamsoft.DWT.EnumDWT_ImageType
+                  .IT_JPG,
                 resolveImage,
                 rejectImage,
               );
@@ -146,7 +217,7 @@ export const getScannerInterface = () => {
           .then(async blobs => {
             const COVER_SHEET_WIDTH_IN_PX = 866;
 
-            const scaledDownBlobs = await Promise.all(
+            const scaledDownBlobs: Blob[] = await Promise.all(
               blobs.map(blob =>
                 applicationContext
                   .getReduceImageBlob()
@@ -154,12 +225,12 @@ export const getScannerInterface = () => {
               ),
             );
 
-            const blobBuffers = await Promise.all(
+            const blobBuffers: Uint8Array<ArrayBuffer>[] = await Promise.all(
               scaledDownBlobs.map(applicationContext.convertBlobToUInt8Array),
             );
 
             response.scannedBuffer = blobBuffers;
-            DWObject.RemoveAllImages();
+            DWObject?.RemoveAllImages();
             return resolve(response);
           })
           .catch(err => {
@@ -168,35 +239,47 @@ export const getScannerInterface = () => {
             reject(response);
           })
           .finally(() => {
-            DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+            DWObject?.UnregisterEvent('OnPostAllTransfers', onScanFinished);
           });
       };
 
       // called when ALL pages are finished
-      DWObject.RegisterEvent('OnPostAllTransfers', onScanFinished);
+      const configureDWObject = () => {
+        if (!DWObject) {
+          return;
+        }
+        DWObject.RegisterEvent('OnPostAllTransfers', onScanFinished);
 
-      DWObject.OpenSource();
-      DWObject.IfDisableSourceAfterAcquire = true;
-      DWObject.IfShowUI = false;
-      DWObject.IfShowIndicator = false;
-      DWObject.IfShowProgressBar = false;
-      DWObject.Resolution = 300;
-      DWObject.IfDuplexEnabled = duplexEnabled;
-      DWObject.IfFeederEnabled = feederEnabled;
-      DWObject.PixelType = window.Dynamsoft.DWT.EnumDWT_PixelType.TWPT_RGB;
-      DWObject.PageSize =
-        window.Dynamsoft.DWT.EnumDWT_CapSupportedSizes.TWSS_A4;
+        DWObject.OpenSource();
+        DWObject.IfDisableSourceAfterAcquire = true;
+        DWObject.IfShowUI = false;
+        DWObject.IfShowIndicator = false;
+        DWObject.IfShowProgressBar = false;
+        DWObject.Resolution = 300;
+        DWObject.IfDuplexEnabled = duplexEnabled;
+        DWObject.IfFeederEnabled = feederEnabled;
+        DWObject.PixelType = (
+          window as DynamsoftWindow
+        ).Dynamsoft.DWT.EnumDWT_PixelType.TWPT_RGB;
+        DWObject.PageSize = (
+          window as DynamsoftWindow
+        ).Dynamsoft.DWT.EnumDWT_CapSupportedSizes.TWSS_A4;
+      };
+      configureDWObject();
 
-      if (feederEnabled && !DWObject.IfFeederLoaded) {
-        DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+      if (feederEnabled && !DWObject?.IfFeederLoaded) {
+        DWObject?.UnregisterEvent('OnPostAllTransfers', onScanFinished);
         return reject(new Error('no images in buffer'));
       }
 
-      DWObject.AcquireImage(null, null, e => {
-        DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
-        // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
-        return reject(e);
-      });
+      DWObject?.AcquireImage(
+        () => {},
+        e => {
+          DWObject?.UnregisterEvent('OnPostAllTransfers', onScanFinished);
+          // eslint-disable-next-line @typescript-eslint/prefer-promise-reject-errors
+          return reject(e);
+        },
+      );
     });
   };
 
