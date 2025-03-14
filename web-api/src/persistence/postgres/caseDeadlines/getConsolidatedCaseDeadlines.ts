@@ -10,12 +10,12 @@ export const getConsolidatedCaseDeadlines = async (
     const RECORDS = await reader
       .selectFrom('dwCaseDeadline as cd')
       .innerJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
-      .selectAll()
       .where('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId)
       .where('c.leadDocketNumber', '=', leadDocketNumber)
+      .selectAll(['cd'])
       .execute();
 
     //TODO: UPDATE TYPES TO HANDLE NULL VALUES INSTEAD OF CALLING NEW DB ENTITY
-    return RECORDS.map(r => caseDeadlineEntity(r).toRawObject());
+    return RECORDS.map(r => caseDeadlineEntity(r).validate().toRawObject());
   });
 };
