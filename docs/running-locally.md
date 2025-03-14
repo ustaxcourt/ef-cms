@@ -67,11 +67,15 @@ Since we use circle ci in our CI/CD process, we using a husky pre-commit to vali
 brew install circleci
 ```
 
-#### 💻 MacOS Monterey+
+### Podman/Docker
 
-There is a conflict on `port 5000` with the public API and AirPlay Receiver.
+We use Podman/Docker for running the postgres database locally so you will need one or the other. The team has typically preferred Podman so the instructions are as follows.
 
-Disable AirPlay Receiver: System Preferences --> General --> AirDrop & Handoff--> Uncheck "AirPlay Receiver" in the list.
+- Download [podman for desktop](https://podman.io/)
+- Open Podman for Desktop and go through the installation process to start a podman machine
+- In podman desktop enable the [podman compose extension](https://podman-desktop.io/docs/compose/setting-up-compose)
+- In podman desktop enable Docker compatibility by going to Settings -> Docker Compatibility
+
 
 ## Getting Running
 
