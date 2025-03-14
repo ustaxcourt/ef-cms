@@ -52,13 +52,15 @@ When updating Node.js, keep in mind:
 
 To update Node.js:
 
-1. Update the version in `.nvmrc`. DAWSON's CircleCI and GitHub Actions YAML files refer to this version.
+1. Update the version in `.nvmrc`. DAWSON's GitHub Actions YAML files refer to this version.
 2. Manually update the `"engines"` property in:
   - `./package.json`
   - `./web-api/runtimes/puppeteer/package.json`
 3. Manually update the images in:
   - `./Dockerfile`
   - `./web-api/runtimes/puppeteer/Dockerfile`
+3. Manually update the Node.js version in:
+  - `./.circleci/config.yml`
 
 #### 2.2 Update `Dockerfile` as needed
 
