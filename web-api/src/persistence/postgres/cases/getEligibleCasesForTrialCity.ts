@@ -37,7 +37,6 @@ export const getEligibleCasesForTrialCity = async ({
             eb('automaticBlocked', 'is', null),
           ]),
           eb.or([eb('blocked', '=', false), eb('blocked', 'is', null)]),
-          // eb.or([
           eb.not(
             eb.exists(sq =>
               sq
@@ -53,7 +52,6 @@ export const getEligibleCasesForTrialCity = async ({
                 ),
             ),
           ),
-          // ]),
         ]),
       )
       .execute(),

@@ -70,7 +70,6 @@ export interface CaseTable {
     string,
     string
   >;
-  docketNumberWithSuffix?: string;
   filingType?: string;
   hasPendingItems?: boolean;
   hasVerifiedIrsNotice?: boolean;

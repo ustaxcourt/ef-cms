@@ -6,11 +6,10 @@ export const getExportTypeAction = ({ get, path }: ActionProps) => {
   const exportFileString =
     exportType === 'eligibleCases' ? 'Eligible Cases' : 'Blocked Cases Report';
 
-  // TODO: edge cases
   const [city, usState] = get(state.trialLocationPage.location).split(',');
   const date = formatNow(FORMATS.YEAR);
 
-  const fileName = `${exportFileString} - ${city.trim()}_${usState}_${date}`;
+  const fileName = `${exportFileString} - ${city.trim()}_${usState.trim()}_${date}`;
 
   if (exportType === 'eligibleCases') {
     return path.eligibleCases({ fileName });

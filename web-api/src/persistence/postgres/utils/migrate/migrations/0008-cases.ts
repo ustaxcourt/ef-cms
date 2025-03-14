@@ -82,7 +82,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('closedDate')
     .dropColumn('createdAt')
     .dropColumn('damages')
-    .dropColumn('docketNumberWithSuffix')
     .dropColumn('filingType')
     .dropColumn('hasPendingItems')
     .dropColumn('hasVerifiedIrsNotice')
