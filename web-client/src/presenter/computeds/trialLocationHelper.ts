@@ -24,7 +24,7 @@ export const trialLocationHelper = (
   blockedCasesForDisplay: any[];
   totalPagesBlocked: number;
 } => {
-  const pageSize = 3;
+  const pageSize = 100;
 
   const { blockedCasesPage, eligibleCases, eligibleCasesPage, location } = get(
     state.trialLocationPage,
