@@ -161,6 +161,7 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -883,8 +884,8 @@ export const baseState = {
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
-  workQueue: [],
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueue: [] as WorkItemAbomination[],
+  workQueueToDisplay: { box: 'inbox', queue: 'my', section: '' },
   workitemAllCheckbox: false,
 };
 

@@ -1,5 +1,6 @@
 import { orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 /**
  * sets the state.workQueue based on the props.workItems passed in.
@@ -13,7 +14,7 @@ export const setWorkItemsAction = ({
   applicationContext,
   props,
   store,
-}: ActionProps) => {
+}: ActionProps<{ workItems: WorkItemAbomination[] }>) => {
   const orderedWorkItems = orderBy(props.workItems, 'updatedAt', 'desc').map(
     workItem => ({
       ...workItem,
