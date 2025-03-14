@@ -4,7 +4,6 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 export const getDocumentQCInboxForUserInteractor = async (
@@ -18,6 +17,7 @@ export const getDocumentQCInboxForUserInteractor = async (
   const workItems = await getDocumentQCInboxForUser({
     userId,
   });
+  console.log(workItems)
 
-  return WorkItem.validateRawCollection(workItems);
+  return workItems;
 };
