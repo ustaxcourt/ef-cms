@@ -15,7 +15,7 @@ export async function getConsolidatedCaseDeadlinesInteractor(
     consolidatedCaseDeadlineId: string;
   },
   authorizedUser: UnknownAuthUser,
-) {
+): Promise<{ docketNumber: string; caseCaption: string }[]> {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -24,12 +24,15 @@ export async function getConsolidatedCaseDeadlinesInteractor(
     consolidatedCaseDeadlineId,
   );
 
-  const RESULTS: any[] = [];
+  const RESULTS: { docketNumber: string; caseCaption: string }[] = [];
   for (let index = 0; index < DEADLINES.length; index++) {
     const { docketNumber } = DEADLINES[index];
-    const [{ caption }] = await getCaseByDocketNumberPostgres(docketNumber);
+    const [CASE] = await getCaseByDocketNumberPostgres(docketNumber);
+    if (!CASE) continue;
+
+    const { caption } = CASE;
     RESULTS.push({
-      caption,
+      caseCaption: caption,
       docketNumber,
     });
   }

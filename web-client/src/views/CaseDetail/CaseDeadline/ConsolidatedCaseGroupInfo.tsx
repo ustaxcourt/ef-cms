@@ -12,7 +12,6 @@ export function ConsolidatedCaseGroupInfo({
   consolidatedCases: {
     docketNumber: string;
     caseCaption: string;
-    caption: string;
   }[];
 }) {
   const isLeadCase = docketNumber === leadDocketNumber;
@@ -34,10 +33,10 @@ export function ConsolidatedCaseGroupInfo({
       <p>{TEXT_DICT[option]}</p>
       {consolidatedCases
         .filter(({ docketNumber }) => docketNumber !== leadDocketNumber)
-        .map(({ docketNumber, caseCaption, caption }) => {
+        .map(({ docketNumber, caseCaption }) => {
           return (
             <p key={docketNumber}>
-              {docketNumber} {caseCaption || caption}
+              {docketNumber} {caseCaption}
             </p>
           );
         })}
