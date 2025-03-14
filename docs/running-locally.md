@@ -14,16 +14,14 @@ After installing git, be sure to clone the project locally:
 
 `git clone git@github.com:flexion/ef-cms.git`
 
-### Node v22.13.1
+### Node.js
 
 All of our application code is built using Javascript:
 
 - Our frontend is written React, Cerebral, and bundled using esbuild.
 - Our backend APIs are written using express and a serverless wrapper.
 
-Because of this, you will need to make sure you node and npm installed locked to the following versions:
-    - Node v22.13.1
-    - npm v10.5.0
+Because of this, you will need to make sure you are using the version of Node.js specified in `.nvmrc` on your machine.
 
 As of March 2025, AWS Lambda only supports up to [`nodejs22.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 

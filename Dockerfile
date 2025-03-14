@@ -1,4 +1,3 @@
-# Note: node-22.13.1-chrome-132.0.* is debian 12.5 (bookworm)
 ARG TARGETARCH=amd64
 
 FROM cypress/browsers:node-22.14.0-chrome-134.0.6998.88-1-ff-136.0.1-edge-134.0.3124.51-1
