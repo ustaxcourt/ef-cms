@@ -1,16 +1,34 @@
-import { ClientApplicationContext } from '@web-client/applicationContext';
+import { applicationContext, ClientApplicationContext } from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { capitalize, cloneDeep, map, memoize, orderBy } from 'lodash';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
+import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import {
+  CASE_STATUS_TYPES,
+  COURT_ISSUED_EVENT_CODES,
+  ORDER_TYPES,
+  ROLES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { isLeadCase } from '@shared/business/entities/cases/Case';
+import { abbreviateState } from '@shared/business/utilities/abbreviateState';
+import {
+  calculateISODate,
+  formatDateString,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
+import { formatDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 
-const isDateToday = (date, applicationContext) => {
-  const now = applicationContext.getUtilities().formatNow('MMDDYY');
-  const then = applicationContext
-    .getUtilities()
-    .formatDateString(date, 'MMDDYY');
+const isDateToday = (date: string) => {
+  const now = formatNow('MMDDYY');
+  const then = formatDateString(date, 'MMDDYY');
   return now === then;
 };
 
@@ -28,18 +46,15 @@ export const workQueueItemsAreEqual = (first, second) => {
  */
 export const formatDateIfToday = (
   date,
-  applicationContext: ClientApplicationContext,
   now = null,
   yesterday = null,
 ): string => {
-  const then = applicationContext
-    .getUtilities()
-    .formatDateString(date, 'MMDDYY');
-  now = now || applicationContext.getUtilities().formatNow('MMDDYY');
+  const then = formatDateString(date, 'MMDDYY');
+  now = now || formatNow('MMDDYY');
   yesterday =
     yesterday ||
-    applicationContext.getUtilities().formatDateString(
-      applicationContext.getUtilities().calculateISODate({
+    formatDateString(
+      calculateISODate({
         howMuch: -1,
       }),
       'MMDDYY',
@@ -47,9 +62,7 @@ export const formatDateIfToday = (
 
   let formattedDate: string;
   if (now == then) {
-    formattedDate = applicationContext
-      .getUtilities()
-      .formatDateString(date, 'TIME_TZ');
+    formattedDate = formatDateString(date, 'TIME_TZ');
   } else if (then === yesterday) {
     formattedDate = 'Yesterday';
   } else {
@@ -59,13 +72,21 @@ export const formatDateIfToday = (
 };
 
 export const formatWorkItem = ({
-  applicationContext,
   isSelected = false,
-  workItem = {} as RawWorkItem,
+  workItem = {} as WorkItemAbomination,
+  authorizedUser,
+  permissions,
+  workQueueToDisplay,
 }: {
-  applicationContext: ClientApplicationContext;
   isSelected?: boolean;
-  workItem: RawWorkItem;
+  workItem: WorkItemAbomination;
+  authorizedUser: AuthUser;
+  permissions: Record<string, boolean>;
+  workQueueToDisplay: {
+    box: string;
+    queue: string;
+    section: string;
+  };
 }): RawWorkItem & {
   assigneeName: string;
   completedAtFormatted: string;
@@ -73,6 +94,7 @@ export const formatWorkItem = ({
   consolidatedIconTooltipText: string;
   createdAtFormatted: string;
   docketEntry: any;
+  editLink: string;
   formattedCaseStatus: string;
   highPriority: boolean;
   inConsolidatedGroup: boolean;
@@ -89,15 +111,10 @@ export const formatWorkItem = ({
   showUnreadIndicators: boolean;
   showUnreadStatusIcon: boolean;
 } => {
-  const { COURT_ISSUED_EVENT_CODES, ORDER_TYPES_MAP } =
-    applicationContext.getConstants();
-
-  const orderDocumentTypes = ORDER_TYPES_MAP.map(
-    orderDoc => orderDoc.documentType,
-  );
+  const orderDocumentTypes = ORDER_TYPES.map(orderDoc => orderDoc.documentType);
 
   const inConsolidatedGroup = !!workItem.leadDocketNumber;
-  const inLeadCase = applicationContext.getUtilities().isLeadCase(workItem);
+  const inLeadCase = isLeadCase(workItem);
 
   let consolidatedIconTooltipText = '';
 
@@ -109,24 +126,34 @@ export const formatWorkItem = ({
     }
   }
 
-  const formattedCaseStatus = setFormattedCaseStatus({
-    applicationContext,
-    workItem,
-  });
+  let formattedCaseStatus = workItem.caseStatus || '';
 
-  const createdAtFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(workItem.createdAt, 'MMDDYY');
+  if (
+    workItem.caseStatus === CASE_STATUS_TYPES.calendared &&
+    workItem.trialLocation &&
+    workItem.trialDate
+  ) {
+    let formattedTrialLocation = '';
+    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+      formattedTrialLocation = abbreviateState(workItem.trialLocation ?? '');
+    } else {
+      formattedTrialLocation = workItem.trialLocation;
+    }
+
+    const formattedTrialDate = formatDateString(workItem.trialDate, 'MMDDYY');
+
+    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
+  }
+
+  const createdAtFormatted = formatDateString(workItem.createdAt, 'MMDDYY');
 
   const highPriority = !!workItem.highPriority;
   const sentBySection = capitalize(workItem.sentBySection);
-  const completedAtFormatted = formatDateIfToday(
+  const completedAtFormatted = formatDateIfToday(workItem.completedAt);
+  const completedAtFormattedTZ = formatDateString(
     workItem.completedAt,
-    applicationContext,
+    'DATE_TIME_TZ',
   );
-  const completedAtFormattedTZ = applicationContext
-    .getUtilities()
-    .formatDateString(workItem.completedAt, 'DATE_TIME_TZ');
   const assigneeName = workItem.assigneeName || 'Unassigned';
 
   const showHighPriorityIcon = highPriority;
@@ -141,19 +168,13 @@ export const formatWorkItem = ({
 
   const selected = !!isSelected;
 
-  const receivedAt = isDateToday(
-    workItem.docketEntry.receivedAt,
-    applicationContext,
-  )
+  const receivedAt = isDateToday(workItem.docketEntry.receivedAt)
     ? workItem.docketEntry.createdAt
     : workItem.docketEntry.receivedAt;
 
-  const received = formatDateIfToday(receivedAt, applicationContext);
+  const received = formatDateIfToday(receivedAt);
 
-  const sentDateFormatted = formatDateIfToday(
-    workItem.createdAt,
-    applicationContext,
-  );
+  const sentDateFormatted = formatDateIfToday(workItem.createdAt);
 
   const isCourtIssuedDocument = !!COURT_ISSUED_EVENT_CODES.map(
     ({ eventCode }) => eventCode,
@@ -171,6 +192,13 @@ export const formatWorkItem = ({
     }
   }
 
+  const editLink = getWorkItemDocumentLink({
+    authorizedUser,
+    permissions,
+    workItem,
+    workQueueToDisplay,
+  });
+
   return {
     ...workItem,
     assigneeName,
@@ -182,6 +210,7 @@ export const formatWorkItem = ({
       ...workItem.docketEntry,
       descriptionDisplay,
     },
+    editLink,
     formattedCaseStatus,
     highPriority,
     inConsolidatedGroup,
@@ -249,13 +278,11 @@ const getDocketEntryEditLink = ({
 };
 
 export const getWorkItemDocumentLink = ({
-  applicationContext,
   authorizedUser,
   permissions,
   workItem,
   workQueueToDisplay,
 }: {
-  applicationContext: any;
   permissions: any;
   workItem: any;
   workQueueToDisplay: any;
@@ -263,9 +290,7 @@ export const getWorkItemDocumentLink = ({
 }) => {
   const result = cloneDeep(workItem);
 
-  const formattedDocketEntry = applicationContext
-    .getUtilities()
-    .formatDocketEntry(applicationContext, result.docketEntry);
+  const formattedDocketEntry = formatDocketEntry(applicationContext, result.docketEntry);
 
   const isInProgress = workItem.inProgress;
 
@@ -287,12 +312,11 @@ export const getWorkItemDocumentLink = ({
   const baseDocumentLink = `/case-detail/${workItem.docketNumber}/documents/${workItem.docketEntry.docketEntryId}`;
   const documentViewLink = `/case-detail/${workItem.docketNumber}/document-view?docketEntryId=${workItem.docketEntry.docketEntryId}`;
 
-  const { USER_ROLES } = applicationContext.getConstants();
   let editLink = documentViewLink;
   if (showDocumentEditLink) {
     if (
       permissions.DOCKET_ENTRY &&
-      (authorizedUser?.role !== USER_ROLES.caseServicesSupervisor ||
+      (authorizedUser?.role !== ROLES.caseServicesSupervisor ||
         !formattedDocketEntry.isPetition)
     ) {
       const editLinkExtension = getDocketEntryEditLink({
@@ -322,86 +346,48 @@ export const getWorkItemDocumentLink = ({
 };
 
 export const filterWorkItems = ({
-  applicationContext,
   assignmentFilterValue,
   authorizedUser,
   section,
   workItems,
   workQueueToDisplay,
 }: {
-  applicationContext: ClientApplicationContext;
   assignmentFilterValue: any;
-  section: any;
-  workItems: any;
-  workQueueToDisplay: any;
-  authorizedUser: UnknownAuthUser;
-}) => {
+  section: string;
+  workItems: WorkItemAbomination[];
+  workQueueToDisplay: {
+    box: string;
+    queue: string;
+    section: string;
+  };
+  authorizedUser: AuthUser;
+}): WorkItemAbomination[] => {
   const { box, queue } = workQueueToDisplay;
 
-  const filters = applicationContext
-    .getUtilities()
-    .getWorkQueueFilters({ section, user: authorizedUser });
+  const filters = getWorkQueueFilters({ section, user: authorizedUser });
 
   const composedFilter = filters[queue][box];
-  let assignmentFilter = workItem => {
-    return workItem;
-  };
 
+  let filteredWorkItems = workItems.filter(composedFilter);
   if (queue === 'section') {
-    assignmentFilter = workItem => {
-      if (assignmentFilterValue && assignmentFilterValue.userId) {
-        if (assignmentFilterValue.userId === 'UA') {
-          return workItem.assigneeId === null;
+    filteredWorkItems = filteredWorkItems.filter(
+      (workItem: WorkItemAbomination) => {
+        if (assignmentFilterValue && assignmentFilterValue.userId) {
+          if (assignmentFilterValue.userId === 'UA') {
+            return workItem.assigneeId === null;
+          }
+          return (
+            workItem.assigneeId === assignmentFilterValue.userId ||
+            workItem.completedBy === assignmentFilterValue.name
+          );
         }
-        return (
-          workItem.assigneeId === assignmentFilterValue.userId ||
-          workItem.completedBy === assignmentFilterValue.name
-        );
-      }
-      return workItem;
-    };
+        return workItem;
+      },
+    );
   }
-
-  const filteredWorkItems = workItems
-    .filter(composedFilter)
-    .filter(assignmentFilter);
 
   return filteredWorkItems;
 };
-
-const memoizedFormatItemWithLink = memoize(
-  ({
-    applicationContext,
-    authorizedUser,
-    isSelected,
-    permissions,
-    workItem,
-    workQueueToDisplay,
-  }: {
-    applicationContext: any;
-    isSelected: any;
-    permissions: any;
-    workItem: any;
-    workQueueToDisplay: any;
-    authorizedUser: UnknownAuthUser;
-  }) => {
-    const result = formatWorkItem({
-      applicationContext,
-      isSelected,
-      workItem,
-    });
-    const editLink = getWorkItemDocumentLink({
-      applicationContext,
-      authorizedUser,
-      permissions,
-      workItem,
-      workQueueToDisplay,
-    });
-    return { ...result, editLink };
-  },
-  ({ isSelected, workItem, workQueueToDisplay }) =>
-    JSON.stringify({ ...workItem, isSelected, workQueueToDisplay }),
-);
 
 export const formattedWorkQueue = (
   get: Get,
@@ -412,7 +398,9 @@ export const formattedWorkQueue = (
   const workQueueToDisplay = get(state.workQueueToDisplay);
   const permissions = get(state.permissions);
   const selectedWorkItems = get(state.selectedWorkItems);
-  const selectedWorkItemIds = map(selectedWorkItems, 'workItemId');
+  const selectedWorkItemIds: string[] = selectedWorkItems.map(
+    wi => wi.workItemId,
+  );
   let { assignmentFilterValue } = get(state.screenMetadata);
   const { STATUS_TYPES } = applicationContext.getConstants();
   const users = get(state.users);
@@ -425,15 +413,13 @@ export const formattedWorkQueue = (
   }
 
   let workQueue = filterWorkItems({
-    applicationContext,
     assignmentFilterValue,
     authorizedUser,
     section,
     workItems,
     workQueueToDisplay,
   }).map(workItem => {
-    return memoizedFormatItemWithLink({
-      applicationContext,
+    return formatWorkItem({
       authorizedUser,
       isSelected: selectedWorkItemIds.includes(workItem.workItemId),
       permissions,
@@ -497,33 +483,4 @@ export const formattedWorkQueue = (
   );
 
   return workQueue;
-};
-
-const setFormattedCaseStatus = ({ applicationContext, workItem }): string => {
-  const { STATUS_TYPES, TRIAL_SESSION_SCOPE_TYPES } =
-    applicationContext.getConstants();
-  let formattedCaseStatus: string = workItem.caseStatus;
-
-  if (
-    workItem.caseStatus === STATUS_TYPES.calendared &&
-    workItem.trialLocation &&
-    workItem.trialDate
-  ) {
-    let formattedTrialLocation = '';
-    if (workItem.trialLocation !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
-      formattedTrialLocation = applicationContext
-        .getUtilities()
-        .abbreviateState(workItem.trialLocation ?? '');
-    } else {
-      formattedTrialLocation = workItem.trialLocation;
-    }
-
-    const formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(workItem.trialDate, 'MMDDYY');
-
-    formattedCaseStatus = `Calendared - ${formattedTrialDate} ${formattedTrialLocation}`;
-  }
-
-  return formattedCaseStatus;
 };

@@ -14,7 +14,13 @@ export const getDocumentQCInboxForUser = async ({
       .where('w.assigneeId', '=', userId)
       .where('w.completedAt', 'is', null)
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .select(['c.status as caseStatus', 'c.caption'])
+      .select([
+        'c.status as caseStatus',
+        'c.caption',
+        'c.leadDocketNumber',
+        'c.trialDate',
+        'c.trialLocation',
+      ])
       .selectAll('w')
       .limit(5000)
       .execute();
@@ -30,6 +36,9 @@ export const getDocumentQCInboxForUser = async ({
       }).toRawObject(),
       caseTitle: Case.getCaseTitle(workItem.caption),
       caseStatus: workItem.caseStatus || undefined,
+      leadDocketNumber: workItem?.leadDocketNumber || undefined,
+      trialDate: workItem?.trialDate?.toISOString(),
+      trialLocation: workItem?.trialLocation || undefined,
     };
     return transformNullToUndefined(abomination);
   });
@@ -38,4 +47,7 @@ export const getDocumentQCInboxForUser = async ({
 export type WorkItemAbomination = RawWorkItem & {
   caseTitle?: string;
   caseStatus?: string;
+  leadDocketNumber?: string;
+  trialDate?: string;
+  trialLocation?: string;
 };

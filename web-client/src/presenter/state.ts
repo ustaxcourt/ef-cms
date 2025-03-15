@@ -835,7 +835,7 @@ export const baseState = {
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
-  selectedWorkItems: [],
+  selectedWorkItems: [] as { workItemId: string }[],
   sessionMetadata: {
     docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: [],
