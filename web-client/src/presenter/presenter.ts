@@ -55,6 +55,7 @@ import { clearDueDateSequence } from './sequences/clearDueDateSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
+import { clearMotionOrderResponseFormSequence } from './sequences/MotionOrderResponse/clearMotionOrderResponseFormSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
 import { clearOptionalCustomCaseReportFilterSequence } from './sequences/clearOptionalCustomCaseReportFilterSequence';
 import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalFieldsStampFormSequence';
@@ -689,6 +690,8 @@ export const presenterSequences = {
     clearExistingDocumentSequence as unknown as Function,
   clearModalFormSequence: clearModalFormSequence as unknown as Function,
   clearModalSequence: clearModalSequence as unknown as Function,
+  clearMotionOrderResponseFormSequence:
+    clearMotionOrderResponseFormSequence as unknown as Function,
   clearOpenClosedCasesCurrentPageSequence:
     clearOpenClosedCasesCurrentPageSequence as unknown as Function,
   clearOptionalCustomCaseReportFilterSequence,
