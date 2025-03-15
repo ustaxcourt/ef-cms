@@ -14,8 +14,8 @@ export const OrderResponse = connect(
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     motionOrderResponseFormHelper: state.motionOrderResponseFormHelper,
     clearDueDateSequence: sequences.clearDueDateSequence,
-    clearOptionalFieldsStampFormSequence:
-      sequences.clearOptionalFieldsStampFormSequence,
+    clearMotionOrderResponseFormSequence:
+      sequences.clearMotionOrderResponseFormSequence,
     constants: state.constants,
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
@@ -31,8 +31,8 @@ export const OrderResponse = connect(
     validationErrors: state.validationErrors,
   },
   function OrderResponse({
+    clearMotionOrderResponseFormSequence,
     motionOrderResponseFormHelper,
-    clearOptionalFieldsStampFormSequence,
     constants,
     form,
     formatAndUpdateDateFromDatePickerSequence,
@@ -40,7 +40,7 @@ export const OrderResponse = connect(
     pdfForSigning,
     pdfObj,
     setPDFStampDataSequence,
-    submitStampMotionSequence,
+    // submitStampMotionSequence, // TODO 10586: update this
     updateFormValueSequence,
     validateStampSequence,
     validationErrors,
@@ -103,14 +103,6 @@ export const OrderResponse = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
-              <Button
-                link
-                icon={['fa', 'arrow-alt-circle-left']}
-                onClick={() => navigateBackSequence()}
-              >
-                Back
-              </Button>
-
               <div className="border border-base-lighter">
                 <label
                   className="grid-header grid-row padding-left-205" // TODO 10586: update classnames
@@ -127,22 +119,23 @@ export const OrderResponse = connect(
                   >
                     <label
                       className="usa-label"
-                      htmlFor="due-date-input-orderResponseDueDate" // TODO 10586: update IDs
+                      htmlFor="response-date-input-orderResponseResponseDate" // TODO 10586: update IDs
                     >
                       Response Date <span className="usa-hint">(Required)</span>
                     </label>
                     <DateSelector
-                      defaultValue={form.date}
+                      defaultValue={'MM/DD/YYYY'} // TODO 10586: fix date selector not clearing bug
                       formGroupClassNames="display-inline-block order-response-date-selector"
-                      id="due-date-input-orderResponseDueDate"
+                      id="response-date-input-orderResponseResponseDate"
                       minDate={motionOrderResponseFormHelper.minDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
-                          key: 'date',
+                          key: 'responseDate',
                           toFormat: constants.DATE_FORMATS.MMDDYY,
                           value: e.target.value,
                         });
+                        // TODO 10586: update this to validateOrderResponseSequence
                         validateStampSequence();
                       }}
                     />
@@ -160,13 +153,17 @@ export const OrderResponse = connect(
                     >
                       Select One <span className="usa-hint">(Required)</span>
                     </label>
+                    {/* TODO 10586: use map as seen in ApplyStamp */}
                     <div className="usa-radio">
                       <input
                         aria-label="order reply"
-                        checked={form.strickenFromTrialSession || false}
+                        checked={
+                          form.motionOrderResponse ===
+                            constants.ORDER_REPLY_OPTIONS.REPLY || false
+                        }
                         className="usa-radio__input"
                         id="motion-order-reply"
-                        name="motionOrderReply"
+                        name="motionOrderResponse"
                         type="radio"
                         value={constants.ORDER_REPLY_OPTIONS.REPLY}
                         onChange={e => {
@@ -186,10 +183,13 @@ export const OrderResponse = connect(
                     <div className="usa-radio">
                       <input
                         aria-label="order reply s/r"
-                        checked={form.strickenFromTrialSession || false}
+                        checked={
+                          form.motionOrderResponse ===
+                            constants.ORDER_REPLY_OPTIONS.REPLY_SR || false
+                        }
                         className="usa-radio__input"
                         id="motion-order-reply-sr"
-                        name="motionOrderReplySr"
+                        name="motionOrderResponse"
                         type="radio"
                         value={constants.ORDER_REPLY_OPTIONS.REPLY_SR}
                         onChange={e => {
@@ -219,15 +219,15 @@ export const OrderResponse = connect(
                       Due date <span className="usa-hint">(Required)</span>
                     </label>
                     <DateSelector
-                      defaultValue={form.date}
-                      disabled={!form.dueDateMessage}
+                      defaultValue={form.dueDate}
+                      disabled={!form.motionOrderResponse}
                       formGroupClassNames="display-inline-block order-response-date-selector"
                       id="due-date-input-motionOrderResponseDueDate"
                       minDate={motionOrderResponseFormHelper.minDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
-                          key: 'date',
+                          key: 'dueDate',
                           toFormat: constants.DATE_FORMATS.MMDDYY,
                           value: e.target.value,
                         });
@@ -256,7 +256,7 @@ export const OrderResponse = connect(
                         id="additional-text"
                         maxLength={constants.MAX_ORDER_RESPONSE_TEXT_CHARACTERS}
                         name="additionalText"
-                        value={form.customText}
+                        value={form.additionalText || ''}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -280,23 +280,34 @@ export const OrderResponse = connect(
                 data-testid="clear-all-fields"
                 onClick={e => {
                   e.preventDefault();
-                  clearOptionalFieldsStampFormSequence();
+                  clearMotionOrderResponseFormSequence();
                 }}
               >
                 Clear All
               </Button>
+              <div className="margin-bottom-2 margin-top-2 button-container">
+                <Button
+                  className="margin-right-1"
+                  data-testid="save-draft-button"
+                  id="save-draft-button"
+                  onClick={() => submitMotionOrderResponseSequence()}
+                >
+                  Save as Draft
+                </Button>
+                <Button link onClick={() => navigateBackSequence()}>
+                  Cancel
+                </Button>
+              </div>
             </div>
             <div className="grid-col-7">
-              <div className="margin-bottom-1 display-flex flex-justify-end">
-                <Button
-                  className="margin-right-0"
-                  data-testid="save-signature-button"
-                  disabled={!motionOrderResponseFormHelper.canSaveOrderRespones}
-                  id="save-signature-button"
-                  onClick={() => submitStampMotionSequence()}
+              <div className="margin-bottom-1 display-flex flex-justify-start">
+                {/* <label
+                  className="usa-label"
+                  htmlFor="custom-text"
+                  id="custom-text-label"
                 >
-                  Save Stamp Order
-                </Button>
+                  Docket entry preview:
+                </label> */}
               </div>
               <div className="grid-row">
                 <div className="grid-col-12">
