@@ -1,7 +1,9 @@
-import { applicationContext, ClientApplicationContext } from '@web-client/applicationContext';
+import {
+  applicationContext,
+  ClientApplicationContext,
+} from '@web-client/applicationContext';
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
 import { Get } from 'cerebral';
-import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import {
   AuthUser,
   UnknownAuthUser,
@@ -87,30 +89,7 @@ export const formatWorkItem = ({
     queue: string;
     section: string;
   };
-}): RawWorkItem & {
-  assigneeName: string;
-  completedAtFormatted: string;
-  completedAtFormattedTZ: string;
-  consolidatedIconTooltipText: string;
-  createdAtFormatted: string;
-  docketEntry: any;
-  editLink: string;
-  formattedCaseStatus: string;
-  highPriority: boolean;
-  inConsolidatedGroup: boolean;
-  inLeadCase: boolean;
-  isCourtIssuedDocument: boolean;
-  isOrder: boolean;
-  received: string;
-  receivedAt: any;
-  selected: boolean;
-  sentBySection: string;
-  sentDateFormatted: string;
-  showHighPriorityIcon: boolean;
-  showUnassignedIcon: boolean;
-  showUnreadIndicators: boolean;
-  showUnreadStatusIcon: boolean;
-} => {
+}): FormattedWorkItemAbomination => {
   const orderDocumentTypes = ORDER_TYPES.map(orderDoc => orderDoc.documentType);
 
   const inConsolidatedGroup = !!workItem.leadDocketNumber;
@@ -290,7 +269,10 @@ export const getWorkItemDocumentLink = ({
 }) => {
   const result = cloneDeep(workItem);
 
-  const formattedDocketEntry = formatDocketEntry(applicationContext, result.docketEntry);
+  const formattedDocketEntry = formatDocketEntry(
+    applicationContext,
+    result.docketEntry,
+  );
 
   const isInProgress = workItem.inProgress;
 
@@ -392,7 +374,7 @@ export const filterWorkItems = ({
 export const formattedWorkQueue = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): FormattedWorkItemAbomination[] => {
   const section = get(state.workQueueToDisplay.section);
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
@@ -483,4 +465,29 @@ export const formattedWorkQueue = (
   );
 
   return workQueue;
+};
+
+export type FormattedWorkItemAbomination = WorkItemAbomination & {
+  assigneeName: string;
+  completedAtFormatted: string;
+  completedAtFormattedTZ: string;
+  consolidatedIconTooltipText: string;
+  createdAtFormatted: string;
+  docketEntry: any;
+  editLink: string;
+  formattedCaseStatus: string;
+  highPriority: boolean;
+  inConsolidatedGroup: boolean;
+  inLeadCase: boolean;
+  isCourtIssuedDocument: boolean;
+  isOrder: boolean;
+  received: string;
+  receivedAt: any;
+  selected: boolean;
+  sentBySection: string;
+  sentDateFormatted: string;
+  showHighPriorityIcon: boolean;
+  showUnassignedIcon: boolean;
+  showUnreadIndicators: boolean;
+  showUnreadStatusIcon: boolean;
 };
