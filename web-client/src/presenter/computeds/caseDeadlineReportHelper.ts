@@ -1,6 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const caseDeadlineReportHelper = (
@@ -22,15 +23,18 @@ export const caseDeadlineReportHelper = (
   })[];
   formattedFilterDateHeader;
   judges: string[];
+  pageCount: number;
   showJudgeSelect: boolean;
   showNoDeadlines: boolean;
 } => {
   const { CHIEF_JUDGE, DATE_FORMATS } = applicationContext.getConstants();
 
-  const caseDeadlines = get(state.caseDeadlineReport.caseDeadlines) || [];
+  const caseDeadlinesForCurrentPage =
+    get(state.caseDeadlineReport.caseDeadlinesForCurrentPage) || [];
   const judgeFilter = get(state.caseDeadlineReport.judgeFilter);
-  const showJudgeSelect = caseDeadlines.length > 0 || !!judgeFilter;
-  const showNoDeadlines = caseDeadlines.length === 0;
+  const showJudgeSelect =
+    caseDeadlinesForCurrentPage.length > 0 || !!judgeFilter;
+  const showNoDeadlines = caseDeadlinesForCurrentPage.length === 0;
   const judges = (get(state.judges) || [])
     .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
     .concat(CHIEF_JUDGE)
@@ -59,7 +63,12 @@ export const caseDeadlineReportHelper = (
         .formatDateString(filterEndDate, DATE_FORMATS.MONTH_DAY_YEAR);
   }
 
-  const formattedCaseDeadlines = caseDeadlines.map(d => {
+  const pageCount = Math.ceil(
+    get(state.caseDeadlineReport.caseDeadlinesTotalCount) /
+      CASE_DEADLINES_REPORT_PAGE_SIZE,
+  );
+
+  const formattedCaseDeadlines = caseDeadlinesForCurrentPage.map(d => {
     const inConsolidatedGroup = !!d.leadDocketNumber;
     const inLeadCase = d.leadDocketNumber === d.docketNumber;
     let consolidatedIconTooltipText;
@@ -91,6 +100,7 @@ export const caseDeadlineReportHelper = (
     formattedCaseDeadlines,
     formattedFilterDateHeader,
     judges,
+    pageCount,
     showJudgeSelect,
     showNoDeadlines,
   };

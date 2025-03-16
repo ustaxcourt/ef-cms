@@ -8,12 +8,10 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.props the cerebral props object
  * @param {object} providers.store the cerebral store
  */
-export const setCaseDeadlinesAction = ({ get, props, store }: ActionProps) => {
-  let caseDeadlines = get(state.caseDeadlineReport.caseDeadlines);
-  if (caseDeadlines) {
-    caseDeadlines.push(...props.caseDeadlines);
-  } else {
-    ({ caseDeadlines } = props);
-  }
-  store.set(state.caseDeadlineReport.caseDeadlines, caseDeadlines);
+export const setCaseDeadlinesAction = ({ props, store }: ActionProps) => {
+  store.set(
+    state.caseDeadlineReport.caseDeadlinesForCurrentPage,
+    props.caseDeadlines,
+  );
+  store.set(state.caseDeadlineReport.caseDeadlinesTotalCount, props.totalCount);
 };
