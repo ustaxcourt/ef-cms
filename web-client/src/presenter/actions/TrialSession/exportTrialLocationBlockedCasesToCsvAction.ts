@@ -3,10 +3,11 @@ import { download, generateCsv, mkConfig } from 'export-to-csv';
 export const exportTrialLocationBlockedCasesToCsvAction = ({
   props,
 }: ActionProps) => {
-  const casesForCsv = props.blockedCases.map(c => {
-    c.blockedReason = c.blockedReason || c.automaticBlockedReason;
-    return c;
-  });
+  const casesForCsv = props.blockedCases.map(c => ({
+    ...c,
+    blockedReason: `${c.blockedReason} ${c.automaticBlockedReason}`,
+  }));
+
   const csvConfig = mkConfig({
     columnHeaders: [
       {
