@@ -12,6 +12,7 @@ import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setC
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 import { BlockedFormattedCase } from '@web-client/presenter/computeds/blockedCasesReportHelper';
+import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 
 export const trialLocationHelper = (
   get: Get,
@@ -95,7 +96,7 @@ export const trialLocationHelper = (
 };
 
 const setFormattedBlockDates = (
-  blockedCase: RawCase & {
+  blockedCase: BlockedCaseData & {
     inConsolidatedGroup: boolean;
     consolidatedIconTooltipText: string;
     shouldIndent: boolean;

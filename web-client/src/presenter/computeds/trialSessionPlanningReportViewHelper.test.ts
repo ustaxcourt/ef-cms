@@ -182,6 +182,7 @@ describe('trialSessionPlanningReportViewHelper', () => {
           lastVisitedDateFormatted: 'Last visited week of 08/27/2001',
           previousTermsData: [[{}], [], [{}]],
           trialCityState: 'TEST_CITY_STATE_1',
+          trialLocationUrl: '/trial-location/TEST_CITY_STATE_1',
         },
         {
           hasNotBeenCalendared: true,
@@ -189,18 +190,21 @@ describe('trialSessionPlanningReportViewHelper', () => {
           lastVisitedDateFormatted: 'Last visited week of 08/30/2004',
           previousTermsData: [[], [], [{}]],
           trialCityState: 'TEST_CITY_STATE_4',
+          trialLocationUrl: '/trial-location/TEST_CITY_STATE_4',
         },
         {
           hasNotBeenCalendared: false,
           lastVisitedDateFormatted: 'Never visited.',
           previousTermsData: [[{}], [], [{}]],
           trialCityState: 'TEST_CITY_STATE_3',
+          trialLocationUrl: '/trial-location/TEST_CITY_STATE_3',
         },
         {
           hasNotBeenCalendared: true,
           lastVisitedDateFormatted: 'Never visited.',
           previousTermsData: [[], [], [{}]],
           trialCityState: 'TEST_CITY_STATE_2',
+          trialLocationUrl: '/trial-location/TEST_CITY_STATE_2',
         },
       ]);
     });

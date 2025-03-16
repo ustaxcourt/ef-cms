@@ -3,21 +3,11 @@ import { download, generateCsv, mkConfig } from 'export-to-csv';
 export const exportTrialLocationEligibleCasesToCsvAction = ({
   props,
 }: ActionProps) => {
-  const casesForCsv = props.eligibleCases.map(c => {
-    let formattedPrivatePractitioners = '';
-    c.privatePractitioners.forEach(p => {
-      formattedPrivatePractitioners += `${p.name} `;
-    });
-
-    let formattedIrsPractitioners = '';
-    c.irsPractitioners.forEach(p => {
-      formattedIrsPractitioners += `${p.name} `;
-    });
-
-    c.privatePractitioners = formattedPrivatePractitioners;
-    c.irsPractitioners = formattedIrsPractitioners;
-    return c;
-  });
+  const casesForCsv = props.eligibleCases.map(c => ({
+    ...c,
+    privatePractitioners: c.privatePractitioners?.map(p => p.name).join(' '),
+    irsPractitioners: c.irsPractitioners?.map(p => p.name).join(' '),
+  }));
 
   const csvConfig = mkConfig({
     columnHeaders: [

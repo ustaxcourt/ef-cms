@@ -1,4 +1,8 @@
-import { download, generateCsv, mkConfig } from 'export-to-csv';
+import {
+  download as downloadMock,
+  generateCsv as generateCsvMock,
+  mkConfig,
+} from 'export-to-csv';
 import { exportTrialLocationBlockedCasesToCsvAction } from './exportTrialLocationBlockedCasesToCsvAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -10,6 +14,8 @@ jest.mock('export-to-csv', () => {
     download: jest.fn(() => jest.fn()),
   };
 });
+const generateCsv = generateCsvMock as jest.Mock;
+const download = downloadMock as jest.Mock;
 
 describe('exportTrialLocationBlockedCasesToCsvAction', () => {
   beforeEach(() => {

@@ -1,4 +1,8 @@
-import { download, generateCsv, mkConfig } from 'export-to-csv';
+import {
+  download as downloadMock,
+  generateCsv as generateCsvMock,
+  mkConfig,
+} from 'export-to-csv';
 import { exportTrialLocationEligibleCasesToCsvAction } from './exportTrialLocationEligibleCasesToCsvAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -10,6 +14,8 @@ jest.mock('export-to-csv', () => {
     download: jest.fn(() => jest.fn()),
   };
 });
+const generateCsv = generateCsvMock as jest.Mock;
+const download = downloadMock as jest.Mock;
 
 describe('exportTrialLocationEligibleCasesToCsvAction', () => {
   beforeEach(() => {
@@ -70,14 +76,22 @@ describe('exportTrialLocationEligibleCasesToCsvAction', () => {
 
     expect(generateCsv).toHaveBeenCalledTimes(1);
     const generateCsvFn = generateCsv.mock.results[0].value;
-    const transformedCases = mockEligibleCases.map(c => ({
-      ...c,
-      privatePractitioners:
-        c.privatePractitioners.map(p => p.name).join(' ') + ' ',
-      irsPractitioners: c.irsPractitioners.map(p => p.name).join(' ') + ' ',
-    }));
-    const [[actualTransformedCases]] = generateCsvFn.mock.calls;
-    expect(actualTransformedCases).toEqual(transformedCases);
+
+    const expectedCases = [
+      {
+        ...mockEligibleCases[0],
+        irsPractitioners: 'Respondent1 Respondent2',
+        privatePractitioners: 'PetrCounsel1 PetrCounsel2',
+      },
+      {
+        ...mockEligibleCases[1],
+        irsPractitioners: 'RespOne',
+        privatePractitioners: 'PetrOne PetrTwo',
+      },
+    ];
+
+    const [[formattedCases]] = generateCsvFn.mock.calls;
+    expect(formattedCases).toEqual(expectedCases);
     expect(generateCsvFn.mock.results[0].value).toEqual('MOCK_CSV_CONTENT');
   });
 
