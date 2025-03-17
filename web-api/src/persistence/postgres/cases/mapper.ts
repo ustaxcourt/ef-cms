@@ -160,7 +160,6 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
     docketNumberSuffix: rawCase.docketNumberSuffix,
-    docketNumberWithSuffix: rawCase.docketNumberWithSuffix,
     docketEntries: JSON.stringify(rawCase.docketEntries),
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,
