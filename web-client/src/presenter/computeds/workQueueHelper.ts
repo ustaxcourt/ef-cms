@@ -8,7 +8,40 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const workQueueHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): {
+  currentBoxView: string;
+  documentQCNavigationPath: Function;
+  getQueuePath: Function;
+  hideCaseStatusColumn: boolean;
+  hideIconColumn: boolean;
+  individualInProgressCount: number;
+  individualInboxCount: number;
+  isCaseServicesSupervisor: boolean;
+  outboxFiledByColumnLabel: string;
+  sectionInProgressCount: number;
+  sectionInboxCount: number;
+  sentTitle: string;
+  showAssignedToColumn: boolean;
+  showCaseStatusColumn: boolean;
+  showDocketClerkFilter: boolean;
+  showEditDocketEntry: boolean;
+  showFiledByColumn: boolean;
+  showFromColumn: boolean;
+  showInProgressTab: boolean;
+  showInbox: boolean;
+  showIndividualWorkQueue: boolean;
+  showMyQueueToggle: boolean;
+  showOutbox: boolean;
+  showProcessedByColumn: boolean;
+  showSectionSentTab: boolean;
+  showSectionWorkQueue: boolean;
+  showSelectAllCheckbox: boolean;
+  showSelectColumn: boolean;
+  showSendToBar: boolean;
+  showStartPetitionButton: boolean;
+  showSwitchToMyDocQCLink: boolean;
+  workQueueTitle: string;
+} => {
   const user = get(state.user);
   const selectedWorkItems = get(state.selectedWorkItems);
   const workQueueToDisplay = get(state.workQueueToDisplay);
