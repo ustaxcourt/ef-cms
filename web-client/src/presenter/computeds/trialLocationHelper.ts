@@ -9,10 +9,11 @@ import {
 } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
 import { compareCasesByDocketNumber } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
-import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
-import { BlockedFormattedCase } from '@web-client/presenter/computeds/blockedCasesReportHelper';
-import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import {
+  groupCases,
+  setFormattedBlockDates,
+} from '@web-client/presenter/computeds/blockedCasesReportHelper';
 
 export const trialLocationHelper = (
   get: Get,
@@ -32,6 +33,7 @@ export const trialLocationHelper = (
   );
 
   const blockedCases = get(state.blockedCases);
+  const groupedCases = groupCases(blockedCases);
 
   const formattedBlockedCases = blockedCases
     .sort(compareCasesByDocketNumber)
@@ -39,12 +41,21 @@ export const trialLocationHelper = (
       setConsolidationFlagsForDisplay(blockedCase, blockedCases),
     )
     .map(blockedCase => {
-      const updatedCase = {
-        ...setFormattedBlockDates(blockedCase),
-        caseTitle: Case.getCaseTitle(blockedCase.caseCaption || ''),
-      };
+      const updatedCase = setFormattedBlockDates(
+        {
+          ...blockedCase,
+          caseTitle: Case.getCaseTitle(blockedCase.caseCaption || ''),
+        },
+        groupedCases,
+      );
 
       return updatedCase;
+    })
+    .map(blockedCase => {
+      if (!blockedCase.blocked && !blockedCase.automaticBlocked) {
+        blockedCase.blockedReason = 'Grouped with blocked case';
+      }
+      return blockedCase;
     });
 
   const formattedEligibleCases = eligibleCases.map(c => {
@@ -93,44 +104,4 @@ export const trialLocationHelper = (
     totalPagesBlocked: Math.ceil(formattedBlockedCases.length / pageSize),
     totalPagesEligible: Math.ceil(sortedEligibleCases.length / pageSize),
   };
-};
-
-const setFormattedBlockDates = (
-  blockedCase: BlockedCaseData & {
-    inConsolidatedGroup: boolean;
-    consolidatedIconTooltipText: string;
-    shouldIndent: boolean;
-    isLeadCase: boolean;
-  },
-): BlockedFormattedCase => {
-  const blockedFormattedCase: BlockedFormattedCase = {
-    ...blockedCase,
-    blockedDateEarliest: '',
-    caseTitle: '',
-  };
-
-  if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
-    if (blockedCase.blockedDate < blockedCase.automaticBlockedDate!) {
-      blockedFormattedCase.blockedDateEarliest = formatDateString(
-        blockedCase.blockedDate,
-        'MMDDYY',
-      );
-    } else {
-      blockedFormattedCase.blockedDateEarliest = formatDateString(
-        blockedCase.automaticBlockedDate!,
-        'MMDDYY',
-      );
-    }
-  } else if (blockedCase.blocked) {
-    blockedFormattedCase.blockedDateEarliest = formatDateString(
-      blockedCase.blockedDate!,
-      'MMDDYY',
-    );
-  } else if (blockedCase.automaticBlocked) {
-    blockedFormattedCase.blockedDateEarliest = formatDateString(
-      blockedCase.automaticBlockedDate!,
-      'MMDDYY',
-    );
-  }
-  return blockedFormattedCase;
 };

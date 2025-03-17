@@ -3,13 +3,7 @@ import { Icon } from '@web-client/ustc-ui/Icon/Icon';
 import React from 'react';
 import classNames from 'classnames';
 
-export function CaseIcons({
-  formattedCase,
-  shouldIndent = true,
-}: {
-  formattedCase: any;
-  shouldIndent?: boolean;
-}) {
+export function CaseIcons({ formattedCase }: { formattedCase: any }) {
   return (
     <div
       className="multi-filing-type-icon"
@@ -32,9 +26,7 @@ export function CaseIcons({
       <span
         className={classNames({
           'margin-left-2':
-            formattedCase.inConsolidatedGroup &&
-            !formattedCase.isLeadCase &&
-            shouldIndent,
+            formattedCase.inConsolidatedGroup && !formattedCase.isLeadCase,
         })}
       >
         <ConsolidatedCaseIcon

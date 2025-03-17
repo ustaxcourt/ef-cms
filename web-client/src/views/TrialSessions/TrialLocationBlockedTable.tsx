@@ -63,10 +63,7 @@ export const TrialLocationBlockedTable = connect(
                 return (
                   <tr key={blockedCase.docketNumber}>
                     <td>
-                      <CaseIcons
-                        formattedCase={blockedCase}
-                        shouldIndent={blockedCase.shouldIndent}
-                      />
+                      <CaseIcons formattedCase={blockedCase} />
                     </td>
                     <td>
                       <CaseLink formattedCase={blockedCase} />
