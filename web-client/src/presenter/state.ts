@@ -100,6 +100,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
+import { initialMinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
@@ -151,6 +152,7 @@ import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
+import { trialSessionMinutesFormOptionsHelper } from './computeds/TrialSession/TrialSessionMinutes/trialSessionMinutesFormOptionsHelper';
 import { trialSessionPlanningReportViewHelper } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
@@ -162,6 +164,7 @@ import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -542,6 +545,10 @@ export const computeds = {
   trialSessionHeaderHelper: trialSessionHeaderHelper as unknown as ReturnType<
     typeof trialSessionHeaderHelper
   >,
+  trialSessionMinutesFormOptionsHelper:
+    trialSessionMinutesFormOptionsHelper as unknown as ReturnType<
+      typeof trialSessionMinutesFormOptionsHelper
+    >,
   trialSessionPlanningReportViewHelper:
     trialSessionPlanningReportViewHelper as unknown as ReturnType<
       typeof trialSessionPlanningReportViewHelper
@@ -580,6 +587,9 @@ export const baseState = {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
+  [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
+    | RawGenerateSuggestedTermForm
+    | undefined,
   [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -619,13 +629,14 @@ export const baseState = {
   blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
   blockedCases: [] as BlockedCaseData[],
   caseDeadlineReport: {} as {
-    caseDeadlines: (RawCaseDeadline & {
+    caseDeadlinesForCurrentPage: (RawCaseDeadline & {
       caseCaption: string;
       docketNumber: string;
       docketNumberSuffix: string;
       docketNumberWithSuffix: string;
       leadDocketNumber: string;
     })[];
+    caseDeadlinesTotalCount: 0;
     judgeFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],
@@ -729,6 +740,8 @@ export const baseState = {
     selectedMessages: new Map() as Map<string, string>,
   },
   messagesSectionCount: 0,
+  minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
+  minuteSheetFormSnapshot: '',
   modal: {
     contactSupportMessage: undefined, // the "contact support" message sans email address
     docketEntry: undefined,

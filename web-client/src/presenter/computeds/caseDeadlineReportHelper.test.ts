@@ -45,7 +45,7 @@ describe('caseDeadlineReportHelper', () => {
   it('should use only the formatted startDate in header if start and end date are on the same day in ET', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
-        caseDeadlineReport: { caseDeadlines },
+        caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
         screenMetadata: {
           filterEndDate: '2019-08-21T12:59:59.000Z',
           filterStartDate: '2019-08-21T04:00:00.000Z',
@@ -58,7 +58,7 @@ describe('caseDeadlineReportHelper', () => {
   it('should return sorted and formatted judges with Chief Judge concatenated', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
-        caseDeadlineReport: { caseDeadlines },
+        caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
         judges: [{ name: 'Carluzzo' }, { name: 'Buch' }, { name: 'Dredd' }],
         screenMetadata: {
           filterEndDate: '2019-08-21T12:59:59.000Z',
@@ -72,7 +72,7 @@ describe('caseDeadlineReportHelper', () => {
   it('should format the associated judge name to remove title so only the last name is returned', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
-        caseDeadlineReport: { caseDeadlines },
+        caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
         judges: [{ name: 'Carluzzo' }, { name: 'Buch' }, { name: 'Dredd' }],
         screenMetadata: {
           filterEndDate: '2019-08-21T12:59:59.000Z',
@@ -120,7 +120,9 @@ describe('caseDeadlineReportHelper', () => {
     ];
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
-        caseDeadlineReport: { caseDeadlines: consolidatedCaseDeadlines },
+        caseDeadlineReport: {
+          caseDeadlinesForCurrentPage: consolidatedCaseDeadlines,
+        },
         judges: [{ name: 'Carluzzo' }, { name: 'Buch' }],
         screenMetadata: {
           filterEndDate: '2019-08-21T12:59:59.000Z',
@@ -150,7 +152,7 @@ describe('caseDeadlineReportHelper', () => {
     it('should return showJudgeSelect true when caseDeadlines length is greater than 0', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
-          caseDeadlineReport: { caseDeadlines },
+          caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
             filterStartDate: '2019-08-21T04:00:00.000Z',
@@ -180,7 +182,7 @@ describe('caseDeadlineReportHelper', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
           caseDeadlineReport: {
-            caseDeadlines: [],
+            caseDeadlinesForCurrentPage: [],
           },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
@@ -197,7 +199,7 @@ describe('caseDeadlineReportHelper', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
           caseDeadlineReport: {
-            caseDeadlines: [],
+            caseDeadlinesForCurrentPage: [],
           },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
@@ -211,7 +213,7 @@ describe('caseDeadlineReportHelper', () => {
     it('should return showNoDeadlines false when caseDeadlines length is greater than 0', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
-          caseDeadlineReport: { caseDeadlines },
+          caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
             filterStartDate: '2019-08-21T04:00:00.000Z',

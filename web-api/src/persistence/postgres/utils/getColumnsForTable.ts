@@ -10,6 +10,7 @@ import {
 import { DW_CASE_WORKSHEET_COLUMNS } from '@web-api/persistence/postgres/caseWorksheets/mapper';
 import { DW_DOCKET_ENTRY_COLUMNS } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { DW_MESSAGE_COLUMNS } from '@web-api/persistence/postgres/messages/mapper';
+import { DW_MINUTE_SHEET_COLUMNS } from '@web-api/persistence/postgres/minuteSheets/mapper';
 import { DW_USER_CASE_NOTE_COLUMNS } from '@web-api/persistence/postgres/userCaseNotes/mapper';
 import { DW_WORK_ITEM_COLUMNS } from '@web-api/persistence/postgres/workitems/mapper';
 
@@ -26,6 +27,7 @@ const columnsByTable: Record<string, any[]> = {
   dwStatisticPenalty: DW_STATISTIC_PENALTY_COLUMNS,
   dwUserCaseNote: DW_USER_CASE_NOTE_COLUMNS,
   dwWorkItem: DW_WORK_ITEM_COLUMNS,
+  dwMinuteSheet: DW_MINUTE_SHEET_COLUMNS,
 };
 
 export const getColumnsForTable = (table: string): any[] => {
