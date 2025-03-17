@@ -6,6 +6,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { ORDER_RESPONSE_DOCUMENTS_ALLOWLIST } from '@shared/business/entities/EntityConstants';
 export const documentViewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -102,7 +103,11 @@ export const documentViewerHelper = (
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
   // TODO 10586: refactor to use document allow list like stampbutton
-  const showOrderResponseButton = permissions.ORDER_RESPONSE;
+  const showOrderResponseButton =
+    permissions.ORDER_RESPONSE &&
+    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(
+      formattedDocumentToDisplay.eventCode,
+    );
 
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
