@@ -37,7 +37,7 @@
     "@aws-sdk/s3-presigned-post": "3.758.0",
     "@aws-sdk/s3-request-presigner": "3.758.0",
     "@aws-sdk/util-dynamodb": "3.767.0",
-    "@cerebral/react": "4.2.1",
+    "@cerebral/react": "github:ustaxcourt/cerebral-react#main",
     "@fortawesome/fontawesome-svg-core": "1.2.36",
     "@fortawesome/free-regular-svg-icons": "5.15.4",
     "@fortawesome/free-solid-svg-icons": "5.15.4",
