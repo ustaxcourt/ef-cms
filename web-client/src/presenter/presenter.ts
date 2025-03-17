@@ -138,6 +138,7 @@ import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryRepo
 import { getCustomCaseReportSequence } from './sequences/getCustomCaseReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
+import { goToOrderResponseSequence } from './sequences/gotoOrderResponseSequence';
 import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { goToForgotPasswordSequence } from '@web-client/presenter/sequences/Login/goToForgotPasswordSequence';
@@ -821,6 +822,7 @@ export const presenterSequences = {
   goToChangePasswordSequence,
   goToCreatePetitionerAccountSequence,
   goToForgotPasswordSequence,
+  goToOrderResponseSequence: goToOrderResponseSequence as unknown as Function,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
   gotoAccessibilityStatementSequence:

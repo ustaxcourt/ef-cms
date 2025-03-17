@@ -191,12 +191,12 @@ export const DocumentViewerDocument = connect(
                   link
                   data-testid="order-response-button"
                   icon="stamp"
-                  // onClick={() => {
-                  //   navigateToPathAndSetRedirectUrlSequence({
-                  //     path: documentViewerLinksHelper.applyStampFromCaseDetailsLink,
-                  //     redirectUrl: documentViewerLinksHelper.redirectUrl,
-                  //   });
-                  // }}
+                  onClick={() => {
+                    navigateToPathAndSetRedirectUrlSequence({
+                      path: documentViewerLinksHelper.orderResponseFromCaseDetailsLink,
+                      redirectUrl: documentViewerLinksHelper.redirectUrl,
+                    });
+                  }}
                 >
                   Order Response
                 </Button>
