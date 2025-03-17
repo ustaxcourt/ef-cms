@@ -61,11 +61,13 @@ export const workQueueHelper = (
   const userIsDocketClerk = user.role === USER_ROLES.docketClerk;
   const isCaseServicesSupervisor =
     user.role === USER_ROLES.caseServicesSupervisor;
-  const userIsOther = ![
-    USER_ROLES.docketClerk,
-    USER_ROLES.petitionsClerk,
-    USER_ROLES.caseServicesSupervisor,
-  ].includes(user.role);
+  const userIsOther = !(
+    [
+      USER_ROLES.docketClerk,
+      USER_ROLES.petitionsClerk,
+      USER_ROLES.caseServicesSupervisor,
+    ] as string[]
+  ).includes(user.role);
   let workQueueTitle = `${
     showIndividualWorkQueue ? 'My ' : userIsOther ? '' : 'Section '
   }Document QC`;
