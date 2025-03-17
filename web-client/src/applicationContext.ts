@@ -23,7 +23,7 @@ import {
   getServedPartiesCode,
 } from '../../shared/src/business/entities/DocketEntry';
 import {
-  ERROR_MAP_429,
+  ERROR_429,
   getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
@@ -401,7 +401,6 @@ const clientSupportsES2022 = (() => {
     }
 
     return true;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return false; // Any failure indicates lack of support
   }
@@ -656,7 +655,7 @@ tryCatchDecorator(allUseCases);
 
 const appConstants = deepFreeze({
   ...getConstants(),
-  ERROR_MAP_429,
+  ERROR_429,
 }) as ReturnType<typeof getConstants>;
 
 const applicationContext = {
