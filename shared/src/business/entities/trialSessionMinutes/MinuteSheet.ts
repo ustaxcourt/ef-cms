@@ -177,5 +177,5 @@ export type Witness = {
 export type Exhibit = {
   description: string;
   status: ExhibitStatusOption;
-  note?: string;
+  note: string;
 };
