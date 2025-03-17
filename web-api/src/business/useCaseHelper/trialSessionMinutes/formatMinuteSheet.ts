@@ -60,6 +60,7 @@ export type FormattedMinuteSheet = {
     totalTrialHours: string;
     briefType: string;
     briefDetails: string[];
+    note: string;
   };
   petitionerWitnesses: { name: string }[];
   respondentWitnesses: { name: string }[];
@@ -383,10 +384,10 @@ export const formatTrialBrief = (trialBrief: MinuteSheet['brief']) => {
     benchOpinionRendered: [
       trialBrief.benchOpinionDate ? trialBrief.benchOpinionDate : '',
       trialBrief.transcriptOrdered ? 'Transcript ordered' : '',
-      trialBrief.note ? `<em>${trialBrief.note}</em>` : '',
     ]
       .filter(substring => !!substring)
       .join('; '),
+    note: trialBrief.note ? `<em>${trialBrief.note}</em>` : '',
     briefDetails: getBriefDetails(trialBrief.details),
     briefType: trialBrief.type || '',
     dateSubmitted: trialBrief.dateSubmitted ? trialBrief.dateSubmitted : '',

@@ -831,14 +831,14 @@ describe('formatMinuteSheet', () => {
         };
         const result = formatTrialBrief(section);
         expect(result).toEqual({
-          benchOpinionRendered:
-            '01/15/2023; Transcript ordered; <em>bench opinion note</em>',
+          benchOpinionRendered: '01/15/2023; Transcript ordered',
           briefDetails: [
             'Opening - petitioner; Due 02/15/2023; <em>Opening brief note</em>',
           ],
           briefType: 'seriatimBrief',
           dateSubmitted: '01/01/2023',
           totalTrialHours: '5',
+          note: '<em>bench opinion note</em>',
         });
       });
 
@@ -859,6 +859,7 @@ describe('formatMinuteSheet', () => {
           briefType: '',
           dateSubmitted: '',
           totalTrialHours: '',
+          note: '',
         });
       });
 
@@ -874,7 +875,7 @@ describe('formatMinuteSheet', () => {
         };
         const result = formatTrialBrief(section);
         expect(result.benchOpinionRendered).toBe(
-          '01/15/2023; Transcript ordered; <em>bench opinion note</em>',
+          '01/15/2023; Transcript ordered',
         );
       });
 
@@ -890,20 +891,6 @@ describe('formatMinuteSheet', () => {
         };
         const result = formatTrialBrief(section);
         expect(result.benchOpinionRendered).toBe('01/15/2023');
-      });
-
-      it('should format benchOpinionRendered correctly when only note is present', () => {
-        const section: MinuteSheet['brief'] = {
-          type: '' as BriefTypeOption,
-          details: {},
-          dateSubmitted: '',
-          hoursOfTrial: 0,
-          benchOpinionDate: '',
-          transcriptOrdered: false,
-          note: 'bench opinion note',
-        };
-        const result = formatTrialBrief(section);
-        expect(result.benchOpinionRendered).toBe('<em>bench opinion note</em>');
       });
 
       it('should format benchOpinionRendered correctly when only transcriptOrdered is present', () => {
