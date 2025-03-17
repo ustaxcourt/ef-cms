@@ -1,7 +1,5 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
-export type DatabaseTableName = keyof Database;
-
 const messageTableDefinition = {
   attachments: {} as
     | ColumnType<{ documentId: string }[], string, string>
