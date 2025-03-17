@@ -76,11 +76,6 @@ export const IndividualWorkQueueOutbox = connect(
                     {item.formattedCaseStatus}
                   </td>
                 )}
-                {workQueueHelper.showAssignedToColumn && (
-                  <td className="to message-queue-row">
-                    {item.currentMessage.to}
-                  </td>
-                )}
                 <td className="message-queue-row">
                   {item.completedAtFormatted}
                 </td>
