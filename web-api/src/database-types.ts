@@ -2,21 +2,6 @@ import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 
 export type DatabaseTableName = keyof Database;
 
-export interface Database {
-  dwCase: CaseTable;
-  dwCaseCorrespondence: CaseCorrespondenceTable;
-  dwCaseDeadline: CaseDeadlineTable;
-  dwCaseStatistic: CaseStatisticTable;
-  dwCaseStatusUpdate: CaseStatusUpdateTable;
-  dwCaseWorksheet: CaseWorksheetTable;
-  dwDocketEntry: DocketEntryTable;
-  dwMessage: MessageTable;
-  dwPetitionerOnCase: PetitionerOnCaseTable;
-  dwStatisticPenalty: StatisticPenaltyTable;
-  dwUserCaseNote: UserCaseNoteTable;
-  dwWorkItem: WorkItemTable;
-}
-
 const messageTableDefinition = {
   attachments: {} as
     | ColumnType<{ documentId: string }[], string, string>
@@ -349,7 +334,6 @@ export type NewUserCaseNoteKysely = Insertable<UserCaseNoteTable>;
 export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
 
 // TODO: This is just a stub to get things out of Open Search and into Postgres
-
 const docketEntryTableDefinition = {
   createdAt: {} as Date,
   docketEntryId: {} as string,
@@ -379,3 +363,57 @@ export const DW_DOCKET_ENTRY_COLUMNS = Object.keys(
 export type DocketEntryKysely = Selectable<DocketEntryTable>;
 export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
 export type UpdateDocketEntryKysely = Updateable<DocketEntryTable>;
+
+export const DatabaseSchema = {
+  dwCase: { table: {} as CaseTable, columns: DW_CASE_COLUMNS },
+  dwCaseCorrespondence: {
+    table: {} as CaseCorrespondenceTable,
+    columns: DW_CASE_CORRESPONDENCE_COLUMNS,
+  },
+  dwCaseDeadline: {
+    table: {} as CaseDeadlineTable,
+    columns: DW_CASE_DEADLINE_COLUMNS,
+  },
+  dwCaseStatistic: {
+    table: {} as CaseStatisticTable,
+    columns: DW_CASE_STATISTIC_COLUMNS,
+  },
+  dwCaseStatusUpdate: {
+    table: {} as CaseStatusUpdateTable,
+    columns: DW_CASE_STATUS_UPDATES_COLUMNS,
+  },
+  dwCaseWorksheet: {
+    table: {} as CaseWorksheetTable,
+    columns: DW_CASE_WORKSHEET_COLUMNS,
+  },
+  dwDocketEntry: {
+    table: {} as DocketEntryTable,
+    columns: DW_DOCKET_ENTRY_COLUMNS,
+  },
+  dwMessage: {
+    table: {} as MessageTable,
+    columns: DW_MESSAGE_COLUMNS,
+  },
+  dwPetitionerOnCase: {
+    table: {} as PetitionerOnCaseTable,
+    columns: DW_PETITIONERS_ON_CASE_COLUMNS,
+  },
+  dwStatisticPenalty: {
+    table: {} as StatisticPenaltyTable,
+    columns: DW_STATISTIC_PENALTY_COLUMNS,
+  },
+  dwUserCaseNote: {
+    table: {} as UserCaseNoteTable,
+    columns: DW_USER_CASE_NOTE_COLUMNS,
+  },
+  dwWorkItem: {
+    table: {} as WorkItemTable,
+    columns: DW_WORK_ITEM_COLUMNS,
+  },
+};
+
+type ExtractTable<T> = T extends { table: infer U } ? U : never;
+
+export type Database = {
+  [K in keyof typeof DatabaseSchema]: ExtractTable<(typeof DatabaseSchema)[K]>;
+};
