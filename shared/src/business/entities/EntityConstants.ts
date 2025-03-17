@@ -635,6 +635,12 @@ export const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
   .filter((internalEvent: Record<string, any>) => !internalEvent.caseDecision)
   .map(x => x.eventCode);
 
+export const ORDER_RESPONSE_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter((doc: Record<string, any>) => doc.allowOrderResponse)
+    .map(x => x.eventCode),
+);
+
 export const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
     .filter((doc: Record<string, any>) => doc.allowStamp)

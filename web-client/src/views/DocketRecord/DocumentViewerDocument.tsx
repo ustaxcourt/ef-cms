@@ -198,7 +198,7 @@ export const DocumentViewerDocument = connect(
                   //   });
                   // }}
                 >
-                  Order Respones
+                  Order Response
                 </Button>
               )}
               {documentViewerHelper.showStatusReportOrderButton && (
