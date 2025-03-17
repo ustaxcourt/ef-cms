@@ -709,7 +709,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              'Motion to Dismiss; 01/15/2023; Filed by Petitioner; Granted; <em>test note</em>',
+              'Motion to Dismiss; 01/15/2023; Filed by Petitioner; GRANTED; <em>test note</em>',
             motionType: 'Motion to Dismiss',
           },
         ]);
@@ -731,7 +731,51 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              'Oral Motion to Dismiss; 01/15/2023; Filed by Petitioner; Granted; <em>test note</em>',
+              'Oral Motion to Dismiss; 01/15/2023; Filed by Petitioner; GRANTED; <em>test note</em>',
+            motionType: 'Motion to Dismiss',
+          },
+        ]);
+      });
+
+      it('should format a motion with an "unknown" objection correctly', () => {
+        const motionsSection: MinuteSheet['proceedings']['motions'] = [
+          {
+            date: '01/15/2023',
+            filedBy: 'petitioner' as MotionFiledByOption,
+            note: 'test note',
+            objection: 'unknown',
+            oralMotion: true,
+            status: 'granted' as MotionStatusOption,
+            type: 'motionToDismiss' as MotionTypeOption,
+          },
+        ];
+        const result = formatMotions(motionsSection);
+        expect(result).toEqual([
+          {
+            content:
+              'Oral Motion to Dismiss; 01/15/2023; Filed by Petitioner; GRANTED; Obj. Unknown; <em>test note</em>',
+            motionType: 'Motion to Dismiss',
+          },
+        ]);
+      });
+
+      it('should format a motion with an objection correctly', () => {
+        const motionsSection: MinuteSheet['proceedings']['motions'] = [
+          {
+            date: '01/15/2023',
+            filedBy: 'petitioner' as MotionFiledByOption,
+            note: 'test note',
+            objection: 'objection',
+            oralMotion: true,
+            status: 'granted' as MotionStatusOption,
+            type: 'motionToDismiss' as MotionTypeOption,
+          },
+        ];
+        const result = formatMotions(motionsSection);
+        expect(result).toEqual([
+          {
+            content:
+              'Oral Motion to Dismiss; 01/15/2023; Filed by Petitioner; GRANTED; Objection; <em>test note</em>',
             motionType: 'Motion to Dismiss',
           },
         ]);
@@ -779,7 +823,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              '01/15/2023; Filing - <em>test note</em>; Petitioner; Filed',
+              '01/15/2023; Filing - <em>test note</em>; Filed by Petitioner; Filed',
           },
         ]);
       });
@@ -800,7 +844,7 @@ describe('formatMinuteSheet', () => {
         const result = formatActionsAndFilings(actionsSection);
         expect(result).toEqual([
           {
-            content: '01/15/2023; Filing; Petitioner; Filed',
+            content: '01/15/2023; Filing; Filed by Petitioner; Filed',
           },
         ]);
       });
@@ -839,7 +883,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              '01/15/2023; Motion - Oral Motion <em>test note</em>; Petitioner; Filed',
+              '01/15/2023; Motion - Oral Motion <em>test note</em>; Filed by Petitioner; Filed',
           },
         ]);
       });
@@ -862,7 +906,30 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              '01/15/2023; Motion - <em>test note</em>; Petitioner; Filed; No Objection',
+              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; Filed; No Objection',
+          },
+        ]);
+      });
+
+      it('should format an unknown objection correctly', () => {
+        const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
+          [
+            {
+              date: '01/15/2023',
+              documentType: 'motion',
+              filedBy: 'petitioner',
+              status: 'filed',
+              note: 'test note',
+              isOnDocketRecord: true,
+              oralMotion: false,
+              objection: 'unknown' as MotionObjectionOption,
+            },
+          ];
+        const result = formatActionsAndFilings(actionsSection);
+        expect(result).toEqual([
+          {
+            content:
+              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; Filed; Obj. Unknown',
           },
         ]);
       });

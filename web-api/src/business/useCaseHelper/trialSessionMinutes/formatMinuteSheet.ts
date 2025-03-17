@@ -345,8 +345,8 @@ export const formatMotions = (
         MOTION_FILED_BY_OPTIONS[motion.filedBy]
           ? `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`
           : '',
-        MOTION_STATUS_OPTIONS[motion.status],
-        MOTION_OBJECTION_OPTIONS[motion.objection],
+        MOTION_STATUS_OPTIONS[motion.status]?.toUpperCase(),
+        formatObjection(motion.objection),
         motion.note ? `<em>${motion.note}</em>` : '',
       ]
         .filter(substring => !!substring)
@@ -363,28 +363,40 @@ export const formatActionsAndFilings = (
   actionsAndFilings: MinuteSheet['proceedings']['actionsAndFilings'],
 ) => {
   return actionsAndFilings
-    .map(action => ({
-      content: [
-        action.date,
-        [
-          ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]
-            ? `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}`
-            : '',
+    .map(action => {
+      return {
+        content: [
+          action.date,
           [
-            action.oralMotion ? 'Oral Motion ' : '',
-            action.note ? `<em>${action.note}</em>` : '',
-          ].join(''),
+            ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]
+              ? `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}`
+              : '',
+            [
+              action.oralMotion ? 'Oral Motion ' : '',
+              action.note ? `<em>${action.note}</em>` : '',
+            ].join(''),
+          ]
+            .filter(substring => !!substring)
+            .join(' - '),
+          action.filedBy
+            ? `Filed by ${ACTION_FILED_BY_OPTIONS[action.filedBy]}`
+            : '',
+          action.status ? ACTION_STATUS_OPTIONS[action.status] : '',
+          formatObjection(action.objection),
         ]
           .filter(substring => !!substring)
-          .join(' - '),
-        action.filedBy ? ACTION_FILED_BY_OPTIONS[action.filedBy] : '',
-        action.status ? ACTION_STATUS_OPTIONS[action.status] : '',
-        action.objection ? MOTION_OBJECTION_OPTIONS[action.objection] : '',
-      ]
-        .filter(substring => !!substring)
-        .join('; '),
-    }))
+          .join('; '),
+      };
+    })
     .filter(action => !!action.content);
+};
+
+const formatObjection = (objection: string | undefined) => {
+  const objectionText = objection ? MOTION_OBJECTION_OPTIONS[objection] : '';
+
+  return objectionText === MOTION_OBJECTION_OPTIONS.unknown
+    ? 'Obj. Unknown'
+    : objectionText;
 };
 
 export const formatTrialBrief = (trialBrief: MinuteSheet['brief']) => {
