@@ -70,11 +70,7 @@ export const TrialLocationEligibleCasesTable = connect(
                   <tbody key={eligibleCase.docketNumber}>
                     <tr>
                       <td>
-                        {/* TODO: should highPriority cases get an icon? */}
-                        <CaseIcons
-                          formattedCase={eligibleCase}
-                          shouldIndent={eligibleCase.shouldIndent}
-                        />
+                        <CaseIcons formattedCase={eligibleCase} />
                       </td>
                       <td>
                         <CaseLink formattedCase={eligibleCase} />

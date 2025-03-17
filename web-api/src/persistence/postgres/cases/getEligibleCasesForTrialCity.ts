@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { convertDbRowToRawEligibleCase } from '@web-api/persistence/postgres/cases/mapper';
+import { RawEligibleCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { query } from '@web-api/persistence/dynamodbClientService';
@@ -32,11 +32,8 @@ export const getEligibleCasesForTrialCity = async ({
       .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
       .where(eb =>
         eb.and([
-          eb.or([
-            eb('automaticBlocked', '=', false),
-            eb('automaticBlocked', 'is', null),
-          ]),
-          eb.or([eb('blocked', '=', false), eb('blocked', 'is', null)]),
+          eb('automaticBlocked', 'is not', true),
+          eb('blocked', 'is not', true),
           eb.not(
             eb.exists(sq =>
               sq
@@ -96,9 +93,7 @@ export const getEligibleCasesForTrialCity = async ({
   const fullEligibleCases = await Promise.all(casePromises);
 
   const casesForReturn = fullEligibleCases.map(c => {
-    return c
-      ? transformNullToUndefined(convertDbRowToRawEligibleCase(c))
-      : undefined;
+    return c ? transformNullToUndefined(RawEligibleCaseEntity(c)) : undefined;
   });
 
   return casesForReturn || [];

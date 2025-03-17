@@ -318,7 +318,7 @@ export const indexCaseEntity = ({
   );
 };
 
-export const convertDbRowToRawEligibleCase = (dbCase: any): RawEligibleCase => {
+export const RawEligibleCaseEntity = (dbCase: any): RawEligibleCase => {
   return {
     ...dbCase,
     caseCaption: dbCase.caption,
