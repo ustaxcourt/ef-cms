@@ -26,7 +26,21 @@ export type PractitionersByName = {
 
 export const getPractitionersByNameInteractor = async (
   applicationContext: ServerApplicationContext,
-  { name, searchAfter }: { name: string; searchAfter: string },
+  {
+    name,
+    searchAfter,
+    practitionerType,
+    practiceType,
+    admissionStatus,
+    originalBarState,
+  }: {
+    name: string;
+    searchAfter: string[];
+    practitionerType?: string;
+    practiceType?: string;
+    admissionStatus?: string;
+    originalBarState?: string;
+  },
   authorizedUser: UnknownAuthUser,
 ): Promise<PractitionersByName> => {
   const isLoggedInUser = !!authorizedUser?.userId;
@@ -47,6 +61,10 @@ export const getPractitionersByNameInteractor = async (
     .getPractitionersByName(applicationContext, {
       name,
       searchAfter,
+      practitionerType,
+      practiceType,
+      admissionStatus,
+      originalBarState,
     });
 
   const practitioners = results.map(foundUser => ({

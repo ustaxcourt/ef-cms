@@ -28,12 +28,61 @@ export type PractitionerSearchResultType = {
 
 export const getPractitionersByName = async (
   applicationContext: ServerApplicationContext,
-  { name, searchAfter },
+  {
+    name,
+    practitionerType,
+    practiceType,
+    admissionStatus,
+    originalBarState,
+    searchAfter,
+  }: {
+    name?: string;
+    practitionerType?: string;
+    practiceType?: string;
+    admissionStatus?: string;
+    originalBarState?: string;
+    searchAfter?: string[];
+  },
 ): Promise<{
   lastKey: (string | number)[];
   total: number;
   results: PractitionerSearchResultType[];
 }> => {
+  const searchClause: Record<string, any>[] = [
+    ...IS_PRACTITIONER,
+    {
+      simple_query_string: {
+        default_operator: 'and',
+        fields: ['name.S'],
+        query: name,
+      },
+    },
+  ];
+
+  if (practitionerType) {
+    searchClause.push({
+      term: { 'practitionerType.S': practitionerType },
+    });
+  }
+
+  if (practiceType) {
+    searchClause.push({
+      term: { 'practiceType.S': practiceType },
+    });
+  }
+
+  if (admissionStatus) {
+    searchClause.push({
+      term: { 'admissionsStatus.S': admissionStatus },
+    });
+  }
+
+  if (originalBarState) {
+    searchClause.push({
+      term: { 'originalBarState.S': originalBarState },
+    });
+  }
+
   const searchParameters: Search_Request = {
     body: {
       _source: [
@@ -48,16 +97,7 @@ export const getPractitionersByName = async (
       ],
       query: {
         bool: {
-          must: [
-            ...IS_PRACTITIONER,
-            {
-              simple_query_string: {
-                default_operator: 'and',
-                fields: ['name.S'],
-                query: name,
-              },
-            },
-          ],
+          must: searchClause,
         },
       },
       search_after: searchAfter,
