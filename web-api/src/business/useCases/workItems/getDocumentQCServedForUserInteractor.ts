@@ -5,24 +5,17 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import {
   calculateDate,
   createISODateAtStartOfDayEST,
 } from '@shared/business/utilities/DateHandler';
 import { getDocumentQCServedForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser';
+import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.userId the user to get the document qc served box
- * @returns {object} the work items in the user document served inbox
- */
 export const getDocumentQCServedForUserInteractor = async (
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<WorkItemAbomination[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -43,5 +36,5 @@ export const getDocumentQCServedForUserInteractor = async (
     authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
   );
 
-  return WorkItem.validateRawCollection(filteredWorkItems);
+  return filteredWorkItems;
 };

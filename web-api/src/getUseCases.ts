@@ -90,7 +90,6 @@ import { getDocumentContentsForDocketEntryInteractor } from './business/useCases
 import { getDocumentQCInboxForSectionInteractor } from './business/useCases/workItems/getDocumentQCInboxForSectionInteractor';
 import { getDocumentQCInboxForUserInteractor } from './business/useCases/workItems/getDocumentQCInboxForUserInteractor';
 import { getDocumentQCServedForSectionInteractor } from './business/useCases/workItems/getDocumentQCServedForSectionInteractor';
-import { getDocumentQCServedForUserInteractor } from './business/useCases/workItems/getDocumentQCServedForUserInteractor';
 import { getDownloadPolicyUrlInteractor } from './business/useCases/document/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
 import { getHealthCheckInteractor } from './business/useCases/health/getHealthCheckInteractor';
@@ -303,7 +302,6 @@ const useCases = {
   getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
   getDocumentQCServedForSectionInteractor,
-  getDocumentQCServedForUserInteractor,
   getDownloadPolicyUrlInteractor,
   getEligibleCasesForTrialSessionInteractor,
   getHealthCheckInteractor,
