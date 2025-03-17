@@ -1,6 +1,5 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { CaseDeadline } from '@shared/business//entities/CaseDeadline';
-import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business//entities/EntityConstants';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -9,6 +8,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { getCaseDeadlinesByDateRange } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange';
 import { pick } from 'lodash';
+import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 
 type CaseDeadlineResponseInfo = {
   associatedJudge: string;
@@ -72,5 +72,5 @@ export const getCaseDeadlinesInteractor = async (
     });
   }
 
-  return { deadlines: deadlinesWithFullInfo, totalCount: Number(totalCount) };
+  return { deadlines: deadlinesWithFullInfo, totalCount };
 };

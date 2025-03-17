@@ -247,6 +247,7 @@ export interface CaseStatisticTable {
   determinationDeficiencyAmount?: string | null;
   determinationTotalPenalties?: string | null;
   lastDateOfPeriod?: Date | null;
+  updatedAt: Date;
 }
 
 export type CaseStatisticKysely = Selectable<CaseStatisticTable>;
@@ -259,6 +260,7 @@ export interface StatisticPenaltyTable {
   penaltyAmount: string;
   penaltyId: string;
   penaltyType: string;
+  updatedAt: Date;
 }
 
 export type StatisticPenaltyKysely = Selectable<StatisticPenaltyTable>;

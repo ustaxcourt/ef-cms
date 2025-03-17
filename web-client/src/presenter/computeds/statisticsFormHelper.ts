@@ -9,6 +9,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { MAX_NUMBER_DEFICIENCY_STATISTICS } from '@shared/business/entities/EntityConstants';
 export const statisticsFormHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -25,9 +26,13 @@ export const statisticsFormHelper = (
     form.caseType === CASE_TYPES_MAP.deficiency && form.hasVerifiedIrsNotice;
 
   const showAddMoreStatisticsButton =
-    form.statistics && form.statistics.length < 12;
+    form.statistics &&
+    form.statistics.length < MAX_NUMBER_DEFICIENCY_STATISTICS;
 
-  const statisticOptions = [];
+  const statisticOptions: {
+    showPeriodInput?: boolean;
+    showYearInput?: boolean;
+  }[] = [];
 
   (form.statistics || []).forEach(statistic => {
     if (statistic.yearOrPeriod === 'Year') {

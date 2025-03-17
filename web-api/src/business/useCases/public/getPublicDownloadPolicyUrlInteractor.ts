@@ -75,6 +75,8 @@ export const getPublicDownloadPolicyUrlInteractor = async (
       user: {
         role: ROLES.petitioner,
         userId: '',
+        email: '',
+        name: '',
       },
       visibilityChangeDate: documentVisibilityChangeDate,
     })
