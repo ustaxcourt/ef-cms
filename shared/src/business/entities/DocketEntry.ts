@@ -13,6 +13,7 @@ import {
   MINUTE_ENTRIES_MAP,
   MINUTE_SHEET_EVENT_CODES,
   MOTION_EVENT_CODES,
+  NOTICE_EVENT_CODES,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
   PARTIES_CODES,
@@ -587,7 +588,7 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   static isNotice(eventCode: string): boolean {
-    return DOCUMENT_NOTICE_EVENT_CODES.includes(eventCode);
+    return NOTICE_EVENT_CODES.includes(eventCode);
   }
 
   static isMinuteSheet(eventCode: string): boolean {

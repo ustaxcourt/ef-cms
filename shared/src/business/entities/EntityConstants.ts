@@ -488,6 +488,12 @@ export const MOTION_EVENT_CODES = [
   }),
 ];
 
+export const NOTICE_EVENT_CODES = [
+  ...INTERNAL_FILING_EVENTS['Notice'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
 export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
   ...EXTERNAL_FILING_EVENTS['Simultaneous Brief'].map(entry => {
     return entry.eventCode;

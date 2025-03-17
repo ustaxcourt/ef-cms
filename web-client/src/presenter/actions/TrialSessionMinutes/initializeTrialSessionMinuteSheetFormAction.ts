@@ -421,11 +421,14 @@ export const getTransformedPendingItemDetails = (
   };
 };
 
-export const transformFiledBy = (pendingItem): string => {
+export const transformFiledBy = (pendingItem: RawDocketEntry): string => {
   if (DocketEntry.isOrder(pendingItem.eventCode))
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court];
 
-  const { filedBy } = pendingItem;
+  const { filedBy, privatePractitioners } = pendingItem;
+
+  if (!filedBy)
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.other];
 
   if (filedBy.startsWith('Resp. &')) {
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.joint];
@@ -441,6 +444,12 @@ export const transformFiledBy = (pendingItem): string => {
 
   if (filedBy.startsWith('Petrs.') || filedBy.startsWith('Petr.')) {
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner];
+  }
+
+  if (Array.isArray(privatePractitioners) && privatePractitioners.length > 0) {
+    return ACTION_FILED_BY_OPTIONS_INVERTED[
+      ACTION_FILED_BY_OPTIONS.practitioner
+    ];
   }
 
   return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.other];
