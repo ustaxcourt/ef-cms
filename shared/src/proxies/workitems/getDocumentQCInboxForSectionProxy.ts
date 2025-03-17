@@ -1,3 +1,4 @@
+import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { get } from '../requests';
 
 /**
@@ -11,7 +12,7 @@ import { get } from '../requests';
 export const getDocumentQCInboxForSectionInteractor = (
   applicationContext,
   { judgeUser, section },
-) => {
+): Promise<WorkItemAbomination[]> => {
   const queryParams =
     judgeUser && judgeUser.name ? { judgeUserName: judgeUser.name } : {};
 

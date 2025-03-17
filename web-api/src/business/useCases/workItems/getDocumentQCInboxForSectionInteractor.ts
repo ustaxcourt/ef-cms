@@ -8,16 +8,9 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
+import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section to get the document qc
- * @returns {object} the work items in the section document inbox
- */
 export const getDocumentQCInboxForSectionInteractor = async (
   {
     judgeUserName,
@@ -27,7 +20,7 @@ export const getDocumentQCInboxForSectionInteractor = async (
     section: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<WorkItemAbomination[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
@@ -44,5 +37,5 @@ export const getDocumentQCInboxForSectionInteractor = async (
     section: sectionToShow,
   });
 
-  return WorkItem.validateRawCollection(workItems);
+  return workItems;
 };

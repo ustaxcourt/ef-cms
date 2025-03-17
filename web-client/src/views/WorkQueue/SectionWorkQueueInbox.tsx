@@ -5,7 +5,7 @@ import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { workQueueItemsAreEqual } from '../../presenter/computeds/formattedWorkQueue';
+import { FormattedWorkItemAbomination } from '../../presenter/computeds/formattedWorkQueue';
 import React from 'react';
 
 const SectionWorkQueueTable = connect(
@@ -24,7 +24,6 @@ const SectionWorkQueueTable = connect(
   },
   function SectionWorkQueueTableComponent({
     formattedWorkQueue,
-    FROM_PAGES,
     hideIconColumn,
     selectWorkItemSequence,
     showAssignedToColumn,
@@ -86,8 +85,7 @@ const SectionWorkQueueTable = connect(
         </thead>
         {formattedWorkQueue.map(formattedWorkItem => {
           return (
-            <SectionWorkQueueTable.Row
-              FROM_PAGES={FROM_PAGES}
+            <SectionWorkQueueTableRow
               hideIconColumn={hideIconColumn}
               item={formattedWorkItem}
               key={formattedWorkItem.workItemId}
@@ -103,107 +101,111 @@ const SectionWorkQueueTable = connect(
   },
 );
 
-SectionWorkQueueTable.Row = React.memo(
-  function SectionWorkQueueTableRowComponent({
-    hideIconColumn,
-    item,
-    selectWorkItemSequence,
-    showAssignedToColumn,
-    showFiledByColumn,
-    showSelectColumn,
-  }) {
-    return (
-      <tbody>
-        <tr data-testid={`work-item-${item.docketNumber}`}>
-          {showSelectColumn && (
-            <td className="message-select-control">
-              <div className="usa-checkbox">
-                <input
-                  aria-label="Select work item"
-                  checked={item.selected}
-                  className="usa-checkbox__input"
-                  data-testid="select-work-item"
-                  id={item.workItemId}
-                  type="checkbox"
-                  onChange={() => {
-                    selectWorkItemSequence({
-                      workItem: item,
-                    });
-                  }}
-                />
-                <label
-                  className="padding-top-05 usa-checkbox__label"
-                  data-testid="checkbox-assign-work-item"
-                  htmlFor={item.workItemId}
-                  id={`label-${item.workItemId}`}
-                >
-                  {''}
-                </label>
-              </div>
-            </td>
-          )}
-          <td className="consolidated-case-column">
-            <ConsolidatedCaseIcon
-              consolidatedIconTooltipText={item.consolidatedIconTooltipText}
-              inConsolidatedGroup={item.inConsolidatedGroup}
-              showLeadCaseIcon={item.inLeadCase}
-            />
-          </td>
-
-          <td className="message-queue-row">
-            <CaseLink formattedCase={item} />
-          </td>
-          <td className="message-queue-row">
-            <span className="no-wrap">{item.received}</span>
-          </td>
-          <td className="message-queue-row message-queue-case-title">
-            {item.caseTitle}
-          </td>
-          {!hideIconColumn && (
-            <td className="message-queue-row has-icon padding-right-0">
-              {item.showUnassignedIcon && (
-                <Icon
-                  aria-label="Unassigned"
-                  className="iconStatusUnassigned"
-                  icon={['fas', 'question-circle']}
-                  size="lg"
-                />
-              )}
-              {item.showHighPriorityIcon && (
-                <Icon
-                  aria-label="High priority"
-                  className="iconHighPriority"
-                  icon={['fas', 'exclamation-circle']}
-                  size="lg"
-                />
-              )}
-            </td>
-          )}
-          <td className="message-queue-row max-width-25">
-            <div className="message-document-title">
-              <a className="case-link" href={item.editLink}>
-                {item.docketEntry.descriptionDisplay}
-              </a>
+function SectionWorkQueueTableRow({
+  hideIconColumn,
+  item,
+  selectWorkItemSequence,
+  showAssignedToColumn,
+  showFiledByColumn,
+  showSelectColumn,
+}: {
+  hideIconColumn: boolean;
+  item: FormattedWorkItemAbomination;
+  selectWorkItemSequence: Function;
+  showAssignedToColumn: boolean;
+  showFiledByColumn: boolean;
+  showSelectColumn: boolean;
+}) {
+  return (
+    <tbody>
+      <tr data-testid={`work-item-${item.docketNumber}`}>
+        {showSelectColumn && (
+          <td className="message-select-control">
+            <div className="usa-checkbox">
+              <input
+                aria-label="Select work item"
+                checked={item.selected}
+                className="usa-checkbox__input"
+                data-testid="select-work-item"
+                id={item.workItemId}
+                type="checkbox"
+                onChange={() => {
+                  selectWorkItemSequence({
+                    workItem: item,
+                  });
+                }}
+              />
+              <label
+                className="padding-top-05 usa-checkbox__label"
+                data-testid="checkbox-assign-work-item"
+                htmlFor={item.workItemId}
+                id={`label-${item.workItemId}`}
+              >
+                {''}
+              </label>
             </div>
           </td>
-          {showFiledByColumn && (
-            <td className="message-queue-row">{item.docketEntry.filedBy}</td>
-          )}
-          <td className="message-queue-row">{item.formattedCaseStatus}</td>
-          {showAssignedToColumn && (
-            <td
-              className="to message-queue-row"
-              data-testid="table-column-work-item-assigned-to"
-            >
-              {item.assigneeName}
-            </td>
-          )}
-        </tr>
-      </tbody>
-    );
-  },
-  workQueueItemsAreEqual,
-);
+        )}
+        <td className="consolidated-case-column">
+          <ConsolidatedCaseIcon
+            consolidatedIconTooltipText={item.consolidatedIconTooltipText}
+            inConsolidatedGroup={item.inConsolidatedGroup}
+            showLeadCaseIcon={item.inLeadCase}
+          />
+        </td>
+
+        <td className="message-queue-row">
+          <CaseLink formattedCase={item} />
+        </td>
+        <td className="message-queue-row">
+          <span className="no-wrap">{item.received}</span>
+        </td>
+        <td className="message-queue-row message-queue-case-title">
+          {item.caseTitle}
+        </td>
+        {!hideIconColumn && (
+          <td className="message-queue-row has-icon padding-right-0">
+            {item.showUnassignedIcon && (
+              <Icon
+                aria-label="Unassigned"
+                className="iconStatusUnassigned"
+                icon={['fas', 'question-circle']}
+                size="lg"
+              />
+            )}
+            {item.showHighPriorityIcon && (
+              <Icon
+                aria-label="High priority"
+                className="iconHighPriority"
+                icon={['fas', 'exclamation-circle']}
+                size="lg"
+              />
+            )}
+          </td>
+        )}
+        <td className="message-queue-row max-width-25">
+          <div className="message-document-title">
+            <a className="case-link" href={item.editLink}>
+              {item.docketEntry.descriptionDisplay}
+            </a>
+          </div>
+        </td>
+        {showFiledByColumn && (
+          <td className="message-queue-row">{item.docketEntry.filedBy}</td>
+        )}
+        <td className="message-queue-row">{item.formattedCaseStatus}</td>
+        {showAssignedToColumn && (
+          <td
+            className="to message-queue-row"
+            data-testid="table-column-work-item-assigned-to"
+          >
+            {item.assigneeName}
+          </td>
+        )}
+      </tr>
+    </tbody>
+  );
+}
 
 export const SectionWorkQueueInbox = connect(
   {

@@ -1,3 +1,4 @@
+import { getDocumentQCInboxForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -20,12 +21,13 @@ export const getDocumentQCInboxForSectionAction = async ({
     judgeUser = { name: CHIEF_JUDGE };
   }
 
-  const workItems = await applicationContext
-    .getUseCases()
-    .getDocumentQCInboxForSectionInteractor(applicationContext, {
+  const workItems = await getDocumentQCInboxForSectionInteractor(
+    applicationContext,
+    {
       judgeUser,
       section: selectedSection || user.section,
-    });
+    },
+  );
 
   return { workItems };
 };
