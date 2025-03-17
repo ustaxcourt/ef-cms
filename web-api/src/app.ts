@@ -93,6 +93,7 @@ import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocum
 import { getDocumentQCInboxForUserLambda } from './lambdas/workitems/getDocumentQCInboxForUserLambda';
 import { getDocumentQCServedForSectionLambda } from './lambdas/workitems/getDocumentQCServedForSectionLambda';
 import { getDocumentQCServedForUserLambda } from './lambdas/workitems/getDocumentQCServedForUserLambda';
+import { getEligibleCasesForCityLambda } from '@web-api/lambdas/trialSessions/getEligibleCasesForCityLambda';
 import { getEligibleCasesForTrialSessionLambda } from './lambdas/trialSessions/getEligibleCasesForTrialSessionLambda';
 import { getGeneratePrintableTrialSessionCopyReportLambda } from './lambdas/trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
 import { getInboxMessagesForSectionLambda } from './lambdas/messages/getInboxMessagesForSectionLambda';
@@ -656,6 +657,10 @@ app.use(expressLogger);
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
+  app.get(
+    '/cases/:trialCity/eligible-cases',
+    lambdaWrapper(getEligibleCasesForCityLambda),
+  );
   app.post('/cases', lambdaWrapper(createCaseLambda));
   app.post(
     '/cases/:docketNumber/case-worksheet',

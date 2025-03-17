@@ -186,6 +186,7 @@ import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/wo
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getEligibleCasesForCityInteractor } from '@shared/proxies/trialSessions/getEligibleCasesForCityProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
@@ -502,6 +503,7 @@ const allUseCases = {
   getDocumentQCInboxForUserInteractor,
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
+  getEligibleCasesForCityInteractor,
   getEligibleCasesForTrialSessionInteractor,
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,

@@ -8,6 +8,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
+  PROCEDURE_TYPES_MAP,
   SESSION_TYPES,
   TRIAL_CITIES,
   US_STATES,
@@ -150,27 +151,27 @@ const getTrialLocation = async (
   },
 ): Promise<TrialLocationData> => {
   const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
-  const trialCityStateStripped = trialCityState.replace(/[\s.,]/g, '');
   const stateAbbreviation = invert(US_STATES)[trialLocation.state];
 
-  const eligibleCasesSmall = await applicationContext
+  const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialCity({
       applicationContext,
-      procedureType: 'Small',
-      trialCity: trialCityStateStripped,
+      trialCity: trialCityState,
     });
 
-  const eligibleCasesRegular = await applicationContext
-    .getPersistenceGateway()
-    .getEligibleCasesForTrialCity({
-      applicationContext,
-      procedureType: 'Regular',
-      trialCity: trialCityStateStripped,
-    });
+  const eligibleCasesRegular = eligibleCases.filter(
+    c => c.procedureType === PROCEDURE_TYPES_MAP.regular,
+  );
 
-  const blockedCasesResult =
-    await getBlockedCasesForTrialLocation(trialCityState);
+  const eligibleCasesSmall = eligibleCases.filter(
+    c => c.procedureType === PROCEDURE_TYPES_MAP.small,
+  );
+
+  const blockedCasesResult = await getBlockedCasesForTrialLocation(
+    trialCityState,
+    true,
+  );
 
   const smallCaseCount = eligibleCasesSmall.length;
   const regularCaseCount = eligibleCasesRegular.length;
