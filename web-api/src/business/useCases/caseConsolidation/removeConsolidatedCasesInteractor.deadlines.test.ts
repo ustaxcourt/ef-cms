@@ -7,6 +7,8 @@ jest.mock('@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines');
 jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
 );
+jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
+jest.mock('@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber');
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
@@ -14,6 +16,8 @@ import { removeConsolidatedCasesInteractor } from '@web-api/business/useCases/ca
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 
 let mockCases;
 let mockLock;
@@ -25,6 +29,9 @@ const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
 
 const getCaseDeadlinesByConsolidatedCaseDeadlineId =
   getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCasesByLeadDocketNumber = getCasesByLeadDocketNumberMock as jest.Mock;
 
 describe('removeConsolidatedCasesInteractor - Deadlines', () => {
   beforeAll(() => {
@@ -72,18 +79,14 @@ describe('removeConsolidatedCasesInteractor - Deadlines', () => {
       },
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        return mockCases[docketNumber];
-      });
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber.mockImplementation(({ leadDocketNumber }) => {
-        return Object.keys(mockCases)
-          .map(key => mockCases[key])
-          .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
-      });
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      return mockCases[docketNumber];
+    });
+    getCasesByLeadDocketNumber.mockImplementation(({ leadDocketNumber }) => {
+      return Object.keys(mockCases)
+        .map(key => mockCases[key])
+        .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
+    });
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
