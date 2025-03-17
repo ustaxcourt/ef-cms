@@ -37,23 +37,15 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
     {
       assigneeId: user.userId,
       assigneeName: user.name,
-      associatedJudge: caseToAdd.associatedJudge,
-      associatedJudgeId: caseToAdd.associatedJudgeId,
-      caseIsInProgress: true,
-      caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
       docketEntry: {
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
       },
       docketNumber: caseToAdd.docketNumber,
-      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
       section: user.section,
       sentBy: user.name,
       sentBySection: user.section,
       sentByUserId: user.userId,
-      trialDate: caseToAdd.trialDate,
-      trialLocation: caseToAdd.trialLocation,
     }
   );
 
