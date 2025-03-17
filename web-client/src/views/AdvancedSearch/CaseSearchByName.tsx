@@ -476,7 +476,7 @@ export const CaseSearchByName = connect(
                 htmlFor="case-type-filter"
                 id="case-type-filter-label"
               >
-                Case type
+                Case type (i.e., docket suffix)
               </label>
               <SelectSearch
                 aria-labelledby="case-type-filter-label"
@@ -489,7 +489,12 @@ export const CaseSearchByName = connect(
                   label: '- Select one or more -',
                   value: '',
                 }}
-                options={caseSearchByNameHelper.caseTypeOptions}
+                options={
+                  caseSearchByNameHelper.caseTypeOptions as {
+                    label: string;
+                    value: string;
+                  }[]
+                }
                 onChange={e => {
                   if (e?.value) {
                     const currentCaseTypeFilters =
@@ -508,14 +513,12 @@ export const CaseSearchByName = connect(
             <div>
               {Object.entries(
                 advancedSearchForm.caseSearchByName?.caseTypes || {},
-              ).map(([label, caseType]: [string, any]) => (
+              ).map(([label, _caseType]: [string, any]) => (
                 <PillButton
-                  key={caseType}
+                  key={label}
                   text={label}
                   onRemove={() => {
-                    delete advancedSearchForm.caseSearchByName.caseTypes[
-                      label
-                    ];
+                    delete advancedSearchForm.caseSearchByName.caseTypes[label];
                     updateCaseAdvancedSearchByNameFormValueSequence({
                       key: 'caseTypes',
                       value: advancedSearchForm.caseSearchByName.caseTypes,

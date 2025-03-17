@@ -1168,6 +1168,19 @@ const router = {
       ),
     );
 
+    registerRoute(
+      '/trial-location/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        trialLocation => {
+          setPageTitle('Trial location');
+          return app.getSequence('gotoTrialLocationSequence')({
+            trialLocation: decodeURIComponent(trialLocation),
+          });
+        },
+      ),
+    );
+
     registerRoute('/idle-logout', () => {
       setPageTitle('Idle Logout');
       return app.getSequence('gotoIdleLogoutSequence')();

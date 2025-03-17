@@ -173,6 +173,12 @@ export const DOCKET_NUMBER_SUFFIXES = {
   WHISTLEBLOWER: 'W',
 };
 
+export const HIGH_PRIORITY_SUFFIXES = [
+  DOCKET_NUMBER_SUFFIXES.LIEN_LEVY, // L
+  DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
+  DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
+];
+
 export const CASE_STATUS_TYPES = {
   assignedCase: 'Assigned - Case', // Case has been assigned to a judge
   assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case

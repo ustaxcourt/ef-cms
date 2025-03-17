@@ -89,6 +89,7 @@ import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
+import { TrialLocation } from '@web-client/views/TrialSessions/TrialLocation';
 import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
 import { TrialSessionMinutesPage } from '@web-client/views/TrialSessionMinutes/TrialSessionMinutesPage';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
@@ -192,6 +193,7 @@ const pages = {
   StartCaseInternal,
   StatusReportOrder,
   StyleGuide,
+  TrialLocation,
   TrialSessionDetails,
   TrialSessionMinutesPage,
   TrialSessionPlanningReportView,

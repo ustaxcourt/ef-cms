@@ -73,7 +73,7 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   const { url } = await getDownloadPolicyUrl({
     applicationContext,
     key: docketEntryId,
-    filename: generateMinuteSheetFilename({ trialSession }),
+    filename: generateMinuteSheetFilename({ trialSession, caseDetail: aCase }),
   });
 
   const documentTitle = `Minutes`;

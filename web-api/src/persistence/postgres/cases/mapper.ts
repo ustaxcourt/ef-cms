@@ -1,6 +1,7 @@
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { Case } from '@shared/business/entities/cases/Case';
 import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
+import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import {
   calculateDate,
   formatNow,
@@ -315,4 +316,14 @@ export const indexCaseEntity = ({
       irsPractitioners,
     }),
   );
+};
+
+export const RawEligibleCaseEntity = (dbCase: any): RawEligibleCase => {
+  return {
+    ...dbCase,
+    caseCaption: dbCase.caption,
+    docketNumberWithSuffix:
+      dbCase.docketNumber +
+      (dbCase.docketNumberSuffix ? dbCase.docketNumberSuffix : ''),
+  };
 };

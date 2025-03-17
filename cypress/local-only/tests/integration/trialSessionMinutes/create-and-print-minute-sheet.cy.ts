@@ -19,7 +19,6 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
         loginAsIrsPractitioner();
         cy.visit(`case-detail/${docketNumber}`);
         getCaseDetailTab('case-information').click();
-
         cy.get('[data-testid="button-first-irs-document"]').click();
         selectTypeaheadInput('complete-doc-document-type-search', 'Answer');
         cy.get('button#submit-document').click();
