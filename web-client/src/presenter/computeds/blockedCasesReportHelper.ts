@@ -146,9 +146,9 @@ function groupCases(cases: BlockedCaseData[]): Map<string, BlockedCaseData[]> {
 
 export type BlockedFormattedCase = {
   docketNumber: string;
-  inConsolidatedGroup?: boolean;
+  inConsolidatedGroup: boolean;
   consolidatedIconTooltipText?: string;
-  isLeadCase?: boolean;
+  isLeadCase: boolean;
   blockedDateEarliest: string;
   caseTitle: string;
   procedureType: string;
