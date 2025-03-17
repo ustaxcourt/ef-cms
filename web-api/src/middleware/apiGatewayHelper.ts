@@ -1,10 +1,8 @@
 import {
   NotFoundError,
   UnauthorizedError,
-  UnsanitizedEntityError,
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '@web-api/applicationContext';
 import { headerOverride } from '../lambdaWrapper';
 import { pick } from 'lodash';
 import jwt from 'jsonwebtoken';
@@ -45,12 +43,6 @@ export const handle = async (event, fun) => {
         statusCode: 200,
       };
     } else {
-      const privateKeys = applicationContext.getPersistencePrivateKeys();
-      (Array.isArray(response) ? response : [response]).forEach(item => {
-        if (item && Object.keys(item).some(key => privateKeys.includes(key))) {
-          throw new UnsanitizedEntityError();
-        }
-      });
       if (event.queryStringParameters && event.queryStringParameters.fields) {
         const { fields } = event.queryStringParameters;
         const fieldsArr = fields.split(',');

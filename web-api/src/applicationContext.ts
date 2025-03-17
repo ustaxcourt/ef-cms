@@ -185,7 +185,6 @@ export const createApplicationContext = (appContextUser = {}) => {
       return pdfLib;
     },
     getPersistenceGateway,
-    getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {
       return pug;
     },
