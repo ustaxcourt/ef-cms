@@ -1,75 +1,84 @@
 import { getCypressEnv } from '../env/cypressEnvironment';
 
 export function loginAsTestAdmissionsClerk() {
-  cy.login('testAdmissionsClerk');
+  login({ email: 'testAdmissionsClerk@example.com' });
   cy.get('#inbox-tab-content').should('exist');
 }
 
-export function loginAsAdc(user: 'adc' = 'adc') {
-  cy.login(user);
+export function loginAsAdc() {
+  login({ email: 'adc@example.com' });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
 export function loginAsAdmissionsClerk(
-  user: 'testAdmissionsClerk' | 'admissionsclerk1' = 'admissionsclerk1',
+  user:
+    | 'testAdmissionsClerk@example.com'
+    | 'admissionsclerk1@example.com' = 'admissionsclerk1@example.com',
 ) {
-  cy.login(user);
+  login({ email: user });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
 export function loginAsDojPractitioner(
   dojPractitionerUser:
-    | 'dojPractitioner1'
-    | 'dojPractitioner2'
-    | 'dojPractitioner3' = 'dojPractitioner1',
+    | 'dojPractitioner1@example.com'
+    | 'dojPractitioner2@example.com'
+    | 'dojPractitioner3@example.com' = 'dojPractitioner1@example.com',
 ) {
-  cy.login(dojPractitionerUser);
+  login({ email: dojPractitionerUser });
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
 }
 
 export function loginAsPrivatePractitioner(
   practitionerUser:
-    | 'privatePractitioner1'
-    | 'privatePractitioner2'
-    | 'privatePractitioner3'
-    | 'privatePractitioner4' = 'privatePractitioner1',
+    | 'privatePractitioner@example.com'
+    | 'privatePractitioner1@example.com'
+    | 'privatePractitioner2@example.com'
+    | 'privatePractitioner3@example.com'
+    | 'privatePractitioner4@example.com' = 'privatePractitioner1@example.com',
 ) {
-  cy.login(practitionerUser);
+  login({ email: practitionerUser });
   cy.get('[data-testid="file-a-petition"]').should('exist');
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
 }
 
 export function loginAsIrsPractitioner(
   irsPractitionerUser:
-    | 'irsPractitioner'
-    | 'irsPractitioner1'
-    | 'irsPractitioner2' = 'irsPractitioner',
+    | 'irsPractitioner@example.com'
+    | 'irsPractitioner1@example.com'
+    | 'irsPractitioner2@example.com' = 'irsPractitioner@example.com',
 ) {
-  cy.login(irsPractitionerUser);
+  login({ email: irsPractitionerUser });
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
   cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
   cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
 export function loginAsIrsPractitioner1() {
-  cy.login('irsPractitioner1');
+  login({ email: 'irsPractitioner1@example.com' });
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
   cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
   cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
 }
 
-export function loginAsPetitioner(petitionerUser: string = 'petitioner1') {
-  cy.login(petitionerUser);
+export function loginAsPetitioner(
+  petitionerUser: string = 'petitioner1@example.com',
+) {
+  login({ email: petitionerUser });
   cy.get('[data-testid="file-a-petition"]').should('exist');
 }
 
-export function loginAsCaseServicesSupervisor() {
-  cy.login('caseservicessupervisor');
+export function loginAsCaseServicesSupervisor(
+  user:
+    | 'caseServicessupervisor@example.com'
+    | 'caseServicesSupervisor1@example.com' = 'caseServicessupervisor@example.com',
+) {
+  login({ email: user });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
 export function loginAsPetitionsClerk() {
-  cy.login('petitionsclerk');
+  login({ email: 'petitionsclerk@example.com' });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
@@ -79,7 +88,7 @@ export function loginAsPetitionsClerk1() {
 }
 
 export function loginAsDocketClerk() {
-  cy.login('docketclerk');
+  login({ email: 'docketclerk@example.com' });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
@@ -94,32 +103,32 @@ export function loginAsClerkOfCourt() {
 }
 
 export function loginAsFloater() {
-  cy.login('floater1');
+  login({ email: 'floater1@example.com' });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
 export function loginAsGeneral() {
-  cy.login('general');
+  login({ email: 'general@example.com' });
   cy.get('[data-testid="section-inbox-tab"]').should('exist');
 }
 
 export function loginAsColvin() {
-  cy.login('judgecolvin');
+  login({ email: 'judgecolvin@example.com' });
   cy.get('h1:contains("Trial Sessions")').should('exist');
 }
 
 export function loginAsColvinChambers() {
-  cy.login('colvinschambers');
+  login({ email: 'colvinschambers@example.com' });
   cy.get('[data-testid="upcoming-trial-sessions-card"]').should('exist');
 }
 
 export function loginAsReportersOffice() {
-  cy.login('reportersoffice');
+  login({ email: 'reportersoffice@example.com' });
   cy.get('[data-testid="inbox-tab-content"]').should('exist');
 }
 
 export function loginAsIrsSuperUser() {
-  cy.login('irssuperuser');
+  login({ email: 'irssuperuser@example.com' });
   cy.get('[data-testid="advanced-search-link"]').should('exist');
 }
 
@@ -128,10 +137,8 @@ export function loginAsTrialClerk() {
   cy.get('[data-testid="trial-session-link"]').should('exist');
 }
 
-// We created this new login function because our current login function was too generically
-// waiting for the account menu button, resulting in visiting a route before the page was fully loaded.
-// We need to deprecate usage of cy.login and have all tests login through helper functions so we properly await
-function login({ email }: { email: string }) {
+// Try to use the above account specific logins as they wait for specific content.
+export function login({ email }: { email: string }) {
   cy.clearAllCookies();
   cy.visit('/login');
   cy.get('[data-testid="email-input"]').type(email);

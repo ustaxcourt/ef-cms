@@ -7,6 +7,7 @@ const caveats: string[] = [
   'react',
   '@types/react',
   'react-dom',
+  '@types/react-dom',
   '@fortawesome/fontawesome-svg-core',
   '@fortawesome/free-regular-svg-icons',
   '@fortawesome/free-solid-svg-icons',
@@ -56,7 +57,9 @@ function upgradePackages(): void {
     if (!caveats.includes(pkg)) {
       const latestVersion = details.latest;
       console.log(`Upgrading ${pkg} to version ${latestVersion}...`);
-      execSync(`npm install ${pkg}@${latestVersion}`, { stdio: 'inherit' });
+      execSync(`npm install ${pkg}@${latestVersion} --save-exact`, {
+        stdio: 'inherit',
+      });
     } else {
       console.log(`Skipping ${pkg} (in caveats list).`);
     }

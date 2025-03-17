@@ -53,6 +53,8 @@
 
     .login-container,
     .create-container {
+      display: flex;
+      align-items: center;
       margin-top: 25px;
       margin-left: auto;
       color: color($theme-color-primary);
