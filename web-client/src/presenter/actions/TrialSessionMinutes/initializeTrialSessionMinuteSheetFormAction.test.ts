@@ -56,6 +56,7 @@ jest.mock(
   }),
 );
 
+/* eslint-disable max-lines */
 describe('initializeTrialSessionMinuteSheetFormAction', () => {
   it('should initialize the minute sheet form with all required sections', async () => {
     const mockJudge = {
@@ -647,12 +648,16 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
   });
 
   describe('transformFiledBy', () => {
+    let MOCK_DOCKET_ENTRY;
+
     beforeEach(() => {
+      MOCK_DOCKET_ENTRY = MOCK_CASE.docketEntries[0];
       mockIsOrder.mockReturnValue(false);
     });
 
     it('should return "petitioner" when filed by petitioner only', () => {
       const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
         filedBy: 'Petr. Bob',
       });
       expect(result).toBe('petitioner');
@@ -660,6 +665,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
 
     it('should return "petitioner" when filed by multiple petitioners', () => {
       const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
         filedBy: 'Petrs. Bob & Bill',
       });
       expect(result).toBe('petitioner');
@@ -667,6 +673,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
 
     it('should return "respondent" when filed by respondent only', () => {
       const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
         filedBy: 'Resp.',
       });
       expect(result).toBe('respondent');
@@ -674,6 +681,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
 
     it('should return "joint" when filed by both', () => {
       const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
         filedBy: 'Resp. & Petr. Bob',
       });
       expect(result).toBe('joint');
@@ -681,6 +689,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
 
     it('should return "other" when filed by an intervenor', () => {
       const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
         filedBy: 'Intv. Alice',
       });
       expect(result).toBe('other');
@@ -689,6 +698,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
     it('should return "court" when the pending item is an order', () => {
       mockIsOrder.mockReturnValue(true);
       const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
         eventCode: 'O',
       });
       expect(result).toBe('court');
@@ -696,6 +706,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
 
     it('should return "other" when filed by multiple intervenors', () => {
       const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
         filedBy: 'Intvs. Alice & Bob',
       });
       expect(result).toBe('other');
@@ -703,6 +714,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
 
     it('should return "other" when filed by both an intervenor and a petitioner', () => {
       const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
         filedBy: 'Petr. Bob & Intv. Alice',
       });
       expect(result).toBe('other');
@@ -710,6 +722,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
 
     it('should return "other" when filed by a private practitioner', () => {
       const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
         filedBy: 'Bob the Private Practitioner',
       });
       expect(result).toBe('other');
