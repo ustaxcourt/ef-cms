@@ -7,7 +7,10 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { CreatableSelect } from '@web-client/ustc-ui/Select/CreatableSelect';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
-import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
+import {
+  MINUTE_SHEET_FORM_SECTION_MAP,
+  RESPONDENT_ROLE_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import React from 'react';
 
@@ -30,8 +33,9 @@ export const RespondentsFieldset = ({
     <fieldset className="grid-container border-0 padding-0 margin-top-4">
       <div className="grid-row grid-gap-2 margin-bottom-1">
         <div className="grid-col-3 usa-label">Respondent(s)</div>
+        <div className="grid-col-2 usa-label">Role</div>
         <div className="grid-col-3 usa-label">Date(s) of Appearance</div>
-        <div className="grid-col-auto"></div>
+        <div className="grid-col-2 usa-label">Note</div>
       </div>
       {Object.values(respondentsFormState.respondents).map((row, rowIndex) => {
         return (
@@ -66,6 +70,38 @@ export const RespondentsFieldset = ({
                 />
               </FormGroup>
             </div>
+            <div className="grid-col-2">
+              <FormGroup className="margin-bottom-0 display-flex align-items-center">
+                <select
+                  className="usa-select display-inline-block"
+                  id={`respondent-role-${rowIndex}`}
+                  name={`respondent-role-${rowIndex}`}
+                  aria-label={`respondent-role-${rowIndex}`}
+                  value={respondentsFormState.respondents[row.renderKey].role}
+                  onBlur={() => onBlurHandler()}
+                  onChange={e => {
+                    onChangeHandler({
+                      name: 'respondents',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'role',
+                      },
+                      section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
+                      value: e.target.value,
+                    });
+                  }}
+                >
+                  <option value="">- Select -</option>
+                  {Object.keys(RESPONDENT_ROLE_OPTIONS).map(optionKey => {
+                    return (
+                      <option key={optionKey} value={optionKey}>
+                        {RESPONDENT_ROLE_OPTIONS[optionKey]}
+                      </option>
+                    );
+                  })}
+                </select>
+              </FormGroup>
+            </div>
             <div className="grid-col-3">
               <FormGroup className="margin-bottom-0">
                 <input
@@ -85,6 +121,30 @@ export const RespondentsFieldset = ({
                       rowInfo: {
                         key: row.renderKey,
                         nestedName: 'datesOfAppearance',
+                      },
+                      section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
+                      value: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
+            </div>
+            <div className="grid-col-2">
+              <FormGroup className="margin-bottom-0">
+                <input
+                  className="usa-input"
+                  id={`respondents-note-${rowIndex}`}
+                  name={`respondents-note-${rowIndex}`}
+                  aria-label={`respondents-note-${rowIndex}`}
+                  type="text"
+                  value={respondentsFormState.respondents[row.renderKey].note}
+                  onBlur={() => onBlurHandler()}
+                  onChange={e =>
+                    onChangeHandler({
+                      name: 'respondents',
+                      rowInfo: {
+                        key: row.renderKey,
+                        nestedName: 'note',
                       },
                       section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
                       value: e.target.value,

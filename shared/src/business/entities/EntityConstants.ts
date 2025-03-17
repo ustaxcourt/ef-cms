@@ -1967,7 +1967,16 @@ export const PETITIONER_ROLE_OPTIONS = {
   participant: 'Participant',
   translator: 'Translator',
   studentIntern: 'Student Intern',
+  thirdParty: 'Third Party',
   other: 'Other',
 } as const;
 export type PetitionerRoleOption = keyof typeof PETITIONER_ROLE_OPTIONS;
 export const PETITIONER_ROLE_OPTIONS_INVERTED = invert(PETITIONER_ROLE_OPTIONS);
+
+export const RESPONDENT_ROLE_OPTIONS = {
+  counsel: 'Counsel',
+  thirdParty: 'Third Party',
+  other: 'Other',
+} as const;
+export type RespondentRoleOption = keyof typeof RESPONDENT_ROLE_OPTIONS;
+export const RESPONDENT_ROLE_OPTIONS_INVERTED = invert(RESPONDENT_ROLE_OPTIONS);

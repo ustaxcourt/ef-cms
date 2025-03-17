@@ -720,10 +720,19 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       expect(result).toBe('other');
     });
 
-    it('should return "other" when filed by a private practitioner', () => {
+    it('should return "practitioner" when filed by a private practitioner', () => {
       const result = transformFiledBy({
         ...MOCK_DOCKET_ENTRY,
         filedBy: 'Bob the Private Practitioner',
+        privatePractitioners: [{ name: 'Bob' }],
+      });
+      expect(result).toBe('practitioner');
+    });
+
+    it('should return "other" when filedBy is not defined', () => {
+      const result = transformFiledBy({
+        ...MOCK_DOCKET_ENTRY,
+        filedBy: undefined,
       });
       expect(result).toBe('other');
     });

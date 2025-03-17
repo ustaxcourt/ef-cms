@@ -3,6 +3,9 @@ import {
   EXHIBIT_STATUS_OPTIONS,
   PETITIONER_ROLE_OPTIONS,
   PETITIONER_ROLE_OPTIONS_INVERTED,
+  RESPONDENT_ROLE_OPTIONS,
+  RESPONDENT_ROLE_OPTIONS_INVERTED,
+  RespondentRoleOption,
   STATUS_REPORT_ORDERED_FOR_OPTIONS,
   type BriefTypeOption,
   type MotionFiledByOption,
@@ -303,8 +306,9 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '01/15/2023',
               name: 'John Smith',
+              note: '',
               role: 'proSe' as PetitionerRoleOption,
-            },
+            } as Appearance,
           ],
         };
         const result = formatPetitionerAppearances(petitionersSection);
@@ -320,6 +324,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '01/15/2023',
               name: 'John Smith',
+              note: '',
               role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
@@ -327,6 +332,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '01/16/2023',
               name: 'Jane Doe',
+              note: '',
               role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.counsel
               ],
@@ -356,6 +362,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '',
               name: 'John Smith',
+              note: '',
               role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
@@ -375,6 +382,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '01/15/2023',
               name: '',
+              note: '',
               role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
@@ -394,6 +402,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '',
               name: '',
+              note: '',
               role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.proSe
               ],
@@ -411,7 +420,8 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '',
               name: '',
-              role: undefined,
+              note: '',
+              role: '' as PetitionerRoleOption,
             },
           ] as Appearance[],
         };
@@ -427,10 +437,10 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '',
               name: '',
+              note: mockNote,
               role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.other
               ],
-              note: mockNote,
             },
           ] as Appearance[],
         };
@@ -447,6 +457,7 @@ describe('formatMinuteSheet', () => {
             {
               datesOfAppearance: '',
               name: '',
+              note: '',
               role: PETITIONER_ROLE_OPTIONS_INVERTED[
                 PETITIONER_ROLE_OPTIONS.other
               ],
@@ -464,10 +475,16 @@ describe('formatMinuteSheet', () => {
           {
             datesOfAppearance: '01/15/2023',
             name: 'John Smith',
+            note: 'This is a note',
+            role: RESPONDENT_ROLE_OPTIONS_INVERTED[
+              RESPONDENT_ROLE_OPTIONS.counsel
+            ] as RespondentRoleOption,
           },
         ];
         const result = formatRespondentAppearances(respondentsSection);
-        expect(result).toEqual(['John Smith - 01/15/2023']);
+        expect(result).toEqual([
+          'John Smith (Counsel - <em>This is a note</em>) - 01/15/2023',
+        ]);
       });
 
       it('should format multiple respondent appearances correctly', () => {
@@ -475,16 +492,24 @@ describe('formatMinuteSheet', () => {
           {
             datesOfAppearance: '01/15/2023',
             name: 'John Smith',
+            note: 'This is a note',
+            role: RESPONDENT_ROLE_OPTIONS_INVERTED[
+              RESPONDENT_ROLE_OPTIONS.counsel
+            ] as RespondentRoleOption,
           },
           {
             datesOfAppearance: '01/16/2023',
             name: 'Jane Doe',
+            note: 'This is a second note',
+            role: RESPONDENT_ROLE_OPTIONS_INVERTED[
+              RESPONDENT_ROLE_OPTIONS.counsel
+            ] as RespondentRoleOption,
           },
         ];
         const result = formatRespondentAppearances(respondentsSection);
         expect(result).toEqual([
-          'John Smith - 01/15/2023',
-          'Jane Doe - 01/16/2023',
+          'John Smith (Counsel - <em>This is a note</em>) - 01/15/2023',
+          'Jane Doe (Counsel - <em>This is a second note</em>) - 01/16/2023',
         ]);
       });
 
@@ -499,10 +524,16 @@ describe('formatMinuteSheet', () => {
           {
             datesOfAppearance: '',
             name: 'John Smith',
+            note: 'This is a note',
+            role: RESPONDENT_ROLE_OPTIONS_INVERTED[
+              RESPONDENT_ROLE_OPTIONS.counsel
+            ] as RespondentRoleOption,
           },
         ];
         const result = formatRespondentAppearances(respondentsSection);
-        expect(result).toEqual(['John Smith']);
+        expect(result).toEqual([
+          'John Smith (Counsel - <em>This is a note</em>)',
+        ]);
       });
 
       it('should handle respondent with missing name', () => {
@@ -510,10 +541,16 @@ describe('formatMinuteSheet', () => {
           {
             datesOfAppearance: '01/15/2023',
             name: '',
+            note: 'This is a note',
+            role: RESPONDENT_ROLE_OPTIONS_INVERTED[
+              RESPONDENT_ROLE_OPTIONS.counsel
+            ] as RespondentRoleOption,
           },
         ];
         const result = formatRespondentAppearances(respondentsSection);
-        expect(result).toEqual(['- 01/15/2023']);
+        expect(result).toEqual([
+          '(Counsel - <em>This is a note</em>) - 01/15/2023',
+        ]);
       });
 
       it('should handle respondent with missing name and datesOfAppearance', () => {
@@ -521,10 +558,29 @@ describe('formatMinuteSheet', () => {
           {
             datesOfAppearance: '',
             name: '',
+            note: 'This is a note',
+            role: RESPONDENT_ROLE_OPTIONS_INVERTED[
+              RESPONDENT_ROLE_OPTIONS.counsel
+            ] as RespondentRoleOption,
           },
         ];
         const result = formatRespondentAppearances(respondentsSection);
-        expect(result).toEqual([]);
+        expect(result).toEqual(['(Counsel - <em>This is a note</em>)']);
+      });
+
+      it('should handle respondent with no note', () => {
+        const respondentsSection: MinuteSheet['appearances']['respondents'] = [
+          {
+            datesOfAppearance: '01/15/2023',
+            name: 'John Smith',
+            note: '',
+            role: RESPONDENT_ROLE_OPTIONS_INVERTED[
+              RESPONDENT_ROLE_OPTIONS.counsel
+            ] as RespondentRoleOption,
+          },
+        ];
+        const result = formatRespondentAppearances(respondentsSection);
+        expect(result).toEqual(['John Smith (Counsel) - 01/15/2023']);
       });
     });
 

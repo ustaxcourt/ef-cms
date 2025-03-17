@@ -8,6 +8,7 @@ import {
   MotionTypeOption,
   PartyTypeOption,
   PetitionerRoleOption,
+  RespondentRoleOption,
   StatusReportOrderedForOption,
   TrialHearingOption,
 } from '../EntityConstants';
@@ -81,8 +82,8 @@ export type CalendarEvent = Event & {
 export type Appearance = {
   name: string;
   datesOfAppearance: string;
-  role?: PetitionerRoleOption;
-  note?: string;
+  role: PetitionerRoleOption | RespondentRoleOption;
+  note: string;
 };
 
 type JurisdictionEvent = {

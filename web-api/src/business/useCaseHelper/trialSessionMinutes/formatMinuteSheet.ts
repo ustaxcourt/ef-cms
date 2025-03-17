@@ -269,8 +269,16 @@ export const formatRespondentAppearances = (
 ): string[] => {
   return respondents
     .map(respondent => {
+      let formattedRespondentRole;
+      if (respondent.role && respondent.note) {
+        formattedRespondentRole = `(${PETITIONER_ROLE_OPTIONS[respondent.role]} - <em>${respondent.note}</em>)`;
+      } else if (respondent.role) {
+        formattedRespondentRole = `(${PETITIONER_ROLE_OPTIONS[respondent.role]})`;
+      }
+
       const parts = [
         respondent.name,
+        formattedRespondentRole,
         respondent.datesOfAppearance && `- ${respondent.datesOfAppearance}`,
       ].filter(substring => !!substring);
 
