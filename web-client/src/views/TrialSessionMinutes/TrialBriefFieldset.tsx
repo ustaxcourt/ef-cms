@@ -122,6 +122,29 @@ export const TrialBriefFieldset = ({
             />
           </FormGroup>
         </div>
+
+        <div className="grid-col-fill">
+          <FormGroup className="margin-bottom-0">
+            <label className="usa-label" htmlFor="trialBriefNote">
+              Note
+            </label>
+            <input
+              className="usa-input"
+              id="trialBriefNote"
+              name="trialBriefNote"
+              type="text"
+              value={trialBriefFormState.note}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'note',
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
+        </div>
         <div className="grid-col-auto">
           <FormGroup className="margin-bottom-0">
             <label className="usa-label" htmlFor="dateBenchOpinionRendered">
@@ -172,28 +195,6 @@ export const TrialBriefFieldset = ({
                 Transcript Ordered
               </label>
             </div>
-          </FormGroup>
-        </div>
-        <div className="grid-col-fill">
-          <FormGroup className="margin-bottom-0">
-            <label className="usa-label" htmlFor="trialBriefNote">
-              Note
-            </label>
-            <input
-              className="usa-input"
-              id="trialBriefNote"
-              name="trialBriefNote"
-              type="text"
-              value={trialBriefFormState.note}
-              onBlur={() => onBlurHandler()}
-              onChange={e =>
-                onChangeHandler({
-                  name: 'note',
-                  section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
-                  value: e.target.value,
-                })
-              }
-            />
           </FormGroup>
         </div>
       </div>
