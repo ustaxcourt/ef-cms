@@ -1,7 +1,7 @@
 jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
 );
-jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
+jest.mock('@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber');
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getConsolidatedCaseDeadlinesInteractor } from '@shared/business/useCases/getConsolidatedCaseDeadlinesInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
@@ -10,13 +10,13 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
-import { getCaseByDocketNumberPostgres as getCaseByDocketNumberPostgresMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
 const getCaseDeadlinesByConsolidatedCaseDeadlineId =
   getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
 
-const getCaseByDocketNumberPostgres =
-  getCaseByDocketNumberPostgresMock as jest.Mock;
+const getCaseMetadataByDocketNumber =
+  getCaseMetadataByDocketNumberMock as jest.Mock;
 
 describe('getConsolidatedCaseDeadlinesInteractor', () => {
   const TEST_CONSOLIDATED_DEADLINE_ID = getUniqueId();
@@ -57,9 +57,9 @@ describe('getConsolidatedCaseDeadlinesInteractor', () => {
       { docketNumber: '106-25' },
     ]);
 
-    getCaseByDocketNumberPostgres.mockImplementation(docketNumber => {
-      if (docketNumber === '106-25') return [];
-      return [{ caption: `${docketNumber} - TEST_CAPTION` }];
+    getCaseMetadataByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '106-25') return undefined;
+      return { caseCaption: `${docketNumber} - TEST_CAPTION` };
     });
 
     const results = await getConsolidatedCaseDeadlinesInteractor(
