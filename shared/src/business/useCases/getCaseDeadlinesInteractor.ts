@@ -8,6 +8,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { getCaseDeadlinesByDateRange } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange';
 import { pick } from 'lodash';
+import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 
 type CaseDeadlineResponseInfo = {
   associatedJudge: string;
@@ -24,23 +25,26 @@ type CaseDeadlineResponseInfo = {
 export const getCaseDeadlinesInteractor = async (
   {
     endDate,
+    from,
     judge,
     startDate,
   }: {
     endDate: string;
+    from: number;
     judge: string;
     startDate;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<{ deadlines: CaseDeadlineResponseInfo[] }> => {
+): Promise<{ deadlines: CaseDeadlineResponseInfo[]; totalCount: number }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_DEADLINE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { foundDeadlines } = await getCaseDeadlinesByDateRange({
+  const { foundDeadlines, totalCount } = await getCaseDeadlinesByDateRange({
     endDate,
+    from,
     judge,
-    pageSize: undefined,
+    pageSize: CASE_DEADLINES_REPORT_PAGE_SIZE,
     startDate,
   });
 
@@ -68,5 +72,5 @@ export const getCaseDeadlinesInteractor = async (
     });
   }
 
-  return { deadlines: deadlinesWithFullInfo };
+  return { deadlines: deadlinesWithFullInfo, totalCount };
 };
