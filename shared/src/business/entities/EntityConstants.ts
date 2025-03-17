@@ -1883,6 +1883,7 @@ export const MOTION_OBJECTION_OPTIONS_INVERTED = invert(
 export const ACTION_DOCUMENT_TYPE_OPTIONS = {
   entryOfAppearance: 'Entry of Appearance',
   limitedEntryOfAppearance: 'Limited Entry of Appearance',
+  proposedStipulatedDecision: 'Proposed Stipulated Decision',
   orderToShowCause: 'Order to Show Cause',
   filing: 'Filing',
   motion: 'Motion',
@@ -1900,6 +1901,7 @@ export const ACTION_FILED_BY_OPTIONS = {
   petitioner: 'Petitioner',
   respondent: 'Respondent',
   petitionerAndRespondent: 'Petitioner and Respondent',
+  practitioner: 'Practitioner',
   joint: 'Joint',
   other: 'Other',
   court: 'Court',
