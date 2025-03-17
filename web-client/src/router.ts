@@ -411,6 +411,19 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/documents/*/order-response',
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+        );
+        return app.getSequence('goToOrderResponseSequence')({
+          docketEntryId,
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/documents/*/status-report-order-create..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
@@ -1319,6 +1332,21 @@ const router = {
       ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
         setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Apply Stamp`);
         return app.getSequence('goToApplyStampSequence')({
+          docketEntryId,
+          docketNumber,
+          parentMessageId,
+        });
+      }),
+    );
+
+    // TODO 10586: fill out this route for messages
+    registerRoute(
+      '/messages/*/message-detail/*/*/order-response',
+      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
+        setPageTitle(
+          `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+        );
+        return app.getSequence('gotoOrderResponseSequence')({
           docketEntryId,
           docketNumber,
           parentMessageId,

@@ -102,7 +102,6 @@ export const documentViewerHelper = (
     permissions.STAMP_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
-  // TODO 10586: refactor to use document allow list like stampbutton
   const showOrderResponseButton =
     permissions.ORDER_RESPONSE &&
     ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(

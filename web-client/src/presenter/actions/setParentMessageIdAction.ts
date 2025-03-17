@@ -7,5 +7,6 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.parentMessageId
  */
 export const setParentMessageIdAction = ({ props, store }: ActionProps) => {
+  console.log('setting parentMessageId', props.parentMessageId);
   store.set(state.parentMessageId, props.parentMessageId);
 };

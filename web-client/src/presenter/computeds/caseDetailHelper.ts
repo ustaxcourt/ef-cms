@@ -18,6 +18,7 @@ export const caseDetailHelper = (
   const documentDetailTab =
     get(state.currentViewMetadata.caseDetail.primaryTab) || 'docketRecord';
   const currentPage = get(state.currentPage);
+  console.log('Case Detail Helper');
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
