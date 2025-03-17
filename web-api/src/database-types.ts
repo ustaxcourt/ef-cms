@@ -364,6 +364,11 @@ export type DocketEntryKysely = Selectable<DocketEntryTable>;
 export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
 export type UpdateDocketEntryKysely = Updateable<DocketEntryTable>;
 
+type DatabaseTableMetadata<TTable> = {
+  table: TTable;
+  columns: string[];
+};
+
 export const DatabaseSchema = {
   dwCase: { table: {} as CaseTable, columns: DW_CASE_COLUMNS },
   dwCaseCorrespondence: {
@@ -410,7 +415,7 @@ export const DatabaseSchema = {
     table: {} as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
   },
-};
+} as const satisfies Record<string, DatabaseTableMetadata<any>>;
 
 type ExtractTable<T> = T extends { table: infer U } ? U : never;
 
