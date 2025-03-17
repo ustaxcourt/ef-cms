@@ -49,8 +49,7 @@ export const fileAndServeDocumentOnOneCase = async ({
         sentByUserId: user.userId,
         trialDate: caseEntity.trialDate,
         trialLocation: caseEntity.trialLocation,
-      },
-      { caseEntity },
+      }
     );
   }
 

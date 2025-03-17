@@ -131,8 +131,7 @@ export const fileCourtIssuedDocketEntry = async (
           sentByUserId: user.userId,
           trialDate: caseEntity.trialDate,
           trialLocation: caseEntity.trialLocation,
-        },
-        { caseEntity },
+        }
       );
 
       if (isUnservable) {

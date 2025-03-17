@@ -50,8 +50,7 @@ const addPetitionDocketEntryToCase = ({
       sentByUserId: user.userId,
       trialDate: caseToAdd.trialDate,
       trialLocation: caseToAdd.trialLocation,
-    },
-    { caseEntity: caseToAdd },
+    }
   );
 
   docketEntryEntity.setWorkItem(workItemEntity);

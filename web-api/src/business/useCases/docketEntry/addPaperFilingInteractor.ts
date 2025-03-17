@@ -132,8 +132,7 @@ export const addPaperFiling = async (
         sentByUserId: user.userId,
         trialDate: caseEntity.trialDate,
         trialLocation: caseEntity.trialLocation,
-      },
-      { caseEntity },
+      }
     );
 
     if (isReadyForService) {

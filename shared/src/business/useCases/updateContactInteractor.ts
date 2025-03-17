@@ -188,8 +188,7 @@ export const updateContact = async (
           sentByUserId: authorizedUser.userId,
           trialDate: caseEntity.trialDate,
           trialLocation: caseEntity.trialLocation,
-        },
-        { caseEntity },
+        }
       );
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
