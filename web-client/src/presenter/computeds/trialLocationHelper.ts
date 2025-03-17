@@ -50,6 +50,12 @@ export const trialLocationHelper = (
       );
 
       return updatedCase;
+    })
+    .map(blockedCase => {
+      if (!blockedCase.blocked && !blockedCase.automaticBlocked) {
+        blockedCase.blockedReason = 'Grouped with blocked case';
+      }
+      return blockedCase;
     });
 
   const formattedEligibleCases = eligibleCases.map(c => {
