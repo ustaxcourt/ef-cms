@@ -2,8 +2,9 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../entities/cases/Case';
-import { CaseDeadline } from '../entities/CaseDeadline';
+import { Case } from '@shared/business//entities/cases/Case';
+import { CaseDeadline } from '@shared/business//entities/CaseDeadline';
+import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business//entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -16,10 +17,12 @@ export const getCaseDeadlinesInteractor = async (
   applicationContext: IApplicationContext,
   {
     endDate,
+    from,
     judge,
     startDate,
   }: {
     endDate: string;
+    from: number;
     judge: string;
     startDate;
   },
@@ -29,10 +32,11 @@ export const getCaseDeadlinesInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { foundDeadlines } = await getCaseDeadlinesByDateRange({
+  const { foundDeadlines, totalCount } = await getCaseDeadlinesByDateRange({
     endDate,
+    from,
     judge,
-    pageSize: undefined,
+    pageSize: CASE_DEADLINES_REPORT_PAGE_SIZE,
     startDate,
   });
 
@@ -58,7 +62,7 @@ export const getCaseDeadlinesInteractor = async (
       ]),
     }));
 
-  return { deadlines: afterCaseMapping };
+  return { deadlines: afterCaseMapping, totalCount };
 };
 
 const getCasesByDocketNumbers = async ({

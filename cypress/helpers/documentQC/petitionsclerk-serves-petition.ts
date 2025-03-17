@@ -1,5 +1,8 @@
+import { loginAsPetitionsClerk1 } from 'cypress/helpers/authentication/login-as-helpers';
+
 export function petitionsClerkServesPetition(docketNumber: string) {
-  cy.login('petitionsclerk1', `case-detail/${docketNumber}`);
+  loginAsPetitionsClerk1();
+  cy.visit(`case-detail/${docketNumber}`)
   cy.get('[data-testid="document-viewer-link-P"]').click();
   cy.get('[data-testid="review-and-serve-petition"]').click();
   cy.get('[data-testid="tab-irs-notice"]').click();
