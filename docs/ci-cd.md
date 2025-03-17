@@ -10,14 +10,14 @@ This part of the documentation is meant to give an overview of how our project i
 
 A majority of CI/CD pipeline is currently run in Circle CI.  Circle is hooked up to our repository and reads a [.circleci/config.yml](https://github.com/ustaxcourt/ef-cms/blob/staging/.circleci/config.yml) file to determine what to build and test.  This file can be broken down into 3 main sections:
 
-- **commands** - these are used for abstracting away reusable pieces of setup that other **jobs** might need to invoke.  
+- **commands** - these are used for abstracting away reusable pieces of setup that other **jobs** might need to invoke.
 - **jobs** - these are the smaller building blocks of a **workflow**.  For example, a single build workflow might have a job for linting, a job for testing, a job for e2e tests, etc.  Jobs are broken down into individual **steps**.
 - **workflows** - allow us to create dependency graphs of **jobs**.  For example, when we merge a PR into `develop`, we need to make sure all of the test pass before we move onto the next job to `deploy` the code.  A workflow is broken down into multiple **jobs** which will all run in parallel unless a **requires** property is defined on the job.
 
 In our Dawson project, we have defined two main workflows:
 
 - **build-and-deploy** - this workflow is used for building, testing, and deploying our application
-- **build-and-deploy-with-context** - this workflow is identical to the build-and-deploy workflow, except we use this workflow for the prod environment. Different AWS credentials are needed for prod, and these are setup in a different [CircleCI context](https://circleci.com/docs/2.0/contexts/) using a different AWS account.  
+- **build-and-deploy-with-context** - this workflow is identical to the build-and-deploy workflow, except we use this workflow for the prod environment. Different AWS credentials are needed for prod, and these are setup in a different [CircleCI context](https://circleci.com/docs/2.0/contexts/) using a different AWS account.
 
 When someone commits to a branch in our repository, CircleCi will run this **build-and-deploy** workflow to start running all of the tests against that commit.  Notice that the jobs in the workflow have properties called **requires** and **filters**.
 
@@ -47,7 +47,7 @@ For example, here is what our migrate job looks like:
 
 This is saying the migrate job should only run directly after the deploy job is successful, and only on the defined branches.
 
-### Executor 
+### Executor
 
 When running a job in Circle, you have the option to run in either a VM or a container.
 
@@ -102,7 +102,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22.13.1'
+          node-version: '22.14.0'
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
@@ -145,6 +145,6 @@ We use Docker on our project to build some of the images we need in the CI/CD pi
 
 We also use a separate image called [Dockerfile](https://github.com/ustaxcourt/ef-cms/blob/staging/Dockerfile) for Circle deploy jobs since we don't care about Cypress when doing deploys.  This image is built and run using the machine executor in Circle, so you don't have to worry about manually building and deploying this image.
 
-?> This documentation isn't meant to cover Docker in detail, so please read the [Docker Getting Started Guide](https://docs.docker.com/get-started/) if you want a more in-depth breakdown of Docker.  
+?> This documentation isn't meant to cover Docker in detail, so please read the [Docker Getting Started Guide](https://docs.docker.com/get-started/) if you want a more in-depth breakdown of Docker.
 
 The gist of Docker is you can build images using `docker build -t YOUR_IMAGE_TAG -f YOUR_DOCKERFILE .` which will basically build an image and provide it access to all of the files in the same working directory.  After you've built the image, you can run it via `docker run YOUR_IMAGE_TAG`.  Often, you need to pass additional flags to `docker run` such as the port `-p 8080:8080` flag to expose certain ports, or `-e "MY_ENV=hello"` to pass in environment variables for the container to use.  The docker definition file usually has a `CMD` line which states what command will execute when you run the container.  In Dawson, we often overwrite this cmd using `/bin/sh -c "npm run start"` command line option which will run whatever script we want inside the container.
