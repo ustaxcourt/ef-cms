@@ -41,7 +41,7 @@ Cognito is a user management service provided by AWS which handles the ability t
 
 ## DynamoDB
 
-> DynamoDB is the source of truth of all our data in Dawson
+> DynamoDB was the source of truth of all our data in Dawson
 
 DynamoDB is a database as a service provided by AWS.  It is mainly a key-value store, but supports some additional features such as **global secondary indicies** which can be used for performing custom queries.  DynamoDB was picked due to it's no-sql nature and promises of reduced operation costs.  It is also highly scalable which was something we decided we might need since we have zero insight into the size of production dataset when we started with development. 
 
