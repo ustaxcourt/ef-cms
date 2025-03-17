@@ -76,20 +76,32 @@ export const formatDateIfToday = (
 export const formatWorkItem = ({
   isSelected = false,
   workItem = {} as WorkItemAbomination,
-  authorizedUser,
-  permissions,
-  workQueueToDisplay,
 }: {
   isSelected?: boolean;
   workItem: WorkItemAbomination;
-  authorizedUser: AuthUser;
-  permissions: Record<string, boolean>;
-  workQueueToDisplay: {
-    box: string;
-    queue: string;
-    section: string;
-  };
-}): FormattedWorkItemAbomination => {
+}): WorkItemAbomination & {
+  assigneeName: string;
+  completedAtFormatted: string;
+  completedAtFormattedTZ: string;
+  consolidatedIconTooltipText: string;
+  createdAtFormatted: string;
+  docketEntry: any;
+  formattedCaseStatus: string;
+  highPriority: boolean;
+  inConsolidatedGroup: boolean;
+  inLeadCase: boolean;
+  isCourtIssuedDocument: boolean;
+  isOrder: boolean;
+  received: string;
+  receivedAt: any;
+  selected: boolean;
+  sentBySection: string;
+  sentDateFormatted: string;
+  showHighPriorityIcon: boolean;
+  showUnassignedIcon: boolean;
+  showUnreadIndicators: boolean;
+  showUnreadStatusIcon: boolean;
+} => {
   const orderDocumentTypes = ORDER_TYPES.map(orderDoc => orderDoc.documentType);
 
   const inConsolidatedGroup = !!workItem.leadDocketNumber;
@@ -171,13 +183,6 @@ export const formatWorkItem = ({
     }
   }
 
-  const editLink = getWorkItemDocumentLink({
-    authorizedUser,
-    permissions,
-    workItem,
-    workQueueToDisplay,
-  });
-
   return {
     ...workItem,
     assigneeName,
@@ -189,7 +194,6 @@ export const formatWorkItem = ({
       ...workItem.docketEntry,
       descriptionDisplay,
     },
-    editLink,
     formattedCaseStatus,
     highPriority,
     inConsolidatedGroup,
@@ -394,21 +398,31 @@ export const formattedWorkQueue = (
     );
   }
 
-  let workQueue = filterWorkItems({
+  let workQueue: FormattedWorkItemAbomination[] = filterWorkItems({
     assignmentFilterValue,
     authorizedUser,
     section,
     workItems,
     workQueueToDisplay,
-  }).map(workItem => {
-    return formatWorkItem({
-      authorizedUser,
-      isSelected: selectedWorkItemIds.includes(workItem.workItemId),
-      permissions,
-      workItem,
-      workQueueToDisplay,
+  })
+    .map(workItem =>
+      formatWorkItem({
+        isSelected: selectedWorkItemIds.includes(workItem.workItemId),
+        workItem,
+      }),
+    )
+    .map(workItem => {
+      const editLink = getWorkItemDocumentLink({
+        authorizedUser,
+        permissions,
+        workItem,
+        workQueueToDisplay,
+      });
+      return {
+        ...workItem,
+        editLink,
+      };
     });
-  });
 
   const sortFields = {
     my: {

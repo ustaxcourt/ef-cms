@@ -22,9 +22,8 @@ const SectionWorkQueueInProgressRow = React.memo(
       consolidatedIconTooltipText: string;
       inLeadCase: boolean;
       inConsolidatedGroup: boolean;
-      showLeadCaseIcon: boolean;
       received: string;
-      caseTitle: string;
+      caseTitle?: string;
       docketEntry: {
         filedBy: string;
         descriptionDisplay: string;

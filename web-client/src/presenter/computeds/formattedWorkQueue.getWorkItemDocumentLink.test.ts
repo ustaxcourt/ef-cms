@@ -63,7 +63,6 @@ describe('getWorkItemDocumentLink', () => {
       getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -90,7 +89,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -118,7 +116,6 @@ describe('getWorkItemDocumentLink', () => {
       getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -144,7 +141,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -176,7 +172,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -202,7 +197,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -237,7 +231,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -272,7 +265,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -305,7 +297,6 @@ describe('getWorkItemDocumentLink', () => {
       getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -334,7 +325,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -363,7 +353,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -390,7 +379,6 @@ describe('getWorkItemDocumentLink', () => {
       getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -422,7 +410,6 @@ describe('getWorkItemDocumentLink', () => {
     );
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -454,7 +441,6 @@ describe('getWorkItemDocumentLink', () => {
     );
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {

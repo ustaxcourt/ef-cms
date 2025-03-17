@@ -204,8 +204,8 @@ describe('filterWorkItems', () => {
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
     } as any);
-    let assigned = null;
-    let unassigned = null;
+    let assigned:string = '';
+    let unassigned: string = '';
 
     filtered.forEach(item => {
       if (item.assigneeId === petitionsClerk1.userId) {
@@ -231,8 +231,8 @@ describe('filterWorkItems', () => {
       workItems: workQueueOutbox,
       ...SECTION_DOCUMENT_QC_OUTBOX,
     } as any);
-    let sentByUser = null;
-    let sentByOtherUser = null;
+    let sentByUser = '';
+    let sentByOtherUser = '';
 
     filtered.forEach(item => {
       if (item.sentByUserId === petitionsClerk1.userId) {
@@ -263,8 +263,8 @@ describe('filterWorkItems', () => {
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
     } as any);
-    let assigned = null;
-    let unassigned = null;
+    let assigned = '';
+    let unassigned = '';
 
     filtered.forEach(item => {
       if (item.assigneeId === docketClerk1.userId) {
