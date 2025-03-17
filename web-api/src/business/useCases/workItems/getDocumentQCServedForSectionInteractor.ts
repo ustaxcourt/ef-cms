@@ -2,7 +2,6 @@ import {
   IRS_SYSTEM_SECTION,
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { OutboxItem } from '../../../../../shared/src/business/entities/OutboxItem';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -15,19 +14,13 @@ import {
   createISODateAtStartOfDayEST,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
+import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.section the section to get the document qc served box
- * @returns {object} the work items in the section document served inbox
- */
 export const getDocumentQCServedForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
   { section }: { section: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<WorkItemAbomination[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',
@@ -44,9 +37,7 @@ export const getDocumentQCServedForSectionInteractor = async (
     authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
   );
 
-  return OutboxItem.validateRawCollection(filteredWorkItems, {
-    applicationContext,
-  });
+  return filteredWorkItems
 };
 
 export const calculateAfterDate = async applicationContext => {

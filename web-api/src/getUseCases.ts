@@ -88,7 +88,6 @@ import { getCompletedMessagesForUserInteractor } from './business/useCases/messa
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { getDocumentContentsForDocketEntryInteractor } from './business/useCases/document/getDocumentContentsForDocketEntryInteractor';
 import { getDocumentQCInboxForUserInteractor } from './business/useCases/workItems/getDocumentQCInboxForUserInteractor';
-import { getDocumentQCServedForSectionInteractor } from './business/useCases/workItems/getDocumentQCServedForSectionInteractor';
 import { getDownloadPolicyUrlInteractor } from './business/useCases/document/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
 import { getHealthCheckInteractor } from './business/useCases/health/getHealthCheckInteractor';
@@ -299,7 +298,6 @@ const useCases = {
   getCountOfCaseDocumentsFiledByJudgesInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentQCInboxForUserInteractor,
-  getDocumentQCServedForSectionInteractor,
   getDownloadPolicyUrlInteractor,
   getEligibleCasesForTrialSessionInteractor,
   getHealthCheckInteractor,

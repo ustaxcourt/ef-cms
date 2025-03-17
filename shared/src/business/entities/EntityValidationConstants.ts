@@ -446,23 +446,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   workItem: joi.object().optional(),
 };
 
-const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
-  caseIsInProgress: joi.boolean().optional(),
-  caseStatus: JoiValidationConstants.STRING.valid(
-    ...Object.values(CASE_STATUS_TYPES),
-  ).optional(),
-  caseTitle: JoiValidationConstants.CASE_CAPTION.optional(),
-  completedAt: JoiValidationConstants.ISO_DATE.optional(),
-  completedBy: JoiValidationConstants.STRING.max(100).optional().allow(null),
-  docketEntry: joi.object().required(),
-  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
-    'Unique case identifier in XXXXX-YY format.',
-  ),
-  inProgress: joi.boolean().optional(),
-  leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
-  section: JoiValidationConstants.STRING.required(),
-  trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
-};
 export const DATE_RANGE_VALIDATION_RULE_KEYS = {
   endDate: joi
     .alternatives()
@@ -500,10 +483,6 @@ export const DATE_RANGE_VALIDATION_RULE_KEYS = {
 export const DOCKET_ENTRY_VALIDATION_RULES = joi
   .object()
   .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS);
-
-export const OUTBOX_ITEM_VALIDATION_RULES = joi
-  .object()
-  .keys(OUTBOX_ITEM_VALIDATION_RULE_KEYS);
 
 export const DATE_RANGE_VALIDATION_RULES = joi
   .object()
