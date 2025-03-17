@@ -111,28 +111,19 @@ export const fileCourtIssuedDocketEntry = async (
 
       docketEntryEntity.setFiledBy(user);
 
-      const workItem = new WorkItem(
-        {
-          assigneeId: null,
-          assigneeName: null,
-          associatedJudge: caseEntity.associatedJudge,
-          associatedJudgeId: caseEntity.associatedJudgeId,
-          caseStatus: caseEntity.status,
-          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseEntity.docketNumber,
-          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-          inProgress: true,
-          section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-          trialDate: caseEntity.trialDate,
-          trialLocation: caseEntity.trialLocation,
-        }
-      );
+      const workItem = new WorkItem({
+        assigneeId: null,
+        assigneeName: null,
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
+        },
+        docketNumber: caseEntity.docketNumber,
+        inProgress: true,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
+      });
 
       if (isUnservable) {
         workItem.setAsCompleted({ message: 'completed', user });
