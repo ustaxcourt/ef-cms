@@ -466,6 +466,7 @@ import { submitJudgeActivityStatisticsReportSequence } from './sequences/JudgeAc
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
+import { submitMotionOrderResponseSequence } from './sequences/MotionOrderResponse/submitMotionOrderResponseSequence';
 import { submitPaperFilingSequence } from './sequences/submitPaperFilingSequence';
 import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
 import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
@@ -1354,6 +1355,8 @@ export const presenterSequences = {
   submitJudgeActivityStatisticsReportSequence:
     submitJudgeActivityStatisticsReportSequence as unknown as Function,
   submitLoginSequence,
+  submitMotionOrderResponseSequence:
+    submitMotionOrderResponseSequence as unknown as Function,
   submitOpinionAdvancedSearchSequence:
     submitOpinionAdvancedSearchSequence as unknown as Function,
   submitOrderAdvancedSearchSequence:
