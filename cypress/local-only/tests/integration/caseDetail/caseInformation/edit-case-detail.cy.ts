@@ -23,6 +23,36 @@ describe('Edit a case caption from case detail header', function () {
   const getDeficiencyStatistics = (docketNumber: string): RawStatistic[] => {
     return [
       {
+        determinationDeficiencyAmount: '200',
+        determinationTotalPenalties: '2',
+        docketNumber,
+        irsDeficiencyAmount: '5678',
+        irsTotalPenalties: '1234',
+        lastDateOfPeriod: '2019-12-16T00:00:00.000-05:00',
+        statisticId: 'bb557361-50ee-4440-aaff-0a9f1bfa30ed',
+        year: undefined,
+        yearOrPeriod: 'Period',
+        updatedAt: '',
+        penalties: [
+          {
+            name: 'Hugh of St. Victor',
+            penaltyAmount: '1', // IRS Notice
+            penaltyId: 'd0a52030-1ba5-4b1a-bb62-b5e591ea434e',
+            penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+            statisticId: 'bb557361-50ee-4440-aaff-0a9f1bfa30ed',
+            updatedAt: '',
+          },
+          {
+            name: 'Alan of Lille',
+            penaltyAmount: '1', // Determination
+            penaltyId: 'e0a52030-1ba5-4b1a-bb62-b5e591ea434e',
+            penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
+            statisticId: 'bb557361-50ee-4440-aaff-0a9f1bfa30ed',
+            updatedAt: '',
+          },
+        ],
+      },
+      {
         determinationDeficiencyAmount: '100',
         determinationTotalPenalties: '5',
         docketNumber,
@@ -56,36 +86,6 @@ describe('Edit a case caption from case detail header', function () {
             penaltyId: 'c0a52030-1ba5-4b1a-bb62-b5e591ea434e',
             penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
             statisticId: 'ab557361-50ee-4440-aaff-0a9f1bfa30ed',
-            updatedAt: '',
-          },
-        ],
-      },
-      {
-        determinationDeficiencyAmount: '200',
-        determinationTotalPenalties: '2',
-        docketNumber,
-        irsDeficiencyAmount: '5678',
-        irsTotalPenalties: '1234',
-        lastDateOfPeriod: '2019-12-16T00:00:00.000-05:00',
-        statisticId: 'bb557361-50ee-4440-aaff-0a9f1bfa30ed',
-        year: undefined,
-        yearOrPeriod: 'Period',
-        updatedAt: '',
-        penalties: [
-          {
-            name: 'Hugh of St. Victor',
-            penaltyAmount: '1', // IRS Notice
-            penaltyId: 'd0a52030-1ba5-4b1a-bb62-b5e591ea434e',
-            penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
-            statisticId: 'bb557361-50ee-4440-aaff-0a9f1bfa30ed',
-            updatedAt: '',
-          },
-          {
-            name: 'Alan of Lille',
-            penaltyAmount: '1', // Determination
-            penaltyId: 'e0a52030-1ba5-4b1a-bb62-b5e591ea434e',
-            penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
-            statisticId: 'bb557361-50ee-4440-aaff-0a9f1bfa30ed',
             updatedAt: '',
           },
         ],
@@ -208,6 +208,87 @@ describe('Edit a case caption from case detail header', function () {
       }
     });
 
-    it('should show statistic penalties in the correct order', () => {});
+    it('should show deficiency statistics in the correct order', () => {
+      cy.get('[data-testid="statistics-deficiencies-table"]').within(() => {
+        cy.get('thead th').should('have.length', 3);
+        cy.get('thead th').eq(0).should('contain', 'Year/Period');
+        cy.get('thead th').eq(1).should('contain', 'IRS Notice');
+        cy.get('thead th').eq(2).should('contain', 'Determination');
+
+        cy.get('tbody tr').should('have.length', 3);
+
+        const expectedRows = [
+          { period: '2018', notice: '$5,678.00', determination: '$100.00' },
+          { period: '12/16/19', notice: '$5,678.00', determination: '$200.00' },
+          { period: '2019', notice: '$5,678.00', determination: '$300.00' },
+        ];
+
+        cy.get('tbody tr').each(($row, index) => {
+          const expected = expectedRows[index];
+          cy.wrap($row).within(() => {
+            cy.get('td').eq(0).should('contain', expected.period);
+            cy.get('td').eq(1).should('contain', expected.notice);
+            cy.get('td').eq(2).should('contain', expected.determination);
+          });
+        });
+      });
+    });
+
+    it('should show total penalties in the correct order', () => {
+      cy.get('[data-testid="statistics-penalties-table"]').within(() => {
+        cy.get('thead th').should('have.length', 3);
+        cy.get('thead th').eq(0).should('contain', 'IRS Notice');
+        cy.get('thead th').eq(1).should('contain', 'Determination');
+        cy.get('thead th').eq(2).should('be.empty'); // The third header is intentionally empty.
+
+        cy.get('tbody tr').should('have.length', 3);
+
+        const expectedRows = [
+          {
+            notice: '$300.00',
+            determination: '$5.00',
+          },
+          {
+            notice: '$1.00',
+            determination: '$1.00',
+          },
+          {
+            notice: '$1.00',
+            determination: '$1.00',
+          },
+        ];
+
+        cy.get('tbody tr').each(($row, index) => {
+          const expected = expectedRows[index];
+          cy.wrap($row).within(() => {
+            cy.get('td').eq(0).should('contain', expected.notice);
+            cy.get('td').eq(1).should('contain', expected.determination);
+          });
+        });
+      });
+    });
+
+    it('should show itemized penalties in the correct order', () => {
+      cy.get(`[data-testid="view-itemized-penalties-button-0"]`).click();
+      cy.get('[data-testid="itemized-penalties-modal"]').within(() => {
+        cy.get('thead th').should('have.length', 3);
+        cy.get('tbody tr').should('have.length', 3);
+
+        const expectedRows = [
+          { label: 'Penalty 1', notice: '$100.00', determination: '$5.00' },
+          { label: 'Penalty 2', notice: '$200.00', determination: '' },
+          { label: 'Total:', notice: '$300.00', determination: '$5.00' },
+        ];
+
+        cy.get('tbody tr').each(($row, index) => {
+          const expected = expectedRows[index];
+          cy.wrap($row).within(() => {
+            cy.get('td').eq(0).should('contain', expected.label);
+            cy.get('td').eq(1).should('contain', expected.notice);
+            cy.get('td').eq(2).should('contain', expected.determination);
+          });
+        });
+      });
+    });
   });
 });
