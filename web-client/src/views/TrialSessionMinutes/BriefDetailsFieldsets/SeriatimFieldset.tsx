@@ -1,4 +1,3 @@
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MINUTE_SHEET_FORM_SECTION_MAP,
@@ -102,28 +101,32 @@ export const SeriatimFieldset = ({
               </FormGroup>
             </div>
             <div className="grid-col-4">
-              <DateSelector
-                placeHolderText="MM/DD/YYYY"
-                formatDateOnChange
-                defaultValue={seriatimFormState[rowConfig.key].dueDate}
-                formGroupClassNames="margin-bottom-0"
-                id={`${rowConfig.key}DueDate`}
-                onBlur={() => onBlurHandler()}
-                onChange={e =>
-                  onChangeHandler({
-                    name: 'briefDetails',
-                    rowInfo: {
-                      key: rowConfig.key,
-                      nestedName: 'dueDate',
-                    },
-                    section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
-                    value: e.target.value,
-                  })
-                }
-              />
+              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+                <input
+                  className="usa-input display-inline-block maxw-full"
+                  aria-label={`${rowConfig.key}DueDate`}
+                  id={`${rowConfig.key}DueDate`}
+                  data-testid={`${rowConfig.key}DueDate`}
+                  name={`${rowConfig.key}DueDate`}
+                  type="text"
+                  value={seriatimFormState[rowConfig.key].dueDate}
+                  onBlur={() => onBlurHandler()}
+                  onChange={e =>
+                    onChangeHandler({
+                      name: 'briefDetails',
+                      rowInfo: {
+                        key: rowConfig.key,
+                        nestedName: 'dueDate',
+                      },
+                      section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
+                      value: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
             </div>
             <div className="grid-col-4">
-              <div className="padding-right-4">
+              <div>
                 <FormGroup className="margin-bottom-0 display-flex align-items-center">
                   <input
                     className="usa-input"

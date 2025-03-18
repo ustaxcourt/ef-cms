@@ -496,6 +496,12 @@ export const MOTION_EVENT_CODES = [
   }),
 ];
 
+export const NOTICE_EVENT_CODES = [
+  ...INTERNAL_FILING_EVENTS['Notice'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
 export const SIMULTANEOUS_DOCUMENT_EVENT_CODES = [
   ...EXTERNAL_FILING_EVENTS['Simultaneous Brief'].map(entry => {
     return entry.eventCode;
@@ -1902,6 +1908,7 @@ export const MOTION_OBJECTION_OPTIONS_INVERTED = invert(
 export const ACTION_DOCUMENT_TYPE_OPTIONS = {
   entryOfAppearance: 'Entry of Appearance',
   limitedEntryOfAppearance: 'Limited Entry of Appearance',
+  proposedStipulatedDecision: 'Proposed Stipulated Decision',
   orderToShowCause: 'Order to Show Cause',
   filing: 'Filing',
   motion: 'Motion',
@@ -1919,6 +1926,7 @@ export const ACTION_FILED_BY_OPTIONS = {
   petitioner: 'Petitioner',
   respondent: 'Respondent',
   petitionerAndRespondent: 'Petitioner and Respondent',
+  practitioner: 'Practitioner',
   joint: 'Joint',
   other: 'Other',
   court: 'Court',
@@ -1978,7 +1986,16 @@ export const PETITIONER_ROLE_OPTIONS = {
   participant: 'Participant',
   translator: 'Translator',
   studentIntern: 'Student Intern',
+  thirdParty: 'Third Party',
   other: 'Other',
 } as const;
 export type PetitionerRoleOption = keyof typeof PETITIONER_ROLE_OPTIONS;
 export const PETITIONER_ROLE_OPTIONS_INVERTED = invert(PETITIONER_ROLE_OPTIONS);
+
+export const RESPONDENT_ROLE_OPTIONS = {
+  counsel: 'Counsel',
+  thirdParty: 'Third Party',
+  other: 'Other',
+} as const;
+export type RespondentRoleOption = keyof typeof RESPONDENT_ROLE_OPTIONS;
+export const RESPONDENT_ROLE_OPTIONS_INVERTED = invert(RESPONDENT_ROLE_OPTIONS);

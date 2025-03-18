@@ -81,6 +81,7 @@ const testFormattedMinuteSheet: FormattedMinuteSheet = {
     briefType: 'Simultaneous',
     dateSubmitted: '01/15/2024',
     totalTrialHours: '4',
+    note: '',
   },
   trialClerk: 'Mary Johnson',
   trialHearing:

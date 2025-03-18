@@ -60,6 +60,7 @@ export type FormattedMinuteSheet = {
     totalTrialHours: string;
     briefType: string;
     briefDetails: string[];
+    note: string;
   };
   petitionerWitnesses: { name: string }[];
   respondentWitnesses: { name: string }[];
@@ -184,9 +185,7 @@ export const getBriefDetails = (briefDetails: BriefDetailsType) => {
       const briefDetail = briefDetails[briefSubtype];
       let stringSubtype = [
         briefDetail.partyType ? briefDetail.partyType : '',
-        briefDetail.dueDate
-          ? `Due ${formatDateString(briefDetail.dueDate, FORMATS.MMDDYYYY)}`
-          : '',
+        briefDetail.dueDate ? `Due ${briefDetail.dueDate}` : '',
         briefDetail.note ? `<em>${briefDetail.note}</em>` : '',
       ]
         .filter(stringBriefSubtype => !!stringBriefSubtype)
@@ -232,7 +231,7 @@ export const formatCalledSection = (
 ): string => {
   if (!calendarCall) return '';
   return [
-    formatDateString(calendarCall.date, FORMATS.MMDDYYYY),
+    calendarCall.date,
     calendarCall.note && `<em>${calendarCall.note}</em>`,
     calendarCall.transcriptOrdered ? 'Transcript ordered' : '',
   ]
@@ -270,8 +269,16 @@ export const formatRespondentAppearances = (
 ): string[] => {
   return respondents
     .map(respondent => {
+      let formattedRespondentRole;
+      if (respondent.role && respondent.note) {
+        formattedRespondentRole = `(${PETITIONER_ROLE_OPTIONS[respondent.role]} - <em>${respondent.note}</em>)`;
+      } else if (respondent.role) {
+        formattedRespondentRole = `(${PETITIONER_ROLE_OPTIONS[respondent.role]})`;
+      }
+
       const parts = [
         respondent.name,
+        formattedRespondentRole,
         respondent.datesOfAppearance && `- ${respondent.datesOfAppearance}`,
       ].filter(substring => !!substring);
 
@@ -284,10 +291,7 @@ export const formatJurisdictionRetained = (
   retained: MinuteSheet['jurisdiction']['retained'],
 ): string => {
   if (!retained?.date) return '';
-  return [
-    `${formatDateString(retained.date, FORMATS.MMDDYYYY)}`,
-    retained.note ? `<em>${retained.note}</em>` : '',
-  ]
+  return [retained.date, retained.note ? `<em>${retained.note}</em>` : '']
     .filter(Boolean)
     .join('; ');
 };
@@ -296,10 +300,7 @@ export const formatJurisdictionContinued = (
   continued: MinuteSheet['jurisdiction']['continued'],
 ): string => {
   if (!continued?.date) return '';
-  return [
-    `${formatDateString(continued.date, FORMATS.MMDDYYYY)}`,
-    continued.note ? `<em>${continued.note}</em>` : '',
-  ]
+  return [continued.date, continued.note ? `<em>${continued.note}</em>` : '']
     .filter(Boolean)
     .join('; ');
 };
@@ -311,10 +312,9 @@ export const formatStatusReportOrdered = (
   const orderedFor =
     STATUS_REPORT_ORDERED_FOR_OPTIONS[statusReport.orderedFor] || '';
   return [
-    formatDateString(statusReport.date, FORMATS.MMDDYYYY),
+    statusReport.date,
     orderedFor && `Ordered for ${orderedFor}`,
-    statusReport.dueDate &&
-      `Due ${formatDateString(statusReport.dueDate, FORMATS.MMDDYYYY)}`,
+    statusReport.dueDate && `Due ${statusReport.dueDate}`,
     statusReport.note && `<em>${statusReport.note}</em>`,
   ]
     .filter(substring => !!substring)
@@ -326,9 +326,8 @@ export const formatStipulatedDecision = (
 ): string => {
   if (!stipulatedDecision) return '';
   return [
-    formatDateString(stipulatedDecision.date, FORMATS.MMDDYYYY),
-    stipulatedDecision.dueDate &&
-      `Due ${formatDateString(stipulatedDecision.dueDate, FORMATS.MMDDYYYY)}`,
+    stipulatedDecision.date,
+    stipulatedDecision.dueDate && `Due ${stipulatedDecision.dueDate}`,
     stipulatedDecision.note && `<em>${stipulatedDecision.note}</em>`,
   ]
     .filter(Boolean)
@@ -342,12 +341,12 @@ export const formatMotions = (
     .map(motion => ({
       content: [
         `${motion.oralMotion ? 'Oral ' : ''}${MOTION_TYPE_OPTIONS[motion.type] || ''}`,
-        formatDateString(motion.date, FORMATS.MMDDYYYY),
+        motion.date,
         MOTION_FILED_BY_OPTIONS[motion.filedBy]
           ? `Filed by ${MOTION_FILED_BY_OPTIONS[motion.filedBy]}`
           : '',
-        MOTION_STATUS_OPTIONS[motion.status],
-        MOTION_OBJECTION_OPTIONS[motion.objection],
+        MOTION_STATUS_OPTIONS[motion.status]?.toUpperCase(),
+        formatObjection(motion.objection),
         motion.note ? `<em>${motion.note}</em>` : '',
       ]
         .filter(substring => !!substring)
@@ -364,46 +363,54 @@ export const formatActionsAndFilings = (
   actionsAndFilings: MinuteSheet['proceedings']['actionsAndFilings'],
 ) => {
   return actionsAndFilings
-    .map(action => ({
-      content: [
-        formatDateString(action.date, FORMATS.MMDDYYYY),
-        [
-          ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]
-            ? `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}`
-            : '',
+    .map(action => {
+      return {
+        content: [
+          action.date,
           [
-            action.oralMotion ? 'Oral Motion ' : '',
-            action.note ? `<em>${action.note}</em>` : '',
-          ].join(''),
+            ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]
+              ? `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}`
+              : '',
+            [
+              action.oralMotion ? 'Oral Motion ' : '',
+              action.note ? `<em>${action.note}</em>` : '',
+            ].join(''),
+          ]
+            .filter(substring => !!substring)
+            .join(' - '),
+          action.filedBy
+            ? `Filed by ${ACTION_FILED_BY_OPTIONS[action.filedBy]}`
+            : '',
+          action.status ? ACTION_STATUS_OPTIONS[action.status] : '',
+          formatObjection(action.objection),
         ]
           .filter(substring => !!substring)
-          .join(' - '),
-        action.filedBy ? ACTION_FILED_BY_OPTIONS[action.filedBy] : '',
-        action.status ? ACTION_STATUS_OPTIONS[action.status] : '',
-        action.objection ? MOTION_OBJECTION_OPTIONS[action.objection] : '',
-      ]
-        .filter(substring => !!substring)
-        .join('; '),
-    }))
+          .join('; '),
+      };
+    })
     .filter(action => !!action.content);
+};
+
+const formatObjection = (objection: string | undefined) => {
+  const objectionText = objection ? MOTION_OBJECTION_OPTIONS[objection] : '';
+
+  return objectionText === MOTION_OBJECTION_OPTIONS.unknown
+    ? 'Obj. Unknown'
+    : objectionText;
 };
 
 export const formatTrialBrief = (trialBrief: MinuteSheet['brief']) => {
   return {
     benchOpinionRendered: [
-      trialBrief.benchOpinionDate
-        ? formatDateString(trialBrief.benchOpinionDate, FORMATS.MMDDYYYY)
-        : '',
+      trialBrief.benchOpinionDate ? trialBrief.benchOpinionDate : '',
       trialBrief.transcriptOrdered ? 'Transcript ordered' : '',
-      trialBrief.note ? `<em>${trialBrief.note}</em>` : '',
     ]
       .filter(substring => !!substring)
       .join('; '),
+    note: trialBrief.note ? `<em>${trialBrief.note}</em>` : '',
     briefDetails: getBriefDetails(trialBrief.details),
     briefType: trialBrief.type || '',
-    dateSubmitted: trialBrief.dateSubmitted
-      ? formatDateString(trialBrief.dateSubmitted, FORMATS.MMDDYYYY)
-      : '',
+    dateSubmitted: trialBrief.dateSubmitted ? trialBrief.dateSubmitted : '',
     totalTrialHours: trialBrief.hoursOfTrial
       ? `${trialBrief.hoursOfTrial}`
       : '',

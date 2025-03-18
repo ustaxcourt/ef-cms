@@ -41,6 +41,7 @@ export const mockFormattedMinuteSheet: FormattedMinuteSheet = {
     totalTrialHours: '4',
     briefType: 'Regular',
     briefDetails: ['Opening brief - Petitioner; Due 01/15/2024'],
+    note: '',
   },
   trialClerk: 'Mary Clerk',
   trialHearing: '01/09/2024; Trial note',

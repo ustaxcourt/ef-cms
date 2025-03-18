@@ -4,7 +4,6 @@ import {
   OnChangeHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   MINUTE_SHEET_FORM_SECTION_MAP,
@@ -37,27 +36,34 @@ export const MotionsFieldset = ({
           <div className="margin-bottom-3" key={row.renderKey}>
             <div className="grid-row grid-gap align-items-center margin-bottom-1">
               <div className="grid-col-auto">
-                <DateSelector
-                  formatDateOnChange
-                  placeHolderText="MM/DD/YYYY"
-                  defaultValue={row.date}
-                  formGroupClassNames="margin-bottom-0"
-                  id={`motionFiledDate-${row.renderKey}`}
-                  label="Date"
-                  labelPosition="left"
-                  onBlur={() => onBlurHandler()}
-                  onChange={e =>
-                    onChangeHandler({
-                      name: 'motions',
-                      rowInfo: {
-                        key: row.renderKey,
-                        nestedName: 'date',
-                      },
-                      section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
-                      value: e.target.value,
-                    })
-                  }
-                />
+                <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+                  <label
+                    className="margin-right-2 margin-bottom-0 display-inline-block"
+                    htmlFor={`motionFiledDate-${row.renderKey}`}
+                  >
+                    Date
+                  </label>
+                  <input
+                    className="usa-input display-inline-block maxw-full"
+                    id={`motionFiledDate-${row.renderKey}`}
+                    data-testid={`motionFiledDate-${row.renderKey}`}
+                    name={`motionFiledDate-${row.renderKey}`}
+                    type="text"
+                    value={row.date}
+                    onBlur={() => onBlurHandler()}
+                    onChange={e =>
+                      onChangeHandler({
+                        name: 'motions',
+                        rowInfo: {
+                          key: row.renderKey,
+                          nestedName: 'date',
+                        },
+                        section: MINUTE_SHEET_FORM_SECTION_MAP.motionsSection,
+                        value: e.target.value,
+                      })
+                    }
+                  />
+                </FormGroup>
               </div>
               <div className="grid-col-3">
                 <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">

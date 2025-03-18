@@ -1,4 +1,3 @@
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { MINUTE_SHEET_FORM_SECTION_MAP } from '@shared/business/entities/EntityConstants';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
@@ -24,26 +23,33 @@ export const JurisdictionFieldset = ({
           Jurisdiction Retained
         </legend>
         <div className="grid-col-auto">
-          <DateSelector
-            formatDateOnChange
-            placeHolderText="MM/DD/YYYY"
-            defaultValue={jurisdictionFormState.retained.date}
-            formGroupClassNames="margin-bottom-0"
-            id="jurisdictionRetainedDate"
-            label="Date"
-            labelPosition="left"
-            onBlur={() => onBlurHandler()}
-            onChange={e =>
-              onChangeHandler({
-                name: 'retained',
-                rowInfo: {
-                  key: 'date',
-                },
-                section: MINUTE_SHEET_FORM_SECTION_MAP.jurisdictionSection,
-                value: e.target.value,
-              })
-            }
-          />
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <label
+              className="margin-right-2 margin-bottom-0 display-inline-block"
+              htmlFor="jurisdictionRetainedDate"
+            >
+              Date
+            </label>
+            <input
+              className="usa-input display-inline-block maxw-full"
+              id="jurisdictionRetainedDate"
+              data-testid="jurisdictionRetainedDate"
+              name="jurisdictionRetainedDate"
+              type="text"
+              value={jurisdictionFormState.retained.date}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'retained',
+                  rowInfo: {
+                    key: 'date',
+                  },
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.jurisdictionSection,
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
         </div>
         <div className="grid-col-fill">
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
@@ -80,26 +86,33 @@ export const JurisdictionFieldset = ({
           Continued
         </legend>
         <div className="grid-col-auto">
-          <DateSelector
-            placeHolderText="MM/DD/YYYY"
-            formatDateOnChange
-            defaultValue={jurisdictionFormState.continued.date}
-            formGroupClassNames="margin-bottom-0"
-            id="jurisdictionContinuedDate"
-            label="Date"
-            labelPosition="left"
-            onBlur={() => onBlurHandler()}
-            onChange={e =>
-              onChangeHandler({
-                name: 'continued',
-                rowInfo: {
-                  key: 'date',
-                },
-                section: MINUTE_SHEET_FORM_SECTION_MAP.jurisdictionSection,
-                value: e.target.value,
-              })
-            }
-          />
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <label
+              className="margin-right-2 margin-bottom-0 display-inline-block"
+              htmlFor="jurisdictionContinuedDate"
+            >
+              Date
+            </label>
+            <input
+              className="usa-input display-inline-block maxw-full"
+              id="jurisdictionContinuedDate"
+              data-testid="jurisdictionContinuedDate"
+              name="jurisdictionContinuedDate"
+              type="text"
+              value={jurisdictionFormState.continued.date}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'continued',
+                  rowInfo: {
+                    key: 'date',
+                  },
+                  section: MINUTE_SHEET_FORM_SECTION_MAP.jurisdictionSection,
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
         </div>
         <div className="grid-col-fill">
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">

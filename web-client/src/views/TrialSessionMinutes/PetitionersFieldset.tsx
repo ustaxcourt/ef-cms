@@ -96,9 +96,9 @@ export const PetitionersFieldset = ({
             <FormGroup className="margin-bottom-0 display-flex align-items-center">
               <select
                 className="usa-select display-inline-block"
-                id={`petitionerRole-${rowIndex}`}
-                name={`petitionerRole-${rowIndex}`}
-                aria-label={`petitionerRole-${rowIndex}`}
+                id={`petitioner-role-${rowIndex}`}
+                name={`petitioner-role-${rowIndex}`}
+                aria-label={`petitioner-role-${rowIndex}`}
                 value={petitionersFormState.petitioners[row.renderKey].role}
                 onBlur={() => onBlurHandler()}
                 onChange={e => {
