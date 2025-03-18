@@ -146,9 +146,6 @@ export const saveCaseDetailInternalEdit = async (
       ...initializeCaseWorkItem,
       assigneeId: user.userId,
       assigneeName: user.name,
-      caseIsInProgress: true,
-      trialDate: caseEntity.trialDate,
-      trialLocation: caseEntity.trialLocation,
     });
 
     await upsertWorkItems({
