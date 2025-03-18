@@ -61,6 +61,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       },
     ],
     docketNumber: '56789-18',
+    docketNumberWithSuffix: '56789-18',
     filingType: 'Myself',
     partyType: PARTY_TYPES.petitioner,
     petitioners: [
