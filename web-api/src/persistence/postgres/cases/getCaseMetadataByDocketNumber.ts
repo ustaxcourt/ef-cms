@@ -1,17 +1,15 @@
-import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { sql } from 'kysely';
-import {
-  Petitioner,
-  RawPetitioner,
-} from '@shared/business/entities/contacts/Petitioner';
 
 export const getCaseMetadataByDocketNumber = async ({
   docketNumber,
 }: {
   docketNumber: string;
-}): Promise<RawCase | undefined> => {
+}): Promise<
+  | Omit<RawCase, 'consolidatedCases' | 'correspondence' | 'docketEntries'>
+  | undefined
+> => {
   const dbCase = await getDbReader(reader =>
     reader
       .selectFrom('dwCase as c')
@@ -26,18 +24,9 @@ export const getCaseMetadataByDocketNumber = async ({
   );
 
   return dbCase
-    ? {
-        ...transformNullToUndefined(rawCaseEntity(dbCase)),
-        petitioners:
-          (dbCase.petitioners as RawPetitioner[]).map(p => {
-            if (!p) {
-              return;
-            }
-            return new Petitioner({
-              ...transformNullToUndefined(p),
-              state: p.state || null, // this needs to be null
-            }).toRawObject();
-          }) || [],
-      }
+    ? transformDBCaseToEntity({
+        ...dbCase,
+        petitioners: dbCase.petitioners as TPetitioner[], // This is a hack because our typing for Petitioners is yucky
+      })
     : undefined;
 };

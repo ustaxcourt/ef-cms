@@ -1,11 +1,16 @@
 import { getDbReader } from '@web-api/database';
-import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
 
 export const getCasesInConsolidatedGroup = async ({
   leadDocketNumber,
 }: {
   leadDocketNumber: string;
-}): Promise<RawCase[]> => {
+}): Promise<
+  Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'docketEntries' | 'petitioners'
+  >[]
+> => {
   const result = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
@@ -14,5 +19,5 @@ export const getCasesInConsolidatedGroup = async ({
       .execute(),
   );
 
-  return result.map(c => rawCaseEntity(c));
+  return result.map(c => transformDBCaseToEntity(c));
 };

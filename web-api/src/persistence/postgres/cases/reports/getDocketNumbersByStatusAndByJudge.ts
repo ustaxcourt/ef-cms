@@ -2,7 +2,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
 
 export type DocketNumberByStatusRequest = {
   statuses: string[];
@@ -57,7 +57,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   });
 
   let results = rawResults.map(result =>
-    transformNullToUndefined({
+    transformDBCaseToEntity({
       ...result,
       caseCaption: result.caption,
       docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
