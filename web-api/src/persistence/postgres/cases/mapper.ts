@@ -45,7 +45,7 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       : calculateDate({ dateString: formatNow() }), // Is this what we want?
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
-    docketNumberSuffix: rawCase.docketNumberSuffix,
+    docketNumberSuffix: rawCase.docketNumberSuffix || undefined,
     docketEntries: JSON.stringify(rawCase.docketEntries),
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,

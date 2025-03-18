@@ -281,10 +281,11 @@ const caseStatisticTableDefinition = {
   irsTotalPenalties: {} as string,
   statisticId: {} as string,
   year: {} as number | null | undefined,
-  yearOrPeriod: {} as string,
+  yearOrPeriod: {} as string | null | undefined,
   determinationDeficiencyAmount: {} as string | null | undefined,
   determinationTotalPenalties: {} as string | null | undefined,
   lastDateOfPeriod: {} as Date | null | undefined,
+  updatedAt: {} as Date,
 };
 
 export type CaseStatisticTable = typeof caseStatisticTableDefinition;
@@ -303,6 +304,7 @@ const statisticPenaltyTableDefinition = {
   penaltyAmount: {} as string,
   penaltyId: {} as string,
   penaltyType: {} as string,
+  updatedAt: {} as Date,
 };
 
 export type StatisticPenaltyTable = typeof statisticPenaltyTableDefinition;
