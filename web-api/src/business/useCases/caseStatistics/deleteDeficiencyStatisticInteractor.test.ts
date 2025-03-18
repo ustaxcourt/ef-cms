@@ -1,15 +1,19 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { CASE_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { deleteCaseStatistic as deleteCaseStatisticMock } from '@web-api/persistence/postgres/cases/statistics/deleteCaseStatistic';
 import { deleteDeficiencyStatisticInteractor } from './deleteDeficiencyStatisticInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('deleteDeficiencyStatisticInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const deleteCaseStatistic = deleteCaseStatisticMock as jest.Mock;
   const statisticId = 'f7a1cdb5-f534-4d12-a046-86ca3b46ddc4';
 
   const statistic = {
@@ -32,14 +36,13 @@ describe('deleteDeficiencyStatisticInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({ ...MOCK_CASE, statistics: [statistic] }),
-      );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      statistics: [statistic],
+    });
   });
 
-  it('should throw an error if the user is unauthorized to update case statistics', async () => {
+  it('should throw an error when the user is unauthorized to update case statistics', async () => {
     await expect(
       deleteDeficiencyStatisticInteractor(
         applicationContext,
@@ -51,7 +54,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should call updateCase with the removed case statistics and return the updated case', async () => {
+  it('should call deleteCaseStatistic with the removed case statistics and return the updated case', async () => {
     const result = await deleteDeficiencyStatisticInteractor(
       applicationContext,
       {
@@ -63,16 +66,10 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     expect(result).toMatchObject({
       statistics: [],
     });
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({ statistics: [] });
+    expect(deleteCaseStatistic.mock.calls[0][0].statisticId).toBe(statisticId);
   });
 
-  it('should call updateCase with the original case statistics and return the original case if statisticId is not present on the case', async () => {
+  it('should call deleteCaseStatistic but return the original case when statisticId is not present on the case', async () => {
     const result = await deleteDeficiencyStatisticInteractor(
       applicationContext,
       {
@@ -84,26 +81,20 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     expect(result).toMatchObject({
       statistics: [statistic],
     });
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate,
-    ).toMatchObject({ statistics: [statistic] });
+    expect(deleteCaseStatistic.mock.calls[0][0].statisticId).toBe(
+      '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
+    );
   });
 
-  it('should throw an error and not update the case if attempting to delete the only statistic from a deficiency case with hasVerifiedIrsNotice true (at least one statistic is required)', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          caseType: CASE_TYPES_MAP.deficiency,
-          hasVerifiedIrsNotice: true,
-          statistics: [statistic],
-        }),
-      );
+  it('should throw an error and not update the case when attempting to delete the only statistic from a deficiency case with hasVerifiedIrsNotice true (at least one statistic is required)', async () => {
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        caseType: CASE_TYPES_MAP.deficiency,
+        hasVerifiedIrsNotice: true,
+        statistics: [statistic],
+      }),
+    );
 
     await expect(
       deleteDeficiencyStatisticInteractor(
@@ -115,12 +106,10 @@ describe('deleteDeficiencyStatisticInteractor', () => {
         mockDocketClerkUser,
       ),
     ).rejects.toThrow('The Case entity was invalid');
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).not.toHaveBeenCalled();
+    expect(deleteCaseStatistic).not.toHaveBeenCalled();
   });
 
-  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+  it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
     await expect(
@@ -134,9 +123,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

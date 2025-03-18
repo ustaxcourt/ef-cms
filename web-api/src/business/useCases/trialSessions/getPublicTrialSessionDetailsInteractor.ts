@@ -1,7 +1,6 @@
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { formatPublicCase } from '@web-api/business/useCaseHelper/consolidatedCases/formatPublicCase';
 
 export type PublicTrialSessionDetails = Pick<
   TrialSession,
@@ -15,7 +14,7 @@ export type PublicTrialSessionDetails = Pick<
   | 'state'
   | 'postalCode'
 > & {
-  calendaredCases: RawPublicCase[];
+  calendaredCases: RawCase[];
   swingSessionLocation?: string;
 };
 
@@ -64,8 +63,7 @@ export const getPublicTrialSessionDetailsInteractor = async (
         ...aCase,
         docketEntries: [],
       };
-
-      return formatPublicCase({ rawCaseRecord: caseWithEmptyDocketEntries });
+      return caseWithEmptyDocketEntries;
     });
 
   const publicTrialSessionData: PublicTrialSessionDetails = {

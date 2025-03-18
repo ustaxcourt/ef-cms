@@ -1,27 +1,36 @@
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { batchWrite, query } from '../../dynamodbClientService';
 import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getCasesInConsolidatedGroup } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { NotFoundError } from '@web-api/errors/errors';
+import { isInConsolidatedGroup } from '@shared/business/entities/cases/Case';
 
 export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
   docketNumber,
   deleteConsolidatedCases = false,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   docketNumber: string;
   deleteConsolidatedCases?: boolean;
 }): Promise<void> => {
-  const docketNumbersToDelete: string[] = [docketNumber];
+  let docketNumbersToDelete: string[] = [docketNumber];
+  const theCase = await getCaseMetadataByDocketNumber({
+    docketNumber,
+  });
+
+  if (!theCase) {
+    throw new NotFoundError(`Case ${docketNumber} was not found.`);
+  }
+
   const recordsToDelete: DeleteRequest[] = [];
-  if (deleteConsolidatedCases) {
-    const theCase = await getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-      includeConsolidatedCases: true,
-    });
-    theCase.consolidatedCases.forEach(c =>
-      docketNumbersToDelete.push(c.docketNumber),
-    );
+  if (deleteConsolidatedCases && isInConsolidatedGroup(theCase)) {
+    docketNumbersToDelete = (
+      await getCasesInConsolidatedGroup({
+        leadDocketNumber: theCase.leadDocketNumber!,
+      })
+    ).map(c => c.docketNumber);
   }
   await Promise.all(
     docketNumbersToDelete.map(async dn => {

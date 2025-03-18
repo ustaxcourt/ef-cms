@@ -2,12 +2,12 @@ import {
   CalendaredCaseItemType,
   TrialSessionState,
 } from '@web-client/presenter/state/trialSessionState';
+import { FORMATS } from '../DateHandler';
 import {
-  DOCKET_NUMBER_SUFFIXES,
+  HIGH_PRIORITY_SUFFIXES,
   PARTIES_CODES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { FORMATS } from '../DateHandler';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -90,12 +90,7 @@ export const formatCaseForTrialSession = ({
       .formatDateString(caseItem.removedFromTrialDate, FORMATS.MMDDYY);
   }
 
-  const highPrioritySuffixes = [
-    DOCKET_NUMBER_SUFFIXES.LIEN_LEVY, // L
-    DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
-    DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
-  ];
-  const isDocketSuffixHighPriority = highPrioritySuffixes.includes(
+  const isDocketSuffixHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
     caseItem.docketNumberSuffix!,
   );
 

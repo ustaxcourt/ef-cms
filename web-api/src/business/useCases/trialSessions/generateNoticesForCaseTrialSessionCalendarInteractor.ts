@@ -11,6 +11,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 
 /**
@@ -376,12 +377,10 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
 
   const trialSessionEntity = new TrialSession(trialSession);
 
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   await setNoticeForCase({
     applicationContext,

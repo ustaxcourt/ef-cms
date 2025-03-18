@@ -2,10 +2,11 @@ import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { caseWorksheetsHelper as caseWorksheetsHelperComputed } from './caseWorksheetsHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
+import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
 
 describe('caseWorksheetsHelper', () => {
   let baseState;
-  let submittedAndCavCasesByJudge;
+  let submittedAndCavCasesByJudge: GetCasesByStatusAndByJudgeResponse[];
 
   const caseWorksheetsHelper = withAppContextDecorator(
     caseWorksheetsHelperComputed,
@@ -15,16 +16,7 @@ describe('caseWorksheetsHelper', () => {
     submittedAndCavCasesByJudge = [
       {
         caseCaption: 'Scooby Doo, Petitioner',
-        caseStatusHistory: [
-          {
-            date: '2002-02-15T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
-          },
-          {
-            date: '2002-02-16T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.submitted,
-          },
-        ],
+        statusDate: '2002-02-16T05:00:00.000Z',
         docketNumber: '101-20',
         formattedCaseCount: 1,
         leadDocketNumber: '101-20',
@@ -32,16 +24,7 @@ describe('caseWorksheetsHelper', () => {
       },
       {
         caseCaption: 'Velma Jinkies, Petitioner',
-        caseStatusHistory: [
-          {
-            date: '2022-02-15T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
-          },
-          {
-            date: '2022-02-26T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.submitted,
-          },
-        ],
+        statusDate: '2022-02-26T05:00:00.000Z',
         caseWorksheet: { docketNumber: '110-15', primaryIssue: 'ZOINKS!' },
         docketNumber: '110-15',
         formattedCaseCount: 1,
@@ -49,32 +32,14 @@ describe('caseWorksheetsHelper', () => {
       },
       {
         caseCaption: 'Fred Dude, Petitioner',
-        caseStatusHistory: [
-          {
-            date: '1987-02-04T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
-          },
-          {
-            date: '1987-02-15T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.cav,
-          },
-        ],
+        statusDate: '1987-02-15T05:00:00.000Z',
         docketNumber: '202-87',
         formattedCaseCount: 1,
         status: CASE_STATUS_TYPES.cav,
       },
       {
         caseCaption: 'Shaggy Guy, Petitioner',
-        caseStatusHistory: [
-          {
-            date: '2022-02-15T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
-          },
-          {
-            date: '2022-02-16T05:00:00.000Z',
-            updatedCaseStatus: CASE_STATUS_TYPES.submittedRule122,
-          },
-        ],
+        statusDate: '2022-02-16T05:00:00.000Z',
         docketNumber: '303-11',
         formattedCaseCount: 1,
         status: CASE_STATUS_TYPES.submittedRule122,

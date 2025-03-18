@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
+import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
@@ -150,6 +151,7 @@ import { statisticsHelper } from './computeds/statisticsHelper';
 import { statusReportOrderHelper } from './computeds/statusReportOrderHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { trialLocationHelper } from '@web-client/presenter/computeds/trialLocationHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
 import { trialSessionMinutesFormOptionsHelper } from './computeds/TrialSession/TrialSessionMinutes/trialSessionMinutesFormOptionsHelper';
@@ -162,7 +164,8 @@ import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
-import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
+import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -537,6 +540,9 @@ export const computeds = {
   trialCitiesHelper: trialCitiesHelper as unknown as ReturnType<
     typeof trialCitiesHelper
   >,
+  trialLocationHelper: trialLocationHelper as unknown as ReturnType<
+    typeof trialLocationHelper
+  >,
   trialSessionDetailsHelper: trialSessionDetailsHelper as unknown as ReturnType<
     typeof trialSessionDetailsHelper
   >,
@@ -585,6 +591,9 @@ export const baseState = {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
+  [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
+    | RawGenerateSuggestedTermForm
+    | undefined,
   [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -622,7 +631,7 @@ export const baseState = {
     title?: string;
   },
   blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
-  blockedCases: [] as BlockedCasesResponse,
+  blockedCases: [] as BlockedCaseData[],
   caseDeadlineReport: {} as {
     caseDeadlinesForCurrentPage: (RawCaseDeadline & {
       caseCaption: string;
@@ -868,6 +877,14 @@ export const baseState = {
   },
   todaysDate: '',
   token: '',
+  trialLocationPage: {
+    blockedCases: [] as RawCase[],
+    blockedCasesPage: 0,
+    currentTab: 'eligibleCases',
+    eligibleCases: [] as EligibleCase[],
+    eligibleCasesPage: 0,
+    location: '',
+  },
   trialSession: cloneDeep(initialTrialSessionState),
   trialSessionDetailsTab: {} as { caseList: any[]; calendaredCaseList: any[] },
   trialSessionJudge: {
@@ -948,7 +965,7 @@ export type PractitionerDetail = {
   pendingEmail?: string;
   additionalPhone?: string;
   firmName?: string;
-  hasEAccess?: boolean;
+  hasElectronicAccess?: boolean;
 };
 
 export type PractitionerAllCasesInfo = {
