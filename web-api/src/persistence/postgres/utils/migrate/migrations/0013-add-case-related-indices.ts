@@ -92,6 +92,12 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
+    .createIndex('idxCaseLeadDocketNumber')
+    .on('dwCase')
+    .column('leadDocketNumber')
+    .execute();
+
+  await db.schema
     .createIndex('idxDocketEntryDocketNumber')
     .on('dwDocketEntry')
     .column('docketNumber')
@@ -206,6 +212,7 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropIndex('idxDocketEntryServedAt').execute();
   await db.schema.dropIndex('idxDocketEntryPending').execute();
   await db.schema.dropIndex('idxDocketEntryDocketNumber').execute();
+  await db.schema.dropIndex('idxCaseLeadDocketNumber').execute();
   await db.schema.dropIndex('idxCaseClosedDate').execute();
   await db.schema.dropIndex('idxCaseAssociatedJudgeId').execute();
   await db.schema.dropIndex('idxCaseHighPriority').execute();
