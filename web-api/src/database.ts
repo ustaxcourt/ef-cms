@@ -4,7 +4,7 @@ import {
   Kysely,
   PostgresDialect,
 } from 'kysely';
-import { Database, DatabaseTableName } from './database-types';
+import { Database } from './database-types';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
@@ -162,7 +162,7 @@ export async function getDbWriter<T>({
   table,
 }: {
   cb: (db: Kysely<Database>) => Promise<T>;
-  table: DatabaseTableName | null;
+  table: keyof Database | null;
 }): Promise<T> {
   if (!table || !Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(table)) {
     return await executeWriter(cb);
