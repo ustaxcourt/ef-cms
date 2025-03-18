@@ -38,7 +38,9 @@ export const petitionsClerkViewsDeadlineReport = (
 
     await cerebralTest.runSequence('updateDateRangeForDeadlinesSequence');
 
-    let deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
+    let deadlines = cerebralTest.getState(
+      'caseDeadlineReport.caseDeadlinesForCurrentPage',
+    );
 
     expect(deadlines.length).toEqual(6);
 
@@ -46,7 +48,9 @@ export const petitionsClerkViewsDeadlineReport = (
       state: cerebralTest.getState(),
     });
 
-    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
+    deadlines = cerebralTest.getState(
+      'caseDeadlineReport.caseDeadlinesForCurrentPage',
+    );
 
     expect(deadlines.length).toEqual(6);
 
@@ -92,7 +96,9 @@ export const petitionsClerkViewsDeadlineReport = (
       judge: 'Buch',
     });
 
-    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
+    deadlines = cerebralTest.getState(
+      'caseDeadlineReport.caseDeadlinesForCurrentPage',
+    );
 
     expect(deadlines.length).toEqual(2);
 
