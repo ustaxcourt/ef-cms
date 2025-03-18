@@ -191,12 +191,12 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
         cy.get('#petitioner-dates-of-appearance-0').type(
           '10/10/2021, 11/10/2021',
         );
-        cy.get('#petitionerRole-0').select('Pro Se');
+        cy.get('#petitioner-role-0').select('Pro Se');
         cy.get('#petitioner-dates-of-appearance-0').should(
           'have.value',
           '10/10/2021, 11/10/2021',
         );
-        cy.get('#petitionerRole-0').should('have.value', 'proSe');
+        cy.get('#petitioner-role-0').should('have.value', 'proSe');
       });
     });
 
