@@ -17,7 +17,6 @@ export const getDocumentQCInboxForSection = async ({
       .where('w.section', '=', section)
       .where('w.completedAt', 'is', null)
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .orderBy('w.highPriority', 'desc')
       .limit(5000);
 
     if (judgeUserName) {

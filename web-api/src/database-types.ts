@@ -161,9 +161,6 @@ export type UpdateCaseWorksheetKysely = Updateable<CaseWorksheetTable>;
 export interface WorkItemTable {
   assigneeId?: string;
   assigneeName?: string;
-  associatedJudge: string;
-  associatedJudgeId?: string;
-  caseIsInProgress?: boolean;
   completedAt?: Date;
   completedBy?: string;
   completedByUserId?: string;
@@ -171,10 +168,7 @@ export interface WorkItemTable {
   createdAt: Date;
   docketEntry: any;
   docketNumber: string;
-  hideFromPendingMessages?: boolean;
-  highPriority?: boolean;
   inProgress?: boolean;
-  isInitializeCase?: boolean;
   isRead?: boolean;
   section: string;
   sentBy: string;
