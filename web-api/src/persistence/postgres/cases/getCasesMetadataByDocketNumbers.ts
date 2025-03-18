@@ -1,13 +1,18 @@
-import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getCasesMetadataByDocketNumbers = async ({
   docketNumbers,
 }: {
   docketNumbers: string[];
-}): Promise<RawCase[] | undefined> => {
+}): Promise<
+  | Omit<
+      RawCase,
+      'consolidatedCases' | 'correspondence' | 'docketEntries' | 'petitioners'
+    >[]
+  | undefined
+> => {
   if (isEmpty(docketNumbers)) {
     return [];
   }
@@ -20,5 +25,5 @@ export const getCasesMetadataByDocketNumbers = async ({
       .execute(),
   );
 
-  return dbCases?.map(c => transformNullToUndefined(rawCaseEntity(c)));
+  return dbCases?.map(c => transformDBCaseToEntity(c));
 };

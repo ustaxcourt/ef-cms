@@ -8,7 +8,9 @@ export const getCasesMetadataWithCounselByLeadDocketNumber = async ({
 }: {
   applicationContext: ServerApplicationContext;
   leadDocketNumber: string;
-}): Promise<RawCase[]> => {
+}): Promise<
+  Omit<RawCase, 'consolidatedCases' | 'correspondence' | 'docketEntries'>[]
+> => {
   const dbCases = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')

@@ -1,5 +1,4 @@
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
@@ -10,7 +9,10 @@ export const getCaseMetadataWithCounsel = async ({
 }: {
   applicationContext: ServerApplicationContext;
   docketNumber: string;
-}): Promise<RawCase | undefined> => {
+}): Promise<
+  | Omit<RawCase, 'consolidatedCases' | 'correspondence' | 'docketEntries'>
+  | undefined
+> => {
   const caseMetaData = await getCaseMetadataByDocketNumber({ docketNumber });
 
   if (!caseMetaData) {
@@ -27,9 +29,9 @@ export const getCaseMetadataWithCounsel = async ({
     docketNumber,
   });
 
-  return transformNullToUndefined({
+  return {
     ...caseMetaData,
     irsPractitioners,
     privatePractitioners,
-  });
+  };
 };
