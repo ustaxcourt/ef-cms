@@ -1,6 +1,7 @@
 import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { sql } from 'kysely';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const getCaseMetadataByDocketNumber = async ({
   docketNumber,
@@ -27,6 +28,10 @@ export const getCaseMetadataByDocketNumber = async ({
     ? transformDBCaseToEntity({
         ...dbCase,
         petitioners: dbCase.petitioners as TPetitioner[], // This is a hack because our typing for Petitioners is yucky
+        docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+          docketNumber: dbCase.docketNumber,
+          docketNumberSuffix: dbCase.docketNumberSuffix,
+        }),
       })
     : undefined;
 };
