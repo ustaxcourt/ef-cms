@@ -2,6 +2,7 @@ import {
   ServerApplicationContext,
   applicationContext,
 } from './applicationContext';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   getConnectionIdFromEvent,
   getUserFromAuthHeader,
@@ -9,6 +10,41 @@ import {
 } from './middleware/apiGatewayHelper';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { getMaintenanceMode } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
+import { getEntityByName } from '@web-api/business/getEntityByName';
+
+export const dataSecurityFilter = (
+  data,
+  {
+    authorizedUser,
+  }: {
+    authorizedUser: UnknownAuthUser;
+  },
+) => {
+  let returnData = data;
+  if (data && Array.isArray(data) && data.length && data[0].entityName) {
+    const entityConstructor = getEntityByName(data[0].entityName);
+    if (entityConstructor) {
+      returnData = data.map(
+        result =>
+          new entityConstructor(result, {
+            applicationContext,
+            authorizedUser,
+            filtered: true,
+          }),
+      );
+    }
+  } else if (data && data.entityName) {
+    const entityConstructor = getEntityByName(data.entityName);
+    if (entityConstructor) {
+      returnData = new entityConstructor(data, {
+        applicationContext,
+        authorizedUser,
+        filtered: true,
+      });
+    }
+  }
+  return returnData;
+};
 
 export const checkMaintenanceMode = async () => {
   const maintenanceRecord = await getMaintenanceMode({ applicationContext });
@@ -65,13 +101,17 @@ export const genericHandler = (
         clientConnectionId,
       });
 
+      const returnResults = dataSecurityFilter(results, {
+        authorizedUser: user,
+      });
+
       if (options.logResults !== false) {
         getLogger().debug('Results:', {
-          results,
+          results: returnResults,
         });
       }
 
-      return results;
+      return returnResults;
     } catch (e) {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
