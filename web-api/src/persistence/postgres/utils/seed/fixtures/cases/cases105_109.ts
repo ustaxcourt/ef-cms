@@ -22,7 +22,7 @@ export const SEEDED_DOCKET_NUMBERS_105_109 = {
   '109-19': '109-19',
 };
 
-export const cases105_109: RawCase[] = [
+export const cases105_109: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
   {
     associatedJudge: CHIEF_JUDGE,
     caseCaption: 'Caryn Wall, Petitioner',
