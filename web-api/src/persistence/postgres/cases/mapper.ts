@@ -121,16 +121,6 @@ const transformMap = {
   closedDate: (value: any, _: any) => value?.toISOString(),
   createdAt: (value: any, _: any) => value?.toISOString(),
   hearings: (value: any, _: any) => value || [],
-  docketNumberWithSuffix: (_: any, record: any) => {
-    if (!record.docketNumber) {
-      throw new Error('Cannot get docketNumberWithSuffix without docketNumber');
-    }
-    // Assuming Case.getDocketNumberWithSuffix is defined elsewhere.
-    return Case.getDocketNumberWithSuffix({
-      docketNumber: record.docketNumber,
-      docketNumberSuffix: record.docketNumberSuffix,
-    });
-  },
   irsNoticeDate: (value: any, _: any) => value?.toISOString(),
   noticeOfTrialDate: (value: any, _: any) => value?.toISOString(),
   petitionPaymentDate: (value: any, _: any) => value?.toISOString(),
@@ -173,6 +163,14 @@ export function transformDBCaseToEntity<T extends object>(
       result[newKey] = result[oldKey];
       delete result[oldKey];
     }
+  }
+
+  // 10502 TODO: This is a hack
+  if ('docketNumber' in record) {
+    result.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: record.docketNumber as string,
+      docketNumberSuffix: record['docketNumberSuffix'],
+    });
   }
 
   // We typically expect undefined rather than null in our app
