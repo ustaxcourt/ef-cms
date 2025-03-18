@@ -253,5 +253,6 @@ export const indexCaseEntity = ({
       privatePractitioners,
       irsPractitioners,
     }),
+    { removeUndefinedValues: true },
   );
 };

@@ -19,15 +19,16 @@ export const getCaseMetadataWithCounsel = async ({
     return undefined;
   }
 
-  const privatePractitioners = await getPrivatePractitionersOnCase({
-    applicationContext,
-    docketNumber,
-  });
-
-  const irsPractitioners = await getIrsPractitionersOnCase({
-    applicationContext,
-    docketNumber,
-  });
+  const [privatePractitioners, irsPractitioners] = await Promise.all([
+    getPrivatePractitionersOnCase({
+      applicationContext,
+      docketNumber,
+    }),
+    getIrsPractitionersOnCase({
+      applicationContext,
+      docketNumber,
+    }),
+  ]);
 
   return {
     ...caseMetaData,
