@@ -165,14 +165,6 @@ export function transformDBCaseToEntity<T extends object>(
     }
   }
 
-  // 10502 TODO: This is a hack
-  if ('docketNumber' in record) {
-    result.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
-      docketNumber: record.docketNumber as string,
-      docketNumberSuffix: record['docketNumberSuffix'],
-    });
-  }
-
   // We typically expect undefined rather than null in our app
   // So convert Postgres null to Typescript undefined by default
   return transformNullToUndefined(

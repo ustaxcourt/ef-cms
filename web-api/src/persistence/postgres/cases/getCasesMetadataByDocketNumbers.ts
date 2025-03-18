@@ -1,6 +1,7 @@
 import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const getCasesMetadataByDocketNumbers = async ({
   docketNumbers,
@@ -25,5 +26,11 @@ export const getCasesMetadataByDocketNumbers = async ({
       .execute(),
   );
 
-  return dbCases?.map(c => transformDBCaseToEntity(c));
+  return dbCases?.map(c => ({
+    ...transformDBCaseToEntity(c),
+    docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+      docketNumber: c.docketNumber,
+      docketNumberSuffix: c.docketNumberSuffix,
+    }),
+  }));
 };
