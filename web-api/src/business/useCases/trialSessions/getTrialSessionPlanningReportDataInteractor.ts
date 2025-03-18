@@ -17,7 +17,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, invert } from 'lodash';
-import { getBlockedCasesForTrialLocation } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { getEligibleCasesCount } from '@web-api/persistence/postgres/cases/getEligibleCasesCount';
+import { getBlockedCasesCount } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount';
 
 export const getTrialSessionPlanningReportDataInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -153,30 +154,19 @@ const getTrialLocation = async (
   const trialCityState = `${trialLocation.city}, ${trialLocation.state}`;
   const stateAbbreviation = invert(US_STATES)[trialLocation.state];
 
-  const eligibleCases = await applicationContext
-    .getPersistenceGateway()
-    .getEligibleCasesForTrialCity({
-      applicationContext,
-      trialCity: trialCityState,
-    });
+  const regularCaseCount = await getEligibleCasesCount({
+    trialCity: trialCityState,
+    procedureType: PROCEDURE_TYPES_MAP.regular,
+  });
 
-  const eligibleCasesRegular = eligibleCases.filter(
-    c => c.procedureType === PROCEDURE_TYPES_MAP.regular,
-  );
+  const smallCaseCount = await getEligibleCasesCount({
+    trialCity: trialCityState,
+    procedureType: PROCEDURE_TYPES_MAP.small,
+  });
 
-  const eligibleCasesSmall = eligibleCases.filter(
-    c => c.procedureType === PROCEDURE_TYPES_MAP.small,
-  );
+  const blockedCaseCount = await getBlockedCasesCount(trialCityState);
 
-  const blockedCasesResult = await getBlockedCasesForTrialLocation(
-    trialCityState,
-    true,
-  );
-
-  const smallCaseCount = eligibleCasesSmall.length;
-  const regularCaseCount = eligibleCasesRegular.length;
   const allCaseCount = smallCaseCount + regularCaseCount;
-  const blockedCaseCount = blockedCasesResult.length;
   const specialCaseCount = specialTrialSessionsCounts[trialCityState] || 0;
 
   const previousTermsDataInformation: RawTrialSession[][] = [];
