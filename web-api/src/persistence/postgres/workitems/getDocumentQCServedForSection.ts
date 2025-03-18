@@ -23,7 +23,6 @@ export const getDocumentQCServedForSection = async ({
         'c.leadDocketNumber',
         'c.trialDate',
         'c.trialLocation',
-        'c.highPriority',
       ])
       .selectAll('w')
       .select('w.docketNumber')
@@ -43,7 +42,6 @@ export const getDocumentQCServedForSection = async ({
       leadDocketNumber: workItem?.leadDocketNumber || undefined,
       trialDate: workItem?.trialDate?.toISOString(),
       trialLocation: workItem?.trialLocation || undefined,
-      highPriority: workItem?.highPriority,
     };
     return transformNullToUndefined(abomination);
   });

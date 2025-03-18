@@ -27,6 +27,7 @@ import {
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 import { formatDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 const isDateToday = (date: string) => {
   const now = formatNow('MMDDYY');
@@ -138,7 +139,7 @@ export const formatWorkItem = ({
 
   const createdAtFormatted = formatDateString(workItem.createdAt, 'MMDDYY');
 
-  const highPriority = !!workItem.highPriority;
+  const highPriority = WorkItem.isHighPriority({ status: workItem.caseStatus });
   const sentBySection = capitalize(workItem.sentBySection);
   const completedAtFormatted = formatDateIfToday(workItem.completedAt);
   const completedAtFormattedTZ = formatDateString(

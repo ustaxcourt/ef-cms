@@ -20,7 +20,6 @@ export const getDocumentQCInboxForUser = async ({
         'c.leadDocketNumber',
         'c.trialDate',
         'c.trialLocation',
-        'c.highPriority',
       ])
       .selectAll('w')
       .limit(5000)
@@ -40,7 +39,6 @@ export const getDocumentQCInboxForUser = async ({
       leadDocketNumber: workItem?.leadDocketNumber || undefined,
       trialDate: workItem?.trialDate?.toISOString(),
       trialLocation: workItem?.trialLocation || undefined,
-      highPriority: workItem?.highPriority,
     };
     return transformNullToUndefined(abomination);
   });
@@ -52,5 +50,4 @@ export type WorkItemAbomination = RawWorkItem & {
   leadDocketNumber?: string;
   trialDate?: string;
   trialLocation?: string;
-  highPriority?: boolean;
 };

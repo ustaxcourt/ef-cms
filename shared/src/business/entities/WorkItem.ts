@@ -109,6 +109,10 @@ export class WorkItem extends JoiValidationEntity {
     workItemId: JoiValidationConstants.UUID.required(),
   };
 
+  static isHighPriority(aCase: { status?: string }): boolean {
+    return aCase?.status === CASE_STATUS_TYPES.calendared;
+  }
+
   assignToUser({
     assigneeId,
     assigneeName,

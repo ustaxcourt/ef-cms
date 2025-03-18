@@ -32,7 +32,6 @@ export const getDocumentQCInboxForSection = async ({
         'c.leadDocketNumber',
         'c.trialDate',
         'c.trialLocation',
-        'c.highPriority',
       ])
       .execute();
   });
@@ -50,7 +49,6 @@ export const getDocumentQCInboxForSection = async ({
       leadDocketNumber: workItem?.leadDocketNumber || undefined,
       trialDate: workItem?.trialDate?.toISOString(),
       trialLocation: workItem?.trialLocation || undefined,
-      highPriority: workItem?.highPriority,
     };
     return transformNullToUndefined(abomination);
   });
