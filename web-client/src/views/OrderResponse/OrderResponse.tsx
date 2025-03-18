@@ -25,6 +25,8 @@ export const OrderResponse = connect(
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
     setPDFStampDataSequence: sequences.setPDFStampDataSequence,
+    submitMotionOrderResponseSequence:
+      sequences.submitMotionOrderResponseSequence,
     submitStampMotionSequence: sequences.submitStampMotionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateStampSequence: sequences.validateStampSequence,
@@ -41,6 +43,7 @@ export const OrderResponse = connect(
     pdfObj,
     setPDFStampDataSequence,
     // submitStampMotionSequence, // TODO 10586: update this
+    // submitMotionOrderResponseSequence,
     updateFormValueSequence,
     validateStampSequence,
     validationErrors,
@@ -290,7 +293,7 @@ export const OrderResponse = connect(
                   className="margin-right-1"
                   data-testid="save-draft-button"
                   id="save-draft-button"
-                  onClick={() => submitMotionOrderResponseSequence()}
+                  // onClick={() => submitMotionOrderResponseSequence()}
                 >
                   Save as Draft
                 </Button>

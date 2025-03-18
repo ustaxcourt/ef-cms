@@ -32,7 +32,11 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   );
 
   static VALIDATION_RULES = {
-    additionalText: JoiValidationConstants.STRING.max(256)
+    additionalText: joi
+      .string()
+      .max(256)
+      .allow(null, '')
+      .description('Additional text for the response.')
       .optional()
       .allow(null, ''),
     dueDate: joi
@@ -47,7 +51,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       .messages({
         '*': 'Enter a response',
       })
-      .valid(Object.values(ORDER_REPLY_OPTIONS))
+      .valid(...Object.values(ORDER_REPLY_OPTIONS))
       .required()
       .description('The type of response.'),
     responseDate: joi

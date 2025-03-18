@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsAction';
 import { navigateToPathAction } from '@web-client/presenter/actions/navigateToPathAction';
+import { prepareMotionOrderResponseAction } from '../../actions/MotionOrderResponse/prepareMotionOrderResponseAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
 import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
@@ -11,7 +12,7 @@ import { validateMotionOrderResponseFormAction } from '../../actions/MotionOrder
 export const submitMotionOrderResponseSequence = [
   showProgressSequenceDecorator([
     clearAlertsAction,
-    validateMotionOrderResponseFormAction,
+    validateMotionOrderResponseFormAction, // TODO 10586: This action breaks entire app
     {
       error: [
         setValidationErrorsAction,
