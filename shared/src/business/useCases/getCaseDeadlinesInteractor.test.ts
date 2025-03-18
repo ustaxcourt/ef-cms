@@ -150,6 +150,7 @@ describe('getCaseDeadlinesInteractor', () => {
           sortableDocketNumber: 2019000102,
         },
       ],
+      totalCount: 2,
     });
   });
 
@@ -158,6 +159,7 @@ describe('getCaseDeadlinesInteractor', () => {
       applicationContext,
       {
         endDate: END_DATE,
+        from: 0,
         judge: 'Buch',
         startDate: START_DATE,
       },
@@ -166,6 +168,7 @@ describe('getCaseDeadlinesInteractor', () => {
 
     expect(getCaseDeadlinesByDateRange.mock.calls[0][0]).toMatchObject({
       endDate: END_DATE,
+      from: 0,
       judge: 'Buch',
       startDate: START_DATE,
     });
@@ -271,6 +274,7 @@ describe('getCaseDeadlinesInteractor', () => {
           sortableDocketNumber: 2019000102,
         },
       ],
+      totalCount: 3,
     });
     expect(applicationContext.logger.error).toHaveBeenCalled();
   });

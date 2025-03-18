@@ -3,6 +3,7 @@ import {
   ALL_EVENT_CODES,
   AMENDMENT_EVENT_CODES,
   EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION,
+  ROLES,
 } from '../EntityConstants';
 import { ExternalDocumentBase } from '@shared/business/entities/externalDocument/ExternalDocumentBase';
 import { GENERATION_TYPES } from '@web-client/getConstants';
@@ -40,6 +41,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
   public selectedCases?: string[];
   public supportingDocuments?: object[];
   public generationType: string;
+  public currentUser: { userId: string; role: string };
 
   private scenario: string;
   private freeText2: string;
@@ -69,6 +71,7 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     this.selectedCases = rawProps.selectedCases;
     this.supportingDocuments = rawProps.supportingDocuments;
     this.generationType = rawProps.generationType;
+    this.currentUser = rawProps.currentUser;
 
     this.scenario = rawProps.scenario;
     this.freeText2 = rawProps.freeText2;
@@ -248,6 +251,24 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
             .array()
             .items(joi.string().required())
             .messages({ '*': 'Select a filing party' }),
+        );
+      } else if (this.currentUser.role === ROLES.petitioner) {
+        addProperty(
+          'filers',
+          joi
+            .array()
+            .items(joi.string().required())
+            .custom((value, helpers) => {
+              if (!value.includes(this.currentUser.userId)) {
+                return helpers.error('array.includeCurrentUser');
+              }
+              return value;
+            })
+            .messages({
+              '*': 'Select a filing party',
+              'array.includeCurrentUser':
+                'You must include yourself as a filing party',
+            }),
         );
       }
     }

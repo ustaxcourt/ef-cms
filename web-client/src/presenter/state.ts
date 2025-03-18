@@ -618,13 +618,14 @@ export const baseState = {
   blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
   blockedCases: [] as BlockedCasesResponse,
   caseDeadlineReport: {} as {
-    caseDeadlines: (RawCaseDeadline & {
+    caseDeadlinesForCurrentPage: (RawCaseDeadline & {
       caseCaption: string;
       docketNumber: string;
       docketNumberSuffix: string;
       docketNumberWithSuffix: string;
       leadDocketNumber: string;
     })[];
+    caseDeadlinesTotalCount: 0;
     judgeFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],
