@@ -27,7 +27,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { formatDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFiltes';
+import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 
 export const formattedWorkQueue = (
   get: Get,

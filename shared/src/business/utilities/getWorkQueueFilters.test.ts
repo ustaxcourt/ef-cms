@@ -5,7 +5,7 @@ import {
   CASE_STATUS_TYPES,
   CASE_SERVICES_SUPERVISOR_SECTION,
 } from '@shared/business/entities/EntityConstants';
-import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFiltes';
+import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 describe('getWorkQueueFilters', () => {

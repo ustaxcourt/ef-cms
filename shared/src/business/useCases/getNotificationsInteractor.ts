@@ -11,7 +11,7 @@ import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { isEmpty } from 'lodash';
 import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
-import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFiltes';
+import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 
 const getJudgeUser = async (
   judgeUserId: string,
