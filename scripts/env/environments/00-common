@@ -68,12 +68,12 @@ RUM_IDENTITY_POOL_ID=$(aws rum get-app-monitor \
   echo "MASTER_REGION='${REGION}'"
   echo "POSTGRES_HOST='${DB_HOST}'"
   echo "REGION='${REGION}'"
+  echo "RUM_IDENTITY_POOL_ID='${RUM_IDENTITY_POOL_ID}'"
+  echo "RUM_APP_MONITOR_ID='${RUM_APP_MONITOR_ID}'"
   echo "SOURCE_TABLE='${SOURCE_TABLE}'"
   echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE_VERSION}'"
   echo "STAGE='${ENV}'"
   echo "USER_POOL_ID='${COGNITO_USER_POOL}'"
-  echo "RUM_IDENTITY_POOL_ID='${RUM_IDENTITY_POOL_ID}'"
-  echo "RUM_APP_MONITOR_ID='${RUM_APP_MONITOR_ID}'"
 } >> .env
 
 if [[ "$DEPLOYING" -eq 1 ]]; then
