@@ -13,7 +13,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCasesByFilters } from '@web-api/persistence/elasticsearch/getCasesByFilters';
+import { getCasesByFilters } from '@web-api/persistence/postgres/cases/reports/getCasesByFilters';
 
 export type CustomCaseReportFilters = {
   caseStatuses: CaseStatus[];
@@ -29,12 +29,11 @@ export type CustomCaseReportFilters = {
 
 export type GetCustomCaseReportRequest = CustomCaseReportFilters & {
   pageSize: number;
-  searchAfter: CustomCaseReportSearchAfter;
+  page: number;
 };
 
 export type GetCustomCaseReportResponse = {
   foundCases: CaseInventory[];
-  lastCaseId: { receivedAt: number; pk: string };
   totalCount: number;
 };
 
@@ -54,11 +53,6 @@ export type CaseInventory = Pick<
   | 'highPriority'
 >;
 
-export type CustomCaseReportSearchAfter = {
-  pk: string | null;
-  receivedAt: number | null;
-};
-
 export const getCustomCaseReportInteractor = async (
   params: GetCustomCaseReportRequest,
   authorizedUser: UnknownAuthUser,
@@ -71,10 +65,7 @@ export const getCustomCaseReportInteractor = async (
   params.caseTypes = params.caseTypes || [];
   params.judges = params.judges || [];
   params.preferredTrialCities = params.preferredTrialCities || [];
-  params.searchAfter = params.searchAfter || {
-    pk: null,
-    receivedAt: null,
-  };
+  params.page = params.page || 0;
 
   new CustomCaseReportSearch(params).validate();
 

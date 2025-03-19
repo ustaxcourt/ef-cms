@@ -1,8 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
@@ -10,9 +10,16 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { prioritizeCaseInteractor } from './prioritizeCaseInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('prioritizeCaseInteractor', () => {
   let mockLock;
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   beforeAll(() => {
     applicationContext
@@ -25,14 +32,12 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should update the case with the highPriority flag set as true and attach a reason', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-        }),
-      );
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      }),
+    );
 
     const result = await prioritizeCaseInteractor(
       applicationContext,
@@ -58,14 +63,12 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should update trial sort mapping records when status is other than "General Docket - At Issue (Ready for Trial)"', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          status: CASE_STATUS_TYPES.rule155,
-        }),
-      );
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.rule155,
+      }),
+    );
 
     await prioritizeCaseInteractor(
       applicationContext,
@@ -95,14 +98,12 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should throw an error if the case status is calendared', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          status: CASE_STATUS_TYPES.calendared,
-        }),
-      );
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.calendared,
+      }),
+    );
 
     await expect(
       prioritizeCaseInteractor(
@@ -117,16 +118,14 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should throw an error if the case is blocked', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          blocked: true,
-          blockedDate: '2019-08-16T17:29:10.132Z',
-          blockedReason: 'something',
-        }),
-      );
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        blocked: true,
+        blockedDate: '2019-08-16T17:29:10.132Z',
+        blockedReason: 'something',
+      }),
+    );
 
     await expect(
       prioritizeCaseInteractor(
@@ -141,14 +140,10 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should not call createCaseTrialSortMappingRecords if the case is missing a trial city', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          preferredTrialCity: null,
-        }),
-      );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      preferredTrialCity: undefined,
+    });
 
     await prioritizeCaseInteractor(
       applicationContext,
@@ -166,17 +161,15 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should update trial sort mapping records when automaticBlocked and high priority', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          automaticBlocked: true,
-          automaticBlockedDate: '2019-11-30T09:10:11.000Z',
-          automaticBlockedReason: 'Pending Item',
-          status: CASE_STATUS_TYPES.rule155,
-        }),
-      );
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-11-30T09:10:11.000Z',
+        automaticBlockedReason: 'Pending Item',
+        status: CASE_STATUS_TYPES.rule155,
+      }),
+    );
 
     await prioritizeCaseInteractor(
       applicationContext,
@@ -207,9 +200,7 @@ describe('prioritizeCaseInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
