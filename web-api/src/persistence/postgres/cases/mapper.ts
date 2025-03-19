@@ -1,11 +1,12 @@
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { Case } from '@shared/business/entities/cases/Case';
 import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
-import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import {
   CaseStatus,
   CaseType,
 } from '@shared/business/entities/EntityConstants';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import {
   calculateDate,
   formatNow,
@@ -143,6 +144,10 @@ export function fromKyselyCase<T extends object>(record: T) {
     ) => value?.toISOString(),
     petitioners: (value?: any[], _?: Partial<CaseKysely>) =>
       value ? value.map(p => ({ ...p, state: p.state || null })) : [], // petitioner state needs to be null rather than undefined
+    irsPractitioners: (value?: any[], _?: any) =>
+      (value || []) as IrsPractitioner[],
+    privatePractitioners: (value?: any[], _?: any) =>
+      (value || []) as PrivatePractitioner[],
     petitionPaymentDate: (
       value: typeof dwCaseSchema.petitionPaymentDate,
       _: Partial<CaseKysely>,
@@ -242,14 +247,4 @@ export const indexCaseEntity = ({
     }),
     { removeUndefinedValues: true },
   );
-};
-
-export const RawEligibleCaseEntity = (dbCase: any): RawEligibleCase => {
-  return {
-    ...dbCase,
-    caseCaption: dbCase.caption,
-    docketNumberWithSuffix:
-      dbCase.docketNumber +
-      (dbCase.docketNumberSuffix ? dbCase.docketNumberSuffix : ''),
-  };
 };

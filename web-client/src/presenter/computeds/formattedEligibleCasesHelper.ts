@@ -1,4 +1,6 @@
+import { ClientApplicationContext } from '@web-client/applicationContext';
 import { state } from '@web-client/presenter/app.cerebral';
+import { Get } from 'cerebral';
 
 export const groupKeySymbol = Symbol('group');
 
@@ -11,14 +13,20 @@ export const addGroupSymbol = (object, value) => {
   return object;
 };
 
-export const getPriorityGroups = (
-  eligibleCases: FormattedTrialSessionCase[],
+export const getPriorityGroups = <
+  T extends {
+    isManuallyAdded?: boolean;
+    highPriority?: boolean;
+    isDocketSuffixHighPriority: boolean;
+  },
+>(
+  eligibleCases: T[],
 ) => {
   const groups = {
-    default: [] as FormattedTrialSessionCase[],
-    highPriority: [] as FormattedTrialSessionCase[],
-    manuallyAdded: [] as FormattedTrialSessionCase[],
-    suffixHighPriority: [] as FormattedTrialSessionCase[],
+    default: [] as T[],
+    highPriority: [] as T[],
+    manuallyAdded: [] as T[],
+    suffixHighPriority: [] as T[],
   };
 
   eligibleCases.forEach(theCase => {
@@ -74,8 +82,14 @@ const getFullSortString = (theCase, cases) => {
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-export const compareTrialSessionEligibleCases = (
-  eligibleCases: FormattedTrialSessionCase[],
+export const compareTrialSessionEligibleCases = <
+  T extends {
+    isManuallyAdded?: boolean;
+    highPriority?: boolean;
+    isDocketSuffixHighPriority: boolean;
+  },
+>(
+  eligibleCases: T[],
 ) => {
   const groups = getPriorityGroups(eligibleCases);
   return (a, b) => {
@@ -85,9 +99,6 @@ export const compareTrialSessionEligibleCases = (
   };
 };
 
-import { ClientApplicationContext } from '@web-client/applicationContext';
-import { Get } from 'cerebral';
-import { FormattedTrialSessionCase } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 export const formattedEligibleCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
