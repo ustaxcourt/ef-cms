@@ -9,7 +9,7 @@ import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { CaseKysely } from '@web-api/database-types';
+import { CaseKysely, DatabaseSchema } from '@web-api/database-types';
 import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
@@ -111,24 +111,44 @@ export function fromKyselyCase<T extends object>(record: T) {
     caption: 'caseCaption',
   } as const;
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const dwCaseSchema = DatabaseSchema.dwCase.table;
+
   // Map for transforming values.
   const transformMap = {
-    automaticBlockedDate: (value: any, _: any) => value?.toISOString(),
-    blockedDate: (value: any, _: any) => value?.toISOString(),
-    caseType: (value: any, _: any) => value as CaseType,
-    closedDate: (value: any, _: any) => value?.toISOString(),
-    createdAt: (value: any, _: any) => value?.toISOString(),
+    automaticBlockedDate: (
+      value: typeof dwCaseSchema.automaticBlockedDate,
+      _: any,
+    ) => value?.toISOString(),
+    blockedDate: (value: typeof dwCaseSchema.blockedDate, _: any) =>
+      value?.toISOString(),
+    caseType: (value: string, _: any) => value as CaseType,
+    closedDate: (value: typeof dwCaseSchema.closedDate, _: any) =>
+      value?.toISOString(),
+    createdAt: (value: typeof dwCaseSchema.createdAt, _: any) =>
+      value.toISOString(),
     hearings: (value: any, _: any) => value || [],
-    irsNoticeDate: (value: any, _: any) => value?.toISOString(),
-    noticeOfTrialDate: (value: any, _: any) => value?.toISOString(),
+    irsNoticeDate: (value: typeof dwCaseSchema.irsNoticeDate, _: any) =>
+      value?.toISOString(),
+    noticeOfTrialDate: (value: typeof dwCaseSchema.noticeOfTrialDate, _: any) =>
+      value?.toISOString(),
     petitioners: (value?: any[], _?: any) =>
       value ? value.map(p => ({ ...p, state: p.state || null })) : [], // petitioner state needs to be null rather than undefined
-    petitionPaymentDate: (value: any, _: any) => value?.toISOString(),
-    petitionPaymentWaivedDate: (value: any, _: any) => value?.toISOString(),
-    receivedAt: (value: any, _: any) => value?.toISOString(),
-    sealedDate: (value: any, _: any) => value?.toISOString(),
+    petitionPaymentDate: (
+      value: typeof dwCaseSchema.petitionPaymentDate,
+      _: any,
+    ) => value?.toISOString(),
+    petitionPaymentWaivedDate: (
+      value: typeof dwCaseSchema.petitionPaymentWaivedDate,
+      _: any,
+    ) => value?.toISOString(),
+    receivedAt: (value: typeof dwCaseSchema.receivedAt, _: any) =>
+      value.toISOString(),
+    sealedDate: (value: typeof dwCaseSchema.sealedDate, _: any) =>
+      value?.toISOString(),
     status: (value: any, _: any) => value as CaseStatus,
-    trialDate: (value: any, _: any) => value?.toISOString(),
+    trialDate: (value: typeof dwCaseSchema.trialDate, _: any) =>
+      value?.toISOString(),
   } as const;
 
   return new DatabaseToAppCodeMapper({ keyRenameMap, transformMap }).transform(

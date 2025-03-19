@@ -1,8 +1,8 @@
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { UNSERVABLE_EVENT_CODES } from '@shared/business/entities/EntityConstants';
-import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 
 export const fetchPendingItems = async ({
   applicationContext,
@@ -60,6 +60,7 @@ export const fetchPendingItems = async ({
         'd.documentType',
         'd.documentTitle',
         'd.receivedAt',
+        'd.createdAt',
       ])
       .orderBy('d.receivedAt', 'asc')
       .orderBy('d.docketEntryId', 'asc') // This was how our secondary sort was originally set up. In moving to Postgres, we kept it.
