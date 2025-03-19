@@ -18,21 +18,23 @@ import {
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
+import { formatDollars } from '@shared/business/utilities/formatDollars';
 
 describe('Edit a case caption from case detail header', function () {
   const getDeficiencyStatistics = (docketNumber: string): RawStatistic[] => {
     return [
       {
-        determinationDeficiencyAmount: '200',
-        determinationTotalPenalties: '2',
+        _sortOrder: 1,
         docketNumber,
-        irsDeficiencyAmount: '5678',
-        irsTotalPenalties: '1234',
         lastDateOfPeriod: '2019-12-16T00:00:00.000-05:00',
         statisticId: 'bb557361-50ee-4440-aaff-0a9f1bfa30ed',
         year: undefined,
         yearOrPeriod: 'Period',
         updatedAt: '',
+        irsDeficiencyAmount: '5678',
+        determinationDeficiencyAmount: '200',
+        irsTotalPenalties: '1',
+        determinationTotalPenalties: '1',
         penalties: [
           {
             name: 'Hugh of St. Victor',
@@ -53,16 +55,17 @@ describe('Edit a case caption from case detail header', function () {
         ],
       },
       {
-        determinationDeficiencyAmount: '100',
-        determinationTotalPenalties: '5',
+        _sortOrder: 0,
         docketNumber,
-        irsDeficiencyAmount: '5678',
-        irsTotalPenalties: '300', // Should match penalties below
         lastDateOfPeriod: undefined,
         statisticId: 'ab557361-50ee-4440-aaff-0a9f1bfa30ed',
         year: 2018,
         yearOrPeriod: 'Year',
         updatedAt: '',
+        irsDeficiencyAmount: '5678',
+        determinationDeficiencyAmount: '100',
+        irsTotalPenalties: '300', // Should match penalties below
+        determinationTotalPenalties: '5',
         penalties: [
           {
             name: 'Marie de France',
@@ -91,20 +94,21 @@ describe('Edit a case caption from case detail header', function () {
         ],
       },
       {
-        determinationDeficiencyAmount: '300',
-        determinationTotalPenalties: '2',
+        _sortOrder: 2,
         docketNumber,
-        irsDeficiencyAmount: '5678',
-        irsTotalPenalties: '1234',
         lastDateOfPeriod: undefined,
         statisticId: 'cb557361-50ee-4440-aaff-0a9f1bfa30ed',
         year: 2019,
         yearOrPeriod: 'Year',
         updatedAt: '',
+        irsDeficiencyAmount: '5678',
+        determinationDeficiencyAmount: '300',
+        irsTotalPenalties: '3',
+        determinationTotalPenalties: '2',
         penalties: [
           {
             name: 'John of Salisbury',
-            penaltyAmount: '1', // IRS Notice
+            penaltyAmount: '3', // IRS Notice
             penaltyId: 'e0a52030-1ba5-4b1a-bb62-b5e591ea434e',
             penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
             statisticId: 'cb557361-50ee-4440-aaff-0a9f1bfa30ed',
@@ -112,7 +116,7 @@ describe('Edit a case caption from case detail header', function () {
           },
           {
             name: 'Roscellinus',
-            penaltyAmount: '1', // Determination
+            penaltyAmount: '2', // Determination
             penaltyId: 'e0a52030-1ba5-4b1a-bb62-b5e591ea434e',
             penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
             statisticId: 'cb557361-50ee-4440-aaff-0a9f1bfa30ed',
@@ -208,21 +212,22 @@ describe('Edit a case caption from case detail header', function () {
       }
     });
 
-    it('should show deficiency statistics in the correct order', () => {
+    it('should show deficiency statistics in the correct order', function () {
+      const sortedStatistics = getDeficiencyStatistics(this.docketNumber).sort(
+        (a, b) => (a._sortOrder < b._sortOrder ? -1 : 1),
+      );
+      const expectedRows = sortedStatistics.map(s => ({
+        period: s.year || formatDateString(s.lastDateOfPeriod, FORMATS.MMDDYY),
+        notice: formatDollars(s.irsDeficiencyAmount),
+        determination: formatDollars(s.determinationDeficiencyAmount),
+      }));
+
       cy.get('[data-testid="statistics-deficiencies-table"]').within(() => {
         cy.get('thead th').should('have.length', 3);
         cy.get('thead th').eq(0).should('contain', 'Year/Period');
         cy.get('thead th').eq(1).should('contain', 'IRS Notice');
         cy.get('thead th').eq(2).should('contain', 'Determination');
-
-        cy.get('tbody tr').should('have.length', 3);
-
-        const expectedRows = [
-          { period: '2018', notice: '$5,678.00', determination: '$100.00' },
-          { period: '12/16/19', notice: '$5,678.00', determination: '$200.00' },
-          { period: '2019', notice: '$5,678.00', determination: '$300.00' },
-        ];
-
+        cy.get('tbody tr').should('have.length', sortedStatistics.length);
         cy.get('tbody tr').each(($row, index) => {
           const expected = expectedRows[index];
           cy.wrap($row).within(() => {
@@ -234,30 +239,21 @@ describe('Edit a case caption from case detail header', function () {
       });
     });
 
-    it('should show total penalties in the correct order', () => {
+    it('should show total penalties in the correct order', function () {
+      const sortedStatistics = getDeficiencyStatistics(this.docketNumber).sort(
+        (a, b) => (a._sortOrder < b._sortOrder ? -1 : 1),
+      );
+      const expectedRows = sortedStatistics.map(s => ({
+        notice: formatDollars(s.irsTotalPenalties),
+        determination: formatDollars(s.determinationTotalPenalties),
+      }));
+
       cy.get('[data-testid="statistics-penalties-table"]').within(() => {
         cy.get('thead th').should('have.length', 3);
         cy.get('thead th').eq(0).should('contain', 'IRS Notice');
         cy.get('thead th').eq(1).should('contain', 'Determination');
         cy.get('thead th').eq(2).should('be.empty'); // The third header is intentionally empty.
-
-        cy.get('tbody tr').should('have.length', 3);
-
-        const expectedRows = [
-          {
-            notice: '$300.00',
-            determination: '$5.00',
-          },
-          {
-            notice: '$1.00',
-            determination: '$1.00',
-          },
-          {
-            notice: '$1.00',
-            determination: '$1.00',
-          },
-        ];
-
+        cy.get('tbody tr').should('have.length', sortedStatistics.length);
         cy.get('tbody tr').each(($row, index) => {
           const expected = expectedRows[index];
           cy.wrap($row).within(() => {
@@ -268,17 +264,54 @@ describe('Edit a case caption from case detail header', function () {
       });
     });
 
-    it('should show itemized penalties in the correct order', () => {
-      cy.get(`[data-testid="view-itemized-penalties-button-0"]`).click();
+    it('should show itemized penalties in the correct order', function () {
+      const sortedStatistics = getDeficiencyStatistics(this.docketNumber).sort(
+        (a, b) => (a._sortOrder < b._sortOrder ? -1 : 1),
+      );
+      const statisticIndex = sortedStatistics.findIndex(
+        s => s.statisticId === 'ab557361-50ee-4440-aaff-0a9f1bfa30ed',
+      )!;
+      const statistic = sortedStatistics[statisticIndex];
+      const irsPenalties = statistic.penalties.filter(
+        (p: Penalty) => p.penaltyType === PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+      );
+      const courtDeterminedPenalties = statistic.penalties.filter(
+        (p: Penalty) =>
+          p.penaltyType === PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
+      );
+      const rowsCount = Math.max(
+        irsPenalties.length,
+        courtDeterminedPenalties.length,
+      );
+      const expectedRows: {
+        label: string;
+        notice: string;
+        determination: string;
+      }[] = [];
+
+      for (let i = 0; i < rowsCount; i++) {
+        expectedRows.push({
+          label: `Penalty ${i + 1}`,
+          notice: irsPenalties[i]
+            ? formatDollars(irsPenalties[i].penaltyAmount)
+            : '',
+          determination: courtDeterminedPenalties[i]
+            ? formatDollars(courtDeterminedPenalties[i].penaltyAmount)
+            : '',
+        });
+      }
+      expectedRows.push({
+        label: 'Total:',
+        notice: formatDollars(statistic.irsTotalPenalties),
+        determination: formatDollars(statistic.determinationTotalPenalties),
+      });
+
+      cy.get(
+        `[data-testid="view-itemized-penalties-button-${statisticIndex}"]`,
+      ).click();
       cy.get('[data-testid="itemized-penalties-modal"]').within(() => {
         cy.get('thead th').should('have.length', 3);
-        cy.get('tbody tr').should('have.length', 3);
-
-        const expectedRows = [
-          { label: 'Penalty 1', notice: '$100.00', determination: '$5.00' },
-          { label: 'Penalty 2', notice: '$200.00', determination: '' },
-          { label: 'Total:', notice: '$300.00', determination: '$5.00' },
-        ];
+        cy.get('tbody tr').should('have.length', statistic.penalties.length);
 
         cy.get('tbody tr').each(($row, index) => {
           const expected = expectedRows[index];
