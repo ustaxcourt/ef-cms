@@ -38,7 +38,7 @@ export const docketClerkAssignWorkItemToSelf = (
       state: cerebralTest.getState(),
     });
     const assignedSelectedWorkItem = sectionWorkQueue.find(
-      workItem => workItem.workItemId === selectedWorkItem.workItemId,
+      workItem => workItem.workItemId === selectedWorkItem!.workItemId,
     );
     expect(assignedSelectedWorkItem).toMatchObject({
       assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',

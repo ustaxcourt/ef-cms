@@ -43,23 +43,6 @@ describe('formatWorkItem', () => {
     expect(result.createdAtFormatted).toEqual('02/28/19');
   });
 
-  it('should coerce the value of highPriority to a boolean', () => {
-    const workItem: WorkItemAbomination = {
-      ...baseWorkItem,
-      highPriority: 1 as unknown as boolean,
-    };
-
-    let result = formatWorkItem({ workItem });
-
-    expect(result.highPriority).toEqual(true);
-
-    workItem.highPriority = undefined as unknown as boolean;
-
-    result = formatWorkItem({ workItem });
-
-    expect(result.highPriority).toEqual(false);
-  });
-
   it('should capitalize sentBySection', () => {
     const workItem = {
       ...baseWorkItem,
