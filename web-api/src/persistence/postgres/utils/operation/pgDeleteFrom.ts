@@ -1,17 +1,22 @@
 import { getDbWriter } from '@web-api/database';
-import { Database, DatabaseTableName } from '@web-api/database-types';
-import { DeleteQueryBuilder } from 'kysely';
+import { Database } from '@web-api/database-types';
+import { DeleteQueryBuilder, DeleteResult } from 'kysely';
+import { ExtractTableAlias } from 'kysely/dist/cjs/parser/table-parser';
 
-type DeleteWhereCallback = (
-  qb: DeleteQueryBuilder<Database, DatabaseTableName, unknown>,
-) => DeleteQueryBuilder<Database, DatabaseTableName, unknown>;
+type DeleteWhereCallback<T extends keyof Database> = (
+  qb: DeleteQueryBuilder<
+    Database,
+    ExtractTableAlias<Database, T>,
+    DeleteResult
+  >,
+) => DeleteQueryBuilder<Database, ExtractTableAlias<Database, T>, DeleteResult>;
 
-export const pgDeleteFrom = async ({
+export const pgDeleteFrom = async <T extends keyof Database>({
   table,
   where,
 }: {
-  table: DatabaseTableName;
-  where: DeleteWhereCallback;
+  table: T;
+  where: DeleteWhereCallback<T>;
 }) => {
   return await getDbWriter({
     cb: async writer => {
