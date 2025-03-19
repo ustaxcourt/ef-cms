@@ -2,26 +2,6 @@ import { NewWorkItemKysely } from '@web-api/database-types';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
-export const DW_WORK_ITEM_COLUMNS = [
-  'assigneeId',
-  'assigneeName',
-  'completedAt',
-  'completedBy',
-  'completedByUserId',
-  'completedMessage',
-  'createdAt',
-  'docketEntry',
-  'docketNumber',
-  'inProgress',
-  'isRead',
-  'section',
-  'sentBy',
-  'sentBySection',
-  'sentByUserId',
-  'updatedAt',
-  'workItemId',
-];
-
 function pickFields(workItem) {
   return {
     assigneeId: workItem.assigneeId,

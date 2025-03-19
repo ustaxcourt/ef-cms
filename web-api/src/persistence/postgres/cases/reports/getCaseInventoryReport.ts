@@ -2,8 +2,9 @@ import {
   CASE_INVENTORY_PAGE_SIZE,
   CASE_STATUS_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const getCaseInventoryReport = async ({
   associatedJudge,
@@ -16,7 +17,10 @@ export const getCaseInventoryReport = async ({
   pageSize?: number;
   status?: string;
 }): Promise<{
-  foundCases: RawCase[];
+  foundCases: Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'docketEntries' | 'petitioners'
+  >[];
   totalCount: number;
 }> => {
   pageSize = Math.min(pageSize, CASE_INVENTORY_PAGE_SIZE);
@@ -47,7 +51,13 @@ export const getCaseInventoryReport = async ({
   });
 
   return {
-    foundCases: results.map(result => rawCaseEntity(result)),
+    foundCases: results.map(result => ({
+      ...fromKyselyCase(result),
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: result.docketNumber,
+        docketNumberSuffix: result.docketNumberSuffix,
+      }),
+    })),
     totalCount: Number(count),
   };
 };

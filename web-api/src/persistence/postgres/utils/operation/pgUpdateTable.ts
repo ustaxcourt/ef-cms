@@ -1,18 +1,34 @@
 import { getDbWriter } from '@web-api/database';
-import { Database, DatabaseTableName } from '@web-api/database-types';
-import { UpdateQueryBuilder } from 'kysely';
+import { Database } from '@web-api/database-types';
+import { UpdateQueryBuilder, UpdateResult } from 'kysely';
+import { ExtractTableAlias } from 'kysely/dist/cjs/parser/table-parser';
+import { UpdateObjectExpression } from 'kysely/dist/cjs/parser/update-set-parser';
 
 type UpdateWhereCallback<T extends keyof Database> = (
-  qb: UpdateQueryBuilder<Database, T, DatabaseTableName, unknown>,
-) => UpdateQueryBuilder<Database, T, DatabaseTableName, unknown>;
+  qb: UpdateQueryBuilder<
+    Database,
+    ExtractTableAlias<Database, T>,
+    ExtractTableAlias<Database, T>,
+    UpdateResult
+  >,
+) => UpdateQueryBuilder<
+  Database,
+  ExtractTableAlias<Database, T>,
+  ExtractTableAlias<Database, T>,
+  UpdateResult
+>;
 
 export const pgUpdateTable = async <T extends keyof Database>({
   table,
   values,
   where,
 }: {
-  table: DatabaseTableName;
-  values: Record<string, unknown>;
+  table: T;
+  values: UpdateObjectExpression<
+    Database,
+    ExtractTableAlias<Database, T>,
+    ExtractTableAlias<Database, T>
+  >;
   where: UpdateWhereCallback<T>;
 }) => {
   return await getDbWriter({

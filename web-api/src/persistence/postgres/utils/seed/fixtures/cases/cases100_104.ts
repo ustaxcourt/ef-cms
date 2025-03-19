@@ -36,7 +36,7 @@ export const SEEDED_DOCKET_NUMBERS_100_104 = {
 };
 
 // If this file gets too big, we can separate out into, say, 100s, 101s, etc.
-export const cases100_104: RawCase[] = [
+export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'> [] = [
   {
     associatedJudge: CHIEF_JUDGE,
     automaticBlocked: false,

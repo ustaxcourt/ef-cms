@@ -65,7 +65,10 @@ export const getCaseByDocketNumber = async ({
     ),
   );
 
-  let consolidatedCases: RawCase[] = [];
+  let consolidatedCases: Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'docketEntries'
+  >[] = [];
   if (includeConsolidatedCases) {
     consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
       applicationContext,

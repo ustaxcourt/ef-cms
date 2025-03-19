@@ -1,17 +1,18 @@
 import { getDbWriter } from '@web-api/database';
-import { Database, DatabaseTableName } from '@web-api/database-types';
+import { Database } from '@web-api/database-types';
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
 import { AnyColumn } from 'kysely';
+import { InsertExpression } from 'kysely/dist/cjs/parser/insert-values-parser';
 import { isEmpty } from 'lodash';
 
-export const pgInsertInto = async ({
+export const pgInsertInto = async <T extends keyof Database>({
   table,
   values,
   onConflictColumns = [],
 }: {
-  table: DatabaseTableName;
-  values: Record<string, unknown>[];
-  onConflictColumns?: AnyColumn<Database, keyof Database>[];
+  table: T;
+  values: InsertExpression<Database, T>;
+  onConflictColumns?: AnyColumn<Database, T>[];
 }) => {
   if (isEmpty(values)) {
     return [];
