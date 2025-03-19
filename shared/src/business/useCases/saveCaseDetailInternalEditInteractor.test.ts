@@ -163,7 +163,6 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       {
         assigneeId: mockPetitionsClerkUser.userId,
         assigneeName: petitionsClerkUser.name,
-        caseIsInProgress: true,
       },
     ]);
   });

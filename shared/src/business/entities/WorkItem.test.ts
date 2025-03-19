@@ -162,4 +162,18 @@ describe('WorkItem', () => {
       expect(workItem.isRead).toBeTruthy();
     });
   });
+
+  describe('isHighPriority', () => {
+    it('should be a highPriority work item when the case is calendared', () => {
+      expect(
+        WorkItem.isHighPriority({ status: CASE_STATUS_TYPES.calendared }),
+      ).toEqual(true);
+    });
+
+    it('should not be a highPriority work item when the case is not calendared', () => {
+      expect(
+        WorkItem.isHighPriority({ status: CASE_STATUS_TYPES.assignedCase }),
+      ).toEqual(false);
+    });
+  });
 });
