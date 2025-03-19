@@ -11,10 +11,8 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { CaseKysely } from '@web-api/database-types';
 import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import {
-  ReplaceNullWithUndefined,
-  transformNullToUndefined,
-} from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToEntityMapper';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const toKyselyNewCase = (rawCase: RawCase) => {
   return {
@@ -107,71 +105,35 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
   };
 };
 
-// Map for renaming keys from DB format to the desired RawCase format.
-const keyRenameMap = {
-  caption: 'caseCaption',
-} as const;
+export function fromKyselyCase<T extends object>(record: T) {
+  // Map for renaming keys from DB format to the desired RawCase format.
+  const keyRenameMap = {
+    caption: 'caseCaption',
+  } as const;
 
-// Map for transforming values.
-// Each transform function accepts the original value and the entire record.
-const transformMap = {
-  automaticBlockedDate: (value: any, _: any) => value?.toISOString(),
-  blockedDate: (value: any, _: any) => value?.toISOString(),
-  caseType: (value: any, _: any) => value as CaseType,
-  closedDate: (value: any, _: any) => value?.toISOString(),
-  createdAt: (value: any, _: any) => value?.toISOString(),
-  hearings: (value: any, _: any) => value || [],
-  irsNoticeDate: (value: any, _: any) => value?.toISOString(),
-  noticeOfTrialDate: (value: any, _: any) => value?.toISOString(),
-  petitioners: (value?: any[], _?: any) =>
-    value ? value.map(p => ({ ...p, state: p.state || null })) : [], // petitioner state needs to be null rather than undefined
-  petitionPaymentDate: (value: any, _: any) => value?.toISOString(),
-  petitionPaymentWaivedDate: (value: any, _: any) => value?.toISOString(),
-  receivedAt: (value: any, _: any) => value?.toISOString(),
-  sealedDate: (value: any, _: any) => value?.toISOString(),
-  status: (value: any, _: any) => value as CaseStatus,
-  trialDate: (value: any, _: any) => value?.toISOString(),
-} as const;
+  // Map for transforming values.
+  const transformMap = {
+    automaticBlockedDate: (value: any, _: any) => value?.toISOString(),
+    blockedDate: (value: any, _: any) => value?.toISOString(),
+    caseType: (value: any, _: any) => value as CaseType,
+    closedDate: (value: any, _: any) => value?.toISOString(),
+    createdAt: (value: any, _: any) => value?.toISOString(),
+    hearings: (value: any, _: any) => value || [],
+    irsNoticeDate: (value: any, _: any) => value?.toISOString(),
+    noticeOfTrialDate: (value: any, _: any) => value?.toISOString(),
+    petitioners: (value?: any[], _?: any) =>
+      value ? value.map(p => ({ ...p, state: p.state || null })) : [], // petitioner state needs to be null rather than undefined
+    petitionPaymentDate: (value: any, _: any) => value?.toISOString(),
+    petitionPaymentWaivedDate: (value: any, _: any) => value?.toISOString(),
+    receivedAt: (value: any, _: any) => value?.toISOString(),
+    sealedDate: (value: any, _: any) => value?.toISOString(),
+    status: (value: any, _: any) => value as CaseStatus,
+    trialDate: (value: any, _: any) => value?.toISOString(),
+  } as const;
 
-// A type for converting from CaseKysely (our DB type) to [some subset of] RawCase (+ any other extraneous key-value pairs unrelated to CaseKysely)
-type Transformed<T> = {
-  [K in keyof T as K extends keyof typeof keyRenameMap
-    ? (typeof keyRenameMap)[K]
-    : K]: K extends keyof typeof transformMap
-    ? ReturnType<(typeof transformMap)[K]>
-    : T[K];
-};
-
-// Convert from our DB representation of case data to our app-code representation
-// You can pass in some subset of CaseKysely data (+ any other random key-value pairs)
-// and get back some subset of appropriately mapped RawCase data (+ any other random key-value pairs)
-export function transformDBCaseToEntity<T extends object>(
-  record: T,
-): ReplaceNullWithUndefined<Transformed<T>> {
-  const result = { ...record } as any;
-
-  // Do any transformations that need to happen to get from CaseKysely to RawCase
-  // E.g., convert a date field to a string
-  for (const key in transformMap) {
-    if (key in result) {
-      result[key] = transformMap[key](result[key], result);
-    }
-  }
-
-  // Rename any keys that have name X in CaseKysely and name Y in RawCase
-  for (const oldKey in keyRenameMap) {
-    if (oldKey in result) {
-      const newKey = keyRenameMap[oldKey];
-      result[newKey] = result[oldKey];
-      delete result[oldKey];
-    }
-  }
-
-  // We typically expect undefined rather than null in our app
-  // So convert Postgres null to Typescript undefined by default
-  return transformNullToUndefined(
-    result as Transformed<T>,
-  ) as ReplaceNullWithUndefined<Transformed<T>>;
+  return new DatabaseToAppCodeMapper({ keyRenameMap, transformMap }).transform(
+    record,
+  );
 }
 
 export const indexCaseEntity = ({

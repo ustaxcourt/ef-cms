@@ -1,6 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { getDbReader } from '@web-api/database';
-import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 
 export const getCasesInConsolidatedGroup = async ({
   leadDocketNumber,
@@ -21,7 +21,7 @@ export const getCasesInConsolidatedGroup = async ({
   );
 
   return result.map(c => ({
-    ...transformDBCaseToEntity(c),
+    ...fromKyselyCase(c),
     docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
       docketNumber: c.docketNumber,
       docketNumberSuffix: c.docketNumberSuffix,

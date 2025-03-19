@@ -5,7 +5,7 @@ import {
   calculateDifferenceInDays,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getDbReader } from '@web-api/database';
 
@@ -54,7 +54,7 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
         : 1;
 
       return {
-        ...transformDBCaseToEntity(r),
+        ...fromKyselyCase(r),
         consolidatedGroupCount,
         daysSinceCreated: calculateDifferenceInDays(
           formatNow(),
