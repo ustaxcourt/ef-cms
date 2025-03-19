@@ -141,8 +141,10 @@ jobs:
             cd ./web-api/terraform/applyables/allColors
             RUM_APP_MONITOR_ID=$(terraform output -raw rum_app_monitor_id)
             RUM_IDENTITY_POOL_ID=$(terraform output -raw rum_identity_pool_id)
-            echo "export RUM_APP_MONITOR_ID=${RUM_APP_MONITOR_ID}" >> $BASH_ENV
-            echo "export RUM_IDENTITY_POOL_ID=${RUM_IDENTITY_POOL_ID}" >> $BASH_ENV
+            {
+              echo "export RUM_APP_MONITOR_ID=${RUM_APP_MONITOR_ID}"
+              echo "export RUM_IDENTITY_POOL_ID=${RUM_IDENTITY_POOL_ID}"
+            } >> $BASH_ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Color Terraform'
