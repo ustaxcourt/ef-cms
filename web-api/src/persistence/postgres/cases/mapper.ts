@@ -11,7 +11,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { CaseKysely } from '@web-api/database-types';
 import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToEntityMapper';
+import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const toKyselyNewCase = (rawCase: RawCase) => {
