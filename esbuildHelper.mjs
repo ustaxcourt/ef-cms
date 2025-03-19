@@ -39,8 +39,6 @@ const env = {
   WS_URL: process.env.WS_URL,
   RUM_APP_MONITOR_ID: process.env.RUM_APP_MONITOR_ID,
   RUM_IDENTITY_POOL_ID: process.env.RUM_IDENTITY_POOL_ID,
-  RUM_ENDPOINT: process.env.RUM_ENDPOINT,
-  REGION: process.env.REGION,
 };
 
 /**
