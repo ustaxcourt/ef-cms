@@ -14,5 +14,9 @@ describe('getWorkQueueFilters', () => {
         DOCKET_SECTION,
       );
     });
+
+    it('returns the docket section when the user does not have a section', () => {
+      expect(getDocQcSectionForUser({})).toEqual(DOCKET_SECTION);
+    });
   });
 });
