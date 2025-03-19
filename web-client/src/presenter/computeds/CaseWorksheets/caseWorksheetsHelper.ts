@@ -36,7 +36,7 @@ export const caseWorksheetsHelper = (
       const { daysElapsedSinceLastStatusChange, statusDate } =
         applicationContext
           .getUtilities()
-          .calculateDaysElapsedSinceLastStatusChange(applicationContext, aCase);
+          .calculateDaysElapsedSinceLastStatusChange(aCase.statusDate);
 
       const finalBriefDueDateFormatted = aCase.caseWorksheet?.finalBriefDueDate
         ? applicationContext

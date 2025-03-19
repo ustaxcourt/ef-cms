@@ -5,6 +5,7 @@ import {
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { PetitionService } from '@shared/business/utilities/emailGenerator/emailTemplates/PetitionService';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
@@ -19,9 +20,7 @@ export const sendIrsSuperuserPetitionEmail = async ({
     throw new Error('Cannot serve a docket entry without an index.');
   }
 
-  const caseDetail = applicationContext
-    .getUtilities()
-    .setServiceIndicatorsForCase(caseEntity);
+  const caseDetail = setServiceIndicatorsForPetitionersOnCase(caseEntity);
 
   const {
     caseCaption,

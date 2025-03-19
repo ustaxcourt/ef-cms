@@ -1,12 +1,19 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
+import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { getCasesMetadataWithCounselByLeadDocketNumber as getCasesMetadataWithCounselByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
 
 describe('getCasesForUserInteractor', () => {
+  const getCasesMetadataByDocketNumbers =
+    getCasesMetadataByDocketNumbersMock as jest.Mock;
+  const getCasesMetadataWithCounselByLeadDocketNumber =
+    getCasesMetadataWithCounselByLeadDocketNumberMock as jest.Mock;
   const mockPetitioner: AuthUser = {
     ...mockPetitionerUser,
     userId: MOCK_CASE.petitioners[0].contactId,
@@ -86,22 +93,18 @@ describe('getCasesForUserInteractor', () => {
           memberCase2,
         ]);
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesByDocketNumbers.mockResolvedValue([
-          unconsolidatedCase1,
-          unconsolidatedCase2,
-          unconsolidatedCase3,
-          unconsolidatedClosedCase1,
-          unconsolidatedClosedCase2,
-          memberCase2,
-        ]);
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
+        unconsolidatedCase1,
+        unconsolidatedCase2,
+        unconsolidatedCase3,
+        unconsolidatedClosedCase1,
+        unconsolidatedClosedCase2,
+        memberCase2,
+      ]);
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
-          consolidatedGroupLeadCase11119,
-        );
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroupLeadCase11119,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -160,14 +163,10 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue(consolidatedGroup);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesByDocketNumbers.mockResolvedValue(consolidatedGroup);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
-          consolidatedGroup,
-        );
+      getCasesMetadataByDocketNumbers.mockResolvedValue(consolidatedGroup);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroup,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -199,14 +198,10 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue([memberCase1]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesByDocketNumbers.mockResolvedValue([memberCase1]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
-          consolidatedGroup,
-        );
+      getCasesMetadataByDocketNumbers.mockResolvedValue([memberCase1]);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroup,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -238,14 +233,10 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue([leadCase]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesByDocketNumbers.mockResolvedValue([leadCase]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
-          consolidatedGroup,
-        );
+      getCasesMetadataByDocketNumbers.mockResolvedValue([leadCase]);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroup,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -299,17 +290,13 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue([leadCase, ...unconsolidatedCases]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesByDocketNumbers.mockResolvedValue([
-          leadCase,
-          ...unconsolidatedCases,
-        ]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
-          consolidatedGroup,
-        );
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
+        leadCase,
+        ...unconsolidatedCases,
+      ]);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroup,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -341,21 +328,17 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedClosedCase2,
           memberCase2,
         ]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesByDocketNumbers.mockResolvedValue([
-          unconsolidatedCase1,
-          unconsolidatedCase2,
-          unconsolidatedCase3,
-          unconsolidatedClosedCase1,
-          unconsolidatedClosedCase2,
-          memberCase2,
-        ]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesMetadataByLeadDocketNumber.mockResolvedValue(
-          consolidatedGroupLeadCase11119,
-        );
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
+        unconsolidatedCase1,
+        unconsolidatedCase2,
+        unconsolidatedCase3,
+        unconsolidatedClosedCase1,
+        unconsolidatedClosedCase2,
+        memberCase2,
+      ]);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroupLeadCase11119,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -390,13 +373,11 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedCase2,
           unconsolidatedClosedCase1,
         ]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesByDocketNumbers.mockResolvedValue([
-          unconsolidatedCase1,
-          unconsolidatedCase2,
-          unconsolidatedClosedCase1,
-        ]);
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
+        unconsolidatedCase1,
+        unconsolidatedCase2,
+        unconsolidatedClosedCase1,
+      ]);
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -436,14 +417,12 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedClosedCase1,
           corruptedCase,
         ]);
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesByDocketNumbers.mockResolvedValue([
-          unconsolidatedCase1,
-          unconsolidatedCase2,
-          unconsolidatedClosedCase1,
-          corruptedCase,
-        ]);
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
+        unconsolidatedCase1,
+        unconsolidatedCase2,
+        unconsolidatedClosedCase1,
+        corruptedCase,
+      ]);
 
       //call validate to ensure that, yes, the case fails validation (todo)
       //call getCasesForUser and expect that no exceptions were thrown
