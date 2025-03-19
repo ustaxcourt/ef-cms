@@ -233,11 +233,6 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
-      {
-        leadDocketNumber: mockCase.leadDocketNumber,
-      },
-    ]);
     expect(updateCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,

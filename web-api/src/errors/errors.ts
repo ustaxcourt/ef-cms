@@ -86,6 +86,23 @@ export const UnprocessableEntityError = class UnprocessableEntityError extends E
   }
 };
 
+/**
+ * UnsanitizedEntityError error
+ * @type {module.UnsanitizedEntity}
+ */
+export const UnsanitizedEntityError = class UnsanitizedEntityError extends Error {
+  public statusCode: number;
+  /**
+   * constructor
+   * @param {string} message the error message
+   */
+  constructor(message = 'Unsanitized entity') {
+    super(message);
+
+    this.statusCode = 500;
+  }
+};
+
 export const ServiceUnavailableError = class ServiceUnavailableError extends Error {
   /**
    * constructor

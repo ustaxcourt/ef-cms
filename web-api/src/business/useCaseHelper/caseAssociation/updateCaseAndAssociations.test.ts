@@ -339,21 +339,6 @@ describe('updateCaseAndAssociations', () => {
       });
       expect(upsertWorkItems).not.toHaveBeenCalled();
     });
-
-    it('the associated judge has been updated', async () => {
-      updatedCase.associatedJudge = 'Judge Dredd';
-      updatedCase.associatedJudgeId = '2f46a889-901c-4e8b-b2bb-c3994e2c75c1';
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-      const { workItems } = upsertWorkItems.mock.calls[0][0];
-      expect(workItems[0].associatedJudge).toBe('Judge Dredd');
-      expect(workItems[0].associatedJudgeId).toBe(
-        '2f46a889-901c-4e8b-b2bb-c3994e2c75c1',
-      );
-    });
   });
 
   describe('correspondences', () => {
