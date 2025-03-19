@@ -1,4 +1,4 @@
-import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { sql } from 'kysely';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -25,7 +25,7 @@ export const getCaseMetadataByDocketNumber = async ({
   );
 
   return dbCase
-    ? transformDBCaseToEntity({
+    ? fromKyselyCase({
         ...dbCase,
         petitioners: dbCase.petitioners as TPetitioner[], // This is a hack because our typing for Petitioners is yucky
         docketNumberWithSuffix: Case.getDocketNumberWithSuffix({

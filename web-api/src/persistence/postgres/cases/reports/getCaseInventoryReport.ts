@@ -2,7 +2,7 @@ import {
   CASE_INVENTORY_PAGE_SIZE,
   CASE_STATUS_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
 
@@ -52,7 +52,7 @@ export const getCaseInventoryReport = async ({
 
   return {
     foundCases: results.map(result => ({
-      ...transformDBCaseToEntity(result),
+      ...fromKyselyCase(result),
       docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
         docketNumber: result.docketNumber,
         docketNumberSuffix: result.docketNumberSuffix,
