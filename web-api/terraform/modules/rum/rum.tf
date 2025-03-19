@@ -1,4 +1,3 @@
-
 resource "aws_cognito_identity_pool" "rum_identity_pool" {
   identity_pool_name               = "${var.environment}-rum-identity-pool"
   allow_unauthenticated_identities = true
@@ -58,7 +57,7 @@ resource "aws_rum_app_monitor" "app_monitor" {
   domain = "*.${var.domain}"
   app_monitor_configuration {
     allow_cookies       = true
-    session_sample_rate = 1
+    session_sample_rate = var.environment == "prod" ? 0.1 : 1
     telemetries         = ["performance"]
     identity_pool_id    = aws_cognito_identity_pool.rum_identity_pool.id
   }
