@@ -1,6 +1,7 @@
-jest.mock('@web-api/persistence/elasticsearch/getBlockedCases');
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
+  PROCEDURE_TYPES_MAP,
   SESSION_TERMS_DICT,
   SESSION_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -11,8 +12,11 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { getBlockedCases as getBlockedCasesMock } from '@web-api/persistence/elasticsearch/getBlockedCases';
-import { MOCK_CASE } from '@shared/test/mockCase';
+import { getBlockedCasesCount as getBlockedCasesCountMock } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount';
+import { getEligibleCasesCount as getEligibleCasesCountMock } from '@web-api/persistence/postgres/cases/getEligibleCasesCount';
+
+const getBlockedCasesCount = getBlockedCasesCountMock as jest.Mock;
+const getEligibleCasesCount = getEligibleCasesCountMock as jest.Mock;
 
 describe('getTrialSessionPlanningReportDataInteractor', () => {
   const ALL_TRIAL_SESSIONS_MOCK: RawTrialSession[] = [
@@ -128,25 +132,26 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
       trialLocation: 'Denver, Colorado',
     } as RawTrialSession,
   ];
-  const SMALL_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [{}];
-  const REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [{}, {}];
-  const BLOCKED_CASES_MOCK = [MOCK_CASE, MOCK_CASE, MOCK_CASE];
-  const getBlockedCases = jest.mocked(getBlockedCasesMock);
+
+  const BLOCKED_CASES_COUNT_MOCK = 3;
+
+  const REGULAR_ELIGIBLE_CASES_COUNT = 2;
+  const SMALL_ELIGIBLE_CASES_COUNT = 1;
 
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessions.mockResolvedValue(ALL_TRIAL_SESSIONS_MOCK);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialCity.mockImplementation(({ procedureType }) => {
-        if (procedureType === 'Small')
-          return SMALL_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK;
-        return REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK;
-      });
+    getEligibleCasesCount.mockImplementation(({ procedureType }) => {
+      if (procedureType === PROCEDURE_TYPES_MAP.regular) {
+        return REGULAR_ELIGIBLE_CASES_COUNT;
+      } else {
+        return SMALL_ELIGIBLE_CASES_COUNT;
+      }
+    });
 
-    getBlockedCases.mockResolvedValue(BLOCKED_CASES_MOCK);
+    getBlockedCasesCount.mockResolvedValue(BLOCKED_CASES_COUNT_MOCK);
   });
 
   it('should throw error if the user is "Unauthorized"', async () => {

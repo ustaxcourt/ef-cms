@@ -18,14 +18,12 @@ describe('getBlockedCasesByTrialLocationAction', () => {
       ];
     });
 
-  it('should not call getBlockedCasesInteractor if the trialLocation is not on the form', async () => {
+  it('should not call getBlockedCasesInteractor if the trialLocation is not in props', async () => {
     await runAction(getBlockedCasesByTrialLocationAction, {
       modules: {
         presenter,
       },
-      state: {
-        blockedCaseReportFilter: {},
-      },
+      props: { filterStatusForTrialLocation: true },
     });
 
     expect(
@@ -38,10 +36,9 @@ describe('getBlockedCasesByTrialLocationAction', () => {
       modules: {
         presenter,
       },
-      state: {
-        blockedCaseReportFilter: {
-          trialLocationFilter: 'Boise, Idaho',
-        },
+      props: {
+        trialLocation: 'Boise, Idaho',
+        filterStatusForTrialLocation: true,
       },
     });
 

@@ -1,21 +1,10 @@
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../authorization/authorizationClientService';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, pick } from 'lodash';
 import { isAssociatedUser, isSealedCase } from '../entities/cases/Case';
-
-const CASE_ATTRIBUTE_ALLOWLIST = [
-  'docketNumber',
-  'docketNumberSuffix',
-  'isPaper',
-  'isSealed',
-  'sealedDate',
-  'leadDocketNumber',
-] as const;
-
-type CaseAttributeAllowlistKeys = (typeof CASE_ATTRIBUTE_ALLOWLIST)[number];
 
 const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
   'additionalName',
@@ -30,24 +19,10 @@ const CASE_CONTACT_ATTRIBUTE_ALLOWLIST = [
   'title',
 ];
 
-export type SealedCase = Record<CaseAttributeAllowlistKeys, any>;
-
-export const caseSealedFormatter = caseRaw => {
-  return pick(caseRaw, CASE_ATTRIBUTE_ALLOWLIST) as SealedCase;
-};
-
-/**
- * caseContactAddressSealedFormatter
- * Modifies raw case data if a contact address is sealed
- * and user does not have permission to view sealed addresses.
- * When sealed addresses are being formatted, the contact objects are
- * emptied of all entries, then assigned key/value pairs from a allow list.
- *
- * @param {object} caseRaw the raw case detail
- * @param {object} currentUser the current
- * @returns {object} reference to modified raw case detail
- */
-export const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
+export const formatSealedAddresses = (
+  caseRaw: any,
+  currentUser: UnknownAuthUser,
+) => {
   const userCanViewSealedAddresses = isAuthorized(
     currentUser,
     ROLE_PERMISSIONS.VIEW_SEALED_ADDRESS,
@@ -77,7 +52,10 @@ export const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   return formattedCase;
 };
 
-export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
+export const filterCaseSearchResultsNotAccessibleToUser = (
+  searchResults,
+  currentUser: UnknownAuthUser,
+) => {
   return searchResults
     .filter(
       searchResult =>
@@ -89,7 +67,5 @@ export const caseSearchFilter = (searchResults, currentUser: AuthUser) => {
         isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
         isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
     )
-    .map(filteredCase =>
-      caseContactAddressSealedFormatter(filteredCase, currentUser),
-    );
+    .map(c => formatSealedAddresses(c, currentUser));
 };

@@ -1,8 +1,6 @@
-import { efcmsCaseDeadlineIndex } from '../../../elasticsearch/efcms-case-deadline-mappings';
 import { efcmsCaseIndex } from '../../../elasticsearch/efcms-case-mappings';
 import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
 import { efcmsUserIndex } from '../../../elasticsearch/efcms-user-mappings';
-import { efcmsWorkItemIndex } from '../../../elasticsearch/efcms-work-item-mappings';
 import { getIndexNameForRecord } from './getIndexNameForRecord';
 
 describe('getIndexNameForRecord', () => {
@@ -144,18 +142,6 @@ describe('getIndexNameForRecord', () => {
     expect(result).toEqual(efcmsUserIndex);
   });
 
-  it('returns efcms-case-deadline for CaseDeadline records', () => {
-    const record = {
-      entityName: {
-        S: 'CaseDeadline',
-      },
-    };
-
-    const result = getIndexNameForRecord(record);
-
-    expect(result).toEqual(efcmsCaseDeadlineIndex);
-  });
-
   it('returns efcms-case for unmarshalled Case record', () => {
     const record = {
       entityName: 'Case',
@@ -164,27 +150,5 @@ describe('getIndexNameForRecord', () => {
     const result = getIndexNameForRecord(record);
 
     expect(result).toEqual(efcmsCaseIndex);
-  });
-
-  it('returns efcms-work-item for WorkItem records', () => {
-    const record = {
-      entityName: 'WorkItem',
-    };
-
-    const result = getIndexNameForRecord(record);
-
-    expect(result).toEqual(efcmsWorkItemIndex);
-  });
-
-  it('returns efcms-work-item for CaseWorkItemMapping records', () => {
-    const record = {
-      entityName: {
-        S: 'CaseWorkItemMapping',
-      },
-    };
-
-    const result = getIndexNameForRecord(record);
-
-    expect(result).toEqual(efcmsWorkItemIndex);
   });
 });
