@@ -57,7 +57,7 @@ resource "aws_rum_app_monitor" "app_monitor" {
   domain = "*.${var.domain}"
   app_monitor_configuration {
     allow_cookies       = true
-    session_sample_rate = var.environment == "prod" ? 0.1 : 1
+    session_sample_rate = var.sample_rate
     telemetries         = ["performance"]
     identity_pool_id    = aws_cognito_identity_pool.rum_identity_pool.id
   }

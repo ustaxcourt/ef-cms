@@ -5,3 +5,7 @@ variable "environment" {
 variable "domain" {
   type = string
 }
+
+variable "sample_rate" {
+  type = number
+}
