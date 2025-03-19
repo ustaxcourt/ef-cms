@@ -1,6 +1,7 @@
 import { AwsRum, AwsRumConfig } from 'aws-rum-web';
 
 export const initializeRealUserMonitoring = () => {
+  if (process.env.ENV === 'local') return;
   let awsRum: AwsRum;
   try {
     const config: AwsRumConfig = {
@@ -8,7 +9,7 @@ export const initializeRealUserMonitoring = () => {
       enableXRay: false,
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId: process.env.RUM_IDENTITY_POOL_ID,
-      sessionSampleRate: 1,
+      sessionSampleRate: process.env.ENV === 'prod' ? 0.1 : 1, // sample 10% of sessions in production until we know how expensive this will be, 100% in lower environments
       telemetries: ['performance'],
     };
 
