@@ -7,11 +7,14 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
-import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../test/mockUsers';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
+import {
+  MOCK_PRACTITIONER,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   getContactPrimary,
   getContactSecondary,

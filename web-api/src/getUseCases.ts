@@ -154,7 +154,7 @@ import { renewIdTokenInteractor } from './business/useCases/auth/renewIdTokenInt
 import { replyToMessageInteractor } from './business/useCases/messages/replyToMessageInteractor';
 import { runTrialSessionPlanningReportInteractor } from './business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { saveCalendarNoteInteractor } from './business/useCases/trialSessions/saveCalendarNoteInteractor';
-import { saveCaseDetailInternalEditInteractor } from '../../shared/src/business/useCases/saveCaseDetailInternalEditInteractor';
+import { saveCaseDetailInternalEditInteractor } from './business/useCases/saveCaseDetailInternalEditInteractor';
 import { saveCaseNoteInteractor } from './business/useCases/caseNote/saveCaseNoteInteractor';
 import { saveSignedDocumentInteractor } from '../../shared/src/business/useCases/saveSignedDocumentInteractor';
 import { sealCaseContactAddressInteractor } from '../../shared/src/business/useCases/sealCaseContactAddressInteractor';
