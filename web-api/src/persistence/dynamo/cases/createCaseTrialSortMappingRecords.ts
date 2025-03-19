@@ -1,4 +1,4 @@
-import { deleteCaseTrialSortMappingRecords } from './deleteCaseTrialSortMappingRecords';
+import { deleteCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { batchWrite, query } from '../../dynamodbClientService';
 import { PutRequest } from '@web-api/persistence/dynamo/dynamoTypes';
 import {

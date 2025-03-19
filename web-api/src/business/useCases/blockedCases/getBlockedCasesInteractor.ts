@@ -15,14 +15,20 @@ import { getBlockedCasesForTrialLocation } from '@web-api/persistence/postgres/c
  * @returns {object} the case data
  */
 export const getBlockedCasesInteractor = async (
-  { trialLocation }: { trialLocation: string },
+  {
+    trialLocation,
+    filterStatusForTrialLocation,
+  }: { trialLocation: string; filterStatusForTrialLocation: boolean },
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const foundCases = await getBlockedCasesForTrialLocation(trialLocation);
+  const foundCases = await getBlockedCasesForTrialLocation(
+    trialLocation,
+    filterStatusForTrialLocation,
+  );
 
   return foundCases;
 };

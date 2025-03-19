@@ -1,8 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-const groupKeySymbol = Symbol('group');
+export const groupKeySymbol = Symbol('group');
 
-const addGroupSymbol = (object, value) => {
+export const addGroupSymbol = (object, value) => {
   Object.defineProperty(object, groupKeySymbol, {
     enumerable: false,
     value,
@@ -11,7 +11,9 @@ const addGroupSymbol = (object, value) => {
   return object;
 };
 
-const getPriorityGroups = (eligibleCases: FormattedTrialSessionCase[]) => {
+export const getPriorityGroups = (
+  eligibleCases: FormattedTrialSessionCase[],
+) => {
   const groups = {
     default: [] as FormattedTrialSessionCase[],
     highPriority: [] as FormattedTrialSessionCase[],
@@ -44,6 +46,9 @@ const getSortableDocketNumber = docketNumber => {
 };
 
 const getFullSortString = (theCase, cases) => {
+  if (!Array.isArray(cases)) {
+    return '';
+  }
   const leadCase = cases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
@@ -69,7 +74,7 @@ const getFullSortString = (theCase, cases) => {
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-const compareTrialSessionEligibleCases = (
+export const compareTrialSessionEligibleCases = (
   eligibleCases: FormattedTrialSessionCase[],
 ) => {
   const groups = getPriorityGroups(eligibleCases);

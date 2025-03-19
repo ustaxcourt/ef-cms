@@ -1,6 +1,7 @@
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { Case } from '@shared/business/entities/cases/Case';
 import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
+import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import {
   CaseStatus,
   CaseType,
@@ -241,4 +242,14 @@ export const indexCaseEntity = ({
     }),
     { removeUndefinedValues: true },
   );
+};
+
+export const RawEligibleCaseEntity = (dbCase: any): RawEligibleCase => {
+  return {
+    ...dbCase,
+    caseCaption: dbCase.caption,
+    docketNumberWithSuffix:
+      dbCase.docketNumber +
+      (dbCase.docketNumberSuffix ? dbCase.docketNumberSuffix : ''),
+  };
 };

@@ -1,4 +1,6 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
+import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
+import { DW_MINUTE_SHEET_COLUMNS } from '@web-api/persistence/postgres/minuteSheets/mapper';
 
 const messageTableDefinition = {
   attachments: {} as
@@ -145,6 +147,7 @@ const caseDeadlineTableDefinition = {
   associatedJudge: {} as string,
   associatedJudgeId: {} as string | undefined,
   caseDeadlineId: {} as string,
+  consolidatedCaseDeadlineId: {} as string | undefined,
   createdAt: {} as Date,
   deadlineDate: {} as Date,
   description: {} as string,
@@ -364,6 +367,22 @@ export type DocketEntryKysely = Selectable<DocketEntryTable>;
 export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
 export type UpdateDocketEntryKysely = Updateable<DocketEntryTable>;
 
+const minuteSheetTableDefinition = {
+  trialSessionId: {} as string,
+  docketNumber: {} as string,
+  content: {} as MinuteSheet,
+};
+
+export type MinuteSheetTable = typeof minuteSheetTableDefinition;
+
+export const DW_MINUTE_SHEET_TABLE = Object.keys(
+  minuteSheetTableDefinition,
+) as Array<keyof MinuteSheetTable>;
+
+export type MinuteSheetKysely = Selectable<MinuteSheetTable>;
+export type NewMinuteSheetKysely = Insertable<MinuteSheetTable>;
+export type UpdateMinuteSheetKysely = Updateable<MinuteSheetTable>;
+
 type DatabaseTableMetadata<TTable> = {
   table: TTable;
   columns: string[];
@@ -414,6 +433,10 @@ export const DatabaseSchema = {
   dwWorkItem: {
     table: {} as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
+  },
+  dwMinuteSheet: {
+    table: {} as MinuteSheetTable,
+    columns: DW_MINUTE_SHEET_COLUMNS,
   },
 } as const satisfies Record<string, DatabaseTableMetadata<any>>;
 

@@ -22,6 +22,7 @@ describe('getBlockedCasesInteractor', () => {
     const results = await getBlockedCasesInteractor(
       {
         trialLocation: 'Boise, Idaho',
+        filterStatusForTrialLocation: false,
       },
       mockPetitionsClerkUser,
     );
@@ -42,6 +43,7 @@ describe('getBlockedCasesInteractor', () => {
       await getBlockedCasesInteractor(
         {
           trialLocation: 'Boise, Idaho',
+          filterStatusForTrialLocation: true,
         },
         mockPetitionerUser,
       );

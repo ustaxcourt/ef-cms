@@ -9,6 +9,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 export type TrialLocationDataFormatted = TrialLocationData & {
   hasNotBeenCalendared: boolean;
   lastVisitedDateFormatted: string;
+  trialLocationUrl: string;
 };
 
 export type PreviousTermFormatted = {
@@ -74,6 +75,7 @@ export const trialSessionPlanningReportViewHelper = (
         lastVisitedDateFormatted: formatLastVisitedDate(
           locationData.lastVisitedDate,
         ),
+        trialLocationUrl: `/trial-location/${locationData.trialCityState}`,
       };
     });
 

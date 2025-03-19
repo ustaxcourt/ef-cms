@@ -65,6 +65,7 @@ describe('createCaseDeadlineInteractor', () => {
 
   it('throws an error if the user is not valid or authorized', async () => {
     const user = {} as UnknownAuthUser;
+    mockCase = MOCK_CASE_WITHOUT_PENDING;
     await expect(
       createCaseDeadlineInteractor(
         applicationContext,
@@ -138,8 +139,6 @@ describe('createCaseDeadlineInteractor', () => {
         mockPetitionsClerkUser,
       ),
     ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the cases', async () => {

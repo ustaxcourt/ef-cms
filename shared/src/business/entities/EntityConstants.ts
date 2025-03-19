@@ -1,14 +1,25 @@
 /* eslint-disable max-lines */
 import { ENTERED_AND_SERVED_EVENT_CODES } from './courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS, formatNow } from '../utilities/DateHandler';
-import { flatten, omit, pick, sortBy, union, uniq, without } from 'lodash';
+import {
+  flatten,
+  invert,
+  omit,
+  pick,
+  sortBy,
+  union,
+  uniq,
+  without,
+} from 'lodash';
 import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
 
 export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
+  TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
+  CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
 } as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
@@ -162,6 +173,12 @@ export const DOCKET_NUMBER_SUFFIXES = {
   WHISTLEBLOWER: 'W',
 };
 
+export const HIGH_PRIORITY_SUFFIXES = [
+  DOCKET_NUMBER_SUFFIXES.LIEN_LEVY, // L
+  DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
+  DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
+];
+
 export const CASE_STATUS_TYPES = {
   assignedCase: 'Assigned - Case', // Case has been assigned to a judge
   assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
@@ -198,6 +215,7 @@ export const SUGGESTED_TRIAL_SESSION_TITLES = {
   invalid: 'Unable to create term',
   success: 'Successfully generated suggested term.',
   warning: 'Successfully generated suggested term with warnings',
+  validation: 'Please correct the following errors on the page:',
 };
 
 export const DOCUMENT_RELATIONSHIPS = {
@@ -467,8 +485,20 @@ export const INTERNAL_DOCUMENTS_ARRAY = flatten(
   Object.values(INTERNAL_FILING_EVENTS),
 );
 
+export const MINUTE_SHEET_EVENT_CODES = [
+  ...COURT_ISSUED_EVENTS.filter(d => d.scenario === 'Type F').map(
+    d => d.eventCode,
+  ),
+];
+
 export const MOTION_EVENT_CODES = [
   ...INTERNAL_FILING_EVENTS['Motion'].map(entry => {
+    return entry.eventCode;
+  }),
+];
+
+export const NOTICE_EVENT_CODES = [
+  ...INTERNAL_FILING_EVENTS['Notice'].map(entry => {
     return entry.eventCode;
   }),
 ];
@@ -1793,3 +1823,183 @@ export const TROUBLESHOOTING_INFO = {
 
 export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
 export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
+
+export const TRIAL_SESSION_TERM_GENERATOR = {
+  MAX_SESSIONS_PER_WEEK: 6,
+  MAX_SESSIONS_PER_LOCATION: 5,
+  REGULAR_CASE_MINIMUM_QUANTITY: 40,
+  REGULAR_CASE_MAX_QUANTITY: 100,
+  SMALL_CASE_MINIMUM_QUANTITY: 40,
+  SMALL_CASE_MAX_QUANTITY: 125,
+  HYBRID_CASE_MINIMUM_QUANTITY: 50,
+  HYBRID_CASE_MAX_QUANTITY: 100,
+} as const;
+
+export const MINUTE_SHEET_FORM_SECTION_MAP = {
+  actionsAndFilingsSection: 'actionsAndFilingsSection',
+  caseMetadataSection: 'caseMetadataSection',
+  exhibitsSection: 'exhibitsSection',
+  jurisdictionSection: 'jurisdictionSection',
+  motionsSection: 'motionsSection',
+  ordersSection: 'ordersSection',
+  petitionersSection: 'petitionersSection',
+  respondentsSection: 'respondentsSection',
+  trialBriefSection: 'trialBriefSection',
+  trialSessionMetadataSection: 'trialSessionMetadataSection',
+  witnessesSection: 'witnessesSection',
+} as const;
+
+export const TRIAL_HEARING_OPTIONS = {
+  trial: 'Trial',
+  hearing: 'Hearing',
+  partialTrial: 'Partial Trial',
+  furtherTrial: 'Further Trial',
+  furtherHearing: 'Further Hearing',
+} as const;
+export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
+
+export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  petitionerAndRespondent: 'Petitioner and Respondent',
+  joint: 'Joint',
+  other: 'Other',
+} as const;
+export type StatusReportOrderedForOption =
+  | keyof typeof STATUS_REPORT_ORDERED_FOR_OPTIONS
+  | '';
+
+export const MOTION_FILED_BY_OPTIONS = {
+  intervenor: 'Intervenor',
+  joint: 'Joint',
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  thirdParty: 'Third Party',
+} as const;
+export type MotionFiledByOption = keyof typeof MOTION_FILED_BY_OPTIONS;
+
+export const MOTION_STATUS_OPTIONS = {
+  seeOrder: 'See Order',
+  cav: 'CAV',
+  denied: 'Denied',
+  granted: 'Granted',
+  filed: 'Filed',
+  lodged: 'Lodged',
+} as const;
+export type MotionStatusOption = keyof typeof MOTION_STATUS_OPTIONS;
+
+export const MOTION_TYPE_OPTIONS = {
+  motionToDismissLackOfProsecution: 'Motion to Dismiss - Lack of Prosecution',
+  motionToDismissLackOfJurisdiction: 'Motion to Dismiss - Lack of Jurisdiction',
+  motionToDismissFailureToProperlyProsecute:
+    'Motion to Dismiss - Failure to Properly Prosecute',
+  motionToDismiss: 'Motion to Dismiss',
+  motionForContinuance: 'Motion for Continuance',
+  motionForGeneralContinuance: 'Motion for General Continuance',
+} as const;
+export type MotionTypeOption = keyof typeof MOTION_TYPE_OPTIONS;
+
+export const MOTION_OBJECTION_OPTIONS = {
+  noObjection: 'No Objection',
+  objection: 'Objection',
+  unknown: 'Unknown',
+} as const;
+export type MotionObjectionOption = keyof typeof MOTION_OBJECTION_OPTIONS;
+export const MOTION_OBJECTION_OPTIONS_INVERTED = invert(
+  MOTION_OBJECTION_OPTIONS,
+);
+
+export const ACTION_DOCUMENT_TYPE_OPTIONS = {
+  entryOfAppearance: 'Entry of Appearance',
+  limitedEntryOfAppearance: 'Limited Entry of Appearance',
+  proposedStipulatedDecision: 'Proposed Stipulated Decision',
+  orderToShowCause: 'Order to Show Cause',
+  filing: 'Filing',
+  motion: 'Motion',
+  notice: 'Notice',
+  order: 'Order',
+  other: 'Other',
+} as const;
+export type ActionDocumentTypeOption =
+  keyof typeof ACTION_DOCUMENT_TYPE_OPTIONS;
+export const ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED = invert(
+  ACTION_DOCUMENT_TYPE_OPTIONS,
+);
+
+export const ACTION_FILED_BY_OPTIONS = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+  petitionerAndRespondent: 'Petitioner and Respondent',
+  practitioner: 'Practitioner',
+  joint: 'Joint',
+  other: 'Other',
+  court: 'Court',
+} as const;
+export type ActionFiledByOption = keyof typeof ACTION_FILED_BY_OPTIONS;
+export const ACTION_FILED_BY_OPTIONS_INVERTED = invert(ACTION_FILED_BY_OPTIONS);
+
+export const ACTION_STATUS_OPTIONS = {
+  seeOrder: 'See Order',
+  cav: 'CAV',
+  denied: 'Denied',
+  granted: 'Granted',
+  filed: 'Filed',
+  lodged: 'Lodged',
+} as const;
+export type ActionStatusOption = keyof typeof ACTION_STATUS_OPTIONS;
+
+export const BRIEF_TYPE_OPTIONS = {
+  seriatimBrief: 'Seriatim Brief',
+  simultaneous: 'Simultaneous Brief',
+  simultaneousMemoranda: 'Simultaneous Memoranda of Law',
+  simultaneousSupplemental: 'Simultaneous Supplemental Brief',
+} as const;
+export type BriefTypeOption = keyof typeof BRIEF_TYPE_OPTIONS;
+
+export const EXHIBIT_STATUS_OPTIONS = {
+  admitted: 'Admitted',
+  notAdmitted: 'Not admitted',
+  withdrawn: 'Withdrawn',
+  notOffered: 'Not offered',
+  reserved: 'Reserved',
+  identificationOnly: 'Identification only',
+  demonstrative: 'Demonstrative',
+  otherSeeNote: 'Other - see note',
+} as const;
+export type ExhibitStatusOption = keyof typeof EXHIBIT_STATUS_OPTIONS;
+
+export const PARTY_TYPE_OPTIONS_MAP = {
+  petitioner: 'Petitioner',
+  respondent: 'Respondent',
+} as const;
+export type PartyTypeOption = keyof typeof PARTY_TYPE_OPTIONS_MAP;
+
+export const BRIEF_SUBTYPE = {
+  answering: 'Answering',
+  memoranda: 'Memoranda',
+  opening: 'Opening',
+  reply: 'Reply',
+  simultaneousSupplemental: '',
+  surReply: 'Sur-reply',
+} as const;
+
+export const PETITIONER_ROLE_OPTIONS = {
+  counsel: 'Counsel',
+  proSe: 'Pro Se',
+  intervenor: 'Intervenor',
+  participant: 'Participant',
+  translator: 'Translator',
+  studentIntern: 'Student Intern',
+  thirdParty: 'Third Party',
+  other: 'Other',
+} as const;
+export type PetitionerRoleOption = keyof typeof PETITIONER_ROLE_OPTIONS;
+export const PETITIONER_ROLE_OPTIONS_INVERTED = invert(PETITIONER_ROLE_OPTIONS);
+
+export const RESPONDENT_ROLE_OPTIONS = {
+  counsel: 'Counsel',
+  thirdParty: 'Third Party',
+  other: 'Other',
+} as const;
+export type RespondentRoleOption = keyof typeof RESPONDENT_ROLE_OPTIONS;
+export const RESPONDENT_ROLE_OPTIONS_INVERTED = invert(RESPONDENT_ROLE_OPTIONS);
