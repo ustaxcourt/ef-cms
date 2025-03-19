@@ -8,6 +8,7 @@ import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/pract
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const getEligibleCasesForTrialCity = async ({
   applicationContext,
@@ -93,6 +94,10 @@ export const getEligibleCasesForTrialCity = async ({
         isSealed: !!c.isSealed,
         irsPractitioners: c.irsPractitioners,
         privatePractitioners: c.privatePractitioners,
+        docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+          docketNumber: c.docketNumber,
+          docketNumberSuffix: c.docketNumberSuffix,
+        }),
       };
     });
 
