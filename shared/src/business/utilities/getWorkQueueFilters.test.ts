@@ -5,10 +5,26 @@ import {
   CASE_STATUS_TYPES,
   CASE_SERVICES_SUPERVISOR_SECTION,
 } from '@shared/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 describe('getWorkQueueFilters', () => {
+  const aWorkItem: WorkItemAbomination = {
+    assigneeId: '123',
+    docketEntry: {
+      isFileAttached: false,
+    },
+    inProgress: false,
+    section: DOCKET_SECTION,
+    workItemId: '1',
+    createdAt: '2024-11-19T20:40:01.811Z',
+    docketNumber: '2049-21',
+    sentBy: 'docket clerk',
+    updatedAt: '2024-11-20T20:40:01.811Z',
+    caseStatus: CASE_STATUS_TYPES.calendared,
+  };
+
   it('returns an object containing a filter map for work queues and boxes', () => {
     const filters = getWorkQueueFilters({
       user: {
@@ -45,6 +61,7 @@ describe('getWorkQueueFilters', () => {
       workItems = [
         {
           // my in progress
+          ...aWorkItem,
           assigneeId: '123',
           docketEntry: {
             isFileAttached: false,
@@ -55,6 +72,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // my in progress
+          ...aWorkItem,
           assigneeId: '123',
           docketEntry: {},
           inProgress: true,
@@ -63,6 +81,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // my inbox
+          ...aWorkItem,
           assigneeId: '123',
           docketEntry: {
             isFileAttached: true,
@@ -73,6 +92,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // my outbox
+          ...aWorkItem,
           assigneeId: '123',
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '123',
@@ -85,6 +105,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // section in progress
+          ...aWorkItem,
           assigneeId: '234',
           docketEntry: {
             isFileAttached: false,
@@ -95,6 +116,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // section in progress
+          ...aWorkItem,
           assigneeId: '234',
           docketEntry: {},
           inProgress: true,
@@ -103,6 +125,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // section inbox
+          ...aWorkItem,
           assigneeId: '234',
           docketEntry: {
             isFileAttached: true,
@@ -113,6 +136,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // section outbox
+          ...aWorkItem,
           assigneeId: '234',
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '234',
@@ -168,7 +192,7 @@ describe('getWorkQueueFilters', () => {
   });
 
   describe('filters for petitions clerk', () => {
-    let user;
+    let user: RawUser;
     let workItems;
 
     beforeAll(() => {
@@ -176,10 +200,12 @@ describe('getWorkQueueFilters', () => {
         role: ROLES.petitionsClerk,
         section: PETITIONS_SECTION,
         userId: '123',
+        name: 'petitionista',
       };
       workItems = [
         {
           // my in progress
+          ...aWorkItem,
           assigneeId: '123',
           inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
@@ -191,6 +217,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // my in progress
+          ...aWorkItem,
           assigneeId: '123',
           inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
@@ -200,6 +227,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // my in progress
+          ...aWorkItem,
           assigneeId: '123',
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           docketEntry: {},
@@ -209,6 +237,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // my inbox
+          ...aWorkItem,
           assigneeId: '123',
           docketEntry: {
             isFileAttached: true,
@@ -219,6 +248,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // my outbox
+          ...aWorkItem,
           assigneeId: '123',
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '123',
@@ -231,6 +261,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // section in progress
+          ...aWorkItem,
           assigneeId: '234',
           inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
@@ -242,6 +273,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // section in progress
+          ...aWorkItem,
           assigneeId: '234',
           inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
@@ -251,6 +283,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // section inbox
+          ...aWorkItem,
           assigneeId: '234',
           docketEntry: {
             isFileAttached: true,
@@ -261,6 +294,7 @@ describe('getWorkQueueFilters', () => {
         },
         {
           // section outbox
+          ...aWorkItem,
           assigneeId: '234',
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '234',
@@ -318,10 +352,11 @@ describe('getWorkQueueFilters', () => {
   });
 
   describe('filters for case services supervisor', () => {
-    let user;
+    let user: RawUser;
 
     beforeAll(() => {
       user = {
+        name: 'case services',
         role: ROLES.caseServicesSupervisor,
         section: CASE_SERVICES_SUPERVISOR_SECTION,
         userId: '123',
@@ -331,6 +366,7 @@ describe('getWorkQueueFilters', () => {
     it('returns an object containing a filter map for my work queues and boxes', () => {
       const myWorkItems: WorkItemAbomination[] = [
         {
+          ...aWorkItem,
           // my in progress
           assigneeId: '123',
           docketEntry: {
@@ -340,6 +376,7 @@ describe('getWorkQueueFilters', () => {
           workItemId: '1',
         },
         {
+          ...aWorkItem,
           // my in progress
           assigneeId: '123',
           inProgress: true,
@@ -349,6 +386,7 @@ describe('getWorkQueueFilters', () => {
           workItemId: '2',
         },
         {
+          ...aWorkItem,
           // my inbox
           assigneeId: '123',
           docketEntry: {
@@ -359,6 +397,7 @@ describe('getWorkQueueFilters', () => {
           workItemId: '3',
         },
         {
+          ...aWorkItem,
           // my outbox
           assigneeId: '123',
           completedAt: '2019-06-17T15:27:55.801Z',
@@ -396,6 +435,7 @@ describe('getWorkQueueFilters', () => {
       it(`returns an object containing a filter map for ${sectionToTest} section work queues and boxes`, () => {
         const sectionWorkItems: WorkItemAbomination[] = [
           {
+            ...aWorkItem,
             // section in progress
             assigneeId: '234',
             caseStatus: CASE_STATUS_TYPES.new,
@@ -407,6 +447,7 @@ describe('getWorkQueueFilters', () => {
             inProgress: true,
           },
           {
+            ...aWorkItem,
             // section in progress
             assigneeId: '234',
             caseStatus: CASE_STATUS_TYPES.new,
@@ -416,6 +457,7 @@ describe('getWorkQueueFilters', () => {
             workItemId: '6',
           },
           {
+            ...aWorkItem,
             // section inbox
             assigneeId: '234',
             docketEntry: {
@@ -426,6 +468,7 @@ describe('getWorkQueueFilters', () => {
             workItemId: '7',
           },
           {
+            ...aWorkItem,
             // section outbox
             assigneeId: '234',
             completedAt: '2019-06-17T15:27:55.801Z',
