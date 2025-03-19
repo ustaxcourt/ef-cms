@@ -29,6 +29,112 @@ import {
 import { formatDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 
+export const formattedWorkQueue = (
+  get: Get,
+  applicationContext: ClientApplicationContext,
+): FormattedWorkItemAbomination[] => {
+  const section = get(state.workQueueToDisplay.section);
+  const workItems = get(state.workQueue);
+  const workQueueToDisplay = get(state.workQueueToDisplay);
+  const permissions = get(state.permissions);
+  const selectedWorkItems = get(state.selectedWorkItems);
+  const selectedWorkItemIds: string[] = selectedWorkItems.map(
+    wi => wi.workItemId,
+  );
+  let { assignmentFilterValue } = get(state.screenMetadata);
+  const { STATUS_TYPES } = applicationContext.getConstants();
+  const users = get(state.users);
+  const authorizedUser = get(state.user);
+
+  if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
+    assignmentFilterValue = users.find(
+      user => user.userId === assignmentFilterValue.userId,
+    );
+  }
+
+  let workQueue: FormattedWorkItemAbomination[] = filterWorkItems({
+    assignmentFilterValue,
+    authorizedUser,
+    section,
+    workItems,
+    workQueueToDisplay,
+  })
+    .map(workItem =>
+      formatWorkItem({
+        isSelected: selectedWorkItemIds.includes(workItem.workItemId),
+        workItem,
+      }),
+    )
+    .map(workItem => {
+      const editLink = getWorkItemDocumentLink({
+        authorizedUser,
+        permissions,
+        workItem,
+        workQueueToDisplay,
+      });
+      return {
+        ...workItem,
+        editLink,
+      };
+    });
+
+  const sortFields = {
+    my: {
+      inProgress: 'receivedAt',
+      inbox: 'receivedAt',
+      outbox: 'completedAt',
+    },
+    section: {
+      inProgress: 'receivedAt',
+      inbox: 'receivedAt',
+      outbox: 'completedAt',
+    },
+  };
+
+  const sortDirections = {
+    my: {
+      inProgress: 'asc',
+      inbox: 'asc',
+      outbox: 'desc',
+    },
+    section: {
+      inProgress: 'asc',
+      inbox: 'asc',
+      outbox: 'desc',
+    },
+  };
+  const sortField =
+    sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
+  const sortDirection =
+    sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
+
+  let highPriorityField = [];
+  let highPriorityDirection = [];
+  if (workQueueToDisplay.box == 'inbox') {
+    const caseStatusSortRank = {
+      [STATUS_TYPES.submitted]: 1,
+      [STATUS_TYPES.assignedCase]: 2,
+      [STATUS_TYPES.assignedMotion]: 3,
+      [STATUS_TYPES.jurisdictionRetained]: 4,
+    };
+
+    highPriorityField = [
+      'highPriority',
+      'trialDate',
+      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
+    ];
+    highPriorityDirection = ['desc', 'asc', 'asc'];
+  }
+
+  workQueue = orderBy(
+    workQueue,
+    [...highPriorityField, sortField, 'docketNumber'],
+    [...highPriorityDirection, sortDirection, 'asc'],
+  );
+
+  return workQueue;
+};
+
 const isDateToday = (date: string) => {
   const now = formatNow('MMDDYY');
   const then = formatDateString(date, 'MMDDYY');
@@ -374,112 +480,6 @@ export const filterWorkItems = ({
   }
 
   return filteredWorkItems;
-};
-
-export const formattedWorkQueue = (
-  get: Get,
-  applicationContext: ClientApplicationContext,
-): FormattedWorkItemAbomination[] => {
-  const section = get(state.workQueueToDisplay.section);
-  const workItems = get(state.workQueue);
-  const workQueueToDisplay = get(state.workQueueToDisplay);
-  const permissions = get(state.permissions);
-  const selectedWorkItems = get(state.selectedWorkItems);
-  const selectedWorkItemIds: string[] = selectedWorkItems.map(
-    wi => wi.workItemId,
-  );
-  let { assignmentFilterValue } = get(state.screenMetadata);
-  const { STATUS_TYPES } = applicationContext.getConstants();
-  const users = get(state.users);
-  const authorizedUser = get(state.user);
-
-  if (assignmentFilterValue && assignmentFilterValue.userId !== 'UA') {
-    assignmentFilterValue = users.find(
-      user => user.userId === assignmentFilterValue.userId,
-    );
-  }
-
-  let workQueue: FormattedWorkItemAbomination[] = filterWorkItems({
-    assignmentFilterValue,
-    authorizedUser,
-    section,
-    workItems,
-    workQueueToDisplay,
-  })
-    .map(workItem =>
-      formatWorkItem({
-        isSelected: selectedWorkItemIds.includes(workItem.workItemId),
-        workItem,
-      }),
-    )
-    .map(workItem => {
-      const editLink = getWorkItemDocumentLink({
-        authorizedUser,
-        permissions,
-        workItem,
-        workQueueToDisplay,
-      });
-      return {
-        ...workItem,
-        editLink,
-      };
-    });
-
-  const sortFields = {
-    my: {
-      inProgress: 'receivedAt',
-      inbox: 'receivedAt',
-      outbox: 'completedAt',
-    },
-    section: {
-      inProgress: 'receivedAt',
-      inbox: 'receivedAt',
-      outbox: 'completedAt',
-    },
-  };
-
-  const sortDirections = {
-    my: {
-      inProgress: 'asc',
-      inbox: 'asc',
-      outbox: 'desc',
-    },
-    section: {
-      inProgress: 'asc',
-      inbox: 'asc',
-      outbox: 'desc',
-    },
-  };
-  const sortField =
-    sortFields[workQueueToDisplay.queue][workQueueToDisplay.box];
-  const sortDirection =
-    sortDirections[workQueueToDisplay.queue][workQueueToDisplay.box];
-
-  let highPriorityField = [];
-  let highPriorityDirection = [];
-  if (workQueueToDisplay.box == 'inbox') {
-    const caseStatusSortRank = {
-      [STATUS_TYPES.submitted]: 1,
-      [STATUS_TYPES.assignedCase]: 2,
-      [STATUS_TYPES.assignedMotion]: 3,
-      [STATUS_TYPES.jurisdictionRetained]: 4,
-    };
-
-    highPriorityField = [
-      'highPriority',
-      'trialDate',
-      workItemToSort => caseStatusSortRank[workItemToSort.caseStatus],
-    ];
-    highPriorityDirection = ['desc', 'asc', 'asc'];
-  }
-
-  workQueue = orderBy(
-    workQueue,
-    [...highPriorityField, sortField, 'docketNumber'],
-    [...highPriorityDirection, sortDirection, 'asc'],
-  );
-
-  return workQueue;
 };
 
 export type FormattedWorkItemAbomination = WorkItemAbomination & {
