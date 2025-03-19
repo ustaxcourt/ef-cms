@@ -1,18 +1,6 @@
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
-import {
-  CASE_SERVICES_SUPERVISOR_SECTION,
-  DOCKET_SECTION,
-  PETITIONS_SECTION,
-  ROLES,
-} from '../entities/EntityConstants';
-
-export const getDocQcSectionForUser = user => {
-  const showDocketSectionQC =
-    user.section !== PETITIONS_SECTION &&
-    user.section !== CASE_SERVICES_SUPERVISOR_SECTION;
-
-  return showDocketSectionQC ? DOCKET_SECTION : user.section;
-};
 
 export const getWorkQueueFilters = ({ section, user }) => {
   const sectionToDisplay = section || getDocQcSectionForUser(user);

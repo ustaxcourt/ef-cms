@@ -10,6 +10,8 @@ import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workite
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { isEmpty } from 'lodash';
+import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
+import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFiltes';
 
 const getJudgeUser = async (
   judgeUserId: string,
@@ -70,17 +72,16 @@ export const getNotificationsInteractor = async (
 
   const { section, userId } = caseServicesSupervisorData || currentUser;
 
-  let sectionToDisplay = applicationContext
-    .getUtilities()
-    .getDocQcSectionForUser(currentUser);
+  let sectionToDisplay = getDocQcSectionForUser(currentUser);
 
   if (!isEmpty(caseServicesSupervisorData)) {
     sectionToDisplay = caseServicesSupervisorData.section;
   }
 
-  const filters = applicationContext
-    .getUtilities()
-    .getWorkQueueFilters({ section: sectionToDisplay, user: currentUser });
+  const filters = getWorkQueueFilters({
+    section: sectionToDisplay,
+    user: currentUser,
+  });
 
   applicationContext.logger.info(
     'getNotificationsInteractor about to start queries',

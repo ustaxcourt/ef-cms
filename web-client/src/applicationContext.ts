@@ -173,10 +173,6 @@ import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
-import {
-  getDocQcSectionForUser,
-  getWorkQueueFilters,
-} from '../../shared/src/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocument } from '@web-client/persistence/s3/getDocument';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
@@ -396,7 +392,6 @@ const clientSupportsES2022 = (() => {
     }
 
     return true;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return false; // Any failure indicates lack of support
   }
@@ -797,7 +792,6 @@ const applicationContext = {
       getCropBox,
       getDateFormat,
       getDescriptionDisplay,
-      getDocQcSectionForUser,
       getDocketEntriesByFilter,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
@@ -816,7 +810,6 @@ const applicationContext = {
       getSortableDocketNumber: Case.getSortableDocketNumber,
       getStampBoxCoordinates,
       getStandaloneRemoteDocumentTitle,
-      getWorkQueueFilters,
       hasPartyWithServiceType,
       isClosed,
       isCourtIssued: DocketEntry.isCourtIssued,

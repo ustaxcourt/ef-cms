@@ -10,7 +10,6 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
   CASE_STATUS_TYPES,
@@ -28,6 +27,7 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { formatDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFiltes';
 
 export const formattedWorkQueue = (
   get: Get,
