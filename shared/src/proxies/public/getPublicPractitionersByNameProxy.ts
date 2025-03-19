@@ -6,9 +6,11 @@ export const getPublicPractitionersByNameInteractor = (
   applicationContext: ClientApplicationContext,
   {
     name,
+    practitionerType,
     searchAfter,
   }: {
     name: string;
+    practitionerType;
     searchAfter: (string | number)[];
   },
 ): Promise<PractitionersByName> => {
@@ -17,6 +19,7 @@ export const getPublicPractitionersByNameInteractor = (
     endpoint: '/public-api/practitioners',
     params: {
       name,
+      practitionerType,
       searchAfter,
     },
   });

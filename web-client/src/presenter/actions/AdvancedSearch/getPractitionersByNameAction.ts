@@ -11,8 +11,10 @@ export const getPractitionersByNameAction = async ({
   const {
     lastKeysOfPages,
     practitionerName,
+    practitionerType,
   }: {
     practitionerName: string;
+    practitionerType?: string;
     pageNum: number;
     lastKeysOfPages: Array<string | number>;
   } = get(state.advancedSearchForm.practitionerSearchByName);
@@ -26,6 +28,8 @@ export const getPractitionersByNameAction = async ({
     .getUseCases()
     .getPractitionersByNameInteractor(applicationContext, {
       name: practitionerName,
+      practitionerType:
+        practitionerType === 'All' ? undefined : practitionerType,
       searchAfter: lastKeysOfPages[selectedPage],
     });
 
