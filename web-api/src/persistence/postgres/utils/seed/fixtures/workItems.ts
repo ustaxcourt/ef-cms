@@ -8,7 +8,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-02-01T17:21:07.638Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -17,7 +16,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"addToCoversheet":false,"attachments":false,"createdAt":"2022-02-01T17:21:07.439Z","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","docketNumber":"100-22","documentContentsId":"97248a8b-d393-446a-9907-d7743b5cc56c","documentIdBeforeSignature":"4158c5f3-9573-4663-ba10-64c9b2e46cfc","documentTitle":"Order of Dismissal for Lack of Jurisdiction","documentType":"Order of Dismissal for Lack of Jurisdiction","draftOrderState":null,"editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"100-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"100-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"97248a8b-d393-446a-9907-d7743b5cc56c\\"}","entityName":"DocketEntry","eventCode":"ODJ","filers":[],"filingDate":"2022-02-01T17:21:07.511Z","freeText":"abcdef","isDraft":false,"isFileAttached":true,"isOnDocketRecord":true,"isStricken":false,"judge":"Carluzzo","numberOfPages":2,"pending":false,"processingStatus":"complete","receivedAt":"2022-02-01T05:00:00.000Z","relationship":"primaryDocument","servedAt":"2022-02-01T17:21:07.581Z","servedParties":[{"email":"petitioner@example.com","name":"Brett Osborne"}],"servedPartiesCode":"B","serviceStamp":"Served","signedAt":"2022-02-01T17:21:07.439Z","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","signedJudgeName":"Maurice B. Foley","userId":"1805d1ab-18d0-43ec-bafb-654e83405416","workItem":{"assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","assigneeName":"Test Docketclerk","associatedJudge":"Chief Judge","createdAt":"2022-02-01T17:21:07.511Z","docketEntry":{"createdAt":"2022-02-01T17:21:07.439Z","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","documentType":"Order of Dismissal for Lack of Jurisdiction","eventCode":"ODJ","isFileAttached":true,"receivedAt":"2022-02-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"100-22","docketNumberWithSuffix":"100-22W","entityName":"WorkItem","highPriority":false,"inProgress":true,"section":"docket","sentBy":"Test Docketclerk","sentBySection":"docket","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-02-01T17:21:07.511Z","workItemId":"dbcb915a-5ed1-45c4-9d6d-b66679a55029"}}',
     docketNumber: '100-22',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -26,12 +24,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'dbcb915a-5ed1-45c4-9d6d-b66679a55029',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2022-02-01T17:21:05.486Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2022-02-01T17:21:05.484Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2022-02-01T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '100-22',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentBySection: 'petitions',
@@ -42,7 +38,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:41:09.339Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -52,7 +47,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2011-10-11T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Virginia Vincent","docketEntryId":"c611ee2e-a270-4dcd-a7bd-b8b9062db630","servedAt":"2021-10-29T13:41:09.316Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2011-10-11T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-11',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -63,7 +57,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:42:43.040Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -72,7 +65,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"SOP","createdAt":"2021-10-29T13:42:27.351Z","documentType":"Summary Opinion","docketEntryId":"4e3e97b1-5b5a-492f-8553-21e2a020211d","servedAt":"2021-10-29T13:42:43.037Z","documentTitle":"Summary Opinion Judge Urda opinion without a file attached","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"2805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-11',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk1',
     sentBySection: 'docket',
@@ -83,7 +75,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:06:24.935Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -93,7 +84,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2016-03-29T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Gwendolyn Cross","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","servedAt":"2021-10-29T13:06:24.912Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2016-03-29T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-16',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -104,7 +94,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:07:19.785Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -113,7 +102,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"OSC","createdAt":"2021-10-29T13:07:06.547Z","documentType":"Order to Show Cause","docketEntryId":"bf525973-e788-4516-8bf3-b70232cb79fc","servedAt":"2021-10-29T13:07:19.782Z","documentTitle":"Order to Show Cause this order will not have a file attached when im done with it!","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-16',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -122,12 +110,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'b8632aec-0a6e-4084-b29e-a7131e0eb24d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:50.122Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:50.120Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"1c64f7e0-9542-493c-8038-de0bd70b12da","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-12T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -135,12 +121,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '01252679-31d8-4a6b-8ef6-ab2b4a4dad7d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:46.077Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:46.076Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"81e68771-2b06-4679-8ee7-6a481f8ef717","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-14T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -148,12 +132,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0a405276-1210-421c-bd9b-5c30dc7c2098',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:47.278Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:47.277Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"df6939f8-320a-4fce-87a5-90abd8b46454","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-20T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -161,12 +143,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0d2c3d5f-022a-4b5b-b8f6-a98f32b085ed',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:45.843Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:45.842Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"b47acaeb-a168-4c50-a503-5411b2a8a447","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-28T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -174,12 +154,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0da1f23b-b8fa-4193-9cec-e1010f2289e9',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:44.748Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:44.747Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"147d1042-47ac-4c5d-b357-e0adbf14ff1b","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-21T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -187,12 +165,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0f2896e8-7582-42e0-8264-00a6a607b9e7',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:12.810Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:12.809Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"886148e2-2513-4b0f-8629-646b6d067999","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-10T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -200,12 +176,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0f4d5f10-7d83-4ad1-9414-5ca4140fac78',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:52.244Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:52.243Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"9ae7a678-94c7-4309-9777-93b29635c4d9","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-11T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -213,12 +187,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0f976425-d545-4dd8-b56e-25bf8384cad4',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:16.921Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:16.919Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"c2c5bcc8-7052-4748-93bd-02d8d81ddd77","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-16T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -226,12 +198,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '10ba272c-92a3-4f1b-8d58-da869c9c5785',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:31:22.730Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:31:22.729Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"8e490ccc-b7d0-4e74-be66-13cdc9ccbfcd","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-11-23T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -239,12 +209,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '1fb0c8d0-a6a0-4960-a0c5-c038ee45a00e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:32.037Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:32.036Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"0d5b0197-4e9f-4d18-b7f3-afbc60439592","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-26T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -252,12 +220,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '1ff0f499-f19e-4f4c-8e38-9cefc88a1d7d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:26.905Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:26.904Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"138ef5eb-6a17-48d7-b04d-119e70dc9c2c","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-28T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -265,12 +231,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '22c52a1a-ab30-4923-9910-cba77ef869f8',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:06.665Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:06.663Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"f8d817ef-91a3-43ba-bad7-7711c8381e1e","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-05T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -278,12 +242,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '242cc9d5-ae73-465e-9691-5cd79c15dfc4',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:56.370Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:56.368Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"bc2b694e-033a-4b0c-8649-5a397ecb7ed8","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-09T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -291,12 +253,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '247c5305-69a2-46ae-a829-bd1984dd2152',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:24.437Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:24.436Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"2c200b3a-8b35-4a9e-a4f9-d2a19cd9fe8b","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-29T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -304,12 +264,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '24dfe037-0304-4e58-b18b-665594de2d4b',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:45.447Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:45.446Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"136641e4-7354-4cea-8afe-80b69b01e519","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-05T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -317,12 +275,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '2906bbc0-af2a-4826-85a9-325525c69a72',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:19.406Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:19.405Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"5eafc3b0-d615-4d60-9eb3-8a5c6a3e427b","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-31T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -330,12 +286,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '2b52b8a9-2ac5-418c-95f5-24534a5f99ba',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:16.873Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:16.872Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"ac8f1f55-6770-47a3-b380-563a9f07c808","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-01T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -343,12 +297,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '2c9bf8a1-14f4-4980-a2ba-1f948a4381fb',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:44.041Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:44.040Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"a45c516a-801c-4042-b01c-84dc4735082b","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-15T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -356,12 +308,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '2feb77ec-07cb-47ba-ace3-dd4e3159517f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:26:56.920Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:26:56.918Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"59f488a9-cc48-43c3-aeb4-cf2bfce33e77","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-03-01T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -369,12 +319,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '31de567b-36c2-435a-9839-00192039be76',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:25.692Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:25.690Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"24699007-472b-4468-81c9-ce4def303d01","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-24T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -382,12 +330,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '340bbaf0-08d0-4db0-b9f3-a19763b06540',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:01.588Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:01.587Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"282ac7db-9d05-4751-ab4d-1d2e9ff5a4d9","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-07T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -395,12 +341,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '34711f51-3552-460d-87c0-ac60e986355d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:49.777Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:49.776Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"b6bbb8de-d739-4bc2-8b09-73eb661b2c32","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-19T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -408,12 +352,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '34aa80e7-9131-4fde-ad01-eab88db238d7',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:31:07.066Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:31:07.064Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"d88adae6-845f-4d68-b0ad-e04abd7d88c6","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-11-28T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -421,12 +363,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '388aeea8-392b-478c-9f00-50e6f5b76695',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:54.851Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:54.850Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"d88e2576-7c62-4bb6-8873-efa855bec5a1","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-17T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -434,12 +374,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '3ac12909-b567-4948-9a0e-bb421f4d8e95',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:28.033Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:28.032Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"7a4fbd88-67a3-4a0f-b992-fe4d4f169fd5","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-04T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -447,12 +385,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '3bd5d3c5-1ddd-4428-8138-6abec5ad841e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:43.305Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:43.304Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"d21a20d8-810f-4a19-8507-3147a8140730","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-29T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -460,12 +396,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '3c31822f-220e-4c26-a170-cc4e120f007e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:31:16.688Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:31:16.687Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"23ccb2e3-d100-41c8-967d-cd0cd7e8591d","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-11-25T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -473,12 +407,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '3d5a3b14-00cf-4afd-a077-83f86284006f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:31:19.740Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:31:19.739Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"bbb9dce3-077d-432e-a92c-44f7df530d33","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-11-24T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -486,12 +418,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '3dff136e-6b33-4b97-9460-7212036b09cc',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:04.224Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:04.222Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"b76bce5a-6e2a-4ba1-a32d-e08e1520148f","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-06T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -499,12 +429,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '46a9a2e7-6912-4e80-a645-c13c47ba61a3',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:01.131Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:01.130Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"8e320898-15e5-4a2a-9dd3-10056854a2b8","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-22T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -512,12 +440,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '4a66dcdb-2bb9-47e5-bcb4-fac5916173cd',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:40.762Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:40.761Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"61750a69-6a7d-4fe9-aa97-63791d3f689f","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-30T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -525,12 +451,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '4ebdd5a4-32ea-42a8-a613-6b64ca37bb30',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:27.715Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:27.713Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"e56f8af2-6ab7-49b7-9bff-55f75087f0af","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-23T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -538,12 +462,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '4f44bf7b-1902-46ef-a05c-bad7042819e5',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:17.629Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:17.627Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"f9467aaf-91d8-4869-a61f-e4443a83c995","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-28T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -551,12 +473,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '4f528eed-6517-4db0-904f-a602ad05bee1',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:11.784Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:11.782Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"970ca8ab-867f-43e5-b55d-993f6943e721","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-03T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -564,12 +484,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '5044f753-f094-4375-a11e-e7d865f5385e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:17.931Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:17.930Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"339e5bb5-c72e-4623-a81c-7742c65d349f","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-08T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -577,12 +495,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '5186d695-1ccd-4d3d-a1f0-4e26254a2a43',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:31:25.767Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:31:25.766Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"1bfa9054-7aa1-41f1-9621-c2deb237a772","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-11-22T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -590,12 +506,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '536069a5-642f-4319-910f-f2f55d9b89ea',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:30.603Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:30.602Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"feab0f2b-697c-4404-9ea8-073b89153ad5","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-03T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -603,12 +517,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '55d874e4-d8c3-463b-9030-00b31b778c59',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:53.430Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:53.429Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"ef55de39-639e-4658-a240-26408f56b49c","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-25T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -616,12 +528,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '5672e930-eb6e-4993-9673-dee881e93faa',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:22.841Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:22.840Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"6b0f83fc-5231-40d7-b955-a4c142024eb0","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-06T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -629,12 +539,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '5ae63056-b0f2-4b82-8e1f-b1a26088a5f4',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:32.533Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:32.532Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"e9bc8371-eeec-4519-aff8-c5febb3761d6","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-10T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -642,12 +550,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '5e7c335c-bf07-4ef3-96ea-cc405338544f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:40.283Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:40.282Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"74472ec4-9aa8-456c-87bc-a760b9b3fb96","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-07T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -655,12 +561,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '5f0c6f95-f620-4dea-a696-8bfd31e219b4',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:59.070Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:59.069Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"92c2bfac-c8b5-4f7c-a506-9051eb24b364","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-08T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -668,12 +572,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '653963d5-69f6-4b23-a6d5-282a60e35089',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:37.951Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:37.950Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"39929943-d4e4-4fa7-9759-409d8478460b","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-18T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -681,12 +583,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '65396a2b-dfa8-4ce8-8ffe-f6f81f3958b7',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:31:13.622Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:31:13.620Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"fcbf5bfa-1fdc-4874-b2c9-50a8ff375ba1","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-11-26T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -694,12 +594,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '6699d82f-e273-4cb3-85ba-709b95c4b9c7',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:48.142Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:48.141Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"72746ef3-9f35-47e5-8a3f-fb653c788ba3","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-13T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -707,12 +605,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '6c1976dd-2800-449d-b403-e2dbfd0a4015',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:05.232Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:05.231Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"f1fc75c4-6456-4d96-9b1a-29efe3cb2652","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-13T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -720,12 +616,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '6d4aa9bf-b226-41bc-b0f4-fb0ce58c3d3d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:19.559Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:19.557Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"ac2ef71e-0f07-4230-bceb-54a3b2d6b3da","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-15T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -733,12 +627,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '772d6c92-ce08-4831-9f21-faf5834cf7ba',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:15.533Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:15.531Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"1bcc24f4-fbde-4558-8864-c2549e0e072e","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-09T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -748,12 +640,10 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:26:51.233Z'),
     docketEntry:
       '{"eventCode":"A","createdAt":"2018-01-01T05:00:00.000Z","isPaper":true,"documentType":"Answer","filedBy":"Petr. Mona Schultz","docketEntryId":"619cdd0c-2be8-4fdb-b1d6-90b7bc6a1f8d","documentTitle":"Answer","isFileAttached":false,"receivedAt":"2018-01-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     inProgress: true,
     isRead: true,
     section: 'docket',
@@ -764,12 +654,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '7a81a95d-c695-4cc1-97db-19ecfacbd1f0',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:03.885Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:03.884Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"6af9d414-b95b-4219-9a66-1a28f1587e25","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-21T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -777,12 +665,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '7f030227-1632-4b0a-a45a-9f0c52279073',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:31:00.340Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:31:00.339Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"32506b52-8ca6-48ba-a06e-a164b928c3fe","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-11-30T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -790,12 +676,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '7f9faed4-b73b-4715-a6c5-4c822b439358',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:35.653Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:35.652Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"75ddcef8-ba63-4b1e-8053-8e8aad768476","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-01T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -803,12 +687,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '829bd9ee-4bc5-4929-a52f-885f1bb07ff7',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:29.784Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:29.783Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"a94e01dc-c3ca-4c22-a680-384efad8e391","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-22T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -816,12 +698,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '84e83cf5-2474-422f-bbac-c164c52d2337',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:57.653Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:57.651Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"21b0d03e-872e-473c-b253-003f2bfcb31b","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-16T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -829,12 +709,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '87af5a41-5deb-4009-b4cf-a84e96301900',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:26:49.117Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-03-01T16:26:49.115Z","documentType":"Petition","filedBy":"Petr. Mona Schultz","docketEntryId":"1f1aa3f7-e2e3-43e6-885d-4ce341588c76","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-03-01T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -842,12 +720,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '8a3a681a-d388-4799-bbe1-8efec124b45d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:02.708Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:02.706Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"baf2e9d7-c018-43cf-a233-997e2cdb97e6","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-14T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -855,12 +731,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '93d80db8-e063-452f-8684-dd4cd45b250b',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:42.821Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:42.820Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"2b0c806e-0568-4e5b-9be8-fdb70a80db2d","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-06T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -868,12 +742,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '94152718-6b17-4c1a-89fc-d56c62b1e8ac',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:29.483Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:29.481Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"eef91e0d-a869-4d1c-89d2-44180e91e0e0","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-27T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -881,12 +753,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '94bc1a19-9dec-490e-b0c7-1e6a6b67a6b4',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:19.584Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:19.582Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"28104b84-5e95-498d-9e94-ce37e94b5882","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-27T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -894,12 +764,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '9a90c3bd-3879-4ff9-a754-0fee0c49870e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:27.150Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:27.149Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"42de4ad0-415a-4187-b4a2-393eff217b14","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-12T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -907,12 +775,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '9aa2f964-0ed2-41d8-914e-e4f79a34d596',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:52.267Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:52.266Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"a3ad99d0-ee2b-4b8b-9416-83d2aa98170c","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-18T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -920,12 +786,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '9aa34b56-5799-4949-89e7-b4b2e196c711',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:54.301Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:54.300Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"1d024c16-ea77-4bc6-82df-d033ac9a259f","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-10T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -933,12 +797,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '9c8e24e6-7eac-4ffb-8629-dc317c90c332',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:39.971Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:39.970Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"c608bcef-80dc-46ee-a61b-10571a51a509","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-17T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -946,12 +808,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '9f83c437-b065-4182-a558-fcce4eee6348',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:07.824Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:07.823Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"2463afed-04ed-43a3-999f-598bba8e5618","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-12T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -959,12 +819,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'a4b181fb-0ade-4f09-9d0e-84f0a9c4faa6',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:20.465Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:20.464Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"798d6073-abc1-45bb-a67b-16b9f9b0a06a","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-07T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -972,12 +830,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'a72c280e-59fe-491a-be53-6e083cd4fd0b',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:11.786Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:11.785Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"8c3073f5-bfb1-4954-9c13-0873ef4f1c84","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-18T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -985,12 +841,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'a86515c7-33b6-4ca2-8235-74b737beecbc',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:31:03.903Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:31:03.902Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"b3e0bec2-ad3b-44b0-ab14-906296db528d","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-11-29T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -998,12 +852,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'a89c659a-bb9e-47e9-8576-266848590403',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:38.242Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:38.241Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"7043e7e4-e801-431c-8a55-f65ff63fa4d6","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-31T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1011,12 +863,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'a93fa951-020c-4761-a497-8b19e86b4b99',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:10.313Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:10.312Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"905acb0c-fe4b-4776-a1b1-a2fd80dbfab1","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-11T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1024,12 +874,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'ad7820a9-a9b9-455a-8477-36a9b9c00a6e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:57.123Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:57.121Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"52ef88e3-531e-4066-8c17-6801f5def867","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-01T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1037,12 +885,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'ae2bed3c-fc12-432b-9e8b-765233a49263',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:14.363Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:14.362Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"41c928b3-e3f8-4c4e-a934-ab6f96e33b2d","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-17T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1050,12 +896,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'b57678fc-5260-46f5-81d8-b473441aed1f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:14.280Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:14.278Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"2c9cd454-41eb-4b49-bda8-bc439cca9b94","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-02T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1063,12 +907,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'b5d4ac3e-27c2-42cf-bd02-431cb54cc95e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:06.373Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:06.372Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"2290bf31-89b4-4e0f-b0c8-6d803d452ea7","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-20T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1076,12 +918,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'b8228bb1-580f-4ba2-8587-92ac0f1d4704',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:48.049Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:48.048Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"b82a72e4-2e89-436c-a183-ac92375753ab","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-04T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1089,12 +929,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'b9d97576-7095-443f-8a6d-738580960f95',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:22.025Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:22.024Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"5925a8c3-4a38-4e22-914c-525240407ec7","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-30T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1102,12 +940,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'bb31709a-2f65-4774-afb5-dc5895e10e5b',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:53.891Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:53.890Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"de09d13b-d779-4d12-804a-63221b24d769","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1115,12 +951,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'bcc1bbe8-abc8-4955-87f7-f2151e8dd34b',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:25.475Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:25.474Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"32e5e090-e7aa-4372-9a7a-47a5c088fe12","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-05T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1128,12 +962,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'bdba73ff-ba89-44b3-9e9e-13b5ae764232',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:31.900Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:31.899Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"7313519e-e620-44d8-ad43-917b2da97a82","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-21T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1141,12 +973,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'c3653713-0fd7-4cf7-8886-5e3848979357',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:00.246Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:00.245Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"55f57fc6-3eab-48e0-99a3-74a7ba0f1b32","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-15T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1154,12 +984,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'c7ee8a23-2814-499c-993a-3373dfe05c02',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:56.047Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:56.046Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"4474b40e-1d43-4285-a5c9-8a2e499c5fc2","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-24T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1167,12 +995,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'c8acf6e4-043c-427f-b0a7-be0c7a82f7e7',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:33.851Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:33.850Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"861cb0e7-5e0b-458b-8fcb-8423a90e97e2","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-20T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1180,12 +1006,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'cdb39d40-e908-4b5b-8574-23e91082cb53',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:37.251Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:37.249Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"2a18bafe-a3d4-459d-ad54-1ad726ac45cb","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-24T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1193,12 +1017,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'cf678ca1-6007-438b-ab9b-1c5f38d342fb',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:39.798Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:39.797Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"cc32fc65-a209-4313-a8f5-190443f486f4","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-23T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1206,12 +1028,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'd46014a1-25c4-44de-a64b-f6b9484ab37f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:58.603Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:58.602Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"c247c24b-0203-46c6-9912-e73a70a2627d","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-23T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1219,12 +1039,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'd965ca24-f65a-4662-b712-45785b494590',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:22.031Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:22.030Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"d5fdf594-691c-40cc-b454-3927d4797bfb","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-14T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1232,12 +1050,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'da7f1c13-720b-4180-b782-2ef11702ce01',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:34.582Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:34.581Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"28893ad5-c8ed-4be8-9c99-8e81a749448e","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-25T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1247,7 +1063,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-03-01T16:27:08.643Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1256,7 +1071,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"MOTR","createdAt":"2001-04-30T04:00:00.000Z","isPaper":true,"documentType":"Motion to Proceed Remotely","filedBy":"Petr. Mona Schultz","docketEntryId":"38f3f4d9-39f2-40e8-8d3b-c52bbf85f499","documentTitle":"Motion to Proceed Remotely","isFileAttached":true,"receivedAt":"2001-04-30T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -1266,12 +1080,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'df474063-f849-4c55-8934-5f43be7dd4c2',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:41.991Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:41.990Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"e6c755a2-5a8b-4c81-a936-953e89d66831","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-16T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1279,12 +1091,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'dfe412cb-a800-46d2-a4b1-89bf03adae55',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:42.212Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:42.211Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"0a504eed-b9f1-433a-b65d-58059dfb3eae","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-22T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1292,12 +1102,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'e0693670-aa12-4e5d-9017-d41344a1817f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:29.747Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:29.746Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"776e83bb-7111-4bbf-84f0-b23811e1f33c","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-11T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1305,12 +1113,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'e3b0f328-40e8-466c-a84e-ee64d63d5804',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:28:09.260Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:28:09.258Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"612966b0-3e3d-4299-9739-102b2279bcf3","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-04T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1318,12 +1124,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'e699264a-9b68-4f2c-8a3e-657a1138cbd2',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:31:10.245Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:31:10.244Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"a8cf7ece-09b8-426e-95e3-209e4e1140e0","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-11-27T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1331,12 +1135,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'e848615c-fddb-473d-83e3-30c6aceab664',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:23.737Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:23.733Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"d25906c7-ad38-4de8-83db-c88b249b03e7","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-25T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1346,7 +1148,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-03-01T16:27:03.606Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1355,7 +1156,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"EVID","createdAt":"2001-04-30T04:00:00.000Z","isPaper":true,"documentType":"Evidence","filedBy":"Petr. Mona Schultz","docketEntryId":"188cd363-1f97-43fb-bee0-9518234e6604","documentTitle":"Evidence","isFileAttached":true,"receivedAt":"2001-04-30T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -1365,12 +1165,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'ebb32cfc-9d54-455b-bdf7-978d15ba7cf8',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:24.562Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:24.560Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"e7646159-4369-41c5-b973-2f0b889314f5","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-13T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1378,12 +1176,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'ebca593c-440b-46df-b13d-8e7b6df7293d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:51.007Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:51.006Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"5c55d636-b54a-44e4-b833-3bc8cd5e58b7","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-03T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1391,12 +1187,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'ee31de69-d0d0-4dfc-bdc5-6f5efeabe060',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:15.774Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:15.772Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"8afb52d4-ebff-4854-8277-4547a265cd1a","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-03-01T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1404,12 +1198,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'ef821cb0-a0ef-4e5e-8a2a-35fe1bf4fd34',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:35.133Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:35.132Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"c3c78a38-cfa6-441e-81ae-f11275c671ea","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-09T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1417,12 +1209,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'f0cf227b-9e55-4f4b-89c2-56d277722e15',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:50.955Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:50.954Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"605b7af3-c9a2-4465-8248-697c1e5e7436","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-26T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1430,12 +1220,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'f4944e72-b339-4178-89ff-f95c968e6ea1',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:21.672Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:21.670Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"3e76cdd7-ad55-4994-b6d1-4509a6f325e3","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-26T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1443,12 +1231,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'f84bc031-f87e-4ee0-b20b-26a1d776db59',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:48.373Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:48.372Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"b782c76c-6c63-4d68-adfe-7344ebbcc695","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-27T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1456,12 +1242,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'f8fc2012-cff3-4103-a562-3db1476e3b3e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:09.175Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:09.174Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"4f0a41ac-bf35-438c-aaa2-904b7fc48e0d","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-19T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1469,12 +1253,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'fce0747e-8331-4b59-80b9-90a21b18c048',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:30:37.776Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:30:37.775Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"5c97e94b-6a52-4a4f-a93a-72be091c8343","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-12-08T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1482,12 +1264,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'fcfcdd4e-ee80-4c47-a311-7d1b9d452ecd',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:29:33.051Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:29:33.050Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"4ad4e43a-b923-4833-9a88-e96ba2c638da","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-01-02T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1495,12 +1275,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'fdc57291-8e82-4448-acfd-f71ab9b96cac',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-03-01T16:27:35.916Z'),
     docketEntry:
       '{"eventCode":"PSDE","createdAt":"2021-03-01T16:27:35.915Z","documentType":"Proposed Stipulated Decision","filedBy":"Resp.","docketEntryId":"0665bf1e-7e02-46db-b386-09168d0a51ce","documentTitle":"Proposed Stipulated Decision","isFileAttached":true,"receivedAt":"2021-02-19T05:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1510,7 +1288,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-02-15T16:52:14.314Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1519,7 +1296,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2022-02-15T16:52:14.159Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"55cd0550-6191-4014-bef8-da56f8cf3685","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2022-02-15T16:52:14.159Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"101-22W","docketEntry":{"eventCode":"ODJ","createdAt":"2022-02-15T16:52:14.079Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2022-02-15T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"101-22","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-02-15T16:52:14.160Z"},"receivedAt":"2022-02-15T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2022-02-15T16:52:14.079Z","documentContentsId":"95dd9113-40a0-47bf-8584-a1d4e86d7b73","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"63b9b593-e928-4163-b05f-5bf686e6bbba","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2022-02-15T16:52:14.080Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"101-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"101-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"95dd9113-40a0-47bf-8584-a1d4e86d7b73\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2022-02-15T16:52:14.238Z","docketNumber":"101-22"}',
     docketNumber: '101-22',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -1528,12 +1304,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '55cd0550-6191-4014-bef8-da56f8cf3685',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2022-02-15T16:52:11.653Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2022-02-15T16:52:11.652Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2022-02-15T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-22',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1541,12 +1315,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '980e1653-28e6-4cd0-8f54-4821f6a3ae76',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-03-13T22:23:32.845Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-13T22:23:32.844Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"816c2c35-c645-44bc-8079-1fe162ea1c93","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-13T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-23',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1556,7 +1328,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
@@ -1566,7 +1337,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2024-05-26T00:00:00.000-04:00","isPaper":true,"documentType":"Petition","filedBy":"Petr. Reading Rainbow","docketEntryId":"3c10fe8a-d9bb-4e11-86ee-41afca5b6953","servedAt":"2024-06-04T22:35:01.144Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2024-05-26T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-24',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -1575,12 +1345,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '2f839cbb-9b53-4e48-abf2-80caf2c4a442',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2024-06-04T22:37:28.345Z'),
     docketEntry:
       '{"eventCode":"NCA","createdAt":"2024-06-04T22:37:28.344Z","documentType":"Notice of Change of Address","docketEntryId":"077bd89c-95da-4579-9e8e-6f32b3bc7964","additionalInfo":"for Reading Rainbow","servedAt":"2024-06-04T22:37:28.345Z","documentTitle":"Notice of Change of Address","isFileAttached":true,"receivedAt":"2024-06-04T04:00:00.000Z","userId":"b3e1941f-230a-47bb-80ec-6b561c1765cd"}',
     docketNumber: '101-24',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Petitioner 4',
     sentByUserId: 'b3e1941f-230a-47bb-80ec-6b561c1765cd',
@@ -1588,12 +1356,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '4e350f1b-c275-4efe-a86e-7da1d10f195d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2024-06-04T22:35:52.940Z'),
     docketEntry:
       '{"eventCode":"NOCE","createdAt":"2024-06-04T22:35:52.190Z","documentType":"Notice of Change of Email Address","docketEntryId":"d200c00a-9f14-4fa3-a3a3-3b765d8803ea","additionalInfo":"for Reading Rainbow","index":4,"servedAt":"2024-06-04T22:35:52.935Z","documentTitle":"Notice of Change of Email Address","isFileAttached":true,"receivedAt":"2024-06-04T04:00:00.000Z","userId":"9d7d63a3-d7a5-4905-ba89-ef71bf30057f"}',
     docketNumber: '101-24',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Admissions Clerk1',
     sentByUserId: '9d7d63a3-d7a5-4905-ba89-ef71bf30057f',
@@ -1601,13 +1367,11 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '96f56053-9e39-4bd3-96d8-5bf3b1846810',
   },
   {
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: false,
     createdAt: new Date('2020-01-21T16:41:39.482Z'),
     docketEntry:
       '{"documentType":"Petition","practitioner":[],"filingDate":"2020-01-21T16:41:39.481Z","partyPrimary":true,"pending":false,"receivedAt":"2020-01-21T16:41:39.481Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-01-21T16:41:39.481Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Eve Brewer","docketEntryId":"d854a954-7332-4e92-93bd-dc28c9fea0a5","partySecondary":false,"documentId":"d854a954-7332-4e92-93bd-dc28c9fea0a5"}',
     docketNumber: '102-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1615,12 +1379,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '77d8449a-ffe1-48e5-b056-a6112a819a4b',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2022-12-21T19:03:01.910Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2022-12-21T19:03:01.909Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"578a9007-b9ad-4201-9aa7-fc87e7e69106","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2022-12-21T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '102-22',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1630,7 +1392,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
@@ -1640,7 +1401,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-04-01T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Dacey Cox","docketEntryId":"8738fa09-bb16-43e0-a9c5-f528751bbd11","servedAt":"2023-04-03T15:52:59.423Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-04-01T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '102-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -1649,12 +1409,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'a181ca02-fa09-44d6-a25b-1ea6e9015f89',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-08-08T17:32:21.433Z'),
     docketEntry:
       '{"eventCode":"SEAB","createdAt":"2023-08-08T17:32:21.432Z","documentType":"Seriatim Answering Brief","filedBy":"Resp.","docketEntryId":"10af43a5-b29b-4ab6-9924-545598fd12c8","documentTitle":"Seriatim Answering Brief","isFileAttached":true,"receivedAt":"2023-08-08T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '102-67',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1662,12 +1420,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'abc6cb32-97b7-4ddc-871b-eb41aaa45114',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2024-06-28T19:55:09.127Z'),
     docketEntry:
       '{"eventCode":"RPT","createdAt":"2024-06-28T19:55:09.126Z","documentType":"Status Report","filedBy":"Resp.","docketEntryId":"7be2dea1-4428-4917-a66d-0d474e57ee02","documentTitle":"Status Report","isFileAttached":true,"receivedAt":"2024-06-28T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '102-67',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1677,13 +1433,11 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Colvin',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: false,
     createdAt: new Date('2019-08-08T14:33:24.183Z'),
     docketEntry:
       '{"createdAt":"2019-03-01T22:54:05.993Z","numberOfPages":1,"filingDate":"2019-03-01T22:54:05.993Z","documentType":"Answer","docketEntryId":"f1aa4aa2-c214-424c-8870-d0049c5744d7","documentId":"f1aa4aa2-c214-424c-8870-d0049c5744d7","documentTitle":"Answer by Test Respondent"}',
     docketNumber: '103-19',
-    highPriority: false,
     section: 'colvinsChambers',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -1692,13 +1446,11 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '8686ddef-c74d-4d26-8748-6b22914c7687',
   },
   {
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: false,
     createdAt: new Date('2020-01-23T21:44:54.043Z'),
     docketEntry:
       '{"documentType":"Petition","practitioner":[],"filingDate":"2020-01-23T21:44:54.043Z","partyPrimary":true,"pending":false,"receivedAt":"2020-01-23T21:44:54.043Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-01-23T21:44:54.043Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Reuben Blair","docketEntryId":"ac62f25a-49f9-46a5-aed7-d6b955a2dc34","partySecondary":false,"documentId":"ac62f25a-49f9-46a5-aed7-d6b955a2dc34"}',
     docketNumber: '103-20',
-    highPriority: true,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1706,13 +1458,11 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '1c7acdf5-480d-404a-9e3a-5d5ccc8068c2',
   },
   {
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: false,
     createdAt: new Date('2020-01-23T21:45:34.520Z'),
     docketEntry:
       '{"hasSupportingDocuments":false,"attachments":false,"documentType":"Administrative Record","practitioner":[],"filingDate":"2020-01-23T21:45:34.520Z","partyPrimary":true,"pending":false,"exhibits":false,"receivedAt":"2020-01-23T21:45:34.520Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ADMR","createdAt":"2020-01-23T21:45:34.520Z","processingStatus":"pending","numberOfPages":1,"scenario":"Standard","filedBy":"Petr. Reuben Blair","docketEntryId":"2cca1543-21b2-4783-a1de-eeaaf269d32c","certificateOfService":false,"certificateOfServiceDate":null,"documentId":"2cca1543-21b2-4783-a1de-eeaaf269d32c","category":"Miscellaneous","documentTitle":"Administrative Record","relationship":"primaryDocument","docketNumber":"103-20"}',
     docketNumber: '103-20',
-    highPriority: true,
     section: 'docket',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1720,13 +1470,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '2a3955ca-baad-4ca7-be23-d862d2ef5310',
   },
   {
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     createdAt: new Date('2022-12-01T20:02:10.611Z'),
     docketEntry:
       '{"eventCode":"ADMR","createdAt":"2022-12-01T20:02:10.609Z","documentType":"Administrative Record","filedBy":"Petr. Reuben Blair","docketEntryId":"4796a931-14fb-43e6-948f-d2b67ce4c1cb","documentTitle":"Administrative Record","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"9805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '103-20',
-    highPriority: true,
     section: 'docket',
     sentBy: 'Test Private Practitioner',
     sentByUserId: '9805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1736,7 +1483,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
@@ -1746,7 +1492,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-25T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Britanney Wiley","docketEntryId":"ac6a8ab2-92f6-4320-aade-ca36b3c8d54b","servedAt":"2023-04-03T15:53:18.588Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-25T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '103-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -1755,12 +1500,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '575c3839-184c-4bb1-a4ec-25ccebadf306',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-08-08T17:32:21.451Z'),
     docketEntry:
       '{"eventCode":"SEAB","createdAt":"2023-08-08T17:32:21.450Z","documentType":"Seriatim Answering Brief","filedBy":"Resp.","docketEntryId":"10af43a5-b29b-4ab6-9924-545598fd12c8","documentTitle":"Seriatim Answering Brief","isFileAttached":true,"receivedAt":"2023-08-08T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '103-67',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1768,12 +1511,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'bcacaddb-1d6c-44dc-9d61-66215dac6a94',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2024-06-28T19:55:09.130Z'),
     docketEntry:
       '{"eventCode":"RPT","createdAt":"2024-06-28T19:55:09.130Z","documentType":"Status Report","filedBy":"Resp.","docketEntryId":"7be2dea1-4428-4917-a66d-0d474e57ee02","documentTitle":"Status Report","isFileAttached":true,"receivedAt":"2024-06-28T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '103-67',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1783,7 +1524,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-04-14T19:59:46.850Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1792,7 +1532,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"documentType":"Petition","filingDate":"2020-04-12T04:00:00.000Z","partyPrimary":true,"pending":false,"mailingDate":"04/12/2020","receivedAt":"2020-04-12T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-04-12T04:00:00.000Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Luksa Lucia","docketEntryId":"596223c1-527b-46b4-98b0-1b10455e9495","partySecondary":false,"documentId":"596223c1-527b-46b4-98b0-1b10455e9495"}',
     docketNumber: '104-17',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -1803,7 +1542,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-04-14T19:59:46.850Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1812,7 +1550,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"documentType":"Petition","filingDate":"2020-04-12T04:00:00.000Z","partyPrimary":true,"pending":false,"mailingDate":"04/12/2020","receivedAt":"2020-04-12T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-04-12T04:00:00.000Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Luksa Lucia","docketEntryId":"596223c1-527b-46b4-98b0-1b10455e9495","partySecondary":false,"documentId":"596223c1-527b-46b4-98b0-1b10455e9495"}',
     docketNumber: '104-18',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -1823,7 +1560,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-04-14T19:59:46.850Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1832,7 +1568,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"documentType":"Petition","filingDate":"2020-04-12T04:00:00.000Z","partyPrimary":true,"pending":false,"mailingDate":"04/12/2020","receivedAt":"2020-04-12T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-04-12T04:00:00.000Z","numberOfPages":1,"filedBy":"Petr. Luksa Lucia","docketEntryId":"596223c1-527b-46b4-98b0-1b10455e9495","partySecondary":false,"documentId":"596223c1-527b-46b4-98b0-1b10455e9495"}',
     docketNumber: '104-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -1843,7 +1578,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-01-06T22:33:15.488Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -1853,7 +1587,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"IRS","role":"irsSuperuser"}],"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2023-01-02T05:00:00.000Z","pending":false,"isDraft":false,"receivedAt":"2023-01-02T05:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-01-02T05:00:00.000Z","numberOfPages":3,"entityName":"DocketEntry","filedBy":"Petr. Armand Fulton","docketEntryId":"38b33b7b-2017-41fe-9453-e9732ebf28f7","sk":"docket-entry|38b33b7b-2017-41fe-9453-e9732ebf28f7","documentTitle":"Petition","addToCoversheet":false,"draftOrderState":null,"filedByRole":"petitioner","index":1,"mailingDate":"asdf","isFileAttached":true,"userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"complete","filers":["40eb0890-aab3-4925-8769-e056b30c502d"],"servedPartiesCode":"R","pk":"case|104-23","servedAt":"2023-01-06T22:33:13.813Z","docketNumber":"104-23"}',
     docketNumber: '104-23',
-    highPriority: false,
     inProgress: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
@@ -1863,12 +1596,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'da03efd1-a7d5-4cf6-ad71-aa1d7c65e0f1',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-08-08T17:32:21.458Z'),
     docketEntry:
       '{"eventCode":"SEAB","createdAt":"2023-08-08T17:32:21.458Z","documentType":"Seriatim Answering Brief","filedBy":"Resp.","docketEntryId":"10af43a5-b29b-4ab6-9924-545598fd12c8","documentTitle":"Seriatim Answering Brief","isFileAttached":true,"receivedAt":"2023-08-08T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '104-67',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1878,7 +1609,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
@@ -1888,7 +1618,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-18T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petrs. Cassidy Mejia & juvek@mailinator.com","docketEntryId":"d151b42b-dc6c-461e-b6fa-81ac0c712dda","servedAt":"2023-04-03T15:53:43.152Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-18T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '104-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -1897,12 +1626,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '45ece874-8c6b-425c-9cd8-6a08e896848f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2024-06-28T19:55:09.121Z'),
     docketEntry:
       '{"eventCode":"RPT","createdAt":"2024-06-28T19:55:09.120Z","documentType":"Status Report","filedBy":"Resp.","docketEntryId":"7be2dea1-4428-4917-a66d-0d474e57ee02","documentTitle":"Status Report","isFileAttached":true,"receivedAt":"2024-06-28T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '104-67',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1910,7 +1637,6 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '4e692ade-3910-4bce-b835-d665c740ab3a',
   },
   {
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-04-29T15:51:29.331Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1919,7 +1645,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"documentType":"Petition","filingDate":"2020-04-29T15:50:41.686Z","partyPrimary":true,"pending":false,"receivedAt":"2020-04-29T15:50:41.698Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-04-29T15:50:41.698Z","numberOfPages":1,"entityName":"Document","filedBy":"Petr. Astra Santiago","docketEntryId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","partySecondary":false,"documentId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","privatePractitioners":[]}',
     docketNumber: '105-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1929,7 +1654,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-08-05T20:25:50.219Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1938,7 +1662,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M000","createdAt":"2022-07-31T04:00:00.000Z","isPaper":true,"documentType":"Motion","filedBy":"Petr. Astra Santiago","docketEntryId":"3eb53932-1a44-40d1-bfb8-d9e908b0b32e","documentTitle":"Motion For testing Stamp Data","isFileAttached":true,"receivedAt":"2022-07-31T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-20',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -1950,7 +1673,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:46.557Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1959,7 +1681,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Brief","filingDate":"2023-07-26T17:24:39.640Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0510d265-c6bd-4ef5-80e9-26e6fca4f53c","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:24:39.642Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAB","createdAt":"2023-07-26T17:24:39.640Z","documentType":"Simultaneous Answering Brief","filedBy":"Petr. Yasir Oneal","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48","documentTitle":"Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:24:39.642Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:24:39.640Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48","certificateOfService":false,"documentTitle":"Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":16,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"SIAB","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:26:46.556Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -1968,12 +1689,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0510d265-c6bd-4ef5-80e9-26e6fca4f53c',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-07-26T18:56:11.184Z'),
     docketEntry:
       '{"eventCode":"M014","createdAt":"2023-07-26T18:56:11.183Z","documentType":"Motion for Leave to File Out of Time","filedBy":"Petr. Yasir Oneal","docketEntryId":"a61b57da-3931-47d5-8d5b-43e95d2829a3","documentTitle":"Motion for Leave to File Out of Time Brief in Support of First Amended AMBR","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Private Practitioner',
     sentByUserId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
@@ -1983,7 +1702,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:24.652Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1992,7 +1710,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Redacted","filingDate":"2023-07-26T17:25:38.204Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Brief","documentType":"Amended","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0b7b0e5a-34d7-4c00-85cd-bafff8300cea","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:38.205Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:25:38.204Z","documentType":"Redacted","filedBy":"Petr. Yasir Oneal","docketEntryId":"ff713546-dbbe-4d59-b543-3472484332aa","documentTitle":"Redacted First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:38.205Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:38.204Z","numberOfPages":3,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"ff713546-dbbe-4d59-b543-3472484332aa","certificateOfService":false,"documentTitle":"Redacted First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":19,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"REDC","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:27:24.651Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2003,7 +1720,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:14.156Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2012,7 +1728,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Redacted","filingDate":"2023-07-26T17:14:17.068Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Memoranda of Law","documentType":"Amended","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0ef72276-20fa-41d9-94e8-58f863ed009b","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:17.069Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:14:17.068Z","documentType":"Redacted","filedBy":"Resp.","docketEntryId":"f836ef0c-4c9d-40ef-b7e9-2ac71342f9e4","documentTitle":"Redacted First Amended Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:17.069Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:14:17.068Z","numberOfPages":3,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"f836ef0c-4c9d-40ef-b7e9-2ac71342f9e4","certificateOfService":false,"documentTitle":"Redacted First Amended Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":10,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"REDC","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:14.154Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2023,7 +1738,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:51.290Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2032,7 +1746,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Redacted","filingDate":"2023-07-26T17:15:28.242Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Seriatim Sur-Reply Brief","documentType":"Seriatim Sur-Reply Brief","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"182cc3d0-cf44-411d-8fad-4d237cd553ea","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:15:28.244Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:15:28.242Z","documentType":"Redacted","filedBy":"Resp.","docketEntryId":"e3948d50-caaa-42be-8023-5bf935476c0b","documentTitle":"Redacted Seriatim Sur-Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:15:28.245Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:51.285Z","createdAt":"2023-07-26T17:15:28.242Z","numberOfPages":2,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"e3948d50-caaa-42be-8023-5bf935476c0b","certificateOfService":false,"documentTitle":"Redacted Seriatim Sur-Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":14,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"REDC","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:15:28.246Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2044,7 +1757,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:35.017Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2053,7 +1765,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Answering Brief","filingDate":"2023-07-26T17:14:50.853Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"1e97f8a8-2d95-44db-b7ed-a4d2334ca607","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:50.854Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SEAB","createdAt":"2023-07-26T17:14:50.853Z","documentType":"Seriatim Answering Brief","filedBy":"Resp.","docketEntryId":"c9e0e099-c805-43a9-a45f-958325835571","documentTitle":"Seriatim Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:50.854Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:35.004Z","createdAt":"2023-07-26T17:14:50.853Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"c9e0e099-c805-43a9-a45f-958325835571","certificateOfService":false,"documentTitle":"Seriatim Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":12,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SEAB","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:14:50.854Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2065,7 +1776,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:52.640Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2074,7 +1784,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:25:00.573Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"22e979ef-873f-4ed7-9dc6-1890510c37c3","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:00.575Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:25:00.573Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e","documentTitle":"First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:00.575Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:00.573Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":17,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:26:52.639Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2083,12 +1792,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '22e979ef-873f-4ed7-9dc6-1890510c37c3',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-07-26T18:44:35.001Z'),
     docketEntry:
       '{"eventCode":"SIMB","createdAt":"2023-07-26T18:44:35.000Z","documentType":"Simultaneous Answering Memorandum Brief","filedBy":"Petr. Yasir Oneal","docketEntryId":"368cb2f3-e2ac-4a26-b0d6-4c7fc158a3c1","documentTitle":"Simultaneous Answering Memorandum Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Private Practitioner',
     sentByUserId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
@@ -2098,7 +1805,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:03.511Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2107,7 +1813,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:13:38.963Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"3822c600-65d1-41d2-8e42-0e1aede1511d","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:38.964Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:13:38.963Z","documentType":"Amended","filedBy":"Resp.","docketEntryId":"533322f8-b0c9-4a7b-a5d1-2d61d0191b18","documentTitle":"First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:38.964Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:38.963Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"533322f8-b0c9-4a7b-a5d1-2d61d0191b18","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":8,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:03.508Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2116,12 +1821,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '3822c600-65d1-41d2-8e42-0e1aede1511d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-07-26T17:29:56.285Z'),
     docketEntry:
       '{"eventCode":"AMAT","createdAt":"2023-07-26T17:29:56.283Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"8b7920c7-d7ef-41b7-87fb-f16eaf270743","documentTitle":"First Amended AMBR","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Private Practitioner',
     sentByUserId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
@@ -2131,7 +1834,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:59.421Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2140,7 +1842,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Opening Brief","filingDate":"2023-07-26T17:25:57.567Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"54a18060-961f-4dce-bd45-bb460e845ad5","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:57.568Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SEOB","createdAt":"2023-07-26T17:25:57.567Z","documentType":"Seriatim Opening Brief","filedBy":"Petr. Yasir Oneal","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5","documentTitle":"Seriatim Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:57.568Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:26:59.406Z","createdAt":"2023-07-26T17:25:57.567Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5","certificateOfService":false,"documentTitle":"Seriatim Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":20,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"SEOB","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:25:57.569Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2152,7 +1853,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:49.508Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2161,7 +1861,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Brief","filingDate":"2023-07-26T17:12:46.030Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"5dc708c5-f8b7-4268-af8f-eb46c09cdcbb","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:12:46.032Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAB","createdAt":"2023-07-26T17:12:46.030Z","documentType":"Simultaneous Answering Brief","filedBy":"Resp.","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf","documentTitle":"Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:12:46.032Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:12:46.030Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf","certificateOfService":false,"documentTitle":"Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":5,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIAB","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:49.507Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2172,7 +1871,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:09.199Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2181,7 +1879,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:13:59.503Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Memoranda of Law","documentType":"Simultaneous Answering Memoranda of Law","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"77a13efe-5c4f-4da6-a4a3-5aaef13a48b4","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:59.506Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:13:59.503Z","documentType":"Amended","filedBy":"Resp.","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd","documentTitle":"First Amended Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:59.506Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:59.503Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":9,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:09.198Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2192,7 +1889,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:58.875Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2201,7 +1897,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Opening Brief","filingDate":"2023-07-26T17:13:19.794Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"8ddf8f6c-0ea5-4a60-ae7e-8c74dd9dbb52","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:19.795Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIOB","createdAt":"2023-07-26T17:13:19.793Z","documentType":"Simultaneous Opening Brief","filedBy":"Resp.","docketEntryId":"283e7fc3-25dc-4ae4-8870-7a111d7584da","documentTitle":"Simultaneous Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:19.795Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:19.793Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"283e7fc3-25dc-4ae4-8870-7a111d7584da","certificateOfService":false,"documentTitle":"Simultaneous Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":7,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIOB","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:58.874Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2212,7 +1907,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:54.106Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2221,7 +1915,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Memoranda of Law","filingDate":"2023-07-26T17:13:03.948Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"92d3f224-a5f4-4cc0-b0cf-415f7d8c190e","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:03.949Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAM","createdAt":"2023-07-26T17:13:03.948Z","documentType":"Simultaneous Answering Memoranda of Law","filedBy":"Resp.","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12","documentTitle":"Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:03.949Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:03.948Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12","certificateOfService":false,"documentTitle":"Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":6,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIAM","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:54.105Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2232,7 +1925,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:09.509Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2241,7 +1933,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Amended [Document Name]","filingDate":"2023-07-26T17:26:16.104Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Seriatim Opening Brief","documentType":"Seriatim Opening Brief","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"952bc117-39e8-4999-892b-ce9c32666c6e","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:26:16.106Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:26:16.104Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"2e8b77ec-4c14-470e-9b04-58c9c8370ff1","documentTitle":"First Amended Seriatim Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:26:16.106Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:27:09.499Z","createdAt":"2023-07-26T17:26:16.104Z","ordinalValue":"1","numberOfPages":2,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"2e8b77ec-4c14-470e-9b04-58c9c8370ff1","certificateOfService":false,"documentTitle":"First Amended Seriatim Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":21,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:26:16.107Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2253,7 +1944,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:28:33.233Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2262,7 +1952,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMBR","createdAt":"2007-07-02T04:00:00.000Z","isPaper":true,"documentType":"Amicus Brief","filedBy":"A Friend","docketEntryId":"bda62f28-77c1-48f7-8072-bcecbbfe833a","otherFilingParty":"A Friend","documentTitle":"AMBR","isFileAttached":true,"receivedAt":"2007-07-02T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2272,12 +1961,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '957630ff-b1a4-4b3c-bdf6-cc803e282283',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-07-26T18:58:50.921Z'),
     docketEntry:
       '{"eventCode":"REPL","createdAt":"2023-07-26T18:58:50.920Z","documentType":"Reply","filedBy":"Petr. Yasir Oneal","docketEntryId":"cc7bdd64-ea38-4575-b87a-40c20daf02eb","documentTitle":"Reply to Seriatim Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Private Practitioner',
     sentByUserId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
@@ -2287,7 +1974,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:28:58.253Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2296,7 +1982,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMBR","createdAt":"2023-07-25T04:00:00.000Z","isPaper":true,"documentType":"Amicus Brief","filedBy":"A Friend","docketEntryId":"5287c2df-e09f-4071-8b50-b9005a7c45e5","otherFilingParty":"A Friend","documentTitle":"AMBR","isFileAttached":true,"receivedAt":"2023-07-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2306,12 +1991,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'a10d2445-7598-4a1c-8224-02f4c2752463',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-07-26T18:56:11.194Z'),
     docketEntry:
       '{"eventCode":"BRF","createdAt":"2023-07-26T18:56:11.193Z","documentType":"Brief in Support","filedBy":"Petr. Yasir Oneal","docketEntryId":"5c14e783-9e0e-45e6-bbc0-eb39f3d301c2","documentTitle":"Brief in Support of First Amended AMBR","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Private Practitioner',
@@ -2320,12 +2003,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'a15e5bc6-6ccf-420f-9bbe-2adbb48d78e5',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-07-26T17:12:26.529Z'),
     docketEntry:
       '{"eventCode":"AMAT","createdAt":"2023-07-26T17:12:26.527Z","documentType":"Amended","filedBy":"Resp.","docketEntryId":"ffbf3ef1-efd3-4193-8494-3dbc20a54e4d","documentTitle":"First Amended Petition","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2335,7 +2016,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:17.588Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2344,7 +2024,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:25:22.269Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Brief","documentType":"Amended","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"afd1417b-5688-41aa-9b53-7b0bf78c1073","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:22.270Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:25:22.269Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"b9dbbef9-0068-4ad7-bb52-396e811ae4d0","documentTitle":"First Amended First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:22.270Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:22.269Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"b9dbbef9-0068-4ad7-bb52-396e811ae4d0","certificateOfService":false,"documentTitle":"First Amended First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":18,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:27:17.586Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2355,7 +2034,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:42.966Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2364,7 +2042,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Sur-Reply Brief","filingDate":"2023-07-26T17:15:09.211Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"e6b4a293-f3ba-4554-a9e7-a37d4cc6ec3d","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:15:09.212Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SESB","createdAt":"2023-07-26T17:15:09.210Z","documentType":"Seriatim Sur-Reply Brief","filedBy":"Resp.","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed","documentTitle":"Seriatim Sur-Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:15:09.212Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:42.954Z","createdAt":"2023-07-26T17:15:09.210Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed","certificateOfService":false,"documentTitle":"Seriatim Sur-Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":13,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SESB","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:15:09.213Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2376,7 +2053,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:24.041Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2385,7 +2061,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Reply Brief","filingDate":"2023-07-26T17:14:35.401Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"e9cbcde8-08a7-4b24-b0ad-f8556f59f0d9","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:35.403Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SERB","createdAt":"2023-07-26T17:14:35.401Z","documentType":"Seriatim Reply Brief","filedBy":"Resp.","docketEntryId":"708e3c41-ac8f-4267-8a33-91234d738292","documentTitle":"Seriatim Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:35.403Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:24.035Z","createdAt":"2023-07-26T17:14:35.401Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"708e3c41-ac8f-4267-8a33-91234d738292","certificateOfService":false,"documentTitle":"Seriatim Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":11,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SERB","processingStatus":"complete","lodged":true,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:14:35.404Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2397,7 +2072,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T18:58:04.853Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2406,7 +2080,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMAT","createdAt":"2023-07-05T04:00:00.000Z","isPaper":true,"documentType":"Amended [Document Name]","filedBy":"Petr. Simba Oneal","docketEntryId":"1340f1d9-1d84-402a-b78b-2e074e0efd00","documentTitle":"First Amended Seriatim Reply Brief","isFileAttached":true,"receivedAt":"2023-07-05T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2416,12 +2089,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'f3910aae-3cb0-4238-9a86-45964c1c358c',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-07-26T17:29:33.750Z'),
     docketEntry:
       '{"eventCode":"AMAT","createdAt":"2023-07-26T17:29:33.749Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"b19664bb-2055-46e3-98fc-f52f6123b40d","documentTitle":"First Amended AMBR","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Private Practitioner',
     sentByUserId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
@@ -2431,7 +2102,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-07-26T17:04:07.414Z'),
     completedBy: 'Test Petitionsclerk',
@@ -2441,7 +2111,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-07-26T17:03:31.708Z","documentType":"Petition","filedBy":"Petr. Yasir Oneal","docketEntryId":"18898c47-0131-405e-a65e-54a5b832d972","servedAt":"2023-07-26T17:04:05.684Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405418"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner 3',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405418',
@@ -2449,12 +2118,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'ff575b8d-79e9-4503-b14c-b23909c2f1f1',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2024-06-28T19:55:09.125Z'),
     docketEntry:
       '{"eventCode":"RPT","createdAt":"2024-06-28T19:55:09.124Z","documentType":"Status Report","filedBy":"Resp.","docketEntryId":"7be2dea1-4428-4917-a66d-0d474e57ee02","documentTitle":"Status Report","isFileAttached":true,"receivedAt":"2024-06-28T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-67',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2464,7 +2131,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
@@ -2474,7 +2140,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-11T05:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Magee Schmidt","docketEntryId":"f4fc88f2-e0bc-49a2-834b-0e51e51f1069","servedAt":"2023-04-03T15:52:36.482Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-11T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -2483,12 +2148,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '481d93aa-2b60-4cec-91f5-feef8fe75160',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2023-08-08T17:32:21.464Z'),
     docketEntry:
       '{"eventCode":"SEAB","createdAt":"2023-08-08T17:32:21.463Z","documentType":"Seriatim Answering Brief","filedBy":"Resp.","docketEntryId":"10af43a5-b29b-4ab6-9924-545598fd12c8","documentTitle":"Seriatim Answering Brief","isFileAttached":true,"receivedAt":"2023-08-08T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-67',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2498,7 +2161,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: false,
     completedAt: new Date('2019-07-12T17:11:27.244Z'),
     completedBy: 'Test Docketclerk',
@@ -2508,7 +2170,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"serviceDate":null,"documentType":"Proposed Stipulated Decision","practitioner":[],"filingDate":"1990-10-10","partyPrimary":true,"receivedAt":"1990-10-10","userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"PSDE","createdAt":"2019-07-12T17:11:26.955Z","processingStatus":"pending","lodged":false,"numberOfPages":1,"scenario":"Standard","filedBy":"Petr. Denise Gould","docketEntryId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","documentId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","category":"Decision","documentTitle":"Proposed Stipulated Decision","relationship":"primaryDocument","docketNumber":"106-19"}',
     docketNumber: '106-19',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2519,13 +2180,11 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Colvin',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: false,
     createdAt: new Date('2019-08-08T14:23:51.565Z'),
     docketEntry:
       '{"createdAt":"2019-07-12T17:11:26.955Z","documentId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","documentTitle":"Proposed Stipulated Decision","numberOfPages":1,"documentType":"Proposed Stipulated Decision","docketEntryId":"7a923abd-fc41-407a-b76b-7f724fa5d47f"}',
     docketNumber: '106-19',
-    highPriority: false,
     section: 'colvinsChambers',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2536,13 +2195,11 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test ADC',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: false,
     createdAt: new Date('2019-07-12T17:11:47.010Z'),
     docketEntry:
       '{"createdAt":"2019-07-12T17:11:26.955Z","documentId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","numberOfPages":1,"documentType":"Proposed Stipulated Decision","docketEntryId":"7a923abd-fc41-407a-b76b-7f724fa5d47f"}',
     docketNumber: '106-19',
-    highPriority: false,
     section: 'adc',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2551,13 +2208,11 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '5059e127-1796-45aa-96bc-351cd5705c66',
   },
   {
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: false,
     createdAt: new Date('2019-07-12T17:09:41.027Z'),
     docketEntry:
       '{"createdAt":"2019-07-12T17:09:41.026Z","processingStatus":"pending","numberOfPages":1,"documentType":"Petition","filingDate":"2019-07-12T17:09:41.026Z","filedBy":"Denise Gould","docketEntryId":"5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c","documentId":"5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c","receivedAt":"2019-07-12T17:09:41.026Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '106-19',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2567,7 +2222,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-01-06T22:34:40.081Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -2577,7 +2231,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-01-06T22:34:19.387Z","documentType":"Petition","filedBy":"Petr. Thaddeus Nicholson","docketEntryId":"dfb11c0f-6680-4b1b-88de-7a04c79630d2","servedAt":"2023-01-06T22:34:39.108Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-01-06T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405417"}',
     docketNumber: '106-23',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner 2',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405417',
@@ -2587,7 +2240,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-15T21:25:25.326Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2596,7 +2248,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"OST","createdAt":"2021-12-15T21:25:12.138Z","documentType":"Order of Service of Transcript (Bench Opinion)","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2021-12-15T21:25:25.320Z","documentTitle":"Order of Service of Transcript (Bench Opinion) bench description","isFileAttached":true,"receivedAt":"2021-12-15T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '107-19',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -2605,12 +2256,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '39b3ac72-0173-4851-829b-e0878def646c',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2024-06-28T19:54:22.467Z'),
     docketEntry:
       '{"eventCode":"RPT","createdAt":"2024-06-28T19:54:22.466Z","documentType":"Status Report","filedBy":"Resp.","docketEntryId":"178af2d2-fab1-445a-a729-d3da63517a0a","documentTitle":"Status Report","isFileAttached":true,"receivedAt":"2024-06-28T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '107-19',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test IRS Practitioner',
     sentByUserId: '5805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2620,7 +2269,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '63784910-c1af-4476-8988-a02f92da8e09',
     assigneeName: 'IRS Holding Queue',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: false,
     completedAt: new Date('2019-08-16T19:22:13.925Z'),
     completedBy: 'Test Petitionsclerk',
@@ -2630,7 +2278,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2019-08-16T19:21:46.146Z","processingStatus":"pending","numberOfPages":1,"documentType":"Petition","filingDate":"2019-08-16T19:21:46.146Z","filedBy":"Garrett Carpenter, Leslie Bullock, Trustee","docketEntryId":"3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c","documentId":"3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c","receivedAt":"2019-08-16T19:21:46.146Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '108-19',
-    highPriority: false,
     section: 'irsSystem',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -2641,12 +2288,10 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2022-09-28T20:21:59.707Z'),
     docketEntry:
       '{"eventCode":"A","createdAt":"2022-09-20T04:00:00.000Z","isPaper":true,"documentType":"Answer","filedBy":"Petr. Roslindis Angelino","docketEntryId":"b56e1b11-41f7-4ad2-9ffc-dac763c1d3b3","documentTitle":"Answer","isFileAttached":true,"receivedAt":"2022-09-20T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '111-19',
-    highPriority: false,
     inProgress: true,
     isRead: true,
     section: 'docket',
@@ -2659,7 +2304,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2022-09-28T16:48:30.590Z'),
     completedBy: 'Test Petitionsclerk',
@@ -2669,7 +2313,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"documentType":"Petition","index":1,"isFileAttached":true,"eventCode":"P","createdAt":"2019-12-11T15:25:09.285Z","processingStatus":"pending","numberOfPages":1,"filers":["7805d1ab-18d0-43ec-bafb-654e83405416"],"entityName":"DocketEntry","filedBy":"Petr. Roslindis Angelino","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","servedAt":"2022-09-28T16:48:30.554Z","documentTitle":"Petition"}',
     docketNumber: '111-19',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     updatedAt: new Date('2022-09-28T16:48:27.729Z'),
@@ -2678,7 +2321,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2022-09-28T16:48:49.683Z'),
     completedBy: 'Test Petitionsclerk',
@@ -2688,7 +2330,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"documentType":"Petition","index":1,"isFileAttached":true,"eventCode":"P","createdAt":"2019-12-11T15:25:09.285Z","processingStatus":"pending","numberOfPages":1,"filers":["7805d1ab-18d0-43ec-bafb-654e83405416"],"entityName":"DocketEntry","filedBy":"Petr. Brian Earl Spilner","docketEntryId":"337b0684-0a8e-43fd-a9e5-3a01c8158cc8","servedAt":"2022-09-28T16:48:49.667Z","documentTitle":"Petition"}',
     docketNumber: '112-19',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     updatedAt: new Date('2022-09-28T16:48:47.111Z'),
@@ -2697,7 +2338,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2022-09-28T19:47:03.663Z'),
     completedBy: 'Test Petitionsclerk',
@@ -2707,18 +2347,15 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2019-12-11T15:25:09.285Z","documentType":"Petition","filedBy":"Petr. Letti Toretto","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","index":1,"servedAt":"2022-09-28T19:47:03.636Z","documentTitle":"Petition","isFileAttached":true}',
     docketNumber: '113-19',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     updatedAt: new Date('2022-09-28T16:48:47.111Z'),
     workItemId: '9f326cac-c07c-42c4-8639-42d0dfb3672d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2020-06-25T20:40:13.685Z'),
     docketEntry: '{}',
     docketNumber: '117-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2726,11 +2363,9 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '883c974c-d9cd-4e3f-9f28-e63a3da0fd8e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2020-06-25T20:58:55.415Z'),
     docketEntry: '{}',
     docketNumber: '120-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2740,13 +2375,11 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     createdAt: new Date('2020-08-10T17:16:49.187Z'),
     docketEntry:
       '{"isPaper":true,"documentType":"Petition","filingDate":"2020-08-10T04:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"05-Apr-1990","isFileAttached":true,"receivedAt":"2020-08-10T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-08-10T04:00:00.000Z","entityName":"Document","filedBy":"Petr. Idola Flowers","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentId":"1a92894e-83a5-48ba-9994-3ada44235deb"}',
     docketNumber: '121-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -2755,12 +2388,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'b99d6fab-d009-4f22-8bdf-e42157cecfe9',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2020-09-25T19:27:00.206Z'),
     docketEntry:
       '{"isStricken":false,"documentType":"Petition","filingDate":"2020-09-25T19:27:00.201Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-09-25T19:27:00.205Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-25T19:27:00.205Z","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '122-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2768,12 +2399,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0fa2107f-84fa-4156-8b69-e96cb4330a5b',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2020-09-30T20:22:10.387Z'),
     docketEntry:
       '{"isStricken":false,"documentType":"Petition","filingDate":"2020-09-30T20:22:10.380Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-09-30T20:22:10.386Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-30T20:22:10.386Z","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '123-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2783,8 +2412,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Fieri',
-    associatedJudgeId: 'dadbad42-18d0-43ec-bafb-654e83405416',
     caseIsInProgress: true,
     completedAt: new Date('2020-09-30T20:24:15.441Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -2794,7 +2421,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-09-02T04:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"03/03/2020","isFileAttached":true,"receivedAt":"2020-09-02T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-02T04:00:00.000Z","entityName":"DocketEntry","filedBy":"Petr. Stacy Russold","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-09-30T20:24:15.162Z","documentTitle":"Petition"}',
     docketNumber: '124-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -2803,12 +2429,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '5ea16d24-7088-4cb9-b137-59900836a96e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2020-10-13T20:23:17.559Z'),
     docketEntry:
       '{"isStricken":false,"documentType":"Petition","filingDate":"2020-10-13T20:23:17.556Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-10-13T20:23:17.558Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-10-13T20:23:17.558Z","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '125-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2816,12 +2440,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'b7e11e69-a529-4a97-977f-e5fd286838f2',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2020-10-16T15:19:38.087Z'),
     docketEntry:
       '{"isStricken":false,"documentType":"Petition","filingDate":"2020-10-16T15:19:38.084Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-10-16T15:19:38.086Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-10-16T15:19:38.086Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '126-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2829,12 +2451,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '7150dc91-bdb6-472f-8f36-71138f80e478',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2020-11-18T19:32:11.465Z'),
     docketEntry:
       '{"isStricken":false,"documentType":"Petition","filingDate":"2020-11-18T19:32:11.463Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-11-18T19:32:11.464Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-11-18T19:32:11.464Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '127-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2842,12 +2462,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'b89f1796-d2c4-4bf4-ad37-6312d9ed8d9e',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2020-11-30T21:58:13.409Z'),
     docketEntry:
       '{"isStricken":false,"documentType":"Petition","filingDate":"2020-11-30T21:58:13.406Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-11-30T21:58:13.408Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-11-30T21:58:13.408Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '128-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2857,7 +2475,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2020-11-30T22:58:08.206Z'),
     completedBy: 'Test Petitionsclerk',
@@ -2867,7 +2484,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-01-20T05:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"25-Sep-1995","isFileAttached":true,"receivedAt":"2020-01-20T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-01-20T05:00:00.000Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Valentine Holman","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-11-30T22:58:08.081Z","documentTitle":"Petition"}',
     docketNumber: '129-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -2876,12 +2492,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'aebe6b3d-71d8-4788-8991-6de482737bcc',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-04-06T19:45:32.913Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-04-06T19:45:32.912Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-04-06T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '301-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2889,12 +2503,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '09ffd365-897e-426f-926e-2404b87aabd5',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-04-27T17:06:15.839Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-04-27T17:06:15.838Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-04-27T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '302-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2902,12 +2514,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '8648ddac-282b-4596-b1a4-6fe4e33f190f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-04-22T18:38:58.093Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-04-22T18:38:58.092Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-04-22T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '302-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2915,12 +2525,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'c5d064c5-fdc6-4733-933e-e4b064294cfe',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-04-27T17:12:53.630Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-04-27T17:12:53.629Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-04-27T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '303-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2928,12 +2536,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '27679efd-e0aa-4c5e-9559-280a8eeb677b',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-04-27T20:50:58.080Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-04-27T20:50:58.079Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-04-27T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '304-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2941,12 +2547,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '75c00ea9-c03c-42bd-8a85-128c2c0ac9d3',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-05-04T17:17:08.081Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-05-04T17:17:08.080Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-05-04T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '305-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2954,12 +2558,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '9bc7614f-470c-4274-943a-a31cb6cc2e6f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-05-14T17:32:46.051Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-05-14T17:32:46.050Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-05-14T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '306-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2967,12 +2569,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'ccb0449b-cc49-436c-a410-cfd2d2123dc7',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-05-25T13:09:44.667Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-05-25T13:09:44.666Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-05-25T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '307-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2980,12 +2580,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '9478c278-3537-4c3f-9a02-0efbede90876',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-05-25T13:23:58.961Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-05-25T13:23:58.960Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-05-25T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '308-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2993,12 +2591,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'ac391ceb-82fa-495f-a5d9-1bdb8bfdcd65',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-05-28T15:15:34.675Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-05-28T15:15:34.674Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-05-28T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '309-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3006,12 +2602,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '45b0cfe0-2285-45e7-8b53-72f8c9b492a9',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-06-07T20:28:11.382Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-06-07T20:28:11.381Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-06-07T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '310-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3021,7 +2615,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-06-07T20:28:16.318Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3030,7 +2623,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-06-07T20:28:16.123Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"d48e3364-ab16-4c79-8857-80239d1a418c","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-06-07T20:28:16.124Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"310-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-06-07T20:28:16.020Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-06-07T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"310-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-06-07T20:28:16.124Z"},"receivedAt":"2021-06-07T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-06-07T20:28:16.020Z","documentContentsId":"923c3813-b226-4450-8301-7f2359bc2c0b","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"afe7eef3-bf73-46ee-bd02-ca27dc920932","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-06-07T20:28:16.020Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"310-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"310-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"923c3813-b226-4450-8301-7f2359bc2c0b\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-06-07T20:28:16.223Z","docketNumber":"310-21"}',
     docketNumber: '310-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3041,7 +2633,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-06-14T15:16:23.253Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3050,7 +2641,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-06-14T15:16:23.111Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"234a49d8-f304-42d6-8bd8-020563c77d16","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-06-14T15:16:23.112Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"311-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-06-14T15:16:23.033Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-06-14T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"311-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-06-14T15:16:23.112Z"},"receivedAt":"2021-06-14T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-06-14T15:16:23.033Z","documentContentsId":"73d77827-1c93-4981-ad79-1b8f62e3d038","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"0d92fcc7-5423-44af-af88-8764d0aed074","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-06-14T15:16:23.034Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"311-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"311-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"73d77827-1c93-4981-ad79-1b8f62e3d038\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-06-14T15:16:23.180Z","docketNumber":"311-21"}',
     docketNumber: '311-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3059,12 +2649,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '234a49d8-f304-42d6-8bd8-020563c77d16',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-06-14T15:16:20.515Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-06-14T15:16:20.514Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-06-14T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '311-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3074,7 +2662,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-25T18:55:28.700Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3083,7 +2670,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-25T18:55:28.576Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"3be01a88-d59e-464b-833f-6cf9e1126a65","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-25T18:55:28.576Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"312-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-25T18:55:28.517Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"312-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-25T18:55:28.576Z"},"receivedAt":"2021-10-25T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-25T18:55:28.517Z","documentContentsId":"f9b7f684-4fae-44df-b4ad-858114647198","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"0a598aa0-927f-4094-8aea-611dc7c73d49","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-25T18:55:28.518Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"312-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"312-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"f9b7f684-4fae-44df-b4ad-858114647198\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-25T18:55:28.640Z","docketNumber":"312-21"}',
     docketNumber: '312-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3092,12 +2678,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '3be01a88-d59e-464b-833f-6cf9e1126a65',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-10-25T18:55:26.828Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-10-25T18:55:26.827Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-10-25T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '312-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3107,7 +2691,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-25T18:57:31.747Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3116,7 +2699,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"SOP","createdAt":"2021-10-25T18:57:06.439Z","documentType":"Summary Opinion","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2021-10-25T18:57:31.743Z","documentTitle":"Summary Opinion Judge Ashford An opinion for testing","isFileAttached":true,"receivedAt":"2021-10-25T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '313-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -3127,7 +2709,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-25T18:56:39.991Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -3137,7 +2718,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-10-04T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Hanae Guerrero","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","servedAt":"2021-10-25T18:56:39.967Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-10-04T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '313-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -3146,12 +2726,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'dcbdaca4-0bcc-4726-95e7-09b9dc59241d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-10-29T13:04:31.311Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-10-29T13:04:31.310Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '314-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3161,7 +2739,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:04:35.996Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3170,7 +2747,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-29T13:04:35.896Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"d716e1a9-529d-472d-924c-bd27b9efdcab","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-29T13:04:35.896Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"314-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-29T13:04:35.839Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"314-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-29T13:04:35.896Z"},"receivedAt":"2021-10-29T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-29T13:04:35.839Z","documentContentsId":"6519553c-0ec6-4f9c-84ef-58844ae26902","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"5b9e1dfb-9db8-4124-b356-d57c73957296","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-29T13:04:35.840Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"314-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"314-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"6519553c-0ec6-4f9c-84ef-58844ae26902\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-29T13:04:35.952Z","docketNumber":"314-21"}',
     docketNumber: '314-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3181,7 +2757,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:39:47.918Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3190,7 +2765,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-29T13:39:47.811Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"c91e875b-2a86-4318-a490-43d63a70ecd4","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-29T13:39:47.812Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"315-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-29T13:39:47.754Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"315-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-29T13:39:47.812Z"},"receivedAt":"2021-10-29T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-29T13:39:47.754Z","documentContentsId":"10075f6c-7697-4b46-a1d0-bc09af102b2b","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"c84dd643-ffa3-4a68-80fb-dcf4551407e6","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-29T13:39:47.755Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"315-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"315-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"10075f6c-7697-4b46-a1d0-bc09af102b2b\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-29T13:39:47.874Z","docketNumber":"315-21"}',
     docketNumber: '315-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3199,12 +2773,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'c91e875b-2a86-4318-a490-43d63a70ecd4',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-10-29T13:39:45.830Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-10-29T13:39:45.829Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '315-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3212,12 +2784,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'f790d058-0664-4d4d-a195-26e94f9cd310',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-12-01T23:43:53.337Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-12-01T23:43:53.335Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-12-01T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '316-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3227,7 +2797,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-01T23:43:55.598Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3236,7 +2805,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-01T23:43:55.483Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"99da1552-ddba-4ed0-a5d1-5aa8b706686f","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-01T23:43:55.483Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"316-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-01T23:43:55.420Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"316-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-01T23:43:55.483Z"},"receivedAt":"2021-12-01T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-01T23:43:55.420Z","documentContentsId":"57199c27-b12c-4e7a-8684-06b5b2985d10","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"1ae82288-efd0-40ad-8f18-1d1249ef3b03","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-01T23:43:55.421Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"316-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"316-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"57199c27-b12c-4e7a-8684-06b5b2985d10\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-01T23:43:55.552Z","docketNumber":"316-21"}',
     docketNumber: '316-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3245,12 +2813,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '99da1552-ddba-4ed0-a5d1-5aa8b706686f',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-12-02T13:52:43.618Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-12-02T13:52:43.617Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '317-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3260,7 +2826,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T13:52:45.888Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3269,7 +2834,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T13:52:45.799Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"5ea01459-12d0-456d-8ce8-b91b2709c037","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T13:52:45.800Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"317-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T13:52:45.747Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"317-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T13:52:45.800Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T13:52:45.747Z","documentContentsId":"0bbce4d9-58bf-4f7e-9ce9-329af7a3faaa","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"87685740-4b58-42a4-8fe8-086875db7699","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T13:52:45.748Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"317-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"317-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"0bbce4d9-58bf-4f7e-9ce9-329af7a3faaa\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T13:52:45.851Z","docketNumber":"317-21"}',
     docketNumber: '317-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3280,7 +2844,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T16:16:32.227Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3289,7 +2852,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T16:16:32.111Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"afda1ef3-86f3-41ca-b038-967fac6b6e91","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T16:16:32.112Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"318-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T16:16:32.047Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"318-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T16:16:32.112Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T16:16:32.047Z","documentContentsId":"571e8411-c1e5-4c5e-b0eb-94265633fdea","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"3a0d75b9-7eb9-488b-882f-732f57cc2d5d","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T16:16:32.047Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"318-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"318-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"571e8411-c1e5-4c5e-b0eb-94265633fdea\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T16:16:32.179Z","docketNumber":"318-21"}',
     docketNumber: '318-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3298,12 +2860,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'afda1ef3-86f3-41ca-b038-967fac6b6e91',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-12-02T16:16:29.568Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-12-02T16:16:29.566Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '318-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3313,7 +2873,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T16:26:44.977Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3322,7 +2881,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T16:26:44.863Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"0e522fe6-ae74-4af2-9456-bf9d6cb3e82d","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T16:26:44.864Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"319-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T16:26:44.794Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"319-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T16:26:44.864Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T16:26:44.794Z","documentContentsId":"527cc069-2d35-45fb-b00b-3b4caae945cc","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"5b7c4419-c42b-4dc9-b118-0c87c2a42683","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T16:26:44.795Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"319-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"319-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"527cc069-2d35-45fb-b00b-3b4caae945cc\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T16:26:44.931Z","docketNumber":"319-21"}',
     docketNumber: '319-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3331,12 +2889,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0e522fe6-ae74-4af2-9456-bf9d6cb3e82d',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-12-02T16:26:42.330Z'),
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-12-02T16:26:42.329Z","documentType":"Petition","filedBy":"Petr. Brett Osborne","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '319-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3346,7 +2902,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-10-28T20:46:18.747Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3355,7 +2910,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Rand al\'Thor","email":"petitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Amended [Document Name]","filingDate":"2022-10-28T20:45:59.206Z","pending":false,"isDraft":false,"previousDocument":{"documentTitle":"Request for Place of Trial at Milwaukee, Wisconsin","documentType":"Request for Place of Trial","docketEntryId":"f2f21f29-a094-4e39-a800-de2c80a08811"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Rand al\'Thor","isRead":true,"section":"docket","workItemId":"0b76f194-4661-4993-9b57-3e5f98193bd9","assigneeId":null,"sentBy":"Test Petitioner","createdAt":"2022-10-28T20:45:59.209Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"320-21S","docketEntry":{"eventCode":"AMAT","createdAt":"2022-10-28T20:45:59.206Z","documentType":"Amended","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6b2bcbcc-bc95-4103-b5fd-3e999395c2d3","documentTitle":"Second Amended Request for Place of Trial at Milwaukee, Wisconsin","isFileAttached":true,"receivedAt":"2022-10-28T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"320-21","sentByUserId":"7805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-10-28T20:45:59.209Z"},"receivedAt":"2022-10-28T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2022-10-28T20:46:18.734Z","createdAt":"2022-10-28T20:45:59.206Z","ordinalValue":"Second","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6b2bcbcc-bc95-4103-b5fd-3e999395c2d3","certificateOfService":false,"documentTitle":"Second Amended Request for Place of Trial at Milwaukee, Wisconsin","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":5,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405416"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2022-10-28T20:45:59.211Z","docketNumber":"320-21","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -3365,12 +2919,10 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '0b76f194-4661-4993-9b57-3e5f98193bd9',
   },
   {
-    associatedJudge: 'Chief Judge',
     createdAt: new Date('2021-11-20T15:26:23.534Z'),
     docketEntry:
       '{"eventCode":"A","createdAt":"2021-11-20T15:26:23.531Z","documentType":"Answer","filedBy":"Petr. Rand al\'Thor","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","documentTitle":"Answer","isFileAttached":true,"receivedAt":"2021-11-20T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3380,7 +2932,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-11-09T15:22:52.475Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3389,7 +2940,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"O","createdAt":"2021-11-09T15:22:37.215Z","documentType":"Order","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2021-11-09T15:22:52.469Z","documentTitle":"Order to Respond","isFileAttached":true,"receivedAt":"2021-11-09T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3400,7 +2950,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-11-08T15:19:17.250Z'),
     completedBy: 'Test Petitionsclerk',
@@ -3410,7 +2959,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-11-05T15:09:29.303Z","documentType":"Petition","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","servedAt":"2021-11-08T15:19:17.214Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-11-08T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3420,8 +2968,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:19:21.048Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3430,7 +2976,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M135","createdAt":"2023-07-05T00:00:00.000-04:00","isPaper":true,"documentType":"Motion for in Camera Review","filedBy":"Resp.","docketEntryId":"5ccb9535-85e0-4d84-aea5-af94bc993cca","documentTitle":"Motion for in Camera Review","isFileAttached":true,"receivedAt":"2023-07-05T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '400-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -3442,8 +2987,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.176Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3452,7 +2995,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '404-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -3464,8 +3006,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.334Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3474,7 +3014,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '405-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -3486,8 +3025,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.162Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3496,7 +3033,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '409-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -3508,8 +3044,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.395Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3518,7 +3052,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '411-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -3530,8 +3063,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.518Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3540,7 +3071,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '413-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -3552,8 +3082,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:08:04.712Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3562,7 +3090,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M004","createdAt":"2020-11-14T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Assignment of Judge","filedBy":"Resp.","docketEntryId":"15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5","documentTitle":"Motion for Assignment of Judge","isFileAttached":true,"receivedAt":"2020-11-14T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '999-15',
-    highPriority: true,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -3574,8 +3101,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2021-12-02T16:18:37.515Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3584,7 +3109,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"O","createdAt":"2021-12-02T16:18:22.832Z","documentType":"Order","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","servedAt":"2021-12-02T16:18:37.511Z","documentTitle":"Sealed Order","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '999-15',
-    highPriority: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3595,7 +3119,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-05-13T14:50:46.662Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3614,8 +3137,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Fieri',
-    associatedJudgeId: 'dadbad42-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2020-09-30T20:25:32.962Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3624,7 +3145,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"date":null,"servedParties":[{"isAddressSealed":false,"serviceIndicator":"Paper","secondaryName":"Natalya Chaouche","contactId":"d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f","city":"Berthoud","address1":"543 Ten Ballon Drive","postalCode":"80513","name":"Stacy Russold","sealedAndUnavailable":false,"state":"CO","countryType":"domestic"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order","filingDate":"2020-09-30T20:25:22.035Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Fieri","inProgress":true,"caseStatus":"General Docket - Not at Issue","caseTitle":"Stacy Russold, Natalya Chaouche, Tax Matters Partner","section":"docket","workItemId":"4c7de46a-b371-4f76-80b0-c9e69d3d6215","assigneeId":"2805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk1","sentBySection":"docket","createdAt":"2020-09-30T20:25:32.384Z","highPriority":false,"assigneeName":"Test Docketclerk1","entityName":"WorkItem","docketNumberWithSuffix":"124-20","docketEntry":{"date":null,"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order","filingDate":"2020-09-30T20:25:22.035Z","pending":false,"isDraft":false,"receivedAt":"2020-09-30T20:25:22.035Z","isOnDocketRecord":true,"signedJudgeName":"Fieri","createdAt":"2020-09-30T20:25:25.087Z","numberOfPages":1,"scenario":"Type A","entityName":"DocketEntry","docketEntryId":"c611ee2e-a270-4dcd-a7bd-b8b9062db630","documentIdBeforeSignature":"106e58ba-d431-457c-9ace-746f8f488b77","documentTitle":"This is a legacy judge\'s order","relationship":"primaryDocument","draftOrderState":{"eventCode":"O","documentTitle":"This is a legacy judge\'s order","documentType":"Order","docketNumber":"124-20","freeText":"This is a legacy judge\'s order"},"isFileAttached":true,"userId":"2805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"O","processingStatus":"complete","freeText":"This is a legacy judge\'s order","signedAt":"2020-09-30T20:25:25.088Z","editState":"{\\"eventCode\\":\\"O\\",\\"documentType\\":\\"Order\\",\\"documentTitle\\":\\"[Anything]\\",\\"scenario\\":\\"Type A\\",\\"isOrder\\":true,\\"requiresSignature\\":true,\\"attachments\\":false,\\"freeText\\":\\"This is a legacy judge\'s order\\",\\"date\\":null,\\"generatedDocumentTitle\\":\\"This is a legacy judge\'s order\\",\\"serviceStamp\\":\\"Served\\",\\"docketEntryId\\":\\"c611ee2e-a270-4dcd-a7bd-b8b9062db630\\",\\"docketNumber\\":\\"124-20\\"}","signedByUserId":"dadbad42-18d0-43ec-bafb-654e83405416","docketNumber":"124-20"},"docketNumber":"124-20","sentByUserId":"2805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2020-09-30T20:25:32.385Z"},"receivedAt":"2020-09-30T20:25:22.035Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2020-09-30T20:25:25.087Z","numberOfPages":1,"scenario":"Type A","entityName":"DocketEntry","docketEntryId":"c611ee2e-a270-4dcd-a7bd-b8b9062db630","documentIdBeforeSignature":"106e58ba-d431-457c-9ace-746f8f488b77","documentTitle":"This is a legacy judge\'s order","relationship":"primaryDocument","draftOrderState":null,"isFileAttached":true,"userId":"2805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"O","processingStatus":"complete","freeText":"This is a legacy judge\'s order","signedAt":"2020-09-30T20:25:25.088Z","editState":"{\\"eventCode\\":\\"O\\",\\"documentType\\":\\"Order\\",\\"documentTitle\\":\\"[Anything]\\",\\"scenario\\":\\"Type A\\",\\"isOrder\\":true,\\"requiresSignature\\":true,\\"attachments\\":false,\\"freeText\\":\\"This is a legacy judge\'s order\\",\\"date\\":null,\\"generatedDocumentTitle\\":\\"This is a legacy judge\'s order\\",\\"serviceStamp\\":\\"Served\\",\\"docketEntryId\\":\\"c611ee2e-a270-4dcd-a7bd-b8b9062db630\\",\\"docketNumber\\":\\"124-20\\"}","signedByUserId":"2805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2020-09-30T20:25:32.869Z","docketNumber":"124-20"}',
     docketNumber: '124-20',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk1',
     sentBySection: 'docket',
@@ -3635,7 +3155,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-09-30T20:26:08.983Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3644,7 +3163,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"date":null,"servedParties":[{"isAddressSealed":false,"serviceIndicator":"Paper","secondaryName":"Natalya Chaouche","contactId":"d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f","city":"Berthoud","address1":"543 Ten Ballon Drive","postalCode":"80513","name":"Stacy Russold","sealedAndUnavailable":false,"state":"CO","countryType":"domestic"}],"attachments":false,"isStricken":false,"documentType":"Summary Opinion","filingDate":"2020-09-30T20:25:50.601Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"General Docket - Not at Issue","caseTitle":"Stacy Russold, Natalya Chaouche, Tax Matters Partner","section":"docket","workItemId":"5f075b42-470c-4ffd-864e-e8b873e96f30","assigneeId":"2805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk1","sentBySection":"docket","createdAt":"2020-09-30T20:26:08.362Z","highPriority":false,"assigneeName":"Test Docketclerk1","entityName":"WorkItem","docketNumberWithSuffix":"124-20","docketEntry":{"date":null,"attachments":false,"isStricken":false,"documentType":"Summary Opinion","filingDate":"2020-09-30T20:25:50.601Z","pending":false,"isDraft":false,"receivedAt":"2020-09-30T20:25:50.601Z","isOnDocketRecord":true,"createdAt":"2020-09-30T20:25:50.600Z","numberOfPages":25,"scenario":"Type B","entityName":"DocketEntry","docketEntryId":"dc2664a1-f552-418f-bcc7-8a67f4246568","judge":"Foley","documentTitle":"Summary Opinion Chief Judge Fieri","relationship":"primaryDocument","draftOrderState":{"eventCode":"MISC","generatedDocumentTitle":"This is a legacy judge\'s opinion","documentType":"Miscellaneous","scenario":"Type A","primaryDocumentFileSize":225760,"freeText":"This is a legacy judge\'s opinion","documentTitle":"This is a legacy judge\'s opinion","docketNumber":"124-20"},"isFileAttached":true,"userId":"2805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SOP","processingStatus":"complete","freeText":"This is a legacy judge\'s opinion","editState":"{\\"eventCode\\":\\"SOP\\",\\"documentType\\":\\"Summary Opinion\\",\\"documentTitle\\":\\"Summary Opinion [judge]\\",\\"scenario\\":\\"Type B\\",\\"attachments\\":false,\\"date\\":null,\\"generatedDocumentTitle\\":\\"Summary Opinion Chief Judge Fieri\\",\\"searchText\\":\\"opi\\",\\"freeText\\":\\"This is a legacy judge\'s opinion\\",\\"judge\\":\\"Chief Judge Foley\\",\\"docketEntryId\\":\\"dc2664a1-f552-418f-bcc7-8a67f4246568\\",\\"docketNumber\\":\\"124-20\\"}","docketNumber":"124-20"},"docketNumber":"124-20","sentByUserId":"2805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2020-09-30T20:26:08.363Z"},"receivedAt":"2020-09-30T20:25:50.601Z","isOnDocketRecord":true,"createdAt":"2020-09-30T20:25:50.600Z","numberOfPages":25,"scenario":"Type B","entityName":"DocketEntry","docketEntryId":"dc2664a1-f552-418f-bcc7-8a67f4246568","judge":"Foley","documentTitle":"Summary Opinion Chief Judge Fieri","relationship":"primaryDocument","draftOrderState":null,"isFileAttached":true,"userId":"2805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SOP","processingStatus":"complete","freeText":"This is a legacy judge\'s opinion","editState":"{\\"eventCode\\":\\"SOP\\",\\"documentType\\":\\"Summary Opinion\\",\\"documentTitle\\":\\"Summary Opinion [judge]\\",\\"scenario\\":\\"Type B\\",\\"attachments\\":false,\\"date\\":null,\\"generatedDocumentTitle\\":\\"Summary Opinion Chief Judge Fieri\\",\\"searchText\\":\\"opi\\",\\"freeText\\":\\"This is a legacy judge\'s opinion\\",\\"judge\\":\\"Chief Judge Foley\\",\\"docketEntryId\\":\\"dc2664a1-f552-418f-bcc7-8a67f4246568\\",\\"docketNumber\\":\\"124-20\\"}","servedAt":"2020-09-30T20:26:08.914Z","docketNumber":"124-20"}',
     docketNumber: '124-20',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk1',
     sentBySection: 'docket',
@@ -3655,7 +3173,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-04-27T17:06:18.104Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3664,7 +3181,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-04-27T17:06:17.880Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"943b9b2c-ea09-473a-a1d1-34035648062f","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-04-27T17:06:17.881Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"302-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-04-27T17:06:17.760Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-04-27T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"302-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-04-27T17:06:17.881Z"},"receivedAt":"2021-04-27T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-04-27T17:06:17.760Z","documentContentsId":"38eea8ee-174b-456f-8d93-7f214051d0b9","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"abcc4956-8c58-48ff-8325-6596cd647b10","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-04-27T17:06:17.760Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"302-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"302-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"38eea8ee-174b-456f-8d93-7f214051d0b9\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-04-27T17:06:18.013Z","docketNumber":"302-21"}',
     docketNumber: '302-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3675,7 +3191,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-04-27T17:12:55.950Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3684,7 +3199,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-04-27T17:12:55.731Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"dbd9d6a3-1995-460c-9761-7d516e5ca41b","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-04-27T17:12:55.732Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"303-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-04-27T17:12:55.601Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-04-27T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"303-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-04-27T17:12:55.732Z"},"receivedAt":"2021-04-27T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-04-27T17:12:55.601Z","documentContentsId":"d7114cc8-60e0-4520-b64f-9fa4f588a1dc","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"7d46fbed-0fbd-4b27-add1-165367bfa5d0","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-04-27T17:12:55.602Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"303-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"303-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"d7114cc8-60e0-4520-b64f-9fa4f588a1dc\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-04-27T17:12:55.874Z","docketNumber":"303-21"}',
     docketNumber: '303-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3695,7 +3209,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-04-27T20:51:00.833Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3704,7 +3217,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-04-27T20:51:00.576Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"e700b727-affd-400b-b7c7-6441bf2c4751","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-04-27T20:51:00.576Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"304-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-04-27T20:51:00.392Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-04-27T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"304-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-04-27T20:51:00.576Z"},"receivedAt":"2021-04-27T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-04-27T20:51:00.392Z","documentContentsId":"ad34ac62-0d41-4de4-98d9-4d9390aa4a94","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"9765e873-8ba0-45e5-9cc7-05ec1d0cc1c7","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-04-27T20:51:00.392Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"304-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"304-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"ad34ac62-0d41-4de4-98d9-4d9390aa4a94\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-04-27T20:51:00.762Z","docketNumber":"304-21"}',
     docketNumber: '304-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3715,7 +3227,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-04T17:17:10.268Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3724,7 +3235,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-04T17:17:10.105Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"fae3cbf6-c250-4f22-adf0-f380076ab2d9","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-04T17:17:10.106Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"305-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-04T17:17:10.023Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-04T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"305-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-04T17:17:10.106Z"},"receivedAt":"2021-05-04T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-04T17:17:10.023Z","documentContentsId":"0a9cd80b-c156-4253-8bca-e7b93fa4f15e","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"f113058a-3131-4a11-ae7a-928a2d3a17b0","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-04T17:17:10.024Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"305-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"305-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"0a9cd80b-c156-4253-8bca-e7b93fa4f15e\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-04T17:17:10.195Z","docketNumber":"305-21"}',
     docketNumber: '305-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3735,7 +3245,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-14T17:32:48.402Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3744,7 +3253,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-14T17:32:48.271Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"8d91ee6b-89d6-466e-8e69-e7d30275c63b","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-14T17:32:48.272Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"306-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-14T17:32:48.206Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-14T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"306-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-14T17:32:48.272Z"},"receivedAt":"2021-05-14T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-14T17:32:48.206Z","documentContentsId":"0fa9fb9e-cd55-487d-a03d-bc315e5aac2e","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"ac6dda66-83d6-47cb-b964-f543d12e5952","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-14T17:32:48.206Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"306-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"306-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"0fa9fb9e-cd55-487d-a03d-bc315e5aac2e\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-14T17:32:48.337Z","docketNumber":"306-21"}',
     docketNumber: '306-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3755,7 +3263,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-25T13:09:46.884Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3764,7 +3271,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-25T13:09:46.748Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"eb055586-cbdd-4d15-978d-58f7a82f6160","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-25T13:09:46.749Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"307-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-25T13:09:46.672Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"307-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-25T13:09:46.749Z"},"receivedAt":"2021-05-25T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-25T13:09:46.672Z","documentContentsId":"286e5a62-e6d8-438e-bc73-c1ced4991e1d","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"e0626ac4-e135-441d-a30c-c4fab41ec0c4","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-25T13:09:46.673Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"307-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"307-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"286e5a62-e6d8-438e-bc73-c1ced4991e1d\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-25T13:09:46.815Z","docketNumber":"307-21"}',
     docketNumber: '307-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3775,7 +3281,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-25T13:24:01.741Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3784,7 +3289,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-25T13:24:01.568Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"5ea7348b-8691-49be-ad1b-5720077e19a2","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-25T13:24:01.568Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"308-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-25T13:24:01.472Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"308-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-25T13:24:01.569Z"},"receivedAt":"2021-05-25T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-25T13:24:01.472Z","documentContentsId":"37504445-93af-4c1c-b006-0101bba993cc","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"03bae297-2450-41ac-a29b-8b68a31e9b87","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-25T13:24:01.472Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"308-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"308-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"37504445-93af-4c1c-b006-0101bba993cc\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-25T13:24:01.671Z","docketNumber":"308-21"}',
     docketNumber: '308-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3795,7 +3299,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-28T15:15:37.750Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3804,7 +3307,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-28T15:15:37.470Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"f4a66ec4-e145-4c47-9575-db2b0c2a3e78","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-28T15:15:37.470Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"309-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-28T15:15:37.283Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-28T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"309-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-28T15:15:37.471Z"},"receivedAt":"2021-05-28T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-28T15:15:37.283Z","documentContentsId":"cc91b5a4-b0b4-450f-a0e2-c09b5502d130","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"01f38bd8-1ca8-4786-9c7e-9c583ccb68f1","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-28T15:15:37.284Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"309-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"309-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"cc91b5a4-b0b4-450f-a0e2-c09b5502d130\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-28T15:15:37.686Z","docketNumber":"309-21"}',
     docketNumber: '309-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3815,7 +3317,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-06-07T20:28:16.318Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3824,7 +3325,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-06-07T20:28:16.123Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"d48e3364-ab16-4c79-8857-80239d1a418c","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-06-07T20:28:16.124Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"310-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-06-07T20:28:16.020Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-06-07T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"310-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-06-07T20:28:16.124Z"},"receivedAt":"2021-06-07T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-06-07T20:28:16.020Z","documentContentsId":"923c3813-b226-4450-8301-7f2359bc2c0b","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"afe7eef3-bf73-46ee-bd02-ca27dc920932","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-06-07T20:28:16.020Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"310-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"310-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"923c3813-b226-4450-8301-7f2359bc2c0b\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-06-07T20:28:16.223Z","docketNumber":"310-21"}',
     docketNumber: '310-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3835,7 +3335,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-06-14T15:16:23.253Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3844,7 +3343,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-06-14T15:16:23.111Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"234a49d8-f304-42d6-8bd8-020563c77d16","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-06-14T15:16:23.112Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"311-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-06-14T15:16:23.033Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-06-14T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"311-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-06-14T15:16:23.112Z"},"receivedAt":"2021-06-14T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-06-14T15:16:23.033Z","documentContentsId":"73d77827-1c93-4981-ad79-1b8f62e3d038","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"0d92fcc7-5423-44af-af88-8764d0aed074","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-06-14T15:16:23.034Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"311-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"311-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"73d77827-1c93-4981-ad79-1b8f62e3d038\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-06-14T15:16:23.180Z","docketNumber":"311-21"}',
     docketNumber: '311-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3855,7 +3353,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-25T18:55:28.700Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3864,7 +3361,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-25T18:55:28.576Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"3be01a88-d59e-464b-833f-6cf9e1126a65","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-25T18:55:28.576Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"312-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-25T18:55:28.517Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"312-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-25T18:55:28.576Z"},"receivedAt":"2021-10-25T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-25T18:55:28.517Z","documentContentsId":"f9b7f684-4fae-44df-b4ad-858114647198","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"0a598aa0-927f-4094-8aea-611dc7c73d49","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-25T18:55:28.518Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"312-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"312-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"f9b7f684-4fae-44df-b4ad-858114647198\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-25T18:55:28.640Z","docketNumber":"312-21"}',
     docketNumber: '312-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3875,7 +3371,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:04:35.996Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3884,7 +3379,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-29T13:04:35.896Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"d716e1a9-529d-472d-924c-bd27b9efdcab","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-29T13:04:35.896Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"314-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-29T13:04:35.839Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"314-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-29T13:04:35.896Z"},"receivedAt":"2021-10-29T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-29T13:04:35.839Z","documentContentsId":"6519553c-0ec6-4f9c-84ef-58844ae26902","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"5b9e1dfb-9db8-4124-b356-d57c73957296","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-29T13:04:35.840Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"314-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"314-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"6519553c-0ec6-4f9c-84ef-58844ae26902\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-29T13:04:35.952Z","docketNumber":"314-21"}',
     docketNumber: '314-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3895,7 +3389,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:39:47.918Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3904,7 +3397,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-29T13:39:47.811Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"c91e875b-2a86-4318-a490-43d63a70ecd4","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-29T13:39:47.812Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"315-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-29T13:39:47.754Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"315-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-29T13:39:47.812Z"},"receivedAt":"2021-10-29T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-29T13:39:47.754Z","documentContentsId":"10075f6c-7697-4b46-a1d0-bc09af102b2b","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"c84dd643-ffa3-4a68-80fb-dcf4551407e6","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-29T13:39:47.755Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"315-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"315-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"10075f6c-7697-4b46-a1d0-bc09af102b2b\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-29T13:39:47.874Z","docketNumber":"315-21"}',
     docketNumber: '315-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3915,7 +3407,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:42:43.040Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3924,7 +3415,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"SOP","createdAt":"2021-10-29T13:42:27.351Z","documentType":"Summary Opinion","docketEntryId":"4e3e97b1-5b5a-492f-8553-21e2a020211d","servedAt":"2021-10-29T13:42:43.037Z","documentTitle":"Summary Opinion Judge Urda opinion without a file attached","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"2805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-11',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk1',
     sentBySection: 'docket',
@@ -3935,7 +3425,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-11-09T15:22:52.475Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3944,7 +3433,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"O","createdAt":"2021-11-09T15:22:37.215Z","documentType":"Order","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2021-11-09T15:22:52.469Z","documentTitle":"Order to Respond","isFileAttached":true,"receivedAt":"2021-11-09T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3955,7 +3443,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-01T23:43:55.598Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3964,7 +3451,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-01T23:43:55.483Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"99da1552-ddba-4ed0-a5d1-5aa8b706686f","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-01T23:43:55.483Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"316-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-01T23:43:55.420Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"316-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-01T23:43:55.483Z"},"receivedAt":"2021-12-01T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-01T23:43:55.420Z","documentContentsId":"57199c27-b12c-4e7a-8684-06b5b2985d10","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"1ae82288-efd0-40ad-8f18-1d1249ef3b03","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-01T23:43:55.421Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"316-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"316-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"57199c27-b12c-4e7a-8684-06b5b2985d10\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-01T23:43:55.552Z","docketNumber":"316-21"}',
     docketNumber: '316-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3975,7 +3461,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T13:52:45.888Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -3984,7 +3469,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T13:52:45.799Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"5ea01459-12d0-456d-8ce8-b91b2709c037","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T13:52:45.800Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"317-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T13:52:45.747Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"317-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T13:52:45.800Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T13:52:45.747Z","documentContentsId":"0bbce4d9-58bf-4f7e-9ce9-329af7a3faaa","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"87685740-4b58-42a4-8fe8-086875db7699","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T13:52:45.748Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"317-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"317-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"0bbce4d9-58bf-4f7e-9ce9-329af7a3faaa\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T13:52:45.851Z","docketNumber":"317-21"}',
     docketNumber: '317-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -3995,7 +3479,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T16:16:32.227Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4004,7 +3487,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T16:16:32.111Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"afda1ef3-86f3-41ca-b038-967fac6b6e91","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T16:16:32.112Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"318-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T16:16:32.047Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"318-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T16:16:32.112Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T16:16:32.047Z","documentContentsId":"571e8411-c1e5-4c5e-b0eb-94265633fdea","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"3a0d75b9-7eb9-488b-882f-732f57cc2d5d","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T16:16:32.047Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"318-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"318-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"571e8411-c1e5-4c5e-b0eb-94265633fdea\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T16:16:32.179Z","docketNumber":"318-21"}',
     docketNumber: '318-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4015,8 +3497,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2021-12-02T16:18:37.515Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4025,7 +3505,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"O","createdAt":"2021-12-02T16:18:22.832Z","documentType":"Order","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","servedAt":"2021-12-02T16:18:37.511Z","documentTitle":"Sealed Order","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '999-15',
-    highPriority: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4036,7 +3515,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T16:26:44.977Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4045,7 +3523,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T16:26:44.863Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"0e522fe6-ae74-4af2-9456-bf9d6cb3e82d","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T16:26:44.864Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"319-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T16:26:44.794Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"319-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T16:26:44.864Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T16:26:44.794Z","documentContentsId":"527cc069-2d35-45fb-b00b-3b4caae945cc","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"5b7c4419-c42b-4dc9-b118-0c87c2a42683","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T16:26:44.795Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"319-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"319-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"527cc069-2d35-45fb-b00b-3b4caae945cc\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T16:26:44.931Z","docketNumber":"319-21"}',
     docketNumber: '319-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4056,7 +3533,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-02-01T17:21:07.638Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4065,7 +3541,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2022-02-01T17:21:07.511Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"dbcb915a-5ed1-45c4-9d6d-b66679a55029","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2022-02-01T17:21:07.511Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"100-22W","docketEntry":{"eventCode":"ODJ","createdAt":"2022-02-01T17:21:07.439Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2022-02-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"100-22","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-02-01T17:21:07.511Z"},"receivedAt":"2022-02-01T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2022-02-01T17:21:07.439Z","documentContentsId":"97248a8b-d393-446a-9907-d7743b5cc56c","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"4158c5f3-9573-4663-ba10-64c9b2e46cfc","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2022-02-01T17:21:07.439Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"100-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"100-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"97248a8b-d393-446a-9907-d7743b5cc56c\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2022-02-01T17:21:07.581Z","docketNumber":"100-22"}',
     docketNumber: '100-22',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4076,7 +3551,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-02-15T16:52:14.314Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4085,7 +3559,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2022-02-15T16:52:14.159Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"55cd0550-6191-4014-bef8-da56f8cf3685","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2022-02-15T16:52:14.159Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"101-22W","docketEntry":{"eventCode":"ODJ","createdAt":"2022-02-15T16:52:14.079Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2022-02-15T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"101-22","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-02-15T16:52:14.160Z"},"receivedAt":"2022-02-15T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2022-02-15T16:52:14.079Z","documentContentsId":"95dd9113-40a0-47bf-8584-a1d4e86d7b73","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"63b9b593-e928-4163-b05f-5bf686e6bbba","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2022-02-15T16:52:14.080Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"101-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"101-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"95dd9113-40a0-47bf-8584-a1d4e86d7b73\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2022-02-15T16:52:14.238Z","docketNumber":"101-22"}',
     docketNumber: '101-22',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4096,7 +3569,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-10-28T20:46:18.747Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4105,7 +3577,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Rand al\'Thor","email":"petitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Amended [Document Name]","filingDate":"2022-10-28T20:45:59.206Z","pending":false,"isDraft":false,"previousDocument":{"documentTitle":"Request for Place of Trial at Milwaukee, Wisconsin","documentType":"Request for Place of Trial","docketEntryId":"f2f21f29-a094-4e39-a800-de2c80a08811"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Rand al\'Thor","isRead":true,"section":"docket","workItemId":"0b76f194-4661-4993-9b57-3e5f98193bd9","assigneeId":null,"sentBy":"Test Petitioner","createdAt":"2022-10-28T20:45:59.209Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"320-21S","docketEntry":{"eventCode":"AMAT","createdAt":"2022-10-28T20:45:59.206Z","documentType":"Amended","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6b2bcbcc-bc95-4103-b5fd-3e999395c2d3","documentTitle":"Second Amended Request for Place of Trial at Milwaukee, Wisconsin","isFileAttached":true,"receivedAt":"2022-10-28T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"320-21","sentByUserId":"7805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-10-28T20:45:59.209Z"},"receivedAt":"2022-10-28T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2022-10-28T20:46:18.734Z","createdAt":"2022-10-28T20:45:59.206Z","ordinalValue":"Second","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6b2bcbcc-bc95-4103-b5fd-3e999395c2d3","certificateOfService":false,"documentTitle":"Second Amended Request for Place of Trial at Milwaukee, Wisconsin","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":5,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405416"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2022-10-28T20:45:59.211Z","docketNumber":"320-21","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4117,7 +3588,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:49.508Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4126,7 +3596,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Brief","filingDate":"2023-07-26T17:12:46.030Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"5dc708c5-f8b7-4268-af8f-eb46c09cdcbb","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:12:46.032Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAB","createdAt":"2023-07-26T17:12:46.030Z","documentType":"Simultaneous Answering Brief","filedBy":"Resp.","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf","documentTitle":"Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:12:46.032Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:12:46.030Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf","certificateOfService":false,"documentTitle":"Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":5,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIAB","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:49.507Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4137,7 +3606,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:54.106Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4146,7 +3614,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Memoranda of Law","filingDate":"2023-07-26T17:13:03.948Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"92d3f224-a5f4-4cc0-b0cf-415f7d8c190e","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:03.949Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAM","createdAt":"2023-07-26T17:13:03.948Z","documentType":"Simultaneous Answering Memoranda of Law","filedBy":"Resp.","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12","documentTitle":"Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:03.949Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:03.948Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12","certificateOfService":false,"documentTitle":"Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":6,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIAM","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:54.105Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4157,7 +3624,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:58.875Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4166,7 +3632,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Opening Brief","filingDate":"2023-07-26T17:13:19.794Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"8ddf8f6c-0ea5-4a60-ae7e-8c74dd9dbb52","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:19.795Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIOB","createdAt":"2023-07-26T17:13:19.793Z","documentType":"Simultaneous Opening Brief","filedBy":"Resp.","docketEntryId":"283e7fc3-25dc-4ae4-8870-7a111d7584da","documentTitle":"Simultaneous Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:19.795Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:19.793Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"283e7fc3-25dc-4ae4-8870-7a111d7584da","certificateOfService":false,"documentTitle":"Simultaneous Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":7,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIOB","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:58.874Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4177,7 +3642,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:03.511Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4186,7 +3650,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:13:38.963Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"3822c600-65d1-41d2-8e42-0e1aede1511d","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:38.964Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:13:38.963Z","documentType":"Amended","filedBy":"Resp.","docketEntryId":"533322f8-b0c9-4a7b-a5d1-2d61d0191b18","documentTitle":"First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:38.964Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:38.963Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"533322f8-b0c9-4a7b-a5d1-2d61d0191b18","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":8,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:03.508Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4197,7 +3660,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:09.199Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4206,7 +3668,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:13:59.503Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Memoranda of Law","documentType":"Simultaneous Answering Memoranda of Law","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"77a13efe-5c4f-4da6-a4a3-5aaef13a48b4","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:59.506Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:13:59.503Z","documentType":"Amended","filedBy":"Resp.","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd","documentTitle":"First Amended Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:59.506Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:59.503Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":9,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:09.198Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4217,7 +3678,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:14.156Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4226,7 +3686,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Redacted","filingDate":"2023-07-26T17:14:17.068Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Memoranda of Law","documentType":"Amended","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0ef72276-20fa-41d9-94e8-58f863ed009b","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:17.069Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:14:17.068Z","documentType":"Redacted","filedBy":"Resp.","docketEntryId":"f836ef0c-4c9d-40ef-b7e9-2ac71342f9e4","documentTitle":"Redacted First Amended Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:17.069Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:14:17.068Z","numberOfPages":3,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"f836ef0c-4c9d-40ef-b7e9-2ac71342f9e4","certificateOfService":false,"documentTitle":"Redacted First Amended Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":10,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"REDC","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:14.154Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4237,7 +3696,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:24.041Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4246,7 +3704,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Reply Brief","filingDate":"2023-07-26T17:14:35.401Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"e9cbcde8-08a7-4b24-b0ad-f8556f59f0d9","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:35.403Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SERB","createdAt":"2023-07-26T17:14:35.401Z","documentType":"Seriatim Reply Brief","filedBy":"Resp.","docketEntryId":"708e3c41-ac8f-4267-8a33-91234d738292","documentTitle":"Seriatim Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:35.403Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:24.035Z","createdAt":"2023-07-26T17:14:35.401Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"708e3c41-ac8f-4267-8a33-91234d738292","certificateOfService":false,"documentTitle":"Seriatim Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":11,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SERB","processingStatus":"complete","lodged":true,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:14:35.404Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4258,7 +3715,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:35.017Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4267,7 +3723,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Answering Brief","filingDate":"2023-07-26T17:14:50.853Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"1e97f8a8-2d95-44db-b7ed-a4d2334ca607","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:50.854Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SEAB","createdAt":"2023-07-26T17:14:50.853Z","documentType":"Seriatim Answering Brief","filedBy":"Resp.","docketEntryId":"c9e0e099-c805-43a9-a45f-958325835571","documentTitle":"Seriatim Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:50.854Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:35.004Z","createdAt":"2023-07-26T17:14:50.853Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"c9e0e099-c805-43a9-a45f-958325835571","certificateOfService":false,"documentTitle":"Seriatim Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":12,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SEAB","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:14:50.854Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4279,7 +3734,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:42.966Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4288,7 +3742,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Sur-Reply Brief","filingDate":"2023-07-26T17:15:09.211Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"e6b4a293-f3ba-4554-a9e7-a37d4cc6ec3d","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:15:09.212Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SESB","createdAt":"2023-07-26T17:15:09.210Z","documentType":"Seriatim Sur-Reply Brief","filedBy":"Resp.","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed","documentTitle":"Seriatim Sur-Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:15:09.212Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:42.954Z","createdAt":"2023-07-26T17:15:09.210Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed","certificateOfService":false,"documentTitle":"Seriatim Sur-Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":13,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SESB","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:15:09.213Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4300,7 +3753,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:51.290Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4309,7 +3761,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Redacted","filingDate":"2023-07-26T17:15:28.242Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Seriatim Sur-Reply Brief","documentType":"Seriatim Sur-Reply Brief","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"182cc3d0-cf44-411d-8fad-4d237cd553ea","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:15:28.244Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:15:28.242Z","documentType":"Redacted","filedBy":"Resp.","docketEntryId":"e3948d50-caaa-42be-8023-5bf935476c0b","documentTitle":"Redacted Seriatim Sur-Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:15:28.245Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:51.285Z","createdAt":"2023-07-26T17:15:28.242Z","numberOfPages":2,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"e3948d50-caaa-42be-8023-5bf935476c0b","certificateOfService":false,"documentTitle":"Redacted Seriatim Sur-Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":14,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"REDC","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:15:28.246Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4321,7 +3772,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:46.557Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4330,7 +3780,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Brief","filingDate":"2023-07-26T17:24:39.640Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0510d265-c6bd-4ef5-80e9-26e6fca4f53c","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:24:39.642Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAB","createdAt":"2023-07-26T17:24:39.640Z","documentType":"Simultaneous Answering Brief","filedBy":"Petr. Yasir Oneal","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48","documentTitle":"Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:24:39.642Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:24:39.640Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48","certificateOfService":false,"documentTitle":"Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":16,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"SIAB","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:26:46.556Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4341,7 +3790,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:52.640Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4350,7 +3798,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:25:00.573Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"22e979ef-873f-4ed7-9dc6-1890510c37c3","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:00.575Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:25:00.573Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e","documentTitle":"First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:00.575Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:00.573Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":17,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:26:52.639Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4361,7 +3808,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:59.421Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4370,7 +3816,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Opening Brief","filingDate":"2023-07-26T17:25:57.567Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"54a18060-961f-4dce-bd45-bb460e845ad5","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:57.568Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SEOB","createdAt":"2023-07-26T17:25:57.567Z","documentType":"Seriatim Opening Brief","filedBy":"Petr. Yasir Oneal","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5","documentTitle":"Seriatim Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:57.568Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:26:59.406Z","createdAt":"2023-07-26T17:25:57.567Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5","certificateOfService":false,"documentTitle":"Seriatim Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":20,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"SEOB","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:25:57.569Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4382,7 +3827,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:09.509Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4391,7 +3835,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Amended [Document Name]","filingDate":"2023-07-26T17:26:16.104Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Seriatim Opening Brief","documentType":"Seriatim Opening Brief","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"952bc117-39e8-4999-892b-ce9c32666c6e","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:26:16.106Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:26:16.104Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"2e8b77ec-4c14-470e-9b04-58c9c8370ff1","documentTitle":"First Amended Seriatim Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:26:16.106Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:27:09.499Z","createdAt":"2023-07-26T17:26:16.104Z","ordinalValue":"1","numberOfPages":2,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"2e8b77ec-4c14-470e-9b04-58c9c8370ff1","certificateOfService":false,"documentTitle":"First Amended Seriatim Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":21,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:26:16.107Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4403,7 +3846,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:17.588Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4412,7 +3854,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:25:22.269Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Brief","documentType":"Amended","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"afd1417b-5688-41aa-9b53-7b0bf78c1073","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:22.270Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:25:22.269Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"b9dbbef9-0068-4ad7-bb52-396e811ae4d0","documentTitle":"First Amended First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:22.270Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:22.269Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"b9dbbef9-0068-4ad7-bb52-396e811ae4d0","certificateOfService":false,"documentTitle":"First Amended First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":18,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:27:17.586Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4423,7 +3864,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:24.652Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4432,7 +3872,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Redacted","filingDate":"2023-07-26T17:25:38.204Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Brief","documentType":"Amended","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0b7b0e5a-34d7-4c00-85cd-bafff8300cea","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:38.205Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:25:38.204Z","documentType":"Redacted","filedBy":"Petr. Yasir Oneal","docketEntryId":"ff713546-dbbe-4d59-b543-3472484332aa","documentTitle":"Redacted First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:38.205Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:38.204Z","numberOfPages":3,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"ff713546-dbbe-4d59-b543-3472484332aa","certificateOfService":false,"documentTitle":"Redacted First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":19,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"REDC","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:27:24.651Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4443,7 +3882,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:28:33.233Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4452,7 +3890,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMBR","createdAt":"2007-07-02T04:00:00.000Z","isPaper":true,"documentType":"Amicus Brief","filedBy":"A Friend","docketEntryId":"bda62f28-77c1-48f7-8072-bcecbbfe833a","otherFilingParty":"A Friend","documentTitle":"AMBR","isFileAttached":true,"receivedAt":"2007-07-02T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4464,7 +3901,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:28:58.253Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4473,7 +3909,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMBR","createdAt":"2023-07-25T04:00:00.000Z","isPaper":true,"documentType":"Amicus Brief","filedBy":"A Friend","docketEntryId":"5287c2df-e09f-4071-8b50-b9005a7c45e5","otherFilingParty":"A Friend","documentTitle":"AMBR","isFileAttached":true,"receivedAt":"2023-07-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4485,7 +3920,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T18:58:04.853Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4494,7 +3928,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMAT","createdAt":"2023-07-05T04:00:00.000Z","isPaper":true,"documentType":"Amended [Document Name]","filedBy":"Petr. Simba Oneal","docketEntryId":"1340f1d9-1d84-402a-b78b-2e074e0efd00","documentTitle":"First Amended Seriatim Reply Brief","isFileAttached":true,"receivedAt":"2023-07-05T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4506,8 +3939,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:08:04.712Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4516,7 +3947,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M004","createdAt":"2020-11-14T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Assignment of Judge","filedBy":"Resp.","docketEntryId":"15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5","documentTitle":"Motion for Assignment of Judge","isFileAttached":true,"receivedAt":"2020-11-14T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '999-15',
-    highPriority: true,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4528,8 +3958,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.176Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4538,7 +3966,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '404-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4550,8 +3977,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.334Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4560,7 +3985,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '405-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4572,8 +3996,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:19:21.048Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4582,7 +4004,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M135","createdAt":"2023-07-05T00:00:00.000-04:00","isPaper":true,"documentType":"Motion for in Camera Review","filedBy":"Resp.","docketEntryId":"5ccb9535-85e0-4d84-aea5-af94bc993cca","documentTitle":"Motion for in Camera Review","isFileAttached":true,"receivedAt":"2023-07-05T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '400-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4594,8 +4015,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.162Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4604,7 +4023,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '409-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4616,8 +4034,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.395Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4626,7 +4042,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '411-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4638,8 +4053,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.518Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4648,7 +4061,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '413-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4660,7 +4072,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-25T18:55:28.700Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4669,7 +4080,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-25T18:55:28.576Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"3be01a88-d59e-464b-833f-6cf9e1126a65","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-25T18:55:28.576Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"312-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-25T18:55:28.517Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"312-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-25T18:55:28.576Z"},"receivedAt":"2021-10-25T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-25T18:55:28.517Z","documentContentsId":"f9b7f684-4fae-44df-b4ad-858114647198","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"0a598aa0-927f-4094-8aea-611dc7c73d49","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-25T18:55:28.518Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"312-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"312-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"f9b7f684-4fae-44df-b4ad-858114647198\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-25T18:55:28.640Z","docketNumber":"312-21"}',
     docketNumber: '312-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4680,7 +4090,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:04:35.996Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4689,7 +4098,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-29T13:04:35.896Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"d716e1a9-529d-472d-924c-bd27b9efdcab","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-29T13:04:35.896Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"314-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-29T13:04:35.839Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"314-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-29T13:04:35.896Z"},"receivedAt":"2021-10-29T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-29T13:04:35.839Z","documentContentsId":"6519553c-0ec6-4f9c-84ef-58844ae26902","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"5b9e1dfb-9db8-4124-b356-d57c73957296","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-29T13:04:35.840Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"314-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"314-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"6519553c-0ec6-4f9c-84ef-58844ae26902\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-29T13:04:35.952Z","docketNumber":"314-21"}',
     docketNumber: '314-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4700,7 +4108,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:39:47.918Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4709,7 +4116,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-29T13:39:47.811Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"c91e875b-2a86-4318-a490-43d63a70ecd4","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-29T13:39:47.812Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"315-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-29T13:39:47.754Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"315-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-29T13:39:47.812Z"},"receivedAt":"2021-10-29T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-29T13:39:47.754Z","documentContentsId":"10075f6c-7697-4b46-a1d0-bc09af102b2b","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"c84dd643-ffa3-4a68-80fb-dcf4551407e6","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-29T13:39:47.755Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"315-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"315-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"10075f6c-7697-4b46-a1d0-bc09af102b2b\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-29T13:39:47.874Z","docketNumber":"315-21"}',
     docketNumber: '315-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4720,7 +4126,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:42:43.040Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4729,7 +4134,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"SOP","createdAt":"2021-10-29T13:42:27.351Z","documentType":"Summary Opinion","docketEntryId":"4e3e97b1-5b5a-492f-8553-21e2a020211d","servedAt":"2021-10-29T13:42:43.037Z","documentTitle":"Summary Opinion Judge Urda opinion without a file attached","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"2805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-11',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk1',
     sentBySection: 'docket',
@@ -4740,7 +4144,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-01T23:43:55.598Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4749,7 +4152,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-01T23:43:55.483Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"99da1552-ddba-4ed0-a5d1-5aa8b706686f","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-01T23:43:55.483Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"316-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-01T23:43:55.420Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"316-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-01T23:43:55.483Z"},"receivedAt":"2021-12-01T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-01T23:43:55.420Z","documentContentsId":"57199c27-b12c-4e7a-8684-06b5b2985d10","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"1ae82288-efd0-40ad-8f18-1d1249ef3b03","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-01T23:43:55.421Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"316-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"316-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"57199c27-b12c-4e7a-8684-06b5b2985d10\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-01T23:43:55.552Z","docketNumber":"316-21"}',
     docketNumber: '316-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4760,7 +4162,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T13:52:45.888Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4769,7 +4170,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T13:52:45.799Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"5ea01459-12d0-456d-8ce8-b91b2709c037","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T13:52:45.800Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"317-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T13:52:45.747Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"317-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T13:52:45.800Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T13:52:45.747Z","documentContentsId":"0bbce4d9-58bf-4f7e-9ce9-329af7a3faaa","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"87685740-4b58-42a4-8fe8-086875db7699","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T13:52:45.748Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"317-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"317-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"0bbce4d9-58bf-4f7e-9ce9-329af7a3faaa\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T13:52:45.851Z","docketNumber":"317-21"}',
     docketNumber: '317-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4780,7 +4180,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T16:16:32.227Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4789,7 +4188,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T16:16:32.111Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"afda1ef3-86f3-41ca-b038-967fac6b6e91","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T16:16:32.112Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"318-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T16:16:32.047Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"318-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T16:16:32.112Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T16:16:32.047Z","documentContentsId":"571e8411-c1e5-4c5e-b0eb-94265633fdea","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"3a0d75b9-7eb9-488b-882f-732f57cc2d5d","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T16:16:32.047Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"318-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"318-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"571e8411-c1e5-4c5e-b0eb-94265633fdea\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T16:16:32.179Z","docketNumber":"318-21"}',
     docketNumber: '318-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4800,8 +4198,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2021-12-02T16:18:37.515Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4810,7 +4206,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"O","createdAt":"2021-12-02T16:18:22.832Z","documentType":"Order","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","servedAt":"2021-12-02T16:18:37.511Z","documentTitle":"Sealed Order","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '999-15',
-    highPriority: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4821,7 +4216,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T16:26:44.977Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4830,7 +4224,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T16:26:44.863Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"0e522fe6-ae74-4af2-9456-bf9d6cb3e82d","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T16:26:44.864Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"319-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T16:26:44.794Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"319-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T16:26:44.864Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T16:26:44.794Z","documentContentsId":"527cc069-2d35-45fb-b00b-3b4caae945cc","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"5b7c4419-c42b-4dc9-b118-0c87c2a42683","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T16:26:44.795Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"319-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"319-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"527cc069-2d35-45fb-b00b-3b4caae945cc\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T16:26:44.931Z","docketNumber":"319-21"}',
     docketNumber: '319-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4841,7 +4234,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-11-09T15:22:52.475Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4850,7 +4242,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"O","createdAt":"2021-11-09T15:22:37.215Z","documentType":"Order","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2021-11-09T15:22:52.469Z","documentTitle":"Order to Respond","isFileAttached":true,"receivedAt":"2021-11-05T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4861,7 +4252,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-02-01T17:21:07.638Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4870,7 +4260,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2022-02-01T17:21:07.511Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"dbcb915a-5ed1-45c4-9d6d-b66679a55029","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2022-02-01T17:21:07.511Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"100-22W","docketEntry":{"eventCode":"ODJ","createdAt":"2022-02-01T17:21:07.439Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2022-02-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"100-22","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-02-01T17:21:07.511Z"},"receivedAt":"2022-02-01T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2022-02-01T17:21:07.439Z","documentContentsId":"97248a8b-d393-446a-9907-d7743b5cc56c","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"4158c5f3-9573-4663-ba10-64c9b2e46cfc","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2022-02-01T17:21:07.439Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"100-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"100-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"97248a8b-d393-446a-9907-d7743b5cc56c\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2022-02-01T17:21:07.581Z","docketNumber":"100-22"}',
     docketNumber: '100-22',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4881,7 +4270,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-02-15T16:52:14.314Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4890,7 +4278,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2022-02-15T16:52:14.159Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"55cd0550-6191-4014-bef8-da56f8cf3685","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2022-02-15T16:52:14.159Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"101-22W","docketEntry":{"eventCode":"ODJ","createdAt":"2022-02-15T16:52:14.079Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2022-02-15T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"101-22","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-02-15T16:52:14.160Z"},"receivedAt":"2022-02-15T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2022-02-15T16:52:14.079Z","documentContentsId":"95dd9113-40a0-47bf-8584-a1d4e86d7b73","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"63b9b593-e928-4163-b05f-5bf686e6bbba","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2022-02-15T16:52:14.080Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"101-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"101-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"95dd9113-40a0-47bf-8584-a1d4e86d7b73\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2022-02-15T16:52:14.238Z","docketNumber":"101-22"}',
     docketNumber: '101-22',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4901,7 +4288,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-10-28T20:46:18.747Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4910,7 +4296,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Rand al\'Thor","email":"petitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Amended [Document Name]","filingDate":"2022-10-28T20:45:59.206Z","pending":false,"isDraft":false,"previousDocument":{"documentTitle":"Request for Place of Trial at Milwaukee, Wisconsin","documentType":"Request for Place of Trial","docketEntryId":"f2f21f29-a094-4e39-a800-de2c80a08811"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Rand al\'Thor","isRead":true,"section":"docket","workItemId":"0b76f194-4661-4993-9b57-3e5f98193bd9","assigneeId":null,"sentBy":"Test Petitioner","createdAt":"2022-10-28T20:45:59.209Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"320-21S","docketEntry":{"eventCode":"AMAT","createdAt":"2022-10-28T20:45:59.206Z","documentType":"Amended","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6b2bcbcc-bc95-4103-b5fd-3e999395c2d3","documentTitle":"Second Amended Request for Place of Trial at Milwaukee, Wisconsin","isFileAttached":true,"receivedAt":"2022-10-28T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"320-21","sentByUserId":"7805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-10-28T20:45:59.209Z"},"receivedAt":"2022-10-28T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2022-10-28T20:46:18.734Z","createdAt":"2022-10-28T20:45:59.206Z","ordinalValue":"Second","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6b2bcbcc-bc95-4103-b5fd-3e999395c2d3","certificateOfService":false,"documentTitle":"Second Amended Request for Place of Trial at Milwaukee, Wisconsin","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":5,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405416"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2022-10-28T20:45:59.211Z","docketNumber":"320-21","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -4922,7 +4307,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:49.508Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4931,7 +4315,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Brief","filingDate":"2023-07-26T17:12:46.030Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"5dc708c5-f8b7-4268-af8f-eb46c09cdcbb","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:12:46.032Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAB","createdAt":"2023-07-26T17:12:46.030Z","documentType":"Simultaneous Answering Brief","filedBy":"Resp.","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf","documentTitle":"Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:12:46.032Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:12:46.030Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf","certificateOfService":false,"documentTitle":"Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":5,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIAB","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:49.507Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4942,7 +4325,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:54.106Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4951,7 +4333,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Memoranda of Law","filingDate":"2023-07-26T17:13:03.948Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"92d3f224-a5f4-4cc0-b0cf-415f7d8c190e","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:03.949Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAM","createdAt":"2023-07-26T17:13:03.948Z","documentType":"Simultaneous Answering Memoranda of Law","filedBy":"Resp.","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12","documentTitle":"Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:03.949Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:03.948Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12","certificateOfService":false,"documentTitle":"Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":6,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIAM","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:54.105Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4962,7 +4343,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:58.875Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4971,7 +4351,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Opening Brief","filingDate":"2023-07-26T17:13:19.794Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"8ddf8f6c-0ea5-4a60-ae7e-8c74dd9dbb52","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:19.795Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIOB","createdAt":"2023-07-26T17:13:19.793Z","documentType":"Simultaneous Opening Brief","filedBy":"Resp.","docketEntryId":"283e7fc3-25dc-4ae4-8870-7a111d7584da","documentTitle":"Simultaneous Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:19.795Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:19.793Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"283e7fc3-25dc-4ae4-8870-7a111d7584da","certificateOfService":false,"documentTitle":"Simultaneous Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":7,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIOB","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:58.874Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -4982,7 +4361,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:03.511Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4991,7 +4369,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:13:38.963Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"3822c600-65d1-41d2-8e42-0e1aede1511d","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:38.964Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:13:38.963Z","documentType":"Amended","filedBy":"Resp.","docketEntryId":"533322f8-b0c9-4a7b-a5d1-2d61d0191b18","documentTitle":"First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:38.964Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:38.963Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"533322f8-b0c9-4a7b-a5d1-2d61d0191b18","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":8,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:03.508Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -5002,7 +4379,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:09.199Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5011,7 +4387,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:13:59.503Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Memoranda of Law","documentType":"Simultaneous Answering Memoranda of Law","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"77a13efe-5c4f-4da6-a4a3-5aaef13a48b4","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:59.506Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:13:59.503Z","documentType":"Amended","filedBy":"Resp.","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd","documentTitle":"First Amended Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:59.506Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:59.503Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":9,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:09.198Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -5022,7 +4397,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:14.156Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5031,7 +4405,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Redacted","filingDate":"2023-07-26T17:14:17.068Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Memoranda of Law","documentType":"Amended","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0ef72276-20fa-41d9-94e8-58f863ed009b","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:17.069Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:14:17.068Z","documentType":"Redacted","filedBy":"Resp.","docketEntryId":"f836ef0c-4c9d-40ef-b7e9-2ac71342f9e4","documentTitle":"Redacted First Amended Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:17.069Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:14:17.068Z","numberOfPages":3,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"f836ef0c-4c9d-40ef-b7e9-2ac71342f9e4","certificateOfService":false,"documentTitle":"Redacted First Amended Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":10,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"REDC","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:14.154Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -5042,7 +4415,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:24.041Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5051,7 +4423,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Reply Brief","filingDate":"2023-07-26T17:14:35.401Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"e9cbcde8-08a7-4b24-b0ad-f8556f59f0d9","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:35.403Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SERB","createdAt":"2023-07-26T17:14:35.401Z","documentType":"Seriatim Reply Brief","filedBy":"Resp.","docketEntryId":"708e3c41-ac8f-4267-8a33-91234d738292","documentTitle":"Seriatim Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:35.403Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:24.035Z","createdAt":"2023-07-26T17:14:35.401Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"708e3c41-ac8f-4267-8a33-91234d738292","certificateOfService":false,"documentTitle":"Seriatim Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":11,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SERB","processingStatus":"complete","lodged":true,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:14:35.404Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5063,7 +4434,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:35.017Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5072,7 +4442,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Answering Brief","filingDate":"2023-07-26T17:14:50.853Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"1e97f8a8-2d95-44db-b7ed-a4d2334ca607","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:50.854Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SEAB","createdAt":"2023-07-26T17:14:50.853Z","documentType":"Seriatim Answering Brief","filedBy":"Resp.","docketEntryId":"c9e0e099-c805-43a9-a45f-958325835571","documentTitle":"Seriatim Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:50.854Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:35.004Z","createdAt":"2023-07-26T17:14:50.853Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"c9e0e099-c805-43a9-a45f-958325835571","certificateOfService":false,"documentTitle":"Seriatim Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":12,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SEAB","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:14:50.854Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5084,7 +4453,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:42.966Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5093,7 +4461,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Sur-Reply Brief","filingDate":"2023-07-26T17:15:09.211Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"e6b4a293-f3ba-4554-a9e7-a37d4cc6ec3d","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:15:09.212Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SESB","createdAt":"2023-07-26T17:15:09.210Z","documentType":"Seriatim Sur-Reply Brief","filedBy":"Resp.","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed","documentTitle":"Seriatim Sur-Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:15:09.212Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:42.954Z","createdAt":"2023-07-26T17:15:09.210Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed","certificateOfService":false,"documentTitle":"Seriatim Sur-Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":13,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SESB","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:15:09.213Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5105,7 +4472,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:51.290Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5114,7 +4480,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Redacted","filingDate":"2023-07-26T17:15:28.242Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Seriatim Sur-Reply Brief","documentType":"Seriatim Sur-Reply Brief","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"182cc3d0-cf44-411d-8fad-4d237cd553ea","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:15:28.244Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:15:28.242Z","documentType":"Redacted","filedBy":"Resp.","docketEntryId":"e3948d50-caaa-42be-8023-5bf935476c0b","documentTitle":"Redacted Seriatim Sur-Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:15:28.245Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:51.285Z","createdAt":"2023-07-26T17:15:28.242Z","numberOfPages":2,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"e3948d50-caaa-42be-8023-5bf935476c0b","certificateOfService":false,"documentTitle":"Redacted Seriatim Sur-Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":14,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"REDC","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:15:28.246Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5126,7 +4491,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:46.557Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5135,7 +4499,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Brief","filingDate":"2023-07-26T17:24:39.640Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0510d265-c6bd-4ef5-80e9-26e6fca4f53c","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:24:39.642Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAB","createdAt":"2023-07-26T17:24:39.640Z","documentType":"Simultaneous Answering Brief","filedBy":"Petr. Yasir Oneal","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48","documentTitle":"Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:24:39.642Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:24:39.640Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48","certificateOfService":false,"documentTitle":"Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":16,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"SIAB","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:26:46.556Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -5146,7 +4509,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:52.640Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5155,7 +4517,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:25:00.573Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"22e979ef-873f-4ed7-9dc6-1890510c37c3","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:00.575Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:25:00.573Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e","documentTitle":"First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:00.575Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:00.573Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":17,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:26:52.639Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -5166,7 +4527,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:59.421Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5175,7 +4535,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Opening Brief","filingDate":"2023-07-26T17:25:57.567Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"54a18060-961f-4dce-bd45-bb460e845ad5","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:57.568Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SEOB","createdAt":"2023-07-26T17:25:57.567Z","documentType":"Seriatim Opening Brief","filedBy":"Petr. Yasir Oneal","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5","documentTitle":"Seriatim Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:57.568Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:26:59.406Z","createdAt":"2023-07-26T17:25:57.567Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5","certificateOfService":false,"documentTitle":"Seriatim Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":20,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"SEOB","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:25:57.569Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5187,7 +4546,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:09.509Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5196,7 +4554,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Amended [Document Name]","filingDate":"2023-07-26T17:26:16.104Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Seriatim Opening Brief","documentType":"Seriatim Opening Brief","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"952bc117-39e8-4999-892b-ce9c32666c6e","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:26:16.106Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:26:16.104Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"2e8b77ec-4c14-470e-9b04-58c9c8370ff1","documentTitle":"First Amended Seriatim Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:26:16.106Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:27:09.499Z","createdAt":"2023-07-26T17:26:16.104Z","ordinalValue":"1","numberOfPages":2,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"2e8b77ec-4c14-470e-9b04-58c9c8370ff1","certificateOfService":false,"documentTitle":"First Amended Seriatim Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":21,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:26:16.107Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5208,7 +4565,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:17.588Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5217,7 +4573,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:25:22.269Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Brief","documentType":"Amended","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"afd1417b-5688-41aa-9b53-7b0bf78c1073","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:22.270Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:25:22.269Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"b9dbbef9-0068-4ad7-bb52-396e811ae4d0","documentTitle":"First Amended First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:22.270Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:22.269Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"b9dbbef9-0068-4ad7-bb52-396e811ae4d0","certificateOfService":false,"documentTitle":"First Amended First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":18,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:27:17.586Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -5228,7 +4583,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:24.652Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5237,7 +4591,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Redacted","filingDate":"2023-07-26T17:25:38.204Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Brief","documentType":"Amended","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0b7b0e5a-34d7-4c00-85cd-bafff8300cea","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:38.205Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:25:38.204Z","documentType":"Redacted","filedBy":"Petr. Yasir Oneal","docketEntryId":"ff713546-dbbe-4d59-b543-3472484332aa","documentTitle":"Redacted First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:38.205Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:38.204Z","numberOfPages":3,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"ff713546-dbbe-4d59-b543-3472484332aa","certificateOfService":false,"documentTitle":"Redacted First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":19,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"REDC","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:27:24.651Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -5248,7 +4601,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:28:33.233Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5257,7 +4609,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMBR","createdAt":"2007-07-02T04:00:00.000Z","isPaper":true,"documentType":"Amicus Brief","filedBy":"A Friend","docketEntryId":"bda62f28-77c1-48f7-8072-bcecbbfe833a","otherFilingParty":"A Friend","documentTitle":"AMBR","isFileAttached":true,"receivedAt":"2007-07-02T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5269,7 +4620,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:28:58.253Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5278,7 +4628,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMBR","createdAt":"2023-07-25T04:00:00.000Z","isPaper":true,"documentType":"Amicus Brief","filedBy":"A Friend","docketEntryId":"5287c2df-e09f-4071-8b50-b9005a7c45e5","otherFilingParty":"A Friend","documentTitle":"AMBR","isFileAttached":true,"receivedAt":"2023-07-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5290,7 +4639,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T18:58:04.853Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5299,7 +4647,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMAT","createdAt":"2023-07-05T04:00:00.000Z","isPaper":true,"documentType":"Amended [Document Name]","filedBy":"Petr. Simba Oneal","docketEntryId":"1340f1d9-1d84-402a-b78b-2e074e0efd00","documentTitle":"First Amended Seriatim Reply Brief","isFileAttached":true,"receivedAt":"2023-07-05T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5311,8 +4658,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:08:04.712Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5321,7 +4666,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M004","createdAt":"2020-11-14T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Assignment of Judge","filedBy":"Resp.","docketEntryId":"15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5","documentTitle":"Motion for Assignment of Judge","isFileAttached":true,"receivedAt":"2020-11-14T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '999-15',
-    highPriority: true,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5333,8 +4677,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.176Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5343,7 +4685,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '404-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5355,8 +4696,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.334Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5365,7 +4704,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '405-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5377,8 +4715,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:19:21.048Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5387,7 +4723,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M135","createdAt":"2023-07-05T00:00:00.000-04:00","isPaper":true,"documentType":"Motion for in Camera Review","filedBy":"Resp.","docketEntryId":"5ccb9535-85e0-4d84-aea5-af94bc993cca","documentTitle":"Motion for in Camera Review","isFileAttached":true,"receivedAt":"2023-07-05T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '400-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5399,8 +4734,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.162Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5409,7 +4742,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '409-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5421,8 +4753,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.395Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5431,7 +4761,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '411-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5443,8 +4772,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.518Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5453,7 +4780,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '413-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -5463,7 +4789,6 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '8b4be2af-6e7c-4c55-93d9-a150fe284b78',
   },
   {
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-04-29T15:51:29.331Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5481,8 +4806,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Fieri',
-    associatedJudgeId: 'dadbad42-18d0-43ec-bafb-654e83405416',
     caseIsInProgress: true,
     completedAt: new Date('2020-09-30T20:24:15.441Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -5492,7 +4815,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-09-02T04:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"03/03/2020","isFileAttached":true,"receivedAt":"2020-09-02T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-02T04:00:00.000Z","entityName":"DocketEntry","filedBy":"Petr. Stacy Russold","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-09-30T20:24:15.162Z","documentTitle":"Petition"}',
     docketNumber: '124-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5503,7 +4825,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2020-11-30T22:58:08.206Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5513,7 +4834,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-01-20T05:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"25-Sep-1995","isFileAttached":true,"receivedAt":"2020-01-20T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-01-20T05:00:00.000Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Valentine Holman","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-11-30T22:58:08.081Z","documentTitle":"Petition"}',
     docketNumber: '129-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5524,7 +4844,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-25T18:56:39.991Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -5534,7 +4853,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-10-04T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Hanae Guerrero","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","servedAt":"2021-10-25T18:56:39.967Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-10-04T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '313-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5545,7 +4863,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-25T18:57:31.747Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5554,7 +4871,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"SOP","createdAt":"2021-10-25T18:57:06.439Z","documentType":"Summary Opinion","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2021-10-25T18:57:31.743Z","documentTitle":"Summary Opinion Judge Ashford An opinion for testing","isFileAttached":true,"receivedAt":"2021-10-25T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '313-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5565,7 +4881,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:06:24.935Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -5575,7 +4890,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2016-03-29T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Gwendolyn Cross","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","servedAt":"2021-10-29T13:06:24.912Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2016-03-29T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-16',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5586,7 +4900,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:07:19.785Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5595,7 +4908,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"OSC","createdAt":"2021-10-29T13:07:06.547Z","documentType":"Order to Show Cause","docketEntryId":"bf525973-e788-4516-8bf3-b70232cb79fc","servedAt":"2021-10-29T13:07:19.782Z","documentTitle":"Order to Show Cause this order will not have a file attached when im done with it!","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-16',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5606,7 +4918,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:41:09.339Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -5616,7 +4927,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2011-10-11T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Virginia Vincent","docketEntryId":"c611ee2e-a270-4dcd-a7bd-b8b9062db630","servedAt":"2021-10-29T13:41:09.316Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2011-10-11T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-11',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5627,7 +4937,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-11-08T15:19:17.250Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5637,7 +4946,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-11-05T15:09:29.303Z","documentType":"Petition","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","servedAt":"2021-11-08T15:19:17.214Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-11-05T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5647,7 +4955,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5657,7 +4964,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-11T05:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Magee Schmidt","docketEntryId":"f4fc88f2-e0bc-49a2-834b-0e51e51f1069","servedAt":"2023-04-03T15:52:36.482Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-11T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5668,7 +4974,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5678,7 +4983,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-04-01T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Dacey Cox","docketEntryId":"8738fa09-bb16-43e0-a9c5-f528751bbd11","servedAt":"2023-04-03T15:52:59.423Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-04-01T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '102-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5689,7 +4993,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5699,7 +5002,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-25T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Britanney Wiley","docketEntryId":"ac6a8ab2-92f6-4320-aade-ca36b3c8d54b","servedAt":"2023-04-03T15:53:18.588Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-25T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '103-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5710,7 +5012,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5720,7 +5021,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-18T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petrs. Cassidy Mejia & juvek@mailinator.com","docketEntryId":"d151b42b-dc6c-461e-b6fa-81ac0c712dda","servedAt":"2023-04-03T15:53:43.152Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-18T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '104-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5731,7 +5031,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5741,7 +5040,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2024-05-26T00:00:00.000-04:00","isPaper":true,"documentType":"Petition","filedBy":"Petr. Reading Rainbow","docketEntryId":"3c10fe8a-d9bb-4e11-86ee-41afca5b6953","servedAt":"2024-06-04T22:35:01.144Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2024-05-26T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-24',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5752,7 +5050,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-25T18:56:39.991Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -5762,7 +5059,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-10-04T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Hanae Guerrero","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","servedAt":"2021-10-25T18:56:39.967Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-10-04T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '313-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5773,7 +5069,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-25T18:57:31.747Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5782,7 +5077,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"SOP","createdAt":"2021-10-25T18:57:06.439Z","documentType":"Summary Opinion","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2021-10-25T18:57:31.743Z","documentTitle":"Summary Opinion Judge Ashford An opinion for testing","isFileAttached":true,"receivedAt":"2021-10-25T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '313-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5793,7 +5087,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:06:24.935Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -5803,7 +5096,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2016-03-29T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Gwendolyn Cross","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","servedAt":"2021-10-29T13:06:24.912Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2016-03-29T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-16',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5814,7 +5106,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:07:19.785Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5823,7 +5114,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"OSC","createdAt":"2021-10-29T13:07:06.547Z","documentType":"Order to Show Cause","docketEntryId":"bf525973-e788-4516-8bf3-b70232cb79fc","servedAt":"2021-10-29T13:07:19.782Z","documentTitle":"Order to Show Cause this order will not have a file attached when im done with it!","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-16',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5834,7 +5124,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:41:09.339Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -5844,7 +5133,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2011-10-11T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Virginia Vincent","docketEntryId":"c611ee2e-a270-4dcd-a7bd-b8b9062db630","servedAt":"2021-10-29T13:41:09.316Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2011-10-11T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-11',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -5855,7 +5143,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-11-08T15:19:17.250Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5865,7 +5152,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-11-05T15:09:29.303Z","documentType":"Petition","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","servedAt":"2021-11-08T15:19:17.214Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-11-05T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5875,7 +5161,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5885,7 +5170,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-11T05:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Magee Schmidt","docketEntryId":"f4fc88f2-e0bc-49a2-834b-0e51e51f1069","servedAt":"2023-04-03T15:52:36.482Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-11T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5896,7 +5180,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5906,7 +5189,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-04-01T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Dacey Cox","docketEntryId":"8738fa09-bb16-43e0-a9c5-f528751bbd11","servedAt":"2023-04-03T15:52:59.423Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-04-01T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '102-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5917,7 +5199,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5927,7 +5208,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-25T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Britanney Wiley","docketEntryId":"ac6a8ab2-92f6-4320-aade-ca36b3c8d54b","servedAt":"2023-04-03T15:53:18.588Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-25T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '103-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5938,7 +5218,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5948,7 +5227,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-18T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petrs. Cassidy Mejia & juvek@mailinator.com","docketEntryId":"d151b42b-dc6c-461e-b6fa-81ac0c712dda","servedAt":"2023-04-03T15:53:43.152Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-18T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '104-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5959,7 +5237,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
@@ -5969,7 +5246,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2024-05-26T00:00:00.000-04:00","isPaper":true,"documentType":"Petition","filedBy":"Petr. Reading Rainbow","docketEntryId":"3c10fe8a-d9bb-4e11-86ee-41afca5b6953","servedAt":"2024-06-04T22:35:01.144Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2024-05-26T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-24',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -5980,7 +5256,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-04-27T17:06:18.104Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5989,7 +5264,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-04-27T17:06:17.880Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"943b9b2c-ea09-473a-a1d1-34035648062f","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-04-27T17:06:17.881Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"302-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-04-27T17:06:17.760Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-04-27T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"302-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-04-27T17:06:17.881Z"},"receivedAt":"2021-04-27T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-04-27T17:06:17.760Z","documentContentsId":"38eea8ee-174b-456f-8d93-7f214051d0b9","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"abcc4956-8c58-48ff-8325-6596cd647b10","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-04-27T17:06:17.760Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"302-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"302-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"38eea8ee-174b-456f-8d93-7f214051d0b9\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-04-27T17:06:18.013Z","docketNumber":"302-21"}',
     docketNumber: '302-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6000,7 +5274,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-04-27T17:12:55.950Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6009,7 +5282,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-04-27T17:12:55.731Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"dbd9d6a3-1995-460c-9761-7d516e5ca41b","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-04-27T17:12:55.732Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"303-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-04-27T17:12:55.601Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-04-27T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"303-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-04-27T17:12:55.732Z"},"receivedAt":"2021-04-27T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-04-27T17:12:55.601Z","documentContentsId":"d7114cc8-60e0-4520-b64f-9fa4f588a1dc","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"7d46fbed-0fbd-4b27-add1-165367bfa5d0","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-04-27T17:12:55.602Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"303-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"303-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"d7114cc8-60e0-4520-b64f-9fa4f588a1dc\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-04-27T17:12:55.874Z","docketNumber":"303-21"}',
     docketNumber: '303-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6020,7 +5292,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-04-27T20:51:00.833Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6029,7 +5300,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-04-27T20:51:00.576Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"e700b727-affd-400b-b7c7-6441bf2c4751","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-04-27T20:51:00.576Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"304-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-04-27T20:51:00.392Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-04-27T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"304-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-04-27T20:51:00.576Z"},"receivedAt":"2021-04-27T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-04-27T20:51:00.392Z","documentContentsId":"ad34ac62-0d41-4de4-98d9-4d9390aa4a94","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"9765e873-8ba0-45e5-9cc7-05ec1d0cc1c7","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-04-27T20:51:00.392Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"304-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"304-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"ad34ac62-0d41-4de4-98d9-4d9390aa4a94\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-04-27T20:51:00.762Z","docketNumber":"304-21"}',
     docketNumber: '304-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6040,7 +5310,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-04T17:17:10.268Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6049,7 +5318,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-04T17:17:10.105Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"fae3cbf6-c250-4f22-adf0-f380076ab2d9","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-04T17:17:10.106Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"305-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-04T17:17:10.023Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-04T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"305-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-04T17:17:10.106Z"},"receivedAt":"2021-05-04T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-04T17:17:10.023Z","documentContentsId":"0a9cd80b-c156-4253-8bca-e7b93fa4f15e","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"f113058a-3131-4a11-ae7a-928a2d3a17b0","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-04T17:17:10.024Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"305-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"305-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"0a9cd80b-c156-4253-8bca-e7b93fa4f15e\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-04T17:17:10.195Z","docketNumber":"305-21"}',
     docketNumber: '305-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6060,7 +5328,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-14T17:32:48.402Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6069,7 +5336,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-14T17:32:48.271Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"8d91ee6b-89d6-466e-8e69-e7d30275c63b","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-14T17:32:48.272Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"306-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-14T17:32:48.206Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-14T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"306-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-14T17:32:48.272Z"},"receivedAt":"2021-05-14T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-14T17:32:48.206Z","documentContentsId":"0fa9fb9e-cd55-487d-a03d-bc315e5aac2e","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"ac6dda66-83d6-47cb-b964-f543d12e5952","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-14T17:32:48.206Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"306-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"306-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"0fa9fb9e-cd55-487d-a03d-bc315e5aac2e\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-14T17:32:48.337Z","docketNumber":"306-21"}',
     docketNumber: '306-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6080,7 +5346,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-25T13:09:46.884Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6089,7 +5354,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-25T13:09:46.748Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"eb055586-cbdd-4d15-978d-58f7a82f6160","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-25T13:09:46.749Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"307-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-25T13:09:46.672Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"307-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-25T13:09:46.749Z"},"receivedAt":"2021-05-25T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-25T13:09:46.672Z","documentContentsId":"286e5a62-e6d8-438e-bc73-c1ced4991e1d","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"e0626ac4-e135-441d-a30c-c4fab41ec0c4","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-25T13:09:46.673Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"307-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"307-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"286e5a62-e6d8-438e-bc73-c1ced4991e1d\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-25T13:09:46.815Z","docketNumber":"307-21"}',
     docketNumber: '307-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6100,7 +5364,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-25T13:24:01.741Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6109,7 +5372,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-25T13:24:01.568Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"5ea7348b-8691-49be-ad1b-5720077e19a2","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-25T13:24:01.568Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"308-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-25T13:24:01.472Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"308-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-25T13:24:01.569Z"},"receivedAt":"2021-05-25T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-25T13:24:01.472Z","documentContentsId":"37504445-93af-4c1c-b006-0101bba993cc","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"03bae297-2450-41ac-a29b-8b68a31e9b87","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-25T13:24:01.472Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"308-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"308-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"37504445-93af-4c1c-b006-0101bba993cc\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-25T13:24:01.671Z","docketNumber":"308-21"}',
     docketNumber: '308-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6120,7 +5382,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-05-28T15:15:37.750Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6129,7 +5390,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-05-28T15:15:37.470Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"f4a66ec4-e145-4c47-9575-db2b0c2a3e78","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-05-28T15:15:37.470Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"309-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-05-28T15:15:37.283Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-05-28T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"309-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-05-28T15:15:37.471Z"},"receivedAt":"2021-05-28T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-05-28T15:15:37.283Z","documentContentsId":"cc91b5a4-b0b4-450f-a0e2-c09b5502d130","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"01f38bd8-1ca8-4786-9c7e-9c583ccb68f1","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-05-28T15:15:37.284Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"309-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"309-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"cc91b5a4-b0b4-450f-a0e2-c09b5502d130\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-05-28T15:15:37.686Z","docketNumber":"309-21"}',
     docketNumber: '309-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6140,7 +5400,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-06-07T20:28:16.318Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6149,7 +5408,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-06-07T20:28:16.123Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"d48e3364-ab16-4c79-8857-80239d1a418c","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-06-07T20:28:16.124Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"310-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-06-07T20:28:16.020Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-06-07T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"310-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-06-07T20:28:16.124Z"},"receivedAt":"2021-06-07T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-06-07T20:28:16.020Z","documentContentsId":"923c3813-b226-4450-8301-7f2359bc2c0b","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"afe7eef3-bf73-46ee-bd02-ca27dc920932","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-06-07T20:28:16.020Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"310-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"310-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"923c3813-b226-4450-8301-7f2359bc2c0b\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-06-07T20:28:16.223Z","docketNumber":"310-21"}',
     docketNumber: '310-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6160,7 +5418,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-06-14T15:16:23.253Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6169,7 +5426,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-06-14T15:16:23.111Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"234a49d8-f304-42d6-8bd8-020563c77d16","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-06-14T15:16:23.112Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"311-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-06-14T15:16:23.033Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-06-14T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"311-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-06-14T15:16:23.112Z"},"receivedAt":"2021-06-14T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-06-14T15:16:23.033Z","documentContentsId":"73d77827-1c93-4981-ad79-1b8f62e3d038","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"0d92fcc7-5423-44af-af88-8764d0aed074","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-06-14T15:16:23.034Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"311-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"311-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"73d77827-1c93-4981-ad79-1b8f62e3d038\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-06-14T15:16:23.180Z","docketNumber":"311-21"}',
     docketNumber: '311-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6180,7 +5436,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-25T18:55:28.700Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6189,7 +5444,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-25T18:55:28.576Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"3be01a88-d59e-464b-833f-6cf9e1126a65","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-25T18:55:28.576Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"312-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-25T18:55:28.517Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"312-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-25T18:55:28.576Z"},"receivedAt":"2021-10-25T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-25T18:55:28.517Z","documentContentsId":"f9b7f684-4fae-44df-b4ad-858114647198","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"0a598aa0-927f-4094-8aea-611dc7c73d49","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-25T18:55:28.518Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"312-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"312-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"f9b7f684-4fae-44df-b4ad-858114647198\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-25T18:55:28.640Z","docketNumber":"312-21"}',
     docketNumber: '312-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6200,7 +5454,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:04:35.996Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6209,7 +5462,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-29T13:04:35.896Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"d716e1a9-529d-472d-924c-bd27b9efdcab","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-29T13:04:35.896Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"314-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-29T13:04:35.839Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"314-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-29T13:04:35.896Z"},"receivedAt":"2021-10-29T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-29T13:04:35.839Z","documentContentsId":"6519553c-0ec6-4f9c-84ef-58844ae26902","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"5b9e1dfb-9db8-4124-b356-d57c73957296","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-29T13:04:35.840Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"314-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"314-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"6519553c-0ec6-4f9c-84ef-58844ae26902\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-29T13:04:35.952Z","docketNumber":"314-21"}',
     docketNumber: '314-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6220,7 +5472,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:39:47.918Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6229,7 +5480,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-10-29T13:39:47.811Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"c91e875b-2a86-4318-a490-43d63a70ecd4","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-10-29T13:39:47.812Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"315-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-10-29T13:39:47.754Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"315-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-10-29T13:39:47.812Z"},"receivedAt":"2021-10-29T04:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-10-29T13:39:47.754Z","documentContentsId":"10075f6c-7697-4b46-a1d0-bc09af102b2b","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"c84dd643-ffa3-4a68-80fb-dcf4551407e6","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-10-29T13:39:47.755Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"315-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"315-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"10075f6c-7697-4b46-a1d0-bc09af102b2b\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-10-29T13:39:47.874Z","docketNumber":"315-21"}',
     docketNumber: '315-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6240,7 +5490,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-11-09T15:22:52.475Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6249,7 +5498,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"O","createdAt":"2021-11-09T15:22:37.215Z","documentType":"Order","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2021-11-09T15:22:52.469Z","documentTitle":"Order to Respond","isFileAttached":true,"receivedAt":"2021-11-09T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6260,7 +5508,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-01T23:43:55.598Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6269,7 +5516,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-01T23:43:55.483Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"99da1552-ddba-4ed0-a5d1-5aa8b706686f","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-01T23:43:55.483Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"316-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-01T23:43:55.420Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"316-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-01T23:43:55.483Z"},"receivedAt":"2021-12-01T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-01T23:43:55.420Z","documentContentsId":"57199c27-b12c-4e7a-8684-06b5b2985d10","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"1ae82288-efd0-40ad-8f18-1d1249ef3b03","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-01T23:43:55.421Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"316-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"316-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"57199c27-b12c-4e7a-8684-06b5b2985d10\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-01T23:43:55.552Z","docketNumber":"316-21"}',
     docketNumber: '316-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6280,7 +5526,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T13:52:45.888Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6289,7 +5534,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T13:52:45.799Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"5ea01459-12d0-456d-8ce8-b91b2709c037","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T13:52:45.800Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"317-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T13:52:45.747Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"317-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T13:52:45.800Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T13:52:45.747Z","documentContentsId":"0bbce4d9-58bf-4f7e-9ce9-329af7a3faaa","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"87685740-4b58-42a4-8fe8-086875db7699","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T13:52:45.748Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"317-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"317-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"0bbce4d9-58bf-4f7e-9ce9-329af7a3faaa\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T13:52:45.851Z","docketNumber":"317-21"}',
     docketNumber: '317-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6300,7 +5544,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T16:16:32.227Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6309,7 +5552,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T16:16:32.111Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"afda1ef3-86f3-41ca-b038-967fac6b6e91","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T16:16:32.112Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"318-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T16:16:32.047Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"318-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T16:16:32.112Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T16:16:32.047Z","documentContentsId":"571e8411-c1e5-4c5e-b0eb-94265633fdea","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"3a0d75b9-7eb9-488b-882f-732f57cc2d5d","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T16:16:32.047Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"318-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"318-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"571e8411-c1e5-4c5e-b0eb-94265633fdea\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T16:16:32.179Z","docketNumber":"318-21"}',
     docketNumber: '318-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6320,8 +5562,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2021-12-02T16:18:37.515Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6330,7 +5570,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"O","createdAt":"2021-12-02T16:18:22.832Z","documentType":"Order","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","servedAt":"2021-12-02T16:18:37.511Z","documentTitle":"Sealed Order","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '999-15',
-    highPriority: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6341,7 +5580,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-12-02T16:26:44.977Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6350,7 +5588,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2021-12-02T16:26:44.863Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"0e522fe6-ae74-4af2-9456-bf9d6cb3e82d","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2021-12-02T16:26:44.864Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"319-21W","docketEntry":{"eventCode":"ODJ","createdAt":"2021-12-02T16:26:44.794Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2021-12-02T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"319-21","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2021-12-02T16:26:44.864Z"},"receivedAt":"2021-12-02T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2021-12-02T16:26:44.794Z","documentContentsId":"527cc069-2d35-45fb-b00b-3b4caae945cc","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"5b7c4419-c42b-4dc9-b118-0c87c2a42683","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2021-12-02T16:26:44.795Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"319-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"319-21\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"527cc069-2d35-45fb-b00b-3b4caae945cc\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2021-12-02T16:26:44.931Z","docketNumber":"319-21"}',
     docketNumber: '319-21',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6361,7 +5598,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-02-01T17:21:07.638Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6370,7 +5606,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2022-02-01T17:21:07.511Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"dbcb915a-5ed1-45c4-9d6d-b66679a55029","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2022-02-01T17:21:07.511Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"100-22W","docketEntry":{"eventCode":"ODJ","createdAt":"2022-02-01T17:21:07.439Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2022-02-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"100-22","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-02-01T17:21:07.511Z"},"receivedAt":"2022-02-01T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2022-02-01T17:21:07.439Z","documentContentsId":"97248a8b-d393-446a-9907-d7743b5cc56c","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"4158c5f3-9573-4663-ba10-64c9b2e46cfc","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2022-02-01T17:21:07.439Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"100-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"100-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"97248a8b-d393-446a-9907-d7743b5cc56c\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2022-02-01T17:21:07.581Z","docketNumber":"100-22"}',
     docketNumber: '100-22',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6381,7 +5616,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-02-15T16:52:14.314Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6390,7 +5624,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"servedParties":[{"name":"Brett Osborne","email":"petitioner@example.com"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order of Dismissal for Lack of Jurisdiction","filingDate":"2022-02-15T16:52:14.159Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","inProgress":true,"caseStatus":"New","caseTitle":"Brett Osborne","section":"docket","workItemId":"55cd0550-6191-4014-bef8-da56f8cf3685","assigneeId":"1805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk","sentBySection":"docket","createdAt":"2022-02-15T16:52:14.159Z","highPriority":false,"assigneeName":"Test Docketclerk","entityName":"WorkItem","docketNumberWithSuffix":"101-22W","docketEntry":{"eventCode":"ODJ","createdAt":"2022-02-15T16:52:14.079Z","documentType":"Order of Dismissal for Lack of Jurisdiction","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentTitle":"Order of Dismissal for Lack of Jurisdiction","isFileAttached":true,"receivedAt":"2022-02-15T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"101-22","sentByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-02-15T16:52:14.160Z"},"receivedAt":"2022-02-15T05:00:00.000Z","isOnDocketRecord":true,"signedJudgeName":"Maurice B. Foley","createdAt":"2022-02-15T16:52:14.079Z","documentContentsId":"95dd9113-40a0-47bf-8584-a1d4e86d7b73","numberOfPages":2,"entityName":"DocketEntry","docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","documentIdBeforeSignature":"63b9b593-e928-4163-b05f-5bf686e6bbba","judge":"Carluzzo","documentTitle":"Order of Dismissal for Lack of Jurisdiction","relationship":"primaryDocument","addToCoversheet":false,"draftOrderState":null,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ODJ","processingStatus":"complete","filers":[],"freeText":"abcdef","servedPartiesCode":"B","signedAt":"2022-02-15T16:52:14.080Z","editState":"{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"101-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"richText\\":\\"<p>Testing</p>\\",\\"serviceStamp\\":\\"Served\\",\\"draftOrderState\\":{\\"attachments\\":false,\\"docketEntryId\\":\\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\\",\\"docketNumber\\":\\"101-22\\",\\"documentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"documentType\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"eventCode\\":\\"ODJ\\",\\"freeText\\":\\"abcdef\\",\\"generatedDocumentTitle\\":\\"Order of Dismissal for Lack of Jurisdiction\\",\\"judge\\":\\"Carluzzo\\",\\"serviceStamp\\":\\"Served\\"},\\"documentContentsId\\":\\"95dd9113-40a0-47bf-8584-a1d4e86d7b73\\"}","signedByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416","servedAt":"2022-02-15T16:52:14.238Z","docketNumber":"101-22"}',
     docketNumber: '101-22',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6401,7 +5634,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2022-10-28T20:46:18.747Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6410,7 +5642,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Rand al\'Thor","email":"petitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Amended [Document Name]","filingDate":"2022-10-28T20:45:59.206Z","pending":false,"isDraft":false,"previousDocument":{"documentTitle":"Request for Place of Trial at Milwaukee, Wisconsin","documentType":"Request for Place of Trial","docketEntryId":"f2f21f29-a094-4e39-a800-de2c80a08811"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Rand al\'Thor","isRead":true,"section":"docket","workItemId":"0b76f194-4661-4993-9b57-3e5f98193bd9","assigneeId":null,"sentBy":"Test Petitioner","createdAt":"2022-10-28T20:45:59.209Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"320-21S","docketEntry":{"eventCode":"AMAT","createdAt":"2022-10-28T20:45:59.206Z","documentType":"Amended","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6b2bcbcc-bc95-4103-b5fd-3e999395c2d3","documentTitle":"Second Amended Request for Place of Trial at Milwaukee, Wisconsin","isFileAttached":true,"receivedAt":"2022-10-28T04:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"320-21","sentByUserId":"7805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2022-10-28T20:45:59.209Z"},"receivedAt":"2022-10-28T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2022-10-28T20:46:18.734Z","createdAt":"2022-10-28T20:45:59.206Z","ordinalValue":"Second","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6b2bcbcc-bc95-4103-b5fd-3e999395c2d3","certificateOfService":false,"documentTitle":"Second Amended Request for Place of Trial at Milwaukee, Wisconsin","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":5,"isFileAttached":true,"userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405416"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2022-10-28T20:45:59.211Z","docketNumber":"320-21","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6422,8 +5653,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:08:04.712Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6432,7 +5661,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M004","createdAt":"2020-11-14T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Assignment of Judge","filedBy":"Resp.","docketEntryId":"15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5","documentTitle":"Motion for Assignment of Judge","isFileAttached":true,"receivedAt":"2020-11-14T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '999-15',
-    highPriority: true,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6444,8 +5672,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.176Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6454,7 +5680,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '404-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6466,8 +5691,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.334Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6476,7 +5699,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '405-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6488,8 +5710,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:19:21.048Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6498,7 +5718,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M135","createdAt":"2023-07-05T00:00:00.000-04:00","isPaper":true,"documentType":"Motion for in Camera Review","filedBy":"Resp.","docketEntryId":"5ccb9535-85e0-4d84-aea5-af94bc993cca","documentTitle":"Motion for in Camera Review","isFileAttached":true,"receivedAt":"2023-07-05T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '400-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6510,8 +5729,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.162Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6520,7 +5737,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '409-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6532,8 +5748,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.395Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6542,7 +5756,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '411-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6554,8 +5767,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.518Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6564,7 +5775,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '413-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6576,7 +5786,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:49.508Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6585,7 +5794,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Brief","filingDate":"2023-07-26T17:12:46.030Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"5dc708c5-f8b7-4268-af8f-eb46c09cdcbb","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:12:46.032Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAB","createdAt":"2023-07-26T17:12:46.030Z","documentType":"Simultaneous Answering Brief","filedBy":"Resp.","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf","documentTitle":"Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:12:46.032Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:12:46.030Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf","certificateOfService":false,"documentTitle":"Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":5,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIAB","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:49.507Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6596,7 +5804,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:54.106Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6605,7 +5812,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Memoranda of Law","filingDate":"2023-07-26T17:13:03.948Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"92d3f224-a5f4-4cc0-b0cf-415f7d8c190e","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:03.949Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAM","createdAt":"2023-07-26T17:13:03.948Z","documentType":"Simultaneous Answering Memoranda of Law","filedBy":"Resp.","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12","documentTitle":"Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:03.949Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:03.948Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12","certificateOfService":false,"documentTitle":"Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":6,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIAM","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:54.105Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6616,7 +5822,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:15:58.875Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6625,7 +5830,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Opening Brief","filingDate":"2023-07-26T17:13:19.794Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"8ddf8f6c-0ea5-4a60-ae7e-8c74dd9dbb52","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:19.795Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIOB","createdAt":"2023-07-26T17:13:19.793Z","documentType":"Simultaneous Opening Brief","filedBy":"Resp.","docketEntryId":"283e7fc3-25dc-4ae4-8870-7a111d7584da","documentTitle":"Simultaneous Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:19.795Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:19.793Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"283e7fc3-25dc-4ae4-8870-7a111d7584da","certificateOfService":false,"documentTitle":"Simultaneous Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":7,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SIOB","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:15:58.874Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6636,7 +5840,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:03.511Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6645,7 +5848,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:13:38.963Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","docketEntryId":"c832356c-ad41-40ff-ad00-7fabc19b92bf"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"3822c600-65d1-41d2-8e42-0e1aede1511d","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:38.964Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:13:38.963Z","documentType":"Amended","filedBy":"Resp.","docketEntryId":"533322f8-b0c9-4a7b-a5d1-2d61d0191b18","documentTitle":"First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:38.964Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:38.963Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"533322f8-b0c9-4a7b-a5d1-2d61d0191b18","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":8,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:03.508Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6656,7 +5858,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:09.199Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6665,7 +5866,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:13:59.503Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Memoranda of Law","documentType":"Simultaneous Answering Memoranda of Law","docketEntryId":"209c9dab-7d96-416f-ba3b-403450a83f12"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"77a13efe-5c4f-4da6-a4a3-5aaef13a48b4","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:13:59.506Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:13:59.503Z","documentType":"Amended","filedBy":"Resp.","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd","documentTitle":"First Amended Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:13:59.506Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:13:59.503Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":9,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"AMAT","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:09.198Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6676,7 +5876,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:14.156Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6685,7 +5884,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Redacted","filingDate":"2023-07-26T17:14:17.068Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Memoranda of Law","documentType":"Amended","docketEntryId":"88096d9f-e3c6-46ea-a7e8-703b941458dd"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0ef72276-20fa-41d9-94e8-58f863ed009b","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:17.069Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:14:17.068Z","documentType":"Redacted","filedBy":"Resp.","docketEntryId":"f836ef0c-4c9d-40ef-b7e9-2ac71342f9e4","documentTitle":"Redacted First Amended Simultaneous Answering Memoranda of Law","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:17.069Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:14:17.068Z","numberOfPages":3,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"f836ef0c-4c9d-40ef-b7e9-2ac71342f9e4","certificateOfService":false,"documentTitle":"Redacted First Amended Simultaneous Answering Memoranda of Law","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":10,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"REDC","processingStatus":"complete","filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:16:14.154Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6696,7 +5894,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:24.041Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6705,7 +5902,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Reply Brief","filingDate":"2023-07-26T17:14:35.401Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"e9cbcde8-08a7-4b24-b0ad-f8556f59f0d9","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:35.403Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SERB","createdAt":"2023-07-26T17:14:35.401Z","documentType":"Seriatim Reply Brief","filedBy":"Resp.","docketEntryId":"708e3c41-ac8f-4267-8a33-91234d738292","documentTitle":"Seriatim Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:35.403Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:24.035Z","createdAt":"2023-07-26T17:14:35.401Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"708e3c41-ac8f-4267-8a33-91234d738292","certificateOfService":false,"documentTitle":"Seriatim Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":11,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SERB","processingStatus":"complete","lodged":true,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:14:35.404Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6717,7 +5913,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:35.017Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6726,7 +5921,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Answering Brief","filingDate":"2023-07-26T17:14:50.853Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"1e97f8a8-2d95-44db-b7ed-a4d2334ca607","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:14:50.854Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SEAB","createdAt":"2023-07-26T17:14:50.853Z","documentType":"Seriatim Answering Brief","filedBy":"Resp.","docketEntryId":"c9e0e099-c805-43a9-a45f-958325835571","documentTitle":"Seriatim Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:14:50.854Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:35.004Z","createdAt":"2023-07-26T17:14:50.853Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"c9e0e099-c805-43a9-a45f-958325835571","certificateOfService":false,"documentTitle":"Seriatim Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":12,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SEAB","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:14:50.854Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6738,7 +5932,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:42.966Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6747,7 +5940,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Sur-Reply Brief","filingDate":"2023-07-26T17:15:09.211Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"e6b4a293-f3ba-4554-a9e7-a37d4cc6ec3d","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:15:09.212Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SESB","createdAt":"2023-07-26T17:15:09.210Z","documentType":"Seriatim Sur-Reply Brief","filedBy":"Resp.","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed","documentTitle":"Seriatim Sur-Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:15:09.212Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:42.954Z","createdAt":"2023-07-26T17:15:09.210Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed","certificateOfService":false,"documentTitle":"Seriatim Sur-Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":13,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SESB","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:15:09.213Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6759,7 +5951,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:16:51.290Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6768,7 +5959,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Redacted","filingDate":"2023-07-26T17:15:28.242Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Seriatim Sur-Reply Brief","documentType":"Seriatim Sur-Reply Brief","docketEntryId":"d8db611a-7577-41f2-8ea8-c501e8b164ed"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"182cc3d0-cf44-411d-8fad-4d237cd553ea","assigneeId":null,"sentBy":"Test IRS Practitioner","createdAt":"2023-07-26T17:15:28.244Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:15:28.242Z","documentType":"Redacted","filedBy":"Resp.","docketEntryId":"e3948d50-caaa-42be-8023-5bf935476c0b","documentTitle":"Redacted Seriatim Sur-Reply Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"5805d1ab-18d0-43ec-bafb-654e83405416"},"docketNumber":"105-23","sentByUserId":"5805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2023-07-26T17:15:28.245Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:16:51.285Z","createdAt":"2023-07-26T17:15:28.242Z","numberOfPages":2,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Resp.","docketEntryId":"e3948d50-caaa-42be-8023-5bf935476c0b","certificateOfService":false,"documentTitle":"Redacted Seriatim Sur-Reply Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"partyIrsPractitioner":true,"index":14,"isFileAttached":true,"userId":"5805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"REDC","processingStatus":"complete","lodged":false,"filers":[],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:15:28.246Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6780,7 +5970,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:46.557Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6789,7 +5978,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Simultaneous Answering Brief","filingDate":"2023-07-26T17:24:39.640Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0510d265-c6bd-4ef5-80e9-26e6fca4f53c","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:24:39.642Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SIAB","createdAt":"2023-07-26T17:24:39.640Z","documentType":"Simultaneous Answering Brief","filedBy":"Petr. Yasir Oneal","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48","documentTitle":"Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:24:39.642Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:24:39.640Z","numberOfPages":3,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48","certificateOfService":false,"documentTitle":"Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":16,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"SIAB","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:26:46.556Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6800,7 +5988,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:52.640Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6809,7 +5996,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:25:00.573Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","docketEntryId":"774e1aee-6713-4c2c-838c-4d7699465c48"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"22e979ef-873f-4ed7-9dc6-1890510c37c3","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:00.575Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:25:00.573Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e","documentTitle":"First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:00.575Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:00.573Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e","certificateOfService":false,"documentTitle":"First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":17,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:26:52.639Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6820,7 +6006,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:26:59.421Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6829,7 +6014,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Seriatim Opening Brief","filingDate":"2023-07-26T17:25:57.567Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"54a18060-961f-4dce-bd45-bb460e845ad5","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:57.568Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"SEOB","createdAt":"2023-07-26T17:25:57.567Z","documentType":"Seriatim Opening Brief","filedBy":"Petr. Yasir Oneal","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5","documentTitle":"Seriatim Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:57.568Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:26:59.406Z","createdAt":"2023-07-26T17:25:57.567Z","numberOfPages":2,"scenario":"Standard","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5","certificateOfService":false,"documentTitle":"Seriatim Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":20,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"SEOB","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:25:57.569Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6841,7 +6025,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:09.509Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6850,7 +6033,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"documentType":"Amended [Document Name]","filingDate":"2023-07-26T17:26:16.104Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"Seriatim Opening Brief","documentType":"Seriatim Opening Brief","docketEntryId":"804132ad-8aae-409e-9e7d-de2dfe4279b5"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","isRead":true,"section":"docket","workItemId":"952bc117-39e8-4999-892b-ce9c32666c6e","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:26:16.106Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:26:16.104Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"2e8b77ec-4c14-470e-9b04-58c9c8370ff1","documentTitle":"First Amended Seriatim Opening Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:26:16.106Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"qcAt":"2023-07-26T17:27:09.499Z","createdAt":"2023-07-26T17:26:16.104Z","ordinalValue":"1","numberOfPages":2,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"2e8b77ec-4c14-470e-9b04-58c9c8370ff1","certificateOfService":false,"documentTitle":"First Amended Seriatim Opening Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":21,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","lodged":false,"filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"editState":"{}","servedAt":"2023-07-26T17:26:16.107Z","docketNumber":"105-23","qcByUserId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6862,7 +6044,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:17.588Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6871,7 +6052,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Amended","filingDate":"2023-07-26T17:25:22.269Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Brief","documentType":"Amended","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"afd1417b-5688-41aa-9b53-7b0bf78c1073","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:22.270Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"AMAT","createdAt":"2023-07-26T17:25:22.269Z","documentType":"Amended","filedBy":"Petr. Yasir Oneal","docketEntryId":"b9dbbef9-0068-4ad7-bb52-396e811ae4d0","documentTitle":"First Amended First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:22.270Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:22.269Z","ordinalValue":"1","numberOfPages":3,"scenario":"Nonstandard F","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"b9dbbef9-0068-4ad7-bb52-396e811ae4d0","certificateOfService":false,"documentTitle":"First Amended First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":18,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"AMAT","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:27:17.586Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6882,7 +6062,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:27:24.652Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6891,7 +6070,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"stampData":{},"servedParties":[{"name":"Test Private Practitioner","email":"privatePractitioner1@example.com"},{"name":"Test IRS Practitioner","email":"irspractitioner@example.com"}],"attachments":false,"isStricken":false,"isPendingService":true,"documentType":"Redacted","filingDate":"2023-07-26T17:25:38.204Z","pending":false,"redactionAcknowledgement":true,"isDraft":false,"previousDocument":{"documentTitle":"First Amended Simultaneous Answering Brief","documentType":"Amended","docketEntryId":"49b0f0f0-fb1d-4418-99b1-857ba4324d1e"},"workItem":{"associatedJudge":"Chief Judge","caseStatus":"General Docket - Not at Issue","caseTitle":"Yasir Oneal","section":"docket","workItemId":"0b7b0e5a-34d7-4c00-85cd-bafff8300cea","assigneeId":null,"sentBy":"Test Private Practitioner","createdAt":"2023-07-26T17:25:38.205Z","highPriority":false,"assigneeName":null,"entityName":"WorkItem","docketNumberWithSuffix":"105-23","docketEntry":{"eventCode":"REDC","createdAt":"2023-07-26T17:25:38.204Z","documentType":"Redacted","filedBy":"Petr. Yasir Oneal","docketEntryId":"ff713546-dbbe-4d59-b543-3472484332aa","documentTitle":"Redacted First Amended Simultaneous Answering Brief","isFileAttached":true,"receivedAt":"2023-07-26T04:00:00.000Z","userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728"},"docketNumber":"105-23","sentByUserId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","updatedAt":"2023-07-26T17:25:38.205Z"},"receivedAt":"2023-07-26T04:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-07-26T17:25:38.204Z","numberOfPages":3,"scenario":"Nonstandard A","entityName":"DocketEntry","filedBy":"Petr. Yasir Oneal","docketEntryId":"ff713546-dbbe-4d59-b543-3472484332aa","certificateOfService":false,"documentTitle":"Redacted First Amended Simultaneous Answering Brief","relationship":"primaryDocument","addToCoversheet":false,"hasSupportingDocuments":false,"draftOrderState":null,"index":19,"isFileAttached":true,"userId":"ad07b846-8933-4778-9fe2-b5d8ac8ad728","eventCode":"REDC","processingStatus":"complete","filers":["7805d1ab-18d0-43ec-bafb-654e83405418"],"servedPartiesCode":"B","certificateOfServiceDate":null,"servedAt":"2023-07-26T17:27:24.651Z","docketNumber":"105-23"}',
     docketNumber: '105-23',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',
     sentBySection: 'docket',
@@ -6902,7 +6080,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:28:33.233Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6911,7 +6088,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMBR","createdAt":"2007-07-02T04:00:00.000Z","isPaper":true,"documentType":"Amicus Brief","filedBy":"A Friend","docketEntryId":"bda62f28-77c1-48f7-8072-bcecbbfe833a","otherFilingParty":"A Friend","documentTitle":"AMBR","isFileAttached":true,"receivedAt":"2007-07-02T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6923,7 +6099,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T17:28:58.253Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6932,7 +6107,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMBR","createdAt":"2023-07-25T04:00:00.000Z","isPaper":true,"documentType":"Amicus Brief","filedBy":"A Friend","docketEntryId":"5287c2df-e09f-4071-8b50-b9005a7c45e5","otherFilingParty":"A Friend","documentTitle":"AMBR","isFileAttached":true,"receivedAt":"2023-07-25T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6944,7 +6118,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2023-07-26T18:58:04.853Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6953,7 +6126,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"AMAT","createdAt":"2023-07-05T04:00:00.000Z","isPaper":true,"documentType":"Amended [Document Name]","filedBy":"Petr. Simba Oneal","docketEntryId":"1340f1d9-1d84-402a-b78b-2e074e0efd00","documentTitle":"First Amended Seriatim Reply Brief","isFileAttached":true,"receivedAt":"2023-07-05T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-23',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6965,8 +6137,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:08:04.712Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6975,7 +6145,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M004","createdAt":"2020-11-14T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Assignment of Judge","filedBy":"Resp.","docketEntryId":"15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5","documentTitle":"Motion for Assignment of Judge","isFileAttached":true,"receivedAt":"2020-11-14T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '999-15',
-    highPriority: true,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -6987,8 +6156,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.176Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6997,7 +6164,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '404-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -7009,8 +6175,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:17:49.334Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7019,7 +6183,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M018","createdAt":"2022-12-01T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Oral Argument","filedBy":"Resp.","docketEntryId":"86aa1097-53ee-48d8-aeae-25ed4d81248a","documentTitle":"Motion for Oral Argument","isFileAttached":true,"receivedAt":"2022-12-01T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '405-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -7031,8 +6194,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:19:21.048Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7041,7 +6202,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M135","createdAt":"2023-07-05T00:00:00.000-04:00","isPaper":true,"documentType":"Motion for in Camera Review","filedBy":"Resp.","docketEntryId":"5ccb9535-85e0-4d84-aea5-af94bc993cca","documentTitle":"Motion for in Camera Review","isFileAttached":true,"receivedAt":"2023-07-05T04:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '400-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -7053,8 +6213,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.162Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7063,7 +6221,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '409-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -7075,8 +6232,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.395Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7085,7 +6240,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '411-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -7097,8 +6251,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    associatedJudge: 'Colvin',
-    associatedJudgeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2023-11-22T01:20:35.518Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7107,7 +6259,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"M009","createdAt":"2017-11-08T00:00:00.000-05:00","isPaper":true,"documentType":"Motion for Default and Dismissal","filedBy":"Resp.","docketEntryId":"6d499aeb-7a4a-4dbc-afa8-5f8bbb71e44d","documentTitle":"Motion for Default and Dismissal","isFileAttached":true,"receivedAt":"2017-11-08T05:00:00.000Z","userId":"1805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '413-22',
-    highPriority: false,
     isRead: true,
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -7119,7 +6270,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-05-13T14:50:46.662Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7138,8 +6288,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Fieri',
-    associatedJudgeId: 'dadbad42-18d0-43ec-bafb-654e83405416',
     completedAt: new Date('2020-09-30T20:25:32.962Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7148,7 +6296,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"date":null,"servedParties":[{"isAddressSealed":false,"serviceIndicator":"Paper","secondaryName":"Natalya Chaouche","contactId":"d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f","city":"Berthoud","address1":"543 Ten Ballon Drive","postalCode":"80513","name":"Stacy Russold","sealedAndUnavailable":false,"state":"CO","countryType":"domestic"}],"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order","filingDate":"2020-09-30T20:25:22.035Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Fieri","inProgress":true,"caseStatus":"General Docket - Not at Issue","caseTitle":"Stacy Russold, Natalya Chaouche, Tax Matters Partner","section":"docket","workItemId":"4c7de46a-b371-4f76-80b0-c9e69d3d6215","assigneeId":"2805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk1","sentBySection":"docket","createdAt":"2020-09-30T20:25:32.384Z","highPriority":false,"assigneeName":"Test Docketclerk1","entityName":"WorkItem","docketNumberWithSuffix":"124-20","docketEntry":{"date":null,"serviceStamp":"Served","attachments":false,"isStricken":false,"documentType":"Order","filingDate":"2020-09-30T20:25:22.035Z","pending":false,"isDraft":false,"receivedAt":"2020-09-30T20:25:22.035Z","isOnDocketRecord":true,"signedJudgeName":"Guy S. B. Fieri","createdAt":"2020-09-30T20:25:25.087Z","numberOfPages":1,"scenario":"Type A","entityName":"DocketEntry","docketEntryId":"c611ee2e-a270-4dcd-a7bd-b8b9062db630","documentIdBeforeSignature":"106e58ba-d431-457c-9ace-746f8f488b77","documentTitle":"This is a legacy judge\'s order","relationship":"primaryDocument","draftOrderState":{"eventCode":"O","documentTitle":"This is a legacy judge\'s order","documentType":"Order","docketNumber":"124-20","freeText":"This is a legacy judge\'s order"},"isFileAttached":true,"userId":"2805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"O","processingStatus":"complete","freeText":"This is a legacy judge\'s order","signedAt":"2020-09-30T20:25:25.088Z","editState":"{\\"eventCode\\":\\"O\\",\\"documentType\\":\\"Order\\",\\"documentTitle\\":\\"[Anything]\\",\\"scenario\\":\\"Type A\\",\\"isOrder\\":true,\\"requiresSignature\\":true,\\"attachments\\":false,\\"freeText\\":\\"This is a legacy judge\'s order\\",\\"date\\":null,\\"generatedDocumentTitle\\":\\"This is a legacy judge\'s order\\",\\"serviceStamp\\":\\"Served\\",\\"docketEntryId\\":\\"c611ee2e-a270-4dcd-a7bd-b8b9062db630\\",\\"docketNumber\\":\\"124-20\\"}","signedByUserId":"dadbad42-18d0-43ec-bafb-654e83405416","docketNumber":"124-20"},"docketNumber":"124-20","sentByUserId":"2805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2020-09-30T20:25:32.385Z"},"receivedAt":"2020-09-30T20:25:22.035Z","isOnDocketRecord":true,"signedJudgeName":"Guy S. B. Fieri","createdAt":"2020-09-30T20:25:25.087Z","numberOfPages":1,"scenario":"Type A","entityName":"DocketEntry","docketEntryId":"c611ee2e-a270-4dcd-a7bd-b8b9062db630","documentIdBeforeSignature":"106e58ba-d431-457c-9ace-746f8f488b77","documentTitle":"This is a legacy judge\'s order","relationship":"primaryDocument","draftOrderState":null,"isFileAttached":true,"userId":"2805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"O","processingStatus":"complete","freeText":"This is a legacy judge\'s order","signedAt":"2020-09-30T20:25:25.088Z","editState":"{\\"eventCode\\":\\"O\\",\\"documentType\\":\\"Order\\",\\"documentTitle\\":\\"[Anything]\\",\\"scenario\\":\\"Type A\\",\\"isOrder\\":true,\\"requiresSignature\\":true,\\"attachments\\":false,\\"freeText\\":\\"This is a legacy judge\'s order\\",\\"date\\":null,\\"generatedDocumentTitle\\":\\"This is a legacy judge\'s order\\",\\"serviceStamp\\":\\"Served\\",\\"docketEntryId\\":\\"c611ee2e-a270-4dcd-a7bd-b8b9062db630\\",\\"docketNumber\\":\\"124-20\\"}","signedByUserId":"dadbad42-18d0-43ec-bafb-654e83405416","servedAt":"2020-09-30T20:25:32.869Z","docketNumber":"124-20"}',
     docketNumber: '124-20',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk1',
     sentBySection: 'docket',
@@ -7159,7 +6306,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-09-30T20:26:08.983Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7168,7 +6314,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"date":null,"servedParties":[{"isAddressSealed":false,"serviceIndicator":"Paper","secondaryName":"Natalya Chaouche","contactId":"d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f","city":"Berthoud","address1":"543 Ten Ballon Drive","postalCode":"80513","name":"Stacy Russold","sealedAndUnavailable":false,"state":"CO","countryType":"domestic"}],"attachments":false,"isStricken":false,"documentType":"Summary Opinion","filingDate":"2020-09-30T20:25:50.601Z","pending":false,"isDraft":false,"workItem":{"associatedJudge":"Fieri","inProgress":true,"caseStatus":"General Docket - Not at Issue","caseTitle":"Stacy Russold, Natalya Chaouche, Tax Matters Partner","section":"docket","workItemId":"5f075b42-470c-4ffd-864e-e8b873e96f30","assigneeId":"2805d1ab-18d0-43ec-bafb-654e83405416","sentBy":"Test Docketclerk1","sentBySection":"docket","createdAt":"2020-09-30T20:26:08.362Z","highPriority":false,"assigneeName":"Test Docketclerk1","entityName":"WorkItem","docketNumberWithSuffix":"124-20","docketEntry":{"date":null,"attachments":false,"isStricken":false,"documentType":"Summary Opinion","filingDate":"2020-09-30T20:25:50.601Z","pending":false,"isDraft":false,"receivedAt":"2020-09-30T20:25:50.601Z","isOnDocketRecord":true,"createdAt":"2020-09-30T20:25:50.600Z","numberOfPages":25,"scenario":"Type B","entityName":"DocketEntry","docketEntryId":"dc2664a1-f552-418f-bcc7-8a67f4246568","judge":"Fieri","documentTitle":"Summary Opinion Chief Judge Fieri","relationship":"primaryDocument","draftOrderState":{"eventCode":"MISC","generatedDocumentTitle":"This is a legacy judge\'s opinion","documentType":"Miscellaneous","scenario":"Type A","primaryDocumentFileSize":225760,"freeText":"This is a legacy judge\'s opinion","documentTitle":"This is a legacy judge\'s opinion","docketNumber":"124-20"},"isFileAttached":true,"userId":"2805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SOP","processingStatus":"complete","freeText":"This is a legacy judge\'s opinion","editState":"{\\"eventCode\\":\\"SOP\\",\\"documentType\\":\\"Summary Opinion\\",\\"documentTitle\\":\\"Summary Opinion [judge]\\",\\"scenario\\":\\"Type B\\",\\"attachments\\":false,\\"date\\":null,\\"generatedDocumentTitle\\":\\"Summary Opinion Chief Judge Fieri\\",\\"searchText\\":\\"opi\\",\\"freeText\\":\\"This is a legacy judge\'s opinion\\",\\"judge\\":\\"Legacy Judge Fieri\\",\\"docketEntryId\\":\\"dc2664a1-f552-418f-bcc7-8a67f4246568\\",\\"docketNumber\\":\\"124-20\\"}","docketNumber":"124-20"},"docketNumber":"124-20","sentByUserId":"2805d1ab-18d0-43ec-bafb-654e83405416","updatedAt":"2020-09-30T20:26:08.363Z"},"receivedAt":"2020-09-30T20:25:50.601Z","isOnDocketRecord":true,"createdAt":"2020-09-30T20:25:50.600Z","numberOfPages":25,"scenario":"Type B","entityName":"DocketEntry","docketEntryId":"dc2664a1-f552-418f-bcc7-8a67f4246568","judge":"Fieri","documentTitle":"Summary Opinion Chief Judge Fieri","relationship":"primaryDocument","draftOrderState":null,"isFileAttached":true,"userId":"2805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"SOP","processingStatus":"complete","freeText":"This is a legacy judge\'s opinion","editState":"{\\"eventCode\\":\\"SOP\\",\\"documentType\\":\\"Summary Opinion\\",\\"documentTitle\\":\\"Summary Opinion [judge]\\",\\"scenario\\":\\"Type B\\",\\"attachments\\":false,\\"date\\":null,\\"generatedDocumentTitle\\":\\"Summary Opinion Chief Judge Fieri\\",\\"searchText\\":\\"opi\\",\\"freeText\\":\\"This is a legacy judge\'s opinion\\",\\"judge\\":\\"Legacy Judge Fieri\\",\\"docketEntryId\\":\\"dc2664a1-f552-418f-bcc7-8a67f4246568\\",\\"docketNumber\\":\\"124-20\\"}","servedAt":"2020-09-30T20:26:08.914Z","docketNumber":"124-20"}',
     docketNumber: '124-20',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk1',
     sentBySection: 'docket',
@@ -7179,7 +6324,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:42:43.040Z'),
     completedBy: 'Test Docketclerk1',
     completedByUserId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7188,7 +6332,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"SOP","createdAt":"2021-10-29T13:42:27.351Z","documentType":"Summary Opinion","docketEntryId":"4e3e97b1-5b5a-492f-8553-21e2a020211d","servedAt":"2021-10-29T13:42:43.037Z","documentTitle":"Summary Opinion Judge Urda opinion without a file attached","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"2805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-11',
-    highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk1',
     sentBySection: 'docket',
@@ -7197,7 +6340,6 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: 'd71e75cc-63a5-48de-bd02-cce5db481e41',
   },
   {
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-04-29T15:51:29.331Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7215,7 +6357,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2020-04-29T15:52:16.578Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7234,7 +6375,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2020-11-30T22:58:08.206Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7244,7 +6384,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-01-20T05:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"25-Sep-1995","isFileAttached":true,"receivedAt":"2020-01-20T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-01-20T05:00:00.000Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Valentine Holman","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-11-30T22:58:08.081Z","documentTitle":"Petition"}',
     docketNumber: '129-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7255,7 +6394,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-11-08T15:19:17.250Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7265,7 +6403,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-11-05T15:09:29.303Z","documentType":"Petition","filedBy":"Petr. Rand al\'Thor","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","servedAt":"2021-11-08T15:19:17.214Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-11-05T05:00:00.000Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '320-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitioner',
     sentByUserId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7275,7 +6412,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7285,7 +6421,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-11T05:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Magee Schmidt","docketEntryId":"f4fc88f2-e0bc-49a2-834b-0e51e51f1069","servedAt":"2023-04-03T15:52:36.482Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-11T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7296,7 +6431,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7306,7 +6440,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-04-01T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Dacey Cox","docketEntryId":"8738fa09-bb16-43e0-a9c5-f528751bbd11","servedAt":"2023-04-03T15:52:59.423Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-04-01T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '102-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7317,7 +6450,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7327,7 +6459,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-25T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Britanney Wiley","docketEntryId":"ac6a8ab2-92f6-4320-aade-ca36b3c8d54b","servedAt":"2023-04-03T15:53:18.588Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-25T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '103-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7338,7 +6469,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7348,7 +6478,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-18T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petrs. Cassidy Mejia & juvek@mailinator.com","docketEntryId":"d151b42b-dc6c-461e-b6fa-81ac0c712dda","servedAt":"2023-04-03T15:53:43.152Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-18T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '104-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7359,7 +6488,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7369,7 +6497,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2024-05-26T00:00:00.000-04:00","isPaper":true,"documentType":"Petition","filedBy":"Petr. Reading Rainbow","docketEntryId":"3c10fe8a-d9bb-4e11-86ee-41afca5b6953","servedAt":"2024-06-04T22:35:01.144Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2024-05-26T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-24',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7380,7 +6507,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7390,7 +6516,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-11T05:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Magee Schmidt","docketEntryId":"f4fc88f2-e0bc-49a2-834b-0e51e51f1069","servedAt":"2023-04-03T15:52:36.482Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-11T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7401,7 +6526,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7411,7 +6535,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-04-01T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Dacey Cox","docketEntryId":"8738fa09-bb16-43e0-a9c5-f528751bbd11","servedAt":"2023-04-03T15:52:59.423Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-04-01T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '102-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7422,7 +6545,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7432,7 +6554,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-25T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Britanney Wiley","docketEntryId":"ac6a8ab2-92f6-4320-aade-ca36b3c8d54b","servedAt":"2023-04-03T15:53:18.588Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-25T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '103-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7443,7 +6564,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7453,7 +6573,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2023-03-18T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petrs. Cassidy Mejia & juvek@mailinator.com","docketEntryId":"d151b42b-dc6c-461e-b6fa-81ac0c712dda","servedAt":"2023-04-03T15:53:43.152Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2023-03-18T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '104-67',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7464,7 +6583,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
@@ -7474,7 +6592,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2024-05-26T00:00:00.000-04:00","isPaper":true,"documentType":"Petition","filedBy":"Petr. Reading Rainbow","docketEntryId":"3c10fe8a-d9bb-4e11-86ee-41afca5b6953","servedAt":"2024-06-04T22:35:01.144Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2024-05-26T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-24',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
     sentBySection: 'petitions',
@@ -7485,8 +6602,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Fieri',
-    associatedJudgeId: 'dadbad42-18d0-43ec-bafb-654e83405416',
     caseIsInProgress: true,
     completedAt: new Date('2020-09-30T20:24:15.441Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -7496,7 +6611,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-09-02T04:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"03/03/2020","isFileAttached":true,"receivedAt":"2020-09-02T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-02T04:00:00.000Z","entityName":"DocketEntry","filedBy":"Petr. Stacy Russold","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-09-30T20:24:15.162Z","documentTitle":"Petition"}',
     docketNumber: '124-20',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -7507,7 +6621,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-25T18:56:39.991Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -7517,7 +6630,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2021-10-04T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Hanae Guerrero","docketEntryId":"9de27a7d-7c6b-434b-803b-7655f82d5e07","servedAt":"2021-10-25T18:56:39.967Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2021-10-04T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '313-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -7528,7 +6640,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-25T18:57:31.747Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7537,7 +6648,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"SOP","createdAt":"2021-10-25T18:57:06.439Z","documentType":"Summary Opinion","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2021-10-25T18:57:31.743Z","documentTitle":"Summary Opinion Judge Ashford An opinion for testing","isFileAttached":true,"receivedAt":"2021-10-25T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '313-21',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -7548,7 +6658,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:06:24.935Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -7558,7 +6667,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2016-03-29T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Gwendolyn Cross","docketEntryId":"6d83425c-8ef3-4c66-b776-6c7957c53f4d","servedAt":"2021-10-29T13:06:24.912Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2016-03-29T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-16',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -7569,7 +6677,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     completedAt: new Date('2021-10-29T13:07:19.785Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -7578,7 +6685,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"OSC","createdAt":"2021-10-29T13:07:06.547Z","documentType":"Order to Show Cause","docketEntryId":"bf525973-e788-4516-8bf3-b70232cb79fc","servedAt":"2021-10-29T13:07:19.782Z","documentTitle":"Order to Show Cause this order will not have a file attached when im done with it!","isFileAttached":true,"receivedAt":"2021-10-29T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-16',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
@@ -7589,7 +6695,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    associatedJudge: 'Chief Judge',
     caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:41:09.339Z'),
     completedBy: 'Test Petitionsclerk1',
@@ -7599,7 +6704,6 @@ export const workItems: NewWorkItemKysely[] = [
     docketEntry:
       '{"eventCode":"P","createdAt":"2011-10-11T04:00:00.000Z","isPaper":true,"documentType":"Petition","filedBy":"Petr. Virginia Vincent","docketEntryId":"c611ee2e-a270-4dcd-a7bd-b8b9062db630","servedAt":"2021-10-29T13:41:09.316Z","documentTitle":"Petition","isFileAttached":true,"receivedAt":"2011-10-11T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '101-11',
-    highPriority: false,
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
     sentBySection: 'petitions',
