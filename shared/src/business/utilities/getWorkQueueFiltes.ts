@@ -1,8 +1,15 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
-export const getWorkQueueFilters = ({ section, user }) => {
+export const getWorkQueueFilters = ({
+  section,
+  user,
+}: {
+  section?: string;
+  user: RawUser;
+}) => {
   const sectionToDisplay = section || getDocQcSectionForUser(user);
   const isCaseServicesSupervisor = user.role === ROLES.caseServicesSupervisor;
   const isDocketClerk = user.role === ROLES.docketClerk;

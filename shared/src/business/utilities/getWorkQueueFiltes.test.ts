@@ -6,6 +6,7 @@ import {
   CASE_SERVICES_SUPERVISOR_SECTION,
 } from '@shared/business/entities/EntityConstants';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFiltes';
+import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 describe('getWorkQueueFilters', () => {
   it('returns an object containing a filter map for work queues and boxes', () => {
@@ -14,6 +15,7 @@ describe('getWorkQueueFilters', () => {
         role: ROLES.petitionsClerk,
         section: PETITIONS_SECTION,
         userId: '123',
+        name: 'petitioner person',
       },
     });
     expect(filters).toMatchObject({
@@ -62,7 +64,6 @@ describe('getWorkQueueFilters', () => {
         {
           // my inbox
           assigneeId: '123',
-          caseIsInProgress: false,
           docketEntry: {
             isFileAttached: true,
           },
@@ -73,7 +74,6 @@ describe('getWorkQueueFilters', () => {
         {
           // my outbox
           assigneeId: '123',
-          caseIsInProgress: false,
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '123',
           docketEntry: {
@@ -104,7 +104,6 @@ describe('getWorkQueueFilters', () => {
         {
           // section inbox
           assigneeId: '234',
-          caseIsInProgress: false,
           docketEntry: {
             isFileAttached: true,
           },
@@ -115,7 +114,6 @@ describe('getWorkQueueFilters', () => {
         {
           // section outbox
           assigneeId: '234',
-          caseIsInProgress: false,
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '234',
           docketEntry: {
@@ -183,7 +181,7 @@ describe('getWorkQueueFilters', () => {
         {
           // my in progress
           assigneeId: '123',
-          caseIsInProgress: true,
+          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {
             isFileAttached: false,
@@ -194,7 +192,7 @@ describe('getWorkQueueFilters', () => {
         {
           // my in progress
           assigneeId: '123',
-          caseIsInProgress: true,
+          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {},
           section: PETITIONS_SECTION,
@@ -203,7 +201,6 @@ describe('getWorkQueueFilters', () => {
         {
           // my in progress
           assigneeId: '123',
-          caseIsInProgress: false,
           caseStatus: CASE_STATUS_TYPES.generalDocket,
           docketEntry: {},
           inProgress: true,
@@ -213,7 +210,6 @@ describe('getWorkQueueFilters', () => {
         {
           // my inbox
           assigneeId: '123',
-          caseIsInProgress: false,
           docketEntry: {
             isFileAttached: true,
           },
@@ -224,7 +220,6 @@ describe('getWorkQueueFilters', () => {
         {
           // my outbox
           assigneeId: '123',
-          caseIsInProgress: false,
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '123',
           docketEntry: {
@@ -237,7 +232,7 @@ describe('getWorkQueueFilters', () => {
         {
           // section in progress
           assigneeId: '234',
-          caseIsInProgress: true,
+          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {
             isFileAttached: false,
@@ -248,7 +243,7 @@ describe('getWorkQueueFilters', () => {
         {
           // section in progress
           assigneeId: '234',
-          caseIsInProgress: true,
+          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {},
           section: PETITIONS_SECTION,
@@ -257,7 +252,6 @@ describe('getWorkQueueFilters', () => {
         {
           // section inbox
           assigneeId: '234',
-          caseIsInProgress: false,
           docketEntry: {
             isFileAttached: true,
           },
@@ -268,7 +262,6 @@ describe('getWorkQueueFilters', () => {
         {
           // section outbox
           assigneeId: '234',
-          caseIsInProgress: false,
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '234',
           docketEntry: {
@@ -336,7 +329,7 @@ describe('getWorkQueueFilters', () => {
     });
 
     it('returns an object containing a filter map for my work queues and boxes', () => {
-      const myWorkItems = [
+      const myWorkItems: WorkItemAbomination[] = [
         {
           // my in progress
           assigneeId: '123',
@@ -349,7 +342,7 @@ describe('getWorkQueueFilters', () => {
         {
           // my in progress
           assigneeId: '123',
-          caseIsInProgress: true,
+          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {},
           section: CASE_SERVICES_SUPERVISOR_SECTION,
@@ -358,7 +351,6 @@ describe('getWorkQueueFilters', () => {
         {
           // my inbox
           assigneeId: '123',
-          caseIsInProgress: false,
           docketEntry: {
             isFileAttached: true,
           },
@@ -369,7 +361,6 @@ describe('getWorkQueueFilters', () => {
         {
           // my outbox
           assigneeId: '123',
-          caseIsInProgress: false,
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '123',
           docketEntry: {
@@ -385,9 +376,9 @@ describe('getWorkQueueFilters', () => {
         user,
       });
 
-      const myInProgress = myWorkItems.filter(filters['my']['inProgress']);
-      const myInbox = myWorkItems.filter(filters['my']['inbox']);
-      const myOutbox = myWorkItems.filter(filters['my']['outbox']);
+      const myInProgress = myWorkItems.filter(filters.my.inProgress);
+      const myInbox = myWorkItems.filter(filters.my.inbox);
+      const myOutbox = myWorkItems.filter(filters.my.outbox);
 
       expect(myInProgress).toMatchObject([
         expect.objectContaining({ workItemId: '1' }),
@@ -403,31 +394,30 @@ describe('getWorkQueueFilters', () => {
 
     [PETITIONS_SECTION, DOCKET_SECTION].forEach(sectionToTest => {
       it(`returns an object containing a filter map for ${sectionToTest} section work queues and boxes`, () => {
-        const sectionWorkItems = [
+        const sectionWorkItems: WorkItemAbomination[] = [
           {
             // section in progress
             assigneeId: '234',
-            caseIsInProgress: true,
             caseStatus: CASE_STATUS_TYPES.new,
             docketEntry: {
               isFileAttached: false,
             },
             section: `${sectionToTest}`,
             workItemId: '5',
+            inProgress: true,
           },
           {
             // section in progress
             assigneeId: '234',
-            caseIsInProgress: true,
             caseStatus: CASE_STATUS_TYPES.new,
             docketEntry: {},
             section: `${sectionToTest}`,
+            inProgress: true,
             workItemId: '6',
           },
           {
             // section inbox
             assigneeId: '234',
-            caseIsInProgress: false,
             docketEntry: {
               isFileAttached: true,
             },
@@ -438,7 +428,6 @@ describe('getWorkQueueFilters', () => {
           {
             // section outbox
             assigneeId: '234',
-            caseIsInProgress: false,
             completedAt: '2019-06-17T15:27:55.801Z',
             completedByUserId: '234',
             docketEntry: {
@@ -456,14 +445,10 @@ describe('getWorkQueueFilters', () => {
         });
 
         const sectionInProgress = sectionWorkItems.filter(
-          filters['section']['inProgress'],
+          filters.section.inProgress,
         );
-        const sectionInbox = sectionWorkItems.filter(
-          filters['section']['inbox'],
-        );
-        const sectionOutbox = sectionWorkItems.filter(
-          filters['section']['outbox'],
-        );
+        const sectionInbox = sectionWorkItems.filter(filters.section.inbox);
+        const sectionOutbox = sectionWorkItems.filter(filters.section.outbox);
 
         expect(sectionInProgress).toMatchObject([
           expect.objectContaining({ workItemId: '5' }),
