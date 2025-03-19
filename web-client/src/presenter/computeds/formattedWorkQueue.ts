@@ -427,7 +427,7 @@ export const getWorkItemDocumentLink = ({
       formattedDocketEntry.isPetition &&
       !DocketEntry.isServed(formattedDocketEntry)
     ) {
-      if (result.caseIsInProgress) {
+      if (result.inProgress) {
         editLink = `${baseDocumentLink}/review`;
       } else {
         editLink = `/case-detail/${workItem.docketNumber}/petition-qc`;

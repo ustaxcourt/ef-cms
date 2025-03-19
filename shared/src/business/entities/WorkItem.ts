@@ -79,10 +79,6 @@ export class WorkItem extends JoiValidationEntity {
   static VALIDATION_RULES = {
     assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
     assigneeName: JoiValidationConstants.STRING.max(100).allow(null).optional(), // should be a Message entity at some point
-    caseIsInProgress: joi.boolean().optional(),
-    caseStatus: JoiValidationConstants.STRING.valid(
-      ...Object.values(CASE_STATUS_TYPES),
-    ).optional(),
     completedAt: JoiValidationConstants.ISO_DATE.optional(),
     completedBy: JoiValidationConstants.STRING.max(100).optional().allow(null),
     completedByUserId: JoiValidationConstants.UUID.optional().allow(null),

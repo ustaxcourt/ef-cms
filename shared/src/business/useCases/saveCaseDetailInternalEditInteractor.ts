@@ -146,6 +146,7 @@ export const saveCaseDetailInternalEdit = async (
       ...initializeCaseWorkItem,
       assigneeId: user.userId,
       assigneeName: user.name,
+      inProgress: true,
     });
 
     await upsertWorkItems({

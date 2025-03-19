@@ -1,6 +1,6 @@
+import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
   CASE_SERVICES_SUPERVISOR_SECTION,
-  CASE_STATUS_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
@@ -33,7 +33,7 @@ export const getWorkQueueFilters = ({ section, user }) => {
 
   return {
     my: {
-      inProgress: item => {
+      inProgress: (item: WorkItemAbomination) => {
         return (
           // DocketClerks
           (item.assigneeId === user.userId &&
@@ -43,21 +43,18 @@ export const getWorkQueueFilters = ({ section, user }) => {
           // PetitionsClerks
           (item.assigneeId === user.userId &&
             canViewPetitionsSection &&
-            ((item.caseStatus === CASE_STATUS_TYPES.new &&
-              item.caseIsInProgress === true) || // caseIsInProgress only looked at for petitions clerks
-              item.inProgress === true))
+            item.inProgress)
         );
       },
-      inbox: item => {
+      inbox: (item: WorkItemAbomination) => {
         return (
           item.assigneeId === user.userId &&
           !item.completedAt &&
           item.docketEntry.isFileAttached !== false &&
-          !item.inProgress &&
-          item.caseIsInProgress !== true
+          !item.inProgress
         );
       },
-      outbox: item => {
+      outbox: (item: WorkItemAbomination) => {
         return (
           (canViewPetitionsSection ? !!item.section : true) &&
           item.completedByUserId &&
@@ -67,7 +64,7 @@ export const getWorkQueueFilters = ({ section, user }) => {
       },
     },
     section: {
-      inProgress: item => {
+      inProgress: (item: WorkItemAbomination) => {
         return (
           // DocketClerks
           (!item.completedAt &&
@@ -75,22 +72,18 @@ export const getWorkQueueFilters = ({ section, user }) => {
             item.section === sectionToMatch &&
             (item.docketEntry.isFileAttached === false || item.inProgress)) ||
           // PetitionsClerks
-          (canViewPetitionsSection &&
-            ((item.caseStatus === CASE_STATUS_TYPES.new &&
-              item.caseIsInProgress === true) ||
-              item.inProgress === true))
+          (canViewPetitionsSection && item.inProgress === true)
         );
       },
-      inbox: item => {
+      inbox: (item: WorkItemAbomination) => {
         return (
           !item.completedAt &&
           item.section === sectionToDisplay &&
           item.docketEntry.isFileAttached !== false &&
-          !item.inProgress &&
-          item.caseIsInProgress !== true
+          !item.inProgress
         );
       },
-      outbox: item => {
+      outbox: (item: WorkItemAbomination) => {
         return (
           !!item.completedAt &&
           (canViewPetitionsSection ? !!item.section : true)
