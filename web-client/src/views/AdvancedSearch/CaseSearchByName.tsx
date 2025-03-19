@@ -532,6 +532,7 @@ export const CaseSearchByName = connect(
             <div className="grid-row">
               <div className="button-container">
                 <Button
+                  type="submit"
                   overrideMargin
                   aria-describedby="case-search-by-name"
                   className="margin-bottom-0"
@@ -545,6 +546,7 @@ export const CaseSearchByName = connect(
                   Search
                 </Button>
                 <Button
+                  type="reset"
                   link
                   overrideMargin
                   aria-describedby="case-search-by-name"
