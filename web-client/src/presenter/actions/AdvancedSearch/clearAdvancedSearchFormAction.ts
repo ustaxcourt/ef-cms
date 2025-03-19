@@ -26,6 +26,7 @@ export const clearAdvancedSearchFormAction = ({
     };
     lastKeysOfPages?: Array<string | number>;
     total?: number;
+    practitionerType?: string;
   };
   if (formType === 'caseSearchByName') {
     defaultForm.countryType = ALL_COUNTRY_TYPE;
@@ -37,6 +38,7 @@ export const clearAdvancedSearchFormAction = ({
   if (formType === 'practitionerSearchByName') {
     defaultForm.lastKeysOfPages = [];
     defaultForm.total = 0;
+    defaultForm.practitionerType = 'All';
   }
   if (formType === 'opinionSearch') {
     defaultForm.opinionTypes = {

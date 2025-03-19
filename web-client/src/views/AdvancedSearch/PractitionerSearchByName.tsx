@@ -4,6 +4,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { PRACTITIONER_TYPE_OPTIONS } from '@shared/business/entities/EntityConstants';
 
 export const PractitionerSearchByName = connect(
   {
@@ -66,7 +67,40 @@ export const PractitionerSearchByName = connect(
                 </FormGroup>
               </div>
             </div>
-
+            <div className="grid-row grid-gap">
+              <fieldset className="usa-fieldset">
+                <legend className="usa-legend">Practitioner type</legend>
+                {['All', ...PRACTITIONER_TYPE_OPTIONS].map(type => (
+                  <div className="usa-radio usa-radio__inline" key={type}>
+                    <input
+                      checked={
+                        advancedSearchForm.practitionerSearchByName
+                          .practitionerType === type
+                      }
+                      className="usa-radio__input"
+                      id={`practitioner-type-${type}`}
+                      name="practitionerType"
+                      type="radio"
+                      value={type}
+                      onChange={e => {
+                        updateAdvancedSearchFormValueSequence({
+                          formType: 'practitionerSearchByName',
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-radio__label"
+                      data-testid={`practitioner-type-${type}-radio`}
+                      htmlFor={`practitioner-type-${type}`}
+                    >
+                      {type}
+                    </label>
+                  </div>
+                ))}
+              </fieldset>
+            </div>
             <div className="grid-row">
               <div className="button-container">
                 <Button
