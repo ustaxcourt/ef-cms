@@ -9,7 +9,7 @@ export const initializeRealUserMonitoring = () => {
       enableXRay: false,
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId: process.env.RUM_IDENTITY_POOL_ID,
-      sessionSampleRate: process.env.ENV === 'prod' ? 0.1 : 1, // sample 10% of sessions in production until we know how expensive this will be, 100% in lower environments
+      sessionSampleRate: parseInt(process.env.RUM_SAMPLE_RATE!),
       telemetries: ['performance'],
     };
 
