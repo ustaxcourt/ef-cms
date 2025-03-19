@@ -118,36 +118,48 @@ export function fromKyselyCase<T extends object>(record: T) {
   const transformMap = {
     automaticBlockedDate: (
       value: typeof dwCaseSchema.automaticBlockedDate,
-      _: any,
+      _: Partial<CaseKysely>,
     ) => value?.toISOString(),
-    blockedDate: (value: typeof dwCaseSchema.blockedDate, _: any) =>
-      value?.toISOString(),
-    caseType: (value: string, _: any) => value as CaseType,
-    closedDate: (value: typeof dwCaseSchema.closedDate, _: any) =>
-      value?.toISOString(),
-    createdAt: (value: typeof dwCaseSchema.createdAt, _: any) =>
+    blockedDate: (
+      value: typeof dwCaseSchema.blockedDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    caseType: (value: string, _: Partial<CaseKysely>) => value as CaseType,
+    closedDate: (
+      value: typeof dwCaseSchema.closedDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    createdAt: (value: typeof dwCaseSchema.createdAt, _: Partial<CaseKysely>) =>
       value.toISOString(),
-    hearings: (value: any, _: any) => value || [],
-    irsNoticeDate: (value: typeof dwCaseSchema.irsNoticeDate, _: any) =>
-      value?.toISOString(),
-    noticeOfTrialDate: (value: typeof dwCaseSchema.noticeOfTrialDate, _: any) =>
-      value?.toISOString(),
-    petitioners: (value?: any[], _?: any) =>
+    hearings: (value: any, _: Partial<CaseKysely>) => value || [],
+    irsNoticeDate: (
+      value: typeof dwCaseSchema.irsNoticeDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    noticeOfTrialDate: (
+      value: typeof dwCaseSchema.noticeOfTrialDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    petitioners: (value?: any[], _?: Partial<CaseKysely>) =>
       value ? value.map(p => ({ ...p, state: p.state || null })) : [], // petitioner state needs to be null rather than undefined
     petitionPaymentDate: (
       value: typeof dwCaseSchema.petitionPaymentDate,
-      _: any,
+      _: Partial<CaseKysely>,
     ) => value?.toISOString(),
     petitionPaymentWaivedDate: (
       value: typeof dwCaseSchema.petitionPaymentWaivedDate,
-      _: any,
+      _: Partial<CaseKysely>,
     ) => value?.toISOString(),
-    receivedAt: (value: typeof dwCaseSchema.receivedAt, _: any) =>
-      value.toISOString(),
-    sealedDate: (value: typeof dwCaseSchema.sealedDate, _: any) =>
-      value?.toISOString(),
-    status: (value: any, _: any) => value as CaseStatus,
-    trialDate: (value: typeof dwCaseSchema.trialDate, _: any) =>
+    receivedAt: (
+      value: typeof dwCaseSchema.receivedAt,
+      _: Partial<CaseKysely>,
+    ) => value.toISOString(),
+    sealedDate: (
+      value: typeof dwCaseSchema.sealedDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    status: (value: any, _: Partial<CaseKysely>) => value as CaseStatus,
+    trialDate: (value: typeof dwCaseSchema.trialDate, _: Partial<CaseKysely>) =>
       value?.toISOString(),
   } as const;
 
