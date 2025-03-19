@@ -14,18 +14,23 @@ After installing git, be sure to clone the project locally:
 
 `git clone git@github.com:flexion/ef-cms.git`
 
-### Node v22.13.1
+### Node.js
 
 All of our application code is built using Javascript:
 
 - Our frontend is written React, Cerebral, and bundled using esbuild.
 - Our backend APIs are written using express and a serverless wrapper.
 
-Because of this, you will need to make sure you node and npm installed locked to the following versions:
-    - Node v22.13.1
-    - npm v10.5.0
+Because of this, you will need to make sure you are using the version of Node.js specified in the `.nvmrc` file in the repository's root directory on your machine:
 
-As of May 2022, AWS Lambda only supports up to [`nodejs20.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+1. [Install](https://github.com/nvm-sh/nvm?tab=readme-) `nvm`
+2. In the project root, run `nvm install` in order to install the version specificed in the `.nvmrc` file, which nvm will automatically pick up
+3. Switch to the installed version by running `nvm use`
+4. Verify you're running the correct version by running `node -v`
+
+If you want to set this version as your default Node.js version for all projects, you can now run `nvm alias default $(node -v)`, which will use your current active Node.js version as the default.
+
+As of March 2025, AWS Lambda only supports up to [`nodejs22.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
 ### Java 11+
 
@@ -49,7 +54,7 @@ The AWS CLI is again used for a majority of our deployment scripts.  You can fol
 
 ### Terraform
 
-We recommend you install a tool called [tfenv](https://github.com/tfutils/tfenv) which can be used to easily switch your terraform version.  
+We recommend you install a tool called [tfenv](https://github.com/tfutils/tfenv) which can be used to easily switch your terraform version.
 
 ```bash
 brew install tfenv
@@ -67,11 +72,15 @@ Since we use circle ci in our CI/CD process, we using a husky pre-commit to vali
 brew install circleci
 ```
 
-#### 💻 MacOS Monterey+
+### Podman/Docker
 
-There is a conflict on `port 5000` with the public API and AirPlay Receiver.
+We use Podman/Docker for running the postgres database locally so you will need one or the other. The team has typically preferred Podman so the instructions are as follows.
 
-Disable AirPlay Receiver: System Preferences --> General --> AirDrop & Handoff--> Uncheck "AirPlay Receiver" in the list.
+- Download [podman for desktop](https://podman.io/)
+- Open Podman for Desktop and go through the installation process to start a podman machine
+- In podman desktop enable the [podman compose extension](https://podman-desktop.io/docs/compose/setting-up-compose)
+- In podman desktop enable Docker compatibility by going to Settings -> Docker Compatibility
+
 
 ## Getting Running
 
@@ -115,7 +124,7 @@ brew install pkg-config cairo pango libpng jpeg giflib librsvg pixman libffi exp
 brew link libffi --force
 brew link expat --force
 brew link zlib --force
-export PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig/ 
+export PKG_CONFIG_PATH=/opt/homebrew/lib/pkgconfig/
 ```
 
 This will install `node-canvas` dependencies globally. As of 12/05/2022, `node-canvas` does not have a package compatible with M1 Macs.
