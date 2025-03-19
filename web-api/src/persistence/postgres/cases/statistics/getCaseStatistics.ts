@@ -30,6 +30,7 @@ export const getCaseStatistics = async ({
       ...s,
       penalties: (s.penalties as Penalty[]) || [],
       year: s.year?.toString(),
+      yearOrPeriod: s.yearOrPeriod || undefined,
       determinationTotalPenalties: s.determinationTotalPenalties || undefined,
       determinationDeficiencyAmount:
         s.determinationDeficiencyAmount || undefined,

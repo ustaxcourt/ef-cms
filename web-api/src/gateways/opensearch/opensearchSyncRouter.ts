@@ -24,7 +24,6 @@ export const syncRouter = async ({
   message: OpensearchSyncMessage;
 }): Promise<void> => {
   const routerFn = TABLES_TO_OPENSEARCH_MAPPING[message.type];
-  console.log('message.type', message.type);
   if (!routerFn) {
     throw new Error(
       `No matching router found for message: ${JSON.stringify(message)}`,

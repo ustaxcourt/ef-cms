@@ -133,7 +133,7 @@ export class Case extends JoiValidationEntity {
   public useSameAsPrimary?: boolean;
   public initialDocketNumberSuffix?: string;
   public noticeOfTrialDate?: string;
-  public docketNumberWithSuffix?: string;
+  public docketNumberWithSuffix!: string;
   public canAllowDocumentService?: boolean;
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;

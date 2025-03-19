@@ -1,8 +1,8 @@
 import { PendingItem } from '@web-api/business/useCases/pendingItems/fetchPendingItemsInteractor';
 import { UNSERVABLE_EVENT_CODES } from '@shared/business/entities/EntityConstants';
-import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { transformDBCaseToEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const fetchPendingItems = async ({
   applicationContext,
@@ -72,9 +72,13 @@ export const fetchPendingItems = async ({
   });
 
   return {
-    foundDocuments: results.map(r =>
-      transformNullToUndefined(rawCaseEntity(r)),
-    ),
+    foundDocuments: results.map(r => ({
+      ...transformDBCaseToEntity(r),
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: r.docketNumber,
+        docketNumberSuffix: r.docketNumberSuffix,
+      }),
+    })),
     total: count,
   };
 };
