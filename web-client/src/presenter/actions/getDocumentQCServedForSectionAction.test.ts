@@ -1,17 +1,19 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getDocumentQCServedForSectionAction } from './getDocumentQCServedForSectionAction';
+import { getDocumentQCServedForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
+jest.mock('@shared/proxies/workitems/getDocumentQCServedForSectionProxy');
+
 describe('getDocumentQCServedForSectionAction', () => {
+  const mockGetDocumentQCServedForSectionInteractor =
+    getDocumentQCServedForSectionInteractor as jest.Mock;
   const mockWorkItems = [{ docketEntryId: 1 }, { docketEntryId: 2 }];
   const mockSection = 'A side section';
 
   beforeAll(() => {
-    applicationContext
-      .getUseCases()
-      .getDocumentQCServedForSectionInteractor.mockReturnValue(mockWorkItems);
-
+    mockGetDocumentQCServedForSectionInteractor.mockReturnValue(mockWorkItems);
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -28,8 +30,7 @@ describe('getDocumentQCServedForSectionAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getDocumentQCServedForSectionInteractor
-        .mock.calls[0][1],
+      mockGetDocumentQCServedForSectionInteractor.mock.calls[0][1],
     ).toMatchObject({ section: mockSection });
   });
 
@@ -50,8 +51,7 @@ describe('getDocumentQCServedForSectionAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getDocumentQCServedForSectionInteractor
-        .mock.calls[0][1],
+      mockGetDocumentQCServedForSectionInteractor.mock.calls[0][1],
     ).toMatchObject({
       section: mockSelectedSection,
     });
