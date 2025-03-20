@@ -31,7 +31,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: 'currentBranch/.nvmrc'
 
       - name: NPM Install in your branch
         working-directory: ./currentBranch
