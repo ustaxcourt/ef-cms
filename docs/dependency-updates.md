@@ -95,7 +95,7 @@ To publish a new ECR docker image:
 
 Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-regex search the entire project for `version = "~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
   - `./shared/admin-tools/glue/glue_migrations/main.tf`
   - `./shared/admin-tools/glue/remote_role/main.tf`
