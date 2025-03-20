@@ -184,6 +184,48 @@ describe('trialLocationHelper', () => {
     expect(totalPagesEligible).toEqual(2);
   });
 
+  it('should sort cases based on docket number and keep consolidated groups together', () => {
+    const mockBlockedCases = [
+      { docketNumber: '999-23', leadDocketNumber: '101-10' },
+      { docketNumber: '3247-19', leadDocketNumber: '232-19' },
+      { docketNumber: '107-21' },
+      { docketNumber: '232-19', leadDocketNumber: '232-19' },
+      { docketNumber: '927-02' },
+      { docketNumber: '101-10', leadDocketNumber: '101-10' },
+      { docketNumber: '927-01' },
+    ];
+
+    const result = runCompute(trialLocationHelper, {
+      state: {
+        trialLocationPage: {
+          blockedCasesPage: 0,
+          eligibleCases: [],
+          eligibleCasesPage: 0,
+          location: '',
+        },
+        blockedCases: mockBlockedCases,
+      },
+    });
+
+    const expected = [
+      { docketNumber: '927-01' },
+      { docketNumber: '927-02' },
+      { docketNumber: '101-10', leadDocketNumber: '101-10' },
+      { docketNumber: '999-23', leadDocketNumber: '101-10' },
+      { docketNumber: '232-19', leadDocketNumber: '232-19' },
+      { docketNumber: '3247-19', leadDocketNumber: '232-19' },
+      { docketNumber: '107-21' },
+    ];
+    expected.forEach((e, i) => {
+      expect(e.docketNumber).toEqual(
+        result.formattedBlockedCases[i].docketNumber,
+      );
+      expect(e.leadDocketNumber).toEqual(
+        result.formattedBlockedCases[i].leadDocketNumber,
+      );
+    });
+  });
+
   describe('isExportDisabled logic', () => {
     it('should set isExportDisabled to true if currentTab is "eligibleCases" and there are no eligible cases', () => {
       const { isExportDisabled } = runCompute(trialLocationHelper, {

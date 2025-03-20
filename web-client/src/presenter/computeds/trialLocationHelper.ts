@@ -7,7 +7,6 @@ import {
   getPriorityGroups,
   groupKeySymbol,
 } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
-import { compareCasesByDocketNumber } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
@@ -38,21 +37,27 @@ export const trialLocationHelper = (
   const blockedCases = get(state.blockedCases);
   const groupedCases = groupCases(blockedCases);
 
-  const formattedBlockedCases = blockedCases
-    .sort(compareCasesByDocketNumber)
-    .map(blockedCase =>
-      setConsolidationFlagsForDisplay(blockedCase, blockedCases),
-    )
-    .map(blockedCase => {
-      const updatedCase = setFormattedBlockDates(
-        {
-          ...blockedCase,
-          caseTitle: Case.getCaseTitle(blockedCase.caseCaption || ''),
-        },
-        groupedCases,
+  const formattedBlockedCases = [...groupedCases.entries()]
+    .sort((a, b) => {
+      return Case.docketNumberSort(a[0], b[0]);
+    })
+    .map(([_, value]) => {
+      return value.sort((a, b) =>
+        Case.docketNumberSort(a.docketNumber, b.docketNumber),
       );
+    })
+    .flat()
+    .map(blockedCase => {
+      const blockedCaseWithConsolidatedProperties =
+        setConsolidationFlagsForDisplay(blockedCase);
 
-      return updatedCase;
+      return {
+        ...blockedCaseWithConsolidatedProperties,
+        caseTitle: Case.getCaseTitle(blockedCase.caseCaption || ''),
+      };
+    })
+    .map(blockedCase => {
+      return setFormattedBlockDates(blockedCase, groupedCases);
     })
     .map(blockedCase => {
       if (!blockedCase.blocked && !blockedCase.automaticBlocked) {
