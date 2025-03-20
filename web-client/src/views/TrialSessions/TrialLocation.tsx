@@ -45,7 +45,6 @@ export const TrialLocation = connect(
               noMargin
               className="margin-right-0"
               icon={['fa', 'arrow-alt-circle-left']}
-              // TODO: reconsider this for multiple tabs
               onClick={() => navigateBackSequence()}
             >
               Back to Trial Session Planning Report
