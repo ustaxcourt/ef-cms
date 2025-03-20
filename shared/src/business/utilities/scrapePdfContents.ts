@@ -1,24 +1,16 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getPdfJs } from '@web-api/utilities/getPdfJs';
 import { isEmpty } from 'lodash';
 
-/**
- * scrapes the text content out of a pdf
- *
- * @param {string} pdfBuffer the buffer for the pdf content
- * @returns {Promise} the template with the brackets replaced with replacement values
- */
 export const scrapePdfContents = async ({
-  applicationContext,
   pdfBuffer,
 }: {
   applicationContext: ServerApplicationContext;
-  pdfBuffer: Buffer;
+  pdfBuffer: Uint8Array;
 }) => {
-  let pdfjsLib;
+  const pdfjsLib = await getPdfJs();
 
   try {
-    pdfjsLib = await applicationContext.getPdfJs();
-
     const document = await pdfjsLib.getDocument({
       data: pdfBuffer,
       isEvalSupported: false,
