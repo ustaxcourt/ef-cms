@@ -9,14 +9,14 @@ export const getBlockedCasesByTrialLocationAction = async ({
   applicationContext,
   props,
 }: ActionProps) => {
-  const { trialLocation, filterStatusForTrialLocation } = props;
+  const { trialLocation, blockedCaseFilter } = props;
   if (!trialLocation) return { blockedCases: [] };
 
   const blockedCases = await applicationContext
     .getUseCases()
     .getBlockedCasesInteractor(applicationContext, {
       trialLocation,
-      filterStatusForTrialLocation,
+      blockedCaseFilter,
     });
 
   return { blockedCases };

@@ -211,6 +211,14 @@ export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
 ];
+
+export const DEFAULT_FILTERED_BLOCKED_CASE_STATUSES = [
+  CASE_STATUS_TYPES.generalDocket,
+  CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  CASE_STATUS_TYPES.assignedCase,
+  CASE_STATUS_TYPES.assignedMotion,
+];
+
 export const SUGGESTED_TRIAL_SESSION_TITLES = {
   invalid: 'Unable to create term',
   success: 'Successfully generated suggested term.',

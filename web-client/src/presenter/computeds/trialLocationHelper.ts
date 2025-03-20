@@ -11,20 +11,23 @@ import { compareCasesByDocketNumber } from '@shared/business/utilities/trialSess
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
+  BlockedFormattedCase,
   groupCases,
   setFormattedBlockDates,
 } from '@web-client/presenter/computeds/blockedCasesReportHelper';
+import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
 
 export const trialLocationHelper = (
   get: Get,
 ): {
   location: string;
-  eligibleCasesForDisplay: any[];
-  formattedBlockedCases: any[];
-  formattedEligibleCases: any[];
+  eligibleCasesForDisplay: (EligibleCase & { caseTitle: string })[];
+  formattedBlockedCases: BlockedFormattedCase[];
+  formattedEligibleCases: (EligibleCase & { caseTitle: string })[];
   totalPagesEligible: number;
-  blockedCasesForDisplay: any[];
+  blockedCasesForDisplay: BlockedFormattedCase[];
   totalPagesBlocked: number;
+  isExportDisabled: boolean;
 } => {
   const pageSize = 100;
 
@@ -95,12 +98,19 @@ export const trialLocationHelper = (
     blockedCasesPage * pageSize + pageSize,
   );
 
+  const currentTab = get(state.trialLocationPage.currentTab);
+
+  const isExportDisabled =
+    (currentTab === 'eligibleCases' && formattedEligibleCases.length === 0) ||
+    (currentTab === 'blockedCases' && formattedBlockedCases.length === 0);
+
   return {
     blockedCasesForDisplay,
     eligibleCasesForDisplay,
     formattedBlockedCases,
-    formattedEligibleCases,
+    formattedEligibleCases: sortedEligibleCases,
     location,
+    isExportDisabled,
     totalPagesBlocked: Math.ceil(formattedBlockedCases.length / pageSize),
     totalPagesEligible: Math.ceil(sortedEligibleCases.length / pageSize),
   };

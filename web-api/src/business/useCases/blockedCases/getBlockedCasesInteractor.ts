@@ -5,6 +5,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getBlockedCasesForTrialLocation } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 
 /**
  * getBlockedCasesInteractor
@@ -17,8 +18,11 @@ import { getBlockedCasesForTrialLocation } from '@web-api/persistence/postgres/c
 export const getBlockedCasesInteractor = async (
   {
     trialLocation,
-    filterStatusForTrialLocation,
-  }: { trialLocation: string; filterStatusForTrialLocation: boolean },
+    blockedCaseFilter,
+  }: {
+    trialLocation: string;
+    blockedCaseFilter?: typeof DEFAULT_FILTERED_BLOCKED_CASE_STATUSES;
+  },
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {
@@ -27,7 +31,7 @@ export const getBlockedCasesInteractor = async (
 
   const foundCases = await getBlockedCasesForTrialLocation(
     trialLocation,
-    filterStatusForTrialLocation,
+    blockedCaseFilter,
   );
 
   return foundCases;
