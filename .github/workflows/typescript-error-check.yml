@@ -20,7 +20,7 @@ jobs:
           path: branchToBeCompared
       - uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
+          node-version-file: 'branchToBeCompared/.nvmrc'
       - name: NPM Install in your branch
         working-directory: ./branchToBeCompared
         run: npm ci
