@@ -1,6 +1,6 @@
 import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 
 const MAX_RESULTS = 5000;
 
@@ -22,7 +22,9 @@ export type BlockedCaseData = Pick<
 
 export const getBlockedCasesForTrialLocation = async (
   trialLocation: string,
-  filterStatusForTrialLocation: boolean = false,
+  blockedCaseFilter:
+    | typeof DEFAULT_FILTERED_BLOCKED_CASE_STATUSES
+    | undefined = undefined,
 ) => {
   const results = await getDbReader(async reader => {
     let query = reader
@@ -65,13 +67,8 @@ export const getBlockedCasesForTrialLocation = async (
       ])
       .limit(MAX_RESULTS);
 
-    if (filterStatusForTrialLocation) {
-      query = query.where('status', 'in', [
-        CASE_STATUS_TYPES.generalDocket,
-        CASE_STATUS_TYPES.generalDocketReadyForTrial,
-        CASE_STATUS_TYPES.assignedCase,
-        CASE_STATUS_TYPES.assignedMotion,
-      ]);
+    if (blockedCaseFilter) {
+      query = query.where('status', 'in', blockedCaseFilter);
     }
 
     return await query.execute();

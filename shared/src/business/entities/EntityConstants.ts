@@ -200,6 +200,14 @@ export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
 ];
+
+export const DEFAULT_FILTERED_BLOCKED_CASE_STATUSES = [
+  CASE_STATUS_TYPES.generalDocket,
+  CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  CASE_STATUS_TYPES.assignedCase,
+  CASE_STATUS_TYPES.assignedMotion,
+];
+
 export const SUGGESTED_TRIAL_SESSION_TITLES = {
   invalid: 'Unable to create term',
   success: 'Successfully generated suggested term.',
@@ -418,12 +426,8 @@ export const OPINION_EVENT_CODES_WITH_BENCH_OPINION = [
   BENCH_OPINION_EVENT_CODE,
 ];
 
-export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
-  EXTERNAL_FILING_EVENTS,
-);
-export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
-  INTERNAL_FILING_EVENTS,
-);
+export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(EXTERNAL_FILING_EVENTS);
+export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(INTERNAL_FILING_EVENTS);
 export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
 
@@ -564,9 +568,7 @@ export const INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION = new Set([
 
 const EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION = [
   ...EXTERNAL_FILING_EVENTS['Motion'],
-  EXTERNAL_FILING_EVENTS['Application'].find(
-    doc => doc.eventCode === 'APLD',
-  )!,
+  EXTERNAL_FILING_EVENTS['Application'].find(doc => doc.eventCode === 'APLD')!,
 ];
 
 export const EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION = new Set(
