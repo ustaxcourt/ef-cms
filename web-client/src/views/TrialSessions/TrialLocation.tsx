@@ -23,12 +23,13 @@ export const TrialLocation = connect(
     navigateBackSequence,
     trialLocationHelper,
   }) {
-    const { formattedBlockedCases, formattedEligibleCases, location } =
-      trialLocationHelper;
-    //TODO: move to helper
-    const isExportDisabled =
-      (currentTab === 'eligibleCases' && formattedEligibleCases.length === 0) ||
-      (currentTab === 'blockedCases' && formattedBlockedCases.length === 0);
+    const {
+      formattedBlockedCases,
+      formattedEligibleCases,
+      location,
+      isExportDisabled,
+    } = trialLocationHelper;
+
     const handleTabSelect = tabName => {
       if (tabName !== currentTab) {
         setCurrentTabSequence({ currentTab: tabName });
@@ -43,7 +44,7 @@ export const TrialLocation = connect(
               link
               noMargin
               className="margin-right-0"
-              icon="print"
+              icon={['fa', 'arrow-alt-circle-left']}
               // TODO: reconsider this for multiple tabs
               onClick={() => navigateBackSequence()}
             >
