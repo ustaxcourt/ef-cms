@@ -5,12 +5,18 @@ import { get } from '../requests';
 export const getPublicPractitionersByNameInteractor = (
   applicationContext: ClientApplicationContext,
   {
+    admissionStatus,
     name,
-    practitionerType,
+    originalBarState,
     searchAfter,
+    practiceType,
+    practitionerType,
   }: {
+    admissionStatus?: string[];
     name: string;
-    practitionerType;
+    originalBarState?: string[];
+    practiceType?: string[];
+    practitionerType?: string;
     searchAfter: (string | number)[];
   },
 ): Promise<PractitionersByName> => {
@@ -18,9 +24,12 @@ export const getPublicPractitionersByNameInteractor = (
     applicationContext,
     endpoint: '/public-api/practitioners',
     params: {
+      admissionStatus,
       name,
-      practitionerType,
+      originalBarState,
       searchAfter,
+      practiceType,
+      practitionerType,
     },
   });
 };
