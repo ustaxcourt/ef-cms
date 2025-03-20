@@ -12,7 +12,7 @@ describe('caseAdvancedSearch', () => {
 
     const results = await caseAdvancedSearch({
       applicationContext,
-      searchTerms: 'search for this',
+      searchTerms: { petitionerName: 'search for this' },
     });
 
     expect(search).toHaveBeenCalledTimes(1);
@@ -46,7 +46,7 @@ describe('caseAdvancedSearch', () => {
 
     const results = await caseAdvancedSearch({
       applicationContext,
-      searchTerms: 'search for this',
+      searchTerms: { petitionerName: 'search for this' },
     });
     expect(search).toHaveBeenCalledTimes(2);
     expect(results).toMatchObject(['other', 'matches']);
