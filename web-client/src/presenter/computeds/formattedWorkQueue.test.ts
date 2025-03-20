@@ -576,7 +576,6 @@ describe('formattedWorkQueue', () => {
           box: 'outbox',
           queue: 'section',
         },
-        selectedWorkItems: [],
       },
     });
 
