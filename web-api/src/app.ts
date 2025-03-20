@@ -326,9 +326,14 @@ app.use(expressLogger);
     '/case-deadlines/:docketNumber/:caseDeadlineId',
     lambdaWrapper(deleteCaseDeadlineLambda),
   );
+
   app.post(
-    '/case-deadlines/:docketNumber',
-    lambdaWrapper(createCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber',
+    lambdaWrapper(
+      createCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.get(
     '/case-deadlines/:docketNumber',
