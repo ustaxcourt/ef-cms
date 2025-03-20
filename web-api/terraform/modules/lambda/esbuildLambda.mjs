@@ -34,7 +34,7 @@ await esbuild.build({
         {
           from: [
             getPathFromRoot(
-              'node_modules/pdfjs-dist/legacy/build/pdf.worker.js',
+              'node_modules/pdfjs-dist/build/pdf.worker.mjs',
             ),
           ],
           keepStructure: true,
