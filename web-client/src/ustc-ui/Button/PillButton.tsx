@@ -14,8 +14,9 @@ export const PillButton = ({
 }: PillButtonProps) => {
   return (
     <span className="blue-pill" data-testid={dataTestId}>
-      {text}
+      <span>{text}</span>
       <button
+        type="button"
         aria-label={`remove ${text} selection`}
         className="margin-left-1 cursor-pointer transparent-button"
         onClick={onRemove}
