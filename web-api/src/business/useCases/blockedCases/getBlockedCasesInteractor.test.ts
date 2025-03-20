@@ -5,6 +5,7 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { getBlockedCasesForTrialLocation as getBlockedCasesForTrialLocationMock } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 
 describe('getBlockedCasesInteractor', () => {
   const getBlockedCasesForTrialLocation =
@@ -22,7 +23,7 @@ describe('getBlockedCasesInteractor', () => {
     const results = await getBlockedCasesInteractor(
       {
         trialLocation: 'Boise, Idaho',
-        filterStatusForTrialLocation: false,
+        blockedCaseFilter: undefined,
       },
       mockPetitionsClerkUser,
     );
@@ -43,7 +44,7 @@ describe('getBlockedCasesInteractor', () => {
       await getBlockedCasesInteractor(
         {
           trialLocation: 'Boise, Idaho',
-          filterStatusForTrialLocation: true,
+          blockedCaseFilter: DEFAULT_FILTERED_BLOCKED_CASE_STATUSES,
         },
         mockPetitionerUser,
       );

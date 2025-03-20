@@ -15,8 +15,8 @@ import {
 import { getBlockedCasesCount as getBlockedCasesCountMock } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount';
 import { getEligibleCasesCount as getEligibleCasesCountMock } from '@web-api/persistence/postgres/cases/getEligibleCasesCount';
 
-const getBlockedCasesCount = getBlockedCasesCountMock as jest.Mock;
-const getEligibleCasesCount = getEligibleCasesCountMock as jest.Mock;
+const getBlockedCasesCount = jest.mocked(getBlockedCasesCountMock);
+const getEligibleCasesCount = jest.mocked(getEligibleCasesCountMock);
 
 describe('getTrialSessionPlanningReportDataInteractor', () => {
   const ALL_TRIAL_SESSIONS_MOCK: RawTrialSession[] = [
@@ -145,9 +145,9 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
 
     getEligibleCasesCount.mockImplementation(({ procedureType }) => {
       if (procedureType === PROCEDURE_TYPES_MAP.regular) {
-        return REGULAR_ELIGIBLE_CASES_COUNT;
+        return Promise.resolve(REGULAR_ELIGIBLE_CASES_COUNT);
       } else {
-        return SMALL_ELIGIBLE_CASES_COUNT;
+        return Promise.resolve(SMALL_ELIGIBLE_CASES_COUNT);
       }
     });
 
