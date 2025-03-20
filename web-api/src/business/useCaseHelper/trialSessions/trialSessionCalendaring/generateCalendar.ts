@@ -217,10 +217,6 @@ const decrementRemainingCaseCounters = (
       calendaringConfig.smallCaseMaxQuantity;
     if (caseCountsAndSessionsByCity[trialLocation].remainingSmallCases < 0)
       caseCountsAndSessionsByCity[trialLocation].remainingSmallCases = 0;
-    // } else if (sessionType === SESSION_TYPES.hybrid) {
-    //   caseCountsAndSessionsByCity[trialLocation].remainingRegularCases = 0;
-    //   caseCountsAndSessionsByCity[trialLocation].remainingSmallCases = 0;
-    // }
   } else if (sessionType === SESSION_TYPES.hybrid) {
     const cityData = caseCountsAndSessionsByCity[trialLocation];
     const { remainingRegularCases, remainingSmallCases } = cityData;
