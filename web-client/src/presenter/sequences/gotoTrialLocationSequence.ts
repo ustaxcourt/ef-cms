@@ -7,11 +7,13 @@ import { setEligibleCasesForLocationAction } from '@web-client/presenter/actions
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { setPropsForTrialLocationAction } from '@web-client/presenter/actions/TrialSession/setPropsForTrialLocationAction';
+import { setRedirectUrlAction } from '@web-client/presenter/actions/setRedirectUrlAction';
 
 export const gotoTrialLocationSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     setPropsForTrialLocationAction,
+    setRedirectUrlAction,
     parallel([
       [getEligibleCasesForLocationAction, setEligibleCasesForLocationAction],
       [

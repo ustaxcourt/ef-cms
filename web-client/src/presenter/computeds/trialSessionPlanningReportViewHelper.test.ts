@@ -9,7 +9,12 @@ describe('trialSessionPlanningReportViewHelper', () => {
     applicationContext,
   );
 
+  const TEST_TRIAL_TERM = 'TEST_TRIAL_TERM';
+  const TEST_TRIAL_YEAR = 'TEST_TRIAL_YEAR';
+
   const BASE_STATE = {
+    trialTerm: TEST_TRIAL_TERM,
+    trialYear: TEST_TRIAL_YEAR,
     previousTerms: [],
     trialLocationData: [],
   };
@@ -182,7 +187,8 @@ describe('trialSessionPlanningReportViewHelper', () => {
           lastVisitedDateFormatted: 'Last visited week of 08/27/2001',
           previousTermsData: [[{}], [], [{}]],
           trialCityState: 'TEST_CITY_STATE_1',
-          trialLocationUrl: '/trial-location/TEST_CITY_STATE_1',
+          trialLocationUrl:
+            '/trial-location/TEST_CITY_STATE_1/TEST_TRIAL_TERM/TEST_TRIAL_YEAR',
         },
         {
           hasNotBeenCalendared: true,
@@ -190,21 +196,24 @@ describe('trialSessionPlanningReportViewHelper', () => {
           lastVisitedDateFormatted: 'Last visited week of 08/30/2004',
           previousTermsData: [[], [], [{}]],
           trialCityState: 'TEST_CITY_STATE_4',
-          trialLocationUrl: '/trial-location/TEST_CITY_STATE_4',
+          trialLocationUrl:
+            '/trial-location/TEST_CITY_STATE_4/TEST_TRIAL_TERM/TEST_TRIAL_YEAR',
         },
         {
           hasNotBeenCalendared: false,
           lastVisitedDateFormatted: 'Never visited.',
           previousTermsData: [[{}], [], [{}]],
           trialCityState: 'TEST_CITY_STATE_3',
-          trialLocationUrl: '/trial-location/TEST_CITY_STATE_3',
+          trialLocationUrl:
+            '/trial-location/TEST_CITY_STATE_3/TEST_TRIAL_TERM/TEST_TRIAL_YEAR',
         },
         {
           hasNotBeenCalendared: true,
           lastVisitedDateFormatted: 'Never visited.',
           previousTermsData: [[], [], [{}]],
           trialCityState: 'TEST_CITY_STATE_2',
-          trialLocationUrl: '/trial-location/TEST_CITY_STATE_2',
+          trialLocationUrl:
+            '/trial-location/TEST_CITY_STATE_2/TEST_TRIAL_TERM/TEST_TRIAL_YEAR',
         },
       ]);
     });
@@ -212,29 +221,21 @@ describe('trialSessionPlanningReportViewHelper', () => {
 
   describe('trialTerm', () => {
     it('should return trialTerm from state', () => {
-      const TEST_TRIAL_TERM = 'TEST_TRIAL_TERM';
       const { trialTerm } = runCompute(trialSessionPlanningReportViewHelper, {
         state: {
-          trialSessionPlanningReportData: {
-            ...BASE_STATE,
-            trialTerm: TEST_TRIAL_TERM,
-          },
+          trialSessionPlanningReportData: BASE_STATE,
         },
       } as any);
 
-      expect(trialTerm).toEqual(TEST_TRIAL_TERM);
+      expect(trialTerm).toEqual(BASE_STATE.trialTerm);
     });
   });
 
   describe('trialYear', () => {
     it('should return trialYear from state', () => {
-      const TEST_TRIAL_YEAR = 'TEST_TRIAL_YEAR';
       const { trialYear } = runCompute(trialSessionPlanningReportViewHelper, {
         state: {
-          trialSessionPlanningReportData: {
-            ...BASE_STATE,
-            trialYear: TEST_TRIAL_YEAR,
-          },
+          trialSessionPlanningReportData: BASE_STATE,
         },
       } as any);
 
