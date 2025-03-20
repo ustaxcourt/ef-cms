@@ -217,9 +217,41 @@ const decrementRemainingCaseCounters = (
       calendaringConfig.smallCaseMaxQuantity;
     if (caseCountsAndSessionsByCity[trialLocation].remainingSmallCases < 0)
       caseCountsAndSessionsByCity[trialLocation].remainingSmallCases = 0;
+    // } else if (sessionType === SESSION_TYPES.hybrid) {
+    //   caseCountsAndSessionsByCity[trialLocation].remainingRegularCases = 0;
+    //   caseCountsAndSessionsByCity[trialLocation].remainingSmallCases = 0;
+    // }
   } else if (sessionType === SESSION_TYPES.hybrid) {
-    caseCountsAndSessionsByCity[trialLocation].remainingRegularCases = 0;
-    caseCountsAndSessionsByCity[trialLocation].remainingSmallCases = 0;
+    const cityData = caseCountsAndSessionsByCity[trialLocation];
+    const { remainingRegularCases, remainingSmallCases } = cityData;
+
+    let toDecrement = calendaringConfig.hybridCaseMaxQuantity;
+
+    if (remainingRegularCases >= remainingSmallCases) {
+      const regularDiff = remainingRegularCases - toDecrement;
+      if (regularDiff >= 0) {
+        caseCountsAndSessionsByCity[trialLocation].remainingRegularCases =
+          regularDiff;
+      } else {
+        caseCountsAndSessionsByCity[trialLocation].remainingRegularCases = 0;
+        toDecrement = Math.abs(regularDiff);
+        const smallDiff = remainingSmallCases - toDecrement;
+        caseCountsAndSessionsByCity[trialLocation].remainingSmallCases =
+          smallDiff >= 0 ? smallDiff : 0;
+      }
+    } else {
+      const smallDiff = remainingSmallCases - toDecrement;
+      if (smallDiff >= 0) {
+        caseCountsAndSessionsByCity[trialLocation].remainingSmallCases =
+          smallDiff;
+      } else {
+        caseCountsAndSessionsByCity[trialLocation].remainingSmallCases = 0;
+        toDecrement = Math.abs(smallDiff);
+        const regularDiff = remainingRegularCases - toDecrement;
+        caseCountsAndSessionsByCity[trialLocation].remainingRegularCases =
+          regularDiff >= 0 ? regularDiff : 0;
+      }
+    }
   }
 };
 
