@@ -9,14 +9,20 @@ export const getPractitionersByNameAction = async ({
   const { selectedPage } = props;
 
   const {
+    admissionStatus,
     lastKeysOfPages,
+    originalBarState,
+    practiceType,
     practitionerName,
     practitionerType,
   }: {
+    admissionStatus;
+    lastKeysOfPages: Array<string | number>;
+    originalBarState;
+    pageNum: number;
+    practiceType;
     practitionerName: string;
     practitionerType?: string;
-    pageNum: number;
-    lastKeysOfPages: Array<string | number>;
   } = get(state.advancedSearchForm.practitionerSearchByName);
 
   store.set(
@@ -27,7 +33,10 @@ export const getPractitionersByNameAction = async ({
   const { searchResults } = await applicationContext
     .getUseCases()
     .getPractitionersByNameInteractor(applicationContext, {
+      admissionStatus,
       name: practitionerName,
+      originalBarState,
+      practiceType,
       practitionerType:
         practitionerType === 'All' ? undefined : practitionerType,
       searchAfter: lastKeysOfPages[selectedPage],

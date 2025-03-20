@@ -37,9 +37,9 @@ export const getPractitionersByNameInteractor = async (
     name: string;
     searchAfter: string[];
     practitionerType?: string;
-    practiceType?: string;
-    admissionStatus?: string;
-    originalBarState?: string;
+    practiceType?: string[];
+    admissionStatus?: string[];
+    originalBarState?: string[];
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<PractitionersByName> => {
@@ -59,12 +59,12 @@ export const getPractitionersByNameInteractor = async (
   const { lastKey, results, total } = await applicationContext
     .getPersistenceGateway()
     .getPractitionersByName(applicationContext, {
-      name,
-      searchAfter,
-      practitionerType,
-      practiceType,
       admissionStatus,
+      name,
       originalBarState,
+      searchAfter,
+      practiceType,
+      practitionerType,
     });
 
   const practitioners = results.map(foundUser => ({

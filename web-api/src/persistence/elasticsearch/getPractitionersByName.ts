@@ -38,9 +38,9 @@ export const getPractitionersByName = async (
   }: {
     name?: string;
     practitionerType?: string;
-    practiceType?: string;
-    admissionStatus?: string;
-    originalBarState?: string;
+    practiceType?: string[];
+    admissionStatus?: string[];
+    originalBarState?: string[];
     searchAfter?: string[];
   },
 ): Promise<{
@@ -67,19 +67,19 @@ export const getPractitionersByName = async (
 
   if (practiceType) {
     searchClause.push({
-      term: { 'practiceType.S': practiceType },
+      terms: { 'practiceType.S': practiceType },
     });
   }
 
   if (admissionStatus) {
     searchClause.push({
-      term: { 'admissionsStatus.S': admissionStatus },
+      terms: { 'admissionsStatus.S': admissionStatus },
     });
   }
 
   if (originalBarState) {
     searchClause.push({
-      term: { 'originalBarState.S': originalBarState },
+      terms: { 'originalBarState.S': originalBarState },
     });
   }
 
