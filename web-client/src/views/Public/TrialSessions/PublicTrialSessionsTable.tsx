@@ -84,10 +84,11 @@ export const PublicTrialSessionsTable = connect<
                         />
                       )}
                     </td>
-                    <td
-                      data-testid={`trial-location-link-${row.trialSessionId}`}
-                    >
-                      <a href={`/trial-session-detail/${row.trialSessionId}`}>
+                    <td>
+                      <a
+                        data-testid={`trial-location-link-${row.trialSessionId}`}
+                        href={`/trial-session-detail/${row.trialSessionId}`}
+                      >
                         {row.trialLocation}
                       </a>
                     </td>
