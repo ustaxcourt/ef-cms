@@ -136,10 +136,9 @@ export const TrialSessionsTable = connect(
                               />
                             )}
                           </td>
-                          <td
-                            data-testid={`trial-location-link-${row.trialSessionId}`}
-                          >
+                          <td>
                             <a
+                              data-testid={`trial-location-link-${row.trialSessionId}`}
                               href={
                                 row.userIsAssignedToSession
                                   ? `/trial-session-working-copy/${row.trialSessionId}`
