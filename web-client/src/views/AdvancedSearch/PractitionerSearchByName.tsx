@@ -79,43 +79,45 @@ export const PractitionerSearchByName = connect(
                 <legend className="usa-legend">
                   Practitioner type <span className="usa-hint">(optional)</span>
                 </legend>
-                {['All', ...PRACTITIONER_TYPE_OPTIONS].map(type => (
-                  <div className="usa-radio usa-radio__inline" key={type}>
-                    <input
-                      checked={
-                        advancedSearchForm.practitionerSearchByName
-                          .practitionerType === type
-                      }
-                      className="usa-radio__input"
-                      id={`practitioner-type-${type}`}
-                      name="practitionerType"
-                      type="radio"
-                      value={type}
-                      onChange={e => {
-                        updateAdvancedSearchFormValueSequence({
-                          formType: 'practitionerSearchByName',
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                    <label
-                      className="usa-radio__label"
-                      data-testid={`practitioner-type-${type}-radio`}
-                      htmlFor={`practitioner-type-${type}`}
-                    >
-                      {type}
-                    </label>
-                  </div>
-                ))}
+                <div className="practitioner-type-container">
+                  {['All', ...PRACTITIONER_TYPE_OPTIONS].map(type => (
+                    <div className="usa-radio" key={type}>
+                      <input
+                        checked={
+                          advancedSearchForm.practitionerSearchByName
+                            .practitionerType === type
+                        }
+                        className="usa-radio__input"
+                        id={`practitioner-type-${type}`}
+                        name="practitionerType"
+                        type="radio"
+                        value={type}
+                        onChange={e => {
+                          updateAdvancedSearchFormValueSequence({
+                            formType: 'practitionerSearchByName',
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label
+                        className="usa-radio__label margin-top-0"
+                        data-testid={`practitioner-type-${type}-radio`}
+                        htmlFor={`practitioner-type-${type}`}
+                      >
+                        {type}
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </fieldset>
             </div>
             <div className="grid-row grid-gap">
               <fieldset className="usa-fieldset">
                 <legend className="usa-legend">
-                  Practice Type <span className="usa-hint">(optional)</span>
+                  Practice type <span className="usa-hint">(optional)</span>
                 </legend>
-                <div style={{ display: 'flex', gap: '30px' }}>
+                <div className="display-flex display-gap">
                   {PRACTICE_TYPE_OPTIONS.map(practiceType => {
                     return (
                       <div className="usa-checkbox" key={practiceType}>
@@ -138,7 +140,7 @@ export const PractitionerSearchByName = connect(
                           }}
                         />
                         <label
-                          className="usa-checkbox__label"
+                          className="usa-checkbox__label margin-top-0"
                           htmlFor={`practiceType.${practiceType}`}
                         >
                           {practiceType}
@@ -151,7 +153,7 @@ export const PractitionerSearchByName = connect(
             </div>
 
             <div className="grid-row grid-gap">
-              <div className="tablet:grid-col-6">
+              <div className="tablet:grid-col-6 margin-bottom-4">
                 <div className="margin-bottom-1">
                   <label
                     className="usa-label"
@@ -203,7 +205,7 @@ export const PractitionerSearchByName = connect(
                   )}
                 </div>
               </div>
-              <div className="tablet:grid-col-6">
+              <div className="tablet:grid-col-6 margin-bottom-4">
                 <div className="margin-bottom-1">
                   <label
                     className="usa-label"
@@ -262,7 +264,7 @@ export const PractitionerSearchByName = connect(
                 </div>
               </div>
             </div>
-            <div className="grid-row margin-top-4">
+            <div className="grid-row">
               <div className="button-container">
                 <Button
                   aria-describedby="search-by-name"
