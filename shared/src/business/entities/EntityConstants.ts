@@ -97,6 +97,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   ENTITY_LOCKING_FEATURE_FLAG: {
     key: 'entity-locking-feature-flag',
   },
+  SEQUENCE_PERFORMANCE_MINIMUM_TIME: {
+    key: 'sequence-performance-minimum-time',
+  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',

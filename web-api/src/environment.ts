@@ -22,6 +22,7 @@ export const environment = {
   efcmsDomain: process.env.EFCMS_DOMAIN || 'localhost',
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
+  elasticsearchInfoEndpoint: process.env.ELASTICSEARCH_INFO_ENDPOINT,
   emailFromAddress,
   isRunningOnLambda: !!process.env.LAMBDA_TASK_ROOT,
   masterRegion: process.env.MASTER_REGION || 'us-east-1',

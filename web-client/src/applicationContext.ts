@@ -238,6 +238,7 @@ import { getUsersPendingEmailInteractor } from '../../shared/src/proxies/users/g
 import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
+import { logUserPerformanceDataInteractor } from '@shared/proxies/system/logUserPerformanceDataProxy';
 import { logErrorInteractor } from '../../shared/src/proxies/logErrorProxy';
 import { loginInteractor } from '@shared/proxies/auth/loginProxy';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
@@ -401,7 +402,6 @@ const clientSupportsES2022 = (() => {
     }
 
     return true;
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (e) {
     return false; // Any failure indicates lack of support
   }
@@ -544,6 +544,7 @@ const allUseCases = {
   getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
+  logUserPerformanceDataInteractor,
   logErrorInteractor,
   loginInteractor,
   opinionAdvancedSearchInteractor,

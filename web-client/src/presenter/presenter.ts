@@ -323,6 +323,8 @@ import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeC
 import { openUnsealDocketEntryModalSequence } from './sequences/openUnsealDocketEntryModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSequence';
+import { performanceMeasurementEndAction } from '@web-client/presenter/actions/performanceMeasurementEndAction';
+import { performanceMeasurementStartAction } from '@web-client/presenter/actions/performanceMeasurementStartAction';
 import { petitionGenerationLiveValidationSequence } from '@web-client/presenter/sequences/petitionGenerationLiveValidationSequence';
 import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
@@ -1603,6 +1605,59 @@ export const presenterSequences = {
     validateUserContactSequence as unknown as Function,
 };
 
+function wrapActionsWithPerformanceLogic(structure) {
+  if (Array.isArray(structure)) {
+    structure.forEach((item, index: number) => {
+      structure[index] = wrapActionsWithPerformanceLogic(item);
+    });
+    return structure;
+  } else if (typeof structure === 'object' && structure !== null) {
+    for (const key in structure) {
+      structure[key] = wrapActionsWithPerformanceLogic(structure[key]);
+    }
+    return structure;
+  } else if (typeof structure === 'function') {
+    return function (...args) {
+      if (!args[0].props['actionPerformanceArray']) {
+        args[0].props['actionPerformanceArray'] = [];
+      }
+
+      const actionName = structure?.name;
+      const startTime: number = Date.now();
+      const result = structure(...args);
+      if (result instanceof Promise) {
+        return result.then(actionResults => {
+          logActionDuration({ actionName, args, startTime });
+          return actionResults;
+        });
+      }
+
+      logActionDuration({ actionName, args, startTime });
+
+      return result;
+    };
+  } else {
+    return structure;
+  }
+}
+
+const logActionDuration = ({
+  actionName,
+  args,
+  startTime,
+}: {
+  actionName: string;
+  args: any;
+  startTime: number;
+}) => {
+  const endTime: number = Date.now();
+  if (actionName)
+    args[0].props['actionPerformanceArray'].push({
+      actionName,
+      duration: endTime - startTime,
+    });
+};
+
 /**
  * Main Cerebral module
  */
@@ -1618,8 +1673,34 @@ export const presenter = {
     [ActionError, setCurrentPageErrorSequence], // generic error handler
   ],
   providers: {} as { applicationContext: ClientApplicationContext; router: {} },
-  sequences: presenterSequences,
   state: cloneDeep(initialState),
+  sequences: Object.entries(presenterSequences).reduce(
+    (acc, [sequenceName, sequence]) => {
+      const SYSTEM_PERFORMANCE_DENYLIST: string[] = [
+        'handleIdleLogoutSequence',
+        'broadcastIdleStatusActiveSequence',
+        'resetHeaderAccordionsSequence',
+      ];
+
+      if (SYSTEM_PERFORMANCE_DENYLIST.includes(sequenceName)) return acc;
+
+      if (!Array.isArray(sequence))
+        throw new Error('Cerebral sequence is not an array');
+      const updatedSequence = [
+        function (
+          ...args: Parameters<typeof performanceMeasurementStartAction>
+        ) {
+          args[0].props['sequenceName'] = sequenceName;
+          return performanceMeasurementStartAction(...args);
+        },
+        ...wrapActionsWithPerformanceLogic(sequence),
+        performanceMeasurementEndAction,
+      ];
+      acc[sequenceName] = updatedSequence;
+      return acc;
+    },
+    presenterSequences,
+  ),
 };
 
 export type Sequences = typeof presenterSequences;
