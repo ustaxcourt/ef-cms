@@ -43,7 +43,10 @@ describe('caseAdvancedSearchInteractor', () => {
     await expect(
       caseAdvancedSearchInteractor(
         applicationContext,
-        { petitionerName: 'Janae Jacobs' },
+        {
+          petitionerName: 'Janae Jacobs',
+          caseTypes: [CASE_TYPES_MAP.cdp],
+        },
         mockPetitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
@@ -56,6 +59,7 @@ describe('caseAdvancedSearchInteractor', () => {
       applicationContext,
       {
         petitionerName: 'Paul Billings',
+        caseTypes: [CASE_TYPES_MAP.cdp],
       },
       mockPetitionsClerkUser,
     );
