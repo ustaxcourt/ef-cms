@@ -11,21 +11,22 @@ export const getCaseMetadataWithCounsel = async ({
   applicationContext: ServerApplicationContext;
   docketNumber: string;
 }): Promise<RawCase | undefined> => {
-  const caseMetaData = await getCaseMetadataByDocketNumber({ docketNumber });
+  const [caseMetaData, privatePractitioners, irsPractitioners] =
+    await Promise.all([
+      getCaseMetadataByDocketNumber({ docketNumber }),
+      getPrivatePractitionersOnCase({
+        applicationContext,
+        docketNumber,
+      }),
+      getIrsPractitionersOnCase({
+        applicationContext,
+        docketNumber,
+      }),
+    ]);
 
   if (!caseMetaData) {
     return undefined;
   }
-
-  const privatePractitioners = await getPrivatePractitionersOnCase({
-    applicationContext,
-    docketNumber,
-  });
-
-  const irsPractitioners = await getIrsPractitionersOnCase({
-    applicationContext,
-    docketNumber,
-  });
 
   return transformNullToUndefined({
     ...caseMetaData,
