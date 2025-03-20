@@ -2,17 +2,20 @@ import { ADC_SECTION } from '@shared/business/entities/EntityConstants';
 import { adcUser } from '@shared/test/mockUsers';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getDocumentQCInboxForSectionAction } from './getDocumentQCInboxForSectionAction';
+import { getDocumentQCInboxForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
+jest.mock('@shared/proxies/workitems/getDocumentQCInboxForSectionProxy');
+
 describe('getDocumentQCInboxForSectionAction', () => {
+  const mockGetDocumentQCInboxForSectionInteractor =
+    getDocumentQCInboxForSectionInteractor as jest.Mock;
   const mockWorkItems = [{ docketEntryId: 1 }, { docketEntryId: 2 }];
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
   beforeAll(() => {
-    applicationContext
-      .getUseCases()
-      .getDocumentQCInboxForSectionInteractor.mockReturnValue(mockWorkItems);
+    mockGetDocumentQCInboxForSectionInteractor.mockReturnValue(mockWorkItems);
     presenter.providers.applicationContext = applicationContext;
   });
 
@@ -32,8 +35,7 @@ describe('getDocumentQCInboxForSectionAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor
-        .mock.calls[0][1],
+      mockGetDocumentQCInboxForSectionInteractor.mock.calls[0][1],
     ).toMatchObject({
       judgeUser: {
         name: 'A judgy person',
@@ -58,8 +60,7 @@ describe('getDocumentQCInboxForSectionAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor
-        .mock.calls[0][1],
+      mockGetDocumentQCInboxForSectionInteractor.mock.calls[0][1],
     ).toMatchObject({
       section: mockSection,
     });
@@ -74,8 +75,7 @@ describe('getDocumentQCInboxForSectionAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor
-        .mock.calls[0][1],
+      mockGetDocumentQCInboxForSectionInteractor.mock.calls[0][1],
     ).toMatchObject({
       judgeUser: {
         name: CHIEF_JUDGE,
