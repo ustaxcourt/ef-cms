@@ -7,11 +7,13 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 type FormattedCaseDeadlinesType = RawCaseDeadline & {
   deadlineDateFormatted: string;
   overdue?: boolean;
+  displayEditAndDeleteLink: boolean;
 };
 
 const formatCaseDeadline = (
   applicationContext: ClientApplicationContext,
   _caseDeadline: RawCaseDeadline,
+  leadDocketNumber?: string,
 ): FormattedCaseDeadlinesType => {
   const caseDeadline = cloneDeep(_caseDeadline);
 
@@ -29,13 +31,16 @@ const formatCaseDeadline = (
   const deadLineIsBeforeToday =
     deadlineDate.startOf('day') < today.startOf('day');
 
-  const result: FormattedCaseDeadlinesType = {
+  const displayEditAndDeleteLink = leadDocketNumber
+    ? !caseDeadline.consolidatedCaseDeadlineId
+    : true;
+
+  return {
     ...caseDeadline,
     deadlineDateFormatted,
     overdue: deadLineIsBeforeToday || undefined,
+    displayEditAndDeleteLink,
   };
-
-  return result;
 };
 
 export const formattedCaseDeadlines = (
@@ -43,9 +48,16 @@ export const formattedCaseDeadlines = (
   applicationContext: ClientApplicationContext,
 ): FormattedCaseDeadlinesType[] => {
   const caseDeadlines = get(state.caseDeadlines) || [];
+  const caseDetail = get(state.caseDetail);
 
   return caseDeadlines
-    .map(d => formatCaseDeadline(applicationContext, d))
+    .map(deadline =>
+      formatCaseDeadline(
+        applicationContext,
+        deadline,
+        caseDetail.leadDocketNumber,
+      ),
+    )
     .sort((a, b) =>
       String.prototype.localeCompare.call(a.deadlineDate, b.deadlineDate),
     );
