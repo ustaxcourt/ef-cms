@@ -14,7 +14,7 @@ const joi: Root = joiImported.extend(joiDate);
 export class MotionOrderResponseForm extends JoiValidationEntity {
   public motionOrderResponse?: string;
   public responseDate?: string;
-  public additionalText?: string;
+  public additionalOrderText?: string;
   public dueDate?: string;
 
   constructor(rawProps) {
@@ -22,7 +22,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
 
     this.motionOrderResponse = rawProps.motionOrderResponse;
     this.responseDate = rawProps.responseDate;
-    this.additionalText = rawProps.additionalText;
+    this.additionalOrderText = rawProps.additionalOrderText;
     this.dueDate = rawProps.dueDate;
   }
 
@@ -32,7 +32,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   );
 
   static VALIDATION_RULES = {
-    additionalText: joi
+    additionalOrderText: joi
       .string()
       .max(256)
       .allow(null, '')
