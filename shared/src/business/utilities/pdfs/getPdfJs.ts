@@ -1,3 +1,20 @@
+/*
+  ____          _____                __       _ 
+ |  _ \        / ____|              / _|     | |
+ | |_) | ___  | |     __ _ _ __ ___| |_ _   _| |
+ |  _ < / _ \ | |    / _` | '__/ _ \  _| | | | |
+ | |_) |  __/ | |___| (_| | | |  __/ | | |_| | |
+ |____/ \___|  \_____\__,_|_|  \___|_|  \__,_|_|
+
+Be careful here. pdfjs-dist is not a typical dependency and requires bundling + browser configuration to use.
+Both the frontend (browser) and backend (node) use this function to get pdfjs-dist and this function has been simplified as much as possible.
+This function code splits the dependency, initializes the worker correctly, works in a node environment, and has backward compatibility with older browser versions.
+If you are going to change this function know you must keep all the above in mind.
+
+The most difficult part of upgrading is correctly bundling the worker files. You must manually include the worker in your output bundle for lambdas and browser.
+This means copying a file from node_modules into the bundle.
+Both web-api/terraform/modules/lambda/esbuildLambda.mjs and ./esbuildHelper.mjs need to point at the worker in node_modules for this package to work.
+*/
 export async function getPdfJs(): Promise<typeof pdfJs> {
   const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
   pdfJs.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
