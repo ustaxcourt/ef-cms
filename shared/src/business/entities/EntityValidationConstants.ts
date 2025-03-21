@@ -620,6 +620,22 @@ export const CASE_STATUS_RULE = joi
   })
   .meta({ tags: ['Restricted'] })
   .description('Status of the case.');
+export const CASE_AUTOMATIC_BLOCKED_RULE = joi
+  .boolean()
+  .optional()
+  .description(
+    'Temporarily blocked from trial due to a pending item or due date.',
+  );
+export const CASE_BLOCKED_RULE = joi
+  .boolean()
+  .optional()
+  .meta({ tags: ['Restricted'] })
+  .when('status', {
+    is: CASE_STATUS_TYPES.calendared,
+    otherwise: joi.optional(),
+    then: joi.invalid(true),
+  })
+  .description('Temporarily blocked from trial.');
 
 export const PASSWORD_VALIDATION_ERROR_MESSAGES = {
   hasNoLeadingOrTrailingSpace: 'Must not contain leading or trailing space',

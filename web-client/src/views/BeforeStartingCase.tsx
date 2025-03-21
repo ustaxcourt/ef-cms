@@ -185,43 +185,45 @@ export const BeforeStartingCase = connect(
             </div>
           </div>
           <BeforeStartingCaseAccordion isPetitioner={isPetitioner} />
-          <Button
-            className="before-case-button"
-            data-testid="go-to-step-1"
-            href="/file-a-petition/new"
-          >
-            {"I'm Ready to Start"}
-          </Button>
-          <Button
-            className="before-case-button before-case-follow-up-button"
-            data-testid="print-this-page"
-            secondary={true}
-            onClick={() => {
-              const elements = window.document.querySelectorAll(
-                '[id^="ustc-ui-accordion-item-button"]',
-              );
+          <div className="button-container">
+            <Button
+              className="before-case-button"
+              data-testid="go-to-step-1"
+              href="/file-a-petition/new"
+            >
+              {"I'm Ready to Start"}
+            </Button>
+            <Button
+              className="before-case-button before-case-follow-up-button"
+              data-testid="print-this-page"
+              secondary={true}
+              onClick={() => {
+                const elements = window.document.querySelectorAll(
+                  '[id^="ustc-ui-accordion-item-button"]',
+                );
 
-              elements.forEach((element: any) => {
-                if (element.getAttribute('aria-expanded') !== 'true')
-                  element.click();
-              });
+                elements.forEach((element: any) => {
+                  if (element.getAttribute('aria-expanded') !== 'true')
+                    element.click();
+                });
 
-              setTimeout(() => window.print(), 100);
-            }}
-          >
-            Print This Page
-          </Button>
-          <Button
-            link
-            className="before-case-button before-case-follow-up-button"
-            data-testid="cancel-before-starting-case"
-            id="cancel"
-            onClick={() => {
-              closeModalAndReturnToDashboardSequence();
-            }}
-          >
-            Cancel
-          </Button>
+                setTimeout(() => window.print(), 100);
+              }}
+            >
+              Print This Page
+            </Button>
+            <Button
+              link
+              className="before-case-button before-case-follow-up-button"
+              data-testid="cancel-before-starting-case"
+              id="cancel"
+              onClick={() => {
+                closeModalAndReturnToDashboardSequence();
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
         </section>
       </>
     );

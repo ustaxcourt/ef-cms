@@ -1,9 +1,10 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { BlockedCasesResponse, getBlockedCases } from '@web-api/persistence/elasticsearch/getBlockedCases';
 
 /**
  * getBlockedCasesInteractor
@@ -14,20 +15,16 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @returns {object} the case data
  */
 export const getBlockedCasesInteractor = async (
-  applicationContext: IApplicationContext,
   { trialLocation }: { trialLocation: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<BlockedCasesResponse> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const foundCases = await applicationContext
-    .getPersistenceGateway()
-    .getBlockedCases({
-      applicationContext,
-      trialLocation,
-    });
+  const foundCases = await getBlockedCases({
+    trialLocation,
+  });
 
   return foundCases;
 };

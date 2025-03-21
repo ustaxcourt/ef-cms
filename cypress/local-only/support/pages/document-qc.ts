@@ -1,10 +1,6 @@
 import { attachFile } from '../../../helpers/file/upload-file';
 import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
 
-export const navigateTo = username => {
-  cy.login(username, '/document-qc');
-};
-
 export const getCreateACaseButton = () => {
   return cy.get('a#file-a-petition');
 };

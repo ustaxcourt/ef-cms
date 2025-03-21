@@ -8,16 +8,19 @@ export function createAndServePaperPetition(
     procedureType = 'Regular',
     trialLocation = 'Birmingham, Alabama',
     yearReceived = '2020',
+    includeApwDocument = true,
   }: Partial<{
     yearReceived: string;
     procedureType: ProcedureType;
     trialLocation: string;
     name: string;
+    includeApwDocument: boolean;
   }> = {
     name: 'rick james ' + Date.now(),
     procedureType: 'Regular',
     trialLocation: 'Birmingham, Alabama',
     yearReceived: '2020',
+    includeApwDocument: true,
   },
 ): Cypress.Chainable<{
   docketNumber: string;
@@ -108,15 +111,18 @@ export function createAndServePaperPetition(
     selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
   });
 
-  cy.get(
-    '[data-testid="tabButton-applicationForWaiverOfFilingFeeFile"]',
-  ).click();
-  cy.get('[data-testid="upload-pdf-button"]').click();
-  attachFile({
-    filePath: '../../helpers/file/sample.pdf',
-    selector: 'input#applicationForWaiverOfFilingFeeFile-file',
-    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
-  });
+  if (includeApwDocument) {
+    // Having this document means creating a pending item and blocking case from trial
+    cy.get(
+      '[data-testid="tabButton-applicationForWaiverOfFilingFeeFile"]',
+    ).click();
+    cy.get('[data-testid="upload-pdf-button"]').click();
+    attachFile({
+      filePath: '../../helpers/file/sample.pdf',
+      selector: 'input#applicationForWaiverOfFilingFeeFile-file',
+      selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+    });
+  }
 
   cy.get('[data-testid="submit-paper-petition"]').click();
   return cy
@@ -140,13 +146,19 @@ export function createAndServePaperPetition(
       );
 
       const expectedDocuments = [
-        { eventCode: 'P', index: 1, servedTo: 'R' },
-        { eventCode: 'ATP', index: 2, servedTo: 'R' },
-        { eventCode: 'APW', index: 3, servedTo: 'R' },
-        { eventCode: 'DISC', index: 4, servedTo: 'R' },
-        { eventCode: 'RQT', index: 5, servedTo: 'R' },
-        { eventCode: 'NOTR', index: 6, servedTo: 'P' },
+        { eventCode: 'P', servedTo: 'R', index: 1 },
+        { eventCode: 'ATP', servedTo: 'R', index: 2 },
+        { eventCode: 'DISC', servedTo: 'R', index: includeApwDocument ? 4 : 3 },
+        { eventCode: 'RQT', servedTo: 'R', index: includeApwDocument ? 5 : 4 },
+        { eventCode: 'NOTR', servedTo: 'P', index: includeApwDocument ? 6 : 5 },
       ];
+      if (includeApwDocument) {
+        expectedDocuments.splice(1, 0, {
+          eventCode: 'APW',
+          servedTo: 'R',
+          index: 3,
+        });
+      }
 
       expectedDocuments.forEach(({ eventCode, index, servedTo }) => {
         cy.get(`[data-testid="docket-entry-eventCode-${index}"]`).should(
@@ -160,22 +172,31 @@ export function createAndServePaperPetition(
 
       cy.get('[data-testid="tab-drafts"] > .button-text').click();
 
-      cy.get('[data-testid="docket-entry-description-0"]').should(
-        'have.text',
+      const expectedDescriptions = [
         'Notice of Attachments in the Nature of Evidence',
-      );
-      cy.get('[data-testid="docket-entry-description-1"]').should(
-        'have.text',
         'Order',
-      );
-      cy.get('[data-testid="docket-entry-description-2"]').should(
-        'have.text',
         'Order',
-      );
-      cy.get('[data-testid="docket-entry-description-3"]').should(
-        'have.text',
         'Order to Show Cause',
-      );
+      ];
+
+      cy.get('[data-testid^="docket-entry-description-"]').should($els => {
+        const actualDescriptions = Array.from($els).map(el => el.textContent);
+
+        expect(actualDescriptions).to.have.length(expectedDescriptions.length);
+
+        expectedDescriptions.forEach(expected => {
+          const expectedCount = expectedDescriptions.filter(
+            desc => desc === expected,
+          ).length;
+          const actualCount = actualDescriptions.filter(
+            desc => desc === expected,
+          ).length;
+          expect(
+            actualCount,
+            `Should have ${expectedCount} occurrence(s) of "${expected}"`,
+          ).to.equal(expectedCount);
+        });
+      });
 
       cy.get('[data-testid="tab-docket-record"]').click();
 
@@ -189,10 +210,13 @@ export function createAndServePaperPetition(
 
 export function createAndServePaperPetitionMyselfAndSpouse(
   {
+    primaryContactName = 'John',
     secondaryContactName = 'John Spouse',
   }: Partial<{
+    primaryContactName: string;
     secondaryContactName: string;
   }> = {
+    primaryContactName: 'John',
     secondaryContactName: 'John Spouse',
   },
 ): Cypress.Chainable<{
@@ -204,7 +228,7 @@ export function createAndServePaperPetitionMyselfAndSpouse(
   cy.get('[data-testid="start-a-petition"]').click();
 
   cy.get('#party-type').select('Petitioner & spouse');
-  cy.get('[data-testid="contact-primary-name"]').type('John');
+  cy.get('[data-testid="contact-primary-name"]').type(primaryContactName);
   cy.get('[data-testid="contactPrimary.address1"]').type('111 South West St.');
   cy.get('[data-testid="contactPrimary.city"]').type('Orlando');
   cy.get('[data-testid="contactPrimary.state"]').select('AK');
