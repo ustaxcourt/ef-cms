@@ -56,7 +56,7 @@ Call stack:
     - `submitExternalDocumentSequence`
       - `FileDocumentReview.tsx`
 
-### 4. `assignWorkItemsInteractor` and `getWorkItemInteractor`
+### 3. `assignWorkItemsInteractor` and `getWorkItemInteractor`
 
 `assignWorkItemsInteractor` creates or updates a work item that is being assigned by the logged-in user to another user. it requires `ROLE_PERMISSIONS.ASSIGN_WORK_ITEM`.
 
@@ -70,7 +70,7 @@ Call stack:
 
 `getWorkItemInteractor` is wired up with a proxy and a lambda, but it does not appear to be called by any application code in the backend or any Cerebral-dependent code in the frontend. It is potentially dead code.
 
-### 5. `saveCaseDetailInternalEditInteractor`
+### 4. `saveCaseDetailInternalEditInteractor`
 
 **If** the Case being updated is **not** a paper case, then the WorkItem associated with the petition docket entry receives the following updates:
 
@@ -83,7 +83,7 @@ Call stack:
   - `saveSavedCaseForLaterSequence`
     - `CaseDetailEdit.tsx`
 
-### 6. `updateContactInteractor`
+### 5. `updateContactInteractor`
 
 When a petitioner updates a case they are associated with from the parties tab, a single new WorkItem is created **if** (1) the contact being edited is not represented by a practitioner for the case in question, **and** the case related to the contact being edited has any parties with paper service.
 
@@ -104,7 +104,7 @@ Call stack:
   - `submitEditContactSequence`
     - `ContactEdit.tsx`
 
-### 7. `createChangeItems.generateAndServeDocketEntry`
+### 6. `createChangeItems.generateAndServeDocketEntry`
 
 This use case helper instantiates a new WorkItem when a DocketEntry is created **if**:
 
@@ -146,10 +146,17 @@ Call stack:
         - `EditPetitionerInformationInternal.tsx`
       - `submitUpdatePetitionerInformationFromModalSequence`
         - `MatchingEmailFoundModal.tsx`
-        - `NoMatchingEmailFoundModa.tsx`
+        - `NoMatchingEmailFoundModal.tsx`
 - `updateAssociatedCaseWorker`
 
-### 8. `setWorkItemAsReadInteractor`
+### 7. `setWorkItemAsReadInteractor`
+
+`setWorkItemAsReadInteractor` updates a WorkItem by marking it as read. It requires `ROLE_PERMISSIONS.GET_READ_MESSAGES`.
+
+Call stack:
+- `setWorkItemAsReadAction`
+  - `gotoDocketEntryQcSequence`
+    - `'/case-detail/*/documents/*/edit..'` path in `router.ts`
 
 ## When is a WorkItem "complete"?
 
