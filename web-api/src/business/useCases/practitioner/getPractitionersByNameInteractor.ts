@@ -6,6 +6,15 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
+export type PractitionerByNameParams = {
+  name: string;
+  searchAfter: string[];
+  practitionerType?: string;
+  practiceType?: string[];
+  admissionStatus?: string[];
+  originalBarState?: string[];
+};
+
 export type PractitionersByName = {
   searchResults: {
     lastKey: (string | number)[];
@@ -32,14 +41,7 @@ export const getPractitionersByNameInteractor = async (
     practiceType,
     admissionStatus,
     originalBarState,
-  }: {
-    name: string;
-    searchAfter: string[];
-    practitionerType?: string;
-    practiceType?: string[];
-    admissionStatus?: string[];
-    originalBarState?: string[];
-  },
+  }: PractitionerByNameParams,
   authorizedUser: UnknownAuthUser,
 ): Promise<PractitionersByName> => {
   const isLoggedInUser = !!authorizedUser?.userId;
@@ -71,7 +73,7 @@ export const getPractitionersByNameInteractor = async (
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
     originalBarState: foundUser.originalBarState,
-    state: isLoggedInUser && foundUser.contact?.state,
+    state: isLoggedInUser ? foundUser.contact?.state : undefined,
     name: foundUser.name,
     practiceType: foundUser.practiceType,
     practitionerType: foundUser.practitionerType,

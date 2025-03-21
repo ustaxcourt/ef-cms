@@ -1,6 +1,9 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getPractitionersByNameInteractor } from './getPractitionersByNameInteractor';
+import {
+  getPractitionersByNameInteractor,
+  PractitionerByNameParams,
+} from './getPractitionersByNameInteractor';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -12,7 +15,7 @@ describe('getPractitionersByNameInteractor', () => {
       await expect(
         getPractitionersByNameInteractor(
           applicationContext,
-          {} as { name: string; searchAfter: string },
+          {} as PractitionerByNameParams,
           mockPetitionerUser,
         ),
       ).rejects.toThrow('Unauthorized for searching practitioners');
@@ -22,7 +25,7 @@ describe('getPractitionersByNameInteractor', () => {
       await expect(
         getPractitionersByNameInteractor(
           applicationContext,
-          {} as { name: string; searchAfter: string },
+          {} as PractitionerByNameParams,
           mockPetitionsClerkUser,
         ),
       ).rejects.toThrow('Name must be provided to search');
@@ -56,7 +59,7 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
-          searchAfter: undefined as unknown as string,
+          searchAfter: undefined as unknown as string[],
         },
         mockPetitionsClerkUser,
       );
@@ -115,7 +118,7 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
-          searchAfter: undefined as unknown as string,
+          searchAfter: undefined as unknown as string[],
         },
         mockPetitionsClerkUser,
       );
@@ -128,7 +131,7 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
-          searchAfter: undefined as unknown as string,
+          searchAfter: undefined as unknown as string[],
         },
         undefined,
       );
