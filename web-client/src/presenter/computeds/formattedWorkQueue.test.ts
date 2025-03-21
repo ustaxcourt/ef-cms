@@ -245,6 +245,7 @@ describe('formattedWorkQueue', () => {
           box: 'outbox',
           queue: 'my',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -265,7 +266,7 @@ describe('formattedWorkQueue', () => {
           {
             ...baseWorkItem,
             associatedJudge: CHIEF_JUDGE,
-            caseIsInProgress: true,
+            inProgress: true,
             caseStatus: STATUS_TYPES.new,
             docketEntry: {
               ...baseWorkItem.docketEntry,
@@ -278,6 +279,7 @@ describe('formattedWorkQueue', () => {
           box: 'inProgress',
           queue: 'section',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -294,6 +296,7 @@ describe('formattedWorkQueue', () => {
           box: 'inbox',
           queue: 'section',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -314,6 +317,7 @@ describe('formattedWorkQueue', () => {
           box: 'inbox',
           queue: 'section',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -335,6 +339,7 @@ describe('formattedWorkQueue', () => {
           box: 'outbox',
           queue: 'section',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -354,6 +359,7 @@ describe('formattedWorkQueue', () => {
           box: 'outbox',
           queue: 'section',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -376,6 +382,7 @@ describe('formattedWorkQueue', () => {
           box: 'inbox',
           queue: 'section',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -421,6 +428,7 @@ describe('formattedWorkQueue', () => {
           box: 'inbox',
           queue: 'my',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -476,6 +484,7 @@ describe('formattedWorkQueue', () => {
           box: 'inbox',
           queue: 'my',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -530,6 +539,7 @@ describe('formattedWorkQueue', () => {
           box: 'inbox',
           queue: 'my',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -627,6 +637,7 @@ describe('formattedWorkQueue', () => {
             box: 'inbox',
             queue: 'section',
           },
+          selectedWorkItems: [],
         },
       });
 
@@ -644,6 +655,7 @@ describe('formattedWorkQueue', () => {
             box: 'inbox',
             queue: 'section',
           },
+          selectedWorkItems: [],
         },
       });
 
@@ -661,6 +673,7 @@ describe('formattedWorkQueue', () => {
             box: 'inbox',
             queue: 'section',
           },
+          selectedWorkItems: [],
         },
       });
 
@@ -691,6 +704,7 @@ describe('formattedWorkQueue', () => {
           box: 'inbox',
           queue: 'section',
         },
+        selectedWorkItems: [],
       },
     });
 
@@ -717,6 +731,7 @@ describe('formattedWorkQueue', () => {
           box: 'inbox',
           queue: 'section',
         },
+        selectedWorkItems: [],
       },
     });
 

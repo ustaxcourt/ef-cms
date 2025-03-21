@@ -383,7 +383,6 @@ describe('getWorkItemDocumentLink', () => {
       permissions,
       workItem: {
         ...baseWorkItem,
-        caseIsInProgress: true,
         docketEntry: {
           ...baseDocketEntry,
           documentType: 'Petition',
@@ -393,6 +392,7 @@ describe('getWorkItemDocumentLink', () => {
           pending: false,
           servedAt: null,
         },
+        inProgress: true,
         section: PETITIONS_SECTION,
       },
       workQueueToDisplay: {
@@ -414,16 +414,17 @@ describe('getWorkItemDocumentLink', () => {
       permissions,
       workItem: {
         ...baseWorkItem,
-        caseIsInProgress: true,
         docketEntry: {
           ...baseDocketEntry,
           documentType: 'Petition',
           eventCode: 'P',
+          inProgress: true,
           isFileAttached: true,
           isInProgress: true,
           pending: false,
           servedAt: null,
         },
+        inProgress: true,
         section: PETITIONS_SECTION,
       },
       workQueueToDisplay: {

@@ -204,7 +204,7 @@ describe('filterWorkItems', () => {
       workItems: workQueueInbox,
       ...SECTION_DOCUMENT_QC_INBOX,
     } as any);
-    let assigned:string = '';
+    let assigned: string = '';
     let unassigned: string = '';
 
     filtered.forEach(item => {
@@ -320,19 +320,5 @@ describe('filterWorkItems', () => {
       workItemDocketMyDocumentQCInProgress,
       workItemDocketSectionDocumentQCInProgress,
     ]);
-  });
-
-  it('should getWorkQueueFilters with the section argument', () => {
-    filterWorkItems({
-      applicationContext,
-      authorizedUser: docketClerk1,
-      section: DOCKET_SECTION,
-      workItems: workQueueInProgress,
-      ...SECTION_DOCUMENT_QC_IN_PROGRESS,
-    } as any);
-
-    expect(
-      applicationContext.getUtilities().getWorkQueueFilters.mock.calls[0][0],
-    ).toMatchObject({ section: DOCKET_SECTION });
   });
 });

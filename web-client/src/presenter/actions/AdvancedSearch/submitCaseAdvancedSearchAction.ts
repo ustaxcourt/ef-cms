@@ -1,25 +1,37 @@
-import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
+import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import {
+  CaseType,
   COUNTRY_TYPES,
   CountryTypes,
+  ProcedureType,
 } from '@shared/business/entities/EntityConstants';
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareFormDataForCaseSearchApi = (
-  form: Omit<CaseAdvancedSearchParamsRequestType, 'countryType'> & {
-    countryType: typeof ALL_COUNTRY_TYPE | CountryTypes;
+  form: Omit<
+    CaseAdvancedSearchParamsRequestType,
+    'countryType' | 'procedureType'
+  > & {
+    countryType: typeof ALL_SELECTION | CountryTypes;
+    procedureType: typeof ALL_SELECTION | ProcedureType;
+    caseTypes: Record<string, CaseType | CaseType[]>;
   },
 ): CaseAdvancedSearchParamsRequestType => {
   return {
     ...form,
     countryType:
-      form.countryType === ALL_COUNTRY_TYPE ? undefined : form.countryType,
+      form.countryType === ALL_SELECTION ? undefined : form.countryType,
     petitionerState:
-      form.countryType === ALL_COUNTRY_TYPE ||
+      form.countryType === ALL_SELECTION ||
       form.countryType === COUNTRY_TYPES.INTERNATIONAL
         ? undefined
         : form.petitionerState,
+    procedureType:
+      form.procedureType === ALL_SELECTION ? undefined : form.procedureType,
+    caseTypes: form.caseTypes
+      ? Object.values(form.caseTypes).flat()
+      : undefined,
   };
 };
 

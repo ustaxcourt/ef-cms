@@ -3,6 +3,10 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { formatWorkItem } from './formattedWorkQueue';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+
+jest.mock('@shared/business/entities/WorkItem');
 
 describe('formatWorkItem', () => {
   const currentTime = applicationContext.getUtilities().createISODateString();
@@ -116,19 +120,20 @@ describe('formatWorkItem', () => {
   });
 
   it('should show the high priority icon when the work item is high priority', () => {
-    const workItem = {
-      ...baseWorkItem,
-      highPriority: false,
-      showHighPriorityIcon: undefined,
-    };
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(false);
 
-    let result = formatWorkItem({ workItem });
+    let result = formatWorkItem({ workItem: baseWorkItem });
 
     expect(result.showHighPriorityIcon).toEqual(false);
 
-    workItem.highPriority = true;
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(true);
 
-    result = formatWorkItem({ workItem });
+    const highPriorityWorkItem = {
+      ...baseWorkItem,
+      status: CASE_STATUS_TYPES.calendared,
+    };
+
+    result = formatWorkItem({ workItem: highPriorityWorkItem });
 
     expect(result.showHighPriorityIcon).toEqual(true);
   });
@@ -157,6 +162,8 @@ describe('formatWorkItem', () => {
       isRead: false,
     };
 
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(false);
+
     let result = formatWorkItem({ workItem });
 
     expect(result.showUnreadStatusIcon).toEqual(true);
@@ -168,7 +175,7 @@ describe('formatWorkItem', () => {
     expect(result.showUnreadStatusIcon).toEqual(false);
 
     workItem.isRead = false;
-    workItem.highPriority = true;
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(true);
 
     result = formatWorkItem({ workItem });
 
@@ -176,26 +183,35 @@ describe('formatWorkItem', () => {
   });
 
   it('should return showUnassignedIcon as true when assigneeName is falsy and highPriority is false', () => {
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(false);
+
     const workItem = {
       ...baseWorkItem,
       assigneeName: '',
-      highPriority: false,
     };
 
     let result = formatWorkItem({ workItem });
 
     expect(result.showUnassignedIcon).toEqual(true);
 
-    workItem.highPriority = true;
+    const highPriorityWorkItem = {
+      ...baseWorkItem,
+    };
 
-    result = formatWorkItem({ workItem });
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(true);
+
+    result = formatWorkItem({ workItem: highPriorityWorkItem });
 
     expect(result.showUnassignedIcon).toBeFalsy();
 
-    workItem.highPriority = false;
-    workItem.assigneeName = 'Not Unassigned';
+    const unassignedWorkItem = {
+      ...baseWorkItem,
+      assigneeName: 'Not Unassigned',
+    };
 
-    result = formatWorkItem({ workItem });
+    WorkItem.isHighPriority = jest.fn().mockReturnValue(false);
+
+    result = formatWorkItem({ workItem: unassignedWorkItem });
 
     expect(result.showUnassignedIcon).toBeFalsy();
   });
