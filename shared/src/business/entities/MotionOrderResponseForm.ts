@@ -41,7 +41,6 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       .allow(null, ''),
     dueDate: joi
       .date()
-      // TODO: 10586: Fix date format
       .iso()
       .format(['YYYY-MM-DD']) // expects format 'YYYY-MM-DD' != 'yyyy-MM-dd'
       .min(MotionOrderResponseForm.TODAY)

@@ -1,5 +1,4 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { ORDER_REPLY_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareMotionOrderResponseAction = ({
@@ -12,6 +11,7 @@ export const prepareMotionOrderResponseAction = ({
   const {
     additionalOrderText,
     dueDate,
+    motionOrderResponse,
     responseDate,
     strickenFromTrialSessions,
   } = get(state.form);
@@ -25,6 +25,8 @@ export const prepareMotionOrderResponseAction = ({
     .getUtilities()
     .formatDateString(dueDate, FORMATS.MMDDYY);
 
+  const motionOrderResponseLine = motionOrderResponse; // TODO 10586: add logic to determine motionOrderResponseLine
+
   const strickenLine = hasStrickenFromTrialSessions
     ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session.</p>'
     : '';
@@ -33,7 +35,11 @@ export const prepareMotionOrderResponseAction = ({
     ? `<p class="indent-paragraph">ORDERED that ${additionalOrderText}</p>`
     : '';
 
-  const linesWithText = [strickenLine, additionalTextLine].filter(line => line);
+  const linesWithText = [
+    strickenLine,
+    additionalTextLine,
+    motionOrderResponseLine,
+  ].filter(line => line);
 
   const richText = linesWithText
     .map((line, index) => {
