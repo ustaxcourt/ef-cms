@@ -9,15 +9,14 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 
 export const createCaseDeadline = async (
   applicationContext: ServerApplicationContext,
   {
     caseDeadline,
-    handlingConsolidatedCases = false,
   }: {
     caseDeadline: CaseDeadline;
-    handlingConsolidatedCases?: boolean;
   },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -25,6 +24,7 @@ export const createCaseDeadline = async (
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
 
+  // Case deadline for a specific case
   const caseDetail = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -32,14 +32,13 @@ export const createCaseDeadline = async (
       docketNumber: caseDeadline.docketNumber,
     });
 
-  const currentCaseEntity = new Case(caseDetail, { authorizedUser });
   const newCaseDeadline = new CaseDeadline({
     ...caseDeadline,
-    associatedJudge: currentCaseEntity.associatedJudge,
-    associatedJudgeId: currentCaseEntity.associatedJudgeId,
+    associatedJudge: caseDetail.associatedJudge,
+    associatedJudgeId: caseDetail.associatedJudgeId,
   });
 
-  await upsertCaseDeadlines([newCaseDeadline.validate().toRawObject()]);
+  const currentCaseEntity = new Case(caseDetail, { authorizedUser });
 
   const updatedCaseEntity = await applicationContext
     .getUseCaseHelpers()
@@ -57,29 +56,50 @@ export const createCaseDeadline = async (
       caseToUpdate: updatedCaseEntity,
     });
 
-  const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
-  if (!handlingConsolidatedCases && docketNumber === leadDocketNumber) {
-    const ADD_DEADLINE_TO_CONSOLIDATED_CASES = consolidatedCases
-      .filter(
-        ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
-      )
-      .map(({ docketNumber: ccDocketNumber }) => {
-        return createCaseDeadline(
+  // Consolidated cases only if lead case
+  const caseDeadlines = [newCaseDeadline.validate().toRawObject()];
+  if (caseDetail.docketNumber === caseDetail.leadDocketNumber) {
+    caseDetail.consolidatedCases.forEach(async consolidatedCase => {
+      if (consolidatedCase.docketNumber === consolidatedCase.leadDocketNumber) {
+        return;
+      }
+
+      const consolidatedCaseDetail = await applicationContext
+        .getPersistenceGateway()
+        .getCaseMetadataByDocketNumber({
           applicationContext,
-          {
-            caseDeadline: {
-              ...caseDeadline,
-              docketNumber: ccDocketNumber,
-              consolidatedCaseDeadlineId: newCaseDeadline.caseDeadlineId,
-            } as CaseDeadline,
-            handlingConsolidatedCases: true,
-          },
-          authorizedUser,
-        );
+          docketNumber: caseDeadline.docketNumber,
+        });
+
+      const cDeadline = new CaseDeadline({
+        ...caseDeadline,
+        docketNumber: consolidatedCase.docketNumber,
+        consolidatedCaseDeadlineId: newCaseDeadline.caseDeadlineId,
+        associatedJudge: consolidatedCaseDetail.associatedJudge,
+        associatedJudgeId: consolidatedCaseDetail.associatedJudgeId,
       });
 
-    await Promise.all(ADD_DEADLINE_TO_CONSOLIDATED_CASES);
+      caseDeadlines.push(cDeadline.validate().toRawObject());
+
+      const currentCaseEntity = new Case(caseDetail, { authorizedUser });
+
+      const updatedCaseEntity = await applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAutomaticBlock({
+          applicationContext,
+          caseEntity: currentCaseEntity,
+          hasCaseDeadline: true,
+        });
+
+      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+        applicationContext,
+        authorizedUser,
+        caseToUpdate: updatedCaseEntity,
+      });
+    });
   }
+
+  await upsertCaseDeadlines(caseDeadlines);
 
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
@@ -92,7 +112,7 @@ export async function getcreateCaseDeadlineLockInfo(
   ttl?: number;
 }> {
   const { docketNumber, leadDocketNumber, consolidatedCases } =
-    await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+    await getCaseByDocketNumber({
       applicationContext,
       docketNumber: caseDeadline.docketNumber,
     });
