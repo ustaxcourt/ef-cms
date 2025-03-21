@@ -4,7 +4,8 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getColdCases } from '@web-api/persistence/postgres/cases/reports/getColdCases';
+import { getColdCases } from '@web-api/persistence/elasticsearch/getColdCases';
+import { applicationContext } from '@web-api/applicationContext';
 
 export type ColdCaseEntry = {
   createdAt: string;
@@ -25,7 +26,7 @@ export const coldCaseReportInteractor = async (
     );
   }
 
-  const coldCases = await getColdCases();
+  const coldCases = await getColdCases({ applicationContext });
 
   return coldCases;
 };

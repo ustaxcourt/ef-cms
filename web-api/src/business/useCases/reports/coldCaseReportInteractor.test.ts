@@ -1,7 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { ColdCaseEntry } from './coldCaseReportInteractor';
 import { coldCaseReportInteractor } from './coldCaseReportInteractor';
-import { getColdCases as getColdCasesMock } from '@web-api/persistence/postgres/cases/reports/getColdCases';
+import { getColdCases as getColdCasesMock } from '@web-api/persistence/elasticsearch/getColdCases';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
