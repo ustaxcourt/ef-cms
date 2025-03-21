@@ -1,4 +1,5 @@
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
+import { PDFDocumentProxy } from 'pdfjs-dist';
 
 /**
  * loadPDFForSigningInteractor
@@ -23,7 +24,7 @@ export const loadPDFForSigningInteractor = async (
     onlyCover: boolean;
     removeCover: boolean;
   },
-) => {
+): Promise<PDFDocumentProxy> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   try {
