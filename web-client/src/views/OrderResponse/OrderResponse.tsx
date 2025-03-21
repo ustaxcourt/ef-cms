@@ -42,10 +42,8 @@ export const OrderResponse = connect(
     pdfForSigning,
     pdfObj,
     setPDFStampDataSequence,
-    // submitStampMotionSequence, // TODO 10586: update this
-    // submitMotionOrderResponseSequence,
+    submitMotionOrderResponseSequence,
     updateFormValueSequence,
-    validateStampSequence,
     validationErrors,
   }) {
     const canvasRef = useRef(null);
@@ -135,11 +133,10 @@ export const OrderResponse = connect(
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
                           key: 'responseDate',
-                          toFormat: constants.DATE_FORMATS.MMDDYY,
+                          toFormat: constants.DATE_FORMATS.YYYYMMDD,
                           value: e.target.value,
                         });
                         // TODO 10586: update this to validateOrderResponseSequence
-                        validateStampSequence();
                       }}
                     />
                   </FormGroup>
@@ -231,10 +228,9 @@ export const OrderResponse = connect(
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
                           key: 'dueDate',
-                          toFormat: constants.DATE_FORMATS.MMDDYY,
+                          toFormat: constants.DATE_FORMATS.YYYYMMDD,
                           value: e.target.value,
                         });
-                        validateStampSequence();
                       }}
                     />
                   </FormGroup>
@@ -293,7 +289,7 @@ export const OrderResponse = connect(
                   className="margin-right-1"
                   data-testid="save-draft-button"
                   id="save-draft-button"
-                  // onClick={() => submitMotionOrderResponseSequence()}
+                  onClick={() => submitMotionOrderResponseSequence()}
                 >
                   Save as Draft
                 </Button>
@@ -304,13 +300,13 @@ export const OrderResponse = connect(
             </div>
             <div className="grid-col-7">
               <div className="margin-bottom-1 display-flex flex-justify-start">
-                {/* <label
+                <label
                   className="usa-label"
                   htmlFor="custom-text"
                   id="custom-text-label"
                 >
                   Docket entry preview:
-                </label> */}
+                </label>
               </div>
               <div className="grid-row">
                 <div className="grid-col-12">
