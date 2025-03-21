@@ -48,7 +48,7 @@ export const formattedCaseDeadlines = (
   applicationContext: ClientApplicationContext,
 ): FormattedCaseDeadlinesType[] => {
   const caseDeadlines = get(state.caseDeadlines) || [];
-  const caseDetail = get(state.caseDetail);
+  const caseDetail = get(state.caseDetail) || {};
 
   return caseDeadlines
     .map(deadline =>
