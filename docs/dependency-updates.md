@@ -63,6 +63,9 @@ To update Node.js:
   - `./.circleci/config.yml`
 4. Manually update DAWSON's GitHub Actions YAML files.
   - **Note:** These files will point to `.nvmrc` in a future update.
+5. Update the node version used by our lambdas. 
+  - `web-api/terraform/modules/lambda/lambda.tf`
+  - `web-api/terraform/modules/api/layers.tf`
 
 #### 2.2 Update `Dockerfile` as needed
 
@@ -82,7 +85,7 @@ To publish a new ECR docker image:
 `efcms-docker-image: &efcms-docker-image`. e.g. `ef-cms-us-east-1:4.3.27` -> `ef-cms-us-east-1:4.3.28`
 
 - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher).
-  - example: `export DESTINATION_TAG=3.1.6 && npm run deploy:ci-image`
+  - example: `export DESTINATION_TAG=4.3.27 && npm run deploy:ci-image`
   - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
   - if you run into any errors similar to 'At least one invalid signature was encountered', try running  `docker builder prune` or `docker system prune` on your local machine. https://stackoverflow.com/questions/62473932/at-least-one-invalid-signature-was-encountered
 
@@ -92,7 +95,7 @@ To publish a new ECR docker image:
 
 Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-regex search the entire project for `version = "~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
   - `./shared/admin-tools/glue/glue_migrations/main.tf`
   - `./shared/admin-tools/glue/remote_role/main.tf`
