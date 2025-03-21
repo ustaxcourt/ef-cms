@@ -1,7 +1,6 @@
 import { BigHeader } from '../BigHeader';
 import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
-import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
@@ -12,8 +11,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 
 export const CaseDeadlines = connect(
   {
@@ -27,6 +25,8 @@ export const CaseDeadlines = connect(
       sequences.selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence:
       sequences.updateDateRangeForDeadlinesSequence,
+    updateCaseDeadlineReportPageSequence:
+      sequences.updateCaseDeadlineReportPageSequence,
     validationErrors: state.validationErrors,
   },
   function CaseDeadlines({
@@ -36,15 +36,11 @@ export const CaseDeadlines = connect(
     screenMetadata,
     selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence,
+    updateCaseDeadlineReportPageSequence,
     validationErrors,
   }) {
     const paginatorTop = useRef(null);
-
-    const { activePage, pageRecords, setActivePage, totalPages } =
-      useClientSidePaginator(
-        caseDeadlineReportHelper.formattedCaseDeadlines,
-        CASE_DEADLINES_REPORT_PAGE_SIZE,
-      );
+    const [activePage, setActivePage] = useState(0);
 
     return (
       <>
@@ -129,12 +125,16 @@ export const CaseDeadlines = connect(
                 </div>
               )}
               <div ref={paginatorTop}>
-                {totalPages > 1 && (
+                {caseDeadlineReportHelper.pageCount > 1 && (
                   <Paginator
                     currentPageIndex={activePage}
-                    totalPages={totalPages}
+                    totalPages={caseDeadlineReportHelper.pageCount}
                     onPageChange={pageChange => {
                       setActivePage(pageChange);
+                      console.log('pageChange', pageChange);
+                      updateCaseDeadlineReportPageSequence({
+                        selectedPage: pageChange,
+                      });
                       focusPaginatorTop(paginatorTop);
                     }}
                   />
@@ -143,8 +143,7 @@ export const CaseDeadlines = connect(
               <div className="margin-bottom-2">
                 <div className="text-right">
                   <span className="text-semibold">
-                    Count:{' '}
-                    {caseDeadlineReportHelper.formattedCaseDeadlines.length}
+                    Count: {caseDeadlineReport.caseDeadlinesTotalCount}
                   </span>
                 </div>
               </div>
@@ -164,39 +163,44 @@ export const CaseDeadlines = connect(
                     </tr>
                   </thead>
                   <tbody>
-                    {pageRecords.map(row => (
-                      <tr key={row.caseDeadlineId}>
-                        <td className="smaller-column">
-                          {row.formattedDeadline}
-                        </td>
-                        <td className="consolidated-case-column">
-                          <ConsolidatedCaseIcon
-                            consolidatedIconTooltipText={
-                              row.consolidatedIconTooltipText
-                            }
-                            inConsolidatedGroup={row.inConsolidatedGroup}
-                            showLeadCaseIcon={row.inLeadCase}
-                          />
-                        </td>
-                        <td className="smaller-column">
-                          <CaseLink formattedCase={row} />
-                        </td>
-                        <td>{row.caseTitle}</td>
-                        <td className="padding-extra">{row.description}</td>
-                        <td className="no-wrap">
-                          {row.associatedJudgeFormatted}
-                        </td>
-                      </tr>
-                    ))}
+                    {caseDeadlineReportHelper.formattedCaseDeadlines.map(
+                      row => (
+                        <tr key={row.caseDeadlineId}>
+                          <td className="smaller-column">
+                            {row.formattedDeadline}
+                          </td>
+                          <td className="consolidated-case-column">
+                            <ConsolidatedCaseIcon
+                              consolidatedIconTooltipText={
+                                row.consolidatedIconTooltipText
+                              }
+                              inConsolidatedGroup={row.inConsolidatedGroup}
+                              showLeadCaseIcon={row.inLeadCase}
+                            />
+                          </td>
+                          <td className="smaller-column">
+                            <CaseLink formattedCase={row} />
+                          </td>
+                          <td>{row.caseTitle}</td>
+                          <td className="padding-extra">{row.description}</td>
+                          <td className="no-wrap">
+                            {row.associatedJudgeFormatted}
+                          </td>
+                        </tr>
+                      ),
+                    )}
                   </tbody>
                 </table>
               )}
-              {totalPages > 1 && (
+              {caseDeadlineReportHelper.pageCount > 1 && (
                 <Paginator
                   currentPageIndex={activePage}
-                  totalPages={totalPages}
+                  totalPages={caseDeadlineReportHelper.pageCount}
                   onPageChange={pageChange => {
                     setActivePage(pageChange);
+                    updateCaseDeadlineReportPageSequence({
+                      selectedPage: pageChange,
+                    });
                     focusPaginatorTop(paginatorTop);
                   }}
                 />

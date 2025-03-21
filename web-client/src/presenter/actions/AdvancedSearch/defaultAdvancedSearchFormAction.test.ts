@@ -1,4 +1,4 @@
-import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
+import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import { COUNTRY_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormAction';
@@ -19,7 +19,7 @@ describe('defaultAdvancedSearchFormAction', () => {
     expect(result.state.advancedSearchForm).toMatchObject({
       caseSearchByDocketNumber: {},
       caseSearchByName: {
-        countryType: ALL_COUNTRY_TYPE,
+        countryType: ALL_SELECTION,
       },
       opinionSearch: {
         opinionTypes: {
