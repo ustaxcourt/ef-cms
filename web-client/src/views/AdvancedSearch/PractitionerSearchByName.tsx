@@ -12,6 +12,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
+import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 
 export const PractitionerSearchByName = connect(
   {
@@ -80,7 +81,7 @@ export const PractitionerSearchByName = connect(
                   Practitioner type <span className="usa-hint">(optional)</span>
                 </legend>
                 <div className="practitioner-type-container">
-                  {['All', ...PRACTITIONER_TYPE_OPTIONS].map(type => (
+                  {[ALL_SELECTION, ...PRACTITIONER_TYPE_OPTIONS].map(type => (
                     <div className="usa-radio" key={type}>
                       <input
                         checked={
@@ -101,7 +102,7 @@ export const PractitionerSearchByName = connect(
                         }}
                       />
                       <label
-                        className="usa-radio__label margin-top-0"
+                        className="usa-radio__label margin-top-0 practitioner-type-label"
                         data-testid={`practitioner-type-${type}-radio`}
                         htmlFor={`practitioner-type-${type}`}
                       >

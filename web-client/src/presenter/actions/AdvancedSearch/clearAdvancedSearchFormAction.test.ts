@@ -26,6 +26,7 @@ describe('clearAdvancedSearchFormAction', () => {
           orderSearch: { keyword: '' },
           practitionerSearchByName: {
             practitionerName: 'Ricky',
+            practitionerType: 'All',
           },
         },
         searchResults: [{ docketNumber: '123-45' }, { docketNumber: '678-90' }],
@@ -41,7 +42,11 @@ describe('clearAdvancedSearchFormAction', () => {
       },
       currentPage: 83,
       orderSearch: { keyword: '' },
-      practitionerSearchByName: { lastKeysOfPages: [], total: 0 },
+      practitionerSearchByName: {
+        lastKeysOfPages: [],
+        practitionerType: 'All',
+        total: 0,
+      },
     });
   });
 
@@ -68,7 +73,10 @@ describe('clearAdvancedSearchFormAction', () => {
     });
 
     expect(result.state.advancedSearchForm).toEqual({
-      caseSearchByName: { countryType: ALL_SELECTION, procedureType: ALL_SELECTION },
+      caseSearchByName: {
+        countryType: ALL_SELECTION,
+        procedureType: ALL_SELECTION,
+      },
       currentPage: 83,
       orderSearch: { keyword: '' },
       practitionerSearchByName: {
