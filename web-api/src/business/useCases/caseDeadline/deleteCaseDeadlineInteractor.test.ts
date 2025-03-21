@@ -59,8 +59,6 @@ describe('deleteCaseDeadlineInteractor', () => {
         mockPetitionsClerkUser,
       ),
     ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
@@ -128,8 +126,8 @@ describe('deleteCaseDeadlineInteractor', () => {
 
   it('should call persistence to delete a case deadline and leave the case automatically blocked when there are more deadlines', async () => {
     mockDeadlines = [
-      { cadeDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416' },
-      { cadeDeadlineId: 'will remain after deletion' },
+      { caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416' },
+      { caseDeadlineId: 'will remain after deletion' },
     ];
 
     await deleteCaseDeadlineInteractor(

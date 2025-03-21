@@ -39,9 +39,12 @@ const numFilesToCheck = Math.min(
 for (let i = 0; i < numFilesToCheck; i++) {
   if (currentBranchMigrationFiles[i] !== targetBranchMigrationFiles[i]) {
     console.log(
-      `\nMigrations do not match at index ${i}: current branch has ${currentBranchMigrationFiles[i]} but targetBranch has ${targetBranchMigrationFiles[i]}`,
+      `\nMigrations do not match at index ${i}: current branch has ${currentBranchMigrationFiles[i]} but the target branch has ${targetBranchMigrationFiles[i]}`,
     );
     process.exit(1);
   }
 }
+console.log(
+  '\nAll good: migrations in the current branch and the target branch match!',
+);
 process.exit(0);

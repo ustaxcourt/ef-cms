@@ -4,10 +4,14 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { NotFoundError } from '@web-api/errors/errors';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 
 export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
   async ({ applicationContext, caseEntity, eventCode }) => {
-    let closedStatus = CASE_STATUS_TYPES.closed;
+    let closedStatus:
+      | typeof CASE_STATUS_TYPES.closed
+      | typeof CASE_STATUS_TYPES.closedDismissed = CASE_STATUS_TYPES.closed;
 
     if (CASE_DISMISSAL_ORDER_TYPES.includes(eventCode)) {
       closedStatus = CASE_STATUS_TYPES.closedDismissed;
@@ -17,6 +21,19 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
       date: applicationContext.getUtilities().createISODateString(),
       updatedCaseStatus: closedStatus,
     });
+
+    const caseDeadlines = await getCaseDeadlinesByDocketNumber({
+      docketNumber: caseEntity.docketNumber,
+    });
+    await Promise.all(
+      caseDeadlines.map(async deadline => {
+        return deleteCaseDeadline({
+          caseDeadlineId: deadline.caseDeadlineId,
+        });
+      }),
+    );
+
+    caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
 
     if (caseEntity.trialSessionId) {
       const trialSession = await applicationContext
