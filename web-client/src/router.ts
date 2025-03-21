@@ -1388,10 +1388,12 @@ const router = {
     registerRoute(
       '/reports/pending-report/printable..',
       ifHasAccess({ app }, () => {
-        const { judgeFilter } = route.query();
+        const { judgeFilter, sortField, sortOrder } = route.query();
         setPageTitle('Pending report');
         return app.getSequence('gotoPrintablePendingReportSequence')({
           judgeFilter: decodeURIComponent(judgeFilter),
+          sortField: decodeURIComponent(sortField),
+          sortOrder: decodeURIComponent(sortOrder),
         });
       }),
     );

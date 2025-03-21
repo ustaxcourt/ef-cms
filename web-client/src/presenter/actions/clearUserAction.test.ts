@@ -16,10 +16,12 @@ describe('clearUserAction', () => {
         permissions: {},
         token: 'abc123',
         user: {},
+        judgeUser: {},
       },
     });
 
     expect(result.state.user).toEqual(emptyUserState);
+    expect(result.state.judgeUser).toBeUndefined();
     expect(result.state.token).toBeUndefined();
     expect(result.state.permissions).toBeUndefined();
   });

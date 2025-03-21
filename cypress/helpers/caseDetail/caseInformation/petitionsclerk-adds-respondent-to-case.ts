@@ -1,8 +1,12 @@
+import { loginAsPetitionsClerk1 } from 'cypress/helpers/authentication/login-as-helpers';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
+
 export function petitionsClerkAddsRespondentToCase(
   docketNumber: string,
   barNumber: string,
 ) {
-  cy.login('petitionsclerk1', `case-detail/${docketNumber}`);
+  loginAsPetitionsClerk1();
+  goToCase(docketNumber);
   cy.get('[data-testid="tab-case-information"]').click();
   cy.get('[data-testid="tab-parties"]').click();
   cy.get('[data-testid="respondent-counsel"]').click();

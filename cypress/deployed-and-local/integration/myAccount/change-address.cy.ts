@@ -1,22 +1,27 @@
 import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { faker } from '@faker-js/faker';
 import { goToCase } from '../../../helpers/caseDetail/go-to-case';
-import { loginAsAdmissionsClerk } from '../../../helpers/authentication/login-as-helpers';
+import {
+  loginAsAdmissionsClerk,
+  loginAsPetitionsClerk1,
+  loginAsPrivatePractitioner,
+} from '../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 
 describe('change of address', () => {
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
     const newAddress = faker.location.streetAddress();
-    cy.login('privatePractitioner2');
+    loginAsPrivatePractitioner('privatePractitioner2@example.com');
+    loginAsPrivatePractitioner('privatePractitioner2@example.com');
     externalUserCreatesElectronicCase().then(docketNumber => {
       logout();
 
-      cy.login('petitionsclerk1');
+      loginAsPetitionsClerk1();
       petitionsClerkServesPetition(docketNumber);
       logout();
 
-      cy.login('privatePractitioner2');
+      loginAsPrivatePractitioner('privatePractitioner2@example.com');
       cy.get('[data-testid="case-list-table"]').should('exist');
       cy.get('[data-testid="account-menu-button"]').click();
       cy.get('[data-testid="my-account-link"]').click();
@@ -55,15 +60,15 @@ describe('change of address', () => {
   it('should update cases for private practitioner and generate NCA for international address', () => {
     const newAddress = faker.location.streetAddress();
     const newCountry = faker.location.country();
-    cy.login('privatePractitioner2');
+    loginAsPrivatePractitioner('privatePractitioner2@example.com');
     externalUserCreatesElectronicCase().then(docketNumber => {
       logout();
 
-      cy.login('petitionsclerk1');
+      loginAsPetitionsClerk1();
       petitionsClerkServesPetition(docketNumber);
       logout();
 
-      cy.login('privatePractitioner2');
+      loginAsPrivatePractitioner('privatePractitioner2@example.com');
       cy.get('[data-testid="case-list-table"]').should('exist');
       cy.get('[data-testid="account-menu-button"]').click();
       cy.get('[data-testid="my-account-link"]').click();

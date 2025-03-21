@@ -5,8 +5,12 @@ ENVIRONMENT=$1
 
 [ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
 [ -z "${ELASTICSEARCH_ENDPOINT}" ] && echo "You must set ELASTICSEARCH_ENDPOINT as an environment variable" && exit 1
-[ -z "${EMAIL_SOURCE}" ] && echo "You must set EMAIL_SOURCE as an environment variable" && exit 1
 [ -z "${INACTIVITY_REPORT_RECIPIENTS}" ] && echo "You must set INACTIVITY_REPORT_RECIPIENTS as an environment variable" && exit 1
+
+if [ -z "$EMAIL_SOURCE" ]; then
+  [ -z "$EFCMS_DOMAIN" ] && echo "You must set EFCMS_DOMAIN as an environment variable" && exit 1
+  EMAIL_SOURCE="U.S. Tax Court <noreply@${EFCMS_DOMAIN}>"
+fi
 
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"

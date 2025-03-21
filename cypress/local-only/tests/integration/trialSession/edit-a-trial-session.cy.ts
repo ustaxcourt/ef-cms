@@ -1,15 +1,11 @@
-import {
-  getCancelButton,
-  navigateTo as navigateToTrialSessionDetails,
-} from '../../../support/pages/edit-trial-session';
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
+import { getCancelButton } from '../../../support/pages/edit-trial-session';
 import { getCancelModalTitle } from '../../../support/pages/form-cancel-modal-dialog';
 
 describe('Edit a trial session', () => {
   it('should display a modal to confirm discarding changes when cancel is clicked', () => {
-    navigateToTrialSessionDetails(
-      'petitionsclerk',
-      '208a959f-9526-4db5-b262-e58c476a4604',
-    );
+    loginAsPetitionsClerk();
+    cy.visit(`/edit-trial-session/208a959f-9526-4db5-b262-e58c476a4604`);
 
     getCancelButton().click();
 
