@@ -199,7 +199,7 @@ export const fileExternalDocument = async (
           applicationContext,
           authorizedUser,
           caseToUpdate: caseEntity,
-          includeCorrespondenceAndWorkItems: false,
+          includeCorrespondence: false,
         });
 
         const rawCaseEntity = caseEntity.toRawObject();
