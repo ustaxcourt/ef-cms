@@ -1,7 +1,6 @@
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@shared/business/entities/Message.ts');
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
@@ -12,20 +11,16 @@ import { DOCKET_NUMBER_SUFFIXES } from '@shared/business/entities/EntityConstant
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
-import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 import { Message } from '@shared/business/entities/Message';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
-import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
@@ -34,8 +29,6 @@ const updateCase = jest.mocked(updateCaseMock);
 
 const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
 const updateMessage = updateMessageMock as jest.Mock;
-const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
-const getWorkItemsByDocketNumber = getWorkItemsByDocketNumberMock as jest.Mock;
 
 const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
 
@@ -183,9 +176,6 @@ describe('updateCaseAndAssociations', () => {
         .updatePrivatePractitionerOnCase,
     ).not.toHaveBeenCalled();
 
-    // updateCaseWorkItems
-    expect(upsertWorkItems).not.toHaveBeenCalled();
-
     // updateUserCaseMappings
     expect(
       applicationContext.getPersistenceGateway().updateUserCaseMapping,
@@ -311,33 +301,6 @@ describe('updateCaseAndAssociations', () => {
       expect(
         applicationContext.getPersistenceGateway().updateDocketEntry,
       ).toHaveBeenCalledTimes(4);
-    });
-  });
-
-  describe('work items', () => {
-    let updatedCase: Case;
-    beforeAll(() => {
-      getWorkItemsByDocketNumber.mockReturnValue([
-        {
-          pk: 'abc|987',
-          sk: `workitem|${MOCK_WORK_ITEM.workItemId}`,
-          ...MOCK_WORK_ITEM,
-        },
-      ]);
-    });
-
-    beforeEach(() => {
-      updatedCase = cloneDeep(validMockCase);
-    });
-
-    it('does not call saveWorkItem if nothing on the case changes that requires a work item to be updated', async () => {
-      updatedCase.mailingDate = '2025-01-05T05:22:16.001Z';
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-      expect(upsertWorkItems).not.toHaveBeenCalled();
     });
   });
 
