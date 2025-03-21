@@ -1,3 +1,4 @@
+import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getPractitionersByNameAction = async ({
@@ -38,7 +39,7 @@ export const getPractitionersByNameAction = async ({
       originalBarState,
       practiceType,
       practitionerType:
-        practitionerType === 'All' ? undefined : practitionerType,
+        practitionerType === ALL_SELECTION ? undefined : practitionerType,
       searchAfter: lastKeysOfPages[selectedPage],
     });
 
