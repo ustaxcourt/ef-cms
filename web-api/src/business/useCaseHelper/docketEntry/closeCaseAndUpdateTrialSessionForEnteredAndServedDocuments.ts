@@ -18,13 +18,6 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
       updatedCaseStatus: closedStatus,
     });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
-      });
-
     if (caseEntity.trialSessionId) {
       const trialSession = await applicationContext
         .getPersistenceGateway()

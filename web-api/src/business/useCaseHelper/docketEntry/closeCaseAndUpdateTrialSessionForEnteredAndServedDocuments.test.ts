@@ -56,19 +56,6 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     );
   });
 
-  it('should make a call to delete the case trial sort mapping records', async () => {
-    await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
-      applicationContext,
-      caseEntity: mockCaseEntity,
-      eventCode,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
-    ).toBe(mockCaseEntity.docketNumber);
-  });
-
   it('should return early when the case is NOT assigned to a trial session', async () => {
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
