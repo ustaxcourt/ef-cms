@@ -29,9 +29,6 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a medium severity for `quill`?**
 > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
-> **Why am I seeing a high severity for `pdfjs-dist`?**
-> [See below](#pdfjs-dist).
-
 > **Why am I seeing a high severity for `ws`?**
 > [See below](#ws-3rd-party-dependency-of-cerebral).
 
@@ -135,11 +132,6 @@ Below is a list of dependencies that are locked down due to known issues with se
 - Puppeteer also has recommended versions of Chromium, so we should make sure to use the recommended version of chromium for the version of puppeteer that we are on. The chromium versions supported by puppeteer can be found [here](https://pptr.dev/supported-browsers)
 
 - There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (Only @cypress/puppeteer depends  on vulnerable version of puppeteer-core)
-
-### pdfjs-dist
-
-- `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
-- The high-severity security issue "vulnerable to arbitrary JavaScript execution" has been addressed by us here: https://github.com/flexion/ef-cms/issues/10407 and can therefore be ignored.
 
 ### ws, 3rd party dependency of Cerebral
 
