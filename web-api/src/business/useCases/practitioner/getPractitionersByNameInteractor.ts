@@ -13,12 +13,11 @@ export type PractitionersByName = {
       admissionsDate: string;
       admissionsStatus: string;
       barNumber: string;
-      contact: {
-        state?: string;
-      };
       name: string;
+      originalBarState: string;
       practiceType: string;
       practitionerType: string;
+      state?: string;
     }[];
     total: number;
   };
@@ -71,11 +70,8 @@ export const getPractitionersByNameInteractor = async (
     admissionsDate: foundUser.admissionsDate,
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
-    contact: {
-      state: isLoggedInUser
-        ? foundUser.contact?.state
-        : foundUser.originalBarState,
-    },
+    originalBarState: foundUser.originalBarState,
+    state: isLoggedInUser && foundUser.contact?.state,
     name: foundUser.name,
     practiceType: foundUser.practiceType,
     practitionerType: foundUser.practitionerType,
