@@ -320,16 +320,29 @@ app.use(expressLogger);
  */
 {
   app.put(
-    '/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(updateCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(
+      updateCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.delete(
-    '/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(deleteCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(
+      deleteCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
+
   app.post(
-    '/case-deadlines/:docketNumber',
-    lambdaWrapper(createCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber',
+    lambdaWrapper(
+      createCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.get(
     '/case-deadlines/:docketNumber',

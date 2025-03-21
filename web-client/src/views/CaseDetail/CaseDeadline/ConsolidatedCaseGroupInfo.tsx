@@ -29,7 +29,7 @@ export function ConsolidatedCaseGroupInfo({
     <div
       className={`margin-bottom-3 ${option === 'delete' ? 'margin-top-3' : ''}`}
     >
-      <h3>This case is part of a consolidated group.</h3>
+      <h4>This case is part of a consolidated group.</h4>
       <p>{TEXT_DICT[option]}</p>
       {consolidatedCases
         .filter(({ docketNumber }) => docketNumber !== leadDocketNumber)
