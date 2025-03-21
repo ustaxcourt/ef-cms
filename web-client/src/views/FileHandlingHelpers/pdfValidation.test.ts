@@ -1,4 +1,4 @@
-jest.mock('@shared/business/utilities/pdfs/getPdfJs', () => ({getPdfJs: jest.fn()}));
+jest.mock('@shared/business/utilities/pdfs/getPdfJs');
 import * as pdfValidationHelpers from './pdfValidationHelpers';
 import { ErrorTypes } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import {
