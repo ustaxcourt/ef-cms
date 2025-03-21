@@ -12,7 +12,7 @@ import { validateMotionOrderResponseFormAction } from '../../actions/MotionOrder
 export const submitMotionOrderResponseSequence = [
   showProgressSequenceDecorator([
     clearAlertsAction,
-    validateMotionOrderResponseFormAction, // TODO 10586: This action breaks entire app
+    validateMotionOrderResponseFormAction,
     {
       error: [
         setValidationErrorsAction,
@@ -21,11 +21,11 @@ export const submitMotionOrderResponseSequence = [
       ],
       success: [
         prepareMotionOrderResponseAction,
-        submitCourtIssuedOrderSequence,
-        {
-          error: [setAlertErrorAction],
-          success: [navigateToPathAction],
-        },
+        submitCourtIssuedOrderSequence, // TODO 10586: This action breaks entire app
+        // {
+        //   error: [setAlertErrorAction],
+        //   success: [navigateToPathAction],
+        // },
       ],
     },
   ]),

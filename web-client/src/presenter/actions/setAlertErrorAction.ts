@@ -7,5 +7,6 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.alertError
  */
 export const setAlertErrorAction = ({ props, store }: ActionProps) => {
+  console.log('The alertError is:', props.alertError);
   store.set(state.alertError, props.alertError);
 };
