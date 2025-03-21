@@ -11,6 +11,7 @@ class CourtOrder extends JoiValidationEntity {
   }
 
   getValidationRules() {
+    // TODO 10586: This method is flagging as missing
     return {
       documentContents: JoiValidationConstants.STRING.required().messages({
         'any.required': 'Enter order text',
@@ -21,6 +22,8 @@ class CourtOrder extends JoiValidationEntity {
 
 export const validateCourtOrderAction = ({ get, path }: ActionProps) => {
   const documentContents = get(state.form.documentContents);
+  console.log('Inside validateCourtOrderAction');
+  console.log('documentContents:', documentContents);
 
   const orderWithoutBody = new CourtOrder({
     documentContents,
