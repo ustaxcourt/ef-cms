@@ -1,5 +1,4 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
-
 import { execSync, spawnSync } from 'child_process';
 
 // Caveats list: packages to exclude from upgrade
@@ -8,16 +7,17 @@ const caveats: string[] = [
   '@types/react',
   'react-dom',
   '@types/react-dom',
+  '@cerebral/react',
+  'cerebral',
+  'babel-plugin-cerebral',
   '@fortawesome/fontawesome-svg-core',
   '@fortawesome/free-regular-svg-icons',
   '@fortawesome/free-solid-svg-icons',
   '@fortawesome/react-fontawesome',
-  'canvas',
   'puppeteer',
   'puppeteer-core',
   '@sparticuz/chromium',
   'pdfjs-dist',
-  '@uswds/uswds',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code
