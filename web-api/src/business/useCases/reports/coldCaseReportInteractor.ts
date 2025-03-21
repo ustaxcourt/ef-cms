@@ -4,8 +4,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getColdCases } from '@web-api/persistence/elasticsearch/getColdCases';
-import { applicationContext } from '@web-api/applicationContext';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type ColdCaseEntry = {
   createdAt: string;
@@ -18,6 +17,7 @@ export type ColdCaseEntry = {
 };
 
 export const coldCaseReportInteractor = async (
+  applicationContext: ServerApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<ColdCaseEntry[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COLD_CASE_REPORT)) {
@@ -26,7 +26,9 @@ export const coldCaseReportInteractor = async (
     );
   }
 
-  const coldCases = await getColdCases({ applicationContext });
+  const coldCases = await applicationContext
+    .getPersistenceGateway()
+    .getColdCases({ applicationContext });
 
   return coldCases;
 };

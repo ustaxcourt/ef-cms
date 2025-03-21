@@ -26,13 +26,16 @@ describe('coldCaseReportInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user does not have access', async () => {
-    await expect(coldCaseReportInteractor(mockPetitionerUser)).rejects.toThrow(
-      'Unauthorized',
-    );
+    await expect(
+      coldCaseReportInteractor(applicationContext, mockPetitionerUser),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should return the expected mocked data', async () => {
-    const coldCases = await coldCaseReportInteractor(mockDocketClerkUser);
+    const coldCases = await coldCaseReportInteractor(
+      applicationContext,
+      mockDocketClerkUser,
+    );
 
     expect(coldCases).toEqual(mockColdCases);
   });
