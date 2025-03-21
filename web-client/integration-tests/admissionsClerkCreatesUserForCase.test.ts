@@ -5,7 +5,7 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 describe('admissions clerk creates user for case', () => {
   const cerebralTest = setupTest();
 
-  const validEmail = `${faker.internet.userName()}_no_error@example.com`;
+  const validEmail = `${faker.internet.username()}_no_error@example.com`;
 
   let petitionerContactId;
 

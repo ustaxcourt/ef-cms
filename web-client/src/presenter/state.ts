@@ -160,6 +160,7 @@ import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
+import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -578,6 +579,10 @@ export const baseState = {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
+  [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  },
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
@@ -611,15 +616,16 @@ export const baseState = {
     title?: string;
   },
   blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
-  blockedCases: [] as RawCase[],
+  blockedCases: [] as BlockedCasesResponse,
   caseDeadlineReport: {} as {
-    caseDeadlines: (RawCaseDeadline & {
+    caseDeadlinesForCurrentPage: (RawCaseDeadline & {
       caseCaption: string;
       docketNumber: string;
       docketNumberSuffix: string;
       docketNumberWithSuffix: string;
       leadDocketNumber: string;
     })[];
+    caseDeadlinesTotalCount: 0;
     judgeFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],

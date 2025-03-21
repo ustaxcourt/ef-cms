@@ -90,7 +90,7 @@ export const PaperFiling = connect(
             <div className="grid-col-5">
               <section className="usa-section DocumentDetail">
                 <PrimaryDocumentForm />
-                <div className="margin-top-5">
+                <div className="margin-top-5 button-container">
                   {paperDocketEntryHelper.canAllowDocumentServiceForCase && (
                     <Button
                       data-testid="save-and-serve"
