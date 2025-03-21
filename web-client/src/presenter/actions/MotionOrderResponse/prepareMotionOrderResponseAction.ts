@@ -25,7 +25,10 @@ export const prepareMotionOrderResponseAction = ({
     .getUtilities()
     .formatDateString(dueDate, FORMATS.MMDDYY);
 
-  const motionOrderResponseLine = motionOrderResponse; // TODO 10586: add logic to determine motionOrderResponseLine
+  const preamble = `<p class="indent-paragraph">ON, {motionFiledDate}, {movant} filed {motionName} (Document no. {documentNumber}). For cause, it is </p>`;
+  const orderVerbiage = `<p class="indent-paragraph">ORDERED that by {responseDate} the {nonMovant} shall file an ${motionOrderResponse} to the {motionName}.</p>`;
+  const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by {dueDate} the {movant} may file a {motionOrderResponse}.</p>`;
+  // const motionOrderResponseLine = motionOrderResponse; // TODO 10586: add logic to determine motionOrderResponseLine
 
   const strickenLine = hasStrickenFromTrialSessions
     ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session.</p>'
@@ -36,9 +39,11 @@ export const prepareMotionOrderResponseAction = ({
     : '';
 
   const linesWithText = [
+    preamble,
+    orderVerbiage,
+    opportunityToRebut,
     strickenLine,
     additionalTextLine,
-    motionOrderResponseLine,
   ].filter(line => line);
 
   const richText = linesWithText
