@@ -1,3 +1,4 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
 import { execSync, spawnSync } from 'child_process';
 
 // Caveats list: packages to exclude from upgrade
