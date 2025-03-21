@@ -53,13 +53,11 @@ import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DocketEntry } from '../DocketEntry';
 import {
-  FORMATS,
   PATTERNS,
   calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
   dateStringsCompared,
-  formatDateString,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
 import { IrsPractitioner } from '../IrsPractitioner';
@@ -1790,13 +1788,6 @@ export class Case extends JoiValidationEntity {
     return this;
   }
 
-  generateTrialSortTags(): {
-    hybrid: string;
-    nonHybrid: string;
-  } {
-    return generateTrialSortTags(this);
-  }
-
   /**
    * set as calendared
    * @param {object} trialSessionEntity - the trial session that is associated with the case
@@ -2083,69 +2074,6 @@ export class Case extends JoiValidationEntity {
       : isAssociatedUser({ caseRaw: rawCase, user });
   }
 }
-
-/**
- * generates sort tags used for sorting trials for calendaring
- * @returns {object} the sort tags
- */
-export const generateTrialSortTags = function ({
-  caseType,
-  docketNumber,
-  highPriority,
-  preferredTrialCity,
-  procedureType,
-  receivedAt,
-}: {
-  caseType: CaseType;
-  docketNumber: string;
-  highPriority?: boolean;
-  preferredTrialCity?: string;
-  procedureType: string;
-  receivedAt: string;
-}): {
-  hybrid: string;
-  nonHybrid: string;
-} {
-  const caseProcedureSymbol =
-    procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
-
-  let casePrioritySymbol = 'D';
-
-  if (highPriority === true) {
-    casePrioritySymbol = 'A';
-  } else if (caseType.toLowerCase() === 'cdp (lien/levy)') {
-    casePrioritySymbol = 'B';
-  } else if (caseType.toLowerCase() === 'passport') {
-    casePrioritySymbol = 'C';
-  }
-
-  const formattedFiledTime = formatDateString(
-    receivedAt,
-    FORMATS.TRIAL_SORT_TAG,
-  );
-  const formattedTrialCity = preferredTrialCity?.replace(/[\s.,]/g, '');
-
-  const nonHybridSortKey = [
-    formattedTrialCity,
-    caseProcedureSymbol,
-    casePrioritySymbol,
-    formattedFiledTime,
-    docketNumber,
-  ].join('-');
-
-  const hybridSortKey = [
-    formattedTrialCity,
-    'H', // Hybrid Tag
-    casePrioritySymbol,
-    formattedFiledTime,
-    docketNumber,
-  ].join('-');
-
-  return {
-    hybrid: hybridSortKey,
-    nonHybrid: nonHybridSortKey,
-  };
-};
 
 /**
  * Returns true if at least one party on the case has the provided serviceIndicator type.
