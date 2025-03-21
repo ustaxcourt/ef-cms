@@ -126,6 +126,16 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
+    getCaseByDocketNumber.mockReturnValue(
+      Promise.resolve({
+        ...MOCK_CASE,
+        automaticBlocked: true,
+        automaticBlockedDate: '2019-11-30T09:10:11.000Z',
+        automaticBlockedReason: 'Pending Item',
+        status: CASE_STATUS_TYPES.rule155,
+      }),
+    );
+
     await prioritizeCaseInteractor(
       applicationContext,
       {
