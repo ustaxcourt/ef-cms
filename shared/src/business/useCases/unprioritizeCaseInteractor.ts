@@ -38,7 +38,6 @@ export const unprioritizeCase = async (
   caseEntity.unsetAsHighPriority();
 
   caseEntity = await updateCaseAutomaticBlock({
-    applicationContext,
     caseEntity,
   });
 
