@@ -77,7 +77,8 @@ export const setTrialSessionCalendarInteractor = async (
         .getEligibleCasesForTrialSession({
           applicationContext,
           limit: eligibleCasesLimit,
-          skPrefix: trialSessionEntity.generateSortKeyPrefix(),
+          sessionType: trialSessionEntity.getCaseProcedureForTrial(),
+          trialCity: trialSessionEntity.trialLocation!,
         })
     )
       .filter(
@@ -276,11 +277,5 @@ const setTrialSessionCalendarForEligibleCase = async (
       authorizedUser,
       caseToUpdate: caseEntity,
     }),
-    applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
-      }),
   ]);
 };
