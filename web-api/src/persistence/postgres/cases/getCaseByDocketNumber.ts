@@ -8,10 +8,10 @@ import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamo
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
-import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
 import { getCaseStatusHistory } from '@web-api/persistence/postgres/cases/getCaseStatusHistory';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -27,42 +27,48 @@ export const getCaseByDocketNumber = async ({
   // These case items are no longer in dynamoDB
   const SK_FILTER_OUT = ['work-item', 'correspondence', 'case'];
 
-  const dbCaseMetadata = await getCaseMetadataWithCounsel({
-    applicationContext,
+  const dbCaseMetadata = await getCaseMetadataByDocketNumber({
     docketNumber,
   });
   if (!dbCaseMetadata) {
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const caseStatusHistory = await getCaseStatusHistory({ docketNumber });
+  const [
+    caseStatusHistory,
+    caseCorrespondences,
+    statisticsWithPenalties,
+    workItems,
+    caseItemsRaw,
+  ] = await Promise.all([
+    getCaseStatusHistory({ docketNumber }),
+    getCaseCorrespondenceByDocketNumber({
+      docketNumber,
+    }),
+    getCaseStatistics({ docketNumber }),
+    getWorkItemsByDocketNumber({
+      docketNumber,
+    }),
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }),
+  ]);
 
-  const caseCorrespondences = await getCaseCorrespondenceByDocketNumber({
-    docketNumber,
-  });
-
-  const statisticsWithPenalties = await getCaseStatistics({ docketNumber });
-
-  const workItems = await getWorkItemsByDocketNumber({
-    docketNumber,
-  });
-
-  const caseItems = await queryFull({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    applicationContext,
-  }).then(items =>
-    items.filter(
-      item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
-    ),
+  const caseItems = caseItemsRaw.filter(
+    item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
   );
 
-  let consolidatedCases: RawCase[] = [];
+  let consolidatedCases: Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'docketEntries'
+  >[] = [];
   if (includeConsolidatedCases) {
     consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
       applicationContext,

@@ -72,11 +72,9 @@ export const draftDocumentViewerHelper = (
 
   const isSigned = !!formattedDocumentToDisplay.signedAt;
 
-  // begin draft document-specific variables
   const createdByLabel = formattedDocumentToDisplay.filedBy
     ? `Created by ${formattedDocumentToDisplay.filedBy}`
     : '';
-  // end draft document-specific variables
 
   const showEditButtonForRole = isInternalUser;
   const showEditButtonSigned = isStatusReportOrder
