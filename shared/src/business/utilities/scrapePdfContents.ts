@@ -1,5 +1,5 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getPdfJs } from '@web-api/utilities/getPdfJs';
+import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
 import { isEmpty } from 'lodash';
 
 export const scrapePdfContents = async ({
