@@ -7,12 +7,13 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect, useRef } from 'react';
+import React from 'react';
+import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 
 export const OrderResponse = connect(
   {
-    applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     motionOrderResponseFormHelper: state.motionOrderResponseFormHelper,
+    motionOrderResponsePdfPreviewSequence: sequences.motionOrderResponsePdfPreviewSequence,
     clearDueDateSequence: sequences.clearDueDateSequence,
     clearMotionOrderResponseFormSequence:
       sequences.clearMotionOrderResponseFormSequence,
@@ -35,63 +36,15 @@ export const OrderResponse = connect(
   function OrderResponse({
     clearMotionOrderResponseFormSequence,
     motionOrderResponseFormHelper,
+    motionOrderResponsePdfPreviewSequence,
     constants,
     form,
     formatAndUpdateDateFromDatePickerSequence,
     navigateBackSequence,
-    pdfForSigning,
-    pdfObj,
-    setPDFStampDataSequence,
     submitMotionOrderResponseSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
-    const canvasRef = useRef(null);
-    const signatureRef = useRef(null);
-
-    const renderPDFPage = () => {
-      const canvas = canvasRef.current;
-      const canvasContext = canvas.getContext('2d');
-
-      pdfObj
-        .getPage(1)
-        .then(page => {
-          const scale = 1;
-          const viewport = page.getViewport({ scale });
-          canvas.height = viewport.height;
-          canvas.width = viewport.width;
-
-          const renderContext = {
-            canvasContext,
-            viewport,
-          };
-          return page.render(renderContext);
-        })
-        .catch(() => {
-          /* no-op*/
-        });
-    };
-
-    const start = () => {
-      const sigEl = signatureRef.current;
-
-      setPDFStampDataSequence({
-        stampApplied: true,
-      });
-
-      sigEl.style.top = '500px';
-      sigEl.style.left = '148px';
-    };
-
-    let hasStarted = false;
-    useEffect(() => {
-      renderPDFPage();
-      if (!hasStarted) {
-        start();
-        hasStarted = true;
-      }
-    }, []);
-
     return (
       <>
         <CaseDetailHeader />
@@ -254,8 +207,8 @@ export const OrderResponse = connect(
                         className="usa-textarea maxw-none height-8 usa-character-count__field textarea-resize-vertical"
                         id="additional-text"
                         maxLength={constants.MAX_ORDER_RESPONSE_TEXT_CHARACTERS}
-                        name="additionalText"
-                        value={form.additionalText || ''}
+                        name="additionalOrderText"
+                        value={form.additionalOrderText || ''}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -293,72 +246,33 @@ export const OrderResponse = connect(
                 >
                   Save as Draft
                 </Button>
+                <Button
+                  secondary
+                  className="margin-right-1"
+                  data-testid="preview-pdf-button"
+                  id="preview-pdf-button"
+                  onClick={() => {
+                    motionOrderResponsePdfPreviewSequence();
+                  }}
+                >
+                  Preview PDF
+                </Button>
                 <Button link onClick={() => navigateBackSequence()}>
                   Cancel
                 </Button>
               </div>
             </div>
             <div className="grid-col-7">
-              <div className="margin-bottom-1 display-flex flex-justify-start">
-                <label
-                  className="usa-label"
-                  htmlFor="custom-text"
-                  id="custom-text-label"
-                >
-                  Docket entry preview:
-                </label>
+              <div>
+                <span className="text-bold">Docket entry preview:</span>{' '}
+                {form.docketEntryDescription} Order{' '}
+                {/** TODO 10586: use form var here instead */}
               </div>
-              <div className="grid-row">
-                <div className="grid-col-12">
-                  <div className="sign-pdf-interface">
-                    <span id="stamp" ref={signatureRef}>
-                      <span className="text-normal" id="stamp-text">
-                        It is ORDERED as follows:
-                        <br />
-                        <span className="font-sans-2xs">
-                          This motion is{' '}
-                          <span className="text-ls-1 text-bold font-sans-lg">
-                            {form.disposition?.toUpperCase()}
-                          </span>{' '}
-                          {form.deniedAsMoot && 'as moot '}
-                          {form.deniedWithoutPrejudice && 'without prejudice'}
-                          <br />
-                        </span>
-                        {(form.strickenFromTrialSession ||
-                          form.jurisdictionalOption ||
-                          (form.dueDateMessage && form.date) ||
-                          form.customText) && <hr className="narrow-hr" />}
-                        {form.strickenFromTrialSession && (
-                          <>
-                            - {constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE} -
-                            <br />
-                          </>
-                        )}
-                        {form.jurisdictionalOption && (
-                          <>
-                            - {form.jurisdictionalOption} -<br />
-                          </>
-                        )}
-                        <span>
-                          {form.date && (
-                            <>
-                              - {form.dueDateMessage} {form.date} -
-                              <br />
-                            </>
-                          )}
-                          {form.customText && <>- {form.customText} -</>}
-                        </span>
-                      </span>
-                      <hr className="narrow-hr" />
-                      <span id="stamp-signature">
-                        (Signed) {pdfForSigning.nameForSigning}
-                        <br />
-                        {pdfForSigning.nameForSigningLine2}
-                      </span>
-                    </span>
-                    <canvas id="sign-pdf-canvas" ref={canvasRef}></canvas>
-                  </div>
-                </div>
+              <div
+                className="motionResponseOrderPdfPreview"
+                data-testid="motion-response-order-pdf-preview"
+              >
+                <PdfPreview />
               </div>
             </div>
           </div>
