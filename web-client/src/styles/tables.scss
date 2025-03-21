@@ -86,6 +86,8 @@ table,
     border: 0;
 
     .sortable-header-button {
+      display: inline-block;
+      align-items: flex-start;
       color: color($theme-color-base-darkest);
       font-weight: $font-semibold;
       text-decoration: none;
@@ -135,7 +137,9 @@ table,
     &.message-queue-row {
       padding-top: 14px;
       overflow-wrap: break-word;
+      /* stylelint-disable declaration-property-value-keyword-no-deprecated */
       word-break: break-word; // fallback
+      /* stylelint-enable declaration-property-value-keyword-no-deprecated */
     }
 
     &.message-queue-case-title {

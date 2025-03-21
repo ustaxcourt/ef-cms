@@ -34,7 +34,7 @@ export const deleteCaseDeadlineAction = async ({
   });
 };
 
-const setAutomaticBlockedFieldsOnState = (updatedCase, store) => {
+export const setAutomaticBlockedFieldsOnState = (updatedCase, store) => {
   store.set(state.caseDetail.automaticBlocked, updatedCase.automaticBlocked);
   store.set(
     state.caseDetail.automaticBlockedDate,
