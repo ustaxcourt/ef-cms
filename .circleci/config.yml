@@ -138,7 +138,6 @@ jobs:
           name: 'Deploy - All Color Terraform'
           command: |
             npm run deploy:allColors $ENV
-            cd ./web-api/terraform/applyables/allColors
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Color Terraform'
