@@ -161,7 +161,8 @@ export const PractitionerSearchByName = connect(
                     htmlFor="admission-status"
                     id="admission-status-label"
                   >
-                    Session type <span className="usa-hint">(optional)</span>
+                    Admission Status{' '}
+                    <span className="usa-hint">(optional)</span>
                   </label>
                   <SelectSearch
                     aria-labelledby="admission-status-label"
