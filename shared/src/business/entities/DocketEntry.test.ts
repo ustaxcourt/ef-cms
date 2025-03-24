@@ -1,6 +1,7 @@
 import {
   DOCUMENT_RELATIONSHIPS,
   INITIAL_DOCUMENT_TYPES,
+  NOTICE_EVENT_CODES,
   ROLES,
 } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
@@ -625,10 +626,13 @@ describe('DocketEntry entity', () => {
   });
 
   describe('isNotice', () => {
-    it('should return true when the eventCode is a notice type', () => {
-      const result = DocketEntry.isNotice('NOT');
-      expect(result).toBe(true);
-    });
+    it.each(NOTICE_EVENT_CODES)(
+      'should return true when the eventCode is a notice type',
+      eventCode => {
+        const result = DocketEntry.isNotice(eventCode);
+        expect(result).toBe(true);
+      },
+    );
 
     it('should return false when the eventCode is not a notice type', () => {
       const result = DocketEntry.isNotice('O');

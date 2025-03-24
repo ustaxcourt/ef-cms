@@ -249,6 +249,102 @@ describe('createProspectiveTrialSessions', () => {
     },
   );
 
+  it('should schedule no regular sessions if the maximum set is to 0', () => {
+    // Arrange
+    const mockCalendaringConfig = getMockCalendaringConfig({
+      regularCaseMaxQuantity: 0,
+      smallCaseMaxQuantity: 10,
+    });
+
+    const totalNumberOfSmallMockCases = Math.round(
+      mockCalendaringConfig.smallCaseMaxQuantity +
+        mockCalendaringConfig.hybridCaseMinimumQuantity / 2,
+    );
+    const totalNumberOfRegularMockCases = totalNumberOfSmallMockCases;
+
+    const mockCases = [
+      ...generateMockCases({
+        city: mockRegularCityString,
+        count: totalNumberOfRegularMockCases,
+        procedureType: PROCEDURE_TYPES_MAP.regular,
+      }),
+      ...generateMockCases({
+        city: mockRegularCityString,
+        count: totalNumberOfSmallMockCases,
+        procedureType: PROCEDURE_TYPES_MAP.small,
+      }),
+    ];
+
+    const { caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity } =
+      getDataForCalendaring({
+        cases: mockCases,
+      });
+
+    // Act
+    const { caseCountsAndSessionsByCity } = createProspectiveTrialSessions({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
+    });
+
+    // Assert
+
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].prospectiveSessions[0]
+        .sessionType,
+    ).toEqual(SESSION_TYPES.small);
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].prospectiveSessions[1]
+        .sessionType,
+    ).toEqual(SESSION_TYPES.hybrid);
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].prospectiveSessions[2]
+        .sessionType,
+    ).toEqual(SESSION_TYPES.hybrid);
+  });
+
+  it('should schedule no sessions if all maximums are set to 0', () => {
+    // Arrange
+    const mockCalendaringConfig = getMockCalendaringConfig({
+      regularCaseMaxQuantity: 0,
+      smallCaseMaxQuantity: 0,
+      hybridCaseMaxQuantity: 0,
+    });
+
+    const totalNumberOfSmallMockCases = 20;
+    const totalNumberOfRegularMockCases = 20;
+
+    const mockCases = [
+      ...generateMockCases({
+        city: mockRegularCityString,
+        count: totalNumberOfRegularMockCases,
+        procedureType: PROCEDURE_TYPES_MAP.regular,
+      }),
+      ...generateMockCases({
+        city: mockRegularCityString,
+        count: totalNumberOfSmallMockCases,
+        procedureType: PROCEDURE_TYPES_MAP.small,
+      }),
+    ];
+
+    const { caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity } =
+      getDataForCalendaring({
+        cases: mockCases,
+      });
+
+    // Act
+    const { caseCountsAndSessionsByCity } = createProspectiveTrialSessions({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      citiesFromLastTwoTerms: TRIAL_CITY_STRINGS,
+    });
+
+    // Assert
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].prospectiveSessions,
+    ).toEqual([]);
+  });
+
   it(
     'should ignore regular case minimums and schedule a session for a ' +
       'location that has not been visited in the previous two terms',

@@ -7,24 +7,26 @@ import {
   getPriorityGroups,
   groupKeySymbol,
 } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
-import { compareCasesByDocketNumber } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
+  BlockedFormattedCase,
   groupCases,
   setFormattedBlockDates,
 } from '@web-client/presenter/computeds/blockedCasesReportHelper';
+import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
 
 export const trialLocationHelper = (
   get: Get,
 ): {
   location: string;
-  eligibleCasesForDisplay: any[];
-  formattedBlockedCases: any[];
-  formattedEligibleCases: any[];
+  eligibleCasesForDisplay: (EligibleCase & { caseTitle: string })[];
+  formattedBlockedCases: BlockedFormattedCase[];
+  formattedEligibleCases: (EligibleCase & { caseTitle: string })[];
   totalPagesEligible: number;
-  blockedCasesForDisplay: any[];
+  blockedCasesForDisplay: BlockedFormattedCase[];
   totalPagesBlocked: number;
+  isExportDisabled: boolean;
 } => {
   const pageSize = 100;
 
@@ -35,21 +37,27 @@ export const trialLocationHelper = (
   const blockedCases = get(state.blockedCases);
   const groupedCases = groupCases(blockedCases);
 
-  const formattedBlockedCases = blockedCases
-    .sort(compareCasesByDocketNumber)
-    .map(blockedCase =>
-      setConsolidationFlagsForDisplay(blockedCase, blockedCases),
-    )
-    .map(blockedCase => {
-      const updatedCase = setFormattedBlockDates(
-        {
-          ...blockedCase,
-          caseTitle: Case.getCaseTitle(blockedCase.caseCaption || ''),
-        },
-        groupedCases,
+  const formattedBlockedCases = [...groupedCases.entries()]
+    .sort((a, b) => {
+      return Case.docketNumberSort(a[0], b[0]);
+    })
+    .map(([_, value]) => {
+      return value.sort((a, b) =>
+        Case.docketNumberSort(a.docketNumber, b.docketNumber),
       );
+    })
+    .flat()
+    .map(blockedCase => {
+      const blockedCaseWithConsolidatedProperties =
+        setConsolidationFlagsForDisplay(blockedCase);
 
-      return updatedCase;
+      return {
+        ...blockedCaseWithConsolidatedProperties,
+        caseTitle: Case.getCaseTitle(blockedCase.caseCaption || ''),
+      };
+    })
+    .map(blockedCase => {
+      return setFormattedBlockDates(blockedCase, groupedCases);
     })
     .map(blockedCase => {
       if (!blockedCase.blocked && !blockedCase.automaticBlocked) {
@@ -95,12 +103,19 @@ export const trialLocationHelper = (
     blockedCasesPage * pageSize + pageSize,
   );
 
+  const currentTab = get(state.trialLocationPage.currentTab);
+
+  const isExportDisabled =
+    (currentTab === 'eligibleCases' && formattedEligibleCases.length === 0) ||
+    (currentTab === 'blockedCases' && formattedBlockedCases.length === 0);
+
   return {
     blockedCasesForDisplay,
     eligibleCasesForDisplay,
     formattedBlockedCases,
-    formattedEligibleCases,
+    formattedEligibleCases: sortedEligibleCases,
     location,
+    isExportDisabled,
     totalPagesBlocked: Math.ceil(formattedBlockedCases.length / pageSize),
     totalPagesEligible: Math.ceil(sortedEligibleCases.length / pageSize),
   };

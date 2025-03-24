@@ -5,13 +5,14 @@ import {
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
+import { VerticalGrowableTextArea } from '@web-client/ustc-ui/Text/VerticalGrowableTextArea';
 import { MinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   EXHIBIT_STATUS_OPTIONS,
   MINUTE_SHEET_FORM_SECTION_MAP,
 } from '@shared/business/entities/EntityConstants';
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 
 export const ExhibitsFieldset = ({
   addRowHandler,
@@ -26,6 +27,37 @@ export const ExhibitsFieldset = ({
   exhibitsFormState: MinuteSheetFormState['exhibitsSection'];
   removeRowHandler: RemoveRowHandler;
 }) => {
+  const textareaRefs = useRef<{ [key: string]: HTMLTextAreaElement | null }>(
+    {},
+  );
+
+  const adjustHeight = (key: string) => {
+    const textarea = textareaRefs.current[key];
+    if (textarea) {
+      // Save existing styles because we need to reset them in order to get
+      // an accurate measurement of the height of the textarea element.
+      const previousStyles = {
+        minHeight: textarea.style.minHeight,
+        height: textarea.style.height,
+        overflow: textarea.style.overflow,
+      };
+
+      textarea.style.height = '0';
+      textarea.style.minHeight = '0';
+      textarea.style.overflow = 'hidden';
+
+      textarea.style.minHeight = previousStyles.minHeight;
+      textarea.style.overflow = previousStyles.overflow;
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    }
+  };
+
+  useEffect(() => {
+    Object.keys(exhibitsFormState.exhibits).forEach(key => {
+      adjustHeight(key);
+    });
+  }, []);
+
   return (
     <fieldset className="grid-container border-0 padding-0">
       <div className="grid-row grid-gap-2">
@@ -36,21 +68,17 @@ export const ExhibitsFieldset = ({
       </div>
       {Object.values(exhibitsFormState.exhibits).map((row, rowIndex) => (
         <div
-          className="grid-row grid-gap-2 flex-justify-start align-items-center margin-bottom-1"
+          className="grid-row grid-gap-2 flex-justify-start align-items-top margin-bottom-1"
           key={row.renderKey}
         >
           <div className="grid-col-5">
             <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
-              <input
-                className="usa-input maxw-full"
+              <VerticalGrowableTextArea
                 id={`exhibit-description-${rowIndex}`}
-                data-testid={`exhibit-description-${rowIndex}`}
                 name={`exhibit-description-${rowIndex}`}
-                aria-label={`exhibit-description-${rowIndex}`}
-                type="text"
                 value={exhibitsFormState.exhibits[row.renderKey].description}
-                onBlur={() => onBlurHandler()}
-                onChange={e =>
+                onBlurHandler={onBlurHandler}
+                onChangeHandler={e => {
                   onChangeHandler({
                     name: 'exhibits',
                     rowInfo: {
@@ -59,8 +87,8 @@ export const ExhibitsFieldset = ({
                     },
                     section: MINUTE_SHEET_FORM_SECTION_MAP.exhibitsSection,
                     value: e.target.value,
-                  })
-                }
+                  });
+                }}
               />
             </FormGroup>
           </div>
@@ -103,22 +131,19 @@ export const ExhibitsFieldset = ({
             </FormGroup>
           </div>
           <div className="grid-col-3">
-            <FormGroup className="margin-bottom-0 display-flex align-items-center">
+            <FormGroup className="margin-bottom-0 display-flex align-items-top">
               <label
-                className="margin-right-2 margin-bottom-0 display-inline-block"
+                className="margin-right-2 margin-bottom-0 display-inline-block margin-top-1"
                 htmlFor={`exhibit-note-${rowIndex}`}
               >
                 Note
               </label>
-              <input
-                className="usa-input"
+              <VerticalGrowableTextArea
                 id={`exhibit-note-${rowIndex}`}
-                data-testid={`exhibit-note-${rowIndex}`}
                 name={`exhibit-note-${rowIndex}`}
-                type="text"
                 value={exhibitsFormState.exhibits[row.renderKey].note}
-                onBlur={() => onBlurHandler()}
-                onChange={e =>
+                onBlurHandler={onBlurHandler}
+                onChangeHandler={e =>
                   onChangeHandler({
                     name: 'exhibits',
                     rowInfo: {

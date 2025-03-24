@@ -75,7 +75,7 @@ export const trialSessionPlanningReportViewHelper = (
         lastVisitedDateFormatted: formatLastVisitedDate(
           locationData.lastVisitedDate,
         ),
-        trialLocationUrl: `/trial-location/${locationData.trialCityState}`,
+        trialLocationUrl: `/trial-location/${locationData.trialCityState}/${trialTerm}/${trialYear}`,
       };
     });
 

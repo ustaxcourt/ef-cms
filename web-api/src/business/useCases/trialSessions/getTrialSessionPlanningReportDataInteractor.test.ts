@@ -12,11 +12,11 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { getBlockedCasesForTrialLocation as getBlockedCasesForTrialLocationMock } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { getBlockedCasesCount as getBlockedCasesCountMock } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount';
+import { getEligibleCasesCount as getEligibleCasesCountMock } from '@web-api/persistence/postgres/cases/getEligibleCasesCount';
 
-const getBlockedCasesForTrialLocation =
-  getBlockedCasesForTrialLocationMock as jest.Mock;
-import { MOCK_CASE } from '@shared/test/mockCase';
+const getBlockedCasesCount = jest.mocked(getBlockedCasesCountMock);
+const getEligibleCasesCount = jest.mocked(getEligibleCasesCountMock);
 
 describe('getTrialSessionPlanningReportDataInteractor', () => {
   const ALL_TRIAL_SESSIONS_MOCK: RawTrialSession[] = [
@@ -132,28 +132,26 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
       trialLocation: 'Denver, Colorado',
     } as RawTrialSession,
   ];
-  const SMALL_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [
-    { procedureType: PROCEDURE_TYPES_MAP.small },
-  ];
-  const REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [
-    { procedureType: PROCEDURE_TYPES_MAP.regular },
-    { procedureType: PROCEDURE_TYPES_MAP.regular },
-  ];
-  const BLOCKED_CASES_MOCK = [MOCK_CASE, MOCK_CASE, MOCK_CASE];
+
+  const BLOCKED_CASES_COUNT_MOCK = 3;
+
+  const REGULAR_ELIGIBLE_CASES_COUNT = 2;
+  const SMALL_ELIGIBLE_CASES_COUNT = 1;
 
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessions.mockResolvedValue(ALL_TRIAL_SESSIONS_MOCK);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialCity.mockResolvedValue([
-        ...SMALL_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK,
-        ...REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK,
-      ]);
+    getEligibleCasesCount.mockImplementation(({ procedureType }) => {
+      if (procedureType === PROCEDURE_TYPES_MAP.regular) {
+        return Promise.resolve(REGULAR_ELIGIBLE_CASES_COUNT);
+      } else {
+        return Promise.resolve(SMALL_ELIGIBLE_CASES_COUNT);
+      }
+    });
 
-    getBlockedCasesForTrialLocation.mockResolvedValue(BLOCKED_CASES_MOCK);
+    getBlockedCasesCount.mockResolvedValue(BLOCKED_CASES_COUNT_MOCK);
   });
 
   it('should throw error if the user is "Unauthorized"', async () => {

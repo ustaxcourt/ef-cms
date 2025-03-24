@@ -64,6 +64,15 @@ jest.mock(
   () => mockFactory('getEligibleCasesForTrialCity'),
 );
 
+jest.mock('@web-api/persistence/postgres/cases/getEligibleCasesCount', () =>
+  mockFactory('getEligibleCasesCount'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount',
+  () => mockFactory('getBlockedCasesCount'),
+);
+
 // Parties
 
 jest.mock(
@@ -119,10 +128,6 @@ jest.mock('@web-api/persistence/postgres/cases/reports/getCasesByFilters', () =>
 jest.mock(
   '@web-api/persistence/postgres/cases/reports/getCasesClosedCountByJudge',
   () => mockFactory('getCasesClosedCountByJudge'),
-);
-
-jest.mock('@web-api/persistence/postgres/cases/reports/getColdCases', () =>
-  mockFactory('getColdCases'),
 );
 
 jest.mock(

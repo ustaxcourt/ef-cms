@@ -171,6 +171,9 @@ const scheduleCases = ({
     [SESSION_TYPES.regular]: number;
   };
 }): void => {
+  if (schedulingConfig.max <= 0) {
+    return;
+  }
   const [primaryType, secondaryType] =
     remainingCaseCounts[SESSION_TYPES.regular] >=
     remainingCaseCounts[SESSION_TYPES.small]

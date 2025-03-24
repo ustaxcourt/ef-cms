@@ -1,14 +1,12 @@
-import '@web-api/persistence/postgres/cases/mocks.jest';
 import { ColdCaseEntry } from './coldCaseReportInteractor';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { coldCaseReportInteractor } from './coldCaseReportInteractor';
-import { getColdCases as getColdCasesMock } from '@web-api/persistence/postgres/cases/reports/getColdCases';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 
 describe('coldCaseReportInteractor', () => {
-  const getColdCases = getColdCasesMock as jest.Mock;
   const mockColdCases: ColdCaseEntry[] = [
     {
       caseType: 'Closed',
@@ -22,17 +20,22 @@ describe('coldCaseReportInteractor', () => {
   ];
 
   beforeEach(() => {
-    getColdCases.mockResolvedValue(mockColdCases);
+    applicationContext
+      .getPersistenceGateway()
+      .getColdCases.mockResolvedValue(mockColdCases);
   });
 
   it('should throw an unauthorized error when the user does not have access', async () => {
-    await expect(coldCaseReportInteractor(mockPetitionerUser)).rejects.toThrow(
-      'Unauthorized',
-    );
+    await expect(
+      coldCaseReportInteractor(applicationContext, mockPetitionerUser),
+    ).rejects.toThrow('Unauthorized');
   });
 
   it('should return the expected mocked data', async () => {
-    const coldCases = await coldCaseReportInteractor(mockDocketClerkUser);
+    const coldCases = await coldCaseReportInteractor(
+      applicationContext,
+      mockDocketClerkUser,
+    );
 
     expect(coldCases).toEqual(mockColdCases);
   });

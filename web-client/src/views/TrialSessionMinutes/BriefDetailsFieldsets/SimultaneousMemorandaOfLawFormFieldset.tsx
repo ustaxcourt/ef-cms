@@ -1,4 +1,3 @@
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   BRIEF_SUBTYPE,
@@ -46,30 +45,34 @@ export const SimultaneousMemorandaOfLawFormFieldset = ({
               <span>{rowConfig.rowLabel}</span>
             </div>
             <div className="grid-col-4">
-              <DateSelector
-                placeHolderText="MM/DD/YYYY"
-                formatDateOnChange
-                defaultValue={
-                  simultaneousMemorandaOfLawFormState[rowConfig.key].dueDate
-                }
-                formGroupClassNames="margin-bottom-0"
-                id={`${rowConfig.key}DueDate`}
-                onBlur={() => onBlurHandler()}
-                onChange={e =>
-                  onChangeHandler({
-                    name: 'briefDetails',
-                    rowInfo: {
-                      key: rowConfig.key,
-                      nestedName: 'dueDate',
-                    },
-                    section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
-                    value: e.target.value,
-                  })
-                }
-              />
+              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+                <input
+                  className="usa-input display-inline-block maxw-full"
+                  aria-label={`${rowConfig.key}DueDate`}
+                  id={`${rowConfig.key}DueDate`}
+                  data-testid={`${rowConfig.key}DueDate`}
+                  name={`${rowConfig.key}DueDate`}
+                  type="text"
+                  value={
+                    simultaneousMemorandaOfLawFormState[rowConfig.key].dueDate
+                  }
+                  onBlur={() => onBlurHandler()}
+                  onChange={e =>
+                    onChangeHandler({
+                      name: 'briefDetails',
+                      rowInfo: {
+                        key: rowConfig.key,
+                        nestedName: 'dueDate',
+                      },
+                      section: MINUTE_SHEET_FORM_SECTION_MAP.trialBriefSection,
+                      value: e.target.value,
+                    })
+                  }
+                />
+              </FormGroup>
             </div>
             <div className="grid-col-7">
-              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full padding-right-4">
+              <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
                 <input
                   className="usa-input maxw-full"
                   id={`${rowConfig.key}Note`}

@@ -9,7 +9,6 @@ import {
   RemoveRowHandler,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/trialSessionMinutesFormHandlers';
 import { Button } from '@web-client/ustc-ui/Button/Button';
-import { DateSelector } from '@web-client/ustc-ui/DateInput/DateSelector';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
   ACTION_DOCUMENT_TYPE_OPTIONS,
@@ -78,26 +77,31 @@ export const ActionsAndFilingsFieldset = ({
   const getFieldsByRow = (row: KeyedActionFilingFormFields, rowIndex) => {
     return (
       <>
-        <div className="grid-col-auto">
-          <DateSelector
-            formatDateOnChange
-            defaultValue={row.date}
-            formGroupClassNames="margin-bottom-0"
-            id={`actionsAndFilingsDate-${row.renderKey}`}
-            placeHolderText="MM/DD/YYYY"
-            onBlur={() => onBlurHandler()}
-            onChange={e =>
-              onChangeHandler({
-                name: 'actionsAndFilings',
-                rowInfo: {
-                  key: row.renderKey,
-                  nestedName: 'date',
-                },
-                section: MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
-                value: e.target.value,
-              })
-            }
-          />
+        <div className="grid-col-2">
+          <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
+            <input
+              className="usa-input display-inline-block maxw-full"
+              id={`actionsAndFilingsDate-${row.renderKey}`}
+              aria-label={`actionsAndFilingsDate-${rowIndex}`}
+              data-testid={`actionsAndFilingsDate-${row.renderKey}`}
+              name={`actionsAndFilingsDate-${row.renderKey}`}
+              type="text"
+              value={row.date}
+              onBlur={() => onBlurHandler()}
+              onChange={e =>
+                onChangeHandler({
+                  name: 'actionsAndFilings',
+                  rowInfo: {
+                    key: row.renderKey,
+                    nestedName: 'date',
+                  },
+                  section:
+                    MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
+                  value: e.target.value,
+                })
+              }
+            />
+          </FormGroup>
         </div>
         <div className="grid-col-2">
           {renderSelectField(
@@ -221,9 +225,7 @@ export const ActionsAndFilingsFieldset = ({
     <fieldset className="border-0 padding-0">
       <div className="usa-label">Actions & Filings</div>
       <div className="grid-row grid-gap-2">
-        <div className="grid-col-auto usa-label" style={{ minWidth: '266px' }}>
-          Date
-        </div>
+        <div className="grid-col-2 usa-label">Date</div>
         <div className="grid-col-2 usa-label">Document Type</div>
         <div className="grid-col-2 usa-label">Filed By</div>
         <div className="grid-col-2 usa-label">Status</div>

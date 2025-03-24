@@ -19,6 +19,8 @@ import {
   OBJECTIONS_OPTIONS_MAP,
   PETITIONER_ROLE_OPTIONS,
   PETITIONER_ROLE_OPTIONS_INVERTED,
+  RESPONDENT_ROLE_OPTIONS,
+  RESPONDENT_ROLE_OPTIONS_INVERTED,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
@@ -35,7 +37,10 @@ import {
   getFormattedTrialSessionDetails,
 } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { GetUserResponse } from '@shared/business/useCases/getUserInteractor';
-import { Judge } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
+import {
+  Appearance,
+  Judge,
+} from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 export const initializeTrialSessionMinuteSheetFormAction = ({
@@ -194,13 +199,15 @@ export const getRespondentsFromCase = (
   const keyedPartyFormFieldsByRenderKey = {};
 
   if (respondents && respondents.length > 0) {
-    respondents.forEach(obj => {
+    respondents.forEach(respondent => {
       const renderKey = uuidv4();
       keyedPartyFormFieldsByRenderKey[renderKey] = {
         datesOfAppearance: '',
-        name: obj.name,
+        name: respondent.name,
         renderKey,
-      };
+        role: RESPONDENT_ROLE_OPTIONS_INVERTED[RESPONDENT_ROLE_OPTIONS.counsel],
+        note: '',
+      } as Appearance;
     });
   } else {
     const renderKey = uuidv4();
@@ -208,6 +215,8 @@ export const getRespondentsFromCase = (
       datesOfAppearance: '',
       name: '',
       renderKey,
+      role: '',
+      note: '',
     };
   }
 
@@ -421,11 +430,14 @@ export const getTransformedPendingItemDetails = (
   };
 };
 
-export const transformFiledBy = (pendingItem): string => {
+export const transformFiledBy = (pendingItem: RawDocketEntry): string => {
   if (DocketEntry.isOrder(pendingItem.eventCode))
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court];
 
-  const { filedBy } = pendingItem;
+  const { filedBy, privatePractitioners } = pendingItem;
+
+  if (!filedBy)
+    return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.other];
 
   if (filedBy.startsWith('Resp. &')) {
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.joint];
@@ -441,6 +453,12 @@ export const transformFiledBy = (pendingItem): string => {
 
   if (filedBy.startsWith('Petrs.') || filedBy.startsWith('Petr.')) {
     return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner];
+  }
+
+  if (Array.isArray(privatePractitioners) && privatePractitioners.length > 0) {
+    return ACTION_FILED_BY_OPTIONS_INVERTED[
+      ACTION_FILED_BY_OPTIONS.practitioner
+    ];
   }
 
   return ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.other];

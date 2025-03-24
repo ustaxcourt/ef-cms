@@ -289,18 +289,29 @@ export const MinuteSheet = ({
               </div>
             )}
           </div>
-          {formattedMinuteSheet.trialBrief.benchOpinionRendered && (
-            <div className="minute-sheet-field">
-              <div>
-                <strong>Bench opinion rendered</strong>
+          <div>
+            {formattedMinuteSheet.trialBrief.benchOpinionRendered && (
+              <div className="minute-sheet-field">
+                <div>
+                  <strong>Bench opinion rendered</strong>
+                </div>
+                <div
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      formattedMinuteSheet.trialBrief.benchOpinionRendered,
+                  }}
+                />
               </div>
+            )}
+            {formattedMinuteSheet.trialBrief.note && (
               <div
+                className="minute-sheet-field"
                 dangerouslySetInnerHTML={{
-                  __html: formattedMinuteSheet.trialBrief.benchOpinionRendered,
+                  __html: formattedMinuteSheet.trialBrief.note,
                 }}
               />
-            </div>
-          )}
+            )}
+          </div>
           {formattedMinuteSheet.trialBrief.briefDetails.length > 0 && (
             <div className="minute-sheet-field">
               <div>
