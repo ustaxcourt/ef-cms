@@ -155,6 +155,11 @@ export default async function ({
             keepStructure: true,
             to: ['.'],
           },
+          {
+            from: ['node_modules/pdfjs-dist/legacy/build/pdf.worker.mjs'],
+            keepStructure: true,
+            to: ['.'],
+          },
         ],
       }),
       {
