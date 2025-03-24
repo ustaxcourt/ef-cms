@@ -32,7 +32,7 @@ const config: Config = {
     uuid: require.resolve('uuid'),
   },
   setupFiles: ['core-js'],
-  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
+  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
@@ -43,5 +43,4 @@ const config: Config = {
   workerIdleMemoryLimit: '20%',
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;
