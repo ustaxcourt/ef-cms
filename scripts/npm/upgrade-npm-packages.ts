@@ -3,10 +3,6 @@ import { execSync, spawnSync } from 'child_process';
 
 // Caveats list: packages to exclude from upgrade
 const caveats: string[] = [
-  'react',
-  '@types/react',
-  'react-dom',
-  '@types/react-dom',
   '@cerebral/react',
   'cerebral',
   'babel-plugin-cerebral',
@@ -17,7 +13,6 @@ const caveats: string[] = [
   'puppeteer',
   'puppeteer-core',
   '@sparticuz/chromium',
-  'pdfjs-dist',
 ];
 
 // Function to run a shell command and capture output, even if it has a non-zero exit code
