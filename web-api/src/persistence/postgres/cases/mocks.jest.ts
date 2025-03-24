@@ -130,10 +130,6 @@ jest.mock(
   () => mockFactory('getCasesClosedCountByJudge'),
 );
 
-jest.mock('@web-api/persistence/postgres/cases/reports/getColdCases', () =>
-  mockFactory('getColdCases'),
-);
-
 jest.mock(
   '@web-api/persistence/postgres/cases/reports/getDocketNumbersByStatusAndByJudge',
   () => mockFactory('getDocketNumbersByStatusAndByJudge'),

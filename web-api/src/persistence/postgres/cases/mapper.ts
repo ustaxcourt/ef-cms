@@ -285,7 +285,7 @@ export const indexCaseEntity = ({
       hasPendingItems: caseRecord.hasPendingItems,
       highPriority: caseRecord.highPriority,
       isPaper: caseRecord.isPaper,
-      leadDocket: caseRecord.leadDocketNumber,
+      leadDocketNumber: caseRecord.leadDocketNumber,
       preferredTrialCity: caseRecord.preferredTrialCity,
       procedureType: caseRecord.procedureType,
       sealedDate:
