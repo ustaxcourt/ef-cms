@@ -86,6 +86,22 @@ resource "aws_iam_policy" "ci_cd_policy" {
       "Resource": "*"
     },
     {
+      "Sid": "CognitoIdentityPool",
+      "Effect": "Allow",
+      "Action": [
+        "cognito-identity:*"
+      ],
+      "Resource": "arn:aws:cognito-identity:us-east-1:${data.aws_caller_identity.current.account_id}:identitypool/*"
+    },
+    {
+      "Sid": "CloudWatchRUM",
+      "Effect": "Allow",
+      "Action": [
+        "rum:*"
+      ],
+      "Resource": "arn:aws:rum:us-east-1:${data.aws_caller_identity.current.account_id}:appmonitor/*"
+    },
+    {
       "Sid": "ApiGateway",
       "Effect": "Allow",
       "Action": [
@@ -276,11 +292,18 @@ resource "aws_iam_policy" "ci_cd_policy" {
           "iam:GetUser",
           "iam:CreateUser",
           "iam:CreatePolicy",
-          "iam:AttachUserPolicy"
+          "iam:AttachUserPolicy",
+          "iam:GetRole",
+          "iam:CreateRole",
+          "iam:AttachRolePolicy",
+          "iam:ListRolePolicies",
+          "iam:GetRolePolicy",
+          "iam:ListAttachedRolePolicies"
         ],
        "Resource": [
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*"
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*",
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*"
         ]
     }, 
     {
