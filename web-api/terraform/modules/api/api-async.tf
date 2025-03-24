@@ -72,17 +72,6 @@ resource "aws_api_gateway_method" "api_async_method_options" {
   authorization = "NONE"
 }
 
-resource "aws_api_gateway_method" "api_async_method_head" {
-  depends_on = [
-    aws_api_gateway_method.api_async_method_options
-  ]
-  rest_api_id   = aws_api_gateway_rest_api.gateway_for_api.id
-  resource_id   = aws_api_gateway_resource.api_async_resource.id
-  http_method   = "HEAD"
-  authorization = "CUSTOM"
-  authorizer_id = aws_api_gateway_authorizer.custom_authorizer.id
-}
-
 resource "aws_api_gateway_integration" "api_async_integration_post" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   resource_id = aws_api_gateway_method.api_async_method_post.resource_id
