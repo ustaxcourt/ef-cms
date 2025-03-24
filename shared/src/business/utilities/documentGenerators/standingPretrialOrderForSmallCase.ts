@@ -1,7 +1,7 @@
 import { GettingReadyForTrialChecklist } from '@shared/business/utilities/pdfGenerator/documentTemplates/GettingReadyForTrialChecklist';
 import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
 import { StandingPretrialOrderForSmallCase } from '@shared/business/utilities/pdfGenerator/documentTemplates/StandingPretrialOrderForSmallCase';
-import { combineTwoPdfs } from './combineTwoPdfs';
+import { combineTwoPdfs } from '../pdfs/combineTwoPdfs';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
