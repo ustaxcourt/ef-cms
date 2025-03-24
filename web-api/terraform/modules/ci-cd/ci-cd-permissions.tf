@@ -292,18 +292,11 @@ resource "aws_iam_policy" "ci_cd_policy" {
           "iam:GetUser",
           "iam:CreateUser",
           "iam:CreatePolicy",
-          "iam:AttachUserPolicy",
-          "iam:GetRole",
-          "iam:CreateRole",
-          "iam:AttachRolePolicy",
-          "iam:ListRolePolicies",
-          "iam:GetRolePolicy",
-          "iam:ListAttachedRolePolicies"
+          "iam:AttachUserPolicy"
         ],
        "Resource": [
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*",
-          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*"
+          "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*"
         ]
     }, 
     {
