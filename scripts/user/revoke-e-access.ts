@@ -6,9 +6,9 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -66,11 +66,7 @@ const { docketNumber, userId } = parseArgsAndEnvVars(scriptConfig) as {
     .validate()
     .toRawObject();
 
-  await upsertCase({ rawCase: caseToUpdate });
-
-  await applicationContext
-    .getPersistenceGateway()
-    .updateCase({ applicationContext, caseToUpdate });
+  await upsertCases([caseToUpdate]);
 
   await applicationContext
     .getPersistenceGateway()

@@ -1,46 +1,24 @@
-import { CaseStatusChange } from '@shared/business/entities/cases/Case';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { isEmpty } from 'lodash';
+import {
+  FORMATS,
+  calculateDifferenceInDays,
+  formatDateString,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
 
 export const calculateDaysElapsedSinceLastStatusChange = (
-  applicationContext: IApplicationContext,
-  individualCase: {
-    caseStatusHistory?: CaseStatusChange[];
-  },
+  statusDate: string,
 ): { daysElapsedSinceLastStatusChange: number; statusDate: string } => {
-  if (
-    !individualCase.caseStatusHistory || // Redundant, but helps typescript not complain later
-    isEmpty(individualCase.caseStatusHistory)
-  ) {
+  if (!statusDate) {
     return { daysElapsedSinceLastStatusChange: 0, statusDate: '' };
   }
 
-  const currentDateInIsoFormat: string = applicationContext
-    .getUtilities()
-    .formatDateString(
-      applicationContext.getUtilities().prepareDateFromString(),
-      FORMATS.ISO,
-    );
-
-  individualCase.caseStatusHistory.sort((a, b) =>
-    applicationContext.getUtilities().compareISODateStrings(a.date, b.date),
-  );
-
-  const newestCaseStatusChangeIndex =
-    individualCase.caseStatusHistory.length - 1;
-
-  const dateOfLastCaseStatusChange =
-    individualCase.caseStatusHistory[newestCaseStatusChangeIndex].date;
+  const currentDateInIsoFormat: string = formatNow();
 
   return {
-    daysElapsedSinceLastStatusChange: applicationContext
-      .getUtilities()
-      .calculateDifferenceInDays(
-        currentDateInIsoFormat,
-        dateOfLastCaseStatusChange,
-      ),
-    statusDate: applicationContext
-      .getUtilities()
-      .formatDateString(dateOfLastCaseStatusChange, FORMATS.MMDDYY),
+    daysElapsedSinceLastStatusChange: calculateDifferenceInDays(
+      currentDateInIsoFormat,
+      statusDate,
+    ),
+    statusDate: formatDateString(statusDate, FORMATS.MMDDYY),
   };
 };

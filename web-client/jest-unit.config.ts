@@ -39,15 +39,14 @@ const config: Config = {
     uuid: require.resolve('uuid'),
   },
   setupFiles: ['core-js'],
-  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
+  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
   // testMatch: ['**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)'], // Uncomment to run all local web-client unit tests.
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
+  transformIgnorePatterns: ['/node_modules/(?!uuid|export-to-csv)'],
   verbose: false,
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;

@@ -3,6 +3,32 @@ import { NewWorkItemKysely } from '@web-api/database-types';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
+export const DW_WORK_ITEM_COLUMNS = [
+  'assigneeId',
+  'assigneeName',
+  'associatedJudge',
+  'associatedJudgeId',
+  'caseIsInProgress',
+  'completedAt',
+  'completedBy',
+  'completedByUserId',
+  'completedMessage',
+  'createdAt',
+  'docketEntry',
+  'docketNumber',
+  'hideFromPendingMessages',
+  'highPriority',
+  'inProgress',
+  'isInitializeCase',
+  'isRead',
+  'section',
+  'sentBy',
+  'sentBySection',
+  'sentByUserId',
+  'updatedAt',
+  'workItemId',
+];
+
 function pickFields(workItem) {
   return {
     assigneeId: workItem.assigneeId,
@@ -65,11 +91,11 @@ export function workItemEntity(workItem) {
     ...transformNullToUndefined({
       ...workItem,
       caseStatus: workItem.status,
-      caseTitle: Case.getCaseTitle(workItem.caption),
+      caseTitle: Case.getCaseTitle(workItem.caption || ''),
       completedAt: workItem.completedAt?.toISOString(),
-      createdAt: workItem.createdAt.toISOString(),
+      createdAt: workItem.createdAt?.toISOString(),
       trialDate: workItem.trialDate?.toISOString(),
-      updatedAt: workItem.createdAt.toISOString(),
+      updatedAt: workItem.createdAt?.toISOString(),
     }),
     assigneeId: workItem.assigneeId, // this needs to be null because it replicates what was done in dynamo
   });

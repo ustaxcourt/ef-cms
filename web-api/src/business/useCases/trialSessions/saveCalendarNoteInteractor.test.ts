@@ -1,17 +1,18 @@
-import {
-  MOCK_CASE,
-  MOCK_CASE_WITH_TRIAL_SESSION,
-} from '../../../../../shared/src/test/mockCase';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '@shared/test/mockCase';
 import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { saveCalendarNoteInteractor } from './saveCalendarNoteInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('saveCalendarNotes', () => {
   let mockTrialSession;
@@ -37,9 +38,7 @@ describe('saveCalendarNotes', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => mockTrialSession);
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
   });
 
   it('throws an Unauthorized error if the user role is not allowed to access the method', async () => {
@@ -145,9 +144,7 @@ describe('saveCalendarNotes', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCaseHearing,
     ).not.toHaveBeenCalled();
@@ -185,9 +182,7 @@ describe('saveCalendarNotes', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCaseHearing,
     ).toHaveBeenCalled();
@@ -225,9 +220,7 @@ describe('saveCalendarNotes', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCaseHearing,
     ).not.toHaveBeenCalled();

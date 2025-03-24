@@ -50,7 +50,34 @@ describe('runCreateTermAction', () => {
         termEndDate: '03/31/2050',
         termName: 'Test term',
         termStartDate: '01/01/2050',
+        maxSessionsPerLocation: 'TEST_maxSessionsPerLocation',
+        maxSessionsPerWeek: 'TEST_maxSessionsPerWeek',
+        smallCaseMinimumQuantity: 'TEST_smallCaseMinimumQuantity',
+        smallCaseMaxQuantity: 'TEST_smallCaseMaxQuantity',
+        regularCaseMinimumQuantity: 'TEST_regularCaseMinimumQuantity',
+        regularCaseMaxQuantity: 'TEST_regularCaseMaxQuantity',
+        hybridCaseMinimumQuantity: 'TEST_hybridCaseMinimumQuantity',
+        hybridCaseMaxQuantity: 'TEST_hybridCaseMaxQuantity',
       },
+    });
+
+    const generateCalls = (
+      applicationContext.getUseCases()
+        .generateSuggestedTrialSessionCalendarInteractor as jest.Mock
+    ).mock.calls;
+    expect(generateCalls.length).toEqual(1);
+    expect(generateCalls[0][1]).toEqual({
+      termEndDate: '03/31/2050',
+      termName: 'Test term',
+      termStartDate: '01/01/2050',
+      maxSessionsPerLocation: 'TEST_maxSessionsPerLocation',
+      maxSessionsPerWeek: 'TEST_maxSessionsPerWeek',
+      smallCaseMinimumQuantity: 'TEST_smallCaseMinimumQuantity',
+      smallCaseMaxQuantity: 'TEST_smallCaseMaxQuantity',
+      regularCaseMinimumQuantity: 'TEST_regularCaseMinimumQuantity',
+      regularCaseMaxQuantity: 'TEST_regularCaseMaxQuantity',
+      hybridCaseMinimumQuantity: 'TEST_hybridCaseMinimumQuantity',
+      hybridCaseMaxQuantity: 'TEST_hybridCaseMaxQuantity',
     });
 
     expect(successStub).toHaveBeenCalledWith({

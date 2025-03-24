@@ -56,7 +56,6 @@ import {
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
-import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
 import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
@@ -68,7 +67,7 @@ import { getItemInteractor } from '../../shared/src/business/useCases/getItemInt
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
-import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
+import { getPublicCaseInteractor } from '@shared/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
 import { getPublicPractitionerByBarNumberInteractor } from '@shared/proxies/public/getPublicPractitionerByBarNumberProxy';
 import { getPublicPractitionersByNameInteractor } from '@shared/proxies/public/getPublicPractitionersByNameProxy';
@@ -105,7 +104,6 @@ const allUseCases = {
   generatePublicDocketRecordPdfInteractor,
   getAllFeatureFlagsInteractor,
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
-  getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
   getCurrentVersionInteractor,
   getDocumentDownloadUrlInteractor,
