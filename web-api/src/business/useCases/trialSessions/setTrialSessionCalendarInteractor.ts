@@ -14,6 +14,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { chunk, flatten, partition, uniq } from 'lodash';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
+import { getFullEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getFullEligibleCasesForTrialSession';
 
 const CHUNK_SIZE = 50;
 
@@ -72,14 +73,12 @@ export const setTrialSessionCalendarInteractor = async (
     eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
 
     const eligibleCases = (
-      await applicationContext
-        .getPersistenceGateway()
-        .getEligibleCasesForTrialSession({
-          applicationContext,
-          limit: eligibleCasesLimit,
-          sessionType: trialSessionEntity.getCaseProcedureForTrial(),
-          trialCity: trialSessionEntity.trialLocation!,
-        })
+      await getFullEligibleCasesForTrialSession({
+        applicationContext,
+        limit: eligibleCasesLimit,
+        sessionType: trialSessionEntity.getCaseProcedureForTrial(),
+        trialCity: trialSessionEntity.trialLocation!,
+      })
     )
       .filter(
         eligibleCase =>
