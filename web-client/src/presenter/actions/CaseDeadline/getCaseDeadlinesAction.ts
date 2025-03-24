@@ -1,3 +1,4 @@
+import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -10,17 +11,23 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const getCaseDeadlinesAction = async ({
   applicationContext,
   get,
+  props,
 }: ActionProps) => {
   const startDate = get(state.screenMetadata.filterStartDate);
   const endDate = get(state.screenMetadata.filterEndDate);
   const judgeFilter = get(state.caseDeadlineReport.judgeFilter);
+  const from = props.selectedPage
+    ? props.selectedPage * CASE_DEADLINES_REPORT_PAGE_SIZE
+    : 0;
 
   const { deadlines, totalCount } = await applicationContext
     .getUseCases()
     .getCaseDeadlinesInteractor(applicationContext, {
       endDate,
+      from,
       judge: judgeFilter,
       startDate,
     });
+
   return { caseDeadlines: deadlines, totalCount };
 };
