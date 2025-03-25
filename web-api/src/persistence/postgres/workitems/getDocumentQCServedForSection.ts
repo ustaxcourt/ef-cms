@@ -16,7 +16,7 @@ export const getDocumentQCServedForSection = async ({
       .where('w.section', 'in', sections)
       .where('w.completedAt', '>=', afterDate)
       .selectAll('w')
-      .select(['c.caption', 'c.status'])
+      .select(['c.caption', 'c.status', 'c.trialDate'])
       .execute();
   });
 
