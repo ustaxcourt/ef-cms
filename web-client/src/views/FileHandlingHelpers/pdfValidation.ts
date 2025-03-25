@@ -2,11 +2,11 @@ import {
   ErrorTypes,
   FileValidationResponse,
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
-import { applicationContext } from '@web-client/applicationContext';
 import {
   validatePdfHeader,
   validatePermissions,
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
+import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
 
 export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
   'The file is encrypted or password protected. Remove encryption or password protection and try again.';
@@ -52,7 +52,7 @@ export const validatePdf = ({
         }
 
         // Attempt to load the PDF to check for any errors
-        const pdfjs = await applicationContext.getPdfJs();
+        const pdfjs = await getPdfJs();
         const document = await pdfjs.getDocument({
           data: fileAsArrayBuffer,
           isEvalSupported: false,
