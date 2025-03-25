@@ -19,7 +19,7 @@ const config: Config = {
     '!src/business/utilities/generateHTMLTemplateForPDF/generateHTMLTemplateForPDF.ts',
     '!src/business/utilities/htmlGenerator/**',
     '!src/business/entities/caseAssociation/CaseAssociationRequestDocument.ts',
-    '!shared/src/business/entities/trialSessions/SpecialTrialSessions.ts',
+    '!src/business/entities/trialSessions/SpecialTrialSessions.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
