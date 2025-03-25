@@ -16,7 +16,7 @@ export const getDocumentQCServedForUser = async ({
       .where('w.assigneeId', '=', userId)
       .where('w.completedAt', '>=', afterDate)
       .selectAll('w')
-      .select(['c.caption', 'c.status', 'c.trialDate'])
+      .select(['c.caption', 'c.status', 'c.trialDate', 'c.leadDocketNumber'])
       .execute();
   });
 

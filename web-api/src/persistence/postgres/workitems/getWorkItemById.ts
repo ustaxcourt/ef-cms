@@ -13,7 +13,7 @@ export const getWorkItemById = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .where('w.workItemId', '=', workItemId)
       .selectAll('w')
-      .select(['c.caption', 'c.status', 'c.trialDate'])
+      .select(['c.caption', 'c.status', 'c.trialDate', 'c.leadDocketNumber'])
       .executeTakeFirst(),
   );
 
