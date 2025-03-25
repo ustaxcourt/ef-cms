@@ -19,6 +19,7 @@ const config: Config = {
     '!src/business/utilities/generateHTMLTemplateForPDF/generateHTMLTemplateForPDF.ts',
     '!src/business/utilities/htmlGenerator/**',
     '!src/business/entities/caseAssociation/CaseAssociationRequestDocument.ts',
+    '!shared/src/business/entities/trialSessions/SpecialTrialSessions.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
@@ -43,5 +44,4 @@ const config: Config = {
   workerIdleMemoryLimit: '20%',
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;
