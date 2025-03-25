@@ -64,6 +64,11 @@ jest.mock(
   () => mockFactory('getEligibleCasesForTrialCity'),
 );
 
+jest.mock(
+  '@web-api/persistence/postgres/cases/getFullEligibleCasesForTrialSession',
+  () => mockFactory('getFullEligibleCasesForTrialSession'),
+);
+
 jest.mock('@web-api/persistence/postgres/cases/getEligibleCasesCount', () =>
   mockFactory('getEligibleCasesCount'),
 );

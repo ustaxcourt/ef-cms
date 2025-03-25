@@ -17,9 +17,13 @@ import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getFullEligibleCasesForTrialSession as getFullEligibleCasesForTrialSessionMock } from '@web-api/persistence/postgres/cases/getFullEligibleCasesForTrialSession';
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const updateCase = jest.mocked(updateCaseMock);
+const getFullEligibleCasesForTrialSession = jest.mocked(
+  getFullEligibleCasesForTrialSessionMock,
+);
 
 describe('setTrialSessionCalendarInteractor', () => {
   const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
@@ -93,16 +97,14 @@ describe('setTrialSessionCalendarInteractor', () => {
           },
         },
       ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-          },
+    getFullEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
-      ]);
+      },
+    ]);
 
     applicationContext
       .getPersistenceGateway()
@@ -140,16 +142,14 @@ describe('setTrialSessionCalendarInteractor', () => {
           trialTime: '11:00',
         },
       ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': false,
-          },
+    getFullEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': false,
         },
-      ]);
+      },
+    ]);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -180,16 +180,14 @@ describe('setTrialSessionCalendarInteractor', () => {
           },
         },
       ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-          },
+    getFullEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
-      ]);
+      },
+    ]);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -224,10 +222,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
-        .mock.calls[0][0],
-    ).toMatchObject({
+    expect(getFullEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
       limit: 150, // max cases + buffer
     });
   });
@@ -254,10 +249,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
-        .mock.calls[0][0],
-    ).toMatchObject({
+    expect(getFullEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
       limit: 149, // max cases + buffer - manually added case
     });
   });
