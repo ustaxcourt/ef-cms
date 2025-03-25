@@ -12,8 +12,8 @@ export const getWorkItemById = async ({
       .selectFrom('dwWorkItem as w')
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .where('w.workItemId', '=', workItemId)
-      .selectAll()
-      .select('w.docketNumber')
+      .selectAll('w')
+      .select(['c.caption', 'c.status'])
       .executeTakeFirst(),
   );
 

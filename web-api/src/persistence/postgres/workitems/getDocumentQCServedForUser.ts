@@ -15,8 +15,8 @@ export const getDocumentQCServedForUser = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .where('w.assigneeId', '=', userId)
       .where('w.completedAt', '>=', afterDate)
-      .selectAll()
-      .select('w.docketNumber')
+      .selectAll('w')
+      .select(['c.caption', 'c.status'])
       .execute();
   });
 

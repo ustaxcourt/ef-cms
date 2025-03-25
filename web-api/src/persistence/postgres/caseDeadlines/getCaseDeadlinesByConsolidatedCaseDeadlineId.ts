@@ -10,7 +10,13 @@ export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
     const query = reader
       .selectFrom('dwCaseDeadline as cd')
       .innerJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
-      .selectAll()
+      .selectAll('cd')
+      .select([
+        'c.associatedJudge',
+        'c.associatedJudgeId',
+        'c.leadDocketNumber',
+        // TODO: use c.sortableDocketNumber and remove from caseDeadline
+      ])
       .where('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId);
 
     if (!leadDocketNumber) return query.execute();
