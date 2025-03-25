@@ -39,14 +39,16 @@ describe('getPractitionersByNameInteractor', () => {
           results: [
             {
               barNumber: 'PT1234',
-              contact: { flavor: 'bbq', state: 'WI' },
+              contact: { state: 'WI' },
+              originalBarState: 'NJ',
               name: 'Test Practitioner1',
               role: ROLES.irsPractitioner,
               userId: '8190d648-e643-4964-988e-141e4e0db861',
             },
             {
               barNumber: 'PT5432',
-              contact: { favoriteColor: 'chartreuse', state: 'WI' },
+              contact: { state: 'WI' },
+              originalBarState: 'NJ',
               name: 'Test Practitioner2',
               role: ROLES.privatePractitioner,
               userId: '12d5bb3a-e867-4066-bda5-2f178a76191f',
@@ -70,12 +72,14 @@ describe('getPractitionersByNameInteractor', () => {
           practitioners: [
             {
               barNumber: 'PT1234',
-              contact: { state: 'WI' },
+              state: 'WI',
+              originalBarState: 'NJ',
               name: 'Test Practitioner1',
             },
             {
               barNumber: 'PT5432',
-              contact: { state: 'WI' },
+              state: 'WI',
+              originalBarState: 'NJ',
               name: 'Test Practitioner2',
             },
           ],
@@ -142,12 +146,12 @@ describe('getPractitionersByNameInteractor', () => {
           practitioners: [
             {
               barNumber: 'PT1234',
-              contact: { state: 'originalBarState_WI' },
+              state: undefined,
               name: 'Test Practitioner1',
             },
             {
               barNumber: 'PT5432',
-              contact: { state: 'originalBarState_WI' },
+              state: undefined,
               name: 'Test Practitioner2',
             },
           ],
