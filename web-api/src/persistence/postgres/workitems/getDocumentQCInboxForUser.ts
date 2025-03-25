@@ -14,7 +14,13 @@ export const getDocumentQCInboxForUser = async ({
       .where('w.completedAt', 'is', null)
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .selectAll('w')
-      .select(['c.caption', 'c.status', 'c.trialDate', 'c.leadDocketNumber'])
+      .select([
+        'c.caption',
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.leadDocketNumber',
+      ])
       .limit(5000)
       .execute();
   });

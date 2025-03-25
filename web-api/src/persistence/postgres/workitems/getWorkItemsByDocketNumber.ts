@@ -13,7 +13,13 @@ export const getWorkItemsByDocketNumber = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .where('w.docketNumber', '=', docketNumber)
       .selectAll('w')
-      .select(['c.caption', 'c.status', 'c.trialDate', 'c.leadDocketNumber'])
+      .select([
+        'c.caption',
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.leadDocketNumber',
+      ])
       .execute();
   });
 

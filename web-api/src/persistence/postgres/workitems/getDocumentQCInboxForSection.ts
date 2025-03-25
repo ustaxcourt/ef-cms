@@ -29,6 +29,7 @@ export const getDocumentQCInboxForSection = async ({
         'w.docketNumber',
         'w.highPriority',
         'c.trialDate',
+        'c.trialLocation',
         'c.leadDocketNumber',
       ])
       .execute();
