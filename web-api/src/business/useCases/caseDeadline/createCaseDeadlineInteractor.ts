@@ -22,10 +22,9 @@ export const createCaseDeadline = async (
   },
   authorizedUser: UnknownAuthUser,
 ) => {
-  let startTime = Date.now();
+  const startTime = Date.now();
   const getElapsedTime = () => {
     const elapsedTime = (Date.now() - startTime) / 1000;
-    startTime = Date.now();
     return `[${elapsedTime.toFixed(4)}s]`;
   };
 
