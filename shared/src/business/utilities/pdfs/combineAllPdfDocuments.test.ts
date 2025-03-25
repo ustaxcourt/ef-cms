@@ -1,6 +1,6 @@
 import { PDFDocument } from 'pdf-lib';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { combineAllPdfDocuments } from '@shared/business/utilities/documentGenerators/combineAllPdfDocuments';
+import { combineAllPdfDocuments } from '@shared/business/utilities/pdfs/combineAllPdfDocuments';
 
 describe('combineAllPdfDocuments', () => {
   it('should merge all the PDF Documents into one', async () => {

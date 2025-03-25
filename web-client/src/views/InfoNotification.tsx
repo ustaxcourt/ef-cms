@@ -30,7 +30,7 @@ export const InfoNotificationComponent = function InfoNotificationComponent({
   iconRight?: boolean;
 }) {
   const notificationRef = useRef(null);
-  const isMessageOnly = alertInfo && alertInfo.message && !alertInfo.title;
+  const isMessageOnly = !!alertInfo && !!alertInfo.message && !alertInfo.title;
 
   useEffect(() => {
     const notification = notificationRef.current;
