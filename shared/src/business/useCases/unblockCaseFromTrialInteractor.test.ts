@@ -10,9 +10,16 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { unblockCaseFromTrialInteractor } from './unblockCaseFromTrialInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('unblockCaseFromTrialInteractor', () => {
   let mockLock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -21,14 +28,10 @@ describe('unblockCaseFromTrialInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-        }),
-      );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
   });
   it('should set the blocked flag to false and remove the blockedReason', async () => {
     const result = await unblockCaseFromTrialInteractor(
@@ -66,15 +69,11 @@ describe('unblockCaseFromTrialInteractor', () => {
   });
 
   it('should not create the trial sort mapping record if the case has no trial city', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(
-        Promise.resolve({
-          ...MOCK_CASE,
-          preferredTrialCity: null,
-          status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-        }),
-      );
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      preferredTrialCity: null,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
 
     await unblockCaseFromTrialInteractor(
       applicationContext,
@@ -103,9 +102,7 @@ describe('unblockCaseFromTrialInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

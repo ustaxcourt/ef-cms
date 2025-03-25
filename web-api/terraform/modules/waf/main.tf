@@ -64,18 +64,16 @@ resource "aws_wafv2_web_acl" "apis" {
     priority = 2
 
     action {
-      count {}
-
-      # block {
-      #   custom_response {
-      #     response_code = 429
-      #   }
-      # } // change to `block {}` when confident in ruleset
+      block {
+        custom_response {
+          response_code = 429
+        }
+      }
     }
 
     statement {
       rate_based_statement {
-        limit                 = 300
+        limit                 = 6000 # very high for now during load testing; current target is 350
         evaluation_window_sec = 60
         aggregate_key_type    = "CONSTANT"
 

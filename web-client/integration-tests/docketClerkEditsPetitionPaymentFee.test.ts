@@ -39,7 +39,7 @@ describe('docket clerk edits a petition payment fee', () => {
     ).not.toContainEqual({
       description: 'Filing Fee Paid',
       eventCode: 'FEE',
-      filingDate: '2001-01-01T05:00:00.000Z',
+      filingDate: '2001-01-01T00:00:00.000-05:00',
       index: 3,
     });
 
@@ -83,7 +83,7 @@ describe('docket clerk edits a petition payment fee', () => {
       PAYMENT_STATUS.PAID,
     );
     expect(cerebralTest.getState('caseDetail.petitionPaymentDate')).toEqual(
-      '2001-01-01T00:00:00.000-05:00',
+      '2001-01-01T05:00:00.000Z',
     );
 
     expect(

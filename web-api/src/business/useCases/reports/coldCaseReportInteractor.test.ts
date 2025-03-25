@@ -1,5 +1,5 @@
 import { ColdCaseEntry } from './coldCaseReportInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { coldCaseReportInteractor } from './coldCaseReportInteractor';
 import {
   mockDocketClerkUser,

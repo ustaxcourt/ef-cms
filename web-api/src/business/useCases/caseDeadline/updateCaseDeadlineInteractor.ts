@@ -1,11 +1,15 @@
-import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
 import {
-  ROLE_PERMISSIONS,
+  CaseDeadline,
+  RawCaseDeadline,
+} from '@shared/business/entities/CaseDeadline';
+import {
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+  ROLE_PERMISSIONS,
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { getConsolidatedCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/getConsolidatedCaseDeadlines';
 
 export const updateCaseDeadlineInteractor = async (
   { caseDeadline }: { caseDeadline: CaseDeadline },
@@ -19,7 +23,28 @@ export const updateCaseDeadlineInteractor = async (
     .validate()
     .toRawObject();
 
-  await upsertCaseDeadlines([caseDeadlineToUpdate]);
+  const consolidatedCaseDeadlines: RawCaseDeadline[] =
+    await getConsolidatedCaseDeadlines(
+      caseDeadlineToUpdate.caseDeadlineId,
+      caseDeadlineToUpdate.docketNumber,
+    );
+
+  const updatedConsolidatedCaseDeadlines: RawCaseDeadline[] =
+    consolidatedCaseDeadlines.map(ccd =>
+      new CaseDeadline({
+        ...ccd,
+        createdAt: caseDeadlineToUpdate.createdAt,
+        deadlineDate: caseDeadlineToUpdate.deadlineDate,
+        description: caseDeadlineToUpdate.description,
+      })
+        .validate()
+        .toRawObject(),
+    );
+
+  await upsertCaseDeadlines([
+    caseDeadlineToUpdate,
+    ...updatedConsolidatedCaseDeadlines,
+  ]);
 
   return caseDeadlineToUpdate;
 };
