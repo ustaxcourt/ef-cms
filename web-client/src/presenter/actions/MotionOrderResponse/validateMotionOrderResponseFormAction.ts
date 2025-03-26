@@ -5,7 +5,7 @@ export const validateMotionOrderResponseFormAction = ({
   get,
   path,
 }: ActionProps) => {
-  const { additionalOrderText, dueDate, motionOrderResponse, responseDate } = get(
+  const { additionalOrderText, documentEntryDescription, dueDate, motionOrderResponse, responseDate } = get(
     state.form,
   );
 
@@ -14,6 +14,7 @@ export const validateMotionOrderResponseFormAction = ({
     dueDate,
     motionOrderResponse,
     responseDate,
+    documentEntryDescription,
   }).getFormattedValidationErrors();
 
   if (!errors) {

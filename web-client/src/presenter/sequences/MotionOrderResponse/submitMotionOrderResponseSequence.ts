@@ -6,7 +6,7 @@ import { setScrollToErrorNotificationAction } from '@web-client/presenter/action
 import { setValidationAlertErrorsAction } from '@web-client/presenter/actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
-import { submitCourtIssuedOrderSequence } from '@web-client/presenter/sequences/submitCourtIssuedOrderSequence';
+import { submitCourtIssuedOrder } from '@web-client/presenter/sequences/submitCourtIssuedOrderSequence';
 import { validateMotionOrderResponseFormAction } from '../../actions/MotionOrderResponse/validateMotionOrderResponseFormAction';
 
 export const submitMotionOrderResponseSequence = [
@@ -21,7 +21,7 @@ export const submitMotionOrderResponseSequence = [
       ],
       success: [
         prepareMotionOrderResponseAction,
-        submitCourtIssuedOrderSequence, // TODO 10586: This action breaks entire app
+        submitCourtIssuedOrder,
         // {
         //   error: [setAlertErrorAction],
         //   success: [navigateToPathAction],
