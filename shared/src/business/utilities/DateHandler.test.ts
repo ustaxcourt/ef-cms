@@ -1023,23 +1023,24 @@ describe('DateHandler', () => {
 
   describe('getWeeksInRange', () => {
     it('returns an array of ISO week-start dates for each Monday between startDate and endDate (inclusive)', () => {
-      const start = '2023-01-02T00:00:00.000Z';
-      const end = '2023-01-30T00:00:00.000Z';
+      const start = '2023-01-03T05:00:00.000Z';
+      const end = '2023-01-31T05:00:00.000Z';
 
       const weeks = getWeeksInRange({ startDate: start, endDate: end });
 
       expect(weeks).toEqual([
-        '2022-12-26',
         '2023-01-02',
         '2023-01-09',
         '2023-01-16',
         '2023-01-23',
+        '2023-01-30',
       ]);
     });
 
     it('returns an empty array if startDate > endDate', () => {
-      const start = '2023-02-01T00:00:00.000Z';
-      const end = '2023-01-01T00:00:00.000Z';
+      const start = '2023-02-01T05:00:00.000Z';
+      const end = '2023-01-01T05:00:00.000Z';
+
       const weeks = getWeeksInRange({ startDate: start, endDate: end });
       expect(weeks).toEqual([]);
     });
@@ -1047,15 +1048,15 @@ describe('DateHandler', () => {
 
   describe('roundDateDownToNearestHour', () => {
     it('rounds a date down to the nearest hour', () => {
-      // Example: 2025-03-01T09:35 => 2025-03-01T09:00
       const inputISO = '2025-03-01T09:35:17.555Z';
+
       const resultDate = roundDateDownToNearestHour(inputISO);
-      // Because it returns a JS Date, let's check it properly:
       expect(resultDate.toISOString()).toBe('2025-03-01T09:00:00.000Z');
     });
 
     it('keeps the same hour if the minutes are already zero', () => {
       const inputISO = '2025-03-01T09:00:00.000Z';
+
       const resultDate = roundDateDownToNearestHour(inputISO);
       expect(resultDate.toISOString()).toBe(inputISO);
     });
