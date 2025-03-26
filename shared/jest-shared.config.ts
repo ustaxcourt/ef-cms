@@ -22,7 +22,7 @@ const config: Config = {
     '!src/business/entities/caseAssociation/CaseAssociationRequestDocument.ts',
     '!src/business/entities/trialSessions/SpecialTrialSessions.ts',
     '!src/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes.ts',
-    '!src/business/entities//trialSessionMinutes/MinuteSheet.ts',
+    '!src/business/entities/trialSessionMinutes/MinuteSheet.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
