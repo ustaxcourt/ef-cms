@@ -102,9 +102,8 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
       },
     });
 
-    expect(state.alertError).toEqual({
-      message: 'Please wait 1 minute before trying your search again.',
-      title: "You've reached your search limit",
-    });
+    expect(state.alertError).toEqual(
+      applicationContext.getConstants().ERROR_429,
+    );
   });
 });
