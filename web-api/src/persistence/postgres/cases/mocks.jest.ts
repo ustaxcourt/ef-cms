@@ -135,10 +135,6 @@ jest.mock(
   () => mockFactory('getCasesClosedCountByJudge'),
 );
 
-jest.mock('@web-api/persistence/postgres/cases/reports/getColdCases', () =>
-  mockFactory('getColdCases'),
-);
-
 jest.mock(
   '@web-api/persistence/postgres/cases/reports/getDocketNumbersByStatusAndByJudge',
   () => mockFactory('getDocketNumbersByStatusAndByJudge'),
@@ -165,3 +161,12 @@ jest.mock(
   '@web-api/persistence/postgres/cases/statistics/updateCaseStatistic',
   () => mockFactory('updateCaseStatistic'),
 );
+
+// Mutex
+
+jest.mock('@web-api/persistence/postgres/utils/mutex', () => ({
+  mutexLockWrapper: jest.fn().mockImplementation(async ({ _, callback }) => {
+    console.debug(`mutexLockWrapper was not implemented, using default mock`);
+    return await callback();
+  }),
+}));
