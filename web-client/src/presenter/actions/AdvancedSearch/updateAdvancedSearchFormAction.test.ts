@@ -65,7 +65,7 @@ describe('updateAdvancedSearchFormAction', () => {
           formType: 'practitionerSearchByName',
           key: 'practiceType',
           value: 'Non-Attorney',
-          isArray: true,
+          isMultiSelect: true,
         },
         state: {
           advancedSearchForm: {
@@ -92,7 +92,7 @@ describe('updateAdvancedSearchFormAction', () => {
           formType: 'practitionerSearchByName',
           key: 'practiceType',
           value: 'Attorney',
-          isArray: true,
+          isMultiSelect: true,
         },
         state: {
           advancedSearchForm: {
