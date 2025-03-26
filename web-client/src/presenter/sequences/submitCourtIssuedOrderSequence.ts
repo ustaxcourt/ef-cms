@@ -53,7 +53,7 @@ const onFileUploadedSuccess = [
   },
 ];
 
-const submitCourtIssuedOrder = showProgressSequenceDecorator([
+export const submitCourtIssuedOrder = showProgressSequenceDecorator([
   convertHtml2PdfSequence,
   isEditingOrderAction,
   {

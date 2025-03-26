@@ -265,7 +265,7 @@ export const OrderResponse = connect(
             <div className="grid-col-7">
               <div>
                 <span className="text-bold">Docket entry preview:</span>{' '}
-                {form.docketEntryDescription} Order{' '}
+                {form.docketEntryDescription}
                 {/** TODO 10586: use form var here instead */}
               </div>
               <div
