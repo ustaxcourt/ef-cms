@@ -6,6 +6,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { navigateToPathAndSetRedirectUrlSequence } from '@web-client/presenter/sequences/navigateToPathAndSetRedirectUrlSequence';
 
 export const MessageDocument = connect(
   {
@@ -188,6 +189,21 @@ export const MessageDocument = connect(
             }}
           >
             Apply Stamp
+          </Button>
+        )}
+        {messageDocumentHelper.showOrderResponseButton && (
+          <Button
+            link
+            data-testid="order-response-button"
+            icon="stamp"
+            onClick={() => {
+              navigateToPathAndSetRedirectUrlSequence({
+                path: documentViewerLinksHelper.motionOrderResponseFromMessageDetailsLink,
+                motionOrderIndex: messageDocumentHelper.index,
+              });
+            }}
+          >
+            Order Response
           </Button>
         )}
         {messageDocumentHelper.showStatusReportOrderButton && (
