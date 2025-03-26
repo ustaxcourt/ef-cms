@@ -367,44 +367,6 @@ const reduce = ImageBlobReduce({
 
 let user;
 let broadcastChannel: BroadcastChannel;
-const clientSupportsES2022 = (() => {
-  try {
-    // Check Object.hasOwn (introduced in ES2022)
-    // @ts-ignore
-    if (typeof Object.hasOwn !== 'function') {
-      return false;
-    }
-
-    // Check structuredClone exists
-    if (typeof structuredClone !== 'function') {
-      return false;
-    }
-
-    // Check Array.prototype.at
-    if (!Array.prototype.at) {
-      return false;
-    }
-
-    // Check private fields
-    class TestPrivateFields {
-      #privateField: boolean;
-      constructor() {
-        this.#privateField = true;
-      }
-      hasPrivateField() {
-        return this.#privateField;
-      }
-    }
-    const instance = new TestPrivateFields();
-    if (!instance.hasPrivateField()) {
-      return false;
-    }
-
-    return true;
-  } catch (e) {
-    return false; // Any failure indicates lack of support
-  }
-})();
 
 let forceRefreshCallback: () => {};
 
@@ -711,23 +673,6 @@ const applicationContext = {
       console.timeEnd(key);
     },
   }),
-  getPdfJs: async () => {
-    const pdfjsLib = (
-      await import(
-        clientSupportsES2022 ? 'pdfjs-dist' : 'pdfjs-dist/legacy/build/pdf'
-      )
-    ).default;
-    const pdfjsWorker = (
-      await import(
-        clientSupportsES2022
-          ? 'pdfjs-dist/build/pdf.worker.entry'
-          : 'pdfjs-dist/legacy/build/pdf.worker.entry'
-      )
-    ).default;
-
-    pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    return pdfjsLib;
-  },
   getPdfLib: () => {
     const pdfLib = import('pdf-lib');
     return pdfLib;
