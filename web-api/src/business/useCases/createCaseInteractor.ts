@@ -323,49 +323,56 @@ export const createCaseInteractor = async (
     waitTime: 500,
   });
 
-  const { caseToAdd, workItem } = await createCaseMetadata(
-    applicationContext,
-    {
-      attachmentToPetitionFileIds,
-      corporateDisclosureFileId,
-      petitionFileId,
-      petitionMetadata,
-      stinFileId,
-      user,
-    },
-    authorizedUser,
-  );
+  try {
+    const { caseToAdd, workItem } = await createCaseMetadata(
+      applicationContext,
+      {
+        attachmentToPetitionFileIds,
+        corporateDisclosureFileId,
+        petitionFileId,
+        petitionMetadata,
+        stinFileId,
+        user,
+      },
+      authorizedUser,
+    );
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
 
-  await removeLock({
-    applicationContext,
-    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-  });
+    await createPetitionersOnCase({
+      docketNumber: caseToAdd.docketNumber,
+      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
+    });
 
-  await createPetitionersOnCase({
-    docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-  });
+    caseToAdd.statistics?.forEach(statistic =>
+      createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+    );
 
-  caseToAdd.statistics?.forEach(statistic =>
-    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-  );
+    const userCaseEntity = new UserCase(caseToAdd);
 
-  const userCaseEntity = new UserCase(caseToAdd);
+    await applicationContext.getPersistenceGateway().associateUserWithCase({
+      applicationContext,
+      docketNumber: caseToAdd.docketNumber,
+      userCase: userCaseEntity.validate().toRawObject(),
+      userId: user.userId,
+    });
 
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
-    applicationContext,
-    docketNumber: caseToAdd.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId: user.userId,
-  });
+    await upsertWorkItems({
+      workItems: [workItem.validate().toRawObject()],
+    });
 
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
+    applicationContext.logger.info('filed a new petition', {
+      docketNumber: caseToAdd.docketNumber,
+    });
 
-  applicationContext.logger.info('filed a new petition', {
-    docketNumber: caseToAdd.docketNumber,
-  });
-
-  return new Case(caseToAdd, { authorizedUser }).toRawObject();
+    return new Case(caseToAdd, { authorizedUser }).toRawObject();
+  } catch (e) {
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
+    throw e;
+  }
 };

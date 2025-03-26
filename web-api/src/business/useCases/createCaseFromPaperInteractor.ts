@@ -329,43 +329,49 @@ export const createCaseFromPaperInteractor = async (
     waitTime: 500,
   });
 
-  const { caseToAdd, workItem } = await createCaseMetadata(
-    applicationContext,
-    {
-      applicationForWaiverOfFilingFeeFileId,
-      attachmentToPetitionFileId,
-      corporateDisclosureFileId,
-      petitionFileId,
-      petitionMetadata,
-      requestForPlaceOfTrialFileId,
-      stinFileId,
-      user,
-    },
-    authorizedUser,
-  );
+  try {
+    const { caseToAdd, workItem } = await createCaseMetadata(
+      applicationContext,
+      {
+        applicationForWaiverOfFilingFeeFileId,
+        attachmentToPetitionFileId,
+        corporateDisclosureFileId,
+        petitionFileId,
+        petitionMetadata,
+        requestForPlaceOfTrialFileId,
+        stinFileId,
+        user,
+      },
+      authorizedUser,
+    );
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
+    setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
-  await removeLock({
-    applicationContext,
-    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-  });
+    await createPetitionersOnCase({
+      docketNumber: caseToAdd.docketNumber,
+      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
+    });
 
-  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
+    caseToAdd.statistics?.forEach(statistic =>
+      createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+    );
 
-  await createPetitionersOnCase({
-    docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-  });
+    await upsertWorkItems({
+      workItems: [workItem.validate().toRawObject()],
+    });
 
-  caseToAdd.statistics?.forEach(statistic =>
-    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-  );
-
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
-
-  return {
-    caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
-    workItem: workItem.validate().toRawObject(),
-  };
+    return {
+      caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
+      workItem: workItem.validate().toRawObject(),
+    };
+  } catch (e) {
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
+    throw e;
+  }
 };
