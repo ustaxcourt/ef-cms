@@ -174,6 +174,12 @@ const createCaseMetadata = async (
 
   petitionDocketEntryEntity.setFiledBy(user);
 
+  const newWorkItem = addPetitionDocketEntryToCase({
+    caseToAdd,
+    docketEntryEntity: petitionDocketEntryEntity,
+    user,
+  });
+
   const requestPlaceOfTrialDocketEntry = new DocketEntry(
     {
       documentTitle: `Request for Place of Trial at ${caseToAdd.preferredTrialCity}`,
@@ -275,12 +281,6 @@ const createCaseMetadata = async (
       caseToAdd.addDocketEntry(atpDocketEntryEntity);
     });
   }
-
-  const newWorkItem = addPetitionDocketEntryToCase({
-    caseToAdd,
-    docketEntryEntity: petitionDocketEntryEntity,
-    user,
-  });
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,

@@ -151,6 +151,12 @@ const createCaseMetadata = async (
 
   petitionDocketEntryEntity.setFiledBy(user);
 
+  const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
+    caseToAdd,
+    docketEntryEntity: petitionDocketEntryEntity,
+    user,
+  });
+
   if (applicationForWaiverOfFilingFeeFileId) {
     const { documentTitle } =
       INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee;
@@ -277,12 +283,6 @@ const createCaseMetadata = async (
 
     caseToAdd.addDocketEntry(atpDocketEntryEntity);
   }
-
-  const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
-    caseToAdd,
-    docketEntryEntity: petitionDocketEntryEntity,
-    user,
-  });
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
