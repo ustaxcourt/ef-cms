@@ -1,3 +1,9 @@
+const mockGetDocument = jest.fn();
+jest.mock('@shared/business/utilities/pdfs/getPdfJs', () => {
+  return {
+    getPdfJs: () => ({ getDocument: mockGetDocument }),
+  };
+});
 import { PDFDocument } from 'pdf-lib';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { loadPDFForSigningInteractor } from './loadPDFForSigningInteractor';
@@ -10,7 +16,7 @@ const getPagesMock = jest.fn().mockReturnValue(fakePdfPages);
 
 describe('loadPDFForSigningInteractor', () => {
   beforeEach(() => {
-    applicationContext.getPdfJs().getDocument.mockReturnValue({
+    mockGetDocument.mockReturnValue({
       promise: 'pdf data',
     });
     (window as any).Response = jest.fn().mockReturnValue({
