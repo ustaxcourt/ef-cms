@@ -9,7 +9,10 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
+import {
+  HIGH_PRIORITY_SUFFIXES,
+  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
+} from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { chunk, flatten, partition, uniq } from 'lodash';
@@ -85,6 +88,25 @@ export const setTrialSessionCalendarInteractor = async (
           eligibleCase.qcCompleteForTrial &&
           eligibleCase.qcCompleteForTrial[trialSessionId] === true,
       )
+      .sort((a, b) => {
+        if (a.isManuallyAdded && !b.isManuallyAdded) return -1;
+        if (!a.isManuallyAdded && b.isManuallyAdded) return 1;
+
+        if (a.highPriority && !b.highPriority) return -1;
+        if (!a.highPriority && b.highPriority) return 1;
+
+        const aSuffixIsHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
+          a.docketNumberSuffix,
+        );
+        const bSuffixIsHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
+          b.docketNumberSuffix,
+        );
+
+        if (aSuffixIsHighPriority && !bSuffixIsHighPriority) return -1;
+        if (!aSuffixIsHighPriority && bSuffixIsHighPriority) return 1;
+
+        return 0;
+      })
       .splice(
         0,
         (trialSessionEntity?.maxCases || 0) -
