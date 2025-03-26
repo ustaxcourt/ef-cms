@@ -20,6 +20,7 @@ const config: Config = {
     '!src/business/utilities/htmlGenerator/**',
     '!src/business/entities/caseAssociation/CaseAssociationRequestDocument.ts',
     '!src/business/entities/trialSessions/SpecialTrialSessions.ts',
+    '!src/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
