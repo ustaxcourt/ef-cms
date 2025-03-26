@@ -1,13 +1,28 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
+const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
+  const { petitioners } = caseDetail;
+  const pNames = petitioners.map(p => p.name);
+  console.log('PNames: ', pNames);
+  console.log('Motion Filed By: ', motion.filedBy);
+  const cleanedFiledBy = motion.filedBy.replace(
+    /^(?:Petr\.|Respt\.|Intvr\.)?\s*/,
+    '',
+  );
+  const movant = pNames.some(name => cleanedFiledBy.includes(name))
+    ? 'Petitioner'
+    : 'Respondent';
+  const nonMovant = movant === 'Petitioner' ? 'Respondent' : 'Petitioner';
+  return { movant, nonMovant };
+};
+
 export const prepareMotionOrderResponseAction = ({
   applicationContext,
   get,
   store,
 }: ActionProps) => {
   // TODO 10586: Implement prepareMotionOrderResponseAction action
-
   const {
     additionalOrderText,
     dueDate,
@@ -16,6 +31,20 @@ export const prepareMotionOrderResponseAction = ({
     strickenFromTrialSessions,
   } = get(state.form);
   const caseDetail = get(state.caseDetail);
+  const { docketEntries } = caseDetail;
+
+  // TODO 10586: Add logic handle multiple motions as well as no motions (<--- is the latter even possible in this action?)
+  const motion = docketEntries.find(entry => entry.documentType === 'Motion');
+  const { movant, nonMovant } = determineMovantAndNonMovant({
+    caseDetail,
+    motion,
+  });
+  const { documentTitle, index } = motion;
+
+  // TODO 10586: Remove use applicationContext for motionFilingDateFormatted
+  const motionFilingDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(motion.filingDate, FORMATS.MMDDYY);
 
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
@@ -25,10 +54,13 @@ export const prepareMotionOrderResponseAction = ({
     .getUtilities()
     .formatDateString(dueDate, FORMATS.MMDDYY);
 
-  const preamble = `<p class="indent-paragraph">ON, {motionFiledDate}, {movant} filed {motionName} (Document no. {documentNumber}). For cause, it is </p>`;
-  const orderVerbiage = `<p class="indent-paragraph">ORDERED that by {responseDate} the {nonMovant} shall file an ${motionOrderResponse} to the {motionName}.</p>`;
-  const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by {dueDate} the {movant} may file a {motionOrderResponse}.</p>`;
-  // const motionOrderResponseLine = motionOrderResponse; // TODO 10586: add logic to determine motionOrderResponseLine
+  const responseDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(responseDate, FORMATS.MMDDYY);
+
+  const preamble = `<p class="indent-paragraph">ON, ${motionFilingDateFormatted}, ${movant} filed ${documentTitle} (Document no. ${index}). For cause, </p>`;
+  const orderVerbiage = `<p class="indent-paragraph">ORDERED that by ${responseDateFormatted} the ${nonMovant} shall file a Response to the ${documentTitle}.</p>`;
+  const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} the ${movant} may file a ${motionOrderResponse}.</p>`;
 
   const strickenLine = hasStrickenFromTrialSessions
     ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session.</p>'
@@ -41,7 +73,7 @@ export const prepareMotionOrderResponseAction = ({
   const linesWithText = [
     preamble,
     orderVerbiage,
-    opportunityToRebut,
+    dueDate ? opportunityToRebut : '',
     strickenLine,
     additionalTextLine,
   ].filter(line => line);

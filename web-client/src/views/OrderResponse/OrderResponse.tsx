@@ -220,7 +220,7 @@ export const OrderResponse = connect(
                         maxCharacters={
                           constants.MAX_ORDER_RESPONSE_TEXT_CHARACTERS
                         }
-                        stringToCount={form.customText}
+                        stringToCount={form.additionalOrderText}
                       />
                     </div>
                   </FormGroup>
