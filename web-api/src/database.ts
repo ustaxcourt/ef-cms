@@ -9,12 +9,12 @@ import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
-import { opensearchGateway } from '@web-api/gateways/opensearch/opensearchGateway';
+import { openSearchGateway } from '@web-api/gateways/openSearch/openSearchGateway';
 import {
-  OpensearchSyncMessage,
+  OpenSearchSyncMessage,
   TABLES_TO_OPENSEARCH_MAPPING,
-  SyncMessageType,
-} from '@web-api/gateways/opensearch/opensearchSyncRouter';
+  OpenSearchSyncMessageType,
+} from '@web-api/gateways/openSearch/openSearchSyncRouter';
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 
@@ -172,13 +172,13 @@ export async function getDbWriter<T>({
 
   if (result) {
     try {
-      const message: OpensearchSyncMessage = {
+      const message: OpenSearchSyncMessage = {
         timestamp: formatNow(),
         payload: result,
-        type: table as SyncMessageType,
+        type: table as OpenSearchSyncMessageType,
       };
 
-      await opensearchGateway().queueSync({ message });
+      await openSearchGateway().queueSync({ message });
     } catch (err) {
       getLogger().error(
         'Error queuing message for opensearch from postgres',

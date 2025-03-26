@@ -1,16 +1,16 @@
 import {
-  SyncHandler,
-  OpensearchSyncMessage,
-  syncRouter,
-} from '@web-api/gateways/opensearch/opensearchSyncRouter';
+  OpenSearchSyncHandler,
+  OpenSearchSyncMessage,
+  openSearchSyncRouter,
+} from '@web-api/gateways/openSearch/openSearchSyncRouter';
 
-export const syncLocal: SyncHandler = async ({
+export const openSearchSyncLocal: OpenSearchSyncHandler = async ({
   message,
 }: {
-  message: OpensearchSyncMessage;
+  message: OpenSearchSyncMessage;
 }): Promise<void> => {
   try {
-    await syncRouter({ message });
+    await openSearchSyncRouter({ message });
   } catch (error) {
     console.error('Sync Local Error: ', error);
   }

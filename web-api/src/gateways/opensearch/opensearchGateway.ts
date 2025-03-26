@@ -1,13 +1,13 @@
 import { environment } from '@web-api/environment';
-import { sync as sync } from '@web-api/gateways/opensearch/opensearchSync';
-import { syncLocal } from '@web-api/gateways/opensearch/opensearchSyncLocal';
-import { OpensearchSyncMessage } from '@web-api/gateways/opensearch/opensearchSyncRouter';
+import { openSearchSync } from '@web-api/gateways/openSearch/openSearchSync';
+import { openSearchSyncLocal } from '@web-api/gateways/openSearch/openSearchSyncLocal';
+import { OpenSearchSyncMessage } from '@web-api/gateways/openSearch/openSearchSyncRouter';
 
-export const opensearchGateway = () => ({
-  queueSync: ({ message }: { message: OpensearchSyncMessage }) => {
+export const openSearchGateway = () => ({
+  queueSync: ({ message }: { message: OpenSearchSyncMessage }) => {
     if (environment.stage === 'local') {
-      return syncLocal({ message });
+      return openSearchSyncLocal({ message });
     }
-    return sync({ message });
+    return openSearchSync({ message });
   },
 });

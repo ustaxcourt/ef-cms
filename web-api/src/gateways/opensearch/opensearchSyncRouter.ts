@@ -1,27 +1,28 @@
-import { opensearchCaseSync } from '@web-api/lambdas/opensearch/updateCaseSync';
+import { openSearchCaseSync } from '@web-api/lambdas/openSearch/openSearchCaseSync';
 
 export const TABLES_TO_OPENSEARCH_MAPPING = {
-  dwCase: opensearchCaseSync,
+  dwCase: openSearchCaseSync,
 };
 
-export type OpensearchSyncMessage = {
+export type OpenSearchSyncMessage = {
   payload: any;
-  type: SyncMessageType;
+  type: OpenSearchSyncMessageType;
   timestamp: string;
 };
 
-export type SyncMessageType = keyof typeof TABLES_TO_OPENSEARCH_MAPPING;
+export type OpenSearchSyncMessageType =
+  keyof typeof TABLES_TO_OPENSEARCH_MAPPING;
 
-export type SyncHandler = ({
+export type OpenSearchSyncHandler = ({
   message,
 }: {
-  message: OpensearchSyncMessage;
+  message: OpenSearchSyncMessage;
 }) => Promise<void>;
 
-export const syncRouter = async ({
+export const openSearchSyncRouter = async ({
   message,
 }: {
-  message: OpensearchSyncMessage;
+  message: OpenSearchSyncMessage;
 }): Promise<void> => {
   const routerFn = TABLES_TO_OPENSEARCH_MAPPING[message.type];
   if (!routerFn) {
