@@ -276,13 +276,19 @@ const createCaseMetadata = async (
     });
   }
 
+  const newWorkItem = addPetitionDocketEntryToCase({
+    caseToAdd,
+    docketEntryEntity: petitionDocketEntryEntity,
+    user,
+  });
+
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
-  return { caseToAdd, petitionDocketEntryEntity };
+  return { caseToAdd, workItem: newWorkItem };
 };
 
 export const createCaseInteractor = async (
@@ -310,7 +316,7 @@ export const createCaseInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const { caseToAdd, petitionDocketEntryEntity } = await mutexLockWrapper({
+  const { caseToAdd, workItem } = await mutexLockWrapper({
     lockId: CREATE_CASE_LOCK,
     callback: async () => {
       return await createCaseMetadata(
@@ -346,13 +352,8 @@ export const createCaseInteractor = async (
     userId: user.userId,
   });
 
-  const newWorkItem = addPetitionDocketEntryToCase({
-    caseToAdd,
-    docketEntryEntity: petitionDocketEntryEntity,
-    user,
-  });
   await upsertWorkItems({
-    workItems: [newWorkItem.validate().toRawObject()],
+    workItems: [workItem.validate().toRawObject()],
   });
 
   applicationContext.logger.info('filed a new petition', {

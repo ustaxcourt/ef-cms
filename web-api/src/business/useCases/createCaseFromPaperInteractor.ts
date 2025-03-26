@@ -278,13 +278,19 @@ const createCaseMetadata = async (
     caseToAdd.addDocketEntry(atpDocketEntryEntity);
   }
 
+  const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
+    caseToAdd,
+    docketEntryEntity: petitionDocketEntryEntity,
+    user,
+  });
+
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
-  return { caseToAdd, petitionDocketEntryEntity };
+  return { caseToAdd, workItem: newWorkItem };
 };
 
 export const createCaseFromPaperInteractor = async (
@@ -316,7 +322,7 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const { caseToAdd, petitionDocketEntryEntity } = await mutexLockWrapper({
+  const { caseToAdd, workItem } = await mutexLockWrapper({
     lockId: CREATE_CASE_LOCK,
     callback: async () => {
       return await createCaseMetadata(
@@ -347,17 +353,12 @@ export const createCaseFromPaperInteractor = async (
     createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
   );
 
-  const { workItem: newWorkItem } = addPetitionDocketEntryWithWorkItemToCase({
-    caseToAdd,
-    docketEntryEntity: petitionDocketEntryEntity,
-    user,
-  });
   await upsertWorkItems({
-    workItems: [newWorkItem.validate().toRawObject()],
+    workItems: [workItem.validate().toRawObject()],
   });
 
   return {
     caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
-    workItem: newWorkItem.validate().toRawObject(),
+    workItem: workItem.validate().toRawObject(),
   };
 };
