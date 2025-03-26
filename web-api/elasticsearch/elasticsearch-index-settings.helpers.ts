@@ -14,9 +14,13 @@ export const setupIndexes = async ({
   const overriddenNumberOfReplicasIfNonProd: number = Number(
     process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS,
   );
+  const overriddenNumberOfShardsIfNonProd: number = Number(
+    process.env.OVERRIDE_ES_NUMBER_OF_SHARDS,
+  );
   const esSettings = settings({
     environment: environmentName,
     overriddenNumberOfReplicasIfNonProd,
+    overriddenNumberOfShardsIfNonProd,
   });
 
   await Promise.all(
@@ -43,6 +47,7 @@ export const setupIndexes = async ({
               index: {
                 max_result_window: esSettings.index!.max_result_window,
                 number_of_replicas: esSettings.index!.number_of_replicas,
+                // number_of_shards can not be changed on an extant index
               },
             },
             index,
