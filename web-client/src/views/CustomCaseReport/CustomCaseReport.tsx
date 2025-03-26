@@ -2,7 +2,10 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInventory } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { CaseType } from '@shared/business/entities/EntityConstants';
+import {
+  CaseType,
+  MULTI_SELECT_PLACEHOLDER,
+} from '@shared/business/entities/EntityConstants';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
@@ -258,8 +261,8 @@ export const CustomCaseReport = connect(
                   id="case-status"
                   name="caseStatus"
                   options={customCaseReportHelper.caseStatuses}
-                  placeholder="- Select one or more -"
-                  value={{ label: '- Select one or more -', value: '' }}
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
+                  value={{ label: MULTI_SELECT_PLACEHOLDER, value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -287,9 +290,9 @@ export const CustomCaseReport = connect(
                   id="case-type"
                   name="eventCode"
                   options={customCaseReportHelper.caseTypes}
-                  placeholder="- Select one or more -"
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
                   value={{
-                    label: '- Select one or more -',
+                    label: MULTI_SELECT_PLACEHOLDER,
                     value: '' as CaseType,
                   }}
                   onChange={inputValue => {
@@ -320,8 +323,8 @@ export const CustomCaseReport = connect(
                   id="judges"
                   name="judges"
                   options={customCaseReportHelper.judges}
-                  placeholder="- Select one or more -"
-                  value={{ label: '- Select one or more -', value: '' }}
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
+                  value={{ label: MULTI_SELECT_PLACEHOLDER, value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -349,8 +352,8 @@ export const CustomCaseReport = connect(
                   id="trial-location"
                   name="requestedPlaceOfTrial"
                   options={customCaseReportHelper.trialCitiesByState}
-                  placeholder="- Select one or more -"
-                  value={{ label: '- Select one or more -', value: '' }}
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
+                  value={{ label: MULTI_SELECT_PLACEHOLDER, value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
