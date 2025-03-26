@@ -1,4 +1,4 @@
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
+import { ALL_SELECTION } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const defaultAdvancedSearchFormAction = ({

@@ -51,6 +51,10 @@ export const PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
 export const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
 
+export const ALL_SELECTION = 'all';
+
+export const MULTI_SELECT_PLACEHOLDER = '- Select one or more -';
+
 export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
