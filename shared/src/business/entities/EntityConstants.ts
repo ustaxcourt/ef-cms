@@ -1802,4 +1802,4 @@ export const ORDER_REPLY_OPTIONS = {
   REPLY_SR: 'Order Reply/SR',
 };
 
-export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 256;
+export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
