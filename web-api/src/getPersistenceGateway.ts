@@ -27,12 +27,6 @@ import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/de
 import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
 import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
-import {
-  deleteKeyCount,
-  getLimiterByKey,
-  incrementKeyCount,
-  setExpiresAt,
-} from './persistence/dynamo/helpers/store';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
 import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
 import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
@@ -203,17 +197,14 @@ const gatewayMethods = {
     createTrialSession,
     createTrialSessionWorkingCopy,
     createUserRecords,
-    deleteKeyCount,
     editPractitionerDocument,
     fetchPendingItems,
     incrementCounter,
-    incrementKeyCount,
     persistUser,
     removeCaseFromHearing,
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
-    setExpiresAt,
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
     updateCase,
@@ -289,7 +280,6 @@ const gatewayMethods = {
   getFeatureFlagValue,
   getFirstSingleCaseRecord,
   getInternalUsers,
-  getLimiterByKey,
   getLock,
   getMaintenanceMode,
   getPractitionerByBarNumber,
