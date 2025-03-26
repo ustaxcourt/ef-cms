@@ -20,7 +20,7 @@ import {
   getServedPartiesCode,
 } from '@shared/business/entities/DocketEntry';
 import {
-  ERROR_MAP_429,
+  ERROR_429,
   getPublicSiteUrl,
   getUniqueId,
 } from '@shared/sharedAppContext';
@@ -31,7 +31,7 @@ import { bulkDeleteRecords } from '@web-api/persistence/elasticsearch/bulkDelete
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
-import { combineTwoPdfs } from '@shared/business/utilities/documentGenerators/combineTwoPdfs';
+import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
   formatCaseForTrialSession,
@@ -401,7 +401,6 @@ const createTestApplicationContext = () => {
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
-    deleteKeyCount: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
     fetchPendingItems: jest.fn(),
@@ -420,7 +419,6 @@ const createTestApplicationContext = () => {
       .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
     getItem: jest.fn().mockImplementation(getItem),
-    getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
     getPractitionerDocuments: jest.fn(),
@@ -431,14 +429,12 @@ const createTestApplicationContext = () => {
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
-    incrementKeyCount: jest.fn(),
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
-    setExpiresAt: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
@@ -493,7 +489,7 @@ const createTestApplicationContext = () => {
     getConstants: jest.fn().mockImplementation(() => {
       return {
         ...getConstants(),
-        ERROR_MAP_429,
+        ERROR_429,
       };
     }),
     getCurrentUserPermissions: jest.fn(),

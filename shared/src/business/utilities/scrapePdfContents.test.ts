@@ -1,3 +1,9 @@
+const mockGetDocument = jest.fn();
+jest.mock('@shared/business/utilities/pdfs/getPdfJs', () => {
+  return {
+    getPdfJs: () => ({ getDocument: mockGetDocument }),
+  };
+});
 import { applicationContext } from '../test/createTestApplicationContext';
 import { scrapePdfContents } from './scrapePdfContents';
 
@@ -52,7 +58,7 @@ const exampleOrderPdf = {
 
 describe('scrapePdfContents', () => {
   beforeEach(() => {
-    applicationContext.getPdfJs().getDocument.mockReturnValue({
+    mockGetDocument.mockReturnValue({
       promise: {
         getPage: jest.fn().mockResolvedValue({
           getTextContent: jest.fn().mockResolvedValue({
@@ -90,7 +96,7 @@ this is some more content`,
   });
 
   it('scrapes pdf and adds spaces between words', async () => {
-    applicationContext.getPdfJs().getDocument.mockReturnValue({
+    mockGetDocument.mockReturnValue({
       promise: {
         getPage: jest.fn().mockResolvedValue({
           getTextContent: jest.fn().mockResolvedValue(exampleOrderPdf),
@@ -108,7 +114,7 @@ this is some more content`,
   });
 
   it('scrapes the pdf that has no contents', async () => {
-    applicationContext.getPdfJs().getDocument.mockReturnValue({
+    mockGetDocument.mockReturnValue({
       promise: {
         getPage: jest.fn().mockResolvedValue({
           getTextContent: jest.fn().mockResolvedValue({
@@ -128,7 +134,7 @@ this is some more content`,
   });
 
   it('fails to scrape the pdf contents', async () => {
-    applicationContext.getPdfJs().getDocument.mockImplementation(() => {
+    mockGetDocument.mockImplementation(() => {
       throw new Error('what');
     });
     await expect(
@@ -136,6 +142,6 @@ this is some more content`,
         applicationContext,
         pdfBuffer: Buffer.from([]),
       }),
-    ).rejects.toThrow('Error scraping PDF with PDF.JS v1');
+    ).rejects.toThrow('Error scraping PDF with PDF.JS');
   });
 });

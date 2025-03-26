@@ -20971,12 +20971,6 @@
     "pk": "docketNumberCounter-2024"
   },
   {
-    "sk": "document-search-limiter-configuration",
-    "windowTime": 1000,
-    "pk": "document-search-limiter-configuration",
-    "maxInvocations": 9999
-  },
-  {
     "sk": "document-search-limiter",
     "id": 1,
     "pk": "document-search-limiter",
