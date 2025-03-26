@@ -1,8 +1,8 @@
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { clearAdvancedSearchFormAction } from './clearAdvancedSearchFormAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { ALL_SELECTION } from '@shared/business/entities/EntityConstants';
 
 describe('clearAdvancedSearchFormAction', () => {
   presenter.providers.applicationContext = applicationContext;

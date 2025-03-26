@@ -1,5 +1,7 @@
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
-import { COUNTRY_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ALL_SELECTION,
+  COUNTRY_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormAction';
 import { presenter } from '../../presenter-mock';
