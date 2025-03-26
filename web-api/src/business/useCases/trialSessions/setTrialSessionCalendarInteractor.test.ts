@@ -5,6 +5,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
+  HIGH_PRIORITY_SUFFIXES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -297,5 +298,80 @@ describe('setTrialSessionCalendarInteractor', () => {
       applicationContext,
       identifiers: [`case|${MOCK_CASE.docketNumber}`],
     });
+  });
+
+  it('should sort eligible cases in the correct priority order (isManuallyAdded, highPriority, docketNumberSuffix) before calendaring them', async () => {
+    const hpSuffixDocketNumber = '101-20';
+    const manuallyAddedDocketNumber = '102-20';
+    const highPriorityDocketNumber = '103-20';
+    const regularDocketNumber = '104-20';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([]);
+
+    getFullEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        docketNumber: hpSuffixDocketNumber,
+        docketNumberSuffix: HIGH_PRIORITY_SUFFIXES[0],
+        isManuallyAdded: false,
+        highPriority: false,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+        },
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: manuallyAddedDocketNumber,
+        docketNumberSuffix: HIGH_PRIORITY_SUFFIXES[1],
+        isManuallyAdded: true,
+        highPriority: false,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+        },
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: highPriorityDocketNumber,
+        docketNumberSuffix: 'NotHighPriority',
+        isManuallyAdded: false,
+        highPriority: true,
+        highPriorityReason: 'When the going gets weird, the weird turn pro',
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+        },
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: regularDocketNumber,
+        docketNumberSuffix: 'AlsoNotHighPriority',
+        isManuallyAdded: false,
+        highPriority: false,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+        },
+      },
+    ]);
+
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
+
+    const updatedDocketNumbers = updateCase.mock.calls.map(
+      callArg => callArg[0].caseToUpdate.docketNumber,
+    );
+
+    expect(updatedDocketNumbers).toEqual([
+      manuallyAddedDocketNumber,
+      highPriorityDocketNumber,
+      hpSuffixDocketNumber,
+      regularDocketNumber,
+    ]);
   });
 });
