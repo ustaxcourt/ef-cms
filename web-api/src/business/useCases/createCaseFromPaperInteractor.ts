@@ -25,10 +25,9 @@ import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import {
-  CREATE_CASE_LOCK,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -322,24 +321,32 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const { caseToAdd, workItem } = await mutexLockWrapper({
-    lockId: CREATE_CASE_LOCK,
-    callback: async () => {
-      return await createCaseMetadata(
-        applicationContext,
-        {
-          applicationForWaiverOfFilingFeeFileId,
-          attachmentToPetitionFileId,
-          corporateDisclosureFileId,
-          petitionFileId,
-          petitionMetadata,
-          requestForPlaceOfTrialFileId,
-          stinFileId,
-          user,
-        },
-        authorizedUser,
-      );
+  await acquireLock({
+    applicationContext,
+    authorizedUser,
+    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    retries: 10,
+    waitTime: 500,
+  });
+
+  const { caseToAdd, workItem } = await createCaseMetadata(
+    applicationContext,
+    {
+      applicationForWaiverOfFilingFeeFileId,
+      attachmentToPetitionFileId,
+      corporateDisclosureFileId,
+      petitionFileId,
+      petitionMetadata,
+      requestForPlaceOfTrialFileId,
+      stinFileId,
+      user,
     },
+    authorizedUser,
+  );
+
+  await removeLock({
+    applicationContext,
+    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
   });
 
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);

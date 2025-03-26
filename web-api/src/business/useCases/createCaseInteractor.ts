@@ -26,12 +26,11 @@ import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statist
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import {
-  CREATE_CASE_LOCK,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
+export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
 
 const addPetitionDocketEntryToCase = ({
   caseToAdd,
@@ -316,22 +315,30 @@ export const createCaseInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const { caseToAdd, workItem } = await mutexLockWrapper({
-    lockId: CREATE_CASE_LOCK,
-    callback: async () => {
-      return await createCaseMetadata(
-        applicationContext,
-        {
-          attachmentToPetitionFileIds,
-          corporateDisclosureFileId,
-          petitionFileId,
-          petitionMetadata,
-          stinFileId,
-          user,
-        },
-        authorizedUser,
-      );
+  await acquireLock({
+    applicationContext,
+    authorizedUser,
+    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    retries: 10,
+    waitTime: 500,
+  });
+
+  const { caseToAdd, workItem } = await createCaseMetadata(
+    applicationContext,
+    {
+      attachmentToPetitionFileIds,
+      corporateDisclosureFileId,
+      petitionFileId,
+      petitionMetadata,
+      stinFileId,
+      user,
     },
+    authorizedUser,
+  );
+
+  await removeLock({
+    applicationContext,
+    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
   });
 
   await createPetitionersOnCase({
