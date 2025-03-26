@@ -40,13 +40,9 @@ export const submitPublicOpinionAdvancedSearchAction = async ({
       });
 
     return { searchResults };
-  } catch (err) {
+  } catch (err: any) {
     if (err.responseCode === 429) {
-      const message =
-        applicationContext.getConstants().ERROR_MAP_429[
-          err.originalError.response.data.type
-        ];
-      store.set(state.alertError, message);
+      store.set(state.alertError, applicationContext.getConstants().ERROR_429);
       return { searchResults: [] };
     } else {
       throw err;
