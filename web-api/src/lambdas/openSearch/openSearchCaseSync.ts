@@ -3,7 +3,7 @@ import {
   AttributeValueWithName,
   IDynamoDBRecord,
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
-import { OpensearchSyncMessage } from '@web-api/gateways/opensearch/opensearchSyncRouter';
+import { OpenSearchSyncMessage } from '@web-api/gateways/openSearch/openSearchSyncRouter';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
@@ -12,10 +12,10 @@ import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/partie
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { flattenDeep, isArray } from 'lodash';
 
-export const opensearchCaseSync = async ({
+export const openSearchCaseSync = async ({
   message,
 }: {
-  message: OpensearchSyncMessage;
+  message: OpenSearchSyncMessage;
 }): Promise<void> => {
   for (const caseRecord of isArray(message.payload)
     ? message.payload
