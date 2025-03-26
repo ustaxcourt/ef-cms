@@ -10,6 +10,7 @@ import { setParentMessageIdAction } from '@web-client/presenter/actions/setParen
 // import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
+import { clearStatusReportOrderFormAction } from '../actions/StatusReportOrder/clearStatusReportOrderFormAction';
 
 export const goToOrderResponseSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -19,10 +20,12 @@ export const goToOrderResponseSequence =
     setDocketEntryIdAction,
     setDocketEntrySelectedFromMessageAction,
     setParentMessageIdAction,
+    // TODO 10586: Clean up commented code at the end
     // clearPDFStampDataAction,
     clearFormAction,
     // setSignatureNameForPdfSigningAction,
     setPDFForStampAction,
     // setPDFPageForSigningAction,
+    clearStatusReportOrderFormAction,
     setupCurrentPageAction('OrderResponse'), // TODO 10586: This is where we set the html page
   ]);

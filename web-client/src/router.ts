@@ -1341,10 +1341,10 @@ const router = {
 
     // TODO 10586: fill out this route for messages
     registerRoute(
-      '/messages/*/message-detail/*/*/order-response',
+      '/messages/*/message-detail/*/*/motion-order-response-create',
       ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
         setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
         );
         return app.getSequence('gotoOrderResponseSequence')({
           docketEntryId,
