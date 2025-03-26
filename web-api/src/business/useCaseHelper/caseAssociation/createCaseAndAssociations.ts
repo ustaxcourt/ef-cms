@@ -24,7 +24,7 @@ const createCaseDocketEntries = ({
   applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketEntries: any;
-  docketNumber: any;
+  docketNumber: string;
   petitioners: any;
 }) => {
   const validDocketEntries = DocketEntry.validateRawCollection(docketEntries, {

@@ -14,7 +14,10 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { UserCase } from '@shared/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
@@ -23,6 +26,10 @@ import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statist
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import {
+  CREATE_CASE_LOCK,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 
@@ -61,7 +68,7 @@ const addPetitionDocketEntryToCase = ({
   return workItemEntity;
 };
 
-export const createCaseInteractor = async (
+const createCaseMetadata = async (
   applicationContext: ServerApplicationContext,
   {
     attachmentToPetitionFileIds,
@@ -69,26 +76,18 @@ export const createCaseInteractor = async (
     petitionFileId,
     petitionMetadata,
     stinFileId,
+    user,
   }: {
     attachmentToPetitionFileIds?: string[];
     corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
+    user: UserRecord;
   },
-  authorizedUser: UnknownAuthUser,
+  authorizedUser: AuthUser,
 ) => {
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
-
-  const docketNumber = await generateDocketNumber({});
 
   let privatePractitioners: UserRecord[] = [];
   if (user.role === ROLES.privatePractitioner) {
@@ -120,6 +119,8 @@ export const createCaseInteractor = async (
 
     privatePractitioners = [practitionerUser];
   }
+
+  const docketNumber = await generateDocketNumber({});
 
   const caseToAdd = new Case(
     {
@@ -287,6 +288,52 @@ export const createCaseInteractor = async (
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
+  return { caseToAdd, workItem: newWorkItem };
+};
+
+export const createCaseInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    attachmentToPetitionFileIds,
+    corporateDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
+    stinFileId,
+  }: {
+    attachmentToPetitionFileIds?: string[];
+    corporateDisclosureFileId?: string;
+    petitionFileId: string;
+    petitionMetadata: any;
+    stinFileId: string;
+  },
+  authorizedUser: UnknownAuthUser,
+) => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  const { caseToAdd, workItem } = await mutexLockWrapper({
+    lockId: CREATE_CASE_LOCK,
+    callback: async () => {
+      return await createCaseMetadata(
+        applicationContext,
+        {
+          attachmentToPetitionFileIds,
+          corporateDisclosureFileId,
+          petitionFileId,
+          petitionMetadata,
+          stinFileId,
+          user,
+        },
+        authorizedUser,
+      );
+    },
+  });
+
   await createPetitionersOnCase({
     docketNumber: caseToAdd.docketNumber,
     petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
@@ -306,7 +353,7 @@ export const createCaseInteractor = async (
   });
 
   await upsertWorkItems({
-    workItems: [newWorkItem.validate().toRawObject()],
+    workItems: [workItem.validate().toRawObject()],
   });
 
   applicationContext.logger.info('filed a new petition', {
