@@ -26,12 +26,11 @@ import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statist
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import {
-  CREATE_CASE_LOCK,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
+export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
 
 const addPetitionDocketEntryToCase = ({
   caseToAdd,
@@ -316,49 +315,64 @@ export const createCaseInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const { caseToAdd, workItem } = await mutexLockWrapper({
-    lockId: CREATE_CASE_LOCK,
-    callback: async () => {
-      return await createCaseMetadata(
-        applicationContext,
-        {
-          attachmentToPetitionFileIds,
-          corporateDisclosureFileId,
-          petitionFileId,
-          petitionMetadata,
-          stinFileId,
-          user,
-        },
-        authorizedUser,
-      );
-    },
-  });
-
-  await createPetitionersOnCase({
-    docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-  });
-
-  caseToAdd.statistics?.forEach(statistic =>
-    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-  );
-
-  const userCaseEntity = new UserCase(caseToAdd);
-
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
+  await acquireLock({
     applicationContext,
-    docketNumber: caseToAdd.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId: user.userId,
+    authorizedUser,
+    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    retries: 10,
+    waitTime: 500,
   });
 
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
+  try {
+    const { caseToAdd, workItem } = await createCaseMetadata(
+      applicationContext,
+      {
+        attachmentToPetitionFileIds,
+        corporateDisclosureFileId,
+        petitionFileId,
+        petitionMetadata,
+        stinFileId,
+        user,
+      },
+      authorizedUser,
+    );
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
 
-  applicationContext.logger.info('filed a new petition', {
-    docketNumber: caseToAdd.docketNumber,
-  });
+    await createPetitionersOnCase({
+      docketNumber: caseToAdd.docketNumber,
+      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
+    });
 
-  return new Case(caseToAdd, { authorizedUser }).toRawObject();
+    caseToAdd.statistics?.forEach(statistic =>
+      createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+    );
+
+    const userCaseEntity = new UserCase(caseToAdd);
+
+    await applicationContext.getPersistenceGateway().associateUserWithCase({
+      applicationContext,
+      docketNumber: caseToAdd.docketNumber,
+      userCase: userCaseEntity.validate().toRawObject(),
+      userId: user.userId,
+    });
+
+    await upsertWorkItems({
+      workItems: [workItem.validate().toRawObject()],
+    });
+
+    applicationContext.logger.info('filed a new petition', {
+      docketNumber: caseToAdd.docketNumber,
+    });
+
+    return new Case(caseToAdd, { authorizedUser }).toRawObject();
+  } catch (e) {
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
+    throw e;
+  }
 };
