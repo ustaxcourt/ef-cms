@@ -6,13 +6,14 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import {
   ADMISSIONS_STATUS_OPTIONS,
+  ALL_SELECTION,
   ALL_STATE_OPTIONS,
+  MULTI_SELECT_PLACEHOLDER,
   PRACTICE_TYPE_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 
 export const PractitionerSearchByName = connect(
   {
@@ -118,7 +119,7 @@ export const PractitionerSearchByName = connect(
                 <legend className="usa-legend">
                   Practice type <span className="usa-hint">(optional)</span>
                 </legend>
-                <div className="display-flex display-gap">
+                <div className="display-flex gap-4">
                   {PRACTICE_TYPE_OPTIONS.map(practiceType => {
                     return (
                       <div className="usa-checkbox" key={practiceType}>
@@ -136,7 +137,7 @@ export const PractitionerSearchByName = connect(
                               formType: 'practitionerSearchByName',
                               key: 'practiceType',
                               value: e.target.value,
-                              isArray: true,
+                              isMultiSelect: true,
                             });
                           }}
                         />
@@ -173,9 +174,9 @@ export const PractitionerSearchByName = connect(
                       label: admissionStatus,
                       value: admissionStatus,
                     }))}
-                    placeholder="- Select one or more -"
+                    placeholder={MULTI_SELECT_PLACEHOLDER}
                     value={{
-                      label: '- Select one or more -',
+                      label: MULTI_SELECT_PLACEHOLDER,
                       value: '',
                     }}
                     onChange={admissionStatus => {
@@ -183,7 +184,7 @@ export const PractitionerSearchByName = connect(
                         formType: 'practitionerSearchByName',
                         key: 'admissionStatus',
                         value: admissionStatus?.value,
-                        isArray: true,
+                        isMultiSelect: true,
                       });
                     }}
                   />
@@ -199,7 +200,7 @@ export const PractitionerSearchByName = connect(
                             formType: 'practitionerSearchByName',
                             key: 'admissionStatus',
                             value: admissionStatus,
-                            isArray: true,
+                            isMultiSelect: true,
                           });
                         }}
                       />
@@ -229,9 +230,9 @@ export const PractitionerSearchByName = connect(
                         value: state,
                       };
                     })}
-                    placeholder="- Select one or more -"
+                    placeholder={MULTI_SELECT_PLACEHOLDER}
                     value={{
-                      label: '- Select one or more -',
+                      label: MULTI_SELECT_PLACEHOLDER,
                       value: '',
                     }}
                     onChange={originalBarState => {
@@ -239,7 +240,7 @@ export const PractitionerSearchByName = connect(
                         formType: 'practitionerSearchByName',
                         key: 'originalBarState',
                         value: originalBarState?.value,
-                        isArray: true,
+                        isMultiSelect: true,
                       });
                     }}
                   />
@@ -256,7 +257,7 @@ export const PractitionerSearchByName = connect(
                               formType: 'practitionerSearchByName',
                               key: 'originalBarState',
                               value: originalBarState,
-                              isArray: true,
+                              isMultiSelect: true,
                             });
                           }}
                         />
