@@ -1084,6 +1084,20 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session-detail/*/case/*/minutes',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
+        (trialSessionId, docketNumber) => {
+          setPageTitle('Trial session minutes');
+          return app.getSequence('goToTrialSessionMinutesSequence')({
+            docketNumber,
+            trialSessionId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/trial-session-detail/*',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
@@ -1124,6 +1138,17 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session/term-builder',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        () => {
+          setPageTitle('Trial session term generator');
+          return app.getSequence('gotoTrialSessionTermBuilderSequence')();
+        },
+      ),
+    );
+
+    registerRoute(
       '/reports/cold-case-report',
       ifHasAccess({ app }, () => {
         setPageTitle('Cold case report');
@@ -1139,6 +1164,20 @@ const router = {
           const queryParams = route.query();
           setPageTitle('Trial sessions');
           return app.getSequence('gotoTrialSessionsSequence')(queryParams);
+        },
+      ),
+    );
+
+    registerRoute(
+      '/trial-location/*/*/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        (trialLocation: string, term: string, year: string) => {
+          setPageTitle('Trial location');
+          return app.getSequence('gotoTrialLocationSequence')({
+            trialLocation: decodeURIComponent(trialLocation),
+            redirectUrl: `/trial-session-planning-report/${term}/${year}`,
+          });
         },
       ),
     );

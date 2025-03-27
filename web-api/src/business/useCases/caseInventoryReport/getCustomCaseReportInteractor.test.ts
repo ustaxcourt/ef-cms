@@ -1,9 +1,9 @@
-jest.mock('@web-api/persistence/elasticsearch/getCasesByFilters');
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   GetCustomCaseReportRequest,
   getCustomCaseReportInteractor,
 } from './getCustomCaseReportInteractor';
-import { getCasesByFilters as getCasesByFiltersMock } from '@web-api/persistence/elasticsearch/getCasesByFilters';
+import { getCasesByFilters as getCasesByFiltersMock } from '@web-api/persistence/postgres/cases/reports/getCasesByFilters';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -19,16 +19,16 @@ describe('getCustomCaseReportInteractor', () => {
       endDate: '2022-02-01T17:21:05.483Z',
       filingMethod: 'all',
       judges: [],
+      page: 0,
       pageSize: 100,
       preferredTrialCities: ['Birmingham, Alabama'],
       procedureType: 'All',
-      searchAfter: { pk: '123-45', receivedAt: 827493 },
       startDate: '2022-01-01T17:21:05.483Z',
     };
   });
 
   describe('Validation', () => {
-    it('throws an error if user is not authorized for case inventory report', async () => {
+    it('should throw an error when user is not authorized for case inventory report', async () => {
       await expect(
         getCustomCaseReportInteractor(params, mockPetitionerUser),
       ).rejects.toThrow('Unauthorized for case inventory report');
@@ -57,7 +57,7 @@ describe('getCustomCaseReportInteractor', () => {
     ];
 
     testCases.forEach(testCase => {
-      it(`throws an error if ${testCase.missingField} is not passed in`, async () => {
+      it(`should throw an error when ${testCase.missingField} is not passed in`, async () => {
         delete params[testCase.missingField];
 
         await expect(
@@ -70,7 +70,6 @@ describe('getCustomCaseReportInteractor', () => {
   it('should fetch cases from persistence with the user selected filters', async () => {
     getCasesByFilters.mockResolvedValue({
       foundCases: [],
-      lastCaseId: { pk: 'case|102-20', receivedAt: 0 },
       totalCount: 0,
     });
 

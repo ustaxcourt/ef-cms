@@ -4,6 +4,16 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import {
+  ADMISSIONS_STATUS_OPTIONS,
+  ALL_SELECTION,
+  ALL_STATE_OPTIONS,
+  MULTI_SELECT_PLACEHOLDER,
+  PRACTICE_TYPE_OPTIONS,
+  PRACTITIONER_TYPE_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
+import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 
 export const PractitionerSearchByName = connect(
   {
@@ -66,7 +76,197 @@ export const PractitionerSearchByName = connect(
                 </FormGroup>
               </div>
             </div>
+            <div className="grid-row grid-gap">
+              <fieldset className="usa-fieldset">
+                <legend className="usa-legend">
+                  Practitioner type <span className="usa-hint">(optional)</span>
+                </legend>
+                <div className="practitioner-type-container">
+                  {[ALL_SELECTION, ...PRACTITIONER_TYPE_OPTIONS].map(type => (
+                    <div className="usa-radio" key={type}>
+                      <input
+                        checked={
+                          advancedSearchForm.practitionerSearchByName
+                            .practitionerType === type
+                        }
+                        className="usa-radio__input"
+                        id={`practitioner-type-${type}`}
+                        name="practitionerType"
+                        type="radio"
+                        value={type}
+                        onChange={e => {
+                          updateAdvancedSearchFormValueSequence({
+                            formType: 'practitionerSearchByName',
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label
+                        className="usa-radio__label margin-top-0 practitioner-type-label"
+                        data-testid={`practitioner-type-${type}-radio`}
+                        htmlFor={`practitioner-type-${type}`}
+                      >
+                        {type}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </fieldset>
+            </div>
+            <div className="grid-row grid-gap">
+              <fieldset className="usa-fieldset">
+                <legend className="usa-legend">
+                  Practice type <span className="usa-hint">(optional)</span>
+                </legend>
+                <div className="display-flex gap-4">
+                  {PRACTICE_TYPE_OPTIONS.map(practiceType => {
+                    return (
+                      <div className="usa-checkbox" key={practiceType}>
+                        <input
+                          checked={advancedSearchForm.practitionerSearchByName.practiceType?.includes(
+                            practiceType,
+                          )}
+                          className="usa-checkbox__input"
+                          id={`practiceType.${practiceType}`}
+                          name={`practiceType`}
+                          type="checkbox"
+                          value={practiceType}
+                          onChange={e => {
+                            updateAdvancedSearchFormValueSequence({
+                              formType: 'practitionerSearchByName',
+                              key: 'practiceType',
+                              value: e.target.value,
+                              isMultiSelect: true,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label margin-top-0"
+                          htmlFor={`practiceType.${practiceType}`}
+                        >
+                          {practiceType}
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
+              </fieldset>
+            </div>
 
+            <div className="grid-row grid-gap">
+              <div className="tablet:grid-col-6 margin-bottom-4">
+                <div className="margin-bottom-1">
+                  <label
+                    className="usa-label"
+                    htmlFor="admission-status"
+                    id="admission-status-label"
+                  >
+                    Admission Status{' '}
+                    <span className="usa-hint">(optional)</span>
+                  </label>
+                  <SelectSearch
+                    aria-labelledby="admission-status-label"
+                    data-testid="admission-status-filter"
+                    inputId="admission-status"
+                    name="admissionStatus"
+                    options={ADMISSIONS_STATUS_OPTIONS.map(admissionStatus => ({
+                      label: admissionStatus,
+                      value: admissionStatus,
+                    }))}
+                    placeholder={MULTI_SELECT_PLACEHOLDER}
+                    value={{
+                      label: MULTI_SELECT_PLACEHOLDER,
+                      value: '',
+                    }}
+                    onChange={admissionStatus => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'practitionerSearchByName',
+                        key: 'admissionStatus',
+                        value: admissionStatus?.value,
+                        isMultiSelect: true,
+                      });
+                    }}
+                  />
+                </div>
+                <div>
+                  {advancedSearchForm.practitionerSearchByName.admissionStatus?.map(
+                    admissionStatus => (
+                      <PillButton
+                        key={admissionStatus}
+                        text={admissionStatus}
+                        onRemove={() => {
+                          updateAdvancedSearchFormValueSequence({
+                            formType: 'practitionerSearchByName',
+                            key: 'admissionStatus',
+                            value: admissionStatus,
+                            isMultiSelect: true,
+                          });
+                        }}
+                      />
+                    ),
+                  )}
+                </div>
+              </div>
+              <div className="tablet:grid-col-6 margin-bottom-4">
+                <div className="margin-bottom-1">
+                  <label
+                    className="usa-label"
+                    htmlFor="original-bar-state"
+                    id="original-bar-state-label"
+                  >
+                    Original Bar State{' '}
+                    <span className="usa-hint">(optional)</span>
+                  </label>
+                  <SelectSearch
+                    aria-labelledby="original-bar-state-label"
+                    data-testid="original-bar-state-filter"
+                    inputId="original-bar-state"
+                    name="originalBarState"
+                    options={Object.keys(ALL_STATE_OPTIONS).map(state => {
+                      const stateLabel = ALL_STATE_OPTIONS[state];
+                      return {
+                        label: stateLabel,
+                        value: state,
+                      };
+                    })}
+                    placeholder={MULTI_SELECT_PLACEHOLDER}
+                    value={{
+                      label: MULTI_SELECT_PLACEHOLDER,
+                      value: '',
+                    }}
+                    onChange={originalBarState => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'practitionerSearchByName',
+                        key: 'originalBarState',
+                        value: originalBarState?.value,
+                        isMultiSelect: true,
+                      });
+                    }}
+                  />
+                </div>
+                <div>
+                  {advancedSearchForm.practitionerSearchByName.originalBarState?.map(
+                    originalBarState => {
+                      return (
+                        <PillButton
+                          key={originalBarState}
+                          text={ALL_STATE_OPTIONS[originalBarState]}
+                          onRemove={() => {
+                            updateAdvancedSearchFormValueSequence({
+                              formType: 'practitionerSearchByName',
+                              key: 'originalBarState',
+                              value: originalBarState,
+                              isMultiSelect: true,
+                            });
+                          }}
+                        />
+                      );
+                    },
+                  )}
+                </div>
+              </div>
+            </div>
             <div className="grid-row">
               <div className="button-container">
                 <Button

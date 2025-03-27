@@ -2,25 +2,26 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
+import {
+  DOCUMENT_RELATIONSHIPS,
+  DOCUMENT_SERVED_MESSAGES,
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep, uniq } from 'lodash';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '@shared/authorization/authorizationClientService';
-import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import {
-  DOCUMENT_SERVED_MESSAGES,
-  DOCUMENT_RELATIONSHIPS,
-} from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 interface IEditPaperFilingRequest {
@@ -129,28 +130,24 @@ const saveForLaterStrategy = async ({
     user,
   });
 
-  await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   const { clientConnectionId, docketEntryId } = request;
 
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'save_docket_entry_for_later_complete',
-        alertSuccess: { message: 'Entry updated.', overwritable: false },
-        docketEntryId,
-      },
-      userId: user.userId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'save_docket_entry_for_later_complete',
+      alertSuccess: { message: 'Entry updated.', overwritable: false },
+      docketEntryId,
+    },
+    userId: user.userId,
+  });
 };
 
 const multiDocketServeStrategy = async ({
@@ -172,12 +169,10 @@ const multiDocketServeStrategy = async ({
 
   const consolidatedCaseRecords = await Promise.all(
     request.consolidatedGroupDocketNumbers!.map(consolidatedGroupDocketNumber =>
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: consolidatedGroupDocketNumber,
-        }),
+      getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: consolidatedGroupDocketNumber,
+      }),
     ),
   );
 
@@ -305,20 +300,18 @@ const serveDocketEntry = async ({
 
     const paperServicePdfUrl = paperServiceResult?.pdfUrl;
 
-    await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: {
-          action: 'serve_document_complete',
-          alertSuccess: { message, overwritable: false },
-          docketEntryId: docketEntryEntity.docketEntryId,
-          generateCoversheet: true,
-          pdfUrl: paperServicePdfUrl,
-        },
-        userId: user.userId,
-      });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: {
+        action: 'serve_document_complete',
+        alertSuccess: { message, overwritable: false },
+        docketEntryId: docketEntryEntity.docketEntryId,
+        generateCoversheet: true,
+        pdfUrl: paperServicePdfUrl,
+      },
+      userId: user.userId,
+    });
 
     await applicationContext
       .getPersistenceGateway()
@@ -489,10 +482,14 @@ const getDocketEntryToEdit = async ({
   docketNumber: string;
   docketEntryId: string;
   authorizedUser: AuthUser;
-}): Promise<{ caseEntity: Case; docketEntryEntity: DocketEntry }> => {
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+}): Promise<{
+  caseEntity: Case;
+  docketEntryEntity: DocketEntry;
+}> => {
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 

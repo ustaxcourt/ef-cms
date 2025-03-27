@@ -19,6 +19,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -101,12 +102,10 @@ export const serveThirtyDayNotice = async (
   const generateNottForCases = trialSession.caseOrder
     .filter(aCase => !aCase.removedFromTrial)
     .map(async aCase => {
-      const rawCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: aCase.docketNumber,
-        });
+      const rawCase = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber: aCase.docketNumber,
+      });
 
       const caseEntity = new Case(rawCase, { authorizedUser });
 

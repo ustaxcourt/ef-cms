@@ -1,14 +1,14 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { caseSearchFilter } from '../../../../shared/src/business/utilities/caseFilter';
+import { filterCaseSearchResultsNotAccessibleToUser } from '@shared/business/utilities/caseFilter';
 import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '@shared/business/utilities/DateHandler';
 import {
   CountryTypes,
-  AbbrevatedStates,
+  AbbreviatedStates,
   CaseType,
   ProcedureType,
   MAX_SEARCH_RESULTS,
@@ -18,11 +18,12 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
+import { caseAdvancedSearch } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
   countryType?: CountryTypes;
-  petitionerState?: AbbrevatedStates;
+  petitionerState?: AbbreviatedStates;
   endDate?: string;
   startDate?: string;
   caseTypes?: CaseType[];
@@ -78,9 +79,7 @@ export const caseAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const foundCases = await applicationContext
-    .getPersistenceGateway()
-    .caseAdvancedSearch({
+  const foundCases = await caseAdvancedSearch({
       applicationContext,
       searchTerms: {
         countryType,
@@ -93,10 +92,10 @@ export const caseAdvancedSearchInteractor = async (
       },
     });
 
-  const filteredCases = caseSearchFilter(foundCases, authorizedUser).slice(
-    0,
-    MAX_SEARCH_RESULTS,
-  );
+  const filteredCases = filterCaseSearchResultsNotAccessibleToUser(
+    foundCases,
+    authorizedUser,
+  ).slice(0, MAX_SEARCH_RESULTS);
 
   return filteredCases.map(filteredCase => {
     return {

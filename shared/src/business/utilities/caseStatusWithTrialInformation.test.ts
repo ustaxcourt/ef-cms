@@ -36,4 +36,38 @@ describe('caseStatusWithTrialInformation', () => {
       `${CASE_STATUS_TYPES.calendared} - 02/01/22 ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`,
     );
   });
+
+  it('should set formattedTrialDate to NA when trialDate is falsy', () => {
+    const caseStatusWithTrialInfo = caseStatusWithTrialInformation({
+      caseStatus: CASE_STATUS_TYPES.calendared,
+      trialDate: undefined,
+      trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+    });
+
+    expect(caseStatusWithTrialInfo).toEqual(
+      `${CASE_STATUS_TYPES.calendared} - NA ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`,
+    );
+  });
+
+  it('should handle a calendared status when trialLocation is undefined', () => {
+    const result = caseStatusWithTrialInformation({
+      caseStatus: CASE_STATUS_TYPES.calendared,
+      trialDate: '2022-02-01T17:21:05.486Z',
+      trialLocation: undefined,
+    });
+
+    expect(result).toEqual(`${CASE_STATUS_TYPES.calendared} - 02/01/22 `);
+  });
+
+  it('should handle a calendared status with an unrecognized location that does not match "City, State" format', () => {
+    const result = caseStatusWithTrialInformation({
+      caseStatus: CASE_STATUS_TYPES.calendared,
+      trialDate: '2022-05-01T17:21:05.486Z',
+      trialLocation: 'Atlantis, Nevada',
+    });
+
+    expect(result).toEqual(
+      `${CASE_STATUS_TYPES.calendared} - 05/01/22 Atlantis, NV`,
+    );
+  });
 });

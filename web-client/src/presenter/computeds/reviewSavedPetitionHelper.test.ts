@@ -21,8 +21,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
         },
       },
     });
@@ -44,8 +44,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
           docketEntries: [
             { documentType: INITIAL_DOCUMENT_TYPES.petition.documentType },
             {
@@ -103,8 +103,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
           docketEntries: [
             {
               documentType:
@@ -131,8 +131,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
           petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
           petitionPaymentWaivedDate: '2019-03-01T21:40:46.415Z',
         },
@@ -148,8 +148,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
         },
       },
     });
@@ -173,8 +173,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
           preferredTrialCity: mockCity,
         },
       },
@@ -199,8 +199,8 @@ describe('reviewSavedPetitionHelper', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
-            contactPrimary: { hasConsentedToEService: true },
-            contactSecondary: { hasConsentedToEService: true },
+            contactPrimary: { hasConsentedToElectronicService: true },
+            contactSecondary: { hasConsentedToElectronicService: true },
             [orderOrNotice]: true,
           },
         },
@@ -217,8 +217,8 @@ describe('reviewSavedPetitionHelper', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
-            contactPrimary: { hasConsentedToEService: true },
-            contactSecondary: { hasConsentedToEService: true },
+            contactPrimary: { hasConsentedToElectronicService: true },
+            contactSecondary: { hasConsentedToElectronicService: true },
             [orderOrNoticeInDraft]: true,
           },
         },
@@ -236,8 +236,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
         },
       },
     });
@@ -249,8 +249,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
           statistics: [],
         },
       },
@@ -263,8 +263,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
           statistics: [{ yearOrPeriod: 'Year' }],
         },
       },
@@ -277,8 +277,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
           statistics: [
             {
               irsDeficiencyAmount: 123,
@@ -315,8 +315,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
           orderForAmendedPetition: true,
         },
       },
@@ -331,8 +331,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
-          contactPrimary: { hasConsentedToEService: true },
-          contactSecondary: { hasConsentedToEService: true },
+          contactPrimary: { hasConsentedToElectronicService: true },
+          contactSecondary: { hasConsentedToElectronicService: true },
           orderForAmendedPetition: false,
         },
       },
@@ -374,7 +374,7 @@ describe('reviewSavedPetitionHelper', () => {
   });
 
   describe('E-service Consent label', () => {
-    it('should return E-service consent text for primary and secondary contacts when hasConsentedToEService is true', () => {
+    it('should return E-service consent text for primary and secondary contacts when hasConsentedToElectronicService is true', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           featureFlags: {
@@ -383,11 +383,11 @@ describe('reviewSavedPetitionHelper', () => {
           },
           form: {
             contactPrimary: {
-              hasConsentedToEService: true,
+              hasConsentedToElectronicService: true,
               paperPetitionEmail: 'aCoolEmail@example.com',
             },
             contactSecondary: {
-              hasConsentedToEService: true,
+              hasConsentedToElectronicService: true,
               paperPetitionEmail: 'anotherCoolEmail@example.com',
             },
           },
@@ -402,7 +402,7 @@ describe('reviewSavedPetitionHelper', () => {
       );
     });
 
-    it('should return No e-service consent text for primary and secondary contacts when hasConsentedToEService is false', () => {
+    it('should return No e-service consent text for primary and secondary contacts when hasConsentedToElectronicService is false', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           featureFlags: {
@@ -411,11 +411,11 @@ describe('reviewSavedPetitionHelper', () => {
           },
           form: {
             contactPrimary: {
-              hasConsentedToEService: false,
+              hasConsentedToElectronicService: false,
               paperPetitionEmail: 'aCoolEmail@example.com',
             },
             contactSecondary: {
-              hasConsentedToEService: false,
+              hasConsentedToElectronicService: false,
               paperPetitionEmail: 'anotherCoolEmail@example.com',
             },
           },
@@ -435,7 +435,7 @@ describe('reviewSavedPetitionHelper', () => {
         state: {
           form: {
             contactPrimary: {
-              hasConsentedToEService: true,
+              hasConsentedToElectronicService: true,
               paperPetitionEmail: undefined,
             },
           },
@@ -455,11 +455,11 @@ describe('reviewSavedPetitionHelper', () => {
         },
         form: {
           contactPrimary: {
-            hasConsentedToEService: false,
+            hasConsentedToElectronicService: false,
             paperPetitionEmail: undefined,
           },
           contactSecondary: {
-            hasConsentedToEService: false,
+            hasConsentedToElectronicService: false,
             paperPetitionEmail: undefined,
           },
         },
@@ -479,11 +479,11 @@ describe('reviewSavedPetitionHelper', () => {
         },
         form: {
           contactPrimary: {
-            hasConsentedToEService: false,
+            hasConsentedToElectronicService: false,
             paperPetitionEmail: undefined,
           },
           contactSecondary: {
-            hasConsentedToEService: false,
+            hasConsentedToElectronicService: false,
             paperPetitionEmail: undefined,
           },
         },

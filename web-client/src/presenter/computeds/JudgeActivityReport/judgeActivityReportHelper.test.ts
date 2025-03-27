@@ -3,20 +3,22 @@ import {
   CASE_STATUS_TYPES,
   DESCENDING,
   SESSION_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_SUBMITTED_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { judgeActivityReportHelper as judgeActivityReportHelperComputed } from './judgeActivityReportHelper';
-import { judgeUser } from '../../../../../shared/src/test/mockUsers';
+import { judgeUser } from '@shared/test/mockUsers';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
+import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 describe('judgeActivityReportHelper', () => {
   let mockJudgeActivityReport;
   let baseState;
 
-  let mockSubmittedAndCavCasesByJudge;
+  let mockSubmittedAndCavCasesByJudge: GetCasesByStatusAndByJudgeResponse[];
 
   const judgeActivityReportHelper = withAppContextDecorator(
     judgeActivityReportHelperComputed,
@@ -29,14 +31,19 @@ describe('judgeActivityReportHelper', () => {
         ...MOCK_SUBMITTED_CASE,
         docketNumber: '101-20',
         formattedCaseCount: 4,
+        statusDate: MOCK_SUBMITTED_CASE.caseStatusHistory![0].date,
       },
       {
         ...MOCK_SUBMITTED_CASE,
         docketNumber: '103-20',
+        formattedCaseCount: 4,
+        statusDate: MOCK_SUBMITTED_CASE.caseStatusHistory![0].date,
       },
       {
         ...MOCK_SUBMITTED_CASE,
         docketNumber: '102-20',
+        formattedCaseCount: 4,
+        statusDate: MOCK_SUBMITTED_CASE.caseStatusHistory![0].date,
       },
     ];
 
@@ -270,15 +277,13 @@ describe('judgeActivityReportHelper', () => {
 
   describe('reportHeader', () => {
     it('should return reportHeader that includes judge name and the currentDate in MMDDYY format', () => {
-      (
-        applicationContext.getUtilities().prepareDateFromString as jest.Mock
-      ).mockReturnValue('2020-01-01');
-
       const { reportHeader } = runCompute(judgeActivityReportHelper, {
         state: baseState,
       });
 
-      expect(reportHeader).toBe(`${judgeUser.name} 01/01/20`);
+      const dateInMMDDYYFormat = formatNow(FORMATS.MMDDYY);
+
+      expect(reportHeader).toBe(`${judgeUser.name} ${dateInMMDDYYFormat}`);
     });
   });
 
@@ -355,16 +360,20 @@ describe('judgeActivityReportHelper', () => {
       mockSubmittedAndCavCasesByJudge = [
         {
           ...MOCK_SUBMITTED_CASE,
+          statusDate: '2023-05-11T14:19:28.717Z',
           docketNumber: '101-20',
           formattedCaseCount: 4,
           leadDocketNumber: '101-20',
         },
         {
           ...MOCK_SUBMITTED_CASE,
+          statusDate: '2023-05-11T14:19:28.717Z',
           docketNumber: '110-15',
           formattedCaseCount: 1,
         },
         {
+          ...MOCK_SUBMITTED_CASE,
+          statusDate: '2023-05-11T14:19:28.717Z',
           docketNumber: '202-11',
           formattedCaseCount: 1,
         },
@@ -409,33 +418,18 @@ describe('judgeActivityReportHelper', () => {
         [
           {
             ...MOCK_SUBMITTED_CASE,
-            caseStatusHistory: [
-              {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
-                date: '2023-05-11T14:19:28.717Z',
-              },
-            ],
+            statusDate: '2023-05-11T14:19:28.717Z',
             docketNumber: '101-20',
             formattedCaseCount: 4,
           },
           {
             ...MOCK_SUBMITTED_CASE,
-            caseStatusHistory: [
-              {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
-                date: '2023-05-29T14:19:28.717Z',
-              },
-            ],
+            statusDate: '2023-05-29T14:19:28.717Z',
             docketNumber: '103-20',
           },
           {
             ...MOCK_SUBMITTED_CASE,
-            caseStatusHistory: [
-              {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
-                date: '2023-05-15T14:19:28.717Z',
-              },
-            ],
+            statusDate: '2023-05-15T14:19:28.717Z',
             docketNumber: '102-20',
           },
         ];
@@ -533,45 +527,25 @@ describe('judgeActivityReportHelper', () => {
           {
             ...MOCK_SUBMITTED_CASE,
             associatedJudge: 'Colvin',
-            caseStatusHistory: [
-              {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
-                date: '2015-05-11T14:19:28.717Z',
-              },
-            ],
+            statusDate: '2015-05-11T14:19:28.717Z',
             docketNumber: '101-20',
           },
           {
             ...MOCK_SUBMITTED_CASE,
             associatedJudge: 'Ashford',
-            caseStatusHistory: [
-              {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
-                date: '2023-05-11T14:19:28.717Z',
-              },
-            ],
+            statusDate: '2023-05-11T14:19:28.717Z',
             docketNumber: '103-20',
           },
           {
             ...MOCK_SUBMITTED_CASE,
             associatedJudge: 'Colvin',
-            caseStatusHistory: [
-              {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
-                date: '2023-05-11T14:19:28.717Z',
-              },
-            ],
+            statusDate: '2023-05-11T14:19:28.717Z',
             docketNumber: '102-20',
           },
           {
             ...MOCK_SUBMITTED_CASE,
             associatedJudge: 'Colvin',
-            caseStatusHistory: [
-              {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
-                date: '2017-05-11T14:19:28.717Z',
-              },
-            ],
+            statusDate: '2017-05-11T14:19:28.717Z',
             docketNumber: '104-20',
           },
         ];

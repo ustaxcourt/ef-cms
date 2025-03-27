@@ -3,26 +3,27 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   FORMATS,
   dateStringsCompared,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { User } from '@shared/business/entities/User';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -52,12 +53,10 @@ const completeDocketEntryQC = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
   const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
@@ -155,9 +154,10 @@ const completeDocketEntryQC = async (
     caseCaptionExtension,
     caseTitle,
     docketEntryIndex: docketRecordIndexUpdated,
-    docketNumber: `${caseToUpdate.docketNumber}${
-      caseToUpdate.docketNumberSuffix || ''
-    }`,
+    docketNumber: Case.getDocketNumberWithSuffix({
+      docketNumber: caseToUpdate.docketNumber,
+      docketNumberSuffix: caseToUpdate.docketNumberSuffix,
+    }),
     filingParties: {
       after: updatedDocketEntry.filedBy,
       before: currentDocketEntry.filedBy,
@@ -174,7 +174,7 @@ const completeDocketEntryQC = async (
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+    .updateCaseAutomaticBlock({ caseEntity });
 
   const workItemToUpdate = updatedDocketEntry.workItem as WorkItem;
 
