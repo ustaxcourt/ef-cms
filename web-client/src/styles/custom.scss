@@ -2458,6 +2458,23 @@ button.change-scanner-button {
   background-color: #ffe396;
 }
 
+.practitioner-type-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+}
+
+@media (max-width: ($medium-screen - 1)) {
+  .practitioner-type-container {
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+.practitioner-type-label {
+  text-transform: capitalize;
+}
+
 .term-builder-form {
 	p {
 		max-width: 100%;
