@@ -4,7 +4,7 @@ resource "aws_cognito_identity_pool" "rum_identity_pool" {
 }
 
 resource "aws_iam_role" "rum_unauthenticated_role" {
-  name = "rum-unauthenticated-role-${var.environment}"
+  name = "rum_unauthenticated_role_${var.environment}"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"
