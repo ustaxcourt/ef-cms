@@ -130,7 +130,7 @@ export const ExhibitsFieldset = ({
               </select>
             </FormGroup>
           </div>
-          <div className="grid-col-3">
+          <div className="grid-col-fill">
             <FormGroup className="margin-bottom-0 display-flex align-items-top">
               <label
                 className="margin-right-2 margin-bottom-0 display-inline-block margin-top-1"
@@ -157,7 +157,7 @@ export const ExhibitsFieldset = ({
               />
             </FormGroup>
           </div>
-          <div className="grid-col-2">
+          <div className="grid-col-auto margin-top-1">
             <Button
               link
               className="padding-0"
