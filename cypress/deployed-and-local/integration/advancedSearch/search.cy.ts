@@ -11,6 +11,7 @@ import {
 } from '../../../helpers/authentication/login-as-helpers';
 import { selectTypeaheadInput } from '../../../helpers/components/typeAhead/select-typeahead-input';
 import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
+import { v4 } from 'uuid';
 
 describe('Advanced Search', () => {
   beforeEach(() => {
@@ -37,7 +38,8 @@ describe('Advanced Search', () => {
   it('should return practitioner results when the user searches by name', () => {
     /** Arrange */
     loginAsAdmissionsClerk();
-    createAPractitioner().then(({ barNumber, firstName }) => {
+    const firstName = `${faker.person.firstName()}-${v4()}`;
+    createAPractitioner({firstName}).then(({ barNumber }) => {
       /** Act */
       cy.get('[data-testid="search-link"]').click();
       cy.get('[data-testid="practitioner-search-tab"]').click();
