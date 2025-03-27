@@ -26,7 +26,7 @@ describe('clearAdvancedSearchFormAction', () => {
           orderSearch: { keyword: '' },
           practitionerSearchByName: {
             practitionerName: 'Ricky',
-            practitionerType: 'All',
+            practitionerType: ALL_SELECTION,
           },
         },
         searchResults: [{ docketNumber: '123-45' }, { docketNumber: '678-90' }],
@@ -44,7 +44,7 @@ describe('clearAdvancedSearchFormAction', () => {
       orderSearch: { keyword: '' },
       practitionerSearchByName: {
         lastKeysOfPages: [],
-        practitionerType: 'All',
+        practitionerType: ALL_SELECTION,
         total: 0,
       },
     });
