@@ -4,8 +4,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   const { petitioners } = caseDetail;
   const pNames = petitioners.map(p => p.name);
-  console.log('PNames: ', pNames);
-  console.log('Motion Filed By: ', motion.filedBy);
   const cleanedFiledBy = motion.filedBy.replace(
     /^(?:Petr\.|Respt\.|Intvr\.)?\s*/,
     '',
@@ -34,7 +32,9 @@ export const prepareMotionOrderResponseAction = ({
   const { docketEntries } = caseDetail;
 
   // TODO 10586: Add logic handle multiple motions as well as no motions (<--- is the latter even possible in this action?)
-  const motion = docketEntries.find(entry => entry.documentType === 'Motion');
+  const motion = docketEntries.find(entry =>
+    entry.documentType?.includes('Motion'),
+  );
   const { movant, nonMovant } = determineMovantAndNonMovant({
     caseDetail,
     motion,
