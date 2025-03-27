@@ -1,15 +1,18 @@
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
-import { NotFoundError } from '../../../../web-api/src/errors/errors';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 
 export const updateCaseContext = async (
   applicationContext: ServerApplicationContext,
@@ -33,9 +36,10 @@ export const updateCaseContext = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const newCase = new Case(oldCase, { authorizedUser });
 
@@ -52,15 +56,19 @@ export const updateCaseContext = async (
   // if this case status is changing FROM calendared
   // we need to remove it from the trial session
   if (caseStatus && caseStatus !== oldCase.status) {
-    const date = applicationContext.getUtilities().createISODateString();
     newCase.setCaseStatus({
       changedBy: authorizedUser.name,
-      date,
       updatedCaseStatus: caseStatus,
     });
 
     if (oldCase.status === CASE_STATUS_TYPES.calendared) {
       const disposition = `Status was changed to ${caseStatus}`;
+
+      if (!oldCase.trialSessionId) {
+        throw new NotFoundError(
+          `Cannot find trialSessionId for case ${docketNumber}`,
+        );
+      }
 
       const trialSession = await applicationContext
         .getPersistenceGateway()
@@ -88,25 +96,23 @@ export const updateCaseContext = async (
       });
 
       newCase.removeFromTrialWithAssociatedJudge(judgeData);
-    } else if (
-      oldCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
-    ) {
-      await applicationContext
-        .getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords({
-          applicationContext,
-          docketNumber: newCase.docketNumber,
-        });
     }
 
-    if (newCase.isReadyForTrial() && !oldCase.trialSessionId) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: newCase.generateTrialSortTags(),
-          docketNumber: newCase.docketNumber,
-        });
+    if (
+      caseStatus === CASE_STATUS_TYPES.closed ||
+      caseStatus === CASE_STATUS_TYPES.closedDismissed
+    ) {
+      const caseDeadlines = await getCaseDeadlinesByDocketNumber({
+        docketNumber,
+      });
+      await Promise.all(
+        caseDeadlines.map(async deadline => {
+          return deleteCaseDeadline({
+            caseDeadlineId: deadline.caseDeadlineId,
+          });
+        }),
+      );
+      newCase.updateAutomaticBlocked({ hasCaseDeadline: false });
     }
   }
 

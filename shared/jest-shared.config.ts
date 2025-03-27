@@ -5,6 +5,7 @@ import type { Config } from 'jest';
 const config: Config = {
   clearMocks: true,
   collectCoverage: true,
+  // type files ignored
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
     '!src/sharedAppContext.ts',
@@ -19,6 +20,9 @@ const config: Config = {
     '!src/business/utilities/generateHTMLTemplateForPDF/generateHTMLTemplateForPDF.ts',
     '!src/business/utilities/htmlGenerator/**',
     '!src/business/entities/caseAssociation/CaseAssociationRequestDocument.ts',
+    '!src/business/entities/trialSessions/SpecialTrialSessions.ts',
+    '!src/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes.ts',
+    '!src/business/entities/trialSessionMinutes/MinuteSheet.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
@@ -32,7 +36,7 @@ const config: Config = {
     uuid: require.resolve('uuid'),
   },
   setupFiles: ['core-js'],
-  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.js`,
+  testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
@@ -43,5 +47,4 @@ const config: Config = {
   workerIdleMemoryLimit: '20%',
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;

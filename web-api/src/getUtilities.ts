@@ -13,8 +13,8 @@ import {
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
-import { combineAllPdfDocuments } from '@shared/business/utilities/documentGenerators/combineAllPdfDocuments';
-import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
+import { combineAllPdfDocuments } from '@shared/business/utilities/pdfs/combineAllPdfDocuments';
+import { combineTwoPdfs } from '../../shared/src/business/utilities/pdfs/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
   getFormattedTrialSessionDetails,
@@ -49,7 +49,6 @@ import {
 import { scrapePdfContents } from '../../shared/src/business/utilities/scrapePdfContents';
 import { serveCaseDocument } from '../../shared/src/business/utilities/serveCaseDocument';
 import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
-import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
 import { sleep } from '@shared/tools/helpers';
 
@@ -93,7 +92,6 @@ const utilities = {
   scrapePdfContents,
   serveCaseDocument,
   setConsolidationFlagsForDisplay,
-  setServiceIndicatorsForCase,
   setupPdfDocument,
   sleep,
 };

@@ -17,7 +17,9 @@ import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/in
 
 export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
+  TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
+  CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
 } as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
@@ -59,6 +61,10 @@ export const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 export const PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
 export const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
+
+export const ALL_SELECTION = 'all';
+
+export const MULTI_SELECT_PLACEHOLDER = '- Select one or more -';
 
 export const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
@@ -171,6 +177,12 @@ export const DOCKET_NUMBER_SUFFIXES = {
   WHISTLEBLOWER: 'W',
 };
 
+export const HIGH_PRIORITY_SUFFIXES = [
+  DOCKET_NUMBER_SUFFIXES.LIEN_LEVY, // L
+  DOCKET_NUMBER_SUFFIXES.PASSPORT, // P
+  DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY, // SL
+];
+
 export const CASE_STATUS_TYPES = {
   assignedCase: 'Assigned - Case', // Case has been assigned to a judge
   assignedMotion: 'Assigned - Motion', // Someone has requested a judge for the case
@@ -203,10 +215,19 @@ export const CLOSED_CASE_STATUSES = [
   CASE_STATUS_TYPES.closed,
   CASE_STATUS_TYPES.closedDismissed,
 ];
+
+export const DEFAULT_FILTERED_BLOCKED_CASE_STATUSES = [
+  CASE_STATUS_TYPES.generalDocket,
+  CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  CASE_STATUS_TYPES.assignedCase,
+  CASE_STATUS_TYPES.assignedMotion,
+];
+
 export const SUGGESTED_TRIAL_SESSION_TITLES = {
   invalid: 'Unable to create term',
   success: 'Successfully generated suggested term.',
   warning: 'Successfully generated suggested term with warnings',
+  validation: 'Please correct the following errors on the page:',
 };
 
 export const DOCUMENT_RELATIONSHIPS = {
@@ -1207,7 +1228,7 @@ export const ALL_STATE_OPTIONS = {
   Other: 'Other',
 };
 
-export type AbbrevatedStates =
+export type AbbreviatedStates =
   | keyof typeof US_STATES
   | keyof typeof US_STATES_OTHER;
 
@@ -1811,6 +1832,17 @@ export const TROUBLESHOOTING_INFO = {
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
+
+export const TRIAL_SESSION_TERM_GENERATOR = {
+  MAX_SESSIONS_PER_WEEK: 6,
+  MAX_SESSIONS_PER_LOCATION: 5,
+  REGULAR_CASE_MINIMUM_QUANTITY: 40,
+  REGULAR_CASE_MAX_QUANTITY: 100,
+  SMALL_CASE_MINIMUM_QUANTITY: 40,
+  SMALL_CASE_MAX_QUANTITY: 125,
+  HYBRID_CASE_MINIMUM_QUANTITY: 50,
+  HYBRID_CASE_MAX_QUANTITY: 100,
+} as const;
 
 export const MINUTE_SHEET_FORM_SECTION_MAP = {
   actionsAndFilingsSection: 'actionsAndFilingsSection',

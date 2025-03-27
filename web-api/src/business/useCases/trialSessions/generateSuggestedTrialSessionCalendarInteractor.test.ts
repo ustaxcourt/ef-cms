@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import * as excelModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import * as generateCalendarModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
 import {
@@ -9,6 +10,7 @@ import {
   SESSION_TYPES,
   SUGGESTED_TRIAL_SESSION_TITLES,
   TRIAL_CITY_STRINGS,
+  TRIAL_SESSION_TERM_GENERATOR,
 } from '@shared/business/entities/EntityConstants';
 import {
   WASHINGTON_DC_NORTH_STRING,
@@ -23,12 +25,13 @@ import {
 } from '@shared/test/mockAuthUsers';
 import mockCases from '@shared/test/mockReadyForTrialCases.json';
 import mockSpecialSessions from '@shared/test/mockTrialSessions.json';
+import { getSuggestedCalendarCases as getSuggestedCalendarCasesMock } from '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases';
+
+const getSuggestedCalendarCases = getSuggestedCalendarCasesMock as jest.Mock;
 
 describe('generateSuggestedTrialSessionCalendar', () => {
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getSuggestedCalendarCases.mockResolvedValue(mockCases);
+    getSuggestedCalendarCases.mockResolvedValue(mockCases);
 
     applicationContext
       .getPersistenceGateway()
@@ -44,7 +47,27 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     const { bufferArray, message } =
       await generateSuggestedTrialSessionCalendarInteractor(
         applicationContext,
-        { termEndDate: mockEndDate, termStartDate: mockStartDate },
+        {
+          termEndDate: mockEndDate,
+          termStartDate: mockStartDate,
+          termName: 'TEST_TERM_NAME',
+          maxSessionsPerLocation:
+            TRIAL_SESSION_TERM_GENERATOR.MAX_SESSIONS_PER_LOCATION,
+          maxSessionsPerWeek:
+            TRIAL_SESSION_TERM_GENERATOR.MAX_SESSIONS_PER_WEEK,
+          smallCaseMinimumQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.SMALL_CASE_MINIMUM_QUANTITY,
+          smallCaseMaxQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.SMALL_CASE_MAX_QUANTITY,
+          regularCaseMinimumQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.REGULAR_CASE_MINIMUM_QUANTITY,
+          regularCaseMaxQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.REGULAR_CASE_MAX_QUANTITY,
+          hybridCaseMinimumQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
+          hybridCaseMaxQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
+        },
         mockPetitionsClerkUser,
       );
 
@@ -76,7 +99,26 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     // Act
     await generateSuggestedTrialSessionCalendarInteractor(
       applicationContext,
-      { termEndDate: mockEndDate, termStartDate: mockStartDate },
+      {
+        termEndDate: mockEndDate,
+        termStartDate: mockStartDate,
+        termName: 'TEST_TERM_NAME',
+        maxSessionsPerLocation:
+          TRIAL_SESSION_TERM_GENERATOR.MAX_SESSIONS_PER_LOCATION,
+        maxSessionsPerWeek: TRIAL_SESSION_TERM_GENERATOR.MAX_SESSIONS_PER_WEEK,
+        smallCaseMinimumQuantity:
+          TRIAL_SESSION_TERM_GENERATOR.SMALL_CASE_MINIMUM_QUANTITY,
+        smallCaseMaxQuantity:
+          TRIAL_SESSION_TERM_GENERATOR.SMALL_CASE_MAX_QUANTITY,
+        regularCaseMinimumQuantity:
+          TRIAL_SESSION_TERM_GENERATOR.REGULAR_CASE_MINIMUM_QUANTITY,
+        regularCaseMaxQuantity:
+          TRIAL_SESSION_TERM_GENERATOR.REGULAR_CASE_MAX_QUANTITY,
+        hybridCaseMinimumQuantity:
+          TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
+        hybridCaseMaxQuantity:
+          TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
+      },
       mockPetitionsClerkUser,
     );
 
@@ -130,7 +172,27 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     await expect(async () => {
       await generateSuggestedTrialSessionCalendarInteractor(
         applicationContext,
-        { termEndDate: mockEndDate, termStartDate: mockStartDate },
+        {
+          termEndDate: mockEndDate,
+          termStartDate: mockStartDate,
+          termName: 'TEST_TERM_NAME',
+          maxSessionsPerLocation:
+            TRIAL_SESSION_TERM_GENERATOR.MAX_SESSIONS_PER_LOCATION,
+          maxSessionsPerWeek:
+            TRIAL_SESSION_TERM_GENERATOR.MAX_SESSIONS_PER_WEEK,
+          smallCaseMinimumQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.SMALL_CASE_MINIMUM_QUANTITY,
+          smallCaseMaxQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.SMALL_CASE_MAX_QUANTITY,
+          regularCaseMinimumQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.REGULAR_CASE_MINIMUM_QUANTITY,
+          regularCaseMaxQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.REGULAR_CASE_MAX_QUANTITY,
+          hybridCaseMinimumQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
+          hybridCaseMaxQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
+        },
         mockPrivatePractitionerUser,
       );
     }).rejects.toThrow('Unauthorized to generate term');
@@ -140,9 +202,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     // Arrange
     const mockStartDate = '2019-08-22T00:00:00.000Z';
     const mockEndDate = '2019-09-22T00:00:00.000Z';
-    applicationContext
-      .getPersistenceGateway()
-      .getSuggestedCalendarCases.mockResolvedValue([]);
+    getSuggestedCalendarCases.mockResolvedValue([]);
 
     applicationContext
       .getPersistenceGateway()
@@ -152,7 +212,27 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     const { bufferArray, message } =
       await generateSuggestedTrialSessionCalendarInteractor(
         applicationContext,
-        { termEndDate: mockEndDate, termStartDate: mockStartDate },
+        {
+          termEndDate: mockEndDate,
+          termStartDate: mockStartDate,
+          termName: 'TEST_TERM_NAME',
+          maxSessionsPerLocation:
+            TRIAL_SESSION_TERM_GENERATOR.MAX_SESSIONS_PER_LOCATION,
+          maxSessionsPerWeek:
+            TRIAL_SESSION_TERM_GENERATOR.MAX_SESSIONS_PER_WEEK,
+          smallCaseMinimumQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.SMALL_CASE_MINIMUM_QUANTITY,
+          smallCaseMaxQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.SMALL_CASE_MAX_QUANTITY,
+          regularCaseMinimumQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.REGULAR_CASE_MINIMUM_QUANTITY,
+          regularCaseMaxQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.REGULAR_CASE_MAX_QUANTITY,
+          hybridCaseMinimumQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MINIMUM_QUANTITY,
+          hybridCaseMaxQuantity:
+            TRIAL_SESSION_TERM_GENERATOR.HYBRID_CASE_MAX_QUANTITY,
+        },
         mockPetitionsClerkUser,
       );
 

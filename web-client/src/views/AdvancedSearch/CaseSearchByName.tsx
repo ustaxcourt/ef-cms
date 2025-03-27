@@ -8,6 +8,13 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
+import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
+import { isEmpty } from 'lodash';
+import {
+  ALL_SELECTION,
+  MULTI_SELECT_PLACEHOLDER,
+} from '@shared/business/entities/EntityConstants';
 
 export const CaseSearchByName = connect(
   {
@@ -47,7 +54,7 @@ export const CaseSearchByName = connect(
         >
           <h3>Search by Name</h3>
         </div>
-        <div className="blue-container advanced-search__form-container">
+        <div className="blue-container height-full display-flex flex-column">
           <form>
             <div className="grid-row grid-gap">
               <div className="tablet:grid-col-12">
@@ -104,22 +111,20 @@ export const CaseSearchByName = connect(
                       <NonMobile>
                         <div className="usa-radio usa-radio__inline">
                           <input
-                            aria-describedby="all-country-selection"
-                            aria-labelledby="all-country-selection"
                             checked={
                               advancedSearchForm.caseSearchByName
-                                .countryType === 'all'
+                                .countryType === ALL_SELECTION
                             }
                             className="usa-radio__input"
                             data-testid="all-country-selection"
                             id="all-country-selection"
-                            name="all"
+                            name="country"
                             type="radio"
-                            value="All"
+                            value={ALL_SELECTION}
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -133,21 +138,19 @@ export const CaseSearchByName = connect(
                         </div>
                         <div className="usa-radio usa-radio__inline">
                           <input
-                            aria-describedby="scan-mode-radios-legend"
-                            aria-labelledby="upload-mode-upload"
                             checked={
                               advancedSearchForm.caseSearchByName
                                 .countryType === 'domestic'
                             }
                             className="usa-radio__input"
                             id="united-states-country-selection"
-                            name="domestic"
+                            name="country"
                             type="radio"
-                            value="United States"
+                            value="domestic"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -161,21 +164,19 @@ export const CaseSearchByName = connect(
                         </div>
                         <div className="usa-radio usa-radio__inline">
                           <input
-                            aria-describedby="scan-mode-radios-legend"
-                            aria-labelledby="upload-mode-upload"
                             checked={
                               advancedSearchForm.caseSearchByName
                                 .countryType === 'international'
                             }
                             className="usa-radio__input"
                             id="international-country-selection"
-                            name="international"
+                            name="country"
                             type="radio"
                             value="international"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -196,18 +197,18 @@ export const CaseSearchByName = connect(
                             aria-labelledby="all-country-selection"
                             checked={
                               advancedSearchForm.caseSearchByName
-                                .countryType === 'all'
+                                .countryType === ALL_SELECTION
                             }
                             className="usa-radio__input"
                             data-testid="all-country-selection"
                             id="all-country-selection"
-                            name="all"
+                            name="country"
                             type="radio"
-                            value="All"
+                            value={ALL_SELECTION}
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -229,13 +230,13 @@ export const CaseSearchByName = connect(
                             }
                             className="usa-radio__input"
                             id="united-states-country-selection"
-                            name="domestic"
+                            name="country"
                             type="radio"
                             value="United States"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -257,13 +258,13 @@ export const CaseSearchByName = connect(
                             }
                             className="usa-radio__input"
                             id="international-country-selection"
-                            name="international"
+                            name="country"
                             type="radio"
                             value="international"
                             onChange={e => {
                               updateCaseAdvancedSearchByNameFormValueSequence({
                                 key: 'countryType',
-                                value: e.target.name,
+                                value: e.target.value,
                               });
                             }}
                           />
@@ -360,7 +361,7 @@ export const CaseSearchByName = connect(
             </div>
 
             <NonMobile>
-              <div className="grid-row grid-gap margin-bottom-2">
+              <div className="grid-row grid-gap">
                 <DateRangePickerComponent
                   omitFormGroupClass
                   endDateErrorText={validationErrors.endDate}
@@ -398,7 +399,7 @@ export const CaseSearchByName = connect(
             </NonMobile>
 
             <Mobile>
-              <div className="grid-row grid-gap margin-bottom-2">
+              <div className="grid-row grid-gap">
                 <DateRangePickerComponent
                   omitFormGroupClass
                   endDateErrorText={validationErrors.endDate}
@@ -435,9 +436,106 @@ export const CaseSearchByName = connect(
               </div>
             </Mobile>
 
+            <div>
+              <fieldset className="usa-fieldset">
+                <legend className="usa-legend">Case procedure</legend>
+                {caseSearchByNameHelper.caseProcedureOptions.map(
+                  procedureType => (
+                    <div
+                      className="usa-radio tablet:display-inline tablet:padding-right-4"
+                      key={procedureType.value}
+                    >
+                      <input
+                        checked={
+                          advancedSearchForm.caseSearchByName.procedureType ===
+                          procedureType.value
+                        }
+                        className="usa-radio__input"
+                        id={`caseProcedureType-${procedureType.value}`}
+                        name="procedureType"
+                        type="radio"
+                        onChange={e => {
+                          updateCaseAdvancedSearchByNameFormValueSequence({
+                            key: 'procedureType',
+                            value: e.target.value,
+                          });
+                        }}
+                        value={procedureType.value}
+                      />
+                      <label
+                        className="usa-radio__label"
+                        htmlFor={`caseProcedureType-${procedureType.value}`}
+                      >
+                        {procedureType.label}
+                      </label>
+                    </div>
+                  ),
+                )}
+              </fieldset>
+            </div>
+            <div>
+              <label
+                className="usa-label"
+                htmlFor="case-type-filter"
+                id="case-type-filter-label"
+              >
+                Case type (i.e., docket suffix)
+              </label>
+              <SelectSearch
+                aria-labelledby="case-type-filter-label"
+                data-testid="case-type-selection"
+                name="caseType"
+                className="maxw-mobile-lg"
+                placeholder={MULTI_SELECT_PLACEHOLDER}
+                inputId="case-type-filter"
+                value={{
+                  label: MULTI_SELECT_PLACEHOLDER,
+                  value: '',
+                }}
+                options={
+                  caseSearchByNameHelper.caseTypeOptions as {
+                    label: string;
+                    value: string;
+                  }[]
+                }
+                onChange={e => {
+                  if (e?.value) {
+                    const currentCaseTypeFilters =
+                      advancedSearchForm.caseSearchByName?.caseTypes || {};
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'caseTypes',
+                      value: { ...currentCaseTypeFilters, [e.label]: e.value },
+                    });
+                  }
+                }}
+              />
+            </div>
+            {!isEmpty(advancedSearchForm.caseSearchByName?.caseTypes) && (
+              <div className="padding-1"></div>
+            )}
+            <div>
+              {Object.entries(
+                advancedSearchForm.caseSearchByName?.caseTypes || {},
+              ).map(([label, _caseType]: [string, any]) => (
+                <PillButton
+                  key={label}
+                  text={label}
+                  onRemove={() => {
+                    delete advancedSearchForm.caseSearchByName.caseTypes[label];
+                    updateCaseAdvancedSearchByNameFormValueSequence({
+                      key: 'caseTypes',
+                      value: advancedSearchForm.caseSearchByName.caseTypes,
+                    });
+                  }}
+                />
+              ))}
+            </div>
+            <div className="padding-2"></div>
+
             <div className="grid-row">
               <div className="button-container">
                 <Button
+                  type="submit"
                   overrideMargin
                   aria-describedby="case-search-by-name"
                   className="margin-bottom-0"
@@ -451,6 +549,7 @@ export const CaseSearchByName = connect(
                   Search
                 </Button>
                 <Button
+                  type="reset"
                   link
                   overrideMargin
                   aria-describedby="case-search-by-name"

@@ -89,6 +89,7 @@ import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
+import { TrialLocation } from '@web-client/views/TrialSessions/TrialLocation';
 import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
 import { TrialSessionMinutesPage } from '@web-client/views/TrialSessionMinutes/TrialSessionMinutesPage';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
@@ -107,6 +108,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { TermBuilderView } from '@web-client/views/TermBuilderView';
 import { AsyncServiceUnavailableModal } from '@web-client/views/AsyncServiceUnavailableModal';
 
 const pages = {
@@ -191,10 +193,12 @@ const pages = {
   StartCaseInternal,
   StatusReportOrder,
   StyleGuide,
+  TrialLocation,
   TrialSessionDetails,
   TrialSessionMinutesPage,
   TrialSessionPlanningReportView,
   TrialSessionWorkingCopy,
+  TermBuilderView,
   TrialSessions,
   UploadCourtIssuedDocument,
   UserContactEdit,

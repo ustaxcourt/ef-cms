@@ -1,7 +1,5 @@
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
-import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import {
   CASE_INVENTORY_PAGE_SIZE,
   CASE_STATUS_TYPES,
@@ -67,7 +65,6 @@ let sqsCache: SQSClient;
 export const createApplicationContext = (appContextUser = {}) => {
   return {
     barNumberGenerator,
-    docketNumberGenerator,
     environment,
     getBatchClient,
     getBounceAlertRecipients: () =>
@@ -179,10 +176,6 @@ export const createApplicationContext = (appContextUser = {}) => {
     getNotificationClient,
     getNotificationGateway,
     getNotificationService,
-    getPdfJs: () => {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
-      return pdfjsLib;
-    },
     getPdfLib: () => {
       return pdfLib;
     },

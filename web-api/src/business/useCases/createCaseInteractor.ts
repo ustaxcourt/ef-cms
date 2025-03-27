@@ -1,26 +1,36 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
+import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { UserCase } from '../../../../shared/src/business/entities/UserCase';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import { UserCase } from '@shared/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import { WorkItem } from '../../../../shared/src/business/entities/WorkItem';
-import { setServiceIndicatorsForCase } from '../../../../shared/src/business/utilities/setServiceIndicatorsForCase';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
+import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
+export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
 
 const addPetitionDocketEntryToCase = ({
   caseToAdd,
@@ -57,7 +67,7 @@ const addPetitionDocketEntryToCase = ({
   return workItemEntity;
 };
 
-export const createCaseInteractor = async (
+const createCaseMetadata = async (
   applicationContext: ServerApplicationContext,
   {
     attachmentToPetitionFileIds,
@@ -65,29 +75,18 @@ export const createCaseInteractor = async (
     petitionFileId,
     petitionMetadata,
     stinFileId,
+    user,
   }: {
     attachmentToPetitionFileIds?: string[];
     corporateDisclosureFileId?: string;
     petitionFileId: string;
     petitionMetadata: any;
     stinFileId: string;
+    user: UserRecord;
   },
-  authorizedUser: UnknownAuthUser,
+  authorizedUser: AuthUser,
 ) => {
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
-
-  const docketNumber =
-    await applicationContext.docketNumberGenerator.createDocketNumber({
-      applicationContext,
-    });
 
   let privatePractitioners: UserRecord[] = [];
   if (user.role === ROLES.privatePractitioner) {
@@ -120,6 +119,8 @@ export const createCaseInteractor = async (
     privatePractitioners = [practitionerUser];
   }
 
+  const docketNumber = await generateDocketNumber({});
+
   const caseToAdd = new Case(
     {
       docketNumber,
@@ -134,7 +135,7 @@ export const createCaseInteractor = async (
     },
   );
 
-  setServiceIndicatorsForCase(caseToAdd);
+  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
   if (user.role === ROLES.petitioner) {
     caseToAdd.getContactPrimary().contactId = user.userId;
@@ -286,22 +287,92 @@ export const createCaseInteractor = async (
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
 
-  const userCaseEntity = new UserCase(caseToAdd);
+  return { caseToAdd, workItem: newWorkItem };
+};
 
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
+export const createCaseInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    attachmentToPetitionFileIds,
+    corporateDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
+    stinFileId,
+  }: {
+    attachmentToPetitionFileIds?: string[];
+    corporateDisclosureFileId?: string;
+    petitionFileId: string;
+    petitionMetadata: any;
+    stinFileId: string;
+  },
+  authorizedUser: UnknownAuthUser,
+) => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PETITION)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  await acquireLock({
     applicationContext,
-    docketNumber: caseToAdd.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId: user.userId,
+    authorizedUser,
+    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    retries: 10,
+    waitTime: 500,
   });
 
-  await upsertWorkItems({
-    workItems: [newWorkItem.validate().toRawObject()],
-  });
+  try {
+    const { caseToAdd, workItem } = await createCaseMetadata(
+      applicationContext,
+      {
+        attachmentToPetitionFileIds,
+        corporateDisclosureFileId,
+        petitionFileId,
+        petitionMetadata,
+        stinFileId,
+        user,
+      },
+      authorizedUser,
+    );
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
 
-  applicationContext.logger.info('filed a new petition', {
-    docketNumber: caseToAdd.docketNumber,
-  });
+    await createPetitionersOnCase({
+      docketNumber: caseToAdd.docketNumber,
+      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
+    });
 
-  return new Case(caseToAdd, { authorizedUser }).toRawObject();
+    caseToAdd.statistics?.forEach(statistic =>
+      createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+    );
+
+    const userCaseEntity = new UserCase(caseToAdd);
+
+    await applicationContext.getPersistenceGateway().associateUserWithCase({
+      applicationContext,
+      docketNumber: caseToAdd.docketNumber,
+      userCase: userCaseEntity.validate().toRawObject(),
+      userId: user.userId,
+    });
+
+    await upsertWorkItems({
+      workItems: [workItem.validate().toRawObject()],
+    });
+
+    applicationContext.logger.info('filed a new petition', {
+      docketNumber: caseToAdd.docketNumber,
+    });
+
+    return new Case(caseToAdd, { authorizedUser }).toRawObject();
+  } catch (e) {
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
+    throw e;
+  }
 };
