@@ -6,6 +6,11 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { runCreateTermAction } from './runCreateTermAction';
+import {
+  createISODateString,
+  FORMATS,
+  getBusinessDateInFuture,
+} from '@shared/business/utilities/DateHandler';
 
 describe('runCreateTermAction', () => {
   let successStub;
@@ -13,6 +18,18 @@ describe('runCreateTermAction', () => {
   let warningStub;
   let mockBufferData;
   let mockExcelJSBuffer;
+
+  const termEndDate = getBusinessDateInFuture({
+    numberOfDays: 360,
+    outputFormat: FORMATS.MMDDYYYY,
+    startDate: createISODateString(),
+  });
+
+  const termStartDate = getBusinessDateInFuture({
+    numberOfDays: 1,
+    outputFormat: FORMATS.MMDDYYYY,
+    startDate: createISODateString(),
+  });
 
   beforeAll(() => {
     successStub = jest.fn();
@@ -47,9 +64,9 @@ describe('runCreateTermAction', () => {
     await runAction(runCreateTermAction, {
       modules: { presenter },
       props: {
-        termEndDate: '03/31/2050',
+        termEndDate,
         termName: 'Test term',
-        termStartDate: '01/01/2050',
+        termStartDate,
         maxSessionsPerLocation: 'TEST_maxSessionsPerLocation',
         maxSessionsPerWeek: 'TEST_maxSessionsPerWeek',
         smallCaseMinimumQuantity: 'TEST_smallCaseMinimumQuantity',
@@ -67,9 +84,9 @@ describe('runCreateTermAction', () => {
     ).mock.calls;
     expect(generateCalls.length).toEqual(1);
     expect(generateCalls[0][1]).toEqual({
-      termEndDate: '03/31/2050',
+      termEndDate,
       termName: 'Test term',
-      termStartDate: '01/01/2050',
+      termStartDate,
       maxSessionsPerLocation: 'TEST_maxSessionsPerLocation',
       maxSessionsPerWeek: 'TEST_maxSessionsPerWeek',
       smallCaseMinimumQuantity: 'TEST_smallCaseMinimumQuantity',
@@ -104,9 +121,9 @@ describe('runCreateTermAction', () => {
     await runAction(runCreateTermAction, {
       modules: { presenter },
       props: {
-        termEndDate: '03/31/2050',
+        termEndDate,
         termName: 'test term',
-        termStartDate: '01/01/2050',
+        termStartDate,
       },
     });
 
@@ -131,9 +148,9 @@ describe('runCreateTermAction', () => {
     await runAction(runCreateTermAction, {
       modules: { presenter },
       props: {
-        termEndDate: '03/31/2050',
+        termEndDate,
         termName: 'Test term with warnings',
-        termStartDate: '01/01/2050',
+        termStartDate,
       },
     });
 
