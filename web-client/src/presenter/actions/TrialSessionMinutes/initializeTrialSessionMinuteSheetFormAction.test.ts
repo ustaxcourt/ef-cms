@@ -760,7 +760,7 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
       const entries = Object.values(result);
       expect(entries).toHaveLength(2); // One pending item + one empty row
       expect(entries[0]).toMatchObject({
-        date: '2018-11-21',
+        date: '11/21/2018',
       });
       expect(entries[1]).toMatchObject({
         date: '',
