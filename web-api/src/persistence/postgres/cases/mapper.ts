@@ -1,6 +1,3 @@
-import { marshall } from '@aws-sdk/util-dynamodb';
-import { Case } from '@shared/business/entities/cases/Case';
-import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   CaseStatus,
   CaseType,
@@ -10,9 +7,7 @@ import {
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 import { CaseKysely, DatabaseSchema } from '@web-api/database-types';
-import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const toKyselyNewCase = (rawCase: RawCase) => {
   return {
@@ -105,6 +100,27 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
   };
 };
 
+// TODO 10502
+// export const toKyselyNewCase = (rawCase: RawCase) => {
+
+//   const valueShouldBeDate = (key: string, value: any) => {
+//     if (key === 'mailingDate' || typeof value !== 'string') {
+//       return false;
+//     }
+//     return key.toLowerCase().includes('date');
+//   };
+
+//   return mapValues(
+//     {
+//       ...pick(rawCase, [...DatabaseSchema['dwCase'].columns, 'caseCaption']),
+//     },
+//     (value, key) =>
+//       valueShouldBeDate(key, value)
+//         ? calculateDate({ dateString: value as string })
+//         : value || null,
+//   );
+// };
+
 export function fromKyselyCase<T extends object>(record: T) {
   // Map for renaming keys from DB format to the desired RawCase format.
   const keyRenameMap = {
@@ -167,78 +183,3 @@ export function fromKyselyCase<T extends object>(record: T) {
     record,
   );
 }
-
-export const indexCaseEntity = ({
-  caseRecord,
-  privatePractitioners,
-  irsPractitioners,
-  petitioners,
-}: {
-  caseRecord: CaseKysely;
-  privatePractitioners: TDynamoRecord[];
-  irsPractitioners: TDynamoRecord[];
-  petitioners: RawPetitioner[];
-}) => {
-  return marshall(
-    transformNullToUndefined({
-      pk: `case|${caseRecord.docketNumber}`,
-      sk: `case|${caseRecord.docketNumber}`,
-      associatedJudge: caseRecord.associatedJudge,
-      associatedJudgeId: caseRecord.associatedJudgeId,
-      automaticBlocked: caseRecord.automaticBlocked,
-      automaticBlockedDate:
-        caseRecord.automaticBlockedDate instanceof Date
-          ? caseRecord.automaticBlockedDate?.toISOString()
-          : caseRecord.automaticBlockedDate,
-      automaticBlockedReason: caseRecord.automaticBlockedReason,
-      blocked: caseRecord.blocked,
-      blockedDate:
-        caseRecord.blockedDate instanceof Date
-          ? caseRecord.blockedDate?.toISOString()
-          : caseRecord.blockedDate,
-      blockedReason: caseRecord.blockedReason,
-      caseType: caseRecord.caseType,
-      closedDate:
-        caseRecord.closedDate instanceof Date
-          ? caseRecord.closedDate?.toISOString()
-          : caseRecord.closedDate,
-      createdAt:
-        caseRecord.createdAt instanceof Date
-          ? caseRecord.createdAt?.toISOString()
-          : caseRecord.createdAt,
-      hasPendingItems: caseRecord.hasPendingItems,
-      highPriority: caseRecord.highPriority,
-      isPaper: caseRecord.isPaper,
-      leadDocketNumber: caseRecord.leadDocketNumber,
-      preferredTrialCity: caseRecord.preferredTrialCity,
-      procedureType: caseRecord.procedureType,
-      sealedDate:
-        caseRecord.sealedDate instanceof Date
-          ? caseRecord.sealedDate?.toISOString()
-          : caseRecord.sealedDate,
-      sortableDocketNumber: caseRecord.sortableDocketNumber,
-      status: caseRecord.status,
-      trialDate:
-        caseRecord.trialDate instanceof Date
-          ? caseRecord.trialDate?.toISOString()
-          : caseRecord.trialDate,
-      trialLocation: caseRecord.trialLocation,
-      entityName: 'Case',
-      caseCaption: caseRecord.caption,
-      docketNumber: caseRecord.docketNumber,
-      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
-        docketNumber: caseRecord.docketNumber,
-        docketNumberSuffix: caseRecord.docketNumberSuffix,
-      }),
-      isSealed: caseRecord.isSealed,
-      petitioners: petitioners || [],
-      receivedAt:
-        caseRecord.receivedAt instanceof Date
-          ? caseRecord.receivedAt.toISOString()
-          : caseRecord.receivedAt,
-      privatePractitioners,
-      irsPractitioners,
-    }),
-    { removeUndefinedValues: true },
-  );
-};

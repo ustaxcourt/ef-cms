@@ -1,18 +1,30 @@
-import { applicationContext } from '@web-api/applicationContext';
+import { marshall } from '@aws-sdk/util-dynamodb';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
-  AttributeValueWithName,
   IDynamoDBRecord,
+  AttributeValueWithName,
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
-import { OpenSearchSyncMessage } from '@web-api/gateways/openSearch/openSearchSyncRouter';
+import { applicationContext } from '@web-api/applicationContext';
+import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
-import { indexCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
-import { flattenDeep, isArray } from 'lodash';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { getLogger } from 'aws-xray-sdk';
+import { pick, mapValues, flattenDeep, isArray } from 'lodash';
+import { efcmsCaseMappings } from 'web-api/elasticsearch/efcms-case-mappings';
 
-export const openSearchCaseSync = async ({
+const FIELDS_THAT_NEED_INDEXING = Object.keys(efcmsCaseMappings.properties).map(
+  field => field.split('.')[0],
+);
+
+export const filterCaseBeforeSendingThroughQueue = caseData => {
+  const cases = isArray(caseData) ? caseData : [caseData];
+  return cases.map(c => pick(c, FIELDS_THAT_NEED_INDEXING));
+};
+
+export const openSearchIndexCase = async ({
   message,
 }: {
   message: OpenSearchSyncMessage;
@@ -36,13 +48,27 @@ export const openSearchCaseSync = async ({
     });
 
     // Recommend further optimization so we are not mocking a DynamoDB record after cases are in Postgres
-    const marshalledCase = indexCaseEntity({
-      caseRecord,
-      privatePractitioners,
-      irsPractitioners,
-      petitioners,
-    });
-
+    const marshalledCase = marshall(
+      transformNullToUndefined({
+        ...mapValues(
+          {
+            ...pick(caseRecord, FIELDS_THAT_NEED_INDEXING),
+            privatePractitioners,
+            irsPractitioners,
+          },
+          value => (value instanceof Date ? value.toISOString() : value),
+        ),
+        pk: `case|${caseRecord.docketNumber}`,
+        sk: `case|${caseRecord.docketNumber}`,
+        entityName: 'Case',
+        docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+          docketNumber: caseRecord.docketNumber,
+          docketNumberSuffix: caseRecord.docketNumberSuffix,
+        }),
+        petitioners: petitioners || [],
+      }),
+      { removeUndefinedValues: true },
+    );
     const caseRecords: IDynamoDBRecord[] = [];
 
     caseRecords.push({

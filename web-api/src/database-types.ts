@@ -1,29 +1,36 @@
+import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
+import {
+  filterCaseBeforeSendingThroughQueue,
+  openSearchIndexCase,
+} from 'web-api/elasticsearch/index-cases';
+
+const DEFAULT = {};
 
 const messageTableDefinition = {
-  attachments: {} as
+  attachments: DEFAULT as
     | ColumnType<{ documentId: string }[], string, string>
     | undefined,
-  completedAt: {} as Date | undefined,
-  completedBy: {} as string | undefined,
-  completedBySection: {} as string | undefined,
-  completedByUserId: {} as string | undefined,
-  completedMessage: {} as string | undefined,
-  createdAt: {} as Date,
-  docketNumber: {} as string,
-  from: {} as string,
-  fromSection: {} as string,
-  fromUserId: {} as string,
-  isCompleted: {} as boolean,
-  isRead: {} as boolean,
-  isRepliedTo: {} as boolean,
-  message: {} as string,
-  messageId: {} as string,
-  parentMessageId: {} as string,
-  subject: {} as string,
-  to: {} as string,
-  toSection: {} as string,
-  toUserId: {} as string,
+  completedAt: DEFAULT as Date | undefined,
+  completedBy: DEFAULT as string | undefined,
+  completedBySection: DEFAULT as string | undefined,
+  completedByUserId: DEFAULT as string | undefined,
+  completedMessage: DEFAULT as string | undefined,
+  createdAt: DEFAULT as Date,
+  docketNumber: DEFAULT as string,
+  from: DEFAULT as string,
+  fromSection: DEFAULT as string,
+  fromUserId: DEFAULT as string,
+  isCompleted: DEFAULT as boolean,
+  isRead: DEFAULT as boolean,
+  isRepliedTo: DEFAULT as boolean,
+  message: DEFAULT as string,
+  messageId: DEFAULT as string,
+  parentMessageId: DEFAULT as string,
+  subject: DEFAULT as string,
+  to: DEFAULT as string,
+  toSection: DEFAULT as string,
+  toUserId: DEFAULT as string,
 };
 
 export type MessageTable = typeof messageTableDefinition;
@@ -37,77 +44,77 @@ export type NewMessageKysely = Insertable<MessageTable>;
 export type UpdateMessageKysely = Updateable<MessageTable>;
 
 const caseTableDefinition = {
-  associatedJudge: {} as string | undefined,
-  associatedJudgeId: {} as string | undefined,
-  automaticBlocked: {} as boolean | undefined,
-  automaticBlockedDate: {} as Date | null,
-  automaticBlockedReason: {} as string | undefined,
-  blocked: {} as boolean | undefined,
-  blockedDate: {} as Date | null,
-  blockedReason: {} as string | undefined,
-  canAllowDocumentService: {} as boolean | undefined,
-  canAllowPrintableDocketRecord: {} as boolean | undefined,
-  canDojPractitionersRepresentParty: {} as boolean | undefined,
-  caption: {} as string,
-  caseNote: {} as string | undefined,
-  caseType: {} as string,
-  closedDate: {} as Date | null,
-  createdAt: {} as Date,
-  damages: {} as number | undefined,
-  docketNumber: {} as string,
-  docketNumberSuffix: {} as string | undefined,
-  docketEntries: {} as
+  associatedJudge: DEFAULT as string | undefined,
+  associatedJudgeId: DEFAULT as string | undefined,
+  automaticBlocked: DEFAULT as boolean | undefined,
+  automaticBlockedDate: DEFAULT as Date | null,
+  automaticBlockedReason: DEFAULT as string | undefined,
+  blocked: DEFAULT as boolean | undefined,
+  blockedDate: DEFAULT as Date | null,
+  blockedReason: DEFAULT as string | undefined,
+  canAllowDocumentService: DEFAULT as boolean | undefined,
+  canAllowPrintableDocketRecord: DEFAULT as boolean | undefined,
+  canDojPractitionersRepresentParty: DEFAULT as boolean | undefined,
+  caption: DEFAULT as string,
+  caseNote: DEFAULT as string | undefined,
+  caseType: DEFAULT as string,
+  closedDate: DEFAULT as Date | null,
+  createdAt: DEFAULT as Date,
+  damages: DEFAULT as number | undefined,
+  docketNumber: DEFAULT as string,
+  docketNumberSuffix: DEFAULT as string | undefined,
+  docketEntries: DEFAULT as
     | ColumnType<
         { docketEntryId: string; docketNumber: string }[],
         string,
         string
       >
     | undefined,
-  filingType: {} as string | undefined,
-  hasPendingItems: {} as boolean | undefined,
-  hasVerifiedIrsNotice: {} as boolean | undefined,
-  hearings: {} as
+  filingType: DEFAULT as string | undefined,
+  hasPendingItems: DEFAULT as boolean | undefined,
+  hasVerifiedIrsNotice: DEFAULT as boolean | undefined,
+  hearings: DEFAULT as
     | ColumnType<{ trialSessionId: string }[], string, string>
     | undefined,
-  highPriority: {} as boolean | undefined,
-  highPriorityReason: {} as string | undefined,
-  initialCaption: {} as string | undefined,
-  initialDocketNumberSuffix: {} as string | undefined,
-  irsNoticeDate: {} as Date | null,
-  isPaper: {} as boolean | null | undefined,
-  isSealed: {} as boolean | null | undefined,
-  judgeUserId: {} as string | undefined,
-  leadDocketNumber: {} as string | null | undefined,
-  litigationCosts: {} as number | undefined,
-  mailingDate: {} as string | undefined,
-  noticeOfAttachments: {} as boolean | undefined,
-  noticeOfTrialDate: {} as Date | null,
-  orderDesignatingPlaceOfTrial: {} as boolean | undefined,
-  orderForAmendedPetition: {} as boolean | undefined,
-  orderForAmendedPetitionAndFilingFee: {} as boolean | undefined,
-  orderForCds: {} as boolean | undefined,
-  orderForFilingFee: {} as boolean | undefined,
-  orderForRatification: {} as boolean | undefined,
-  orderToShowCause: {} as boolean | undefined,
-  partyType: {} as string,
-  petitionPaymentDate: {} as Date | null,
-  petitionPaymentMethod: {} as string | undefined,
-  petitionPaymentStatus: {} as string,
-  petitionPaymentWaivedDate: {} as Date | null,
-  preferredTrialCity: {} as string | undefined,
-  procedureType: {} as string,
-  qcCompleteForTrial: {} as
+  highPriority: DEFAULT as boolean | undefined,
+  highPriorityReason: DEFAULT as string | undefined,
+  initialCaption: DEFAULT as string | undefined,
+  initialDocketNumberSuffix: DEFAULT as string | undefined,
+  irsNoticeDate: DEFAULT as Date | null,
+  isPaper: DEFAULT as boolean | null | undefined,
+  isSealed: DEFAULT as boolean | null | undefined,
+  judgeUserId: DEFAULT as string | undefined,
+  leadDocketNumber: DEFAULT as string | null | undefined,
+  litigationCosts: DEFAULT as number | undefined,
+  mailingDate: DEFAULT as string | undefined,
+  noticeOfAttachments: DEFAULT as boolean | undefined,
+  noticeOfTrialDate: DEFAULT as Date | null,
+  orderDesignatingPlaceOfTrial: DEFAULT as boolean | undefined,
+  orderForAmendedPetition: DEFAULT as boolean | undefined,
+  orderForAmendedPetitionAndFilingFee: DEFAULT as boolean | undefined,
+  orderForCds: DEFAULT as boolean | undefined,
+  orderForFilingFee: DEFAULT as boolean | undefined,
+  orderForRatification: DEFAULT as boolean | undefined,
+  orderToShowCause: DEFAULT as boolean | undefined,
+  partyType: DEFAULT as string,
+  petitionPaymentDate: DEFAULT as Date | null,
+  petitionPaymentMethod: DEFAULT as string | undefined,
+  petitionPaymentStatus: DEFAULT as string,
+  petitionPaymentWaivedDate: DEFAULT as Date | null,
+  preferredTrialCity: DEFAULT as string | undefined,
+  procedureType: DEFAULT as string,
+  qcCompleteForTrial: DEFAULT as
     | ColumnType<{ trialSessionId: string }, string, string>
     | undefined,
-  receivedAt: {} as Date,
-  sealedDate: {} as Date | null,
+  receivedAt: DEFAULT as Date,
+  sealedDate: DEFAULT as Date | null,
   sortableDocketNumber: 0 as number,
-  status: {} as string,
-  trialDate: {} as Date | null,
-  trialLocation: {} as string | null,
-  trialSessionId: {} as string | null,
-  trialTime: {} as string | null,
-  useSameAsPrimary: {} as boolean | undefined,
+  status: DEFAULT as string,
+  trialDate: DEFAULT as Date | null,
+  trialLocation: DEFAULT as string | null,
+  trialSessionId: DEFAULT as string | null,
+  trialTime: DEFAULT as string | null,
+  useSameAsPrimary: DEFAULT as boolean | undefined,
 };
 
 export type CaseTable = typeof caseTableDefinition;
@@ -121,13 +128,13 @@ export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
 
 const caseCorrespondenceTableDefinition = {
-  archived: {} as boolean | undefined,
-  correspondenceId: {} as string,
-  documentTitle: {} as string,
-  filedBy: {} as string | undefined,
-  filingDate: {} as Date,
-  userId: {} as string,
-  docketNumber: {} as string,
+  archived: DEFAULT as boolean | undefined,
+  correspondenceId: DEFAULT as string,
+  documentTitle: DEFAULT as string,
+  filedBy: DEFAULT as string | undefined,
+  filingDate: DEFAULT as Date,
+  userId: DEFAULT as string,
+  docketNumber: DEFAULT as string,
 };
 
 export type CaseCorrespondenceTable = typeof caseCorrespondenceTableDefinition;
@@ -142,14 +149,14 @@ export type UpdateCaseCorrespondenceKysely =
   Updateable<CaseCorrespondenceTable>;
 
 const caseDeadlineTableDefinition = {
-  associatedJudge: {} as string,
-  associatedJudgeId: {} as string | undefined,
-  caseDeadlineId: {} as string,
-  createdAt: {} as Date,
-  deadlineDate: {} as Date,
-  description: {} as string,
-  docketNumber: {} as string,
-  sortableDocketNumber: {} as number,
+  associatedJudge: DEFAULT as string,
+  associatedJudgeId: DEFAULT as string | undefined,
+  caseDeadlineId: DEFAULT as string,
+  createdAt: DEFAULT as Date,
+  deadlineDate: DEFAULT as Date,
+  description: DEFAULT as string,
+  docketNumber: DEFAULT as string,
+  sortableDocketNumber: DEFAULT as number,
 };
 
 export type CaseDeadlineTable = typeof caseDeadlineTableDefinition;
@@ -163,11 +170,11 @@ export type NewCaseDeadlineKysely = Insertable<CaseDeadlineTable>;
 export type UpdateCaseDeadlineKysely = Updateable<CaseDeadlineTable>;
 
 const caseWorksheetTableDefinition = {
-  docketNumber: {} as string,
-  finalBriefDueDate: {} as Date | null | undefined,
-  primaryIssue: {} as string | undefined,
-  statusOfMatter: {} as string | undefined,
-  judgeUserId: {} as string | undefined,
+  docketNumber: DEFAULT as string,
+  finalBriefDueDate: DEFAULT as Date | null | undefined,
+  primaryIssue: DEFAULT as string | undefined,
+  statusOfMatter: DEFAULT as string | undefined,
+  judgeUserId: DEFAULT as string | undefined,
 };
 
 export type CaseWorksheetTable = typeof caseWorksheetTableDefinition;
@@ -181,29 +188,29 @@ export type NewCaseWorksheetKysely = Insertable<CaseWorksheetTable>;
 export type UpdateCaseWorksheetKysely = Updateable<CaseWorksheetTable>;
 
 const workItemTableDefinition = {
-  assigneeId: {} as string | undefined,
-  assigneeName: {} as string | undefined,
-  associatedJudge: {} as string,
-  associatedJudgeId: {} as string | undefined,
-  caseIsInProgress: {} as boolean | undefined,
-  completedAt: {} as Date | undefined,
-  completedBy: {} as string | undefined,
-  completedByUserId: {} as string | undefined,
-  completedMessage: {} as string | undefined,
-  createdAt: {} as Date,
-  docketEntry: {} as any,
-  docketNumber: {} as string,
-  hideFromPendingMessages: {} as boolean | undefined,
-  highPriority: {} as boolean | undefined,
-  inProgress: {} as boolean | undefined,
-  isInitializeCase: {} as boolean | undefined,
-  isRead: {} as boolean | undefined,
-  section: {} as string,
-  sentBy: {} as string,
-  sentBySection: {} as string | undefined,
-  sentByUserId: {} as string | undefined,
-  updatedAt: {} as Date,
-  workItemId: {} as string,
+  assigneeId: DEFAULT as string | undefined,
+  assigneeName: DEFAULT as string | undefined,
+  associatedJudge: DEFAULT as string,
+  associatedJudgeId: DEFAULT as string | undefined,
+  caseIsInProgress: DEFAULT as boolean | undefined,
+  completedAt: DEFAULT as Date | undefined,
+  completedBy: DEFAULT as string | undefined,
+  completedByUserId: DEFAULT as string | undefined,
+  completedMessage: DEFAULT as string | undefined,
+  createdAt: DEFAULT as Date,
+  docketEntry: DEFAULT as any,
+  docketNumber: DEFAULT as string,
+  hideFromPendingMessages: DEFAULT as boolean | undefined,
+  highPriority: DEFAULT as boolean | undefined,
+  inProgress: DEFAULT as boolean | undefined,
+  isInitializeCase: DEFAULT as boolean | undefined,
+  isRead: DEFAULT as boolean | undefined,
+  section: DEFAULT as string,
+  sentBy: DEFAULT as string,
+  sentBySection: DEFAULT as string | undefined,
+  sentByUserId: DEFAULT as string | undefined,
+  updatedAt: DEFAULT as Date,
+  workItemId: DEFAULT as string,
 };
 
 export type WorkItemTable = typeof workItemTableDefinition;
@@ -217,34 +224,34 @@ export type NewWorkItemKysely = Insertable<WorkItemTable>;
 export type UpdateWorkItemKysely = Updateable<WorkItemTable>;
 
 const petitionerOnCaseTableDefinition = {
-  additionalName: {} as string | undefined,
-  contactType: {} as string,
-  docketNumber: {} as string,
-  hasConsentedToElectronicService: {} as boolean | undefined,
-  hasElectronicAccess: {} as boolean | undefined,
-  inCareOf: {} as string | undefined,
-  isAddressSealed: {} as boolean,
-  paperPetitionEmail: {} as string | undefined,
-  placeOfLegalResidence: {} as string | undefined,
-  sealedAndUnavailable: {} as boolean | undefined,
-  secondaryName: {} as string | undefined,
-  serviceIndicator: {} as string | undefined,
-  title: {} as string | undefined,
-  orderOnCase: {} as number,
+  additionalName: DEFAULT as string | undefined,
+  contactType: DEFAULT as string,
+  docketNumber: DEFAULT as string,
+  hasConsentedToElectronicService: DEFAULT as boolean | undefined,
+  hasElectronicAccess: DEFAULT as boolean | undefined,
+  inCareOf: DEFAULT as string | undefined,
+  isAddressSealed: DEFAULT as boolean,
+  paperPetitionEmail: DEFAULT as string | undefined,
+  placeOfLegalResidence: DEFAULT as string | undefined,
+  sealedAndUnavailable: DEFAULT as boolean | undefined,
+  secondaryName: DEFAULT as string | undefined,
+  serviceIndicator: DEFAULT as string | undefined,
+  title: DEFAULT as string | undefined,
+  orderOnCase: DEFAULT as number,
 
   // Maybe break this out into a contact table down the road
-  address1: {} as string,
-  address2: {} as string | undefined,
-  address3: {} as string | undefined,
-  city: {} as string,
-  contactId: {} as string,
-  country: {} as string | undefined,
-  countryType: {} as string,
-  email: {} as string | undefined,
-  name: {} as string,
-  phone: {} as string,
-  postalCode: {} as string,
-  state: {} as string | undefined,
+  address1: DEFAULT as string,
+  address2: DEFAULT as string | undefined,
+  address3: DEFAULT as string | undefined,
+  city: DEFAULT as string,
+  contactId: DEFAULT as string,
+  country: DEFAULT as string | undefined,
+  countryType: DEFAULT as string,
+  email: DEFAULT as string | undefined,
+  name: DEFAULT as string,
+  phone: DEFAULT as string,
+  postalCode: DEFAULT as string,
+  state: DEFAULT as string | undefined,
 };
 
 export type PetitionerOnCaseTable = typeof petitionerOnCaseTableDefinition;
@@ -258,11 +265,11 @@ export type NewPetitionerOnCaseKysely = Insertable<PetitionerOnCaseTable>;
 export type UpdatePetitionerOnCaseKysely = Updateable<PetitionerOnCaseTable>;
 
 const caseStatusUpdateTableDefinition = {
-  statusUpdateId: {} as string,
-  changedBy: {} as string,
-  date: {} as Date,
-  docketNumber: {} as string,
-  updatedCaseStatus: {} as string,
+  statusUpdateId: DEFAULT as string,
+  changedBy: DEFAULT as string,
+  date: DEFAULT as Date,
+  docketNumber: DEFAULT as string,
+  updatedCaseStatus: DEFAULT as string,
 };
 
 export type CaseStatusUpdateTable = typeof caseStatusUpdateTableDefinition;
@@ -276,16 +283,16 @@ export type NewCaseStatusUpdateKysely = Insertable<CaseStatusUpdateTable>;
 export type UpdateCaseStatusUpdateKysely = Updateable<CaseStatusUpdateTable>;
 
 const caseStatisticTableDefinition = {
-  docketNumber: {} as string,
-  irsDeficiencyAmount: {} as string,
-  irsTotalPenalties: {} as string,
-  statisticId: {} as string,
-  year: {} as number | null | undefined,
-  yearOrPeriod: {} as string | null | undefined,
-  determinationDeficiencyAmount: {} as string | null | undefined,
-  determinationTotalPenalties: {} as string | null | undefined,
-  lastDateOfPeriod: {} as Date | null | undefined,
-  updatedAt: {} as Date,
+  docketNumber: DEFAULT as string,
+  irsDeficiencyAmount: DEFAULT as string,
+  irsTotalPenalties: DEFAULT as string,
+  statisticId: DEFAULT as string,
+  year: DEFAULT as number | null | undefined,
+  yearOrPeriod: DEFAULT as string | null | undefined,
+  determinationDeficiencyAmount: DEFAULT as string | null | undefined,
+  determinationTotalPenalties: DEFAULT as string | null | undefined,
+  lastDateOfPeriod: DEFAULT as Date | null | undefined,
+  updatedAt: DEFAULT as Date,
 };
 
 export type CaseStatisticTable = typeof caseStatisticTableDefinition;
@@ -299,12 +306,12 @@ export type NewCaseStatisticKysely = Insertable<CaseStatisticTable>;
 export type UpdateCaseStatisticKysely = Updateable<CaseStatisticTable>;
 
 const statisticPenaltyTableDefinition = {
-  statisticId: {} as string,
-  name: {} as string,
-  penaltyAmount: {} as string,
-  penaltyId: {} as string,
-  penaltyType: {} as string,
-  updatedAt: {} as Date,
+  statisticId: DEFAULT as string,
+  name: DEFAULT as string,
+  penaltyAmount: DEFAULT as string,
+  penaltyId: DEFAULT as string,
+  penaltyType: DEFAULT as string,
+  updatedAt: DEFAULT as Date,
 };
 
 export type StatisticPenaltyTable = typeof statisticPenaltyTableDefinition;
@@ -318,9 +325,9 @@ export type NewStatisticPenaltyKysely = Insertable<StatisticPenaltyTable>;
 export type UpdateStatisticPenaltyKysely = Updateable<StatisticPenaltyTable>;
 
 const userCaseNoteTableDefinition = {
-  docketNumber: {} as string,
-  userId: {} as string,
-  notes: {} as string | undefined,
+  docketNumber: DEFAULT as string,
+  userId: DEFAULT as string,
+  notes: DEFAULT as string | undefined,
 };
 
 export type UserCaseNoteTable = typeof userCaseNoteTableDefinition;
@@ -335,23 +342,23 @@ export type UpdateUserCaseNoteKysely = Updateable<UserCaseNoteTable>;
 
 // TODO: This is just a stub to get things out of Open Search and into Postgres
 const docketEntryTableDefinition = {
-  createdAt: {} as Date,
-  docketEntryId: {} as string,
-  docketNumber: {} as string,
-  documentTitle: {} as string,
-  documentType: {} as string,
-  eventCode: {} as string,
-  filingDate: {} as Date,
-  isLegacyServed: {} as boolean,
-  pending: {} as boolean,
-  receivedAt: {} as Date,
-  servedAt: {} as Date | null,
-  isStricken: {} as boolean | null,
-  judge: {} as string | null,
-  signedJudgeName: {} as string | null,
-  isSealed: {} as boolean | null,
-  sealedTo: {} as string | undefined,
-  numberOfPages: {} as number | undefined,
+  createdAt: DEFAULT as Date,
+  docketEntryId: DEFAULT as string,
+  docketNumber: DEFAULT as string,
+  documentTitle: DEFAULT as string,
+  documentType: DEFAULT as string,
+  eventCode: DEFAULT as string,
+  filingDate: DEFAULT as Date,
+  isLegacyServed: DEFAULT as boolean,
+  pending: DEFAULT as boolean,
+  receivedAt: DEFAULT as Date,
+  servedAt: DEFAULT as Date | null,
+  isStricken: DEFAULT as boolean | null,
+  judge: DEFAULT as string | null,
+  signedJudgeName: DEFAULT as string | null,
+  isSealed: DEFAULT as boolean | null,
+  sealedTo: DEFAULT as string | undefined,
+  numberOfPages: DEFAULT as number | undefined,
 };
 
 export type DocketEntryTable = typeof docketEntryTableDefinition;
@@ -364,58 +371,84 @@ export type DocketEntryKysely = Selectable<DocketEntryTable>;
 export type NewDocketEntryKysely = Insertable<DocketEntryTable>;
 export type UpdateDocketEntryKysely = Updateable<DocketEntryTable>;
 
+interface DatabaseSchemaType {
+  dwCase: DatabaseTableMetadata<CaseTable>;
+  dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
+  dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
+  dwCaseStatistic: DatabaseTableMetadata<CaseStatisticTable>;
+  dwCaseStatusUpdate: DatabaseTableMetadata<CaseStatusUpdateTable>;
+  dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
+  dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
+  dwMessage: DatabaseTableMetadata<MessageTable>;
+  dwPetitionerOnCase: DatabaseTableMetadata<PetitionerOnCaseTable>;
+  dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
+  dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
+  dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
+}
+
 type DatabaseTableMetadata<TTable> = {
   table: TTable;
   columns: string[];
+  filterBeforeSendingThroughQueue?: (rawResult) => {};
+  openSearchIndex?: ({
+    message,
+  }: {
+    message: OpenSearchSyncMessage;
+  }) => Promise<void>;
 };
 
-export const DatabaseSchema = {
-  dwCase: { table: {} as CaseTable, columns: DW_CASE_COLUMNS },
+export const DatabaseSchema: DatabaseSchemaType = {
+  dwCase: {
+    table: DEFAULT as CaseTable,
+    columns: DW_CASE_COLUMNS,
+    filterBeforeSendingThroughQueue: filterCaseBeforeSendingThroughQueue,
+    openSearchIndex: openSearchIndexCase,
+  },
   dwCaseCorrespondence: {
-    table: {} as CaseCorrespondenceTable,
+    table: DEFAULT as CaseCorrespondenceTable,
     columns: DW_CASE_CORRESPONDENCE_COLUMNS,
   },
   dwCaseDeadline: {
-    table: {} as CaseDeadlineTable,
+    table: DEFAULT as CaseDeadlineTable,
     columns: DW_CASE_DEADLINE_COLUMNS,
   },
   dwCaseStatistic: {
-    table: {} as CaseStatisticTable,
+    table: DEFAULT as CaseStatisticTable,
     columns: DW_CASE_STATISTIC_COLUMNS,
   },
   dwCaseStatusUpdate: {
-    table: {} as CaseStatusUpdateTable,
+    table: DEFAULT as CaseStatusUpdateTable,
     columns: DW_CASE_STATUS_UPDATES_COLUMNS,
   },
   dwCaseWorksheet: {
-    table: {} as CaseWorksheetTable,
+    table: DEFAULT as CaseWorksheetTable,
     columns: DW_CASE_WORKSHEET_COLUMNS,
   },
   dwDocketEntry: {
-    table: {} as DocketEntryTable,
+    table: DEFAULT as DocketEntryTable,
     columns: DW_DOCKET_ENTRY_COLUMNS,
   },
   dwMessage: {
-    table: {} as MessageTable,
+    table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
   },
   dwPetitionerOnCase: {
-    table: {} as PetitionerOnCaseTable,
+    table: DEFAULT as PetitionerOnCaseTable,
     columns: DW_PETITIONERS_ON_CASE_COLUMNS,
   },
   dwStatisticPenalty: {
-    table: {} as StatisticPenaltyTable,
+    table: DEFAULT as StatisticPenaltyTable,
     columns: DW_STATISTIC_PENALTY_COLUMNS,
   },
   dwUserCaseNote: {
-    table: {} as UserCaseNoteTable,
+    table: DEFAULT as UserCaseNoteTable,
     columns: DW_USER_CASE_NOTE_COLUMNS,
   },
   dwWorkItem: {
-    table: {} as WorkItemTable,
+    table: DEFAULT as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
   },
-} as const satisfies Record<string, DatabaseTableMetadata<any>>;
+};
 
 type ExtractTable<T> = T extends { table: infer U } ? U : never;
 
