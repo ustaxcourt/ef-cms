@@ -39,14 +39,19 @@ export const CaseDeadlinesInternal = connect(
             </thead>
             <tbody>
               {formattedCaseDeadlines.map(item => (
-                <tr key={item.caseDeadlineId}>
+                <tr key={item.caseDeadlineId} className="case-deadline-row">
                   <td className="smaller-column">
                     {item.deadlineDateFormatted}
                   </td>
                   <td className="overdue smaller-column center-column semi-bold">
                     {item.overdue && 'Overdue'}
                   </td>
-                  <td className="padding-extra">{item.description}</td>
+                  <td
+                    className="padding-extra"
+                    data-testid="case-deadline-description"
+                  >
+                    {item.description}
+                  </td>
                   <td className="smaller-column center-column">
                     {caseDetailHelper.hasTrackedItemsPermission &&
                       item.displayEditAndDeleteLink && (
