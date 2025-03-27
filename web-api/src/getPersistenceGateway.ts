@@ -71,6 +71,7 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSesStatus } from './persistence/ses/getSesStatus';
+import { getColdCases } from './persistence/elasticsearch/getColdCases';
 import { getStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/getStoredApplicationHealth';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
@@ -251,6 +252,7 @@ const gatewayMethods = {
   getReconciliationReport,
   getRequestResults,
   getSesStatus,
+  getColdCases,
   getStoredApplicationHealth,
   getTableStatus,
   getTrialSessionById,
