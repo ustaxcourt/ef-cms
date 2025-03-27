@@ -1,22 +1,70 @@
-import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { caseSearchByNameHelper as caseSearchByNameHelperComputed } from '@web-client/presenter/computeds/AdvancedSearch/CaseSearchByNameHelper';
-import { runCompute } from '@web-client/presenter/test.cerebral';
-import { withAppContextDecorator } from '@web-client/withAppContext';
+import { caseSearchByNameHelper } from '@web-client/presenter/computeds/AdvancedSearch/CaseSearchByNameHelper';
+import {
+  CASE_TYPES_MAP,
+  PROCEDURE_TYPES_MAP,
+} from '@shared/business/entities/EntityConstants';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
+import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 
 describe('caseSearchByNameHelper', () => {
-  const caseSearchByNameHelper = withAppContextDecorator(
-    caseSearchByNameHelperComputed,
-    applicationContext,
-  );
-
   it('returns appropriate defaults if permissions are not defined in state', () => {
-    const TEST_DATE = 'TEST_DATE';
-    applicationContext.getUtilities().formatNow = () => TEST_DATE;
+    const caseTypeOptions = [
+      {
+        label: 'None',
+        value: [
+          CASE_TYPES_MAP.deficiency,
+          CASE_TYPES_MAP.disclosure,
+          CASE_TYPES_MAP.innocentSpouse,
+          CASE_TYPES_MAP.interestAbatement,
+          CASE_TYPES_MAP.other,
+          CASE_TYPES_MAP.partnershipSection1101,
+          CASE_TYPES_MAP.partnershipSection6226,
+          CASE_TYPES_MAP.partnershipSection6228,
+          CASE_TYPES_MAP.workerClassification,
+        ],
+      },
+      {
+        label: `L - Lien/Levy`,
+        value: CASE_TYPES_MAP.cdp,
+      },
+      {
+        label: `P - ${CASE_TYPES_MAP.passport}`,
+        value: CASE_TYPES_MAP.passport,
+      },
+      {
+        label: `R - ${CASE_TYPES_MAP.djRetirementPlan}`,
+        value: CASE_TYPES_MAP.djRetirementPlan,
+      },
+      {
+        label: `W - ${CASE_TYPES_MAP.whistleblower}`,
+        value: CASE_TYPES_MAP.whistleblower,
+      },
+      {
+        label: `X - ${CASE_TYPES_MAP.djExemptOrg}`,
+        value: CASE_TYPES_MAP.djExemptOrg,
+      },
+    ];
+    const caseProcedureOptions = [
+      {
+        label: 'All',
+        value: ALL_SELECTION,
+      },
+      {
+        label: PROCEDURE_TYPES_MAP.regular,
+        value: PROCEDURE_TYPES_MAP.regular,
+      },
+      {
+        label: PROCEDURE_TYPES_MAP.small,
+        value: PROCEDURE_TYPES_MAP.small,
+      },
+    ];
 
-    const result = runCompute(caseSearchByNameHelper, {} as any);
+    const result = caseSearchByNameHelper();
 
     expect(result).toEqual({
-      today: 'TEST_DATE',
+      today: formatNow(FORMATS.YYYYMMDD),
+      caseTypeOptions,
+      caseProcedureOptions,
     });
   });
 });

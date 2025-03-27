@@ -140,7 +140,7 @@ export const SearchDateRangePickerComponent = connect(
           errorText={
             validationErrors.dateRangeRequired || validationErrors.startDate
           }
-          formGroupRef={startDatePickerRef}
+          ref={startDatePickerRef}
         >
           <label
             className="usa-label"
@@ -171,7 +171,7 @@ export const SearchDateRangePickerComponent = connect(
           errorText={
             validationErrors.dateRangeRequired || validationErrors.endDate
           }
-          formGroupRef={endDatePickerRef}
+          ref={endDatePickerRef}
         >
           <label
             className="usa-label"
