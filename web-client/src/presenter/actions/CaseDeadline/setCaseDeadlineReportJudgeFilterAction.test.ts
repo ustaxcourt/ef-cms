@@ -4,16 +4,17 @@ import { setCaseDeadlineReportJudgeFilterAction } from './setCaseDeadlineReportJ
 
 describe('setCaseDeadlineReportJudgeFilterAction', () => {
   it('sets state.caseDeadlineReport.judgeFilter to the props.judge passed in', async () => {
+    const judgeId = '123456';
     const result = await runAction(setCaseDeadlineReportJudgeFilterAction, {
       modules: { presenter },
       props: {
-        judge: 'Buch',
+        selectedJudgeId: judgeId,
       },
       state: {
         caseDeadlineReport: {},
       },
     });
 
-    expect(result.state.caseDeadlineReport.judgeFilter).toEqual('Buch');
+    expect(result.state.caseDeadlineReport.judgeIdFilter).toEqual(judgeId);
   });
 });
