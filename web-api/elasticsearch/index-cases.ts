@@ -13,7 +13,7 @@ import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/partie
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getLogger } from 'aws-xray-sdk';
 import { pick, mapValues, flattenDeep, isArray } from 'lodash';
-import { efcmsCaseMappings } from 'web-api/elasticsearch/efcms-case-mappings';
+import { efcmsCaseMappings } from './efcms-case-mappings';
 
 const FIELDS_THAT_NEED_INDEXING = Object.keys(efcmsCaseMappings.properties).map(
   field => field.split('.')[0],
