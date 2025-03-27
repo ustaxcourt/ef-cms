@@ -3,7 +3,7 @@ import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 import {
   filterCaseBeforeSendingThroughQueue,
   openSearchIndexCase,
-} from 'web-api/elasticsearch/index-cases';
+} from '../../web-api/elasticsearch/index-cases';
 
 const DEFAULT = {};
 
