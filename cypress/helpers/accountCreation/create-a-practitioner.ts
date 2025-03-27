@@ -1,8 +1,19 @@
 import { faker } from '@faker-js/faker';
 import { v4 } from 'uuid';
 
-export function createAPractitioner() {
-  const firstName = faker.person.firstName();
+export function createAPractitioner(
+  {
+    firstName = faker.person.firstName(),
+  }: Partial<{
+    firstName: string;
+  }> = {
+    firstName: faker.person.firstName(),
+  },
+): Cypress.Chainable<{
+  barNumber: string;
+  firstName: string;
+  lastName: string;
+}> {
   const lastName = faker.person.lastName();
 
   cy.get('[data-testid="search-link"]').click();
