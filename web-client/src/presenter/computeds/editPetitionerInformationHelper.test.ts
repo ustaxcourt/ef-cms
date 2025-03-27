@@ -69,6 +69,52 @@ describe('editPetitionerInformationHelper', () => {
     expect(result.userPendingEmail).toEqual('email@example.com');
   });
 
+  it('handles an undefined state.form property', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [
+            { contactType: CONTACT_TYPES.petitioner },
+            { contactType: CONTACT_TYPES.petitioner },
+          ],
+        },
+        form: undefined,
+        permissions: {
+          EDIT_PETITIONER_EMAIL: true,
+          REMOVE_PETITIONER: true,
+          SEAL_ADDRESS: true,
+        },
+      },
+    });
+
+    expect(result.showEditEmail).toEqual(true);
+    expect(result.showRemovePetitionerButton).toBeFalsy();
+    expect(result.showSealAddress).toEqual(true);
+  });
+
+  it('handles an undefined state.form.contact property', () => {
+    const result = runCompute(editPetitionerInformationHelper, {
+      state: {
+        caseDetail: {
+          petitioners: [
+            { contactType: CONTACT_TYPES.petitioner },
+            { contactType: CONTACT_TYPES.petitioner },
+          ],
+        },
+        form: { contact: undefined },
+        permissions: {
+          EDIT_PETITIONER_EMAIL: true,
+          REMOVE_PETITIONER: true,
+          SEAL_ADDRESS: true,
+        },
+      },
+    });
+
+    expect(result.showEditEmail).toEqual(true);
+    expect(result.showRemovePetitionerButton).toBeFalsy();
+    expect(result.showSealAddress).toEqual(true);
+  });
+
   describe('showRemovePetitionerButton', () => {
     it('is false when the current user does not have permission to edit petitioners', () => {
       const result = runCompute(editPetitionerInformationHelper, {
