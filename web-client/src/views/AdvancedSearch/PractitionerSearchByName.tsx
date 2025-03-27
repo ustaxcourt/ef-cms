@@ -122,7 +122,11 @@ export const PractitionerSearchByName = connect(
                 <div className="display-flex gap-4">
                   {PRACTICE_TYPE_OPTIONS.map(practiceType => {
                     return (
-                      <div className="usa-checkbox" key={practiceType}>
+                      <div
+                        className="usa-checkbox"
+                        key={practiceType}
+                        data-testid={`practice-type-${practiceType}`}
+                      >
                         <input
                           checked={advancedSearchForm.practitionerSearchByName.practiceType?.includes(
                             practiceType,
@@ -194,6 +198,7 @@ export const PractitionerSearchByName = connect(
                     admissionStatus => (
                       <PillButton
                         key={admissionStatus}
+                        buttonDataTestId={`admission-status-pill-${admissionStatus}`}
                         text={admissionStatus}
                         onRemove={() => {
                           updateAdvancedSearchFormValueSequence({
@@ -252,6 +257,7 @@ export const PractitionerSearchByName = connect(
                         <PillButton
                           key={originalBarState}
                           text={ALL_STATE_OPTIONS[originalBarState]}
+                          buttonDataTestId={`bar-state-pill-${originalBarState}`}
                           onRemove={() => {
                             updateAdvancedSearchFormValueSequence({
                               formType: 'practitionerSearchByName',

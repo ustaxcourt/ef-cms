@@ -1,9 +1,11 @@
 import { faker } from '@faker-js/faker';
 import { v4 } from 'uuid';
 
-export function createAPractitioner() {
+export function createAPractitioner(options?: { barState?: string }) {
   const firstName = faker.person.firstName();
   const lastName = faker.person.lastName();
+  const originalBarState = options?.barState || faker.location.state();
+  const state = faker.location.state();
 
   cy.get('[data-testid="search-link"]').click();
   cy.get('[data-testid="practitioner-search-tab"] > .button-text').click();
@@ -28,9 +30,7 @@ export function createAPractitioner() {
   );
   cy.get('#contact\\.address2').type(faker.location.buildingNumber());
   cy.get('[data-testid="contact.city"]').type(faker.location.city());
-  cy.get('[data-testid="contact.state"]').select(
-    faker.location.state({ abbreviated: true }),
-  );
+  cy.get('[data-testid="contact.state"]').select(state);
   cy.get('[data-testid="contact.postalCode"]').type(faker.location.zipCode());
 
   cy.get('[data-testid="practitioner-phone-input"]').type(faker.phone.number());
@@ -42,7 +42,7 @@ export function createAPractitioner() {
   );
 
   cy.get('[data-testid="practitioner-bar-state-select"]').select(
-    faker.location.state({ abbreviated: true }),
+    originalBarState,
   );
   cy.get(
     '.usa-date-picker__wrapper > [data-testid="admissions-date-picker"]',
@@ -60,6 +60,7 @@ export function createAPractitioner() {
         barNumber,
         firstName,
         lastName,
+        originalBarState,
       });
     });
 }
