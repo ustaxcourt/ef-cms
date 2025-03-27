@@ -1357,7 +1357,7 @@ const router = {
         setPageTitle(
           `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
         );
-        return app.getSequence('gotoOrderResponseSequence')({
+        return app.getSequence('goToOrderResponseSequence')({
           docketEntryId,
           docketNumber,
           parentMessageId,

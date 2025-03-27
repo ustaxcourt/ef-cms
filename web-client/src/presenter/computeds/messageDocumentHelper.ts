@@ -15,6 +15,7 @@ export const messageDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
+  console.log('In message document Helper!!!');
   const {
     COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
@@ -30,7 +31,6 @@ export const messageDocumentHelper = (
   const permissions = get(state.permissions);
   const caseDetail = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
-
   const viewerDocumentToDisplayDocumentId = get(
     state.messageViewerDocumentToDisplay.documentId,
   );
@@ -145,7 +145,7 @@ export const messageDocumentHelper = (
 
   const showOrderResponseButton =
     permissions.ORDER_RESPONSE &&
-    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode);
+    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
 
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
@@ -198,10 +198,10 @@ export const messageDocumentHelper = (
   const applyStampFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/apply-stamp`;
   const editCorrespondenceLink = `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplayDocumentId}/${parentMessageId}`;
   const messageDetailLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`;
+  // TODO: 10586: Wrape up link to message route. Button now working for messages.
   const motionOrderResponseFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/motion-order-response-create`;
   const servePetitionLink = `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`;
   const statusReportOrderFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/status-report-order-create`;
-
   return {
     addDocketEntryLink,
     applySignatureLink,
