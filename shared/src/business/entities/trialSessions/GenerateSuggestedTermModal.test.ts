@@ -1,13 +1,30 @@
+import {
+  getBusinessDateInFuture,
+  FORMATS,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
 import { GenerateSuggestedTermModal } from './GenerateSuggestedTermModal';
 import { yesterdayFormatted } from '@shared/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 describe('GenerateSuggestedTermModal', () => {
+  const termEndDate = getBusinessDateInFuture({
+    numberOfDays: 360,
+    outputFormat: FORMATS.MMDDYYYY,
+    startDate: createISODateString(),
+  });
+
+  const termStartDate = getBusinessDateInFuture({
+    numberOfDays: 1,
+    outputFormat: FORMATS.MMDDYYYY,
+    startDate: createISODateString(),
+  });
+
   describe('validation', () => {
     it('should pass validation when all required fields are valid', () => {
       const formEntity = new GenerateSuggestedTermModal({
-        termEndDate: '03/31/2050',
+        termEndDate,
         termName: 'Test Term',
-        termStartDate: '01/01/2050',
+        termStartDate,
       });
 
       expect(formEntity.isValid()).toBeTruthy();
@@ -26,9 +43,9 @@ describe('GenerateSuggestedTermModal', () => {
 
     it('should fail validation when end date is prior to start date', () => {
       const formEntity = new GenerateSuggestedTermModal({
-        termEndDate: '01/01/2050',
+        termEndDate: termStartDate,
         termName: 'Test Term',
-        termStartDate: '03/31/2050',
+        termStartDate: termEndDate,
       });
 
       expect(formEntity.isValid()).toBeFalsy();
@@ -40,7 +57,7 @@ describe('GenerateSuggestedTermModal', () => {
 
     it('should fail validation when start date is in the past', () => {
       const formEntity = new GenerateSuggestedTermModal({
-        termEndDate: '01/01/2050',
+        termEndDate,
         termName: 'Test Term',
         termStartDate: yesterdayFormatted,
       });
@@ -53,10 +70,10 @@ describe('GenerateSuggestedTermModal', () => {
 
     it('should fail validation when term name is longer than 100 characters', () => {
       const formEntity = new GenerateSuggestedTermModal({
-        termEndDate: '03/31/2050',
+        termEndDate,
         termName:
           'I woke up this morning and shot an elephant in my pajamas; how he got in my pajamas I`ll never know. Here are some more characters to make this string particularly long.',
-        termStartDate: '01/01/2050',
+        termStartDate,
       });
 
       expect(formEntity.isValid()).toBeFalsy();
@@ -69,7 +86,7 @@ describe('GenerateSuggestedTermModal', () => {
       const formEntity = new GenerateSuggestedTermModal({
         termEndDate: yesterdayFormatted,
         termName: 'Test Term',
-        termStartDate: '01/01/2050',
+        termStartDate,
       });
 
       expect(formEntity.isValid()).toBeFalsy();
