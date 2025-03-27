@@ -219,7 +219,7 @@ export const formatWitnesses = (
 };
 
 export const formatCaseTitle = (aCase: RawCase) => {
-  const caseTitle = Case.getCaseTitle(Case.getCaseCaption(aCase));
+  const caseTitle = Case.getCaseTitle(aCase.caseCaption);
   return isLeadCase(aCase) ? `${caseTitle}, et al.` : caseTitle;
 };
 
