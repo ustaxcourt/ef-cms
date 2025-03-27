@@ -5,9 +5,6 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { AUTOMATIC_BLOCKED_REASONS } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
-jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
-);
 import {
   ServiceUnavailableError,
   UnauthorizedError,
@@ -19,16 +16,12 @@ import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persisten
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('deleteCaseDeadlineInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
   const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
-  );
   let user;
   let mockDeadlines;
   let mockLock;
@@ -129,7 +122,6 @@ describe('deleteCaseDeadlineInteractor', () => {
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
     });
-    expect(deleteCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
   it('should call persistence to delete a case deadline and leave the case automatically blocked when there are more deadlines', async () => {
@@ -155,6 +147,5 @@ describe('deleteCaseDeadlineInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 });
