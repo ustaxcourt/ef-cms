@@ -4,19 +4,19 @@ import {
   Kysely,
   PostgresDialect,
 } from 'kysely';
-import { Database } from './database-types';
+import { Database, DatabaseSchema } from './database-types';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
 import { openSearchGateway } from '@web-api/gateways/openSearch/openSearchGateway';
-import {
-  OpenSearchSyncMessage,
-  TABLES_TO_OPENSEARCH_MAPPING,
-  OpenSearchSyncMessageType,
-} from '@web-api/gateways/openSearch/openSearchSyncRouter';
+
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
+import {
+  OpenSearchSyncMessage,
+  OpenSearchSyncMessageType,
+} from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 export const POOL = {
   ...environment.rds.pool,
@@ -164,11 +164,15 @@ export async function getDbWriter<T>({
   cb: (db: Kysely<Database>) => Promise<T>;
   table: keyof Database | null;
 }): Promise<T> {
-  if (!table || !Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(table)) {
+  if (!table || !DatabaseSchema[table].openSearchIndex) {
     return await executeWriter(cb);
   }
 
-  const result: T = await executeWriter(cb);
+  const rawResult: T = await executeWriter(cb);
+  let result: any = rawResult;
+  if (DatabaseSchema[table].filterBeforeSendingThroughQueue) {
+    result = DatabaseSchema[table].filterBeforeSendingThroughQueue(rawResult);
+  }
 
   if (result) {
     try {
@@ -187,5 +191,5 @@ export async function getDbWriter<T>({
     }
   }
 
-  return result;
+  return rawResult;
 }
