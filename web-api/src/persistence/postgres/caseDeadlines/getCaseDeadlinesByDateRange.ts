@@ -5,9 +5,15 @@ import { getDbReader } from '@web-api/database';
 export const getCaseDeadlinesByDateRange = async ({
   endDate,
   from = 0,
-  judge,
+  judgeId,
   pageSize,
   startDate,
+}: {
+  endDate;
+  from: number;
+  judgeId?: string | null;
+  pageSize: number;
+  startDate;
 }) => {
   const size =
     pageSize && pageSize <= CASE_DEADLINES_REPORT_PAGE_SIZE
@@ -24,9 +30,7 @@ export const getCaseDeadlinesByDateRange = async ({
         .where('cd.deadlineDate', '>=', startDate)
         .where('cd.deadlineDate', '<=', endDate);
 
-      if (judge) {
-        deadlineQuery = deadlineQuery.where('associatedJudge', '=', judge);
-      }
+      deadlineQuery = applyJudgeFilter(deadlineQuery, judgeId);
 
       deadlineQuery = deadlineQuery
         .offset(from)
@@ -42,9 +46,7 @@ export const getCaseDeadlinesByDateRange = async ({
         .where('deadlineDate', '>=', startDate)
         .where('deadlineDate', '<=', endDate);
 
-      if (judge) {
-        countQuery = countQuery.where('associatedJudge', '=', judge);
-      }
+      countQuery = applyJudgeFilter(countQuery, judgeId);
 
       const total = await countQuery.executeTakeFirst();
 
@@ -61,4 +63,10 @@ export const getCaseDeadlinesByDateRange = async ({
     ),
     totalCount,
   };
+};
+
+const applyJudgeFilter = (query, judgeId) => {
+  return !!judgeId || judgeId === null
+    ? query.where('associatedJudgeId', '=', judgeId)
+    : query;
 };
