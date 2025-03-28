@@ -99,3 +99,8 @@ variable "rds_min_capacity" {
 variable "restoring_aws_account_id" {
   type = string
 }
+
+variable "rum_sample_rate" {
+  type = number
+
+}
