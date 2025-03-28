@@ -41,10 +41,10 @@ export const getCaseDeadlinesByDateRange = async ({
       const results = await deadlineQuery.execute();
 
       let countQuery = reader
-        .selectFrom('dwCaseDeadline')
+        .selectFrom('dwCaseDeadline as cd')
         .select(reader.fn.count('docketNumber').as('totalCount'))
-        .where('deadlineDate', '>=', startDate)
-        .where('deadlineDate', '<=', endDate);
+        .where('cd.deadlineDate', '>=', startDate)
+        .where('cd.deadlineDate', '<=', endDate);
 
       countQuery = applyJudgeFilter(countQuery, judgeId);
 
@@ -67,9 +67,9 @@ export const getCaseDeadlinesByDateRange = async ({
 
 const applyJudgeFilter = (query, judgeId) => {
   if (judgeId === null) {
-    return query.where('associatedJudgeId', 'is', null);
+    return query.where('cd.associatedJudgeId', 'is', null);
   } else if (judgeId !== undefined) {
-    return query.where('associatedJudgeId', '=', judgeId);
+    return query.where('cd.associatedJudgeId', '=', judgeId);
   }
 
   return query;
