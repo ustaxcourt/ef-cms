@@ -1,8 +1,8 @@
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
 import {
-  filterCaseBeforeSendingThroughQueue,
-  openSearchIndexCase,
+  transformOpenSearchCase,
+  indexOpenSearchCase,
 } from '../../web-api/elasticsearch/index-cases';
 
 const DEFAULT = {};
@@ -386,11 +386,13 @@ interface DatabaseSchemaType {
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
 
+// transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
+// indexOpenSearchMessage receives this message from the queue and indexes it into OpenSearch
 type DatabaseTableMetadata<TTable> = {
   table: TTable;
   columns: string[];
-  filterBeforeSendingThroughQueue?: (rawResult) => {};
-  indexInOpenSearch?: ({
+  transformOpenSearchMessage?: (rawMessage) => {};
+  indexOpenSearchMessage?: ({
     message,
   }: {
     message: OpenSearchSyncMessage;
@@ -401,8 +403,8 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwCase: {
     table: DEFAULT as CaseTable,
     columns: DW_CASE_COLUMNS,
-    filterBeforeSendingThroughQueue: filterCaseBeforeSendingThroughQueue,
-    indexInOpenSearch: openSearchIndexCase,
+    transformOpenSearchMessage: transformOpenSearchCase,
+    indexOpenSearchMessage: indexOpenSearchCase,
   },
   dwCaseCorrespondence: {
     table: DEFAULT as CaseCorrespondenceTable,

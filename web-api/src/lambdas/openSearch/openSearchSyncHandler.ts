@@ -14,7 +14,7 @@ export const openSearchSyncHandler = async (event: SQSEvent): Promise<void> => {
   const { body } = Records[0];
   const message: OpenSearchSyncMessage = JSON.parse(body);
 
-  const handlerFn = DatabaseSchema[message.type].indexInOpenSearch;
+  const handlerFn = DatabaseSchema[message.type].indexOpenSearchMessage;
   if (!handlerFn) {
     throw new Error(
       `No matching router found for message: ${JSON.stringify(message)}`,

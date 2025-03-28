@@ -163,14 +163,14 @@ export async function getDbWriter<T>({
   cb: (db: Kysely<Database>) => Promise<T>;
   table: keyof Database | null;
 }): Promise<T> {
-  if (!table || !DatabaseSchema[table].indexInOpenSearch) {
+  if (!table || !DatabaseSchema[table].indexOpenSearchMessage) {
     return await executeWriter(cb);
   }
 
   const rawResult: T = await executeWriter(cb);
   let result: any = rawResult;
-  if (DatabaseSchema[table].filterBeforeSendingThroughQueue) {
-    result = DatabaseSchema[table].filterBeforeSendingThroughQueue(rawResult);
+  if (DatabaseSchema[table].transformOpenSearchMessage) {
+    result = DatabaseSchema[table].transformOpenSearchMessage(rawResult);
   }
 
   if (result) {
