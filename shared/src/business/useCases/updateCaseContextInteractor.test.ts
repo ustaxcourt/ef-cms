@@ -173,12 +173,10 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should remove automatic block information if case status is closed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE_WITHOUT_PENDING,
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      ...MOCK_CASE_WITHOUT_PENDING,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
 
     const result = await updateCaseContextInteractor(
       applicationContext,

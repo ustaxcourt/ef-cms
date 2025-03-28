@@ -10,7 +10,6 @@ import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
 import { openSearchGateway } from '@web-api/gateways/openSearch/openSearchGateway';
-
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import {
