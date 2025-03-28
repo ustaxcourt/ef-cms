@@ -71,7 +71,11 @@ export const getCaseDeadlinesByDateRange = async ({
 };
 
 const applyJudgeFilter = (query, judgeId) => {
-  return !!judgeId || judgeId === null
-    ? query.where('associatedJudgeId', '=', judgeId)
-    : query;
+  if (judgeId === null) {
+    return query.where('associatedJudgeId', 'is', null);
+  } else if (judgeId !== undefined) {
+    return query.where('associatedJudgeId', '=', judgeId);
+  }
+
+  return query;
 };
