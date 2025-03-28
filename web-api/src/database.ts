@@ -163,7 +163,7 @@ export async function getDbWriter<T>({
   cb: (db: Kysely<Database>) => Promise<T>;
   table: keyof Database | null;
 }): Promise<T> {
-  if (!table || !DatabaseSchema[table].openSearchIndex) {
+  if (!table || !DatabaseSchema[table].indexInOpenSearch) {
     return await executeWriter(cb);
   }
 
