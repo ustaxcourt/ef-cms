@@ -6,64 +6,42 @@ import {
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import { applicationContext } from '@web-api/applicationContext';
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
-import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getLogger } from 'aws-xray-sdk';
-import { pick, mapValues, flattenDeep, isArray } from 'lodash';
-import { efcmsCaseMappings } from './efcms-case-mappings';
-import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/database-types';
+import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
+import { flattenDeep, isArray } from 'lodash';
 
-const FIELDS_THAT_NEED_INDEXING = Object.keys(efcmsCaseMappings.properties).map(
-  field => field.split('.')[0],
-);
-
-export const filterCaseBeforeSendingThroughQueue = (
+export const transformOpenSearchCase = (
   caseData: CaseKysely | CaseKysely[],
 ) => {
   const cases = isArray(caseData) ? caseData : [caseData];
-  // Transform the database data format to app-code data format since we index based on the latter, then filter
-  return cases.map(c => pick(fromKyselyCase(c), FIELDS_THAT_NEED_INDEXING));
+  return cases.map(c => c.docketNumber);
 };
 
-export const openSearchIndexCase = async ({
+export const indexOpenSearchCase = async ({
   message,
 }: {
   message: OpenSearchSyncMessage;
 }): Promise<void> => {
-  for (const caseRecord of isArray(message.payload)
+  for (const docketNumber of isArray(message.payload)
     ? message.payload
     : [message.payload]) {
-    const petitioners = await getPetitionersOnCase({
-      docketNumber: caseRecord.docketNumber,
+    const caseRecord = await getCaseMetadataWithCounsel({
+      applicationContext,
+      docketNumber,
     });
 
-    // Although we do not search by practitioner, we need this info stored to check permissions on searches
-    const privatePractitioners = await getPrivatePractitionersOnCase({
-      applicationContext,
-      docketNumber: caseRecord.docketNumber,
-    });
-
-    const irsPractitioners = await getIrsPractitionersOnCase({
-      applicationContext,
-      docketNumber: caseRecord.docketNumber,
-    });
+    if (!caseRecord) {
+      getLogger().error(`Could not index case ${docketNumber}: not found!`);
+      continue;
+    }
 
     // Recommend further optimization so we are not mocking a DynamoDB record after cases are in Postgres
     // Just done this way because bulkIndexRecords expects Dynamo records
     const marshalledCase = marshall(
       transformNullToUndefined({
-        ...mapValues(
-          {
-            ...caseRecord,
-            privatePractitioners,
-            irsPractitioners,
-          },
-          value => (value instanceof Date ? value.toISOString() : value),
-        ),
         pk: `case|${caseRecord.docketNumber}`,
         sk: `case|${caseRecord.docketNumber}`,
         entityName: 'Case',
@@ -71,7 +49,6 @@ export const openSearchIndexCase = async ({
           docketNumber: caseRecord.docketNumber,
           docketNumberSuffix: caseRecord.docketNumberSuffix,
         }),
-        petitioners: petitioners || [],
       }),
       { removeUndefinedValues: true },
     );
