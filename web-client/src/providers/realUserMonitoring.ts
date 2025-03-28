@@ -9,7 +9,7 @@ export const initializeRealUserMonitoring = () => {
       enableXRay: false,
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId: process.env.RUM_IDENTITY_POOL_ID,
-      sessionSampleRate: parseInt(process.env.RUM_SAMPLE_RATE!),
+      sessionSampleRate: Number(process.env.RUM_SAMPLE_RATE!),
       telemetries: ['performance'],
     };
 
@@ -26,5 +26,6 @@ export const initializeRealUserMonitoring = () => {
     awsRum.enable();
   } catch (error) {
     // Ignore errors thrown during CloudWatch RUM web client initialization
+    console.log('Error initializing real user monitoring: ', error);
   }
 };
