@@ -8,6 +8,7 @@ import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/in
 
 export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
+  TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
 } as const;
 
@@ -198,6 +199,7 @@ export const SUGGESTED_TRIAL_SESSION_TITLES = {
   invalid: 'Unable to create term',
   success: 'Successfully generated suggested term.',
   warning: 'Successfully generated suggested term with warnings',
+  validation: 'Please correct the following errors on the page:',
 };
 
 export const DOCUMENT_RELATIONSHIPS = {
@@ -412,12 +414,8 @@ export const OPINION_EVENT_CODES_WITH_BENCH_OPINION = [
   BENCH_OPINION_EVENT_CODE,
 ];
 
-export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(
-  EXTERNAL_FILING_EVENTS,
-);
-export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
-  INTERNAL_FILING_EVENTS,
-);
+export const DOCUMENT_EXTERNAL_CATEGORIES = Object.keys(EXTERNAL_FILING_EVENTS);
+export const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(INTERNAL_FILING_EVENTS);
 export const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
 
@@ -558,9 +556,7 @@ export const INTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION = new Set([
 
 const EXTERNAL_DOCUMENTS_REQUIRING_OBJECTION = [
   ...EXTERNAL_FILING_EVENTS['Motion'],
-  EXTERNAL_FILING_EVENTS['Application'].find(
-    doc => doc.eventCode === 'APLD',
-  )!,
+  EXTERNAL_FILING_EVENTS['Application'].find(doc => doc.eventCode === 'APLD')!,
 ];
 
 export const EXTERNAL_DOCUMENT_TYPES_REQUIRING_OBJECTION = new Set(
@@ -1796,3 +1792,14 @@ export const TROUBLESHOOTING_INFO = {
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
+
+export const TERM_GENERATOR_DEFAULT_VALUES = {
+  MAX_SESSIONS_PER_WEEK: 6,
+  MAX_SESSIONS_PER_LOCATION: 5,
+  REGULAR_CASE_MINIMUM_QUANTITY: 40,
+  REGULAR_CASE_MAX_QUANTITY: 100,
+  SMALL_CASE_MINIMUM_QUANTITY: 40,
+  SMALL_CASE_MAX_QUANTITY: 125,
+  HYBRID_CASE_MINIMUM_QUANTITY: 50,
+  HYBRID_CASE_MAX_QUANTITY: 100,
+} as const;
