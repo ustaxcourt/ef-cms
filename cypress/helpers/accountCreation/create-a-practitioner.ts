@@ -1,10 +1,24 @@
 import { faker } from '@faker-js/faker';
 import { v4 } from 'uuid';
 
-export function createAPractitioner(options?: { barState?: string }) {
-  const firstName = faker.person.firstName();
+export function createAPractitioner(
+  {
+    firstName = faker.person.firstName(),
+    originalBarState = faker.location.state(),
+  }: Partial<{
+    firstName: string;
+    originalBarState: string;
+  }> = {
+    firstName: faker.person.firstName(),
+    originalBarState: faker.location.state(),
+  },
+): Cypress.Chainable<{
+  barNumber: string;
+  firstName: string;
+  lastName: string;
+  originalBarState: string;
+}> {
   const lastName = faker.person.lastName();
-  const originalBarState = options?.barState || faker.location.state();
   const state = faker.location.state();
 
   cy.get('[data-testid="search-link"]').click();

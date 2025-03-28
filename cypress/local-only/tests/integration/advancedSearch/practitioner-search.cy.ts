@@ -6,7 +6,7 @@ import { assertExists, retry } from 'cypress/helpers/retry';
 describe('Practitioner Search', () => {
   it('should return practitioner results when the user filters by original bar state', () => {
     loginAsAdmissionsClerk();
-    createAPractitioner({ barState: 'New Jersey' }).then(
+    createAPractitioner({ originalBarState: 'New Jersey' }).then(
       ({ barNumber, firstName, originalBarState }) => {
         cy.get('[data-testid="search-link"]').click();
         cy.get('[data-testid="practitioner-search-tab"]').click();

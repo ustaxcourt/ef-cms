@@ -1,4 +1,3 @@
-import { cloneDeep } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -16,7 +15,8 @@ export const editPetitionerInformationHelper = (
 ): any => {
   const { CONTACT_TYPES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
-  const { contact } = cloneDeep(get(state.form));
+  const form = get(state.form) || {};
+  const contact = form.contact || {};
   const userPendingEmail = get(state.screenMetadata.userPendingEmail);
   const showEditEmail = permissions.EDIT_PETITIONER_EMAIL && !userPendingEmail;
   const showSealAddress = permissions.SEAL_ADDRESS;
