@@ -36,7 +36,7 @@ import {
   getContactSecondary,
 } from '../../shared/src/business/entities/cases/Case';
 import {
-  ERROR_MAP_429,
+  ERROR_429,
   getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext';
@@ -146,7 +146,7 @@ const frozenConstants = deepFreeze({
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  ERROR_MAP_429,
+  ERROR_429,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   MOTION_EVENT_CODES,

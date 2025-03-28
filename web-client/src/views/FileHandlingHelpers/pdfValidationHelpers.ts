@@ -1,4 +1,4 @@
-import { PDFDocumentProxy } from 'pdfjs-dist/types/src/display/api';
+import { PDFDocumentProxy } from 'pdfjs-dist';
 
 export const validatePdfHeader = (pdfData: Uint8Array): boolean => {
   const stringDecoder = new TextDecoder('utf8');

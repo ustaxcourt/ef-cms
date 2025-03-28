@@ -1,4 +1,7 @@
-import { MAX_SEARCH_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  MAX_SEARCH_RESULTS,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseAdvancedSearchInteractor } from './caseAdvancedSearchInteractor';
 import {
@@ -37,7 +40,10 @@ describe('caseAdvancedSearchInteractor', () => {
     await expect(
       caseAdvancedSearchInteractor(
         applicationContext,
-        { petitionerName: 'Janae Jacobs' },
+        {
+          petitionerName: 'Janae Jacobs',
+          caseTypes: [CASE_TYPES_MAP.cdp],
+        },
         mockPetitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
@@ -52,6 +58,7 @@ describe('caseAdvancedSearchInteractor', () => {
       applicationContext,
       {
         petitionerName: 'Paul Billings',
+        caseTypes: [CASE_TYPES_MAP.cdp],
       },
       mockPetitionsClerkUser,
     );

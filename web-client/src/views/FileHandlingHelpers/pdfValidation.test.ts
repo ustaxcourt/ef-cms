@@ -1,3 +1,4 @@
+jest.mock('@shared/business/utilities/pdfs/getPdfJs');
 import * as pdfValidationHelpers from './pdfValidationHelpers';
 import { ErrorTypes } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import {
@@ -5,8 +6,8 @@ import {
   PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
   validatePdf,
 } from './pdfValidation';
-import { applicationContext } from '@web-client/applicationContext';
 import { validatePdfHeader } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
+import { getPdfJs as getPdfJsMock } from '@shared/business/utilities/pdfs/getPdfJs';
 
 const VALID_PDF_HEADER_BYTES = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
 const INVALID_PDF_HEADER_BYTES = [0x50, 0x44, 0x46, 0x25, 0x2d]; // PFD%-
@@ -30,6 +31,8 @@ describe('validatePdfHeader', () => {
 });
 
 describe('validatePdf', () => {
+  const getPdfJs = jest.mocked(getPdfJsMock);
+
   let mockFile: File;
   let mockPdfJs: any;
   let mockFileReader: any;
@@ -55,7 +58,7 @@ describe('validatePdf', () => {
     mockPdfJs = {
       getDocument: jest.fn(),
     };
-    applicationContext.getPdfJs = jest.fn().mockResolvedValue(mockPdfJs);
+    getPdfJs.mockResolvedValue(mockPdfJs);
   });
 
   it('should resolve as valid when the PDF is valid', async () => {
