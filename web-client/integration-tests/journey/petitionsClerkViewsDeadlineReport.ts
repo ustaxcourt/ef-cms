@@ -25,6 +25,9 @@ export const petitionsClerkViewsDeadlineReport = (
 
     const computedStartDate = `01/${options.day}/${options.year}`;
     const computedEndDate = `02/${options.day}/${options.year}`;
+    const buchUserId = cerebralTest
+      .getState('judges')
+      .find(judge => judge.name === 'Buch').userId;
 
     await cerebralTest.runSequence('selectDateRangeFromCalendarSequence', {
       endDate: prepareDateFromString(computedEndDate, FORMATS.MMDDYYYY),
@@ -55,37 +58,39 @@ export const petitionsClerkViewsDeadlineReport = (
     expect(deadlines.length).toEqual(6);
 
     // verify sorting by date and docket number
-    expect(deadlines).toEqual([
-      expect.objectContaining({
+    expect(deadlines).toMatchObject([
+      {
         associatedJudge: 'Buch',
+        associatedJudgeId: buchUserId,
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
-      }),
-      expect.objectContaining({
+      },
+      {
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[1],
-      }),
-      expect.objectContaining({
+      },
+      {
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[2],
-      }),
-      expect.objectContaining({
+      },
+      {
         associatedJudge: 'Buch',
+        associatedJudgeId: buchUserId,
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
-      }),
-      expect.objectContaining({
+      },
+      {
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[1],
-      }),
-      expect.objectContaining({
+      },
+      {
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[2],
-      }),
+      },
     ]);
 
     runCompute(caseDeadlineReportHelper, {
@@ -93,7 +98,7 @@ export const petitionsClerkViewsDeadlineReport = (
     });
 
     await cerebralTest.runSequence('filterCaseDeadlinesByJudgeSequence', {
-      selectedJudgeId: '123456',
+      selectedJudgeId: buchUserId,
     });
 
     deadlines = cerebralTest.getState(
@@ -107,17 +112,19 @@ export const petitionsClerkViewsDeadlineReport = (
     });
 
     // verify filtering by judge
-    expect(deadlines).toEqual([
-      expect.objectContaining({
+    expect(deadlines).toMatchObject([
+      {
         associatedJudge: 'Buch',
+        associatedJudgeId: buchUserId,
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
-      }),
-      expect.objectContaining({
+      },
+      {
         associatedJudge: 'Buch',
+        associatedJudgeId: buchUserId,
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
-      }),
+      },
     ]);
   });
 };
