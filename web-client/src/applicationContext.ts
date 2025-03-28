@@ -23,7 +23,7 @@ import {
   getServedPartiesCode,
 } from '../../shared/src/business/entities/DocketEntry';
 import {
-  ERROR_MAP_429,
+  ERROR_429,
   getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
@@ -618,7 +618,7 @@ tryCatchDecorator(allUseCases);
 
 const appConstants = deepFreeze({
   ...getConstants(),
-  ERROR_MAP_429,
+  ERROR_429,
 }) as ReturnType<typeof getConstants>;
 
 const applicationContext = {

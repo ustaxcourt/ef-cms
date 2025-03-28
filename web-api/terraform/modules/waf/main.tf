@@ -60,22 +60,17 @@ resource "aws_wafv2_web_acl" "apis" {
   }
 
   rule {
-    name     = "expensive_request_limit"
+    name     = "per_ip_expensive_request_limit"
     priority = 2
 
     action {
-      block {
-        custom_response {
-          response_code = 429
-        }
-      }
+      count {} // change to `block {}` when confident in ruleset
     }
 
     statement {
       rate_based_statement {
-        limit                 = 6000 # very high for now during load testing; current target is 350
-        evaluation_window_sec = 60
-        aggregate_key_type    = "CONSTANT"
+        limit              = 150 // per 5 minutes
+        aggregate_key_type = "IP"
 
         scope_down_statement {
           regex_pattern_set_reference_statement {
@@ -96,23 +91,28 @@ resource "aws_wafv2_web_acl" "apis" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "expensive_request_limit_${var.environment}"
+      metric_name                = "per_ip_expensive_request_limit_${var.environment}"
       sampled_requests_enabled   = false
     }
   }
 
   rule {
-    name     = "per_ip_expensive_request_limit"
+    name     = "expensive_request_limit"
     priority = 3
 
     action {
-      count {} // change to `block {}` when confident in ruleset
+      block {
+        custom_response {
+          response_code = 429
+        }
+      }
     }
 
     statement {
       rate_based_statement {
-        limit              = 150 // per 5 minutes
-        aggregate_key_type = "IP"
+        limit                 = 350
+        evaluation_window_sec = 60
+        aggregate_key_type    = "CONSTANT"
 
         scope_down_statement {
           regex_pattern_set_reference_statement {

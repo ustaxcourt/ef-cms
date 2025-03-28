@@ -21,7 +21,7 @@ import {
   getServedPartiesCode,
 } from '@shared/business/entities/DocketEntry';
 import {
-  ERROR_MAP_429,
+  ERROR_429,
   getPublicSiteUrl,
   getUniqueId,
 } from '@shared/sharedAppContext';
@@ -571,7 +571,7 @@ export const createTestApplicationContext = () => {
     getConstants: jest.fn().mockImplementation(() => {
       return {
         ...getConstants(),
-        ERROR_MAP_429,
+        ERROR_429,
       };
     }),
     getDispatchers: jest.fn().mockReturnValue({
