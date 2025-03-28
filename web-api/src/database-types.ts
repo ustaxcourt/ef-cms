@@ -390,7 +390,7 @@ type DatabaseTableMetadata<TTable> = {
   table: TTable;
   columns: string[];
   filterBeforeSendingThroughQueue?: (rawResult) => {};
-  openSearchIndex?: ({
+  indexInOpenSearch?: ({
     message,
   }: {
     message: OpenSearchSyncMessage;
@@ -402,7 +402,7 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as CaseTable,
     columns: DW_CASE_COLUMNS,
     filterBeforeSendingThroughQueue: filterCaseBeforeSendingThroughQueue,
-    openSearchIndex: openSearchIndexCase,
+    indexInOpenSearch: openSearchIndexCase,
   },
   dwCaseCorrespondence: {
     table: DEFAULT as CaseCorrespondenceTable,

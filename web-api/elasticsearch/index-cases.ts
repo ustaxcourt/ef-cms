@@ -14,14 +14,19 @@ import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/tr
 import { getLogger } from 'aws-xray-sdk';
 import { pick, mapValues, flattenDeep, isArray } from 'lodash';
 import { efcmsCaseMappings } from './efcms-case-mappings';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
+import { CaseKysely } from '@web-api/database-types';
 
 const FIELDS_THAT_NEED_INDEXING = Object.keys(efcmsCaseMappings.properties).map(
   field => field.split('.')[0],
 );
 
-export const filterCaseBeforeSendingThroughQueue = caseData => {
+export const filterCaseBeforeSendingThroughQueue = (
+  caseData: CaseKysely | CaseKysely[],
+) => {
   const cases = isArray(caseData) ? caseData : [caseData];
-  return cases.map(c => pick(c, FIELDS_THAT_NEED_INDEXING));
+  // Transform the database data format to app-code data format since we index based on the latter, then filter
+  return cases.map(c => pick(fromKyselyCase(c), FIELDS_THAT_NEED_INDEXING));
 };
 
 export const openSearchIndexCase = async ({
@@ -48,11 +53,12 @@ export const openSearchIndexCase = async ({
     });
 
     // Recommend further optimization so we are not mocking a DynamoDB record after cases are in Postgres
+    // Just done this way because bulkIndexRecords expects Dynamo records
     const marshalledCase = marshall(
       transformNullToUndefined({
         ...mapValues(
           {
-            ...pick(caseRecord, FIELDS_THAT_NEED_INDEXING),
+            ...caseRecord,
             privatePractitioners,
             irsPractitioners,
           },
