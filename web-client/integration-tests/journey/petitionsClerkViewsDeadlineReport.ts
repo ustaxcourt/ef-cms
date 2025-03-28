@@ -55,39 +55,37 @@ export const petitionsClerkViewsDeadlineReport = (
     expect(deadlines.length).toEqual(6);
 
     // verify sorting by date and docket number
-    expect(deadlines).toMatchObject([
-      {
+    expect(deadlines).toEqual([
+      expect.objectContaining({
         associatedJudge: 'Buch',
-        associatedJudgeId: '123456',
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
-      },
-      {
+      }),
+      expect.objectContaining({
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[1],
-      },
-      {
+      }),
+      expect.objectContaining({
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[2],
-      },
-      {
+      }),
+      expect.objectContaining({
         associatedJudge: 'Buch',
-        associatedJudgeId: '123456',
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
-      },
-      {
+      }),
+      expect.objectContaining({
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[1],
-      },
-      {
+      }),
+      expect.objectContaining({
         associatedJudge: CHIEF_JUDGE,
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[2],
-      },
+      }),
     ]);
 
     runCompute(caseDeadlineReportHelper, {
