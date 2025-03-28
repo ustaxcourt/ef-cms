@@ -60,7 +60,6 @@ export const fetchPendingItems = async ({
         'd.documentType',
         'd.documentTitle',
         'd.receivedAt',
-        'd.createdAt',
       ])
       .orderBy('d.receivedAt', 'asc')
       .orderBy('d.docketEntryId', 'asc') // This was how our secondary sort was originally set up. In moving to Postgres, we kept it.
