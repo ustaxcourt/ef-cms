@@ -7,7 +7,7 @@ export const openSearchSyncLocal = async ({
   message: OpenSearchSyncMessage;
 }): Promise<void> => {
   try {
-    const handlerFn = DatabaseSchema[message.type].indexInOpenSearch;
+    const handlerFn = DatabaseSchema[message.type].indexOpenSearchMessage;
     if (!handlerFn) {
       throw new Error(
         `No matching router found for message: ${JSON.stringify(message)}`,
