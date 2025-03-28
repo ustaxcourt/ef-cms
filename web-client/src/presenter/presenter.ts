@@ -351,7 +351,6 @@ import { resetHeaderAccordionsSequence } from './sequences/resetHeaderAccordions
 import { resetPasswordSequence } from '@web-client/presenter/sequences/Login/resetPasswordSequence';
 import { resetSecondaryAddressSequence } from './sequences/resetSecondaryAddressSequence';
 import { resetTrialSessionsFiltersSequence } from '@web-client/presenter/sequences/resetTrialSessionsFiltersSequence';
-import { retryAsyncRequestSequence } from './sequences/retryAsyncRequestSequence';
 import { reviewCaseAssociationRequestSequence } from './sequences/reviewCaseAssociationRequestSequence';
 import { reviewExternalDocumentInformationSequence } from './sequences/reviewExternalDocumentInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
@@ -507,6 +506,7 @@ import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/upd
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseCheckboxSequence } from './sequences/updateCaseCheckboxSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
+import { updateCaseDeadlineReportPageSequence } from './sequences/updateCaseDeadlineReportPageSequence';
 import { updateCaseDetailsSequence } from './sequences/updateCaseDetailsSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
@@ -612,6 +612,7 @@ import { validateUpdatePractitionerSequence } from './sequences/validateUpdatePr
 import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
+import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -642,6 +643,8 @@ export const presenterSequences = {
     associateIrsPractitionerWithCaseSequence as unknown as Function,
   associatePrivatePractitionerWithCaseSequence:
     associatePrivatePractitionerWithCaseSequence as unknown as Function,
+  asyncServiceUnavailablrHandlerSequence:
+    asyncServiceUnavailablrHandlerSequence as unknown as Function,
   autoSaveTrialSessionWorkingCopySequence:
     autoSaveTrialSessionWorkingCopySequence as unknown as Function,
   batchCompleteMessageSequence:
@@ -1171,7 +1174,6 @@ export const presenterSequences = {
   resetPasswordSequence,
   resetSecondaryAddressSequence,
   resetTrialSessionsFiltersSequence,
-  retryAsyncRequestSequence: retryAsyncRequestSequence as unknown as Function,
   reviewCaseAssociationRequestSequence:
     reviewCaseAssociationRequestSequence as unknown as Function,
   reviewExternalDocumentInformationSequence:
@@ -1417,6 +1419,7 @@ export const presenterSequences = {
     updateCaseAssociationFormValueSequence as unknown as Function,
   updateCaseCheckboxSequence: updateCaseCheckboxSequence as unknown as Function,
   updateCaseDeadlineSequence: updateCaseDeadlineSequence as unknown as Function,
+  updateCaseDeadlineReportPageSequence,
   updateCaseDetailsSequence: updateCaseDetailsSequence as unknown as Function,
   updateCaseNoteSequence: updateCaseNoteSequence as unknown as Function,
   updateCasePartyTypeSequence:

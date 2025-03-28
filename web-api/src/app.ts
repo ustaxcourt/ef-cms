@@ -5,7 +5,6 @@ import { addCoversheetLambda } from './lambdas/documents/addCoversheetLambda';
 import { addDeficiencyStatisticLambda } from './lambdas/cases/addDeficiencyStatisticLambda';
 import { addPaperFilingLambda } from './lambdas/documents/addPaperFilingLambda';
 import { addPetitionerToCaseLambda } from './lambdas/cases/addPetitionerToCaseLambda';
-import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { appendAmendedPetitionFormLambda } from './lambdas/courtIssuedOrder/appendAmendedPetitionFormLambda';
 import { applicationContext } from '@web-api/applicationContext';
 import { archiveCorrespondenceDocumentLambda } from './lambdas/correspondence/archiveCorrespondenceDocumentLambda';
@@ -130,7 +129,6 @@ import { getUserPendingEmailStatusLambda } from './lambdas/users/getUserPendingE
 import { getUsersInSectionLambda } from './lambdas/users/getUsersInSectionLambda';
 import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmailLambda';
 import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
-import { ipLimiter } from './middleware/ipLimiter';
 import { lambdaWrapper } from './lambdaWrapper';
 import { logErrorLambda } from '@web-api/lambdas/errors/logErrorLambda';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
@@ -196,7 +194,6 @@ import { updateTrialSessionWorkingCopyLambda } from './lambdas/trialSessions/upd
 import { updateUserCaseNoteLambda } from './lambdas/caseNote/updateUserCaseNoteLambda';
 import { updateUserContactInformationLambda } from './lambdas/users/updateUserContactInformationLambda';
 import { updateUserPendingEmailLambda } from './lambdas/users/updateUserPendingEmailLambda';
-import { userIdLimiter } from './middleware/userIdLimiter';
 import { getCaseLambda as v1GetCaseLambda } from './lambdas/v1/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v1GetDocumentDownloadUrlLambda } from './lambdas/v1/getDocumentDownloadUrlLambda';
 import { getCaseLambda as v2GetCaseLambda } from './lambdas/v2/getCaseLambda';
@@ -355,28 +352,10 @@ app.use(expressLogger);
   );
   app.get(
     '/case-documents/opinion-search',
-    ipLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-    }),
-    userIdLimiter('opinion-search'),
-    advancedQueryLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-    }),
     lambdaWrapper(opinionAdvancedSearchLambda),
   );
   app.get(
     '/case-documents/order-search',
-    ipLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-    }),
-    userIdLimiter('order-search'),
-    advancedQueryLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-    }),
     lambdaWrapper(orderAdvancedSearchLambda),
   );
   app.get(
