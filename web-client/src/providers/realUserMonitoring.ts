@@ -26,5 +26,6 @@ export const initializeRealUserMonitoring = () => {
     awsRum.enable();
   } catch (error) {
     // Ignore errors thrown during CloudWatch RUM web client initialization
+    console.log('Error initiatlizing real user monitoring: ', error);
   }
 };
