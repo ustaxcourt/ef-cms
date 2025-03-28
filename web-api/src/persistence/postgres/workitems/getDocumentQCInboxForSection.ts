@@ -1,15 +1,19 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import {
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 export const getDocumentQCInboxForSection = async ({
-  judgeUserName,
+  judgeUserId,
   section,
 }: {
-  judgeUserName?: string;
-  section: string;
+  judgeUserId?: string | null;
+  section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
 }): Promise<WorkItemAbomination[]> => {
   const workItems = await getDbReader(reader => {
     let builder = reader
@@ -19,8 +23,10 @@ export const getDocumentQCInboxForSection = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .limit(5000);
 
-    if (judgeUserName) {
-      builder = builder.where('c.associatedJudge', '=', judgeUserName);
+    if (judgeUserId) {
+      builder = builder.where('c.associatedJudgeId', '=', judgeUserId);
+    } else if (judgeUserId === null) {
+      builder = builder.where('c.associatedJudgeId', 'is', null);
     }
 
     return builder

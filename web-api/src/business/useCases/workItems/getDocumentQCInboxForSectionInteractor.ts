@@ -1,4 +1,5 @@
 import {
+  CHIEF_JUDGE,
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '@shared/business/entities/EntityConstants';
@@ -11,14 +12,13 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
+export type GetDocumentQCInboxForSectionRequest = {
+  judgeUserId?: string;
+  section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
+};
+
 export const getDocumentQCInboxForSectionInteractor = async (
-  {
-    judgeUserName,
-    section,
-  }: {
-    judgeUserName?: string;
-    section: string;
-  },
+  { judgeUserId, section }: GetDocumentQCInboxForSectionRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<WorkItemAbomination[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
@@ -27,14 +27,10 @@ export const getDocumentQCInboxForSectionInteractor = async (
     );
   }
 
-  let sectionToShow = section;
-  if (section !== PETITIONS_SECTION) {
-    sectionToShow = DOCKET_SECTION;
-  }
-
+  const judgeId = judgeUserId === CHIEF_JUDGE ? null : judgeUserId;
   const workItems = await getDocumentQCInboxForSection({
-    judgeUserName,
-    section: sectionToShow,
+    judgeUserId: judgeId,
+    section,
   });
 
   return workItems;
