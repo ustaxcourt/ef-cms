@@ -17,4 +17,18 @@ describe('setCaseDeadlineReportJudgeFilterAction', () => {
 
     expect(result.state.caseDeadlineReport.judgeIdFilter).toEqual(judgeId);
   });
+
+  it('unsets state.caseDeadlineReport.judgeFilter if no props.judge value is passed in', async () => {
+    const result = await runAction(setCaseDeadlineReportJudgeFilterAction, {
+      modules: { presenter },
+      props: {
+        selectedJudgeId: '',
+      },
+      state: {
+        caseDeadlineReport: {},
+      },
+    });
+
+    expect(result.state.caseDeadlineReport.judgeIdFilter).toEqual(undefined);
+  });
 });
