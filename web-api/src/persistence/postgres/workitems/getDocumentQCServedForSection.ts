@@ -1,4 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
+import {
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
@@ -6,16 +10,16 @@ import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/get
 
 export const getDocumentQCServedForSection = async ({
   afterDate,
-  sections,
+  section,
 }: {
-  sections: string[];
+  section: typeof DOCKET_SECTION | typeof PETITIONS_SECTION;
   afterDate: Date;
 }): Promise<WorkItemAbomination[]> => {
   const workItems = await getDbReader(reader => {
     return reader
       .selectFrom('dwWorkItem as w')
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .where('w.section', 'in', sections)
+      .where('w.section', '=', section)
       .where('w.completedAt', '>=', afterDate)
       .select([
         'c.status as caseStatus',

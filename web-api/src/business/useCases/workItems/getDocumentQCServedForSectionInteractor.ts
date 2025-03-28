@@ -1,8 +1,4 @@
 import {
-  IRS_SYSTEM_SECTION,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
@@ -15,10 +11,15 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import {
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 
 export const getDocumentQCServedForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
-  { section }: { section: string },
+  { section }: { section: typeof DOCKET_SECTION | typeof PETITIONS_SECTION },
   authorizedUser: UnknownAuthUser,
 ): Promise<WorkItemAbomination[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
@@ -30,14 +31,14 @@ export const getDocumentQCServedForSectionInteractor = async (
   const afterDate = await calculateAfterDate(applicationContext);
   const workItems = await getDocumentQCServedForSection({
     afterDate,
-    sections: [section, IRS_SYSTEM_SECTION],
+    section,
   });
 
   const filteredWorkItems = workItems.filter(workItem =>
     authorizedUser.role === ROLES.petitionsClerk ? !!workItem.section : true,
   );
 
-  return filteredWorkItems
+  return filteredWorkItems;
 };
 
 export const calculateAfterDate = async applicationContext => {

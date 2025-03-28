@@ -1,4 +1,4 @@
-import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES, CHIEF_JUDGE, PETITIONS_SECTION } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
@@ -10,12 +10,6 @@ import {
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-
-const {
-  IRS_SYSTEM_SECTION,
-  PETITIONS_SECTION,
-  STATUS_TYPES: CASE_STATUS_TYPES,
-} = applicationContext.getConstants();
 
 const cerebralTest = setupTest();
 
@@ -76,7 +70,7 @@ describe('verify old served work items do not show up in the outbox', () => {
       },
       docketNumber: caseDetail.docketNumber,
       docketNumberSuffix: null,
-      section: IRS_SYSTEM_SECTION,
+      section: PETITIONS_SECTION,
       sentBy: 'Test petitionsclerk1',
       sentBySection: PETITIONS_SECTION,
       sentByUserId: mockUser.userId,

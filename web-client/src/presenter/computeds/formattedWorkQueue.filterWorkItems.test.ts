@@ -4,7 +4,6 @@ import { petitionsClerkUser } from '@shared/test/mockUsers';
 
 const {
   DOCKET_SECTION,
-  IRS_SYSTEM_SECTION,
   PETITIONS_SECTION,
   STATUS_TYPES: CASE_STATUS_TYPES,
   USER_ROLES: ROLES,
@@ -119,7 +118,7 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk1.userId,
       docketNumber: '100-07',
-      section: IRS_SYSTEM_SECTION,
+      section: DOCKET_SECTION,
       sentByUserId: petitionsClerk1.userId,
     });
 
@@ -135,7 +134,7 @@ describe('filterWorkItems', () => {
       completedAt: '2019-07-18T18:05:54.166Z',
       completedByUserId: petitionsClerk2.userId,
       docketNumber: '100-10',
-      section: IRS_SYSTEM_SECTION,
+      section: DOCKET_SECTION,
       sentByUserId: petitionsClerk2.userId,
     });
 
