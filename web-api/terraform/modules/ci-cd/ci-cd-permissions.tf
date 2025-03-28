@@ -86,6 +86,22 @@ resource "aws_iam_policy" "ci_cd_policy" {
       "Resource": "*"
     },
     {
+      "Sid": "CognitoIdentityPool",
+      "Effect": "Allow",
+      "Action": [
+        "cognito-identity:*"
+      ],
+      "Resource": "arn:aws:cognito-identity:us-east-1:${data.aws_caller_identity.current.account_id}:identitypool/*"
+    },
+    {
+      "Sid": "CloudWatchRUM",
+      "Effect": "Allow",
+      "Action": [
+        "rum:*"
+      ],
+      "Resource": "arn:aws:rum:us-east-1:${data.aws_caller_identity.current.account_id}:appmonitor/*"
+    },
+    {
       "Sid": "ApiGateway",
       "Effect": "Allow",
       "Action": [
@@ -277,6 +293,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
           "iam:CreateUser",
           "iam:CreatePolicy",
           "iam:AttachUserPolicy"
+
         ],
        "Resource": [
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
@@ -444,6 +461,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/migration_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/reindex_status_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/restore_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/rum_unauthenticated_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/s3_bucket_replication_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/stale_cases_email_cron_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*",

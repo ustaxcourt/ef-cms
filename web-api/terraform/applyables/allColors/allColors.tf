@@ -145,3 +145,10 @@ module "rds" {
     aws.us-west-1 = aws.us-west-1
   }
 }
+
+module "rum" {
+  source      = "../../modules/rum"
+  domain      = var.dns_domain
+  environment = var.environment
+  sample_rate = var.rum_sample_rate
+}
