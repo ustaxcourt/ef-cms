@@ -14,6 +14,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
+import { getGroupedStateOptions } from '@shared/business/utilities/groupStatesOptions';
 
 export const PractitionerSearchByName = connect(
   {
@@ -35,6 +36,7 @@ export const PractitionerSearchByName = connect(
     validatePractitionerSearchByNameFormSequence,
     validationErrors,
   }) {
+    const groupedStateOptions = getGroupedStateOptions();
     return (
       <>
         <div
@@ -83,7 +85,7 @@ export const PractitionerSearchByName = connect(
                 </legend>
                 <div className="practitioner-type-container">
                   {[ALL_SELECTION, ...PRACTITIONER_TYPE_OPTIONS].map(type => (
-                    <div className="usa-radio" key={type}>
+                    <div className="usa-radio margin-bottom-0" key={type}>
                       <input
                         checked={
                           advancedSearchForm.practitionerSearchByName
@@ -122,7 +124,11 @@ export const PractitionerSearchByName = connect(
                 <div className="display-flex gap-4">
                   {PRACTICE_TYPE_OPTIONS.map(practiceType => {
                     return (
-                      <div className="usa-checkbox" key={practiceType}>
+                      <div
+                        className="usa-checkbox margin-bottom-0"
+                        key={practiceType}
+                        data-testid={`practice-type-${practiceType}`}
+                      >
                         <input
                           checked={advancedSearchForm.practitionerSearchByName.practiceType?.includes(
                             practiceType,
@@ -194,6 +200,7 @@ export const PractitionerSearchByName = connect(
                     admissionStatus => (
                       <PillButton
                         key={admissionStatus}
+                        buttonDataTestId={`admission-status-pill-${admissionStatus}`}
                         text={admissionStatus}
                         onRemove={() => {
                           updateAdvancedSearchFormValueSequence({
@@ -223,13 +230,7 @@ export const PractitionerSearchByName = connect(
                     data-testid="original-bar-state-filter"
                     inputId="original-bar-state"
                     name="originalBarState"
-                    options={Object.keys(ALL_STATE_OPTIONS).map(state => {
-                      const stateLabel = ALL_STATE_OPTIONS[state];
-                      return {
-                        label: stateLabel,
-                        value: state,
-                      };
-                    })}
+                    options={groupedStateOptions}
                     placeholder={MULTI_SELECT_PLACEHOLDER}
                     value={{
                       label: MULTI_SELECT_PLACEHOLDER,
@@ -252,6 +253,7 @@ export const PractitionerSearchByName = connect(
                         <PillButton
                           key={originalBarState}
                           text={ALL_STATE_OPTIONS[originalBarState]}
+                          buttonDataTestId={`bar-state-pill-${originalBarState}`}
                           onRemove={() => {
                             updateAdvancedSearchFormValueSequence({
                               formType: 'practitionerSearchByName',
