@@ -24,10 +24,11 @@ export const getCaseMetadataByDocketNumber = async ({
       .executeTakeFirst(),
   );
 
+  // Note that json_agg will get [null] if there are no petitioners on the case, so filter out nulls
   return dbCase
     ? fromKyselyCase({
         ...dbCase,
-        petitioners: dbCase.petitioners as TPetitioner[], // This is a hack because our typing for Petitioners is yucky
+        petitioners: (dbCase.petitioners as TPetitioner[]).filter(p => p), // This is a hack because our typing for Petitioners is yucky
         docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
           docketNumber: dbCase.docketNumber,
           docketNumberSuffix: dbCase.docketNumberSuffix,
