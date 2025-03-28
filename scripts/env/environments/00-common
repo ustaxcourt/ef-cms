@@ -35,6 +35,15 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   --max-results 30 \
   --region "us-east-1" \
   --output text)
+RUM_APP_MONITOR_ID=$(aws rum list-app-monitors \
+  --query "AppMonitorSummaries[?Name == '${ENV}_dawson_rum_app_monitor'].Id | [0]" \
+  --region "us-east-1" \
+  --output text)
+RUM_IDENTITY_POOL_ID=$(aws rum get-app-monitor \
+  --name "${ENV}_dawson_rum_app_monitor" \
+  --query 'AppMonitor.AppMonitorConfiguration.IdentityPoolId' \
+  --region "us-east-1" \
+  --output text)
 
 {
   echo "AWS_REGION='${REGION}'"
@@ -59,6 +68,8 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "MASTER_REGION='${REGION}'"
   echo "POSTGRES_HOST='${DB_HOST}'"
   echo "REGION='${REGION}'"
+  echo "RUM_IDENTITY_POOL_ID='${RUM_IDENTITY_POOL_ID}'"
+  echo "RUM_APP_MONITOR_ID='${RUM_APP_MONITOR_ID}'"
   echo "SOURCE_TABLE='${SOURCE_TABLE}'"
   echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE_VERSION}'"
   echo "STAGE='${ENV}'"

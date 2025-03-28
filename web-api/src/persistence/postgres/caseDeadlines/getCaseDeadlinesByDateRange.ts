@@ -19,13 +19,18 @@ export const getCaseDeadlinesByDateRange = async ({
       let deadlineQuery = reader
         .selectFrom('dwCaseDeadline as cd')
         .leftJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
-        .selectAll()
-        .select('cd.docketNumber')
+        .selectAll('cd')
+        .select([
+          'c.associatedJudge',
+          'c.associatedJudgeId',
+          'c.leadDocketNumber',
+          // TODO: use c.sortableDocketNumber and remove from caseDeadline
+        ])
         .where('cd.deadlineDate', '>=', startDate)
         .where('cd.deadlineDate', '<=', endDate);
 
       if (judge) {
-        deadlineQuery = deadlineQuery.where('associatedJudge', '=', judge);
+        deadlineQuery = deadlineQuery.where('cd.associatedJudge', '=', judge);
       }
 
       deadlineQuery = deadlineQuery

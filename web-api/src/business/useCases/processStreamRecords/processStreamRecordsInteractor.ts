@@ -46,7 +46,6 @@ export const processStreamRecordsInteractor = async (
     });
 
     await processCaseEntries({
-      applicationContext,
       caseEntityRecords,
     }).catch(err => {
       getLogger().error('failed to processCaseEntries', {

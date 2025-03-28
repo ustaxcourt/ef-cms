@@ -173,7 +173,7 @@ describe('generateCalendar', () => {
     ).toEqual(0);
   });
 
-  it('should proritize cities that have not been visited in the past two terms', () => {
+  it('should prioritize cities that have not been visited in the past two terms', () => {
     // Arrange
     const mockProspectiveRegularTrialSession = {
       cityWasNotVisitedInLastTwoTerms: false,
@@ -288,7 +288,6 @@ describe('generateCalendar', () => {
           mockProspectiveSmallTrialSession,
         ],
         remainingRegularCases: 0,
-
         remainingSmallCases: 1,
       },
       mockSpecialCityString,
@@ -323,7 +322,6 @@ describe('generateCalendar', () => {
       initialSmallCases: 1,
       prospectiveSessions: [mockProspectiveRegularTrialSession],
       remainingRegularCases: 1,
-
       remainingSmallCases: 1,
     });
     const mockSecondWeek = '3000-03-10';
@@ -344,6 +342,46 @@ describe('generateCalendar', () => {
     expect(
       caseCountsAndSessionsByCity[mockRegularCityString].remainingSmallCases,
     ).toEqual(0);
+  });
+
+  it('should decrement from the larger count (of small and regular cases) first if leftover remains for hybrid sessions', () => {
+    // Arrange
+    const mockProspectiveHybridTrialSession = {
+      cityWasNotVisitedInLastTwoTerms: false,
+      sessionType: SESSION_TYPES.hybrid,
+      trialLocation: mockRegularCityString,
+    };
+
+    const mockCalendaringConfig = getMockCalendaringConfig({
+      hybridCaseMaxQuantity: 12,
+    });
+
+    const mockCaseCountsAndSessionsByCity = getMockCaseCountsAndSessionsByCity({
+      initialRegularCases: 10,
+      initialSmallCases: 3,
+      prospectiveSessions: [mockProspectiveHybridTrialSession],
+      remainingRegularCases: 10,
+      remainingSmallCases: 3,
+    });
+
+    const mockSecondWeek = '2027-03-10';
+
+    // Act
+    const { caseCountsAndSessionsByCity } = generateCalendar({
+      calendaringConfig: mockCalendaringConfig,
+      caseCountsAndSessionsByCity: mockCaseCountsAndSessionsByCity,
+      constraints: [createMockConstraint(true)],
+      specialSessions: [],
+      weeksToLoop: [...mockWeeksToLoop, mockSecondWeek],
+    });
+
+    // Assert
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].remainingRegularCases,
+    ).toEqual(0);
+    expect(
+      caseCountsAndSessionsByCity[mockRegularCityString].remainingSmallCases,
+    ).toEqual(1);
   });
 
   it('should use the correct trial location for special sessions when Washington DC, North is available', () => {

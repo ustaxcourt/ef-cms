@@ -16,8 +16,15 @@ export const getUserOutboxMessages = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'm.docketNumber')
       .where('m.fromUserId', '=', userId)
       .where('m.createdAt', '>=', filterDate)
-      .selectAll()
-      .select('m.docketNumber')
+      .selectAll('m')
+      .select([
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.docketNumberSuffix',
+        'c.leadDocketNumber',
+        'c.caption',
+      ])
       .limit(5000)
       .execute(),
   );
