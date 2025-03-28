@@ -109,17 +109,17 @@ export const petitionsClerkViewsDeadlineReport = (
     });
 
     // verify filtering by judge
-    expect(deadlines).toMatchObject([
-      {
+    expect(deadlines).toEqual([
+      expect.objectContaining({
         associatedJudge: 'Buch',
         deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
-      },
-      {
+      }),
+      expect.objectContaining({
         associatedJudge: 'Buch',
         deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
-      },
+      }),
     ]);
   });
 };
