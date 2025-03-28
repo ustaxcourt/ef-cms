@@ -1,5 +1,4 @@
 import { marshall } from '@aws-sdk/util-dynamodb';
-import { Case } from '@shared/business/entities/cases/Case';
 import {
   IDynamoDBRecord,
   AttributeValueWithName,
@@ -42,13 +41,10 @@ export const indexOpenSearchCase = async ({
     // Just done this way because bulkIndexRecords expects Dynamo records
     const marshalledCase = marshall(
       transformNullToUndefined({
+        ...caseRecord,
         pk: `case|${caseRecord.docketNumber}`,
         sk: `case|${caseRecord.docketNumber}`,
         entityName: 'Case',
-        docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
-          docketNumber: caseRecord.docketNumber,
-          docketNumberSuffix: caseRecord.docketNumberSuffix,
-        }),
       }),
       { removeUndefinedValues: true },
     );
