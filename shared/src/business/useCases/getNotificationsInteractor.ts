@@ -13,25 +13,25 @@ import { isEmpty } from 'lodash';
 import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 
-const getJudgeUser = async (
-  judgeUserId: string,
-  applicationContext: IApplicationContext,
-  role: string,
-) => {
-  let judgeUser;
+// const getJudgeUser = async (
+//   judgeUserId: string,
+//   applicationContext: IApplicationContext,
+//   role: string,
+// ) => {
+//   let judgeUser;
 
-  if (judgeUserId) {
-    judgeUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId: judgeUserId });
-  } else if (role === ROLES.adc) {
-    judgeUser = {
-      name: CHIEF_JUDGE,
-    };
-  }
+//   if (judgeUserId) {
+//     judgeUser = await applicationContext
+//       .getPersistenceGateway()
+//       .getUserById({ applicationContext, userId: judgeUserId });
+//   } else if (role === ROLES.adc) {
+//     judgeUser = {
+//       name: CHIEF_JUDGE,
+//     };
+//   }
 
-  return judgeUser;
-};
+//   return judgeUser;
+// };
 
 export const getNotificationsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -58,16 +58,12 @@ export const getNotificationsInteractor = async (
     throw new UnauthorizedError('Invalid User getting notifications');
   }
 
-  const [currentUser, judgeUser] = await Promise.all([
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId: authorizedUser.userId }),
-    getJudgeUser(judgeUserId, applicationContext, authorizedUser.role),
-  ]);
+  const currentUser = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   applicationContext.logger.info('getNotificationsInteractor getUser', {
     currentUser,
-    judgeUser,
   });
 
   const { section, userId } = caseServicesSupervisorData || currentUser;
@@ -108,7 +104,7 @@ export const getNotificationsInteractor = async (
       userId,
     }),
     getDocumentQCInboxForSection({
-      judgeUserName: judgeUser ? judgeUser.name : null,
+      judgeUserId,
       section: sectionToDisplay,
     }),
   ]);
