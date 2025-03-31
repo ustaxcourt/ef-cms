@@ -1,0 +1,767 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>Cerebral Migration Presentation</title>
+    <script>
+      /*
+       * big.js - Original work by Tom MacWright (https://github.com/tmcw/big)
+       * Copyright (c) 2023, Tom MacWright
+       * ISC License
+       *
+       * Permission to use, copy, modify, and/or distribute this software for any
+       * purpose with or without fee is hereby granted, provided that the above
+       * copyright notice and this permission notice appear in all copies.
+       */
+      (function IIFE() {
+        let ASPECT_RATIO =
+          window.BIG_ASPECT_RATIO === undefined ? 1.6 : window.BIG_ASPECT_RATIO;
+
+        function parseHash() {
+          return parseInt(window.location.hash.substring(1), 10);
+        }
+
+        function emptyNode(node) {
+          while (node.hasChildNodes()) node.removeChild(node.lastChild);
+        }
+
+        function ce(type, className = '') {
+          return Object.assign(document.createElement(type), { className });
+        }
+
+        addEventListener('load', () => {
+          let slideDivs = Array.from(document.querySelectorAll('body > div'));
+          let pc = document.body.appendChild(
+            ce('div', 'presentation-container'),
+          );
+          slideDivs = slideDivs.map((slide, _i) => {
+            slide.setAttribute('tabindex', 0);
+            slide.classList.add('slide');
+            let sc = pc.appendChild(ce('div', 'slide-container'));
+            sc.appendChild(slide);
+            return Object.assign(sc, {
+              _notes: Array.from(
+                slide.querySelectorAll('notes'),
+                noteElement => {
+                  noteElement.parentNode.removeChild(noteElement);
+                  return noteElement.innerHTML.trim();
+                },
+              ),
+              _i,
+            });
+          });
+          let timeoutInterval,
+            { body } = document,
+            {
+              className: initialBodyClass,
+              style: { cssText: initialBodyStyle },
+            } = body,
+            big = (window.big = {
+              current: -1,
+              mode: 'talk',
+              length: slideDivs.length,
+              forward,
+              reverse,
+              go,
+            });
+
+          function forward() {
+            go(big.current + 1);
+          }
+
+          function reverse() {
+            go(big.current - 1);
+          }
+
+          function go(n, force) {
+            n = Math.max(0, Math.min(big.length - 1, n));
+            if (!force && big.current === n) return;
+            big.current = n;
+            let sc = slideDivs[n],
+              slideDiv = sc.firstChild;
+            if (sc._notes.length) {
+              console.group(n);
+              for (let note of sc._notes)
+                console.log(
+                  '%c%s',
+                  'padding:5px;font-family:serif;font-size:18px;line-height:150%;',
+                  note,
+                );
+              console.groupEnd();
+            }
+            for (let slide of slideDivs)
+              slide.style.display = slide._i === n ? '' : 'none';
+            body.className = `talk-mode ${
+              slideDiv.dataset.bodyClass || ''
+            } ${initialBodyClass}`;
+            body.style.cssText = `${initialBodyStyle} ${
+              slideDiv.dataset.bodyStyle || ''
+            }`;
+            window.clearInterval(timeoutInterval);
+            if (slideDiv.dataset.timeToNext)
+              timeoutInterval = window.setTimeout(
+                forward,
+                parseFloat(slideDiv.dataset.timeToNext) * 1000,
+              );
+            onResize();
+            if (window.location.hash !== n) window.location.hash = n;
+            document.title = slideDiv.textContent;
+          }
+
+          function resizeTo(sc, width, height) {
+            let slideDiv = sc.firstChild,
+              padding = Math.min(width * 0.04),
+              fontSize = height;
+            sc.style.width = `${width}px`;
+            sc.style.height = `${height}px`;
+            slideDiv.style.padding = `${padding}px`;
+            if (getComputedStyle(slideDiv).display === 'grid')
+              slideDiv.style.height = `${height - padding * 2}px`;
+            for (let step of [100, 50, 10, 2]) {
+              for (; fontSize > 0; fontSize -= step) {
+                slideDiv.style.fontSize = `${fontSize}px`;
+                if (
+                  slideDiv.scrollWidth <= width &&
+                  slideDiv.offsetHeight <= height &&
+                  Array.from(slideDiv.querySelectorAll('div')).every(
+                    elem =>
+                      elem.scrollWidth <= elem.clientWidth &&
+                      elem.scrollHeight <= elem.clientHeight,
+                  )
+                ) {
+                  break;
+                }
+              }
+              fontSize += step;
+            }
+          }
+
+          function onPrint() {
+            if (big.mode === 'print') return;
+            body.className = `print-mode ${initialBodyClass}`;
+            body.style.cssText = initialBodyStyle;
+            emptyNode(pc);
+            for (let sc of slideDivs) {
+              let subContainer = pc.appendChild(ce('div', 'sub-container')),
+                sbc = subContainer.appendChild(
+                  ce('div', sc.firstChild.dataset.bodyClass || ''),
+                );
+              sbc.appendChild(sc);
+              sbc.style.cssText = sc.dataset.bodyStyle || '';
+              sc.style.display = 'flex';
+              resizeTo(sc, 512, 320);
+              if (sc._notes.length) continue;
+              let notesUl = subContainer.appendChild(ce('ul', 'notes-list'));
+              for (let note of sc._notes) {
+                let li = notesUl.appendChild(ce('li'));
+                li.innerText = note;
+              }
+            }
+            big.mode = 'print';
+          }
+
+          function onTalk(i) {
+            if (big.mode === 'talk') return;
+            big.mode = 'talk';
+            body.className = `talk-mode ${initialBodyClass}`;
+            emptyNode(pc);
+            for (let sc of slideDivs) pc.appendChild(sc);
+            go(i, true);
+            // Hack: show images in "jump mode"
+            [...document.querySelectorAll('img')].forEach(img => {
+              img.classList.remove('hidden');
+            });
+          }
+
+          function onJump() {
+            if (big.mode === 'jump') return;
+            big.mode = 'jump';
+            body.className = 'jump-mode ' + initialBodyClass;
+            body.style.cssText = initialBodyStyle;
+            emptyNode(pc);
+            slideDivs.forEach(sc => {
+              let subContainer = pc.appendChild(ce('div', 'sub-container'));
+              subContainer.addEventListener('keypress', e => {
+                if (e.key !== 'Enter') return;
+                subContainer.removeEventListener('click', onClickSlide);
+                e.stopPropagation();
+                e.preventDefault();
+                onTalk(sc._i);
+              });
+              let sbc = subContainer.appendChild(
+                ce('div', sc.firstChild.dataset.bodyClass || ''),
+              );
+              sbc.appendChild(sc);
+              sc.style.display = 'flex';
+              sbc.style.cssText = sc.dataset.bodyStyle || '';
+              resizeTo(sc, 192, 120);
+              // Hack: hide images in "jump mode"
+              [...document.querySelectorAll('img')].forEach(img => {
+                img.classList.add('hidden');
+              });
+              function onClickSlide(e) {
+                subContainer.removeEventListener('click', onClickSlide);
+                e.stopPropagation();
+                e.preventDefault();
+                onTalk(sc._i);
+              }
+              subContainer.addEventListener('click', onClickSlide);
+            });
+          }
+
+          function onClick(e) {
+            if (big.mode !== 'talk') return;
+            if (e.target.tagName !== 'A') go((big.current + 1) % big.length);
+          }
+
+          function onKeyDown(e) {
+            if (big.mode === 'talk') {
+              switch (e.key) {
+                case 'ArrowLeft':
+                case 'ArrowUp':
+                case 'PageUp':
+                  return reverse();
+                case 'ArrowRight':
+                case 'ArrowDown':
+                case 'PageDown':
+                  return forward();
+              }
+            }
+            let m = { p: onPrint, t: onTalk, j: onJump }[e.key];
+            if (m) m(big.current);
+          }
+
+          function onResize() {
+            if (big.mode !== 'talk') return;
+            let { clientWidth: width, clientHeight: height } =
+              document.documentElement;
+            if (ASPECT_RATIO !== false) {
+              if (width / height > ASPECT_RATIO)
+                width = Math.ceil(height * ASPECT_RATIO);
+              else height = Math.ceil(width / ASPECT_RATIO);
+            }
+            resizeTo(slideDivs[big.current], width, height);
+          }
+
+          window.matchMedia('print').addListener(onPrint);
+          document.addEventListener('click', onClick);
+          document.addEventListener('keydown', onKeyDown);
+          document.addEventListener('touchstart', e => {
+            if (big.mode !== 'talk') return;
+            let { pageX: startingPageX } = e.changedTouches[0];
+            document.addEventListener(
+              'touchend',
+              e2 => {
+                let distanceTraveled =
+                  e2.changedTouches[0].pageX - startingPageX;
+                // Don't navigate if the person didn't swipe by fewer than 4 pixels
+                if (Math.abs(distanceTraveled) < 4) return;
+                if (distanceTraveled < 0) forward();
+                else reverse();
+              },
+              { once: true },
+            );
+          });
+          addEventListener('hashchange', () => {
+            if (big.mode === 'talk') go(parseHash());
+          });
+          addEventListener('resize', onResize);
+          console.log(
+            'This is a big presentation. You can: \n\n* press j to jump to a slide\n' +
+              '* press p to see the print view\n* press t to go back to the talk view',
+          );
+          body.className = `talk-mode ${initialBodyClass}`;
+          go(parseHash() || big.current);
+        });
+      })();
+    </script>
+    <style id="core">
+      html {
+        height: 100%;
+      }
+
+      body {
+        font-family:
+          -apple-system,
+          BlinkMacSystemFont,
+          avenir next,
+          avenir,
+          helvetica neue,
+          helvetica,
+          Ubuntu,
+          roboto,
+          noto,
+          segoe ui,
+          arial,
+          sans-serif;
+        font-weight: 700;
+        margin: 0;
+        padding: 0;
+      }
+
+      h1,
+      h2,
+      h3,
+      p {
+        margin: 0;
+      }
+
+      em {
+        font-style: normal;
+      }
+
+      .nowrap {
+        white-space: nowrap;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      div.slide-container {
+        background-size: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+
+      div.slide {
+        cursor: pointer;
+        cursor: hand;
+      }
+
+      div.imageText {
+        text-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+      }
+
+      /* normally not good, but ok in context of full screen directional navigation */
+      .talk-mode .slide:focus {
+        outline: 0;
+      }
+
+      body.talk-mode {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+      }
+
+      body.print-mode {
+        background: #fff;
+        color: #000;
+        font-weight: normal;
+        padding: 0px;
+      }
+
+      body.print-mode div.sub-container {
+        padding: 10px 20px;
+        display: flex;
+        flex-flow: row wrap;
+        break-inside: avoid;
+      }
+
+      ul.notes-list {
+        display: inline-block;
+        float: left;
+        vertical-align: top;
+      }
+
+      body.print-mode div.slide-container {
+        border: 1px solid #000;
+      }
+
+      body.jump-mode {
+        padding: 10px;
+      }
+
+      body.jump-mode div.sub-container {
+        display: inline-block;
+        vertical-align: top;
+        padding: 2px;
+      }
+
+      body.jump-mode div.slide-container {
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        cursor: pointer;
+      }
+
+      body.jump-mode div.slide-container:hover {
+        border: 1px solid rgba(255, 255, 255, 0.8);
+      }
+
+      .layout {
+        display: grid;
+      }
+
+      .layout div {
+        display: flex;
+        align-items: center;
+      }
+
+      .layout img {
+        object-fit: contain;
+        width: 100%;
+        height: 100%;
+      }
+
+      div.slide > img:only-child,
+      div.slide > canvas:only-child,
+      div.slide > video:only-child {
+        width: 100%;
+      }
+    </style>
+    <style id="theme">
+      body {
+        background: #272c32;
+        color: #fff;
+      }
+
+      em {
+        color: #fadb03;
+      }
+
+      a {
+        color: #7cbfe5;
+        text-decoration-skip: ink;
+      }
+
+      a:hover {
+        background: #4e5b6f;
+      }
+    </style>
+    <style id="custom">
+      .highlight {
+        color: rgb(241, 241, 122);
+      }
+
+      .lowlight {
+        color: rgb(120, 120, 120);
+      }
+
+      .tiny {
+        font-size: 16px;
+      }
+
+      .small {
+        font-size: 20px;
+      }
+
+      .good {
+        color: rgba(108, 234, 108, 0.9);
+      }
+
+      .bad {
+        color: rgba(219, 88, 88, 0.9);
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      code {
+        font-family: monospace;
+        font-weight: 400;
+        font-size: 0.75em;
+        line-height: 1.5;
+        letter-spacing: -0.025em;
+      }
+    </style>
+  </head>
+  <body>
+    <div>
+      <h1>Cerebral Migration Research Findings</h1>
+      <h6>January 30, 2025</h6>
+    </div>
+    <div>
+      <h1>The Problem:</h1>
+    </div>
+    <div>
+      <p class="highlight">Cerebral has not been maintained since 2020.</p>
+    </div>
+    <div>
+      <p class="lowlight">Cerebral has not been maintained since 2020.</p>
+      <p class="highlight">
+        We cannot update DAWSON's React and ReactDOM dependencies past version
+        18.x.
+      </p>
+    </div>
+    <div>
+      <p class="lowlight">Cerebral has not been maintained since 2020.</p>
+      <p class="lowlight">
+        We cannot update DAWSON's React and ReactDOM dependencies past version
+        18.x.
+      </p>
+      <p class="highlight">
+        Poor TypeScript support makes maintaining and extending the codebase
+        difficult.
+      </p>
+    </div>
+    <div>
+      <h1>Scope of the Problem:</h1>
+    </div>
+    <div>
+      <ul>
+        <li><span class="highlight">972</span> action files.</li>
+        <li><span class="highlight">631</span> sequence files.</li>
+        <li>
+          <span class="highlight">377</span> React components wrapped by the
+          `connect` function.
+        </li>
+      </ul>
+    </div>
+    <div>
+      <p class="tiny">
+        [An image of two hands bound together with rope at the wrist.]
+      </p>
+    </div>
+    <div>
+      <h1>Understanding the Problem:</h1>
+    </div>
+    <div>
+      <p class="highlight">What does Cerebral do for us?</p>
+      <br />
+      <p>?</p>
+    </div>
+    <div>
+      <p class="lowlight">What does Cerebral do for us?</p>
+      <ul>
+        <li class="highlight">
+          State management (e.g., form data in a global state tree).
+        </li>
+      </ul>
+    </div>
+    <div>
+      <p class="lowlight">What does Cerebral do for us?</p>
+      <ul>
+        <li class="lowlight">
+          State management (e.g., form data in a global state tree).
+        </li>
+        <li class="highlight">
+          Computed/derived state (e.g., formatted display values).
+        </li>
+      </ul>
+    </div>
+    <div>
+      <p class="lowlight">What does Cerebral do for us?</p>
+      <ul>
+        <li class="lowlight">
+          State management (e.g., form data in a global state tree).
+        </li>
+        <li class="lowlight">
+          Computed/derived state (e.g., formatted display values).
+        </li>
+        <li class="highlight">
+          Workflow orchestration (e.g., multi-step form submission flows).
+        </li>
+      </ul>
+    </div>
+    <div>
+      <p>Two distinct technical use cases:</p>
+      <p><span class="highlight">#1</span> State get/set/derive.</p>
+      <p><span class="highlight">#2</span> Workflow orchestration.</p>
+    </div>
+    <div>
+      <h1>Solving the Problem:</h1>
+    </div>
+    <div>
+      <h1>Idea:</h1>
+      <h3>Rebuild the Entire Frontend.</h3>
+    </div>
+    <div>
+      <p class="good">Pro: fresh slate.</p>
+      <p class="bad">Cons: labor-intensive and high-risk effort.</p>
+    </div>
+    <div>
+      <h1>Idea:</h1>
+      <h3>Fork Cerebral.</h3>
+    </div>
+    <div>
+      <p class="good">
+        Pro: straightforward solution to the immediate problem.
+      </p>
+      <p class="bad">
+        Con: requires maintaining a fork of an already ancient library.
+      </p>
+    </div>
+    <div>
+      <h1>Idea:</h1>
+      <h3>Explore the Middle Path.</h3>
+    </div>
+    <div>
+      <p class="highlight">Create a compatibility layer that:</p>
+    </div>
+    <div>
+      <p class="lowlight">Create a compatibility layer that:</p>
+      <ul>
+        <li class="highlight">Maintains existing sequence/action patterns.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="lowlight">Create a compatibility layer that:</p>
+      <ul>
+        <li class="lowlight">Maintains existing sequence/action patterns.</li>
+        <li class="highlight">Allows gradual migration to new libraries.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="lowlight">Create a compatibility layer that:</p>
+      <ul>
+        <li class="lowlight">Maintains existing sequence/action patterns.</li>
+        <li class="lowlight">
+          Allows gradual migration to new library/libraries.
+        </li>
+        <li class="highlight">Preserves existing business logic.</li>
+      </ul>
+    </div>
+    <div>
+      <p>Cerebral actions are functions:</p>
+      <pre><code>
+        export const validateWidgetSearchAction = ({ <em>get, path, store</em> }) => {
+          const widgetSearch = <em>get</em>(state.widgetSearch);
+          const errors = await validateWidgetSearchOnServerInteractor({ widgetSearch }); <em>// async work</em>
+
+          if (_.isEmpty(errors)) {
+            <em>store.set</em>(state.widgetSearchStatus, 'SUCCESS');
+            return <em>path.success</em>();
+          } else {
+            return <em>path.error</em>({ errors });
+          }
+        };
+      </code></pre>
+    </div>
+    <div>
+      <p>Cerebral sequences are arrays of functions and objects:</p>
+      <pre><code>
+        export const validateWidgetSearchSequence = [
+          shouldValidateAction,
+          {
+            ignore: [],
+            validate: [
+              validateWidgetSearchAction,
+              {
+                error: [setValidationErrorsAction],
+                success: [clearAlertsAction, stopShowValidationAction],
+              },
+            ],
+          },
+        ];
+        </code></pre>
+    </div>
+    <div>
+      <p class="good">Pro: allows for code reuse and incremental migration.</p>
+      <p class="bad">Con: compatibility layer could become complex.</p>
+    </div>
+    <div>
+      <h1>What Can We Do?</h1>
+    </div>
+    <div>
+      <ol>
+        <li class="highlight">
+          Identify a library/libraries that would satisfy one or both technical
+          use cases.
+        </li>
+      </ol>
+    </div>
+    <div>
+      <ol>
+        <li class="lowlight">
+          Identify a library/libraries that would satisfy one or both technical
+          use cases.
+        </li>
+        <li class="highlight">
+          Integrate new library/libraries alongside existing architecture.
+        </li>
+      </ol>
+    </div>
+    <div>
+      <ol>
+        <li class="lowlight">
+          Identify a library/libraries that would satisfy one or both technical
+          use cases.
+        </li>
+        <li class="lowlight">
+          Integrate new library/libraries alongside existing architecture.
+        </li>
+        <li class="highlight">
+          Implement one vertical slice with new approach.
+        </li>
+      </ol>
+    </div>
+    <div>
+      <ol>
+        <li class="lowlight">
+          Identify a library/libraries that would satisfy one or both technical
+          use cases.
+        </li>
+        <li class="lowlight">
+          Integrate new library/libraries alongside existing architecture.
+        </li>
+        <li class="lowlight">
+          Implement one vertical slice with new approach.
+        </li>
+        <li class="highlight">
+          Use this experience to estimate effort and risk of migration effort.
+        </li>
+      </ol>
+    </div>
+    <div>
+      <p class="highlight">Make a decision based on data:</p>
+      <ul>
+        <li>LOE is feasible? Proceed with incremental migration.</li>
+        <li>LOE is prohibitive? Fall back to forking Cerebral.</li>
+      </ul>
+    </div>
+    <div>
+      <p class="lowlight">Make a decision based on data:</p>
+      <ul class="lowlight">
+        <li>LOE is feasible? Proceed with incremental migration.</li>
+        <li>LOE is prohibitive? Fall back to forking Cerebral.</li>
+      </ul>
+      <p class="highlight">Decision criteria:</p>
+      <ol>
+        <li>Time estimate of migration per feature.</li>
+        <li>Risk assessment derived from proof of concept.</li>
+        <li>Maintenance costs of compatibility layer vs. fork.</li>
+      </ol>
+    </div>
+    <div>
+      <h1>In Summary:</h1>
+      <p>...</p>
+    </div>
+    <div>
+      <h1>In Summary:</h1>
+      <p class="highlight">
+        DAWSON is coupled to Cerebral literally and conceptually.
+      </p>
+    </div>
+    <div>
+      <h1>In Summary:</h1>
+      <p class="lowlight">
+        DAWSON is coupled to Cerebral literally and conceptually.
+      </p>
+      <p class="highlight">
+        Cerebral satisfies two distinct technical use cases.
+      </p>
+    </div>
+    <div>
+      <h1>In Summary:</h1>
+      <p class="lowlight">
+        DAWSON is coupled to Cerebral literally and conceptually.
+      </p>
+      <p class="lowlight">
+        Cerebral satisfies two distinct technical use cases.
+      </p>
+      <p class="highlight">Proactively manage risk.</p>
+    </div>
+    <div>
+      <h1>The End.</h1>
+      <p class="small">
+        https://github.com/flexion/ef-cms/tree/10462-dxox/docs/state-management-migration
+      </p>
+    </div>
+  </body>
+</html>
