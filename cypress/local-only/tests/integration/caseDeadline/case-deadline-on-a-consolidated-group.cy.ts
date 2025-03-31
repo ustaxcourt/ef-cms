@@ -58,7 +58,7 @@ describe('Case Deadline - Consolidated Group', () => {
     });
   });
 
-  it('should ', () => {
+  it('should add deadlines to all the children cases in the CG and bot update children removed from the group', () => {
     loginAsDocketClerk1();
 
     cy.get<GroupInfoType>('@GROUP_INFO').then(GROUP_INFO => {
