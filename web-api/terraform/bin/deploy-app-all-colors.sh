@@ -101,6 +101,7 @@ export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
 export TF_VAR_postgres_master_username="${POSTGRES_MASTER_USERNAME}"
 export TF_VAR_postgres_master_password="${POSTGRES_MASTER_PASSWORD}"
 export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
+export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
 
 if [[ -n "${RDS_MIN_CAPACITY}" ]]
 then
