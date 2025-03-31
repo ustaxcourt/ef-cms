@@ -21,7 +21,7 @@ import {
   getServedPartiesCode,
 } from '@shared/business/entities/DocketEntry';
 import {
-  ERROR_MAP_429,
+  ERROR_429,
   getPublicSiteUrl,
   getUniqueId,
 } from '@shared/sharedAppContext';
@@ -34,7 +34,7 @@ import { bulkDeleteRecords } from '@web-api/persistence/elasticsearch/bulkDelete
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
-import { combineTwoPdfs } from '@shared/business/utilities/documentGenerators/combineTwoPdfs';
+import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
   formatCaseForTrialSession,
@@ -573,7 +573,7 @@ export const createTestApplicationContext = () => {
     getConstants: jest.fn().mockImplementation(() => {
       return {
         ...getConstants(),
-        ERROR_MAP_429,
+        ERROR_429,
       };
     }),
     getDispatchers: jest.fn().mockReturnValue({

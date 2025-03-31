@@ -4,17 +4,31 @@ import {
   SUGGESTED_TRIAL_SESSION_TITLES,
   USER_MESSAGE_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { DateTime } from 'luxon';
 import { validateCreateTermFormAction } from '@web-client/presenter/actions/TrialSession/validateCreateTermFormAction';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { presenter } from '@web-client/presenter/presenter-mock';
+import {
+  getBusinessDateInFuture,
+  FORMATS,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
 
 describe('validateCreateTermFormAction', () => {
-  const CURRENT_YEAR = DateTime.now().year;
+  const termEndDate = getBusinessDateInFuture({
+    numberOfDays: 360,
+    outputFormat: FORMATS.MMDDYYYY,
+    startDate: createISODateString(),
+  });
+
+  const termStartDate = getBusinessDateInFuture({
+    numberOfDays: 1,
+    outputFormat: FORMATS.MMDDYYYY,
+    startDate: createISODateString(),
+  });
 
   const VALID_TERM_FORM: RawGenerateSuggestedTermForm = {
-    termStartDate: `01/01/${CURRENT_YEAR + 1}`,
-    termEndDate: `03/31/${CURRENT_YEAR + 1}`,
+    termStartDate,
+    termEndDate,
     termName: 'TEST_TERM_NAME',
     maxSessionsPerLocation: 1,
     maxSessionsPerWeek: 1,

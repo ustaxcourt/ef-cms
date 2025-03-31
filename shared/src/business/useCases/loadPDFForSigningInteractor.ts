@@ -1,3 +1,6 @@
+import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
+import { PDFDocumentProxy } from 'pdfjs-dist';
+
 /**
  * loadPDFForSigningInteractor
  *
@@ -21,11 +24,11 @@ export const loadPDFForSigningInteractor = async (
     onlyCover: boolean;
     removeCover: boolean;
   },
-) => {
+): Promise<PDFDocumentProxy> => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   try {
-    const pdfjsLib = await applicationContext.getPdfJs();
+    const pdfJs = await getPdfJs();
     const pdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
@@ -55,7 +58,7 @@ export const loadPDFForSigningInteractor = async (
     } else {
       formattedArrayBuffer = arrayBuffer;
     }
-    return await pdfjsLib.getDocument({
+    return await pdfJs.getDocument({
       data: formattedArrayBuffer,
       isEvalSupported: false,
     }).promise;
