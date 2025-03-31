@@ -9,6 +9,7 @@ import {
 import { CaseKysely, DatabaseSchema } from '@web-api/database-types';
 import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 
+// Select the relevant RawCase fields from dwCase and map them correctly.
 export const toKyselyNewCase = (rawCase: RawCase) => {
   return {
     associatedJudge: rawCase.associatedJudge,
@@ -35,7 +36,7 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       : null,
     createdAt: rawCase.createdAt
       ? calculateDate({ dateString: rawCase.createdAt })
-      : calculateDate({ dateString: formatNow() }), // Is this what we want?
+      : calculateDate({ dateString: formatNow() }),
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
     docketNumberSuffix: rawCase.docketNumberSuffix || undefined,
@@ -99,27 +100,6 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     useSameAsPrimary: rawCase.useSameAsPrimary,
   };
 };
-
-// TODO 10502
-// export const toKyselyNewCase = (rawCase: RawCase) => {
-
-//   const valueShouldBeDate = (key: string, value: any) => {
-//     if (key === 'mailingDate' || typeof value !== 'string') {
-//       return false;
-//     }
-//     return key.toLowerCase().includes('date');
-//   };
-
-//   return mapValues(
-//     {
-//       ...pick(rawCase, [...DatabaseSchema['dwCase'].columns, 'caseCaption']),
-//     },
-//     (value, key) =>
-//       valueShouldBeDate(key, value)
-//         ? calculateDate({ dateString: value as string })
-//         : value || null,
-//   );
-// };
 
 export function fromKyselyCase<T extends object>(record: T) {
   // Map for renaming keys from DB format to the desired RawCase format.
