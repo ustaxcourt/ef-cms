@@ -2,6 +2,7 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import {
   asyncHandleLockError,
@@ -52,12 +53,10 @@ export const fileAndServeCourtIssuedDocument = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const subjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectCaseDocketNumber,
-    });
+  const subjectCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: subjectCaseDocketNumber,
+  });
 
   const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
@@ -74,14 +73,12 @@ export const fileAndServeCourtIssuedDocument = async (
     error = new Error('Docket entry is already being served');
   }
   if (error) {
-    await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        clientConnectionId,
-        message: { action: 'serve_document_error', error: error.message },
-        userId: user.userId,
-      });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      clientConnectionId,
+      message: { action: 'serve_document_error', error: error.message },
+      userId: user.userId,
+    });
 
     throw error;
   }
@@ -132,15 +129,13 @@ export const fileAndServeCourtIssuedDocument = async (
 
       const contentToStore = { documentContents };
 
-      await applicationContext
-        .getPersistenceGateway()
-        .saveDocumentFromLambda({
-          applicationContext,
-          contentType: 'application/json',
-          document: Buffer.from(JSON.stringify(contentToStore)),
-          key: documentContentsId,
-          useTempBucket: false,
-        });
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        applicationContext,
+        contentType: 'application/json',
+        document: Buffer.from(JSON.stringify(contentToStore)),
+        key: documentContentsId,
+        useTempBucket: false,
+      });
     }
   } catch (e) {
     applicationContext.logger.error(e);
@@ -148,9 +143,10 @@ export const fileAndServeCourtIssuedDocument = async (
 
   try {
     for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({ applicationContext, docketNumber });
+      const caseToUpdate = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
@@ -204,12 +200,12 @@ export const fileAndServeCourtIssuedDocument = async (
         }
 
         return fileAndServeDocumentOnOneCase({
-            caseEntity,
-            docketEntryEntity,
-            subjectCaseDocketNumber,
-            user,
-            caseHasDeadline,
-          });
+          caseEntity,
+          docketEntryEntity,
+          subjectCaseDocketNumber,
+          user,
+          caseHasDeadline,
+        });
       }),
     );
 
@@ -241,31 +237,27 @@ export const fileAndServeCourtIssuedDocument = async (
     }
   }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .saveDocumentFromLambda({
-      applicationContext,
-      document: stampedPdf,
-      key: docketEntryToServe.docketEntryId,
-    });
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: stampedPdf,
+    key: docketEntryToServe.docketEntryId,
+  });
 
   const successMessage =
     docketNumbers.length > 0
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.GENERIC;
 
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'serve_document_complete',
-        alertSuccess: { message: successMessage, overwritable: false },
-        pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
-      },
-      userId: user.userId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_document_complete',
+      alertSuccess: { message: successMessage, overwritable: false },
+      pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
+    },
+    userId: user.userId,
+  });
 };
 
 export const determineEntitiesToLock = (

@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
+import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
@@ -100,6 +101,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
+import { initialMinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
@@ -149,8 +151,10 @@ import { statisticsHelper } from './computeds/statisticsHelper';
 import { statusReportOrderHelper } from './computeds/statusReportOrderHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { trialLocationHelper } from '@web-client/presenter/computeds/trialLocationHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
+import { trialSessionMinutesFormOptionsHelper } from './computeds/TrialSession/TrialSessionMinutes/trialSessionMinutesFormOptionsHelper';
 import { trialSessionPlanningReportViewHelper } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
@@ -161,8 +165,7 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
-import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
-
+import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
 export const computeds = {
@@ -536,12 +539,19 @@ export const computeds = {
   trialCitiesHelper: trialCitiesHelper as unknown as ReturnType<
     typeof trialCitiesHelper
   >,
+  trialLocationHelper: trialLocationHelper as unknown as ReturnType<
+    typeof trialLocationHelper
+  >,
   trialSessionDetailsHelper: trialSessionDetailsHelper as unknown as ReturnType<
     typeof trialSessionDetailsHelper
   >,
   trialSessionHeaderHelper: trialSessionHeaderHelper as unknown as ReturnType<
     typeof trialSessionHeaderHelper
   >,
+  trialSessionMinutesFormOptionsHelper:
+    trialSessionMinutesFormOptionsHelper as unknown as ReturnType<
+      typeof trialSessionMinutesFormOptionsHelper
+    >,
   trialSessionPlanningReportViewHelper:
     trialSessionPlanningReportViewHelper as unknown as ReturnType<
       typeof trialSessionPlanningReportViewHelper
@@ -587,6 +597,10 @@ export const baseState = {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
+  [STATE_KEYS.CONSOLIDATED_CASE_DEADLINES]: [] as {
+    docketNumber: string;
+    caseCaption: string;
+  }[],
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
@@ -620,7 +634,7 @@ export const baseState = {
     title?: string;
   },
   blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
-  blockedCases: [] as BlockedCasesResponse,
+  blockedCases: [] as BlockedCaseData[],
   caseDeadlineReport: {} as {
     caseDeadlinesForCurrentPage: (RawCaseDeadline & {
       caseCaption: string;
@@ -733,6 +747,8 @@ export const baseState = {
     selectedMessages: new Map() as Map<string, string>,
   },
   messagesSectionCount: 0,
+  minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
+  minuteSheetFormSnapshot: '',
   modal: {
     contactSupportMessage: undefined, // the "contact support" message sans email address
     docketEntry: undefined,
@@ -864,6 +880,14 @@ export const baseState = {
   },
   todaysDate: '',
   token: '',
+  trialLocationPage: {
+    blockedCases: [] as RawCase[],
+    blockedCasesPage: 0,
+    currentTab: 'eligibleCases',
+    eligibleCases: [] as EligibleCase[],
+    eligibleCasesPage: 0,
+    location: '',
+  },
   trialSession: cloneDeep(initialTrialSessionState),
   trialSessionDetailsTab: {} as { caseList: any[]; calendaredCaseList: any[] },
   trialSessionJudge: {
@@ -944,7 +968,7 @@ export type PractitionerDetail = {
   pendingEmail?: string;
   additionalPhone?: string;
   firmName?: string;
-  hasEAccess?: boolean;
+  hasElectronicAccess?: boolean;
 };
 
 export type PractitionerAllCasesInfo = {

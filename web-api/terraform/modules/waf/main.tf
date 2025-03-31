@@ -105,12 +105,12 @@ resource "aws_wafv2_web_acl" "apis" {
         custom_response {
           response_code = 429
         }
-      } 
+      }
     }
 
     statement {
       rate_based_statement {
-        limit                 = 350 
+        limit                 = 350
         evaluation_window_sec = 60
         aggregate_key_type    = "CONSTANT"
 
@@ -133,7 +133,7 @@ resource "aws_wafv2_web_acl" "apis" {
 
     visibility_config {
       cloudwatch_metrics_enabled = true
-      metric_name                = "expensive_request_limit_${var.environment}"
+      metric_name                = "per_ip_expensive_request_limit_${var.environment}"
       sampled_requests_enabled   = false
     }
   }

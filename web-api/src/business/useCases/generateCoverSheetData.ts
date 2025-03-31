@@ -24,7 +24,7 @@ export const formatCaseTitle = ({
   useInitialData,
 }: {
   applicationContext: ServerApplicationContext;
-  caseEntity: Case;
+  caseEntity: Case | RawCase;
   useInitialData?: boolean;
 }) => {
   const caseCaption = useInitialData
@@ -35,7 +35,9 @@ export const formatCaseTitle = ({
   let caseCaptionExtension = '';
   if (caseTitle !== caseCaption) {
     caseTitle += ', ';
-    caseCaptionExtension = caseCaption.replace(caseTitle, '');
+    caseCaptionExtension = caseCaption
+      ? caseCaption.replace(caseTitle, '')
+      : '';
   }
   return { caseCaptionExtension, caseTitle };
 };

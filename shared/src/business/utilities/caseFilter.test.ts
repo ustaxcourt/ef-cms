@@ -1,12 +1,11 @@
 import {
   CONTACT_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
+  COUNTRY_TYPES,
   ROLES,
 } from '../entities/EntityConstants';
 import {
-  caseContactAddressSealedFormatter,
-  caseSealedFormatter,
-  caseSearchFilter,
+  filterCaseSearchResultsNotAccessibleToUser,
+  formatSealedAddresses,
 } from './caseFilter';
 import {
   mockIrsPractitionerUser,
@@ -16,40 +15,29 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 describe('caseFilter', () => {
-  it('should format sealed cases to preserve ONLY attributes appearing in a whitelist', () => {
-    const result = caseSealedFormatter({
-      baz: 'quux',
-      docketNumber: '102-20',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      foo: 'bar',
-      isPaper: true,
-      sealedDate: '2020-01-02T03:04:05.007Z',
-    });
-
-    expect(result).toEqual({
-      docketNumber: '102-20',
-      docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-      isPaper: true,
-      sealedDate: '2020-01-02T03:04:05.007Z',
-    });
-  });
-
   describe('caseContactAddressSealedFormatter', () => {
     it('returns contact info with ONLY the whitelisted attributes present', () => {
       const createContactInfo = () => ({
         additionalName: 'Bob',
+        address1: '123 Sesame Street',
         bananas: '8-foot bunch',
         city: 'Los Angeles',
         contactId: '42-universe-everything',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        entityName: 'Petitioner',
         inCareOf: 'Friendship is Magic',
         isAddressSealed: true,
         name: 'Joe Dirt',
+        phone: 'N/A',
+        postalCode: '11111',
+        sealedAndUnavailable: false,
         secondaryName: 'Cheeseburgers',
         serviceIndicator: 'Electronic',
+        state: 'IL',
         title: 'Emperor',
         transmission: 'manual',
       });
-      const caseDetail = {};
+      const caseDetail = {} as Partial<RawCase>;
       caseDetail.petitioners = [
         { ...createContactInfo(), contactType: CONTACT_TYPES.primary },
         { ...createContactInfo(), contactType: CONTACT_TYPES.otherFiler },
@@ -59,8 +47,11 @@ describe('caseFilter', () => {
         { ...createContactInfo(), contactType: CONTACT_TYPES.secondary },
       ];
 
-      const result = caseContactAddressSealedFormatter(caseDetail, {
+      const result = formatSealedAddresses(caseDetail, {
         role: ROLES.petitioner,
+        userId: '1234',
+        name: 'Test',
+        email: 'test@test.com',
       });
 
       result.petitioners.forEach(party => {
@@ -173,7 +164,7 @@ describe('caseFilter', () => {
     ];
 
     it('should remove sealed cases from a set of advanced search results', () => {
-      const result = caseSearchFilter(
+      const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
         mockIrsPractitionerUser,
       );
@@ -190,7 +181,7 @@ describe('caseFilter', () => {
     });
 
     it('should format sealed addresses in search results if user does not have permission to see sealed contact addresses', () => {
-      const result = caseSearchFilter(
+      const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
         mockPetitionsClerkUser,
       );
@@ -204,7 +195,7 @@ describe('caseFilter', () => {
     });
 
     it('should keep sealed cases in search results if user is an internal user with permission to see sealed cases', () => {
-      const result = caseSearchFilter(
+      const result = filterCaseSearchResultsNotAccessibleToUser(
         caseSearchResults,
         mockPetitionsClerkUser,
       );
@@ -213,20 +204,26 @@ describe('caseFilter', () => {
     });
 
     it('should keep sealed cases in search results if user is an IRS superuser with permission to see sealed cases', () => {
-      const result = caseSearchFilter(caseSearchResults, mockIrsSuperuser);
+      const result = filterCaseSearchResultsNotAccessibleToUser(
+        caseSearchResults,
+        mockIrsSuperuser,
+      );
 
       expect(result.length).toEqual(4);
     });
 
     it('should keep sealed cases in search results if user is associated as practitioner or respondent', () => {
-      let result = caseSearchFilter(caseSearchResults, {
-        ...mockPrivatePractitionerUser,
-        userId: 'authPractitioner',
-      });
+      let result = filterCaseSearchResultsNotAccessibleToUser(
+        caseSearchResults,
+        {
+          ...mockPrivatePractitionerUser,
+          userId: 'authPractitioner',
+        },
+      );
 
       expect(result.length).toEqual(4);
 
-      result = caseSearchFilter(caseSearchResults, {
+      result = filterCaseSearchResultsNotAccessibleToUser(caseSearchResults, {
         ...mockPrivatePractitionerUser,
         userId: 'authRespondent',
       });
@@ -235,7 +232,7 @@ describe('caseFilter', () => {
     });
 
     it('should filter out sealed documents in search results when the user is not associated with the case', () => {
-      const result = caseSearchFilter(
+      const result = filterCaseSearchResultsNotAccessibleToUser(
         documentSearchResults,
         mockPrivatePractitionerUser,
       );
@@ -245,10 +242,13 @@ describe('caseFilter', () => {
     });
 
     it('should NOT filter out sealed documents in search results when the user is associated with the case', () => {
-      const result = caseSearchFilter(documentSearchResults, {
-        ...mockPrivatePractitionerUser,
-        userId: 'associatedPractitioner',
-      });
+      const result = filterCaseSearchResultsNotAccessibleToUser(
+        documentSearchResults,
+        {
+          ...mockPrivatePractitionerUser,
+          userId: 'associatedPractitioner',
+        },
+      );
 
       expect(result.length).toEqual(2);
     });

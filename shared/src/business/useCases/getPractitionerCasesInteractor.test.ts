@@ -1,4 +1,5 @@
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getPractitionerCasesInteractor } from './getPractitionerCasesInteractor';
@@ -6,31 +7,33 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 
 describe('getPractitionerCasesInteractor', () => {
+  const getCasesMetadataByDocketNumbers =
+    getCasesMetadataByDocketNumbersMock as jest.Mock;
+
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByDocketNumbers.mockResolvedValue([
-        {
-          ...MOCK_CASE,
-          docketNumber: '108-07',
-          status: CASE_STATUS_TYPES.closed,
-        },
-        {
-          ...MOCK_CASE,
-          docketNumber: '2001-17',
-          status: CASE_STATUS_TYPES.closed,
-        },
-        {
-          ...MOCK_CASE,
-          docketNumber: '501-17',
-          status: CASE_STATUS_TYPES.closed,
-        },
-        { ...MOCK_CASE, docketNumber: '201-07' },
-        { ...MOCK_CASE, docketNumber: '1002-17' },
-        { ...MOCK_CASE, docketNumber: '902-17' },
-      ]);
+    getCasesMetadataByDocketNumbers.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        docketNumber: '108-07',
+        status: CASE_STATUS_TYPES.closed,
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: '2001-17',
+        status: CASE_STATUS_TYPES.closed,
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: '501-17',
+        status: CASE_STATUS_TYPES.closed,
+      },
+      { ...MOCK_CASE, docketNumber: '201-07' },
+      { ...MOCK_CASE, docketNumber: '1002-17' },
+      { ...MOCK_CASE, docketNumber: '902-17' },
+    ]);
   });
 
   it('returns an unauthorized error on non internal users', async () => {
@@ -54,9 +57,7 @@ describe('getPractitionerCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCasesByDocketNumbers,
-    ).toHaveBeenCalled();
+    expect(getCasesMetadataByDocketNumbers).toHaveBeenCalled();
 
     expect(
       closedCases.map(closedCase => {
@@ -83,5 +84,41 @@ describe('getPractitionerCasesInteractor', () => {
       { caseTitle: 'Test Petitioner', docketNumber: '902-17' },
       { caseTitle: 'Test Petitioner', docketNumber: '201-07' },
     ]);
+  });
+
+  it('returns empty arrays if `getCasesMetadataByDocketNumbers` returns undefined', async () => {
+    getCasesMetadataByDocketNumbers.mockResolvedValueOnce(undefined);
+
+    const { closedCases, openCases } = await getPractitionerCasesInteractor(
+      applicationContext,
+      {
+        userId: 'abc',
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(closedCases).toEqual([]);
+    expect(openCases).toEqual([]);
+  });
+
+  it('handles scenario where getDocketNumbersByUser returns an empty array', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockResolvedValueOnce([]);
+    getCasesMetadataByDocketNumbers.mockResolvedValueOnce(undefined);
+
+    const { closedCases, openCases } = await getPractitionerCasesInteractor(
+      applicationContext,
+      {
+        userId: 'someUserId',
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCasesMetadataByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: [],
+    });
+    expect(closedCases).toEqual([]);
+    expect(openCases).toEqual([]);
   });
 });

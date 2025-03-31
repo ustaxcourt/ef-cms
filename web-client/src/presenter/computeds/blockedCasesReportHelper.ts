@@ -1,10 +1,10 @@
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { Get } from 'cerebral';
+import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { Case } from '@shared/business/entities/cases/Case';
-import { formatDateString } from '@shared/business/utilities/DateHandler';
-import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
+import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 
 export const blockedCasesReportHelper = (
   get: Get,
@@ -62,41 +62,7 @@ export const blockedCasesReportHelper = (
       };
     })
     .map(blockedCase => {
-      let blockedDateEarliest: string = '';
-      if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
-        if (blockedCase.blockedDate < blockedCase.automaticBlockedDate!) {
-          blockedDateEarliest = formatDateString(
-            blockedCase.blockedDate,
-            'MMDDYY',
-          );
-        } else {
-          blockedDateEarliest = formatDateString(
-            blockedCase.automaticBlockedDate!,
-            'MMDDYY',
-          );
-        }
-      } else if (blockedCase.blocked) {
-        blockedDateEarliest = formatDateString(
-          blockedCase.blockedDate!,
-          'MMDDYY',
-        );
-      } else if (blockedCase.automaticBlocked) {
-        blockedDateEarliest = formatDateString(
-          blockedCase.automaticBlockedDate!,
-          'MMDDYY',
-        );
-      } else {
-        const blockedDate = getBlockedDateFromBlockedGroup(
-          blockedCase.leadDocketNumber!,
-          groupedCases,
-        );
-        blockedDateEarliest = formatDateString(blockedDate, 'MMDDYY');
-      }
-
-      return {
-        ...blockedCase,
-        blockedDateEarliest,
-      };
+      return setFormattedBlockDates(blockedCase, groupedCases);
     })
     .map(blockedCase => {
       if (!blockedCase.blocked && !blockedCase.automaticBlocked) {
@@ -111,9 +77,50 @@ export const blockedCasesReportHelper = (
   };
 };
 
+export function setFormattedBlockDates(
+  blockedCase: BlockedCaseData & {
+    inConsolidatedGroup: boolean;
+    consolidatedIconTooltipText: string;
+    shouldIndent: boolean;
+    isLeadCase: boolean;
+    caseTitle: string;
+  },
+  blockCaseGroups: Map<string, BlockedCaseData[]>,
+): BlockedFormattedCase {
+  let blockedDateEarliest: string = '';
+  if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
+    if (blockedCase.blockedDate < blockedCase.automaticBlockedDate!) {
+      blockedDateEarliest = formatDateString(blockedCase.blockedDate, 'MMDDYY');
+    } else {
+      blockedDateEarliest = formatDateString(
+        blockedCase.automaticBlockedDate!,
+        'MMDDYY',
+      );
+    }
+  } else if (blockedCase.blocked) {
+    blockedDateEarliest = formatDateString(blockedCase.blockedDate!, 'MMDDYY');
+  } else if (blockedCase.automaticBlocked) {
+    blockedDateEarliest = formatDateString(
+      blockedCase.automaticBlockedDate!,
+      'MMDDYY',
+    );
+  } else {
+    const blockedDate = getBlockedDateFromBlockedGroup(
+      blockedCase.leadDocketNumber!,
+      blockCaseGroups,
+    );
+    blockedDateEarliest = formatDateString(blockedDate, 'MMDDYY');
+  }
+
+  return {
+    ...blockedCase,
+    blockedDateEarliest,
+  };
+}
+
 function getBlockedDateFromBlockedGroup(
   leadDocketNumber: string,
-  blockCaseGroups: Map<string, BlockedCasesResponse>,
+  blockCaseGroups: Map<string, BlockedCaseData[]>,
 ) {
   const cases = blockCaseGroups.get(leadDocketNumber);
   if (!cases || cases.length === 0) return undefined;
@@ -127,10 +134,10 @@ function getBlockedDateFromBlockedGroup(
     .sort()[0];
 }
 
-function groupCases(
-  cases: BlockedCasesResponse,
-): Map<string, BlockedCasesResponse> {
-  const leadDocketNumberMap: Map<string, BlockedCasesResponse> = new Map();
+export function groupCases(
+  cases: BlockedCaseData[],
+): Map<string, BlockedCaseData[]> {
+  const leadDocketNumberMap: Map<string, BlockedCaseData[]> = new Map();
 
   cases.forEach(c => {
     if (c.leadDocketNumber) {
@@ -149,9 +156,11 @@ function groupCases(
 export type BlockedFormattedCase = {
   docketNumber: string;
   inConsolidatedGroup: boolean;
-  consolidatedIconTooltipText: string;
+  consolidatedIconTooltipText?: string;
   isLeadCase: boolean;
   blockedDateEarliest: string;
+  blocked?: boolean;
+  automaticBlocked?: boolean;
   caseTitle: string;
   procedureType: string;
   status: CaseStatus;

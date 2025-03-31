@@ -1,5 +1,5 @@
-import { CUSTOM_CASE_REPORT_PAGE_SIZE } from '../../../../shared/src/business/entities/EntityConstants';
-import { CustomCaseReportSearch } from '../../../../shared/src/business/entities/customCaseReportSearch/CustomCaseReportSearch';
+import { CUSTOM_CASE_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
+import { CustomCaseReportSearch } from '@shared/business/entities/customCaseReportSearch/CustomCaseReportSearch';
 import {
   FORMATS,
   createISODateString,
@@ -21,14 +21,11 @@ export const validateCustomCaseReportFiltersAction = ({
     ? createISODateString(filters.startDate, FORMATS.MMDDYYYY)
     : undefined;
 
-  const lastIdsOfPages = get(state.customCaseReport.lastIdsOfPages);
-  const searchAfter = lastIdsOfPages[props.selectedPage];
-
   const errors = new CustomCaseReportSearch({
     ...filters,
     endDate: formattedEndDate,
+    page: props.selectedPage,
     pageSize: CUSTOM_CASE_REPORT_PAGE_SIZE,
-    searchAfter,
     startDate: formattedStartDate,
   }).getFormattedValidationErrors();
 
