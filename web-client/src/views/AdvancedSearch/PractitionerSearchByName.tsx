@@ -83,7 +83,7 @@ export const PractitionerSearchByName = connect(
                 <legend className="usa-legend">
                   Practitioner type <span className="usa-hint">(optional)</span>
                 </legend>
-                <div className="practitioner-type-container">
+                <div className="practitioner-type-container gap-3">
                   {[ALL_SELECTION, ...PRACTITIONER_TYPE_OPTIONS].map(type => (
                     <div className="usa-radio margin-bottom-0" key={type}>
                       <input
@@ -121,7 +121,7 @@ export const PractitionerSearchByName = connect(
                 <legend className="usa-legend">
                   Practice type <span className="usa-hint">(optional)</span>
                 </legend>
-                <div className="display-flex gap-4">
+                <div className="display-flex gap-3">
                   {PRACTICE_TYPE_OPTIONS.map(practiceType => {
                     return (
                       <div
