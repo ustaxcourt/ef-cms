@@ -7,6 +7,7 @@ import { AppInstanceManager } from './AppInstanceManager';
 import { Container } from '@cerebral/react';
 import { GlobalModalWrapper } from './views/GlobalModalWrapper';
 import { IdleActivityMonitor } from './views/IdleActivityMonitor';
+import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
 import {
   back,
   createObjectURL,
@@ -128,6 +129,7 @@ import React from 'react';
  */
 const app = {
   initialize: async applicationContext => {
+    initializeRealUserMonitoring();
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
