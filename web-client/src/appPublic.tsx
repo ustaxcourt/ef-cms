@@ -4,6 +4,7 @@ import '../../node_modules/@fortawesome/fontawesome-svg-core/styles.css';
 
 import { AppComponentPublic } from './views/AppComponentPublic';
 import { Container } from '@cerebral/react';
+import { initializeRealUserMonitoring } from '@web-client/providers/realUserMonitoring';
 import {
   back,
   createObjectURL,
@@ -56,6 +57,7 @@ import React from 'react';
  */
 const appPublic = {
   initialize: (applicationContext, debugTools) => {
+    initializeRealUserMonitoring();
     const withAppContextDecorator = (f, context) => {
       return get => f(get, context || applicationContext);
     };

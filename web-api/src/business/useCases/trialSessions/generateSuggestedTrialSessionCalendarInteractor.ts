@@ -39,29 +39,7 @@ import {
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/constraints';
 import { sortObjectByKey } from '@shared/tools/helpers';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
-
-const MAX_SESSIONS_PER_WEEK = 6;
-const MAX_SESSIONS_PER_LOCATION = 5;
-
-const REGULAR_CASE_MINIMUM_QUANTITY = 40;
-const REGULAR_CASE_MAX_QUANTITY = 100;
-
-const SMALL_CASE_MINIMUM_QUANTITY = 40;
-const SMALL_CASE_MAX_QUANTITY = 125;
-
-const HYBRID_CASE_MINIMUM_QUANTITY = 50;
-const HYBRID_CASE_MAX_QUANTITY = 100;
-
-const calendaringConfig = {
-  hybridCaseMaxQuantity: HYBRID_CASE_MAX_QUANTITY,
-  hybridCaseMinimumQuantity: HYBRID_CASE_MINIMUM_QUANTITY,
-  maxSessionsPerLocation: MAX_SESSIONS_PER_LOCATION,
-  maxSessionsPerWeek: MAX_SESSIONS_PER_WEEK,
-  regularCaseMaxQuantity: REGULAR_CASE_MAX_QUANTITY,
-  regularCaseMinimumQuantity: REGULAR_CASE_MINIMUM_QUANTITY,
-  smallCaseMaxQuantity: SMALL_CASE_MAX_QUANTITY,
-  smallCaseMinimumQuantity: SMALL_CASE_MINIMUM_QUANTITY,
-};
+import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
 export const WASHINGTON_DC_NORTH_STRING =
@@ -81,10 +59,7 @@ export type CalendarGeneratorMessage = {
 
 export const generateSuggestedTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
-  {
-    termEndDate,
-    termStartDate,
-  }: { termEndDate: string; termStartDate: string },
+  TERM_BUILDER_INFORMATION: RawGenerateSuggestedTermForm,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   message: CalendarGeneratorMessage;
@@ -97,6 +72,8 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   }
 
   const cases = await getSuggestedCalendarCases();
+  const { termEndDate, termStartDate, ...calendaringConfig } =
+    TERM_BUILDER_INFORMATION;
 
   const sessions = await applicationContext
     .getPersistenceGateway()
@@ -116,6 +93,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   // eslint-disable-next-line prefer-const
   let { caseCountsAndSessionsByCity, incorrectSizeRegularCases } =
     getDataForCalendaring({ cases });
+
   let userMessages: string[];
 
   ({ caseCountsAndSessionsByCity } = createProspectiveTrialSessions({
@@ -200,7 +178,9 @@ export const getSpecialSessionsInTerm = ({
   });
 };
 
-export const getPreviousTwoTerms = (termStartDate: string) => {
+export const getPreviousTwoTerms = (
+  termStartDate: string,
+): [string, string] => {
   const { month, year } = deconstructDate(termStartDate);
 
   const currentTerm = getCurrentTermByMonth(month);

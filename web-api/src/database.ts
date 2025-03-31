@@ -4,19 +4,18 @@ import {
   Kysely,
   PostgresDialect,
 } from 'kysely';
-import { Database } from './database-types';
+import { Database, DatabaseSchema } from './database-types';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
-import { opensearchGateway } from '@web-api/gateways/opensearch/opensearchGateway';
-import {
-  OpensearchSyncMessage,
-  TABLES_TO_OPENSEARCH_MAPPING,
-  SyncMessageType,
-} from '@web-api/gateways/opensearch/opensearchSyncRouter';
+import { openSearchGateway } from '@web-api/gateways/openSearch/openSearchGateway';
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
+import {
+  OpenSearchSyncMessage,
+  OpenSearchSyncMessageType,
+} from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 export const POOL = {
   ...environment.rds.pool,
@@ -164,21 +163,25 @@ export async function getDbWriter<T>({
   cb: (db: Kysely<Database>) => Promise<T>;
   table: keyof Database | null;
 }): Promise<T> {
-  if (!table || !Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(table)) {
+  if (!table || !DatabaseSchema[table].indexOpenSearchMessage) {
     return await executeWriter(cb);
   }
 
-  const result: T = await executeWriter(cb);
+  const rawResult: T = await executeWriter(cb);
+  let result: any = rawResult;
+  if (DatabaseSchema[table].transformOpenSearchMessage) {
+    result = DatabaseSchema[table].transformOpenSearchMessage(rawResult);
+  }
 
   if (result) {
     try {
-      const message: OpensearchSyncMessage = {
+      const message: OpenSearchSyncMessage = {
         timestamp: formatNow(),
         payload: result,
-        type: table as SyncMessageType,
+        type: table as OpenSearchSyncMessageType,
       };
 
-      await opensearchGateway().queueSync({ message });
+      await openSearchGateway().queueSync({ message });
     } catch (err) {
       getLogger().error(
         'Error queuing message for opensearch from postgres',
@@ -187,5 +190,5 @@ export async function getDbWriter<T>({
     }
   }
 
-  return result;
+  return rawResult;
 }
