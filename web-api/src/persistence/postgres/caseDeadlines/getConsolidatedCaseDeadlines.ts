@@ -16,7 +16,6 @@ export const getConsolidatedCaseDeadlines = async (
       .selectAll(['cd'])
       .execute();
 
-    //TODO: UPDATE TYPES TO HANDLE NULL VALUES INSTEAD OF CALLING NEW DB ENTITY
     return RECORDS.map(r => caseDeadlineEntity(r).validate().toRawObject());
   });
 };
