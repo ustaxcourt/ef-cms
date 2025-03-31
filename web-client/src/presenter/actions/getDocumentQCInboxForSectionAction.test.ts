@@ -1,5 +1,3 @@
-import { ADC_SECTION } from '@shared/business/entities/EntityConstants';
-import { adcUser } from '@shared/test/mockUsers';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getDocumentQCInboxForSectionAction } from './getDocumentQCInboxForSectionAction';
 import { getDocumentQCInboxForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCInboxForSectionProxy';
@@ -12,7 +10,6 @@ describe('getDocumentQCInboxForSectionAction', () => {
   const mockGetDocumentQCInboxForSectionInteractor =
     getDocumentQCInboxForSectionInteractor as jest.Mock;
   const mockWorkItems = [{ docketEntryId: 1 }, { docketEntryId: 2 }];
-  const { CHIEF_JUDGE } = applicationContext.getConstants();
 
   beforeAll(() => {
     mockGetDocumentQCInboxForSectionInteractor.mockReturnValue(mockWorkItems);
@@ -20,13 +17,14 @@ describe('getDocumentQCInboxForSectionAction', () => {
   });
 
   it('should call getDocumentQCInboxForSectionInteractor with the judge user from state', async () => {
+    const judgeId = '123456';
     await runAction(getDocumentQCInboxForSectionAction, {
       modules: {
         presenter,
       },
       state: {
         judgeUser: {
-          name: 'A judgy person',
+          userId: judgeId,
         },
         user: {
           section: 'judgy section',
@@ -35,52 +33,23 @@ describe('getDocumentQCInboxForSectionAction', () => {
     });
 
     expect(
-      mockGetDocumentQCInboxForSectionInteractor.mock.calls[0][1],
+      mockGetDocumentQCInboxForSectionInteractor.mock.calls[0][0],
     ).toMatchObject({
-      judgeUser: {
-        name: 'A judgy person',
-      },
+      judgeId,
       section: 'judgy section',
     });
   });
 
-  it('should call getDocumentQCInboxForSectionInteractor with the selectedSection when section exists off workQueueToDisplay', async () => {
-    const mockSection = 'a selected section';
-
-    await runAction(getDocumentQCInboxForSectionAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        user: {},
-        workQueueToDisplay: {
-          section: mockSection,
+  it('should throw an error if the logged-in user does not have a section', async () => {
+    await expect(
+      runAction(getDocumentQCInboxForSectionAction, {
+        modules: {
+          presenter,
         },
-      },
-    });
-
-    expect(
-      mockGetDocumentQCInboxForSectionInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      section: mockSection,
-    });
-  });
-
-  it('should call getDocumentQCInboxForSectionInteractor with the CHIEF_JUDGE if judgeUser is not found in state and user role is adc', async () => {
-    await runAction(getDocumentQCInboxForSectionAction, {
-      modules: {
-        presenter,
-      },
-      state: { user: adcUser },
-    });
-
-    expect(
-      mockGetDocumentQCInboxForSectionInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      judgeUser: {
-        name: CHIEF_JUDGE,
-      },
-      section: ADC_SECTION,
-    });
+        state: {
+          user: { userId: '123' },
+        },
+      }),
+    ).rejects.toThrow('Unable to fetch work items without a section');
   });
 });

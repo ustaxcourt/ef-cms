@@ -721,6 +721,11 @@ export const baseState = {
   login: {} as any,
   logoutType: '',
   maintenanceMode: false,
+  messageBoxToDisplay: {
+    box: undefined,
+    queue: undefined,
+    section: undefined,
+  },
   messages: [] as RawMessage[],
   messagesInboxCount: 0,
   messagesPage: {

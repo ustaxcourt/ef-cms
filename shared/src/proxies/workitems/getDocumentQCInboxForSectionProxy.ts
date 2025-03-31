@@ -4,10 +4,11 @@ import { applicationContext } from '@web-client/applicationContext';
 import { GetDocumentQCInboxForSectionRequest } from '@web-api/business/useCases/workItems/getDocumentQCInboxForSectionInteractor';
 
 export const getDocumentQCInboxForSectionInteractor = ({
-  judgeUserId,
+  judgeId,
   section,
+  selectedSection,
 }: GetDocumentQCInboxForSectionRequest): Promise<WorkItemAbomination[]> => {
-  const queryParams = { judgeUserId };
+  const queryParams = { judgeId, section, selectedSection };
 
   return get({
     applicationContext,

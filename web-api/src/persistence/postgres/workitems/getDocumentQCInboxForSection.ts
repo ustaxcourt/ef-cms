@@ -9,10 +9,10 @@ import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/tr
 import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 export const getDocumentQCInboxForSection = async ({
-  judgeUserId,
+  judgeId,
   section,
 }: {
-  judgeUserId?: string | null;
+  judgeId?: string | null;
   section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
 }): Promise<WorkItemAbomination[]> => {
   const workItems = await getDbReader(reader => {
@@ -23,9 +23,9 @@ export const getDocumentQCInboxForSection = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .limit(5000);
 
-    if (judgeUserId) {
-      builder = builder.where('c.associatedJudgeId', '=', judgeUserId);
-    } else if (judgeUserId === null) {
+    if (judgeId) {
+      builder = builder.where('c.associatedJudgeId', '=', judgeId);
+    } else if (judgeId === null) {
       builder = builder.where('c.associatedJudgeId', 'is', null);
     }
 
