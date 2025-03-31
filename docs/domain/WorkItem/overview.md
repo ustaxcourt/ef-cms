@@ -56,7 +56,7 @@ Call stack:
     - `submitExternalDocumentSequence`
       - `FileDocumentReview.tsx`
 
-### 3. `assignWorkItemsInteractor` and `getWorkItemInteractor`
+### 3. `assignWorkItemsInteractor`
 
 `assignWorkItemsInteractor` creates or updates a work item that is being assigned by the logged-in user to another user. it requires `ROLE_PERMISSIONS.ASSIGN_WORK_ITEM`.
 
@@ -67,8 +67,6 @@ Call stack:
 - `assignPetitionToAuthenticatedUserAction`
   - `submitPetitionFromPaperSequence`
     - `StartCaseInternal.tsx`
-
-`getWorkItemInteractor` is wired up with a proxy and a lambda, but it does not appear to be called by any application code in the backend or any Cerebral-dependent code in the frontend. It is potentially dead code.
 
 ### 4. `saveCaseDetailInternalEditInteractor`
 
