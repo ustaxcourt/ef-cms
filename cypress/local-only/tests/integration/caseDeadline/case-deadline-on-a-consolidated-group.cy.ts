@@ -63,9 +63,6 @@ describe('Case Deadline - Consolidated Group', () => {
 
     cy.get<GroupInfoType>('@GROUP_INFO').then(GROUP_INFO => {
       const { memberDocketNumbers, leadDocketNumber } = GROUP_INFO;
-      // const leadDocketNumber = '101-25';
-      // const memberDocketNumbers = ['102-25', '103-25', '104-25', '105-25'];
-
       goToCase(leadDocketNumber);
       cy.get('[data-testid="case-detail-menu-button"]').click();
       cy.get('[data-testid="menu-button-create-deadline"]').click();
@@ -97,13 +94,71 @@ describe('Case Deadline - Consolidated Group', () => {
         );
       }
 
-      // const remainingMemberDocketNumbers = memberDocketNumbers.slice(0, -1);
-      // const removedDocketNumber = memberDocketNumbers[memberDocketNumbers.length - 1];
+      const remainingMemberDocketNumbers = memberDocketNumbers.slice(0, -1);
+      const removedDocketNumber =
+        memberDocketNumbers[memberDocketNumbers.length - 1];
+      goToCase(removedDocketNumber);
+      cy.get('[data-testid="tab-case-information"]').click();
+      cy.get('[data-testid="unconsolidate-cases-button"]').click();
+      cy.get(`.usa-checkbox`).last().click();
+      cy.get('[data-testid="modal-confirm"]').click();
 
-      // //remove last case
+      goToCase(leadDocketNumber);
+      cy.get('[data-testid="tab-tracked-items"]').click();
+      cy.get('[data-testid="case-deadline-edit-button"]').click();
+      cy.get('[data-testid="case-deadline-description-input"]').type(
+        ' Updated',
+      );
+      cy.get('[data-testid="modal-button-confirm"]').click();
 
-      // goToCase(leadDocketNumber);
-      // cy.get('[data-testid="tab-tracked-items"]').click();
+      for (
+        let index = 0;
+        index < remainingMemberDocketNumbers.length;
+        index++
+      ) {
+        const docketNumber = remainingMemberDocketNumbers[index];
+        goToCase(docketNumber);
+        cy.get('[data-testid="tab-tracked-items"]').click();
+        cy.get('.case-deadline-row').should('have.length', 1);
+
+        cy.get('[data-testid="case-deadline-description"]').should(
+          'have.text',
+          'John Is Testing Updated',
+        );
+      }
+
+      goToCase(removedDocketNumber);
+      cy.get('[data-testid="tab-tracked-items"]').click();
+      cy.get('.case-deadline-row').should('have.length', 1);
+      cy.get('[data-testid="case-deadline-description"]').should(
+        'have.text',
+        'John Is Testing',
+      );
+
+      goToCase(leadDocketNumber);
+      cy.get('[data-testid="tab-tracked-items"]').click();
+      cy.get('[data-testid="delete-case-deadline-button"]').click();
+      cy.get('[data-testid="modal-button-confirm"]').click();
+
+      cy.get('.case-deadline-row').should('have.length', 1);
+      for (
+        let index = 0;
+        index < remainingMemberDocketNumbers.length;
+        index++
+      ) {
+        const docketNumber = remainingMemberDocketNumbers[index];
+        goToCase(docketNumber);
+        cy.get('[data-testid="tab-tracked-items"]').click();
+        cy.get('.case-deadline-row').should('not.exist');
+      }
+
+      goToCase(removedDocketNumber);
+      cy.get('[data-testid="tab-tracked-items"]').click();
+      cy.get('.case-deadline-row').should('have.length', 1);
+      cy.get('[data-testid="case-deadline-description"]').should(
+        'have.text',
+        'John Is Testing',
+      );
     });
   });
 });

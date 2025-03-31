@@ -58,6 +58,7 @@ export const CaseDeadlinesInternal = connect(
                         <Button
                           link
                           className="margin-right-0 padding-0"
+                          data-testid="case-deadline-edit-button"
                           icon="edit"
                           onClick={() => {
                             openEditCaseDeadlineModalSequence({
