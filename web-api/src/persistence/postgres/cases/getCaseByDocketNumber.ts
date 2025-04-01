@@ -39,6 +39,7 @@ export const getCaseByDocketNumber = async ({
     caseCorrespondences,
     statisticsWithPenalties,
     workItems,
+    caseItemsRaw,
   ] = await Promise.all([
     getCaseStatusHistory({ docketNumber }),
     getCaseCorrespondenceByDocketNumber({
@@ -48,21 +49,20 @@ export const getCaseByDocketNumber = async ({
     getWorkItemsByDocketNumber({
       docketNumber,
     }),
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }),
   ]);
 
-  const caseItems = await queryFull({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-    },
-    KeyConditionExpression: '#pk = :pk',
-    applicationContext,
-  }).then(items =>
-    items.filter(
-      item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
-    ),
+  const caseItems = caseItemsRaw.filter(
+    item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
   );
 
   let consolidatedCases: Omit<
