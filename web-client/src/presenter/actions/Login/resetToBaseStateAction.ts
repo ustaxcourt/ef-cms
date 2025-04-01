@@ -9,6 +9,9 @@ export const resetToBaseStateAction = ({ store }: ActionProps) => {
       'featureFlags',
       'header',
       'constants',
+      'scanner',
+      'clientConnectionId',
+      'caseDetail',
     ];
     if (stateSlicesToPersist.includes(key)) return;
     store.set(state[key], value);
