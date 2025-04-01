@@ -645,7 +645,7 @@ export const baseState = {
       leadDocketNumber: string;
     })[];
     caseDeadlinesTotalCount: 0;
-    judgeFilter: string;
+    judgeIdFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
