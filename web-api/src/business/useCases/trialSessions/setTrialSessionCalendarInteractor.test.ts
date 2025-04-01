@@ -13,7 +13,6 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
@@ -22,7 +21,6 @@ const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCase = jest.mocked(updateCaseMock);
 
 describe('setTrialSessionCalendarInteractor', () => {
-  const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
   const MOCK_TRIAL = {
     chambersPhoneNumber: '1111111',
     joinPhoneNumber: '0987654321',
@@ -104,10 +102,6 @@ describe('setTrialSessionCalendarInteractor', () => {
         },
       ]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .setPriorityOnAllWorkItems.mockReturnValue({});
-
     await setTrialSessionCalendarInteractor(
       applicationContext,
       {
@@ -165,48 +159,6 @@ describe('setTrialSessionCalendarInteractor', () => {
       trialLocation: undefined,
       trialSessionId: undefined,
       trialTime: undefined,
-    });
-  });
-
-  it('should set work items as high priority for each case that is calendared', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          docketNumber: '102-19',
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-          },
-        },
-      ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-          },
-        },
-      ]);
-
-    await setTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        clientConnectionId: 'hi',
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-      mockPetitionsClerkUser,
-    );
-
-    expect(setPriorityOnAllWorkItems).toHaveBeenCalled();
-    expect(setPriorityOnAllWorkItems.mock.calls.length).toEqual(2);
-    expect(setPriorityOnAllWorkItems.mock.calls[0][0]).toMatchObject({
-      highPriority: true,
-    });
-    expect(setPriorityOnAllWorkItems.mock.calls[1][0]).toMatchObject({
-      highPriority: true,
     });
   });
 
