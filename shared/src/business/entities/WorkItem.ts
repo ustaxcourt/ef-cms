@@ -14,7 +14,7 @@ export class WorkItem extends JoiValidationEntity {
   public completedByUserId?: string;
   public completedMessage?: string;
   public createdAt: string;
-  public docketEntry: any; // 10103: Should this be removed? Instead point at the docketEntryId?
+  public docketEntry: any;
   public docketNumber: string;
   public inProgress?: boolean;
   public isRead?: boolean;

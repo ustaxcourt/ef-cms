@@ -55,7 +55,6 @@ export const setWorkItemAsReadInteractor = async (
 
   docketEntryEntity.workItem.markAsRead();
 
-  // TODO: 10103 Once the spiderman problem has been solved this can go away.
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
     docketEntryId,
