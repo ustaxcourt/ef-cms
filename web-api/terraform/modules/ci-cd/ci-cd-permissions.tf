@@ -293,7 +293,6 @@ resource "aws_iam_policy" "ci_cd_policy" {
           "iam:CreateUser",
           "iam:CreatePolicy",
           "iam:AttachUserPolicy"
-
         ],
        "Resource": [
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",

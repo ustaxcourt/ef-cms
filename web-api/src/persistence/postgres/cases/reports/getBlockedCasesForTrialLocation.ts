@@ -1,5 +1,6 @@
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
+import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 
 const MAX_RESULTS = 5000;
 
@@ -21,9 +22,12 @@ export type BlockedCaseData = Pick<
 
 export const getBlockedCasesForTrialLocation = async (
   trialLocation: string,
+  blockedCaseFilter:
+    | typeof DEFAULT_FILTERED_BLOCKED_CASE_STATUSES
+    | undefined = undefined,
 ) => {
-  const results = await getDbReader(reader =>
-    reader
+  const results = await getDbReader(async reader => {
+    let query = reader
       .selectFrom('dwCase')
       .where('preferredTrialCity', '=', trialLocation)
       .where(eb =>
@@ -61,8 +65,14 @@ export const getBlockedCasesForTrialLocation = async (
         'status',
         'procedureType',
       ])
-      .limit(MAX_RESULTS)
-      .execute(),
-  );
+      .limit(MAX_RESULTS);
+
+    if (blockedCaseFilter) {
+      query = query.where('status', 'in', blockedCaseFilter);
+    }
+
+    return await query.execute();
+  });
+
   return results.map(result => fromKyselyCase(result));
 };

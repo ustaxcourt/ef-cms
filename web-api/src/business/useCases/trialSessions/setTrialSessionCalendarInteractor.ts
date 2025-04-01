@@ -9,11 +9,15 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
+import {
+  HIGH_PRIORITY_SUFFIXES,
+  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
+} from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { chunk, flatten, partition, uniq } from 'lodash';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
+import { getFullEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getFullEligibleCasesForTrialSession';
 
 const CHUNK_SIZE = 50;
 
@@ -72,19 +76,37 @@ export const setTrialSessionCalendarInteractor = async (
     eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
 
     const eligibleCases = (
-      await applicationContext
-        .getPersistenceGateway()
-        .getEligibleCasesForTrialSession({
-          applicationContext,
-          limit: eligibleCasesLimit,
-          skPrefix: trialSessionEntity.generateSortKeyPrefix(),
-        })
+      await getFullEligibleCasesForTrialSession({
+        applicationContext,
+        limit: eligibleCasesLimit,
+        sessionType: trialSessionEntity.getCaseProcedureForTrial(),
+        trialCity: trialSessionEntity.trialLocation!,
+      })
     )
       .filter(
         eligibleCase =>
           eligibleCase.qcCompleteForTrial &&
           eligibleCase.qcCompleteForTrial[trialSessionId] === true,
       )
+      .sort((a, b) => {
+        if (a.isManuallyAdded && !b.isManuallyAdded) return -1;
+        if (!a.isManuallyAdded && b.isManuallyAdded) return 1;
+
+        if (a.highPriority && !b.highPriority) return -1;
+        if (!a.highPriority && b.highPriority) return 1;
+
+        const aSuffixIsHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
+          a.docketNumberSuffix,
+        );
+        const bSuffixIsHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
+          b.docketNumberSuffix,
+        );
+
+        if (aSuffixIsHighPriority && !bSuffixIsHighPriority) return -1;
+        if (!aSuffixIsHighPriority && bSuffixIsHighPriority) return 1;
+
+        return 0;
+      })
       .splice(
         0,
         (trialSessionEntity?.maxCases || 0) -
@@ -276,11 +298,5 @@ const setTrialSessionCalendarForEligibleCase = async (
       authorizedUser,
       caseToUpdate: caseEntity,
     }),
-    applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
-      }),
   ]);
 };
