@@ -89,18 +89,15 @@ export const setTrialSessionCalendarInteractor = async (
           eligibleCase.qcCompleteForTrial[trialSessionId] === true,
       )
       .sort((a, b) => {
-        if (a.isManuallyAdded && !b.isManuallyAdded) return -1;
-        if (!a.isManuallyAdded && b.isManuallyAdded) return 1;
-
         if (a.highPriority && !b.highPriority) return -1;
         if (!a.highPriority && b.highPriority) return 1;
 
-        const aSuffixIsHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
-          a.docketNumberSuffix,
-        );
-        const bSuffixIsHighPriority = HIGH_PRIORITY_SUFFIXES.includes(
-          b.docketNumberSuffix,
-        );
+        const aSuffixIsHighPriority =
+          a.docketNumberSuffix &&
+          HIGH_PRIORITY_SUFFIXES.includes(a.docketNumberSuffix);
+        const bSuffixIsHighPriority =
+          b.docketNumberSuffix &&
+          HIGH_PRIORITY_SUFFIXES.includes(b.docketNumberSuffix);
 
         if (aSuffixIsHighPriority && !bSuffixIsHighPriority) return -1;
         if (!aSuffixIsHighPriority && bSuffixIsHighPriority) return 1;
@@ -278,7 +275,10 @@ const setTrialSessionCalendarForEligibleCase = async (
     trialSessionEntity,
   }: {
     applicationContext: ServerApplicationContext;
-    caseRecord: RawCase;
+    caseRecord: Omit<
+      RawCase,
+      'correspondence' | 'consolidatedCases' | 'petitioners'
+    >;
     trialSessionEntity: TrialSession;
   },
   authorizedUser: AuthUser,

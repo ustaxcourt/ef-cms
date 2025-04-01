@@ -127,6 +127,7 @@ export function fromKyselyCase<T extends object>(record: T) {
     ) => value?.toISOString(),
     createdAt: (value: typeof dwCaseSchema.createdAt, _: Partial<CaseKysely>) =>
       value.toISOString(),
+    docketEntries: (value: any, _: Partial<CaseKysely>) => value || [],
     hearings: (value: any, _: Partial<CaseKysely>) => value || [],
     irsNoticeDate: (
       value: typeof dwCaseSchema.irsNoticeDate,
