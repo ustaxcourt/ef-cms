@@ -14,14 +14,31 @@ import {
 } from '@web-api/business/useCases/trialSessions/generateSuggestedTrialSessionCalendarInteractor';
 import { cloneDeep } from 'lodash';
 import { generateCalendar } from './generateCalendar';
+import {
+  getBusinessDateInFuture,
+  FORMATS,
+  createISODateString,
+  createDateAtStartOfWeekEST,
+} from '@shared/business/utilities/DateHandler';
 
 const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
 const mockSpecialCityString = TRIAL_CITY_STRINGS[0];
-const mockWeekString = '3000-03-03';
+
+const mockBusinessDate = getBusinessDateInFuture({
+  numberOfDays: 30,
+  outputFormat: FORMATS.YYYYMMDD,
+  startDate: createISODateString(),
+});
+
+const mockWeekString = createDateAtStartOfWeekEST(
+  mockBusinessDate,
+  FORMATS.YYYYMMDD,
+);
+
 const mockWeeksToLoop = [mockWeekString];
 const mockTrialSession: RawTrialSession = {
   ...MOCK_TRIAL_INPERSON,
-  startDate: '3000-03-07T00:00:00.000Z',
+  startDate: createISODateString(mockWeekString, FORMATS.YYYYMMDD),
 };
 const mockErrorMessage = 'Mocked error';
 
@@ -186,7 +203,11 @@ describe('generateCalendar', () => {
     });
 
     const mockCityNotVisitedLastTwoTerms = 'mock city, usa';
-    const mockSecondWeek = '3000-03-10';
+    const mockSecondWeek = getBusinessDateInFuture({
+      numberOfDays: 37,
+      outputFormat: FORMATS.YYYYMMDD,
+      startDate: createISODateString(),
+    });
     const mockProspectiveRegularTrialSessionNotVisitedLastTwoTerms = {
       cityWasNotVisitedInLastTwoTerms: true,
       sessionType: SESSION_TYPES.regular,
@@ -247,7 +268,11 @@ describe('generateCalendar', () => {
 
       remainingSmallCases: 0,
     });
-    const mockSecondWeek = '3000-03-10';
+    const mockSecondWeek = getBusinessDateInFuture({
+      numberOfDays: 37,
+      outputFormat: FORMATS.YYYYMMDD,
+      startDate: createISODateString(),
+    });
 
     // Act
     const { caseCountsAndSessionsByCity } = generateCalendar({
@@ -292,7 +317,11 @@ describe('generateCalendar', () => {
       },
       mockSpecialCityString,
     );
-    const mockSecondWeek = '3000-03-10';
+    const mockSecondWeek = getBusinessDateInFuture({
+      numberOfDays: 37,
+      outputFormat: FORMATS.YYYYMMDD,
+      startDate: createISODateString(),
+    });
 
     // Act
     const { caseCountsAndSessionsByCity } = generateCalendar({
@@ -324,7 +353,11 @@ describe('generateCalendar', () => {
       remainingRegularCases: 1,
       remainingSmallCases: 1,
     });
-    const mockSecondWeek = '3000-03-10';
+    const mockSecondWeek = getBusinessDateInFuture({
+      numberOfDays: 37,
+      outputFormat: FORMATS.YYYYMMDD,
+      startDate: createISODateString(),
+    });
 
     // Act
     const { caseCountsAndSessionsByCity } = generateCalendar({
@@ -364,7 +397,11 @@ describe('generateCalendar', () => {
       remainingSmallCases: 3,
     });
 
-    const mockSecondWeek = '2027-03-10';
+    const mockSecondWeek = getBusinessDateInFuture({
+      numberOfDays: 37,
+      outputFormat: FORMATS.YYYYMMDD,
+      startDate: createISODateString(),
+    });
 
     // Act
     const { caseCountsAndSessionsByCity } = generateCalendar({

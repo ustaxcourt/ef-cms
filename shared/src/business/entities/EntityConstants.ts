@@ -1833,7 +1833,7 @@ export const TROUBLESHOOTING_INFO = {
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
 
-export const TRIAL_SESSION_TERM_GENERATOR = {
+export const TERM_GENERATOR_DEFAULT_VALUES = {
   MAX_SESSIONS_PER_WEEK: 6,
   MAX_SESSIONS_PER_LOCATION: 5,
   REGULAR_CASE_MINIMUM_QUANTITY: 40,

@@ -1,14 +1,29 @@
-import { DateTime } from 'luxon';
 import {
   GenerateSuggestedTermForm,
   RawGenerateSuggestedTermForm,
 } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
+import {
+  getBusinessDateInFuture,
+  FORMATS,
+  createISODateString,
+} from '@shared/business/utilities/DateHandler';
 
 describe('GenerateSuggestedTermForm', () => {
-  const CURRENT_YEAR = DateTime.now().year;
+  const termEndDate = getBusinessDateInFuture({
+    numberOfDays: 360,
+    outputFormat: FORMATS.MMDDYYYY,
+    startDate: createISODateString(),
+  });
+
+  const termStartDate = getBusinessDateInFuture({
+    numberOfDays: 1,
+    outputFormat: FORMATS.MMDDYYYY,
+    startDate: createISODateString(),
+  });
+
   const VALID_TERM_FORM: RawGenerateSuggestedTermForm = {
-    termStartDate: `01/01/${CURRENT_YEAR + 1}`,
-    termEndDate: `03/31/${CURRENT_YEAR + 1}`,
+    termStartDate,
+		termEndDate,
     termName: 'TEST_TERM_NAME',
     maxSessionsPerLocation: 1,
     maxSessionsPerWeek: 1,
