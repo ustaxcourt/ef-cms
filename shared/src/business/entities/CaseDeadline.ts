@@ -9,6 +9,7 @@ export class CaseDeadline extends JoiValidationEntity {
   public associatedJudge: string;
   public associatedJudgeId: string;
   public caseDeadlineId: string;
+  public consolidatedCaseDeadlineId?: string;
   public createdAt: string;
   public deadlineDate: string;
   public description: string;
@@ -22,6 +23,7 @@ export class CaseDeadline extends JoiValidationEntity {
     this.associatedJudge = rawProps.associatedJudge;
     this.associatedJudgeId = rawProps.associatedJudgeId;
     this.caseDeadlineId = rawProps.caseDeadlineId || getUniqueId();
+    this.consolidatedCaseDeadlineId = rawProps.consolidatedCaseDeadlineId;
     this.createdAt = rawProps.createdAt || createISODateString();
     this.deadlineDate = rawProps.deadlineDate;
     this.description = rawProps.description;
@@ -47,6 +49,7 @@ export class CaseDeadline extends JoiValidationEntity {
     caseDeadlineId: JoiValidationConstants.UUID.required().description(
       'Unique Case Deadline ID only used by the system.',
     ),
+    consolidatedCaseDeadlineId: JoiValidationConstants.UUID.optional(),
     createdAt: JoiValidationConstants.ISO_DATE.required().description(
       'When the Case Deadline was added to the system.',
     ),

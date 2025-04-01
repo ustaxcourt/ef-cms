@@ -7,6 +7,18 @@ describe('PublicUser entity', () => {
     it('should fail validation when role is not provided', () => {
       const publicUser = new PublicUser({});
 
+      const errors = publicUser.getFormattedValidationErrors();
+      expect(errors).toMatchObject({
+        name: 'Enter name',
+        role: 'Role is required',
+      });
+    });
+
+    it('fails validation when role is not provided', () => {
+      const publicUser = new PublicUser({
+        name: 'Test User',
+      });
+
       expect(publicUser.getFormattedValidationErrors()).toMatchObject({
         role: 'Role is required',
       });

@@ -5,6 +5,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
+  HIGH_PRIORITY_SUFFIXES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -17,9 +18,13 @@ import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getFullEligibleCasesForTrialSession as getFullEligibleCasesForTrialSessionMock } from '@web-api/persistence/postgres/cases/getFullEligibleCasesForTrialSession';
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const updateCase = jest.mocked(updateCaseMock);
+const getFullEligibleCasesForTrialSession = jest.mocked(
+  getFullEligibleCasesForTrialSessionMock,
+);
 
 describe('setTrialSessionCalendarInteractor', () => {
   const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
@@ -93,16 +98,14 @@ describe('setTrialSessionCalendarInteractor', () => {
           },
         },
       ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-          },
+    getFullEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
-      ]);
+      },
+    ]);
 
     applicationContext
       .getPersistenceGateway()
@@ -140,16 +143,14 @@ describe('setTrialSessionCalendarInteractor', () => {
           trialTime: '11:00',
         },
       ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': false,
-          },
+    getFullEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': false,
         },
-      ]);
+      },
+    ]);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -180,16 +181,14 @@ describe('setTrialSessionCalendarInteractor', () => {
           },
         },
       ]);
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-          },
+    getFullEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
-      ]);
+      },
+    ]);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -224,10 +223,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
-        .mock.calls[0][0],
-    ).toMatchObject({
+    expect(getFullEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
       limit: 150, // max cases + buffer
     });
   });
@@ -254,10 +250,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getEligibleCasesForTrialSession
-        .mock.calls[0][0],
-    ).toMatchObject({
+    expect(getFullEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
       limit: 149, // max cases + buffer - manually added case
     });
   });
@@ -305,5 +298,80 @@ describe('setTrialSessionCalendarInteractor', () => {
       applicationContext,
       identifiers: [`case|${MOCK_CASE.docketNumber}`],
     });
+  });
+
+  it('should sort eligible cases in the correct priority order (isManuallyAdded, highPriority, docketNumberSuffix) before calendaring them', async () => {
+    const hpSuffixDocketNumber = '101-20';
+    const manuallyAddedDocketNumber = '102-20';
+    const highPriorityDocketNumber = '103-20';
+    const regularDocketNumber = '104-20';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([]);
+
+    getFullEligibleCasesForTrialSession.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        docketNumber: hpSuffixDocketNumber,
+        docketNumberSuffix: HIGH_PRIORITY_SUFFIXES[0],
+        isManuallyAdded: false,
+        highPriority: false,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+        },
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: manuallyAddedDocketNumber,
+        docketNumberSuffix: HIGH_PRIORITY_SUFFIXES[1],
+        isManuallyAdded: true,
+        highPriority: false,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+        },
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: highPriorityDocketNumber,
+        docketNumberSuffix: 'NotHighPriority',
+        isManuallyAdded: false,
+        highPriority: true,
+        highPriorityReason: 'When the going gets weird, the weird turn pro',
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+        },
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: regularDocketNumber,
+        docketNumberSuffix: 'AlsoNotHighPriority',
+        isManuallyAdded: false,
+        highPriority: false,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+        },
+      },
+    ]);
+
+    await setTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        clientConnectionId: 'hi',
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+      mockPetitionsClerkUser,
+    );
+
+    const updatedDocketNumbers = updateCase.mock.calls.map(
+      callArg => callArg[0].caseToUpdate.docketNumber,
+    );
+
+    expect(updatedDocketNumbers).toEqual([
+      manuallyAddedDocketNumber,
+      highPriorityDocketNumber,
+      hpSuffixDocketNumber,
+      regularDocketNumber,
+    ]);
   });
 });

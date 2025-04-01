@@ -5,9 +5,15 @@ import { getDbReader } from '@web-api/database';
 export const getCaseDeadlinesByDateRange = async ({
   endDate,
   from = 0,
-  judge,
+  judgeId,
   pageSize,
   startDate,
+}: {
+  endDate;
+  from: number;
+  judgeId?: string | null;
+  pageSize: number;
+  startDate;
 }) => {
   const size =
     pageSize && pageSize <= CASE_DEADLINES_REPORT_PAGE_SIZE
@@ -29,9 +35,7 @@ export const getCaseDeadlinesByDateRange = async ({
         .where('cd.deadlineDate', '>=', startDate)
         .where('cd.deadlineDate', '<=', endDate);
 
-      if (judge) {
-        deadlineQuery = deadlineQuery.where('cd.associatedJudge', '=', judge);
-      }
+      deadlineQuery = applyJudgeFilter(deadlineQuery, judgeId);
 
       deadlineQuery = deadlineQuery
         .offset(from)
@@ -42,14 +46,12 @@ export const getCaseDeadlinesByDateRange = async ({
       const results = await deadlineQuery.execute();
 
       let countQuery = reader
-        .selectFrom('dwCaseDeadline')
+        .selectFrom('dwCaseDeadline as cd')
         .select(reader.fn.count('docketNumber').as('totalCount'))
-        .where('deadlineDate', '>=', startDate)
-        .where('deadlineDate', '<=', endDate);
+        .where('cd.deadlineDate', '>=', startDate)
+        .where('cd.deadlineDate', '<=', endDate);
 
-      if (judge) {
-        countQuery = countQuery.where('associatedJudge', '=', judge);
-      }
+      countQuery = applyJudgeFilter(countQuery, judgeId);
 
       const total = await countQuery.executeTakeFirst();
 
@@ -66,4 +68,14 @@ export const getCaseDeadlinesByDateRange = async ({
     ),
     totalCount: Number(totalCount),
   };
+};
+
+const applyJudgeFilter = (query, judgeId) => {
+  if (judgeId === null) {
+    return query.where('cd.associatedJudgeId', 'is', null);
+  } else if (judgeId !== undefined) {
+    return query.where('cd.associatedJudgeId', '=', judgeId);
+  }
+
+  return query;
 };

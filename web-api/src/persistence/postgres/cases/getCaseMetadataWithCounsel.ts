@@ -2,6 +2,7 @@ import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cas
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getCaseMetadataWithCounsel = async ({
   applicationContext,
@@ -13,26 +14,26 @@ export const getCaseMetadataWithCounsel = async ({
   | Omit<RawCase, 'consolidatedCases' | 'correspondence' | 'docketEntries'>
   | undefined
 > => {
-  const caseMetaData = await getCaseMetadataByDocketNumber({ docketNumber });
+  const [caseMetaData, privatePractitioners, irsPractitioners] =
+    await Promise.all([
+      getCaseMetadataByDocketNumber({ docketNumber }),
+      getPrivatePractitionersOnCase({
+        applicationContext,
+        docketNumber,
+      }),
+      getIrsPractitionersOnCase({
+        applicationContext,
+        docketNumber,
+      }),
+    ]);
 
   if (!caseMetaData) {
     return undefined;
   }
 
-  const [privatePractitioners, irsPractitioners] = await Promise.all([
-    getPrivatePractitionersOnCase({
-      applicationContext,
-      docketNumber,
-    }),
-    getIrsPractitionersOnCase({
-      applicationContext,
-      docketNumber,
-    }),
-  ]);
-
-  return {
+  return transformNullToUndefined({
     ...caseMetaData,
     irsPractitioners,
     privatePractitioners,
-  };
+  });
 };
