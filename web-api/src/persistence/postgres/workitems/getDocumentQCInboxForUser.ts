@@ -7,7 +7,7 @@ export const getDocumentQCInboxForUser = async ({
   userId,
 }: {
   userId: string;
-}): Promise<WorkItemAbomination[]> => {
+}): Promise<WorkItemWithCaseInfo[]> => {
   const workItems = await getDbReader(reader => {
     return reader
       .selectFrom('dwWorkItem as w')
@@ -27,7 +27,7 @@ export const getDocumentQCInboxForUser = async ({
   });
 
   return workItems.map(workItem => {
-    const abomination: WorkItemAbomination = {
+    const abomination: WorkItemWithCaseInfo = {
       ...new WorkItem({
         ...workItem,
         completedAt: workItem.completedAt?.toISOString(),
@@ -44,7 +44,7 @@ export const getDocumentQCInboxForUser = async ({
   });
 };
 
-export type WorkItemAbomination = RawWorkItem & {
+export type WorkItemWithCaseInfo = RawWorkItem & {
   caseTitle?: string;
   caseStatus?: string;
   leadDocketNumber?: string;

@@ -2,7 +2,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getDbReader } from '@web-api/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 export const getDocumentQCServedForUser = async ({
   afterDate,
@@ -10,7 +10,7 @@ export const getDocumentQCServedForUser = async ({
 }: {
   userId: string;
   afterDate: Date;
-}): Promise<WorkItemAbomination[]> => {
+}): Promise<WorkItemWithCaseInfo[]> => {
   const workItems = await getDbReader(reader => {
     return reader
       .selectFrom('dwWorkItem as w')
@@ -29,7 +29,7 @@ export const getDocumentQCServedForUser = async ({
   });
 
   return workItems.map(workItem => {
-    const abomination: WorkItemAbomination = {
+    const abomination: WorkItemWithCaseInfo = {
       ...new WorkItem({
         ...workItem,
         completedAt: workItem.completedAt?.toISOString(),

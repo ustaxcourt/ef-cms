@@ -10,7 +10,7 @@ import {
   createISODateAtStartOfDayEST,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
-import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
@@ -21,7 +21,7 @@ export const getDocumentQCServedForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
   { section }: { section: typeof DOCKET_SECTION | typeof PETITIONS_SECTION },
   authorizedUser: UnknownAuthUser,
-): Promise<WorkItemAbomination[]> => {
+): Promise<WorkItemWithCaseInfo[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',

@@ -10,7 +10,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
@@ -182,11 +182,11 @@ export const formatDateIfToday = (
 
 export const formatWorkItem = ({
   isSelected = false,
-  workItem = {} as WorkItemAbomination,
+  workItem = {} as WorkItemWithCaseInfo,
 }: {
   isSelected?: boolean;
-  workItem: WorkItemAbomination;
-}): WorkItemAbomination & {
+  workItem: WorkItemWithCaseInfo;
+}): WorkItemWithCaseInfo & {
   assigneeName: string;
   completedAtFormatted: string;
   completedAtFormattedTZ: string;
@@ -447,14 +447,14 @@ export const filterWorkItems = ({
 }: {
   assignmentFilterValue: any;
   section: string;
-  workItems: WorkItemAbomination[];
+  workItems: WorkItemWithCaseInfo[];
   workQueueToDisplay: {
     box: string;
     queue: string;
     section: string;
   };
   authorizedUser: AuthUser;
-}): WorkItemAbomination[] => {
+}): WorkItemWithCaseInfo[] => {
   const { box, queue } = workQueueToDisplay;
 
   const filters = getWorkQueueFilters({ section, user: authorizedUser });
@@ -464,7 +464,7 @@ export const filterWorkItems = ({
   let filteredWorkItems = workItems.filter(composedFilter);
   if (queue === 'section') {
     filteredWorkItems = filteredWorkItems.filter(
-      (workItem: WorkItemAbomination) => {
+      (workItem: WorkItemWithCaseInfo) => {
         if (assignmentFilterValue && assignmentFilterValue.userId) {
           if (assignmentFilterValue.userId === 'UA') {
             return workItem.assigneeId === null;
@@ -482,7 +482,7 @@ export const filterWorkItems = ({
   return filteredWorkItems;
 };
 
-export type FormattedWorkItemAbomination = WorkItemAbomination & {
+export type FormattedWorkItemAbomination = WorkItemWithCaseInfo & {
   assigneeName: string;
   completedAtFormatted: string;
   completedAtFormattedTZ: string;

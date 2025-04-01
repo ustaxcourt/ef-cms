@@ -7,10 +7,10 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
-import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 describe('getWorkQueueFilters', () => {
-  const aWorkItem: WorkItemAbomination = {
+  const aWorkItem: WorkItemWithCaseInfo = {
     assigneeId: '123',
     docketEntry: {
       isFileAttached: false,
@@ -364,7 +364,7 @@ describe('getWorkQueueFilters', () => {
     });
 
     it('returns an object containing a filter map for my work queues and boxes', () => {
-      const myWorkItems: WorkItemAbomination[] = [
+      const myWorkItems: WorkItemWithCaseInfo[] = [
         {
           ...aWorkItem,
           // my in progress
@@ -433,7 +433,7 @@ describe('getWorkQueueFilters', () => {
 
     [PETITIONS_SECTION, DOCKET_SECTION].forEach(sectionToTest => {
       it(`returns an object containing a filter map for ${sectionToTest} section work queues and boxes`, () => {
-        const sectionWorkItems: WorkItemAbomination[] = [
+        const sectionWorkItems: WorkItemWithCaseInfo[] = [
           {
             ...aWorkItem,
             // section in progress

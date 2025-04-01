@@ -1,7 +1,7 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
-import { WorkItemAbomination } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 
 export const getWorkQueueFilters = ({
   section,
@@ -28,7 +28,7 @@ export const getWorkQueueFilters = ({
 
   return {
     my: {
-      inProgress: (item: WorkItemAbomination) => {
+      inProgress: (item: WorkItemWithCaseInfo) => {
         return (
           // DocketClerks
           (item.assigneeId === user.userId &&
@@ -41,7 +41,7 @@ export const getWorkQueueFilters = ({
             item.inProgress)
         );
       },
-      inbox: (item: WorkItemAbomination) => {
+      inbox: (item: WorkItemWithCaseInfo) => {
         return (
           item.assigneeId === user.userId &&
           !item.completedAt &&
@@ -49,7 +49,7 @@ export const getWorkQueueFilters = ({
           !item.inProgress
         );
       },
-      outbox: (item: WorkItemAbomination) => {
+      outbox: (item: WorkItemWithCaseInfo) => {
         return (
           (canViewPetitionsSection ? !!item.section : true) &&
           item.completedByUserId &&
@@ -59,7 +59,7 @@ export const getWorkQueueFilters = ({
       },
     },
     section: {
-      inProgress: (item: WorkItemAbomination) => {
+      inProgress: (item: WorkItemWithCaseInfo) => {
         return (
           // DocketClerks
           (!item.completedAt &&
@@ -70,7 +70,7 @@ export const getWorkQueueFilters = ({
           (canViewPetitionsSection && item.inProgress === true)
         );
       },
-      inbox: (item: WorkItemAbomination) => {
+      inbox: (item: WorkItemWithCaseInfo) => {
         return (
           !item.completedAt &&
           item.section === sectionToDisplay &&
@@ -78,7 +78,7 @@ export const getWorkQueueFilters = ({
           !item.inProgress
         );
       },
-      outbox: (item: WorkItemAbomination) => {
+      outbox: (item: WorkItemWithCaseInfo) => {
         return (
           !!item.completedAt &&
           (canViewPetitionsSection ? !!item.section : true)
