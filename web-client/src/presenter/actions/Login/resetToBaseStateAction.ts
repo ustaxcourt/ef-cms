@@ -12,6 +12,7 @@ export const resetToBaseStateAction = ({ store }: ActionProps) => {
       'scanner',
       'clientConnectionId',
       'caseDetail',
+      'pendingReports',
     ];
     if (stateSlicesToPersist.includes(key)) return;
     store.set(state[key], value);
