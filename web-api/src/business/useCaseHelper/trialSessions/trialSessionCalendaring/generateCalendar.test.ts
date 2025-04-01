@@ -18,15 +18,23 @@ import {
   getBusinessDateInFuture,
   FORMATS,
   createISODateString,
+  createDateAtStartOfWeekEST,
 } from '@shared/business/utilities/DateHandler';
 
 const mockRegularCityString = TRIAL_CITY_STRINGS[TRIAL_CITY_STRINGS.length - 1];
 const mockSpecialCityString = TRIAL_CITY_STRINGS[0];
-const mockWeekString = getBusinessDateInFuture({
+
+const mockBusinessDate = getBusinessDateInFuture({
   numberOfDays: 30,
   outputFormat: FORMATS.YYYYMMDD,
   startDate: createISODateString(),
 });
+
+const mockWeekString = createDateAtStartOfWeekEST(
+  mockBusinessDate,
+  FORMATS.YYYYMMDD,
+);
+
 const mockWeeksToLoop = [mockWeekString];
 const mockTrialSession: RawTrialSession = {
   ...MOCK_TRIAL_INPERSON,
@@ -77,9 +85,6 @@ const createMockConstraint = (
 
 describe('generateCalendar', () => {
   it('should schedule a special session when it meets all constraints', () => {
-    console.log('mockWeekString', mockWeekString);
-    console.log('mockTrialSession', mockTrialSession);
-
     // Arrange
     const mockCalendaringConfig = getMockCalendaringConfig();
     const mockCaseCountsAndSessionsByCity =
