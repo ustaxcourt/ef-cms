@@ -440,6 +440,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_cloudwatch_global",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/authorizer_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/rum.amazonaws.com/AWSServiceRoleForCloudWatchRUM",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_instance_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav_s3_download_role_*",
