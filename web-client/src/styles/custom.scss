@@ -2457,3 +2457,15 @@ button.change-scanner-button {
 .cities-not-calendated-yellow-background {
   background-color: #ffe396;
 }
+
+.term-builder-form {
+	p {
+		max-width: 100%;
+	}
+
+	input {
+		max-width: 2.5rem;
+		margin-right: 5px !important;
+		margin-left: 5px !important;
+	}
+}
