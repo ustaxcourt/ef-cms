@@ -239,7 +239,6 @@ const gatewayMethods = {
   getReconciliationReport,
   getRequestResults,
   getSesStatus,
-  getColdCases,
   getStoredApplicationHealth,
   getTableStatus,
   getTrialSessionById,

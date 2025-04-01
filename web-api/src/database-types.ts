@@ -104,12 +104,8 @@ const caseTableDefinition = {
   petitionPaymentWaivedDate: DEFAULT as Date | null,
   preferredTrialCity: DEFAULT as string | undefined,
   procedureType: DEFAULT as string,
-  qcCompleteForTrial: DEFAULT as
-    | ColumnType<
-        Record<string, boolean>,
-        Record<string, boolean>,
-        Record<string, boolean>
-      >
+  qcCompleteForTrial: {} as
+    | ColumnType<{ trialSessionId: string }, string, string>
     | undefined,
   receivedAt: DEFAULT as Date,
   sealedDate: DEFAULT as Date | null,
