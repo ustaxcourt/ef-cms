@@ -5,7 +5,7 @@ import { WorkQueueAssignments } from './WorkQueueAssignments';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import { FormattedWorkItemAbomination } from '../../presenter/computeds/formattedWorkQueue';
+import { FormattedWorkItemWithCaseInfo } from '../../presenter/computeds/formattedWorkQueue';
 import React from 'react';
 
 const SectionWorkQueueTable = connect(
@@ -110,7 +110,7 @@ function SectionWorkQueueTableRow({
   showSelectColumn,
 }: {
   hideIconColumn: boolean;
-  item: FormattedWorkItemAbomination;
+  item: FormattedWorkItemWithCaseInfo;
   selectWorkItemSequence: Function;
   showAssignedToColumn: boolean;
   showFiledByColumn: boolean;

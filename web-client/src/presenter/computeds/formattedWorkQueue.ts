@@ -32,7 +32,7 @@ import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilt
 export const formattedWorkQueue = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): FormattedWorkItemAbomination[] => {
+): FormattedWorkItemWithCaseInfo[] => {
   const section = get(state.workQueueToDisplay.section);
   const workItems = get(state.workQueue);
   const workQueueToDisplay = get(state.workQueueToDisplay);
@@ -52,7 +52,7 @@ export const formattedWorkQueue = (
     );
   }
 
-  let workQueue: FormattedWorkItemAbomination[] = filterWorkItems({
+  let workQueue: FormattedWorkItemWithCaseInfo[] = filterWorkItems({
     assignmentFilterValue,
     authorizedUser,
     section,
@@ -482,7 +482,7 @@ export const filterWorkItems = ({
   return filteredWorkItems;
 };
 
-export type FormattedWorkItemAbomination = WorkItemWithCaseInfo & {
+export type FormattedWorkItemWithCaseInfo = WorkItemWithCaseInfo & {
   assigneeName: string;
   completedAtFormatted: string;
   completedAtFormattedTZ: string;
