@@ -1,6 +1,8 @@
 import { NewWorkItemKysely } from '@web-api/database-types';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { Case } from '@shared/business/entities/cases/Case';
 
 function pickFields(workItem) {
   return {
@@ -63,4 +65,24 @@ export function workItemEntity(workItem) {
     }),
     assigneeId: workItem.assigneeId, // this needs to be null because it replicates what was done in dynamo
   });
+}
+
+
+export function toWorkItemWithCaseInfo(
+  dbWorkItem,
+): WorkItemWithCaseInfo {
+  const workItemWithCaseInfo: WorkItemWithCaseInfo = {
+    ...new WorkItem({
+      ...dbWorkItem,
+      completedAt: dbWorkItem.completedAt?.toISOString(),
+      createdAt: dbWorkItem.createdAt?.toISOString(),
+      updatedAt: dbWorkItem.createdAt?.toISOString(),
+    }).toRawObject(),
+    caseTitle: Case.getCaseTitle(dbWorkItem.caption),
+    caseStatus: dbWorkItem.status || undefined,
+    leadDocketNumber: dbWorkItem?.leadDocketNumber || undefined,
+    trialDate: dbWorkItem?.trialDate?.toISOString(),
+    trialLocation: dbWorkItem?.trialLocation || undefined,
+  };
+  return transformNullToUndefined(workItemWithCaseInfo);
 }

@@ -1,8 +1,6 @@
-import { Case } from '@shared/business/entities/cases/Case';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getDbReader } from '@web-api/database';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getDocumentQCServedForUser = async ({
   afterDate,
@@ -18,7 +16,7 @@ export const getDocumentQCServedForUser = async ({
       .where('w.assigneeId', '=', userId)
       .where('w.completedAt', '>=', afterDate)
       .select([
-        'c.status as caseStatus',
+        'c.status',
         'c.caption',
         'c.leadDocketNumber',
         'c.trialDate',
@@ -28,20 +26,5 @@ export const getDocumentQCServedForUser = async ({
       .execute();
   });
 
-  return workItems.map(workItem => {
-    const abomination: WorkItemWithCaseInfo = {
-      ...new WorkItem({
-        ...workItem,
-        completedAt: workItem.completedAt?.toISOString(),
-        createdAt: workItem.createdAt?.toISOString(),
-        updatedAt: workItem.createdAt?.toISOString(),
-      }).toRawObject(),
-      caseTitle: Case.getCaseTitle(workItem.caption),
-      caseStatus: workItem.caseStatus || undefined,
-      leadDocketNumber: workItem?.leadDocketNumber || undefined,
-      trialDate: workItem?.trialDate?.toISOString(),
-      trialLocation: workItem?.trialLocation || undefined,
-    };
-    return transformNullToUndefined(abomination);
-  });
+  return workItems.map(toWorkItemWithCaseInfo);
 };
