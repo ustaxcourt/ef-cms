@@ -23,8 +23,14 @@ export const getDocumentQCInboxForSection = async ({
     }
 
     return builder
-      .selectAll()
-      .select(['w.docketNumber', 'w.highPriority'])
+      .selectAll('w')
+      .select([
+        'c.caption',
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.leadDocketNumber',
+      ])
       .execute();
   });
 

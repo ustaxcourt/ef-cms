@@ -8,6 +8,7 @@ import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/in
 
 export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
+  TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
 } as const;
 
@@ -212,6 +213,7 @@ export const SUGGESTED_TRIAL_SESSION_TITLES = {
   invalid: 'Unable to create term',
   success: 'Successfully generated suggested term.',
   warning: 'Successfully generated suggested term with warnings',
+  validation: 'Please correct the following errors on the page:',
 };
 
 export const DOCUMENT_RELATIONSHIPS = {
@@ -1804,3 +1806,17 @@ export const TROUBLESHOOTING_INFO = {
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
+
+export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
+export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
+
+export const TERM_GENERATOR_DEFAULT_VALUES = {
+  MAX_SESSIONS_PER_WEEK: 6,
+  MAX_SESSIONS_PER_LOCATION: 5,
+  REGULAR_CASE_MINIMUM_QUANTITY: 40,
+  REGULAR_CASE_MAX_QUANTITY: 100,
+  SMALL_CASE_MINIMUM_QUANTITY: 40,
+  SMALL_CASE_MAX_QUANTITY: 125,
+  HYBRID_CASE_MINIMUM_QUANTITY: 50,
+  HYBRID_CASE_MAX_QUANTITY: 100,
+} as const;

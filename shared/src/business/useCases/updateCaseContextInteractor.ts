@@ -11,6 +11,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 
 export const updateCaseContext = async (
   applicationContext: ServerApplicationContext,
@@ -94,6 +96,23 @@ export const updateCaseContext = async (
       });
 
       newCase.removeFromTrialWithAssociatedJudge(judgeData);
+    }
+
+    if (
+      caseStatus === CASE_STATUS_TYPES.closed ||
+      caseStatus === CASE_STATUS_TYPES.closedDismissed
+    ) {
+      const caseDeadlines = await getCaseDeadlinesByDocketNumber({
+        docketNumber,
+      });
+      await Promise.all(
+        caseDeadlines.map(async deadline => {
+          return deleteCaseDeadline({
+            caseDeadlineId: deadline.caseDeadlineId,
+          });
+        }),
+      );
+      newCase.updateAutomaticBlocked({ hasCaseDeadline: false });
     }
   }
 

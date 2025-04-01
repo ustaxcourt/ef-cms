@@ -22,12 +22,6 @@ import { decrementJobCounter } from './persistence/dynamo/trialSessions/decremen
 import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
 import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
-import {
-  deleteKeyCount,
-  getLimiterByKey,
-  incrementKeyCount,
-  setExpiresAt,
-} from './persistence/dynamo/helpers/store';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
 import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
 import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
@@ -68,6 +62,7 @@ import { getPractitionersByName } from './persistence/elasticsearch/getPractitio
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSesStatus } from './persistence/ses/getSesStatus';
+import { getColdCases } from './persistence/elasticsearch/getColdCases';
 import { getStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/getStoredApplicationHealth';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
@@ -173,16 +168,13 @@ const gatewayMethods = {
     createTrialSession,
     createTrialSessionWorkingCopy,
     createUserRecords,
-    deleteKeyCount,
     editPractitionerDocument,
     incrementCounter,
-    incrementKeyCount,
     persistUser,
     removeCaseFromHearing,
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
-    setExpiresAt,
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
     updateCaseHearing,
@@ -237,7 +229,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialSession,
   getFeatureFlagValue,
   getInternalUsers,
-  getLimiterByKey,
   getLock,
   getMaintenanceMode,
   getPractitionerByBarNumber,
@@ -247,6 +238,7 @@ const gatewayMethods = {
   getReconciliationReport,
   getRequestResults,
   getSesStatus,
+  getColdCases,
   getStoredApplicationHealth,
   getTableStatus,
   getTrialSessionById,

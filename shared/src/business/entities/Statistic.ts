@@ -12,6 +12,9 @@ import joi from 'joi';
  * @constructor
  */
 export class Statistic extends JoiValidationEntity {
+  // TODO: the total penalties amount should be computed from the children penalties, not calculated and stored separately
+  // In other words, to get this information, it would be better to sum over all associated penalties in the penalty table,
+  // not store the (duplicative) information on the statistic table
   public determinationDeficiencyAmount?: string;
   public determinationTotalPenalties?: string;
   public irsDeficiencyAmount: string;
@@ -40,12 +43,11 @@ export class Statistic extends JoiValidationEntity {
       rawStatistic.penalties.length > 0 &&
       rawStatistic.irsTotalPenalties
     ) {
-      assignPenalties(this, {
+      this.assignPenalties({
         rawPenalties: rawStatistic.penalties,
-        statisticId: this.statisticId,
       });
     } else if (rawStatistic.irsTotalPenalties) {
-      itemizeTotalPenalties(this, {
+      this.itemizeTotalPenalties({
         determinationTotalPenalties: this.determinationTotalPenalties,
         irsTotalPenalties: this.irsTotalPenalties,
       });
@@ -122,77 +124,48 @@ export class Statistic extends JoiValidationEntity {
       .description('Whether the statistics are for a year or period.'),
   });
 
-  /**
-   *  adds a Penalty object to the Statistic's penalties array
-   *
-   * @param {Object} penalty  the Penalty object to add
-   * @returns {void} modifies the penalties array on the Statistic
-   */
   addPenalty({ rawPenalty }) {
-    const rawPenaltyCopy = { ...rawPenalty };
-    if (!rawPenaltyCopy.statisticId) {
-      rawPenaltyCopy.statisticId = this.statisticId;
-    }
+    const rawPenaltyCopy = { ...rawPenalty, statisticId: this.statisticId };
     const penalty = new Penalty(rawPenaltyCopy);
     this.penalties.push(penalty);
   }
 
-  /**
-   * updates a Penalty on the Statistic's penalties array
-   *
-   * @param {string} updatedPenalty the penaltyToUpdate Penalty object with updated info
-   * @returns {void} modifies the penalties array on the Statistic
-   */
-  updatePenalty(updatedPenalty) {
-    const foundPenalty = this.penalties.find(
-      penalty => penalty.penaltyId === updatedPenalty.penaltyId,
-    );
+  assignPenalties = ({ rawPenalties }) => {
+    rawPenalties.forEach(penalty => {
+      this.addPenalty({
+        rawPenalty: { ...penalty, statisticId: this.statisticId },
+      });
+    });
+  };
 
-    Object.assign(foundPenalty, updatedPenalty);
-  }
+  itemizeTotalPenalties = ({
+    determinationTotalPenalties,
+    irsTotalPenalties,
+  }) => {
+    this.addPenalty({
+      rawPenalty: {
+        name: 'Penalty 1 (IRS)',
+        penaltyAmount: irsTotalPenalties,
+        penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+        statisticId: this.statisticId,
+      },
+    });
+
+    if (determinationTotalPenalties) {
+      this.addPenalty({
+        rawPenalty: {
+          name: 'Penalty 1 (Court)',
+          penaltyAmount: determinationTotalPenalties,
+          penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
+          statisticId: this.statisticId,
+        },
+      });
+    }
+  };
 
   getValidationRules() {
     return Statistic.VALIDATION_RULES;
   }
 }
 
-const assignPenalties = (obj, { rawPenalties, statisticId }) => {
-  rawPenalties.forEach(penalty => {
-    if (penalty.statisticId) {
-      obj.addPenalty({ rawPenalty: penalty });
-    } else {
-      obj.addPenalty({
-        rawPenalty: { ...penalty, statisticId },
-      });
-    }
-  });
-};
-
-const itemizeTotalPenalties = function (
-  obj,
-  { determinationTotalPenalties, irsTotalPenalties },
-) {
-  obj.addPenalty({
-    rawPenalty: {
-      name: 'Penalty 1 (IRS)',
-      penaltyAmount: irsTotalPenalties,
-      penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
-      statisticId: obj.statisticId,
-    },
-  });
-
-  if (determinationTotalPenalties) {
-    obj.addPenalty({
-      rawPenalty: {
-        name: 'Penalty 1 (Court)',
-        penaltyAmount: determinationTotalPenalties,
-        penaltyType: PENALTY_TYPES.DETERMINATION_PENALTY_AMOUNT,
-        statisticId: obj.statisticId,
-      },
-    });
-  }
-};
-
-declare global {
-  type RawStatistic = ExcludeMethods<Statistic>;
-}
+export type RawStatistic = ExcludeMethods<Statistic>;

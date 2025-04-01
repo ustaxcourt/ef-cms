@@ -1,135 +1,15 @@
-import { marshall } from '@aws-sdk/util-dynamodb';
-import { Case } from '@shared/business/entities/cases/Case';
-import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
-import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
+import {
+  CaseStatus,
+  CaseType,
+} from '@shared/business/entities/EntityConstants';
 import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { CaseKysely } from '@web-api/database-types';
-import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { CaseKysely, DatabaseSchema } from '@web-api/database-types';
+import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 
-export const DW_CASE_COLUMNS = [
-  'associatedJudge',
-  'associatedJudgeId',
-  'automaticBlocked',
-  'automaticBlockedDate',
-  'automaticBlockedReason',
-  'blocked',
-  'blockedDate',
-  'blockedReason',
-  'canAllowDocumentService',
-  'canAllowPrintableDocketRecord',
-  'canDojPractitionersRepresentParty',
-  'caption',
-  'caseNote',
-  'caseType',
-  'closedDate',
-  'createdAt',
-  'damages',
-  'docketNumber',
-  'docketNumberSuffix',
-  'filingType',
-  'hasPendingItems',
-  'hasVerifiedIrsNotice',
-  'hearings',
-  'highPriority',
-  'highPriorityReason',
-  'initialCaption',
-  'initialDocketNumberSuffix',
-  'irsNoticeDate',
-  'isPaper',
-  'isSealed',
-  'judgeUserId',
-  'leadDocketNumber',
-  'litigationCosts',
-  'mailingDate',
-  'noticeOfAttachments',
-  'noticeOfTrialDate',
-  'orderDesignatingPlaceOfTrial',
-  'orderForAmendedPetition',
-  'orderForAmendedPetitionAndFilingFee',
-  'orderForCds',
-  'orderForFilingFee',
-  'orderForRatification',
-  'orderToShowCause',
-  'partyType',
-  'petitionPaymentDate',
-  'petitionPaymentMethod',
-  'petitionPaymentStatus',
-  'petitionPaymentWaivedDate',
-  'preferredTrialCity',
-  'procedureType',
-  'qcCompleteForTrial',
-  'receivedAt',
-  'sealedDate',
-  'sortableDocketNumber',
-  'status',
-  'trialDate',
-  'trialLocation',
-  'trialSessionId',
-  'trialTime',
-  'useSameAsPrimary',
-];
-
-export const DW_CASE_STATUS_UPDATES_COLUMNS = [
-  'statusUpdateId',
-  'changedBy',
-  'date',
-  'docketNumber',
-  'updatedCaseStatus',
-];
-
-export const DW_PETITIONERS_ON_CASE_COLUMNS = [
-  'additionalName',
-  'contactType',
-  'docketNumber',
-  'hasConsentedToElectronicService',
-  'hasElectronicAccess',
-  'inCareOf',
-  'isAddressSealed',
-  'paperPetitionEmail',
-  'placeOfLegalResidence',
-  'sealedAndUnavailable',
-  'secondaryName',
-  'serviceIndicator',
-  'title',
-  'orderOnCase',
-  'address1',
-  'address2',
-  'address3',
-  'city',
-  'contactId',
-  'country',
-  'countryType',
-  'email',
-  'name',
-  'phone',
-  'postalCode',
-  'state',
-];
-
-export const DW_CASE_STATISTIC_COLUMNS = [
-  'docketNumber',
-  'irsDeficiencyAmount',
-  'irsTotalPenalties',
-  'statisticId',
-  'year',
-  'yearOrPeriod',
-  'determinationDeficiencyAmount',
-  'determinationTotalPenalties',
-  'lastDateOfPeriod',
-];
-
-export const DW_STATISTIC_PENALTY_COLUMNS = [
-  'statisticId',
-  'name',
-  'penaltyAmount',
-  'penaltyId',
-  'penaltyType',
-];
-
+// Select the relevant RawCase fields from dwCase and map them correctly.
 export const toKyselyNewCase = (rawCase: RawCase) => {
   return {
     associatedJudge: rawCase.associatedJudge,
@@ -156,10 +36,10 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       : null,
     createdAt: rawCase.createdAt
       ? calculateDate({ dateString: rawCase.createdAt })
-      : calculateDate({ dateString: formatNow() }), // Is this what we want?
+      : calculateDate({ dateString: formatNow() }),
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
-    docketNumberSuffix: rawCase.docketNumberSuffix,
+    docketNumberSuffix: rawCase.docketNumberSuffix || undefined,
     docketEntries: JSON.stringify(rawCase.docketEntries),
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,
@@ -221,109 +101,65 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
   };
 };
 
-export const rawCaseEntity = (caseRecord: any): RawCase => {
-  return {
-    ...caseRecord,
-    automaticBlockedDate: caseRecord.automaticBlockedDate?.toISOString(),
-    blockedDate: caseRecord.blockedDate?.toISOString(),
-    caseCaption: caseRecord.caption,
-    closedDate: caseRecord.closedDate?.toISOString(),
-    createdAt: caseRecord.createdAt?.toISOString(),
-    docketNumberWithSuffix:
-      caseRecord.docketNumber +
-      (caseRecord.docketNumberSuffix ? caseRecord.docketNumberSuffix : ''),
-    hearings: caseRecord.hearings || [],
-    irsNoticeDate: caseRecord.irsNoticeDate?.toISOString(),
-    noticeOfTrialDate: caseRecord.noticeOfTrialDate?.toISOString(),
-    petitionPaymentDate: caseRecord.petitionPaymentDate?.toISOString(),
-    petitionPaymentWaivedDate:
-      caseRecord.petitionPaymentWaivedDate?.toISOString(),
-    receivedAt: caseRecord.receivedAt?.toISOString(),
-    sealedDate: caseRecord.sealedDate?.toISOString(),
-    trialDate: caseRecord.trialDate?.toISOString(),
-  };
-};
+export function fromKyselyCase<T extends object>(record: T) {
+  // Map for renaming keys from DB format to the desired RawCase format.
+  const keyRenameMap = {
+    caption: 'caseCaption',
+  } as const;
 
-export const indexCaseEntity = ({
-  caseRecord,
-  privatePractitioners,
-  irsPractitioners,
-  petitioners,
-}: {
-  caseRecord: CaseKysely;
-  privatePractitioners: TDynamoRecord[];
-  irsPractitioners: TDynamoRecord[];
-  petitioners: RawPetitioner[];
-}) => {
-  return marshall(
-    transformNullToUndefined({
-      pk: `case|${caseRecord.docketNumber}`,
-      sk: `case|${caseRecord.docketNumber}`,
-      associatedJudge: caseRecord.associatedJudge,
-      associatedJudgeId: caseRecord.associatedJudgeId,
-      automaticBlocked: caseRecord.automaticBlocked,
-      automaticBlockedDate:
-        caseRecord.automaticBlockedDate instanceof Date
-          ? caseRecord.automaticBlockedDate?.toISOString()
-          : caseRecord.automaticBlockedDate,
-      automaticBlockedReason: caseRecord.automaticBlockedReason,
-      blocked: caseRecord.blocked,
-      blockedDate:
-        caseRecord.blockedDate instanceof Date
-          ? caseRecord.blockedDate?.toISOString()
-          : caseRecord.blockedDate,
-      blockedReason: caseRecord.blockedReason,
-      caseType: caseRecord.caseType,
-      closedDate:
-        caseRecord.closedDate instanceof Date
-          ? caseRecord.closedDate?.toISOString()
-          : caseRecord.closedDate,
-      createdAt:
-        caseRecord.createdAt instanceof Date
-          ? caseRecord.createdAt?.toISOString()
-          : caseRecord.createdAt,
-      hasPendingItems: caseRecord.hasPendingItems,
-      highPriority: caseRecord.highPriority,
-      isPaper: caseRecord.isPaper,
-      leadDocket: caseRecord.leadDocketNumber,
-      preferredTrialCity: caseRecord.preferredTrialCity,
-      procedureType: caseRecord.procedureType,
-      sealedDate:
-        caseRecord.sealedDate instanceof Date
-          ? caseRecord.sealedDate?.toISOString()
-          : caseRecord.sealedDate,
-      sortableDocketNumber: caseRecord.sortableDocketNumber,
-      status: caseRecord.status,
-      trialDate:
-        caseRecord.trialDate instanceof Date
-          ? caseRecord.trialDate?.toISOString()
-          : caseRecord.trialDate,
-      trialLocation: caseRecord.trialLocation,
-      entityName: 'Case',
-      caseCaption: caseRecord.caption,
-      docketNumber: caseRecord.docketNumber,
-      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
-        docketNumber: caseRecord.docketNumber,
-        docketNumberSuffix: caseRecord.docketNumberSuffix,
-      }),
-      isSealed: caseRecord.isSealed,
-      petitioners: petitioners || [],
-      receivedAt:
-        caseRecord.receivedAt instanceof Date
-          ? caseRecord.receivedAt.toISOString()
-          : caseRecord.receivedAt,
-      privatePractitioners,
-      irsPractitioners,
-    }),
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const dwCaseSchema = DatabaseSchema.dwCase.table;
+
+  // Map for transforming values.
+  const transformMap = {
+    automaticBlockedDate: (
+      value: typeof dwCaseSchema.automaticBlockedDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    blockedDate: (
+      value: typeof dwCaseSchema.blockedDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    caseType: (value: string, _: Partial<CaseKysely>) => value as CaseType,
+    closedDate: (
+      value: typeof dwCaseSchema.closedDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    createdAt: (value: typeof dwCaseSchema.createdAt, _: Partial<CaseKysely>) =>
+      value.toISOString(),
+    hearings: (value: any, _: Partial<CaseKysely>) => value || [],
+    irsNoticeDate: (
+      value: typeof dwCaseSchema.irsNoticeDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    noticeOfTrialDate: (
+      value: typeof dwCaseSchema.noticeOfTrialDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    petitioners: (value?: any[], _?: Partial<CaseKysely>) =>
+      value ? value.map(p => ({ ...p, state: p.state || null })) : [], // petitioner state needs to be null rather than undefined
+    petitionPaymentDate: (
+      value: typeof dwCaseSchema.petitionPaymentDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    petitionPaymentWaivedDate: (
+      value: typeof dwCaseSchema.petitionPaymentWaivedDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    receivedAt: (
+      value: typeof dwCaseSchema.receivedAt,
+      _: Partial<CaseKysely>,
+    ) => value.toISOString(),
+    sealedDate: (
+      value: typeof dwCaseSchema.sealedDate,
+      _: Partial<CaseKysely>,
+    ) => value?.toISOString(),
+    status: (value: any, _: Partial<CaseKysely>) => value as CaseStatus,
+    trialDate: (value: typeof dwCaseSchema.trialDate, _: Partial<CaseKysely>) =>
+      value?.toISOString(),
+  } as const;
+
+  return new DatabaseToAppCodeMapper({ keyRenameMap, transformMap }).transform(
+    record,
   );
-};
-
-export const RawEligibleCaseEntity = (dbCase: any): RawEligibleCase => {
-  return {
-    ...dbCase,
-    caseCaption: dbCase.caption,
-    docketNumberWithSuffix:
-      dbCase.docketNumber +
-      (dbCase.docketNumberSuffix ? dbCase.docketNumberSuffix : ''),
-  };
-};
+}

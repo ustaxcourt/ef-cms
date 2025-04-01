@@ -4,9 +4,7 @@ import {
   formatNow,
   getMonthDayYearInETObj,
 } from '@shared/business/utilities/DateHandler';
-import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getDbWriter } from '@web-api/database';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 const incrementCounter = async (year: string): Promise<number> => {
   if (!year) {
@@ -39,8 +37,7 @@ export const getNextDocketNumber = async ({ year }: { year: string }) => {
   return `${id}-${twoDigitYear}`;
 };
 
-export const MAX_ATTEMPTS = 5;
-
+// Note that this DOES NOT handle concurrency for free, so it should be used within the context of a mutex lock or something similar.
 export const generateDocketNumber = async ({
   receivedAt,
 }: {
@@ -50,32 +47,5 @@ export const generateDocketNumber = async ({
     ? formatDateString(receivedAt, FORMATS.YEAR)
     : formatNow(FORMATS.YEAR);
 
-  let attempt = 0;
-  let nextDocketNumber;
-
-  const docketNumber = await (async () => {
-    while (attempt < MAX_ATTEMPTS) {
-      nextDocketNumber = await getNextDocketNumber({
-        year,
-      });
-
-      const existingCase = await getCaseMetadataByDocketNumber({
-        docketNumber: nextDocketNumber,
-      });
-      if (!existingCase) {
-        return nextDocketNumber;
-      }
-
-      attempt++;
-    }
-  })();
-
-  if (docketNumber) {
-    return docketNumber;
-  } else {
-    // be sure case with this docket number doesn't already exist -- if it does, stop!
-    const message = `${nextDocketNumber}: docket number already exists!`;
-    getLogger().error(message, nextDocketNumber);
-    throw new Error(message);
-  }
+  return getNextDocketNumber({ year });
 };

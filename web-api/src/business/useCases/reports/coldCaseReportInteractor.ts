@@ -4,7 +4,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getColdCases } from '@web-api/persistence/postgres/cases/reports/getColdCases';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type ColdCaseEntry = {
   createdAt: string;
@@ -17,6 +17,7 @@ export type ColdCaseEntry = {
 };
 
 export const coldCaseReportInteractor = async (
+  applicationContext: ServerApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<ColdCaseEntry[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.COLD_CASE_REPORT)) {
@@ -25,7 +26,9 @@ export const coldCaseReportInteractor = async (
     );
   }
 
-  const coldCases = await getColdCases();
+  const coldCases = await applicationContext
+    .getPersistenceGateway()
+    .getColdCases({ applicationContext });
 
   return coldCases;
 };

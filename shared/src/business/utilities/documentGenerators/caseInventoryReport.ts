@@ -17,7 +17,7 @@ export const caseInventoryReport = async ({
       inConsolidatedGroup: boolean;
       docketNumber: string;
       caseTitle: string;
-      docketNumberSuffix?: string;
+      docketNumberSuffix?: string | null;
       status: string;
       associatedJudge?: string;
     }[];

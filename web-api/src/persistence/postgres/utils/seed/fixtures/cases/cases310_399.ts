@@ -21,7 +21,7 @@ export const SEEDED_DOCKET_NUMBERS_310_399 = {
   '320-21': '320-21',
 };
 
-export const cases310_399: RawCase[] = [
+export const cases310_399: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
   {
     associatedJudge: CHIEF_JUDGE,
     automaticBlocked: false,

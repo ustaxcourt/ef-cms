@@ -1,6 +1,5 @@
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as pdfLib from 'pdf-lib';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import {
   CASE_INVENTORY_PAGE_SIZE,
   CASE_STATUS_TYPES,
@@ -177,10 +176,6 @@ export const createApplicationContext = (appContextUser = {}) => {
     getNotificationClient,
     getNotificationGateway,
     getNotificationService,
-    getPdfJs: () => {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
-      return pdfjsLib;
-    },
     getPdfLib: () => {
       return pdfLib;
     },

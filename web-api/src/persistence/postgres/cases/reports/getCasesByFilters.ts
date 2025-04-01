@@ -18,18 +18,19 @@ export const getCasesByFilters = async ({
 }> => {
   const { count, results } = await getDbReader(async reader => {
     let query = reader.selectFrom('dwCase');
-    if (params.startDate && params.endDate) {
-      query = query
-        .where(
-          'receivedAt',
-          '>=',
-          calculateDate({ dateString: params.startDate }),
-        )
-        .where(
-          'receivedAt',
-          '<=',
-          calculateDate({ dateString: params.endDate }),
-        );
+    if (params.startDate) {
+      query = query.where(
+        'receivedAt',
+        '>=',
+        calculateDate({ dateString: params.startDate }),
+      );
+    }
+    if (params.endDate) {
+      query = query.where(
+        'receivedAt',
+        '<=',
+        calculateDate({ dateString: params.endDate }),
+      );
     }
     if (params.caseStatuses.length) {
       query = query.where('status', 'in', params.caseStatuses);

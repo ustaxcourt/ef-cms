@@ -8,17 +8,23 @@ import { getCaseInventoryReport } from '@web-api/persistence/postgres/cases/repo
 export const getCaseInventoryReportInteractor = async (
   {
     associatedJudge,
-    from,
+    selectedPage,
     pageSize,
     status,
   }: {
     associatedJudge?: string;
-    from?: string;
+    selectedPage?: string;
     pageSize?: number;
     status?: string;
   },
   authorizedUser: UnknownAuthUser,
-): Promise<{ foundCases: RawCase[]; totalCount: number }> => {
+): Promise<{
+  foundCases: Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'docketEntries' | 'petitioners'
+  >[];
+  totalCount: number;
+}> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_INVENTORY_REPORT)) {
     throw new UnauthorizedError('Unauthorized for case inventory report');
   }
@@ -29,7 +35,7 @@ export const getCaseInventoryReportInteractor = async (
 
   return await getCaseInventoryReport({
     associatedJudge,
-    page: from ? Number(from) : 0,
+    page: selectedPage ? Number(selectedPage) : 0,
     pageSize,
     status,
   });

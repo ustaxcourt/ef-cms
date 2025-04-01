@@ -126,7 +126,7 @@ async function fetchConsolidatedGroupsAndNest({
     aCase => aCase.docketNumber,
   ).map(aCase => ({
     ...aCase,
-    consolidatedCases: (aCase.consolidatedCases || []) as TAssociatedCase[],
+    consolidatedCases: [] as TAssociatedCase[], // 10502 TODO: This originally assumed consolidatedCases might exist; was that wrong, or are we wrong now?
   }));
 
   const [topLevelCases, memberConsolidatedCases] = partition(
@@ -206,7 +206,11 @@ async function getAllConsolidatedCases(
   applicationContext: ServerApplicationContext,
   cases: TAssociatedCase[],
   userId: string,
-): Promise<(RawCase & { isRequestingUserAssociated: boolean })[]> {
+): Promise<
+  (Omit<RawCase, 'consolidatedCases' | 'correspondence' | 'docketEntries'> & {
+    isRequestingUserAssociated: boolean;
+  })[]
+> {
   const uniqueLeadDocketNumbers = uniqBy(
     cases.filter(aCase => aCase.leadDocketNumber),
     'leadDocketNumber',

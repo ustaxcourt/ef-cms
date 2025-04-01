@@ -163,6 +163,7 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -584,6 +585,9 @@ export const baseState = {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
+  [STATE_KEYS.TERM_BUILDER_INFORMATION]: undefined as
+    | RawGenerateSuggestedTermForm
+    | undefined,
   [STATE_KEYS.PENDING_REPORT_TABLE_SORT]: {} as {
     sortField: string;
     sortOrder: 'asc' | 'desc';
@@ -623,13 +627,14 @@ export const baseState = {
   blockedCaseReportFilter: cloneDeep(initialBlockedCaseReportFilter),
   blockedCases: [] as BlockedCaseData[],
   caseDeadlineReport: {} as {
-    caseDeadlines: (RawCaseDeadline & {
+    caseDeadlinesForCurrentPage: (RawCaseDeadline & {
       caseCaption: string;
       docketNumber: string;
       docketNumberSuffix: string;
       docketNumberWithSuffix: string;
       leadDocketNumber: string;
     })[];
+    caseDeadlinesTotalCount: 0;
     judgeFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],

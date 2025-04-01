@@ -451,7 +451,7 @@ import { submitCourtIssuedDocketEntrySequence } from './sequences/submitCourtIss
 import { submitCourtIssuedOrderSequence } from './sequences/submitCourtIssuedOrderSequence';
 import { submitCreateOrderModalSequence } from './sequences/submitCreateOrderModalSequence';
 import { submitCreatePetitionerAccountFormSequence } from '@web-client/presenter/sequences/submitCreatePetitionerAccountFormSequence';
-import { submitCreateTermModalSequence } from '@web-client/presenter/sequences/TrialSessions/submitCreateTermModalSequence';
+import { submitCreateTermFormSequence } from '@web-client/presenter/sequences/TrialSessions/submitCreateTermFormSequence';
 import { submitEditContactSequence } from './sequences/submitEditContactSequence';
 import { submitEditDeficiencyStatisticSequence } from './sequences/submitEditDeficiencyStatisticSequence';
 import { submitEditDocketEntryMetaSequence } from './sequences/submitEditDocketEntryMetaSequence';
@@ -510,6 +510,7 @@ import { updateCaseAdvancedSearchByNameFormValueSequence } from './sequences/upd
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
 import { updateCaseCheckboxSequence } from './sequences/updateCaseCheckboxSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
+import { updateCaseDeadlineReportPageSequence } from './sequences/updateCaseDeadlineReportPageSequence';
 import { updateCaseDetailsSequence } from './sequences/updateCaseDetailsSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
 import { updateCasePartyTypeSequence } from './sequences/updateCasePartyTypeSequence';
@@ -615,6 +616,8 @@ import { validateUpdatePractitionerSequence } from './sequences/validateUpdatePr
 import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
+import { navigateToTermBuilderPageSequence } from '@web-client/presenter/sequences/TrialSessions/navigateToTermBuilderPageSequence';
+import { gotoTrialSessionTermBuilderSequence } from '@web-client/presenter/sequences/gotoTrialSessionTermBuilderSequence';
 import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
 
 export const presenterSequences = {
@@ -945,6 +948,7 @@ export const presenterSequences = {
   gotoTrialLocationSequence,
   gotoTrialSessionDetailSequence: gotoTrialSessionDetailsSequence,
   gotoTrialSessionPlanningReportViewSequence,
+  gotoTrialSessionTermBuilderSequence,
   gotoTrialSessionWorkingCopySequence:
     gotoTrialSessionWorkingCopySequence as unknown as Function,
   gotoTrialSessionsSequence,
@@ -986,6 +990,7 @@ export const presenterSequences = {
   navigateToPrintableCaseConfirmationSequence:
     navigateToPrintableCaseConfirmationSequence as unknown as Function,
   navigateToStatusReportOrderSequence,
+  navigateToTermBuilderPageSequence,
   navigateToTrialSessionPlanningReportSequence,
   notFoundErrorSequence: notFoundErrorSequence as unknown as Function,
   noticeGenerationCompleteSequence:
@@ -1329,8 +1334,8 @@ export const presenterSequences = {
     submitCreateOrderModalSequence as unknown as Function,
   submitCreatePetitionerAccountFormSequence:
     submitCreatePetitionerAccountFormSequence as unknown as Function,
-  submitCreateTermModalSequence:
-    submitCreateTermModalSequence as unknown as Function,
+  submitCreateTermFormSequence:
+    submitCreateTermFormSequence as unknown as Function,
   submitEditContactSequence: submitEditContactSequence as unknown as Function,
   submitEditDeficiencyStatisticSequence:
     submitEditDeficiencyStatisticSequence as unknown as Function,
@@ -1426,6 +1431,7 @@ export const presenterSequences = {
     updateCaseAssociationFormValueSequence as unknown as Function,
   updateCaseCheckboxSequence: updateCaseCheckboxSequence as unknown as Function,
   updateCaseDeadlineSequence: updateCaseDeadlineSequence as unknown as Function,
+  updateCaseDeadlineReportPageSequence,
   updateCaseDetailsSequence: updateCaseDetailsSequence as unknown as Function,
   updateCaseNoteSequence: updateCaseNoteSequence as unknown as Function,
   updateCasePartyTypeSequence:
@@ -1459,7 +1465,7 @@ export const presenterSequences = {
   updateFormValueAndSecondaryContactInfoSequence:
     updateFormValueAndSecondaryContactInfoSequence as unknown as Function,
   updateFormValueCountryTypeSequence,
-  updateFormValueSequence: updateFormValueSequence as unknown as Function,
+  updateFormValueSequence,
   updateFormValueUpdatedSequence,
   updateGenerateNoticesProgressSequence:
     updateGenerateNoticesProgressSequence as unknown as Function,

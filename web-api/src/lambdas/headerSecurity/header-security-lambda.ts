@@ -38,9 +38,11 @@ export const handler = async (
   const s3Url = 'https://s3.us-east-1.amazonaws.com';
   const statuspageUrl = 'https://lynmjtcq5px1.statuspage.io';
   const pdfjsExpressUrl = 'https://*.pdfjs.express';
+  const cognitoIdentityUrl = 'https://cognito-identity.us-east-1.amazonaws.com';
+  const rumEndpointUrl = 'https://dataplane.rum.us-east-1.amazonaws.com';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
+    `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl} ${cognitoIdentityUrl} ${rumEndpointUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,

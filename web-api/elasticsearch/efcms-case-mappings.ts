@@ -1,7 +1,6 @@
-import { Property } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 import { createHash } from 'crypto';
 
-export const efcmsCaseMappings: Property = {
+export const efcmsCaseMappings: Record<string, Object> = {
   properties: {
     'associatedJudge.S': {
       fields: {

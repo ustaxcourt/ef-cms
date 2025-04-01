@@ -1,13 +1,3 @@
-import {
-  AbbreviatedStates,
-  CountryTypes,
-  MAX_SEARCH_RESULTS,
-  US_STATES,
-} from '@shared/business/entities/EntityConstants';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -17,6 +7,18 @@ import {
   createStartOfDayISO,
 } from '@shared/business/utilities/DateHandler';
 import { caseAdvancedSearch } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
+import {
+  CountryTypes,
+  AbbreviatedStates,
+  CaseType,
+  ProcedureType,
+  MAX_SEARCH_RESULTS,
+  US_STATES,
+} from '@shared/business/entities/EntityConstants';
+import {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} from '@shared/authorization/authorizationClientService';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;
@@ -24,6 +26,8 @@ export type CaseAdvancedSearchParamsRequestType = {
   petitionerState?: AbbreviatedStates;
   endDate?: string;
   startDate?: string;
+  caseTypes?: CaseType[];
+  procedureType?: ProcedureType;
 };
 
 export type CaseSearchResult = {
@@ -43,6 +47,8 @@ export const caseAdvancedSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
+    caseTypes: caseType,
+    procedureType,
   }: CaseAdvancedSearchParamsRequestType,
   authorizedUser: UnknownAuthUser,
 ): Promise<CaseSearchResult[]> => {
@@ -81,6 +87,8 @@ export const caseAdvancedSearchInteractor = async (
       petitionerName,
       petitionerState,
       startDate: searchStartDate,
+      caseTypes: caseType,
+      procedureType,
     },
   });
 
