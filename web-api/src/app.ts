@@ -68,6 +68,7 @@ import { generatePrintableFilingReceiptLambda } from './lambdas/documents/genera
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
 import { generateSuggestedTrialSessionCalendarLambda } from '@web-api/lambdas/trialSessions/generateSuggestedTrialSessionCalendarLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
+import { generateTrialSessionMinutesPdfLambda } from './lambdas/trialSessionMinutes/generateTrialSessionMinutesPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
@@ -103,6 +104,7 @@ import { getJudgeInSectionLambda } from './lambdas/users/getJudgeInSectionLambda
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
+import { getMinuteSheetLambda } from './lambdas/trialSessionMinutes/getMinuteSheetLambda';
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
@@ -185,6 +187,7 @@ import { updateCourtIssuedOrderToCaseLambda } from './lambdas/documents/updateCo
 import { updateDeficiencyStatisticLambda } from './lambdas/cases/updateDeficiencyStatisticLambda';
 import { updateDocketEntryMetaLambda } from './lambdas/documents/updateDocketEntryMetaLambda';
 import { updateDocketEntryWorksheetLambda } from '@web-api/lambdas/pendingMotion/updateDocketEntryWorksheetLambda';
+import { updateMinuteSheetLambda } from './lambdas/trialSessionMinutes/updateMinuteSheetLambda';
 import { updateOtherStatisticsLambda } from './lambdas/cases/updateOtherStatisticsLambda';
 import { updatePetitionerInformationLambda } from './lambdas/cases/updatePetitionerInformationLambda';
 import { updatePractitionerUserLambda } from './lambdas/practitioners/updatePractitionerUserLambda';
@@ -205,6 +208,7 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
+import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 
 export const app = express();
 
@@ -315,22 +319,39 @@ app.use(expressLogger);
  */
 {
   app.put(
-    '/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(updateCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(
+      updateCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.delete(
-    '/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(deleteCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(
+      deleteCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
+
   app.post(
-    '/case-deadlines/:docketNumber',
-    lambdaWrapper(createCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber',
+    lambdaWrapper(
+      createCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.get(
     '/case-deadlines/:docketNumber',
     lambdaWrapper(getCaseDeadlinesForCaseLambda),
   );
   app.get('/case-deadlines', lambdaWrapper(getCaseDeadlinesLambda));
+  app.get(
+    '/consolidated-case-deadlines/:consolidatedCaseDeadlineId',
+    lambdaWrapper(getConsolidatedCaseDeadlinesLambda),
+  );
 }
 
 /**
@@ -882,6 +903,12 @@ app.delete(
  * trial-sessions
  */
 {
+  app.get('/trial-sessions/minutes', lambdaWrapper(getMinuteSheetLambda));
+  app.put('/trial-sessions/minutes', lambdaWrapper(updateMinuteSheetLambda));
+  app.post(
+    '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
+    lambdaWrapper(generateTrialSessionMinutesPdfLambda),
+  );
   app.get(
     '/trial-sessions/paper-service-pdf/:fileId',
     lambdaWrapper(getPaperServicePdfUrlLambda),

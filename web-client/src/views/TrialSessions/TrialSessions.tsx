@@ -5,6 +5,7 @@ import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRang
 import { ErrorNotification } from '../ErrorNotification';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import {
+  MULTI_SELECT_PLACEHOLDER,
   SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TrialSessionProceedingType,
@@ -267,9 +268,9 @@ const TrialSessionFilters = connect(
                 inputId="session-type-filter"
                 name="sessionType"
                 options={trialSessionsHelper.sessionTypeOptions}
-                placeholder="- Select one or more -"
+                placeholder={MULTI_SELECT_PLACEHOLDER}
                 value={{
-                  label: '- Select one or more -',
+                  label: MULTI_SELECT_PLACEHOLDER,
                   value: '' as TrialSessionTypes,
                 }}
                 onChange={sessionType => {
@@ -318,9 +319,9 @@ const TrialSessionFilters = connect(
                 inputId="location-filter"
                 name="location"
                 options={trialSessionsHelper.trialCitiesByState}
-                placeholder="- Select one or more -"
+                placeholder={MULTI_SELECT_PLACEHOLDER}
                 value={{
-                  label: '- Select one or more -',
+                  label: MULTI_SELECT_PLACEHOLDER,
                   value: '',
                 }}
                 onChange={location => {
@@ -369,9 +370,9 @@ const TrialSessionFilters = connect(
                 inputId="judges-filter"
                 name="judges"
                 options={trialSessionsHelper.trialSessionJudgeOptions}
-                placeholder="- Select one or more -"
+                placeholder={MULTI_SELECT_PLACEHOLDER}
                 value={{
-                  label: '- Select one or more -',
+                  label: MULTI_SELECT_PLACEHOLDER,
                   value: { name: '', userId: '' },
                 }}
                 onChange={inputValue => {

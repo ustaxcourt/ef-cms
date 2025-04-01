@@ -6,7 +6,6 @@ import {
   createEndOfDayISO,
   createStartOfDayISO,
 } from '@shared/business/utilities/DateHandler';
-import { caseAdvancedSearch } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 import {
   CountryTypes,
   AbbreviatedStates,
@@ -19,6 +18,7 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
+import { caseAdvancedSearch } from '@web-api/persistence/elasticsearch/caseAdvancedSearch';
 
 export type CaseAdvancedSearchParamsRequestType = {
   petitionerName: string;

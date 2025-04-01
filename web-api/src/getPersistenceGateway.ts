@@ -216,6 +216,7 @@ const gatewayMethods = {
   getCasesForUser,
   getClientId,
   getConfigurationItemValue,
+  getColdCases,
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,

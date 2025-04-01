@@ -15,20 +15,20 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCaseContextInteractor } from './updateCaseContextInteractor';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('updateCaseContextInteractor', () => {
+  const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCase = jest.mocked(updateCaseMock);
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
-  );
-  const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
-  const getCaseDeadlinesByDocketNumber = jest.mocked(
-    getCaseDeadlinesByDocketNumberMock,
   );
 
   beforeEach(() => {
@@ -169,7 +169,7 @@ describe('updateCaseContextInteractor', () => {
   });
 
   it('should remove automatic block information if case status is closed', async () => {
-    getCaseByDocketNumber.mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE_WITHOUT_PENDING,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
     });

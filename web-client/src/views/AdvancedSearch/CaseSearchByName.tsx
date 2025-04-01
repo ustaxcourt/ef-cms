@@ -11,7 +11,10 @@ import classNames from 'classnames';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { isEmpty } from 'lodash';
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
+import {
+  ALL_SELECTION,
+  MULTI_SELECT_PLACEHOLDER,
+} from '@shared/business/entities/EntityConstants';
 
 export const CaseSearchByName = connect(
   {
@@ -483,10 +486,10 @@ export const CaseSearchByName = connect(
                 data-testid="case-type-selection"
                 name="caseType"
                 className="maxw-mobile-lg"
-                placeholder="- Select one or more -"
+                placeholder={MULTI_SELECT_PLACEHOLDER}
                 inputId="case-type-filter"
                 value={{
-                  label: '- Select one or more -',
+                  label: MULTI_SELECT_PLACEHOLDER,
                   value: '',
                 }}
                 options={
