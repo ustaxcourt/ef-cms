@@ -411,6 +411,7 @@ export const MOCK_ELIGIBLE_CASE: RawEligibleCase = {
   caseCaption: 'Roslindis Angelino & Saturnino Nao, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
+  docketNumberWithSuffix: '321-21W',
   isSealed: false,
   procedureType: PROCEDURE_TYPES_MAP.regular,
   docketNumberSuffix: 'W',

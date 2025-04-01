@@ -153,6 +153,7 @@ const caseDeadlineTableDefinition = {
   associatedJudge: DEFAULT as string,
   associatedJudgeId: DEFAULT as string | undefined,
   caseDeadlineId: DEFAULT as string,
+  consolidatedCaseDeadlineId: DEFAULT as string | undefined,
   createdAt: DEFAULT as Date,
   deadlineDate: DEFAULT as Date,
   description: DEFAULT as string,

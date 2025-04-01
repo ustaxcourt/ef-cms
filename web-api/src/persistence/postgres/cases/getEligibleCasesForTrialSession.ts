@@ -6,12 +6,12 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { RawEligibleCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 
 export const getEligibleCasesForTrialSession = async ({
   applicationContext,
@@ -98,7 +98,7 @@ export const getEligibleCasesForTrialSession = async ({
   const fullEligibleCases = await Promise.all(casePromises);
 
   const casesForReturn = fullEligibleCases.map(c => {
-    return c ? transformNullToUndefined(RawEligibleCaseEntity(c)) : undefined;
+    return c ? transformNullToUndefined(fromKyselyCase(c)) : undefined;
   });
 
   return casesForReturn || [];
