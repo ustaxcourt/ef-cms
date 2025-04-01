@@ -31,6 +31,9 @@ describe('Run the suggested trial session calendar generator', () => {
       '.usa-date-picker__wrapper > [data-testid="termEndDate-date-end-input"]',
     ).type(oneMonthFromNow);
     cy.get('[data-testid="modal-button-confirm"]').click();
+
+    cy.get('[data-testid="submit-create-term-form-button"]').click();
+
     cy.get('[data-testid="success-alert"]').should(
       'contain.text',
       SUGGESTED_TRIAL_SESSION_TITLES.success,
