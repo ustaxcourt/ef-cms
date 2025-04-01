@@ -9,7 +9,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store used for setting state.sessionMetadata.docketRecordSort
  * @param {object} providers.get the cerebral store used for getting state.sessionMetadata.docketRecordSort
  */
-export const setDefaultDocketRecordSortAction = ({
+export const setDefaultDocketRecordSortAndFilterAction = ({
   get,
   store,
 }: ActionProps) => {
@@ -19,4 +19,6 @@ export const setDefaultDocketRecordSortAction = ({
   if (!hasSort) {
     store.set(state.sessionMetadata.docketRecordSort[docketNumber], 'byDate');
   }
+
+  store.set(state.sessionMetadata.docketRecordFilter, '');
 };

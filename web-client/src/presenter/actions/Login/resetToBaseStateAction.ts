@@ -11,8 +11,8 @@ export const resetToBaseStateAction = ({ store }: ActionProps) => {
       'constants',
       'scanner',
       'clientConnectionId',
-      'caseDetail',
-      'pendingReports',
+      'caseDetail', // We persist this only because old cerebral tests depend on it. It should be removed once those tests are converted to Cypress
+      'pendingReports', // We persist this only because old cerebral tests depend on it. It should be removed once those tests are converted to Cypress
     ];
     if (stateSlicesToPersist.includes(key)) return;
     store.set(state[key], value);
