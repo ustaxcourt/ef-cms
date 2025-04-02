@@ -110,7 +110,8 @@ export const StatisticsForm = connect(
 
         <FormGroup
           confirmationText={
-            confirmationText?.statistics[index]?.irsDeficiencyAmount
+            confirmationText?.statistics &&
+            confirmationText.statistics[index]?.irsDeficiencyAmount
           }
           errorText={
             validationErrors.statistics &&

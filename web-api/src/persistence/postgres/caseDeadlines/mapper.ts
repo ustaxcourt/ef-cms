@@ -2,7 +2,7 @@ import {
   CaseDeadline,
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
-import { NewCaseDeadlineKysely } from '@web-api/database-types';
+import { NewCaseDeadlineKysely } from '@web-api/persistence/postgres/caseDeadlines/schema';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 function pickFields(deadline): NewCaseDeadlineKysely {

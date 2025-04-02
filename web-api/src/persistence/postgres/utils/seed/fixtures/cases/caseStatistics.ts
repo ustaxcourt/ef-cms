@@ -2,7 +2,7 @@ import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { CaseStatisticKysely } from '@web-api/database-types';
+import { CaseStatisticKysely } from '@web-api/persistence/postgres/cases/statistics/schema';
 import { SEEDED_DOCKET_NUMBERS_105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 import { SEEDED_DOCKET_NUMBERS_310_399 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases310_399';
 

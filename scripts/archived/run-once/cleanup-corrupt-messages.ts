@@ -1,6 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { Database } from '@web-api/database-types';
+import { Database } from '@web-api/database-schema';
 import { Kysely } from 'kysely';
 import { RawCorrespondence } from '@shared/business/entities/Correspondence';
 import {

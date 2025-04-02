@@ -93,8 +93,6 @@ export const processPractitionerMappingEntries = async ({
     practitionerMappingRecords.map(indexCaseEntryForPractitionerMapping),
   );
 
-  console.log('indexRecords', indexRecords);
-
   const { failedRecords } = await applicationContext
     .getPersistenceGateway()
     .bulkIndexRecords({
