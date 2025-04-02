@@ -2,15 +2,19 @@ import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
 
 const DEFAULT = {};
 
+// Our semantics around undefined and null are currently inconsistent due to the Dynamo to Postgres transition.
+// Undefined in a Dynamo record update  = "will overwrite so key no longer exists."
+// Undefined in a Postgres row update = "won't overwrite and will leave as is." So we sometimes need null to say, "No, actually overwrite this!"
+// After the transition to Postgres is complete, we should clean this up and be more consistent
 export const caseTableDefinition = {
   associatedJudge: DEFAULT as string | undefined,
   associatedJudgeId: DEFAULT as string | undefined,
   automaticBlocked: DEFAULT as boolean | undefined,
   automaticBlockedDate: DEFAULT as Date | null,
-  automaticBlockedReason: DEFAULT as string | undefined,
+  automaticBlockedReason: DEFAULT as string | undefined | null,
   blocked: DEFAULT as boolean | undefined,
   blockedDate: DEFAULT as Date | null,
-  blockedReason: DEFAULT as string | undefined,
+  blockedReason: DEFAULT as string | undefined | null,
   caption: DEFAULT as string,
   caseNote: DEFAULT as string | undefined,
   caseType: DEFAULT as string,

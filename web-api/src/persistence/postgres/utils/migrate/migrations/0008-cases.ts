@@ -27,7 +27,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('irsNoticeDate', 'timestamptz')
     .addColumn('isPaper', 'boolean')
     .addColumn('isSealed', 'boolean')
-    .addColumn('judgeUserId', 'varchar')
     .addColumn('litigationCosts', 'numeric')
     .addColumn('mailingDate', 'varchar')
     .addColumn('noticeOfAttachments', 'boolean')
