@@ -27,7 +27,7 @@ export const updateCase = async ({
       docketNumber: caseToUpdate.docketNumber,
       statusUpdates: caseToUpdate.caseStatusHistory as CaseStatusChange[],
     }),
-    clearAndUpdatePetitioners({ caseToUpdate }),
+    clearAndUpsertPetitioners({ caseToUpdate }),
     clearAndUpsertStatistics({ caseToUpdate }),
   ]);
 
@@ -38,7 +38,7 @@ export const updateCase = async ({
   return caseToUpdate;
 };
 
-const clearAndUpdatePetitioners = async ({
+const clearAndUpsertPetitioners = async ({
   caseToUpdate,
 }: {
   caseToUpdate: RawCase;
