@@ -21,7 +21,11 @@ export const getCaseInventoryReportInteractor = async (
 ): Promise<{
   foundCases: Omit<
     RawCase,
-    'consolidatedCases' | 'correspondence' | 'docketEntries' | 'petitioners'
+    | 'consolidatedCases'
+    | 'correspondence'
+    | 'docketEntries'
+    | 'hearings'
+    | 'petitioners'
   >[];
   totalCount: number;
 }> => {
