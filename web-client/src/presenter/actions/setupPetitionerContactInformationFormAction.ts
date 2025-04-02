@@ -1,4 +1,5 @@
 import { cloneDeep } from 'lodash';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -18,11 +19,9 @@ export const setupPetitionerContactInformationFormAction = ({
   const caseDetail = get(state.caseDetail);
   const { contactId } = props;
 
-  const formattedCaseDetail = applicationContext
-    .getUtilities()
-    .setServiceIndicatorsForCase({
-      ...caseDetail,
-    });
+  const formattedCaseDetail = setServiceIndicatorsForPetitionersOnCase({
+    ...caseDetail,
+  });
 
   const contactToSet = applicationContext
     .getUtilities()

@@ -93,7 +93,7 @@ describe('createTrialSessionInteractor', () => {
         trialSession: {
           ...MOCK_TRIAL,
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-          sessionType: 'Something Else',
+          sessionType: SESSION_TYPES.hybrid,
         } as RawTrialSession,
       },
       mockDocketClerkUser,

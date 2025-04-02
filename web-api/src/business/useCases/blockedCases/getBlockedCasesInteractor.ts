@@ -1,10 +1,11 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { BlockedCasesResponse, getBlockedCases } from '@web-api/persistence/elasticsearch/getBlockedCases';
+import { getBlockedCasesForTrialLocation } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 
 /**
  * getBlockedCasesInteractor
@@ -15,16 +16,23 @@ import { BlockedCasesResponse, getBlockedCases } from '@web-api/persistence/elas
  * @returns {object} the case data
  */
 export const getBlockedCasesInteractor = async (
-  { trialLocation }: { trialLocation: string },
+  {
+    trialLocation,
+    blockedCaseFilter,
+  }: {
+    trialLocation: string;
+    blockedCaseFilter?: typeof DEFAULT_FILTERED_BLOCKED_CASE_STATUSES;
+  },
   authorizedUser: UnknownAuthUser,
-): Promise<BlockedCasesResponse> => {
+) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.BLOCK_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const foundCases = await getBlockedCases({
+  const foundCases = await getBlockedCasesForTrialLocation(
     trialLocation,
-  });
+    blockedCaseFilter,
+  );
 
   return foundCases;
 };

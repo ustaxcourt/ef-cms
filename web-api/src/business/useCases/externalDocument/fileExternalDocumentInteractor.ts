@@ -5,26 +5,20 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
-/**
- * fileExternalDocumentInteractor
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.documentMetadata the metadata for all the documents
- * @returns {object} the updated case after the documents have been added
- */
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: any },
@@ -41,13 +35,10 @@ export const fileExternalDocument = async (
   const { docketNumber } = documentMetadata;
   const workItems: WorkItem[] = [];
 
-  const currentCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-      includeCorrespondenceAndWorkItems: false,
-    });
+  const currentCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
@@ -127,17 +118,22 @@ export const fileExternalDocument = async (
   const consolidatedCaseEntities: Promise<RawCase>[] =
     documentMetadataForConsolidatedCases.map(
       async individualDocumentMetadata => {
-        const caseToUpdate = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: individualDocumentMetadata.docketNumber,
-            includeCorrespondenceAndWorkItems: false,
-          });
+        const caseToUpdate = await getCaseByDocketNumber({
+          applicationContext,
+          docketNumber: individualDocumentMetadata.docketNumber,
+        });
+
+        if (!caseToUpdate) {
+          throw new NotFoundError(
+            `Case ${individualDocumentMetadata.docketNumber} not found`,
+          );
+        }
 
         let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
         const servedParties = aggregatePartiesForService(caseEntity);
+        const highPriorityWorkItem =
+          caseEntity.status === CASE_STATUS_TYPES.calendared;
 
         for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
           if (docketEntryId && metadata) {
@@ -159,9 +155,6 @@ export const fileExternalDocument = async (
             docketEntryEntity.setFiledBy(user);
 
             docketEntryEntity.validate();
-
-            const highPriorityWorkItem =
-              caseEntity.status === CASE_STATUS_TYPES.calendared;
 
             const workItem = new WorkItem({
               assigneeId: null,
@@ -210,7 +203,6 @@ export const fileExternalDocument = async (
         caseEntity = await applicationContext
           .getUseCaseHelpers()
           .updateCaseAutomaticBlock({
-            applicationContext,
             caseEntity,
           });
 

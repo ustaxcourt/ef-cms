@@ -1,13 +1,15 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import {
   mockDocketClerkUser,
@@ -19,6 +21,7 @@ import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/pos
 describe('setWorkItemAsReadInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const mockWorkItem = {
     assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
     assigneeName: 'bob',
@@ -35,14 +38,12 @@ describe('setWorkItemAsReadInteractor', () => {
   beforeEach(() => {
     getWorkItemById.mockReturnValue(new WorkItem(mockWorkItem));
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue({
-        ...MOCK_CASE,
-        docketEntries: [
-          { ...MOCK_CASE.docketEntries[0], workItem: mockWorkItem },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: [
+        { ...MOCK_CASE.docketEntries[0], workItem: mockWorkItem },
+      ],
+    });
   });
 
   it('should throw an error when an unauthorized user tries to invoke this interactor', async () => {

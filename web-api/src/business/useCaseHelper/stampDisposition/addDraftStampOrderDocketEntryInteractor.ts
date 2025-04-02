@@ -1,18 +1,19 @@
 import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { Message } from '../../../../../shared/src/business/entities/Message';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { Message } from '@shared/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { Stamp } from '../../../../../shared/src/business/entities/Stamp';
+import { Stamp } from '@shared/business/entities/Stamp';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
@@ -55,12 +56,10 @@ export const addDraftStampOrderDocketEntry = async (
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
   const caseEntity = new Case(caseRecord, { authorizedUser });
   const originalDocketEntryEntity = caseEntity.docketEntries.find(
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,

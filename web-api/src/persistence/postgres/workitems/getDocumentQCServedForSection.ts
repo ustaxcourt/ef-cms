@@ -15,8 +15,14 @@ export const getDocumentQCServedForSection = async ({
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .where('w.section', 'in', sections)
       .where('w.completedAt', '>=', afterDate)
-      .selectAll()
-      .select('w.docketNumber')
+      .selectAll('w')
+      .select([
+        'c.caption',
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.leadDocketNumber',
+      ])
       .execute();
   });
 

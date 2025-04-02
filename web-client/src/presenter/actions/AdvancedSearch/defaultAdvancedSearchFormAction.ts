@@ -1,4 +1,4 @@
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
+import { ALL_SELECTION } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const defaultAdvancedSearchFormAction = ({
@@ -19,6 +19,7 @@ export const defaultAdvancedSearchFormAction = ({
   store.set(state.advancedSearchForm.practitionerSearchByName, {
     lastKeysOfPages: [],
     total: 0,
+    practitionerType: ALL_SELECTION,
   });
 
   store.set(state.advancedSearchForm.searchMode, 'byName');

@@ -1,38 +1,40 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { formatConsolidatedCaseCoversheetData } from './formatConsolidatedCaseCoversheetData';
+import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 
 describe('formatConsolidatedCaseCoversheetData', () => {
   const mockDocketEntry = MOCK_CASE.docketEntries[0];
+  const getCasesByLeadDocketNumber =
+    getCasesByLeadDocketNumberMock as jest.Mock;
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber.mockResolvedValue([
-        {
-          docketEntries: [],
-          docketNumber: '102-19',
-        },
-        {
-          docketEntries: [
-            {
-              docketEntryId: mockDocketEntry.docketEntryId,
-              index: 3,
-            },
-          ],
-          docketNumber: '101-30',
-        },
+    getCasesByLeadDocketNumber.mockResolvedValue([
+      {
+        docketEntries: [],
+        docketNumber: '102-19',
+      },
+      {
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntry.docketEntryId,
+            index: 3,
+          },
+        ],
+        docketNumber: '101-30',
+      },
 
-        {
-          docketEntries: [
-            {
-              docketEntryId: mockDocketEntry.docketEntryId,
-              index: 4,
-            },
-          ],
-          docketNumber: '101-19',
-        },
-      ]);
+      {
+        docketEntries: [
+          {
+            docketEntryId: mockDocketEntry.docketEntryId,
+            index: 4,
+          },
+        ],
+        docketNumber: '101-19',
+      },
+    ]);
   });
 
   it('should add docket numbers of all cases in the consolidated group to the coversheet data', async () => {
@@ -41,6 +43,7 @@ describe('formatConsolidatedCaseCoversheetData', () => {
       caseEntity: MOCK_CASE,
       coverSheetData: {},
       docketEntryEntity: mockDocketEntry,
+      useInitialData: false,
     });
 
     expect(result.consolidatedCases.length).toEqual(2);
@@ -58,6 +61,7 @@ describe('formatConsolidatedCaseCoversheetData', () => {
         ...mockDocketEntry,
         docketEntryId: docketEntryIdOnLeadCaseNotMultiDocketed,
       },
+      useInitialData: false,
     });
 
     expect(result.consolidatedCases).toBeUndefined();
@@ -69,6 +73,7 @@ describe('formatConsolidatedCaseCoversheetData', () => {
       caseEntity: MOCK_CASE,
       coverSheetData: {},
       docketEntryEntity: mockDocketEntry,
+      useInitialData: false,
     });
 
     expect(result.consolidatedCases[0]).toMatchObject({
@@ -85,6 +90,7 @@ describe('formatConsolidatedCaseCoversheetData', () => {
       caseEntity: MOCK_CASE,
       coverSheetData: {},
       docketEntryEntity: mockDocketEntry,
+      useInitialData: false,
     });
 
     expect(result.consolidatedCases[0]).toMatchObject({

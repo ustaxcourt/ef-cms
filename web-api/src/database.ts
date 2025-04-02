@@ -4,11 +4,19 @@ import {
   Kysely,
   PostgresDialect,
 } from 'kysely';
-import { Database } from './database-types';
+import { Database, DatabaseTableName } from './database-types';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
+import { opensearchGateway } from '@web-api/gateways/opensearch/opensearchGateway';
+import {
+  OpensearchSyncMessage,
+  TABLES_TO_OPENSEARCH_MAPPING,
+  SyncMessageType,
+} from '@web-api/gateways/opensearch/opensearchSyncRouter';
+import { formatNow } from '@shared/business/utilities/DateHandler';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const POOL = {
   ...environment.rds.pool,
@@ -56,7 +64,7 @@ function clearToken(region: string) {
 }
 
 async function getToken(region: string, host: string) {
-  if (environment.nodeEnv !== 'production') {
+  if (environment.rds.pool.host === 'localhost') {
     return environment.rds.pool.password;
   }
   const token = tokens[region];
@@ -102,7 +110,6 @@ async function getConnection<T>({
     });
 
     return await cb(dbInstances[dbKey]!);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     clearToken(region);
     const token = await getToken(region, host);
@@ -140,11 +147,45 @@ export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   });
 }
 
-export function getDbWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
+function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   return getConnection({
     cb,
     dbKey: 'writer',
     host: environment.rds.pool.host,
     region: 'us-east-1',
   });
+}
+
+// Prefer pgInsertInto, pgUpdateTable, pgDeleteFrom, etc.
+export async function getDbWriter<T>({
+  cb,
+  table,
+}: {
+  cb: (db: Kysely<Database>) => Promise<T>;
+  table: DatabaseTableName | null;
+}): Promise<T> {
+  if (!table || !Object.keys(TABLES_TO_OPENSEARCH_MAPPING).includes(table)) {
+    return await executeWriter(cb);
+  }
+
+  const result: T = await executeWriter(cb);
+
+  if (result) {
+    try {
+      const message: OpensearchSyncMessage = {
+        timestamp: formatNow(),
+        payload: result,
+        type: table as SyncMessageType,
+      };
+
+      await opensearchGateway().queueSync({ message });
+    } catch (err) {
+      getLogger().error(
+        'Error queuing message for opensearch from postgres',
+        err,
+      );
+    }
+  }
+
+  return result;
 }

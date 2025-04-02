@@ -1,16 +1,17 @@
-import { Case } from '../entities/cases/Case';
-import { DocketEntry } from '../entities/DocketEntry';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
-} from '../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -44,9 +45,10 @@ export const updateCaseDetails = async (
     statistics: caseDetails.statistics,
   };
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const isPaid = editableFields.petitionPaymentStatus === PAYMENT_STATUS.PAID;
   const isWaived =
@@ -105,27 +107,6 @@ export const updateCaseDetails = async (
       filingFeeWaivedEntry.setFiledBy(authorizedUser);
 
       newCaseEntity.addDocketEntry(filingFeeWaivedEntry);
-    }
-  }
-
-  if (newCaseEntity.getShouldHaveTrialSortMappingRecords()) {
-    const oldCaseEntity = new Case(oldCase, { authorizedUser });
-    const oldTrialSortTag = oldCaseEntity.getShouldHaveTrialSortMappingRecords()
-      ? oldCaseEntity.generateTrialSortTags()
-      : { nonHybrid: undefined };
-    const newTrialSortTag = newCaseEntity.generateTrialSortTags();
-
-    // The nonHybrid sort tag will be comprised of the trial city, procedure type, and case type
-    // so we can simply check if this tag changes to determine if new records should be created
-    // rather than looking at the changed fields directly
-    if (oldTrialSortTag.nonHybrid !== newTrialSortTag.nonHybrid) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: newCaseEntity.generateTrialSortTags(),
-          docketNumber: newCaseEntity.validate().toRawObject().docketNumber,
-        });
     }
   }
 
