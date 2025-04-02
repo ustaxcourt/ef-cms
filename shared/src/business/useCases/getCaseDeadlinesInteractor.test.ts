@@ -178,6 +178,7 @@ describe('getCaseDeadlinesInteractor', () => {
 
   it('passes null for judgeId to getCaseDeadlinesByDateRange persistence call when chief judge is requested', async () => {
     await getCaseDeadlinesInteractor(
+      applicationContext,
       {
         endDate: END_DATE,
         from: 0,
