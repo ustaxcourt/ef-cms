@@ -277,7 +277,11 @@ const setTrialSessionCalendarForEligibleCase = async (
     applicationContext: ServerApplicationContext;
     caseRecord: Omit<
       RawCase,
-      'correspondence' | 'consolidatedCases' | 'petitioners'
+      | 'correspondence'
+      | 'consolidatedCases'
+      | 'docketEntries'
+      | 'hearings'
+      | 'petitioners'
     >;
     trialSessionEntity: TrialSession;
   },
