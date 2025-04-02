@@ -52,9 +52,6 @@ const caseTableDefinition = {
   blocked: DEFAULT as boolean | undefined,
   blockedDate: DEFAULT as Date | null,
   blockedReason: DEFAULT as string | undefined,
-  canAllowDocumentService: DEFAULT as boolean | undefined,
-  canAllowPrintableDocketRecord: DEFAULT as boolean | undefined,
-  canDojPractitionersRepresentParty: DEFAULT as boolean | undefined,
   caption: DEFAULT as string,
   caseNote: DEFAULT as string | undefined,
   caseType: DEFAULT as string,
@@ -63,19 +60,9 @@ const caseTableDefinition = {
   damages: DEFAULT as number | undefined,
   docketNumber: DEFAULT as string,
   docketNumberSuffix: DEFAULT as string | undefined,
-  docketEntries: DEFAULT as
-    | ColumnType<
-        { docketEntryId: string; docketNumber: string }[],
-        string,
-        string
-      >
-    | undefined,
   filingType: DEFAULT as string | undefined,
   hasPendingItems: DEFAULT as boolean | undefined,
   hasVerifiedIrsNotice: DEFAULT as boolean | undefined,
-  hearings: DEFAULT as
-    | ColumnType<{ trialSessionId: string }[], string, string>
-    | undefined,
   highPriority: DEFAULT as boolean | undefined,
   highPriorityReason: DEFAULT as string | undefined,
   initialCaption: DEFAULT as string | undefined,

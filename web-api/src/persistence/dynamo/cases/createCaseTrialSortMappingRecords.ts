@@ -51,7 +51,11 @@ export const createCaseTrialSortMappingRecords = async ({
   const isConsolidatedCase = isInConsolidatedGroup(theCase);
   let casesToUpdate: Omit<
     RawCase,
-    'consolidatedCases' | 'correspondence' | 'docketEntries' | 'petitioners'
+    | 'consolidatedCases'
+    | 'correspondence'
+    | 'docketEntries'
+    | 'hearings'
+    | 'petitioners'
   >[];
   if (isConsolidatedCase) {
     casesToUpdate = await getCasesInConsolidatedGroup({

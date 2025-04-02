@@ -10,7 +10,10 @@ export const getCaseMetadataWithCounsel = async ({
   applicationContext: ServerApplicationContext;
   docketNumber: string;
 }): Promise<
-  | Omit<RawCase, 'consolidatedCases' | 'correspondence' | 'docketEntries'>
+  | Omit<
+      RawCase,
+      'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
+    >
   | undefined
 > => {
   const [caseMetaData, privatePractitioners, irsPractitioners] =
