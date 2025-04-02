@@ -1,3 +1,4 @@
+import { DOCKET_RECORD_FILTER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -20,5 +21,8 @@ export const setDefaultDocketRecordSortAndFilterAction = ({
     store.set(state.sessionMetadata.docketRecordSort[docketNumber], 'byDate');
   }
 
-  store.set(state.sessionMetadata.docketRecordFilter, '');
+  store.set(
+    state.sessionMetadata.docketRecordFilter,
+    DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+  );
 };
