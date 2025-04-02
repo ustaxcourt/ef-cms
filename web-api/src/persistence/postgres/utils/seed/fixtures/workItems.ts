@@ -1,7 +1,5 @@
 /* eslint-disable custom-rules-plugin/no-new-dates */
 /* eslint-disable max-lines */
-// createdAt: new Date('2020-06-05T18:02:25.280Z').toISOString(),
-
 import { NewWorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
 
 export const workItems: NewWorkItemKysely[] = [
@@ -38,7 +36,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:41:09.339Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -75,7 +72,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:06:24.935Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1328,7 +1324,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1367,7 +1362,6 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '96f56053-9e39-4bd3-96d8-5bf3b1846810',
   },
   {
-    caseIsInProgress: false,
     createdAt: new Date('2020-01-21T16:41:39.482Z'),
     docketEntry:
       '{"documentType":"Petition","practitioner":[],"filingDate":"2020-01-21T16:41:39.481Z","partyPrimary":true,"pending":false,"receivedAt":"2020-01-21T16:41:39.481Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-01-21T16:41:39.481Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Eve Brewer","docketEntryId":"d854a954-7332-4e92-93bd-dc28c9fea0a5","partySecondary":false,"documentId":"d854a954-7332-4e92-93bd-dc28c9fea0a5"}',
@@ -1392,7 +1386,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1433,7 +1426,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Colvin',
-    caseIsInProgress: false,
     createdAt: new Date('2019-08-08T14:33:24.183Z'),
     docketEntry:
       '{"createdAt":"2019-03-01T22:54:05.993Z","numberOfPages":1,"filingDate":"2019-03-01T22:54:05.993Z","documentType":"Answer","docketEntryId":"f1aa4aa2-c214-424c-8870-d0049c5744d7","documentId":"f1aa4aa2-c214-424c-8870-d0049c5744d7","documentTitle":"Answer by Test Respondent"}',
@@ -1446,7 +1438,6 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '8686ddef-c74d-4d26-8748-6b22914c7687',
   },
   {
-    caseIsInProgress: false,
     createdAt: new Date('2020-01-23T21:44:54.043Z'),
     docketEntry:
       '{"documentType":"Petition","practitioner":[],"filingDate":"2020-01-23T21:44:54.043Z","partyPrimary":true,"pending":false,"receivedAt":"2020-01-23T21:44:54.043Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-01-23T21:44:54.043Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Reuben Blair","docketEntryId":"ac62f25a-49f9-46a5-aed7-d6b955a2dc34","partySecondary":false,"documentId":"ac62f25a-49f9-46a5-aed7-d6b955a2dc34"}',
@@ -1458,7 +1449,6 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '1c7acdf5-480d-404a-9e3a-5d5ccc8068c2',
   },
   {
-    caseIsInProgress: false,
     createdAt: new Date('2020-01-23T21:45:34.520Z'),
     docketEntry:
       '{"hasSupportingDocuments":false,"attachments":false,"documentType":"Administrative Record","practitioner":[],"filingDate":"2020-01-23T21:45:34.520Z","partyPrimary":true,"pending":false,"exhibits":false,"receivedAt":"2020-01-23T21:45:34.520Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ADMR","createdAt":"2020-01-23T21:45:34.520Z","processingStatus":"pending","numberOfPages":1,"scenario":"Standard","filedBy":"Petr. Reuben Blair","docketEntryId":"2cca1543-21b2-4783-a1de-eeaaf269d32c","certificateOfService":false,"certificateOfServiceDate":null,"documentId":"2cca1543-21b2-4783-a1de-eeaaf269d32c","category":"Miscellaneous","documentTitle":"Administrative Record","relationship":"primaryDocument","docketNumber":"103-20"}',
@@ -1483,7 +1473,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1578,7 +1567,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2023-01-06T22:33:15.488Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -1609,7 +1597,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2102,7 +2089,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-07-26T17:04:07.414Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2131,7 +2117,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2161,7 +2146,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Docketclerk',
-    caseIsInProgress: false,
     completedAt: new Date('2019-07-12T17:11:27.244Z'),
     completedBy: 'Test Docketclerk',
     completedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2180,7 +2164,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: 'dabbad00-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Colvin',
-    caseIsInProgress: false,
     createdAt: new Date('2019-08-08T14:23:51.565Z'),
     docketEntry:
       '{"createdAt":"2019-07-12T17:11:26.955Z","documentId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","documentTitle":"Proposed Stipulated Decision","numberOfPages":1,"documentType":"Proposed Stipulated Decision","docketEntryId":"7a923abd-fc41-407a-b76b-7f724fa5d47f"}',
@@ -2195,7 +2178,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test ADC',
-    caseIsInProgress: false,
     createdAt: new Date('2019-07-12T17:11:47.010Z'),
     docketEntry:
       '{"createdAt":"2019-07-12T17:11:26.955Z","documentId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","numberOfPages":1,"documentType":"Proposed Stipulated Decision","docketEntryId":"7a923abd-fc41-407a-b76b-7f724fa5d47f"}',
@@ -2208,7 +2190,6 @@ export const workItems: NewWorkItemKysely[] = [
     workItemId: '5059e127-1796-45aa-96bc-351cd5705c66',
   },
   {
-    caseIsInProgress: false,
     createdAt: new Date('2019-07-12T17:09:41.027Z'),
     docketEntry:
       '{"createdAt":"2019-07-12T17:09:41.026Z","processingStatus":"pending","numberOfPages":1,"documentType":"Petition","filingDate":"2019-07-12T17:09:41.026Z","filedBy":"Denise Gould","docketEntryId":"5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c","documentId":"5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c","receivedAt":"2019-07-12T17:09:41.026Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
@@ -2222,7 +2203,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2023-01-06T22:34:40.081Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2285,7 +2265,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2022-09-28T16:48:30.590Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2302,7 +2281,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2022-09-28T16:48:49.683Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2319,7 +2297,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2022-09-28T19:47:03.663Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2356,7 +2333,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     createdAt: new Date('2020-08-10T17:16:49.187Z'),
     docketEntry:
       '{"isPaper":true,"documentType":"Petition","filingDate":"2020-08-10T04:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"05-Apr-1990","isFileAttached":true,"receivedAt":"2020-08-10T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-08-10T04:00:00.000Z","entityName":"Document","filedBy":"Petr. Idola Flowers","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentId":"1a92894e-83a5-48ba-9994-3ada44235deb"}',
@@ -2393,7 +2369,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2020-09-30T20:24:15.441Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2456,7 +2431,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2020-11-30T22:58:08.206Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2690,7 +2664,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-25T18:56:39.991Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -2931,7 +2904,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2021-11-08T15:19:17.250Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4787,7 +4759,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2020-09-30T20:24:15.441Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4806,7 +4777,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2020-11-30T22:58:08.206Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4825,7 +4795,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-25T18:56:39.991Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4862,7 +4831,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:06:24.935Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4899,7 +4867,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:41:09.339Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4918,7 +4885,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2021-11-08T15:19:17.250Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4936,7 +4902,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4955,7 +4920,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4974,7 +4938,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -4993,7 +4956,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5012,7 +4974,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5031,7 +4992,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-25T18:56:39.991Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5068,7 +5028,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:06:24.935Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5105,7 +5064,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:41:09.339Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5124,7 +5082,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2021-11-08T15:19:17.250Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5142,7 +5099,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5161,7 +5117,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5180,7 +5135,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5199,7 +5153,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -5218,7 +5171,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6356,7 +6308,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2020-11-30T22:58:08.206Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6375,7 +6326,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2021-11-08T15:19:17.250Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6393,7 +6343,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6412,7 +6361,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6431,7 +6379,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6450,7 +6397,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6469,7 +6415,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6488,7 +6433,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:36.503Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6507,7 +6451,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:52:59.441Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6526,7 +6469,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:18.595Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6545,7 +6487,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2023-04-03T15:53:43.171Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6564,7 +6505,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk',
-    caseIsInProgress: true,
     completedAt: new Date('2024-06-04T22:35:02.502Z'),
     completedBy: 'Test Petitionsclerk',
     completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6583,7 +6523,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2020-09-30T20:24:15.441Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6602,7 +6541,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-25T18:56:39.991Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6639,7 +6577,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:06:24.935Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -6676,7 +6613,6 @@ export const workItems: NewWorkItemKysely[] = [
   {
     assigneeId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     assigneeName: 'Test Petitionsclerk1',
-    caseIsInProgress: true,
     completedAt: new Date('2021-10-29T13:41:09.339Z'),
     completedBy: 'Test Petitionsclerk1',
     completedByUserId: '4805d1ab-18d0-43ec-bafb-654e83405416',
