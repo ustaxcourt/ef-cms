@@ -130,9 +130,11 @@ export const PractitionerSearchByName = connect(
                         data-testid={`practice-type-${practiceType}`}
                       >
                         <input
-                          checked={advancedSearchForm.practitionerSearchByName.practiceType?.includes(
-                            practiceType,
-                          )}
+                          checked={
+                            !!advancedSearchForm.practitionerSearchByName.practiceType?.includes(
+                              practiceType,
+                            )
+                          }
                           className="usa-checkbox__input"
                           id={`practiceType.${practiceType}`}
                           name={`practiceType`}
