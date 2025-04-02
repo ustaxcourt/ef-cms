@@ -22,10 +22,10 @@ export const submitMotionOrderResponseSequence = [
       success: [
         prepareMotionOrderResponseAction,
         submitCourtIssuedOrder,
-        // {
-        //   error: [setAlertErrorAction],
-        //   success: [navigateToPathAction],
-        // },
+        {
+          error: [setAlertErrorAction],
+          success: [navigateToPathAction],
+        },
       ],
     },
   ]),
