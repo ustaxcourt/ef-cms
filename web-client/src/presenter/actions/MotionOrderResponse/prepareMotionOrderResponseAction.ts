@@ -15,12 +15,13 @@ const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   return { movant, nonMovant };
 };
 
+// TODO 10586: Handle consolidated cases
+
 export const prepareMotionOrderResponseAction = ({
   applicationContext,
   get,
   store,
 }: ActionProps) => {
-  // TODO 10586: Implement prepareMotionOrderResponseAction action
   const {
     additionalOrderText,
     dueDate,
@@ -31,7 +32,8 @@ export const prepareMotionOrderResponseAction = ({
   const caseDetail = get(state.caseDetail);
   const { docketEntries } = caseDetail;
 
-  // TODO 10586: Add logic handle multiple motions as well as no motions (<--- is the latter even possible in this action?)
+  console.log('Case Detail: ', caseDetail);
+
   const motion = docketEntries.find(entry =>
     entry.documentType?.includes('Motion'),
   );
@@ -41,7 +43,6 @@ export const prepareMotionOrderResponseAction = ({
   });
   const { documentTitle, index } = motion;
 
-  // TODO 10586: Remove use applicationContext for motionFilingDateFormatted
   const motionFilingDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(motion.filingDate, FORMATS.MMDDYY);

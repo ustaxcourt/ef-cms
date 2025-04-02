@@ -170,22 +170,6 @@ export const DocumentViewerDocument = connect(
                   Complete QC
                 </Button>
               )}
-
-              {documentViewerHelper.showApplyStampButton && (
-                <Button
-                  link
-                  data-testid="apply-stamp"
-                  icon="stamp"
-                  onClick={() => {
-                    navigateToPathAndSetRedirectUrlSequence({
-                      path: documentViewerLinksHelper.applyStampFromCaseDetailsLink,
-                      redirectUrl: documentViewerLinksHelper.redirectUrl,
-                    });
-                  }}
-                >
-                  Apply Stamp
-                </Button>
-              )}
               {documentViewerHelper.showOrderResponseButton && (
                 <Button
                   link
@@ -199,6 +183,21 @@ export const DocumentViewerDocument = connect(
                   }}
                 >
                   Order Response
+                </Button>
+              )}
+              {documentViewerHelper.showApplyStampButton && (
+                <Button
+                  link
+                  data-testid="apply-stamp"
+                  icon="stamp"
+                  onClick={() => {
+                    navigateToPathAndSetRedirectUrlSequence({
+                      path: documentViewerLinksHelper.applyStampFromCaseDetailsLink,
+                      redirectUrl: documentViewerLinksHelper.redirectUrl,
+                    });
+                  }}
+                >
+                  Apply Stamp
                 </Button>
               )}
               {documentViewerHelper.showStatusReportOrderButton && (

@@ -179,20 +179,6 @@ export const MessageDocument = connect(
             Sign Stipulated Decision
           </Button>
         )}
-        {messageDocumentHelper.showApplyStampButton && (
-          <Button
-            link
-            data-testid="apply-stamp"
-            icon="stamp"
-            onClick={() => {
-              navigateToPathSequence({
-                path: messageDocumentHelper.applyStampFromMessagesLink,
-              });
-            }}
-          >
-            Apply Stamp
-          </Button>
-        )}
         {messageDocumentHelper.showOrderResponseButton && (
           <Button
             link
@@ -206,6 +192,20 @@ export const MessageDocument = connect(
             }}
           >
             Order Response
+          </Button>
+        )}
+        {messageDocumentHelper.showApplyStampButton && (
+          <Button
+            link
+            data-testid="apply-stamp"
+            icon="stamp"
+            onClick={() => {
+              navigateToPathSequence({
+                path: messageDocumentHelper.applyStampFromMessagesLink,
+              });
+            }}
+          >
+            Apply Stamp
           </Button>
         )}
         {messageDocumentHelper.showStatusReportOrderButton && (
