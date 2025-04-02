@@ -90,6 +90,11 @@ jest.mock(
   () => mockFactory('getPetitionersOnCase'),
 );
 
+jest.mock(
+  '@web-api/persistence/postgres/cases/parties/clearPetitionersOnCase',
+  () => mockFactory('clearPetitionersOnCase'),
+);
+
 // Reports
 
 jest.mock('@web-api/persistence/postgres/cases/reports/fetchPendingItems', () =>
@@ -145,4 +150,9 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/cases/statistics/updateCaseStatistic',
   () => mockFactory('updateCaseStatistic'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/statistics/clearCaseStatistics',
+  () => mockFactory('clearCaseStatistics'),
 );
