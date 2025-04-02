@@ -19,12 +19,12 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     automaticBlockedDate: rawCase.automaticBlockedDate
       ? calculateDate({ dateString: rawCase.automaticBlockedDate })
       : null,
-    automaticBlockedReason: rawCase.automaticBlockedReason,
+    automaticBlockedReason: rawCase.automaticBlockedReason || null,
     blocked: rawCase.blocked,
     blockedDate: rawCase.blockedDate
       ? calculateDate({ dateString: rawCase.blockedDate })
       : null,
-    blockedReason: rawCase.blockedReason,
+    blockedReason: rawCase.blockedReason || null,
     caption: rawCase.caseCaption,
     caseNote: rawCase.caseNote,
     caseType: rawCase.caseType,
@@ -49,7 +49,6 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       : null,
     isPaper: rawCase.isPaper,
     isSealed: rawCase.isSealed,
-    judgeUserId: rawCase.judgeUserId,
     leadDocketNumber: rawCase.leadDocketNumber || null,
     litigationCosts: rawCase.litigationCosts,
     mailingDate: rawCase.mailingDate,
