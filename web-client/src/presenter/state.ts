@@ -734,7 +734,7 @@ export const baseState = {
   judgeUser: {} as any,
   judges: [] as RawUser[],
   judgesChambers: [] as JudgeChambersInfo[],
-  judgesNote: {},
+  judgesNote: {} as { notes: string },
   legacyAndCurrentJudges: [] as RawUser[],
   login: {} as any,
   logoutType: '',
