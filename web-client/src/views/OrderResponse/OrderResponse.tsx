@@ -82,7 +82,7 @@ export const OrderResponse = connect(
                           This is the lead case in a consolidated group. Issue
                           this order in:
                         </label>
-                        <div className="grid-row">
+                        <div className="grid-row grid-gap">
                           <div className="usa-radio">
                             <input
                               aria-label="all cases in this group"
@@ -156,16 +156,12 @@ export const OrderResponse = connect(
                     }
                     errorText={validationErrors.disposition}
                   >
-                    <label
-                      className="usa-label"
-                      htmlFor="response-date-input-orderResponseResponseDate" // TODO 10586: update IDs
-                    >
-                      Response Date <span className="usa-hint">(Required)</span>
-                    </label>
                     <DateSelector
                       defaultValue={'MM/DD/YYYY'} // TODO 10586: fix date selector not clearing bug
                       formGroupClassNames="display-inline-block order-response-date-selector"
                       id="response-date-input-orderResponseResponseDate"
+                      label="Response Date"
+                      hintText="(Required)"
                       minDate={motionOrderResponseFormHelper.minDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
@@ -250,17 +246,13 @@ export const OrderResponse = connect(
                     className={motionOrderResponseFormHelper.dateErrorClass}
                     errorText={validationErrors.date}
                   >
-                    <label
-                      className="usa-label"
-                      htmlFor="due-date-input-motionOrderResponseDueDate"
-                    >
-                      Due date <span className="usa-hint">(Required)</span>
-                    </label>
                     <DateSelector
                       defaultValue={form.dueDate}
                       disabled={!form.motionOrderResponse}
                       formGroupClassNames="display-inline-block order-response-date-selector"
                       id="due-date-input-motionOrderResponseDueDate"
+                      label="Due date"
+                      hintText="(Required)"
                       minDate={motionOrderResponseFormHelper.minDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
@@ -313,7 +305,7 @@ export const OrderResponse = connect(
               </div>
               <Button
                 link
-                className="margin-left-205 order-response-clear-button"
+                className="order-response-clear-button"
                 data-testid="clear-all-fields"
                 onClick={e => {
                   e.preventDefault();

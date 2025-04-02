@@ -644,7 +644,7 @@ label.ustc-upload {
     margin-bottom: 0;
 
     &.order-response-form-group {
-      margin: 0 1rem;
+      margin: 1rem;
     }
 
     &.order-response-form-group-error {
@@ -656,40 +656,9 @@ label.ustc-upload {
     }
 
     &.usa-label-due-date {
-      margin-bottom: 0;
-    }
-
-    .padding-left-205 {
-      margin-left: 0.5em !important; // TODO 10586: maybe remove this
-    }
-
-    .usa-radio {
-      margin: 0.5em 0.5em 0 0.5em;
-    }
-
-    .usa-label {
-      margin: 1em 0.5em 0 0.5em;
-    }
-
-    .usa-textarea {
-      margin: 0.5em 0.5em 0 0.5em !important;
-    }
-
-    .order-response-clear-all {
-      margin: 0 0.5em 0 0;  // TODO 10586: better align this
-    }
-
-    .order-response-date-selector {
-      margin: 0 0.5em 0 0.5em;
-    }
-
-    #due-date-input-date-label {
       margin: 0;
     }
 
-    .width-150 {
-      width: 150px;
-    }
   }
 
   .narrow-hr {
