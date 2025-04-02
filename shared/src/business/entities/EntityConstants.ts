@@ -1802,4 +1802,9 @@ export const ORDER_REPLY_OPTIONS = {
   REPLY_SR: 'Order Reply/SR',
 };
 
+export const CONSOLIDATED_GROUP_ORDER_FOR = {
+  ALL_CASES: 'All cases in this group',
+  THIS_CASE_ONLY: 'Just this case',
+};
+
 export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;

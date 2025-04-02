@@ -13,7 +13,8 @@ import { PdfPreview } from '@web-client/ustc-ui/PdfPreview/PdfPreview';
 export const OrderResponse = connect(
   {
     motionOrderResponseFormHelper: state.motionOrderResponseFormHelper,
-    motionOrderResponsePdfPreviewSequence: sequences.motionOrderResponsePdfPreviewSequence,
+    motionOrderResponsePdfPreviewSequence:
+      sequences.motionOrderResponsePdfPreviewSequence,
     clearDueDateSequence: sequences.clearDueDateSequence,
     clearMotionOrderResponseFormSequence:
       sequences.clearMotionOrderResponseFormSequence,
@@ -21,6 +22,7 @@ export const OrderResponse = connect(
     form: state.form,
     formatAndUpdateDateFromDatePickerSequence:
       sequences.formatAndUpdateDateFromDatePickerSequence,
+    formattedCaseDetail: state.formattedCaseDetail,
     navigateBackSequence: sequences.navigateBackSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
@@ -40,6 +42,7 @@ export const OrderResponse = connect(
     constants,
     form,
     formatAndUpdateDateFromDatePickerSequence,
+    formattedCaseDetail,
     navigateBackSequence,
     submitMotionOrderResponseSequence,
     updateFormValueSequence,
@@ -65,6 +68,86 @@ export const OrderResponse = connect(
                   Order Response
                 </label>
                 <div className="motion-order-response-form">
+                  {formattedCaseDetail.isLeadCase && (
+                    <div>
+                      <FormGroup
+                        className={
+                          motionOrderResponseFormHelper.dispositionErrorClass
+                        }
+                      >
+                        <label
+                          className="usa-label"
+                          htmlFor="motion-order-lead-case-radio"
+                        >
+                          This is the lead case in a consolidated group. Issue
+                          this order in:
+                        </label>
+                        <div className="usa-radio">
+                          <input
+                            aria-label="all cases in this group"
+                            checked={
+                              form.consolidatedGroupOrderFor ===
+                                constants.CONSOLIDATED_GROUP_ORDER_FOR
+                                  .ALL_CASES || false
+                            }
+                            className="usa-radio__input"
+                            id="motion-order-cg-all"
+                            name="consolidatedGroupOrderFor"
+                            type="radio"
+                            value={
+                              constants.CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES
+                            }
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor={'motion-order-lead-case-radio'}
+                          >
+                            {constants.CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES}
+                          </label>
+                        </div>
+                        <div className="usa-radio">
+                          <input
+                            aria-label="Just this case"
+                            checked={
+                              form.consolidatedGroupOrderFor ===
+                                constants.CONSOLIDATED_GROUP_ORDER_FOR
+                                  .THIS_CASE_ONLY || false
+                            }
+                            className="usa-radio__input"
+                            id="motion-order-cg-just-this"
+                            name="consolidatedGroupOrderFor"
+                            type="radio"
+                            value={
+                              constants.CONSOLIDATED_GROUP_ORDER_FOR
+                                .THIS_CASE_ONLY
+                            }
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor={'motion-order-reply-sr'}
+                          >
+                            {
+                              constants.CONSOLIDATED_GROUP_ORDER_FOR
+                                .THIS_CASE_ONLY
+                            }
+                          </label>
+                        </div>
+                      </FormGroup>
+                      <hr className="border-top-2px border-base-lighter" />
+                    </div>
+                  )}
                   <FormGroup
                     className={
                       motionOrderResponseFormHelper.dispositionErrorClass
