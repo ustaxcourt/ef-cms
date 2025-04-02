@@ -1,5 +1,5 @@
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { NewCaseCorrespondenceKysely } from '@web-api/database-schema';
+import { NewCaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 
 export const correspondence: NewCaseCorrespondenceKysely[] = [
   {

@@ -2,7 +2,7 @@
 /* eslint-disable max-lines */
 // createdAt: new Date('2020-06-05T18:02:25.280Z').toISOString(),
 
-import { NewWorkItemKysely } from '@web-api/database-schema';
+import { NewWorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
 
 export const workItems: NewWorkItemKysely[] = [
   {
