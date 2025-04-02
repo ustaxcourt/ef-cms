@@ -40,11 +40,24 @@ describe('setTrialSessionCalendarInteractor', () => {
   };
   let mockLock;
 
-  beforeAll(() => {
+  beforeEach(() => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+    applicationContext
+      .getPersistenceGateway()
+      .getEligibleCasesForTrialSession.mockReturnValue([MOCK_CASE]);
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockReturnValue([
+        {
+          ...MOCK_CASE,
+          qcCompleteForTrial: {
+            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
+          },
+        },
+      ]);
   });
 
   beforeEach(() => {
