@@ -16,9 +16,9 @@ export const getCasesByEmailTotal = async ({
         .selectFrom('dwPetitionerOnCase')
         .where('email', '=', email)
         .select(({ fn }) => fn.count('docketNumber').as('count'))
-        .execute(),
+        .executeTakeFirst(),
     );
-    return Number(total[0].count);
+    return total ? Number(total.count) : 0;
   }
   return await getCasesByEmailTotalElasticsearch({ applicationContext, email });
 };

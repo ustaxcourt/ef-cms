@@ -4,7 +4,7 @@ import {
   Kysely,
   PostgresDialect,
 } from 'kysely';
-import { Database, DatabaseSchema } from './database-types';
+import { Database, DatabaseSchema } from './database-schema';
 import { Pool } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';

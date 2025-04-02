@@ -1,7 +1,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { NewWorkItemKysely } from '@web-api/database-types';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { NewWorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
 
 function pickFields(workItem) {
   return {

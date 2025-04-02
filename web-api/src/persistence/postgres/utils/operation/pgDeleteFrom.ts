@@ -1,5 +1,5 @@
 import { getDbWriter } from '@web-api/database';
-import { Database } from '@web-api/database-types';
+import { Database } from '@web-api/database-schema';
 import { DeleteQueryBuilder, DeleteResult } from 'kysely';
 import { ExtractTableAlias } from 'kysely/dist/cjs/parser/table-parser';
 
