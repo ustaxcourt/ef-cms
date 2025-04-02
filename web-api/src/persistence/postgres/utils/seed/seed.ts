@@ -131,4 +131,5 @@ seed()
   .catch(err => {
     console.log('Could not seed postgres data.');
     console.log(err);
+    throw err;
   });
