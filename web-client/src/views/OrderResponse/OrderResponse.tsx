@@ -77,7 +77,7 @@ export const OrderResponse = connect(
                       >
                         <label
                           className="usa-label"
-                          htmlFor="motion-order-lead-case-radio"
+                          htmlFor="motion-order-lead-case"
                         >
                           This is the lead case in a consolidated group. Issue
                           this order in:
@@ -91,7 +91,7 @@ export const OrderResponse = connect(
                                   .ALL_CASES || false
                             }
                             className="usa-radio__input"
-                            id="motion-order-cg-all"
+                            id="motion-order-lead-case-radio-all"
                             name="consolidatedGroupOrderFor"
                             type="radio"
                             value={
@@ -106,7 +106,7 @@ export const OrderResponse = connect(
                           />
                           <label
                             className="usa-radio__label"
-                            htmlFor={'motion-order-lead-case-radio'}
+                            htmlFor={'motion-order-lead-case-radio-all'}
                           >
                             {constants.CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES}
                           </label>
@@ -120,7 +120,7 @@ export const OrderResponse = connect(
                                   .THIS_CASE_ONLY || false
                             }
                             className="usa-radio__input"
-                            id="motion-order-cg-just-this"
+                            id="motion-order-lead-case-radio-just-this"
                             name="consolidatedGroupOrderFor"
                             type="radio"
                             value={
@@ -136,7 +136,7 @@ export const OrderResponse = connect(
                           />
                           <label
                             className="usa-radio__label"
-                            htmlFor={'motion-order-reply-sr'}
+                            htmlFor={'motion-order-lead-case-radio-just-this'}
                           >
                             {
                               constants.CONSOLIDATED_GROUP_ORDER_FOR
