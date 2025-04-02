@@ -1,5 +1,5 @@
 import { getDbWriter } from '@web-api/database';
-import { Database } from '@web-api/database-types';
+import { Database } from '@web-api/database-schema';
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
 import { AnyColumn } from 'kysely';
 import { InsertExpression } from 'kysely/dist/cjs/parser/insert-values-parser';

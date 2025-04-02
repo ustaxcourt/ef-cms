@@ -1,4 +1,4 @@
-import { NewCaseWorksheetKysely } from '@web-api/database-types';
+import { NewCaseWorksheetKysely } from '@web-api/database-schema';
 
 export const caseWorksheets: NewCaseWorksheetKysely[] = [
   {

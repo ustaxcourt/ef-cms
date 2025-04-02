@@ -2,7 +2,7 @@
 /* eslint-disable max-lines */
 // createdAt: new Date('2020-06-05T18:02:25.280Z').toISOString(),
 
-import { NewWorkItemKysely } from '@web-api/database-types';
+import { NewWorkItemKysely } from '@web-api/database-schema';
 
 export const workItems: NewWorkItemKysely[] = [
   {

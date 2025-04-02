@@ -1,5 +1,5 @@
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { NewCaseDeadlineKysely } from '@web-api/database-types';
+import { NewCaseDeadlineKysely } from '@web-api/database-schema';
 
 export const caseDeadlines: NewCaseDeadlineKysely[] = [
   {
