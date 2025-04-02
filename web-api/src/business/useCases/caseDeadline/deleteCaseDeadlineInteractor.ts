@@ -48,7 +48,6 @@ export const deleteCaseDeadline = async (
   });
 
   updatedCase = await updateCaseAutomaticBlock({
-    applicationContext,
     caseEntity: updatedCase,
     hasCaseDeadline: deadlinesBeforeDelete.length > 1,
   });

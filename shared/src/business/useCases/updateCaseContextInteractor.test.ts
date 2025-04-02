@@ -129,7 +129,7 @@ describe('updateCaseContextInteractor', () => {
     expect(result.trialSessionId).toBeUndefined();
   });
 
-  it('should call updateCase and deleteCaseTrialSortMappingRecords if the old case status was Ready for Trial and the new status is different', async () => {
+  it('should call updateCase if the old case status was Ready for Trial and the new status is different', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -145,10 +145,6 @@ describe('updateCaseContextInteractor', () => {
     );
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocket);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
   });
 
   it('should remove case deadlines if case is status is closed', async () => {
@@ -191,7 +187,7 @@ describe('updateCaseContextInteractor', () => {
     expect(result.automaticBlockedDate).toBeUndefined();
   });
 
-  it('should call updateCase and createCaseTrialSortMappingRecords if the case status is being updated to Ready for Trial and is not assigned to a trial session', async () => {
+  it('should call updateCase if the case status is being updated to Ready for Trial and is not assigned to a trial session', async () => {
     const result = await updateCaseContextInteractor(
       applicationContext,
       {
@@ -201,14 +197,14 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
     expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
+
+    expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
   });
 
-  it('should call updateCase but not createCaseTrialSortMappingRecords if the case status is being updated to Ready for Trial and is already assigned to a trial session', async () => {
+  it('should call updateCase if the case status is being updated to Ready for Trial and is already assigned to a trial session', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       trialDate: '2019-03-01T21:40:46.415Z',
@@ -231,10 +227,6 @@ describe('updateCaseContextInteractor', () => {
     );
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
@@ -295,26 +287,5 @@ describe('updateCaseContextInteractor', () => {
     );
 
     expect(result.caseCaption).toEqual('The new case caption');
-  });
-
-  it('should not call createCaseTrialSortMappingRecords if the case is missing a trial city', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...MOCK_CASE,
-      preferredTrialCity: null,
-    });
-
-    await updateCaseContextInteractor(
-      applicationContext,
-      {
-        caseCaption: 'The new case caption',
-        docketNumber: MOCK_CASE.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
   });
 });

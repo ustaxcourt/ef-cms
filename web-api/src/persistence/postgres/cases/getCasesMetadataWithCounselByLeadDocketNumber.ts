@@ -9,16 +9,16 @@ export const getCasesMetadataWithCounselByLeadDocketNumber = async ({
   applicationContext: ServerApplicationContext;
   leadDocketNumber: string;
 }): Promise<RawCase[]> => {
-  const dbCases = await getDbReader(reader =>
+  const dbCaseData = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
       .where('leadDocketNumber', '=', leadDocketNumber)
-      .selectAll()
+      .select('docketNumber')
       .execute(),
   );
 
   const cases = await Promise.all(
-    dbCases.map(({ docketNumber }) =>
+    dbCaseData.map(({ docketNumber }) =>
       getCaseMetadataWithCounsel({
         applicationContext,
         docketNumber,

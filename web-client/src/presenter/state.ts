@@ -164,9 +164,8 @@ import { userContactEditHelper } from './computeds/userContactEditHelper';
 import { userContactEditProgressHelper } from './computeds/userContactEditProgressHelper';
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
-import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
-
+import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
 export const computeds = {
@@ -645,7 +644,7 @@ export const baseState = {
       leadDocketNumber: string;
     })[];
     caseDeadlinesTotalCount: 0;
-    judgeFilter: string;
+    judgeIdFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,

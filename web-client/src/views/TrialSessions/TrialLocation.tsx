@@ -67,7 +67,7 @@ export const TrialLocation = connect(
             Export
           </Button>
           <Tabs
-            defaultActiveTab={'eligibleCases'}
+            defaultActiveTab="eligibleCases"
             headingLevel="2"
             id="trial-location-tabs"
             value={currentTab}
