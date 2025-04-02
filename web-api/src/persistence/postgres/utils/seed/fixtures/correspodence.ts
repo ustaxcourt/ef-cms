@@ -1,5 +1,5 @@
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { NewCaseCorrespondenceKysely } from '@web-api/database-types';
+import { NewCaseCorrespondenceKysely } from '@web-api/database-schema';
 
 export const correspondence: NewCaseCorrespondenceKysely[] = [
   {

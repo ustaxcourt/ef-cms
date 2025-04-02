@@ -1,4 +1,4 @@
-import { NewMessageKysely } from '@web-api/database-types';
+import { NewMessageKysely } from '@web-api/database-schema';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 
 export const messages: NewMessageKysely[] = [
