@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
@@ -174,7 +175,7 @@ export const DocumentViewerDocument = connect(
                 <Button
                   link
                   data-testid="order-response-button"
-                  icon="stamp"
+                  icon="edit"
                   onClick={() => {
                     navigateToPathAndSetRedirectUrlSequence({
                       path: documentViewerLinksHelper.orderResponseFromCaseDetailsLink,

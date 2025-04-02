@@ -1,3 +1,4 @@
+import { CONSOLIDATED_GROUP_ORDER_FOR } from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
@@ -28,6 +29,7 @@ export const prepareMotionOrderResponseAction = ({
     motionOrderResponse,
     responseDate,
     strickenFromTrialSessions,
+    consolidatedGroupOrderFor,
   } = get(state.form);
   const caseDetail = get(state.caseDetail);
   const { docketEntries } = caseDetail;
@@ -57,6 +59,16 @@ export const prepareMotionOrderResponseAction = ({
     .getUtilities()
     .formatDateString(responseDate, FORMATS.MMDDYY);
 
+  let docketNumbersToDisplay = [caseDetail.docketNumber];
+
+  if (
+    isLeadCase &&
+    consolidatedGroupOrderFor === CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES
+  ) {
+    const docketNumbers = caseDetail.consolidatedCases.map(c => c.docketNumber);
+    docketNumbersToDisplay = docketNumbers.sort();
+  }
+
   const preamble = `<p class="indent-paragraph">ON, ${motionFilingDateFormatted}, ${movant} filed ${documentTitle} (Document no. ${index}). For cause, </p>`;
   const orderVerbiage = `<p class="indent-paragraph">ORDERED that by ${responseDateFormatted} the ${nonMovant} shall file a Response to the ${documentTitle}.</p>`;
   const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} the ${movant} may file a ${motionOrderResponse}.</p>`;
@@ -84,6 +96,7 @@ export const prepareMotionOrderResponseAction = ({
     })
     .join('');
 
+  store.set(state.form.docketNumbersToDisplay, docketNumbersToDisplay);
   store.set(state.form.documentTitle, get(state.form.docketEntryDescription));
   store.set(state.form.dueDateFormatted, dueDateFormatted);
   store.set(state.form.eventCode, 'O');
