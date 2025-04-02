@@ -126,7 +126,7 @@ async function fetchConsolidatedGroupsAndNest({
     aCase => aCase.docketNumber,
   ).map(aCase => ({
     ...aCase,
-    consolidatedCases: [] as TAssociatedCase[], // 10502 TODO: This originally assumed consolidatedCases might exist; was that wrong, or are we wrong now?
+    consolidatedCases: [] as TAssociatedCase[],
   }));
 
   const [topLevelCases, memberConsolidatedCases] = partition(
