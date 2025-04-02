@@ -33,7 +33,6 @@ export const caseTableDefinition = {
   irsNoticeDate: DEFAULT as Date | null,
   isPaper: DEFAULT as boolean | null | undefined,
   isSealed: DEFAULT as boolean | null | undefined,
-  judgeUserId: DEFAULT as string | undefined,
   leadDocketNumber: DEFAULT as string | null | undefined,
   litigationCosts: DEFAULT as number | undefined,
   mailingDate: DEFAULT as string | undefined,
