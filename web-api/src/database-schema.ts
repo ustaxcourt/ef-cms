@@ -47,8 +47,10 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
-import { MinuteSheetTable } from '@web-api/database-types';
-import { DW_MINUTE_SHEET_COLUMNS } from '@web-api/persistence/postgres/minuteSheets/schema';
+import {
+  DW_MINUTE_SHEET_COLUMNS,
+  MinuteSheetTable,
+} from '@web-api/persistence/postgres/minuteSheets/schema';
 
 const DEFAULT = {};
 
