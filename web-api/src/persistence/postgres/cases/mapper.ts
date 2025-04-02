@@ -24,10 +24,6 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       ? calculateDate({ dateString: rawCase.blockedDate })
       : null,
     blockedReason: rawCase.blockedReason,
-    canAllowDocumentService: rawCase.canAllowDocumentService,
-    canAllowPrintableDocketRecord: rawCase.canAllowPrintableDocketRecord,
-    canDojPractitionersRepresentParty:
-      rawCase.canDojPractitionersRepresentParty,
     caption: rawCase.caseCaption,
     caseNote: rawCase.caseNote,
     caseType: rawCase.caseType,
@@ -40,11 +36,9 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
     docketNumberSuffix: rawCase.docketNumberSuffix || undefined,
-    docketEntries: JSON.stringify(rawCase.docketEntries),
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,
     hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,
-    hearings: JSON.stringify(rawCase.hearings),
     highPriority: rawCase.highPriority,
     highPriorityReason: rawCase.highPriorityReason,
     initialCaption: rawCase.initialCaption,
@@ -127,7 +121,6 @@ export function fromKyselyCase<T extends object>(record: T) {
     ) => value?.toISOString(),
     createdAt: (value: typeof dwCaseSchema.createdAt, _: Partial<CaseKysely>) =>
       value.toISOString(),
-    hearings: (value: any, _: Partial<CaseKysely>) => value || [],
     irsNoticeDate: (
       value: typeof dwCaseSchema.irsNoticeDate,
       _: Partial<CaseKysely>,
