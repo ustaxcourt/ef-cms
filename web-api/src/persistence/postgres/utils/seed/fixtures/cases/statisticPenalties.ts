@@ -3,7 +3,7 @@ import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { StatisticPenaltyKysely } from '@web-api/database-schema';
+import { StatisticPenaltyKysely } from '@web-api/persistence/postgres/cases/statistics/schema';
 
 export const statisticPenalties: StatisticPenaltyKysely[] = [
   {

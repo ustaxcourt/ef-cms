@@ -1,5 +1,5 @@
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { NewCaseDeadlineKysely } from '@web-api/database-schema';
+import { NewCaseDeadlineKysely } from '@web-api/persistence/postgres/caseDeadlines/schema';
 
 export const caseDeadlines: NewCaseDeadlineKysely[] = [
   {
