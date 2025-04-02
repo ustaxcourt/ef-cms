@@ -37,6 +37,7 @@ export const PractitionerSearchByName = connect(
     validationErrors,
   }) {
     const groupedStateOptions = getGroupedStateOptions();
+    const allStateOptions = { ...ALL_STATE_OPTIONS, 'N/A': 'N/A' };
     return (
       <>
         <div
@@ -254,7 +255,7 @@ export const PractitionerSearchByName = connect(
                       return (
                         <PillButton
                           key={originalBarState}
-                          text={ALL_STATE_OPTIONS[originalBarState]}
+                          text={allStateOptions[originalBarState]}
                           buttonDataTestId={`bar-state-pill-${originalBarState}`}
                           onRemove={() => {
                             updateAdvancedSearchFormValueSequence({
