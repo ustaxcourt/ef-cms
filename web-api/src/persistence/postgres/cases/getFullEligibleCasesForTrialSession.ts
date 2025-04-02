@@ -24,7 +24,14 @@ export const getFullEligibleCasesForTrialSession = async ({
   trialCity: string;
   sessionType: TrialSessionTypes;
 }): Promise<
-  Omit<RawCase, 'correspondence' | 'consolidatedCases' | 'petitioners'>[]
+  Omit<
+    RawCase,
+    | 'correspondence'
+    | 'consolidatedCases'
+    | 'docketEntries'
+    | 'hearings'
+    | 'petitioners'
+  >[]
 > => {
   const dbCases = await getDbReader(async reader => {
     let query = reader
