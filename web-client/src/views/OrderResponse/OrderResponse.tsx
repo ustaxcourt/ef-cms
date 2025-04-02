@@ -82,67 +82,69 @@ export const OrderResponse = connect(
                           This is the lead case in a consolidated group. Issue
                           this order in:
                         </label>
-                        <div className="usa-radio">
-                          <input
-                            aria-label="all cases in this group"
-                            checked={
-                              form.consolidatedGroupOrderFor ===
+                        <div className="grid-row">
+                          <div className="usa-radio">
+                            <input
+                              aria-label="all cases in this group"
+                              checked={
+                                form.consolidatedGroupOrderFor ===
+                                  constants.CONSOLIDATED_GROUP_ORDER_FOR
+                                    .ALL_CASES || false
+                              }
+                              className="usa-radio__input"
+                              id="motion-order-lead-case-radio-all"
+                              name="consolidatedGroupOrderFor"
+                              type="radio"
+                              value={
+                                constants.CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES
+                              }
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <label
+                              className="usa-radio__label"
+                              htmlFor={'motion-order-lead-case-radio-all'}
+                            >
+                              {constants.CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES}
+                            </label>
+                          </div>
+                          <div className="usa-radio">
+                            <input
+                              aria-label="Just this case"
+                              checked={
+                                form.consolidatedGroupOrderFor ===
+                                  constants.CONSOLIDATED_GROUP_ORDER_FOR
+                                    .THIS_CASE_ONLY || false
+                              }
+                              className="usa-radio__input"
+                              id="motion-order-lead-case-radio-just-this"
+                              name="consolidatedGroupOrderFor"
+                              type="radio"
+                              value={
                                 constants.CONSOLIDATED_GROUP_ORDER_FOR
-                                  .ALL_CASES || false
-                            }
-                            className="usa-radio__input"
-                            id="motion-order-lead-case-radio-all"
-                            name="consolidatedGroupOrderFor"
-                            type="radio"
-                            value={
-                              constants.CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES
-                            }
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={'motion-order-lead-case-radio-all'}
-                          >
-                            {constants.CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES}
-                          </label>
-                        </div>
-                        <div className="usa-radio">
-                          <input
-                            aria-label="Just this case"
-                            checked={
-                              form.consolidatedGroupOrderFor ===
+                                  .THIS_CASE_ONLY
+                              }
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <label
+                              className="usa-radio__label"
+                              htmlFor={'motion-order-lead-case-radio-just-this'}
+                            >
+                              {
                                 constants.CONSOLIDATED_GROUP_ORDER_FOR
-                                  .THIS_CASE_ONLY || false
-                            }
-                            className="usa-radio__input"
-                            id="motion-order-lead-case-radio-just-this"
-                            name="consolidatedGroupOrderFor"
-                            type="radio"
-                            value={
-                              constants.CONSOLIDATED_GROUP_ORDER_FOR
-                                .THIS_CASE_ONLY
-                            }
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={'motion-order-lead-case-radio-just-this'}
-                          >
-                            {
-                              constants.CONSOLIDATED_GROUP_ORDER_FOR
-                                .THIS_CASE_ONLY
-                            }
-                          </label>
+                                  .THIS_CASE_ONLY
+                              }
+                            </label>
+                          </div>
                         </div>
                       </FormGroup>
                       <hr className="border-top-2px border-base-lighter" />

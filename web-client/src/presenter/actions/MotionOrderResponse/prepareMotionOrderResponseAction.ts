@@ -32,8 +32,6 @@ export const prepareMotionOrderResponseAction = ({
   const caseDetail = get(state.caseDetail);
   const { docketEntries } = caseDetail;
 
-  console.log('Case Detail: ', caseDetail);
-
   const motion = docketEntries.find(entry =>
     entry.documentType?.includes('Motion'),
   );
