@@ -18,6 +18,7 @@ export const getGroupedStateOptions = (): {
     { label: 'Other', value: 'Other' },
   ];
   return [
+    { label: '', options: [{ label: 'N/A', value: 'N/A' }] },
     {
       label: 'States',
       options: Object.entries(US_STATES).map(([value, label]) => ({

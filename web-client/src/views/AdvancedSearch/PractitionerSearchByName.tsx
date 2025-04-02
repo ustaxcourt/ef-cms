@@ -37,6 +37,7 @@ export const PractitionerSearchByName = connect(
     validationErrors,
   }) {
     const groupedStateOptions = getGroupedStateOptions();
+    const allStateOptions = { ...ALL_STATE_OPTIONS, 'N/A': 'N/A' };
     return (
       <>
         <div
@@ -130,9 +131,11 @@ export const PractitionerSearchByName = connect(
                         data-testid={`practice-type-${practiceType}`}
                       >
                         <input
-                          checked={advancedSearchForm.practitionerSearchByName.practiceType?.includes(
-                            practiceType,
-                          )}
+                          checked={
+                            !!advancedSearchForm.practitionerSearchByName.practiceType?.includes(
+                              practiceType,
+                            )
+                          }
                           className="usa-checkbox__input"
                           id={`practiceType.${practiceType}`}
                           name={`practiceType`}
@@ -252,7 +255,7 @@ export const PractitionerSearchByName = connect(
                       return (
                         <PillButton
                           key={originalBarState}
-                          text={ALL_STATE_OPTIONS[originalBarState]}
+                          text={allStateOptions[originalBarState]}
                           buttonDataTestId={`bar-state-pill-${originalBarState}`}
                           onRemove={() => {
                             updateAdvancedSearchFormValueSequence({
