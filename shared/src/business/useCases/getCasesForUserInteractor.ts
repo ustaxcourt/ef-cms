@@ -207,7 +207,10 @@ async function getAllConsolidatedCases(
   cases: TAssociatedCase[],
   userId: string,
 ): Promise<
-  (Omit<RawCase, 'consolidatedCases' | 'correspondence' | 'docketEntries'> & {
+  (Omit<
+    RawCase,
+    'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
+  > & {
     isRequestingUserAssociated: boolean;
   })[]
 > {
