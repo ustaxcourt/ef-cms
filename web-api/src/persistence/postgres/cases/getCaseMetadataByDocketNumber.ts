@@ -8,7 +8,10 @@ export const getCaseMetadataByDocketNumber = async ({
 }: {
   docketNumber: string;
 }): Promise<
-  | Omit<RawCase, 'consolidatedCases' | 'correspondence' | 'docketEntries'>
+  | Omit<
+      RawCase,
+      'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
+    >
   | undefined
 > => {
   const dbCase = await getDbReader(reader =>

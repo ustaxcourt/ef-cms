@@ -8,6 +8,10 @@ jest.mock('@web-api/persistence/postgres/cases/generateDocketNumber', () =>
   mockFactory('generateDocketNumber'),
 );
 
+jest.mock('@web-api/persistence/postgres/cases/getCaseExists', () =>
+  mockFactory('getCaseExists', true),
+);
+
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber', () =>
   mockFactory('getCaseByDocketNumber'),
 );
