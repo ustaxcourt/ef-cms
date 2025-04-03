@@ -28,31 +28,37 @@ async function main() {
 }
 
 async function scanContinuously(params: ScanCommandInput) {
-  const result = await documentClient.scan(params);
-  const items = result.Items ?? [];
+  let lastEvaluatedKey: typeof params.ExclusiveStartKey | undefined = undefined;
 
-  items.forEach((record: TDynamoRecord) => {
-    if (record.sk.startsWith('docket-entry|')) {
-      Object.keys(record).forEach(key => {
-        const numberOfOccurences = uniqueKeysMap.get(key) || 0;
-        if (numberOfOccurences) {
-          uniqueKeysMap.set(key, numberOfOccurences + 1);
-        } else {
-          uniqueKeysMap.set(key, 1);
+  do {
+    const result = await documentClient.scan({
+      ...params,
+      ExclusiveStartKey: lastEvaluatedKey,
+    });
+
+    const items = result.Items ?? [];
+
+    for (const record of items as TDynamoRecord[]) {
+      if (record.sk.startsWith('docket-entry|')) {
+        for (const key of Object.keys(record)) {
+          const currentCount = uniqueKeysMap.get(key) || 0;
+          uniqueKeysMap.set(key, currentCount + 1);
         }
-      });
+      }
     }
-  });
-  itemsScanned = itemsScanned + items.length;
-  console.log('itemsScanned: ', itemsScanned);
 
-  if (result.LastEvaluatedKey) {
-    params.ExclusiveStartKey = result.LastEvaluatedKey;
-    await scanContinuously(params);
-  }
+    itemsScanned += items.length;
+    console.log('itemsScanned:', itemsScanned);
+
+    lastEvaluatedKey = result.LastEvaluatedKey;
+  } while (lastEvaluatedKey);
 }
 process.on('SIGINT', () => {
   console.log(uniqueKeysMap);
   process.exit(1);
 });
-main().catch(console.error);
+main()
+  .then(() => {
+    console.log(uniqueKeysMap);
+  })
+  .catch(console.error);
