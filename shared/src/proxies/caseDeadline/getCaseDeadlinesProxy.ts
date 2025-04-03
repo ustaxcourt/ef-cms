@@ -11,7 +11,7 @@ import { get } from '../requests';
  */
 export const getCaseDeadlinesInteractor = (
   applicationContext,
-  { endDate, from, judge, startDate },
+  { endDate, from, judgeId, startDate },
 ) => {
   return get({
     applicationContext,
@@ -19,7 +19,7 @@ export const getCaseDeadlinesInteractor = (
     params: {
       endDate,
       from,
-      judge,
+      judgeId,
       startDate,
     },
   });
