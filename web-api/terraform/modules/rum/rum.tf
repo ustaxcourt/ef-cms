@@ -58,7 +58,7 @@ resource "aws_rum_app_monitor" "app_monitor" {
   app_monitor_configuration {
     allow_cookies       = true
     session_sample_rate = var.sample_rate
-    telemetries         = ["performance", "errors"]
+    telemetries         = ["performance", "errors", "http"]
     identity_pool_id    = aws_cognito_identity_pool.rum_identity_pool.id
   }
   custom_events {
