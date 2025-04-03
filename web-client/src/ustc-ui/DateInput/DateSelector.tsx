@@ -16,11 +16,11 @@ export const DateSelector = ({
   onBlur,
   onChange,
   placeHolderText,
+  pristine = false,
   showDateHint = false,
 }: {
   defaultValue: string | undefined; // expects format 'YYYY-MM-DD'
   displayOptionalHintText?: boolean;
-  placeHolderText?: string;
   errorText?: string;
   maxDate?: string;
   disabled?: boolean;
@@ -31,6 +31,8 @@ export const DateSelector = ({
   label?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  placeHolderText?: string;
+  pristine?: boolean;
   showDateHint?: boolean;
 }) => {
   const datePickerId = `#${id}-picker.usa-date-picker__external-input`;
@@ -63,7 +65,7 @@ export const DateSelector = ({
   useEffect(() => {
     if (formGroupInputRef.current) {
       const input = formGroupInputRef.current.querySelector('.usa-date-picker');
-      if (disabled) {
+      if (disabled || pristine) {
         const myDatePicker =
           formGroupInputRef.current.querySelector(datePickerId);
 
@@ -72,7 +74,9 @@ export const DateSelector = ({
 
         (myDatePicker as HTMLInputElement).value = '';
 
-        datePicker.disable(input);
+        if (disabled) {
+          datePicker.disable(input);
+        }
       } else {
         datePicker.enable(input);
       }
