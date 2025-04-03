@@ -2,6 +2,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import {
   CASE_TYPES_MAP,
+  CHIEF_JUDGE,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -164,11 +165,12 @@ describe('getCaseDeadlinesInteractor', () => {
   });
 
   it('passes date and filtering params to getCaseDeadlinesByDateRange persistence call', async () => {
+    const judgeId = '123456';
     await getCaseDeadlinesInteractor(
       {
         endDate: END_DATE,
         from: 0,
-        judge: 'Buch',
+        judgeId,
         startDate: START_DATE,
       },
       mockPetitionsClerkUser,
@@ -177,7 +179,27 @@ describe('getCaseDeadlinesInteractor', () => {
     expect(getCaseDeadlinesByDateRange.mock.calls[0][0]).toMatchObject({
       endDate: END_DATE,
       from: 0,
-      judge: 'Buch',
+      judgeId,
+      startDate: START_DATE,
+    });
+  });
+
+  it('passes null for judgeId to getCaseDeadlinesByDateRange persistence call when chief judge is requested', async () => {
+    await getCaseDeadlinesInteractor(
+      applicationContext,
+      {
+        endDate: END_DATE,
+        from: 0,
+        judgeId: CHIEF_JUDGE,
+        startDate: START_DATE,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(getCaseDeadlinesByDateRange.mock.calls[0][0]).toMatchObject({
+      endDate: END_DATE,
+      from: 0,
+      judgeId: null,
       startDate: START_DATE,
     });
   });
