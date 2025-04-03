@@ -109,7 +109,7 @@ export class DocketEntry extends JoiValidationEntity {
   public isLegacy?: boolean;
   public editState?: string;
   public isLegacySealed?: boolean;
-  public isLegacyServed?: boolean;
+  public isLegacyServed?: boolean; // 10494: Not a single docket entry has this field
   public isOnDocketRecord: boolean;
   public isPaper?: boolean;
   public isPendingService?: boolean;
