@@ -2,15 +2,16 @@ import { User } from '@shared/business/entities/User';
 import { getDbReader } from '@web-api/database';
 import { userEntity } from '@web-api/persistence/postgres/users/mapper';
 
-export const getUserById = async ({
-  userId,
+export const getUserByEmail = async ({
+  email,
 }: {
-  userId: string;
+  email: string;
 }): Promise<User> => {
+  const formattedEmail = email.toLowerCase().trim();
   const user = await getDbReader(reader =>
     reader
       .selectFrom('dwUser as u')
-      .where('u.userId', '=', userId)
+      .where('u.email', '=', formattedEmail)
       .selectAll('u')
       .executeTakeFirst(),
   );

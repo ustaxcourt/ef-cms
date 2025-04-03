@@ -1,70 +1,67 @@
-// import { Case } from '@shared/business/entities/cases/Case';
-// import { MessageResult } from '@shared/business/entities/MessageResult';
-// import { RawMessage } from '@shared/business/entities/Message';
-// import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-// import {
-//   UpdateMessageKysely,
-//   NewMessageKysely,
-// } from '@web-api/persistence/postgres/messages/schema';
+import { RawUser, User } from '@shared/business/entities/User';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { NewUserKysely, UpdateUserKysely } from './schema';
 
-// function pickFields(message) {
-//   return {
-//     attachments: JSON.stringify(message.attachments),
-//     completedAt: message.completedAt,
-//     completedBy: message.completedBy,
-//     completedBySection: message.completedBySection,
-//     completedByUserId: message.completedByUserId,
-//     completedMessage: message.completedMessage,
-//     createdAt: message.createdAt,
-//     docketNumber: message.docketNumber,
-//     from: message.from,
-//     fromSection: message.fromSection,
-//     fromUserId: message.fromUserId,
-//     isCompleted: message.isCompleted,
-//     isRead: message.isRead,
-//     isRepliedTo: message.isRepliedTo,
-//     message: message.message,
-//     messageId: message.messageId,
-//     parentMessageId: message.parentMessageId,
-//     subject: message.subject,
-//     to: message.to,
-//     toSection: message.toSection,
-//     toUserId: message.toUserId,
-//   };
-// }
+// 10495 TODO: Is this function necessary for User? If so, it needs to be completed.
+function pickFields(user) {
+  return {
+    name: user.name,
+    role: user.role,
+    userId: user.userId,
+    userType: user.userType,
+  };
+}
 
-// export function toKyselyUpdateMessage(
-//   message: RawMessage,
-// ): UpdateMessageKysely {
-//   return pickFields(message);
-// }
+export function toKyselyUpdateUser(user: RawUser): UpdateUserKysely {
+  return pickFields(user);
+}
 
-// export function toKyselyUpdateMessages(
-//   messages: RawMessage[],
-// ): UpdateMessageKysely[] {
-//   return messages.map(pickFields);
-// }
+export function toKyselyUpdateUsers(users: RawUser[]): UpdateUserKysely[] {
+  return users.map(pickFields);
+}
 
-// export function toKyselyNewMessage(message: RawMessage): NewMessageKysely {
-//   return pickFields(message);
-// }
+export function toKyselyNewUser(user: RawUser): NewUserKysely {
+  return pickFields(user);
+}
 
-// export function toKyselyNewMessages(
-//   messages: RawMessage[],
-// ): NewMessageKysely[] {
-//   return messages.map(pickFields);
-// }
+export function toKyselyNewMessages(users: RawUser[]): NewUserKysely[] {
+  return users.map(pickFields);
+}
 
-// export function userEntity(user) {
-// return new User(
-//   transformNullToUndefined({
-// contact?: UserContact,
-//     ...message,
-//     caseStatus: message.status,
-//     caseTitle: Case.getCaseTitle(message.caption || ''),
-//     completedAt: message.completedAt?.toISOString(),
-//     createdAt: message.createdAt.toISOString(),
-//     trialDate: message.trialDate?.toISOString(),
-//   }),
-// );
-// }
+export function userEntity(user) {
+  const userContactInfo = userHasContactInfo(user)
+    ? {
+        address1: user?.address1,
+        address2: user?.address2,
+        address3: user?.address3,
+        city: user?.city,
+        country: user?.country,
+        countryType: user?.countryType,
+        phone: user?.phone,
+        postalCode: user?.postalCode,
+        state: user?.state,
+      }
+    : undefined;
+
+  return new User(
+    transformNullToUndefined({
+      ...user,
+      contact: userContactInfo,
+      admissionsDate: user.admissionsDate?.toISOString(),
+      pendingEmailVerificationTokenTimestamp:
+        user.pendingEmailVerificationTokenTimestamp?.toISOString(),
+    }),
+  );
+}
+
+function userHasContactInfo(user): boolean {
+  return (
+    user.address1 &&
+    user.city &&
+    user.country &&
+    user.countryType &&
+    user.phone &&
+    user.postalCode &&
+    user.state
+  );
+}
