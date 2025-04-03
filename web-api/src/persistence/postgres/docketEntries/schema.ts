@@ -30,7 +30,7 @@ export const docketEntryTableDefinition = {
   attachments: DEFAULT as string | null,
   caseType: DEFAULT as string | null,
   certificateOfService: DEFAULT as boolean | null,
-  certificateOfServiceDate: DEFAULT as string | null,
+  certificateOfServiceDate: DEFAULT as Date | null, // Check if this is actually a date
   date: DEFAULT as Date | null, // 10494 Check if this is actually a date.
   docketNumbers: DEFAULT as string | null,
   documentContentsId: DEFAULT as string | null,
@@ -66,7 +66,7 @@ export const docketEntryTableDefinition = {
   previousDocument: DEFAULT as any, // 10494 probably JSONB
   privatePractitioners: DEFAULT as any, // 10494 probably JSONB
   processingStatus: DEFAULT as string,
-  qcAt: DEFAULT as string | null,
+  qcAt: DEFAULT as Date | null,
   qcByUserId: DEFAULT as string | null,
   redactionAcknowledgement: DEFAULT as boolean | null,
   relationship: DEFAULT as string | null,
@@ -77,11 +77,11 @@ export const docketEntryTableDefinition = {
   servedPartiesCode: DEFAULT as string | null,
   serviceDate: DEFAULT as string | null,
   serviceStamp: DEFAULT as string | null,
-  signedAt: DEFAULT as string | null,
+  signedAt: DEFAULT as Date | null,
   signedByUserId: DEFAULT as string | null,
   signedJudgeUserId: DEFAULT as string | null,
   stampData: DEFAULT as any, // 10494 probably JSONB
-  strickenAt: DEFAULT as string | null,
+  strickenAt: DEFAULT as Date | null,
   strickenBy: DEFAULT as string | null,
   strickenByUserId: DEFAULT as string | null,
   supportingDocument: DEFAULT as string | null,
