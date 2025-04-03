@@ -157,7 +157,8 @@ export const OrderResponse = connect(
                     errorText={validationErrors.disposition}
                   >
                     <DateSelector
-                      defaultValue={'MM/DD/YYYY'} // TODO 10586: fix date selector not clearing bug
+                      defaultValue={'MM/DD/YYYY'}
+                      pristine={!form.responseDate}
                       formGroupClassNames="display-inline-block order-response-date-selector"
                       id="response-date-input-orderResponseResponseDate"
                       label="Response Date"
