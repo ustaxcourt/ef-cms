@@ -1,3 +1,4 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import { CONSOLIDATED_GROUP_ORDER_FOR } from '@shared/business/entities/EntityConstants';
 import { FORMATS } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -16,8 +17,6 @@ const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   return { movant, nonMovant };
 };
 
-// TODO 10586: Handle consolidated cases
-
 export const prepareMotionOrderResponseAction = ({
   applicationContext,
   get,
@@ -33,15 +32,17 @@ export const prepareMotionOrderResponseAction = ({
   } = get(state.form);
   const caseDetail = get(state.caseDetail);
   const { docketEntries } = caseDetail;
+  const motionDocketEntryId = get(state.docketEntryId);
 
-  const motion = docketEntries.find(entry =>
-    entry.documentType?.includes('Motion'),
+  const motion = docketEntries.find(
+    entry => entry.docketEntryId === motionDocketEntryId,
   );
+
   const { movant, nonMovant } = determineMovantAndNonMovant({
     caseDetail,
     motion,
   });
-  const { documentTitle, index } = motion;
+  const { documentTitle: motionDocumentTitle, index } = motion;
 
   const motionFilingDateFormatted = applicationContext
     .getUtilities()
@@ -59,18 +60,25 @@ export const prepareMotionOrderResponseAction = ({
     .getUtilities()
     .formatDateString(responseDate, FORMATS.MMDDYY);
 
-  let docketNumbersToDisplay = [caseDetail.docketNumber];
+  // let docketNumbersToDisplay = [caseDetail.docketNumber];
+  let createOrderSelectedCases = [] as any;
 
   if (
     isLeadCase &&
     consolidatedGroupOrderFor === CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES
   ) {
-    const docketNumbers = caseDetail.consolidatedCases.map(c => c.docketNumber);
-    docketNumbersToDisplay = docketNumbers.sort();
+    const consolidatedCases = caseDetail.consolidatedCases.map(c => {
+      return {
+        docketNumber: c.docketNumber,
+        docketNumberWithSuffix: c.docketNumberWithSuffix,
+        checked: true,
+      };
+    });
+    createOrderSelectedCases = Case.sortByDocketNumber(consolidatedCases);
   }
 
-  const preamble = `<p class="indent-paragraph">ON, ${motionFilingDateFormatted}, ${movant} filed ${documentTitle} (Document no. ${index}). For cause, </p>`;
-  const orderVerbiage = `<p class="indent-paragraph">ORDERED that by ${responseDateFormatted} the ${nonMovant} shall file a Response to the ${documentTitle}.</p>`;
+  const preamble = `<p class="indent-paragraph">ON, ${motionFilingDateFormatted}, ${movant} filed ${motionDocumentTitle} (Document no. ${index}). For cause, </p>`;
+  const orderVerbiage = `<p class="indent-paragraph">ORDERED that by ${responseDateFormatted} the ${nonMovant} shall file a Response to the ${motionDocumentTitle}.</p>`;
   const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} the ${movant} may file a ${motionOrderResponse}.</p>`;
 
   const strickenLine = hasStrickenFromTrialSessions
@@ -96,8 +104,8 @@ export const prepareMotionOrderResponseAction = ({
     })
     .join('');
 
-  store.set(state.form.docketNumbersToDisplay, docketNumbersToDisplay);
-  store.set(state.form.documentTitle, get(state.form.docketEntryDescription));
+  store.set(state.createOrderSelectedCases, createOrderSelectedCases);
+  // store.set(state.form.documentTitle, get(state.form.docketEntryDescription));
   store.set(state.form.dueDateFormatted, dueDateFormatted);
   store.set(state.form.eventCode, 'O');
   store.set(state.form.isLeadCase, isLeadCase);
