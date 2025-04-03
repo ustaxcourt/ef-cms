@@ -27,7 +27,7 @@ export const prepareMotionOrderResponseAction = ({
     dueDate,
     motionOrderResponse,
     responseDate,
-    strickenFromTrialSessions,
+    strickenFromTrialSessions,  // 10586: hook this into the UI and add to state.form
     consolidatedGroupOrderFor,
   } = get(state.form);
   const caseDetail = get(state.caseDetail);
