@@ -6,14 +6,15 @@ import { setPdfFileAction } from '../../actions/CourtIssuedOrder/setPdfFileActio
 import { setPdfPreviewUrlAction } from '../../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { prepareMotionOrderResponseAction } from '@web-client/presenter/actions/MotionOrderResponse/prepareMotionOrderResponseAction';
-import { getMotionOrderResponsePdfUrlAction } from '@web-client/presenter/actions/StatusReportOrder/getMotionOrderResponsePdfUrlAction';
+import { getPdfUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/getPdfUrlAction';
 
 export const motionOrderResponsePdfPreviewSequence =
   showProgressSequenceDecorator([
     prepareMotionOrderResponseAction,
     createOrderAction,
     clearPdfPreviewUrlAction,
-    getMotionOrderResponsePdfUrlAction,
+    getPdfUrlAction,
+    // getMotionOrderResponsePdfUrlAction,
     getPdfFromUrlAction,
     setPdfFileAction,
     setPdfPreviewUrlAction,
