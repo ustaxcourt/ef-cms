@@ -55,7 +55,7 @@ const onFileUploadedSuccess = [
 
 export const submitCourtIssuedOrder = showProgressSequenceDecorator([
   convertHtml2PdfSequence,
-  isEditingOrderAction,
+  isEditingOrderAction,  // 10586: hook this into the UI and add to state.form
   {
     no: [
       uploadOrderFileAction,
