@@ -1,4 +1,4 @@
-import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 
@@ -74,5 +74,5 @@ export const getBlockedCasesForTrialLocation = async (
     return await query.execute();
   });
 
-  return results.map(result => rawCaseEntity(result) as BlockedCaseData);
+  return results.map(result => fromKyselyCase(result));
 };

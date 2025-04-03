@@ -1,23 +1,22 @@
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import { environment } from '@web-api/environment';
-import {
-  SyncHandler,
-  OpensearchSyncMessage,
-} from '@web-api/gateways/opensearch/opensearchSyncRouter';
+import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 let sqsCache: SQSClient;
 
-export const sync: SyncHandler = async ({
+export const openSearchSync = async ({
   message,
 }: {
-  message: OpensearchSyncMessage;
+  message: OpenSearchSyncMessage;
 }): Promise<void> => {
   const sqs: SQSClient = getMessagingClient();
+
   const cmd = new SendMessageCommand({
     MessageBody: JSON.stringify(message),
     QueueUrl: environment.opensearchQueueUrl,
   });
+
   await sqs.send(cmd);
 };
 

@@ -66,6 +66,7 @@ export const CalculatePenaltiesModal = connect(
               <DollarsInput
                 className="usa-input"
                 id={`penalty_${index}`}
+                data-testid={`penalty_${index}`}
                 name={`penalties.${index}`}
                 value={penalties[index].penaltyAmount}
                 onValueChange={values => {

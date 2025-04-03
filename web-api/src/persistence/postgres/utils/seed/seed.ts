@@ -23,6 +23,7 @@ import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -79,7 +80,15 @@ export const seed = async () => {
     ...cases440_449,
     ...cases450_plus,
   ];
-  await upsertCases(cases);
+  await upsertCases(
+    cases.map(c => ({
+      ...c,
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: c.docketNumber,
+        docketNumberSuffix: c.docketNumberSuffix,
+      }),
+    })),
+  );
 
   // Attach the case status updates to their respective cases
   await pgInsertInto({
@@ -122,4 +131,5 @@ seed()
   .catch(err => {
     console.log('Could not seed postgres data.');
     console.log(err);
+    throw err;
   });

@@ -1,49 +1,46 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MOCK_CASE } from '@shared/test/mockCase';
 import { getCaseExistsInteractor } from './getCaseExistsInteractor';
-import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getCaseExists as getCaseExistsMock } from '@web-api/persistence/postgres/cases/getCaseExists';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('getCaseExistsInteractor', () => {
-  const getCaseMetadataByDocketNumber = jest.mocked(
-    getCaseMetadataByDocketNumberMock,
-  );
+  const getCaseExists = jest.mocked(getCaseExistsMock);
   const updateCase = jest.mocked(updateCaseMock);
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
   );
 
   it('should format the given docket number before querying persistence, removing leading zeroes and suffix', async () => {
-    getCaseMetadataByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCaseExists.mockResolvedValue(true);
 
     await getCaseExistsInteractor({
       docketNumber: '000123-19S',
     });
 
-    expect(getCaseMetadataByDocketNumber.mock.calls[0][0]).toEqual({
+    expect(getCaseExists.mock.calls[0][0]).toEqual({
       docketNumber: '123-19',
     });
   });
 
   it('should throw an error when a case with the provided docketNumber is not found', async () => {
-    getCaseMetadataByDocketNumber.mockResolvedValue(undefined);
+    getCaseExists.mockResolvedValue(false);
 
     await expect(
       getCaseExistsInteractor({
         docketNumber: '123-19',
       }),
     ).rejects.toThrow('Case 123-19 was not found.');
-    expect(getCaseMetadataByDocketNumber.mock.calls.length).toBe(1);
+    expect(getCaseExists.mock.calls.length).toBe(1);
   });
 
   it('should return true a case with the provided docketNumber is found', async () => {
-    getCaseMetadataByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCaseExists.mockResolvedValue(true);
 
     await expect(
       getCaseExistsInteractor({
         docketNumber: '1000-01',
       }),
     ).resolves.toEqual(true);
-    expect(getCaseMetadataByDocketNumber).toHaveBeenCalled();
+    expect(getCaseExists).toHaveBeenCalled();
   });
 });

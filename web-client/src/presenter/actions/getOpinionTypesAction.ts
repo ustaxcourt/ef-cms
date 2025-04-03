@@ -12,8 +12,9 @@ export const getOpinionTypesAction = () => {
     DocketEntry.isOpinion(courtIssuedDocument.eventCode),
   );
 
-  const opinionDocumentTypes = opinionDocuments.map(opinionDocument =>
-    opinionDocument.documentType.split('-').pop().trim(),
+  const opinionDocumentTypes = opinionDocuments.map(
+    opinionDocument =>
+      opinionDocument.documentType.split('-').pop()?.trim() || '',
   );
 
   return { opinionDocumentTypes };

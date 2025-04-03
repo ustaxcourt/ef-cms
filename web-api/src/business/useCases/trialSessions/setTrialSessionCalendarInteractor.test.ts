@@ -300,9 +300,8 @@ describe('setTrialSessionCalendarInteractor', () => {
     });
   });
 
-  it('should sort eligible cases in the correct priority order (isManuallyAdded, highPriority, docketNumberSuffix) before calendaring them', async () => {
+  it('should sort eligible cases in the correct priority order (highPriority, docketNumberSuffix) before calendaring them', async () => {
     const hpSuffixDocketNumber = '101-20';
-    const manuallyAddedDocketNumber = '102-20';
     const highPriorityDocketNumber = '103-20';
     const regularDocketNumber = '104-20';
 
@@ -315,17 +314,6 @@ describe('setTrialSessionCalendarInteractor', () => {
         ...MOCK_CASE,
         docketNumber: hpSuffixDocketNumber,
         docketNumberSuffix: HIGH_PRIORITY_SUFFIXES[0],
-        isManuallyAdded: false,
-        highPriority: false,
-        qcCompleteForTrial: {
-          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-        },
-      },
-      {
-        ...MOCK_CASE,
-        docketNumber: manuallyAddedDocketNumber,
-        docketNumberSuffix: HIGH_PRIORITY_SUFFIXES[1],
-        isManuallyAdded: true,
         highPriority: false,
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
@@ -335,7 +323,6 @@ describe('setTrialSessionCalendarInteractor', () => {
         ...MOCK_CASE,
         docketNumber: highPriorityDocketNumber,
         docketNumberSuffix: 'NotHighPriority',
-        isManuallyAdded: false,
         highPriority: true,
         highPriorityReason: 'When the going gets weird, the weird turn pro',
         qcCompleteForTrial: {
@@ -346,7 +333,6 @@ describe('setTrialSessionCalendarInteractor', () => {
         ...MOCK_CASE,
         docketNumber: regularDocketNumber,
         docketNumberSuffix: 'AlsoNotHighPriority',
-        isManuallyAdded: false,
         highPriority: false,
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
@@ -368,7 +354,6 @@ describe('setTrialSessionCalendarInteractor', () => {
     );
 
     expect(updatedDocketNumbers).toEqual([
-      manuallyAddedDocketNumber,
       highPriorityDocketNumber,
       hpSuffixDocketNumber,
       regularDocketNumber,

@@ -80,17 +80,17 @@ export const caseAdvancedSearchInteractor = async (
   }
 
   const foundCases = await caseAdvancedSearch({
-      applicationContext,
-      searchTerms: {
-        countryType,
-        endDate: searchEndDate,
-        petitionerName,
-        petitionerState,
-        startDate: searchStartDate,
-        caseTypes: caseType,
-        procedureType,
-      },
-    });
+    applicationContext,
+    searchTerms: {
+      countryType,
+      endDate: searchEndDate,
+      petitionerName,
+      petitionerState,
+      startDate: searchStartDate,
+      caseTypes: caseType,
+      procedureType,
+    },
+  });
 
   const filteredCases = filterCaseSearchResultsNotAccessibleToUser(
     foundCases,
