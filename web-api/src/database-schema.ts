@@ -47,6 +47,10 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
+import {
+  DW_USER_COLUMNS,
+  UserTable,
+} from '@web-api/persistence/postgres/users/schema';
 
 const DEFAULT = {};
 
@@ -63,6 +67,7 @@ interface DatabaseSchemaType {
   dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
+  dwUser: DatabaseTableMetadata<UserTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -128,6 +133,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwWorkItem: {
     table: DEFAULT as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
+  },
+  dwUser: {
+    table: DEFAULT as UserTable,
+    columns: DW_USER_COLUMNS,
   },
 };
 

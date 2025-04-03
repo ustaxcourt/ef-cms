@@ -24,8 +24,15 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
+import { users } from '@web-api/persistence/postgres/utils/seed/fixtures/users/users';
 
 export const seed = async () => {
+  const insertUsers = pgInsertInto({
+    table: 'dwUser',
+    values: users,
+    onConflictColumns: ['userId'],
+  });
+
   const insertMessages = pgInsertInto({
     table: 'dwMessage',
     values: messages,
@@ -115,6 +122,7 @@ export const seed = async () => {
   });
 
   await Promise.all([
+    insertUsers,
     insertMessages,
     insertCaseDeadline,
     insertCorrespondence,
