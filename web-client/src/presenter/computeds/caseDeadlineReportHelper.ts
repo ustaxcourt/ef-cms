@@ -22,7 +22,7 @@ export const caseDeadlineReportHelper = (
     inLeadCase: boolean;
   })[];
   formattedFilterDateHeader;
-  judges: string[];
+  judgeOptions: Array<{ id: string; name: string }>;
   pageCount: number;
   showJudgeSelect: boolean;
   showNoDeadlines: boolean;
@@ -31,14 +31,17 @@ export const caseDeadlineReportHelper = (
 
   const caseDeadlinesForCurrentPage =
     get(state.caseDeadlineReport.caseDeadlinesForCurrentPage) || [];
-  const judgeFilter = get(state.caseDeadlineReport.judgeFilter);
   const showJudgeSelect =
-    caseDeadlinesForCurrentPage.length > 0 || !!judgeFilter;
+    caseDeadlinesForCurrentPage.length > 0 ||
+    !!get(state.caseDeadlineReport.judgeIdFilter);
   const showNoDeadlines = caseDeadlinesForCurrentPage.length === 0;
-  const judges = (get(state.judges) || [])
-    .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
-    .concat(CHIEF_JUDGE)
-    .sort();
+  const judgeOptions = (get(state.judges) || [])
+    .map(judge => ({
+      id: judge.userId,
+      name: applicationContext.getUtilities().formatJudgeName(judge.name),
+    }))
+    .concat({ id: CHIEF_JUDGE, name: CHIEF_JUDGE })
+    .sort((a, b) => a.name.localeCompare(b.name));
 
   let filterStartDate = get(state.screenMetadata.filterStartDate);
   let filterEndDate = get(state.screenMetadata.filterEndDate);
@@ -99,7 +102,7 @@ export const caseDeadlineReportHelper = (
   return {
     formattedCaseDeadlines,
     formattedFilterDateHeader,
-    judges,
+    judgeOptions,
     pageCount,
     showJudgeSelect,
     showNoDeadlines,

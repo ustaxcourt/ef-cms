@@ -6,7 +6,8 @@ import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { CaseKysely, DatabaseSchema } from '@web-api/database-types';
+import { DatabaseSchema } from '@web-api/database-schema';
+import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 
 // Select the relevant RawCase fields from dwCase and map them correctly.
@@ -18,16 +19,12 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     automaticBlockedDate: rawCase.automaticBlockedDate
       ? calculateDate({ dateString: rawCase.automaticBlockedDate })
       : null,
-    automaticBlockedReason: rawCase.automaticBlockedReason,
+    automaticBlockedReason: rawCase.automaticBlockedReason || null,
     blocked: rawCase.blocked,
     blockedDate: rawCase.blockedDate
       ? calculateDate({ dateString: rawCase.blockedDate })
       : null,
-    blockedReason: rawCase.blockedReason,
-    canAllowDocumentService: rawCase.canAllowDocumentService,
-    canAllowPrintableDocketRecord: rawCase.canAllowPrintableDocketRecord,
-    canDojPractitionersRepresentParty:
-      rawCase.canDojPractitionersRepresentParty,
+    blockedReason: rawCase.blockedReason || null,
     caption: rawCase.caseCaption,
     caseNote: rawCase.caseNote,
     caseType: rawCase.caseType,
@@ -40,11 +37,9 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
     docketNumberSuffix: rawCase.docketNumberSuffix || undefined,
-    docketEntries: JSON.stringify(rawCase.docketEntries),
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,
     hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,
-    hearings: JSON.stringify(rawCase.hearings),
     highPriority: rawCase.highPriority,
     highPriorityReason: rawCase.highPriorityReason,
     initialCaption: rawCase.initialCaption,
@@ -54,7 +49,6 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       : null,
     isPaper: rawCase.isPaper,
     isSealed: rawCase.isSealed,
-    judgeUserId: rawCase.judgeUserId,
     leadDocketNumber: rawCase.leadDocketNumber || null,
     litigationCosts: rawCase.litigationCosts,
     mailingDate: rawCase.mailingDate,
@@ -127,8 +121,6 @@ export function fromKyselyCase<T extends object>(record: T) {
     ) => value?.toISOString(),
     createdAt: (value: typeof dwCaseSchema.createdAt, _: Partial<CaseKysely>) =>
       value.toISOString(),
-    docketEntries: (value: any, _: Partial<CaseKysely>) => value || [],
-    hearings: (value: any, _: Partial<CaseKysely>) => value || [],
     irsNoticeDate: (
       value: typeof dwCaseSchema.irsNoticeDate,
       _: Partial<CaseKysely>,

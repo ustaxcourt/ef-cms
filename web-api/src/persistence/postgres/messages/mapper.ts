@@ -1,8 +1,11 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { MessageResult } from '@shared/business/entities/MessageResult';
-import { NewMessageKysely, UpdateMessageKysely } from '@web-api/database-types';
 import { RawMessage } from '@shared/business/entities/Message';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import {
+  UpdateMessageKysely,
+  NewMessageKysely,
+} from '@web-api/persistence/postgres/messages/schema';
 
 function pickFields(message) {
   return {

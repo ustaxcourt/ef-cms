@@ -8,7 +8,7 @@ import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyn
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getLogger } from 'aws-xray-sdk';
-import { CaseKysely } from '@web-api/database-types';
+import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { flattenDeep, isArray } from 'lodash';
 
