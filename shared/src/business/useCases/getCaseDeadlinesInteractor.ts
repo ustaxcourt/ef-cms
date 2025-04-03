@@ -83,3 +83,9 @@ const getJudgeIdForPersistence = (
 ): string | undefined | null => {
   return judgeId === CHIEF_JUDGE ? null : judgeId;
 };
+
+const getJudgeIdForPersistence = (
+  judgeId: string | undefined,
+): string | undefined | null => {
+  return judgeId === CHIEF_JUDGE ? null : judgeId;
+};
