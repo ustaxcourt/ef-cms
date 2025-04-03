@@ -341,9 +341,8 @@ export const OrderResponse = connect(
             </div>
             <div className="grid-col-7">
               <div>
-                <span className="text-bold">Docket entry preview:</span>{' '}
-                {form.docketEntryDescription}
-                {/** TODO 10586: use form var here instead */}
+                <span className="text-bold">Docket entry preview:</span> Order
+                {/** TODO 10586: maybe don't hardcode order */}
               </div>
               <div
                 className="motionResponseOrderPdfPreview"
