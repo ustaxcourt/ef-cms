@@ -53,7 +53,6 @@ async function scanContinuously(params: ScanCommandInput) {
 }
 process.on('SIGINT', () => {
   console.log(uniqueKeysMap);
-  // console.log('records scanned', itemsScanned);
   process.exit(1);
 });
 main().catch(console.error);
