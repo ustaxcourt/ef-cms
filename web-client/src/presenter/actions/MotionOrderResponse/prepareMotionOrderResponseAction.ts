@@ -27,7 +27,7 @@ export const prepareMotionOrderResponseAction = ({
     dueDate,
     motionOrderResponse,
     responseDate,
-    strickenFromTrialSessions,  // 10586: hook this into the UI and add to state.form
+    strickenFromTrialSessions, // 10586: hook this into the UI and add to state.form
     consolidatedGroupOrderFor,
   } = get(state.form);
   const caseDetail = get(state.caseDetail);
@@ -77,8 +77,9 @@ export const prepareMotionOrderResponseAction = ({
     createOrderSelectedCases = Case.sortByDocketNumber(consolidatedCases);
   }
 
+  const orderVerbiage = `that by ${responseDateFormatted} the ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
   const preamble = `<p class="indent-paragraph">ON, ${motionFilingDateFormatted}, ${movant} filed ${motionDocumentTitle} (Document no. ${index}). For cause, </p>`;
-  const orderVerbiage = `<p class="indent-paragraph">ORDERED that by ${responseDateFormatted} the ${nonMovant} shall file a Response to the ${motionDocumentTitle}.</p>`;
+  const orderVerbiageHtml = `<p class="indent-paragraph">ORDERED ${orderVerbiage} </p>`;
   const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} the ${movant} may file a ${motionOrderResponse}.</p>`;
 
   const strickenLine = hasStrickenFromTrialSessions
@@ -91,7 +92,7 @@ export const prepareMotionOrderResponseAction = ({
 
   const linesWithText = [
     preamble,
-    orderVerbiage,
+    orderVerbiageHtml,
     dueDate ? opportunityToRebut : '',
     strickenLine,
     additionalTextLine,
@@ -104,8 +105,13 @@ export const prepareMotionOrderResponseAction = ({
     })
     .join('');
 
+  const initialFreeText = `Ordered ${orderVerbiage}`;
+
   store.set(state.createOrderSelectedCases, createOrderSelectedCases);
   // store.set(state.form.documentTitle, get(state.form.docketEntryDescription));
+  store.set(state.form.initialFreeText, initialFreeText);
+  store.set(state.form.orderType, 'motionOrderResponse');
+  store.set(state.form.documentTitle, 'Order');
   store.set(state.form.dueDateFormatted, dueDateFormatted);
   store.set(state.form.eventCode, 'O');
   store.set(state.form.isLeadCase, isLeadCase);
