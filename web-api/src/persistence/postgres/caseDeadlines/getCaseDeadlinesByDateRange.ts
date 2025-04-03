@@ -27,8 +27,6 @@ export const getCaseDeadlinesByDateRange = async ({
         .leftJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
         .selectAll('cd')
         .select([
-          'c.associatedJudge',
-          'c.associatedJudgeId',
           'c.leadDocketNumber',
           // TODO: use c.sortableDocketNumber and remove from caseDeadline
         ])
