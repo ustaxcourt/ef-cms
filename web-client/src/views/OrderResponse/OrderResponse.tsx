@@ -254,7 +254,7 @@ export const OrderResponse = connect(
                       id="due-date-input-motionOrderResponseDueDate"
                       label="Due date"
                       hintText="(Required)"
-                      minDate={motionOrderResponseFormHelper.minDate}
+                      minDate={form.responseDate}
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
