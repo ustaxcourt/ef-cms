@@ -10,17 +10,16 @@
 - [ ] generateAccountConfirmation
 - [ ] getAccountConfirmationCode
 - [ ] getCasesForUser
-- [ ] getInternalUsers
-- [ ] getPractitionerByBarNumber
+- [x] getInternalUsers
+- [x]* getPractitionerByBarNumber
 - [x] getUserByEmail
 - [x] getUserById
-- [ ] getUserByIdOnceAllUpdatesComplete
+- [x] getUserByIdOnceAllUpdatesComplete
 - [x] getUsersById
-- [ ] getUsersInSection
+- [x] getUsersInSection
 - [x] updateUser & persistUser (same thing)
 - [ ] refreshConfirmationCodeExpiration
 - [ ] updatePractitionerUser
-- [ ] updateUser.test
 - [ ] updateUserRecords
 
 Odd dynamo functions:
