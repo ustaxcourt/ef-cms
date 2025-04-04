@@ -50,7 +50,7 @@ import {
 import {
   ConnectionTable,
   DW_CONNECTION_COLUMNS,
-} from '@web-api/persistence/postgres/notifications/schema';
+} from '@web-api/persistence/postgres/connections/schema';
 
 const DEFAULT = {};
 
