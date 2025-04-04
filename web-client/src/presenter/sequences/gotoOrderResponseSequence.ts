@@ -4,13 +4,13 @@ import { getCaseAction } from '../actions/getCaseAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocketEntrySelectedFromMessageAction } from '../actions/setDocketEntrySelectedFromMessageAction';
-import { setPDFForStampAction } from '../actions/setPDFForStampAction';
 // import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
 import { setParentMessageIdAction } from '@web-client/presenter/actions/setParentMessageIdAction';
 // import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
 import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { clearPdfPreviewUrlAction } from '@web-client/presenter/actions/clearPdfPreviewUrlAction';
+import { setupOrderResponseFormAction } from '@web-client/presenter/actions/setupOrderResponseFormAction';
 
 export const goToOrderResponseSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -21,12 +21,9 @@ export const goToOrderResponseSequence =
     setDocketEntrySelectedFromMessageAction,
     setParentMessageIdAction,
     // TODO 10586: Clean up commented code at the end
-    // clearPDFStampDataAction,
     clearPdfPreviewUrlAction,
     clearFormAction,
-    // setSignatureNameForPdfSigningAction,
-    setPDFForStampAction,
-    // setPDFPageForSigningAction,
+    setupOrderResponseFormAction,
     // clearStatusReportOrderFormAction,
     setupCurrentPageAction('OrderResponse'), // TODO 10586: This is where we set the html page
   ]);
