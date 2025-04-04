@@ -53,6 +53,6 @@ export const processCaseEntries = async ({
       getLogger().debug(`Successfully upsert ${caseRecord.docketNumber}`);
     }
   } catch (e) {
-    getLogger().debug(`Failed to processCaseEntries: ${e}`);
+    getLogger().debug(`Postgres re-indexing failure: Failed to processCaseEntries: ${e}`);
   }
 };

@@ -108,7 +108,9 @@ export const processPractitionerMappingEntries = async ({
       throw new Error('failed to index practitioner mapping records');
     }
   } catch (e) {
-    getLogger().error(`Failed to process practitioner mapping record: ${e}`);
+    getLogger().error(
+      `Postgres re-indexing failure: Failed to process practitioner mapping record: ${e}`,
+    );
   }
 };
 
