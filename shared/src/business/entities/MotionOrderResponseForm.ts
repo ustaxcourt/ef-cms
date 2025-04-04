@@ -5,7 +5,11 @@ import {
 } from '../utilities/DateHandler';
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
-import { ORDER_REPLY_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  CONSOLIDATED_GROUP_ORDER_FOR,
+  MAX_ORDER_RESPONSE_TEXT_CHARACTERS,
+  ORDER_REPLY_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
@@ -16,6 +20,8 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   public responseDate?: string;
   public additionalOrderText?: string;
   public dueDate?: string;
+  public isOnLeadCase: boolean;
+  public consolidatedGroupOrderFor: typeof CONSOLIDATED_GROUP_ORDER_FOR;
 
   constructor(rawProps) {
     super('MotionOrderResponseForm');
@@ -25,7 +31,8 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
     this.additionalOrderText = rawProps.additionalOrderText;
     this.dueDate = rawProps.dueDate;
     this.docketEntryDescription = rawProps.docketEntryDescription;
-
+    this.isOnLeadCase = rawProps.isOnLeadCase;
+    this.consolidatedGroupOrderFor = rawProps.consolidatedGroupOrderFor;
   }
 
   static TODAY = formatDateString(
@@ -36,25 +43,46 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   static VALIDATION_RULES = {
     additionalOrderText: joi
       .string()
-      .max(256)
+      .optional()
+      .max(MAX_ORDER_RESPONSE_TEXT_CHARACTERS)
       .allow(null, '')
       .description('Additional text for the response.')
-      .optional()
-      .allow(null, ''),
-    dueDate: joi
-      .date()
-      .iso()
-      .format(['YYYY-MM-DD']) // expects format 'YYYY-MM-DD' != 'yyyy-MM-dd'
-      .min(MotionOrderResponseForm.TODAY)
-      .required()
-      .description('When the response is due.'),
-    motionOrderResponse: JoiValidationConstants.STRING.max(256)
-      .required()
       .messages({
-        '*': 'Enter a response',
+        'string.max': 'Limit is 240 characters.',
+      }),
+    consolidatedGroupOrderFor: joi.when('isOnLeadCase', {
+      is: joi.equal(true),
+      then: joi
+        .required()
+        .valid(...Object.values(CONSOLIDATED_GROUP_ORDER_FOR)),
+      otherwise: joi
+        .required()
+        .equal(CONSOLIDATED_GROUP_ORDER_FOR.THIS_CASE_ONLY),
+    }),
+    dueDate: joi
+      .when('motionOrderResponse', {
+        is: joi.exist().not(null),
+        then: joi
+          .date()
+          .iso()
+          .format(['YYYY-MM-DD']) // expects format 'YYYY-MM-DD' != 'yyyy-MM-dd'
+          .min(joi.ref('responseDate'))
+          .required(),
+        otherwise: joi.optional().allow(null),
       })
-      .valid(...Object.values(ORDER_REPLY_OPTIONS))
-      .required()
+      .description('When the response is due.')
+      .messages({
+        'any.required':
+          'Due Date is required when a Reply or Reply/SR is ordered',
+        'date.format': 'Enter a valid date',
+        'date.min':
+          'Due date cannot be prior to response date. Enter a valid date.',
+      }),
+    motionOrderResponse: JoiValidationConstants.STRING.valid(
+      ...Object.values(ORDER_REPLY_OPTIONS),
+    )
+      .optional()
+      .allow(null)
       .description('The type of response.'),
     responseDate: joi
       .date()
@@ -62,7 +90,13 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       .format(['YYYY-MM-DD']) // expects format 'YYYY-MM-DD' != 'yyyy-MM-dd'
       .min(MotionOrderResponseForm.TODAY)
       .required()
-      .description('When the response was filed.'),
+      .description('When the response was filed.')
+      .messages({
+        'any.required': 'Response Date is required.',
+        'date.format': 'Enter a valid date',
+        'date.min':
+          'Response Date cannot be prior to today. Enter a valid date.',
+      }),
   };
 
   getValidationRules() {
