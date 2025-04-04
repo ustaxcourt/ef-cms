@@ -27,7 +27,7 @@ export const prepareMotionOrderResponseAction = ({
     dueDate,
     motionOrderResponse,
     responseDate,
-    strickenFromTrialSessions, // 10586: hook this into the UI and add to state.form
+    strickenFromTrialSession,
     consolidatedGroupOrderFor,
   } = get(state.form);
   const caseDetail = get(state.caseDetail);
@@ -49,7 +49,7 @@ export const prepareMotionOrderResponseAction = ({
     .formatDateString(motion.filingDate, FORMATS.MMDDYY);
 
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
-  const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
+  const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
   const hasAdditionalOrderText = !!additionalOrderText;
 
   const dueDateFormatted = applicationContext
@@ -116,6 +116,7 @@ export const prepareMotionOrderResponseAction = ({
   store.set(state.form.eventCode, 'O');
   store.set(state.form.isLeadCase, isLeadCase);
   store.set(state.form.richText, richText);
+  store.set(state.form.showStrickenFromTrialSession, strickenFromTrialSession);
   store.set(state.form.motionOrderResponseFilingDate, responseDate);
   store.set(state.form.parentMessageId, get(state.parentMessageId));
 };
