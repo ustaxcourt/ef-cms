@@ -26,7 +26,7 @@ export const setupIndexes = async ({
   await Promise.all(
     elasticsearchIndexes.map(async (index: string) => {
       try {
-        const indexExists = await client.indices.exists({
+        const { body: indexExists } = await client.indices.exists({
           index,
         });
 
