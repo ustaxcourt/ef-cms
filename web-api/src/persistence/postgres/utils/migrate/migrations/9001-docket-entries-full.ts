@@ -8,7 +8,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('additionalInfo2', 'varchar')
     .addColumn('addToCoversheet', 'boolean')
     .addColumn('archived', 'boolean')
-    .addColumn('attachments', 'varchar')
+    .addColumn('attachments', 'boolean')
     .addColumn('caseType', 'varchar')
     .addColumn('certificateOfService', 'varchar')
     .addColumn('certificateOfServiceDate', 'timestamptz')

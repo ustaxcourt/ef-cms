@@ -33,7 +33,10 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { AuthUser, UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { User } from './User';
 import { WorkItem } from './WorkItem';
 import {
@@ -80,7 +83,7 @@ export class DocketEntry extends JoiValidationEntity {
   public additionalInfo2?: string;
   public addToCoversheet?: boolean;
   public archived?: boolean;
-  public attachments?: string;
+  public attachments?: boolean;
   public caseType?: string;
   public taxYear?: string;
   public noticeIssuedDate?: string;
@@ -94,7 +97,7 @@ export class DocketEntry extends JoiValidationEntity {
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
   public documentTitle: string;
-  public documentType: string;
+  public documentType?: string;
   public eventCode: string;
   public filedBy?: string;
   public filedByRole?: string;
@@ -131,7 +134,7 @@ export class DocketEntry extends JoiValidationEntity {
   public scenario?: string;
   public secondaryDocument?: {
     secondaryDocumentInfo: string;
-  };
+  } & any; // 10494: This would be nice to fix, but a secondaryDocument is much more than just secondaryDocumentInfo
   public servedAt?: string;
   public servedPartiesCode?: string;
   public serviceDate?: string;

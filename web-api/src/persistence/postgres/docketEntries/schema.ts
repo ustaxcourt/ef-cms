@@ -27,7 +27,7 @@ export const docketEntryTableDefinition = {
   additionalInfo2: DEFAULT as string | null,
   addToCoversheet: DEFAULT as boolean | null,
   archived: DEFAULT as boolean | null,
-  attachments: DEFAULT as string | null,
+  attachments: DEFAULT as boolean | null,
   caseType: DEFAULT as string | null,
   certificateOfService: DEFAULT as boolean | null,
   certificateOfServiceDate: DEFAULT as Date | null, // Check if this is actually a date

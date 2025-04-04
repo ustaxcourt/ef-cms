@@ -22,7 +22,7 @@ export class DocketEntryFactory extends JoiValidationEntity {
   public additionalInfo?: string;
   public additionalInfo2?: string;
   public addToCoversheet?: boolean;
-  public attachments?: string;
+  public attachments?: boolean;
   public certificateOfService?: string;
   public certificateOfServiceDate?: string;
   public documentTitle: string;
