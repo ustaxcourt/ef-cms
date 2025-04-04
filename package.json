@@ -43,7 +43,7 @@
     "@fortawesome/free-solid-svg-icons": "5.15.4",
     "@fortawesome/react-fontawesome": "0.2.2",
     "@joi/date": "2.1.1",
-    "@opensearch-project/opensearch": "3.4.0",
+    "@opensearch-project/opensearch": "3.5.0",
     "@smithy/node-http-handler": "4.0.4",
     "@smithy/protocol-http": "5.1.0",
     "@smithy/signature-v4": "5.0.2",
