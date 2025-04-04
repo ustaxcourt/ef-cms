@@ -46,7 +46,7 @@ import {
 import { getClientId } from './persistence/cognito/getClientId';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
-import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
+import { getDispatchNotification } from './persistence/postgres/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocketEntryOnCase } from './persistence/dynamo/cases/getDocketEntryOnCase';
 import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/dynamo/docketEntryWorksheet/getDocketEntryWorksheetsByDocketEntryIds';
@@ -91,7 +91,7 @@ import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/removePractitionerOnCase';
-import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
+import { saveDispatchNotification } from '@web-api/persistence/postgres/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
 import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';

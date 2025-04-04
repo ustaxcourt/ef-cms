@@ -51,6 +51,10 @@ import {
   ConnectionTable,
   DW_CONNECTION_COLUMNS,
 } from '@web-api/persistence/postgres/connections/schema';
+import {
+  DW_NOTIFICATION_COLUMNS,
+  NotificationTable,
+} from '@web-api/persistence/postgres/notifications/schema';
 
 const DEFAULT = {};
 
@@ -64,6 +68,7 @@ interface DatabaseSchemaType {
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
+  dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwPetitionerOnCase: DatabaseTableMetadata<PetitionerOnCaseTable>;
   dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
@@ -121,6 +126,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMessage: {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
+  },
+  dwNotification: {
+    table: DEFAULT as NotificationTable,
+    columns: DW_NOTIFICATION_COLUMNS,
   },
   dwPetitionerOnCase: {
     table: DEFAULT as PetitionerOnCaseTable,
