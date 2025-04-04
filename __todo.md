@@ -2,7 +2,7 @@
 
 ## Dynamo Functions to Postgres
 
-- [ ] createNewPetitionerUsers
+- [x] createNewPetitionerUser
 - [ ] createNewPractitionerUser
 - [ ] createOrUpdatePractitionerUser
 - [ ] createPetitionerUserRecords
@@ -29,3 +29,6 @@ does not belong in the persistence layer.
 - [ ] getUsersBySearchKey: Invoked by (1) `getPrivatePractitionersBySearchKey`
 action, interactor and (2) `getIrsPractitionersBySearchKey` action, interactor.
 Is "search key" a concept we need to hold onto?
+
+All TODO comments begin with the string "10495 TODO:" to make searching for them
+simple.

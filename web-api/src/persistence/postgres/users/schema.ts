@@ -38,7 +38,7 @@ export const userTableDefinition = {
   state: DEFAULT as string | undefined, // forced optional
   token: DEFAULT as string | undefined,
   userId: DEFAULT as string,
-  userType: DEFAULT as string | undefined, // TODO 10495 Notes: "entityName": "Practitioner",
+  userType: DEFAULT as string | undefined, // 10495 TODO: "entityName": "Practitioner",
 };
 
 export type UserTable = typeof userTableDefinition;
