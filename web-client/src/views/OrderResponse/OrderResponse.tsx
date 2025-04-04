@@ -280,7 +280,7 @@ export const OrderResponse = connect(
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
-                            value: e.target.value,
+                            value: !form.strickenFromTrialSession,
                           });
                         }}
                       />
