@@ -411,16 +411,36 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/documents/*/order-response',
-      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
-        );
-        return app.getSequence('goToOrderResponseSequence')({
-          docketEntryId,
-          docketNumber,
-        });
-      }),
+      '/case-detail/*/documents/*/motion-order-response',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/motion-order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            isEditing: true,
+          });
+        },
+      ),
     );
 
     registerRoute(
@@ -1353,16 +1373,37 @@ const router = {
     // TODO 10586: fill out this route for messages
     registerRoute(
       '/messages/*/message-detail/*/*/motion-order-response-create',
-      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
-        setPageTitle(
-          `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
-        );
-        return app.getSequence('goToOrderResponseSequence')({
-          docketEntryId,
-          docketNumber,
-          parentMessageId,
-        });
-      }),
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            parentMessageId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/motion-order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            isEditing: true,
+            parentMessageId,
+          });
+        },
+      ),
     );
 
     registerRoute(

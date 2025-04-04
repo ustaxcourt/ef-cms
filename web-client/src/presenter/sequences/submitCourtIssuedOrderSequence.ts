@@ -8,7 +8,7 @@ import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocume
 import { getShouldRedirectToSigningAction } from '../actions/getShouldRedirectToSigningAction';
 import { isDocumentRequiringAppendedFormAction } from '../actions/CourtIssuedOrder/isDocumentRequiringAppendedFormAction';
 import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrderAction';
-import { isStatusReportOrderAction } from '@web-client/presenter/actions/StatusReportOrder/isStatusReportOrderAction';
+import { getOrderTypeAction } from '@web-client/presenter/actions/StatusReportOrder/getOrderTypeAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -55,7 +55,7 @@ const onFileUploadedSuccess = [
 
 export const submitCourtIssuedOrder = showProgressSequenceDecorator([
   convertHtml2PdfSequence,
-  isEditingOrderAction,  // 10586: hook this into the UI and add to state.form
+  isEditingOrderAction, // 10586: hook this into the UI and add to state.form
   {
     no: [
       uploadOrderFileAction,
@@ -82,9 +82,23 @@ export const submitCourtIssuedOrder = showProgressSequenceDecorator([
 ]);
 
 export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
-  isStatusReportOrderAction,
+  getOrderTypeAction,
   {
-    isNotStatusReportOrder: [
+    isMotionResponseOrder: [
+      // 10586: DRY this up
+      clearAlertsAction,
+      startShowValidationAction,
+      validateCourtOrderAction,
+      {
+        error: [
+          setValidationErrorsAction,
+          setScrollToErrorNotificationAction,
+          setValidationAlertErrorsAction,
+        ],
+        success: submitCourtIssuedOrder,
+      },
+    ],
+    isStandardOrder: [
       clearAlertsAction,
       startShowValidationAction,
       validateCourtOrderAction,
