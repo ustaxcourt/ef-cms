@@ -17,6 +17,8 @@ export const PetitionersAndCounsel = connect(
     showModal: state.modal.showModal,
     showViewPetitionerCounselModalSequence:
       sequences.showViewPetitionerCounselModalSequence,
+    showRemovePetitionerEmailModalSequence:
+      sequences.showRemovePetitionerEmailModalSequence,
   },
   function PetitionersAndCounsel({
     caseDetail,
@@ -24,6 +26,7 @@ export const PetitionersAndCounsel = connect(
     partiesInformationHelper,
     showModal,
     showViewPetitionerCounselModalSequence,
+    showRemovePetitionerEmailModalSequence,
   }) {
     return (
       <>
@@ -70,9 +73,23 @@ export const PetitionersAndCounsel = connect(
                       />
                     )}
                   </span>
-                  <span data-testid="petitioner-pending-email">
+                  {petitioner.showRemoveEmailButton && (
+                    <Button
+                      link
+                      className="text-secondary-dark underline-secondary-dark padding-0 margin-top-05"
+                      data-testid="remove-email-button"
+                      icon="trash"
+                      overrideMargin={true}
+                      onClick={() => {
+                        showRemovePetitionerEmailModalSequence();
+                      }}
+                    >
+                      Remove Email
+                    </Button>
+                  )}
+                  <div data-testid="petitioner-pending-email">
                     {petitioner.formattedPendingEmail}
-                  </span>
+                  </div>
                   {petitioner.showPaperPetitionEmail && (
                     <>
                       <p className="semi-bold margin-bottom-0">
