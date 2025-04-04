@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { isStatusReportOrderAction } from './isStatusReportOrderAction';
+import { isStatusReportOrderAction } from './getOrderTypeAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 

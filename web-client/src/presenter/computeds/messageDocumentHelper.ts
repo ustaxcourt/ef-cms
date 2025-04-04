@@ -144,7 +144,7 @@ export const messageDocumentHelper = (
       STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
 
   const showOrderResponseButton =
-    permissions.ORDER_RESPONSE &&
+    permissions.MOTION_ORDER_RESPONSE &&
     ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
 
   const showStatusReportOrderButton =
