@@ -43,7 +43,7 @@ export class User extends JoiValidationEntity {
   public judgePhoneNumber?: string;
 
   constructor(rawUser, { filtered = false } = {}) {
-    super('User');
+    super('User'); // 10495 TODO: Replace magic 'User' strings with a static constant
 
     if (!filtered) {
       this.pendingEmailVerificationToken =

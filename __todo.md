@@ -32,3 +32,42 @@ Is "search key" a concept we need to hold onto?
 
 All TODO comments begin with the string "10495 TODO:" to make searching for them
 simple.
+
+## Notes on User entity hierarchy
+
+```shell
+User
+  ├── Practitioner
+  ├── PrivatePractitioner
+  └── IrsPractitioner
+```
+
+Practitioner
+- optional additionalPhone?: string;
+- required admissionsDate: string;
+- required admissionsStatus: string;
+- required barNumber: string;
+- required birthYear: string;
+- optional confirmEmail?: string;
+- required practiceType: string;
+- optional firmName?: string;
+- required firstName: string;
+- required lastName: string;
+- optional middleName?: string;
+- required originalBarState: string;
+- optional practitionerNotes?: string;
+- required practitionerType: string;
+- required serviceIndicator: string;
+- optional suffix?: string;
+- optional updatedEmail?: string;
+
+PrivatePractitioner
+- required entityName: string;
+- required barNumber: string;
+- required firmName: string;
+- required representing: string[];
+- required serviceIndicator: string;
+
+IrsPractitioner
+- required barNumber: string;
+- required serviceIndicator: string;

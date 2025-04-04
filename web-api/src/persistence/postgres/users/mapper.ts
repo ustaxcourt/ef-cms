@@ -1,6 +1,9 @@
 import { RawUser, User } from '@shared/business/entities/User';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { NewUserKysely, UpdateUserKysely } from './schema';
+import { Practitioner } from '@shared/business/entities/Practitioner';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 
 // 10495 TODO: Is this function necessary for User? If so, it needs to be completed.
 function pickFields(user) {
@@ -29,6 +32,7 @@ export function toKyselyNewMessages(users: RawUser[]): NewUserKysely[] {
 }
 
 export function userEntity(user) {
+  const { userType } = user;
   const userContactInfo = userHasContactInfo(user)
     ? {
         address1: user?.address1,
@@ -43,6 +47,8 @@ export function userEntity(user) {
       }
     : undefined;
 
+  if (userType !== 'User') return userEntitySubset(user, userContactInfo);
+
   return new User(
     transformNullToUndefined({
       ...user,
@@ -52,6 +58,21 @@ export function userEntity(user) {
         user.pendingEmailVerificationTokenTimestamp?.toISOString(),
     }),
   );
+}
+
+// 10495: Implement this function
+function userEntitySubset(user, userContactInfo) {
+  if (user.entityName === Practitioner.ENTITY_NAME) {
+    // instantiate and return a Petitioner
+  }
+
+  if (user.entityName === PrivatePractitioner.ENTITY_NAME) {
+    // instantiate and return a PrivatePractitioner
+  }
+
+  if (user.entityName === IrsPractitioner.ENTITY_NAME) {
+    // instantiate and return a IrsPractitioner
+  }
 }
 
 function userHasContactInfo(user): boolean {
