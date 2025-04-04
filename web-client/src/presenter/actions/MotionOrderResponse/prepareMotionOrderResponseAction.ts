@@ -48,7 +48,7 @@ export const prepareMotionOrderResponseAction = ({
     .getUtilities()
     .formatDateString(motion.filingDate, FORMATS.MMDDYY);
 
-  const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
+  const isOnLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
   const hasAdditionalOrderText = !!additionalOrderText;
 
@@ -64,7 +64,7 @@ export const prepareMotionOrderResponseAction = ({
   let createOrderSelectedCases = [] as any;
 
   if (
-    isLeadCase &&
+    isOnLeadCase &&
     consolidatedGroupOrderFor === CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES
   ) {
     const consolidatedCases = caseDetail.consolidatedCases.map(c => {
@@ -114,7 +114,7 @@ export const prepareMotionOrderResponseAction = ({
   store.set(state.form.documentTitle, 'Order');
   store.set(state.form.dueDateFormatted, dueDateFormatted);
   store.set(state.form.eventCode, 'O');
-  store.set(state.form.isLeadCase, isLeadCase);
+  store.set(state.form.isOnLeadCase, isOnLeadCase);
   store.set(state.form.richText, richText);
   store.set(state.form.showStrickenFromTrialSession, strickenFromTrialSession);
   store.set(state.form.motionOrderResponseFilingDate, responseDate);
