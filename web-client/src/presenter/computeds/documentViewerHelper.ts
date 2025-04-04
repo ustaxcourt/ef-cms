@@ -103,7 +103,7 @@ export const documentViewerHelper = (
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
   const showOrderResponseButton =
-    permissions.ORDER_RESPONSE &&
+    permissions.MOTION_ORDER_RESPONSE &&
     ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(
       formattedDocumentToDisplay.eventCode,
     );
