@@ -47,6 +47,10 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
+import {
+  ConnectionTable,
+  DW_CONNECTION_COLUMNS,
+} from '@web-api/persistence/postgres/notifications/schema';
 
 const DEFAULT = {};
 
@@ -57,6 +61,7 @@ interface DatabaseSchemaType {
   dwCaseStatistic: DatabaseTableMetadata<CaseStatisticTable>;
   dwCaseStatusUpdate: DatabaseTableMetadata<CaseStatusUpdateTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
+  dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwPetitionerOnCase: DatabaseTableMetadata<PetitionerOnCaseTable>;
@@ -104,6 +109,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwCaseWorksheet: {
     table: DEFAULT as CaseWorksheetTable,
     columns: DW_CASE_WORKSHEET_COLUMNS,
+  },
+  dwConnection: {
+    table: DEFAULT as ConnectionTable,
+    columns: DW_CONNECTION_COLUMNS,
   },
   dwDocketEntry: {
     table: DEFAULT as DocketEntryTable,
