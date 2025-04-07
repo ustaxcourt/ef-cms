@@ -1,8 +1,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import {
   CASE_STATUS_TYPES,
-  CONSOLIDATED_GROUP_ORDER_FOR,
-  ORDER_REPLY_OPTIONS,
+  MOTION_ORDER_RESPONSE_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import {
   formatDateString,
@@ -70,7 +69,8 @@ export const prepareMotionOrderResponseAction = ({
 
   if (
     isOnLeadCase &&
-    consolidatedGroupOrderFor === CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES
+    consolidatedGroupOrderFor ===
+      MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor.ALL_CASES
   ) {
     const consolidatedCases = caseDetail.consolidatedCases.map(c => {
       return {
@@ -97,7 +97,8 @@ export const prepareMotionOrderResponseAction = ({
   const orderVerbiageHtml = `<p class="indent-paragraph">ORDERED ${orderVerbiage}`;
 
   const typeOfReply =
-    motionOrderResponse === ORDER_REPLY_OPTIONS.REPLY
+    motionOrderResponse ===
+    MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY
       ? 'Reply'
       : 'Reply, or if no Reply is filed, shall file a Status Report';
   const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} the ${movant} may file a ${typeOfReply}.`;
@@ -132,7 +133,7 @@ export const prepareMotionOrderResponseAction = ({
 
   store.set(state.createOrderSelectedCases, createOrderSelectedCases);
   store.set(state.form.initialFreeText, initialFreeText);
-  store.set(state.form.orderType, 'motionOrderResponse');
+  store.set(state.form.orderType, MOTION_ORDER_RESPONSE_OPTIONS.orderType);
   store.set(state.form.documentTitle, 'Order');
   store.set(state.form.documentType, 'Order'); // Todo 10586: set in setup function
   store.set(state.form.dueDateFormatted, dueDateFormatted);

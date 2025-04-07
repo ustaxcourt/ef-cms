@@ -2,7 +2,8 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
   EVENT_CODES_THAT_ALLOW_FREE_TEXT,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+  MOTION_ORDER_RESPONSE_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
@@ -197,7 +198,7 @@ function generateFreeText(documentMetadata: {
   }
 
   if (eventCode === 'O') {
-    if (orderType === 'motionOrderResponse') {
+    if (orderType === MOTION_ORDER_RESPONSE_OPTIONS.orderType) {
       return initialFreeText;
     } else if (orderType || jurisdiction) {
       return [
