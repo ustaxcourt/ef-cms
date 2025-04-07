@@ -1799,14 +1799,16 @@ export const TROUBLESHOOTING_INFO = {
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
 
-export const ORDER_REPLY_OPTIONS = {
-  REPLY: 'Order Reply',
-  REPLY_SR: 'Order Reply/SR',
-};
-
-export const CONSOLIDATED_GROUP_ORDER_FOR = {
-  ALL_CASES: 'All cases in this group',
-  THIS_CASE_ONLY: 'Just this case',
+export const MOTION_ORDER_RESPONSE_OPTIONS = {
+  orderReplyOptions: {
+    REPLY: 'Order Reply',
+    REPLY_SR: 'Order Reply/SR',
+  },
+  consolidatedGroupOrderFor: {
+    ALL_CASES: 'All cases in this group',
+    THIS_CASE_ONLY: 'Just this case',
+  },
+  orderType: 'motionOrderResponse',
 };
 
 export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
