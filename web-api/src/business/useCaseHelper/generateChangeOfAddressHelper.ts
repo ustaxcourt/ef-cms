@@ -119,13 +119,13 @@ export const generateChangeOfAddressHelper = async ({
     userId: requestUserId || user.userId,
   });
 
-  const updatedJob = await applicationContext
+  const [updatedJob] = await applicationContext
     .getPersistenceGateway()
-    .setChangeOfAddressCaseAsDone({ applicationContext, docketNumber, jobId });
-
+    .setChangeOfAddressCaseAsDone(jobId);
   const isDoneProcessing = updatedJob.remaining === 0;
 
   if (isDoneProcessing) {
+    // TODO: cleanup postgres record
     applicationContext.logger.info(
       `"change-of-address-job|${jobId}" job finished`,
     );

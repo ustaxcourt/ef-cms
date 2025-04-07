@@ -55,6 +55,10 @@ import {
   DW_NOTIFICATION_COLUMNS,
   NotificationTable,
 } from '@web-api/persistence/postgres/notifications/schema';
+import {
+  ChangeOfAddressTable,
+  DW_CHANGE_OF_ADDRESS_COLUMNS,
+} from '@web-api/persistence/postgres/jobs/changeOfAddress/schema';
 
 const DEFAULT = {};
 
@@ -65,6 +69,7 @@ interface DatabaseSchemaType {
   dwCaseStatistic: DatabaseTableMetadata<CaseStatisticTable>;
   dwCaseStatusUpdate: DatabaseTableMetadata<CaseStatusUpdateTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
+  dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
@@ -114,6 +119,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwCaseWorksheet: {
     table: DEFAULT as CaseWorksheetTable,
     columns: DW_CASE_WORKSHEET_COLUMNS,
+  },
+  dwChangeOfAddress: {
+    table: DEFAULT as ChangeOfAddressTable,
+    columns: DW_CHANGE_OF_ADDRESS_COLUMNS,
   },
   dwConnection: {
     table: DEFAULT as ConnectionTable,

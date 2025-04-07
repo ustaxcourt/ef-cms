@@ -5,7 +5,7 @@ import { associateUserWithCasePending } from './persistence/dynamo/cases/associa
 import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
-import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
+import { createChangeOfAddressJob } from './persistence/postgres/jobs/ChangeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
 import {
   createLock,
@@ -94,7 +94,7 @@ import {
 import { saveDispatchNotification } from '@web-api/persistence/postgres/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
-import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
+import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
 import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
