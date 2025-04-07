@@ -5916,7 +5916,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     lodged: false,
     filers: ['23d9342c-577d-4cc4-a44d-aae2dca9a436'],
     editState:
-      '{"lodged":false,"practitioner":[],"dateReceivedMonth":"10","dateReceivedDay":"10","dateReceivedYear":"2001","eventCode":"SIAB","category":"Simultaneous Brief","documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","scenario":"Standard","additionalInfo":"abc","additionalInfo2":"123","partyPrimary":true,"partyIrsPractitioner":true,"attachments":true,"searchError":false,"serviceDate":null,"certificateOfServiceDate":null,"dateReceived":"2001-10-10","isFileAttached":false,"isPaper":true,"docketNumber":"103-19","createdAt":"2019-08-14T20:35:52.858Z","receivedAt":"2001-10-10"}',
+      '{"lodged":false,"practitioner":[],"dateReceivedMonth":"10","dateReceivedDay":"10","dateReceivedYear":"2001","eventCode":"SIAB","category":"Simultaneous Brief","documentTitle":"Simultaneous Answering Brief","documentType":"Simultaneous Answering Brief","scenario":"Standard","additionalInfo":"abc","additionalInfo2":"123","partyIrsPractitioner":true,"attachments":true,"searchError":false,"serviceDate":null,"certificateOfServiceDate":null,"dateReceived":"2001-10-10","isFileAttached":false,"isPaper":true,"docketNumber":"103-19","createdAt":"2019-08-14T20:35:52.858Z","receivedAt":"2001-10-10"}',
     docketNumber: '103-19',
     stampData: {},
   },

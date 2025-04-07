@@ -60,7 +60,6 @@ export const docketEntryTableDefinition = {
   otherFilingParty: DEFAULT as string | null,
   otherIteration: DEFAULT as string | null,
   partyIrsPractitioner: DEFAULT as boolean | null,
-  // partyPrimary: DEFAULT as string, // Does not exist on docketEntry entity
   // partySecondary: DEFAULT as string, // Does not exist on docketEntry
   previousDocument: DEFAULT as ColumnType<
     {

@@ -49,7 +49,6 @@ describe('getWorkItemDocumentLink', () => {
     documentType: 'Administrative Record',
     eventCode: 'ADMR',
     filedBy: 'Petr. Ori Petersen',
-    partyPrimary: true,
     partySecondary: false,
     processingStatus: 'complete',
     receivedAt: '2019-12-16T16:48:02.888Z',
