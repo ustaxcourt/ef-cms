@@ -1,9 +1,10 @@
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { MOTION_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 
 export const getOrderTypeAction = ({ get, path }) => {
   const documentToEdit = get(state.documentToEdit);
-  console.log('documentToEdit', documentToEdit);
+
   const docketEntryDescription = get(state.form.docketEntryDescription);
 
   const isStatusReportOrder =
@@ -13,7 +14,8 @@ export const getOrderTypeAction = ({ get, path }) => {
 
   const isMotionResponseOrder =
     !isEmpty(documentToEdit) &&
-    documentToEdit.draftOrderState?.orderType === 'motionOrderResponse';
+    documentToEdit.draftOrderState?.orderType ===
+      MOTION_ORDER_RESPONSE_OPTIONS.orderType;
 
   const permissions = get(state.permissions);
 
