@@ -10,9 +10,6 @@ export const createNewPetitionerUser = async ({
 }: {
   userToCreate: RawUser;
 }): Promise<User> => {
-  // 10495 TODO: This function contains two separate function calls that should
-  // be bundled into one unit of work that prevents one call from suceeding
-  // while the other fails
   await createUser(applicationContext, {
     email: userToCreate.pendingEmail!,
     name: userToCreate.name,

@@ -5,10 +5,10 @@
 All TODO comments begin with the string "10495 TODO:" to help keep track of them.
 
 - [ ] Replace magic 'User' strings with a static constant in `User.ts`
-- [ ] `createNewPetitionerUser.ts` contains two distinct operations that should not fail independently of one another
 - [ ] `getPractitionerByBarNumber.ts` should map results to the Practitioner entity
 - [ ] Do we need `pickFields` in `mapper.ts`?
 - [ ] Where should Practitioner entity-specific fields like `suffix` and `additionalPhone` live?
+- [ ] Fix privatePractitioner representing field
 
 ## Dynamo Functions to Postgres
 
@@ -78,3 +78,6 @@ PrivatePractitioner
 IrsPractitioner
 - required barNumber: string;
 - required serviceIndicator: string;
+
+## No longer relevant
+- `createNewPetitionerUser.ts` contains two distinct operations that can fail independently and they could before this migration, and that's okay.

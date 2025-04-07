@@ -4,6 +4,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createTable('dwUser')
     .addColumn('userId', 'varchar', col => col.primaryKey())
+    .addColumn('additionalPhone', 'varchar')
     .addColumn('address1', 'varchar')
     .addColumn('address2', 'varchar')
     .addColumn('address3', 'varchar')
@@ -12,6 +13,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('barNumber', 'varchar')
     .addColumn('birthYear', 'int2')
     .addColumn('city', 'varchar')
+    .addColumn('confirmEmail', 'varchar')
     .addColumn('country', 'varchar')
     .addColumn('countryType', 'varchar')
     .addColumn('email', 'varchar')
@@ -32,12 +34,16 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('phone', 'varchar')
     .addColumn('postalCode', 'varchar')
     .addColumn('practiceType', 'varchar')
+    .addColumn('practitionerNotes', 'text')
     .addColumn('practitionerType', 'varchar')
+    .addColumn('representing', 'jsonb')
     .addColumn('role', 'varchar', col => col.notNull())
     .addColumn('section', 'varchar')
     .addColumn('serviceIndicator', 'varchar')
     .addColumn('state', 'varchar')
+    .addColumn('suffix', 'varchar')
     .addColumn('token', 'varchar')
+    .addColumn('updatedEmail', 'varchar')
     .addColumn('userType', 'varchar')
     .execute();
 }

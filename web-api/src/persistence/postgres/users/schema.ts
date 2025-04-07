@@ -3,6 +3,7 @@ import { Selectable, Insertable, Updateable } from 'kysely';
 const DEFAULT = {};
 
 export const userTableDefinition = {
+  additionalPhone: DEFAULT as string | undefined,
   address1: DEFAULT as string | undefined, // forced optional
   address2: DEFAULT as string | undefined,
   address3: DEFAULT as string | undefined,
@@ -11,6 +12,7 @@ export const userTableDefinition = {
   barNumber: DEFAULT as string | undefined,
   birthYear: DEFAULT as number | undefined,
   city: DEFAULT as string | undefined, // forced optional
+  confirmEmail: DEFAULT as string | undefined,
   country: DEFAULT as string | undefined, // forced optional
   countryType: DEFAULT as string | undefined, // forced optional
   email: DEFAULT as string | undefined,
@@ -31,12 +33,16 @@ export const userTableDefinition = {
   phone: DEFAULT as string | undefined, // forced optional
   postalCode: DEFAULT as string | undefined, // forced optional
   practiceType: DEFAULT as string | undefined,
+  practitionerNotes: DEFAULT as string | undefined,
   practitionerType: DEFAULT as string | undefined,
+  representing: DEFAULT as any,
   role: DEFAULT as string,
   section: DEFAULT as string | undefined,
   serviceIndicator: DEFAULT as string | undefined,
   state: DEFAULT as string | undefined, // forced optional
+  suffix: DEFAULT as string | undefined,
   token: DEFAULT as string | undefined,
+  updatedEmail: DEFAULT as string | undefined,
   userId: DEFAULT as string,
   userType: DEFAULT as string | undefined, // 10495 TODO: "entityName": "Practitioner",
 };
