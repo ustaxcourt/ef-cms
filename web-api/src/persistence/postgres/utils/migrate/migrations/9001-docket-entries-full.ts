@@ -10,7 +10,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('archived', 'boolean')
     .addColumn('attachments', 'boolean')
     .addColumn('caseType', 'varchar')
-    .addColumn('certificateOfService', 'varchar')
+    .addColumn('certificateOfService', 'boolean')
     .addColumn('certificateOfServiceDate', 'timestamptz')
     .addColumn('date', 'timestamptz')
     .addColumn('docketNumbers', 'varchar')

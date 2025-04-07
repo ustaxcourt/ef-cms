@@ -35,11 +35,11 @@ export const docketEntryTableDefinition = {
   docketNumbers: DEFAULT as string | null,
   documentContentsId: DEFAULT as string | null,
   documentIdBeforeSignature: DEFAULT as string | null,
-  draftOrderState: DEFAULT as any, // 10494 Probably a JSONB
+  draftOrderState: DEFAULT as Record<string, any>,
   editState: DEFAULT as string | null,
   filedBy: DEFAULT as string | null,
   filedByRole: DEFAULT as string | null,
-  filers: DEFAULT as any, // 10494 probably JSONB
+  filers: DEFAULT as string[],
   freeText: DEFAULT as string | null,
   hasOtherFilingParty: DEFAULT as boolean | null,
   hasSupportingDocuments: DEFAULT as boolean | null,
@@ -49,7 +49,6 @@ export const docketEntryTableDefinition = {
   isFileAttached: DEFAULT as boolean | null,
   isLegacy: DEFAULT as boolean | null,
   isLegacySealed: DEFAULT as boolean | null,
-  // isMinuteEntry: DEFAULT as string, // Does not exist on docketEntry entity
   isOnDocketRecord: DEFAULT as boolean,
   isPaper: DEFAULT as boolean | null,
   isPendingService: DEFAULT as boolean | null,
@@ -71,11 +70,10 @@ export const docketEntryTableDefinition = {
   redactionAcknowledgement: DEFAULT as boolean | null,
   relationship: DEFAULT as string | null,
   scenario: DEFAULT as string | null,
-  // secondaryDate: DEFAULT as string, // Does not exist on docketEntry entity
   secondaryDocument: DEFAULT as any, // 10494 probably JSONB
   servedParties: DEFAULT as any, // 10494 probably JSONB
   servedPartiesCode: DEFAULT as string | null,
-  serviceDate: DEFAULT as string | null,
+  serviceDate: DEFAULT as Date | null, // 10494 check if actually date
   serviceStamp: DEFAULT as string | null,
   signedAt: DEFAULT as Date | null,
   signedByUserId: DEFAULT as string | null,
