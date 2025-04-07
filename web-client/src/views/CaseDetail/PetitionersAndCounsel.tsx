@@ -81,7 +81,9 @@ export const PetitionersAndCounsel = connect(
                       icon="trash"
                       overrideMargin={true}
                       onClick={() => {
-                        showRemovePetitionerEmailModalSequence();
+                        showRemovePetitionerEmailModalSequence({
+                          email: petitioner.formattedEmail,
+                        });
                       }}
                     >
                       Remove Email
