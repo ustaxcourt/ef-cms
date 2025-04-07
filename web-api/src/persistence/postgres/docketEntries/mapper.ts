@@ -25,7 +25,7 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     documentIdBeforeSignature: docketEntry.documentIdBeforeSignature ?? null,
     documentTitle: docketEntry.documentTitle,
     documentType: docketEntry.documentType ?? null,
-    draftOrderState: docketEntry.draftOrderState ?? null,
+    draftOrderState: JSON.stringify(docketEntry.draftOrderState) ?? null,
     editState: docketEntry.editState ?? null,
     eventCode: docketEntry.eventCode,
     filedBy: docketEntry.filedBy ?? null,
@@ -59,8 +59,8 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     otherIteration: docketEntry.otherIteration ?? null,
     partyIrsPractitioner: docketEntry.partyIrsPractitioner ?? null,
     pending: docketEntry.pending ?? null,
-    previousDocument: docketEntry.previousDocument ?? null,
-    privatePractitioners: docketEntry.privatePractitioners ?? null,
+    previousDocument: JSON.stringify(docketEntry.previousDocument) ?? null,
+    privatePractitioners: JSON.stringify(docketEntry.privatePractitioners) ?? null,
     processingStatus: docketEntry.processingStatus,
     qcAt: docketEntry.qcAt
       ? calculateDate({ dateString: docketEntry.qcAt })
@@ -71,11 +71,11 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     relationship: docketEntry.relationship ?? null,
     scenario: docketEntry.scenario ?? null,
     sealedTo: docketEntry.sealedTo,
-    secondaryDocument: docketEntry.secondaryDocument,
+    secondaryDocument: JSON.stringify(docketEntry.secondaryDocument) ?? null,
     servedAt: docketEntry.servedAt
       ? calculateDate({ dateString: docketEntry.servedAt })
       : null,
-    servedParties: docketEntry.servedParties ?? null,
+    servedParties: JSON.stringify(docketEntry.servedParties) ?? null,
     servedPartiesCode: docketEntry.servedPartiesCode ?? null,
     serviceDate: docketEntry.serviceDate
       ? calculateDate({ dateString: docketEntry.serviceDate })

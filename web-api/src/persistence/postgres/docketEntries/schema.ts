@@ -21,7 +21,11 @@ export const docketEntryTableDefinition = {
   documentIdBeforeSignature: DEFAULT as string | null,
   documentTitle: DEFAULT as string,
   documentType: DEFAULT as string | null,
-  draftOrderState: DEFAULT as Record<string, any> | null,
+  draftOrderState: DEFAULT as ColumnType<
+    Record<string, any>,
+    string,
+    string
+  > | null,
   editState: DEFAULT as string | null,
   eventCode: DEFAULT as string,
   filedBy: DEFAULT as string | null,
@@ -78,7 +82,11 @@ export const docketEntryTableDefinition = {
   relationship: DEFAULT as string | null,
   scenario: DEFAULT as string | null,
   sealedTo: DEFAULT as string | null,
-  secondaryDocument: DEFAULT as Record<string, any>,
+  secondaryDocument: DEFAULT as ColumnType<
+    Record<string, any>,
+    string,
+    string
+  > | null,
   servedAt: DEFAULT as Date | null,
   servedParties: DEFAULT as ColumnType<
     {
