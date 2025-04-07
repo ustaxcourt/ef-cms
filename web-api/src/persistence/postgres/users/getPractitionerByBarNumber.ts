@@ -17,6 +17,6 @@ export const getPractitionerByBarNumber = async ({
       .executeTakeFirst(),
   );
 
-  // 10495 TODO: should map to petitioner
+  // 10495 TODO: should map to Practitioner entity
   return userEntity(user);
 };

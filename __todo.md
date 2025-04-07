@@ -1,4 +1,14 @@
-# 10495 Todo Items
+# 10495 Development Notes
+
+## Todo Items
+
+All TODO comments begin with the string "10495 TODO:" to help keep track of them.
+
+- [ ] Replace magic 'User' strings with a static constant in `User.ts`
+- [ ] `createNewPetitionerUser.ts` contains two distinct operations that should not fail independently of one another
+- [ ] `getPractitionerByBarNumber.ts` should map results to the Practitioner entity
+- [ ] Do we need `pickFields` in `mapper.ts`?
+- [ ] Where should Practitioner entity-specific fields like `suffix` and `additionalPhone` live?
 
 ## Dynamo Functions to Postgres
 
@@ -29,9 +39,6 @@ does not belong in the persistence layer.
 - [ ] getUsersBySearchKey: Invoked by (1) `getPrivatePractitionersBySearchKey`
 action, interactor and (2) `getIrsPractitionersBySearchKey` action, interactor.
 Is "search key" a concept we need to hold onto?
-
-All TODO comments begin with the string "10495 TODO:" to make searching for them
-simple.
 
 ## Notes on User entity hierarchy
 
