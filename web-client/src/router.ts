@@ -1370,7 +1370,6 @@ const router = {
       }),
     );
 
-    // TODO 10586: fill out this route for messages
     registerRoute(
       '/messages/*/message-detail/*/*/motion-order-response-create',
       ifHasAccess(

@@ -23,7 +23,6 @@ export const goToOrderResponseSequence =
     getCaseAction,
     setCaseAction,
     setParentMessageIdAction,
-    // TODO 10586: Clean up commented code at the end
     clearPdfPreviewUrlAction,
     clearFormAction,
     isEditMotionOrderResponseAction,
@@ -40,6 +39,5 @@ export const goToOrderResponseSequence =
         motionOrderResponsePdfPreviewSequence,
       ],
     },
-    // clearStatusReportOrderFormAction,
-    setupCurrentPageAction('OrderResponse'), // TODO 10586: This is where we set the html page
+    setupCurrentPageAction('OrderResponse'),
   ]);
