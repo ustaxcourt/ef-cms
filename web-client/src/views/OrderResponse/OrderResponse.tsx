@@ -270,27 +270,29 @@ export const OrderResponse = connect(
                     className="order-response-form-group"
                     errorText={validationErrors.customText}
                   >
-                    <div className="usa-checkbox">
-                      <input
-                        checked={form.strickenFromTrialSession || false}
-                        className="usa-checkbox__input"
-                        id="case-is-stricken-from-trial-session"
-                        name="strickenFromTrialSession"
-                        type="checkbox"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: !form.strickenFromTrialSession,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-checkbox__label"
-                        htmlFor="case-is-stricken-from-trial-session"
-                      >
-                        Strike from trial session and retain jurisdiction
-                      </label>
-                    </div>
+                    {motionOrderResponseFormHelper.showStrikeCheckBox && (
+                      <div className="usa-checkbox">
+                        <input
+                          checked={form.strickenFromTrialSession || false}
+                          className="usa-checkbox__input"
+                          id="case-is-stricken-from-trial-session"
+                          name="strickenFromTrialSession"
+                          type="checkbox"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: !form.strickenFromTrialSession,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="case-is-stricken-from-trial-session"
+                        >
+                          Strike from trial session and retain jurisdiction
+                        </label>
+                      </div>
+                    )}
                     <div>
                       <label
                         className="usa-label"
