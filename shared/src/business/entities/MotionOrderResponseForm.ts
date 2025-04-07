@@ -29,7 +29,6 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
     this.responseDate = rawProps.responseDate;
     this.additionalOrderText = rawProps.additionalOrderText;
     this.dueDate = rawProps.dueDate;
-    this.docketEntryDescription = rawProps.docketEntryDescription;
     this.isOnLeadCase = rawProps.isOnLeadCase;
     this.consolidatedGroupOrderFor = rawProps.consolidatedGroupOrderFor;
   }
