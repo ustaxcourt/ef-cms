@@ -4,80 +4,46 @@
 
 All TODO comments begin with the string "10495 TODO:" to help keep track of them.
 
-- [ ] Replace magic 'User' strings with a static constant in `User.ts`
-- [ ] `getPractitionerByBarNumber.ts` should map results to the Practitioner entity
-- [ ] Do we need `pickFields` in `mapper.ts`?
-- [ ] Where should Practitioner entity-specific fields like `suffix` and `additionalPhone` live?
-- [ ] Fix privatePractitioner representing field
+- [ ] Fix privatePractitioner `representing` field
+- [ ] Expire user confirmation codes (some sort of cron job?)
+- [ ] Replace all calls to `updateUserRecords` with `updateUser`
 
 ## Dynamo Functions to Postgres
 
 - [x] createNewPetitionerUser
-- [ ] createNewPractitionerUser
-- [ ] createOrUpdatePractitionerUser
-- [ ] createPetitionerUserRecords
-- [ ] createUserRecords
-- [ ] generateAccountConfirmation
-- [ ] getAccountConfirmationCode
-- [ ] getCasesForUser
+- [x] createNewPractitionerUser
+- [x] createOrUpdatePractitionerUser
+- [x] createPetitionerUserRecord (Note: removed 's' from function name)
+- [x] createUserRecords
+- [x] generateAccountConfirmationCode (Note: renamed to generateUserConfirmationCode)
+- [x] getAccountConfirmationCode  (Note: renamed to getUserConfirmationCode)
+- [x] refreshConfirmationCodeExpiration (Note: renamed to refreshUserConfirmationCodeExpiration)
 - [x] getInternalUsers
-- [x]* getPractitionerByBarNumber
+- [x] getPractitionerByBarNumber
 - [x] getUserByEmail
 - [x] getUserById
 - [x] getUserByIdOnceAllUpdatesComplete
 - [x] getUsersById
 - [x] getUsersInSection
 - [x] updateUser & persistUser (same thing)
-- [ ] refreshConfirmationCodeExpiration
-- [ ] updatePractitionerUser
-- [ ] updateUserRecords
+- [x] updatePractitionerUser
 
 Odd dynamo functions:
 
+- [ ] getCasesForUser - not really concerning users
 - [ ] barNumberGenerator: Contains business logic for generating a bar number,
 does not belong in the persistence layer.
 - [ ] getUsersBySearchKey: Invoked by (1) `getPrivatePractitionersBySearchKey`
 action, interactor and (2) `getIrsPractitionersBySearchKey` action, interactor.
 Is "search key" a concept we need to hold onto?
 
-## Notes on User entity hierarchy
-
-```shell
-User
-  ├── Practitioner
-  ├── PrivatePractitioner
-  └── IrsPractitioner
-```
-
-Practitioner
-- optional additionalPhone?: string;
-- required admissionsDate: string;
-- required admissionsStatus: string;
-- required barNumber: string;
-- required birthYear: string;
-- optional confirmEmail?: string;
-- required practiceType: string;
-- optional firmName?: string;
-- required firstName: string;
-- required lastName: string;
-- optional middleName?: string;
-- required originalBarState: string;
-- optional practitionerNotes?: string;
-- required practitionerType: string;
-- required serviceIndicator: string;
-- optional suffix?: string;
-- optional updatedEmail?: string;
-
-PrivatePractitioner
-- required entityName: string;
-- required barNumber: string;
-- required firmName: string;
-- required representing: string[];
-- required serviceIndicator: string;
-
-IrsPractitioner
-- required barNumber: string;
-- required serviceIndicator: string;
-
-## No longer relevant
+## Completed todos and no-longer-relevant notes
+- [x] Replace magic 'User' strings with a static constant in `User.ts`
+- [x] `getPractitionerByBarNumber.ts` should map results to the Practitioner entity
+- [x] Do we need `pickFields` in `mapper.ts`?
+- [x] Where should Practitioner entity-specific fields like `suffix` and `additionalPhone` live?
 - `createNewPetitionerUser.ts` contains two distinct operations that can fail independently and they could before this migration, and that's okay.
+
+
+## Considerations
+- `userType`, which is the renamed `entityName` field, appears to only have `'User` or `'Practitioner'`

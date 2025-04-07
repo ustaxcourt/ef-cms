@@ -49,6 +49,8 @@ import {
 } from '@web-api/persistence/postgres/workitems/schema';
 import {
   DW_USER_COLUMNS,
+  DW_USER_CONFIRMATION_CODE_COLUMNS,
+  UserConfirmationCodeTable,
   UserTable,
 } from '@web-api/persistence/postgres/users/schema';
 
@@ -68,6 +70,7 @@ interface DatabaseSchemaType {
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
   dwUser: DatabaseTableMetadata<UserTable>;
+  dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -137,6 +140,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUser: {
     table: DEFAULT as UserTable,
     columns: DW_USER_COLUMNS,
+  },
+  dwUserConfirmationCode: {
+    table: DEFAULT as UserConfirmationCodeTable,
+    columns: DW_USER_CONFIRMATION_CODE_COLUMNS,
   },
 };
 

@@ -58,6 +58,7 @@ export type TrialSessionPaperPdfRecord = TDynamoRecord<{
   title: string;
 }>;
 
+// 10495 TODO: Remove type?
 export type AccountConfirmationRecord = TDynamoRecord<{
   userId: string;
   confirmationCode: string;

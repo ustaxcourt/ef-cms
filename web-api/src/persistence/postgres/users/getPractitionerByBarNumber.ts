@@ -1,12 +1,12 @@
-import { User } from '@shared/business/entities/User';
 import { userEntity } from './mapper';
 import { getDbReader } from '@web-api/database';
+import { Practitioner } from '@shared/business/entities/Practitioner';
 
 export const getPractitionerByBarNumber = async ({
   barNumber,
 }: {
   barNumber: string;
-}): Promise<User> => {
+}): Promise<Practitioner> => {
   const formattedBarNumber = barNumber.toUpperCase();
 
   const user = await getDbReader(reader =>
@@ -17,6 +17,5 @@ export const getPractitionerByBarNumber = async ({
       .executeTakeFirst(),
   );
 
-  // 10495 TODO: should map to Practitioner entity
-  return userEntity(user);
+  return userEntity(user) as Practitioner;
 };

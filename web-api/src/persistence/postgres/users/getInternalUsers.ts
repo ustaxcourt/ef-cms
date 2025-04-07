@@ -17,5 +17,5 @@ export const getInternalUsers = async (): Promise<User[]> => {
       .execute(),
   );
 
-  return users.map(user => userEntity(user));
+  return users.map(user => userEntity(user)) as User[];
 };

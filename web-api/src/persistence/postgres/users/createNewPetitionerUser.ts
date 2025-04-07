@@ -23,5 +23,5 @@ export const createNewPetitionerUser = async ({
     values: [toKyselyNewUser(userToCreate)],
   });
 
-  return userEntity(createdUser);
+  return userEntity(createdUser) as User;
 };

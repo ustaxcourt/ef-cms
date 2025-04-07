@@ -18,5 +18,5 @@ export const updateUser = async ({
     throw new Error('could not update the user');
   }
 
-  return userEntity(updatedUser);
+  return userEntity(updatedUser) as User;
 };

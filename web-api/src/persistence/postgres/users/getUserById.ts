@@ -15,5 +15,5 @@ export const getUserById = async ({
       .executeTakeFirst(),
   );
 
-  return userEntity(user);
+  return userEntity(user) as User;
 };

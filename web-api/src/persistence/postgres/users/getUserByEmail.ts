@@ -16,5 +16,5 @@ export const getUserByEmail = async ({
       .executeTakeFirst(),
   );
 
-  return userEntity(user);
+  return userEntity(user) as User;
 };

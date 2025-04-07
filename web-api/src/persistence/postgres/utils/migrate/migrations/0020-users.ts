@@ -46,8 +46,17 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('updatedEmail', 'varchar')
     .addColumn('userType', 'varchar')
     .execute();
+
+  await db.schema
+    .createTable('dwUserConfirmationCode')
+    .addColumn('id', 'varchar', col => col.primaryKey())
+    .addColumn('userId', 'varchar', col => col.notNull())
+    .addColumn('confirmationCode', 'varchar', col => col.notNull())
+    .addColumn('expiresAt', 'timestamptz', col => col.notNull())
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
+  await db.schema.dropTable('dwUserConfirmationCode').execute();
   await db.schema.dropTable('dwUser').execute();
 }

@@ -5,11 +5,49 @@ import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 
-// 10495 TODO: Is this function necessary for User? If so, it needs to be completed.
 function pickFields(user) {
   return {
-    name: user.name,
+    additionalPhone: user.additionalPhone,
+    address1: user.address1,
+    address2: user.address2,
+    address3: user.address3,
+    admissionsDate: user.admissionsDate,
+    admissionsStatus: user.admissionsStatus,
+    barNumber: user.barNumber, // 10495: Note that this field was previously all upper-case
+    birthYear: user.birthYear,
+    city: user.city,
+    confirmEmail: user.confirmEmail,
+    country: user.country,
+    countryType: user.countryType,
+    email: user.email, // 10495: Note that this field was previously trimmed and all lower-case
+    firmName: user.firmName,
+    firstName: user.firstName,
+    isSeniorJudge: user.isSeniorJudge,
+    isUpdatingInformation: user.isUpdatingInformation,
+    judgeFullName: user.judgeFullName,
+    judgePhoneNumber: user.judgePhoneNumber,
+    judgeTitle: user.judgeTitle,
+    lastName: user.lastName,
+    middleName: user.middleName,
+    name: user.name, // 10495: Note that this field was previously all upper-case
+    originalBarState: user.originalBarState,
+    pendingEmail: user.pendingEmail,
+    pendingEmailVerificationToken: user.pendingEmailVerificationToken,
+    pendingEmailVerificationTokenTimestamp:
+      user.pendingEmailVerificationTokenTimestamp,
+    phone: user.phone,
+    postalCode: user.postalCode,
+    practiceType: user.practiceType,
+    practitionerNotes: user.practitionerNotes,
+    practitionerType: user.practitionerType,
+    representing: user.representing,
     role: user.role,
+    section: user.section,
+    serviceIndicator: user.serviceIndicator,
+    state: user.state,
+    suffix: user.suffix,
+    token: user.token,
+    updatedEmail: user.updatedEmail,
     userId: user.userId,
     userType: user.userType,
   };
@@ -32,7 +70,6 @@ export function toKyselyNewMessages(users: RawUser[]): NewUserKysely[] {
 }
 
 export function userEntity(user) {
-  const { userType } = user;
   const userContactInfo = userHasContactInfo(user)
     ? {
         address1: user?.address1,
@@ -47,7 +84,45 @@ export function userEntity(user) {
       }
     : undefined;
 
-  if (userType !== 'User') return userEntitySubset(user, userContactInfo);
+  return userEntitySubset(user, userContactInfo);
+}
+
+function userEntitySubset(user, userContactInfo) {
+  if (user.userType === Practitioner.ENTITY_NAME) {
+    return new Practitioner(
+      transformNullToUndefined({
+        ...user,
+        contact: userContactInfo,
+        admissionsDate: user.admissionsDate?.toISOString(),
+        pendingEmailVerificationTokenTimestamp:
+          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
+      }),
+    );
+  }
+
+  if (user.userType === PrivatePractitioner.ENTITY_NAME) {
+    return new PrivatePractitioner(
+      transformNullToUndefined({
+        ...user,
+        contact: userContactInfo,
+        admissionsDate: user.admissionsDate?.toISOString(),
+        pendingEmailVerificationTokenTimestamp:
+          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
+      }),
+    );
+  }
+
+  if (user.userType === IrsPractitioner.ENTITY_NAME) {
+    return new IrsPractitioner(
+      transformNullToUndefined({
+        ...user,
+        contact: userContactInfo,
+        admissionsDate: user.admissionsDate?.toISOString(),
+        pendingEmailVerificationTokenTimestamp:
+          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
+      }),
+    );
+  }
 
   return new User(
     transformNullToUndefined({
@@ -58,21 +133,6 @@ export function userEntity(user) {
         user.pendingEmailVerificationTokenTimestamp?.toISOString(),
     }),
   );
-}
-
-// 10495: Implement this function
-function userEntitySubset(user, userContactInfo) {
-  if (user.entityName === Practitioner.ENTITY_NAME) {
-    // instantiate and return a Petitioner
-  }
-
-  if (user.entityName === PrivatePractitioner.ENTITY_NAME) {
-    // instantiate and return a PrivatePractitioner
-  }
-
-  if (user.entityName === IrsPractitioner.ENTITY_NAME) {
-    // instantiate and return a IrsPractitioner
-  }
 }
 
 function userHasContactInfo(user): boolean {

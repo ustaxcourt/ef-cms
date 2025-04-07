@@ -56,3 +56,23 @@ export const DW_USER_COLUMNS = Object.keys(userTableDefinition) as Array<
 export type UserKysely = Selectable<UserTable>;
 export type NewUserKysely = Insertable<UserTable>;
 export type UpdateUserKysely = Updateable<UserTable>;
+
+export const userConfirmationCodeTableDefinition = {
+  id: DEFAULT as string,
+  userId: DEFAULT as string,
+  confirmationCode: DEFAULT as string,
+  expiresAt: DEFAULT as Date,
+};
+
+export type UserConfirmationCodeTable =
+  typeof userConfirmationCodeTableDefinition;
+
+export const DW_USER_CONFIRMATION_CODE_COLUMNS = Object.keys(
+  userConfirmationCodeTableDefinition,
+) as Array<keyof UserConfirmationCodeTable>;
+
+export type UserConfirmationCodeKysely = Selectable<UserConfirmationCodeTable>;
+export type NewUserConfirmationCodeKysely =
+  Insertable<UserConfirmationCodeTable>;
+export type UpdateUserConfirmationCodeKysely =
+  Updateable<UserConfirmationCodeTable>;

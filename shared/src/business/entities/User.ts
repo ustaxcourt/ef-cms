@@ -43,7 +43,7 @@ export class User extends JoiValidationEntity {
   public judgePhoneNumber?: string;
 
   constructor(rawUser, { filtered = false } = {}) {
-    super('User'); // 10495 TODO: Replace magic 'User' strings with a static constant
+    super(User.ENTITY_NAME);
 
     if (!filtered) {
       this.pendingEmailVerificationToken =
@@ -68,6 +68,8 @@ export class User extends JoiValidationEntity {
 
     this.section = rawUser.section;
   }
+
+  static ENTITY_NAME = 'User';
 
   setContactInformation(rawUser) {
     if ([ROLES.judge, ROLES.legacyJudge].includes(rawUser.role)) {
@@ -133,7 +135,9 @@ export class User extends JoiValidationEntity {
   static VALIDATION_RULES = {
     contact: joi.object().keys(User.USER_CONTACT_VALIDATION_RULES).optional(),
     email: JoiValidationConstants.EMAIL.optional(),
-    entityName: JoiValidationConstants.STRING.valid('User').required(),
+    entityName: JoiValidationConstants.STRING.valid(
+      User.ENTITY_NAME,
+    ).required(),
     isSeniorJudge: joi.when('role', {
       is: ROLES.judge,
       otherwise: joi.optional().allow(null),
