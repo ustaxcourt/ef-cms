@@ -95,6 +95,7 @@ import { saveDispatchNotification } from '@web-api/persistence/postgres/notifica
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
 import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
+import { deleteChangeOfAddressCaseRecord } from './persistence/postgres/jobs/ChangeOfAddress/deleteChangeOfAddressCaseRecord';
 import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
@@ -200,6 +201,7 @@ const gatewayMethods = {
   createLock,
   decrementJobCounter,
   deleteCaseTrialSortMappingRecords,
+  deleteChangeOfAddressCaseRecord,
   deleteDocketEntry,
   deleteDocketEntryWorksheetRecord,
   deleteDocumentFile,

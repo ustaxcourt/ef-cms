@@ -125,7 +125,10 @@ export const generateChangeOfAddressHelper = async ({
   const isDoneProcessing = updatedJob.remaining === 0;
 
   if (isDoneProcessing) {
-    // TODO: cleanup postgres record
+    await applicationContext
+      .getPersistenceGateway()
+      .deleteChangeOfAddressCaseRecord(jobId);
+
     applicationContext.logger.info(
       `"change-of-address-job|${jobId}" job finished`,
     );
