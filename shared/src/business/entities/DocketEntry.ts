@@ -143,8 +143,15 @@ export class DocketEntry extends JoiValidationEntity {
   public trialLocation?: string;
   public supportingDocument?: string;
   public userId?: string;
-  public privatePractitioners?: any[];
-  public servedParties?: any[];
+  public privatePractitioners?: {
+    name: string;
+    partyPrivatePractitioner?: boolean;
+  }[];
+  public servedParties?: {
+    name: string;
+    role?: string;
+    email?: string;
+  }[];
   public signedAt?: string;
   public draftOrderState?: {
     additionalOrderText?: string;
@@ -175,7 +182,7 @@ export class DocketEntry extends JoiValidationEntity {
   public judgeUserId?: string;
   public pending?: boolean;
   public previousDocument?: {
-    docketEntryId: string;
+    docketEntryId?: string;
     documentTitle: string;
     documentType: string;
   };

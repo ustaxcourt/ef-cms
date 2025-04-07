@@ -1,4 +1,4 @@
-import { Selectable, Insertable, Updateable } from 'kysely';
+import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
 
 const DEFAULT = {};
 
@@ -30,8 +30,8 @@ export const docketEntryTableDefinition = {
   attachments: DEFAULT as boolean | null,
   caseType: DEFAULT as string | null,
   certificateOfService: DEFAULT as boolean | null,
-  certificateOfServiceDate: DEFAULT as Date | null, // Check if this is actually a date
-  date: DEFAULT as Date | null, // 10494 Check if this is actually a date.
+  certificateOfServiceDate: DEFAULT as Date | null,
+  date: DEFAULT as Date | null,
   docketNumbers: DEFAULT as string | null,
   documentContentsId: DEFAULT as string | null,
   documentIdBeforeSignature: DEFAULT as string | null,
@@ -62,23 +62,46 @@ export const docketEntryTableDefinition = {
   partyIrsPractitioner: DEFAULT as boolean | null,
   // partyPrimary: DEFAULT as string, // Does not exist on docketEntry entity
   // partySecondary: DEFAULT as string, // Does not exist on docketEntry
-  previousDocument: DEFAULT as any, // 10494 probably JSONB
-  privatePractitioners: DEFAULT as any, // 10494 probably JSONB
+  previousDocument: DEFAULT as ColumnType<
+    {
+      docketEntryId?: string;
+      documentTitle: string;
+      documentType: string;
+    },
+    string,
+    string
+  > | null,
+  privatePractitioners: DEFAULT as ColumnType<
+    {
+      name: string;
+      partyPrivatePractitioner?: boolean;
+    }[],
+    string,
+    string
+  > | null,
   processingStatus: DEFAULT as string,
   qcAt: DEFAULT as Date | null,
   qcByUserId: DEFAULT as string | null,
   redactionAcknowledgement: DEFAULT as boolean | null,
   relationship: DEFAULT as string | null,
   scenario: DEFAULT as string | null,
-  secondaryDocument: DEFAULT as any, // 10494 probably JSONB
-  servedParties: DEFAULT as any, // 10494 probably JSONB
+  secondaryDocument: DEFAULT as Record<string, any>,
+  servedParties: DEFAULT as ColumnType<
+    {
+      name: string;
+      role?: string;
+      email?: string;
+    }[],
+    string,
+    string
+  > | null,
   servedPartiesCode: DEFAULT as string | null,
-  serviceDate: DEFAULT as Date | null, // 10494 check if actually date
+  serviceDate: DEFAULT as Date | null,
   serviceStamp: DEFAULT as string | null,
   signedAt: DEFAULT as Date | null,
   signedByUserId: DEFAULT as string | null,
   signedJudgeUserId: DEFAULT as string | null,
-  stampData: DEFAULT as any, // 10494 probably JSONB
+  stampData: DEFAULT as Record<string, any>,
   strickenAt: DEFAULT as Date | null,
   strickenBy: DEFAULT as string | null,
   strickenByUserId: DEFAULT as string | null,
