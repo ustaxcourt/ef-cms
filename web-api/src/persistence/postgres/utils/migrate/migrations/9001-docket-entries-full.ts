@@ -35,7 +35,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('isPendingService', 'boolean')
     .addColumn('lodged', 'boolean')
     .addColumn('mailingDate', 'varchar')
-    .addColumn('noticeIssuedDate', 'varchar', col => col.notNull())
+    .addColumn('noticeIssuedDate', 'timestamptz')
     .addColumn('objections', 'varchar')
     .addColumn('ordinalValue', 'varchar')
     .addColumn('otherFilingParty', 'varchar')

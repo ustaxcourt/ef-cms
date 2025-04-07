@@ -104,7 +104,7 @@ export const docketEntryTableDefinition = {
   signedByUserId: DEFAULT as string | null,
   signedJudgeName: DEFAULT as string | null,
   signedJudgeUserId: DEFAULT as string | null,
-  stampData: DEFAULT as Record<string, any>,
+  stampData: DEFAULT as ColumnType<Record<string, any>, string, string> | null,
   strickenAt: DEFAULT as Date | null,
   strickenBy: DEFAULT as string | null,
   strickenByUserId: DEFAULT as string | null,

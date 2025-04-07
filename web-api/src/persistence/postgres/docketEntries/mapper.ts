@@ -60,7 +60,8 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     partyIrsPractitioner: docketEntry.partyIrsPractitioner ?? null,
     pending: docketEntry.pending ?? null,
     previousDocument: JSON.stringify(docketEntry.previousDocument) ?? null,
-    privatePractitioners: JSON.stringify(docketEntry.privatePractitioners) ?? null,
+    privatePractitioners:
+      JSON.stringify(docketEntry.privatePractitioners) ?? null,
     processingStatus: docketEntry.processingStatus,
     qcAt: docketEntry.qcAt
       ? calculateDate({ dateString: docketEntry.qcAt })
@@ -87,7 +88,7 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     signedByUserId: docketEntry.signedByUserId ?? null,
     signedJudgeName: docketEntry.signedJudgeName ?? null,
     signedJudgeUserId: docketEntry.signedJudgeUserId ?? null,
-    stampData: docketEntry.stampData,
+    stampData: JSON.stringify(docketEntry.stampData) ?? null,
     strickenAt: docketEntry.strickenAt
       ? calculateDate({ dateString: docketEntry.strickenAt })
       : null,
