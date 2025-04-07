@@ -49,7 +49,9 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     judge: docketEntry.judge ?? null,
     lodged: docketEntry.lodged ?? null,
     mailingDate: docketEntry.mailingDate ?? null,
-    noticeIssuedDate: docketEntry.noticeIssuedDate ?? null,
+    noticeIssuedDate: docketEntry.noticeIssuedDate
+      ? calculateDate({ dateString: docketEntry.noticeIssuedDate })
+      : null,
     numberOfPages: docketEntry.numberOfPages ?? null,
     objections: docketEntry.objections ?? null,
     ordinalValue: docketEntry.ordinalValue ?? null,
