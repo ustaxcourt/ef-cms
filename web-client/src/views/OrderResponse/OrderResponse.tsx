@@ -88,15 +88,17 @@ export const OrderResponse = connect(
                               aria-label="all cases in this group"
                               checked={
                                 form.consolidatedGroupOrderFor ===
-                                  constants.CONSOLIDATED_GROUP_ORDER_FOR
-                                    .ALL_CASES || false
+                                  constants.MOTION_ORDER_RESPONSE_OPTIONS
+                                    .consolidatedGroupOrderFor.ALL_CASES ||
+                                false
                               }
                               className="usa-radio__input"
                               id="motion-order-lead-case-radio-all"
                               name="consolidatedGroupOrderFor"
                               type="radio"
                               value={
-                                constants.CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES
+                                constants.MOTION_ORDER_RESPONSE_OPTIONS
+                                  .consolidatedGroupOrderFor.ALL_CASES
                               }
                               onChange={e => {
                                 updateFormValueSequence({
@@ -109,7 +111,10 @@ export const OrderResponse = connect(
                               className="usa-radio__label"
                               htmlFor={'motion-order-lead-case-radio-all'}
                             >
-                              {constants.CONSOLIDATED_GROUP_ORDER_FOR.ALL_CASES}
+                              {
+                                constants.MOTION_ORDER_RESPONSE_OPTIONS
+                                  .consolidatedGroupOrderFor.ALL_CASES
+                              }
                             </label>
                           </div>
                           <div className="usa-radio">
@@ -117,16 +122,17 @@ export const OrderResponse = connect(
                               aria-label="Just this case"
                               checked={
                                 form.consolidatedGroupOrderFor ===
-                                  constants.CONSOLIDATED_GROUP_ORDER_FOR
-                                    .THIS_CASE_ONLY || false
+                                  constants.MOTION_ORDER_RESPONSE_OPTIONS
+                                    .consolidatedGroupOrderFor.THIS_CASE_ONLY ||
+                                false
                               }
                               className="usa-radio__input"
                               id="motion-order-lead-case-radio-just-this"
                               name="consolidatedGroupOrderFor"
                               type="radio"
                               value={
-                                constants.CONSOLIDATED_GROUP_ORDER_FOR
-                                  .THIS_CASE_ONLY
+                                constants.MOTION_ORDER_RESPONSE_OPTIONS
+                                  .consolidatedGroupOrderFor.THIS_CASE_ONLY
                               }
                               onChange={e => {
                                 updateFormValueSequence({
@@ -140,8 +146,8 @@ export const OrderResponse = connect(
                               htmlFor={'motion-order-lead-case-radio-just-this'}
                             >
                               {
-                                constants.CONSOLIDATED_GROUP_ORDER_FOR
-                                  .THIS_CASE_ONLY
+                                constants.MOTION_ORDER_RESPONSE_OPTIONS
+                                  .consolidatedGroupOrderFor.THIS_CASE_ONLY
                               }
                             </label>
                           </div>
@@ -194,13 +200,17 @@ export const OrderResponse = connect(
                         aria-label="order reply"
                         checked={
                           form.motionOrderResponse ===
-                            constants.ORDER_REPLY_OPTIONS.REPLY || false
+                            constants.MOTION_ORDER_RESPONSE_OPTIONS
+                              .orderReplyOptions.REPLY || false
                         }
                         className="usa-radio__input"
                         id="motion-order-reply"
                         name="motionOrderResponse"
                         type="radio"
-                        value={constants.ORDER_REPLY_OPTIONS.REPLY}
+                        value={
+                          constants.MOTION_ORDER_RESPONSE_OPTIONS
+                            .orderReplyOptions.REPLY
+                        }
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -212,7 +222,10 @@ export const OrderResponse = connect(
                         className="usa-radio__label"
                         htmlFor={'motion-order-reply'}
                       >
-                        {constants.ORDER_REPLY_OPTIONS.REPLY}
+                        {
+                          constants.MOTION_ORDER_RESPONSE_OPTIONS
+                            .orderReplyOptions.REPLY
+                        }
                       </label>
                     </div>
                     <div className="usa-radio">
@@ -220,13 +233,17 @@ export const OrderResponse = connect(
                         aria-label="order reply s/r"
                         checked={
                           form.motionOrderResponse ===
-                            constants.ORDER_REPLY_OPTIONS.REPLY_SR || false
+                            constants.MOTION_ORDER_RESPONSE_OPTIONS
+                              .orderReplyOptions.REPLY_SR || false
                         }
                         className="usa-radio__input"
                         id="motion-order-reply-sr"
                         name="motionOrderResponse"
                         type="radio"
-                        value={constants.ORDER_REPLY_OPTIONS.REPLY_SR}
+                        value={
+                          constants.MOTION_ORDER_RESPONSE_OPTIONS
+                            .orderReplyOptions.REPLY_SR
+                        }
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -238,7 +255,10 @@ export const OrderResponse = connect(
                         className="usa-radio__label"
                         htmlFor={'motion-order-reply-sr'}
                       >
-                        {constants.ORDER_REPLY_OPTIONS.REPLY_SR}
+                        {
+                          constants.MOTION_ORDER_RESPONSE_OPTIONS
+                            .orderReplyOptions.REPLY_SR
+                        }
                       </label>
                     </div>
                   </FormGroup>

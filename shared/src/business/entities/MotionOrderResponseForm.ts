@@ -6,9 +6,8 @@ import {
 import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import {
-  CONSOLIDATED_GROUP_ORDER_FOR,
   MAX_ORDER_RESPONSE_TEXT_CHARACTERS,
-  ORDER_REPLY_OPTIONS,
+  MOTION_ORDER_RESPONSE_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
@@ -21,7 +20,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   public additionalOrderText?: string;
   public dueDate?: string;
   public isOnLeadCase: boolean;
-  public consolidatedGroupOrderFor: typeof CONSOLIDATED_GROUP_ORDER_FOR;
+  public consolidatedGroupOrderFor: typeof MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor;
 
   constructor(rawProps) {
     super('MotionOrderResponseForm');
@@ -54,10 +53,17 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       is: joi.equal(true),
       then: joi
         .required()
-        .valid(...Object.values(CONSOLIDATED_GROUP_ORDER_FOR)),
+        .valid(
+          ...Object.values(
+            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor,
+          ),
+        ),
       otherwise: joi
         .required()
-        .equal(CONSOLIDATED_GROUP_ORDER_FOR.THIS_CASE_ONLY),
+        .equal(
+          MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor
+            .THIS_CASE_ONLY,
+        ),
     }),
     dueDate: joi
       .when('motionOrderResponse', {
@@ -79,7 +85,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
           'Due date cannot be prior to response date. Enter a valid date.',
       }),
     motionOrderResponse: JoiValidationConstants.STRING.valid(
-      ...Object.values(ORDER_REPLY_OPTIONS),
+      ...Object.values(MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions),
     )
       .optional()
       .allow(null)

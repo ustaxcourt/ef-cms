@@ -1813,14 +1813,17 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
   HYBRID_CASE_MINIMUM_QUANTITY: 50,
   HYBRID_CASE_MAX_QUANTITY: 100,
 } as const;
-export const ORDER_REPLY_OPTIONS = {
-  REPLY: 'Order Reply',
-  REPLY_SR: 'Order Reply/SR',
-};
 
-export const CONSOLIDATED_GROUP_ORDER_FOR = {
-  ALL_CASES: 'All cases in this group',
-  THIS_CASE_ONLY: 'Just this case',
+export const MOTION_ORDER_RESPONSE_OPTIONS = {
+  orderReplyOptions: {
+    REPLY: 'Order Reply',
+    REPLY_SR: 'Order Reply/SR',
+  },
+  consolidatedGroupOrderFor: {
+    ALL_CASES: 'All cases in this group',
+    THIS_CASE_ONLY: 'Just this case',
+  },
+  orderType: 'motionOrderResponse',
 };
 
 export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
