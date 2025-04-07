@@ -8,7 +8,7 @@ import { setupCurrentPageAction } from '@web-client/presenter/actions/setupCurre
 import { startWebSocketConnectionSequenceDecorator } from '@web-client/presenter/utilities/startWebSocketConnectionSequenceDecorator';
 import { clearPdfPreviewUrlAction } from '@web-client/presenter/actions/clearPdfPreviewUrlAction';
 import { setupOrderResponseFormAction } from '@web-client/presenter/actions/setupOrderResponseFormAction';
-import { isEditMotionOrderResponseAction } from '@web-client/presenter/actions/MotionOrderResponse/isEditMotionOrderResponseAction';
+import { isEditOrderResponseAction } from '@web-client/presenter/actions/StatusReportOrder/isEditOrderResponseAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setEditMotionOrderResponseFormAction } from '@web-client/presenter/actions/MotionOrderResponse/setEditMotionOrderResponseFormAction';
@@ -22,7 +22,7 @@ export const goToOrderResponseSequence =
     setParentMessageIdAction,
     clearPdfPreviewUrlAction,
     clearFormAction,
-    isEditMotionOrderResponseAction,
+    isEditOrderResponseAction,
     {
       create: [
         setDocketEntryIdAction,
