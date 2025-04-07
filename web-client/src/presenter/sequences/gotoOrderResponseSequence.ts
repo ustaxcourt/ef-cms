@@ -14,23 +14,31 @@ import { setupOrderResponseFormAction } from '@web-client/presenter/actions/setu
 import { isEditMotionOrderResponseAction } from '@web-client/presenter/actions/MotionOrderResponse/isEditMotionOrderResponseAction';
 import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
-import { setEditStatusReportOrderFormAction } from '../actions/StatusReportOrder/setEditStatusReportOrderFormAction';
+import { setEditMotionOrderResponseFormAction } from '@web-client/presenter/actions/MotionOrderResponse/setEditMotionOrderResponseFormAction';
+import { motionOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/MotionOrderResponse/motionOrderResponsePdfPreviewSequence';
 
 export const goToOrderResponseSequence =
   startWebSocketConnectionSequenceDecorator([
     setupCurrentPageAction('Interstitial'),
     getCaseAction,
     setCaseAction,
-    setDocketEntryIdAction,
-    setDocketEntrySelectedFromMessageAction,
     setParentMessageIdAction,
     // TODO 10586: Clean up commented code at the end
     clearPdfPreviewUrlAction,
     clearFormAction,
     isEditMotionOrderResponseAction,
     {
-      create: [setupOrderResponseFormAction, unsetDocumentToEditAction],
-      edit: [setDocumentToEditAction, setEditStatusReportOrderFormAction],
+      create: [
+        setDocketEntryIdAction,
+        setDocketEntrySelectedFromMessageAction,
+        setupOrderResponseFormAction,
+        unsetDocumentToEditAction,
+      ],
+      edit: [
+        setDocumentToEditAction,
+        setEditMotionOrderResponseFormAction,
+        motionOrderResponsePdfPreviewSequence,
+      ],
     },
     // clearStatusReportOrderFormAction,
     setupCurrentPageAction('OrderResponse'), // TODO 10586: This is where we set the html page

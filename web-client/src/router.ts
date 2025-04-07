@@ -430,12 +430,12 @@ const router = {
       '/case-detail/*/documents/*/motion-order-response-edit',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
-        (docketNumber, docketEntryId) => {
+        (docketNumber, docketEntryIdToEdit) => {
           setPageTitle(
             `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
           );
           return app.getSequence('goToOrderResponseSequence')({
-            docketEntryId,
+            docketEntryIdToEdit,
             docketNumber,
             isEditing: true,
           });
@@ -1392,12 +1392,12 @@ const router = {
       '/messages/*/message-detail/*/*/motion-order-response-edit',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
-        (docketNumber, parentMessageId, docketEntryId) => {
+        (docketNumber, parentMessageId, docketEntryIdToEdit) => {
           setPageTitle(
             `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
           );
           return app.getSequence('goToOrderResponseSequence')({
-            docketEntryId,
+            docketEntryIdToEdit,
             docketNumber,
             isEditing: true,
             parentMessageId,

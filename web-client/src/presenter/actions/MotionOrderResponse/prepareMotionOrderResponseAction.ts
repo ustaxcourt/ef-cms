@@ -120,4 +120,5 @@ export const prepareMotionOrderResponseAction = ({
   store.set(state.form.showStrickenFromTrialSession, strickenFromTrialSession);
   store.set(state.form.motionOrderResponseFilingDate, responseDate);
   store.set(state.form.parentMessageId, get(state.parentMessageId));
+  store.set(state.form.previousDocument, motion);
 };
