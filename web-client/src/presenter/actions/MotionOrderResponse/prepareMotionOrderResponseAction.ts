@@ -4,7 +4,10 @@ import {
   CONSOLIDATED_GROUP_ORDER_FOR,
   ORDER_REPLY_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
-import { FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
@@ -22,7 +25,6 @@ const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
 };
 
 export const prepareMotionOrderResponseAction = ({
-  applicationContext,
   get,
   store,
 }: ActionProps) => {
@@ -48,21 +50,21 @@ export const prepareMotionOrderResponseAction = ({
   });
   const { documentTitle: motionDocumentTitle, index } = motion;
 
-  const motionFilingDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(motion.filingDate, FORMATS.MMDDYYYY);
+  const motionFilingDateFormatted = formatDateString(
+    motion.filingDate,
+    FORMATS.MMDDYYYY,
+  );
 
   const isOnLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
   const hasAdditionalOrderText = !!additionalOrderText;
 
-  const dueDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(dueDate, FORMATS.MMDDYYYY);
+  const dueDateFormatted = formatDateString(dueDate, FORMATS.MMDDYYYY);
 
-  const responseDateFormatted = applicationContext
-    .getUtilities()
-    .formatDateString(responseDate, FORMATS.MMDDYYYY);
+  const responseDateFormatted = formatDateString(
+    responseDate,
+    FORMATS.MMDDYYYY,
+  );
 
   let createOrderSelectedCases = [] as any;
 
@@ -83,9 +85,7 @@ export const prepareMotionOrderResponseAction = ({
 
   if (caseDetail.status === CASE_STATUS_TYPES.calendared) {
     const { trialLocation, trialDate } = caseDetail;
-    const formattedTrialDate = applicationContext
-      .getUtilities()
-      .formatDateString(trialDate, FORMATS.MMDDYYYY);
+    const formattedTrialDate = formatDateString(trialDate, FORMATS.MMDDYYYY);
     preambleAddendum = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate} in ${trialLocation}.`;
   }
 
