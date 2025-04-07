@@ -1,60 +1,26 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { loginAsDocketClerk1 } from 'cypress/helpers/authentication/login-as-helpers';
-import { addCaseToGroup } from 'cypress/helpers/caseDetail/add-case-to-group';
-import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
-import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
+import {
+  createAndServeConsolidatedGroup,
+  GroupInfoType,
+} from 'cypress/helpers/fileAPetition/create-consolidated-case-group';
 
 describe('Case Deadline - Consolidated Group', () => {
   const JUDGE_NAME = 'Ashford';
   const CASE_STATUS = CASE_STATUS_TYPES.submitted;
   const CASE_YEAR = '2025';
 
-  type GroupInfoType = {
-    leadDocketNumber: string;
-    memberDocketNumbers: string[];
-  };
-
   before(() => {
-    cy.wrap({
-      leadDocketNumber: undefined,
-      memberDocketNumbers: [],
-    }).as('GROUP_INFO');
-
-    createAndServePaperPetition({
-      yearReceived: CASE_YEAR,
-    }).then(({ docketNumber: leadDocketNumber }) => {
-      loginAsDocketClerk1();
-      goToCase(leadDocketNumber);
-      updateCaseStatus(CASE_STATUS, JUDGE_NAME);
-      cy.get<GroupInfoType>('@GROUP_INFO').then(GROUP_INFO => {
-        GROUP_INFO.leadDocketNumber = leadDocketNumber;
-        cy.wrap(GROUP_INFO).as('GROUP_INFO');
-      });
-    });
-
-    for (let index = 0; index < 4; index++) {
-      createAndServePaperPetition({
-        yearReceived: CASE_YEAR,
-      }).then(({ docketNumber: memberDocketNumber }) => {
-        loginAsDocketClerk1();
-        goToCase(memberDocketNumber);
-        updateCaseStatus(CASE_STATUS, JUDGE_NAME);
-        cy.get<GroupInfoType>('@GROUP_INFO').then(GROUP_INFO => {
-          GROUP_INFO.memberDocketNumbers.push(memberDocketNumber);
-          cy.wrap(GROUP_INFO).as('GROUP_INFO');
-        });
-      });
-    }
-
-    cy.get<GroupInfoType>('@GROUP_INFO').then(GROUP_INFO => {
-      const { leadDocketNumber, memberDocketNumbers } = GROUP_INFO;
-      for (let index = 0; index < memberDocketNumbers.length; index++) {
-        const docketNumber = memberDocketNumbers[index];
-        goToCase(docketNumber);
-        cy.get('[data-testid="tab-case-information"]').click();
-        addCaseToGroup(leadDocketNumber!);
-      }
+    createAndServeConsolidatedGroup({
+      caseStatus: CASE_STATUS,
+      leadCaseJudge: JUDGE_NAME,
+      memeberCaseJudge: JUDGE_NAME,
+      numberOfMemberCases: 2,
+      leadYearReceived: CASE_YEAR,
+      memberYearReceived: CASE_YEAR,
+    }).then(consolidatedGroupInfo => {
+      cy.wrap<GroupInfoType>(consolidatedGroupInfo).as('GROUP_INFO');
     });
   });
 

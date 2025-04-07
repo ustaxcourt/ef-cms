@@ -9,7 +9,7 @@ import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/upd
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 
-type GroupInfoType = {
+export type GroupInfoType = {
   leadDocketNumber: string;
   memberDocketNumbers: string[];
 };
@@ -22,6 +22,8 @@ export function createAndServeConsolidatedGroup({
   trialLocation = undefined,
   includeApwDocument = undefined,
   numberOfMemberCases = 1,
+  leadYearReceived = '2019',
+  memberYearReceived = '2023',
 }: {
   includeApwDocument?: boolean;
   caseStatus?: CaseStatus;
@@ -30,9 +32,11 @@ export function createAndServeConsolidatedGroup({
   procedureType?: ProcedureType;
   trialLocation?: string;
   numberOfMemberCases?: number;
+  leadYearReceived?: string;
+  memberYearReceived?: string;
 }): Cypress.Chainable<GroupInfoType> {
   return createAndServePaperPetition({
-    yearReceived: '2019',
+    yearReceived: leadYearReceived,
     includeApwDocument,
     procedureType,
     trialLocation,
@@ -48,7 +52,7 @@ export function createAndServeConsolidatedGroup({
 
     for (let index = 0; index < numberOfMemberCases; index++) {
       createAndServePaperPetition({
-        yearReceived: '2023',
+        yearReceived: memberYearReceived,
         includeApwDocument,
         procedureType,
         trialLocation,
