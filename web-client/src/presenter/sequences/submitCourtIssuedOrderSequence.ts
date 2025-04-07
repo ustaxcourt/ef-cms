@@ -84,7 +84,7 @@ export const submitCourtIssuedOrder = showProgressSequenceDecorator([
 export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
   getOrderTypeAction,
   {
-    isMotionResponseOrder: [
+    isMotionOrderResponse: [
       // 10586: DRY this up
       clearAlertsAction,
       startShowValidationAction,
