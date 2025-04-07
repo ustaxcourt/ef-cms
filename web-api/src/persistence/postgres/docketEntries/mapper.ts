@@ -10,10 +10,14 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     archived: docketEntry.archived ?? null,
     attachments: docketEntry.attachments ?? null,
     caseType: docketEntry.caseType ?? null,
-    certificateOfService: docketEntry.certificateOfService ?? null,
+    certificateOfService: docketEntry.certificateOfService
+      ? calculateDate({ dateString: docketEntry.certificateOfServiceDate })
+      : null,
     certificateOfServiceDate: docketEntry.certificateOfServiceDate ?? null,
     createdAt: calculateDate({ dateString: docketEntry.createdAt }),
-    date: docketEntry.date ?? null,
+    date: docketEntry.date
+      ? calculateDate({ dateString: docketEntry.date })
+      : null,
     docketEntryId: docketEntry.docketEntryId,
     docketNumber: docketEntry.docketNumber,
     docketNumbers: docketEntry.docketNumbers ?? null,
@@ -45,7 +49,7 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     judge: docketEntry.judge ?? null,
     lodged: docketEntry.lodged ?? null,
     mailingDate: docketEntry.mailingDate ?? null,
-    noticeIssuedDate: docketEntry.noticeIssuedDate,
+    noticeIssuedDate: docketEntry.noticeIssuedDate ?? null,
     numberOfPages: docketEntry.numberOfPages ?? null,
     objections: docketEntry.objections ?? null,
     ordinalValue: docketEntry.ordinalValue ?? null,
@@ -56,7 +60,9 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     previousDocument: docketEntry.previousDocument ?? null,
     privatePractitioners: docketEntry.privatePractitioners ?? null,
     processingStatus: docketEntry.processingStatus,
-    qcAt: docketEntry.qcAt ?? null,
+    qcAt: docketEntry.qcAt
+      ? calculateDate({ dateString: docketEntry.qcAt })
+      : null,
     qcByUserId: docketEntry.qcByUserId ?? null,
     receivedAt: calculateDate({ dateString: docketEntry.receivedAt }),
     redactionAcknowledgement: docketEntry.redactionAcknowledgement ?? null,
@@ -69,14 +75,20 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
       : null,
     servedParties: docketEntry.servedParties ?? null,
     servedPartiesCode: docketEntry.servedPartiesCode ?? null,
-    serviceDate: docketEntry.serviceDate ?? null,
+    serviceDate: docketEntry.serviceDate
+      ? calculateDate({ dateString: docketEntry.serviceDate })
+      : null,
     serviceStamp: docketEntry.serviceStamp ?? null,
-    signedAt: docketEntry.signedAt ?? null,
+    signedAt: docketEntry.signedAt
+      ? calculateDate({ dateString: docketEntry.signedAt })
+      : null,
     signedByUserId: docketEntry.signedByUserId ?? null,
     signedJudgeName: docketEntry.signedJudgeName ?? null,
     signedJudgeUserId: docketEntry.signedJudgeUserId ?? null,
     stampData: docketEntry.stampData,
-    strickenAt: docketEntry.strickenAt ?? null,
+    strickenAt: docketEntry.strickenAt
+      ? calculateDate({ dateString: docketEntry.strickenAt })
+      : null,
     strickenBy: docketEntry.strickenBy ?? null,
     strickenByUserId: docketEntry.strickenByUserId ?? null,
     supportingDocument: docketEntry.supportingDocument ?? null,

@@ -44,8 +44,8 @@ export const docketEntryTableDefinition = {
   isStricken: DEFAULT as boolean | null,
   judge: DEFAULT as string | null,
   lodged: DEFAULT as boolean | null,
-  mailingDate: DEFAULT as string | null,
-  noticeIssuedDate: DEFAULT as string,
+  mailingDate: DEFAULT as string | null, // 10494 check date
+  noticeIssuedDate: DEFAULT as string | null, // 10494 check date
   numberOfPages: DEFAULT as number | undefined,
   objections: DEFAULT as string | null,
   ordinalValue: DEFAULT as string | null,
