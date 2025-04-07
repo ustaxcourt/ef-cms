@@ -11,7 +11,7 @@ const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const documentClient = DynamoDBDocument.from(dynamoDbClient, {
   marshallOptions: { removeUndefinedValues: true },
 });
-const totalSegments = 10;
+const totalSegments = 15;
 let itemsScanned = 0;
 
 const setHasEAccessToTrue: { docketNumber: string; contactId: string }[] = [];
@@ -22,7 +22,7 @@ const hasConsentedToElectronicService: {
 
 async function main() {
   await Promise.all(
-    Array.from({ length: 10 }).map((_, segment) =>
+    Array.from({ length: totalSegments }).map((_, segment) =>
       scanContinuously({
         TableName: environment.dynamoDbTableName,
         Segment: segment,
