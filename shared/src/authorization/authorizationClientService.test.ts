@@ -55,12 +55,24 @@ describe('Authorization client service', () => {
         isAuthorized(mockAdcUser, ROLE_PERMISSIONS.STAMP_MOTION),
       ).toBeTruthy();
     });
+
+    it('should be authorized for motion order response', () => {
+      expect(
+        isAuthorized(mockAdcUser, ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE),
+      ).toBeTruthy();
+    });
   });
 
   describe('chambers role', () => {
     it('should be authorized to stamp a motion', () => {
       expect(
         isAuthorized(mockChambersUser, ROLE_PERMISSIONS.STAMP_MOTION),
+      ).toBeTruthy();
+    });
+
+    it('should be authorized for motion order response', () => {
+      expect(
+        isAuthorized(mockChambersUser, ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE),
       ).toBeTruthy();
     });
   });
@@ -120,6 +132,12 @@ describe('Authorization client service', () => {
     it('should be authorized to stamp a motion', () => {
       expect(
         isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.STAMP_MOTION),
+      ).toBeTruthy();
+    });
+
+    it('should be authorized for motion order response', () => {
+      expect(
+        isAuthorized(mockJudgeUser, ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE),
       ).toBeTruthy();
     });
   });
