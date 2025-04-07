@@ -2436,7 +2436,6 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       allowStamp: true,
       allowOrderResponse: true,
     },
-    // TODO 10586: Should the motion below allow for order response?
     {
       documentTitle: 'Motion to Vacate or Revise Pursuant to Rule 162',
       documentType: 'Motion to Vacate or Revise Pursuant to Rule 162',
@@ -2461,7 +2460,6 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       allowStamp: true,
       allowOrderResponse: true,
     },
-    // TODO 10586: Should the motion below allow for order response?
     {
       documentTitle: 'Motion to Withdraw as Counsel',
       documentType: 'Motion to Withdraw as Counsel',
@@ -2488,7 +2486,6 @@ export const INTERNAL_FILING_EVENTS: AllInteralFilingEvents = {
       allowStamp: true,
       allowOrderResponse: true,
     },
-    // TODO 10586: Should the motion below allow for order response?
     {
       documentTitle: 'Motion to Withdraw Counsel',
       documentType: 'Motion to Withdraw Counsel (filed by petitioner)',

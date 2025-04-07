@@ -62,7 +62,7 @@ export const OrderResponse = connect(
             <div className="grid-col-5">
               <div className="border border-base-lighter">
                 <label
-                  className="grid-header grid-row padding-left-205" // TODO 10586: update classnames
+                  className="grid-header grid-row padding-left-205"
                   htmlFor="motion-order-response-form"
                 >
                   Order Response
@@ -177,12 +177,10 @@ export const OrderResponse = connect(
                           toFormat: constants.DATE_FORMATS.YYYYMMDD,
                           value: e.target.value,
                         });
-                        // TODO 10586: update this to validateOrderResponseSequence
                       }}
                     />
                   </FormGroup>
                   <hr className="border-top-2px border-base-lighter" />
-                  {/* TODO 10586: update IDs and classnames */}
                   <FormGroup
                     className={
                       motionOrderResponseFormHelper.dispositionErrorClass
@@ -194,7 +192,6 @@ export const OrderResponse = connect(
                     >
                       Select One <span className="usa-hint">(Required)</span>
                     </label>
-                    {/* TODO 10586: use map as seen in ApplyStamp */}
                     <div className="usa-radio">
                       <input
                         aria-label="order reply"
