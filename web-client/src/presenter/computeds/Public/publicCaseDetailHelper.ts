@@ -75,6 +75,8 @@ export const formatDocketEntryOnDocketRecord = (
     user: {
       role: ROLES.petitioner,
       userId: '',
+      email: '',
+      name: '',
     },
     visibilityChangeDate: visibilityPolicyDate,
   });

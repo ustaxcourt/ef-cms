@@ -1,5 +1,5 @@
 /* eslint-disable max-lines */
-import { NewPetitionerOnCaseKysely } from '@web-api/database-types';
+import { NewPetitionerOnCaseKysely } from '@web-api/persistence/postgres/cases/parties/schema';
 import { SEEDED_DOCKET_NUMBERS_100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
 import { SEEDED_DOCKET_NUMBERS_105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 import { SEEDED_DOCKET_NUMBERS_110_129 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases110_129';

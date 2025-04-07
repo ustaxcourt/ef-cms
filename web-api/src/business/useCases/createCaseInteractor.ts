@@ -72,53 +72,24 @@ const createCaseMetadata = async (
   {
     attachmentToPetitionFileIds,
     corporateDisclosureFileId,
+    petitionEntity,
     petitionFileId,
     petitionMetadata,
+    privatePractitioners,
     stinFileId,
     user,
   }: {
     attachmentToPetitionFileIds?: string[];
     corporateDisclosureFileId?: string;
+    petitionEntity: ElectronicPetition;
     petitionFileId: string;
     petitionMetadata: any;
+    privatePractitioners: UserRecord[];
     stinFileId: string;
     user: UserRecord;
   },
   authorizedUser: AuthUser,
 ) => {
-  const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
-
-  let privatePractitioners: UserRecord[] = [];
-  if (user.role === ROLES.privatePractitioner) {
-    const practitionerUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({
-        applicationContext,
-        userId: user.userId,
-      });
-
-    practitionerUser.representing = [
-      petitionEntity.getContactPrimary().contactId,
-    ];
-
-    if (
-      petitionMetadata.contactSecondary &&
-      petitionMetadata.contactSecondary.name
-    ) {
-      practitionerUser.representing.push(
-        petitionEntity.getContactSecondary().contactId,
-      );
-    }
-
-    // remove the email from contactPrimary
-    // since the practitioners array should have a service email
-    // and paperPetitionEmail is used as email for the petitioner
-    delete petitionEntity.getContactPrimary().email;
-    delete petitionEntity.getContactPrimary().serviceIndicator;
-
-    privatePractitioners = [practitionerUser];
-  }
-
   const docketNumber = await generateDocketNumber({});
 
   const caseToAdd = new Case(
@@ -315,6 +286,39 @@ export const createCaseInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
+
+  let privatePractitioners: UserRecord[] = [];
+  if (user.role === ROLES.privatePractitioner) {
+    const practitionerUser = await applicationContext
+      .getPersistenceGateway()
+      .getUserById({
+        applicationContext,
+        userId: user.userId,
+      });
+
+    practitionerUser.representing = [
+      petitionEntity.getContactPrimary().contactId,
+    ];
+
+    if (
+      petitionMetadata.contactSecondary &&
+      petitionMetadata.contactSecondary.name
+    ) {
+      practitionerUser.representing.push(
+        petitionEntity.getContactSecondary().contactId,
+      );
+    }
+
+    // remove the email from contactPrimary
+    // since the practitioners array should have a service email
+    // and paperPetitionEmail is used as email for the petitioner
+    delete petitionEntity.getContactPrimary().email;
+    delete petitionEntity.getContactPrimary().serviceIndicator;
+
+    privatePractitioners = [practitionerUser];
+  }
+
   await acquireLock({
     applicationContext,
     authorizedUser,
@@ -323,56 +327,56 @@ export const createCaseInteractor = async (
     waitTime: 500,
   });
 
+  let caseToAdd: Case;
+  let workItem: WorkItem;
+
   try {
-    const { caseToAdd, workItem } = await createCaseMetadata(
+    ({ caseToAdd, workItem } = await createCaseMetadata(
       applicationContext,
       {
         attachmentToPetitionFileIds,
         corporateDisclosureFileId,
+        petitionEntity,
         petitionFileId,
         petitionMetadata,
+        privatePractitioners,
         stinFileId,
         user,
       },
       authorizedUser,
-    );
+    ));
+  } finally {
     await removeLock({
       applicationContext,
       identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
     });
-
-    await createPetitionersOnCase({
-      docketNumber: caseToAdd.docketNumber,
-      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-    });
-
-    caseToAdd.statistics?.forEach(statistic =>
-      createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-    );
-
-    const userCaseEntity = new UserCase(caseToAdd);
-
-    await applicationContext.getPersistenceGateway().associateUserWithCase({
-      applicationContext,
-      docketNumber: caseToAdd.docketNumber,
-      userCase: userCaseEntity.validate().toRawObject(),
-      userId: user.userId,
-    });
-
-    await upsertWorkItems({
-      workItems: [workItem.validate().toRawObject()],
-    });
-
-    applicationContext.logger.info('filed a new petition', {
-      docketNumber: caseToAdd.docketNumber,
-    });
-
-    return new Case(caseToAdd, { authorizedUser }).toRawObject();
-  } catch (e) {
-    await removeLock({
-      applicationContext,
-      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    });
-    throw e;
   }
+
+  await createPetitionersOnCase({
+    docketNumber: caseToAdd.docketNumber,
+    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
+  });
+
+  caseToAdd.statistics?.forEach(statistic =>
+    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+  );
+
+  const userCaseEntity = new UserCase(caseToAdd);
+
+  await applicationContext.getPersistenceGateway().associateUserWithCase({
+    applicationContext,
+    docketNumber: caseToAdd.docketNumber,
+    userCase: userCaseEntity.validate().toRawObject(),
+    userId: user.userId,
+  });
+
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
+
+  applicationContext.logger.info('filed a new petition', {
+    docketNumber: caseToAdd.docketNumber,
+  });
+
+  return new Case(caseToAdd, { authorizedUser }).toRawObject();
 };

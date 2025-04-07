@@ -1,8 +1,3 @@
-import {
-  FORMATS,
-  createISODateString,
-  formatDateString,
-} from '@shared/business/utilities/DateHandler';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import React, { useEffect, useRef } from 'react';
 import datePicker from '../../../../node_modules/@uswds/uswds/packages/usa-date-picker/src';
@@ -12,7 +7,6 @@ export const DateSelector = ({
   disabled = false,
   displayOptionalHintText = false,
   errorText,
-  formatDateOnChange = false,
   formGroupClassNames,
   hintText = undefined,
   id,
@@ -37,7 +31,6 @@ export const DateSelector = ({
   id: string;
   label?: string;
   labelPosition?: 'top' | 'left';
-  formatDateOnChange?: boolean;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   showDateHint?: boolean;
@@ -68,37 +61,31 @@ export const DateSelector = ({
 
       if (!myDatePicker) throw new Error('could not find expected date picker');
 
-      let onChangeHandler = onChange;
-      if (formatDateOnChange) {
-        onChangeHandler = originalEvent => {
-          // Create a new event to avoid modifying the original
-          const newEvent = new Event('change', {
-            bubbles: true,
-          }) as unknown as React.ChangeEvent<HTMLInputElement>;
-          const target = Object.create(originalEvent.target, {
-            value: {
-              get: () => {
-                if (originalEvent.target.value === '') return '';
-                return formatDateString(
-                  createISODateString(
-                    originalEvent.target.value,
-                    FORMATS.MMDDYYYY,
-                  ),
-                  FORMATS.YYYYMMDD,
-                );
-              },
-            },
-          });
+      const transformDomEventIntoReactEvent = (
+        e: Event,
+      ): React.ChangeEvent<HTMLInputElement> => {
+        const target = e.target as HTMLInputElement;
+        return {
+          target,
+          currentTarget: target,
+          bubbles: e.bubbles,
+          cancelable: e.cancelable,
+          defaultPrevented: e.defaultPrevented,
+          preventDefault: () => e.preventDefault(),
+          stopPropagation: () => e.stopPropagation(),
+          nativeEvent: e,
+          isDefaultPrevented: () => e.defaultPrevented,
+          isPropagationStopped: () => false,
+          persist: () => {},
+          type: e.type,
+        } as unknown as React.ChangeEvent<HTMLInputElement>;
+      };
 
-          Object.defineProperty(newEvent, 'target', {
-            enumerable: true,
-            value: target,
-          });
-
-          // Original input keeps MM/DD/YYYY format
-          onChange(newEvent);
-        };
-      }
+      const onChangeHandler = (e: Event) =>
+        onChange(transformDomEventIntoReactEvent(e));
+      const onBlurHandler = onBlur
+        ? (e: Event) => onBlur(transformDomEventIntoReactEvent(e))
+        : null;
 
       (myDatePicker as HTMLInputElement).addEventListener(
         'change',
@@ -108,8 +95,29 @@ export const DateSelector = ({
         'input',
         onChangeHandler,
       );
-      if (onBlur)
-        (myDatePicker as HTMLInputElement).addEventListener('blur', onBlur);
+      if (onBlur && onBlurHandler)
+        (myDatePicker as HTMLInputElement).addEventListener(
+          'blur',
+          onBlurHandler,
+        );
+
+      return () => {
+        (myDatePicker as HTMLInputElement).removeEventListener(
+          'change',
+          onChangeHandler,
+        );
+        (myDatePicker as HTMLInputElement).removeEventListener(
+          'input',
+          onChangeHandler,
+        );
+
+        if (onBlur && onBlurHandler) {
+          (myDatePicker as HTMLInputElement).removeEventListener(
+            'blur',
+            onBlurHandler,
+          );
+        }
+      };
     }
   }, [formGroupInputRef]);
 

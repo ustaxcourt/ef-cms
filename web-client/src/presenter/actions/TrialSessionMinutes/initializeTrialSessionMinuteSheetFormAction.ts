@@ -345,7 +345,7 @@ export const getPendingItemsFromCase = ({
         getTransformedPendingItemDetails(pendingItem);
       const renderKey = uuidv4();
       keyedActionFilingFormFieldsByRenderKey[renderKey] = {
-        date: formatDateString(pendingItem.createdAt, FORMATS.YYYYMMDD),
+        date: formatDateString(pendingItem.createdAt, FORMATS.MMDDYYYY),
         documentType: transformedPendingItemDetails.documentType,
         filedBy: transformFiledBy(pendingItem),
         note: transformedPendingItemDetails.description,

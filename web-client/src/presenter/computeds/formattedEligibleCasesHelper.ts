@@ -13,10 +13,10 @@ export const addGroupSymbol = (object, value) => {
 
 export const getPriorityGroups = eligibleCases => {
   const groups = {
-    default: [],
-    highPriority: [],
-    manuallyAdded: [],
-    suffixHighPriority: [],
+    default: [] as FormattedTrialSessionCase[],
+    highPriority: [] as FormattedTrialSessionCase[],
+    manuallyAdded: [] as FormattedTrialSessionCase[],
+    suffixHighPriority: [] as FormattedTrialSessionCase[],
   };
 
   eligibleCases.forEach(theCase => {
@@ -83,6 +83,7 @@ export const compareTrialSessionEligibleCases = eligibleCases => {
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { FormattedTrialSessionCase } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 export const formattedEligibleCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -123,7 +124,7 @@ export const formattedEligibleCasesHelper = (
         );
       } else if (filter === 'Regular') {
         return (
-          eligibleCase.docketNumberSuffix === null ||
+          !eligibleCase.docketNumberSuffix ||
           (eligibleCase.docketNumberSuffix !== DOCKET_NUMBER_SUFFIXES.SMALL &&
             eligibleCase.docketNumberSuffix !==
               DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY)

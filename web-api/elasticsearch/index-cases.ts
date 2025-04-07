@@ -1,0 +1,102 @@
+import { marshall } from '@aws-sdk/util-dynamodb';
+import {
+  IDynamoDBRecord,
+  AttributeValueWithName,
+} from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
+import { applicationContext } from '@web-api/applicationContext';
+import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
+import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
+import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { getLogger } from 'aws-xray-sdk';
+import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
+import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
+import { flattenDeep, isArray } from 'lodash';
+
+export const transformOpenSearchCase = (
+  caseData: CaseKysely | CaseKysely[],
+) => {
+  const cases = isArray(caseData) ? caseData : [caseData];
+  return cases.map(c => c.docketNumber);
+};
+
+export const indexOpenSearchCase = async ({
+  message,
+}: {
+  message: OpenSearchSyncMessage;
+}): Promise<void> => {
+  for (const docketNumber of isArray(message.payload)
+    ? message.payload
+    : [message.payload]) {
+    const caseRecord = await getCaseMetadataWithCounsel({
+      applicationContext,
+      docketNumber,
+    });
+
+    if (!caseRecord) {
+      getLogger().error(`Could not index case ${docketNumber}: not found!`);
+      continue;
+    }
+
+    // Recommend further optimization so we are not mocking a DynamoDB record after cases are in Postgres
+    // Just done this way because bulkIndexRecords expects Dynamo records
+    const marshalledCase = marshall(
+      transformNullToUndefined({
+        ...caseRecord,
+        pk: `case|${caseRecord.docketNumber}`,
+        sk: `case|${caseRecord.docketNumber}`,
+        entityName: 'Case',
+      }),
+      { removeUndefinedValues: true },
+    );
+    const caseRecords: IDynamoDBRecord[] = [];
+
+    caseRecords.push({
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: `case|${caseRecord.docketNumber}`,
+          },
+          sk: {
+            S: `case|${caseRecord.docketNumber}`,
+          },
+        },
+        NewImage: {
+          ...marshalledCase,
+          case_relations: { name: 'case' },
+          entityName: { S: 'CaseDocketEntryMapping' },
+        },
+      },
+      eventName: 'MODIFY',
+    });
+
+    caseRecords.push({
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: `case|${caseRecord.docketNumber}`,
+          },
+          sk: {
+            S: `case|${caseRecord.docketNumber}`,
+          },
+        },
+        NewImage: marshalledCase as { [key: string]: AttributeValueWithName },
+      },
+      eventName: 'MODIFY',
+    });
+
+    const { failedRecords } = await bulkIndexRecords({
+      applicationContext,
+      records: flattenDeep(caseRecords),
+    });
+
+    if (failedRecords.length > 0) {
+      getLogger().error(
+        'the case or docket entry records that failed to index',
+        {
+          failedRecords,
+        },
+      );
+      throw new Error('failed to index case entry or docket entry records');
+    }
+  }
+};

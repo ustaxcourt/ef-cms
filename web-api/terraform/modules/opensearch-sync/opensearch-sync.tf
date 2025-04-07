@@ -2,8 +2,8 @@ data "aws_caller_identity" "current" {}
 
 module "opensearch_sync_lambda" {
   source         = "../lambda"
-  handler_file   = "./web-api/src/lambdas/opensearch/sync-handler.ts"
-  handler_method = "syncHandler"
+  handler_file   = "./web-api/src/lambdas/openSearch/openSearchSyncHandler.ts"
+  handler_method = "openSearchSyncHandler"
   lambda_name    = "opensearch_sync_lambda_${var.environment}_${var.color}"
   role           = var.lambda_role_arn
   environment    = var.lambda_environment

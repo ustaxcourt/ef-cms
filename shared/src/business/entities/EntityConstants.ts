@@ -1833,6 +1833,9 @@ export const TROUBLESHOOTING_INFO = {
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
 
+export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
+export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
+
 export const TERM_GENERATOR_DEFAULT_VALUES = {
   MAX_SESSIONS_PER_WEEK: 6,
   MAX_SESSIONS_PER_LOCATION: 5,

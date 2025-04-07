@@ -75,7 +75,7 @@ export const getCaseDeadlinesInteractor = async (
     });
   }
 
-  return { deadlines: deadlinesWithFullInfo, totalCount: Number(totalCount) };
+  return { deadlines: deadlinesWithFullInfo, totalCount };
 };
 
 const getJudgeIdForPersistence = (

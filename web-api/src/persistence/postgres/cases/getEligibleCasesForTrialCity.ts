@@ -1,11 +1,14 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
 import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { RawEligibleCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
-import { query } from '@web-api/persistence/dynamodbClientService';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
+import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 
 export const getEligibleCasesForTrialCity = async ({
   applicationContext,
@@ -54,47 +57,49 @@ export const getEligibleCasesForTrialCity = async ({
       .execute(),
   );
 
-  // use batchGet instead of queries with Promise.all?
   const casePromises = dbCases.map(async c => {
     const [privatePractitioners, irsPractitioners] = await Promise.all([
-      query({
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-          '#sk': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': `case|${c.docketNumber}`,
-          ':skPrefix': 'privatePractitioner|',
-        },
-        KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :skPrefix)',
+      getPrivatePractitionersOnCase({
+        docketNumber: c.docketNumber,
         applicationContext,
       }),
-      query({
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-          '#sk': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': `case|${c.docketNumber}`,
-          ':skPrefix': 'irsPractitioner|',
-        },
-        KeyConditionExpression: '#pk = :pk AND begins_with(#sk, :skPrefix)',
+      getIrsPractitionersOnCase({
+        docketNumber: c.docketNumber,
         applicationContext,
       }),
     ]);
 
-    return purgeDynamoKeys({
+    const dynamoData = purgeDynamoKeys<
+      any,
+      {
+        irsPractitioners: IrsPractitioner[];
+        privatePractitioners: PrivatePractitioner[];
+      }
+    >({
       ...c,
       irsPractitioners,
       privatePractitioners,
     });
+
+    return { ...c, ...dynamoData };
   });
 
   const fullEligibleCases = await Promise.all(casePromises);
 
-  const casesForReturn = fullEligibleCases.map(c => {
-    return c ? transformNullToUndefined(RawEligibleCaseEntity(c)) : undefined;
-  });
+  const casesForReturn = fullEligibleCases
+    .filter(c => c)
+    .map(c => {
+      return {
+        ...fromKyselyCase(c),
+        isSealed: !!c.isSealed,
+        irsPractitioners: c.irsPractitioners,
+        privatePractitioners: c.privatePractitioners,
+        docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+          docketNumber: c.docketNumber,
+          docketNumberSuffix: c.docketNumberSuffix,
+        }),
+      };
+    });
 
   return casesForReturn || [];
 };

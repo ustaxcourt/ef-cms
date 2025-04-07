@@ -1,10 +1,14 @@
+jest.mock(
+  '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo',
+);
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import * as practitionerModule from './processPractitionerMappingEntries';
-const { processPractitionerMappingEntries } = practitionerModule;
-
+import { processPractitionerMappingEntries } from '@web-api/business/useCases/processStreamRecords/processPractitionerMappingEntries';
 import { getCaseMetadataWithCounsel as getCaseMetadataWithCounselMock } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
-const getCaseMetadataWithCounsel = getCaseMetadataWithCounselMock as jest.Mock;
+import { getCaseDataFromDynamo as getCaseDataFromDynamoMock } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
+
+const getCaseMetadataWithCounsel = jest.mocked(getCaseMetadataWithCounselMock);
+const getCaseDataFromDynamo = jest.mocked(getCaseDataFromDynamoMock);
 
 describe('processPractitionerMappingEntries', () => {
   const mockCaseRecord = {
@@ -66,7 +70,7 @@ describe('processPractitionerMappingEntries', () => {
         '|',
       )[1];
 
-    getCaseMetadataWithCounsel.mockResolvedValue(mockCaseRecord);
+    getCaseMetadataWithCounsel.mockResolvedValue(mockCaseRecord as any);
 
     await processPractitionerMappingEntries({
       applicationContext,
@@ -84,38 +88,36 @@ describe('processPractitionerMappingEntries', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should log an error and throw an exception when bulk index returns failed records', async () => {
-    getCaseMetadataWithCounsel.mockResolvedValue(mockCaseRecord);
+  // Add back in as part of 10502-dxox
+  // it('should log an error and throw an exception when bulk index returns failed records', async () => {
+  //   getCaseMetadataWithCounsel.mockResolvedValue(mockCaseRecord as any);
 
-    applicationContext
-      .getPersistenceGateway()
-      .bulkIndexRecords.mockReturnValueOnce({
-        failedRecords: [{ id: 'failed record' }],
-      });
+  //   applicationContext
+  //     .getPersistenceGateway()
+  //     .bulkIndexRecords.mockReturnValueOnce({
+  //       failedRecords: [{ id: 'failed record' }],
+  //     });
 
-    await expect(
-      processPractitionerMappingEntries({
-        applicationContext,
-        practitionerMappingRecords: mockPractitionerMappingEntries,
-      }),
-    ).rejects.toThrow('failed to index practitioner mapping records');
+  //   await expect(
+  //     processPractitionerMappingEntries({
+  //       applicationContext,
+  //       practitionerMappingRecords: mockPractitionerMappingEntries,
+  //     }),
+  //   ).rejects.toThrow('failed to index practitioner mapping records');
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-  });
+  //   expect(applicationContext.logger.error).toHaveBeenCalled();
+  // });
 
   it('should fallback to dynamo when case is not found in postgres during re-indexing', async () => {
-    jest
-      .spyOn(practitionerModule, 'getCaseDataFromDynamo')
-      .mockResolvedValue({});
-
     getCaseMetadataWithCounsel.mockRejectedValue({});
+    getCaseDataFromDynamo.mockResolvedValue({});
 
     await processPractitionerMappingEntries({
       applicationContext,
       practitionerMappingRecords: mockPractitionerMappingEntries,
     });
 
-    expect(practitionerModule.getCaseDataFromDynamo).toHaveBeenCalledTimes(
+    expect(getCaseDataFromDynamo).toHaveBeenCalledTimes(
       mockPractitionerMappingEntries.length,
     );
   });

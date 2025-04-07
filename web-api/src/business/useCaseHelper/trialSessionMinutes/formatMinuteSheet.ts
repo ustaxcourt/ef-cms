@@ -219,7 +219,7 @@ export const formatWitnesses = (
 };
 
 export const formatCaseTitle = (aCase: RawCase) => {
-  const caseTitle = Case.getCaseTitle(Case.getCaseCaption(aCase));
+  const caseTitle = Case.getCaseTitle(aCase.caseCaption);
   return isLeadCase(aCase) ? `${caseTitle}, et al.` : caseTitle;
 };
 
@@ -381,7 +381,9 @@ export const formatActionsAndFilings = (
           action.filedBy
             ? `Filed by ${ACTION_FILED_BY_OPTIONS[action.filedBy]}`
             : '',
-          action.status ? ACTION_STATUS_OPTIONS[action.status] : '',
+          action.status
+            ? ACTION_STATUS_OPTIONS[action.status].toUpperCase()
+            : '',
           formatObjection(action.objection),
         ]
           .filter(substring => !!substring)
