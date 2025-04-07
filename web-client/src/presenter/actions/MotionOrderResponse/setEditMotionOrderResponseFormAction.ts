@@ -10,7 +10,11 @@ export const setEditMotionOrderResponseFormAction = ({
   const pathUrl = props.parentMessageId
     ? `/messages/${caseDetail.docketNumber}/message-detail/${props.parentMessageId}/${docketEntryIdToEdit}/motion-response-order-edit`
     : `/case-detail/${caseDetail.docketNumber}/documents/${docketEntryIdToEdit}/motion-order-response-edit`;
-  store.set(state.form, documentToEdit.draftOrderState);
 
+  store.set(state.form, documentToEdit.draftOrderState);
+  store.set(
+    state.docketEntryId,
+    documentToEdit.draftOrderState.previousDocument.docketEntryId,
+  );
   return { path: pathUrl };
 };
