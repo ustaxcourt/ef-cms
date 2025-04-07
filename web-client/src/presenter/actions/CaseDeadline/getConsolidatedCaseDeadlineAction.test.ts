@@ -12,7 +12,7 @@ describe('getConsolidatedCaseDeadlineAction', () => {
 
   applicationContext
     .getUseCases()
-    .getConsolidatedCaseDeadlinesInteractor.mockReturnValue(
+    .getConsolidatedCaseDeadlinesInteractor.mockResolvedValue(
       TEST_INTERACTOR_RESULTS,
     );
 
