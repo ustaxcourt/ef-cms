@@ -1,15 +1,13 @@
-import { GenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { GenerateSuggestedTermModal } from '@shared/business/entities/trialSessions/GenerateSuggestedTermModal';
 
 export const validateCreateTermModalAction = ({ get, path }: ActionProps) => {
-  const { termEndDate, termName, termStartDate } = get(state.modal);
+  const TERM_BUILDER_INFORMATION = get(state.modal);
 
-  const errors = new GenerateSuggestedTermForm({
-    termEndDate,
-    termName,
-    termStartDate,
-  }).getFormattedValidationErrors();
+  const errors = new GenerateSuggestedTermModal(
+    TERM_BUILDER_INFORMATION,
+  ).getFormattedValidationErrors();
 
   if (isEmpty(errors)) {
     return path.success();
