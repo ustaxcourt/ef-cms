@@ -1729,10 +1729,6 @@ button.change-scanner-button {
       border-right: 1px solid color($theme-color-base-light);
     }
 
-    .advanced-search__form-container {
-      height: 90%;
-    }
-
     .nowrap-large-screens {
       flex-wrap: nowrap;
     }
@@ -2153,7 +2149,8 @@ button.change-scanner-button {
 }
 
 .blue-pill {
-  display: inline-block;
+  display: inline-flex; /* Allows inline behavior with flex */
+  align-items: center;
   padding: 0.5rem 1rem;
   border-radius: 20px;
   margin: 0 0.7rem 0.7rem 0;
@@ -2162,10 +2159,25 @@ button.change-scanner-button {
   font-weight: $font-semibold;
   text-align: center;
 
+  span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
   button {
+    flex-shrink: 0;
     border: none;
+    margin-left: 8px;
     background: none;
     color: white;
+    white-space: nowrap;
+  }
+}
+
+@media only screen and (max-width: ($large-screen - 1)) {
+  .blue-pill {
+    max-width: 250px;
   }
 }
 
@@ -2450,4 +2462,16 @@ button.change-scanner-button {
 
 .cities-not-calendated-yellow-background {
   background-color: #ffe396;
+}
+
+.term-builder-form {
+	p {
+		max-width: 100%;
+	}
+
+	input {
+		max-width: 2.5rem;
+		margin-right: 5px !important;
+		margin-left: 5px !important;
+	}
 }

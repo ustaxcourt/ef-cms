@@ -3,6 +3,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { props } from 'cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const PdfPreview = connect(
   {
@@ -29,7 +30,7 @@ export const PdfPreview = connect(
 
     return (
       <PdfViewer
-        className={!heightOverride && 'pdf-preview-viewer'}
+        className={classNames([!heightOverride && 'pdf-preview-viewer'])}
         removeToolbar={removeToolbar}
         src={pdfPreviewUrl}
         title="pdf-preview-viewer"

@@ -3,7 +3,11 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../entities/EntityConstants';
-import { MOCK_CASE, MOCK_CASE_WITH_TRIAL_SESSION } from '../../test/mockCase';
+import {
+  MOCK_CASE,
+  MOCK_CASE_WITH_TRIAL_SESSION,
+  MOCK_CASE_WITHOUT_PENDING,
+} from '../../test/mockCase';
 import { MOCK_TRIAL_REMOTE } from '../../test/mockTrial';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
@@ -11,8 +15,15 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCaseContextInteractor } from './updateCaseContextInteractor';
+import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 
 describe('updateCaseContextInteractor', () => {
+  const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
+
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -139,6 +150,48 @@ describe('updateCaseContextInteractor', () => {
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
+  });
+
+  it('should remove case deadlines if case is status is closed', async () => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { caseDeadlineId: '123' } as any,
+    ]);
+    deleteCaseDeadline.mockResolvedValue({} as any);
+
+    const result = await updateCaseContextInteractor(
+      applicationContext,
+      {
+        caseStatus: CASE_STATUS_TYPES.closed,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(result.status).toEqual(CASE_STATUS_TYPES.closed);
+    expect(deleteCaseDeadline).toHaveBeenCalledWith({
+      caseDeadlineId: '123',
+    });
+  });
+
+  it('should remove automatic block information if case status is closed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE_WITHOUT_PENDING,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      });
+
+    const result = await updateCaseContextInteractor(
+      applicationContext,
+      {
+        caseStatus: CASE_STATUS_TYPES.closed,
+        docketNumber: MOCK_CASE_WITHOUT_PENDING.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
+    expect(result.automaticBlocked).toEqual(false);
+    expect(result.automaticBlockedReason).toBeUndefined();
+    expect(result.automaticBlockedDate).toBeUndefined();
   });
 
   it('should call updateCase and createCaseTrialSortMappingRecords if the case status is being updated to Ready for Trial and is not assigned to a trial session', async () => {
