@@ -25,6 +25,7 @@ type TPetitioner = {
   state: string;
   title?: string;
   hasConsentedToElectronicService?: boolean;
+  hasElectronicAccess?: boolean;
 };
 
 interface IValidateRawCollection<I> {

@@ -48,10 +48,11 @@ export class Petitioner extends JoiValidationEntity {
     this.paperPetitionEmail = rawProps.paperPetitionEmail;
     this.hasConsentedToElectronicService =
       rawProps.hasConsentedToElectronicService || undefined;
-    this.hasElectronicAccess =
-      rawProps.hasElectronicAccess === null
-        ? undefined
-        : rawProps.hasElectronicAccess;
+    this.hasElectronicAccess = rawProps.hasElectronicAccess || undefined;
+    // this.hasElectronicAccess =
+    // rawProps.hasElectronicAccess === null
+    //   ? undefined
+    //   : rawProps.hasElectronicAccess;;
     this.inCareOf = rawProps.inCareOf;
     this.isAddressSealed = rawProps.isAddressSealed || false;
     this.name = rawProps.name;
