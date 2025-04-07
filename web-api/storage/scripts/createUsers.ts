@@ -3,9 +3,8 @@ import {
   ROLES,
   Role,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { createApplicationContext } from '../../src/applicationContext';
-import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
-import { createUserRecords } from '../../src/persistence/dynamo/users/createUserRecords';
+import { createPetitionerUserRecord } from '@web-api/persistence/postgres/users/createPetitionerUserRecord';
+import { createUserRecord } from '@web-api/persistence/postgres/users/createUserRecord';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
@@ -14,7 +13,6 @@ export const createUsers = async () => {
   const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
   const usersByEmail = {};
 
-  const applicationContext = createApplicationContext();
   getLogger().addUser({
     user: {
       email: 'system@ustc.gov',
@@ -44,13 +42,10 @@ export const createUsers = async () => {
           .validate()
           .toRawObject();
 
-        const userCreated = await applicationContext
-          .getPersistenceGateway()
-          .createUserRecords({
-            applicationContext,
-            user: practitionerUser,
-            userId,
-          });
+        const userCreated = await createUserRecord({
+          user: practitionerUser,
+          userId,
+        });
 
         if (usersByEmail[userCreated.email]) {
           throw new Error('User already exists');
@@ -61,8 +56,7 @@ export const createUsers = async () => {
       }
 
       if (userRecord.role === ROLES.petitioner) {
-        const userCreated = await createPetitionerUserRecords({
-          applicationContext,
+        const userCreated = await createPetitionerUserRecord({
           user: omit(userRecord, EXCLUDE_PROPS),
           userId,
         });
@@ -74,8 +68,7 @@ export const createUsers = async () => {
         return;
       }
 
-      const userCreated = await createUserRecords({
-        applicationContext,
+      const userCreated = await createUserRecord({
         user: omit(userRecord, EXCLUDE_PROPS),
         userId,
       });

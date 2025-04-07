@@ -1,17 +1,8 @@
 import { getCypressEnv } from '../../env/cypressEnvironment';
 import { getDocumentClient } from './getDynamoCypress';
 import { getUserByEmail } from '../cognito/cognito-helpers';
-
-export const getUserConfirmationCodeFromDynamo = async (
-  userId: string,
-): Promise<string> => {
-  const result = await getDocumentClient().get({
-    Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
-    TableName: getCypressEnv().dynamoDbTableName,
-  });
-
-  return result.Item!.confirmationCode;
-};
+import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
+import { deleteUserConfirmationCode } from '@web-api/persistence/postgres/users/deleteUserConfirmationCode';
 
 export const getNewAccountVerificationCode = async ({
   email,
@@ -28,7 +19,7 @@ export const getNewAccountVerificationCode = async ({
       userId: undefined,
     };
 
-  const confirmationCode = await getUserConfirmationCodeFromDynamo(userId);
+  const confirmationCode = await getUserConfirmationCode({ userId });
 
   return {
     confirmationCode,
@@ -42,12 +33,8 @@ export const expireUserConfirmationCode = async (
   const { userId } = await getUserByEmail(email);
   if (!userId) return null;
 
-  await getDocumentClient()
-    .delete({
-      Key: { pk: `user|${userId}`, sk: 'account-confirmation-code' },
-      TableName: getCypressEnv().dynamoDbTableName,
-    })
-    .catch(error => console.error(error)); // if no confirmation code exists do not throw error.
+  await deleteUserConfirmationCode({ userId });
+
   return null;
 };
 

@@ -16,6 +16,10 @@ import {
   Practitioner,
 } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
+import { createNewPractitionerUser } from '@web-api/persistence/postgres/users/createNewPractitionerUser';
+import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
+import { updatePractitionerUser as updatePractitionerUserFromPersistence } from '@web-api/persistence/postgres/users/updatePractitionerUser';
+import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -42,9 +46,7 @@ export const updatePractitionerUser = async (
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
-  const oldUser = await applicationContext
-    .getPersistenceGateway()
-    .getPractitionerByBarNumber({ applicationContext, barNumber });
+  const oldUser = await getPractitionerByBarNumber({ barNumber });
 
   if (!oldUser) {
     throw new NotFoundError('Could not find user');
@@ -67,7 +69,12 @@ export const updatePractitionerUser = async (
 
   // do not allow edit of bar number
   const validatedUserData = new Practitioner(
-    { ...user, barNumber: oldUser.barNumber, email: oldUser.email },
+    {
+      ...user,
+      userId: oldUser.userId,
+      barNumber: oldUser.barNumber,
+      email: oldUser.email,
+    },
     { applicationContext },
   )
     .validate()
@@ -76,49 +83,36 @@ export const updatePractitionerUser = async (
   let updatedUser = validatedUserData;
 
   if (oldUser.email || oldUser.pendingEmail) {
-    updatedUser = await applicationContext
-      .getPersistenceGateway()
-      .updatePractitionerUser({ applicationContext, user: validatedUserData });
+    updatedUser = await updatePractitionerUserFromPersistence({
+      applicationContext,
+      user: validatedUserData,
+    });
   } else if (!oldUser.email && user.updatedEmail) {
-    updatedUser = await applicationContext
-      .getPersistenceGateway()
-      .createNewPractitionerUser({
-        applicationContext,
-        user: new Practitioner({
-          ...validatedUserData,
-          pendingEmail: user.updatedEmail,
-        })
-          .validate()
-          .toRawObject(),
-      });
+    updatedUser = await createNewPractitionerUser({
+      user: new Practitioner({
+        ...validatedUserData,
+        pendingEmail: user.updatedEmail,
+      })
+        .validate()
+        .toRawObject(),
+    });
   } else {
-    await applicationContext
-      .getPersistenceGateway()
-      .updateUserRecords({
-        applicationContext,
-        oldUser: new Practitioner(oldUser).validate().toRawObject(),
-        updatedUser: validatedUserData,
-        userId: oldUser.userId,
-      });
+    await updateUser({ userToUpdate: validatedUserData });
   }
 
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      message: { action: 'admin_contact_initial_update_complete' },
-      userId: authorizedUser.userId,
-      clientConnectionId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: { action: 'admin_contact_initial_update_complete' },
+    userId: authorizedUser.userId,
+    clientConnectionId,
+  });
 
   if (userHasAccount && userIsUpdatingEmail) {
-    await applicationContext
-      .getUseCaseHelpers()
-      .sendEmailVerificationLink({
-        applicationContext,
-        pendingEmail: user.pendingEmail,
-        pendingEmailVerificationToken: user.pendingEmailVerificationToken,
-      });
+    await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
+      applicationContext,
+      pendingEmail: user.pendingEmail,
+      pendingEmailVerificationToken: user.pendingEmailVerificationToken,
+    });
   }
 
   const updatedFields = getUpdatedFieldNames({
@@ -152,14 +146,12 @@ export const updatePractitionerUser = async (
       websocketMessagePrefix: 'admin',
     });
   } else {
-    await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        message: { action: 'admin_contact_full_update_complete' },
-        userId: authorizedUser.userId,
-        clientConnectionId,
-      });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: { action: 'admin_contact_full_update_complete' },
+      userId: authorizedUser.userId,
+      clientConnectionId,
+    });
   }
 };
 

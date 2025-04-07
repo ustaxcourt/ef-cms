@@ -8,7 +8,7 @@ import { createUser } from '@web-api/gateways/user/createUser';
 import { updateUser } from '@web-api/gateways/user/updateUser';
 import { getUserByEmail } from './getUserByEmail';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { createUserRecords } from './createUserRecords';
+import { createUserRecord } from './createUserRecord';
 
 export const createOrUpdatePractitionerUser = async ({
   user,
@@ -54,7 +54,7 @@ export const createOrUpdatePractitionerUser = async ({
     }
   }
 
-  return await createUserRecords({
+  return await createUserRecord({
     user,
     userId,
   });

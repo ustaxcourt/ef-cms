@@ -10,7 +10,7 @@ import {
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { type UserType } from '@aws-sdk/client-cognito-identity-provider';
-import { createPetitionerUserRecords } from '@web-api/persistence/dynamo/users/createPetitionerUserRecords';
+import { createPetitionerUserRecord } from '@web-api/persistence/postgres/users/createPetitionerUserRecord';
 import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
 import { omit } from 'lodash';
 import { usersWithoutUserIds } from './fix-cognito-users-without-ids-constants';
@@ -94,8 +94,7 @@ const setUserAttributes = async ({
       }
 
       if (cognitoUser.UserStatus === 'CONFIRMED') {
-        await createPetitionerUserRecords({
-          applicationContext,
+        await createPetitionerUserRecord({
           user: omit(user, 'userId'),
           userId: user.userId,
         });

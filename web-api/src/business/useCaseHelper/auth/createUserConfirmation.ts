@@ -1,29 +1,27 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import qs from 'qs';
+import { generateUserConfirmationCode } from '@web-api/persistence/postgres/users/generateUserConfirmationCode';
+import { refreshUserConfirmationCodeExpiration } from '@web-api/persistence/postgres/users/refreshConfirmationCodeExpiration';
+import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
 
 export async function createUserConfirmation(
   applicationContext: ServerApplicationContext,
   { email, userId }: { email: string; userId: string },
 ): Promise<{ confirmationCode: string }> {
-  const existingConfirmationCode = await applicationContext
-    .getPersistenceGateway()
-    .getAccountConfirmationCode(applicationContext, { userId });
+  const existingConfirmationCode = await getUserConfirmationCode({ userId });
 
   let code: string;
 
   if (!existingConfirmationCode) {
-    const { confirmationCode: newConfirmationCode } = await applicationContext
-      .getPersistenceGateway()
-      .generateAccountConfirmationCode(applicationContext, { userId });
+    const { confirmationCode: newConfirmationCode } =
+      await generateUserConfirmationCode({ userId });
     code = newConfirmationCode;
   } else {
-    await applicationContext
-      .getPersistenceGateway()
-      .refreshConfirmationCodeExpiration(applicationContext, {
-        confirmationCode: existingConfirmationCode,
-        userId,
-      });
+    await refreshUserConfirmationCodeExpiration({
+      confirmationCode: existingConfirmationCode,
+      userId,
+    });
     code = existingConfirmationCode;
   }
 
@@ -36,7 +34,7 @@ export async function createUserConfirmation(
   const emailBody = `<div>
     <div>Welcome to DAWSON!</div>
     <div style="margin-top: 20px;">
-      Your account with DAWSON has been created. Use the button below to verify your email address. <span style="font-weight: bold;">After 24 hours, this link will expire.</span> 
+      Your account with DAWSON has been created. Use the button below to verify your email address. <span style="font-weight: bold;">After 24 hours, this link will expire.</span>
     </div>
     <div style="margin-top: 20px;">
       <a href="${verificationLink}" style="background-color: #005ea2; color: white; line-height: 0.9; border-radius: 0.25rem; text-decoration: none; font-size: 1.06rem; padding: .6rem 2.25rem; font-family: Source Sans Pro Web,Helvetica Neue,Helvetica,Roboto,Arial,sans-serif;">Verify Email</a>

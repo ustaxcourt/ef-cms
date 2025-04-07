@@ -7,6 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createPractitionerUser } from '../../../../../shared/src/business/utilities/createPractitionerUser';
+import { createOrUpdatePractitionerUser } from '@web-api/persistence/postgres/users/createOrUpdatePractitionerUser';
 
 export const createPractitionerUserInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -26,12 +27,9 @@ export const createPractitionerUserInteractor = async (
     user,
   });
 
-  const createdUser = await applicationContext
-    .getPersistenceGateway()
-    .createOrUpdatePractitionerUser({
-      applicationContext,
-      user: practitioner,
-    });
+  const createdUser = await createOrUpdatePractitionerUser({
+    user: practitioner,
+  });
 
   return { barNumber: createdUser.barNumber };
 };

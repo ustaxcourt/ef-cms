@@ -2,7 +2,7 @@ import { pgInsertInto } from '../utils/operation/pgInsertInto';
 import { toKyselyNewUser } from './mapper';
 
 // TODO: 10495 Delete this file
-export const createUserRecords = async ({
+export const createUserRecord = async ({
   user,
   userId,
 }: {

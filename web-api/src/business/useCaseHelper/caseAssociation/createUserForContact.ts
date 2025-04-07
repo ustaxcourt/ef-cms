@@ -9,6 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { createNewPetitionerUser } from '@web-api/persistence/postgres/users/createNewPetitionerUser';
 
 export const createUserForContact = async ({
   applicationContext,
@@ -42,9 +43,8 @@ export const createUserForContact = async ({
 
   const userRaw = userEntity.validate().toRawObject();
 
-  await applicationContext.getPersistenceGateway().createNewPetitionerUser({
-    applicationContext,
-    user: userRaw,
+  await createNewPetitionerUser({
+    userToCreate: userRaw,
   });
 
   const rawCase = caseEntity.toRawObject();

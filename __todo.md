@@ -20,16 +20,17 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [x] refreshConfirmationCodeExpiration (Note: renamed to refreshUserConfirmationCodeExpiration)
 - [x] getInternalUsers
 - [x] getPractitionerByBarNumber
-- [x] getUserByEmail
-- [x] getUserById
-- [x] getUserByIdOnceAllUpdatesComplete
-- [x] getUsersById
-- [x] getUsersInSection
-- [x] updateUser & persistUser (same thing)
-- [x] updatePractitionerUser
+- [ ] getUserByEmail [pick up here on 4/8/25]
+- [ ] getUserById
+- [ ] getUserByIdOnceAllUpdatesComplete
+- [ ] getUsersById
+- [ ] getUsersInSection
+- [ ] updateUser & persistUser (same thing)
+- [ ] updatePractitionerUser
 
 Odd dynamo functions:
 
+- associateUserWithCase - association table
 - [ ] getCasesForUser - not really concerning users
 - [ ] barNumberGenerator: Contains business logic for generating a bar number,
 does not belong in the persistence layer.
