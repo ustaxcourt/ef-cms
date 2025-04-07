@@ -687,7 +687,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "pk": "case|101-20",
     "docketNumber": "101-20"
@@ -713,7 +712,6 @@
     "filedBy": "Petr. Bill Burr",
     "docketEntryId": "cb323daf-c541-4645-bb44-232255d03d40",
     "sk": "docket-entry|cb323daf-c541-4645-bb44-232255d03d40",
-    "partySecondary": false,
     "pk": "case|101-20",
     "documentTitle": "Petition",
     "docketNumber": "101-20"
@@ -6328,7 +6326,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "pk": "case|102-20",
     "docketNumber": "102-20"
@@ -6397,7 +6394,6 @@
     "filedBy": "Petr. Eve Brewer",
     "docketEntryId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
     "sk": "docket-entry|d854a954-7332-4e92-93bd-dc28c9fea0a5",
-    "partySecondary": false,
     "pk": "case|102-20",
     "documentTitle": "Petition",
     "docketNumber": "102-20"
@@ -7283,7 +7279,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|103-20",
     "servedAt": "2020-09-25T19:27:16.630Z",
     "docketNumber": "103-20"
@@ -7310,7 +7305,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|103-20",
     "docketNumber": "103-20"
@@ -7700,7 +7694,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
-    "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.673Z",
@@ -7736,7 +7729,6 @@
     "eventCode": "MISC",
     "processingStatus": "complete",
     "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
-    "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.671Z",
     "docketNumber": "104-17"
@@ -7769,7 +7761,6 @@
     "eventCode": "RQT",
     "processingStatus": "complete",
     "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
-    "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.672Z",
     "docketNumber": "104-17"
@@ -7840,7 +7831,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
-    "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.673Z",
@@ -7876,7 +7866,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
-    "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.671Z",
     "docketNumber": "104-18"
@@ -7909,7 +7898,6 @@
     "eventCode": "RQT",
     "processingStatus": "complete",
     "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
-    "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.672Z",
     "docketNumber": "104-18"
@@ -8135,7 +8123,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
-    "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-20",
     "servedAt": "2020-04-14T19:59:46.673Z",
@@ -8171,7 +8158,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
-    "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.671Z",
     "pk": "case|104-20",
     "docketNumber": "104-20"
@@ -8204,7 +8190,6 @@
     "eventCode": "RQT",
     "processingStatus": "complete",
     "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
-    "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.672Z",
     "pk": "case|104-20",
     "docketNumber": "104-20"
@@ -8913,7 +8898,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "pk": "case|105-20",
     "servedAt": "2020-04-29T15:51:29.168Z",
@@ -8948,7 +8932,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "servedAt": "2020-04-29T15:51:29.168Z",
     "pk": "case|105-20",
     "docketNumber": "105-20"
@@ -12533,7 +12516,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
     "pk": "case|117-20",
     "docketNumber": "117-20"
@@ -12561,7 +12543,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|117-20",
     "docketNumber": "117-20"
   },
@@ -12659,7 +12640,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
     "pk": "case|120-20",
     "docketNumber": "120-20"
@@ -12691,7 +12671,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|120-20",
     "docketNumber": "120-20"
   },
@@ -12718,7 +12697,6 @@
     "eventCode": "P",
     "processingStatus": "pending",
     "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
-    "partySecondary": false,
     "pk": "case|121-20",
     "docketNumber": "121-20"
   },
@@ -12760,7 +12738,6 @@
     "eventCode": "APW",
     "processingStatus": "pending",
     "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
-    "partySecondary": false,
     "documentId": "fb125bc1-27aa-4224-b52a-46346f6d167b",
     "pk": "case|121-20",
     "servedAt": "2020-08-10T04:00:00.000Z",
@@ -12804,7 +12781,6 @@
     "eventCode": "RQT",
     "processingStatus": "pending",
     "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
-    "partySecondary": false,
     "documentId": "fd468817-a88e-4c13-b32b-abb7afc04ea4",
     "pk": "case|121-20",
     "servedAt": "2020-08-10T04:00:00.000Z",
@@ -12833,7 +12809,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
   },
@@ -12888,7 +12863,6 @@
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "953057bb-72d2-412d-8352-fb68c6b0fe2b",
     "sk": "docket-entry|953057bb-72d2-412d-8352-fb68c6b0fe2b",
-    "partySecondary": false,
     "pk": "case|122-20",
     "documentTitle": "Statement of Taxpayer Identification",
     "privatePractitioners": [],
@@ -12917,7 +12891,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
   },
@@ -12964,7 +12937,6 @@
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "7a9ae90c-348c-467a-8720-c3d1c195d76b",
     "sk": "docket-entry|7a9ae90c-348c-467a-8720-c3d1c195d76b",
-    "partySecondary": false,
     "pk": "case|123-20",
     "documentTitle": "Statement of Taxpayer Identification",
     "privatePractitioners": [],
@@ -13001,7 +12973,6 @@
     "eventCode": "P",
     "processingStatus": "pending",
     "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
-    "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.162Z",
     "docketNumber": "124-20"
@@ -13037,7 +13008,6 @@
     "eventCode": "RQT",
     "processingStatus": "pending",
     "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
-    "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.222Z",
     "docketNumber": "124-20"
@@ -13145,7 +13115,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
   },
@@ -13192,7 +13161,6 @@
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
     "sk": "docket-entry|c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
-    "partySecondary": false,
     "pk": "case|125-20",
     "documentTitle": "Statement of Taxpayer Identification",
     "privatePractitioners": [],
@@ -13221,7 +13189,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
-    "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
   },
@@ -13245,7 +13212,6 @@
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "8439ca33-ac7a-4ae6-a228-7581e2114341",
     "sk": "docket-entry|8439ca33-ac7a-4ae6-a228-7581e2114341",
-    "partySecondary": false,
     "pk": "case|126-20",
     "documentTitle": "Statement of Taxpayer Identification",
     "privatePractitioners": [],
@@ -13297,7 +13263,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
   },
@@ -13347,7 +13312,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
   },
@@ -13374,7 +13338,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
   },
@@ -13401,7 +13364,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
   },
@@ -13498,7 +13460,6 @@
     "eventCode": "P",
     "processingStatus": "pending",
     "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
-    "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.081Z",
     "docketNumber": "129-20"
@@ -13534,7 +13495,6 @@
     "eventCode": "RQT",
     "processingStatus": "pending",
     "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
-    "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.130Z",
     "docketNumber": "129-20"
@@ -13962,7 +13922,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
   },
@@ -13990,7 +13949,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
   },
@@ -14066,7 +14024,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
   },
@@ -14094,7 +14051,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
   },
@@ -14191,7 +14147,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
   },
@@ -14219,7 +14174,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
   },
@@ -14316,7 +14270,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
   },
@@ -14344,7 +14297,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
   },
@@ -14417,7 +14369,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
   },
@@ -14469,7 +14420,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
   },
@@ -14542,7 +14492,6 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
   },
@@ -14594,7 +14543,6 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
   },
@@ -21489,7 +21437,7 @@
       "createdAt": "2020-04-12T04:00:00.000Z",
       "numberOfPages": 1,
       "filedBy": "Petr. Luksa Lucia",
-      "partySecondary": false,
+
       "documentId": "596223c1-527b-46b4-98b0-1b10455e9495"
     },
     "gsi1pk": "work-item|2020d554-30c7-450a-ac01-738c1996c783",
