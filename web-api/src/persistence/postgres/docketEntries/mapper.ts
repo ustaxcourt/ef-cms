@@ -10,10 +10,10 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     archived: docketEntry.archived ?? null,
     attachments: docketEntry.attachments ?? null,
     caseType: docketEntry.caseType ?? null,
-    certificateOfService: docketEntry.certificateOfService
+    certificateOfService: docketEntry.certificateOfService ?? null,
+    certificateOfServiceDate: docketEntry.certificateOfServiceDate
       ? calculateDate({ dateString: docketEntry.certificateOfServiceDate })
       : null,
-    certificateOfServiceDate: docketEntry.certificateOfServiceDate ?? null,
     createdAt: calculateDate({ dateString: docketEntry.createdAt }),
     date: docketEntry.date
       ? calculateDate({ dateString: docketEntry.date })
@@ -24,8 +24,8 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     documentContentsId: docketEntry.documentContentsId ?? null,
     documentIdBeforeSignature: docketEntry.documentIdBeforeSignature ?? null,
     documentTitle: docketEntry.documentTitle,
-    documentType: docketEntry.documentType,
-    draftOrderState: docketEntry.draftOrderState,
+    documentType: docketEntry.documentType ?? null,
+    draftOrderState: docketEntry.draftOrderState ?? null,
     editState: docketEntry.editState ?? null,
     eventCode: docketEntry.eventCode,
     filedBy: docketEntry.filedBy ?? null,

@@ -20,8 +20,8 @@ export const docketEntryTableDefinition = {
   documentContentsId: DEFAULT as string | null,
   documentIdBeforeSignature: DEFAULT as string | null,
   documentTitle: DEFAULT as string,
-  documentType: DEFAULT as string,
-  draftOrderState: DEFAULT as Record<string, any>,
+  documentType: DEFAULT as string | null,
+  draftOrderState: DEFAULT as Record<string, any> | null,
   editState: DEFAULT as string | null,
   eventCode: DEFAULT as string,
   filedBy: DEFAULT as string | null,
@@ -46,13 +46,13 @@ export const docketEntryTableDefinition = {
   lodged: DEFAULT as boolean | null,
   mailingDate: DEFAULT as string | null,
   noticeIssuedDate: DEFAULT as Date | null,
-  numberOfPages: DEFAULT as number | undefined,
+  numberOfPages: DEFAULT as number | null,
   objections: DEFAULT as string | null,
   ordinalValue: DEFAULT as string | null,
   otherFilingParty: DEFAULT as string | null,
   otherIteration: DEFAULT as string | null,
   partyIrsPractitioner: DEFAULT as boolean | null,
-  pending: DEFAULT as boolean,
+  pending: DEFAULT as boolean | null,
   previousDocument: DEFAULT as ColumnType<
     {
       docketEntryId?: string;
