@@ -2,16 +2,17 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 export const motionOrderResponseFormHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
   const { DATE_FORMATS } = applicationContext.getConstants();
   const form = get(state.form);
-  const pdfForSigning = get(state.pdfForSigning);
+  const { status } = get(state.caseDetail);
+  const showStrikeCheckBox = status === CASE_STATUS_TYPES.calendared;
 
   const { customText } = form;
-  const { isPdfAlreadyStamped, stampApplied } = pdfForSigning;
 
   const CUSTOM_ORDER_MAX_LENGTH = 60;
   const customOrderTextCharacterCount = customText?.length
@@ -21,8 +22,6 @@ export const motionOrderResponseFormHelper = (
   // TODO 10586: fix this
   const canSaveOrderRespones =
     !!form.disposition && get(state.pdfForSigning.stampApplied);
-
-  const hideClass = stampApplied && !isPdfAlreadyStamped ? '' : 'hide';
 
   const minDate = applicationContext
     .getUtilities()
@@ -42,7 +41,7 @@ export const motionOrderResponseFormHelper = (
     customOrderTextCharacterCount,
     dateErrorClass,
     dispositionErrorClass,
-    hideClass,
     minDate,
+    showStrikeCheckBox,
   };
 };
