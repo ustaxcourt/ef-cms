@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
-import { isEditStatusReportOrderAction } from './isEditStatusReportOrderAction';
+import { isEditOrderResponseAction } from './isEditOrderResponseAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
-describe('isEditStatusReportOrderAction,', () => {
+describe('isEditOrderResponseAction,', () => {
   const mockEditPath = jest.fn();
   const mockCreatePath = jest.fn();
 
@@ -15,7 +15,7 @@ describe('isEditStatusReportOrderAction,', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should use create path when new status report order', async () => {
-    await runAction(isEditStatusReportOrderAction, {
+    await runAction(isEditOrderResponseAction, {
       modules: {
         presenter,
       },
@@ -28,7 +28,7 @@ describe('isEditStatusReportOrderAction,', () => {
   });
 
   it('should use edit path when existing status report order', async () => {
-    await runAction(isEditStatusReportOrderAction, {
+    await runAction(isEditOrderResponseAction, {
       modules: {
         presenter,
       },
