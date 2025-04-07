@@ -15,7 +15,6 @@ export const messageDocumentHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  console.log('In message document Helper!!!');
   const {
     COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
