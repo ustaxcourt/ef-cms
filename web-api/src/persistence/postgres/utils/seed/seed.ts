@@ -24,6 +24,8 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -113,6 +115,8 @@ export const seed = async () => {
     values: statisticPenalties,
     onConflictColumns: ['penaltyId'],
   });
+
+  await upsertDocketEntries(docketEntrySeeds); // 10494 Can all of this be parallelized?
 
   await Promise.all([
     insertMessages,
