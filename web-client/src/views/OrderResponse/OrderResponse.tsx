@@ -87,18 +87,17 @@ export const OrderResponse = connect(
                             <input
                               aria-label="all cases in this group"
                               checked={
-                                form.consolidatedGroupOrderFor ===
+                                form.issueOrderFor ===
                                   constants.MOTION_ORDER_RESPONSE_OPTIONS
-                                    .consolidatedGroupOrderFor.ALL_CASES ||
-                                false
+                                    .issueOrderOptions.ALL_CASES || false
                               }
                               className="usa-radio__input"
                               id="motion-order-lead-case-radio-all"
-                              name="consolidatedGroupOrderFor"
+                              name="issueOrderFor"
                               type="radio"
                               value={
                                 constants.MOTION_ORDER_RESPONSE_OPTIONS
-                                  .consolidatedGroupOrderFor.ALL_CASES
+                                  .issueOrderOptions.ALL_CASES
                               }
                               onChange={e => {
                                 updateFormValueSequence({
@@ -113,7 +112,7 @@ export const OrderResponse = connect(
                             >
                               {
                                 constants.MOTION_ORDER_RESPONSE_OPTIONS
-                                  .consolidatedGroupOrderFor.ALL_CASES
+                                  .issueOrderOptions.ALL_CASES
                               }
                             </label>
                           </div>
@@ -121,18 +120,17 @@ export const OrderResponse = connect(
                             <input
                               aria-label="Just this case"
                               checked={
-                                form.consolidatedGroupOrderFor ===
+                                form.issueOrderFor ===
                                   constants.MOTION_ORDER_RESPONSE_OPTIONS
-                                    .consolidatedGroupOrderFor.THIS_CASE_ONLY ||
-                                false
+                                    .issueOrderOptions.THIS_CASE_ONLY || false
                               }
                               className="usa-radio__input"
                               id="motion-order-lead-case-radio-just-this"
-                              name="consolidatedGroupOrderFor"
+                              name="issueOrderFor"
                               type="radio"
                               value={
                                 constants.MOTION_ORDER_RESPONSE_OPTIONS
-                                  .consolidatedGroupOrderFor.THIS_CASE_ONLY
+                                  .issueOrderOptions.THIS_CASE_ONLY
                               }
                               onChange={e => {
                                 updateFormValueSequence({
@@ -147,7 +145,7 @@ export const OrderResponse = connect(
                             >
                               {
                                 constants.MOTION_ORDER_RESPONSE_OPTIONS
-                                  .consolidatedGroupOrderFor.THIS_CASE_ONLY
+                                  .issueOrderOptions.THIS_CASE_ONLY
                               }
                             </label>
                           </div>

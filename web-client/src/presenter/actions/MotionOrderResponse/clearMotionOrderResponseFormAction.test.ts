@@ -1,3 +1,4 @@
+import { MOTION_ORDER_RESPONSE_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { clearMotionOrderResponseFormAction } from './clearMotionOrderResponseFormAction';
 import { runAction } from '@web-client/presenter/test.cerebral';
 
@@ -5,7 +6,8 @@ describe('clearMotionOrderResponseFormAction', () => {
   it('should clear all motion order response form fields', async () => {
     const mockStore = {
       form: {
-        consolidatedGroupOrderFor: 'ALL_CASES',
+        issueOrderFor:
+          MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
         motionOrderResponse: 'Reply',
         additionalOrderText: 'Some text',
         dueDate: '2024-03-22',
