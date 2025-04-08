@@ -48,22 +48,24 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       .messages({
         'string.max': 'Limit is 240 characters.',
       }),
-    consolidatedGroupOrderFor: joi.when('isOnLeadCase', {
-      is: joi.equal(true),
-      then: joi
-        .required()
-        .valid(
-          ...Object.values(
-            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor,
+    consolidatedGroupOrderFor: joi
+      .when('isOnLeadCase', {
+        is: joi.equal(true),
+        then: joi
+          .required()
+          .valid(
+            ...Object.values(
+              MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor,
+            ),
           ),
-        ),
-      otherwise: joi
-        .required()
-        .equal(
-          MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor
-            .THIS_CASE_ONLY,
-        ),
-    }),
+        otherwise: joi
+          .required()
+          .equal(
+            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor
+              .THIS_CASE_ONLY,
+          ),
+      })
+      .messages({ 'any.required': 'Select on which cases to file this order' }),
     dueDate: joi
       .when('motionOrderResponse', {
         is: joi.exist().not(null),
@@ -88,7 +90,10 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
     )
       .optional()
       .allow(null)
-      .description('The type of response.'),
+      .description('The type of response.')
+      .messages({
+        '*': 'Order reply must be one of [Order Reply, Order Reply/SR]',
+      }),
     responseDate: joi
       .date()
       .iso()
