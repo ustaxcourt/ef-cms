@@ -3,7 +3,12 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateMotionOrderResponseFormAction } from './validateMotionOrderResponseFormAction';
-import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  createISODateString,
+  formatNow,
+  FORMATS,
+  getBusinessDateInFuture,
+} from '@shared/business/utilities/DateHandler';
 
 describe('validateMotionOrderResponseFormAction', () => {
   const mockSuccessPath = jest.fn();
@@ -32,6 +37,8 @@ describe('validateMotionOrderResponseFormAction', () => {
           responseDate: today,
           orderType: MOTION_ORDER_RESPONSE_OPTIONS.orderType,
           strickenFromTrialSession: false,
+          consolidatedGroupOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor.ALL_CASES,
         },
       },
     });
@@ -46,16 +53,18 @@ describe('validateMotionOrderResponseFormAction', () => {
         presenter,
       },
       state: {
-        form: {
-          additionalOrderText: '',
-          dueDate: '',
-          motionOrderResponse: undefined,
-          responseDate: '',
-        },
+        form: {},
       },
     });
 
-    expect(mockErrorPath).toHaveBeenCalled();
+    expect(mockErrorPath).toHaveBeenCalledWith(
+      expect.objectContaining({
+        errors: {
+          consolidatedGroupOrderFor: 'Select on which cases to file this order',
+          responseDate: 'Response Date is required.',
+        },
+      }),
+    );
     expect(mockSuccessPath).not.toHaveBeenCalled();
   });
 
@@ -68,13 +77,24 @@ describe('validateMotionOrderResponseFormAction', () => {
         form: {
           additionalOrderText: 'Test',
           dueDate: 'invalid-date',
-          motionOrderResponse: MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY,
+          consolidatedGroupOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor
+              .THIS_CASE_ONLY,
+          motionOrderResponse:
+            MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY,
           responseDate: 'invalid-date',
         },
       },
     });
 
-    expect(mockErrorPath).toHaveBeenCalled();
+    expect(mockErrorPath).toHaveBeenCalledWith(
+      expect.objectContaining({
+        errors: {
+          dueDate: 'Enter a valid date',
+          responseDate: 'Enter a valid date',
+        },
+      }),
+    );
     expect(mockSuccessPath).not.toHaveBeenCalled();
   });
 
@@ -85,15 +105,33 @@ describe('validateMotionOrderResponseFormAction', () => {
       },
       state: {
         form: {
+          consolidatedGroupOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor
+              .THIS_CASE_ONLY,
           additionalOrderText: 'Test',
-          dueDate: '2024-03-22',
+          dueDate: getBusinessDateInFuture({
+            numberOfDays: 4,
+            outputFormat: FORMATS.YYYYMMDD,
+            startDate: createISODateString(),
+          }),
           motionOrderResponse: 'INVALID_TYPE',
-          responseDate: '2024-03-21',
+          responseDate: getBusinessDateInFuture({
+            numberOfDays: 2,
+            outputFormat: FORMATS.YYYYMMDD,
+            startDate: createISODateString(),
+          }),
         },
       },
     });
 
-    expect(mockErrorPath).toHaveBeenCalled();
+    expect(mockErrorPath).toHaveBeenCalledWith(
+      expect.objectContaining({
+        errors: {
+          motionOrderResponse:
+            'Order reply must be one of [Order Reply, Order Reply/SR]',
+        },
+      }),
+    );
     expect(mockSuccessPath).not.toHaveBeenCalled();
   });
 });
