@@ -23,7 +23,6 @@ export const documentViewerHelper = (
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
   const user = get(state.user);
-
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
@@ -35,14 +34,12 @@ export const documentViewerHelper = (
   const canAllowDocumentServiceForCase = !!applicationContext
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
-
   const formattedDocumentToDisplay =
     viewerDocumentToDisplay &&
     formattedCaseDetail.formattedDocketEntries.find(
       entry =>
         entry && entry.docketEntryId === viewerDocumentToDisplay.docketEntryId,
     );
-
   if (!formattedDocumentToDisplay) {
     return {};
   }
