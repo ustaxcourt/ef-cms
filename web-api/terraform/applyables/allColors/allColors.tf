@@ -139,6 +139,7 @@ module "rds" {
   max_capacity             = var.rds_max_capacity
   delete_protection        = true
   restoring_aws_account_id = var.restoring_aws_account_id
+  postgres_user            = data.terraform_remote_state.remote.outputs.postgres_user
 
   providers = {
     aws           = aws.us-east-1

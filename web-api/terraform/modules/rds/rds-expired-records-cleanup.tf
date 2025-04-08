@@ -29,7 +29,16 @@ resource "aws_iam_role_policy" "rds_expired_records_cleanup_lambda_policy" {
 {
   "Version": "2012-10-17",
   "Statement": [
-		//TODO DETERMINE WHAT ROLES TO GIVE LAMBDA
+		{
+      "Sid": "RdsConnect",
+      "Effect": "Allow",
+      "Action": [
+          "rds-db:connect"
+      ],
+      "Resource": [
+          "arn:aws:rds-db:*:${data.aws_caller_identity.current.account_id}:dbuser:*/${var.postgres_user}"
+      ]
+    },
   ]
 }
 EOF
@@ -44,6 +53,14 @@ module "rds_expired_records_cleanup_lambda" {
   environment = {
     STAGE                        = var.environment
     NODE_ENV                     = "production"
+    //region
+    //rds
+      //readHost
+      // useGlobalCert
+
+      //pool
+        //host
+        //user
   }
   timeout = "900"
 }
