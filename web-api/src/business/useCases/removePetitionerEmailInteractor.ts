@@ -11,6 +11,7 @@ import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/par
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { applicationContext } from '@web-api/applicationContext';
+import { deleteUserFromCase } from '@web-api/persistence/dynamo/cases/deleteUserFromCase';
 
 export const removePetitionerEmailInteractor = async (
   { docketNumber, email }: { docketNumber: string; email: string },
@@ -19,7 +20,6 @@ export const removePetitionerEmailInteractor = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.REMOVE_PETITIONER_EMAIL)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
   const rawCase = await getCaseByDocketNumber({
     applicationContext,
     docketNumber,
@@ -57,7 +57,7 @@ export const removePetitionerEmailInteractor = async (
     oldContactId: petitionerToRemove.contactId,
   });
 
-  await applicationContext.getPersistenceGateway().deleteUserFromCase({
+  await deleteUserFromCase({
     applicationContext,
     docketNumber,
     userId: petitionerToRemove.contactId,
