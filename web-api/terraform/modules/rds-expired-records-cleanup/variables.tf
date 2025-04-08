@@ -14,3 +14,11 @@ variable "current_color" {
 variable "environment" {
   type = string
 }
+
+variable "postgres_database" {
+  type = string
+}
+
+variable "postgres_host" {
+  type = string
+}

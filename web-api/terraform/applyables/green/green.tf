@@ -305,7 +305,9 @@ module "ui-green" {
 
 module "rds-expired-records-cleanup" {
     source                 = "../../modules/rds-expired-records-cleanup"
-    postgres_user          = data.terraform_remote_state.remote.outputs.postgres_user
     current_color          = "green"
     environment            = var.environment
+    postgres_user          = data.terraform_remote_state.remote.outputs.postgres_user
+    postgres_database      = data.terraform_remote_state.remote.outputs.database_name
+    postgres_host          = data.terraform_remote_state.remote.outputs.rds_host_name
 }
