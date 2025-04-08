@@ -4,7 +4,6 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-// import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { updatePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
@@ -21,28 +20,12 @@ export const removePetitionerEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const case1 = await getCaseByDocketNumber({
+  const rawCase = await getCaseByDocketNumber({
     applicationContext,
     docketNumber,
   });
 
-  // const petitioners = await getPetitionersOnCase({ docketNumber });
-  // const petitionerToRemove = petitioners.find(
-  //   petitioner => petitioner.email === email,
-  // );
-  // if (!petitionerToRemove) {
-  //   throw new Error(`Petitioner with email ${email} not found`);
-  // }
-
-  // const updatedPetitioner = new Petitioner({
-  //   ...petitionerToRemove,
-  //   email: null,
-  //   hasElectronicAccess: false,
-  //   serviceIndicator: 'Paper',
-  //   // contactId: getUniqueId(),
-  // });
-
-  const petitionerToRemove = case1.petitioners.find(
+  const petitionerToRemove = rawCase.petitioners.find(
     petitioner => petitioner.email === email,
   );
 
@@ -54,7 +37,7 @@ export const removePetitionerEmailInteractor = async (
   petitionerToRemove.hasElectronicAccess = false;
   delete petitionerToRemove.email;
 
-  const caseToUpdate = new Case(case1, { authorizedUser })
+  const caseToUpdate = new Case(rawCase, { authorizedUser })
     .validate()
     .toRawObject();
 

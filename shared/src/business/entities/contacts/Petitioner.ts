@@ -49,10 +49,6 @@ export class Petitioner extends JoiValidationEntity {
     this.hasConsentedToElectronicService =
       rawProps.hasConsentedToElectronicService || undefined;
     this.hasElectronicAccess = rawProps.hasElectronicAccess || undefined;
-    // this.hasElectronicAccess =
-    // rawProps.hasElectronicAccess === null
-    //   ? undefined
-    //   : rawProps.hasElectronicAccess;;
     this.inCareOf = rawProps.inCareOf;
     this.isAddressSealed = rawProps.isAddressSealed || false;
     this.name = rawProps.name;
