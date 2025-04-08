@@ -1,5 +1,6 @@
 import { getDbWriter } from '@web-api/database';
 import { Database } from '@web-api/database-schema';
+import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { DeleteQueryBuilder, DeleteResult } from 'kysely';
 import { ExtractTableAlias } from 'kysely/dist/cjs/parser/table-parser';
 
@@ -24,5 +25,6 @@ export const pgDeleteFrom = async <T extends keyof Database>({
       return await where(query).returningAll().execute();
     },
     table: null,
+    action: OPENSEARCH_SYNC_ACTIONS.DELETE,
   });
 };

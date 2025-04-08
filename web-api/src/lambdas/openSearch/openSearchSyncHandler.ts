@@ -2,11 +2,19 @@ import { SQSEvent } from 'aws-lambda';
 import { DatabaseSchema } from '@web-api/database-schema';
 
 export type OpenSearchSyncMessageType = keyof typeof DatabaseSchema;
+export type OpenSearchSyncAction =
+  (typeof OPENSEARCH_SYNC_ACTIONS)[keyof typeof OPENSEARCH_SYNC_ACTIONS];
+
+export const OPENSEARCH_SYNC_ACTIONS = {
+  UPSERT: 'UPSERT',
+  DELETE: 'DELETE',
+} as const;
 
 export type OpenSearchSyncMessage = {
   payload: any;
   type: OpenSearchSyncMessageType;
   timestamp: string;
+  action: OpenSearchSyncAction;
 };
 
 export const openSearchSyncHandler = async (event: SQSEvent): Promise<void> => {

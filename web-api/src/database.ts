@@ -13,6 +13,7 @@ import { openSearchGateway } from '@web-api/gateways/openSearch/openSearchGatewa
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import {
+  OpenSearchSyncAction,
   OpenSearchSyncMessage,
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
@@ -159,15 +160,20 @@ function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
 export async function getDbWriter<T>({
   cb,
   table,
+  action,
 }: {
   cb: (db: Kysely<Database>) => Promise<T>;
   table: keyof Database | null;
+  action: OpenSearchSyncAction | null;
 }): Promise<T> {
-  if (!table || !DatabaseSchema[table].indexOpenSearchMessage) {
+  const writeDoesNotNeedToBeIndexedInOpenSearch =
+    !table || !DatabaseSchema[table].indexOpenSearchMessage || !action;
+
+  if (writeDoesNotNeedToBeIndexedInOpenSearch) {
     return await executeWriter(cb);
   }
 
-  const rawResult: T = await executeWriter(cb);
+  const rawResult = await executeWriter(cb);
   let result: any = rawResult;
   if (DatabaseSchema[table].transformOpenSearchMessage) {
     result = DatabaseSchema[table].transformOpenSearchMessage(rawResult);
@@ -179,6 +185,7 @@ export async function getDbWriter<T>({
         timestamp: formatNow(),
         payload: result,
         type: table as OpenSearchSyncMessageType,
+        action,
       };
 
       await openSearchGateway().queueSync({ message });

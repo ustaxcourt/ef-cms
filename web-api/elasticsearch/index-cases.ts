@@ -10,12 +10,12 @@ import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/tr
 import { getLogger } from 'aws-xray-sdk';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
-import { flattenDeep, isArray } from 'lodash';
+import { flattenDeep } from 'lodash';
 
 export const transformOpenSearchCase = (
   caseData: CaseKysely | CaseKysely[],
 ) => {
-  const cases = isArray(caseData) ? caseData : [caseData];
+  const cases = Array.isArray(caseData) ? caseData : [caseData];
   return cases.map(c => c.docketNumber);
 };
 
@@ -24,7 +24,7 @@ export const indexOpenSearchCase = async ({
 }: {
   message: OpenSearchSyncMessage;
 }): Promise<void> => {
-  for (const docketNumber of isArray(message.payload)
+  for (const docketNumber of Array.isArray(message.payload)
     ? message.payload
     : [message.payload]) {
     const caseRecord = await getCaseMetadataWithCounsel({

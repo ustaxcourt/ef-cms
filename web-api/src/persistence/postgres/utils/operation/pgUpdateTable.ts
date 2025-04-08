@@ -1,5 +1,6 @@
 import { getDbWriter } from '@web-api/database';
 import { Database } from '@web-api/database-schema';
+import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { UpdateQueryBuilder, UpdateResult } from 'kysely';
 import { ExtractTableAlias } from 'kysely/dist/cjs/parser/table-parser';
 import { UpdateObjectExpression } from 'kysely/dist/cjs/parser/update-set-parser';
@@ -39,5 +40,6 @@ export const pgUpdateTable = async <T extends keyof Database>({
       return await where(query).returningAll().execute();
     },
     table,
+    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 };

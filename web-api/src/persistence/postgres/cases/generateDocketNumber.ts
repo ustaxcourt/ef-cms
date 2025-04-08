@@ -22,6 +22,7 @@ const incrementCounter = async (year: string): Promise<number> => {
         .orderBy('sortableDocketNumber', 'desc')
         .executeTakeFirst(),
     table: null,
+    action: null,
   });
 
   if (!theCase) {

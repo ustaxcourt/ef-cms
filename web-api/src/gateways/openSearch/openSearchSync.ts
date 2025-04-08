@@ -22,7 +22,7 @@ export const openSearchSync = async ({
 
 const getMessagingClient = () => {
   if (!sqsCache) {
-    sqsCache = new SQSClient({
+    sqsCache = new SQSClient({ // 10494 Use global sqs cache
       maxAttempts: 3,
       region: environment.region,
       requestHandler: new NodeHttpHandler({

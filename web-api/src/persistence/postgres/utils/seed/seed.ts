@@ -26,6 +26,7 @@ import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
+import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -60,6 +61,7 @@ export const seed = async () => {
         .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
         .execute(),
     table: null,
+    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 
   await pgInsertInto({
