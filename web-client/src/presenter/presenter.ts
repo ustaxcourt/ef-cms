@@ -246,7 +246,6 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToStatusReportOrderSequence } from './sequences/StatusReportOrder/navigateToStatusReportOrderSequence';
-import { navigateToMotionOrderResponseSequence } from './sequences/MotionOrderResponse/navigateToMotionOrderResponseSequence';
 import { navigateToTrialSessionPlanningReportSequence } from '@web-client/presenter/sequences/navigateToTrialSessionPlanningReportViewSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
@@ -986,8 +985,6 @@ export const presenterSequences = {
   navigateToEditOrderSequence,
   navigateToForgotPasswordSequence,
   navigateToLoginSequence,
-  navigateToMotionOrderResponseSequence:
-    navigateToMotionOrderResponseSequence as unknown as Function,
   navigateToPathAndSetRedirectUrlSequence:
     navigateToPathAndSetRedirectUrlSequence as unknown as Function,
   navigateToPathSequence: navigateToPathSequence as unknown as Function,
