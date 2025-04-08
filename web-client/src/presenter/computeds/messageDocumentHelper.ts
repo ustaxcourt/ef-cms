@@ -197,7 +197,6 @@ export const messageDocumentHelper = (
   const applyStampFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/apply-stamp`;
   const editCorrespondenceLink = `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplayDocumentId}/${parentMessageId}`;
   const messageDetailLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`;
-  // TODO: 10586: Wrape up link to message route. Button now working for messages.
   const motionOrderResponseFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/motion-order-response-create`;
   const servePetitionLink = `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`;
   const statusReportOrderFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/status-report-order-create`;
