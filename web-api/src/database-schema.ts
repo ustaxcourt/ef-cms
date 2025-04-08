@@ -53,6 +53,10 @@ import {
   UserConfirmationCodeTable,
   UserTable,
 } from '@web-api/persistence/postgres/users/schema';
+import {
+  indexOpenSearchUser,
+  transformOpenSearchUser,
+} from 'web-api/elasticsearch/index-users';
 
 const DEFAULT = {};
 
@@ -140,6 +144,8 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUser: {
     table: DEFAULT as UserTable,
     columns: DW_USER_COLUMNS,
+    indexOpenSearchMessage: indexOpenSearchUser,
+    transformOpenSearchMessage: transformOpenSearchUser,
   },
   dwUserConfirmationCode: {
     table: DEFAULT as UserConfirmationCodeTable,

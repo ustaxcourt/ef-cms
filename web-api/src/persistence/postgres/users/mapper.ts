@@ -146,3 +146,7 @@ function userHasContactInfo(user): boolean {
     user.state
   );
 }
+
+export function toKyselyNewUsers(users: RawUser[]): NewUserKysely[] {
+  return users.map(pickFields);
+}

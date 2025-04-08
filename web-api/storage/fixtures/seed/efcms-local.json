@@ -23880,5 +23880,18 @@
     "entityName": "UserCaseNote",
     "notes": "Test",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "role": "petitioner",
+    "address2": "Blandtowne, AK 90210",
+    "phone": "234-234-2345",
+    "address1": "123 Domestic Bliss Lane",
+    "entityName": "User",
+    "name": "Test Petitioner OpenSearch",
+    "sk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "section": "petitioner",
+    "pk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "userId": "e3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "email": "petitionerOpenSearch@example.com"
   }
 ]

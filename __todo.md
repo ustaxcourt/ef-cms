@@ -9,6 +9,18 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [ ] Replace all calls to `updateUserRecords` with `updateUser`
 - [ ] Remove `getUserGateway` entirely
 - [ ] Update & Create Case Associations Judge Updates, maybe??
+- [ ] Odd case related functions
+- [-] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
+- [-] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
+- [-] Remove DynamoDB seed user when finished
+- [ ] Implement TTL on Confirmation Codes
+- [ ] Make sure all user related entities are copied in & all user related functions
+- [ ] Update DynamoDB DrawIO Entity Map
+- [ ] Update ERD for new tables
+- [ ] Get Green PR and All Tests Pass
+- [ ] Push to Experimental Environment (Smoke Tests)
+- [ ] Write a Deletion Script to Remove DynamoDB Records (One Time) 
+- [ ] Test Deletion Script on Deployed Environment
 
 ## Dynamo Functions to Postgres
 
@@ -49,6 +61,7 @@ Is "search key" a concept we need to hold onto?
 
 ## Things to test
 - ./scripts/user/update-judge.ts
+- Account Creation and Various Authentication States (such as forgot password, change email, grant e-access, etc)
 
 
 ## Considerations

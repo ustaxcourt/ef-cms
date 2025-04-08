@@ -8,7 +8,6 @@ import { createUserRecord } from '@web-api/persistence/postgres/users/createUser
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
-import { pinkLog } from '@shared/tools/pinkLog';
 
 export const createUsers = async () => {
   const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
@@ -43,13 +42,6 @@ export const createUsers = async () => {
           .validate()
           .toRawObject();
 
-        pinkLog('About to call createUserRecord');
-        pinkLog(
-          'practitionerUser being passed to createUserRecord',
-          practitionerUser,
-        );
-        pinkLog('userId', userId);
-
         const userCreated = await createUserRecord({
           user: practitionerUser,
           userId,
@@ -75,10 +67,6 @@ export const createUsers = async () => {
         usersByEmail[userCreated.email] = userCreated;
         return;
       }
-
-      pinkLog('About to call createUserRecord');
-      pinkLog('userRecord being passed to createUserRecord', userRecord);
-      pinkLog('userId', userId);
 
       const userCreated = await createUserRecord({
         user: omit(userRecord, EXCLUDE_PROPS),
