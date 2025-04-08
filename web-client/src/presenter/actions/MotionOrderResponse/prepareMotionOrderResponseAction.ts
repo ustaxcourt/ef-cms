@@ -131,7 +131,7 @@ export const prepareMotionOrderResponseAction = ({
   store.set(state.form.initialFreeText, initialFreeText);
   store.set(state.form.orderType, MOTION_ORDER_RESPONSE_OPTIONS.orderType);
   store.set(state.form.documentTitle, 'Order');
-  store.set(state.form.documentType, 'Order'); // Todo 10586: set in setup function
+  store.set(state.form.documentType, 'Order');
   store.set(state.form.dueDateFormatted, dueDateFormatted);
   store.set(state.form.eventCode, 'O');
   store.set(state.form.isOnLeadCase, isOnLeadCase);
