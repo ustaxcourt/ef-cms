@@ -47,10 +47,8 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
-import {
-  indexOpenSearchDocketEntries,
-  transformOpenSearchDocketEntry,
-} from 'web-api/elasticsearch/index-docketEntry';
+import { transformOpenSearchDocketEntry } from 'web-api/elasticsearch/docketEntries/transformOpenSearchDocketEntry';
+import { indexOpenSearchDocketEntries } from 'web-api/elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 
 const DEFAULT = {};
 

@@ -8,23 +8,10 @@ import {
   OpenSearchSyncMessage,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
-import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { getDocument } from '@web-api/persistence/s3/getDocument';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { chunk } from 'lodash';
 import { efcmsDocketEntryIndex } from 'web-api/elasticsearch/efcms-docket-entry-mappings';
-
-export const transformOpenSearchDocketEntry = (
-  docketEntryData: DocketEntryKysely | DocketEntryKysely[],
-): { docketNumber: string; docketEntryId: string }[] => {
-  const docketEntryArray = Array.isArray(docketEntryData)
-    ? docketEntryData
-    : [docketEntryData];
-  return docketEntryArray.map(d => ({
-    docketNumber: d.docketNumber,
-    docketEntryId: d.docketEntryId,
-  }));
-};
 
 export const indexOpenSearchDocketEntries = async ({
   message,
