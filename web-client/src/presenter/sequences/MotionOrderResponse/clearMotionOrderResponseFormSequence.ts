@@ -2,4 +2,4 @@ import { clearMotionOrderResponseFormAction } from '@web-client/presenter/action
 
 export const clearMotionOrderResponseFormSequence = [
   clearMotionOrderResponseFormAction,
-];
+] as unknown as () => void;
