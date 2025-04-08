@@ -71,9 +71,8 @@ export const OrderResponse = connect(
                   {formattedCaseDetail.isLeadCase && (
                     <div>
                       <FormGroup
-                        className={
-                          motionOrderResponseFormHelper.dispositionErrorClass
-                        }
+                        className="order-response-form-group"
+                        errorText={validationErrors.issueOrderFor}
                       >
                         <label
                           className="usa-label"
@@ -155,10 +154,8 @@ export const OrderResponse = connect(
                     </div>
                   )}
                   <FormGroup
-                    className={
-                      motionOrderResponseFormHelper.dispositionErrorClass
-                    }
-                    errorText={validationErrors.disposition}
+                    className="order-response-form-group"
+                    errorText={validationErrors.responseDate}
                   >
                     <DateSelector
                       defaultValue={form.responseDate}
@@ -179,11 +176,7 @@ export const OrderResponse = connect(
                     />
                   </FormGroup>
                   <hr className="border-top-2px border-base-lighter" />
-                  <FormGroup
-                    className={
-                      motionOrderResponseFormHelper.dispositionErrorClass
-                    }
-                  >
+                  <FormGroup className="order-response-form-group">
                     <label
                       className="usa-label"
                       htmlFor="motion-order-reply-radio"
@@ -259,8 +252,8 @@ export const OrderResponse = connect(
                   </FormGroup>
 
                   <FormGroup
-                    className={motionOrderResponseFormHelper.dateErrorClass}
-                    errorText={validationErrors.date}
+                    className="order-response-form-group"
+                    errorText={validationErrors.dueDate}
                   >
                     <DateSelector
                       defaultValue={form.dueDate}
@@ -283,7 +276,7 @@ export const OrderResponse = connect(
                   <hr className="border-top-2px border-base-lighter" />
                   <FormGroup
                     className="order-response-form-group"
-                    errorText={validationErrors.customText}
+                    errorText={validationErrors.additionalOrderText}
                   >
                     {motionOrderResponseFormHelper.showStrikeCheckBox && (
                       <div className="usa-checkbox">
