@@ -2,7 +2,6 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   CaseInventory,
   CustomCaseReportFilters,
-  CustomCaseReportSearchAfter,
   getCustomCaseReportInteractor,
 } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import {
@@ -46,10 +45,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let searchAfter: CustomCaseReportSearchAfter = {
-    pk: null,
-    receivedAt: null,
-  };
+  let page = 0;
   const pageSize = 9000;
 
   const loops = Math.floor(totalCount / pageSize) + 1;
@@ -83,17 +79,17 @@ export const createCsvCustomCaseReportFileInteractor = async (
         filingMethod,
         highPriority,
         judges,
+        page,
         pageSize,
         preferredTrialCities,
         procedureType,
-        searchAfter,
         startDate,
       },
       authorizedUser,
     );
 
     cases.push(...iterationData.foundCases);
-    searchAfter = iterationData.lastCaseId;
+    page += pageSize;
 
     await getNotificationGateway().sendNotificationToUser({
       applicationContext,

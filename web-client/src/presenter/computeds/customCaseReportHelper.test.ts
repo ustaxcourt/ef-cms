@@ -59,7 +59,6 @@ describe('customCaseReportHelper', () => {
         procedureType: 'All',
         startDate: '2018-03-01T00:00:00.000Z',
       },
-      lastIdsOfPages: [{ pk: '', receivedAt: 0 }],
       totalCases: 0,
     };
     initialState = {

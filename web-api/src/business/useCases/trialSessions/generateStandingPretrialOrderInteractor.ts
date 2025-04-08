@@ -8,6 +8,7 @@ import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
 
@@ -38,12 +39,10 @@ export const generateStandingPretrialOrderInteractor = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetail = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const { startDate } = trialSession;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
@@ -60,7 +59,7 @@ export const generateStandingPretrialOrderInteractor = async (
 
   const formattedJudgeName = await getJudgeWithTitle({
     applicationContext,
-    judgeUserName: trialSession.judge.name,
+    judgeUserName: trialSession.judge?.name,
   });
 
   const trialStartTimeIso = createISODateString(

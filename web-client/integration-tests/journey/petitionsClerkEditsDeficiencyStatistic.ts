@@ -101,6 +101,6 @@ export const petitionsClerkEditsDeficiencyStatistic = cerebralTest => {
 
     expect(
       cerebralTest.getState('caseDetail.statistics')[0].irsDeficiencyAmount,
-    ).toEqual(1000);
+    ).toEqual('1000');
   });
 };

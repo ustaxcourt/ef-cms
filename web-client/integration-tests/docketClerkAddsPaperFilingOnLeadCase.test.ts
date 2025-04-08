@@ -1,4 +1,4 @@
-import { DOCUMENT_SERVED_MESSAGES } from '../../shared/src/business/entities/EntityConstants';
+import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConstants';
 import { createConsolidatedGroup } from './journey/consolidation/createConsolidatedGroup';
 import { docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledMultiDocketableDocketEntryAndSavesForLater';
 import { docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes';
@@ -8,6 +8,9 @@ import {
   waitForCondition,
   waitForLoadingComponentToHide,
 } from './helpers';
+import { formattedWorkQueue as formattedWorkQueueComputed } from '@web-client/presenter/computeds/formattedWorkQueue';
+import { runCompute } from '@web-client/presenter/test.cerebral';
+import { withAppContextDecorator } from '@web-client/withAppContext';
 
 describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
   const cerebralTest = setupTest();
@@ -15,6 +18,10 @@ describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
   afterAll(() => {
     cerebralTest.closeSocket();
   });
+
+  const formattedWorkQueue = withAppContextDecorator(
+    formattedWorkQueueComputed,
+  );
 
   describe('Create a consolidated group', () => {
     createConsolidatedGroup(cerebralTest);
@@ -110,7 +117,7 @@ describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
       ).toEqual('documentView');
     });
 
-    it('verify multi-docketed document has been filed on every case in the consolidated group', async () => {
+    it('should verify multi-docketed document has been filed on every case in the consolidated group', async () => {
       for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
         await cerebralTest.runSequence('gotoCaseDetailSequence', {
           docketNumber,
@@ -127,7 +134,7 @@ describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
       }
     });
 
-    it('verify a completed work item exists for each case in the consolidated group that the document was filed on from the document viewer', async () => {
+    it('should verify a completed work item exists for each case in the consolidated group that the document was filed on from the document viewer', async () => {
       await cerebralTest.runSequence('gotoWorkQueueSequence');
       await cerebralTest.runSequence('chooseWorkQueueSequence', {
         box: 'outbox',
@@ -139,11 +146,13 @@ describe('Docket clerk adds and multi-dockets a paper filing journey', () => {
           cerebralTest.getState('currentPage') === 'WorkQueue',
       });
 
-      const outboxQueue = cerebralTest.getState('workQueue');
+      const formattedOutboxQueue = runCompute(formattedWorkQueue, {
+        state: cerebralTest.getState(),
+      });
 
       for (const docketNumber of cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries) {
         const outboxWorkItem = findWorkItemByDocketNumber(
-          outboxQueue,
+          formattedOutboxQueue,
           docketNumber,
         );
 

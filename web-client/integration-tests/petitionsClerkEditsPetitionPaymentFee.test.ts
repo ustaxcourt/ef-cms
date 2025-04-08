@@ -2,7 +2,7 @@ import { FORMATS } from '@shared/business/utilities/DateHandler';
 import {
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
-} from '../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 
 describe('petitions clerk edits a petition payment fee', () => {
@@ -82,7 +82,7 @@ describe('petitions clerk edits a petition payment fee', () => {
       PAYMENT_STATUS.PAID,
     );
     expect(cerebralTest.getState('caseDetail.petitionPaymentDate')).toEqual(
-      '2001-01-01T00:00:00.000-05:00',
+      '2001-01-01T05:00:00.000Z',
     );
 
     expect(

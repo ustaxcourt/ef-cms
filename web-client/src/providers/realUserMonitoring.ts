@@ -10,7 +10,7 @@ export const initializeRealUserMonitoring = () => {
       endpoint: 'https://dataplane.rum.us-east-1.amazonaws.com',
       identityPoolId: process.env.RUM_IDENTITY_POOL_ID,
       sessionSampleRate: Number(process.env.RUM_SAMPLE_RATE!),
-      telemetries: ['performance'],
+      telemetries: ['performance', 'errors', 'http'],
     };
 
     const APPLICATION_ID: string = process.env.RUM_APP_MONITOR_ID!;

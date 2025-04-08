@@ -1,14 +1,18 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   PARTY_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
-import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import { getPublicCaseInteractor } from './getPublicCaseInteractor';
 
 describe('getPublicCaseInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
   const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
 
   const mockCase = {
@@ -61,35 +65,26 @@ describe('getPublicCaseInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        return mockCases[docketNumber];
-      });
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      return mockCases[docketNumber];
+    });
   });
 
   it('should format the given docket number, removing leading zeroes and suffix', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     await getPublicCaseInteractor(applicationContext, {
       docketNumber: '0000123-19S',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
-        .calls[0][0],
-    ).toEqual({
+    expect(getCaseByDocketNumber.mock.calls[0][0]).toEqual({
       applicationContext,
       docketNumber: '123-19',
     });
   });
 
-  it('Should return a Not Found error if the case does not exist', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({ archivedCorrespondences: [] });
+  it('should return a Not Found error when the case does not exist', async () => {
+    getCaseByDocketNumber.mockResolvedValue({ archivedCorrespondences: [] });
 
     await expect(
       getPublicCaseInteractor(applicationContext, {
@@ -98,16 +93,14 @@ describe('getPublicCaseInteractor', () => {
     ).rejects.toThrow('Case 999 was not found.');
   });
 
-  it('Should search by docketNumber when docketNumber parameter is a valid docketNumber', async () => {
+  it('should search by docketNumber when docketNumber parameter is a valid docketNumber', async () => {
     const docketNumber = '123-45';
 
     const result = await getPublicCaseInteractor(applicationContext, {
       docketNumber,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(result).toMatchObject({
       docketNumber: '123-45',
       petitioners: [
@@ -158,7 +151,7 @@ describe('getPublicCaseInteractor', () => {
     expect(getContactPrimary(result).address1).toBeUndefined();
   });
 
-  it('should return the case to the public user if the case is unsealed but has a sealed document', async () => {
+  it('should return the case to the public user when the case is unsealed but has a sealed document', async () => {
     const docketNumber = '190-92';
 
     await expect(

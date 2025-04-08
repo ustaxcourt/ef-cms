@@ -18,6 +18,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy, some } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
@@ -41,12 +42,10 @@ export const fileCourtIssuedOrder = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   if (

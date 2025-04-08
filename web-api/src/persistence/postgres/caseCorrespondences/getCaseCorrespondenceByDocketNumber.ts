@@ -10,7 +10,6 @@ export const getCaseCorrespondenceByDocketNumber = async ({
   const correspondence = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseCorrespondence as cc')
-      .leftJoin('dwCase as c', 'c.docketNumber', 'cc.docketNumber')
       .where('cc.docketNumber', '=', docketNumber)
       .selectAll()
       .select('cc.docketNumber')

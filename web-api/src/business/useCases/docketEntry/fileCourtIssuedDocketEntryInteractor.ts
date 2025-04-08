@@ -1,14 +1,15 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -43,12 +44,10 @@ export const fileCourtIssuedDocketEntry = async (
 
   const { docketEntryId } = documentMeta;
 
-  const subjectCaseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectDocketNumber,
-    });
+  const subjectCaseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: subjectDocketNumber,
+  });
 
   const subjectCaseToUpdateEntity = new Case(subjectCaseToUpdate, {
     authorizedUser,
@@ -78,12 +77,10 @@ export const fileCourtIssuedDocketEntry = async (
 
   await Promise.all(
     [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
+      const caseToUpdate = await getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
 
       const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -184,12 +181,10 @@ export const fileCourtIssuedDocketEntry = async (
     }),
   );
 
-  const rawSubjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectDocketNumber,
-    });
+  const rawSubjectCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: subjectDocketNumber,
+  });
 
   const subjectCase = new Case(rawSubjectCase, {
     authorizedUser,

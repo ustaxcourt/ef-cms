@@ -8,6 +8,11 @@ describe('resetToBaseStateAction', () => {
       featureFlags: {},
       header: {},
       maintenanceMode: {},
+      caseDetail: {},
+      pendingReports: {},
+      scanner: {},
+      constants: {},
+      clientConnectionId: '',
     };
 
     const result = await runAction(resetToBaseStateAction, {

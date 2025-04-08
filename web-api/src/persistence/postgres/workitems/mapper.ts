@@ -1,7 +1,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { NewWorkItemKysely } from '@web-api/database-types';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { NewWorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
 
 function pickFields(workItem) {
   return {
@@ -65,11 +65,11 @@ export function workItemEntity(workItem) {
     ...transformNullToUndefined({
       ...workItem,
       caseStatus: workItem.status,
-      caseTitle: Case.getCaseTitle(workItem.caption),
+      caseTitle: Case.getCaseTitle(workItem.caption || ''),
       completedAt: workItem.completedAt?.toISOString(),
-      createdAt: workItem.createdAt.toISOString(),
+      createdAt: workItem.createdAt?.toISOString(),
       trialDate: workItem.trialDate?.toISOString(),
-      updatedAt: workItem.createdAt.toISOString(),
+      updatedAt: workItem.createdAt?.toISOString(),
     }),
     assigneeId: workItem.assigneeId, // this needs to be null because it replicates what was done in dynamo
   });

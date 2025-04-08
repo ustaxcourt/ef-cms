@@ -22,7 +22,7 @@ export const shouldGenerateDocketRecordIndex = ({
   docketEntry,
 }) => {
   if (docketEntry.index) {
-    return false; // an index does not need to be generated
+    return false;
   }
 
   const isMinuteEntry = DocketEntry.isMinuteEntry(docketEntry);
