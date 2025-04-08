@@ -9,3 +9,12 @@ jest.mock(
   '@web-api/persistence/postgres/docketEntries/reports/getAllPendingMotionDocketEntriesForJudge',
   () => mockFactory('getAllPendingMotionDocketEntriesForJudge'),
 );
+
+jest.mock('@web-api/persistence/postgres/docketEntries/deleteDocketEntry', () =>
+  mockFactory('deleteDocketEntry'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingStatus',
+  () => mockFactory('updateDocketEntryPendingServiceStatus'),
+);

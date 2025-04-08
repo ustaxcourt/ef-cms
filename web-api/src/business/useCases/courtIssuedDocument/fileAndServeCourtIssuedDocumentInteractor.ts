@@ -19,6 +19,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -99,14 +100,11 @@ export const fileAndServeCourtIssuedDocument = async (
       documentBytes: stampedPdf,
     });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocketEntryPendingServiceStatus({
-      applicationContext,
-      docketEntryId: docketEntryToServe.docketEntryId,
-      docketNumber: subjectCaseDocketNumber,
-      status: true,
-    });
+  await updateDocketEntryPendingServiceStatus({
+    docketEntryId: docketEntryToServe.docketEntryId,
+    docketNumber: subjectCaseDocketNumber,
+    status: true,
+  });
 
   let caseEntities: Case[] = [];
   let serviceResults;
@@ -220,14 +218,11 @@ export const fileAndServeCourtIssuedDocument = async (
   } finally {
     for (const caseEntity of caseEntities) {
       try {
-        await applicationContext
-          .getPersistenceGateway()
-          .updateDocketEntryPendingServiceStatus({
-            applicationContext,
-            docketEntryId: docketEntryToServe.docketEntryId,
-            docketNumber: caseEntity.docketNumber,
-            status: false,
-          });
+        await updateDocketEntryPendingServiceStatus({
+          docketEntryId: docketEntryToServe.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          status: false,
+        });
       } catch (e) {
         applicationContext.logger.error(
           `Encountered an exception trying to reset isPendingService on Docket Number ${caseEntity.docketNumber}.`,

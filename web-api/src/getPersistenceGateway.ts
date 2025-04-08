@@ -21,7 +21,6 @@ import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSession
 import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
-import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
 import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
@@ -99,8 +98,6 @@ import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessi
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
-import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
-import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
 import { updateDocketEntryWorksheet } from '@web-api/persistence/dynamo/pendingMotion/updateDocketEntryWorksheet';
 import {
   updateIrsPractitionerOnCase,
@@ -181,8 +178,6 @@ const gatewayMethods = {
     setTrialSessionProcessingStatus,
     updateCaseHearing,
     updateDocketEntry,
-    updateDocketEntryPendingServiceStatus,
-    updateDocketEntryProcessingStatus,
     updateDocketEntryWorksheet,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
@@ -199,7 +194,6 @@ const gatewayMethods = {
   createLock,
   decrementJobCounter,
   deleteCaseTrialSortMappingRecords,
-  deleteDocketEntry,
   deleteDocketEntryWorksheetRecord,
   deleteDocumentFile,
   deleteMessage,
