@@ -44,7 +44,6 @@ export const cases410_419: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_410_419['410-22'],
-    // gsi1pk: 'leadCase|409-22',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -125,7 +124,6 @@ export const cases410_419: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_410_419['411-22'],
-    // gsi1pk: 'leadCase|409-22',
     hasPendingItems: true,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -204,7 +202,6 @@ export const cases410_419: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_410_419['412-22'],
-    // gsi1pk: 'leadCase|409-22',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -285,7 +282,6 @@ export const cases410_419: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_410_419['413-22'],
-    // gsi1pk: 'leadCase|409-22',
     hasPendingItems: true,
     hasVerifiedIrsNotice: false,
     initialCaption:

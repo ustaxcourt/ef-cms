@@ -574,7 +574,6 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'> [] = [
     createdAt: '2023-04-03T15:49:19.618Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['103-67'],
     docketNumberSuffix: 'L',
-    // gsi1pk: 'leadCase|102-67',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption: 'Britanney Wiley, Petitioner',
@@ -762,7 +761,6 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'> [] = [
     createdAt: '2023-01-06T22:33:08.581Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['104-23'],
     docketNumberSuffix: 'D',
-    // gsi1pk: 'leadCase|104-23',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption: 'Armand Fulton, Petitioner',
@@ -804,7 +802,6 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'> [] = [
     createdAt: '2023-04-03T15:50:59.961Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['104-67'],
     docketNumberSuffix: 'L',
-    // gsi1pk: 'leadCase|102-67',
     hasPendingItems: true,
     hasVerifiedIrsNotice: false,
     initialCaption:
