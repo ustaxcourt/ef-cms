@@ -47,7 +47,10 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
-import { transformOpenSearchDocketEntry } from 'web-api/elasticsearch/index-docketEntry';
+import {
+  indexOpenSearchDocketEntries,
+  transformOpenSearchDocketEntry,
+} from 'web-api/elasticsearch/index-docketEntry';
 
 const DEFAULT = {};
 
@@ -110,7 +113,7 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as DocketEntryTable,
     columns: DW_DOCKET_ENTRY_COLUMNS,
     transformOpenSearchMessage: transformOpenSearchDocketEntry,
-    // indexOpenSearchMessage: goDoStuff,
+    indexOpenSearchMessage: indexOpenSearchDocketEntries,
   },
   dwMessage: {
     table: DEFAULT as MessageTable,
