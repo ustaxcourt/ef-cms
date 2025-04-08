@@ -20,7 +20,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
   public additionalOrderText?: string;
   public dueDate?: string;
   public isOnLeadCase: boolean;
-  public consolidatedGroupOrderFor: typeof MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor;
+  public issueOrderFor: typeof MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions;
 
   constructor(rawProps) {
     super('MotionOrderResponseForm');
@@ -30,7 +30,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
     this.additionalOrderText = rawProps.additionalOrderText;
     this.dueDate = rawProps.dueDate;
     this.isOnLeadCase = rawProps.isOnLeadCase;
-    this.consolidatedGroupOrderFor = rawProps.consolidatedGroupOrderFor;
+    this.issueOrderFor = rawProps.issueOrderFor;
   }
 
   static TODAY = formatDateString(
@@ -48,21 +48,18 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       .messages({
         'string.max': 'Limit is 240 characters.',
       }),
-    consolidatedGroupOrderFor: joi
+    issueOrderFor: joi
       .when('isOnLeadCase', {
         is: joi.equal(true),
         then: joi
           .required()
           .valid(
-            ...Object.values(
-              MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor,
-            ),
+            ...Object.values(MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions),
           ),
         otherwise: joi
           .required()
           .equal(
-            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor
-              .THIS_CASE_ONLY,
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
           ),
       })
       .messages({ 'any.required': 'Select on which cases to file this order' }),

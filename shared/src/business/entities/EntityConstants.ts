@@ -1804,7 +1804,7 @@ export const MOTION_ORDER_RESPONSE_OPTIONS = {
     REPLY: 'Order Reply',
     REPLY_SR: 'Order Reply/SR',
   },
-  consolidatedGroupOrderFor: {
+  issueOrderOptions: {
     ALL_CASES: 'All cases in this group',
     THIS_CASE_ONLY: 'Just this case',
   },
