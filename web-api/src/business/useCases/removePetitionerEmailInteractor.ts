@@ -56,4 +56,10 @@ export const removePetitionerEmailInteractor = async (
     petitioner: petitionerToUpdate,
     oldContactId: petitionerToRemove.contactId,
   });
+
+  await applicationContext.getPersistenceGateway().deleteUserFromCase({
+    applicationContext,
+    docketNumber,
+    userId: petitionerToRemove.contactId,
+  });
 };
