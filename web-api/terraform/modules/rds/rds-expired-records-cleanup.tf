@@ -44,18 +44,13 @@ module "rds_expired_records_cleanup_lambda" {
   environment = {
     STAGE                        = var.environment
     NODE_ENV                     = "production"
-    ACCOUNT_ID                   = data.aws_caller_identity.current.account_id
-    DISABLE_EMAILS               = "false"
-    ELASTICSEARCH_ENDPOINT       = var.elasticsearch_endpoint
-    EMAIL_SOURCE                 = var.email_source
-    INACTIVITY_REPORT_RECIPIENTS = var.inactivity_report_recipients
   }
   timeout = "900"
 }
 
 resource "aws_cloudwatch_event_rule" "rds_expired_records_cleanup_cron_rule_daily" {
   name                = "rds_expired_records_cleanup_cron_${var.environment}"
-  schedule_expression = "cron(0 9 1 * ? *)" //UPDATE
+  schedule_expression = "cron(0 0 * * ? *)"
   state               = "ENABLED"
 }
 
