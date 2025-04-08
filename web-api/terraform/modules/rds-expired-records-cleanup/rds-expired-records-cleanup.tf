@@ -1,7 +1,7 @@
 data "aws_caller_identity" "current" {}
 
 resource "aws_iam_role" "rds_expired_records_cleanup_lambda_role" {
-  name = "rds_expired_records_cleanup_lambda_role${var.environment}"
+  name = "rds_expired_records_cleanup_lambda_role_${var.environment}_${var.current_color}"
 
   assume_role_policy = <<EOF
 {
@@ -22,7 +22,7 @@ EOF
 
 
 resource "aws_iam_role_policy" "rds_expired_records_cleanup_lambda_policy" {
-  name = "rds_expired_records_cleanup_lambda_policy${var.environment}"
+  name = "rds_expired_records_cleanup_lambda_policy${var.environment}_${var.current_color}"
   role = aws_iam_role.rds_expired_records_cleanup_lambda_role.id
 
   policy = <<EOF
@@ -48,12 +48,12 @@ module "rds_expired_records_cleanup_lambda" {
   source         = "../lambda"
   handler_file   = "./web-api/src/lambdas/rdsExpiredRecordsCleanup/rdsExpiredRecordsCleanupLambda.ts"
   handler_method = "handler"
-  lambda_name    = "rds_expired_records_cleanup_lambda_${var.environment}"
+  lambda_name    = "rds_expired_records_cleanup_lambda_${var.environment}_${var.current_color}"
   role           = aws_iam_role.rds_expired_records_cleanup_lambda_role.arn
   environment = {
     STAGE                        = var.environment
     NODE_ENV                     = "production"
-    REGION                       = var.region
+    REGION                       = var.aws_region
     //region
     //rds
       //readHost
@@ -67,7 +67,7 @@ module "rds_expired_records_cleanup_lambda" {
 }
 
 resource "aws_cloudwatch_event_rule" "rds_expired_records_cleanup_cron_rule_daily" {
-  name                = "rds_expired_records_cleanup_cron_${var.environment}"
+  name                = "rds_expired_records_cleanup_cron_${var.environment}_${var.current_color}"
   schedule_expression = "cron(0 0 * * ? *)"
   state               = "ENABLED"
 }

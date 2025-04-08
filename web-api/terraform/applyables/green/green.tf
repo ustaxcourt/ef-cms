@@ -301,3 +301,11 @@ module "ui-green" {
     aws.us-west-1 = aws.us-west-1
   }
 }
+
+
+module "rds-expired-records-cleanup" {
+    source                 = "../../modules/rds-expired-records-cleanup"
+    postgres_user          = data.terraform_remote_state.remote.outputs.postgres_user
+    current_color          = "green"
+    environment            = var.environment
+}
