@@ -76,6 +76,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       })
       .description('When the response is due.')
       .messages({
+        'any.ref': 'Enter a valid Response Date',
         'any.required':
           'Due Date is required when a Reply or Reply/SR is ordered',
         'date.format': 'Enter a valid date',
