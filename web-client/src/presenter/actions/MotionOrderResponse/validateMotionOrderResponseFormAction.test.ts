@@ -37,8 +37,8 @@ describe('validateMotionOrderResponseFormAction', () => {
           responseDate: today,
           orderType: MOTION_ORDER_RESPONSE_OPTIONS.orderType,
           strickenFromTrialSession: false,
-          consolidatedGroupOrderFor:
-            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor.ALL_CASES,
+          issueOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
         },
       },
     });
@@ -60,7 +60,7 @@ describe('validateMotionOrderResponseFormAction', () => {
     expect(mockErrorPath).toHaveBeenCalledWith(
       expect.objectContaining({
         errors: {
-          consolidatedGroupOrderFor: 'Select on which cases to file this order',
+          issueOrderFor: 'Select on which cases to file this order',
           responseDate: 'Response Date is required.',
         },
       }),
@@ -77,9 +77,8 @@ describe('validateMotionOrderResponseFormAction', () => {
         form: {
           additionalOrderText: 'Test',
           dueDate: 'invalid-date',
-          consolidatedGroupOrderFor:
-            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor
-              .THIS_CASE_ONLY,
+          issueOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
           motionOrderResponse:
             MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY,
           responseDate: 'invalid-date',
@@ -105,9 +104,8 @@ describe('validateMotionOrderResponseFormAction', () => {
       },
       state: {
         form: {
-          consolidatedGroupOrderFor:
-            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor
-              .THIS_CASE_ONLY,
+          issueOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
           additionalOrderText: 'Test',
           dueDate: getBusinessDateInFuture({
             numberOfDays: 4,
