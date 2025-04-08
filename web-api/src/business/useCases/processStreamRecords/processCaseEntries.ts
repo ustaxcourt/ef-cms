@@ -24,6 +24,10 @@ export const processCaseEntries = async ({
   await upsertCases(Object.values(casesToUpsert));
   const postgresUpserts: Promise<void>[] = [];
   for (const caseRecord of Object.values(casesToUpsert)) {
+    caseRecord.petitioners?.forEach(p => {
+      p.hasConsentedToElectronicService = p?.hasConsentedToEService;
+      p.hasElectronicAccess = p?.hasEAccess;
+    });
     postgresUpserts.push(
       upsertPetitionersOnCase({
         docketNumber: caseRecord.docketNumber,
