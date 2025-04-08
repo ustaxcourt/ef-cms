@@ -12,6 +12,7 @@ import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgr
 import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
 import { getCaseStatusHistory } from '@web-api/persistence/postgres/cases/getCaseStatusHistory';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getDocketEntriesByDocketNumber } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -25,7 +26,7 @@ export const getCaseByDocketNumber = async ({
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
   // These case items are no longer in dynamoDB
-  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case'];
+  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case', 'docket-entry'];
 
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({
     docketNumber,
@@ -34,11 +35,14 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
+  // 10494: We only need certain work items: 1) not completed and 2) associated with the following docketEntries
+  // Let's see if we can improve the below based on this, which could significantly impact performance since these tables have millions of rows
   const [
     caseStatusHistory,
     caseCorrespondences,
     statisticsWithPenalties,
     workItems,
+    docketEntries,
     caseItemsRaw,
   ] = await Promise.all([
     getCaseStatusHistory({ docketNumber }),
@@ -49,6 +53,7 @@ export const getCaseByDocketNumber = async ({
     getWorkItemsByDocketNumber({
       docketNumber,
     }),
+    getDocketEntriesByDocketNumber({ docketNumber }),
     queryFull({
       ExpressionAttributeNames: {
         '#pk': 'pk',
@@ -84,6 +89,7 @@ export const getCaseByDocketNumber = async ({
   return purgeDynamoKeys({
     ...aggregateCaseItems([
       ...caseItems,
+      // 10494: Can we now stop using aggregateCaseItems? If so, remove the fake Dynamo nonsense below.
       {
         ...dbCaseMetadata,
         caseStatusHistory,
@@ -100,6 +106,11 @@ export const getCaseByDocketNumber = async ({
         ...workItem,
         pk: `case|${docketNumber}`,
         sk: `work-item|${workItem.workItemId}`,
+      })),
+      ...docketEntries.map(docketEntry => ({
+        ...docketEntry,
+        pk: `case|${docketNumber}`,
+        sk: `docket-entry|${docketEntry.docketEntryId}`,
       })),
     ]),
     consolidatedCases: consolidatedCases.map(

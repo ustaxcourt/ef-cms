@@ -30,7 +30,7 @@ export const docketEntryTableDefinition = {
   eventCode: DEFAULT as string,
   filedBy: DEFAULT as string | null,
   filedByRole: DEFAULT as string | null,
-  filers: DEFAULT as string[],
+  filers: DEFAULT as ColumnType<string[], string, string>,
   filingDate: DEFAULT as Date,
   freeText: DEFAULT as string | null,
   hasOtherFilingParty: DEFAULT as boolean | null,

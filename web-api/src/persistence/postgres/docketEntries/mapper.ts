@@ -1,4 +1,7 @@
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { DatabaseSchema } from '@web-api/database-schema';
+import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 
 // eslint-disable-next-line complexity
 export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
@@ -100,3 +103,89 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     userId: docketEntry.userId ?? null,
   };
 }
+
+export function fromKyselyDocketEntry<T extends object>(record: T) {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const dwDocketEntrySchema = DatabaseSchema.dwDocketEntry.table;
+
+  const transformMap = {
+    certificateOfServiceDate: (
+      value: typeof dwDocketEntrySchema.certificateOfServiceDate,
+      _: Partial<DocketEntry>,
+    ) => value?.toISOString(),
+    createdAt: (
+      value: typeof dwDocketEntrySchema.createdAt,
+      _: Partial<DocketEntry>,
+    ) => value.toISOString(),
+    date: (value: typeof dwDocketEntrySchema.date, _: Partial<DocketEntry>) =>
+      value?.toISOString(),
+    filingDate: (
+      value: typeof dwDocketEntrySchema.filingDate,
+      _: Partial<DocketEntry>,
+    ) => value.toISOString(),
+    noticeIssuedDate: (
+      value: typeof dwDocketEntrySchema.noticeIssuedDate,
+      _: Partial<DocketEntry>,
+    ) => value?.toISOString(),
+    qcAt: (value: typeof dwDocketEntrySchema.qcAt, _: Partial<DocketEntry>) =>
+      value?.toISOString(),
+    receivedAt: (
+      value: typeof dwDocketEntrySchema.receivedAt,
+      _: Partial<DocketEntry>,
+    ) => value.toISOString(),
+    servedAt: (
+      value: typeof dwDocketEntrySchema.servedAt,
+      _: Partial<DocketEntry>,
+    ) => value?.toISOString(),
+    serviceDate: (
+      value: typeof dwDocketEntrySchema.serviceDate,
+      _: Partial<DocketEntry>,
+    ) => value?.toISOString(),
+    signedAt: (
+      value: typeof dwDocketEntrySchema.signedAt,
+      _: Partial<DocketEntry>,
+    ) => value?.toISOString(),
+    stampData: (
+      value: typeof dwDocketEntrySchema.stampData,
+      _: Partial<DocketEntry>,
+    ) => value ?? {},
+    strickenAt: (
+      value: typeof dwDocketEntrySchema.strickenAt,
+      _: Partial<DocketEntry>,
+    ) => value?.toISOString(),
+  } as const;
+
+  return new DatabaseToAppCodeMapper({
+    keyRenameMap: {},
+    transformMap,
+  }).transform(record);
+}
+
+// 10494: can we do something dynamic like this but still coax out the right types
+// export function fromKyselyDocketEntry<T extends object>(record: T) {
+//   const dwDocketEntrySchema = DatabaseSchema.dwDocketEntry.table;
+
+//   // Utility type: pick keys whose value is Date or Date | null.
+//   type DateFieldKeys<T> = {
+//     [K in keyof T]: T[K] extends Date | null ? K : never;
+//   }[keyof T];
+
+//   const dateKeys = Object.keys(dwDocketEntrySchema) as Array<
+//     DateFieldKeys<typeof dwDocketEntrySchema>
+//   >;
+
+//   const transformMap = {};
+
+//   // We'll convert every date type to string or undefined
+//   for (const key of dateKeys) {
+//     transformMap[key] = (
+//       value: (typeof dwDocketEntrySchema)[typeof key],
+//       _record: Partial<DocketEntry>,
+//     ) => value?.toISOString();
+//   }
+
+//   return new DatabaseToAppCodeMapper({
+//     keyRenameMap: {},
+//     transformMap,
+//   }).transform(record);
+// }

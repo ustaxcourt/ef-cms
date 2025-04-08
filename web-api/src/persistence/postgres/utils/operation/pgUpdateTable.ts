@@ -18,6 +18,8 @@ type UpdateWhereCallback<T extends keyof Database> = (
   UpdateResult
 >;
 
+// Note that an undefined value will NOT overwrite the existing value in the database.
+// If you need to overwrite the existing value, use pgInstertInto with onConflictColumns specified.
 export const pgUpdateTable = async <T extends keyof Database>({
   table,
   values,

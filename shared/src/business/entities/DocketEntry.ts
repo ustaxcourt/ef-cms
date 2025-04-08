@@ -175,7 +175,7 @@ export class DocketEntry extends JoiValidationEntity {
     statusReportIndex?: string;
     strickenFromTrialSessions?: boolean;
   };
-  public stampData!: object;
+  public stampData!: Record<string, any>;
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
   public judge?: string;
