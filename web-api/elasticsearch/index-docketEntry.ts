@@ -1,10 +1,7 @@
 import { marshall } from '@aws-sdk/util-dynamodb';
+import { Bulk_RequestBody } from '@opensearch-project/opensearch/api';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { applicationContext } from '@web-api/applicationContext';
-import {
-  AttributeValueWithName,
-  IDynamoDBRecord,
-} from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import { getSearchClient } from '@web-api/getSearchClient';
 import {
   OPENSEARCH_SYNC_ACTIONS,
@@ -12,7 +9,9 @@ import {
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { getDocument } from '@web-api/persistence/s3/getDocument';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { chunk } from 'lodash';
 import { efcmsDocketEntryIndex } from 'web-api/elasticsearch/efcms-docket-entry-mappings';
 
 export const transformOpenSearchDocketEntry = (
@@ -76,7 +75,7 @@ const upsertDocketEntriesInOpenSearch = async ({
       docketNumbersAndIds: payload,
     });
 
-  const newDocketEntryRecords: IDynamoDBRecord[] = await Promise.all(
+  const newDocketEntryRecords: Bulk_RequestBody[] = await Promise.all(
     fullDocketEntries.map(async docketEntry => {
       const docketEntryToIndex: RawDocketEntry & {
         documentContents?: any;
@@ -87,20 +86,18 @@ const upsertDocketEntriesInOpenSearch = async ({
       ) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
         try {
-          const buffer = await applicationContext
-            .getPersistenceGateway()
-            .getDocument({
-              applicationContext,
-              key: docketEntry.documentContentsId,
-              useTempBucket: false,
-            });
+          const buffer = await getDocument({
+            applicationContext,
+            key: docketEntry.documentContentsId,
+            useTempBucket: false,
+          });
           const docketEntryDocument = new TextDecoder('utf-8').decode(buffer);
 
           const { documentContents } = JSON.parse(docketEntryDocument);
 
           docketEntryToIndex.documentContents = documentContents;
         } catch (err) {
-          applicationContext.logger.error(
+          getLogger().error(
             `the s3 document of ${docketEntry.documentContentsId} was not found in s3`,
             { err },
           );
@@ -108,8 +105,7 @@ const upsertDocketEntriesInOpenSearch = async ({
       }
 
       const caseDocketEntryMappingRecordId = `case|${docketEntry.docketNumber}_docket-entry|${docketEntry.docketEntryId}|mapping`;
-
-      return {
+      const doc = {
         dynamodb: {
           Keys: {
             pk: {
@@ -129,24 +125,20 @@ const upsertDocketEntriesInOpenSearch = async ({
         },
         eventName: 'MODIFY',
       };
+
+      return {
+        doc,
+        index: {
+          _index: efcmsDocketEntryIndex,
+          _id: `case|${docketEntry.docketNumber}_docket-entry|${docketEntry.docketEntryId}`,
+        },
+      } as Bulk_RequestBody;
     }),
   );
 
-  // ZACH AND CHRIS ARE HERE
-
-  // const searchClient = getSearchClient();
-
-  // const body: {
-  //   index: { _index: string; _id: string; routing: string };
-  //   doc: any;
-  // }[] = fullDocketEntries.map(d => ({
-  //   index: {
-  //     _index: efcmsDocketEntryIndex,
-  //     _id: `case|${d.docketNumber}_docket-entry|${d.docketEntryId}`,
-  //     routing: `case|${d.docketNumber}_docket-entry|${d.docketEntryId}|mapping`,
-  //   },
-  //   doc: d,
-  // }));
-
-  // await searchClient.bulk({ body });
+  const CHUNK_SIZE = 50;
+  const chunks = chunk(newDocketEntryRecords, CHUNK_SIZE);
+  await Promise.all(
+    chunks.map(chunk => getSearchClient().bulk({ body: chunk })),
+  );
 };
