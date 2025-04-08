@@ -38,7 +38,7 @@ resource "aws_iam_role_policy" "rds_expired_records_cleanup_lambda_policy" {
       "Resource": [
           "arn:aws:rds-db:*:${data.aws_caller_identity.current.account_id}:dbuser:*/${var.postgres_user}"
       ]
-    },
+    }
   ]
 }
 EOF
