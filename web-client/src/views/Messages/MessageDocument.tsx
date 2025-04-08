@@ -18,8 +18,6 @@ export const MessageDocument = connect(
     navigateToPathSequence: sequences.navigateToPathSequence,
     navigateToStatusReportOrderSequence:
       sequences.navigateToStatusReportOrderSequence,
-    navigateToMotionOrderResponseSequence:
-      sequences.navigateToMotionOrderResponseSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
@@ -41,7 +39,6 @@ export const MessageDocument = connect(
     iframeSrc,
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
-    navigateToMotionOrderResponseSequence,
     navigateToPathSequence,
     navigateToStatusReportOrderSequence,
     openCaseDocumentDownloadUrlSequence,
@@ -185,9 +182,8 @@ export const MessageDocument = connect(
             data-testid="order-response-button"
             icon="stamp"
             onClick={() => {
-              navigateToMotionOrderResponseSequence({
+              navigateToPathSequence({
                 path: messageDocumentHelper.motionOrderResponseFromMessagesLink,
-                motionOrderIndex: messageDocumentHelper.index,
               });
             }}
           >

@@ -251,7 +251,6 @@ import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { navigateToStatusReportOrderSequence } from './sequences/StatusReportOrder/navigateToStatusReportOrderSequence';
-import { navigateToMotionOrderResponseSequence } from './sequences/MotionOrderResponse/navigateToMotionOrderResponseSequence';
 import { navigateToTrialSessionPlanningReportSequence } from '@web-client/presenter/sequences/navigateToTrialSessionPlanningReportViewSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
@@ -707,8 +706,7 @@ export const presenterSequences = {
     clearExistingDocumentSequence as unknown as Function,
   clearModalFormSequence: clearModalFormSequence as unknown as Function,
   clearModalSequence: clearModalSequence as unknown as Function,
-  clearMotionOrderResponseFormSequence:
-    clearMotionOrderResponseFormSequence as unknown as Function,
+  clearMotionOrderResponseFormSequence,
   clearOpenClosedCasesCurrentPageSequence:
     clearOpenClosedCasesCurrentPageSequence as unknown as Function,
   clearOptionalCustomCaseReportFilterSequence,
@@ -842,7 +840,7 @@ export const presenterSequences = {
   goToChangePasswordSequence,
   goToCreatePetitionerAccountSequence,
   goToForgotPasswordSequence,
-  goToOrderResponseSequence: goToOrderResponseSequence as unknown as Function,
+  goToOrderResponseSequence,
   goToTrialSessionMinutesSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
@@ -989,8 +987,7 @@ export const presenterSequences = {
   loadDefaultViewerCorrespondenceSequence:
     loadDefaultViewerCorrespondenceSequence as unknown as Function,
   loadPdfForTabSequence: loadPdfForTabSequence as unknown as Function,
-  motionOrderResponsePdfPreviewSequence:
-    motionOrderResponsePdfPreviewSequence as unknown as Function,
+  motionOrderResponsePdfPreviewSequence,
   navigateBackSequence: navigateBackSequence as unknown as Function,
   navigateToCaseDetailFromPaperServiceSequence:
     navigateToCaseDetailFromPaperServiceSequence as unknown as Function,
@@ -1002,8 +999,6 @@ export const presenterSequences = {
   navigateToEditOrderSequence,
   navigateToForgotPasswordSequence,
   navigateToLoginSequence,
-  navigateToMotionOrderResponseSequence:
-    navigateToMotionOrderResponseSequence as unknown as Function,
   navigateToPathAndSetRedirectUrlSequence:
     navigateToPathAndSetRedirectUrlSequence as unknown as Function,
   navigateToPathSequence: navigateToPathSequence as unknown as Function,
@@ -1384,8 +1379,7 @@ export const presenterSequences = {
   submitJudgeActivityStatisticsReportSequence:
     submitJudgeActivityStatisticsReportSequence as unknown as Function,
   submitLoginSequence,
-  submitMotionOrderResponseSequence:
-    submitMotionOrderResponseSequence as unknown as Function,
+  submitMotionOrderResponseSequence,
   submitOpinionAdvancedSearchSequence:
     submitOpinionAdvancedSearchSequence as unknown as Function,
   submitOrderAdvancedSearchSequence:

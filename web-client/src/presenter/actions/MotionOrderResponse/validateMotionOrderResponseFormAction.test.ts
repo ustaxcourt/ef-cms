@@ -25,7 +25,7 @@ describe('validateMotionOrderResponseFormAction', () => {
     mockSuccessPath.mockReset();
     mockErrorPath.mockReset();
   });
-  // TODO 10586: success path is not being called
+
   it('should validate successfully when all required fields are present', async () => {
     const today = formatNow(FORMATS.YYYYMMDD);
     await runAction(validateMotionOrderResponseFormAction, {
