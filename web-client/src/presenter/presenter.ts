@@ -694,8 +694,7 @@ export const presenterSequences = {
     clearExistingDocumentSequence as unknown as Function,
   clearModalFormSequence: clearModalFormSequence as unknown as Function,
   clearModalSequence: clearModalSequence as unknown as Function,
-  clearMotionOrderResponseFormSequence:
-    clearMotionOrderResponseFormSequence as unknown as Function,
+  clearMotionOrderResponseFormSequence,
   clearOpenClosedCasesCurrentPageSequence:
     clearOpenClosedCasesCurrentPageSequence as unknown as Function,
   clearOptionalCustomCaseReportFilterSequence,
@@ -827,7 +826,7 @@ export const presenterSequences = {
   goToChangePasswordSequence,
   goToCreatePetitionerAccountSequence,
   goToForgotPasswordSequence,
-  goToOrderResponseSequence: goToOrderResponseSequence as unknown as Function,
+  goToOrderResponseSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
   gotoAccessibilityStatementSequence:
@@ -972,8 +971,7 @@ export const presenterSequences = {
   loadDefaultViewerCorrespondenceSequence:
     loadDefaultViewerCorrespondenceSequence as unknown as Function,
   loadPdfForTabSequence: loadPdfForTabSequence as unknown as Function,
-  motionOrderResponsePdfPreviewSequence:
-    motionOrderResponsePdfPreviewSequence as unknown as Function,
+  motionOrderResponsePdfPreviewSequence,
   navigateBackSequence: navigateBackSequence as unknown as Function,
   navigateToCaseDetailFromPaperServiceSequence:
     navigateToCaseDetailFromPaperServiceSequence as unknown as Function,
@@ -1362,8 +1360,7 @@ export const presenterSequences = {
   submitJudgeActivityStatisticsReportSequence:
     submitJudgeActivityStatisticsReportSequence as unknown as Function,
   submitLoginSequence,
-  submitMotionOrderResponseSequence:
-    submitMotionOrderResponseSequence as unknown as Function,
+  submitMotionOrderResponseSequence,
   submitOpinionAdvancedSearchSequence:
     submitOpinionAdvancedSearchSequence as unknown as Function,
   submitOrderAdvancedSearchSequence:
