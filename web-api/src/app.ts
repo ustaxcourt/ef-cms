@@ -208,6 +208,7 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
+import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 
 export const app = express();
@@ -641,6 +642,10 @@ app.use(expressLogger);
   app.put(
     '/case-parties/:docketNumber/petitioner-info',
     lambdaWrapper(updatePetitionerInformationLambda),
+  );
+  app.post(
+    '/case-parties/:docketNumber/remove-petitioner-email',
+    lambdaWrapper(removePetitionerEmailLambda),
   );
 }
 
