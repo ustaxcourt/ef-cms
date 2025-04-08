@@ -13,6 +13,7 @@ export async function waitForPractitionerEmailUpdate({
 }): Promise<boolean> {
   const maxAttempts = 10;
   const { userId } = await getUserByEmail(practitionerEmail);
+  // TODO 10495
   const result = await getDocumentClient().get({
     Key: {
       pk: `case|${docketNumber}`,

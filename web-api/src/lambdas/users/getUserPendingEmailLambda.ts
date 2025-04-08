@@ -12,9 +12,8 @@ export const getUserPendingEmailLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await getUserPendingEmailInteractor(
-      applicationContext,
       {
         userId: event.pathParameters.userId,
       },

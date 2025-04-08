@@ -13,7 +13,8 @@ export const createPetitionerUserRecord = async ({
 
   await pgInsertInto({
     table: 'dwUser',
-    values: [toKyselyNewUser(user)],
+    values: [toKyselyNewUser({ ...user, userId })],
+    onConflictColumns: ['userId'],
   });
 
   return {

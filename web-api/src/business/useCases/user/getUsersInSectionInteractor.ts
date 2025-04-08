@@ -6,12 +6,11 @@ import {
   RawUser,
   User,
 } from '../../../../../shared/src/business/entities/User';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
 
 export const getUsersInSectionInteractor = async (
-  applicationContext: ServerApplicationContext,
   { section }: { section: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<RawUser[]> => {
@@ -27,12 +26,9 @@ export const getUsersInSectionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const rawUsers = await applicationContext
-    .getPersistenceGateway()
-    .getUsersInSection({
-      applicationContext,
-      section,
-    });
+  const rawUsers = await getUsersInSection({
+    section,
+  });
 
   return User.validateRawCollection(rawUsers);
 };

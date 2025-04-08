@@ -12,6 +12,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * updateCounselOnCase
@@ -48,12 +49,9 @@ const updateCounselOnCase = async (
     docketNumber,
   });
 
-  const userToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId,
-    });
+  const userToUpdate = await getUserById({
+    userId,
+  });
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 

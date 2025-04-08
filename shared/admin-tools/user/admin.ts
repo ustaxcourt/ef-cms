@@ -11,6 +11,10 @@ import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getClientId, getUserPoolId, requireEnvVars } from '../util';
 import { createUserRecord } from '@web-api/persistence/postgres/users/createUserRecord';
+import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
+import { updateUser } from '@web-api/gateways/user/updateUser';
+import { createUser } from '@web-api/gateways/user/createUser';
+import { disableUser as disableUserGateway } from '@web-api/gateways/user/disableUser';
 
 const { USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 
@@ -91,12 +95,10 @@ export async function createOrUpdateUser(
       ? process.env.USER_POOL_IRS_ID
       : applicationContext.environment.userPoolId;
 
-  const userExists = await applicationContext
-    .getUserGateway()
-    .getUserByEmail(applicationContext, {
-      email: user.email!,
-      poolId: userPoolId,
-    });
+  const userExists = await getUserByEmail(applicationContext, {
+    email: user.email!,
+    poolId: userPoolId,
+  });
 
   const userId = userExists?.userId || applicationContext.getUniqueId();
 
@@ -122,7 +124,7 @@ export async function createOrUpdateUser(
   });
 
   if (userExists) {
-    await applicationContext.getUserGateway().updateUser(applicationContext, {
+    await updateUser(applicationContext, {
       attributesToUpdate: {
         name: rawUser.name,
         role: rawUser.role,
@@ -131,7 +133,7 @@ export async function createOrUpdateUser(
       poolId: userPoolId,
     });
   } else {
-    await applicationContext.getUserGateway().createUser(applicationContext, {
+    await createUser(applicationContext, {
       email: rawUser.email!,
       name: rawUser.name,
       poolId: userPoolId,
@@ -143,7 +145,7 @@ export async function createOrUpdateUser(
   }
 
   if (user.role === ROLES.legacyJudge) {
-    await applicationContext.getUserGateway().disableUser(applicationContext, {
+    await disableUserGateway(applicationContext, {
       email: user.email!,
     });
   }

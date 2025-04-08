@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export type EntryOfAppearanceProps = {
   caseCaptionExtension: string;
@@ -35,12 +36,9 @@ export const generateEntryOfAppearancePdfInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const practitionerInformation = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId: authorizedUser.userId,
-    });
+  const practitionerInformation = await getUserById({
+    userId: authorizedUser.userId,
+  });
 
   const filerNames: string[] =
     authorizedUser.role === ROLES.irsPractitioner

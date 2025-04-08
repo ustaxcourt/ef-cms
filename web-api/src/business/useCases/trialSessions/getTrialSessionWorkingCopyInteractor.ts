@@ -8,6 +8,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * getTrialSessionWorkingCopyInteractor
@@ -28,10 +29,7 @@ export const getTrialSessionWorkingCopyInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const rawUser = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId: authorizedUser?.userId || '',
-  });
+  const rawUser = await getUserById({ userId: authorizedUser?.userId || '' });
 
   const userEntity = new User(rawUser);
 

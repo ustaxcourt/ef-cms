@@ -155,11 +155,7 @@ export const sendWelcomeEmail = async ({
 
   const judgeUsers: RawUser[] = await applicationContext
     .getUseCases()
-    .getUsersInSectionInteractor(
-      applicationContext,
-      { section: 'judge' },
-      mockJudgeUser,
-    );
+    .getUsersInSectionInteractor({ section: 'judge' }, mockJudgeUser);
   const validChambersSections = judgeUsers.map(user => user.section!);
   const params: UserParamsInterface = {
     email,

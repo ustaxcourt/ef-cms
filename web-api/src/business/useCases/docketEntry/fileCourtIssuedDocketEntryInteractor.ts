@@ -13,6 +13,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  *
@@ -69,9 +70,7 @@ export const fileCourtIssuedDocketEntry = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const isUnservable = DocketEntry.isUnservable(documentMeta);
 
@@ -155,7 +154,7 @@ export const fileCourtIssuedDocketEntry = async (
       workItem.assignToUser({
         assigneeId: user.userId,
         assigneeName: user.name,
-        section: user.section,
+        section: user.section!,
         sentBy: user.name,
         sentBySection: user.section,
         sentByUserId: user.userId,

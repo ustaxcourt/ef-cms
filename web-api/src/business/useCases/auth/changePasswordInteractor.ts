@@ -14,6 +14,9 @@ import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 import jwt from 'jsonwebtoken';
+import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 
 export const changePasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -54,21 +57,16 @@ export const changePasswordInteractor = async (
       const decoded = jwt.decode(result.idToken);
       const userId = decoded['custom:userId'];
 
-      const userFromPersistence = await applicationContext
-        .getPersistenceGateway()
-        .getUserById({ applicationContext, userId });
+      const userFromPersistence = await getUserById({ userId });
 
       if (
         userFromPersistence &&
         userFromPersistence.pendingEmail &&
         userFromPersistence.pendingEmail.toLowerCase() === email.toLowerCase()
       ) {
-        const { updatedUser } = await updateUserPendingEmailRecord(
-          applicationContext,
-          {
-            user: userFromPersistence,
-          },
-        );
+        const { updatedUser } = await updateUserPendingEmailRecord({
+          user: userFromPersistence,
+        });
 
         await applicationContext
           .getWorkerGateway()
@@ -83,9 +81,7 @@ export const changePasswordInteractor = async (
 
       return result;
     } else {
-      const user = await applicationContext
-        .getUserGateway()
-        .getUserByEmail(applicationContext, { email });
+      const user = await getUserByEmail(applicationContext, { email });
 
       if (!user) {
         throw new NotFoundError(`User not found with email: ${email}`);
@@ -121,13 +117,13 @@ export const changePasswordInteractor = async (
   }
 };
 
-export const updateUserPendingEmailRecord = async (
-  applicationContext: ServerApplicationContext,
-  {
-    setIsUpdatingInformation = false,
-    user,
-  }: { user: RawUser; setIsUpdatingInformation?: boolean },
-): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
+export const updateUserPendingEmailRecord = async ({
+  setIsUpdatingInformation = false,
+  user,
+}: {
+  user: RawUser;
+  setIsUpdatingInformation?: boolean;
+}): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
   let userEntity;
 
   if (
@@ -156,10 +152,7 @@ export const updateUserPendingEmailRecord = async (
   if (setIsUpdatingInformation) userEntity.isUpdatingInformation = true;
 
   const rawUser = userEntity.validate().toRawObject();
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: rawUser,
-  });
+  await updateUser({ userToUpdate: rawUser });
 
   return { updatedUser: rawUser };
 };

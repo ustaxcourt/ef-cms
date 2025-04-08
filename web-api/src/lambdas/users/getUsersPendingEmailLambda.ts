@@ -13,11 +13,10 @@ export const getUsersPendingEmailLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const userIds = event.queryStringParameters.userIds?.split(',') || [];
 
     return await getUsersPendingEmailInteractor(
-      applicationContext,
       {
         userIds,
       },

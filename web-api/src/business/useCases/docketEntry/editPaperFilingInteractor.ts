@@ -23,6 +23,7 @@ import {
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -111,9 +112,7 @@ const saveForLaterStrategy = async ({
   docketEntryEntity: DocketEntry;
   authorizedUser: AuthUser;
 }) => {
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const updatedDocketEntryEntity = await updateDocketEntry({
     applicationContext,
@@ -264,9 +263,7 @@ const serveDocketEntry = async ({
     });
 
   try {
-    const user = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId });
+    const user = await getUserById({ userId });
 
     const updatedDocketEntry = await updateDocketEntry({
       applicationContext,

@@ -19,7 +19,6 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { UserCase } from '@shared/business/entities/UserCase';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
 import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
@@ -28,6 +27,11 @@ import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utili
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { Practitioner } from '@shared/business/entities/Practitioner';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { User } from '@shared/business/entities/User';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
@@ -84,9 +88,13 @@ const createCaseMetadata = async (
     petitionEntity: ElectronicPetition;
     petitionFileId: string;
     petitionMetadata: any;
-    privatePractitioners: UserRecord[];
+    privatePractitioners:
+      | User
+      | Practitioner
+      | PrivatePractitioner
+      | IrsPractitioner[];
     stinFileId: string;
-    user: UserRecord;
+    user: User | Practitioner | PrivatePractitioner | IrsPractitioner;
   },
   authorizedUser: AuthUser,
 ) => {
@@ -282,20 +290,19 @@ export const createCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
-  let privatePractitioners: UserRecord[] = [];
+  let privatePractitioners:
+    | User
+    | Practitioner
+    | PrivatePractitioner
+    | IrsPractitioner[] = [];
   if (user.role === ROLES.privatePractitioner) {
-    const practitionerUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({
-        applicationContext,
-        userId: user.userId,
-      });
+    const practitionerUser = (await getUserById({
+      userId: user.userId,
+    })) as PrivatePractitioner;
 
     practitionerUser.representing = [
       petitionEntity.getContactPrimary().contactId,

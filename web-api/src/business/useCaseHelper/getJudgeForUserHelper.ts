@@ -2,15 +2,13 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { InvalidRequest } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const getJudgeForUserHelper = async (
   applicationContext: ServerApplicationContext,
   { user }: { user: AuthUser },
 ): Promise<ExcludeMethods<User>> => {
-  const rawUser = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId: user.userId,
-  });
+  const rawUser = await getUserById({ userId: user.userId });
 
   const userEntity = new User(rawUser);
 
@@ -19,7 +17,7 @@ export const getJudgeForUserHelper = async (
   if (userEntity.isChambersUser()) {
     const judgeUser = await applicationContext
       .getUseCaseHelpers()
-      .getJudgeInSectionHelper(applicationContext, {
+      .getJudgeInSectionHelper({
         section: userEntity.section,
       });
 

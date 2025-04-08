@@ -1,14 +1,10 @@
+import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
+
 export const getJudgeWithTitle = async ({
-  applicationContext,
   judgeUserName,
   useFullName = false,
 }) => {
-  const judges = await applicationContext
-    .getPersistenceGateway()
-    .getUsersInSection({
-      applicationContext,
-      section: 'judge',
-    });
+  const judges = await getUsersInSection({ section: 'judge' });
 
   const foundJudge = judges.find(_judge => _judge.name === judgeUserName);
 

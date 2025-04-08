@@ -15,6 +15,8 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { updateUser } from '@web-api/gateways/user/updateUser';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 
@@ -27,12 +29,9 @@ export const verifyUserPendingEmail = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserByIdOnceAllUpdatesComplete({
-      applicationContext,
-      userId: authorizedUser.userId,
-    });
+  const user = await getUserByIdOnceAllUpdatesComplete({
+    userId: authorizedUser.userId,
+  });
 
   if (
     !user.pendingEmailVerificationToken ||
@@ -60,27 +59,23 @@ export const verifyUserPendingEmail = async (
     throw new Error('Email is not available');
   }
 
-  const { updatedUser } = await updateUserPendingEmailRecord(
-    applicationContext,
-    { setIsUpdatingInformation: true, user },
-  );
+  const { updatedUser } = await updateUserPendingEmailRecord({
+    setIsUpdatingInformation: true,
+    user,
+  });
 
-  await applicationContext
-    .getUserGateway()
-    .updateUser(applicationContext, {
-      attributesToUpdate: { email: updatedUser.email },
-      email: user.email!,
-    });
+  await updateUser(applicationContext, {
+    attributesToUpdate: { email: updatedUser.email },
+    email: user.email!,
+  });
 
-  await applicationContext
-    .getWorkerGateway()
-    .queueWork(applicationContext, {
-      message: {
-        authorizedUser,
-        payload: { user: updatedUser },
-        type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
-      },
-    });
+  await applicationContext.getWorkerGateway().queueWork(applicationContext, {
+    message: {
+      authorizedUser,
+      payload: { user: updatedUser },
+      type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
+    },
+  });
 };
 
 export const userTokenHasExpired = (

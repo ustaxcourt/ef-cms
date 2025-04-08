@@ -2,10 +2,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * getUserPendingEmailInteractor
@@ -16,7 +16,6 @@ import { User } from '../../../../../shared/src/business/entities/User';
  * @returns {Promise} the user's pending email
  */
 export const getUserPendingEmailStatusInteractor = async (
-  applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -31,10 +30,7 @@ export const getUserPendingEmailStatusInteractor = async (
     );
   }
 
-  const userRaw = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId,
-  });
+  const userRaw = await getUserById({ userId });
 
   if (!userRaw) return;
 

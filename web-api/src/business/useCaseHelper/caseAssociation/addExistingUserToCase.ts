@@ -8,6 +8,8 @@ import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/enti
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const addExistingUserToCase = async ({
   applicationContext,
@@ -28,22 +30,15 @@ export const addExistingUserToCase = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getUserGateway()
-    .getUserByEmail(applicationContext, {
-      email,
-    });
+  const user = await getUserByEmail(applicationContext, {
+    email,
+  });
 
   if (!user) {
     throw new Error(`no user found with the provided email of ${email}`);
   }
 
-  const userToAdd = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId: user.userId,
-    });
+  const userToAdd = await getUserById({ userId: user.userId });
 
   const contact = caseEntity.getPetitionerById(contactId);
 

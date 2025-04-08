@@ -1,6 +1,8 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { Practitioner } from '@shared/business/entities/Practitioner';
 
 /**
  * generatePractitionerCaseListPdfInteractor
@@ -15,9 +17,7 @@ export const generatePractitionerCaseListPdfInteractor = async (
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
-  const practitionerUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId });
+  const practitionerUser = (await getUserById({ userId })) as Practitioner;
 
   if (!practitionerUser || !practitionerUser.barNumber) {
     throw new UnauthorizedError('Practitioner not found');

@@ -18,6 +18,7 @@ import { createApplicationContext } from '@web-api/applicationContext';
 import { environment } from '@web-api/environment';
 import { getDestinationTableInfo } from '../../../shared/admin-tools/util';
 import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
+import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -42,9 +43,7 @@ const getPhoneNumberForJudgeUser = (judgeUser: RawUser): string | undefined => {
   environment.dynamoDbTableName = tableName;
 
   // Get all the existing judge user records
-  const judgeUsers: RawUser[] = await applicationContext
-    .getPersistenceGateway()
-    .getUsersInSection({ applicationContext, section: 'judge' });
+  const judgeUsers: RawUser[] = await getUsersInSection({ section: 'judge' });
 
   let totalUpdated = 0;
   // For each judge user record, we get the relevant phone number.

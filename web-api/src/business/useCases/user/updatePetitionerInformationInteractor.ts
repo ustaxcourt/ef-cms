@@ -24,6 +24,7 @@ import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updatePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -290,12 +291,7 @@ export const updatePetitionerInformation = async (
       updatedCaseContact.oldEmail = existingPetitionerInfo.email;
       updatedCaseContact.newEmail = updatedPetitionerData.updatedEmail;
 
-      const userToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getUserById({
-          applicationContext,
-          userId: contactId,
-        });
+      const userToUpdate = await getUserById({ userId: contactId });
 
       await updateCaseEntityAndGenerateChange({
         applicationContext,

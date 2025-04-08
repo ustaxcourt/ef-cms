@@ -10,18 +10,13 @@ import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workite
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { isEmpty } from 'lodash';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
-const getJudgeUser = async (
-  judgeUserId: string,
-  applicationContext: IApplicationContext,
-  role: string,
-) => {
+const getJudgeUser = async (judgeUserId: string, role: string) => {
   let judgeUser;
 
   if (judgeUserId) {
-    judgeUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId: judgeUserId });
+    judgeUser = await getUserById({ userId: judgeUserId });
   } else if (role === ROLES.adc) {
     judgeUser = {
       name: CHIEF_JUDGE,
@@ -57,10 +52,8 @@ export const getNotificationsInteractor = async (
   }
 
   const [currentUser, judgeUser] = await Promise.all([
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId: authorizedUser.userId }),
-    getJudgeUser(judgeUserId, applicationContext, authorizedUser.role),
+    getUserById({ userId: authorizedUser.userId }),
+    getJudgeUser(judgeUserId, authorizedUser.role),
   ]);
 
   applicationContext.logger.info('getNotificationsInteractor getUser', {

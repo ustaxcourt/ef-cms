@@ -9,6 +9,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 
 /**
  * updateUserPendingEmailInteractor
@@ -28,9 +30,7 @@ export const updateUserPendingEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const user: any = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user: any = await getUserById({ userId: authorizedUser.userId });
 
   await updateUserPendingEmail({ applicationContext, pendingEmail, user });
 
@@ -41,9 +41,8 @@ export const updateUserPendingEmailInteractor = async (
     updatedUserRaw = new Practitioner(user).validate().toRawObject();
   }
 
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: updatedUserRaw,
+  await updateUser({
+    userToUpdate: updatedUserRaw,
   });
 
   await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({

@@ -13,6 +13,7 @@ import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export type GetUserResponse =
   | RawUser
@@ -21,16 +22,13 @@ export type GetUserResponse =
   | RawPrivatePractitioner;
 
 export const getUserInteractor = async (
-  applicationContext: IApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<GetUserResponse> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError('Not authorized to get user');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   if (!user) {
     throw new NotFoundError(

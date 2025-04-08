@@ -1,3 +1,4 @@
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { User } from '../../../../shared/src/business/entities/User';
 
 /**
@@ -15,10 +16,7 @@ export const getUserIdForNote = async (
   applicationContext,
   { userIdMakingRequest },
 ) => {
-  const rawUser = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId: userIdMakingRequest,
-  });
+  const rawUser = await getUserById({ userId: userIdMakingRequest });
 
   const userEntity = new User(rawUser);
 
@@ -27,7 +25,7 @@ export const getUserIdForNote = async (
   if (userEntity.isChambersUser()) {
     const judgeUser = await applicationContext
       .getUseCaseHelpers()
-      .getJudgeInSectionHelper(applicationContext, {
+      .getJudgeInSectionHelper({
         section: userEntity.section,
       });
     if (judgeUser) {

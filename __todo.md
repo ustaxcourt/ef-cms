@@ -7,6 +7,8 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [ ] Fix privatePractitioner `representing` field
 - [ ] Expire user confirmation codes (some sort of cron job?)
 - [ ] Replace all calls to `updateUserRecords` with `updateUser`
+- [ ] Remove `getUserGateway` entirely
+- [ ] Update & Create Case Associations Judge Updates, maybe??
 
 ## Dynamo Functions to Postgres
 
@@ -20,13 +22,13 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [x] refreshConfirmationCodeExpiration (Note: renamed to refreshUserConfirmationCodeExpiration)
 - [x] getInternalUsers
 - [x] getPractitionerByBarNumber
-- [ ] getUserByEmail [pick up here on 4/8/25]
-- [ ] getUserById
-- [ ] getUserByIdOnceAllUpdatesComplete
-- [ ] getUsersById
-- [ ] getUsersInSection
-- [ ] updateUser & persistUser (same thing)
-- [ ] updatePractitionerUser
+- [x] getUserByEmail
+- [x] getUserById
+- [x] getUserByIdOnceAllUpdatesComplete
+- [x] getUsersById
+- [x] getUsersInSection
+- [x] updateUser & persistUser (same thing)
+- [x] updatePractitionerUser
 
 Odd dynamo functions:
 
@@ -44,6 +46,9 @@ Is "search key" a concept we need to hold onto?
 - [x] Do we need `pickFields` in `mapper.ts`?
 - [x] Where should Practitioner entity-specific fields like `suffix` and `additionalPhone` live?
 - `createNewPetitionerUser.ts` contains two distinct operations that can fail independently and they could before this migration, and that's okay.
+
+## Things to test
+- ./scripts/user/update-judge.ts
 
 
 ## Considerations

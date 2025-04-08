@@ -14,6 +14,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 
 /**
  * generateChangeOfAddressHelper
@@ -136,10 +137,7 @@ export const generateChangeOfAddressHelper = async ({
         isUpdatingInformation: false,
       });
 
-      await applicationContext.getPersistenceGateway().updateUser({
-        applicationContext,
-        user: userEntity.validate().toRawObject(),
-      });
+      await updateUser({ user: userEntity.validate().toRawObject() });
     }
 
     const CONTACT_UPDATE_COMPLETE_ACTION:
