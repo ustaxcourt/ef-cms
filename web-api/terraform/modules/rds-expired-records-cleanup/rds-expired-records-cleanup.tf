@@ -53,6 +53,7 @@ module "rds_expired_records_cleanup_lambda" {
   environment = {
     STAGE                        = var.environment
     NODE_ENV                     = "production"
+    REGION                       = var.region
     //region
     //rds
       //readHost

@@ -42,7 +42,3 @@ variable "restoring_aws_account_id" {
   type = string
 }
 
-variable "postgres_user" {
-  type = string
-}
-
