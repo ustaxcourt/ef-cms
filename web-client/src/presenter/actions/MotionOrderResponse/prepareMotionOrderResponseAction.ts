@@ -13,7 +13,7 @@ const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   const { petitioners } = caseDetail;
   const pNames = petitioners.map(p => p.name);
   const cleanedFiledBy = motion.filedBy.replace(
-    /^(?:Petr\.|Respt\.|Intvr\.)?\s*/,
+    /^(?:Petr\.|Respt\.)?\s*/,
     '',
   );
   const movant = pNames.some(name => cleanedFiledBy.includes(name))
