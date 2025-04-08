@@ -74,7 +74,7 @@ resource "aws_cloudwatch_event_rule" "rds_expired_records_cleanup_cron_rule_dail
 
 resource "aws_cloudwatch_event_target" "rds_expired_records_cleanup_cron_target" {
   rule      = aws_cloudwatch_event_rule.rds_expired_records_cleanup_cron_rule_daily.name
-  target_id = module.rds_expired_records_cleanup__lambda.function_name
+  target_id = module.rds_expired_records_cleanup_lambda.function_name
   arn       = module.rds_expired_records_cleanup_lambda.arn
 }
 
