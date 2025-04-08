@@ -32,85 +32,93 @@ describe('Blocked Cases', () => {
       trialLocation,
       caseStatus,
       includeApwDocument: false,
-    }).then(({ leadDocketNumber, memberDocketNumber }) => {
-      loginAsPetitionsClerk1();
-      createTrialSession({ trialLocation, sessionType: procedureType }).then(
-        ({ trialSessionId }) => {
-          //Shows as eligible
-          loginAsPetitionsClerk1();
-          cy.get('[data-testid="trial-session-link"]').click();
-          cy.visit(`/trial-session-detail/${trialSessionId}`);
-          cy.get(`label[for="qc-complete-${leadDocketNumber}"]`);
-          cy.get(`label[for="qc-complete-${memberDocketNumber}"]`);
+    }).then(
+      ({ leadDocketNumber, memberDocketNumbers: [memberDocketNumber] }) => {
+        loginAsPetitionsClerk1();
+        createTrialSession({ trialLocation, sessionType: procedureType }).then(
+          ({ trialSessionId }) => {
+            //Shows as eligible
+            loginAsPetitionsClerk1();
+            cy.get('[data-testid="trial-session-link"]').click();
+            cy.visit(`/trial-session-detail/${trialSessionId}`);
+            cy.get(`label[for="qc-complete-${leadDocketNumber}"]`);
+            cy.get(`label[for="qc-complete-${memberDocketNumber}"]`);
 
-          //block case
-          loginAsColvin();
-          goToCase(memberDocketNumber);
-          cy.get('[data-testid="tab-case-information"]').click();
-          cy.get('[data-testid="add-manual-block-button"]').click();
-          cy.get('[data-testid="blocked-from-trial-reason-textarea"]').type(
-            'This case cannot go to trial.',
-          );
-          cy.get('[data-testid="modal-button-confirm"]').click();
-          cy.get('[data-testid="success-alert"]').contains(
-            'Case blocked from being set for trial.',
-          );
-          cy.get('[data-testid="blocked-case-icon"]');
-          goToCase(leadDocketNumber);
-          cy.get('[data-testid="blocked-case-icon"]');
+            //block case
+            loginAsColvin();
+            goToCase(memberDocketNumber);
+            cy.get('[data-testid="tab-case-information"]').click();
+            cy.get('[data-testid="add-manual-block-button"]').click();
+            cy.get('[data-testid="blocked-from-trial-reason-textarea"]').type(
+              'This case cannot go to trial.',
+            );
+            cy.get('[data-testid="modal-button-confirm"]').click();
+            cy.get('[data-testid="success-alert"]').contains(
+              'Case blocked from being set for trial.',
+            );
+            cy.get('[data-testid="blocked-case-icon"]');
+            goToCase(leadDocketNumber);
+            cy.get('[data-testid="blocked-case-icon"]');
 
-          //Does not show in eligible case list
-          loginAsPetitionsClerk1();
-          cy.get('[data-testid="trial-session-link"]').click();
-          cy.visit(`/trial-session-detail/${trialSessionId}`);
-          cy.get(`label[for="qc-complete-${leadDocketNumber}"]`).should(
-            'not.exist',
-          );
-          cy.get(`label[for="qc-complete-${memberDocketNumber}"]`).should(
-            'not.exist',
-          );
+            //Does not show in eligible case list
+            loginAsPetitionsClerk1();
+            cy.get('[data-testid="trial-session-link"]').click();
+            cy.visit(`/trial-session-detail/${trialSessionId}`);
+            cy.get(`label[for="qc-complete-${leadDocketNumber}"]`).should(
+              'not.exist',
+            );
+            cy.get(`label[for="qc-complete-${memberDocketNumber}"]`).should(
+              'not.exist',
+            );
 
-          //Shows in blocked cases report
-          cy.get('[data-testid="dropdown-select-report"]').click();
-          cy.get('[data-testid="blocked-cases-report"]').click();
-          cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
-          cy.get('[data-testid="procedure-type-filter"]').select(procedureType);
-          cy.get('[data-testid="case-status-filter"]').select(caseStatus);
-          cy.get('[data-testid="blocked-reason-filter"]').select(
-            'Manual Block',
-          );
-          cy.get(`[data-testid="blocked-case-${leadDocketNumber}-row"]`);
-          cy.get(`[data-testid="blocked-case-${memberDocketNumber}-row"]`);
+            //Shows in blocked cases report
+            cy.get('[data-testid="dropdown-select-report"]').click();
+            cy.get('[data-testid="blocked-cases-report"]').click();
+            cy.get('[data-testid="trial-location-filter"]').select(
+              trialLocation,
+            );
+            cy.get('[data-testid="procedure-type-filter"]').select(
+              procedureType,
+            );
+            cy.get('[data-testid="case-status-filter"]').select(caseStatus);
+            cy.get('[data-testid="blocked-reason-filter"]').select(
+              'Manual Block',
+            );
+            cy.get(`[data-testid="blocked-case-${leadDocketNumber}-row"]`);
+            cy.get(`[data-testid="blocked-case-${memberDocketNumber}-row"]`);
 
-          //Remove block
-          goToCase(memberDocketNumber);
-          cy.get('[data-testid="tab-case-information"]').click();
-          cy.get('[data-testid=remove-block-button').click();
-          cy.get('[data-testid=modal-button-confirm').click();
-          cy.get('[data-testid="success-alert"]').contains(
-            'Block removed. Case is eligible for next available trial session.',
-          );
-          cy.get('[data-testid="blocked-case-icon"]').should('not.exist');
+            //Remove block
+            goToCase(memberDocketNumber);
+            cy.get('[data-testid="tab-case-information"]').click();
+            cy.get('[data-testid=remove-block-button').click();
+            cy.get('[data-testid=modal-button-confirm').click();
+            cy.get('[data-testid="success-alert"]').contains(
+              'Block removed. Case is eligible for next available trial session.',
+            );
+            cy.get('[data-testid="blocked-case-icon"]').should('not.exist');
 
-          //Shows as eligible
-          cy.get('[data-testid="trial-session-link"]').click();
-          cy.visit(`/trial-session-detail/${trialSessionId}`);
-          cy.get(`label[for="qc-complete-${leadDocketNumber}"]`);
-          cy.get(`label[for="qc-complete-${memberDocketNumber}"]`);
+            //Shows as eligible
+            cy.get('[data-testid="trial-session-link"]').click();
+            cy.visit(`/trial-session-detail/${trialSessionId}`);
+            cy.get(`label[for="qc-complete-${leadDocketNumber}"]`);
+            cy.get(`label[for="qc-complete-${memberDocketNumber}"]`);
 
-          //Does not shows in blocked cases report
-          cy.get('[data-testid="dropdown-select-report"]').click();
-          cy.get('[data-testid="blocked-cases-report"]').click();
-          cy.get('[data-testid="trial-location-filter"]').select(trialLocation);
-          cy.get(`[data-testid="blocked-case-${leadDocketNumber}-row"]`).should(
-            'not.exist',
-          );
-          cy.get(
-            `[data-testid="blocked-case-${memberDocketNumber}-row"]`,
-          ).should('not.exist');
-        },
-      );
-    });
+            //Does not shows in blocked cases report
+            cy.get('[data-testid="dropdown-select-report"]').click();
+            cy.get('[data-testid="blocked-cases-report"]').click();
+            cy.get('[data-testid="trial-location-filter"]').select(
+              trialLocation,
+            );
+            cy.get(
+              `[data-testid="blocked-case-${leadDocketNumber}-row"]`,
+            ).should('not.exist');
+            cy.get(
+              `[data-testid="blocked-case-${memberDocketNumber}-row"]`,
+            ).should('not.exist');
+          },
+        );
+      },
+    );
   });
 
   it('should show a case as ineligible for trial when it has a case deadline or a pending item', () => {
@@ -208,7 +216,7 @@ describe('Blocked Cases', () => {
           goToCase(docketNumber);
           cy.get('[data-testid=tab-tracked-items]').click();
           cy.get('[data-testid="pending-report-tab"]').click();
-          cy.get('[data-testid="remove-pending-item-button"]').click();
+          cy.get('[data-testid="remove-pending-item-button-0"]').click();
           cy.get('[data-testid="modal-confirm"]').click();
           cy.contains('There is nothing pending');
 

@@ -163,7 +163,9 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
             practitionerBarNumber,
           );
           cy.get('[data-testid="practitioner-search-submit-button"]').click();
-          cy.get('[data-testid="practitioner-representing-0"]').click();
+          cy.get('[data-testid="practitioner-representing-0"]')
+            .should('be.visible')
+            .click();
           cy.get('[data-testid="modal-button-confirm"]').click();
           cy.get('[data-testid="success-alert"]').should(
             'contain.text',
@@ -195,7 +197,9 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           cy.get(
             '[data-testid="practitioner-search-by-bar-number-button"]',
           ).click();
-          cy.get('[data-testid="edit-practitioner-button"]').click();
+          cy.get('[data-testid="edit-practitioner-button"]')
+            .should('be.visible')
+            .click();
           cy.get('[data-testid="practitioner-email-input"]').type(
             updatedPractitionerEmail,
           );
