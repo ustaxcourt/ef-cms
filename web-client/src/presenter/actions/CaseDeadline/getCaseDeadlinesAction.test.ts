@@ -18,13 +18,14 @@ describe('getCaseDeadlinesAction', () => {
   });
 
   it('gets all case deadlines', async () => {
+    const judgeId = '123456';
     const result = await runAction(getCaseDeadlinesAction, {
       modules: {
         presenter,
       },
       state: {
         caseDeadlineReport: {
-          judgeFilter: 'Buch',
+          judgeIdFilter: judgeId,
         },
         screenMetadata: {
           filterEndDate: END_DATE,
@@ -38,7 +39,7 @@ describe('getCaseDeadlinesAction', () => {
         .calls[0][1],
     ).toMatchObject({
       endDate: END_DATE,
-      judge: 'Buch',
+      judgeId,
       startDate: START_DATE,
     });
     expect(result.output).toEqual({
