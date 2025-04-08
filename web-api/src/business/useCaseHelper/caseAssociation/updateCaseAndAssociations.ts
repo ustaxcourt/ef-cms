@@ -19,6 +19,7 @@ import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCor
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import diff from 'diff-arrays-of-objects';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -29,12 +30,10 @@ import diff from 'diff-arrays-of-objects';
  * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateCaseDocketEntries = ({
-  applicationContext,
   authorizedUser,
   caseToUpdate,
   oldCase,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
   oldCase: any;
@@ -67,12 +66,12 @@ const updateCaseDocketEntries = ({
   return validDocketEntries.map(
     doc =>
       function updateCaseDocketEntries_cb() {
-        return applicationContext.getPersistenceGateway().updateDocketEntry({
-          applicationContext,
-          docketEntryId: doc.docketEntryId,
-          docketNumber: caseToUpdate.docketNumber,
-          document: doc,
-        });
+        return upsertDocketEntries([
+          {
+            ...doc,
+            docketNumber: caseToUpdate.docketNumber,
+          },
+        ]);
       },
   );
 };

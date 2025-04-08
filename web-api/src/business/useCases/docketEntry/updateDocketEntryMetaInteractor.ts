@@ -15,6 +15,7 @@ import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -148,12 +149,13 @@ export const updateDocketEntryMeta = async (
     .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
   if (shouldGenerateCoversheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
+    await upsertDocketEntries([
+      {
+        ...docketEntryEntity.validate(),
+
+        docketNumber,
+      },
+    ]);
 
     const updatedDocketEntry = await applicationContext
       .getUseCases()

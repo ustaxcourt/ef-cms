@@ -4,6 +4,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 /**
  * addCoversheetInteractor
@@ -126,12 +127,13 @@ export const addCoversheetInteractor = async (
           .validate()
           .toRawObject();
 
-        await applicationContext.getPersistenceGateway().updateDocketEntry({
-          applicationContext,
-          docketEntryId,
-          docketNumber: caseDocketNumber,
-          document: updateConsolidatedDocketEntry,
-        });
+        await upsertDocketEntries([
+          {
+            ...updateConsolidatedDocketEntry,
+            docketEntryId,
+            docketNumber: caseDocketNumber,
+          },
+        ]);
         return updateConsolidatedDocketEntry;
       }
     }),
