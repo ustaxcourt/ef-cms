@@ -37,4 +37,10 @@ export const goToOrderResponseSequence =
       ],
     },
     setupCurrentPageAction('OrderResponse'),
-  ]);
+  ]) as unknown as (props: {
+    docketEntryIdToEdit?: string;
+    docketNumber: string;
+    docketEntryId?: string;
+    isEditing?: boolean;
+    parentMessageId?: string;
+  }) => void;
