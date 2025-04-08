@@ -30,7 +30,7 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     eventCode: docketEntry.eventCode,
     filedBy: docketEntry.filedBy ?? null,
     filedByRole: docketEntry.filedByRole ?? null,
-    filers: docketEntry.filers,
+    filers: JSON.stringify(docketEntry.filers),
     filingDate: calculateDate({ dateString: docketEntry.filingDate }),
     freeText: docketEntry.freeText ?? null,
     hasOtherFilingParty: docketEntry.hasOtherFilingParty ?? null,
