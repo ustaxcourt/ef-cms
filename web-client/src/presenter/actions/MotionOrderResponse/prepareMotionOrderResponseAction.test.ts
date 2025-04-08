@@ -63,9 +63,7 @@ describe('prepareMotionOrderResponseAction', () => {
         },
       },
     });
-    expect(result.state.form.richText).toContain(
-      'shall file a Status Report',
-    );
+    expect(result.state.form.richText).toContain('shall file a Status Report');
   });
 
   it('should handle REPLY selection', async () => {
@@ -207,8 +205,8 @@ describe('prepareMotionOrderResponseAction', () => {
         docketEntryId: 'mock-motion-id',
         form: {
           ...mockForm,
-          consolidatedGroupOrderFor:
-            MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor.ALL_CASES,
+          issueOrderFor:
+            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
         },
       },
     });

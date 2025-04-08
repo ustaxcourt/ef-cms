@@ -5,8 +5,8 @@ export const setupOrderResponseFormAction = ({ store, get }: ActionProps) => {
   const caseDetail = get(state.caseDetail);
   const isOnLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
   const consolidatedFiling = isOnLeadCase
-    ? MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor.ALL_CASES
-    : MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor.THIS_CASE_ONLY;
+    ? MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES
+    : MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY;
 
-  store.set(state.form.consolidatedGroupOrderFor, consolidatedFiling);
+  store.set(state.form.issueOrderFor, consolidatedFiling);
 };

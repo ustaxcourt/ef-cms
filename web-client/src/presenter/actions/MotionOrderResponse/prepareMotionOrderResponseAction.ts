@@ -12,10 +12,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   const { petitioners } = caseDetail;
   const pNames = petitioners.map(p => p.name);
-  const cleanedFiledBy = motion.filedBy.replace(
-    /^(?:Petr\.|Respt\.)?\s*/,
-    '',
-  );
+  const cleanedFiledBy = motion.filedBy.replace(/^(?:Petr\.|Respt\.)?\s*/, '');
   const movant = pNames.some(name => cleanedFiledBy.includes(name))
     ? 'Petitioner'
     : 'Respondent';
@@ -33,7 +30,7 @@ export const prepareMotionOrderResponseAction = ({
     motionOrderResponse,
     responseDate,
     strickenFromTrialSession,
-    consolidatedGroupOrderFor,
+    issueOrderFor,
   } = get(state.form);
   const caseDetail = get(state.caseDetail);
   const { docketEntries } = caseDetail;
@@ -69,8 +66,7 @@ export const prepareMotionOrderResponseAction = ({
 
   if (
     isOnLeadCase &&
-    consolidatedGroupOrderFor ===
-      MOTION_ORDER_RESPONSE_OPTIONS.consolidatedGroupOrderFor.ALL_CASES
+    issueOrderFor === MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES
   ) {
     const consolidatedCases = caseDetail.consolidatedCases.map(c => {
       return {
