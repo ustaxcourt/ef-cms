@@ -12,6 +12,7 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { Signer } from '@aws-sdk/rds-signer';
 import { spawn } from 'child_process';
+import { replaceEmailAddresses } from 'scripts/emailReplacer';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -75,8 +76,11 @@ async function main() {
     username: sourceUsername,
   });
 
+  const sanitizedFileName = `sanitized-${backUpFileName}`;
+  replaceEmailAddresses(backUpFileName, sanitizedFileName);
+
   await restoreFromBackup({
-    backUpFileName,
+    backUpFileName: sanitizedFileName,
     dbName: targetDbname,
     host: targetHost,
     port: targetPort,
@@ -160,7 +164,6 @@ async function createDbBackup({
         `--port=${port}`,
         `--dbname=${dbName}`,
         `--file=${backUpFileName}`,
-        '--format=c',
         '--verbose',
       ],
       { env: { ...process.env, PGPASSWORD: sourcePassword }, stdio: 'pipe' },
@@ -235,17 +238,14 @@ async function restoreFromBackup({
 
   await new Promise(resolve => {
     const restoreDbResult = spawn(
-      'pg_restore',
+      'psql',
       [
         `--host=${host}`,
         `--username=${username}`,
         `--dbname=${dbName}`,
         `--port=${port}`,
-        '--format=c',
+        `--file=${backUpFileName}`,
         '--verbose',
-        '--no-privileges',
-        '--no-owner',
-        `${backUpFileName}`,
       ],
       {
         env: {
