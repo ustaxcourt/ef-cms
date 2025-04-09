@@ -245,7 +245,7 @@ async function restoreFromBackup({
         `--dbname=${dbName}`,
         `--port=${port}`,
         `--file=${backUpFileName}`,
-        '--verbose',
+        '--echo-errors',
       ],
       {
         env: {
