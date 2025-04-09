@@ -126,7 +126,7 @@ export const formatMinuteSheet = ({
     recalled: formatRecalledRows(sanitizeMinuteSheetForm(recalls)),
     remoteSession: formatRemoteSession(minuteSheet.trialSession.isRemote),
     respondentAppearances: formatRespondentAppearances(
-      minuteSheet.appearances.respondents,
+      sanitizeMinuteSheetForm(minuteSheet.appearances.respondents),
     ),
     respondentWitnesses: formatWitnesses(
       minuteSheet.evidence.respondentWitnesses,
