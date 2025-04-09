@@ -1,7 +1,10 @@
 import { toKyselyNewDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
+import { withValidation } from '@web-api/persistence/postgres/utils/withValidation';
 
-export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
+const upsertDocketEntriesWithoutValidation = async (
+  docketEntries: RawDocketEntry[],
+) => {
   if (docketEntries.length === 0) return;
 
   const docketEntriesToUpsert = docketEntries.map(toKyselyNewDocketEntry);
@@ -12,3 +15,7 @@ export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
     onConflictColumns: ['docketNumber', 'docketEntryId'],
   });
 };
+
+export const upsertDocketEntries = withValidation(
+  upsertDocketEntriesWithoutValidation,
+);

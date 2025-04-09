@@ -66,7 +66,7 @@ const upsertDocketEntriesInOpenSearch = async ({
   await Promise.all(
     fullDocketEntries.map(async docketEntry => {
       const doc = await formatDocketEntryForIndexing(docketEntry);
-      // The OpenSearch bulk API expects an object for the operation followed by an object for what is to be operated on, e.g., [{doThis}, {someDocument}, {doThat} {anotherDocument}]
+      // The OpenSearch bulk API expects an object for the operation followed by an object for what is to be operated on, e.g., [{doThis}, {someDocument}, {doThat}, {anotherDocument}]
       docketEntryIndexData.push({
         index: {
           _index: efcmsDocketEntryIndex,
