@@ -1,5 +1,4 @@
 import { marshall } from '@aws-sdk/util-dynamodb';
-import { Bulk_RequestBody } from '@opensearch-project/opensearch/api';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { applicationContext } from '@web-api/applicationContext';
 import { getSearchClient } from '@web-api/getSearchClient';
@@ -62,70 +61,78 @@ const upsertDocketEntriesInOpenSearch = async ({
       docketNumbersAndIds: payload,
     });
 
-  const newDocketEntryRecords: Bulk_RequestBody[] = await Promise.all(
+  const docketEntryIndexData: any[] = [];
+
+  await Promise.all(
     fullDocketEntries.map(async docketEntry => {
-      const docketEntryToIndex: RawDocketEntry & {
-        documentContents?: any;
-      } = docketEntry;
-      if (
-        DocketEntry.isSearchable(docketEntry.eventCode) &&
-        docketEntry.documentContentsId
-      ) {
-        // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
-        try {
-          const buffer = await getDocument({
-            applicationContext,
-            key: docketEntry.documentContentsId,
-            useTempBucket: false,
-          });
-          const docketEntryDocument = new TextDecoder('utf-8').decode(buffer);
-
-          const { documentContents } = JSON.parse(docketEntryDocument);
-
-          docketEntryToIndex.documentContents = documentContents;
-        } catch (err) {
-          getLogger().error(
-            `the s3 document of ${docketEntry.documentContentsId} was not found in s3`,
-            { err },
-          );
-        }
-      }
-
-      const caseDocketEntryMappingRecordId = `case|${docketEntry.docketNumber}_docket-entry|${docketEntry.docketEntryId}|mapping`;
-      const doc = {
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: `case|${docketEntry.docketNumber}`,
-            },
-            sk: {
-              S: `docket-entry|${docketEntry.docketEntryId}`,
-            },
-          },
-          NewImage: {
-            ...marshall(docketEntryToIndex),
-            case_relations: {
-              name: 'document',
-              parent: caseDocketEntryMappingRecordId,
-            },
-          },
-        },
-        eventName: 'MODIFY',
-      };
-
-      return {
-        doc,
+      const doc = await formatDocketEntryForIndexing(docketEntry);
+      // The OpenSearch bulk API expects an object for the operation followed by an object for what is to be operated on, e.g., [{doThis}, {someDocument}, {doThat} {anotherDocument}]
+      docketEntryIndexData.push({
         index: {
           _index: efcmsDocketEntryIndex,
           _id: `case|${docketEntry.docketNumber}_docket-entry|${docketEntry.docketEntryId}`,
         },
-      } as Bulk_RequestBody;
+      });
+      docketEntryIndexData.push(doc);
     }),
   );
 
-  const CHUNK_SIZE = 50;
-  const chunks = chunk(newDocketEntryRecords, CHUNK_SIZE);
+  const CHUNK_SIZE = 50; // Make sure this is an even number
+  const chunks = chunk(docketEntryIndexData, CHUNK_SIZE);
   await Promise.all(
     chunks.map(chunk => getSearchClient().bulk({ body: chunk })),
   );
+};
+
+const formatDocketEntryForIndexing = async (
+  docketEntry: RawDocketEntry & { documentContents?: any },
+) => {
+  const docketEntryToIndex: RawDocketEntry & {
+    documentContents?: any;
+  } = docketEntry;
+  if (
+    DocketEntry.isSearchable(docketEntry.eventCode) &&
+    docketEntry.documentContentsId
+  ) {
+    // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
+    try {
+      const buffer = await getDocument({
+        applicationContext,
+        key: docketEntry.documentContentsId,
+        useTempBucket: false,
+      });
+      const docketEntryDocument = new TextDecoder('utf-8').decode(buffer);
+
+      const { documentContents } = JSON.parse(docketEntryDocument);
+
+      docketEntryToIndex.documentContents = documentContents;
+    } catch (err) {
+      getLogger().error(
+        `the s3 document of ${docketEntry.documentContentsId} was not found in s3`,
+        { err },
+      );
+    }
+  }
+
+  const caseDocketEntryMappingRecordId = `case|${docketEntry.docketNumber}_docket-entry|${docketEntry.docketEntryId}|mapping`;
+  return {
+    dynamodb: {
+      Keys: {
+        pk: {
+          S: `case|${docketEntry.docketNumber}`,
+        },
+        sk: {
+          S: `docket-entry|${docketEntry.docketEntryId}`,
+        },
+      },
+      NewImage: {
+        ...marshall(docketEntryToIndex, { removeUndefinedValues: true }),
+        case_relations: {
+          name: 'document',
+          parent: caseDocketEntryMappingRecordId,
+        },
+      },
+    },
+    eventName: 'MODIFY',
+  };
 };

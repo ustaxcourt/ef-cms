@@ -1,6 +1,6 @@
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 
-export const transformOpenSearchDocketEntry = (
+export const transformOpenSearchDocketEntries = (
   docketEntryData: DocketEntryKysely | DocketEntryKysely[],
 ): { docketNumber: string; docketEntryId: string }[] => {
   const docketEntryArray = Array.isArray(docketEntryData)
