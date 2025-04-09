@@ -118,7 +118,9 @@ export const seed = async () => {
     onConflictColumns: ['penaltyId'],
   });
 
-  await upsertDocketEntries(docketEntrySeeds); // 10494 Can all of this be parallelized?
+  await upsertDocketEntries(
+    docketEntrySeeds.map(d => ({ ...d, isValidated: true })),
+  ); // 10494 Can all of this be parallelized? -- Yes
 
   await Promise.all([
     insertMessages,

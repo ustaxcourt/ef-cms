@@ -1,5 +1,5 @@
-import { getCypressEnv } from '../env/cypressEnvironment';
-import { getDocumentClient } from './dynamo/getDynamoCypress';
+import { getCypressPostgresDb } from 'cypress/helpers/cypressTasks/postgres/getCypressPostgresDb';
+import { isEmpty } from 'lodash';
 
 export async function waitForNoce({
   attempts = 0,
@@ -9,22 +9,15 @@ export async function waitForNoce({
   attempts?: number;
 }): Promise<boolean> {
   const maxAttempts = 10;
-  const result = await getDocumentClient().query({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pk': `case|${docketNumber}`,
-      ':prefix': 'docket-entry',
-    },
-    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-    TableName: getCypressEnv().dynamoDbTableName,
-  });
+  const dbConnection = await getCypressPostgresDb();
+  const noceDocketEntry = await dbConnection
+    .selectFrom('dwDocketEntry')
+    .where('docketNumber', '=', docketNumber)
+    .where('eventCode', '=', 'NOCE')
+    .select('docketEntryId')
+    .executeTakeFirst();
 
-  const noce = result.Items?.find(item => item.eventCode === 'NOCE');
-
-  if (noce) {
+  if (!isEmpty(noceDocketEntry)) {
     return true;
   }
 
