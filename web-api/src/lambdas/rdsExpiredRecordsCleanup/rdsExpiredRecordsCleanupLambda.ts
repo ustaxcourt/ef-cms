@@ -14,7 +14,7 @@ export const handler: Handler = async (_event, context) => {
     });
 
     await Promise.all(
-      TABLES_WITH_EXPIRATIONS.map(tableMetaData => async () => {
+      TABLES_WITH_EXPIRATIONS.map(async tableMetaData => {
         const { name: tableName } = tableMetaData;
         await pgDeleteFrom({
           // fix the type
