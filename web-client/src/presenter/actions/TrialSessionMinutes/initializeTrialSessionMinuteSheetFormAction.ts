@@ -91,7 +91,7 @@ export const initializeMinuteSheet = ({
 
   // Trial session metadata
   initializedMinuteSheet.trialSessionMetadataSection = {
-    courtReporter: formattedTrialSession.formattedCourtReporter,
+    courtReporter: formattedTrialSession.courtReporter ?? '',
     judge: {
       fullName: judge.fullName,
       title: judge.title,

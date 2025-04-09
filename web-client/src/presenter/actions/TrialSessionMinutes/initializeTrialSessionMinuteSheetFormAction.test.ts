@@ -195,6 +195,36 @@ describe('initializeMinuteSheet', () => {
     });
   });
 
+  it('should initialize trial session metadata with empty court reporter when trial session has no court reporter assigned', () => {
+    const result = initializeMinuteSheet({
+      emptyMinuteSheet: initialMinuteSheetFormState,
+      caseDetail: MOCK_CASE,
+      formattedTrialSession: {
+        ...mockFormattedTrialSession,
+        courtReporter: undefined,
+      },
+      currentUser: { ...mockValidUser, email: 'test@example.com' },
+      judgeOptions: {
+        '1': {
+          fullName: 'Judge Smith',
+          title: 'Judge',
+          userId: '1',
+        },
+      },
+    });
+
+    expect(result.trialSessionMetadataSection).toMatchObject({
+      courtReporter: '',
+      judge: {
+        fullName: 'Judge Smith',
+        title: 'Judge',
+        userId: '1',
+      },
+      remoteSession: false,
+      trialClerk: 'Test Trial Clerk',
+    });
+  });
+
   it('should initialize recalled section with empty row', () => {
     const result = initializeMinuteSheet({
       emptyMinuteSheet: initialMinuteSheetFormState,
