@@ -2,6 +2,7 @@ import { Kysely } from 'kysely';
 
 const connectionTableName = 'dwConnection';
 const connectionUserIdIndex = 'idx_connection_userId';
+const connectionExpirationIndex = 'idx_connection_expirationDate';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
@@ -18,9 +19,16 @@ export async function up(db: Kysely<any>): Promise<void> {
     .on(connectionTableName)
     .column('userId')
     .execute();
+
+  await db.schema
+    .createIndex(connectionExpirationIndex)
+    .on(connectionTableName)
+    .column('expirationDate')
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
+  await db.schema.dropIndex(connectionExpirationIndex).execute();
   await db.schema.dropIndex(connectionUserIdIndex).execute();
   await db.schema.dropTable(connectionTableName).execute();
 }
