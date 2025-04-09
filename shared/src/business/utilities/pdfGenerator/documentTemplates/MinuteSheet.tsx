@@ -171,7 +171,12 @@ export const MinuteSheet = ({
             </div>
             {formattedMinuteSheet.respondentAppearances.map(
               (respondentAppearance, index) => (
-                <div key={index}>{respondentAppearance}</div>
+                <div
+                  key={index}
+                  dangerouslySetInnerHTML={{
+                    __html: respondentAppearance,
+                  }}
+                ></div>
               ),
             )}
           </div>

@@ -126,7 +126,7 @@ export const formatMinuteSheet = ({
     recalled: formatRecalledRows(sanitizeMinuteSheetForm(recalls)),
     remoteSession: formatRemoteSession(minuteSheet.trialSession.isRemote),
     respondentAppearances: formatRespondentAppearances(
-      minuteSheet.appearances.respondents,
+      sanitizeMinuteSheetForm(minuteSheet.appearances.respondents),
     ),
     respondentWitnesses: formatWitnesses(
       minuteSheet.evidence.respondentWitnesses,
@@ -272,6 +272,8 @@ export const formatRespondentAppearances = (
       let formattedRespondentRole;
       if (respondent.role && respondent.note) {
         formattedRespondentRole = `(${PETITIONER_ROLE_OPTIONS[respondent.role]} - <em>${respondent.note}</em>)`;
+      } else if (!respondent.role && respondent.note) {
+        formattedRespondentRole = `(<em>${respondent.note}</em>)`;
       } else if (respondent.role) {
         formattedRespondentRole = `(${PETITIONER_ROLE_OPTIONS[respondent.role]})`;
       }

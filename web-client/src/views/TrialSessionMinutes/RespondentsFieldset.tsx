@@ -67,6 +67,20 @@ export const RespondentsFieldset = ({
                       value: inputValue?.value || '',
                     })
                   }
+                  onBlur={e => {
+                    if (e.target.value) {
+                      onChangeHandler({
+                        name: 'respondents',
+                        rowInfo: {
+                          key: row.renderKey,
+                          nestedName: 'name',
+                        },
+                        section:
+                          MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
+                        value: e.target.value,
+                      });
+                    }
+                  }}
                 />
               </FormGroup>
             </div>
@@ -86,7 +100,7 @@ export const RespondentsFieldset = ({
                         key: row.renderKey,
                         nestedName: 'role',
                       },
-                      section: MINUTE_SHEET_FORM_SECTION_MAP.petitionersSection,
+                      section: MINUTE_SHEET_FORM_SECTION_MAP.respondentsSection,
                       value: e.target.value,
                     });
                   }}
