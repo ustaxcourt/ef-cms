@@ -93,7 +93,7 @@ import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSeale
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
-import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
+import { getUserById as getUserByIdPersistence } from '@web-api/persistence/postgres/users/getUserById';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { removeCounselFromRemovedPetitioner } from '@web-api/business/useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner';
@@ -111,7 +111,7 @@ import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEn
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
-import { updateUserRecords } from '@web-api/persistence/dynamo/users/updateUserRecords';
+import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
@@ -393,7 +393,7 @@ export const createTestApplicationContext = () => {
     updateCaseAutomaticBlock: jest
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
-    updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
+    updateUserRecords: jest.fn().mockImplementation(updateUser),
   });
 
   const getDocumentGeneratorsReturnMock = {
