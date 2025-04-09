@@ -272,6 +272,8 @@ export const formatRespondentAppearances = (
       let formattedRespondentRole;
       if (respondent.role && respondent.note) {
         formattedRespondentRole = `(${PETITIONER_ROLE_OPTIONS[respondent.role]} - <em>${respondent.note}</em>)`;
+      } else if (!respondent.role && respondent.note) {
+        formattedRespondentRole = `(<em>${respondent.note}</em>)`;
       } else if (respondent.role) {
         formattedRespondentRole = `(${PETITIONER_ROLE_OPTIONS[respondent.role]})`;
       }
