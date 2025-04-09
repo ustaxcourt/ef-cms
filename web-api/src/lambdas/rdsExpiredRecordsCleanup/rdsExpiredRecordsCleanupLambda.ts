@@ -2,7 +2,7 @@ import { getDbReader } from '@web-api/database';
 import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 import type { Handler } from 'aws-lambda';
 
-const EXPIRATION_COLUMN = 'expirationDate';
+const EXPIRATION_COLUMN = 'expiration_date';
 
 export const handler: Handler = async (_event, context) => {
   await getDbReader(async reader => {
