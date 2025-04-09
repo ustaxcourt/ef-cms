@@ -56,7 +56,7 @@ import {
 import {
   indexOpenSearchUser,
   transformOpenSearchUser,
-} from 'web-api/elasticsearch/index-users';
+} from '../elasticsearch/index-users';
 
 const DEFAULT = {};
 
