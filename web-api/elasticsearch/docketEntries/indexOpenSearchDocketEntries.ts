@@ -10,7 +10,7 @@ import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persist
 import { getDocument } from '@web-api/persistence/s3/getDocument';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { chunk } from 'lodash';
-import { efcmsDocketEntryIndex } from 'web-api/elasticsearch/efcms-docket-entry-mappings';
+import { efcmsDocketEntryIndex } from '../efcms-docket-entry-mappings';
 
 // Our indexing in OpenSearch is based on the pk/sk that existed in Dynamo.
 function getPk<T extends RawDocketEntry>(docketEntry: T): string {
@@ -80,6 +80,7 @@ const upsertDocketEntriesInOpenSearch = async ({
         index: {
           _index: efcmsDocketEntryIndex,
           _id: `${getPk(docketEntry)}_${getSk(docketEntry)}`,
+          routing: `${getPk(docketEntry)}_case|${getSk(docketEntry)}|mapping`,
         },
       });
       docketEntryIndexData.push(doc);
@@ -140,6 +141,5 @@ const formatDocketEntryForIndexing = async (
       name: 'document',
       parent: caseDocketEntryMappingRecordId,
     },
-    eventName: 'MODIFY',
   };
 };
