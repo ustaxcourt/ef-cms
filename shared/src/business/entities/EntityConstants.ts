@@ -1086,6 +1086,16 @@ export const ROLES = {
 } as const;
 export type Role = (typeof ROLES)[keyof typeof ROLES];
 
+export const INTERNAL_ROLES = omit(ROLES, [
+  ROLES.admin,
+  ROLES.inactivePractitioner,
+  ROLES.irsPractitioner,
+  ROLES.irsSuperuser,
+  ROLES.legacyJudge,
+  ROLES.petitioner,
+  ROLES.privatePractitioner,
+]);
+
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.
 export const SYSTEM_ROLE = 'System';

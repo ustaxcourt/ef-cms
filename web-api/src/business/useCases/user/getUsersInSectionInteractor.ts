@@ -1,12 +1,9 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import {
-  RawUser,
-  User,
-} from '../../../../../shared/src/business/entities/User';
-import { UnauthorizedError } from '../../../errors/errors';
+} from '@shared/authorization/authorizationClientService';
+import { RawUser, User } from '@shared/business/entities/User';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
 
@@ -26,9 +23,9 @@ export const getUsersInSectionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const rawUsers = await getUsersInSection({
+  const users = await getUsersInSection({
     section,
   });
 
-  return User.validateRawCollection(rawUsers);
+  return User.validateRawCollection(users);
 };

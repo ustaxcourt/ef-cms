@@ -1,6 +1,7 @@
 import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   COUNTRY_TYPES,
+  INTERNAL_ROLES,
   JudgeTitle,
   ROLES,
   Role,
@@ -194,20 +195,7 @@ export class User extends JoiValidationEntity {
   }
 
   static isInternalUser(role?: Role): boolean {
-    const internalRoles: (Role | undefined)[] = [
-      ROLES.adc,
-      ROLES.admissionsClerk,
-      ROLES.chambers,
-      ROLES.clerkOfCourt,
-      ROLES.caseServicesSupervisor,
-      ROLES.docketClerk,
-      ROLES.floater,
-      ROLES.general,
-      ROLES.judge,
-      ROLES.petitionsClerk,
-      ROLES.reportersOffice,
-      ROLES.trialClerk,
-    ];
+    const internalRoles: (Role | undefined)[] = Object.values(INTERNAL_ROLES);
 
     return internalRoles.includes(role);
   }
