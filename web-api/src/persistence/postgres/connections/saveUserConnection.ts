@@ -13,7 +13,7 @@ export const saveUserConnection = async ({
   endpoint: string;
   userId: string;
 }) => {
-  const EXPIRATION_DATE = Math.floor(Date.now() / 1000) + TIME_TO_EXIST;
+  const TTL = Math.floor(Date.now() / 1000) + TIME_TO_EXIST;
   await pgInsertInto({
     table: 'dwConnection',
     values: [
@@ -22,7 +22,7 @@ export const saveUserConnection = async ({
         connectionId,
         endpoint,
         userId,
-        expirationDate: EXPIRATION_DATE,
+        ttl: TTL,
       },
     ],
   });

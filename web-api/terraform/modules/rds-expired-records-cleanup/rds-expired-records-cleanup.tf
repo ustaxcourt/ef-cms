@@ -54,17 +54,9 @@ module "rds_expired_records_cleanup_lambda" {
     STAGE                        = var.environment
     NODE_ENV                     = "production"
     REGION                       = var.aws_region
-    rds = {
-      pool = {
-        database = var.postgres_database
-        host = var.postgres_host,
-        idleTimeoutMillis = 1000,
-        max = 1,
-        port = 5432,
-        user = var.postgres_user,
-      }
-      useGlobalCert = true
-    }
+    DATABASE_NAME                = var.postgres_database
+    POSTGRES_HOST                = var.postgres_host
+    POSTGRES_USER                = var.postgres_user
   }
   timeout = "900"
 }

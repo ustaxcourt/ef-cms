@@ -5,7 +5,7 @@ const DEFAULT = {};
 export const notificationTableDefinition = {
   id: DEFAULT as number | undefined,
   topic: DEFAULT as string,
-  expirationDate: DEFAULT as number,
+  ttl: DEFAULT as number,
 };
 
 export type NotificationTable = typeof notificationTableDefinition;
