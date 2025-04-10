@@ -2,6 +2,9 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
+);
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_SERVED_MESSAGES,
@@ -16,6 +19,7 @@ import { docketClerkUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
@@ -23,6 +27,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase;
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
+  );
+  const updateDocketEntryPendingServiceStatus = jest.mocked(
+    updateDocketEntryPendingServiceStatusMock,
   );
 
   const mockClientConnectionId = '987654';
@@ -509,23 +516,14 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(2);
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       applicationContext,
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: true,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       applicationContext,
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
@@ -554,21 +552,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ),
     ).rejects.toThrow(mockErrorText);
 
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(2);
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus.mock.calls[0][0],
+      updateDocketEntryPendingServiceStatus.mock.calls[0][0],
     ).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: true,
     });
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus.mock.calls[1][0],
+      updateDocketEntryPendingServiceStatus.mock.calls[1][0],
     ).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
