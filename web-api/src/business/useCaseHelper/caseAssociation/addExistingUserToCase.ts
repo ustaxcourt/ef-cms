@@ -3,13 +3,13 @@ import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/authorization/authorizationClientService';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 
 export const addExistingUserToCase = async ({
   applicationContext,
@@ -64,12 +64,9 @@ export const addExistingUserToCase = async ({
   }
 
   const rawCase = caseEntity.toRawObject();
-  const userCaseEntity = new UserCase(rawCase);
 
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
-    applicationContext,
+  await associateUserWithCase({
     docketNumber: rawCase.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
     userId: userToAdd.userId,
   });
 

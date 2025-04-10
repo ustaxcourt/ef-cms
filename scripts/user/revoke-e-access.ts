@@ -9,6 +9,7 @@ import { createApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { deleteUserFromCase } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -68,9 +69,7 @@ const { docketNumber, userId } = parseArgsAndEnvVars(scriptConfig) as {
 
   await upsertCases([caseToUpdate]);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteUserFromCase({ applicationContext, docketNumber, userId });
+  await deleteUserFromCase({ docketNumber, userId });
 
   console.log(
     `Electronic access to case ${docketNumber} has been revoked for ${offendingPetitioner.name}.`,

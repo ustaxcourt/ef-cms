@@ -2,21 +2,13 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 
-/**
- * submitPendingCaseAssociationRequestInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case
- * @returns {Promise<*>} the promise of the pending case association request
- */
 export const submitPendingCaseAssociationRequestInteractor = async (
-  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -28,29 +20,20 @@ export const submitPendingCaseAssociationRequestInteractor = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
-  const isAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: user.userId,
-    });
+  const isAssociated = await verifyCaseForUser({
+    docketNumber,
+    userId: user.userId,
+  });
 
-  const isAssociationPending = await applicationContext
-    .getPersistenceGateway()
-    .verifyPendingCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: user.userId,
-    });
+  const isAssociationPending = await verifyCaseForUser({
+    docketNumber,
+    userId: user.userId,
+  });
 
   if (!isAssociated && !isAssociationPending) {
-    await applicationContext
-      .getPersistenceGateway()
-      .associateUserWithCasePending({
-        applicationContext,
-        docketNumber,
-        userId: user.userId,
-      });
+    await associateUserWithCase({
+      docketNumber,
+      userId: user.userId,
+    });
   }
 };

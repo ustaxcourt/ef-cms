@@ -118,7 +118,6 @@ export const saveCaseDetailInternalEdit = async (
     await applicationContext
       .getUseCaseHelpers()
       .removeCounselFromRemovedPetitioner({
-        applicationContext,
         authorizedUser,
         caseEntity: caseEntityWithFormEdits,
         petitionerContactId: originalSecondaryContactId,

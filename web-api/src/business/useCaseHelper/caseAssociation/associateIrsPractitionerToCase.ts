@@ -3,8 +3,9 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UserCase } from '@shared/business/entities/UserCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 
 export const associateIrsPractitionerToCase = async ({
   applicationContext,
@@ -19,13 +20,10 @@ export const associateIrsPractitionerToCase = async ({
   serviceIndicator?: string;
   user: RawUser;
 }): Promise<void> => {
-  const isAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: user.userId,
-    });
+  const isAssociated = await verifyCaseForUser({
+    docketNumber,
+    userId: user.userId,
+  });
 
   if (!isAssociated) {
     const caseToUpdate = await getCaseByDocketNumber({
@@ -33,12 +31,8 @@ export const associateIrsPractitionerToCase = async ({
       docketNumber,
     });
 
-    const userCaseEntity = new UserCase(caseToUpdate);
-
-    await applicationContext.getPersistenceGateway().associateUserWithCase({
-      applicationContext,
+    await associateUserWithCase({
       docketNumber,
-      userCase: userCaseEntity.validate().toRawObject(),
       userId: user.userId,
     });
 

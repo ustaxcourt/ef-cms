@@ -1,7 +1,5 @@
 import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
-import { associateUserWithCase } from './persistence/dynamo/cases/associateUserWithCase';
-import { associateUserWithCasePending } from './persistence/dynamo/cases/associateUserWithCasePending';
 import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
@@ -26,7 +24,6 @@ import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
 import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
 import { deleteUserConnection } from './persistence/dynamo/notifications/deleteUserConnection';
-import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
@@ -96,8 +93,6 @@ import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMa
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
-import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
-import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from './persistence/s3/zipDocuments';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
@@ -140,8 +135,6 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
 const gatewayMethods = {
   ...isValidatedDecorator({
     addCaseToHearing,
-    associateUserWithCase,
-    associateUserWithCasePending,
     bulkDeleteRecords,
     bulkIndexRecords,
     createCaseTrialSortMappingRecords,
@@ -183,7 +176,6 @@ const gatewayMethods = {
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
   deleteUserConnection,
-  deleteUserFromCase,
   fetchEventCodesCountForJudges,
   getAllUsersByRole,
   getAllWebSocketConnections,
@@ -231,8 +223,6 @@ const gatewayMethods = {
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
   uploadDocument,
-  verifyCaseForUser,
-  verifyPendingCaseForUser,
   zipDocuments,
 };
 

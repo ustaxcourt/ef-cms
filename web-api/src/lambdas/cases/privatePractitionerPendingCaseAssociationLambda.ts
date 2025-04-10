@@ -15,7 +15,6 @@ export const privatePractitionerPendingCaseAssociationLambda = (
     return await applicationContext
       .getUseCases()
       .submitPendingCaseAssociationRequestInteractor(
-        applicationContext,
         {
           ...event.pathParameters,
         },

@@ -18,7 +18,6 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { UserCase } from '@shared/business/entities/UserCase';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
 import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
@@ -32,6 +31,7 @@ import { PrivatePractitioner } from '@shared/business/entities/PrivatePractition
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { User } from '@shared/business/entities/User';
+import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
@@ -368,12 +368,8 @@ export const createCaseInteractor = async (
     createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
   );
 
-  const userCaseEntity = new UserCase(caseToAdd);
-
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
-    applicationContext,
+  await associateUserWithCase({
     docketNumber: caseToAdd.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
     userId: user.userId,
   });
 

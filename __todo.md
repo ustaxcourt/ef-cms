@@ -25,6 +25,7 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [ ] Determine if selectAll is necessary for User functions
 - [ ] dwUsersOnCase: is it possible for the same user to be on the same case multiple times??
 - [ ] Do we need to tackle: "pk": "chief-judge-name" ??
+- [ ] Delete UserCase
 
 ## Dynamo Functions to Postgres
 
@@ -55,6 +56,8 @@ does not belong in the persistence layer.
 - [ ] getUsersBySearchKey: Invoked by (1) `getPrivatePractitionersBySearchKey`
 action, interactor and (2) `getIrsPractitionersBySearchKey` action, interactor.
 Is "search key" a concept we need to hold onto?
+- [ ] removePractitionerOnCase
+- [ ] updatePractitionerOnCase
 
 ## Completed todos and no-longer-relevant notes
 - [x] Replace magic 'User' strings with a static constant in `User.ts`
@@ -88,3 +91,10 @@ Is "search key" a concept we need to hold onto?
   "email": "petitionerOpenSearch@example.com"
 }
 ```
+
+## Association tables to replace 4/10/25
+- [x] associateUserWithCase
+- [x] associateUserWithPendingCase (this was combined with associateUserWithCase)
+- [x] verifyCaseForUser
+- [x] verifyPendingCaseForUser
+- [ ] deleteUserFromCase

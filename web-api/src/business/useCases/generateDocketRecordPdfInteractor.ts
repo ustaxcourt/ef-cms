@@ -12,6 +12,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
+import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 
 export const generateDocketRecordPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -30,13 +31,10 @@ export const generateDocketRecordPdfInteractor = async (
   },
   authorizedUser: UnknownAuthUser,
 ) => {
-  const isDirectlyAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: authorizedUser?.userId,
-    });
+  const isDirectlyAssociated = await verifyCaseForUser({
+    docketNumber,
+    userId: authorizedUser?.userId!,
+  });
 
   const caseSource = await getCaseByDocketNumber({
     applicationContext,
