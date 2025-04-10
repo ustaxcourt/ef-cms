@@ -55,7 +55,6 @@ export const processStreamRecordsInteractor = async (
     });
 
     await processDocketEntries({
-      applicationContext,
       docketEntryRecords,
     }).catch(err => {
       getLogger().error('failed to processDocketEntries', {
