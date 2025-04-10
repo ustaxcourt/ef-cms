@@ -1,31 +1,30 @@
 # 10495 Development Notes
 
-## Todo Items
+## Todo part 1
 
 All TODO comments begin with the string "10495 TODO:" to help keep track of them.
 
+- [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
+- [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
 - [ ] Fix privatePractitioner `representing` field
-- [ ] Expire user confirmation codes (some sort of cron job?)
 - [ ] Replace all calls to `updateUserRecords` with `updateUser`
-- [ ] Remove `getUserGateway` entirely
-- [ ] Update & Create Case Associations Judge Updates, maybe??
-- [ ] Odd case related functions
-- [-] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
-- [-] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
-- [-] Remove DynamoDB seed user when finished
+- [ ] Odd user-related dynamodb functions
 - [ ] Implement TTL on Confirmation Codes
-- [ ] Make sure all user related entities are copied in & all user related functions
-- [ ] Update DynamoDB DrawIO Entity Map
-- [ ] Update ERD for new tables
+- [ ] dwUsersOnCase: is it possible for the same user to be on the same case multiple times??
+- [ ] Do we need to tackle: "pk": "chief-judge-name" ??
+- [ ] Index all where clauses
+- [ ] Determine if selectAll is necessary for User functions
+- [ ] Delete `UserCase` entity
+- [ ] Make sure all user related entities are copied in & all user related functions (i.e., scrub all user-related dynamodb code)
+
+## Todo part 2
+
 - [ ] Get Green PR and All Tests Pass
 - [ ] Push to Experimental Environment (Smoke Tests)
 - [ ] Write a Deletion Script to Remove DynamoDB Records (One Time)
 - [ ] Test Deletion Script on Deployed Environment
-- [ ] Index all where clauses
-- [ ] Determine if selectAll is necessary for User functions
-- [ ] dwUsersOnCase: is it possible for the same user to be on the same case multiple times??
-- [ ] Do we need to tackle: "pk": "chief-judge-name" ??
-- [ ] Delete UserCase
+- [ ] Update DynamoDB DrawIO Entity Map
+- [ ] Update ERD for new tables
 
 ## Dynamo Functions to Postgres
 
@@ -97,4 +96,4 @@ Is "search key" a concept we need to hold onto?
 - [x] associateUserWithPendingCase (this was combined with associateUserWithCase)
 - [x] verifyCaseForUser
 - [x] verifyPendingCaseForUser
-- [ ] deleteUserFromCase
+- [x] deleteUserFromCase
