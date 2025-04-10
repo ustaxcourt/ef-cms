@@ -5694,27 +5694,7 @@
     "servedAt": "2021-03-01T16:29:30.604Z",
     "docketNumber": "101-21"
   },
-  {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "case|101-21",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com"
-  },
+
   {
     "servedParties": [
       {
@@ -6402,52 +6382,7 @@
     "documentTitle": "Petition",
     "docketNumber": "102-20"
   },
-  {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "irsPractitioner",
-    "pk": "case|102-20",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com"
-  },
-  {
-    "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "section": "privatePractitioner",
-    "representingPrimary": true,
-    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT5432",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "case|102-20",
-    "email": "privatePractitioner1@example.com"
-  },
+
   {
     "stampData": {},
     "isStricken": false,
@@ -6801,54 +6736,6 @@
     "addToCoversheet": false
   },
   {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "gsi1pk": "leadCase|102-67",
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "irsPractitioner",
-    "pk": "case|102-67",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com"
-  },
-  {
-    "role": "privatePractitioner",
-    "gsi1pk": "leadCase|102-67",
-    "representing": ["5da54af1-1969-4011-8275-a949084b7928"],
-    "section": "privatePractitioner",
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT1234",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "firmName": "GW Law Offices",
-    "pk": "case|102-67",
-    "email": "privatePractitioner@example.com"
-  },
-  {
     "servedParties": [
       {
         "name": "Samson Workman",
@@ -7009,28 +6896,6 @@
     "pk": "case|103-19",
     "servedAt": "2019-03-01T22:54:05.993Z",
     "docketNumber": "103-19"
-  },
-  {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "case|103-19",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao"
   },
   {
     "isStricken": false,
@@ -7315,29 +7180,7 @@
     "pk": "case|103-20",
     "docketNumber": "103-20"
   },
-  {
-    "role": "privatePractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT1234",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "firmName": "GW Law Offices",
-    "pk": "case|103-20",
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner@example.com"
-  },
+
   {
     "stampData": {},
     "servedParties": [
@@ -7611,29 +7454,7 @@
     "servedAt": "2023-04-03T15:53:18.589Z",
     "docketNumber": "103-67"
   },
-  {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "gsi1pk": "leadCase|102-67",
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "irsPractitioner",
-    "pk": "case|103-67",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com"
-  },
+
   {
     "servedParties": [
       {
@@ -8625,29 +8446,7 @@
     "servedAt": "2023-04-03T15:53:43.150Z",
     "docketNumber": "104-67"
   },
-  {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "gsi1pk": "leadCase|102-67",
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "irsPractitioner",
-    "pk": "case|104-67",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com"
-  },
+
   {
     "isStricken": false,
     "documentType": "Petition",
@@ -8733,30 +8532,7 @@
     "documentTitle": "Statement of Taxpayer Identification",
     "docketNumber": "105-19"
   },
-  {
-    "role": "privatePractitioner",
-    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
-    "section": "privatePractitioner",
-    "representingPrimary": true,
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT1234",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "case|105-19",
-    "email": "privatePractitioner@example.com"
-  },
+
   {
     "servedParties": [
       {
@@ -8988,30 +8764,7 @@
     "servedAt": "2020-09-25T19:27:16.469Z",
     "docketNumber": "105-20"
   },
-  {
-    "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "section": "privatePractitioner",
-    "representingPrimary": true,
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT1234",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test Private Practitioner",
-    "pk": "case|105-20",
-    "email": "privatePractitioner@example.com"
-  },
+
   {
     "stampData": {},
     "draftOrderState": {
@@ -10614,52 +10367,7 @@
     "servedAt": "2023-07-26T17:12:26.530Z",
     "docketNumber": "105-23"
   },
-  {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "irsPractitioner",
-    "pk": "case|105-23",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com"
-  },
-  {
-    "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405418"],
-    "section": "privatePractitioner",
-    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT5432",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "firmName": "Bogus Barristers",
-    "pk": "case|105-23",
-    "email": "privatePractitioner1@example.com"
-  },
+
   {
     "stampData": {},
     "servedParties": [
@@ -10889,54 +10597,7 @@
     "servedAt": "2023-04-03T15:52:36.482Z",
     "docketNumber": "105-67"
   },
-  {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "gsi1pk": "leadCase|102-67",
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "irsPractitioner",
-    "pk": "case|105-67",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com"
-  },
-  {
-    "role": "privatePractitioner",
-    "gsi1pk": "leadCase|102-67",
-    "representing": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
-    "section": "privatePractitioner",
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT1234",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "firmName": "GW Law Offices",
-    "pk": "case|105-67",
-    "email": "privatePractitioner@example.com"
-  },
+
   {
     "servedParties": [
       {
@@ -11260,31 +10921,7 @@
     "docketNumber": "106-23",
     "addToCoversheet": false
   },
-  {
-    "role": "privatePractitioner",
-    "gsi1pk": "leadCase|104-23",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
-    "section": "privatePractitioner",
-    "representingPrimary": true,
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT1234",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "case|106-23",
-    "email": "privatePractitioner@example.com"
-  },
+
   {
     "stampData": {},
     "servedParties": [
@@ -11639,52 +11276,7 @@
     "servedAt": "2020-09-25T19:27:16.956Z",
     "docketNumber": "107-19"
   },
-  {
-    "role": "irsPractitioner",
-    "serviceIndicator": "Electronic",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test IRS Practitioner",
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "section": "irsPractitioner",
-    "pk": "case|107-19",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com"
-  },
-  {
-    "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "section": "privatePractitioner",
-    "representingPrimary": true,
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "serviceIndicator": "Electronic",
-    "barNumber": "PT1234",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "name": "Test Private Practitioner",
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "case|107-19",
-    "email": "privatePractitioner@example.com"
-  },
+
   {
     "isStricken": false,
     "documentType": "Statement of Taxpayer Identification",
@@ -12005,28 +11597,7 @@
     "documentTitle": "Statement of Taxpayer Identification",
     "docketNumber": "110-19"
   },
-  {
-    "role": "privatePractitioner",
-    "serviceIndicator": "Paper",
-    "barNumber": "BR1335",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": null,
-      "address2": null,
-      "city": "Washington",
-      "phone": "123-456-7890",
-      "address1": "1234 Street Blvd",
-      "postalCode": "20006-1806",
-      "state": "DC",
-      "countryType": "domestic"
-    },
-    "name": "Ronald Buch Jr.",
-    "representing": ["6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"],
-    "sk": "privatePractitioner|af298b91-fb95-4b87-be16-8ad0fade5eb4",
-    "firmName": "Firmly Grasped, LLP",
-    "pk": "case|110-19",
-    "userId": "af298b91-fb95-4b87-be16-8ad0fade5eb4"
-  },
+
   {
     "stampData": {},
     "isStricken": false,
@@ -20668,49 +20239,6 @@
     "docketNumber": "999-15"
   },
   {
-    "role": "irsPractitioner",
-    "serviceIndicator": "None",
-    "barNumber": "RT6789",
-    "entityName": "IrsPractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test IRS Practitioner",
-    "pk": "case|999-15",
-    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "irspractitioner@example.com"
-  },
-  {
-    "role": "privatePractitioner",
-    "serviceIndicator": "None",
-    "barNumber": "PT1234",
-    "entityName": "PrivatePractitioner",
-    "contact": {
-      "address3": "Under the stairs",
-      "address2": "Apartment 4",
-      "city": "Chicago",
-      "phone": "+1 (555) 555-5555",
-      "address1": "234 Main St",
-      "postalCode": "61234",
-      "state": "IL",
-      "countryType": "domestic"
-    },
-    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test Private Practitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "pk": "case|999-15",
-    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "privatePractitioner@example.com"
-  },
-  {
     "sk": "chief-judge-name",
     "current": "Maurice B. Foley",
     "pk": "chief-judge-name"
@@ -21087,66 +20615,7 @@
     "pk": "ip-limiter-document-search-ip-limiter|localhost",
     "expiresAt": 1638454128024
   },
-  {
-    "sk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
-    "pk": "irsPractitioner|Jaquelyn Lane"
-  },
-  {
-    "sk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
-    "pk": "irsPractitioner|JAQUELYN LANE"
-  },
-  {
-    "sk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
-    "pk": "irsPractitioner|LJ9999"
-  },
-  {
-    "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
-    "pk": "irsPractitioner|MS8888"
-  },
-  {
-    "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
-    "pk": "irsPractitioner|Nero West"
-  },
-  {
-    "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
-    "pk": "irsPractitioner|NERO WEST"
-  },
-  {
-    "sk": "user|5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
-    "pk": "irsPractitioner|RT0987"
-  },
-  {
-    "sk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "irsPractitioner|RT6789"
-  },
-  {
-    "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
-    "pk": "irsPractitioner|Stuart Morrison"
-  },
-  {
-    "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
-    "pk": "irsPractitioner|STUART MORRISON"
-  },
-  {
-    "sk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "irsPractitioner|Test IRS Practitioner"
-  },
-  {
-    "sk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "irsPractitioner|TEST IRS PRACTITIONER"
-  },
-  {
-    "sk": "user|5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
-    "pk": "irsPractitioner|Test IRS Practitioner1"
-  },
-  {
-    "sk": "user|5fb6e815-b5d3-459b-b08b-49c61f0fce5e",
-    "pk": "irsPractitioner|TEST IRS PRACTITIONER1"
-  },
-  {
-    "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
-    "pk": "irsPractitioner|WN7777"
-  },
+
   {
     "sk": "maintenance-mode",
     "current": false,
@@ -21197,78 +20666,6 @@
       "00039-serve-autoserved-docketentries.js"
     ],
     "pk": "migrationSchema"
-  },
-  {
-    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "pk": "privatePractitioner|Alden Rivas"
-  },
-  {
-    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "pk": "privatePractitioner|ALDEN RIVAS"
-  },
-  {
-    "sk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
-    "pk": "privatePractitioner|Clark Stark"
-  },
-  {
-    "sk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
-    "pk": "privatePractitioner|CLARK STARK"
-  },
-  {
-    "sk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "pk": "privatePractitioner|GL1111"
-  },
-  {
-    "sk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "pk": "privatePractitioner|Lilah Gilbert"
-  },
-  {
-    "sk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "pk": "privatePractitioner|LILAH GILBERT"
-  },
-  {
-    "sk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "privatePractitioner|PT1234"
-  },
-  {
-    "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "privatePractitioner|PT5432"
-  },
-  {
-    "sk": "user|a6318a31-8aa4-4002-a7b0-1192af19dbb9",
-    "pk": "privatePractitioner|PT9999"
-  },
-  {
-    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
-    "pk": "privatePractitioner|RA3333"
-  },
-  {
-    "sk": "user|9f25dc2c-764a-435c-86dd-323e53634537",
-    "pk": "privatePractitioner|SC2222"
-  },
-  {
-    "sk": "user|a6318a31-8aa4-4002-a7b0-1192af19dbb9",
-    "pk": "privatePractitioner|TEST PRIVATE PRACTITIONER 99"
-  },
-  {
-    "sk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "privatePractitioner|Test Private Practitioner"
-  },
-  {
-    "sk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "pk": "privatePractitioner|TEST PRIVATE PRACTITIONER"
-  },
-  {
-    "sk": "user|a6318a31-8aa4-4002-a7b0-1192af19dbb9",
-    "pk": "privatePractitioner|TEST PRIVATE PRACTITIONER"
-  },
-  {
-    "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "privatePractitioner|Test Private Practitioner"
-  },
-  {
-    "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "pk": "privatePractitioner|TEST PRIVATE PRACTITIONER"
   },
   {
     "sk": "section-outbox-number-of-days",
@@ -23128,48 +22525,6 @@
     "ttl": 1717541444
   },
   {
-    "sk": "case|102-20",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "102-20",
-    "gsi1pk": "user-case|102-20"
-  },
-  {
-    "sk": "case|102-67",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "102-67",
-    "gsi1pk": "user-case|102-67"
-  },
-  {
-    "sk": "case|103-19",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "103-19",
-    "gsi1pk": "user-case|103-19"
-  },
-  {
-    "sk": "case|103-67",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "103-67",
-    "gsi1pk": "user-case|103-67"
-  },
-  {
-    "sk": "case|104-67",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "104-67",
-    "gsi1pk": "user-case|104-67"
-  },
-  {
-    "sk": "case|105-67",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "105-67",
-    "gsi1pk": "user-case|105-67"
-  },
-  {
-    "sk": "case|107-19",
-    "pk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "107-19",
-    "gsi1pk": "user-case|107-19"
-  },
-  {
     "endpoint": "ws://localhost:3011",
     "clientConnectionId": "812669f6-3d73-4ecb-85cb-62e3003d5335",
     "gsi1pk": "connection",
@@ -23236,354 +22591,6 @@
     "ttl": 1719605470
   },
   {
-    "sk": "case|100-22",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "100-22",
-    "gsi1pk": "user-case|100-22"
-  },
-  {
-    "sk": "case|101-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "101-19",
-    "gsi1pk": "user-case|101-19"
-  },
-  {
-    "sk": "case|101-22",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "101-22",
-    "gsi1pk": "user-case|101-22"
-  },
-  {
-    "sk": "case|101-23",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "101-23",
-    "gsi1pk": "user-case|101-23"
-  },
-  {
-    "sk": "case|102-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "102-19",
-    "gsi1pk": "user-case|102-19"
-  },
-  {
-    "sk": "case|102-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "102-20",
-    "gsi1pk": "user-case|102-20"
-  },
-  {
-    "sk": "case|102-22",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "102-22",
-    "gsi1pk": "user-case|102-22"
-  },
-  {
-    "sk": "case|103-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "103-19",
-    "gsi1pk": "user-case|103-19"
-  },
-  {
-    "sk": "case|103-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "103-20",
-    "gsi1pk": "user-case|103-20"
-  },
-  {
-    "sk": "case|104-17",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "104-17",
-    "gsi1pk": "user-case|104-17"
-  },
-  {
-    "sk": "case|104-18",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "104-18",
-    "gsi1pk": "user-case|104-18"
-  },
-  {
-    "sk": "case|104-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "104-19",
-    "gsi1pk": "user-case|104-19"
-  },
-  {
-    "sk": "case|104-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "104-20",
-    "gsi1pk": "user-case|104-20"
-  },
-  {
-    "sk": "case|105-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "105-20",
-    "gsi1pk": "user-case|105-20"
-  },
-  {
-    "sk": "case|106-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "106-19",
-    "gsi1pk": "user-case|106-19"
-  },
-  {
-    "sk": "case|107-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "107-19",
-    "gsi1pk": "user-case|107-19"
-  },
-  {
-    "sk": "case|108-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "108-19",
-    "gsi1pk": "user-case|108-19"
-  },
-  {
-    "sk": "case|111-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "111-19",
-    "gsi1pk": "user-case|111-19"
-  },
-  {
-    "sk": "case|112-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "112-19",
-    "gsi1pk": "user-case|112-19"
-  },
-  {
-    "sk": "case|113-19",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "113-19",
-    "gsi1pk": "user-case|113-19"
-  },
-  {
-    "sk": "case|117-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "117-20",
-    "gsi1pk": "user-case|117-20"
-  },
-  {
-    "sk": "case|120-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "120-20",
-    "gsi1pk": "user-case|120-20"
-  },
-  {
-    "sk": "case|122-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "122-20",
-    "gsi1pk": "user-case|122-20"
-  },
-  {
-    "sk": "case|123-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "123-20",
-    "gsi1pk": "user-case|123-20"
-  },
-  {
-    "sk": "case|125-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "125-20",
-    "gsi1pk": "user-case|125-20"
-  },
-  {
-    "sk": "case|126-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "126-20",
-    "gsi1pk": "user-case|126-20"
-  },
-  {
-    "sk": "case|127-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "127-20",
-    "gsi1pk": "user-case|127-20"
-  },
-  {
-    "sk": "case|128-20",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "128-20",
-    "gsi1pk": "user-case|128-20"
-  },
-  {
-    "sk": "case|301-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "301-21",
-    "gsi1pk": "user-case|301-21"
-  },
-  {
-    "sk": "case|302-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "302-21",
-    "gsi1pk": "user-case|302-21"
-  },
-  {
-    "sk": "case|303-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "303-21",
-    "gsi1pk": "user-case|303-21"
-  },
-  {
-    "sk": "case|304-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "304-21",
-    "gsi1pk": "user-case|304-21"
-  },
-  {
-    "sk": "case|305-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "305-21",
-    "gsi1pk": "user-case|305-21"
-  },
-  {
-    "sk": "case|306-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "306-21",
-    "gsi1pk": "user-case|306-21"
-  },
-  {
-    "sk": "case|307-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "307-21",
-    "gsi1pk": "user-case|307-21"
-  },
-  {
-    "sk": "case|308-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "308-21",
-    "gsi1pk": "user-case|308-21"
-  },
-  {
-    "sk": "case|309-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "309-21",
-    "gsi1pk": "user-case|309-21"
-  },
-  {
-    "sk": "case|310-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "310-21",
-    "gsi1pk": "user-case|310-21"
-  },
-  {
-    "sk": "case|311-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "311-21",
-    "gsi1pk": "user-case|311-21"
-  },
-  {
-    "sk": "case|312-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "312-21",
-    "gsi1pk": "user-case|312-21"
-  },
-  {
-    "sk": "case|314-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "314-21",
-    "gsi1pk": "user-case|314-21"
-  },
-  {
-    "sk": "case|315-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "315-21",
-    "gsi1pk": "user-case|315-21"
-  },
-  {
-    "sk": "case|316-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "316-21",
-    "gsi1pk": "user-case|316-21"
-  },
-  {
-    "sk": "case|317-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "317-21",
-    "gsi1pk": "user-case|317-21"
-  },
-  {
-    "sk": "case|318-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "318-21",
-    "gsi1pk": "user-case|318-21"
-  },
-  {
-    "sk": "case|319-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "319-21",
-    "gsi1pk": "user-case|319-21"
-  },
-  {
-    "sk": "case|320-21",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "320-21",
-    "gsi1pk": "user-case|320-21"
-  },
-  {
-    "sk": "case|106-23",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405417",
-    "docketNumber": "106-23",
-    "gsi1pk": "user-case|106-23"
-  },
-  {
-    "sk": "case|102-67",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "102-67",
-    "gsi1pk": "user-case|102-67"
-  },
-  {
-    "sk": "case|103-20",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "103-20",
-    "gsi1pk": "user-case|103-20"
-  },
-  {
-    "sk": "case|105-19",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "105-19",
-    "gsi1pk": "user-case|105-19"
-  },
-  {
-    "sk": "case|105-20",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "105-20",
-    "gsi1pk": "user-case|105-20"
-  },
-  {
-    "sk": "case|105-67",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "105-67",
-    "gsi1pk": "user-case|105-67"
-  },
-  {
-    "sk": "case|106-23",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "106-23",
-    "gsi1pk": "user-case|106-23"
-  },
-  {
-    "sk": "case|107-19",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "107-19",
-    "gsi1pk": "user-case|107-19"
-  },
-  {
-    "sk": "case|999-15",
-    "pk": "user|9805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "999-15",
-    "gsi1pk": "user-case|999-15"
-  },
-  {
-    "sk": "case|102-20",
-    "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "docketNumber": "102-20",
-    "gsi1pk": "user-case|102-20"
-  },
-  {
-    "sk": "case|105-23",
-    "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
-    "docketNumber": "105-23",
-    "gsi1pk": "user-case|105-23"
-  },
-  {
     "endpoint": "ws://localhost:3011",
     "gsi1pk": "connection",
     "sk": "connection|157fee0b-f0f9-44f6-ae4c-4bfe885525d4",
@@ -23601,13 +22608,7 @@
     "ttl": 1638540951,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728"
   },
-  {
-    "sk": "case|101-24",
-    "pk": "user|b3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "docketNumber": "101-24",
-    "entityName": "UserCase",
-    "gsi1pk": "user-case|101-24"
-  },
+
   {
     "endpoint": "ws://localhost:3011",
     "clientConnectionId": "2bedb457-da8c-45ed-847d-408cddb89c79",
@@ -23882,16 +22883,10 @@
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
   },
   {
-    "role": "petitioner",
-    "address2": "Blandtowne, AK 90210",
-    "phone": "234-234-2345",
-    "address1": "123 Domestic Bliss Lane",
-    "entityName": "User",
-    "name": "Test Petitioner OpenSearch",
-    "sk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "section": "petitioner",
-    "pk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "userId": "e3e1941f-230a-47bb-80ec-6b561c1765cd",
-    "email": "petitionerOpenSearch@example.com"
+    "sk": "case|101-24",
+    "pk": "user|b3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "docketNumber": "101-24",
+    "entityName": "UserCase",
+    "gsi1pk": "user-case|101-24"
   }
 ]

@@ -19,8 +19,12 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [ ] Update ERD for new tables
 - [ ] Get Green PR and All Tests Pass
 - [ ] Push to Experimental Environment (Smoke Tests)
-- [ ] Write a Deletion Script to Remove DynamoDB Records (One Time) 
+- [ ] Write a Deletion Script to Remove DynamoDB Records (One Time)
 - [ ] Test Deletion Script on Deployed Environment
+- [ ] Index all where clauses
+- [ ] Determine if selectAll is necessary for User functions
+- [ ] dwUsersOnCase: is it possible for the same user to be on the same case multiple times??
+- [ ] Do we need to tackle: "pk": "chief-judge-name" ??
 
 ## Dynamo Functions to Postgres
 
@@ -66,3 +70,21 @@ Is "search key" a concept we need to hold onto?
 
 ## Considerations
 - `userType`, which is the renamed `entityName` field, appears to only have `'User` or `'Practitioner'`
+
+## OpenSearch/Dynamodb sync record for testing
+
+```javascript
+{
+  "role": "petitioner",
+  "address2": "Blandtowne, AK 90210",
+  "phone": "234-234-2345",
+  "address1": "123 Domestic Bliss Lane",
+  "entityName": "User",
+  "name": "Test Petitioner OpenSearch",
+  "sk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
+  "section": "petitioner",
+  "pk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
+  "userId": "e3e1941f-230a-47bb-80ec-6b561c1765cd",
+  "email": "petitionerOpenSearch@example.com"
+}
+```
