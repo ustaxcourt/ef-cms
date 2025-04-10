@@ -99,7 +99,7 @@ import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateD
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
-import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
+import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 import path from 'path';
 import pug from 'pug';
 import sass from 'sass';

@@ -115,7 +115,7 @@ import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
-import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
+import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 import path from 'path';
 import pug from 'pug';
 import sass from 'sass';
