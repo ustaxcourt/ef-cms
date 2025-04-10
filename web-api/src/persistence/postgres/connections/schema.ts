@@ -7,7 +7,7 @@ export const connectionTableDefinition = {
   connectionId: DEFAULT as string,
   endpoint: DEFAULT as string,
   userId: DEFAULT as string,
-  expirationDate: DEFAULT as number,
+  ttl: DEFAULT as number,
 };
 
 export type ConnectionTable = typeof connectionTableDefinition;

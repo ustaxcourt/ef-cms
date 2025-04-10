@@ -5,7 +5,7 @@ export const getDispatchNotification = async (topic: string) => {
     reader
       .selectFrom('dwNotification')
       .where('topic', '=', topic)
-      .where('expirationDate', '>=', Date.now() / 1000)
+      .where('ttl', '>=', Date.now() / 1000)
       .execute(),
   );
 };

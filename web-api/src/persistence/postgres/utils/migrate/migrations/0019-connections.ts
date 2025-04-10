@@ -2,7 +2,7 @@ import { Kysely } from 'kysely';
 
 const connectionTableName = 'dwConnection';
 const connectionUserIdIndex = 'idx_connection_userId';
-const connectionExpirationIndex = 'idx_connection_expirationDate';
+const connectionTTLIndex = 'idx_connection_ttl';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
@@ -11,7 +11,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('clientConnectionId', 'varchar', col => col.notNull())
     .addColumn('endpoint', 'varchar', col => col.notNull())
     .addColumn('userId', 'varchar', col => col.notNull())
-    .addColumn('expirationDate', 'bigint', col => col.notNull())
+    .addColumn('ttl', 'bigint', col => col.notNull())
     .execute();
 
   await db.schema
@@ -21,14 +21,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
-    .createIndex(connectionExpirationIndex)
+    .createIndex(connectionTTLIndex)
     .on(connectionTableName)
-    .column('expirationDate')
+    .column('ttl')
     .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await db.schema.dropIndex(connectionExpirationIndex).execute();
+  await db.schema.dropIndex(connectionTTLIndex).execute();
   await db.schema.dropIndex(connectionUserIdIndex).execute();
   await db.schema.dropTable(connectionTableName).execute();
 }
