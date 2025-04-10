@@ -12,6 +12,15 @@ import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { chunk } from 'lodash';
 import { efcmsDocketEntryIndex } from 'web-api/elasticsearch/efcms-docket-entry-mappings';
 
+// Our indexing in OpenSearch is based on the pk/sk that existed in Dynamo.
+function getPk<T extends RawDocketEntry>(docketEntry: T): string {
+  return `case|${docketEntry.docketNumber}`;
+}
+
+function getSk<T extends RawDocketEntry>(docketEntry: T): string {
+  return `docket-entry|${docketEntry.docketEntryId}`;
+}
+
 export const indexOpenSearchDocketEntries = async ({
   message,
 }: {
@@ -70,7 +79,7 @@ const upsertDocketEntriesInOpenSearch = async ({
       docketEntryIndexData.push({
         index: {
           _index: efcmsDocketEntryIndex,
-          _id: `case|${docketEntry.docketNumber}_docket-entry|${docketEntry.docketEntryId}`,
+          _id: `${getPk(docketEntry)}_${getSk(docketEntry)}`,
         },
       });
       docketEntryIndexData.push(doc);
@@ -80,7 +89,9 @@ const upsertDocketEntriesInOpenSearch = async ({
   const CHUNK_SIZE = 50; // Make sure this is an even number
   const chunks = chunk(docketEntryIndexData, CHUNK_SIZE);
   await Promise.all(
-    chunks.map(chunk => getSearchClient().bulk({ body: chunk })),
+    chunks.map(docketEntryChunk =>
+      getSearchClient().bulk({ body: docketEntryChunk, refresh: false }),
+    ),
   );
 };
 
@@ -114,24 +125,20 @@ const formatDocketEntryForIndexing = async (
     }
   }
 
-  const caseDocketEntryMappingRecordId = `case|${docketEntry.docketNumber}_docket-entry|${docketEntry.docketEntryId}|mapping`;
+  const caseDocketEntryMappingRecordId = `${getPk(docketEntry)}_${getPk(docketEntry)}|mapping`;
   return {
-    dynamodb: {
-      Keys: {
-        pk: {
-          S: `case|${docketEntry.docketNumber}`,
-        },
-        sk: {
-          S: `docket-entry|${docketEntry.docketEntryId}`,
-        },
+    ...marshall(
+      {
+        ...docketEntryToIndex,
+        pk: getPk(docketEntry),
+        sk: getSk(docketEntry),
+        entityName: 'DocketEntry',
       },
-      NewImage: {
-        ...marshall(docketEntryToIndex, { removeUndefinedValues: true }),
-        case_relations: {
-          name: 'document',
-          parent: caseDocketEntryMappingRecordId,
-        },
-      },
+      { removeUndefinedValues: true },
+    ),
+    case_relations: {
+      name: 'document',
+      parent: caseDocketEntryMappingRecordId,
     },
     eventName: 'MODIFY',
   };
