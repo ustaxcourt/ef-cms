@@ -52,7 +52,7 @@ async function scanContinuously(
         fileStream.write(json);
         fileStream.write('\n');
         if (!fileStream.write('')) {
-          await new Promise(resolve => fileStream.once('drain', resolve));
+          await new Promise(resolve => fileStream.once('drain', resolve as any));
         }
       }
     }

@@ -185,7 +185,7 @@ const getDocuments = async ({
     filedBy: nonAttorneys[de.userId!],
     filedOn: de.receivedAt.split('T')[0],
   }));
-  const docType = documents[0].documentType.replace(' ', '-').toLowerCase();
+  const docType = documents[0].documentType?.replace(' ', '-').toLowerCase();
   const filename = `${OUTPUT_DIR}/${docType}s-filed-by-non-attorneys-in${fiscal ? '-fiscal-year' : ''}-${year}.csv`;
   generateCsv({ columns, filename, rows });
   console.log(`Generated ${filename}`);
