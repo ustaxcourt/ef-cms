@@ -98,7 +98,7 @@ export class DocketEntry extends JoiValidationEntity {
   public documentIdBeforeSignature?: string;
   public documentTitle: string;
   public documentType?: string;
-  public eventCode: string;
+  public eventCode: string; // technically optional as draft docketEntry does not require it
   public filedBy?: string;
   public filedByRole?: string;
   public filingDate: string;
