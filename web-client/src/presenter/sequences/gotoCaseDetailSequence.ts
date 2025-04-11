@@ -21,7 +21,6 @@ import { setCaseAssociationAction } from '../actions/setCaseAssociationAction';
 import { setCaseDetailPageTabUnfrozenAction } from '../actions/CaseDetail/setCaseDetailPageTabUnfrozenAction';
 import { setDefaultCaseDetailTabAction } from '../actions/setDefaultCaseDetailTabAction';
 import { setDefaultDocketEntriesTableSortAction } from '@web-client/presenter/actions/setDefaultDocketEntriesTableSortAction';
-import { setDefaultDocketRecordSortAction } from '../actions/DocketRecord/setDefaultDocketRecordSortAction';
 import { setDefaultEditDocumentEntryPointAction } from '../actions/setDefaultEditDocumentEntryPointAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
@@ -33,6 +32,7 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { takePathForRoles } from './takePathForRoles';
+import { setDefaultDocketRecordSortAndFilterAction } from '@web-client/presenter/actions/DocketRecord/setDefaultDocketRecordSortAndFilterAction';
 
 const { USER_ROLES } = getConstants();
 
@@ -86,7 +86,7 @@ export const gotoCaseDetailSequence = [
   setIsPrimaryTabAction,
   getCaseAction,
   setCaseAction,
-  setDefaultDocketRecordSortAction,
+  setDefaultDocketRecordSortAndFilterAction,
   setDefaultEditDocumentEntryPointAction,
   runPathForUserRoleAction,
   {

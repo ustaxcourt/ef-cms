@@ -66,7 +66,7 @@ describe('login', () => {
     const practitionerEmail = `${practitionerUserName}@example.com`;
 
     createAndServePaperPetition().then(({ docketNumber }) => {
-      loginAsAdmissionsClerk('admissionsclerk1@example.com')
+      loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
@@ -97,9 +97,9 @@ describe('login', () => {
     );
     cy.get('[data-testid="login-button"]').click();
 
-    cy.get('[data-testid="new-password-input"]').type(
-      getCypressEnv().defaultAccountPass,
-    );
+    cy.get('[data-testid="new-password-input"]')
+      .should('be.visible')
+      .type(getCypressEnv().defaultAccountPass);
     cy.get('[data-testid="confirm-new-password-input"]').type(
       getCypressEnv().defaultAccountPass,
     );

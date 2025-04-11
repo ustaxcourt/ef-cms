@@ -6,6 +6,15 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
+export type PractitionerByNameParams = {
+  name: string;
+  searchAfter: string[];
+  practitionerType?: string;
+  practiceType?: string[];
+  admissionStatus?: string[];
+  originalBarState?: string[];
+};
+
 export type PractitionersByName = {
   searchResults: {
     lastKey: (string | number)[];
@@ -13,12 +22,11 @@ export type PractitionersByName = {
       admissionsDate: string;
       admissionsStatus: string;
       barNumber: string;
-      contact: {
-        state?: string;
-      };
       name: string;
+      originalBarState: string;
       practiceType: string;
       practitionerType: string;
+      state?: string;
     }[];
     total: number;
   };
@@ -26,7 +34,14 @@ export type PractitionersByName = {
 
 export const getPractitionersByNameInteractor = async (
   applicationContext: ServerApplicationContext,
-  { name, searchAfter }: { name: string; searchAfter: string },
+  {
+    name,
+    searchAfter,
+    practitionerType,
+    practiceType,
+    admissionStatus,
+    originalBarState,
+  }: PractitionerByNameParams,
   authorizedUser: UnknownAuthUser,
 ): Promise<PractitionersByName> => {
   const isLoggedInUser = !!authorizedUser?.userId;
@@ -45,19 +60,20 @@ export const getPractitionersByNameInteractor = async (
   const { lastKey, results, total } = await applicationContext
     .getPersistenceGateway()
     .getPractitionersByName(applicationContext, {
+      admissionStatus,
       name,
+      originalBarState,
       searchAfter,
+      practiceType,
+      practitionerType,
     });
 
   const practitioners = results.map(foundUser => ({
     admissionsDate: foundUser.admissionsDate,
     admissionsStatus: foundUser.admissionsStatus,
     barNumber: foundUser.barNumber,
-    contact: {
-      state: isLoggedInUser
-        ? foundUser.contact?.state
-        : foundUser.originalBarState,
-    },
+    originalBarState: foundUser.originalBarState,
+    state: isLoggedInUser ? foundUser.contact?.state : undefined,
     name: foundUser.name,
     practiceType: foundUser.practiceType,
     practitionerType: foundUser.practitionerType,
