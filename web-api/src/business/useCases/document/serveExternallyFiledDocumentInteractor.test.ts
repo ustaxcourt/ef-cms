@@ -518,13 +518,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(2);
     expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
-      applicationContext,
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: true,
     });
     expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
-      applicationContext,
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: false,

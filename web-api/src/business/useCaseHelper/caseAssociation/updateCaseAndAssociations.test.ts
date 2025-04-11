@@ -268,7 +268,7 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate,
       });
 
-      expect(upsertDocketEntries).not.toHaveBeenCalled();
+      expect(upsertDocketEntries).toHaveBeenCalledWith([]);
       expect(updateCase.mock.calls[0][0]).toMatchObject({
         caseToUpdate,
       });
@@ -307,7 +307,7 @@ describe('updateCaseAndAssociations', () => {
       expect(
         updateCase.mock.calls[0][0].caseToUpdate.archivedDocketEntries,
       ).toMatchObject(caseToUpdate.archivedDocketEntries);
-      expect(upsertDocketEntries).toHaveBeenCalledTimes(4);
+      expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
     });
   });
 

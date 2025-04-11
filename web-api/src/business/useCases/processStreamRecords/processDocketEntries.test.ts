@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { processDocketEntries } from '@web-api/business/useCases/processStreamRecords/processDocketEntries';
+import { CHIEF_JUDGE, ROLES } from '@shared/business/entities/EntityConstants';
 
 jest.mock('@web-api/persistence/postgres/docketEntries/upsertDocketEntries');
 
@@ -20,6 +21,21 @@ describe('processDocketEntries', () => {
         sk: {
           S: 'docket-entry|297b53b0-ba5d-4f99-9ed5-f667c67bc12c',
         },
+        documentType: {
+          S: 'Petition',
+        },
+        eventCode: {
+          S: 'P',
+        },
+        filedBy: { S: 'someone' },
+        filedByRole: {
+          S: ROLES.petitioner,
+        },
+        signedAt: {
+          S: '1990-01-01T05:00:00.000Z',
+        },
+        signedJudgeName: { S: CHIEF_JUDGE },
+        signedByUserId: { S: '997b53b0-ba5d-4f99-9ed5-f667c67bc12c' },
       },
     },
   };
@@ -40,7 +56,7 @@ describe('processDocketEntries', () => {
     });
 
     expect(upsertDocketEntries).toHaveBeenCalledWith([
-      expect.objectContaining({ pk: 'case|123-45' }),
+      expect.objectContaining({ docketNumber: '123-45' }),
     ]);
   });
 });
