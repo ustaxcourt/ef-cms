@@ -336,13 +336,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     );
 
     expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
-      applicationContext,
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
       status: true,
     });
     expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
-      applicationContext,
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
       status: false,
