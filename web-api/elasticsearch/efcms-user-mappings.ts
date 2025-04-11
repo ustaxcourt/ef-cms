@@ -30,7 +30,13 @@ export const efcmsUserMappings: Property = {
     'name.S': {
       type: 'text',
     },
+    'originalBarState.S': {
+      type: 'keyword',
+    },
     'pk.S': {
+      type: 'keyword',
+    },
+    'practiceType.S': {
       type: 'keyword',
     },
     'practitionerType.S': {

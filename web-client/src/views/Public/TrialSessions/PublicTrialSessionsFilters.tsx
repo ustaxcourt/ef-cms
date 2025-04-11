@@ -1,6 +1,7 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
 import {
+  MULTI_SELECT_PLACEHOLDER,
   PUBLIC_TRIAL_SESSIONS_DATA_KEY,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -165,9 +166,9 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
             inputId={`${name}-filter`}
             name={name}
             options={options}
-            placeholder="- Select one or more -"
+            placeholder={MULTI_SELECT_PLACEHOLDER}
             value={{
-              label: '- Select one or more -',
+              label: MULTI_SELECT_PLACEHOLDER,
               value: '',
             }}
             onChange={option =>
@@ -178,12 +179,12 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
         <Phone>
           <Select
             defaultValue={{
-              label: '- Select one or more -',
+              label: MULTI_SELECT_PLACEHOLDER,
               value: '',
             }}
             name={name}
             options={options}
-            value={'- Select one or more -'}
+            value={MULTI_SELECT_PLACEHOLDER}
             onChange={value => {
               if (value) {
                 onChange(`${name}.${value}`, value);

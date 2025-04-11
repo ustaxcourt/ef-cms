@@ -1,8 +1,8 @@
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { clearAdvancedSearchFormAction } from './clearAdvancedSearchFormAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { ALL_SELECTION } from '@shared/business/entities/EntityConstants';
 
 describe('clearAdvancedSearchFormAction', () => {
   presenter.providers.applicationContext = applicationContext;
@@ -26,6 +26,7 @@ describe('clearAdvancedSearchFormAction', () => {
           orderSearch: { keyword: '' },
           practitionerSearchByName: {
             practitionerName: 'Ricky',
+            practitionerType: ALL_SELECTION,
           },
         },
         searchResults: [{ docketNumber: '123-45' }, { docketNumber: '678-90' }],
@@ -41,7 +42,11 @@ describe('clearAdvancedSearchFormAction', () => {
       },
       currentPage: 83,
       orderSearch: { keyword: '' },
-      practitionerSearchByName: { lastKeysOfPages: [], total: 0 },
+      practitionerSearchByName: {
+        lastKeysOfPages: [],
+        practitionerType: ALL_SELECTION,
+        total: 0,
+      },
     });
   });
 
@@ -68,7 +73,10 @@ describe('clearAdvancedSearchFormAction', () => {
     });
 
     expect(result.state.advancedSearchForm).toEqual({
-      caseSearchByName: { countryType: ALL_SELECTION, procedureType: ALL_SELECTION },
+      caseSearchByName: {
+        countryType: ALL_SELECTION,
+        procedureType: ALL_SELECTION,
+      },
       currentPage: 83,
       orderSearch: { keyword: '' },
       practitionerSearchByName: {
