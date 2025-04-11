@@ -1816,8 +1816,8 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
 
 export const MOTION_ORDER_RESPONSE_OPTIONS = {
   orderReplyOptions: {
+    // More options may arise in future
     REPLY: 'Order Reply',
-    REPLY_SR: 'Order Reply/SR',
   },
   issueOrderOptions: {
     ALL_CASES: 'All cases in this group',
