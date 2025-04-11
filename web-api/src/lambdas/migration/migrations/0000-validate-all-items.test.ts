@@ -1,4 +1,3 @@
-import { RawUserCase } from '@shared/business/entities/UserCase';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { migrateItems } from './0000-validate-all-items';
 
@@ -38,9 +37,6 @@ describe('0000-validate-all-items', () => {
       entityName: 'User',
     },
     {
-      entityName: 'UserCase',
-    },
-    {
       entityName: 'UserCaseNote',
     },
     {
@@ -61,16 +57,5 @@ describe('0000-validate-all-items', () => {
     expect(() =>
       migrateItems([{ entityName: 'DOES_NOT_EXIST' }], applicationContext),
     ).not.toThrow();
-  });
-
-  it('should not throw an error when the entity is valid', () => {
-    const validUserCase: RawUserCase = {
-      docketNumber: '104-21',
-      entityName: 'UserCase',
-    };
-
-    const result = migrateItems([validUserCase], applicationContext);
-
-    expect(result).toEqual([validUserCase]);
   });
 });

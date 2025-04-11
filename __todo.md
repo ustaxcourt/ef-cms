@@ -11,7 +11,6 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [ ] dwUsersOnCase: is it possible for the same user to be on the same case multiple times??
 - [ ] Do we need to tackle: "pk": "chief-judge-name" ??
 - [ ] Determine if selectAll is necessary for User functions
-- [ ] Delete `UserCase` entity
 - [ ] Make sure all user related entities are copied in & all user related functions (i.e., scrub all user-related dynamodb code)
 - [ ] Index all where clauses (good for solo work)
 - [ ] Implement TTL on Confirmation Codes (potentially solo work)
@@ -99,3 +98,4 @@ Is "search key" a concept we need to hold onto?
 - [x] Where should Practitioner entity-specific fields like `suffix` and `additionalPhone` live?
 - `createNewPetitionerUser.ts` contains two distinct operations that can fail independently and they could before this migration, and that's okay.
 - [x] Replace all calls to `updateUserRecords` with `updateUser`
+- [x] Delete `UserCase` entity

@@ -1,4 +1,3 @@
-import { RawUserCase } from '@shared/business/entities/UserCase';
 import { queryFull } from '../../dynamodbClientService';
 
 export const getCasesForUser = ({
@@ -19,7 +18,7 @@ export const getCasesForUser = ({
     },
     KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
     applicationContext,
-  }) as unknown as Promise<RawUserCase[]>;
+  });
 
 export const getDocketNumbersByUser = async ({
   applicationContext,

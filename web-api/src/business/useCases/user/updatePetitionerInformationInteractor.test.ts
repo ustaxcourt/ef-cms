@@ -20,7 +20,6 @@ import {
 } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { UserCase } from '@shared/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { addExistingUserToCase } from '@web-api/business/useCaseHelper/caseAssociation/addExistingUserToCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -67,9 +66,6 @@ describe('updatePetitionerInformationInteractor', () => {
       .getUseCaseHelpers()
       .addExistingUserToCase.mockReturnValue(PRIMARY_CONTACT_ID);
 
-    applicationContext
-      .getUseCaseHelpers()
-      .createUserForContact.mockImplementation(() => new UserCase(mockCase));
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);

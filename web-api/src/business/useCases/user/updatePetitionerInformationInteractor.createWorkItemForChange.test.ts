@@ -8,7 +8,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
-import { UserCase } from '@shared/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
@@ -57,10 +56,6 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
     applicationContext
       .getUseCaseHelpers()
       .addExistingUserToCase.mockImplementation(({ caseEntity }) => caseEntity);
-
-    applicationContext
-      .getUseCaseHelpers()
-      .createUserForContact.mockImplementation(() => new UserCase(mockCase));
   });
 
   beforeEach(() => {
