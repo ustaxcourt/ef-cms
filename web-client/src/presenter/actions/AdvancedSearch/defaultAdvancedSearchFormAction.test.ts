@@ -1,4 +1,4 @@
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
+import { ALL_SELECTION } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormAction';
 import { presenter } from '../../presenter-mock';
@@ -15,10 +15,11 @@ describe('defaultAdvancedSearchFormAction', () => {
       },
     });
 
-    expect(result.state.advancedSearchForm).toMatchObject({
+    expect(result.state.advancedSearchForm).toEqual({
       caseSearchByDocketNumber: {},
       caseSearchByName: {
         countryType: ALL_SELECTION,
+        procedureType: ALL_SELECTION,
       },
       opinionSearch: {
         opinionTypes: {
@@ -30,8 +31,13 @@ describe('defaultAdvancedSearchFormAction', () => {
       },
       orderSearch: {},
       practitionerSearchByBarNumber: {},
-      practitionerSearchByName: {},
+      practitionerSearchByName: {
+        lastKeysOfPages: [],
+        total: 0,
+        practitionerType: ALL_SELECTION,
+      },
       searchMode: 'byName',
+      currentPage: 1,
     });
   });
 
@@ -55,5 +61,20 @@ describe('defaultAdvancedSearchFormAction', () => {
     });
 
     expect(result.state.advancedSearchForm.currentPage).toEqual(1);
+  });
+
+  it('should set the defaults for practitioner search by name form', async () => {
+    const result = await runAction(defaultAdvancedSearchFormAction, {
+      modules: { presenter },
+      state: {
+        advancedSearchForm: {},
+      },
+    });
+
+    expect(result.state.advancedSearchForm.practitionerSearchByName).toEqual({
+      lastKeysOfPages: [],
+      total: 0,
+      practitionerType: 'all',
+    });
   });
 });
