@@ -63,7 +63,7 @@ const updateCaseDocketEntries = ({
     { authorizedUser, petitioners: caseToUpdate.petitioners },
   );
 
-  return upsertDocketEntries(validDocketEntries);
+  return [() => upsertDocketEntries(validDocketEntries)];
 };
 
 const updateCaseMessages = async ({

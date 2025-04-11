@@ -9,7 +9,7 @@ describe('CourtIssuedDocumentTypeD', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
       const documentInstance = CourtIssuedDocumentFactory({
-        date: '2025-04-10T04:00:00.000Z',
+        date: '3100-04-10T04:00:00.000Z',
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
@@ -76,7 +76,7 @@ describe('CourtIssuedDocumentTypeD', () => {
     it('should be valid when all fields are present', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
-        date: '2025-04-10T04:00:00.000Z',
+        date: '3100-04-10T04:00:00.000Z',
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
@@ -90,7 +90,7 @@ describe('CourtIssuedDocumentTypeD', () => {
     it('should be invalid when freeText is over 1000 characters', () => {
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
-        date: '2025-04-10T04:00:00.000Z',
+        date: '3100-04-10T04:00:00.000Z',
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
@@ -107,7 +107,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       it('should be invalid when filingDate is undefined on an unservable document', () => {
         const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
-          date: '2025-04-10T04:00:00.000Z',
+          date: '3100-04-10T04:00:00.000Z',
 
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -123,7 +123,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       it('should be valid when filingDate is defined on an unservable document', () => {
         const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
-          date: '2025-04-10T04:00:00.000Z',
+          date: '3100-04-10T04:00:00.000Z',
 
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -141,7 +141,7 @@ describe('CourtIssuedDocumentTypeD', () => {
     it('should generate valid title', () => {
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
-        date: '2025-04-10T04:00:00.000Z',
+        date: '3100-04-10T04:00:00.000Z',
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
@@ -150,14 +150,14 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(extDoc.getDocumentTitle()).toEqual(
-        'Order for Amended Petition and Filing Fee on 04-10-2025 Some free text',
+        'Order for Amended Petition and Filing Fee on 04-10-3100 Some free text',
       );
     });
 
     it('should generate valid title without optional freeText', () => {
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
-        date: '2025-04-10T04:00:00.000Z',
+        date: '3100-04-10T04:00:00.000Z',
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
@@ -165,7 +165,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(extDoc.getDocumentTitle()).toEqual(
-        'Order for Amended Petition and Filing Fee on 04-10-2025',
+        'Order for Amended Petition and Filing Fee on 04-10-3100',
       );
     });
   });

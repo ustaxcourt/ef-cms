@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -11,6 +14,7 @@ import {
 import { unsealCaseInteractor } from './unsealCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('unsealCaseInteractor', () => {
   let mockLock;
@@ -19,6 +23,7 @@ describe('unsealCaseInteractor', () => {
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
   );
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   beforeAll(() => {
     applicationContext
@@ -29,6 +34,9 @@ describe('unsealCaseInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    updateCaseAndAssociations.mockImplementation(
+      ({ caseToUpdate }) => caseToUpdate,
+    );
   });
 
   it('should throw an error if the user is unauthorized to unseal a case', async () => {

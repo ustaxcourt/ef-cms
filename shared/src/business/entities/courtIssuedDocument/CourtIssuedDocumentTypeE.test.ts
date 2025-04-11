@@ -8,7 +8,7 @@ describe('CourtIssuedDocumentTypeE', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
       const documentInstance = CourtIssuedDocumentFactory({
-        date: '2025-04-10T04:00:00.000Z',
+        date: '3100-04-10T04:00:00.000Z',
         documentTitle:
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
@@ -72,7 +72,7 @@ describe('CourtIssuedDocumentTypeE', () => {
     it('should be valid when all fields are present', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
-        date: '2025-04-10T04:00:00.000Z',
+        date: '3100-04-10T04:00:00.000Z',
         documentTitle:
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
@@ -86,7 +86,7 @@ describe('CourtIssuedDocumentTypeE', () => {
       it('should be invalid when filingDate is undefined on an unservable document', () => {
         const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
-          date: '2025-04-10T04:00:00.000Z',
+          date: '3100-04-10T04:00:00.000Z',
 
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -101,7 +101,7 @@ describe('CourtIssuedDocumentTypeE', () => {
       it('should be valid when filingDate is defined on an unservable document', () => {
         const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
-          date: '2025-04-10T04:00:00.000Z',
+          date: '3100-04-10T04:00:00.000Z',
 
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -118,7 +118,7 @@ describe('CourtIssuedDocumentTypeE', () => {
     it('should generate valid title', () => {
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
-        date: '2025-04-10T04:00:00.000Z',
+        date: '3100-04-10T04:00:00.000Z',
         documentTitle:
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
@@ -126,7 +126,7 @@ describe('CourtIssuedDocumentTypeE', () => {
         scenario: 'Type E',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        'Order time is extended to 04-10-2025 for petr(s) to pay the filing fee',
+        'Order time is extended to 04-10-3100 for petr(s) to pay the filing fee',
       );
     });
   });

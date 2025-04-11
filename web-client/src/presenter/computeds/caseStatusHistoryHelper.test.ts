@@ -17,7 +17,7 @@ describe('caseTypeDescriptionHelper', () => {
           caseStatusHistory: [
             {
               changedBy: 'Test Docketclerk',
-              date: '2025-04-10T04:00:00.000Z',
+              date: '3100-04-10T04:00:00.000Z',
               updatedCaseStatus: CASE_STATUS_TYPES.new,
             },
           ],
@@ -28,7 +28,7 @@ describe('caseTypeDescriptionHelper', () => {
     expect(result.formattedCaseStatusHistory).toMatchObject([
       {
         changedBy: 'Test Docketclerk',
-        date: '2025-04-10T04:00:00.000Z',
+        date: '3100-04-10T04:00:00.000Z',
         formattedDateChanged: '04/10/25',
         updatedCaseStatus: CASE_STATUS_TYPES.new,
       },
@@ -42,7 +42,7 @@ describe('caseTypeDescriptionHelper', () => {
           caseStatusHistory: [
             {
               changedBy: 'Test Docketclerk',
-              date: '2025-04-10T04:00:00.000Z',
+              date: '3100-04-10T04:00:00.000Z',
               updatedCaseStatus: CASE_STATUS_TYPES.new,
             },
           ],
