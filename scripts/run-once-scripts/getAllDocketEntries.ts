@@ -14,28 +14,38 @@ const totalSegments = 10;
 let itemsScanned = 0;
 
 async function main() {
-  const stream = createWriteStream('allTestDocketEntries.txt', { flags: 'w' });
+  const docketEntryStream = createWriteStream('allTestDocketEntries.txt', {
+    flags: 'w',
+  });
+  const usersStream = createWriteStream('users.txt', { flags: 'w' });
 
   await Promise.all(
     Array.from({ length: 10 }).map((_, segment) =>
-      scanContinuously(
-        {
+      scanContinuously({
+        params: {
           TableName: environment.dynamoDbTableName,
           Segment: segment,
           TotalSegments: totalSegments,
         },
-        stream,
-      ),
+        docketEntryStream,
+        usersStream,
+      }),
     ),
   );
 
-  stream.end();
+  docketEntryStream.end();
+  usersStream.end();
 }
 
-async function scanContinuously(
-  params: ScanCommandInput,
-  fileStream: WriteStream,
-) {
+async function scanContinuously({
+  params,
+  docketEntryStream,
+  usersStream,
+}: {
+  params: ScanCommandInput;
+  docketEntryStream: WriteStream;
+  usersStream: WriteStream;
+}) {
   let lastEvaluatedKey: typeof params.ExclusiveStartKey | undefined = undefined;
 
   do {
@@ -49,10 +59,51 @@ async function scanContinuously(
     for (const record of items as TDynamoRecord[]) {
       if (record.sk.startsWith('docket-entry|')) {
         const json = JSON.stringify(record);
-        fileStream.write(json);
-        fileStream.write('\n');
-        if (!fileStream.write('')) {
-          await new Promise(resolve => fileStream.once('drain', resolve as any));
+        docketEntryStream.write(json);
+        docketEntryStream.write('\n');
+        if (!docketEntryStream.write('')) {
+          await new Promise(resolve =>
+            docketEntryStream.once('drain', resolve as any),
+          );
+        }
+      }
+
+      if (record.pk.startsWith('user|') && record.sk.startsWith('user|')) {
+        const json = JSON.stringify(record);
+        usersStream.write(json);
+        usersStream.write('\n');
+        if (!usersStream.write('')) {
+          await new Promise(resolve =>
+            usersStream.once('drain', resolve as any),
+          );
+        }
+      }
+
+      if (
+        record.pk.startsWith('case|') &&
+        record.sk.startsWith('irsPractitioner|')
+      ) {
+        const json = JSON.stringify(record);
+        usersStream.write(json);
+        usersStream.write('\n');
+        if (!usersStream.write('')) {
+          await new Promise(resolve =>
+            usersStream.once('drain', resolve as any),
+          );
+        }
+      }
+
+      if (
+        record.pk.startsWith('case|') &&
+        record.sk.startsWith('privatePractitioner|')
+      ) {
+        const json = JSON.stringify(record);
+        usersStream.write(json);
+        usersStream.write('\n');
+        if (!usersStream.write('')) {
+          await new Promise(resolve =>
+            usersStream.once('drain', resolve as any),
+          );
         }
       }
     }
