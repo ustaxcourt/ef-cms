@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from './caseDeadlineReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 
 describe('caseDeadlineReportHelper', () => {
   const caseDeadlineReportHelper = withAppContextDecorator(
@@ -55,18 +56,27 @@ describe('caseDeadlineReportHelper', () => {
     expect(result.formattedFilterDateHeader).toEqual('August 21, 2019');
   });
 
-  it('should return sorted and formatted judges with Chief Judge concatenated', () => {
+  it('should return formatted judges options sorted by name with Chief Judge included', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
         caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
-        judges: [{ name: 'Carluzzo' }, { name: 'Buch' }, { name: 'Dredd' }],
+        judges: [
+          { userId: '123456', name: 'Carluzzo' },
+          { userId: '234567', name: 'Buch' },
+          { userId: '345678', name: 'Dredd' },
+        ],
         screenMetadata: {
           filterEndDate: '2019-08-21T12:59:59.000Z',
           filterStartDate: '2019-08-21T04:00:00.000Z',
         },
       },
     });
-    expect(result.judges).toEqual(['Buch', 'Carluzzo', 'Chief Judge', 'Dredd']);
+    expect(result.judgeOptions).toEqual([
+      { id: '234567', name: 'Buch' },
+      { id: '123456', name: 'Carluzzo' },
+      { id: CHIEF_JUDGE, name: CHIEF_JUDGE },
+      { id: '345678', name: 'Dredd' },
+    ]);
   });
 
   it('should format the associated judge name to remove title so only the last name is returned', () => {
@@ -167,7 +177,7 @@ describe('caseDeadlineReportHelper', () => {
         state: {
           caseDeadlineReport: {
             caseDeadlines: [],
-            judgeFilter: 'Carluzzo',
+            judgeIdFilter: '987654',
           },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',

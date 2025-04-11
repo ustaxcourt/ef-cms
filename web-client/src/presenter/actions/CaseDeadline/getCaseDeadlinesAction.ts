@@ -15,7 +15,7 @@ export const getCaseDeadlinesAction = async ({
 }: ActionProps) => {
   const startDate = get(state.screenMetadata.filterStartDate);
   const endDate = get(state.screenMetadata.filterEndDate);
-  const judgeFilter = get(state.caseDeadlineReport.judgeFilter);
+  const judgeIdFilter = get(state.caseDeadlineReport.judgeIdFilter);
   const from = props.selectedPage
     ? props.selectedPage * CASE_DEADLINES_REPORT_PAGE_SIZE
     : 0;
@@ -25,7 +25,7 @@ export const getCaseDeadlinesAction = async ({
     .getCaseDeadlinesInteractor(applicationContext, {
       endDate,
       from,
-      judge: judgeFilter,
+      judgeId: judgeIdFilter,
       startDate,
     });
 

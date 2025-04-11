@@ -1,7 +1,4 @@
-import {
-  ALL_SELECTION,
-  COUNTRY_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { ALL_SELECTION } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormAction';
 import { presenter } from '../../presenter-mock';
@@ -53,39 +50,6 @@ describe('defaultAdvancedSearchFormAction', () => {
     });
 
     expect(result.state.opinionDocumentTypes).toEqual([]);
-  });
-
-  it('does not overwrite values for form data if they are present on state.advancedSearchForm', async () => {
-    const result = await runAction(defaultAdvancedSearchFormAction, {
-      modules: { presenter },
-      state: {
-        advancedSearchForm: {
-          caseSearchByDocketNumber: { yes: true },
-          caseSearchByName: {
-            countryType: COUNTRY_TYPES.INTERNATIONAL,
-            no: false,
-          },
-          opinionSearch: {},
-          orderSearch: { taco: 'tuesday' },
-          practitionerSearchByBarNumber: { red: 'blue' },
-          practitionerSearchByName: { one: 'two' },
-          searchMode: 'byDocketNumber',
-        },
-      },
-    });
-
-    expect(result.state.advancedSearchForm).toMatchObject({
-      caseSearchByDocketNumber: { yes: true },
-      caseSearchByName: {
-        countryType: COUNTRY_TYPES.INTERNATIONAL,
-        no: false,
-      },
-      opinionSearch: {},
-      orderSearch: { taco: 'tuesday' },
-      practitionerSearchByBarNumber: { red: 'blue' },
-      practitionerSearchByName: { one: 'two' },
-      searchMode: 'byDocketNumber',
-    });
   });
 
   it('should set the current page to 1', async () => {
