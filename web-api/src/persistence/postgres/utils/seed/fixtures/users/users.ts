@@ -449,7 +449,7 @@ export const users: NewUserKysely[] = [
     state: 'IL',
     countryType: 'domestic',
     name: 'Test Private Practitioner',
-    additionalPhone: '111-111-1111', // 10495 TODO: practitioner-specific field
+    additionalPhone: '111-111-1111',
     middleName: 'Private',
     firmName: 'GW Law Offices',
     originalBarState: 'MD',
@@ -586,7 +586,7 @@ export const users: NewUserKysely[] = [
     admissionsDate: calculateDate({ dateString: '1950-02-04T05:00:00.000Z' }),
     section: 'privatePractitioner',
     practitionerType: 'Attorney',
-    suffix: 'Jr.', // 10495 TODO: practitioner-specific field
+    suffix: 'Jr.',
     userId: 'af298b91-fb95-4b87-be16-8ad0fade5eb4',
     practiceType: 'Private',
     firstName: 'Ronald',

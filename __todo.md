@@ -26,7 +26,50 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [ ] Update DynamoDB DrawIO Entity Map
 - [ ] Update ERD for new tables
 
-## Dynamo Functions to Postgres
+## Odd dynamo functions that need to be reimplemented with postgres
+
+- associateUserWithCase - association table
+- [ ] getCasesForUser - not really concerning users
+- [ ] barNumberGenerator: Contains business logic for generating a bar number,
+does not belong in the persistence layer.
+- [ ] getUsersBySearchKey: Invoked by (1) `getPrivatePractitionersBySearchKey`
+action, interactor and (2) `getIrsPractitionersBySearchKey` action, interactor.
+Is "search key" a concept we need to hold onto?
+- [ ] removePractitionerOnCase
+- [ ] updatePractitionerOnCase
+
+## Things to test
+
+- ./scripts/user/update-judge.ts
+- Account Creation and Various Authentication States (such as forgot password, change email, grant e-access, etc)
+
+## OpenSearch/Dynamodb sync record for testing
+
+```json
+{
+  "role": "petitioner",
+  "address2": "Blandtowne, AK 90210",
+  "phone": "234-234-2345",
+  "address1": "123 Domestic Bliss Lane",
+  "entityName": "User",
+  "name": "Test Petitioner OpenSearch",
+  "sk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
+  "section": "petitioner",
+  "pk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
+  "userId": "e3e1941f-230a-47bb-80ec-6b561c1765cd",
+  "email": "petitionerOpenSearch@example.com"
+}
+```
+
+## Association tables to replace 4/10/25
+
+- [x] associateUserWithCase
+- [x] associateUserWithPendingCase (this was combined with associateUserWithCase)
+- [x] verifyCaseForUser
+- [x] verifyPendingCaseForUser
+- [x] deleteUserFromCase
+
+## Dynamo functions reimplemented with postgres and swapped for dynamo implementations
 
 - [x] createNewPetitionerUser
 - [x] createNewPractitionerUser
@@ -46,54 +89,9 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [x] updateUser & persistUser (same thing)
 - [x] updatePractitionerUser
 
-Odd dynamo functions:
-
-- associateUserWithCase - association table
-- [ ] getCasesForUser - not really concerning users
-- [ ] barNumberGenerator: Contains business logic for generating a bar number,
-does not belong in the persistence layer.
-- [ ] getUsersBySearchKey: Invoked by (1) `getPrivatePractitionersBySearchKey`
-action, interactor and (2) `getIrsPractitionersBySearchKey` action, interactor.
-Is "search key" a concept we need to hold onto?
-- [ ] removePractitionerOnCase
-- [ ] updatePractitionerOnCase
-
 ## Completed todos and no-longer-relevant notes
 - [x] Replace magic 'User' strings with a static constant in `User.ts`
 - [x] `getPractitionerByBarNumber.ts` should map results to the Practitioner entity
 - [x] Do we need `pickFields` in `mapper.ts`?
 - [x] Where should Practitioner entity-specific fields like `suffix` and `additionalPhone` live?
 - `createNewPetitionerUser.ts` contains two distinct operations that can fail independently and they could before this migration, and that's okay.
-
-## Things to test
-- ./scripts/user/update-judge.ts
-- Account Creation and Various Authentication States (such as forgot password, change email, grant e-access, etc)
-
-
-## Considerations
-- `userType`, which is the renamed `entityName` field, appears to only have `'User` or `'Practitioner'`
-
-## OpenSearch/Dynamodb sync record for testing
-
-```javascript
-{
-  "role": "petitioner",
-  "address2": "Blandtowne, AK 90210",
-  "phone": "234-234-2345",
-  "address1": "123 Domestic Bliss Lane",
-  "entityName": "User",
-  "name": "Test Petitioner OpenSearch",
-  "sk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
-  "section": "petitioner",
-  "pk": "user|e3e1941f-230a-47bb-80ec-6b561c1765cd",
-  "userId": "e3e1941f-230a-47bb-80ec-6b561c1765cd",
-  "email": "petitionerOpenSearch@example.com"
-}
-```
-
-## Association tables to replace 4/10/25
-- [x] associateUserWithCase
-- [x] associateUserWithPendingCase (this was combined with associateUserWithCase)
-- [x] verifyCaseForUser
-- [x] verifyPendingCaseForUser
-- [x] deleteUserFromCase
