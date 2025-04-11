@@ -797,6 +797,10 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
   cerebralTest.applicationContext = applicationContext;
 
   cerebralTest.setState('constants', applicationContext.getConstants());
+  cerebralTest.setState(
+    'clientConnectionId',
+    applicationContext.getConstants(),
+  );
 
   router.initialize(cerebralTest, (route, cb) => {
     routes.push({
