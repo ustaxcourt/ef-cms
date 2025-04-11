@@ -177,6 +177,9 @@ export const OrderResponse = connect(
                   </FormGroup>
                   <hr className="border-top-2px border-base-lighter" />
                   <FormGroup className="order-response-form-group">
+                    <label htmlFor="motion-order-reply">
+                      Order Reply <span className="usa-hint">(Optional)</span>:
+                    </label>
                     <div className="usa-checkbox">
                       <input
                         aria-label="order reply"
@@ -209,9 +212,8 @@ export const OrderResponse = connect(
                       disabled={!form.motionOrderResponse}
                       formGroupClassNames="display-inline-block order-response-date-selector"
                       id="due-date-input-motionOrderResponseDueDate"
-                      label="Due date"
-                      hintText="(Required)"
                       minDate={form.responseDate}
+                      hintText="Due date (Required):"
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({

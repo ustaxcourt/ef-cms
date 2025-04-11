@@ -50,22 +50,6 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.richText).toContain('shall file a Response');
   });
 
-  it('should handle REPLY_SR selection', async () => {
-    const result = await runAction(prepareMotionOrderResponseAction, {
-      state: {
-        caseDetail: mockCaseDetail,
-        docketEntryId: 'mock-motion-id',
-        form: {
-          ...mockForm,
-          motionOrderResponse:
-            MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY_SR,
-          dueDate: '2024-04-22',
-        },
-      },
-    });
-    expect(result.state.form.richText).toContain('shall file a Status Report');
-  });
-
   it('should handle REPLY selection', async () => {
     const result = await runAction(prepareMotionOrderResponseAction, {
       state: {
@@ -83,7 +67,7 @@ describe('prepareMotionOrderResponseAction', () => {
     expect(result.state.form.richText).not.toContain(
       'or if no Reply is filed, shall file a Status Report',
     );
-    expect(result.state.form.richText).toContain('by 04/22/2024');
+    expect(result.state.form.richText).toContain('by April 22, 2024');
     expect(result.state.form.documentTitle).toEqual('Order');
     expect(result.state.form.documentType).toEqual('Order');
     expect(result.state.form.eventCode).toEqual('O');
@@ -125,7 +109,7 @@ describe('prepareMotionOrderResponseAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'session of the Court commencing on 05/01/2024 in Houston, Texas',
+      'session of the Court commencing on May 1, 2024, in Houston, Texas',
     );
   });
 
@@ -164,7 +148,7 @@ describe('prepareMotionOrderResponseAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'Petitioner shall file a Response',
+      'petitioner shall file a Response',
     );
   });
 
@@ -186,7 +170,7 @@ describe('prepareMotionOrderResponseAction', () => {
     });
 
     expect(result.state.form.richText).toContain(
-      'Respondent shall file a Response',
+      'respondent shall file a Response',
     );
     expect(result.state.form.eventCode).toEqual('O');
     expect(result.state.form.documentType).toEqual('Order');

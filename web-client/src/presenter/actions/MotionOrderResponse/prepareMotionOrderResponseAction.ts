@@ -14,9 +14,9 @@ const determineMovantAndNonMovant = ({ caseDetail, motion }) => {
   const pNames = petitioners.map(p => p.name);
   const cleanedFiledBy = motion.filedBy.replace(/^(?:Petr\.|Respt\.)?\s*/, '');
   const movant = pNames.some(name => cleanedFiledBy.includes(name))
-    ? 'Petitioner'
-    : 'Respondent';
-  const nonMovant = movant === 'Petitioner' ? 'Respondent' : 'Petitioner';
+    ? 'petitioner'
+    : 'respondent';
+  const nonMovant = movant === 'petitioner' ? 'respondent' : 'petitioner';
   return { movant, nonMovant };
 };
 
@@ -27,7 +27,6 @@ export const prepareMotionOrderResponseAction = ({
   const {
     additionalOrderText,
     dueDate,
-    motionOrderResponse,
     responseDate,
     strickenFromTrialSession,
     issueOrderFor,
@@ -48,18 +47,18 @@ export const prepareMotionOrderResponseAction = ({
 
   const motionFilingDateFormatted = formatDateString(
     motion.filingDate,
-    FORMATS.MMDDYYYY,
+    FORMATS.MONTH_DAY_YEAR,
   );
 
   const isOnLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSession;
   const hasAdditionalOrderText = !!additionalOrderText;
 
-  const dueDateFormatted = formatDateString(dueDate, FORMATS.MMDDYYYY);
+  const dueDateFormatted = formatDateString(dueDate, FORMATS.MONTH_DAY_YEAR);
 
   const responseDateFormatted = formatDateString(
     responseDate,
-    FORMATS.MMDDYYYY,
+    FORMATS.MONTH_DAY_YEAR,
   );
 
   let createOrderSelectedCases = [] as any;
@@ -77,27 +76,22 @@ export const prepareMotionOrderResponseAction = ({
     });
     createOrderSelectedCases = Case.sortByDocketNumber(consolidatedCases);
   }
-  let preambleAddendum;
+  let preamblePrepend = '';
 
   if (caseDetail.status === CASE_STATUS_TYPES.calendared) {
     const { trialLocation, trialDate } = caseDetail;
-    const formattedTrialDate = formatDateString(trialDate, FORMATS.MMDDYYYY);
-    preambleAddendum = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate} in ${trialLocation}.`;
+    const formattedTrialDate = formatDateString(
+      trialDate,
+      FORMATS.MONTH_DAY_YEAR,
+    );
+    preamblePrepend = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate}, in ${trialLocation}.`;
   }
 
-  const orderVerbiage = `that by ${responseDateFormatted} the ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
-  const initialConditionalText = preambleAddendum
-    ? `<p class="indent-paragraph">${preambleAddendum}</p>`
-    : '';
-  const preamble = `<p class="indent-paragraph">ON, ${motionFilingDateFormatted}, ${movant} filed ${motionDocumentTitle} (Document no. ${index}). For cause, it is </p>`;
+  const orderVerbiage = `that by ${responseDateFormatted} ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
+  const preamble = `<p class="indent-paragraph">${preamblePrepend} On, ${motionFilingDateFormatted}, ${movant} filed ${motionDocumentTitle} (Document no. ${index}). For cause, it is </p>`;
   const orderVerbiageHtml = `<p class="indent-paragraph">ORDERED ${orderVerbiage}`;
 
-  const typeOfReply =
-    motionOrderResponse ===
-    MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY
-      ? 'Reply'
-      : 'Reply, or if no Reply is filed, shall file a Status Report';
-  const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} the ${movant} may file a ${typeOfReply}.`;
+  const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} ${movant} may file a Reply.`;
 
   const strickenLine = hasStrickenFromTrialSessions
     ? '<p class="indent-paragraph">ORDERED that this case is stricken from the trial session. It is further</p> <p class="indent-paragraph">ORDERED that jurisdiction is retained by the undersigned.'
@@ -123,8 +117,6 @@ export const prepareMotionOrderResponseAction = ({
 
   richTextString = richTextString + '</p>';
 
-  const finalRichText = initialConditionalText + richTextString;
-
   const initialFreeText = `Ordered ${orderVerbiage}`;
 
   store.set(state.createOrderSelectedCases, createOrderSelectedCases);
@@ -135,7 +127,7 @@ export const prepareMotionOrderResponseAction = ({
   store.set(state.form.dueDateFormatted, dueDateFormatted);
   store.set(state.form.eventCode, 'O');
   store.set(state.form.isOnLeadCase, isOnLeadCase);
-  store.set(state.form.richText, finalRichText);
+  store.set(state.form.richText, richTextString);
   store.set(state.form.showStrickenFromTrialSession, strickenFromTrialSession);
   store.set(state.form.motionOrderResponseFilingDate, responseDate);
   store.set(state.form.parentMessageId, get(state.parentMessageId));
