@@ -147,11 +147,7 @@ export class DocketEntry extends JoiValidationEntity {
     name: string;
     partyPrivatePractitioner?: boolean;
   }[];
-  public servedParties?: {
-    name: string;
-    role?: string;
-    email?: string;
-  }[];
+  public servedParties?: any[]; // 10494: This would be nice to type
   public signedAt?: string;
   public draftOrderState?: {
     additionalOrderText?: string;
