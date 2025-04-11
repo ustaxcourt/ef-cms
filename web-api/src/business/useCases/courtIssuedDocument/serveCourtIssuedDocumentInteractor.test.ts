@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
@@ -13,9 +14,13 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateDocketEntryPendingServiceStatus = jest.mocked(
+    updateDocketEntryPendingServiceStatusMock,
+  );
   const mockDocketEntryId = 'cf105788-5d34-4451-aa8d-dfd9a851b675';
   const mockClientConnectionId = 'ABC123';
   const fileAndServeDocumentOnOneCase = jest.mocked(
@@ -330,19 +335,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       applicationContext,
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
       status: true,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       applicationContext,
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
@@ -380,8 +379,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).rejects.toThrow('whoops, that is an error!');
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus.mock.calls[1][0],
+      updateDocketEntryPendingServiceStatus.mock.calls[1][0],
     ).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
