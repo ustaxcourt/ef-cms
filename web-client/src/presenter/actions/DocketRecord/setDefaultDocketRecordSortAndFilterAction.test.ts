@@ -1,9 +1,9 @@
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { setDefaultDocketRecordSortAction } from './setDefaultDocketRecordSortAction';
+import { setDefaultDocketRecordSortAndFilterAction } from './setDefaultDocketRecordSortAndFilterAction';
 
-describe('setDefaultDocketRecordSortAction', () => {
+describe('setDefaultDocketRecordSortAndFilterAction', () => {
   it('should not default docketRecordSort if current docketNumber matches sessionMetadata docketNumber', async () => {
-    const result = await runAction(setDefaultDocketRecordSortAction, {
+    const result = await runAction(setDefaultDocketRecordSortAndFilterAction, {
       state: {
         caseDetail: { docketNumber: '123-45' },
         sessionMetadata: { docketRecordSort: { '123-45': 'something' } },
@@ -16,7 +16,7 @@ describe('setDefaultDocketRecordSortAction', () => {
   });
 
   it('should default docketRecordSort if current docketNumber does not match sessionMetadata docketNumber', async () => {
-    const result = await runAction(setDefaultDocketRecordSortAction, {
+    const result = await runAction(setDefaultDocketRecordSortAndFilterAction, {
       state: {
         caseDetail: { docketNumber: '987-65' },
         sessionMetadata: {},

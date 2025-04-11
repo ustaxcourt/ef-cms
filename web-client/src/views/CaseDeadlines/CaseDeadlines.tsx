@@ -107,18 +107,18 @@ export const CaseDeadlines = connect(
                     className="select-left width-card-lg inline-select"
                     name="judges"
                     placeholder="- Judge -"
-                    value={caseDeadlineReport.judgeFilter}
+                    value={caseDeadlineReport.judgeIdFilter}
                     onChange={e => {
                       filterCaseDeadlinesByJudgeSequence({
-                        judge: e,
+                        selectedJudgeId: e,
                       });
                       setActivePage(0);
                     }}
                   >
                     <option value="">-Judge-</option>
-                    {caseDeadlineReportHelper.judges.map(judge => (
-                      <option key={judge} value={judge}>
-                        {judge}
+                    {caseDeadlineReportHelper.judgeOptions.map(judgeOption => (
+                      <option key={judgeOption.id} value={judgeOption.id}>
+                        {judgeOption.name}
                       </option>
                     ))}
                   </BindedSelect>
@@ -131,7 +131,6 @@ export const CaseDeadlines = connect(
                     totalPages={caseDeadlineReportHelper.pageCount}
                     onPageChange={pageChange => {
                       setActivePage(pageChange);
-                      console.log('pageChange', pageChange);
                       updateCaseDeadlineReportPageSequence({
                         selectedPage: pageChange,
                       });
