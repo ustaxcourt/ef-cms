@@ -64,7 +64,6 @@ import {
 } from '@shared/business/utilities/getFormattedJudgeName';
 import { formatPendingItem } from '@shared/business/utilities/formatPendingItem';
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
-import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { generateChangeOfAddressHelper } from '@web-api/business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
@@ -371,9 +370,6 @@ export const createTestApplicationContext = () => {
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
-    generateAndServeDocketEntry: jest
-      .fn()
-      .mockImplementation(generateAndServeDocketEntry),
     generateChangeOfAddressHelper: jest
       .fn()
       .mockImplementation(generateChangeOfAddressHelper),

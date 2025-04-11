@@ -2,7 +2,6 @@ import { EntityNotValidatedError } from '@web-api/errors/errors';
 
 function validateArgs(arg) {
   if (typeof arg === 'object' && arg.entityName) {
-    console.trace();
     if (!arg.isValidated) {
       throw new EntityNotValidatedError(
         `a entity of type ${arg.entityName} was not validated before passed to a persistence method`,

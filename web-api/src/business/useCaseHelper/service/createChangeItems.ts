@@ -192,7 +192,7 @@ export const generateAndServeDocketEntry = async ({
   servedParties: any;
   user: any;
   authorizedUser: AuthUser;
-}) => {
+}): Promise<{ caseEntity: Case; url: string }> => {
   const partyWithPaperService = caseEntity.hasPartyWithServiceType(
     SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
@@ -240,5 +240,5 @@ export const generateAndServeDocketEntry = async ({
     servedParties,
   });
 
-  return { caseEntity, changeOfAddressDocketEntry, url };
+  return { caseEntity, url };
 };
