@@ -83,7 +83,6 @@ import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/ut
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
 import { getTextByCount } from '@shared/test/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
-import { getUserById as getUserByIdPersistence } from '@web-api/persistence/postgres/users/getUserById';
 import { incrementCounter } from '@web-api/persistence/dynamo/helpers/incrementCounter';
 import { removeItem } from '@web-client/persistence/localStorage/removeItem';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -96,10 +95,8 @@ import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/t
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@shared/proxies/editDocketEntry/unsealDocketEntryProxy';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
-import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
-import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 import path from 'path';
 import pug from 'pug';
 import sass from 'sass';
@@ -351,7 +348,6 @@ const createTestApplicationContext = () => {
   const mockGetUseCaseHelpers = appContextProxy({
     getJudgeInSectionHelper: jest.fn(),
     sendServedPartiesEmails: jest.fn(),
-    updateUserRecords: jest.fn().mockImplementation(updateUser),
   });
 
   const getDocumentGeneratorsReturnMock = {
@@ -434,7 +430,6 @@ const createTestApplicationContext = () => {
     getRecord: jest.fn(),
     getTrialSessionById: jest.fn().mockImplementation(getTrialSessionById),
     getTrialSessionJobStatusForCase: jest.fn(),
-    getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
     isEmailAvailable: jest.fn(),
@@ -449,7 +444,6 @@ const createTestApplicationContext = () => {
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     uploadPdfFromClient: jest.fn().mockImplementation(() => ''),
-    verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
 
   const mockGetEmailClient = {

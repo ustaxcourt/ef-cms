@@ -7,15 +7,18 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
 - [ ] Fix privatePractitioner `representing` field
-- [ ] Replace all calls to `updateUserRecords` with `updateUser`
 - [ ] Odd user-related dynamodb functions
-- [ ] Implement TTL on Confirmation Codes
 - [ ] dwUsersOnCase: is it possible for the same user to be on the same case multiple times??
 - [ ] Do we need to tackle: "pk": "chief-judge-name" ??
-- [ ] Index all where clauses
 - [ ] Determine if selectAll is necessary for User functions
 - [ ] Delete `UserCase` entity
 - [ ] Make sure all user related entities are copied in & all user related functions (i.e., scrub all user-related dynamodb code)
+- [ ] Index all where clauses (good for solo work)
+- [ ] Implement TTL on Confirmation Codes (potentially solo work)
+- [ ] Update api tests (Andy will tackle first half)
+- [ ] Update shared tests (Kaitlyn will look at shared)
+- [ ] Update legacy client integration tests (Kaitlyn will look at legacy client integration)
+- [ ] Update cypress e2e tests (Andy will tackle first half)
 
 ## Todo part 2
 
@@ -95,3 +98,4 @@ Is "search key" a concept we need to hold onto?
 - [x] Do we need `pickFields` in `mapper.ts`?
 - [x] Where should Practitioner entity-specific fields like `suffix` and `additionalPhone` live?
 - `createNewPetitionerUser.ts` contains two distinct operations that can fail independently and they could before this migration, and that's okay.
+- [x] Replace all calls to `updateUserRecords` with `updateUser`
