@@ -29,7 +29,7 @@ describe('caseTypeDescriptionHelper', () => {
       {
         changedBy: 'Test Docketclerk',
         date: '3100-04-10T04:00:00.000Z',
-        formattedDateChanged: '04/10/25',
+        formattedDateChanged: '04/10/00',
         updatedCaseStatus: CASE_STATUS_TYPES.new,
       },
     ]);

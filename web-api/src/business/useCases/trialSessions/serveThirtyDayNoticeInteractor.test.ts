@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import {
   FORMATS,
   formatDateString,
@@ -47,8 +48,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
     applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById.mockResolvedValueOnce(trialSession);
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValueOnce(trialSession);
 
     await expect(
       serveThirtyDayNoticeInteractor(
@@ -64,8 +65,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
   it('should throw an invalid request error when no trial session id is provided', async () => {
     applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById.mockResolvedValue(trialSession);
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue(trialSession);
 
     await expect(
       serveThirtyDayNoticeInteractor(
