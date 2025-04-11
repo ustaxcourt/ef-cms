@@ -56,13 +56,7 @@ export const setWorkItemAsReadInteractor = async (
 
   docketEntryEntity.workItem.markAsRead();
 
-  await upsertDocketEntries([
-    {
-      ...docketEntryEntity.validate().toRawObject(),
-      docketEntryId,
-      docketNumber,
-    },
-  ]);
+  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
 
   return upsertWorkItems({
     workItems: [docketEntryEntity.workItem.validate().toRawObject()],

@@ -49,13 +49,7 @@ export const strikeDocketEntryInteractor = async (
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  await upsertDocketEntries([
-    {
-      ...docketEntryEntity.validate().toRawObject(),
-      docketEntryId,
-      docketNumber,
-    },
-  ]);
+  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
 
   return caseEntity.toRawObject();
 };

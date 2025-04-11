@@ -10,18 +10,16 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 const createCaseDocketEntries = async ({
   authorizedUser,
   docketEntries,
-  docketNumber,
   petitioners,
 }: {
   authorizedUser: AuthUser;
   docketEntries: any;
-  docketNumber: string;
   petitioners: any;
 }) => {
   const validDocketEntries = DocketEntry.validateRawCollection(docketEntries, {
     authorizedUser,
     petitioners,
-  }).map(d => ({ ...d, docketNumber }));
+  });
 
   await upsertDocketEntries(validDocketEntries);
 };
@@ -117,7 +115,6 @@ export const createCaseAndAssociations = async ({
     createCaseDocketEntries({
       authorizedUser,
       docketEntries,
-      docketNumber,
       petitioners: caseToCreate.petitioners,
     }),
     ...connectIrsPractitioners({

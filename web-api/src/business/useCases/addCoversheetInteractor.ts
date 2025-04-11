@@ -127,19 +127,14 @@ export const addCoversheetInteractor = async (
           .validate()
           .toRawObject();
 
-        await upsertDocketEntries([
-          {
-            ...updateConsolidatedDocketEntry,
-            docketEntryId,
-            docketNumber: caseDocketNumber,
-          },
-        ]);
         return updateConsolidatedDocketEntry;
       }
     }),
   );
 
-  return updatedDocketEntries
-    .filter(Boolean)
-    .find(entry => entry.docketNumber === docketNumber);
+  await upsertDocketEntries(updatedDocketEntries);
+
+  return updatedDocketEntries.find(
+    entry => entry.docketNumber === docketNumber,
+  );
 };

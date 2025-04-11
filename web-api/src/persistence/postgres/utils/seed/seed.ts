@@ -27,6 +27,7 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -118,9 +119,18 @@ export const seed = async () => {
     onConflictColumns: ['penaltyId'],
   });
 
-  await upsertDocketEntries(
-    docketEntrySeeds.map(d => ({ ...d, isValidated: true })),
-  ); // 10494 Can all of this be parallelized? -- Yes
+  const validatedDocketEntrySeeds = DocketEntry.validateRawCollection(
+    docketEntrySeeds,
+    {
+      authorizedUser: {
+        email: 'system@ustc.gov',
+        name: 'ustc automated system',
+        role: 'docketclerk',
+        userId: 'N/A',
+      },
+    },
+  );
+  await upsertDocketEntries(validatedDocketEntrySeeds); // 10494 Can all of this be parallelized? -- Yes
 
   await Promise.all([
     insertMessages,

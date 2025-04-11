@@ -149,13 +149,7 @@ export const updateDocketEntryMeta = async (
     .updateCaseAutomaticBlock({ applicationContext, caseEntity });
 
   if (shouldGenerateCoversheet) {
-    await upsertDocketEntries([
-      {
-        ...docketEntryEntity.validate(),
-
-        docketNumber,
-      },
-    ]);
+    await upsertDocketEntries([docketEntryEntity.validate()]);
 
     const updatedDocketEntry = await applicationContext
       .getUseCases()

@@ -52,13 +52,7 @@ export const unsealDocketEntryInteractor = async (
 
   docketEntryEntity.unsealEntry();
 
-  await upsertDocketEntries([
-    {
-      ...docketEntryEntity.validate().toRawObject(),
-      docketEntryId,
-      docketNumber,
-    },
-  ]);
+  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
 
   return docketEntryEntity.toRawObject();
 };

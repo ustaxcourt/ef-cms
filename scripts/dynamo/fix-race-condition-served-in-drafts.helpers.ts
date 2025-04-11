@@ -146,12 +146,6 @@ export const fixRaceConditionServedInDrafts = async (
   console.log(docketEntry);
 
   if (performUpdate) {
-    await upsertDocketEntries([
-      {
-        ...docketEntry,
-        docketEntryId,
-        docketNumber,
-      },
-    ]);
+    await upsertDocketEntries([docketEntry]);
   }
 };

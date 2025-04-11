@@ -1,4 +1,5 @@
 import { unmarshall } from '@aws-sdk/util-dynamodb';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 
@@ -25,6 +26,14 @@ export const processDocketEntries = async ({
     // Only upsert the most recent update of any duplicate docket entry record since otherwise Postgres will throw an error.
     pgDocketEntries[key] = unmarshalledRecord as RawDocketEntry;
   }
-
-  await upsertDocketEntries(Object.values(pgDocketEntries));
+  const docketEntries = Object.values(pgDocketEntries);
+  const validatedEntries = DocketEntry.validateRawCollection(docketEntries, {
+    authorizedUser: {
+      email: 'system@ustc.gov',
+      name: 'ustc automated system',
+      role: 'docketclerk',
+      userId: 'N/A',
+    },
+  });
+  await upsertDocketEntries(validatedEntries);
 };
