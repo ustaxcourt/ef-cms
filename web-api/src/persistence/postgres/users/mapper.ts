@@ -4,6 +4,10 @@ import { NewUserKysely, UpdateUserKysely } from './schema';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import {
+  formatDateString,
+  FORMATS,
+} from '@shared/business/utilities/DateHandler';
 
 function pickFields(user) {
   return {
@@ -93,7 +97,10 @@ function userEntitySubset(user, userContactInfo) {
       transformNullToUndefined({
         ...user,
         contact: userContactInfo,
-        admissionsDate: user.admissionsDate?.toISOString(),
+        admissionsDate: formatDateString(
+          user.admissionsDate?.toISOString(),
+          FORMATS.YYYYMMDD,
+        ),
         pendingEmailVerificationTokenTimestamp:
           user.pendingEmailVerificationTokenTimestamp?.toISOString(),
       }),
@@ -105,7 +112,10 @@ function userEntitySubset(user, userContactInfo) {
       transformNullToUndefined({
         ...user,
         contact: userContactInfo,
-        admissionsDate: user.admissionsDate?.toISOString(),
+        admissionsDate: formatDateString(
+          user.admissionsDate?.toISOString(),
+          FORMATS.YYYYMMDD,
+        ),
         pendingEmailVerificationTokenTimestamp:
           user.pendingEmailVerificationTokenTimestamp?.toISOString(),
       }),
@@ -117,7 +127,10 @@ function userEntitySubset(user, userContactInfo) {
       transformNullToUndefined({
         ...user,
         contact: userContactInfo,
-        admissionsDate: user.admissionsDate?.toISOString(),
+        admissionsDate: formatDateString(
+          user.admissionsDate?.toISOString(),
+          FORMATS.YYYYMMDD,
+        ),
         pendingEmailVerificationTokenTimestamp:
           user.pendingEmailVerificationTokenTimestamp?.toISOString(),
       }),
@@ -128,7 +141,10 @@ function userEntitySubset(user, userContactInfo) {
     transformNullToUndefined({
       ...user,
       contact: userContactInfo,
-      admissionsDate: user.admissionsDate?.toISOString(),
+      admissionsDate: formatDateString(
+        user.admissionsDate?.toISOString(),
+        FORMATS.YYYYMMDD,
+      ),
       pendingEmailVerificationTokenTimestamp:
         user.pendingEmailVerificationTokenTimestamp?.toISOString(),
     }),

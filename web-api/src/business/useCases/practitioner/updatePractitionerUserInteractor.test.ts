@@ -1,14 +1,23 @@
-import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
+jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 import {
   mockAdmissionsClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { updatePractitionerUser } from './updatePractitionerUserInteractor';
-jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
+import { updatePractitionerUser as updatePractitionerUserInteractor } from '@web-api/business/useCases/practitioner/updatePractitionerUserInteractor';
+import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
+import { updatePractitionerUser as updatePractitionerUserMock } from '@web-api/persistence/postgres/users/updatePractitionerUser';
+import { createNewPractitionerUser as createNewPractitionerUserMock } from '@web-api/persistence/postgres/users/createNewPractitionerUser';
+import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
+
+const getPractitionerByBarNumber = getPractitionerByBarNumberMock as jest.Mock;
+const updatePractitionerUser = updatePractitionerUserMock as jest.Mock;
+const createNewPractitionerUser = createNewPractitionerUserMock as jest.Mock;
 
 describe('updatePractitionerUser', () => {
   let mockPractitioner = MOCK_PRACTITIONER;
@@ -20,15 +29,10 @@ describe('updatePractitionerUser', () => {
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['123-23']);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockImplementation(() => mockPractitioner);
-    applicationContext
-      .getPersistenceGateway()
-      .updatePractitionerUser.mockImplementation(({ user }) => user);
-    applicationContext
-      .getPersistenceGateway()
-      .createNewPractitionerUser.mockImplementation(({ user }) => user);
+    getPractitionerByBarNumber.mockImplementation(() => mockPractitioner);
+    updatePractitionerUser.mockImplementation(({ user }) => user);
+    createNewPractitionerUser.mockImplementation(({ user }) => user);
+
     applicationContext
       .getPersistenceGateway()
       .isEmailAvailable.mockReturnValue(true);
@@ -36,7 +40,7 @@ describe('updatePractitionerUser', () => {
 
   it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {
     await expect(
-      updatePractitionerUser(
+      updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'pt101',
@@ -49,12 +53,10 @@ describe('updatePractitionerUser', () => {
   });
 
   it('throws a NotFoundError if the barNumber passed in does not find a user in the database', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue(undefined);
+    getPractitionerByBarNumber.mockResolvedValue(undefined);
 
     await expect(
-      updatePractitionerUser(
+      updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'AB1111',
@@ -73,15 +75,13 @@ describe('updatePractitionerUser', () => {
   });
 
   it('throws an error if the barNumber/userId combo passed in does not match the user retrieved from getPractitionerByBarNumber', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue({
-        ...mockPractitioner,
-        userId: '2c14ebbc-a6e1-4267-b6b7-e329e592ec93',
-      });
+    getPractitionerByBarNumber.mockResolvedValue({
+      ...mockPractitioner,
+      userId: '2c14ebbc-a6e1-4267-b6b7-e329e592ec93',
+    });
 
     await expect(
-      updatePractitionerUser(
+      updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'AB1111',
@@ -106,7 +106,7 @@ describe('updatePractitionerUser', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    await updatePractitionerUser(
+    await updatePractitionerUserInteractor(
       applicationContext,
       {
         barNumber: 'AB1111',
@@ -121,16 +121,13 @@ describe('updatePractitionerUser', () => {
       mockAdmissionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
-        .calls[0][0].user,
-    ).toMatchObject({
+    expect(createNewPractitionerUser.mock.calls[0][0].user).toMatchObject({
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
   });
 
   it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {
-    await updatePractitionerUser(
+    await updatePractitionerUserInteractor(
       applicationContext,
       {
         barNumber: 'AB1111',
@@ -145,20 +142,17 @@ describe('updatePractitionerUser', () => {
       mockAdmissionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser.mock
-        .calls[0][0],
-    ).toMatchObject({ user: mockPractitioner });
+    expect(updatePractitionerUser).toHaveBeenCalled();
+    expect(updatePractitionerUser.mock.calls[0][0]).toMatchObject({
+      user: mockPractitioner,
+    });
   });
 
   it('updates the practitioner user and does NOT override a bar number when the original user has a pending email', async () => {
     mockPractitioner.email = undefined;
     mockPractitioner.pendingEmail = 'pendingEmail@example.com';
 
-    await updatePractitionerUser(
+    await updatePractitionerUserInteractor(
       applicationContext,
       {
         barNumber: 'AB1111',
@@ -173,24 +167,19 @@ describe('updatePractitionerUser', () => {
       mockAdmissionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updatePractitionerUser.mock
-        .calls[0][0],
-    ).toMatchObject({ user: mockPractitioner });
+    expect(updatePractitionerUser).toHaveBeenCalled();
+    expect(updatePractitionerUser.mock.calls[0][0]).toMatchObject({
+      user: mockPractitioner,
+    });
   });
 
   it('creates and updates the practitioner user and adds a pending email when the original user did not have an email', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue({
-        ...mockPractitioner,
-        email: undefined,
-      });
+    getPractitionerByBarNumber.mockResolvedValue({
+      ...mockPractitioner,
+      email: undefined,
+    });
 
-    await updatePractitionerUser(
+    await updatePractitionerUserInteractor(
       applicationContext,
       {
         barNumber: 'AB1111',
@@ -204,24 +193,19 @@ describe('updatePractitionerUser', () => {
       mockAdmissionsClerkUser,
     );
 
+    expect(createNewPractitionerUser).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().createNewPractitionerUser,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
-        .calls[0][0].user.pendingEmail,
+      createNewPractitionerUser.mock.calls[0][0].user.pendingEmail,
     ).toEqual('admissionsclerk@example.com');
   });
 
   it('should update practitioner information when the practitioner does not have an email and is not updating their email', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockResolvedValue({
-        ...mockPractitioner,
-        email: undefined,
-      });
+    getPractitionerByBarNumber.mockResolvedValue({
+      ...mockPractitioner,
+      email: undefined,
+    });
 
-    await updatePractitionerUser(
+    await updatePractitionerUserInteractor(
       applicationContext,
       {
         barNumber: 'AB1111',
@@ -235,11 +219,8 @@ describe('updatePractitionerUser', () => {
       mockAdmissionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateUserRecords.mock
-        .calls[0][0],
-    ).toMatchObject({
-      updatedUser: {
+    expect(await (updateUser as jest.Mock).mock.calls[0][0]).toMatchObject({
+      userToUpdate: {
         ...mockPractitioner,
         email: undefined,
         firstName: 'Donna',
@@ -251,7 +232,7 @@ describe('updatePractitionerUser', () => {
   describe('updating email', () => {
     it('should throw unauthorized error when the logged in user does not have permission to manage emails', async () => {
       await expect(
-        updatePractitionerUser(
+        updatePractitionerUserInteractor(
           applicationContext,
           {
             barNumber: 'pt101',
@@ -269,7 +250,7 @@ describe('updatePractitionerUser', () => {
         .isEmailAvailable.mockReturnValue(false);
 
       await expect(
-        updatePractitionerUser(
+        updatePractitionerUserInteractor(
           applicationContext,
           {
             barNumber: 'pt101',
@@ -286,7 +267,7 @@ describe('updatePractitionerUser', () => {
     });
 
     it('should update the user with the new user.updatedEmail value', async () => {
-      await updatePractitionerUser(
+      await updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'pt101',
@@ -300,17 +281,14 @@ describe('updatePractitionerUser', () => {
         mockAdmissionsClerkUser,
       );
 
-      expect(
-        applicationContext.getPersistenceGateway().updatePractitionerUser.mock
-          .calls[0][0].user,
-      ).toMatchObject({
+      expect(updatePractitionerUser.mock.calls[0][0].user).toMatchObject({
         pendingEmail: 'free-email-to-use@example.com',
         pendingEmailVerificationToken: expect.anything(),
       });
     });
 
     it("should send the verification email when the user's email is being changed", async () => {
-      await updatePractitionerUser(
+      await updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'pt101',
@@ -335,7 +313,7 @@ describe('updatePractitionerUser', () => {
 
     it("should NOT send the verification email when the user's email is being added for the first time", async () => {
       mockPractitioner.email = undefined;
-      await updatePractitionerUser(
+      await updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'pt101',
@@ -355,7 +333,7 @@ describe('updatePractitionerUser', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the email is being updated', async () => {
-      await updatePractitionerUser(
+      await updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'pt101',
@@ -373,7 +351,7 @@ describe('updatePractitionerUser', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes are being updated', async () => {
-      await updatePractitionerUser(
+      await updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'pt101',
@@ -390,7 +368,7 @@ describe('updatePractitionerUser', () => {
     });
 
     it('should NOT call generateChangeOfAddress if ONLY the notes and email are being updated', async () => {
-      await updatePractitionerUser(
+      await updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'pt101',
@@ -409,7 +387,7 @@ describe('updatePractitionerUser', () => {
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the address1', async () => {
-      await updatePractitionerUser(
+      await updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'pt101',
@@ -431,7 +409,7 @@ describe('updatePractitionerUser', () => {
     });
 
     it('should call generateChangeOfAddress if the email is being updated along with the practitioner name', async () => {
-      await updatePractitionerUser(
+      await updatePractitionerUserInteractor(
         applicationContext,
         {
           barNumber: 'pt101',
