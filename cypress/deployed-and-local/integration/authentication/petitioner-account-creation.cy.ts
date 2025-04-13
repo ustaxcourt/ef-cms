@@ -138,7 +138,7 @@ describe('Petitioner Account Creation', () => {
 
       cy.get('[data-testid="login-button"]').click();
 
-      cy.get('[data-testid="account-menu-button"]');
+      cy.get('[data-testid="account-menu-button"]').should('be.visible');
 
       externalUserCreatesElectronicCase();
     });
@@ -166,7 +166,7 @@ describe('Petitioner Account Creation', () => {
 
       cy.get('[data-testid="login-button"]').click();
 
-      cy.get('[data-testid="account-menu-button"]');
+      cy.get('[data-testid="account-menu-button"]').should('be.visible');
     });
   });
 

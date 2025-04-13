@@ -1,9 +1,9 @@
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import {
   formatNow,
   FORMATS,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import {
+  ALL_SELECTION,
   CASE_TYPES,
   CASE_TYPES_MAP,
   PROCEDURE_TYPES_MAP,
