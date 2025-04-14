@@ -398,7 +398,6 @@ const updateDocketEntry = async ({
     eventCode: documentMetadata.eventCode,
     filers: documentMetadata.filers,
     freeText: documentMetadata.freeText,
-    freeText2: documentMetadata.freeText2,
     hasOtherFilingParty: documentMetadata.hasOtherFilingParty,
     isFileAttached: documentMetadata.isFileAttached,
     lodged: documentMetadata.lodged,

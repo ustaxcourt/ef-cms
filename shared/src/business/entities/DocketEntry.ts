@@ -234,7 +234,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.filedByRole = rawDocketEntry.filedByRole;
     this.filingDate = rawDocketEntry.filingDate || createISODateString();
     this.freeText = rawDocketEntry.freeText;
-    this.freeText2 = rawDocketEntry.freeText2;
     this.hasOtherFilingParty = rawDocketEntry.hasOtherFilingParty;
     this.hasSupportingDocuments = rawDocketEntry.hasSupportingDocuments;
     this.index = rawDocketEntry.index;

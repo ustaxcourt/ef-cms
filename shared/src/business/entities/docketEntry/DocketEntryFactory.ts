@@ -49,7 +49,6 @@ export class DocketEntryFactory extends JoiValidationEntity {
     documentType: string;
   };
 
-  private freeText2?: string;
   private scenario: string;
   private selectedCases: string[];
 
@@ -92,7 +91,6 @@ export class DocketEntryFactory extends JoiValidationEntity {
     }
 
     this.scenario = rawPropsParam.scenario;
-    this.freeText2 = rawPropsParam.freeText2;
     this.selectedCases = rawPropsParam.selectedCases;
   }
 
