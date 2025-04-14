@@ -9,8 +9,9 @@ import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
 import { environment } from '@web-api/environment';
-import { applicationContext } from '@web-api/applicationContext';
-import { getDynamoClient } from '@web-api/persistence/dynamo/getDynamoClient';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
+import { Agent } from 'https';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -22,14 +23,22 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: false,
 };
-parseArgsAndEnvVars(scriptConfig);
+const { sourceTable } = parseArgsAndEnvVars(scriptConfig) as {
+  env: string;
+  sourceTable: string;
+};
 
 const docketEntryPageSize = 10000;
-const dynamoDbClient = getDynamoClient(applicationContext, {
-  useMainRegion: false,
+const dynamoDbClient = new DynamoDBClient({
+  maxAttempts: 5,
+  region: 'us-east-1',
+  requestHandler: new NodeHttpHandler({
+    connectionTimeout: 3000,
+    httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
+    requestTimeout: 5000,
+  }),
 });
 const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
-
 // We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
 environment.nodeEnv = 'production';
 
@@ -51,7 +60,6 @@ let totalItemsDeleted = 0;
 async function main() {
   let offset = 0;
   let docketEntriesToDelete = await getDocketEntriesToDelete(offset);
-  console.log(docketEntriesToDelete.length);
 
   while (!isEmpty(docketEntriesToDelete)) {
     const dynamoItemsToDelete = docketEntriesToDelete.map(cd => ({
@@ -65,7 +73,7 @@ async function main() {
     totalItemsDeleted += await batchDeleteDynamoItems(
       dynamoItemsToDelete,
       dynamoDbDocClient,
-      environment.dynamoDbTableName,
+      sourceTable,
     );
     console.log(`Total docket entries deleted so far: ${totalItemsDeleted}`);
     offset += docketEntryPageSize;
