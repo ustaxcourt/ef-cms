@@ -58,7 +58,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('servedPartiesCode', 'varchar')
     .addColumn('serviceDate', 'timestamptz')
     .addColumn('serviceStamp', 'varchar')
-    .addColumn('signedAt', 'timestamptz')
+    .addColumn('signedAt', 'varchar')
     .addColumn('signedByUserId', 'varchar')
     .addColumn('signedJudgeUserId', 'varchar')
     .addColumn('stampData', 'jsonb')

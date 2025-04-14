@@ -85,9 +85,7 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
       ? calculateDate({ dateString: docketEntry.serviceDate })
       : null,
     serviceStamp: docketEntry.serviceStamp ?? null,
-    signedAt: docketEntry.signedAt
-      ? calculateDate({ dateString: docketEntry.signedAt })
-      : null,
+    signedAt: docketEntry.signedAt ?? null,
     signedByUserId: docketEntry.signedByUserId ?? null,
     signedJudgeName: docketEntry.signedJudgeName ?? null,
     signedJudgeUserId: docketEntry.signedJudgeUserId ?? null,
@@ -139,10 +137,6 @@ export function fromKyselyDocketEntry<T extends object>(record: T) {
     ) => value?.toISOString(),
     serviceDate: (
       value: typeof dwDocketEntrySchema.serviceDate,
-      _: Partial<DocketEntry>,
-    ) => value?.toISOString(),
-    signedAt: (
-      value: typeof dwDocketEntrySchema.signedAt,
       _: Partial<DocketEntry>,
     ) => value?.toISOString(),
     stampData: (

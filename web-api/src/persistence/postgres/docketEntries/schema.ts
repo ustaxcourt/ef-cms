@@ -100,7 +100,7 @@ export const docketEntryTableDefinition = {
   servedPartiesCode: DEFAULT as string | null,
   serviceDate: DEFAULT as Date | null,
   serviceStamp: DEFAULT as string | null,
-  signedAt: DEFAULT as Date | null,
+  signedAt: DEFAULT as string | null,
   signedByUserId: DEFAULT as string | null,
   signedJudgeName: DEFAULT as string | null,
   signedJudgeUserId: DEFAULT as string | null,
