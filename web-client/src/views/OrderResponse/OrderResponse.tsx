@@ -177,80 +177,32 @@ export const OrderResponse = connect(
                   </FormGroup>
                   <hr className="border-top-2px border-base-lighter" />
                   <FormGroup className="order-response-form-group">
-                    <label
-                      className="usa-label"
-                      htmlFor="motion-order-reply-radio"
-                    >
-                      Select One <span className="usa-hint">(Required)</span>
+                    <label htmlFor="motion-order-reply">
+                      Order Reply <span className="usa-hint">(Optional)</span>:
                     </label>
-                    <div className="usa-radio">
+                    <div className="usa-checkbox">
                       <input
                         aria-label="order reply"
-                        checked={
-                          form.motionOrderResponse ===
-                            constants.MOTION_ORDER_RESPONSE_OPTIONS
-                              .orderReplyOptions.REPLY || false
-                        }
-                        className="usa-radio__input"
+                        checked={form.motionOrderResponse || false}
+                        className="usa-checkbox__input"
                         id="motion-order-reply"
                         name="motionOrderResponse"
-                        type="radio"
-                        value={
-                          constants.MOTION_ORDER_RESPONSE_OPTIONS
-                            .orderReplyOptions.REPLY
-                        }
+                        type="checkbox"
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
-                            value: e.target.value,
+                            value: !form.motionOrderResponse,
                           });
                         }}
                       />
                       <label
-                        className="usa-radio__label"
-                        htmlFor={'motion-order-reply'}
+                        className="usa-checkbox__label"
+                        htmlFor="motion-order-reply"
                       >
-                        {
-                          constants.MOTION_ORDER_RESPONSE_OPTIONS
-                            .orderReplyOptions.REPLY
-                        }
-                      </label>
-                    </div>
-                    <div className="usa-radio">
-                      <input
-                        aria-label="order reply s/r"
-                        checked={
-                          form.motionOrderResponse ===
-                            constants.MOTION_ORDER_RESPONSE_OPTIONS
-                              .orderReplyOptions.REPLY_SR || false
-                        }
-                        className="usa-radio__input"
-                        id="motion-order-reply-sr"
-                        name="motionOrderResponse"
-                        type="radio"
-                        value={
-                          constants.MOTION_ORDER_RESPONSE_OPTIONS
-                            .orderReplyOptions.REPLY_SR
-                        }
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-radio__label"
-                        htmlFor={'motion-order-reply-sr'}
-                      >
-                        {
-                          constants.MOTION_ORDER_RESPONSE_OPTIONS
-                            .orderReplyOptions.REPLY_SR
-                        }
+                        Order Reply
                       </label>
                     </div>
                   </FormGroup>
-
                   <FormGroup
                     className="order-response-form-group"
                     errorText={validationErrors.dueDate}
@@ -260,9 +212,8 @@ export const OrderResponse = connect(
                       disabled={!form.motionOrderResponse}
                       formGroupClassNames="display-inline-block order-response-date-selector"
                       id="due-date-input-motionOrderResponseDueDate"
-                      label="Due date"
-                      hintText="(Required)"
                       minDate={form.responseDate}
+                      hintText="Due date (Required):"
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
