@@ -103,7 +103,6 @@ export class DocketEntry extends JoiValidationEntity {
   public filedByRole?: string;
   public filingDate: string;
   public freeText?: string;
-  public freeText2?: string;
   public hasOtherFilingParty?: boolean;
   public hasSupportingDocuments?: boolean;
   public index?: number;
@@ -112,7 +111,7 @@ export class DocketEntry extends JoiValidationEntity {
   public isLegacy?: boolean;
   public editState?: string;
   public isLegacySealed?: boolean;
-  public isLegacyServed?: boolean; // 10494: Not a single docket entry has this field
+  public isLegacyServed?: boolean;
   public isOnDocketRecord: boolean;
   public isPaper?: boolean;
   public isPendingService?: boolean;
@@ -175,7 +174,6 @@ export class DocketEntry extends JoiValidationEntity {
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
   public judge?: string;
-  public judgeUserId?: string;
   public pending?: boolean;
   public previousDocument?: {
     docketEntryId?: string;
@@ -317,7 +315,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.stampData = rawDocketEntry.stampData || {};
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
-    this.judgeUserId = rawDocketEntry.judgeUserId;
     this.pending =
       rawDocketEntry.pending === undefined
         ? DocketEntry.isPendingOnCreation(rawDocketEntry)
