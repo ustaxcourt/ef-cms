@@ -3,20 +3,20 @@ import { toKyselyNewCase } from '@web-api/persistence/postgres/cases/mapper';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
 import { upsertCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/upsertCaseStatistics';
-import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 import { isEmpty } from 'lodash';
 import { clearCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/clearCaseStatistics';
 import { clearPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/clearPetitionersOnCase';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const updateCase = async ({
   caseToUpdate,
 }: {
   caseToUpdate: RawCase;
 }): Promise<RawCase> => {
-  const updatedCase = await pgUpdateTable({
+  const updatedCase = await pgInsertInto({
     table: 'dwCase',
     values: toKyselyNewCase(caseToUpdate),
-    where: qb => qb.where('docketNumber', '=', caseToUpdate.docketNumber),
+    onConflictColumns: ['docketNumber'],
   });
 
   // Because we used to have nested objects in our case records, we upserted everything.
