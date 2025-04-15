@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -28,6 +28,7 @@ import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
+import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -362,6 +363,11 @@ export const createCaseFromPaperInteractor = async (
   caseToAdd.statistics?.forEach(statistic =>
     createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
   );
+
+  await upsertCaseStatusUpdates({
+    docketNumber: caseToAdd.docketNumber,
+    statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
+  });
 
   await upsertWorkItems({
     workItems: [workItem.validate().toRawObject()],
