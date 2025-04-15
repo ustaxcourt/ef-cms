@@ -54,7 +54,7 @@ export const seed = async () => {
     onConflictColumns: ['docketNumber'],
   });
 
-  const insertWorkItem = await getDbWriter({
+  const insertWorkItem = getDbWriter({
     cb: writer =>
       writer
         .insertInto('dwWorkItem')
@@ -65,7 +65,7 @@ export const seed = async () => {
     action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 
-  await pgInsertInto({
+  const insertPetitionerOnCase = pgInsertInto({
     table: 'dwPetitionerOnCase',
     values: petitionerToCaseMappings,
     onConflictColumns: ['contactId', 'docketNumber'],
@@ -85,7 +85,7 @@ export const seed = async () => {
     ...cases440_449,
     ...cases450_plus,
   ];
-  await upsertCases(
+  const insertCases = upsertCases(
     cases.map(c => ({
       ...c,
       docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
@@ -96,7 +96,7 @@ export const seed = async () => {
   );
 
   // Attach the case status updates to their respective cases
-  await pgInsertInto({
+  const insertCaseStatusUpdates = pgInsertInto({
     table: 'dwCaseStatusUpdate',
     values: caseStatusUpdates.map(s => ({
       ...s,
@@ -107,13 +107,13 @@ export const seed = async () => {
   });
 
   // Attach the case statistics to their respective cases
-  await pgInsertInto({
+  const insertCaseStatistics = pgInsertInto({
     table: 'dwCaseStatistic',
     values: caseStatistics,
     onConflictColumns: ['statisticId'],
   });
 
-  await pgInsertInto({
+  const insertStatisticPenalties = pgInsertInto({
     table: 'dwStatisticPenalty',
     values: statisticPenalties,
     onConflictColumns: ['penaltyId'],
@@ -130,7 +130,7 @@ export const seed = async () => {
       },
     },
   );
-  await upsertDocketEntries(validatedDocketEntrySeeds); // 10494 Can all of this be parallelized? -- Yes
+  const insertDocketEntries = upsertDocketEntries(validatedDocketEntrySeeds);
 
   await Promise.all([
     insertMessages,
@@ -138,6 +138,12 @@ export const seed = async () => {
     insertCorrespondence,
     insertCaseWorksheet,
     insertWorkItem,
+    insertPetitionerOnCase,
+    insertCases,
+    insertCaseStatusUpdates,
+    insertCaseStatistics,
+    insertStatisticPenalties,
+    insertDocketEntries,
   ]);
 };
 
