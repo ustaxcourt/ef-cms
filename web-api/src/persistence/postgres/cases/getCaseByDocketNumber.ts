@@ -35,8 +35,6 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  // 10494: We only need certain work items: 1) not completed and 2) associated with the following docketEntries
-  // Let's see if we can improve the below based on this, which could significantly impact performance since these tables have millions of rows
   const [
     caseStatusHistory,
     caseCorrespondences,
@@ -89,7 +87,6 @@ export const getCaseByDocketNumber = async ({
   return purgeDynamoKeys({
     ...aggregateCaseItems([
       ...caseItems,
-      // 10494: Can we now stop using aggregateCaseItems? If so, remove the fake Dynamo nonsense below.
       {
         ...dbCaseMetadata,
         caseStatusHistory,

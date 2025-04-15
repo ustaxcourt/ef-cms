@@ -154,32 +154,3 @@ export function fromKyselyDocketEntry<T extends object>(record: T) {
     transformMap,
   }).transform(record);
 }
-
-// 10494: can we do something dynamic like this but still coax out the right types
-// export function fromKyselyDocketEntry<T extends object>(record: T) {
-//   const dwDocketEntrySchema = DatabaseSchema.dwDocketEntry.table;
-
-//   // Utility type: pick keys whose value is Date or Date | null.
-//   type DateFieldKeys<T> = {
-//     [K in keyof T]: T[K] extends Date | null ? K : never;
-//   }[keyof T];
-
-//   const dateKeys = Object.keys(dwDocketEntrySchema) as Array<
-//     DateFieldKeys<typeof dwDocketEntrySchema>
-//   >;
-
-//   const transformMap = {};
-
-//   // We'll convert every date type to string or undefined
-//   for (const key of dateKeys) {
-//     transformMap[key] = (
-//       value: (typeof dwDocketEntrySchema)[typeof key],
-//       _record: Partial<DocketEntry>,
-//     ) => value?.toISOString();
-//   }
-
-//   return new DatabaseToAppCodeMapper({
-//     keyRenameMap: {},
-//     transformMap,
-//   }).transform(record);
-// }
