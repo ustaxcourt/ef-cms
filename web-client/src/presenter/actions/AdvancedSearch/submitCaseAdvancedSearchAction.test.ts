@@ -1,5 +1,5 @@
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 import {
+  ALL_SELECTION,
   COUNTRY_TYPES,
   US_STATES,
 } from '@shared/business/entities/EntityConstants';

@@ -2,13 +2,21 @@ import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import {
   calculateISODate,
   createISODateString,
+  FORMATS,
+  getBusinessDateInFuture,
 } from '../../utilities/DateHandler';
+
+const oneMonthFromNow = getBusinessDateInFuture({
+  numberOfDays: 30,
+  outputFormat: FORMATS.ISO,
+  startDate: createISODateString(),
+});
 
 describe('CourtIssuedDocumentTypeE', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
       const documentInstance = CourtIssuedDocumentFactory({
-        date: '2025-04-10T04:00:00.000Z',
+        date: oneMonthFromNow,
         documentTitle:
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
@@ -72,7 +80,7 @@ describe('CourtIssuedDocumentTypeE', () => {
     it('should be valid when all fields are present', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
-        date: '2025-04-10T04:00:00.000Z',
+        date: oneMonthFromNow,
         documentTitle:
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
@@ -86,7 +94,7 @@ describe('CourtIssuedDocumentTypeE', () => {
       it('should be invalid when filingDate is undefined on an unservable document', () => {
         const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
-          date: '2025-04-10T04:00:00.000Z',
+          date: oneMonthFromNow,
 
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -101,7 +109,7 @@ describe('CourtIssuedDocumentTypeE', () => {
       it('should be valid when filingDate is defined on an unservable document', () => {
         const documentInstance = CourtIssuedDocumentFactory({
           attachments: false,
-          date: '2025-04-10T04:00:00.000Z',
+          date: oneMonthFromNow,
 
           documentTitle: '[Anything]',
           documentType: 'USCA',
@@ -116,9 +124,15 @@ describe('CourtIssuedDocumentTypeE', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
+      const expectedDate = getBusinessDateInFuture({
+        numberOfDays: 30,
+        outputFormat: FORMATS.MMDDYYYY_DASHED,
+        startDate: createISODateString(),
+      });
+
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
-        date: '2025-04-10T04:00:00.000Z',
+        date: oneMonthFromNow,
         documentTitle:
           'Order time is extended to [Date] for petr(s) to pay the filing fee',
         documentType:
@@ -126,7 +140,7 @@ describe('CourtIssuedDocumentTypeE', () => {
         scenario: 'Type E',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        'Order time is extended to 04-10-2025 for petr(s) to pay the filing fee',
+        `Order time is extended to ${expectedDate} for petr(s) to pay the filing fee`,
       );
     });
   });
