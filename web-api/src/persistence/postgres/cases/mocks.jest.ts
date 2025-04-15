@@ -156,3 +156,13 @@ jest.mock(
   '@web-api/persistence/postgres/cases/statistics/clearCaseStatistics',
   () => mockFactory('clearCaseStatistics'),
 );
+
+// Case status updates
+
+jest.mock('@web-api/persistence/postgres/cases/getCaseStatusHistory', () =>
+  mockFactory('getCaseStatusHistory'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/upsertCaseStatusUpdates', () =>
+  mockFactory('upsertCaseStatusUpdates'),
+);
