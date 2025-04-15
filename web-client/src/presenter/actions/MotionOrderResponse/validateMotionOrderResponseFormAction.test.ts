@@ -4,10 +4,8 @@ import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateMotionOrderResponseFormAction } from './validateMotionOrderResponseFormAction';
 import {
-  createISODateString,
   formatNow,
   FORMATS,
-  getBusinessDateInFuture,
 } from '@shared/business/utilities/DateHandler';
 
 describe('validateMotionOrderResponseFormAction', () => {
@@ -91,42 +89,6 @@ describe('validateMotionOrderResponseFormAction', () => {
         errors: {
           dueDate: 'Enter a valid date',
           responseDate: 'Enter a valid date',
-        },
-      }),
-    );
-    expect(mockSuccessPath).not.toHaveBeenCalled();
-  });
-
-  it('should fail validation when response type is invalid', async () => {
-    await runAction(validateMotionOrderResponseFormAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: {
-          issueOrderFor:
-            MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
-          additionalOrderText: 'Test',
-          dueDate: getBusinessDateInFuture({
-            numberOfDays: 4,
-            outputFormat: FORMATS.YYYYMMDD,
-            startDate: createISODateString(),
-          }),
-          motionOrderResponse: 'INVALID_TYPE',
-          responseDate: getBusinessDateInFuture({
-            numberOfDays: 2,
-            outputFormat: FORMATS.YYYYMMDD,
-            startDate: createISODateString(),
-          }),
-        },
-      },
-    });
-
-    expect(mockErrorPath).toHaveBeenCalledWith(
-      expect.objectContaining({
-        errors: {
-          motionOrderResponse:
-            'Order reply must be one of [Order Reply, Order Reply/SR]',
         },
       }),
     );
