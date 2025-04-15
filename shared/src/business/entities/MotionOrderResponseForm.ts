@@ -3,7 +3,6 @@ import {
   createISODateAtStartOfDayEST,
   formatDateString,
 } from '../utilities/DateHandler';
-import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import {
   MAX_ORDER_RESPONSE_TEXT_CHARACTERS,
@@ -49,7 +48,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
         'string.max': 'Limit is 240 characters.',
       }),
     issueOrderFor: joi
-      .when('isOnLeadCase', {
+      .when('isLeadCase', {
         is: joi.equal(true),
         then: joi
           .required()
@@ -77,21 +76,16 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       .description('When the response is due.')
       .messages({
         'any.ref': 'Enter a valid Response Date',
-        'any.required':
-          'Due Date is required when a Reply or Reply/SR is ordered',
+        'any.required': 'Due Date is required when a Reply is ordered',
         'date.format': 'Enter a valid date',
         'date.min':
           'Due date cannot be prior to response date. Enter a valid date.',
       }),
-    motionOrderResponse: JoiValidationConstants.STRING.valid(
-      ...Object.values(MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions),
-    )
+    motionOrderResponse: joi
       .optional()
       .allow(null)
-      .description('The type of response.')
-      .messages({
-        '*': 'Order reply must be one of [Order Reply, Order Reply/SR]',
-      }),
+      .description('The type of response.'),
+
     responseDate: joi
       .date()
       .iso()
