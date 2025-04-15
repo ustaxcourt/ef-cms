@@ -7,10 +7,12 @@ import { setPdfPreviewUrlAction } from '../../actions/CourtIssuedOrder/setPdfPre
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { prepareMotionOrderResponseAction } from '@web-client/presenter/actions/MotionOrderResponse/prepareMotionOrderResponseAction';
 import { getPdfUrlAction } from '@web-client/presenter/actions/CourtIssuedOrder/getPdfUrlAction';
+import { clearAlertsAction } from '@web-client/presenter/actions/clearAlertsAction';
 
 export const motionOrderResponsePdfPreviewSequence =
   showProgressSequenceDecorator([
     prepareMotionOrderResponseAction,
+    clearAlertsAction, // clear any existing alerts that are left over after form fixes
     createOrderAction,
     clearPdfPreviewUrlAction,
     getPdfUrlAction,
