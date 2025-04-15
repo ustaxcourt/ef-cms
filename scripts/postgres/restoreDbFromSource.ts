@@ -67,7 +67,7 @@ async function main() {
     useWriter: true,
   });
 
-  const backUpFileName = 'dawson.dump';
+  const backUpFileName = 'dawson-dump.sql';
   await createDbBackup({
     backUpFileName,
     dbName: sourceDbname,
@@ -90,6 +90,8 @@ async function main() {
     targetSessionToken,
     username: targetUsername,
   });
+
+  await removeBackupFiles({ backUpFileName, sanitizedFileName });
 }
 void main();
 
@@ -226,8 +228,6 @@ async function restoreFromBackup({
   });
   const targetPassword = await targetSigner.getAuthToken();
 
-  // pg_restore --clean only drops tables that exist in the source dump, so we drop all target tables before calling pg_restore.
-  // We could drop the whole target db or the schema, but then we would have to deal with stricter permissions.
   await dropAllTargetTables({
     dbName,
     host,
@@ -365,6 +365,25 @@ async function dropAllTargetTables({
       } else {
         console.log(`Successfully dropped all tables from DB ${dbName}.`);
       }
+      resolve(undefined);
+    });
+  });
+}
+
+function removeBackupFiles({
+  backUpFileName,
+  sanitizedFileName,
+}: {
+  backUpFileName: string;
+  sanitizedFileName: string;
+}) {
+  return new Promise(resolve => {
+    spawn('rm', ['-f', backUpFileName, sanitizedFileName], {
+      stdio: 'ignore',
+    }).on('close', () => {
+      console.log(
+        `Removed backup files ${backUpFileName} and ${sanitizedFileName}`,
+      );
       resolve(undefined);
     });
   });
