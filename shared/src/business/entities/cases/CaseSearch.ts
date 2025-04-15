@@ -1,12 +1,15 @@
-import { COUNTRY_TYPES, US_STATES, US_STATES_OTHER } from '../EntityConstants';
+import {
+  ALL_SELECTION,
+  COUNTRY_TYPES,
+  US_STATES,
+  US_STATES_OTHER,
+} from '../EntityConstants';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import joiDate from '@joi/date';
 import joiImported, { Root } from 'joi';
 
 const joi: Root = joiImported.extend(joiDate);
-
-export const ALL_SELECTION = 'all';
 
 export class CaseSearch extends JoiValidationEntity {
   countryType?: string;

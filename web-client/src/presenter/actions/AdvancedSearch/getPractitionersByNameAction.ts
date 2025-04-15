@@ -1,3 +1,4 @@
+import { ALL_SELECTION } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const getPractitionersByNameAction = async ({
@@ -9,12 +10,20 @@ export const getPractitionersByNameAction = async ({
   const { selectedPage } = props;
 
   const {
+    admissionStatus,
     lastKeysOfPages,
+    originalBarState,
+    practiceType,
     practitionerName,
+    practitionerType,
   }: {
-    practitionerName: string;
-    pageNum: number;
+    admissionStatus;
     lastKeysOfPages: Array<string | number>;
+    originalBarState;
+    pageNum: number;
+    practiceType;
+    practitionerName: string;
+    practitionerType?: string;
   } = get(state.advancedSearchForm.practitionerSearchByName);
 
   store.set(
@@ -25,7 +34,12 @@ export const getPractitionersByNameAction = async ({
   const { searchResults } = await applicationContext
     .getUseCases()
     .getPractitionersByNameInteractor(applicationContext, {
+      admissionStatus,
       name: practitionerName,
+      originalBarState,
+      practiceType,
+      practitionerType:
+        practitionerType === ALL_SELECTION ? undefined : practitionerType,
       searchAfter: lastKeysOfPages[selectedPage],
     });
 
