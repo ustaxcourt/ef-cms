@@ -65,11 +65,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('taxYear', 'varchar')
     .addColumn('trialLocation', 'varchar')
     .addColumn('userId', 'varchar')
-    .alterColumn('pending', col => col.setNotNull())
-    .alterColumn('isStricken', col => col.setNotNull())
-    .alterColumn('receivedAt', col => col.setNotNull())
-    .alterColumn('createdAt', col => col.setNotNull())
-    .alterColumn('filingDate', col => col.setNotNull())
     .execute();
 }
 
@@ -138,10 +133,5 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('taxYear')
     .dropColumn('trialLocation')
     .dropColumn('userId')
-    .alterColumn('pending', col => col.dropNotNull())
-    .alterColumn('isStricken', col => col.dropNotNull())
-    .alterColumn('receivedAt', col => col.dropNotNull())
-    .alterColumn('createdAt', col => col.dropNotNull())
-    .alterColumn('filingDate', col => col.dropNotNull())
     .execute();
 }
