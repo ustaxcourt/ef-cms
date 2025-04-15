@@ -49,11 +49,13 @@ import {
 } from '@web-api/persistence/postgres/workitems/schema';
 import {
   DW_USER_COLUMNS,
+  DW_PRACTITIONER_COLUMNS,
   DW_USER_CONFIRMATION_CODE_COLUMNS,
   DW_USER_ON_CASE_COLUMNS,
+  UserTable,
+  PractitionerTable,
   UserConfirmationCodeTable,
   UserOnCaseTable,
-  UserTable,
 } from '@web-api/persistence/postgres/users/schema';
 import {
   indexOpenSearchUser,
@@ -72,6 +74,7 @@ interface DatabaseSchemaType {
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwPetitionerOnCase: DatabaseTableMetadata<PetitionerOnCaseTable>;
+  dwPractitioner: DatabaseTableMetadata<PractitionerTable>;
   dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
@@ -149,6 +152,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
     columns: DW_USER_COLUMNS,
     indexOpenSearchMessage: indexOpenSearchUser,
     transformOpenSearchMessage: transformOpenSearchUser,
+  },
+  dwPractitioner: {
+    table: DEFAULT as PractitionerTable,
+    columns: DW_PRACTITIONER_COLUMNS,
   },
   dwUserConfirmationCode: {
     table: DEFAULT as UserConfirmationCodeTable,
