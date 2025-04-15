@@ -133,7 +133,7 @@ export class DocketEntry extends JoiValidationEntity {
   public scenario?: string;
   public secondaryDocument?: {
     secondaryDocumentInfo: string;
-  } & any; // 10494: This would be nice to fix, but a secondaryDocument is much more than just secondaryDocumentInfo
+  } & any;
   public servedAt?: string;
   public servedPartiesCode?: string;
   public serviceDate?: string;
@@ -146,7 +146,7 @@ export class DocketEntry extends JoiValidationEntity {
     name: string;
     partyPrivatePractitioner?: boolean;
   }[];
-  public servedParties?: any[]; // 10494: This would be nice to type
+  public servedParties?: any[];
   public signedAt?: string;
   public draftOrderState?: {
     additionalOrderText?: string;
