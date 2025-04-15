@@ -10,7 +10,6 @@ export const getDocketEntriesByDocketNumber = async ({
     reader
       .selectFrom('dwDocketEntry')
       .where('docketNumber', '=', docketNumber)
-      // 10494: .orderby?
       .selectAll()
       .execute(),
   );
