@@ -48,7 +48,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
         'string.max': 'Limit is 240 characters.',
       }),
     issueOrderFor: joi
-      .when('isLeadCase', {
+      .when('isOnLeadCase', {
         is: joi.equal(true),
         then: joi
           .required()
