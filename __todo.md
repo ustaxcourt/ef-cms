@@ -1,14 +1,5 @@
 # 10495 Development Notes
 
-## Practitioner todo
-
-- [x] Remove practitioner-specific fields from user table in schema.ts
-- [x] Update database-schema.ts
-- [x] Update migration
-- [x] Rework seed data
-- [ ] Rework mapper
-- [ ] Split out postgres functions for practitioners
-
 ## Todo part 1
 
 All TODO comments begin with the string "10495 TODO:" to help keep track of them.
@@ -108,32 +99,3 @@ Is "search key" a concept we need to hold onto?
 - `createNewPetitionerUser.ts` contains two distinct operations that can fail independently and they could before this migration, and that's okay.
 - [x] Replace all calls to `updateUserRecords` with `updateUser`
 - [x] Delete `UserCase` entity
-
----
-
-## Notes on practitioners
-
-From staging: dynamodb persistence functions that use a string containing `*practitioner|`:
-
-These functions refer to `privatePractitioner|` and `irsPractitioner|` EXCLUSIVELY.
-- getPractitionerByBarNumber
-- updatePractititionerOnCase
-- removePractitionerOnCase
-
-These all map straightforwardly to CRUD interactor functions. They also use `practitioner|`  EXCLUSIVELY.
-- createPractitionerDocument
-- getPractitionerDocuments
-- getPractitionerDocumentByFileId
-- editPractitionerDocument
-- deletePractitionerDocument
-
-**dw_practitioner_document** (all columns are required strings)
-id (PK)
-barNumber (FK)
-categoryName
-categoryType
-description
-fileName
-location
-practitionerDocumentFileId
-uploadDate
