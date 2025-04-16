@@ -32,7 +32,8 @@ export const OrderResponse = connect(
       sequences.submitMotionOrderResponseSequence,
     submitStampMotionSequence: sequences.submitStampMotionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateStampSequence: sequences.validateStampSequence,
+    validateMotionOrderResponseSequence:
+      sequences.validateMotionOrderResponseSequence,
     validationErrors: state.validationErrors,
   },
   function OrderResponse({
@@ -47,6 +48,7 @@ export const OrderResponse = connect(
     submitMotionOrderResponseSequence,
     updateFormValueSequence,
     validationErrors,
+    validateMotionOrderResponseSequence,
   }) {
     return (
       <>
@@ -103,6 +105,7 @@ export const OrderResponse = connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
+                                validateMotionOrderResponseSequence();
                               }}
                             />
                             <label
@@ -136,6 +139,7 @@ export const OrderResponse = connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
+                                validateMotionOrderResponseSequence();
                               }}
                             />
                             <label
@@ -172,6 +176,7 @@ export const OrderResponse = connect(
                           toFormat: constants.DATE_FORMATS.YYYYMMDD,
                           value: e.target.value,
                         });
+                        validateMotionOrderResponseSequence();
                       }}
                     />
                   </FormGroup>
@@ -193,6 +198,7 @@ export const OrderResponse = connect(
                             key: e.target.name,
                             value: !form.motionOrderResponse,
                           });
+                          validateMotionOrderResponseSequence();
                         }}
                       />
                       <label
@@ -221,6 +227,7 @@ export const OrderResponse = connect(
                           toFormat: constants.DATE_FORMATS.YYYYMMDD,
                           value: e.target.value,
                         });
+                        validateMotionOrderResponseSequence();
                       }}
                     />
                   </FormGroup>
@@ -274,6 +281,7 @@ export const OrderResponse = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
+                          validateMotionOrderResponseSequence();
                         }}
                       ></textarea>
                       <CharactersRemainingHint

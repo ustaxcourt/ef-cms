@@ -79,7 +79,7 @@ describe('MotionOrderResponseForm', () => {
       });
       const errors = form.getFormattedValidationErrors();
       expect(errors).toMatchObject({
-        dueDate: 'Due Date is required when a Reply or Reply/SR is ordered',
+        dueDate: 'Due Date is required when a Reply is ordered',
       });
     });
 
@@ -149,34 +149,6 @@ describe('MotionOrderResponseForm', () => {
       const errors = form.getFormattedValidationErrors();
       expect(errors).toEqual({
         issueOrderFor: `"issueOrderFor" must be [${MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY}]`,
-      });
-    });
-
-    it('should be invalid when motionOrderResponse is not one of the allowed values', () => {
-      const responseDate = getBusinessDateInFuture({
-        numberOfDays: 4,
-        outputFormat: FORMATS.YYYYMMDD,
-        startDate: createISODateString(),
-      });
-      const dueDate = getBusinessDateInFuture({
-        numberOfDays: 5,
-        outputFormat: FORMATS.YYYYMMDD,
-        startDate: createISODateString(),
-      });
-
-      const form = new MotionOrderResponseForm({
-        motionOrderResponse: 'Not a valid reply option',
-        responseDate,
-        dueDate,
-        isOnLeadCase: true,
-        issueOrderFor:
-          MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
-      });
-
-      const errors = form.getFormattedValidationErrors();
-      expect(errors).toEqual({
-        motionOrderResponse:
-          'Order reply must be one of [Order Reply, Order Reply/SR]',
       });
     });
   });

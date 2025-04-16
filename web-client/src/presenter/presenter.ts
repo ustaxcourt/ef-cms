@@ -603,6 +603,7 @@ import { validateEditRespondentCounselSequence } from './sequences/CaseAssociati
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateFilePetitionStep2Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep2Sequence';
 import { validateFilePetitionStep5Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep5Sequence';
+import { validateMotionOrderResponseSequence } from './sequences/MotionOrderResponse/validateMotionOrderResponseSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
@@ -1597,6 +1598,8 @@ export const presenterSequences = {
     validateExternalDocumentInformationSequence as unknown as Function,
   validateFilePetitionStep2Sequence,
   validateFilePetitionStep5Sequence,
+  validateMotionOrderResponseSequence:
+    validateMotionOrderResponseSequence as unknown as Function,
   validateNoteSequence: validateNoteSequence as unknown as Function,
   validateOpinionSearchSequence:
     validateOpinionSearchSequence as unknown as Function,
