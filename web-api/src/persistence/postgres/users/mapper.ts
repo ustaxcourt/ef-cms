@@ -1,6 +1,11 @@
 import { RawUser, User } from '@shared/business/entities/User';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { NewUserKysely, UpdateUserKysely } from './schema';
+import {
+  NewPractitionerKysely,
+  NewUserKysely,
+  UpdatePractitionerKysely,
+  UpdateUserKysely,
+} from './schema';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
@@ -9,68 +14,92 @@ import {
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
 
-function pickFields(user) {
+function pickUserFields(user) {
   return {
-    additionalPhone: user.additionalPhone,
     address1: user.address1,
     address2: user.address2,
     address3: user.address3,
-    admissionsDate: user.admissionsDate,
-    admissionsStatus: user.admissionsStatus,
-    barNumber: user.barNumber, // 10495: Note that this field was previously all upper-case
-    birthYear: user.birthYear,
     city: user.city,
-    confirmEmail: user.confirmEmail,
     country: user.country,
     countryType: user.countryType,
     email: user.email, // 10495: Note that this field was previously trimmed and all lower-case
-    firmName: user.firmName,
-    firstName: user.firstName,
     isSeniorJudge: user.isSeniorJudge,
     isUpdatingInformation: user.isUpdatingInformation,
     judgeFullName: user.judgeFullName,
     judgePhoneNumber: user.judgePhoneNumber,
     judgeTitle: user.judgeTitle,
-    lastName: user.lastName,
-    middleName: user.middleName,
     name: user.name, // 10495: Note that this field was previously all upper-case
-    originalBarState: user.originalBarState,
     pendingEmail: user.pendingEmail,
     pendingEmailVerificationToken: user.pendingEmailVerificationToken,
     pendingEmailVerificationTokenTimestamp:
       user.pendingEmailVerificationTokenTimestamp,
     phone: user.phone,
     postalCode: user.postalCode,
-    practiceType: user.practiceType,
-    practitionerNotes: user.practitionerNotes,
-    practitionerType: user.practitionerType,
-    representing: user.representing,
     role: user.role,
     section: user.section,
-    serviceIndicator: user.serviceIndicator,
     state: user.state,
-    suffix: user.suffix,
     token: user.token,
-    updatedEmail: user.updatedEmail,
     userId: user.userId,
     userType: user.userType,
   };
 }
 
+// 10495 TODO: do not use `any` below please
+export function pickPractitionerFields(user: any) {
+  return {
+    additionalPhone: user.additionalPhone,
+    admissionsDate: user.admissionsDate,
+    admissionsStatus: user.admissionsStatus,
+    barNumber: user.barNumber, // 10495: Note that this field was previously all upper-case
+    birthYear: user.birthYear,
+    confirmEmail: user.confirmEmail,
+    firmName: user.firmName,
+    firstName: user.firstName,
+    lastName: user.lastName,
+    middleName: user.middleName,
+    originalBarState: user.originalBarState,
+    practitionerId: user.practitionerId,
+    practiceType: user.practiceType,
+    practitionerNotes: user.practitionerNotes,
+    practitionerType: user.practitionerType,
+    representing: user.representing,
+    serviceIndicator: user.serviceIndicator,
+    suffix: user.suffix,
+    updatedEmail: user.updatedEmail,
+    userId: user.userId,
+  };
+}
+
 export function toKyselyUpdateUser(user: RawUser): UpdateUserKysely {
-  return pickFields(user);
+  return pickUserFields(user);
 }
 
 export function toKyselyUpdateUsers(users: RawUser[]): UpdateUserKysely[] {
-  return users.map(pickFields);
+  return users.map(pickUserFields);
 }
 
 export function toKyselyNewUser(user: RawUser): NewUserKysely {
-  return pickFields(user);
+  return pickUserFields(user);
+}
+
+export function toKyselyUpdatePractitioner(
+  user: RawUser,
+): UpdatePractitionerKysely {
+  return pickPractitionerFields(user);
+}
+
+export function toKyselyUpdatePractitioners(
+  users: RawUser[],
+): UpdatePractitionerKysely[] {
+  return users.map(pickPractitionerFields);
+}
+
+export function toKyselyNewPractitioner(user: RawUser): NewPractitionerKysely {
+  return pickPractitionerFields(user);
 }
 
 export function toKyselyNewMessages(users: RawUser[]): NewUserKysely[] {
-  return users.map(pickFields);
+  return users.map(pickUserFields);
 }
 
 export function userEntity(user) {
@@ -91,6 +120,7 @@ export function userEntity(user) {
   return userEntitySubset(user, userContactInfo);
 }
 
+// 10495: key off of role instead of userType because userType will never be 'IrsPractitioner' or 'PrivatePractitioner'
 function userEntitySubset(user, userContactInfo) {
   if (user.userType === Practitioner.ENTITY_NAME) {
     return new Practitioner(
@@ -164,5 +194,5 @@ function userHasContactInfo(user): boolean {
 }
 
 export function toKyselyNewUsers(users: RawUser[]): NewUserKysely[] {
-  return users.map(pickFields);
+  return users.map(pickUserFields);
 }

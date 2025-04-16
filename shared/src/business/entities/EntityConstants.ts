@@ -1096,6 +1096,12 @@ export const INTERNAL_ROLES = omit(ROLES, [
   ROLES.privatePractitioner,
 ]);
 
+export const PRACTITIONER_ROLES = [
+  ROLES.inactivePractitioner,
+  ROLES.irsPractitioner,
+  ROLES.privatePractitioner,
+];
+
 // this isn't a real role someone can login with, which is why
 // it's a separate constant.
 export const SYSTEM_ROLE = 'System';

@@ -25,12 +25,19 @@ import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgIn
 import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
 import { users } from '@web-api/persistence/postgres/utils/seed/fixtures/users/users';
+import { practitioners } from '@web-api/persistence/postgres/utils/seed/fixtures/users/practitioners';
 import { usersOnCase } from './fixtures/users/usersOnCase';
 
 export const seed = async () => {
   const insertUsers = pgInsertInto({
     table: 'dwUser',
     values: users,
+    onConflictColumns: ['userId'],
+  });
+
+  const insertPractitioners = pgInsertInto({
+    table: 'dwPractitioner',
+    values: practitioners,
     onConflictColumns: ['userId'],
   });
 
@@ -129,6 +136,7 @@ export const seed = async () => {
 
   await Promise.all([
     insertUsers,
+    insertPractitioners,
     insertUsersOnCase,
     insertMessages,
     insertCaseDeadline,

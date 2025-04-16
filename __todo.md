@@ -4,9 +4,11 @@
 
 All TODO comments begin with the string "10495 TODO:" to help keep track of them.
 
+- [in-progress] Figure out how to store practitioners
+  - [ ] Fix privatePractitioner `representing` field
 - [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
-- [ ] Fix privatePractitioner `representing` field
+- [ ] Consider replicating the name field from User on Practitioner (need to be able to search for Practitioners by name)
 - [ ] Odd user-related dynamodb functions
 - [ ] dwUsersOnCase: is it possible for the same user to be on the same case multiple times??
 - [ ] Do we need to tackle: "pk": "chief-judge-name" ??
@@ -99,3 +101,40 @@ Is "search key" a concept we need to hold onto?
 - [x] Where should Practitioner entity-specific fields like `suffix` and `additionalPhone` live?
 - `createNewPetitionerUser.ts` contains two distinct operations that can fail independently and they could before this migration, and that's okay.
 - [x] Replace all calls to `updateUserRecords` with `updateUser`
+
+## Random notes
+
+case
+4383-25
+(in postgres)
+
+petitioner (contact id/user id)
+3e579a7e-4ae0-4b69-af1f-be4d261dd8f3
+petitionerOnCase - in postgres -> dwPetitionerOnCase
+userCase - in dynamodb -> dwUserOnCase
+user - in dynamodb -> dwUser
+
+practitioner
+barNumber (PT1234)
+userId 9bd27534-3c9f-471e-8b29-2461d08ffe12
+(privatePractioner | irsPractitioner | inActivePractitioner - in dynamodb) -> dwPractitioner
+(user - in dynamodb) -> dwUser
+(userCase - in dynamodb) -> dwUserOnCase
+
+
+respondent
+irsPractitioner
+barNumber: CS0478
+202c6900-08bf-4dff-bd67-db58efee8e0b
+user|202c6900-08bf-4dff-bd67-db58efee8e0b
+irsPractioner|202c6900-08bf-4dff-bd67-db58efee8e0b
+userCase -- in dynamodb
+
+pk: practioner|id
+sk: document|id
+
+questions
+
+Tenille... how does the tax court...
+1) add a practitioner without a user account? - not allowed (but support legacy w/o email)
+2) add a practitioner to the system? - admissions clerk only under advanced search
