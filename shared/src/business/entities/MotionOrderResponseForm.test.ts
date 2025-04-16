@@ -79,7 +79,7 @@ describe('MotionOrderResponseForm', () => {
       });
       const errors = form.getFormattedValidationErrors();
       expect(errors).toMatchObject({
-        dueDate: 'Due Date is required when a Reply or Reply/SR is ordered',
+        dueDate: 'Due Date is required when a Reply is ordered',
       });
     });
 
