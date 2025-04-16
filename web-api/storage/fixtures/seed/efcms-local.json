@@ -22881,5 +22881,12 @@
     "entityName": "UserCaseNote",
     "notes": "Test",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "sk": "case|101-24",
+    "pk": "user|b3e1941f-230a-47bb-80ec-6b561c1765cd",
+    "docketNumber": "101-24",
+    "entityName": "UserCase",
+    "gsi1pk": "user-case|101-24"
   }
 ]
