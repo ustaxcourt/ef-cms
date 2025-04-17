@@ -2,6 +2,9 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as crypto from 'crypto';
 
+const DOMAIN_REPLACER = 'mig.ef-cms.ustaxcourt.gov';
+const EMAIL_REGEX = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+
 /**
  * Creates an anonymized email address by hashing the original email
  * @param email The original email address
@@ -22,7 +25,6 @@ function mockEmail(email: string, domain: string): string {
 export function replaceEmailAddresses(
   inputFilePath: string,
   outputFilePath?: string,
-  domain: string = 'mig.ef-cms.ustaxcourt.gov',
 ): void {
   try {
     if (!fs.existsSync(inputFilePath)) {
@@ -31,12 +33,10 @@ export function replaceEmailAddresses(
 
     const fileContent = fs.readFileSync(inputFilePath, 'utf8');
 
-    const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
-
     let emailCount = 0;
-    const sanitizedContent = fileContent.replace(emailRegex, match => {
+    const sanitizedContent = fileContent.replace(EMAIL_REGEX, match => {
       emailCount++;
-      return mockEmail(match, domain);
+      return mockEmail(match, DOMAIN_REPLACER);
     });
 
     const finalOutputPath =
