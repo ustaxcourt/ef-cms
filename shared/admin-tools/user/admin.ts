@@ -118,6 +118,7 @@ export async function createOrUpdateUser(
     rawUser = new User({ ...user, userId }).validate().toRawObject();
   }
 
+  // TODO 10495 Fix me.. could be practitioner
   await createUserRecord({
     user: rawUser,
     userId: rawUser.userId,

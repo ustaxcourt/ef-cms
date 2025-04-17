@@ -49,14 +49,16 @@ import {
 } from '@web-api/persistence/postgres/workitems/schema';
 import {
   DW_USER_COLUMNS,
-  DW_PRACTITIONER_COLUMNS,
   DW_USER_CONFIRMATION_CODE_COLUMNS,
   DW_USER_ON_CASE_COLUMNS,
   UserTable,
-  PractitionerTable,
   UserConfirmationCodeTable,
   UserOnCaseTable,
 } from '@web-api/persistence/postgres/users/schema';
+import {
+  DW_PRACTITIONER_COLUMNS,
+  PractitionerTable,
+} from '@web-api/persistence/postgres/practitioners/schema';
 // import {
 //   indexOpenSearchUser,
 //   transformOpenSearchUser,

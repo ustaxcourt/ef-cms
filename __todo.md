@@ -138,3 +138,62 @@ questions
 Tenille... how does the tax court...
 1) add a practitioner without a user account? - not allowed (but support legacy w/o email)
 2) add a practitioner to the system? - admissions clerk only under advanced search
+
+  {
+    "admissionsStatus": "Active",
+    "lastName": "Practitioner",
+    "role": "privatePractitioner",
+    "admissionsDate": "2019-03-01",
+    "section": "privatePractitioner",
+    "practitionerType": "Attorney",
+    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
+    "practiceType": "Private",
+    "firstName": "Test",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT5432",
+    "birthYear": "1950",
+    "entityName": "Practitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
+    "name": "Test Private Practitioner",
+    "middleName": "Private",
+    "firmName": "Bogus Barristers",
+    "pk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
+    "originalBarState": "OR",
+    "email": "privatePractitioner1@example.com"
+  },
+
+
+    {
+    "role": "privatePractitioner",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT5432",
+    "entityName": "PrivatePractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
+    "pk": "case|102-20",
+    "email": "privatePractitioner1@example.com"
+  },

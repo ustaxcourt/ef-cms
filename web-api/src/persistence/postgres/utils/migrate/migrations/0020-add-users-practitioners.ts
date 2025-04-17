@@ -11,6 +11,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('country', 'varchar')
     .addColumn('countryType', 'varchar')
     .addColumn('email', 'varchar')
+    .addColumn('entityName', 'varchar')
     .addColumn('isSeniorJudge', 'boolean')
     .addColumn('isUpdatingInformation', 'boolean')
     .addColumn('judgeFullName', 'varchar')
@@ -26,11 +27,25 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('section', 'varchar')
     .addColumn('state', 'varchar')
     .addColumn('token', 'varchar')
-    .addColumn('userType', 'varchar')
     .execute();
 
   await db.schema
     .createTable('dwPractitioner')
+    .addColumn('address1', 'varchar')
+    .addColumn('address2', 'varchar')
+    .addColumn('address3', 'varchar')
+    .addColumn('city', 'varchar')
+    .addColumn('country', 'varchar')
+    .addColumn('countryType', 'varchar')
+    .addColumn('email', 'varchar')
+    // .addColumn('isUpdatingInformation', 'boolean') 10495 TODO: Do practitioners have "isUpdatingInformation"?
+    .addColumn('name', 'varchar', col => col.notNull())
+    .addColumn('phone', 'varchar')
+    .addColumn('postalCode', 'varchar')
+    .addColumn('role', 'varchar', col => col.notNull())
+    .addColumn('section', 'varchar')
+    .addColumn('state', 'varchar')
+    // .addColumn('token', 'varchar') 10495 TODO: Do practitioners have a "token"?
     .addColumn('practitionerId', 'varchar', col => col.primaryKey())
     .addColumn('userId', 'varchar', col => col.unique()) // make this have to be unique, but also nullable
     .addColumn('additionalPhone', 'varchar')

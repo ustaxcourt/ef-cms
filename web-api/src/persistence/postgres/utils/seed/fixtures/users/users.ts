@@ -6,50 +6,49 @@ export const users: NewUserKysely[] = [
     address2: 'Hanover, MI 49241',
     phone: '517-563-1536',
     address1: '3202 Elk Avenue',
-    userType: 'User',
     name: 'Test Petitioner 2',
     section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405417',
     email: 'petitioner2@example.com',
+    entityName: 'User',
   },
   {
     role: 'petitioner',
     address2: 'Flavortown, AR 72364',
     phone: '517-563-1532',
     address1: '3202 Sauceboss Ln',
-    userType: 'User',
     name: 'Test Petitioner 3',
     section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405418',
     email: 'petitioner3@example.com',
+    entityName: 'User',
   },
   {
     role: 'chambers',
-    userType: 'User',
     name: "Test Ashford's Chambers",
     section: 'ashfordsChambers',
     userId: '817b48c5-d4e5-4544-9e11-9ba0102918f4',
     email: 'ashfordschambers@example.com',
+    entityName: 'User',
   },
   {
     role: 'admin',
-    userType: 'User',
     name: 'Test Admin',
     section: 'admin',
     userId: '86c3f87b-350b-477d-92c3-43bd095cb006',
     email: 'admin@example.com',
+    entityName: 'User',
   },
   {
     role: 'chambers',
-    userType: 'User',
     name: "Test Carluzzo's Chambers",
     section: 'carluzzosChambers',
     userId: '8c0902ab-d156-4cca-b80d-43f595aa5ab0',
     email: 'carluzzoschambers@example.com',
+    entityName: 'User',
   },
   {
     role: 'caseServicesSupervisor',
-    userType: 'User',
     address3: 'Under the stairs',
     address2: 'Apartment 4',
     city: 'Chicago',
@@ -62,6 +61,7 @@ export const users: NewUserKysely[] = [
     section: 'caseServicesSupervisor',
     userId: '91bae3e8-3079-43a6-920d-b74ed9c649d4',
     email: 'caseServicesSupervisor1@example.com',
+    entityName: 'User',
   },
   {
     role: 'irsSuperuser',
@@ -69,7 +69,7 @@ export const users: NewUserKysely[] = [
     section: 'irsSuperuser',
     userId: '02c9b614-e498-4dae-b0f5-751b9ab5e8b3',
     email: 'irssuperuser@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Judge',
@@ -80,7 +80,7 @@ export const users: NewUserKysely[] = [
     userId: '09b7c6c9-2d9e-43a5-83a4-096ae5362725',
     isSeniorJudge: false,
     email: 'judgemowry@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'general',
@@ -88,7 +88,7 @@ export const users: NewUserKysely[] = [
     section: 'general',
     userId: '0a03718f-595e-4e2e-bde0-e0b3c3c5ae16',
     email: 'general@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'chambers',
@@ -96,7 +96,7 @@ export const users: NewUserKysely[] = [
     section: 'cohensChambers',
     userId: '0bd3bc49-4e46-4caa-adeb-4960c56e17c8',
     email: 'cohenschambers@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'docketclerk',
@@ -104,7 +104,7 @@ export const users: NewUserKysely[] = [
     section: 'docket',
     userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'docketclerk@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'clerkofcourt',
@@ -112,7 +112,7 @@ export const users: NewUserKysely[] = [
     section: 'clerkofcourt',
     userId: '23dd8806-c0c7-4265-81f0-5f264ef78248',
     email: 'clerkofcourt@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'reportersOffice',
@@ -120,7 +120,7 @@ export const users: NewUserKysely[] = [
     section: 'reportersOffice',
     userId: '27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f',
     email: 'reportersoffice@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'docketclerk',
@@ -128,7 +128,7 @@ export const users: NewUserKysely[] = [
     section: 'docket',
     userId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'docketclerk1@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'caseServicesSupervisor',
@@ -136,7 +136,7 @@ export const users: NewUserKysely[] = [
     section: 'caseServicesSupervisor',
     userId: '35959d1a-0981-40b2-a93d-f65c7977db52',
     email: 'caseservicessupervisor@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'petitionsclerk',
@@ -144,7 +144,7 @@ export const users: NewUserKysely[] = [
     section: 'petitions',
     userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'petitionsclerk@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'chambers',
@@ -152,7 +152,7 @@ export const users: NewUserKysely[] = [
     section: 'gustafsonsChambers',
     userId: '3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2',
     email: 'gustafsonschambers@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'chambers',
@@ -160,7 +160,7 @@ export const users: NewUserKysely[] = [
     section: 'urdasChambers',
     userId: '44f02385-e4c6-49f9-a554-ecf93531d8a3',
     email: 'urdaschambers@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'petitionsclerk',
@@ -168,7 +168,7 @@ export const users: NewUserKysely[] = [
     section: 'petitions',
     userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'petitionsclerk1@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'chambers',
@@ -176,7 +176,7 @@ export const users: NewUserKysely[] = [
     section: 'buchsChambers',
     userId: '49421c68-0c09-4b4b-b32c-a535279be8d0',
     email: 'buchschambers@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'floater',
@@ -184,7 +184,7 @@ export const users: NewUserKysely[] = [
     section: 'floater',
     userId: '5dffc4d8-423d-4de9-bca0-585c7b6627f7',
     email: 'floater1@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Chief Judge',
@@ -196,7 +196,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgefoley@example.com',
     judgePhoneNumber: '(202) 521-0681',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'adc',
@@ -204,7 +204,7 @@ export const users: NewUserKysely[] = [
     section: 'adc',
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'adc@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'petitioner',
@@ -215,7 +215,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'petitioner@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'chambers',
@@ -223,7 +223,7 @@ export const users: NewUserKysely[] = [
     section: 'colvinsChambers',
     userId: '9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5',
     email: 'colvinschambers@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'admissionsclerk',
@@ -231,7 +231,7 @@ export const users: NewUserKysely[] = [
     section: 'admissions',
     userId: '9d7d63a3-d7a5-4905-ba89-ef71bf30057f',
     email: 'admissionsclerk1@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'admissionsclerk',
@@ -239,7 +239,7 @@ export const users: NewUserKysely[] = [
     section: 'admissions',
     userId: '9d7d63b7-d7a5-4905-ba89-ef71bf30057f',
     email: 'admissionsclerk@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'floater',
@@ -247,7 +247,7 @@ export const users: NewUserKysely[] = [
     section: 'floater',
     userId: '9ef02385-e4c6-49f9-a554-ecf93531d8a4',
     email: 'floater@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'chambers',
@@ -255,7 +255,7 @@ export const users: NewUserKysely[] = [
     section: 'pughsChambers',
     userId: '9fbae83a-a55b-4132-96df-e04a8ee675e3',
     email: 'pughschambers@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'petitioner',
@@ -266,7 +266,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'b2d1941f-230a-47bb-80ec-6b561c1765cd',
     email: 'petitioner9@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'petitioner',
@@ -277,7 +277,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'b3e1941f-230a-47bb-80ec-6b561c1765cd',
     email: 'petitioner4@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'petitioner',
@@ -288,7 +288,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'b84acb19-008f-4911-bfb6-773ca4020464',
     email: 'petitioner1@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'trialclerk',
@@ -296,7 +296,7 @@ export const users: NewUserKysely[] = [
     section: 'trialClerks',
     userId: 'd1f8a729-cbfa-4d22-a09b-73743a12f188',
     email: 'trialclerk1@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'petitioner',
@@ -307,7 +307,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'd3e1941f-230a-47bb-80ec-6b561c1765cd',
     email: 'petitioner7@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Judge',
@@ -319,7 +319,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: true,
     email: 'judgecolvin@example.com',
     judgePhoneNumber: '(202) 521-0662',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Judge',
@@ -331,7 +331,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgeashford@example.com',
     judgePhoneNumber: '(202) 521-0822',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Judge',
@@ -343,7 +343,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgebuch@example.com',
     judgePhoneNumber: '(202) 521-0810',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Chief Special Trial Judge',
@@ -355,7 +355,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgecarluzzo@example.com',
     judgePhoneNumber: '(202) 521-3339',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Judge',
@@ -367,7 +367,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: true,
     email: 'judgecohen@example.com',
     judgePhoneNumber: '(202) 521-0655',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Judge',
@@ -379,7 +379,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: true,
     email: 'judgegustafson@example.com',
     judgePhoneNumber: '(202) 521-0850',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Judge',
@@ -391,7 +391,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgepugh@example.com',
     judgePhoneNumber: '(202) 521-0824',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Judge',
@@ -403,7 +403,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgeurda@example.com',
     judgePhoneNumber: '(202) 521-0800',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     judgeTitle: 'Judge',
@@ -413,7 +413,7 @@ export const users: NewUserKysely[] = [
     section: 'legacyJudgesChambers',
     userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
     email: 'judgefieri@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'petitioner',
@@ -424,7 +424,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'e3e1941f-230a-47bb-80ec-6b561c1765cd',
     email: 'petitioner8@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   {
     role: 'trialclerk',
@@ -432,7 +432,7 @@ export const users: NewUserKysely[] = [
     section: 'trialClerks',
     userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
     email: 'trialclerk@example.com',
-    userType: 'User',
+    entityName: 'User',
   },
   // userType === 'Practitioner' && role === 'privatePractitioner'
   {
@@ -446,13 +446,12 @@ export const users: NewUserKysely[] = [
     state: 'DC',
     countryType: 'domestic',
     name: 'Ronald Buch Jr.',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   {
     role: 'privatePractitioner',
     section: 'privatePractitioner',
     userId: '8e4959cd-3e13-4bf6-95bf-a276cc63b9e1',
-    userType: 'Practitioner',
     address3: 'Under the stairs',
     address2: 'Apartment 4',
     city: 'Chicago',
@@ -463,6 +462,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Lilah Gilbert',
     email: 'privatePractitioner2@example.com',
+    entityName: 'Practitioner',
   },
   {
     role: 'privatePractitioner',
@@ -478,7 +478,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Test Private Practitioner',
     email: 'privatePractitioner99@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   {
     role: 'privatePractitioner',
@@ -494,7 +494,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Test Private Practitioner',
     email: 'privatePractitioner1@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   {
     role: 'privatePractitioner',
@@ -510,7 +510,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Alden Rivas',
     email: 'privatePractitioner4@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   {
     role: 'privatePractitioner',
@@ -526,7 +526,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Test Private Practitioner',
     email: 'privatePractitioner@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   {
     role: 'privatePractitioner',
@@ -542,7 +542,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Clark Stark',
     email: 'privatePractitioner3@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   // userType === 'Practitioner && role === 'irsPractitioner'
   {
@@ -559,7 +559,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Test IRS Practitioner',
     email: 'dojpractitioner1@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   {
     role: 'irsPractitioner',
@@ -575,7 +575,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Nero West',
     email: 'irspractitioner2@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   {
     role: 'irsPractitioner',
@@ -591,9 +591,9 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Test IRS Practitioner',
     email: 'irspractitioner@example.com',
-    userType: 'Practitioner',
     token:
       'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206cm9sZSI6InJlc3BvbmRlbnQiLCJlbWFpbCI6InJlc3BvbmRlbnQiLCJuYW1lIjoiVGVzdCBSZXNwb25kZW50Iiwicm9sZSI6InJlc3BvbmRlbnQiLCJzZWN0aW9uIjoicGV0aXRpb25zIiwidXNlcklkIjoicmVzcG9uZGVudCIsImlhdCI6MTU1MTQ4MDgzOH0.U72pP7ZEwQkQIzlhpKvaEdMbcQhCjSLQbp0FP06LKao',
+    entityName: 'Practitioner',
   },
   {
     role: 'irsPractitioner',
@@ -609,7 +609,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Stuart Morrison',
     email: 'irspractitioner3@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   {
     role: 'irsPractitioner',
@@ -625,7 +625,7 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Test IRS Practitioner1',
     email: 'irspractitioner1@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   {
     role: 'irsPractitioner',
@@ -636,7 +636,7 @@ export const users: NewUserKysely[] = [
     phone: '517-563-1536',
     name: 'Jaquelyn Lane',
     email: 'irspractitioner4@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
   // userType === 'Practitioner' && role === 'inactivePractitioner'
   {
@@ -653,6 +653,6 @@ export const users: NewUserKysely[] = [
     countryType: 'domestic',
     name: 'Test Inactive Practitioner',
     email: 'inactivepractitioner@example.com',
-    userType: 'Practitioner',
+    entityName: 'Practitioner',
   },
 ];

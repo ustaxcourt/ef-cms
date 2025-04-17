@@ -26,7 +26,7 @@ export const userTableDefinition = {
   state: DEFAULT as string | undefined, // forced optional
   token: DEFAULT as string | undefined,
   userId: DEFAULT as string,
-  userType: DEFAULT as string | undefined,
+  entityName: DEFAULT as string | undefined,
 };
 
 export type UserTable = typeof userTableDefinition;
@@ -38,39 +38,6 @@ export const DW_USER_COLUMNS = Object.keys(userTableDefinition) as Array<
 export type UserKysely = Selectable<UserTable>;
 export type NewUserKysely = Insertable<UserTable>;
 export type UpdateUserKysely = Updateable<UserTable>;
-
-export const practitionerTableDefinition = {
-  practitionerId: DEFAULT as string,
-  userId: DEFAULT as string | undefined, // Not all Practitioners have a corresponding User
-  additionalPhone: DEFAULT as string | undefined,
-  admissionsDate: DEFAULT as Date,
-  admissionsStatus: DEFAULT as string,
-  barNumber: DEFAULT as string,
-  birthYear: DEFAULT as number,
-  confirmEmail: DEFAULT as string | undefined,
-  firmName: DEFAULT as string | undefined,
-  firstName: DEFAULT as string,
-  lastName: DEFAULT as string,
-  middleName: DEFAULT as string | undefined,
-  originalBarState: DEFAULT as string | undefined,
-  practiceType: DEFAULT as string,
-  practitionerNotes: DEFAULT as string | undefined,
-  practitionerType: DEFAULT as string,
-  representing: DEFAULT as any,
-  serviceIndicator: DEFAULT as string,
-  suffix: DEFAULT as string | undefined,
-  updatedEmail: DEFAULT as string | undefined,
-};
-
-export type PractitionerTable = typeof practitionerTableDefinition;
-
-export const DW_PRACTITIONER_COLUMNS = Object.keys(
-  practitionerTableDefinition,
-) as Array<keyof PractitionerTable>;
-
-export type PractitionerKysely = Selectable<PractitionerTable>;
-export type NewPractitionerKysely = Insertable<PractitionerTable>;
-export type UpdatePractitionerKysely = Updateable<PractitionerTable>;
 
 export const userConfirmationCodeTableDefinition = {
   id: DEFAULT as string,

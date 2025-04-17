@@ -15,5 +15,5 @@ export const getUsersById = async ({
       .execute(),
   );
 
-  return users.map(user => userEntity(user)) as User[];
+  return users.map(user => userEntity(user));
 };

@@ -28,6 +28,10 @@ export const getUserInteractor = async (
     throw new UnauthorizedError('Not authorized to get user');
   }
 
+  // TODO: 10495
+  // from user table - entityName: user or practitioner (use entityName off user table)
+  // replace with function getUserOrPractitioner that selects from users table with a
+  // left join practitioners (only want petitioner data if user exists for user.userId)
   const user = await getUserById({ userId: authorizedUser.userId });
 
   if (!user) {
@@ -36,6 +40,7 @@ export const getUserInteractor = async (
     );
   }
 
+  // TODO: 10495 function getUserOrPractitioner handles this logic
   if (user.entityName === PrivatePractitioner.ENTITY_NAME) {
     return new PrivatePractitioner(user).validate().toRawObject();
   } else if (user.entityName === IrsPractitioner.ENTITY_NAME) {
