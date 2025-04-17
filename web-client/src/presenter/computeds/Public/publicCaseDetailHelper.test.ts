@@ -1544,7 +1544,7 @@ describe('formatDocketEntryOnDocketRecord', () => {
     expect(showNotServed).toBe(false);
   });
 
-  it("should format a docket entry's descriptionDisplay when correctly when the docket entry is a certificate of service", () => {
+  it("should format a docket entry's descriptionDisplay correctly when the docket entry is a certificate of service", () => {
     const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
       entry: {
         ...baseDocketEntry,
