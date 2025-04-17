@@ -31,15 +31,13 @@ export function ConsolidatedCaseGroupInfo({
     >
       <h4>This case is part of a consolidated group.</h4>
       <p>{TEXT_DICT[option]}</p>
-      {consolidatedCases
-        .filter(({ docketNumber }) => docketNumber !== leadDocketNumber)
-        .map(({ docketNumber, caseCaption }) => {
-          return (
-            <p key={docketNumber}>
-              {docketNumber} {caseCaption}
-            </p>
-          );
-        })}
+      {consolidatedCases.map(({ docketNumber, caseCaption }) => {
+        return (
+          <p key={docketNumber}>
+            {docketNumber} {caseCaption}
+          </p>
+        );
+      })}
     </div>
   );
 }
