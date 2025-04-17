@@ -411,6 +411,39 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/documents/*/motion-order-response',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/case-detail/*/documents/*/motion-order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, docketEntryIdToEdit) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryIdToEdit,
+            docketNumber,
+            isEditing: true,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/case-detail/*/documents/*/status-report-order-create..',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.STATUS_REPORT_ORDER },
@@ -1084,6 +1117,20 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session-detail/*/case/*/minutes',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET },
+        (trialSessionId, docketNumber) => {
+          setPageTitle('Trial session minutes');
+          return app.getSequence('goToTrialSessionMinutesSequence')({
+            docketNumber,
+            trialSessionId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
       '/trial-session-detail/*',
       ifHasAccess(
         { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
@@ -1150,6 +1197,20 @@ const router = {
           const queryParams = route.query();
           setPageTitle('Trial sessions');
           return app.getSequence('gotoTrialSessionsSequence')(queryParams);
+        },
+      ),
+    );
+
+    registerRoute(
+      '/trial-location/*/*/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        (trialLocation: string, term: string, year: string) => {
+          setPageTitle('Trial location');
+          return app.getSequence('gotoTrialLocationSequence')({
+            trialLocation: decodeURIComponent(trialLocation),
+            redirectUrl: `/trial-session-planning-report/${term}/${year}`,
+          });
         },
       ),
     );
@@ -1335,6 +1396,41 @@ const router = {
           parentMessageId,
         });
       }),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/motion-order-response-create',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryId) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryId,
+            docketNumber,
+            parentMessageId,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/motion-order-response-edit',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.MOTION_ORDER_RESPONSE },
+        (docketNumber, parentMessageId, docketEntryIdToEdit) => {
+          setPageTitle(
+            `${getPageTitleDocketPrefix(docketNumber)} Order Motion Response`,
+          );
+          return app.getSequence('goToOrderResponseSequence')({
+            docketEntryIdToEdit,
+            docketNumber,
+            isEditing: true,
+            parentMessageId,
+          });
+        },
+      ),
     );
 
     registerRoute(

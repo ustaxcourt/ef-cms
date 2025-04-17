@@ -5,6 +5,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const getDocumentFromDynamo = async ({
   docketEntryId,
@@ -58,9 +59,7 @@ export const fixRaceConditionServedInDrafts = async (
     timestamp: string;
   },
 ) => {
-  const subjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
+  const subjectCase = await getCaseByDocketNumber({
       applicationContext,
       docketNumber,
     });

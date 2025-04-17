@@ -5,16 +5,28 @@ import {
   CONTACT_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
+import { UserCase } from '@shared/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updatePetitionerOnCase as updatePetitionerOnCaseMock } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
+
 jest.mock('@web-api/business/useCases/addCoverToPdf');
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const updateCase = jest.mocked(updateCaseMock);
+updateCase.mockImplementation(({ caseToUpdate }) =>
+  Promise.resolve(caseToUpdate),
+);
+const updatePetitionerOnCase = updatePetitionerOnCaseMock as jest.Mock;
+updatePetitionerOnCase.mockImplementation(({ petitioner }) => petitioner);
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
   let mockCase;
@@ -59,9 +71,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       status: CASE_STATUS_TYPES.generalDocket,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => Promise.resolve(mockCase));
   });
 
   it('should create a work item for the NCA when the petitioner is unrepresented', async () => {

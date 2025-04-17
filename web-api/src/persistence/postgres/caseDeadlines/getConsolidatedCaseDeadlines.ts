@@ -1,6 +1,5 @@
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { getDbReader } from '@web-api/database';
-import { CaseDeadlineTable } from '@web-api/database-types';
 import { caseDeadlineEntity } from '@web-api/persistence/postgres/caseDeadlines/mapper';
 
 export const getConsolidatedCaseDeadlines = async (
@@ -8,7 +7,7 @@ export const getConsolidatedCaseDeadlines = async (
   leadDocketNumber: string,
 ): Promise<RawCaseDeadline[]> => {
   return await getDbReader(async reader => {
-    const RECORDS: CaseDeadlineTable[] = await reader
+    const RECORDS = await reader
       .selectFrom('dwCaseDeadline as cd')
       .innerJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
       .where('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId)

@@ -19,25 +19,28 @@ export const openCompleteAndSendMessageDialog = () => {
 };
 
 export const selectSection = (section: string) => {
-  cy.get('#toSection').scrollIntoView().select(section);
+  cy.get('#toSection').scrollIntoView();
+  cy.get('#toSection').select(section);
 };
 
 export const selectChambers = (chamber: string) => {
-  cy.get('#chambers').scrollIntoView().select(chamber);
+  cy.get('#chambers').scrollIntoView();
+  cy.get('#chambers').select(chamber);
 };
 
 export const selectRecipient = (recipient: string) => {
-  cy.get('#toUserId').scrollIntoView().select(recipient);
+  cy.get('#toUserId').scrollIntoView();
+  cy.get('#toUserId').select(recipient);
 };
 
 export const fillOutMessageField = () => {
-  cy.get('#message').clear().type("I don't appreciate your lack of sarcasm.");
+  cy.get('#message').clear();
+  cy.get('#message').type("I don't appreciate your lack of sarcasm.");
 };
 
 export const enterSubject = (subject?: string) => {
-  cy.get('#subject')
-    .clear()
-    .type(subject || 'Demeanor');
+  cy.get('#subject').clear();
+  cy.get('#subject').type(subject || 'Demeanor');
 };
 
 export const sendMessage = () => {

@@ -13,13 +13,24 @@ export const getPractitionersByNameLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { name, searchAfter } = event.queryStringParameters;
+    const {
+      name,
+      practitionerType,
+      practiceType,
+      admissionStatus,
+      originalBarState,
+      searchAfter,
+    } = event.queryStringParameters;
 
     return await getPractitionersByNameInteractor(
       applicationContext,
       {
         name,
         searchAfter,
+        practitionerType,
+        practiceType,
+        admissionStatus,
+        originalBarState,
       },
       authorizedUser,
     );

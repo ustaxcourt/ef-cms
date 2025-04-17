@@ -1,17 +1,24 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { NotFoundError, ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { unsealCaseInteractor } from './unsealCaseInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('unsealCaseInteractor', () => {
   let mockLock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   beforeAll(() => {
     applicationContext
@@ -21,9 +28,7 @@ describe('unsealCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
 
   it('should throw an error if the user is unauthorized to unseal a case', async () => {
@@ -64,9 +69,7 @@ describe('unsealCaseInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
@@ -92,5 +95,49 @@ describe('unsealCaseInteractor', () => {
       applicationContext,
       identifiers: [`case|${MOCK_CASE.docketNumber}`],
     });
+  });
+
+  it('should throw a NotFoundError if the case cannot be found', async () => {
+    getCaseByDocketNumber.mockResolvedValueOnce(undefined);
+
+    await expect(
+      unsealCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '999-99',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should bubble up an error thrown by updateCase', async () => {
+    const mockError = new Error('Something went wrong');
+    updateCase.mockRejectedValueOnce(mockError);
+
+    await expect(
+      unsealCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Something went wrong');
+  });
+
+  it('should bubble up an error thrown by getCaseByDocketNumber', async () => {
+    const mockError = new Error('DB is unreachable');
+    getCaseByDocketNumber.mockRejectedValueOnce(mockError);
+
+    await expect(
+      unsealCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('DB is unreachable');
   });
 });

@@ -68,6 +68,7 @@ import { generatePrintableFilingReceiptLambda } from './lambdas/documents/genera
 import { generatePrintablePendingReportLambda } from './lambdas/pendingItems/generatePrintablePendingReportLambda';
 import { generateSuggestedTrialSessionCalendarLambda } from '@web-api/lambdas/trialSessions/generateSuggestedTrialSessionCalendarLambda';
 import { generateTrialCalendarPdfLambda } from './lambdas/trialSessions/generateTrialCalendarPdfLambda';
+import { generateTrialSessionMinutesPdfLambda } from './lambdas/trialSessionMinutes/generateTrialSessionMinutesPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
 import { getAllUsersByRoleLambda } from '@web-api/lambdas/users/getAllUsersByRoleLambda';
 import { getBlockedCasesLambda } from './lambdas/reports/getBlockedCasesLambda';
@@ -92,6 +93,7 @@ import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocum
 import { getDocumentQCInboxForUserLambda } from './lambdas/workitems/getDocumentQCInboxForUserLambda';
 import { getDocumentQCServedForSectionLambda } from './lambdas/workitems/getDocumentQCServedForSectionLambda';
 import { getDocumentQCServedForUserLambda } from './lambdas/workitems/getDocumentQCServedForUserLambda';
+import { getEligibleCasesForCityLambda } from '@web-api/lambdas/trialSessions/getEligibleCasesForCityLambda';
 import { getEligibleCasesForTrialSessionLambda } from './lambdas/trialSessions/getEligibleCasesForTrialSessionLambda';
 import { getGeneratePrintableTrialSessionCopyReportLambda } from './lambdas/trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
 import { getInboxMessagesForSectionLambda } from './lambdas/messages/getInboxMessagesForSectionLambda';
@@ -102,6 +104,7 @@ import { getJudgeInSectionLambda } from './lambdas/users/getJudgeInSectionLambda
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getMessageThreadLambda } from './lambdas/messages/getMessageThreadLambda';
 import { getMessagesForCaseLambda } from './lambdas/messages/getMessagesForCaseLambda';
+import { getMinuteSheetLambda } from './lambdas/trialSessionMinutes/getMinuteSheetLambda';
 import { getNotificationsLambda } from './lambdas/users/getNotificationsLambda';
 import { getOutboxMessagesForSectionLambda } from './lambdas/messages/getOutboxMessagesForSectionLambda';
 import { getOutboxMessagesForUserLambda } from './lambdas/messages/getOutboxMessagesForUserLambda';
@@ -175,7 +178,6 @@ import { unsealDocketEntryLambda } from './lambdas/documents/unsealDocketEntryLa
 import { updateCaseContextLambda } from './lambdas/cases/updateCaseContextLambda';
 import { updateCaseDeadlineLambda } from './lambdas/caseDeadline/updateCaseDeadlineLambda';
 import { updateCaseDetailsLambda } from './lambdas/cases/updateCaseDetailsLambda';
-import { updateCaseTrialSortTagsLambda } from './lambdas/cases/updateCaseTrialSortTagsLambda';
 import { updateCaseWorksheetLambda } from '@web-api/lambdas/caseWorksheet/updateCaseWorksheetLambda';
 import { updateContactLambda } from './lambdas/cases/updateContactLambda';
 import { updateCorrespondenceDocumentLambda } from './lambdas/correspondence/updateCorrespondenceDocumentLambda';
@@ -185,6 +187,7 @@ import { updateCourtIssuedOrderToCaseLambda } from './lambdas/documents/updateCo
 import { updateDeficiencyStatisticLambda } from './lambdas/cases/updateDeficiencyStatisticLambda';
 import { updateDocketEntryMetaLambda } from './lambdas/documents/updateDocketEntryMetaLambda';
 import { updateDocketEntryWorksheetLambda } from '@web-api/lambdas/pendingMotion/updateDocketEntryWorksheetLambda';
+import { updateMinuteSheetLambda } from './lambdas/trialSessionMinutes/updateMinuteSheetLambda';
 import { updateOtherStatisticsLambda } from './lambdas/cases/updateOtherStatisticsLambda';
 import { updatePetitionerInformationLambda } from './lambdas/cases/updatePetitionerInformationLambda';
 import { updatePractitionerUserLambda } from './lambdas/practitioners/updatePractitionerUserLambda';
@@ -205,9 +208,13 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
+import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 
 export const app = express();
+
+// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
+app.set('query parser', 'extended');
 
 const allowAccessOriginFunction = (origin, callback) => {
   //Origin header wasn't provided
@@ -516,10 +523,6 @@ app.use(expressLogger);
  * case-meta
  */
 {
-  app.put(
-    '/case-meta/:docketNumber/update-case-trial-sort-tags',
-    lambdaWrapper(updateCaseTrialSortTagsLambda),
-  );
   app.post(
     '/case-meta/:docketNumber/block',
     lambdaWrapper(blockCaseFromTrialLambda),
@@ -640,6 +643,10 @@ app.use(expressLogger);
     '/case-parties/:docketNumber/petitioner-info',
     lambdaWrapper(updatePetitionerInformationLambda),
   );
+  app.post(
+    '/case-parties/:docketNumber/remove-petitioner-email',
+    lambdaWrapper(removePetitionerEmailLambda),
+  );
 }
 
 /**
@@ -671,6 +678,10 @@ app.use(expressLogger);
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
+  app.get(
+    '/cases/:trialCity/eligible-cases',
+    lambdaWrapper(getEligibleCasesForCityLambda),
+  );
   app.post('/cases', lambdaWrapper(createCaseLambda));
   app.post(
     '/cases/:docketNumber/case-worksheet',
@@ -900,6 +911,12 @@ app.delete(
  * trial-sessions
  */
 {
+  app.get('/trial-sessions/minutes', lambdaWrapper(getMinuteSheetLambda));
+  app.put('/trial-sessions/minutes', lambdaWrapper(updateMinuteSheetLambda));
+  app.post(
+    '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
+    lambdaWrapper(generateTrialSessionMinutesPdfLambda),
+  );
   app.get(
     '/trial-sessions/paper-service-pdf/:fileId',
     lambdaWrapper(getPaperServicePdfUrlLambda),

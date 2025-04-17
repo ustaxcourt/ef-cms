@@ -42,7 +42,7 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
         state: cerebralTest.getState(),
       });
 
-      expect(caseDeadlineReportHelper.judges).not.toContain(judgeName);
+      expect(caseDeadlineReportHelper.judgeOptions).not.toContain(judgeName);
     });
 
     it(`petitions clerk verifies judge ${judgeName} does not appear in the case inventory report judge dropdown`, () => {

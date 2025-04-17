@@ -6,6 +6,8 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
@@ -36,9 +38,10 @@ export const removeConsolidatedCases = async (
     throw new UnauthorizedError('Unauthorized for case consolidation');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   if (!caseToUpdate || !caseToUpdate?.leadDocketNumber) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
@@ -48,12 +51,10 @@ export const removeConsolidatedCases = async (
 
   const { leadDocketNumber } = caseToUpdate;
 
-  const allConsolidatedCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesByLeadDocketNumber({
-      applicationContext,
-      leadDocketNumber,
-    });
+  const allConsolidatedCases = await getCasesByLeadDocketNumber({
+    applicationContext,
+    leadDocketNumber,
+  });
 
   const newConsolidatedCases: RawCase[] = allConsolidatedCases.filter(
     consolidatedCase =>
@@ -103,12 +104,10 @@ export const removeConsolidatedCases = async (
   }
 
   for (const docketNumberToRemove of docketNumbersToRemove) {
-    const caseToRemove = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: docketNumberToRemove,
-      });
+    const caseToRemove = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: docketNumberToRemove,
+    });
 
     if (!caseToRemove) {
       throw new NotFoundError(

@@ -8,19 +8,18 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { getUniqueId } from '@shared/sharedAppContext';
 import { getDeleteCaseDeadlineInteractorLockInfo } from '@web-api/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 const getCaseDeadlinesByConsolidatedCaseDeadlineId =
   getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('deleteCaseDeadlineInteractor - getDeleteCaseDeadlineInteractorLockInfo', () => {
   const TEST_DEADLINE_ID = getUniqueId();
   const TEST_DOCKET_NUMBER = '101-25';
 
   it('should return only the main case when the case is not the lead case', async () => {
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockReturnValue({ leadDocketNumber: undefined });
+    getCaseByDocketNumber.mockReturnValue({ leadDocketNumber: undefined });
 
     getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue([
       { docketNumber: TEST_DOCKET_NUMBER },
@@ -42,10 +41,9 @@ describe('deleteCaseDeadlineInteractor - getDeleteCaseDeadlineInteractorLockInfo
   });
 
   it('should return only the main case when there are no consolidated case deadlines', async () => {
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockReturnValue({ leadDocketNumber: TEST_DOCKET_NUMBER });
+    getCaseByDocketNumber.mockReturnValue({
+      leadDocketNumber: TEST_DOCKET_NUMBER,
+    });
 
     getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue([]);
 
@@ -62,10 +60,9 @@ describe('deleteCaseDeadlineInteractor - getDeleteCaseDeadlineInteractorLockInfo
   });
 
   it('should return all the identities for cases in a consolidated group that contain deadline', async () => {
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockReturnValue({ leadDocketNumber: TEST_DOCKET_NUMBER });
+    getCaseByDocketNumber.mockReturnValue({
+      leadDocketNumber: TEST_DOCKET_NUMBER,
+    });
 
     getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue([
       { docketNumber: TEST_DOCKET_NUMBER },

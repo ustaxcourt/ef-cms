@@ -5,8 +5,6 @@ export const irsSuperuserAdvancedSearchForCaseDocketNumber = cerebralTest => {
   return it('irsSuperuser performs an advanced search for a case', async () => {
     await refreshElasticsearchIndex();
 
-    await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-
     await cerebralTest.runSequence('updateAdvancedSearchFormValueSequence', {
       formType: 'caseSearchByDocketNumber',
       key: 'docketNumber',

@@ -1,24 +1,34 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
+import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
-import { PaperPetition } from '../../../../shared/src/business/entities/cases/PaperPetition';
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { PaperPetition } from '@shared/business/entities/cases/PaperPetition';
+import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
-import {
-  RawWorkItem,
-  WorkItem,
-} from '../../../../shared/src/business/entities/WorkItem';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '../../errors/errors';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { replaceBracketed } from '../../../../shared/src/business/utilities/replaceBracketed';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
+import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
+import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
+import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
+import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
+import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
+import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -65,7 +75,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   };
 };
 
-export const createCaseFromPaperInteractor = async (
+const createCaseMetadata = async (
   applicationContext: ServerApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
@@ -75,6 +85,7 @@ export const createCaseFromPaperInteractor = async (
     petitionMetadata,
     requestForPlaceOfTrialFileId,
     stinFileId,
+    user,
   }: {
     applicationForWaiverOfFilingFeeFileId?: string;
     attachmentToPetitionFileId?: string;
@@ -83,26 +94,17 @@ export const createCaseFromPaperInteractor = async (
     petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
+    user: UserRecord;
   },
-  authorizedUser: UnknownAuthUser,
-): Promise<{ caseDetail: RawCase; workItem: RawWorkItem }> => {
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
+  authorizedUser: AuthUser,
+) => {
   const petitionEntity = new PaperPetition(petitionMetadata, {
     authorizedUser,
   }).validate();
 
-  const docketNumber =
-    await applicationContext.docketNumberGenerator.createDocketNumber({
-      applicationContext,
-      receivedAt: petitionMetadata.receivedAt,
-    });
+  const docketNumber = await generateDocketNumber({
+    receivedAt: petitionMetadata.receivedAt,
+  });
 
   const caseToAdd = new Case(
     {
@@ -184,20 +186,15 @@ export const createCaseFromPaperInteractor = async (
   }
 
   if (requestForPlaceOfTrialFileId) {
-    let { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
-
-    if (caseToAdd.preferredTrialCity) {
-      documentTitle = replaceBracketed(
-        documentTitle,
-        caseToAdd.preferredTrialCity,
-      );
-    }
+    const { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
 
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {
         createdAt: caseToAdd.receivedAt,
         docketEntryId: requestForPlaceOfTrialFileId,
-        documentTitle,
+        documentTitle: caseToAdd.preferredTrialCity
+          ? replaceBracketed(documentTitle, caseToAdd.preferredTrialCity)
+          : documentTitle,
         documentType:
           INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
         eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
@@ -287,19 +284,97 @@ export const createCaseFromPaperInteractor = async (
     caseToAdd.addDocketEntry(atpDocketEntryEntity);
   }
 
-  await Promise.all([
-    applicationContext.getUseCaseHelpers().createCaseAndAssociations({
+  await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
+    applicationContext,
+    authorizedUser,
+    caseToCreate: caseToAdd.validate().toRawObject(),
+  });
+
+  return { caseToAdd, workItem: newWorkItem };
+};
+
+export const createCaseFromPaperInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    applicationForWaiverOfFilingFeeFileId,
+    attachmentToPetitionFileId,
+    corporateDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
+    requestForPlaceOfTrialFileId,
+    stinFileId,
+  }: {
+    applicationForWaiverOfFilingFeeFileId?: string;
+    attachmentToPetitionFileId?: string;
+    corporateDisclosureFileId?: string;
+    petitionFileId: string;
+    petitionMetadata: CreatedCaseType;
+    requestForPlaceOfTrialFileId?: string;
+    stinFileId?: string;
+  },
+  authorizedUser: UnknownAuthUser,
+): Promise<{ caseDetail: RawCase; workItem: RawWorkItem }> => {
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.START_PAPER_CASE)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  await acquireLock({
+    applicationContext,
+    authorizedUser,
+    identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    retries: 10,
+    waitTime: 500,
+  });
+
+  let caseToAdd: Case;
+  let workItem: WorkItem;
+  try {
+    ({ caseToAdd, workItem } = await createCaseMetadata(
       applicationContext,
+      {
+        applicationForWaiverOfFilingFeeFileId,
+        attachmentToPetitionFileId,
+        corporateDisclosureFileId,
+        petitionFileId,
+        petitionMetadata,
+        requestForPlaceOfTrialFileId,
+        stinFileId,
+        user,
+      },
       authorizedUser,
-      caseToCreate: caseToAdd.validate().toRawObject(),
-    }),
-    upsertWorkItems({
-      workItems: [newWorkItem.validate().toRawObject()],
-    }),
-  ]);
+    ));
+  } finally {
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
+  }
+  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
+
+  await createPetitionersOnCase({
+    docketNumber: caseToAdd.docketNumber,
+    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
+  });
+
+  caseToAdd.statistics?.forEach(statistic =>
+    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+  );
+
+  await upsertCaseStatusUpdates({
+    docketNumber: caseToAdd.docketNumber,
+    statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
+  });
+
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
 
   return {
     caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
-    workItem: newWorkItem.validate().toRawObject(),
+    workItem: workItem.validate().toRawObject(),
   };
 };

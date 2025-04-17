@@ -14,6 +14,14 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { createCaseDeadline } from '@web-api/business/useCases/caseDeadline/createCaseDeadlineInteractor';
 import { MOCK_CASE } from '@shared/test/mockCase';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+
+const updateCase = jest.mocked(updateCaseMock);
+updateCase.mockImplementation(({ caseToUpdate }) =>
+  Promise.resolve(caseToUpdate),
+);
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
   const LEAD_DOCKET_NUMBER = '101-25';
@@ -21,10 +29,7 @@ describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
   const CASE_DEADLINE_ID = getUniqueId();
 
   it('should create a case deadline for all the cases in the consolidated group', async () => {
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockResolvedValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       docketNumber: LEAD_DOCKET_NUMBER,
       leadDocketNumber: LEAD_DOCKET_NUMBER,
@@ -80,10 +85,7 @@ describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
   });
 
   it('should not create a case deadline for the child cases if the flag "handlingConsolidatedCases" is true', async () => {
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockResolvedValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       docketNumber: LEAD_DOCKET_NUMBER,
       leadDocketNumber: LEAD_DOCKET_NUMBER,
@@ -133,10 +135,7 @@ describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
   });
 
   it('should not create a case deadline for all the cases in the consolidated group if its being added to a child case', async () => {
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockResolvedValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       docketNumber: CHILD_DOCKET_NUMBER,
       leadDocketNumber: LEAD_DOCKET_NUMBER,

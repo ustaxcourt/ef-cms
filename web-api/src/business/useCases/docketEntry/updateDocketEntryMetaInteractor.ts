@@ -1,18 +1,19 @@
 import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   UNSERVABLE_EVENT_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
-import { getDocumentTitleWithAdditionalInfo } from '../../../../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const updateDocketEntryMeta = async (
@@ -27,12 +28,10 @@ export const updateDocketEntryMeta = async (
     throw new UnauthorizedError('Unauthorized to update docket entry');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
@@ -146,7 +145,7 @@ export const updateDocketEntryMeta = async (
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+    .updateCaseAutomaticBlock({ caseEntity });
 
   if (shouldGenerateCoversheet) {
     await applicationContext.getPersistenceGateway().updateDocketEntry({
