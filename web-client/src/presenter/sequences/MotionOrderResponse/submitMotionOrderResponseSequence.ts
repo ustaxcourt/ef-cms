@@ -8,10 +8,12 @@ import { setValidationErrorsAction } from '../../actions/setValidationErrorsActi
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { submitCourtIssuedOrder } from '@web-client/presenter/sequences/submitCourtIssuedOrderSequence';
 import { validateMotionOrderResponseFormAction } from '../../actions/MotionOrderResponse/validateMotionOrderResponseFormAction';
+import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
 
 export const submitMotionOrderResponseSequence = [
   showProgressSequenceDecorator([
     clearAlertsAction,
+    startShowValidationAction,
     validateMotionOrderResponseFormAction,
     {
       error: [
