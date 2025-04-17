@@ -52,8 +52,7 @@ describe('replaceEmailAddresses', () => {
       expect.any(String),
     );
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringContaining('Email addresses anonymized'),
-      expect.stringContaining(expectedOutputPath),
+      `Email addresses anonymized. Sanitized file saved to: ${expectedOutputPath}`,
     );
     expect(mockConsoleLog).toHaveBeenCalledWith(
       'Found and anonymized 2 email addresses.',
@@ -75,8 +74,10 @@ describe('replaceEmailAddresses', () => {
       expect.any(String),
     );
     expect(mockConsoleLog).toHaveBeenCalledWith(
-      expect.stringContaining('Email addresses anonymized'),
-      expect.stringContaining(outputPath),
+      `Email addresses anonymized. Sanitized file saved to: ${outputPath}`,
+    );
+    expect(mockConsoleLog).toHaveBeenCalledWith(
+      'Found and anonymized 1 email addresses.',
     );
   });
 
