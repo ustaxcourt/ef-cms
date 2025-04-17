@@ -1,5 +1,6 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import {
@@ -70,21 +71,6 @@ export function toKyselyNewPractitioner(user: RawUser): NewPractitionerKysely {
 }
 
 export function practitionerEntity(practitioner) {
-  // if (practitioner.role === ROLES.practitioner) {
-  //   return new Practitioner(
-  //     transformNullToUndefined({
-  //       ...practitioner,
-  //       contact: contactInfo(practitioner),
-  //       admissionsDate: formatDateString(
-  //         practitioner.admissionsDate?.toISOString(),
-  //         FORMATS.YYYYMMDD,
-  //       ),
-  //       pendingEmailVerificationTokenTimestamp:
-  //         practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
-  //     }),
-  //   );
-  // }
-
   if (practitioner.role === ROLES.privatePractitioner) {
     return new PrivatePractitioner(
       transformNullToUndefined({
@@ -114,4 +100,17 @@ export function practitionerEntity(practitioner) {
       }),
     );
   }
+
+  return new Practitioner(
+    transformNullToUndefined({
+      ...practitioner,
+      contact: contactInfo(practitioner),
+      admissionsDate: formatDateString(
+        practitioner.admissionsDate?.toISOString(),
+        FORMATS.YYYYMMDD,
+      ),
+      pendingEmailVerificationTokenTimestamp:
+        practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
+    }),
+  );
 }

@@ -6,11 +6,21 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 
 - [in-progress] Figure out how to store practitioners
   - [ ] Fix privatePractitioner `representing` field
+  - [x] Split Up Users and Practitioners (into separate directories + functions)
+  - [x] Added EntityName to User and removed UserType References
+  - [x] Added User Information Back into Petitioner (role, contact, name, etc)
+  - [ ] Check all user functions and ensure using User vs Practitioner where applicable 
+    - [ ] getUserById
+    - [ ] getUserByIds
+    - [ ] getUserInteractor add new function getUserOrPractitioner
+    - [ ] etc. ...
+  - [ ] make sure any sure any situation expecting an IrsPractitioner or a PrivatePractitioner in the application/interactor layer gets what it needs from persistence
+  - [ ] finish implementing `practitionerEntity` function in `practitioner/mapper.ts`
 - [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
-- [ ] Consider replicating the name field from User on Practitioner (need to be able to search for Practitioners by name)
+- [x] Consider replicating the name field from User on Practitioner (need to be able to search for Practitioners by name)
 - [ ] Odd user-related dynamodb functions
-- [ ] dwUsersOnCase: is it possible for the same user to be on the same case multiple times??
+- [x] dwUsersOnCase: is it possible for the same user to be on the same case multiple times?? (update the answer is no, it's not possible, but what we've built does handle this scenario)
 - [ ] Do we need to tackle: "pk": "chief-judge-name" ??
 - [ ] Determine if selectAll is necessary for User functions
 - [ ] Delete `UserCase` entity
