@@ -11,7 +11,12 @@ export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
       .selectFrom('dwCaseDeadline as cd')
       .innerJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
       .selectAll()
-      .where('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId);
+      .where(q =>
+        q.or([
+          q('cd.caseDeadlineId', '=', consolidatedCaseDeadlineId),
+          q('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId),
+        ]),
+      );
 
     if (!leadDocketNumber) return query.execute();
     return query.where('c.leadDocketNumber', '=', leadDocketNumber).execute();
