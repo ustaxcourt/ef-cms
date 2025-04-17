@@ -8,6 +8,7 @@ import {
 } from '../../../../support/pages/case-detail';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import {
+  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   PENALTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -126,17 +127,39 @@ const getDeficiencyStatistics = (docketNumber: string): RawStatistic[] => {
   ];
 };
 
-describe('Edit case detail', () => {
+describe('View/Edit case detail', () => {
   before(function () {
     createAndServePaperPetition({ yearReceived: '1950' }).then(caseRecord => {
       cy.wrap(caseRecord.docketNumber).as('docketNumber');
     });
   });
 
-  it('should change the title of the case', function () {
+  it('should show correct initial case statuses', function () {
     loginAsDocketClerk();
     cy.visit(`/case-detail/${this.docketNumber}`);
     getCaseDetailTab('case-information').click();
+    cy.get('[data-testid="case-status-history-tab"]').click();
+    // We should have two case statuses, the first New and the second General Docket - Not at Issue
+    cy.get('[data-testid="case-status-history-container"]')
+      .find('tbody tr')
+      .should('have.length', 2)
+      .as('statusRows');
+
+    cy.get('@statusRows')
+      .eq(0)
+      .find('td')
+      .eq(1)
+      .should('have.text', CASE_STATUS_TYPES.new);
+
+    cy.get('@statusRows')
+      .eq(1)
+      .find('td')
+      .eq(1)
+      .should('have.text', CASE_STATUS_TYPES.generalDocket);
+  });
+
+  it('should change the title of the case', function () {
+    cy.get('[data-testid="case-overview-tab"]').click();
     getEditCaseCaptionButton().click();
     getCaptionTextArea().clear().type('there is no cow level');
     getButton('Save').click();
@@ -146,7 +169,6 @@ describe('Edit case detail', () => {
   });
 
   it('should change type of case (to deficiency)', function () {
-    getCaseDetailTab('case-information').click();
     cy.get('[data-testid="edit-case-details-button"]').click();
     cy.get('[data-testid="case-type-select"]').select(
       CASE_TYPES_MAP.deficiency,
@@ -156,7 +178,7 @@ describe('Edit case detail', () => {
   });
 
   it('should add deficiency statistics', function () {
-    getButton('Statistics').click();
+    cy.get('[data-testid="case-statistics-tab"]').click();
     for (const statistic of getDeficiencyStatistics(docketNumber)) {
       cy.contains('a', 'Add New Year/Period').click();
       cy.get(`[data-testid="year-or-period-${statistic.yearOrPeriod}"]`);

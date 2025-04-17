@@ -208,6 +208,9 @@ import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessi
 
 export const app = express();
 
+// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
+app.set('query parser', 'extended');
+
 const allowAccessOriginFunction = (origin, callback) => {
   //Origin header wasn't provided
   if (!origin || origin === '') {

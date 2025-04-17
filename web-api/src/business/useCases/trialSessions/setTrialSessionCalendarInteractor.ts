@@ -48,10 +48,9 @@ export const setTrialSessionCalendarInteractor = async (
     }
 
     const trialSessionEntity = new TrialSession(trialSession);
-
+    trialSessionEntity.setAsCalendared();
     trialSessionEntity.validate();
 
-    trialSessionEntity.setAsCalendared();
 
     //get cases that have been manually added so we can set them as calendared
     const manuallyAddedCases = await applicationContext
