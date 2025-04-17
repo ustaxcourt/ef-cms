@@ -10,6 +10,7 @@ import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { sql } from 'kysely';
 import { Penalty } from '@shared/business/entities/Penalty';
 import { PetitionerOnCaseKysely } from '@web-api/persistence/postgres/cases/parties/schema';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const getCalendaredCasesForTrialSession = async ({
   applicationContext,
@@ -17,9 +18,7 @@ export const getCalendaredCasesForTrialSession = async ({
 }: {
   applicationContext: ServerApplicationContext;
   trialSessionId: string;
-}): Promise<
-  (Omit<RawCase, 'caseStatusHistory' | 'correspondence'> & TCaseOrder)[]
-> => {
+}): Promise<(Omit<RawCase, 'correspondence'> & TCaseOrder)[]> => {
   const trialSession = await getTrialSessionInfo(
     trialSessionId,
     applicationContext,
@@ -44,7 +43,13 @@ export const getCalendaredCasesForTrialSession = async ({
 
   const caseMap: Map<string, any> = new Map();
   cases.forEach(c => {
-    caseMap.set(c.docketNumber, { ...c });
+    caseMap.set(c.docketNumber, {
+      ...c,
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: c.docketNumber,
+        docketNumberSuffix: c.docketNumberSuffix,
+      }),
+    });
   });
   petitioners.forEach(p => {
     const caseInfo = caseMap.get(p.docketNumber);
@@ -87,7 +92,7 @@ export const getCalendaredCasesForTrialSession = async ({
     );
   });
 
-  return casesData;
+  return casesData.map(c => fromKyselyCase(c)) as (RawCase & TCaseOrder)[];
 };
 
 // function sortStatistics(statistics: RawStatistic[]) {
@@ -156,7 +161,7 @@ async function getCasesMetadata(docketNumbers: string[]) {
       .selectAll()
       .execute(),
   );
-  return caseInfo.map(c => fromKyselyCase(c));
+  return caseInfo;
 }
 
 async function getPetitioners(docketNumbers: string[]) {
