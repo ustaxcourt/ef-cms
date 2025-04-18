@@ -1804,10 +1804,6 @@ export const TROUBLESHOOTING_INFO = {
 };
 
 export const MOTION_ORDER_RESPONSE_OPTIONS = {
-  orderReplyOptions: {
-    // More options may arise in future
-    REPLY: 'Order Reply',
-  },
   issueOrderOptions: {
     ALL_CASES: 'All cases in this group',
     THIS_CASE_ONLY: 'Just this case',
