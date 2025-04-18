@@ -634,7 +634,7 @@ export const baseState = {
       leadDocketNumber: string;
     })[];
     caseDeadlinesTotalCount: 0;
-    judgeFilter: string;
+    judgeIdFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],
   caseDetail: {} as RawCase,
@@ -724,6 +724,7 @@ export const baseState = {
   judgeUser: {} as any,
   judges: [] as RawUser[],
   judgesChambers: [] as JudgeChambersInfo[],
+  judgesNote: {} as { notes: string },
   legacyAndCurrentJudges: [] as RawUser[],
   login: {} as any,
   logoutType: '',

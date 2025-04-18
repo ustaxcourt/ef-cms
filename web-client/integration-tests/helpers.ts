@@ -107,6 +107,22 @@ export const getFormattedDocketEntriesForTest = async cerebralTest => {
   });
 };
 
+export const getFilteredFormattedDocketEntriesForTest = async (
+  cerebralTest,
+  documentTypeFilter: string,
+) => {
+  await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    docketNumber: cerebralTest.docketNumber,
+  });
+  await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+    key: 'sessionMetadata.docketRecordFilter',
+    value: documentTypeFilter,
+  });
+  return runCompute(formattedDocketEntries, {
+    state: cerebralTest.getState(),
+  });
+};
+
 export const contactPrimaryFromState = cerebralTest => {
   return cerebralTest.getState('caseDetail.petitioners.0');
 };
