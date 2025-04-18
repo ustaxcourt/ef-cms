@@ -301,6 +301,7 @@ export const createCaseInteractor = async (
     | IrsPractitioner[] = [];
   if (user.role === ROLES.privatePractitioner) {
     const practitionerUser = (await getUserById({
+      // TODO 10495: use getUserOrPractitioner here
       userId: user.userId,
     })) as PrivatePractitioner;
 

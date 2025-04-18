@@ -28,9 +28,6 @@ import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCa
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { Practitioner } from '@shared/business/entities/Practitioner';
-import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -96,7 +93,7 @@ const createCaseMetadata = async (
     petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    user: User | Practitioner | IrsPractitioner | PrivatePractitioner;
+    user: User;
   },
   authorizedUser: AuthUser,
 ) => {

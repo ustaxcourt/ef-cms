@@ -9,10 +9,12 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
   - [x] Split Up Users and Practitioners (into separate directories + functions)
   - [x] Added EntityName to User and removed UserType References
   - [x] Added User Information Back into Petitioner (role, contact, name, etc)
-  - [ ] Check all user functions and ensure using User vs Practitioner where applicable 
+  - [ ] Check all user functions and ensure using User vs Practitioner where applicable
     - [ ] getUserById
+      - [ ] getUserInteractor - add new function getUserOrPractitioner
+      - [ ] createCaseInteractor ditto
+      - [ ] deleteCounselFromCaseInteractor ditto
     - [ ] getUserByIds
-    - [ ] getUserInteractor add new function getUserOrPractitioner
     - [ ] etc. ...
   - [ ] make sure any sure any situation expecting an IrsPractitioner or a PrivatePractitioner in the application/interactor layer gets what it needs from persistence
   - [ ] finish implementing `practitionerEntity` function in `practitioner/mapper.ts`
