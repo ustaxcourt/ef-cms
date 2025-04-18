@@ -12,10 +12,10 @@ import { sortBy } from 'lodash';
 
 export const getAssociatedJudge = (theCase, caseAndCaseItems) => {
   if (theCase && theCase.judgeUserId) {
-    const associatedJudgeId = caseAndCaseItems.find(
+    const judgeRecord = caseAndCaseItems.find(
       item => item.sk === `user|${theCase.judgeUserId}`,
     );
-    return associatedJudgeId ? associatedJudgeId.name : undefined;
+    return judgeRecord ? judgeRecord.name : undefined;
   } else if (theCase && theCase.associatedJudge) {
     return theCase.associatedJudge;
   }

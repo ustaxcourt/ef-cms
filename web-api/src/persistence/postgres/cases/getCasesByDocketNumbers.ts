@@ -5,9 +5,11 @@ import { getDbReader } from '@web-api/database';
 import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
+import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { PetitionerOnCaseKysely } from '@web-api/persistence/postgres/cases/parties/schema';
+import { sortStatistics } from '@web-api/persistence/postgres/cases/statistics/helper';
 import { sql } from 'kysely';
 import { isEmpty, partition, sortBy } from 'lodash';
 
@@ -15,7 +17,7 @@ export async function getCasesByDocketNumbers({
   docketNumbers,
 }: {
   docketNumbers: string[];
-}): Promise<Omit<RawCase, 'correspondence'>[]> {
+}): Promise<Omit<RawCase, 'hearings'>[]> {
   if (isEmpty(docketNumbers)) {
     return [];
   }
@@ -29,6 +31,7 @@ export async function getCasesByDocketNumbers({
     docketEntriesFromDb,
     caseStatusHistories,
     caseCorrespondences,
+    hearings,
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
     getPetitioners(docketNumbers),
@@ -37,6 +40,7 @@ export async function getCasesByDocketNumbers({
     getDocketEntries(docketNumbers, applicationContext),
     getCasesStatusHistory(docketNumbers),
     getCaseCorrespondenceByDocketNumber(docketNumbers),
+    getHearings(docketNumbers),
   ]);
 
   // Associate the right data with each case
@@ -95,6 +99,13 @@ export async function getCasesByDocketNumbers({
       correspondence: correspondences,
     });
   });
+  hearings.forEach(hearingInfo => {
+    const caseInfo = caseMap.get(hearingInfo.docketNumber);
+    caseMap.set(hearingInfo.docketNumber, {
+      ...caseInfo,
+      hearings: hearingInfo.hearings,
+    });
+  });
 
   // Sort case fields that need to be sorted
   const casesData = Array.from(caseMap.values());
@@ -117,7 +128,7 @@ export async function getCasesByDocketNumbers({
     );
     c.correspondence = sortBy(correspondence, 'filingDate');
     c.archivedCorrespondences = sortBy(archivedCorrespondences, 'filingDate');
-    // 10502 TODO sort statistics
+    c.statistics = sortStatistics(c.statistics);
   });
 
   // Sort the cases in the original docketNumber order
@@ -147,6 +158,30 @@ async function getDocketEntries(
     }),
   );
   return docketEntryInfo;
+}
+
+async function getHearings(
+  docketNumbers: string[],
+): Promise<{ docketNumber: string; hearings: any[] }[]> {
+  const hearingsInfo = await Promise.all(
+    docketNumbers.map(async docketNumber => {
+      const hearings = await queryFull({
+        ExpressionAttributeNames: {
+          '#pk': 'pk',
+          '#sk': 'sk',
+        },
+        ExpressionAttributeValues: {
+          ':pk': `case|${docketNumber}`,
+          ':prefix': 'hearing|',
+        },
+        KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+        applicationContext,
+      });
+      return { docketNumber, hearings };
+    }),
+  );
+
+  return hearingsInfo;
 }
 
 async function getPractitioners(
