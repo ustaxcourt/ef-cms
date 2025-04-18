@@ -88,7 +88,7 @@ export const prepareMotionOrderResponseAction = ({
   }
 
   const orderVerbiage = `that by ${responseDateFormatted} ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
-  const preamble = `<p class="indent-paragraph">${preamblePrepend} On ${motionFilingDateFormatted}, ${movant} filed ${motionDocumentTitle} (Document no. ${index}). For cause, it is </p>`;
+  const preamble = `<p class="indent-paragraph">${preamblePrepend} On ${motionFilingDateFormatted}, ${movant} filed a ${motionDocumentTitle} (Document no. ${index}). For cause, it is </p>`;
   const orderVerbiageHtml = `<p class="indent-paragraph">ORDERED ${orderVerbiage}`;
 
   const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} ${movant} may file a Reply.`;
