@@ -5,11 +5,12 @@ import { getDbReader } from '@web-api/database';
 import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
+import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { PetitionerOnCaseKysely } from '@web-api/persistence/postgres/cases/parties/schema';
 // import { CaseStatisticKysely } from '@web-api/persistence/postgres/cases/statistics/schema';
 import { sql } from 'kysely';
-import { isEmpty } from 'lodash';
+import { isEmpty, sortBy } from 'lodash';
 
 export async function getCasesByDocketNumbers({
   docketNumbers,
@@ -27,12 +28,16 @@ export async function getCasesByDocketNumbers({
     statistics,
     practitionerInfo,
     docketEntriesFromDb,
+    caseStatusHistories,
+    caseCorrespondences,
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
     getPetitioners(docketNumbers),
     getStatistics(docketNumbers),
     getPractitioners(docketNumbers, applicationContext),
     getDocketEntries(docketNumbers, applicationContext),
+    getCasesStatusHistory(docketNumbers),
+    getCaseCorrespondenceByDocketNumber(docketNumbers),
   ]);
 
   // Associate the right data with each case
@@ -73,6 +78,24 @@ export async function getCasesByDocketNumbers({
       privatePractitioners: info.privatePractitioners,
     });
   });
+  caseStatusHistories.forEach(history => {
+    const caseInfo = caseMap.get(history.docketNumber);
+    const histories = caseInfo.caseStatusHistory || [];
+    histories.push(history);
+    caseMap.set(history.docketNumber, {
+      ...caseInfo,
+      caseStatusHistory: histories,
+    });
+  });
+  caseCorrespondences.forEach(correspondence => {
+    const caseInfo = caseMap.get(correspondence.docketNumber!);
+    const correspondences = caseInfo.correspondence || [];
+    correspondences.push(correspondence);
+    caseMap.set(correspondence.docketNumber!, {
+      ...caseInfo,
+      correspondence: correspondences,
+    });
+  });
 
   // Sort case fields that need to be sorted
   const casesData = Array.from(caseMap.values());
@@ -82,9 +105,7 @@ export async function getCasesByDocketNumbers({
         return a.orderOnCase - b.orderOnCase;
       },
     );
-    c.docketEntries.sort((a, b) => {
-      return a.index - b.index;
-    });
+    c.docketEntries = sortBy(c.docketEntries, 'createdAt');
     // 10502 TODO sort statistics
   });
 
@@ -179,6 +200,35 @@ async function getPetitioners(docketNumbers: string[]) {
       .execute(),
   );
   return dbPetitioners;
+}
+
+async function getCasesStatusHistory(docketNumbers: string[]) {
+  const dbCaseStatusHistory = await getDbReader(reader =>
+    reader
+      .selectFrom('dwCaseStatusUpdate')
+      .where('docketNumber', 'in', docketNumbers)
+      .orderBy('date asc')
+      .selectAll()
+      .execute(),
+  );
+  const caseStatusHistory = dbCaseStatusHistory.map(update => {
+    return { ...update, date: update.date.toISOString() };
+  });
+
+  return caseStatusHistory;
+}
+
+async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
+  const correspondence = await getDbReader(reader =>
+    reader
+      .selectFrom('dwCaseCorrespondence as cc')
+      .where('cc.docketNumber', 'in', docketNumbers)
+      .selectAll()
+      .select('cc.docketNumber')
+      .execute(),
+  );
+
+  return correspondence.map(c => caseCorrespondenceEntity(c));
 }
 
 async function getStatistics(docketNumbers: string[]) {
