@@ -10,17 +10,6 @@ import {
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { sortBy } from 'lodash';
 
-export const getAssociatedJudge = (theCase, caseAndCaseItems) => {
-  if (theCase && theCase.judgeUserId) {
-    const judgeRecord = caseAndCaseItems.find(
-      item => item.sk === `user|${theCase.judgeUserId}`,
-    );
-    return judgeRecord ? judgeRecord.name : undefined;
-  } else if (theCase && theCase.associatedJudge) {
-    return theCase.associatedJudge;
-  }
-};
-
 export const isArchivedCorrespondenceItem = item =>
   item.sk.startsWith('correspondence|') && item.archived;
 
@@ -113,7 +102,6 @@ export const aggregateCaseItems = (caseAndCaseItems): RawCase => {
     ...theCase,
     archivedCorrespondences: sortedArchivedCorrespondences,
     archivedDocketEntries: sortedArchivedDocketEntries,
-    associatedJudge: getAssociatedJudge(theCase, caseAndCaseItems),
     correspondence: sortedCorrespondences,
     docketEntries: sortedDocketEntries,
     hearings,
