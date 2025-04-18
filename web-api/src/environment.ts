@@ -29,7 +29,11 @@ export const environment = {
   rds: {
     pool: {
       database: process.env.DATABASE_NAME || 'postgres',
-      host: process.env.POSTGRES_HOST || 'localhost',
+      host:
+        process.env.POSTGRES_HOST ||
+        (process.env.NODE_ENV !== 'test'
+          ? 'localhost'
+          : 'SHOULD_NOT_CONNECT_TO_DB__SOMETHING_NOT_MOCKED'),
       idleTimeoutMillis: 1000,
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
