@@ -18,8 +18,8 @@ export const defaultAdvancedSearchFormAction = ({
 
   store.set(state.advancedSearchForm.practitionerSearchByName, {
     lastKeysOfPages: [],
-    total: 0,
     practitionerType: ALL_SELECTION,
+    total: 0,
   });
 
   store.set(state.advancedSearchForm.searchMode, 'byName');

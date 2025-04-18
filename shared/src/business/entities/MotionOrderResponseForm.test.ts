@@ -38,8 +38,7 @@ describe('MotionOrderResponseForm', () => {
         startDate: createISODateString(),
       });
       const form = new MotionOrderResponseForm({
-        motionOrderResponse:
-          MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY,
+        motionOrderResponse: true,
         responseDate,
         dueDate,
         additionalOrderText: 'Live long and prosper',
@@ -70,8 +69,7 @@ describe('MotionOrderResponseForm', () => {
         startDate: createISODateString(),
       });
       const form = new MotionOrderResponseForm({
-        motionOrderResponse:
-          MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY,
+        motionOrderResponse: true,
         responseDate,
         isOnLeadCase: true,
         issueOrderFor:
@@ -96,8 +94,7 @@ describe('MotionOrderResponseForm', () => {
       });
 
       const form = new MotionOrderResponseForm({
-        motionOrderResponse:
-          MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY,
+        motionOrderResponse: true,
         responseDate,
         dueDate: invalidDueDate,
         isOnLeadCase: true,

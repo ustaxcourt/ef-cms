@@ -9,4 +9,5 @@ export const setupOrderResponseFormAction = ({ store, get }: ActionProps) => {
     : MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY;
 
   store.set(state.form.issueOrderFor, consolidatedFiling);
+  store.set(state.form.isOnLeadCase, isOnLeadCase);
 };
