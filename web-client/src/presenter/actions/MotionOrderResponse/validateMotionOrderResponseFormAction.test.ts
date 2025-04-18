@@ -3,10 +3,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { validateMotionOrderResponseFormAction } from './validateMotionOrderResponseFormAction';
-import {
-  formatNow,
-  FORMATS,
-} from '@shared/business/utilities/DateHandler';
+import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 
 describe('validateMotionOrderResponseFormAction', () => {
   const mockSuccessPath = jest.fn();
@@ -35,6 +32,7 @@ describe('validateMotionOrderResponseFormAction', () => {
           responseDate: today,
           orderType: MOTION_ORDER_RESPONSE_OPTIONS.orderType,
           strickenFromTrialSession: false,
+          isOnLeadCase: true,
           issueOrderFor:
             MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.ALL_CASES,
         },
@@ -77,8 +75,7 @@ describe('validateMotionOrderResponseFormAction', () => {
           dueDate: 'invalid-date',
           issueOrderFor:
             MOTION_ORDER_RESPONSE_OPTIONS.issueOrderOptions.THIS_CASE_ONLY,
-          motionOrderResponse:
-            MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY,
+          motionOrderResponse: true,
           responseDate: 'invalid-date',
         },
       },

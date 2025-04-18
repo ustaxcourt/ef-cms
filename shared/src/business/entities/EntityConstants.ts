@@ -1843,10 +1843,6 @@ export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
 export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
 
 export const MOTION_ORDER_RESPONSE_OPTIONS = {
-  orderReplyOptions: {
-    // More options may arise in future
-    REPLY: 'Order Reply',
-  },
   issueOrderOptions: {
     ALL_CASES: 'All cases in this group',
     THIS_CASE_ONLY: 'Just this case',
