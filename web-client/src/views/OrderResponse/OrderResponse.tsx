@@ -198,6 +198,12 @@ export const OrderResponse = connect(
                             key: e.target.name,
                             value: !form.motionOrderResponse,
                           });
+                          if (form.motionOrderResponse === false) {
+                            updateFormValueSequence({
+                              key: 'dueDate',
+                              value: '',
+                            });
+                          }
                           validateMotionOrderResponseSequence();
                         }}
                       />
@@ -219,7 +225,11 @@ export const OrderResponse = connect(
                       formGroupClassNames="display-inline-block order-response-date-selector"
                       id="due-date-input-motionOrderResponseDueDate"
                       minDate={form.responseDate}
-                      hintText="Due date (Required):"
+                      hintText={
+                        form.motionOrderResponse
+                          ? 'Due date (Required):'
+                          : 'Due date:'
+                      }
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
