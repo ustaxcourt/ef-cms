@@ -17,7 +17,7 @@ export async function getCasesByDocketNumbers({
   docketNumbers,
 }: {
   docketNumbers: string[];
-}): Promise<Omit<RawCase, 'hearings'>[]> {
+}): Promise<Omit<RawCase, 'consolidatedCases'>[]> {
   if (isEmpty(docketNumbers)) {
     return [];
   }
@@ -244,7 +244,7 @@ async function getCasesStatusHistory(docketNumbers: string[]) {
     reader
       .selectFrom('dwCaseStatusUpdate')
       .where('docketNumber', 'in', docketNumbers)
-      .orderBy('date asc')
+      .orderBy('date', 'asc')
       .selectAll()
       .execute(),
   );

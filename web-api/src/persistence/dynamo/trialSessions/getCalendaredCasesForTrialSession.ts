@@ -9,7 +9,7 @@ export const getCalendaredCasesForTrialSession = async ({
 }: {
   applicationContext: ServerApplicationContext;
   trialSessionId: string;
-}): Promise<(Omit<RawCase, 'correspondence'> & TCaseOrder)[]> => {
+}): Promise<(Omit<RawCase, 'consolidatedCases'> & TCaseOrder)[]> => {
   const trialSession = await getTrialSessionInfo(
     trialSessionId,
     applicationContext,
