@@ -12,17 +12,17 @@ export const associateIrsPractitionerToCase = async ({
   authorizedUser,
   docketNumber,
   serviceIndicator,
-  user,
+  irsPractitioner,
 }: {
   applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketNumber: string;
   serviceIndicator?: string;
-  user: RawUser;
+  irsPractitioner: RawUser;
 }): Promise<void> => {
   const isAssociated = await verifyCaseForUser({
     docketNumber,
-    userId: user.userId,
+    userId: irsPractitioner.userId,
   });
 
   if (!isAssociated) {
@@ -33,7 +33,7 @@ export const associateIrsPractitionerToCase = async ({
 
     await associateUserWithCase({
       docketNumber,
-      userId: user.userId,
+      userId: irsPractitioner.userId,
     });
 
     const caseEntity = new Case(caseToUpdate, {
@@ -41,7 +41,7 @@ export const associateIrsPractitionerToCase = async ({
     });
 
     caseEntity.attachIrsPractitioner(
-      new IrsPractitioner({ ...user, serviceIndicator }),
+      new IrsPractitioner({ ...irsPractitioner, serviceIndicator }),
     );
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

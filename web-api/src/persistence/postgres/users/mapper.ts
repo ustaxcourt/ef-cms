@@ -5,6 +5,18 @@ import {
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '@shared/business/entities/Practitioner';
+import {
+  PrivatePractitioner,
+  RawPrivatePractitioner,
+} from '@shared/business/entities/PrivatePractitioner';
+import {
+  IrsPractitioner,
+  RawIrsPractitioner,
+} from '@shared/business/entities/IrsPractitioner';
 
 function pickUserFields(user) {
   return {
@@ -97,4 +109,70 @@ function hasContactInfo(contact): boolean {
 
 export function toKyselyNewUsers(users: RawUser[]): NewUserKysely[] {
   return users.map(pickUserFields);
+}
+
+export function rawUserWithPractitionerEntity(
+  user,
+): RawUser | RawPractitioner | RawIrsPractitioner | RawPrivatePractitioner {
+  if (user.entityName === PrivatePractitioner.ENTITY_NAME) {
+    return new PrivatePractitioner(
+      transformNullToUndefined({
+        ...user,
+        contact: contactInfo(user),
+        admissionsDate: formatDateString(
+          user.admissionsDate?.toISOString(),
+          FORMATS.YYYYMMDD,
+        ),
+        pendingEmailVerificationTokenTimestamp:
+          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
+      }),
+    )
+      .validate()
+      .toRawObject();
+  } else if (user.entityName === IrsPractitioner.ENTITY_NAME) {
+    return new IrsPractitioner(
+      transformNullToUndefined({
+        ...user,
+        contact: contactInfo(user),
+        admissionsDate: formatDateString(
+          user.admissionsDate?.toISOString(),
+          FORMATS.YYYYMMDD,
+        ),
+        pendingEmailVerificationTokenTimestamp:
+          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
+      }),
+    )
+      .validate()
+      .toRawObject();
+  } else if (user.entityName === Practitioner.ENTITY_NAME) {
+    return new Practitioner(
+      transformNullToUndefined({
+        ...user,
+        contact: contactInfo(user),
+        admissionsDate: formatDateString(
+          user.admissionsDate?.toISOString(),
+          FORMATS.YYYYMMDD,
+        ),
+        pendingEmailVerificationTokenTimestamp:
+          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
+      }),
+    )
+      .validate()
+      .toRawObject();
+  } else {
+    return new User(
+      transformNullToUndefined({
+        ...user,
+        contact: contactInfo(user),
+        admissionsDate: formatDateString(
+          user.admissionsDate?.toISOString(),
+          FORMATS.YYYYMMDD,
+        ),
+        pendingEmailVerificationTokenTimestamp:
+          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
+      }),
+    )
+      .validate()
+      .toRawObject();
+  }
 }

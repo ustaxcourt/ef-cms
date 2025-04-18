@@ -7,8 +7,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -36,7 +36,7 @@ const submitCaseAssociationRequest = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await getUserById({ userId: authorizedUser.userId });
+  const user = await getPractitionerById({ userId: authorizedUser.userId });
 
   const isPrivatePractitioner =
     authorizedUser.role === ROLES.privatePractitioner;
@@ -50,7 +50,7 @@ const submitCaseAssociationRequest = async (
         authorizedUser,
         docketNumber,
         representing: filers,
-        user: user.toRawObject() as RawPractitioner,
+        privatePractitioner: user.toRawObject() as RawPractitioner,
       });
   } else if (isIrsPractitioner) {
     return await applicationContext
@@ -59,7 +59,7 @@ const submitCaseAssociationRequest = async (
         applicationContext,
         authorizedUser,
         docketNumber,
-        user,
+        irsPractitioner: user.toRawObject() as RawPractitioner,
       });
   }
 };

@@ -32,6 +32,7 @@ import { Practitioner } from '@shared/business/entities/Practitioner';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { User } from '@shared/business/entities/User';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
@@ -300,8 +301,7 @@ export const createCaseInteractor = async (
     | PrivatePractitioner
     | IrsPractitioner[] = [];
   if (user.role === ROLES.privatePractitioner) {
-    const practitionerUser = (await getUserById({
-      // TODO 10495: use getUserOrPractitioner here
+    const practitionerUser = (await getPractitionerById({
       userId: user.userId,
     })) as PrivatePractitioner;
 

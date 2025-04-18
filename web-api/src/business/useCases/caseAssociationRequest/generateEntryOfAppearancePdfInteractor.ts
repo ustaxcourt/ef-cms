@@ -6,7 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 
 export type EntryOfAppearanceProps = {
   caseCaptionExtension: string;
@@ -36,7 +36,7 @@ export const generateEntryOfAppearancePdfInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const practitionerInformation = await getUserById({
+  const practitionerInformation = await getPractitionerById({
     userId: authorizedUser.userId,
   });
 

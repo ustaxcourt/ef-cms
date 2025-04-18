@@ -10,14 +10,18 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
   - [x] Added EntityName to User and removed UserType References
   - [x] Added User Information Back into Petitioner (role, contact, name, etc)
   - [ ] Check all user functions and ensure using User vs Practitioner where applicable
-    - [ ] getUserById
-      - [ ] getUserInteractor - add new function getUserOrPractitioner
-      - [ ] createCaseInteractor ditto
-      - [ ] deleteCounselFromCaseInteractor ditto
+    - [x] getUserById
+      - [x] getUserInteractor - add new function getUserOrPractitioner
+      - [x] createCaseInteractor ditto
+      - [x] deleteCounselFromCaseInteractor ditto
+      - [x] check getUserByIdOnceAllUpdatesComplete
+      - [x] SIDE QUEST: fix all invocations of web-api/src/business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase.ts
     - [ ] getUserByIds
     - [ ] etc. ...
   - [ ] make sure any sure any situation expecting an IrsPractitioner or a PrivatePractitioner in the application/interactor layer gets what it needs from persistence
   - [ ] finish implementing `practitionerEntity` function in `practitioner/mapper.ts`
+- [ ] Add entity name to Practitioner
+- [ ] Update `web-api/src/lambdas/migration/utilities/getUserById.ts`
 - [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
 - [x] Consider replicating the name field from User on Practitioner (need to be able to search for Practitioners by name)

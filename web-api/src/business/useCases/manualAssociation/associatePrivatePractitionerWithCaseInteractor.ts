@@ -7,7 +7,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { Practitioner } from '@shared/business/entities/Practitioner';
 
 /**
  * associatePrivatePractitionerWithCaseInteractor
@@ -40,7 +41,9 @@ export const associatePrivatePractitionerWithCase = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await getUserById({ userId });
+  const privatePractitioner = (await getPractitionerById({
+    userId,
+  })) as Practitioner;
 
   return await associatePrivatePractitionerToCase({
     applicationContext,
@@ -48,7 +51,7 @@ export const associatePrivatePractitionerWithCase = async (
     docketNumber,
     representing,
     serviceIndicator,
-    user: user.toRawObject(),
+    privatePractitioner,
   });
 };
 

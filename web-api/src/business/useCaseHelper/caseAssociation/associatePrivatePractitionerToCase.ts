@@ -24,18 +24,18 @@ export const associatePrivatePractitionerToCase = async ({
   docketNumber,
   representing = [],
   serviceIndicator,
-  user,
+  privatePractitioner,
 }: {
   applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketNumber: string;
   serviceIndicator?: string;
-  user: RawPractitioner;
+  privatePractitioner: RawPractitioner;
   representing: string[];
 }) => {
   const isAssociated = await verifyCaseForUser({
     docketNumber,
-    userId: user.userId,
+    userId: privatePractitioner.userId,
   });
 
   const caseToUpdate = await getCaseByDocketNumber({
@@ -44,13 +44,13 @@ export const associatePrivatePractitionerToCase = async ({
   });
 
   const isPrivatePractitionerOnCase = caseToUpdate.privatePractitioners?.some(
-    practitioner => practitioner.userId === user.userId,
+    practitioner => practitioner.userId === privatePractitioner.userId,
   );
 
   if (!isAssociated) {
     await associateUserWithCase({
       docketNumber,
-      userId: user.userId,
+      userId: privatePractitioner.userId,
     });
 
     const caseEntity = new Case(caseToUpdate, {
@@ -67,7 +67,7 @@ export const associatePrivatePractitionerToCase = async ({
 
     caseEntity.attachPrivatePractitioner(
       new PrivatePractitioner({
-        ...user,
+        ...privatePractitioner,
         representing,
         serviceIndicator,
       }),
@@ -82,7 +82,7 @@ export const associatePrivatePractitionerToCase = async ({
     return caseEntity.toRawObject();
   } else if (!isPrivatePractitionerOnCase) {
     applicationContext.logger.error(
-      `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
+      `BUG 9323: Private Practitioner with userId: ${privatePractitioner.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
     );
   }
 };

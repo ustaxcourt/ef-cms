@@ -17,9 +17,9 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 
 /**
  * updateUserContactInformationHelper
@@ -45,7 +45,7 @@ const updateUserContactInformationHelper = async (
   },
   authorizedUser: AuthUser,
 ) => {
-  const user = (await getUserById({ userId })) as Practitioner;
+  const user = (await getPractitionerById({ userId })) as Practitioner;
 
   const isPractitioner = u => {
     return (

@@ -13,6 +13,7 @@ import {
 } from '@web-api/persistence/postgres/practitioners/schema';
 import { contactInfo } from '@web-api/persistence/postgres/users/mapper';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { DW_PRACTITIONER_COLUMNS } from '@web-api/persistence/postgres/practitioners/schema';
 
 // 10495 TODO: do not use `any` below please
 export function pickPractitionerFields(user: any) {
@@ -70,6 +71,9 @@ export function toKyselyNewPractitioner(user: RawUser): NewPractitionerKysely {
   return pickPractitionerFields(user);
 }
 
+// 10495 TODO: We must update the `practitionerEntity` factory function so
+// that it returns whichever of the three practitioner entity types the
+// client needs
 export function practitionerEntity(practitioner) {
   if (practitioner.role === ROLES.privatePractitioner) {
     return new PrivatePractitioner(
@@ -114,3 +118,23 @@ export function practitionerEntity(practitioner) {
     }),
   );
 }
+
+export const PRACTITIONER_ONLY_FIELDS = [
+  'additionalPhone',
+  'admissionsDate',
+  'admissionsStatus',
+  'barNumber',
+  'birthYear',
+  'confirmEmail',
+  'practiceType',
+  'firmName',
+  'firstName',
+  'lastName',
+  'middleName',
+  'originalBarState',
+  'practitionerNotes',
+  'practitionerType',
+  'serviceIndicator',
+  'suffix',
+  'updatedEmail',
+] as typeof DW_PRACTITIONER_COLUMNS;
