@@ -23,9 +23,9 @@ export const getUpdatedAtWithIndexBasedIncrement = ({
 };
 
 // Look at tests for how statistics should be sorted
-export function sortStatistics(
-  statistics: CaseStatisticKysely[],
-): CaseStatisticKysely[] {
+export function sortStatistics<T extends CaseStatisticKysely>(
+  statistics: T[],
+): T[] {
   return statistics?.sort((a, b) => {
     const aPrimarySort = a.year
       ? new Date(a.year, 0).getTime()
