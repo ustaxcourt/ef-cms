@@ -25,7 +25,7 @@ describe('prepareMotionOrderResponseAction', () => {
   const mockForm = {
     additionalOrderText: '',
     dueDate: '2024-04-22',
-    motionOrderResponse: MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY,
+    motionOrderResponse: true,
     responseDate: '2024-03-29',
     strickenFromTrialSession: false,
   };
@@ -57,8 +57,7 @@ describe('prepareMotionOrderResponseAction', () => {
         docketEntryId: 'mock-motion-id',
         form: {
           ...mockForm,
-          motionOrderResponse:
-            MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions.REPLY,
+          motionOrderResponse: true,
           dueDate: '2024-04-22',
         },
       },
@@ -197,5 +196,66 @@ describe('prepareMotionOrderResponseAction', () => {
 
     expect(result.state.createOrderSelectedCases).toHaveLength(2);
     expect(result.state.createOrderSelectedCases[0].checked).toBe(true);
+  });
+
+  it('should set initialFreeText based on movant and responseDate', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: mockCaseDetail,
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+      },
+    });
+
+    expect(result.state.form.initialFreeText).toContain(
+      'respondent shall file a Response',
+    );
+  });
+
+  it('should correctly format the text for a basic order', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: mockCaseDetail,
+        docketEntryId: 'mock-motion-id',
+        form: mockForm,
+        parentMessageId: 'parent-456',
+      },
+    });
+
+    const expectedHtml = `<p class="indent-paragraph"> On March 22, 2024, petitioner filed a Motion to Dismiss (Document no. 1). For cause, it is </p><p class="indent-paragraph">ORDERED that by March 29, 2024 respondent shall file a Response to the Motion to Dismiss. It is further</p><p class="indent-paragraph">ORDERED that by April 22, 2024 petitioner may file a Reply.</p>`;
+    expect(result.state.form.richText).toEqual(expectedHtml);
+  });
+
+  it('should correctly format order text with a preamble, response, reply, stricken line, and additional text', async () => {
+    const result = await runAction(prepareMotionOrderResponseAction, {
+      state: {
+        caseDetail: {
+          ...mockCaseDetail,
+          status: CASE_STATUS_TYPES.calendared,
+          trialDate: '2024-06-03',
+          trialLocation: 'New York, NY',
+        },
+        docketEntryId: 'mock-motion-id',
+        form: {
+          ...mockForm,
+          additionalOrderText: 'The Court expects full compliance.',
+          strickenFromTrialSession: true,
+        },
+      },
+    });
+
+    const { richText } = result.state.form;
+
+    expect(richText).toContain(
+      'session of the Court commencing on June 3, 2024, in New York, NY',
+    );
+    expect(richText).toContain('respondent shall file a Response');
+    expect(richText).toContain('petitioner may file a Reply');
+    expect(richText).toContain(
+      'ORDERED that this case is stricken from the trial session',
+    );
+    expect(richText).toContain(
+      'ORDERED that The Court expects full compliance.',
+    );
   });
 });
