@@ -16,8 +16,16 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
       - [x] deleteCounselFromCaseInteractor ditto
       - [x] check getUserByIdOnceAllUpdatesComplete
       - [x] SIDE QUEST: fix all invocations of web-api/src/business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase.ts
-    - [ ] getUserByIds
-    - [ ] etc. ...
+    - [s] getUsersById
+    - [ ] getUsersInSection
+    - [ ] updatePractitionerUser
+    - [ ] updateUsers
+    - [x] upsertUsers
+    - [ ] updatePractitionerUser
+    - [x] getPractitionerByBarNumber
+    - [x] createUserRecord
+    - [x] createOrUpdatePractitionerUser
+    - [x] createNewPractitionerUser
   - [ ] make sure any sure any situation expecting an IrsPractitioner or a PrivatePractitioner in the application/interactor layer gets what it needs from persistence
   - [ ] finish implementing `practitionerEntity` function in `practitioner/mapper.ts`
 - [ ] Add entity name to Practitioner

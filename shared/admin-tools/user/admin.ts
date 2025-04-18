@@ -15,6 +15,7 @@ import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 import { updateUser } from '@web-api/gateways/user/updateUser';
 import { createUser } from '@web-api/gateways/user/createUser';
 import { disableUser as disableUserGateway } from '@web-api/gateways/user/disableUser';
+import { createPractitionerRecord } from '@web-api/persistence/postgres/practitioners/createPractitionerRecord';
 
 const { USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 
@@ -114,11 +115,12 @@ export async function createOrUpdateUser(
     })
       .validate()
       .toRawObject();
+
+    await createPractitionerRecord({ practitioner: rawUser, userId });
   } else {
     rawUser = new User({ ...user, userId }).validate().toRawObject();
   }
 
-  // TODO 10495 Fix me.. could be practitioner
   await createUserRecord({
     user: rawUser,
     userId: rawUser.userId,

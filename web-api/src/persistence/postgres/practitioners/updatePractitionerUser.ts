@@ -1,7 +1,7 @@
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { updateUser as updateUserFromGateWay } from '@web-api/gateways/user/updateUser';
-import { updateUser } from './updateUser';
+import { updateUser } from '../users/updateUser';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const updatePractitionerUser = async ({

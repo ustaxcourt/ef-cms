@@ -16,10 +16,10 @@ import {
   Practitioner,
 } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
-import { createNewPractitionerUser } from '@web-api/persistence/postgres/users/createNewPractitionerUser';
+import { createNewPractitionerUser } from '@web-api/persistence/postgres/practitioners/createNewPractitionerUser';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
-import { updatePractitionerUser as updatePractitionerUserFromPersistence } from '@web-api/persistence/postgres/users/updatePractitionerUser';
-import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
+import { updatePractitionerUser as updatePractitionerUserFromPersistence } from '@web-api/persistence/postgres/practitioners/updatePractitionerUser';
+import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/practitioners/getPractitionerByBarNumber';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -46,7 +46,9 @@ export const updatePractitionerUser = async (
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
-  const oldUser = await getPractitionerByBarNumber({ barNumber });
+  const oldUser = (
+    await getPractitionerByBarNumber({ barNumber })
+  ).toRawObject();
 
   if (!oldUser) {
     throw new NotFoundError('Could not find user');

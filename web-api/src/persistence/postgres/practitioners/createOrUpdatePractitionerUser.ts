@@ -6,9 +6,9 @@ import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '@web-api/applicationContext';
 import { createUser } from '@web-api/gateways/user/createUser';
 import { updateUser } from '@web-api/gateways/user/updateUser';
-import { getUserByEmail } from './getUserByEmail';
+import { getUserByEmail } from '../users/getUserByEmail';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { createUserRecord } from './createUserRecord';
+import { createUserRecord } from '../users/createUserRecord';
 import { createPractitionerRecord } from '@web-api/persistence/postgres/practitioners/createPractitionerRecord';
 
 export const createOrUpdatePractitionerUser = async ({

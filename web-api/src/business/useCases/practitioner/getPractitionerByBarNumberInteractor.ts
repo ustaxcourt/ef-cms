@@ -1,11 +1,10 @@
-import { Practitioner } from '../../../../../shared/src/business/entities/Practitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
+import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/practitioners/getPractitionerByBarNumber';
 
 /**
  * getPractitionerByBarNumberInteractor
@@ -32,7 +31,7 @@ export const getPractitionerByBarNumberInteractor = async (
   let practitioner;
 
   if (foundPractitioner) {
-    practitioner = new Practitioner(foundPractitioner).validate().toRawObject();
+    practitioner = foundPractitioner.validate().toRawObject();
   }
 
   return isLoggedInUser

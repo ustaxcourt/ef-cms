@@ -1,6 +1,6 @@
-import { userEntity } from './mapper';
 import { getDbReader } from '@web-api/database';
 import { Practitioner } from '@shared/business/entities/Practitioner';
+import { practitionerEntity } from './mapper';
 
 export const getPractitionerByBarNumber = async ({
   barNumber,
@@ -11,11 +11,11 @@ export const getPractitionerByBarNumber = async ({
 
   const user = await getDbReader(reader =>
     reader
-      .selectFrom('dwUser as u')
-      .where('u.barNumber', '=', formattedBarNumber)
-      .selectAll('u')
+      .selectFrom('dwPractitioner as p')
+      .where('p.barNumber', '=', formattedBarNumber)
+      .selectAll('p')
       .executeTakeFirst(),
   );
 
-  return userEntity(user) as Practitioner;
+  return practitionerEntity(user) as Practitioner;
 };

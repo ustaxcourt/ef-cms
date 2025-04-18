@@ -71,41 +71,38 @@ export function toKyselyNewPractitioner(user: RawUser): NewPractitionerKysely {
   return pickPractitionerFields(user);
 }
 
-// 10495 TODO: We must update the `practitionerEntity` factory function so
-// that it returns whichever of the three practitioner entity types the
-// client needs
-export function practitionerEntity(practitioner) {
-  if (practitioner.role === ROLES.privatePractitioner) {
-    return new PrivatePractitioner(
-      transformNullToUndefined({
-        ...practitioner,
-        contact: contactInfo(practitioner),
-        admissionsDate: formatDateString(
-          practitioner.admissionsDate?.toISOString(),
-          FORMATS.YYYYMMDD,
-        ),
-        pendingEmailVerificationTokenTimestamp:
-          practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
-      }),
-    );
-  }
-
-  if (practitioner.role === ROLES.irsPractitioner) {
-    return new IrsPractitioner(
-      transformNullToUndefined({
-        ...practitioner,
-        contact: contactInfo(practitioner),
-        admissionsDate: formatDateString(
-          practitioner.admissionsDate?.toISOString(),
-          FORMATS.YYYYMMDD,
-        ),
-        pendingEmailVerificationTokenTimestamp:
-          practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
-      }),
-    );
-  }
-
+export function practitionerEntity(practitioner): Practitioner {
   return new Practitioner(
+    transformNullToUndefined({
+      ...practitioner,
+      contact: contactInfo(practitioner),
+      admissionsDate: formatDateString(
+        practitioner.admissionsDate?.toISOString(),
+        FORMATS.YYYYMMDD,
+      ),
+      pendingEmailVerificationTokenTimestamp:
+        practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
+    }),
+  );
+}
+
+export function irsPractitionerEntity(practitioner): IrsPractitioner {
+  return new IrsPractitioner(
+    transformNullToUndefined({
+      ...practitioner,
+      contact: contactInfo(practitioner),
+      admissionsDate: formatDateString(
+        practitioner.admissionsDate?.toISOString(),
+        FORMATS.YYYYMMDD,
+      ),
+      pendingEmailVerificationTokenTimestamp:
+        practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
+    }),
+  );
+}
+
+export function privatePractitioner(practitioner): PrivatePractitioner {
+  return new PrivatePractitioner(
     transformNullToUndefined({
       ...practitioner,
       contact: contactInfo(practitioner),

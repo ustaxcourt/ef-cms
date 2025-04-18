@@ -2,10 +2,11 @@ import {
   Practitioner,
   RawPractitioner,
 } from '@shared/business/entities/Practitioner';
-import { toKyselyNewUser, userEntity } from './mapper';
 import { pgInsertInto } from '../utils/operation/pgInsertInto';
 import { applicationContext } from '@web-api/applicationContext';
 import { createUser } from '@web-api/gateways/user/createUser';
+import { createUserRecord } from '../users/createUserRecord';
+import { practitionerEntity, toKyselyNewPractitioner } from './mapper';
 
 export const createNewPractitionerUser = async ({
   user,
@@ -20,10 +21,13 @@ export const createNewPractitionerUser = async ({
     userId: user.userId,
   });
 
-  const createdUser = await pgInsertInto({
-    table: 'dwUser',
-    values: [toKyselyNewUser(user)],
+  const practitioner = await pgInsertInto({
+    table: 'dwPractitioner',
+    values: toKyselyNewPractitioner(user),
+    onConflictColumns: ['userId'],
   });
 
-  return userEntity(createdUser) as Practitioner;
+  await createUserRecord({ user, userId: user.userId });
+
+  return practitionerEntity(practitioner);
 };

@@ -10,9 +10,9 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updatePractitionerUser as updatePractitionerUserInteractor } from '@web-api/business/useCases/practitioner/updatePractitionerUserInteractor';
-import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
-import { updatePractitionerUser as updatePractitionerUserMock } from '@web-api/persistence/postgres/users/updatePractitionerUser';
-import { createNewPractitionerUser as createNewPractitionerUserMock } from '@web-api/persistence/postgres/users/createNewPractitionerUser';
+import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@web-api/persistence/postgres/practitioners/getPractitionerByBarNumber';
+import { updatePractitionerUser as updatePractitionerUserMock } from '@web-api/persistence/postgres/practitioners/updatePractitionerUser';
+import { createNewPractitionerUser as createNewPractitionerUserMock } from '@web-api/persistence/postgres/practitioners/createNewPractitionerUser';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 
 const getPractitionerByBarNumber = getPractitionerByBarNumberMock as jest.Mock;

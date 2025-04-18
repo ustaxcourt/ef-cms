@@ -7,7 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createPractitionerUser } from '../../../../../shared/src/business/utilities/createPractitionerUser';
-import { createOrUpdatePractitionerUser } from '@web-api/persistence/postgres/users/createOrUpdatePractitionerUser';
+import { createOrUpdatePractitionerUser } from '@web-api/persistence/postgres/practitioners/createOrUpdatePractitionerUser';
 
 export const createPractitionerUserInteractor = async (
   applicationContext: ServerApplicationContext,
