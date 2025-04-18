@@ -14,7 +14,7 @@ import joiImported, { Root } from 'joi';
 const joi: Root = joiImported.extend(joiDate);
 
 export class MotionOrderResponseForm extends JoiValidationEntity {
-  public motionOrderResponse?: string;
+  public motionOrderResponse?: boolean;
   public responseDate?: string;
   public additionalOrderText?: string;
   public dueDate?: string;
@@ -49,7 +49,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       }),
     issueOrderFor: joi
       .when('isOnLeadCase', {
-        is: joi.equal(true),
+        is: true,
         then: joi
           .required()
           .valid(
@@ -64,7 +64,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       .messages({ 'any.required': 'Select on which cases to file this order' }),
     dueDate: joi
       .when('motionOrderResponse', {
-        is: joi.exist().not(null),
+        is: true,
         then: joi
           .date()
           .iso()
@@ -84,7 +84,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
     motionOrderResponse: joi
       .optional()
       .allow(null)
-      .description('The type of response.'),
+      .description('Whether a reply is ordered'),
 
     responseDate: joi
       .date()

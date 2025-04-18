@@ -9,6 +9,7 @@ import { showProgressSequenceDecorator } from '../../utilities/showProgressSeque
 import { submitCourtIssuedOrder } from '@web-client/presenter/sequences/submitCourtIssuedOrderSequence';
 import { validateMotionOrderResponseFormAction } from '../../actions/MotionOrderResponse/validateMotionOrderResponseFormAction';
 import { startShowValidationAction } from '@web-client/presenter/actions/startShowValidationAction';
+import { stopShowValidationAction } from '@web-client/presenter/actions/stopShowValidationAction';
 
 export const submitMotionOrderResponseSequence = [
   showProgressSequenceDecorator([
@@ -26,7 +27,7 @@ export const submitMotionOrderResponseSequence = [
         submitCourtIssuedOrder,
         {
           error: [setAlertErrorAction],
-          success: [navigateToPathAction],
+          success: [stopShowValidationAction, navigateToPathAction],
         },
       ],
     },
