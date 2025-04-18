@@ -14,9 +14,9 @@ const oneMonthFromNow = getBusinessDateInFuture({
   startDate: createISODateString(),
 });
 
-const oneMonthFromNowInSlashedFormat = formatDateString(
+const oneMonthFromNowInExpectedFormat = formatDateString(
   oneMonthFromNow,
-  'MMDDYY',
+  FORMATS.MMDDYYYY_DASHED,
 );
 
 describe('CourtIssuedDocumentTypeD', () => {
@@ -164,7 +164,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Order for Amended Petition and Filing Fee on ${oneMonthFromNowInSlashedFormat} Some free text`,
+        `Order for Amended Petition and Filing Fee on ${oneMonthFromNowInExpectedFormat} Some free text`,
       );
     });
 
@@ -179,7 +179,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Order for Amended Petition and Filing Fee on ${oneMonthFromNowInSlashedFormat}`,
+        `Order for Amended Petition and Filing Fee on ${oneMonthFromNowInExpectedFormat}`,
       );
     });
   });
