@@ -2,6 +2,7 @@ import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import {
   calculateISODate,
   createISODateString,
+  formatDateString,
   FORMATS,
   getBusinessDateInFuture,
 } from '../../utilities/DateHandler';
@@ -13,11 +14,10 @@ const oneMonthFromNow = getBusinessDateInFuture({
   startDate: createISODateString(),
 });
 
-const dateInDashedFormat = getBusinessDateInFuture({
-  numberOfDays: 30,
-  outputFormat: FORMATS.MMDDYYYY_DASHED,
-  startDate: createISODateString(),
-});
+const oneMonthFromNowInSlashedFormat = formatDateString(
+  oneMonthFromNow,
+  'MMDDYY',
+);
 
 describe('CourtIssuedDocumentTypeD', () => {
   describe('constructor', () => {
@@ -164,7 +164,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Order for Amended Petition and Filing Fee on ${dateInDashedFormat} Some free text`,
+        `Order for Amended Petition and Filing Fee on ${oneMonthFromNowInSlashedFormat} Some free text`,
       );
     });
 
@@ -179,7 +179,7 @@ describe('CourtIssuedDocumentTypeD', () => {
       });
 
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Order for Amended Petition and Filing Fee on ${dateInDashedFormat}`,
+        `Order for Amended Petition and Filing Fee on ${oneMonthFromNowInSlashedFormat}`,
       );
     });
   });
