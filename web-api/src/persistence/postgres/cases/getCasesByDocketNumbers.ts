@@ -1,17 +1,28 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { Penalty } from '@shared/business/entities/Penalty';
+import { RawPenalty } from '@shared/business/entities/Penalty';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
+import { NotFoundError } from '@web-api/errors/errors';
 import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
+import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { PetitionerOnCaseKysely } from '@web-api/persistence/postgres/cases/parties/schema';
+import {
+  CaseKysely,
+  CaseStatusUpdateKysely,
+} from '@web-api/persistence/postgres/cases/schema';
 import { sortStatistics } from '@web-api/persistence/postgres/cases/statistics/helper';
+import {
+  CaseStatisticKysely,
+  StatisticPenaltyKysely,
+} from '@web-api/persistence/postgres/cases/statistics/schema';
 import { sql } from 'kysely';
-import { isEmpty, partition, sortBy } from 'lodash';
+import { difference, isEmpty, partition, sortBy } from 'lodash';
 
 export async function getCasesByDocketNumbers({
   docketNumbers,
@@ -21,8 +32,17 @@ export async function getCasesByDocketNumbers({
   if (isEmpty(docketNumbers)) {
     return [];
   }
+  const casesData = await getAllCaseData({ docketNumbers });
+  const casesDataSorted = sortCaseFields({ cases: casesData, docketNumbers });
+  const rawCases = casesDataSorted.map(c => convertDbCaseToRawCase(c));
+  return rawCases;
+}
 
-  // Get all the data for all cases in arbitrary order
+async function getAllCaseData({
+  docketNumbers,
+}: {
+  docketNumbers: string[];
+}): Promise<EnrichedCaseRow[]> {
   const [
     cases,
     petitioners,
@@ -43,8 +63,15 @@ export async function getCasesByDocketNumbers({
     getHearings(docketNumbers),
   ]);
 
-  // Associate the right data with each case
-  const caseMap: Map<string, any> = new Map();
+  const notFoundCases = difference(
+    docketNumbers,
+    cases.map(c => c.docketNumber),
+  );
+  if (!isEmpty(notFoundCases)) {
+    throw new NotFoundError(`Cases ${notFoundCases.join(', ')} not found`);
+  }
+
+  const caseMap: Map<string, EnrichedCaseRow> = new Map();
   cases.forEach(c => {
     caseMap.set(c.docketNumber, {
       ...c,
@@ -52,29 +79,39 @@ export async function getCasesByDocketNumbers({
         docketNumber: c.docketNumber,
         docketNumberSuffix: c.docketNumberSuffix,
       }),
+      petitioners: [],
+      statistics: [],
+      docketEntries: [],
+      archivedDocketEntries: [],
+      irsPractitioners: [],
+      privatePractitioners: [],
+      caseStatusHistory: [],
+      correspondence: [],
+      archivedCorrespondences: [],
+      hearings: [],
     });
   });
   petitioners.forEach(p => {
-    const caseInfo = caseMap.get(p.docketNumber);
+    const caseInfo = caseMap.get(p.docketNumber)!; // We know that we have the case because of our notFoundCases check above
     const petitioners = caseInfo.petitioners || [];
     petitioners.push(p);
     caseMap.set(p.docketNumber, { ...caseInfo, petitioners });
   });
   statistics.forEach(s => {
-    const caseInfo = caseMap.get(s.docketNumber);
+    const caseInfo = caseMap.get(s.docketNumber)!;
     const statistics = caseInfo.statistics || [];
     statistics.push(s);
     caseMap.set(s.docketNumber, { ...caseInfo, statistics });
   });
   docketEntriesFromDb.forEach(docketEntryInfo => {
-    const caseInfo = caseMap.get(docketEntryInfo.docketNumber);
+    const caseInfo = caseMap.get(docketEntryInfo.docketNumber)!;
     caseMap.set(docketEntryInfo.docketNumber, {
       ...caseInfo,
       docketEntries: docketEntryInfo.docketEntries,
     });
   });
   practitionerInfo.forEach(info => {
-    const caseInfo = caseMap.get(info.docketNumber);
+    const caseInfo = caseMap.get(info.docketNumber)!;
     caseMap.set(info.docketNumber, {
       ...caseInfo,
       irsPractitioners: info.irsPractitioners,
@@ -82,7 +119,7 @@ export async function getCasesByDocketNumbers({
     });
   });
   caseStatusHistories.forEach(history => {
-    const caseInfo = caseMap.get(history.docketNumber);
+    const caseInfo = caseMap.get(history.docketNumber)!;
     const histories = caseInfo.caseStatusHistory || [];
     histories.push(history);
     caseMap.set(history.docketNumber, {
@@ -91,7 +128,7 @@ export async function getCasesByDocketNumbers({
     });
   });
   caseCorrespondences.forEach(correspondence => {
-    const caseInfo = caseMap.get(correspondence.docketNumber!);
+    const caseInfo = caseMap.get(correspondence.docketNumber!)!;
     const correspondences = caseInfo.correspondence || [];
     correspondences.push(correspondence);
     caseMap.set(correspondence.docketNumber!, {
@@ -100,21 +137,27 @@ export async function getCasesByDocketNumbers({
     });
   });
   hearings.forEach(hearingInfo => {
-    const caseInfo = caseMap.get(hearingInfo.docketNumber);
+    const caseInfo = caseMap.get(hearingInfo.docketNumber)!;
     caseMap.set(hearingInfo.docketNumber, {
       ...caseInfo,
       hearings: hearingInfo.hearings,
     });
   });
 
-  // Sort case fields that need to be sorted
-  const casesData = Array.from(caseMap.values());
-  casesData.forEach(c => {
-    c.petitioners?.sort(
-      (a: PetitionerOnCaseKysely, b: PetitionerOnCaseKysely) => {
-        return a.orderOnCase - b.orderOnCase;
-      },
-    );
+  return Array.from(caseMap.values());
+}
+
+function sortCaseFields({
+  cases,
+  docketNumbers,
+}: {
+  cases: EnrichedCaseRow[];
+  docketNumbers: string[];
+}): EnrichedCaseRow[] {
+  cases.forEach(c => {
+    c.petitioners?.sort((a, b) => {
+      return a.orderOnCase - b.orderOnCase;
+    });
     const [docketEntries, archivedDocketEntries] = partition(
       c.docketEntries,
       docketEntry => !docketEntry.archived,
@@ -136,52 +179,76 @@ export async function getCasesByDocketNumbers({
   docketNumbers.forEach((num, idx) => {
     orderObj[num] = idx;
   });
-  casesData.sort((a, b) => {
+  cases.sort((a, b) => {
     return orderObj[a.docketNumber] - orderObj[b.docketNumber];
   });
 
-  // Map and return the cases
-  return casesData.map(c => fromKyselyCase(c)) as RawCase[];
+  return cases;
 }
 
-async function getDocketEntries(
-  docketNumbers: string[],
-  applicationContext,
-): Promise<{ docketNumber: string; docketEntries: RawDocketEntry[] }[]> {
-  const docketEntryInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const docketEntries = await getDocketEntryOnCase({
-        applicationContext,
-        docketNumber,
-      });
-      return { docketNumber, docketEntries };
+function convertDbCaseToRawCase(
+  dbCase: EnrichedCaseRow,
+): Omit<RawCase, 'consolidatedCases'> {
+  return {
+    ...fromKyselyCase(dbCase),
+    statistics: dbCase.statistics.map(s => ({
+      ...s,
+      penalties: (s.penalties as RawPenalty[]) || [],
+      year: s.year?.toString(),
+      yearOrPeriod: s.yearOrPeriod || undefined,
+      determinationTotalPenalties: s.determinationTotalPenalties || undefined,
+      determinationDeficiencyAmount:
+        s.determinationDeficiencyAmount || undefined,
+      lastDateOfPeriod: s.lastDateOfPeriod?.toISOString(),
+    })),
+    correspondence: dbCase.correspondence.map(cc =>
+      caseCorrespondenceEntity(cc),
+    ),
+    caseStatusHistory: dbCase.caseStatusHistory.map(update => {
+      return { ...update, date: update.date.toISOString() };
     }),
-  );
-  return docketEntryInfo;
+  };
 }
 
-async function getHearings(
-  docketNumbers: string[],
-): Promise<{ docketNumber: string; hearings: any[] }[]> {
-  const hearingsInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const hearings = await queryFull({
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-          '#sk': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': `case|${docketNumber}`,
-          ':prefix': 'hearing|',
-        },
-        KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-        applicationContext,
-      });
-      return { docketNumber, hearings };
-    }),
+async function getCasesMetadata(docketNumbers: string[]) {
+  const caseInfo = await getDbReader(db =>
+    db
+      .selectFrom('dwCase')
+      .where('docketNumber', 'in', docketNumbers)
+      .selectAll()
+      .execute(),
   );
+  return caseInfo;
+}
 
-  return hearingsInfo;
+async function getPetitioners(docketNumbers: string[]) {
+  const dbPetitioners = await getDbReader(cb =>
+    cb
+      .selectFrom('dwPetitionerOnCase')
+      .where('docketNumber', 'in', docketNumbers)
+      .selectAll()
+      .execute(),
+  );
+  return dbPetitioners;
+}
+
+async function getStatistics(docketNumbers: string[]) {
+  const dbStatistics = await getDbReader(cb =>
+    cb
+      .selectFrom('dwCaseStatistic as cs')
+      .where('docketNumber', 'in', docketNumbers)
+      .leftJoin('dwStatisticPenalty as sp', 'sp.statisticId', 'cs.statisticId')
+      .selectAll('cs')
+      .select(
+        sql`jsonb_agg(to_jsonb(sp) ORDER BY sp.updated_at)`.as('penalties'),
+      )
+      .groupBy(['cs.docketNumber', 'cs.statisticId'])
+      .execute(),
+  );
+  return dbStatistics.map(s => ({
+    ...s,
+    penalties: (s.penalties as StatisticPenaltyKysely[]) || [],
+  }));
 }
 
 async function getPractitioners(
@@ -217,26 +284,20 @@ async function getPractitioners(
   return practitionerInfo;
 }
 
-async function getCasesMetadata(docketNumbers: string[]) {
-  const caseInfo = await getDbReader(db =>
-    db
-      .selectFrom('dwCase')
-      .where('docketNumber', 'in', docketNumbers)
-      .selectAll()
-      .execute(),
+async function getDocketEntries(
+  docketNumbers: string[],
+  applicationContext,
+): Promise<{ docketNumber: string; docketEntries: RawDocketEntry[] }[]> {
+  const docketEntryInfo = await Promise.all(
+    docketNumbers.map(async docketNumber => {
+      const docketEntries = await getDocketEntryOnCase({
+        applicationContext,
+        docketNumber,
+      });
+      return { docketNumber, docketEntries };
+    }),
   );
-  return caseInfo;
-}
-
-async function getPetitioners(docketNumbers: string[]) {
-  const dbPetitioners = await getDbReader(cb =>
-    cb
-      .selectFrom('dwPetitionerOnCase')
-      .where('docketNumber', 'in', docketNumbers)
-      .selectAll()
-      .execute(),
-  );
-  return dbPetitioners;
+  return docketEntryInfo;
 }
 
 async function getCasesStatusHistory(docketNumbers: string[]) {
@@ -248,11 +309,8 @@ async function getCasesStatusHistory(docketNumbers: string[]) {
       .selectAll()
       .execute(),
   );
-  const caseStatusHistory = dbCaseStatusHistory.map(update => {
-    return { ...update, date: update.date.toISOString() };
-  });
 
-  return caseStatusHistory;
+  return dbCaseStatusHistory;
 }
 
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
@@ -264,30 +322,43 @@ async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
       .select('cc.docketNumber')
       .execute(),
   );
-
-  return correspondence.map(c => caseCorrespondenceEntity(c));
+  return correspondence;
 }
 
-async function getStatistics(docketNumbers: string[]) {
-  const dbStatistics = await getDbReader(cb =>
-    cb
-      .selectFrom('dwCaseStatistic as cs')
-      .where('docketNumber', 'in', docketNumbers)
-      .leftJoin('dwStatisticPenalty as sp', 'sp.statisticId', 'cs.statisticId')
-      .selectAll('cs')
-      .select(
-        sql`jsonb_agg(to_jsonb(sp) ORDER BY sp.updated_at)`.as('penalties'),
-      )
-      .groupBy(['cs.docketNumber', 'cs.statisticId'])
-      .execute(),
+async function getHearings(
+  docketNumbers: string[],
+): Promise<{ docketNumber: string; hearings: any[] }[]> {
+  const hearingsInfo = await Promise.all(
+    docketNumbers.map(async docketNumber => {
+      const hearings = await queryFull({
+        ExpressionAttributeNames: {
+          '#pk': 'pk',
+          '#sk': 'sk',
+        },
+        ExpressionAttributeValues: {
+          ':pk': `case|${docketNumber}`,
+          ':prefix': 'hearing|',
+        },
+        KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+        applicationContext,
+      });
+      return { docketNumber, hearings };
+    }),
   );
-  return dbStatistics.map(s => ({
-    ...s,
-    penalties: (s.penalties as Penalty[]) || [],
-    year: s.year?.toString(),
-    yearOrPeriod: s.yearOrPeriod || undefined,
-    determinationTotalPenalties: s.determinationTotalPenalties || undefined,
-    determinationDeficiencyAmount: s.determinationDeficiencyAmount || undefined,
-    lastDateOfPeriod: s.lastDateOfPeriod?.toISOString(),
-  }));
+
+  return hearingsInfo;
 }
+
+type EnrichedCaseRow = CaseKysely & {
+  docketNumberWithSuffix: string;
+  petitioners: PetitionerOnCaseKysely[];
+  statistics: (CaseStatisticKysely & { penalties: StatisticPenaltyKysely[] })[];
+  docketEntries: RawDocketEntry[];
+  archivedDocketEntries: RawDocketEntry[];
+  irsPractitioners: RawPractitioner[];
+  privatePractitioners: RawPractitioner[];
+  caseStatusHistory: CaseStatusUpdateKysely[];
+  correspondence: CaseCorrespondenceKysely[];
+  archivedCorrespondences: CaseCorrespondenceKysely[];
+  hearings: any[];
+};
