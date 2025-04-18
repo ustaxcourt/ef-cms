@@ -8,9 +8,8 @@ import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/pract
 import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { PetitionerOnCaseKysely } from '@web-api/persistence/postgres/cases/parties/schema';
-// import { CaseStatisticKysely } from '@web-api/persistence/postgres/cases/statistics/schema';
 import { sql } from 'kysely';
-import { isEmpty, sortBy } from 'lodash';
+import { isEmpty, partition, sortBy } from 'lodash';
 
 export async function getCasesByDocketNumbers({
   docketNumbers,
@@ -105,7 +104,19 @@ export async function getCasesByDocketNumbers({
         return a.orderOnCase - b.orderOnCase;
       },
     );
-    c.docketEntries = sortBy(c.docketEntries, 'createdAt');
+    const [docketEntries, archivedDocketEntries] = partition(
+      c.docketEntries,
+      docketEntry => !docketEntry.archived,
+    );
+    c.docketEntries = sortBy(docketEntries, 'createdAt');
+    c.archivedDocketEntries = sortBy(archivedDocketEntries, 'createdAt');
+
+    const [correspondence, archivedCorrespondences] = partition(
+      c.correspondence,
+      correspondenceItem => !correspondenceItem.archived,
+    );
+    c.correspondence = sortBy(correspondence, 'filingDate');
+    c.archivedCorrespondences = sortBy(archivedCorrespondences, 'filingDate');
     // 10502 TODO sort statistics
   });
 
@@ -121,15 +132,6 @@ export async function getCasesByDocketNumbers({
   // Map and return the cases
   return casesData.map(c => fromKyselyCase(c)) as RawCase[];
 }
-
-// function sortStatistics(statistics: CaseStatisticKysely[]) {
-//   statistics?.sort((a, b) => {
-//     if (a.year === b.year) {
-//       return b.updatedAt.localeCompare(a.updatedAt);
-//     }
-//     return +a.year - +b.year;
-//   });
-// }
 
 async function getDocketEntries(
   docketNumbers: string[],
