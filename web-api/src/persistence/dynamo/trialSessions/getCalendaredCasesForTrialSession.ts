@@ -1,7 +1,7 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { get } from '../../dynamodbClientService';
-import { map } from 'lodash';
+import { isEmpty, map } from 'lodash';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getDbReader } from '@web-api/database';
@@ -26,6 +26,10 @@ export const getCalendaredCasesForTrialSession = async ({
 
   const { caseOrder } = trialSession;
   const docketNumbers = map(caseOrder, 'docketNumber');
+
+  if (isEmpty(docketNumbers)) {
+    return [];
+  }
 
   const [
     cases,
