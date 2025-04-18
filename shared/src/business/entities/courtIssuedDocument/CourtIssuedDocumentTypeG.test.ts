@@ -13,9 +13,9 @@ const oneMonthFromNow = getBusinessDateInFuture({
   startDate: createISODateString(),
 });
 
-const oneMonthFromNowInSlashedFormat = formatDateString(
+const oneMonthFromNowInExpectedFormat = formatDateString(
   oneMonthFromNow,
-  'MMDDYY',
+  FORMATS.MMDDYYYY_DASHED,
 );
 
 describe('CourtIssuedDocumentTypeG', () => {
@@ -114,7 +114,7 @@ describe('CourtIssuedDocumentTypeG', () => {
         trialLocation: 'Seattle, Washington',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Notice of Trial on ${oneMonthFromNowInSlashedFormat} at Seattle, Washington`,
+        `Notice of Trial on ${oneMonthFromNowInExpectedFormat} at Seattle, Washington`,
       );
     });
 
@@ -128,7 +128,7 @@ describe('CourtIssuedDocumentTypeG', () => {
         trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Notice of Trial on ${oneMonthFromNowInSlashedFormat} in standalone remote session`,
+        `Notice of Trial on ${oneMonthFromNowInExpectedFormat} in standalone remote session`,
       );
     });
   });
