@@ -125,7 +125,7 @@ describe('CourtIssuedDocumentTypeE', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const expectedDate = formatDateString(
+      const oneMonthFromNowInExpectedFormat = formatDateString(
         oneMonthFromNow,
         FORMATS.MMDDYYYY_DASHED,
       );
@@ -139,7 +139,7 @@ describe('CourtIssuedDocumentTypeE', () => {
         scenario: 'Type E',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Order time is extended to ${expectedDate} for petr(s) to pay the filing fee`,
+        `Order time is extended to ${oneMonthFromNowInExpectedFormat} for petr(s) to pay the filing fee`,
       );
     });
   });
