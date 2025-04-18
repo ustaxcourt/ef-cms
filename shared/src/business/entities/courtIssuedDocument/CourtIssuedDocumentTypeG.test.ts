@@ -4,6 +4,7 @@ import {
   getBusinessDateInFuture,
   FORMATS,
   createISODateString,
+  formatDateString,
 } from '@shared/business/utilities/DateHandler';
 
 const oneMonthFromNow = getBusinessDateInFuture({
@@ -12,11 +13,11 @@ const oneMonthFromNow = getBusinessDateInFuture({
   startDate: createISODateString(),
 });
 
-const dateInDashedFormat = getBusinessDateInFuture({
-  numberOfDays: 30,
-  outputFormat: FORMATS.MMDDYYYY_DASHED,
-  startDate: createISODateString(),
-});
+const oneMonthFromNowInSlashedFormat = formatDateString(
+  oneMonthFromNow,
+  'MMDDYY',
+);
+
 describe('CourtIssuedDocumentTypeG', () => {
   describe('constructor', () => {
     it('should set attachments to false when no value is provided', () => {
@@ -113,7 +114,7 @@ describe('CourtIssuedDocumentTypeG', () => {
         trialLocation: 'Seattle, Washington',
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Notice of Trial on ${dateInDashedFormat} at Seattle, Washington`,
+        `Notice of Trial on ${oneMonthFromNowInSlashedFormat} at Seattle, Washington`,
       );
     });
 
@@ -127,7 +128,7 @@ describe('CourtIssuedDocumentTypeG', () => {
         trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
       });
       expect(extDoc.getDocumentTitle()).toEqual(
-        `Notice of Trial on ${dateInDashedFormat} in standalone remote session`,
+        `Notice of Trial on ${oneMonthFromNowInSlashedFormat} in standalone remote session`,
       );
     });
   });

@@ -2,6 +2,7 @@ import { CourtIssuedDocumentFactory } from './CourtIssuedDocumentFactory';
 import {
   calculateISODate,
   createISODateString,
+  formatDateString,
   FORMATS,
   getBusinessDateInFuture,
 } from '../../utilities/DateHandler';
@@ -124,12 +125,10 @@ describe('CourtIssuedDocumentTypeE', () => {
 
   describe('title generation', () => {
     it('should generate valid title', () => {
-      const expectedDate = getBusinessDateInFuture({
-        numberOfDays: 30,
-        outputFormat: FORMATS.MMDDYYYY_DASHED,
-        startDate: createISODateString(),
-      });
-
+      const expectedDate = formatDateString(
+        oneMonthFromNow,
+        FORMATS.MMDDYYYY_DASHED,
+      );
       const extDoc = CourtIssuedDocumentFactory({
         attachments: false,
         date: oneMonthFromNow,
