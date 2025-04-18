@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -9,10 +12,13 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { removeConsolidatedCasesInteractor } from '@web-api/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 
 let mockCases;
 let mockLock;
 const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
+const getCaseDeadlinesByDocketNumber =
+  getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 describe('removeConsolidatedCasesInteractor', () => {
   beforeAll(() => {
@@ -71,6 +77,8 @@ describe('removeConsolidatedCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
+
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
   });
 
   it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {
