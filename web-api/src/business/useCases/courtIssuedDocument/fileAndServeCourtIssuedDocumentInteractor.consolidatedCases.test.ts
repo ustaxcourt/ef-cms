@@ -18,12 +18,13 @@ import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIs
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { v4 as uuidv4 } from 'uuid';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { Case } from '@shared/business/entities/cases/Case';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('consolidated cases', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
@@ -124,6 +125,29 @@ describe('consolidated cases', () => {
             docketEntries: [],
           };
       }
+    });
+    getCasesByDocketNumbers.mockImplementation(({ docketNumbers }) => {
+      const doStuff = docketNumber => {
+        switch (docketNumber) {
+          case MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber:
+            return {
+              ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+              docketEntries: leadCaseDocketEntries,
+            } as any;
+          case MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber:
+            return {
+              ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+              docketEntries: consolidatedCase1DocketEntries,
+            } as any;
+          default:
+            return {
+              ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+              docketEntries: [],
+            } as any;
+        }
+      };
+
+      return Promise.resolve(docketNumbers.map(doStuff));
     });
   });
 
