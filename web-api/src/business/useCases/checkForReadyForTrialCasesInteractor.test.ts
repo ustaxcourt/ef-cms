@@ -10,8 +10,10 @@ import { checkForReadyForTrialCasesInteractor } from './checkForReadyForTrialCas
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getReadyForTrialCases as getReadyForTrialCasesMock } from '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const updateCase = jest.mocked(updateCaseMock);
 const getReadyForTrialCases = getReadyForTrialCasesMock as jest.Mock;
 
@@ -22,6 +24,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     getReadyForTrialCases.mockImplementation(() => mockCasesReadyForTrial);
 
     updateCase.mockResolvedValue({} as RawCase);
+    getCasesByDocketNumbers.mockResolvedValue([]);
   });
 
   beforeEach(() => {
@@ -33,6 +36,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   it('should successfully run without error', async () => {
     mockCasesReadyForTrial = [];
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCasesByDocketNumbers.mockResolvedValue([MOCK_CASE]);
 
     await expect(
       checkForReadyForTrialCasesInteractor(applicationContext),
@@ -120,11 +124,11 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       { docketNumber: '320-21' },
     ]);
 
-    await expect(
-      checkForReadyForTrialCasesInteractor(applicationContext),
-    ).resolves.not.toThrow();
+    await checkForReadyForTrialCasesInteractor(applicationContext);
 
-    expect(updateCase).toHaveBeenCalledTimes(2);
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: ['101-20', '320-21'],
+    });
   });
 
   it('should not call createCaseTrialSortMappingRecords if case has no trial city', async () => {
@@ -155,17 +159,19 @@ describe('checkForReadyForTrialCasesInteractor', () => {
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocket,
     });
+    getCasesByDocketNumbers.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      {
+        ...MOCK_CASE,
+        docketNumber: '320-21',
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+    ]);
 
     updateCase.mockResolvedValue({} as RawCase);
-
-    mockCasesReadyForTrial = [
-      { docketNumber: '101-20' },
-      { docketNumber: '320-21' },
-    ];
-    getReadyForTrialCases.mockResolvedValue([
-      { docketNumber: '101-20' },
-      { docketNumber: '320-21' },
-    ]);
 
     await expect(
       checkForReadyForTrialCasesInteractor(applicationContext),
