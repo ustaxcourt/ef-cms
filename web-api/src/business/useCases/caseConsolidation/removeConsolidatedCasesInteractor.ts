@@ -9,6 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 /**
  * removeConsolidatedCases
@@ -45,7 +46,6 @@ export const removeConsolidatedCases = async (
   const { leadDocketNumber } = caseToUpdate;
 
   const allConsolidatedCases = await getCasesByLeadDocketNumber({
-    applicationContext,
     leadDocketNumber,
   });
 
@@ -90,18 +90,11 @@ export const removeConsolidatedCases = async (
     );
   }
 
-  for (const docketNumberToRemove of docketNumbersToRemove) {
-    const caseToRemove = await getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: docketNumberToRemove,
-    });
+  const casesToRemove = await getCasesByDocketNumbers({
+    docketNumbers: docketNumbersToRemove,
+  });
 
-    if (!caseToRemove) {
-      throw new NotFoundError(
-        `Case to consolidate with (${docketNumberToRemove}) was not found.`,
-      );
-    }
-
+  for (const caseToRemove of casesToRemove) {
     const caseEntity = new Case(caseToRemove, { authorizedUser });
     caseEntity.removeConsolidation();
 

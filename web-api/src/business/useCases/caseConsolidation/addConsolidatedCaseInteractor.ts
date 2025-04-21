@@ -51,14 +51,13 @@ export const addConsolidatedCase = async (
     );
   }
 
-  let allCasesToConsolidate: RawCase[] = [];
+  let allCasesToConsolidate: Omit<RawCase, 'consolidatedCases'>[] = [];
 
   if (
     caseToUpdate.leadDocketNumber &&
     caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
   ) {
     allCasesToConsolidate = await getCasesByLeadDocketNumber({
-      applicationContext,
       leadDocketNumber: caseToUpdate.leadDocketNumber,
     });
   } else {
@@ -67,7 +66,6 @@ export const addConsolidatedCase = async (
 
   if (caseToConsolidateWith.leadDocketNumber) {
     const casesConsolidatedWithLeadCase = await getCasesByLeadDocketNumber({
-      applicationContext,
       leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
     });
     allCasesToConsolidate.push(...casesConsolidatedWithLeadCase);
