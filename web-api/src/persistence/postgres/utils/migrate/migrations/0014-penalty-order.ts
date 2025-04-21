@@ -23,6 +23,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .execute();
   await db.schema
     .alterTable('dwCaseStatistic')
-    .addColumn('updatedAt', 'timestamp')
+    .dropColumn('updatedAt')
     .execute();
 }
