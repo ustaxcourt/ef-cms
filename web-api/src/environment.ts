@@ -6,6 +6,17 @@ const emailFromAddress =
   process.env.EMAIL_SOURCE ||
   `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`;
 
+function getJestDBConnectionError(): string {
+  return [
+    '\n',
+    'Hello Developer',
+    'You should not connect to the Database when running JEST tests',
+    'Something was not mocked out',
+    'If you are running Integration tests and need a Database connection',
+    'Set the environment variable "NODE_ENV" to "integration"',
+  ].join('\n');
+}
+
 export const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
     ? `app-${currentColor}.${process.env.EFCMS_DOMAIN}`
@@ -33,7 +44,7 @@ export const environment = {
         process.env.POSTGRES_HOST ||
         (process.env.NODE_ENV !== 'test'
           ? 'localhost'
-          : 'SHOULD_NOT_CONNECT_TO_DB__SOMETHING_NOT_MOCKED'),
+          : getJestDBConnectionError()),
       idleTimeoutMillis: 1000,
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
