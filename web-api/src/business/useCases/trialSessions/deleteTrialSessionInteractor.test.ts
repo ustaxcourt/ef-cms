@@ -2,7 +2,9 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-jest.mock('@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations')
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
@@ -13,14 +15,12 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-// import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('deleteTrialSessionInteractor', () => {
-  // const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-  const updateCase = jest.mocked(updateCaseMock);
   let mockTrialSession;
   let mockLock;
 
@@ -128,7 +128,7 @@ describe('deleteTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('does not delete the trial session working copy if there is no judge on the trial session', async () => {
@@ -162,7 +162,7 @@ describe('deleteTrialSessionInteractor', () => {
     getCasesByDocketNumbers.mockResolvedValue([
       {
         ...MOCK_CASE,
-        preferredTrialCity: null,
+        preferredTrialCity: undefined,
       },
     ]);
 
