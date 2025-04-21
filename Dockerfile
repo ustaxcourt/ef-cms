@@ -42,7 +42,7 @@ RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.26.2.zip" -o "a
   ./aws/install && \
   rm -rf awscliv2.zip
 
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.11.4/terraform_1.11.4_darwin_amd64.zip && \
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.11.4/terraform_1.11.4_linux_amd64.zip && \
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/
