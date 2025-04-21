@@ -47,7 +47,6 @@ export const setTrialSessionCalendarInteractor = async (
     trialSessionEntity.setAsCalendared();
     trialSessionEntity.validate();
 
-
     //get cases that have been manually added so we can set them as calendared
     const manuallyAddedCases = await applicationContext
       .getPersistenceGateway()
@@ -197,7 +196,7 @@ const removeManuallyAddedCaseFromTrialSession = (
     trialSessionEntity,
   }: {
     applicationContext: ServerApplicationContext;
-    caseRecord: RawCase;
+    caseRecord: Omit<RawCase, 'consolidatedCases'>;
     trialSessionEntity: TrialSession;
   },
   authorizedUser: AuthUser,
@@ -226,7 +225,7 @@ const setManuallyAddedCaseAsCalendared = async (
     trialSessionEntity,
   }: {
     applicationContext: ServerApplicationContext;
-    caseRecord: RawCase;
+    caseRecord: Omit<RawCase, 'consolidatedCases'>;
     trialSessionEntity: TrialSession;
   },
   authorizedUser: AuthUser,

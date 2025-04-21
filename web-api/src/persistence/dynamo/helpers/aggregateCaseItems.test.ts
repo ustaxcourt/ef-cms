@@ -93,7 +93,6 @@ describe('aggregateCaseItems', () => {
       archivedDocketEntryRecord,
       hearingRecord,
       irsPractitionerRecord,
-      judgeRecord,
       privatePractitionerRecord,
     ];
 
@@ -103,7 +102,6 @@ describe('aggregateCaseItems', () => {
       ...caseRecord,
       archivedCorrespondences: [archivedCorrespondenceRecord],
       archivedDocketEntries: [archivedDocketEntryRecord],
-      associatedJudge: judgeRecord.name,
       correspondence: [correspondenceRecord],
       docketEntries: [{ ...docketEntryRecord, workItem: workItemRecord }],
       hearings: [hearingRecord],
