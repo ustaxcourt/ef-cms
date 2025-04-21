@@ -6,7 +6,10 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { upsertPetitionersOnCase as upsertPetitonerOnCaseMock } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
 import { updatePetitionerOnCase as updatePetitionerOnCaseMock } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
+import {
+  mockAdmissionsClerkUser,
+  mockDocketClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { removePetitionerEmailInteractor } from '@web-api/business/useCases/removePetitionerEmailInteractor';
 import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/dynamo/cases/deleteUserFromCase';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
@@ -26,7 +29,7 @@ describe('removePetitionerEmailInteractor', () => {
   });
 
   it('should remove the email from the petitioner and set serviceIndicator to Paper', async () => {
-    await removePetitionerEmailInteractor(
+    const result = await removePetitionerEmailInteractor(
       {
         docketNumber: MOCK_CASE.docketNumber,
         email: MOCK_CASE.petitioners[0].email!,
@@ -65,5 +68,34 @@ describe('removePetitionerEmailInteractor', () => {
     expect(deleteUserFromCase.mock.calls[0][0].userId).toEqual(
       updatedPetitioner.contactId,
     );
+
+    expect(result).toBeDefined();
+    expect(result).toEqual(updatePetitionerOnCase.mock.calls[0][0].petitioner);
+  });
+
+  it('should throw an unauthorized error when user does not have permission', async () => {
+    await expect(
+      removePetitionerEmailInteractor(
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          email: MOCK_CASE.petitioners[0].email!,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('Unauthorized');
+  });
+
+  it('should throw an error when petitioner with given email is not found', async () => {
+    const nonExistentEmail = 'nonexistent@example.com';
+
+    await expect(
+      removePetitionerEmailInteractor(
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          email: nonExistentEmail,
+        },
+        mockAdmissionsClerkUser,
+      ),
+    ).rejects.toThrow(`Petitioner with email ${nonExistentEmail} not found`);
   });
 });
