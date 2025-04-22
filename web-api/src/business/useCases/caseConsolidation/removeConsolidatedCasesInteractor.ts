@@ -20,7 +20,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
  * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
  * @returns {object} the updated case data
  */
-export const removeConsolidatedCases = async (
+const removeConsolidatedCases = async (
   applicationContext: ServerApplicationContext,
   {
     docketNumber,
@@ -90,6 +90,9 @@ export const removeConsolidatedCases = async (
     );
   }
 
+  // TODO: I am pretty sure getCasesByDocketNumbers here (which mimics preexisting logic) is unnecessary and, in fact, dangerous.
+  // We already got the case information above via getCasesByLeadDocketNumber.
+  // The call here allows a request to remove consolidation on arbitrary docket numbers unrelated to the lead case.
   const casesToRemove = await getCasesByDocketNumbers({
     docketNumbers: docketNumbersToRemove,
   });
