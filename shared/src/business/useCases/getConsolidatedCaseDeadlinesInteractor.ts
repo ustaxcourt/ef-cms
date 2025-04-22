@@ -5,10 +5,10 @@ import {
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
-import { getCaseByDocketNumberPostgres } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseMetadataByDocketNumber';
 
 export async function getConsolidatedCaseDeadlinesInteractor(
-  _applicationContext: IApplicationContext,
+  applicationContext: IApplicationContext,
   {
     consolidatedCaseDeadlineId,
   }: {
@@ -27,12 +27,15 @@ export async function getConsolidatedCaseDeadlinesInteractor(
   const RESULTS: { docketNumber: string; caseCaption: string }[] = [];
   for (let index = 0; index < DEADLINES.length; index++) {
     const { docketNumber } = DEADLINES[index];
-    const [CASE] = await getCaseByDocketNumberPostgres(docketNumber);
+    const CASE = await getCaseMetadataByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
     if (!CASE) continue;
 
-    const { caption } = CASE;
+    const { caseCaption } = CASE;
     RESULTS.push({
-      caseCaption: caption,
+      caseCaption,
       docketNumber,
     });
   }
