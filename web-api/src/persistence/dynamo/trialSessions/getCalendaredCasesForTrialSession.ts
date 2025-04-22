@@ -32,7 +32,7 @@ export const getCalendaredCasesForTrialSession = async ({
     const order = caseOrderMap[caseItem.docketNumber];
     return {
       ...caseItem,
-      ...(order ?? {}), // spreads addedToSessionAt, disposition, etc.
+      ...(order ?? {}),
     };
   });
 
