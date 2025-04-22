@@ -35,7 +35,7 @@ export const lambdaWrapper = (
 
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const { event: currentInvokeEvent } = getCurrentInvoke();
-    let isTerminalUser =
+    const isTerminalUser =
       get(currentInvokeEvent, 'requestContext.authorizer.isTerminalUser') ===
       'true';
 

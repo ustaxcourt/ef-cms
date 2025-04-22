@@ -130,6 +130,7 @@ export const getCaseInteractor = async (
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
       docketNumber: Case.formatDocketNumber(docketNumber),
+      user: authorizedUser,
     }),
   );
   const isValidCase = Boolean(caseRecord.docketNumber && caseRecord.entityName);

@@ -17,7 +17,7 @@ import { getUserOutboxMessages } from '@web-api/persistence/postgres/messages/ge
  * @returns {object} the messages in the user outbox
  */
 export const getOutboxMessagesForUserInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ) => {

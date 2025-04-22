@@ -1,14 +1,14 @@
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
 
 export const getSealedQuery = () => {
-  const sealedDocumentMustNotQuery: QueryDslQueryContainer[] = [
+  const sealedDocumentMustNotQuery: QueryContainer[] = [
     {
       term: { 'isSealed.BOOL': true },
     },
     { term: { 'sealedTo.S': 'External' } },
   ];
 
-  const sealedCaseQuery: QueryDslQueryContainer = {
+  const sealedCaseQuery: QueryContainer = {
     bool: {
       must: [
         {

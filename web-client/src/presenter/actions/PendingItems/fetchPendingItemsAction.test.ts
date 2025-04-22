@@ -10,7 +10,6 @@ describe('fetchPendingItemsAction', () => {
     .getUseCases()
     .fetchPendingItemsInteractor.mockResolvedValue({
       foundDocuments: ['some content'],
-      total: 10,
     });
 
   it('updates pendingItems', async () => {
@@ -27,6 +26,5 @@ describe('fetchPendingItemsAction', () => {
       applicationContextForClient.getUseCases().fetchPendingItemsInteractor,
     ).toHaveBeenCalled();
     expect(result.output.pendingItems).toEqual(['some content']);
-    expect(result.output.total).toEqual(10);
   });
 });

@@ -11,7 +11,7 @@ Sometimes we need to query against information that isn't indexed in OpenSearch.
      ```
   1. Run the `create-temporary-indices` script to create the new index (or indices, if you modified multiple mappings) from the locally-defined mappings:
      ```bash
-     npx ts-node --transpile-only scripts/elasticsearch/create-temporary-indices.ts
+     ./scripts/elasticsearch/create-temporary-indices.ts
      ```
   1. You can now query against your temporary index (or indices) by utilizing [searchClient](../../web-api/src/persistence/elasticsearch/searchClient.ts)'s `search` or `searchAll`:
      ```typescript

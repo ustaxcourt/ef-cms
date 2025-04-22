@@ -87,7 +87,7 @@ export const migrateRecords = async (
     ranMigrations?: { [key: string]: boolean } | undefined;
   },
 ) => {
-  for (let { key, script } of migrationsToRun) {
+  for (const { key, script } of migrationsToRun) {
     if (!ranMigrations || !ranMigrations[key]) {
       applicationContext.logger.debug(`about to run migration ${key}`);
       items = await script(items, applicationContext);
@@ -120,9 +120,9 @@ export const processItems = async (
     throw err;
   }
   const chunks = chunk(items, MAX_DYNAMO_WRITE_SIZE);
-  for (let aChunk of chunks) {
+  for (const aChunk of chunks) {
     const promises: Promise<string | PutCommandOutput>[] = [];
-    for (let item of aChunk) {
+    for (const item of aChunk) {
       promises.push(
         promiseRetry(retry => {
           return dynamoDbDocumentClient
@@ -171,7 +171,7 @@ export const handler: Handler = async (event: SQSEvent, context: Context) => {
     totalSegments,
   });
   const ranMigrations = {};
-  for (let { key } of migrationsToRun) {
+  for (const { key } of migrationsToRun) {
     Object.assign(ranMigrations, await hasMigrationRan(key));
   }
 

@@ -9,7 +9,8 @@ import classNames from 'classnames';
 export const TrialSessionPlanningModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    confirmSequence: sequences.runTrialSessionPlanningReportSequence,
+    confirmSequence: sequences.navigateToTrialSessionPlanningReportSequence,
+    modalInfo: state.modal,
     trialYears: state.modal.trialYears,
     updateModalValueSequence: sequences.updateModalValueSequence,
     validateTrialSessionPlanningSequence:
@@ -19,22 +20,27 @@ export const TrialSessionPlanningModal = connect(
   function TrialSessionPlanningModal({
     cancelSequence,
     confirmSequence,
+    modalInfo,
     trialYears,
     updateModalValueSequence,
     validateTrialSessionPlanningSequence,
     validationErrors,
   }) {
+    const { term, year: modalYear } = modalInfo;
     return (
       <ModalDialog
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className="trial-session-planning-modal"
         confirmLabel="Run Report"
-        confirmSequence={confirmSequence}
+        confirmSequence={() => confirmSequence({ term, year: modalYear })}
         title="Run Trial Session Planning Report"
       >
         <div className="margin-bottom-4">
-          <FormGroup errorText={validationErrors.term}>
+          <FormGroup
+            errorMessageId="trial-session-planning-report-modal-term-error"
+            errorText={validationErrors.term}
+          >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="display-block" id="trial-term">
                 What trial term are you planning for?
@@ -45,13 +51,17 @@ export const TrialSessionPlanningModal = connect(
                   'usa-select',
                   validationErrors.term && 'usa-select--error',
                 )}
+                data-testid="trial-session-planning-report-term-selector"
                 name="term"
                 onChange={e => {
                   updateModalValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  validateTrialSessionPlanningSequence();
+                  validateTrialSessionPlanningSequence({
+                    term: e.target.value,
+                    year: modalYear,
+                  });
                 }}
               >
                 <option value="">- Select -</option>
@@ -68,7 +78,10 @@ export const TrialSessionPlanningModal = connect(
             </fieldset>
           </FormGroup>
 
-          <FormGroup errorText={validationErrors.year}>
+          <FormGroup
+            errorMessageId="trial-session-planning-report-modal-year-error"
+            errorText={validationErrors.year}
+          >
             <fieldset className="usa-fieldset margin-bottom-0">
               <legend className="display-block" id="trial-year">
                 Select year
@@ -79,13 +92,17 @@ export const TrialSessionPlanningModal = connect(
                   'usa-select',
                   validationErrors.year && 'usa-select--error',
                 )}
+                data-testid="trial-session-planning-report-year-selector"
                 name="year"
                 onChange={e => {
                   updateModalValueSequence({
                     key: e.target.name,
                     value: e.target.value,
                   });
-                  validateTrialSessionPlanningSequence();
+                  validateTrialSessionPlanningSequence({
+                    term,
+                    year: +e.target.value,
+                  });
                 }}
               >
                 <option value="">- Select -</option>

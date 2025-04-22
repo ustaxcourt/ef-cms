@@ -1,149 +1,156 @@
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import { NonPhone, Phone } from '@web-client/ustc-ui/Responsive/Responsive';
+import {
+  MULTI_SELECT_PLACEHOLDER,
+  PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { Select } from '@web-client/ustc-ui/Select/Selects';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
-import { props as cerebralProps } from 'cerebral';
-import { connect } from '@web-client/presenter/shared.cerebral';
-import { sequences, state } from '@web-client/presenter/app-public.cerebral';
 import React from 'react';
 
 type PublicTrialSessionsFiltersProps = {
-  ROOT: string;
+  judges: { [key: string]: string };
+  locations: { [key: string]: string };
+  sessionTypes: { [key: string]: string };
+  proceedingType: string;
+  displayProgressSpinnerSequence: (props: { timeInSeconds: number }) => void;
+  updateFormValueSequence: (props: {
+    index?: number;
+    root?: string;
+    key: string;
+    value: any;
+    allowEmptyString?: boolean;
+  }) => void;
+  sessionTypeOptions: Array<{ label: string; value: string }>;
+  trialCitiesByState: Array<{
+    label: string;
+    options: {
+      label: string;
+      value: string;
+    }[];
+  }>;
+  trialSessionJudgeOptions: Array<{ label: string; value: string }>;
 };
 
-const props = cerebralProps as unknown as PublicTrialSessionsFiltersProps;
+export const PublicTrialSessionsFilters = function ({
+  displayProgressSpinnerSequence,
+  judges,
+  locations,
+  proceedingType,
+  sessionTypeOptions,
+  sessionTypes,
+  trialCitiesByState,
+  trialSessionJudgeOptions,
+  updateFormValueSequence,
+}: PublicTrialSessionsFiltersProps) {
+  const PROCEEDING_TYPES = Object.entries({
+    all: 'All',
+    ...TRIAL_SESSION_PROCEEDING_TYPES,
+  });
 
-const PublicTrialSessionsFiltersDeps = {
-  displayProgressSpinnerSequence: sequences.displayProgressSpinnerSequence,
-  publicTrialSessionData: state[props.ROOT],
-  publicTrialSessionsHelper: state.publicTrialSessionsHelper,
-  updateFormValueSequence: sequences.updateFormValueSequence,
-};
-
-export const PublicTrialSessionsFilters = connect<
-  PublicTrialSessionsFiltersProps,
-  typeof PublicTrialSessionsFiltersDeps
->(
-  PublicTrialSessionsFiltersDeps,
-  function ({
-    displayProgressSpinnerSequence,
-    publicTrialSessionData,
-    publicTrialSessionsHelper,
-    ROOT,
-    updateFormValueSequence,
-  }) {
-    const PROCEEDING_TYPES = Object.entries({
-      all: 'All',
-      ...TRIAL_SESSION_PROCEEDING_TYPES,
+  const handleUpdateFormValue = (key: string, value: string | undefined) => {
+    displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
+    updateFormValueSequence({
+      key,
+      root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+      value,
     });
+    updateFormValueSequence({
+      key: 'pageNumber',
+      root: PUBLIC_TRIAL_SESSIONS_DATA_KEY,
+      value: 0,
+    });
+  };
 
-    const {
-      judges = {},
-      locations = {},
-      proceedingType = 'All',
-      sessionTypes = {},
-    } = publicTrialSessionData;
-
-    const handleUpdateFormValue = (key: string, value: string | undefined) => {
-      displayProgressSpinnerSequence({ timeInSeconds: 0.25 });
-      updateFormValueSequence({ key, root: ROOT, value });
-      updateFormValueSequence({
-        key: 'pageNumber',
-        root: ROOT,
-        value: 0,
-      });
-    };
-
-    function proceedingTypeRadioOption(key: string, value: string) {
-      return (
-        <div className="usa-radio usa-radio__inline padding-right-1" key={key}>
-          <input
-            aria-describedby="proceeding-type-legend"
-            checked={proceedingType === value}
-            className="usa-radio__input"
-            id={`${key}-proceeding`}
-            name="proceedingType"
-            type="radio"
-            value={value}
-            onChange={e => {
-              handleUpdateFormValue(e.target.name, e.target.value);
-            }}
-          />
-          <label
-            aria-label={value}
-            className="smaller-padding-right usa-radio__label"
-            data-testid={`${value}-proceeding-label`}
-            htmlFor={`${key}-proceeding`}
-            id={`${key}-proceeding-label`}
-          >
-            {value}
-          </label>
-        </div>
-      );
-    }
-
+  function proceedingTypeRadioOption(key: string, value: string) {
     return (
-      <>
-        <FormGroup>
-          <fieldset
-            className="usa-fieldset margin-top-2"
-            data-testid="proceeding-type-filter"
-          >
-            <legend className="usa-legend" id="proceeding-type-legend">
-              Proceeding type
-            </legend>
-            {PROCEEDING_TYPES.map(([key, value]) =>
-              proceedingTypeRadioOption(key, value),
-            )}
-          </fieldset>
-        </FormGroup>
+      <div className="usa-radio usa-radio__inline padding-right-1" key={key}>
+        <input
+          aria-describedby="proceeding-type-legend"
+          checked={proceedingType === value}
+          className="usa-radio__input"
+          id={`${key}-proceeding`}
+          name="proceedingType"
+          type="radio"
+          value={value}
+          onChange={e => {
+            handleUpdateFormValue(e.target.name, e.target.value);
+          }}
+        />
+        <label
+          aria-label={value}
+          className="smaller-padding-right usa-radio__label"
+          data-testid={`${value}-proceeding-label`}
+          htmlFor={`${key}-proceeding`}
+          id={`${key}-proceeding-label`}
+        >
+          {value}
+        </label>
+      </div>
+    );
+  }
 
-        <div className="desktop:grid-col grid-col-12">
-          <div className="grid-row">
-            <div
-              className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
-              data-testid="session-type-filter"
-            >
-              <FilterSelect
-                label="Session type"
-                name="sessionTypes"
-                options={publicTrialSessionsHelper.sessionTypeOptions}
-                selectedValues={sessionTypes}
-                onChange={handleUpdateFormValue}
-              />
-            </div>
-            <div
-              className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
-              data-testid="location-filter"
-            >
-              <FilterSelect
-                label="Location"
-                name="locations"
-                options={publicTrialSessionsHelper.trialCitiesByState}
-                selectedValues={locations}
-                onChange={handleUpdateFormValue}
-              />
-            </div>
-            <div
-              className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
-              data-testid="judge-filter"
-            >
-              <FilterSelect
-                label="Judge"
-                name="judges"
-                options={publicTrialSessionsHelper.trialSessionJudgeOptions}
-                selectedValues={judges}
-                onChange={handleUpdateFormValue}
-              />
-            </div>
+  return (
+    <>
+      <FormGroup>
+        <fieldset
+          className="usa-fieldset margin-top-2"
+          data-testid="proceeding-type-filter"
+        >
+          <legend className="usa-legend" id="proceeding-type-legend">
+            Proceeding type
+          </legend>
+          {PROCEEDING_TYPES.map(([key, value]) =>
+            proceedingTypeRadioOption(key, value),
+          )}
+        </fieldset>
+      </FormGroup>
+
+      <div className="desktop:grid-col grid-col-12">
+        <div className="grid-row">
+          <div
+            className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
+            data-testid="session-type-filter"
+          >
+            <FilterSelect
+              label="Session type"
+              name="sessionTypes"
+              options={sessionTypeOptions}
+              selectedValues={sessionTypes}
+              onChange={handleUpdateFormValue}
+            />
+          </div>
+          <div
+            className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
+            data-testid="location-filter"
+          >
+            <FilterSelect
+              label="Location"
+              name="locations"
+              options={trialCitiesByState}
+              selectedValues={locations}
+              onChange={handleUpdateFormValue}
+            />
+          </div>
+          <div
+            className="desktop:grid-col-4 grid-col-12 tablet:padding-right-2"
+            data-testid="judge-filter"
+          >
+            <FilterSelect
+              label="Judge"
+              name="judges"
+              options={trialSessionJudgeOptions}
+              selectedValues={judges}
+              onChange={handleUpdateFormValue}
+            />
           </div>
         </div>
-      </>
-    );
-  },
-);
+      </div>
+    </>
+  );
+};
 
 function FilterSelect({ label, name, onChange, options, selectedValues }) {
   return (
@@ -159,9 +166,9 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
             inputId={`${name}-filter`}
             name={name}
             options={options}
-            placeholder="- Select one or more -"
+            placeholder={MULTI_SELECT_PLACEHOLDER}
             value={{
-              label: '- Select one or more -',
+              label: MULTI_SELECT_PLACEHOLDER,
               value: '',
             }}
             onChange={option =>
@@ -172,14 +179,16 @@ function FilterSelect({ label, name, onChange, options, selectedValues }) {
         <Phone>
           <Select
             defaultValue={{
-              label: '- Select one or more -',
+              label: MULTI_SELECT_PLACEHOLDER,
               value: '',
             }}
             name={name}
             options={options}
-            value={'- Select one or more -'}
+            value={MULTI_SELECT_PLACEHOLDER}
             onChange={value => {
-              value && onChange(`${name}.${value}`, value);
+              if (value) {
+                onChange(`${name}.${value}`, value);
+              }
             }}
           />
         </Phone>

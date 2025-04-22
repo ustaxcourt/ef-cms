@@ -13,14 +13,10 @@ export const updateUserContactInformationLambda = (
   authorizedUser: UnknownAuthUser,
 ) =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { contactInfo, firmName } = JSON.parse(event.body);
+    const body = JSON.parse(event.body);
     return await updateUserContactInformationInteractor(
       applicationContext,
-      {
-        contactInfo,
-        firmName,
-        userId: (event.pathParameters || event.path).userId,
-      },
+      { ...body, userId: (event.pathParameters || event.path).userId },
       authorizedUser,
     );
   });

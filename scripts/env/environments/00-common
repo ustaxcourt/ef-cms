@@ -5,7 +5,7 @@ REGION="${DEFAULT_REGION}"
 CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
 SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}")
 SOURCE_TABLE_VERSION="${SOURCE_TABLE//efcms-${ENV}-/}"
-DB_HOST=$(./scripts/postgres/get-host.sh -h)
+DB_HOST=$(./scripts/postgres/get-host.sh -h -w)
 
 # region hard-coded; all ES domains and Cognito user pools are in us-east-1
 ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
@@ -35,6 +35,15 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   --max-results 30 \
   --region "us-east-1" \
   --output text)
+RUM_APP_MONITOR_ID=$(aws rum list-app-monitors \
+  --query "AppMonitorSummaries[?Name == '${ENV}_dawson_rum_app_monitor'].Id | [0]" \
+  --region "us-east-1" \
+  --output text)
+RUM_IDENTITY_POOL_ID=$(aws rum get-app-monitor \
+  --name "${ENV}_dawson_rum_app_monitor" \
+  --query 'AppMonitor.AppMonitorConfiguration.IdentityPoolId' \
+  --region "us-east-1" \
+  --output text)
 
 {
   echo "AWS_REGION='${REGION}'"
@@ -59,11 +68,31 @@ IRS_CLIENT_ID=$(aws cognito-idp list-user-pool-clients \
   echo "MASTER_REGION='${REGION}'"
   echo "POSTGRES_HOST='${DB_HOST}'"
   echo "REGION='${REGION}'"
+  echo "RUM_IDENTITY_POOL_ID='${RUM_IDENTITY_POOL_ID}'"
+  echo "RUM_APP_MONITOR_ID='${RUM_APP_MONITOR_ID}'"
   echo "SOURCE_TABLE='${SOURCE_TABLE}'"
   echo "SOURCE_TABLE_VERSION='${SOURCE_TABLE_VERSION}'"
   echo "STAGE='${ENV}'"
   echo "USER_POOL_ID='${COGNITO_USER_POOL}'"
 } >> .env
+
+if [[ "$DEPLOYING" -eq 1 ]]; then
+  DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "$ENV")
+  DESTINATION_ELASTICSEARCH=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "$ENV")
+  DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh "$ENV")
+  DESTINATION_TABLE_VERSION="${DESTINATION_TABLE//efcms-${ENV}-/}"
+  MIGRATE_FLAG=$(./scripts/migration/get-migrate-flag.sh "$ENV")
+  SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh "$ENV")
+
+  {
+    echo "DEPLOYING_COLOR='${DEPLOYING_COLOR}'"
+    echo "DESTINATION_ELASTICSEARCH='${DESTINATION_ELASTICSEARCH}'"
+    echo "DESTINATION_TABLE='${DESTINATION_TABLE}'"
+    echo "DESTINATION_TABLE_VERSION='${DESTINATION_TABLE_VERSION}'"
+    echo "MIGRATE_FLAG='${MIGRATE_FLAG}'"
+    echo "SOURCE_ELASTICSEARCH='${SOURCE_ELASTICSEARCH}'"
+  } >> .env
+fi
 
 sort -o .env .env
 set -o allexport

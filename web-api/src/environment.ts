@@ -6,6 +6,17 @@ const emailFromAddress =
   process.env.EMAIL_SOURCE ||
   `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`;
 
+function getJestDBConnectionError(): string {
+  return [
+    '\n',
+    'Hello Developer',
+    'You should not connect to the Database when running JEST tests',
+    'Something was not mocked out',
+    'If you are running Integration tests and need a Database connection',
+    'Set the environment variable "NODE_ENV" to "integration"',
+  ].join('\n');
+}
+
 export const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
     ? `app-${currentColor}.${process.env.EFCMS_DOMAIN}`
@@ -29,7 +40,11 @@ export const environment = {
   rds: {
     pool: {
       database: process.env.DATABASE_NAME || 'postgres',
-      host: process.env.POSTGRES_HOST || 'localhost',
+      host:
+        process.env.POSTGRES_HOST ||
+        (process.env.NODE_ENV !== 'test'
+          ? 'localhost'
+          : getJestDBConnectionError()),
       idleTimeoutMillis: 1000,
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
@@ -37,8 +52,7 @@ export const environment = {
       user: process.env.POSTGRES_USER || 'postgres',
     },
     readHost: process.env.POSTGRES_READ_HOST!,
-    useGlobalCert:
-      process.env.NODE_ENV === 'production' || process.env.CIRCLE_BRANCH,
+    useGlobalCert: !isLocal,
   },
   region,
   s3Endpoint: isLocal
@@ -50,8 +64,6 @@ export const environment = {
     : `${process.env.EFCMS_DOMAIN}-temp-documents-${stage}-us-east-1`,
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   userPoolIrsId: process.env.USER_POOL_IRS_ID || 'NOT_REAL_USER_POOL_ID',
-  workerQueueUrl:
-    `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}` ||
-    '',
+  workerQueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };

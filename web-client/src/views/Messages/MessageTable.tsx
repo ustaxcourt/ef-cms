@@ -1,6 +1,8 @@
 import {
   ASCENDING,
   DESCENDING,
+  SORT_ASCENDING_TEXT,
+  SORT_DESCENDING_TEXT,
 } from '@shared/business/entities/EntityConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
@@ -9,8 +11,6 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import {
   MessageColumnData,
   SORT_FIELDS,
-  getAscendingTextForSortType,
-  getDescendingTextForSortType,
 } from '@web-client/views/Messages/MessageColumns';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import { SuccessNotification } from '../SuccessNotification';
@@ -136,9 +136,11 @@ export const MessageTable = connect<
             role="alert"
           >
             <div className="usa-alert__body">
-              Message(s) completed at{' '}
-              {messagesIndividualInboxHelper.messagesCompletedAt} by{' '}
-              {messagesIndividualInboxHelper.messagesCompletedBy}
+              <p className="usa-alert__text">
+                Message(s) completed at{' '}
+                {messagesIndividualInboxHelper.messagesCompletedAt} by{' '}
+                {messagesIndividualInboxHelper.messagesCompletedBy}
+              </p>
             </div>
           </div>
         )}
@@ -235,9 +237,7 @@ const MessageColumnHeader = ({
         // TODO: probably should use aria-sort, but USWDS has default styles for this we may not want
       >
         <SortableColumn
-          ascText={getAscendingTextForSortType(
-            columnData.sortFieldInfo.sortType,
-          )}
+          ascText={SORT_ASCENDING_TEXT[columnData.sortFieldInfo.sortType]}
           currentlySortedField={tableSort.sortField}
           currentlySortedOrder={tableSort.sortOrder}
           data-testid={`${messageListId}-${columnData.sortFieldInfo.sortField}-header-button`}
@@ -246,9 +246,7 @@ const MessageColumnHeader = ({
               ? DESCENDING
               : ASCENDING
           }
-          descText={getDescendingTextForSortType(
-            columnData.sortFieldInfo.sortType,
-          )}
+          descText={SORT_DESCENDING_TEXT[columnData.sortFieldInfo.sortType]}
           hasRows={formattedMessages.hasMessages}
           sortField={columnData.sortFieldInfo.sortField}
           title={columnData.columnName}

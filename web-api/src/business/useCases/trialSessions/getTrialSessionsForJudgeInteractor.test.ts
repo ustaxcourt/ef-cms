@@ -1,4 +1,8 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getTrialSessionsForJudgeInteractor } from './getTrialSessionsForJudgeInteractor';
 import {
   mockPetitionerUser,
@@ -7,8 +11,8 @@ import {
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,
-  proceedingType: 'Remote',
-  sessionType: 'Regular',
+  proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+  sessionType: SESSION_TYPES.regular,
   startDate: '3000-03-01T00:00:00.000Z',
   term: 'Fall',
   termYear: '2009',

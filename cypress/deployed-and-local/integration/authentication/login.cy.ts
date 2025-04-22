@@ -3,6 +3,7 @@ import { createAndServePaperPetition } from '../../../helpers/fileAPetition/crea
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
 import { logout } from '../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
+import { loginAsAdmissionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('login', () => {
   beforeEach(() => {
@@ -65,7 +66,7 @@ describe('login', () => {
     const practitionerEmail = `${practitionerUserName}@example.com`;
 
     createAndServePaperPetition().then(({ docketNumber }) => {
-      cy.login('admissionsclerk1');
+      loginAsAdmissionsClerk('admissionsclerk1@example.com');
       cy.get('[data-testid="messages-banner"]');
       cy.get('[data-testid="docket-number-search-input"]').type(docketNumber);
       cy.get('[data-testid="search-docket-number"]').click();
@@ -96,9 +97,9 @@ describe('login', () => {
     );
     cy.get('[data-testid="login-button"]').click();
 
-    cy.get('[data-testid="new-password-input"]').type(
-      getCypressEnv().defaultAccountPass,
-    );
+    cy.get('[data-testid="new-password-input"]')
+      .should('be.visible')
+      .type(getCypressEnv().defaultAccountPass);
     cy.get('[data-testid="confirm-new-password-input"]').type(
       getCypressEnv().defaultAccountPass,
     );

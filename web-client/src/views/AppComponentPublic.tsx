@@ -46,7 +46,7 @@ export const AppComponentPublic = connect(
   },
   function AppComponentPublic({ currentPage }) {
     const focusMain = (e?: React.MouseEvent) => {
-      e && e?.preventDefault();
+      e?.preventDefault();
       const header = window.document.querySelector('#main-content h1');
       if (header instanceof HTMLElement) {
         header.focus();
@@ -63,7 +63,7 @@ export const AppComponentPublic = connect(
       }
     });
 
-    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
+    const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     if (!process.env.CI) {
       useScript('https://lynmjtcq5px1.statuspage.io/embed/script.js');

@@ -25,6 +25,9 @@ export const petitionsClerkViewsDeadlineReport = (
 
     const computedStartDate = `01/${options.day}/${options.year}`;
     const computedEndDate = `02/${options.day}/${options.year}`;
+    const buchUserId = cerebralTest
+      .getState('judges')
+      .find(judge => judge.name === 'Buch').userId;
 
     await cerebralTest.runSequence('selectDateRangeFromCalendarSequence', {
       endDate: prepareDateFromString(computedEndDate, FORMATS.MMDDYYYY),
@@ -38,24 +41,19 @@ export const petitionsClerkViewsDeadlineReport = (
 
     await cerebralTest.runSequence('updateDateRangeForDeadlinesSequence');
 
-    let deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
+    let deadlines = cerebralTest.getState(
+      'caseDeadlineReport.caseDeadlinesForCurrentPage',
+    );
 
-    expect(deadlines.length).toEqual(1); // the page size is overridden for integration tests to 1
+    expect(deadlines.length).toEqual(6);
 
-    let helper = runCompute(caseDeadlineReportHelper, {
+    runCompute(caseDeadlineReportHelper, {
       state: cerebralTest.getState(),
     });
 
-    expect(helper.showLoadMoreButton).toBeTruthy();
-
-    // 6 deadlines total, so click load more 5 times and then the load more button should be hidden
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-
-    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
+    deadlines = cerebralTest.getState(
+      'caseDeadlineReport.caseDeadlinesForCurrentPage',
+    );
 
     expect(deadlines.length).toEqual(6);
 
@@ -63,66 +61,68 @@ export const petitionsClerkViewsDeadlineReport = (
     expect(deadlines).toMatchObject([
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-01-${options.day}T00:00:00.000-05:00`,
+        associatedJudgeId: buchUserId,
+        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: CHIEF_JUDGE,
-        deadlineDate: `${options.year}-01-${options.day}T00:00:00.000-05:00`,
+        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[1],
       },
       {
         associatedJudge: CHIEF_JUDGE,
-        deadlineDate: `${options.year}-01-${options.day}T00:00:00.000-05:00`,
+        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[2],
       },
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-02-${options.day}T00:00:00.000-05:00`,
+        associatedJudgeId: buchUserId,
+        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: CHIEF_JUDGE,
-        deadlineDate: `${options.year}-02-${options.day}T00:00:00.000-05:00`,
+        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[1],
       },
       {
         associatedJudge: CHIEF_JUDGE,
-        deadlineDate: `${options.year}-02-${options.day}T00:00:00.000-05:00`,
+        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[2],
       },
     ]);
 
-    helper = runCompute(caseDeadlineReportHelper, {
+    runCompute(caseDeadlineReportHelper, {
       state: cerebralTest.getState(),
     });
-
-    expect(helper.showLoadMoreButton).toBeFalsy();
 
     await cerebralTest.runSequence('filterCaseDeadlinesByJudgeSequence', {
-      judge: 'Buch',
+      selectedJudgeId: buchUserId,
     });
 
-    deadlines = cerebralTest.getState('caseDeadlineReport.caseDeadlines');
+    deadlines = cerebralTest.getState(
+      'caseDeadlineReport.caseDeadlinesForCurrentPage',
+    );
 
-    expect(deadlines.length).toEqual(1);
-    await cerebralTest.runSequence('loadMoreCaseDeadlinesSequence');
-    helper = runCompute(caseDeadlineReportHelper, {
+    expect(deadlines.length).toEqual(2);
+
+    runCompute(caseDeadlineReportHelper, {
       state: cerebralTest.getState(),
     });
-
-    expect(helper.showLoadMoreButton).toBeFalsy();
 
     // verify filtering by judge
     expect(deadlines).toMatchObject([
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-01-${options.day}T00:00:00.000-05:00`,
+        associatedJudgeId: buchUserId,
+        deadlineDate: `${options.year}-01-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
       {
         associatedJudge: 'Buch',
-        deadlineDate: `${options.year}-02-${options.day}T00:00:00.000-05:00`,
+        associatedJudgeId: buchUserId,
+        deadlineDate: `${options.year}-02-${options.day}T05:00:00.000Z`,
         docketNumber: cerebralTest.createdDocketNumbers[0],
       },
     ]);

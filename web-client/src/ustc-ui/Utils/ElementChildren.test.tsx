@@ -10,7 +10,7 @@ describe('map', () => {
     ];
 
     expect(
-      map(children, (child, i) => {
+      map(children, (_child, i) => {
         return i;
       }),
     ).toEqual([0, 22, 1]);

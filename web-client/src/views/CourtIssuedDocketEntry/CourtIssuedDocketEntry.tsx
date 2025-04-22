@@ -96,7 +96,10 @@ export const CourtIssuedDocketEntry = connect(
             </div>
             <div className="grid-col-7">
               <div className="display-flex flex-row flex-justify flex-align-center">
-                <div className="margin-top-1 margin-bottom-1 docket-entry-preview-text">
+                <div
+                  className="margin-top-1 margin-bottom-1 docket-entry-preview-text"
+                  data-testid="docket-entry-preview-text"
+                >
                   <span className="text-bold">Docket entry preview: </span>
                   {addCourtIssuedDocketEntryHelper.formattedDocumentTitle}
                 </div>
@@ -263,7 +266,7 @@ export const CourtIssuedDocketEntry = connect(
               </div>
 
               <section className="usa-section DocumentDetail">
-                <div className="margin-top-5">
+                <div className="margin-top-5 button-container">
                   {addCourtIssuedDocketEntryHelper.showSaveAndServeButton && (
                     <Button
                       data-testid="serve-to-parties-btn"

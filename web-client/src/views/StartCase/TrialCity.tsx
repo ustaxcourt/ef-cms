@@ -7,7 +7,7 @@ import classNames from 'classnames';
 
 type TrialCityType = {
   label: string;
-  onBlur: () => void;
+  onBlur?: () => void;
   onChange: (event: any) => void;
   procedureType: string;
   showDefaultOption: boolean;

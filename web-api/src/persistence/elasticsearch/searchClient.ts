@@ -1,4 +1,3 @@
-import { Search } from '@opensearch-project/opensearch/api/requestParams';
 import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
 import { formatMessageResult } from './helpers/formatMessageResult';
 import { formatWorkItemResult } from './helpers/formatWorkItemResult';
@@ -6,6 +5,11 @@ import { get } from 'lodash';
 import { getIndexNameFromAlias } from '../../../elasticsearch/elasticsearch-aliases';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import {
+  Count_Request,
+  Search_Request,
+} from '@opensearch-project/opensearch/api';
 
 const CHUNK_SIZE = 10000;
 export type SearchClientResultsType = {
@@ -21,15 +25,6 @@ export type SearchClientResultsType = {
   total: number;
   results: any;
 };
-export type SearchAllParametersType = {
-  index?: string;
-  body?: {
-    _source?: string[];
-    query?: any;
-    sort?: any;
-  };
-  size?: number;
-};
 
 export type SearchClientCountResultsType = number;
 
@@ -37,7 +32,7 @@ export const formatResults = <T>(body: Record<string, any>) => {
   const total: number = get(body, 'hits.total.value', 0);
   const aggregations = get(body, 'aggregations');
 
-  let caseMap = {};
+  const caseMap = {};
   const results: T[] = get(body, 'hits.hits', []).map(hit => {
     delete hit['_source']['case_relations'];
     const sourceUnmarshalled = unmarshall(hit['_source']);
@@ -79,8 +74,8 @@ export const count = async ({
   applicationContext,
   searchParameters,
 }: {
-  applicationContext: IApplicationContext;
-  searchParameters: Search;
+  applicationContext: ServerApplicationContext;
+  searchParameters: Count_Request;
 }): Promise<SearchClientCountResultsType> => {
   updateIndex({ searchParameters });
   try {
@@ -98,8 +93,8 @@ export const search = async <T>({
   applicationContext,
   searchParameters,
 }: {
-  applicationContext: IApplicationContext;
-  searchParameters: Search;
+  applicationContext: ServerApplicationContext;
+  searchParameters: Search_Request;
 }): Promise<SearchClientResultsType> => {
   updateIndex({ searchParameters });
   try {
@@ -118,7 +113,7 @@ export const searchRaw = async ({
   searchParameters,
 }: {
   applicationContext: IApplicationContext;
-  searchParameters: Search;
+  searchParameters: Search_Request;
 }): Promise<any> => {
   updateIndex({ searchParameters });
   try {
@@ -137,7 +132,7 @@ export const searchAll = async ({
   searchParameters,
 }: {
   applicationContext: IApplicationContext;
-  searchParameters: SearchAllParametersType;
+  searchParameters: Search_Request;
 }): Promise<SearchClientResultsType> => {
   updateIndex({ searchParameters });
   const index = searchParameters.index || '';
@@ -157,7 +152,6 @@ export const searchAll = async ({
     throw new Error('Search client encountered an error.');
   }
 
-  // eslint-disable-next-line no-underscore-dangle
   const _source = searchParameters.body?._source || [];
   let search_after = [0];
   const sort = searchParameters.body?.sort || [{ 'pk.S': 'asc' }]; // sort is required for paginated queries

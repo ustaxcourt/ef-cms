@@ -1,8 +1,57 @@
 # Postgres - Restore Database
 
-## Database goes offline (Fire drill)
+## Database goes offline / Lost data (Fire drill)
 
 Ensure snapshot exists for restore (aws console, rds -> snapshots).
+
+### Manual Restore Process
+
+- In AWS, restore from desired snapshot to restore instance.
+
+- Source to your target env
+
+- Using the script below
+`scripts/postgres/connect.sh`
+
+- Temporarily modify the line
+`PGPASSWORD="$DB_TOKEN" psql -h "$DB_HOST" -U "$DB_USER" -d "$DB_NAME"`
+
+To restore the database:
+```
+PGPASSWORD="$DB_TOKEN" pg_restore \
+  --host="$DB_HOST" \
+  --username="$DB_USER" \
+  --dbname="$DB_NAME" \
+  --port="$DB_PORT" \
+  --format=c \
+  --verbose \
+  --clean \
+  --no-privileges \
+  --no-owner \
+  --table=dw_case \ # optional if doing per table
+  --jobs=3 \
+  "backup.sql"
+```
+
+To backup the database:
+```
+PGPASSWORD="$DB_TOKEN" pg_dump \ # change to restore instance password
+  --host="$DB_HOST" \ # change to restore instance host
+  --username="$DB_USER" \
+  --port="$DB_PORT" \
+  --dbname="$DB_NAME" \
+  --file="backup.sql" \
+  --format=c \
+  --no-privileges \
+  --no-owner \
+  --verbose
+```
+
+- Run the script for the backup and restore operation (separately one at a time).
+
+- Re-add indexes using tables plus by going to each table on the restore instance under the structure tab copy and paste to target instance (writer).
+
+- Delete the restore instance and regional cluster (in this order).
 
 ### Terraform Process
 

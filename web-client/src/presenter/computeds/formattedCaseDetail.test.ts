@@ -1,4 +1,3 @@
-import { CONTACT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
@@ -9,40 +8,7 @@ import { formattedCaseDetail as formattedCaseDetailComputed } from './formattedC
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
-
-const getDateISO = () =>
-  applicationContext.getUtilities().createISODateString();
-
-export const simpleDocketEntries = [
-  {
-    createdAt: getDateISO(),
-    docketEntryId: '123',
-    documentTitle: 'Petition',
-    filedBy: 'Jessica Frase Marine',
-    filingDate: '2019-02-28T21:14:39.488Z',
-    isOnDocketRecord: true,
-  },
-];
-
-export const mockPetitioners = [
-  {
-    address1: '734 Cowley Parkway',
-    address2: 'Cum aut velit volupt',
-    address3: 'Et sunt veritatis ei',
-    city: 'Et id aut est velit',
-    contactId: '0e891509-4e33-49f6-bb2a-23b327faf6f1',
-    contactType: CONTACT_TYPES.primary,
-    countryType: 'domestic',
-    email: 'petitioner@example.com',
-    isAddressSealed: false,
-    name: 'Mona Schultz',
-    phone: '+1 (884) 358-9729',
-    postalCode: '77546',
-    sealedAndUnavailable: false,
-    serviceIndicator: 'Electronic',
-    state: 'CT',
-  },
-];
+import { mockPetitioners } from '@web-client/presenter/computeds/mockFormattedCaseDetailTestFixtures';
 
 describe('formattedCaseDetail', () => {
   const { STATUS_TYPES } = applicationContext.getConstants();
@@ -237,5 +203,23 @@ describe('formattedCaseDetail', () => {
     expect(result.petitioners[0]).toMatchObject({
       displayName: 'John Johnson, Participant',
     });
+  });
+
+  it('should set isCurrentUser to true if the contactId matches the user.userId', () => {
+    const result = runCompute(formattedCaseDetail, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          petitioners: [
+            {
+              contactId: petitionsClerkUser.userId,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.petitioners[0].isCurrentUser).toBeTruthy();
   });
 });

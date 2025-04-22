@@ -15,6 +15,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -45,9 +46,10 @@ export const fileExternalDocument = async (
     .getCaseByDocketNumber({
       applicationContext,
       docketNumber,
+      includeCorrespondenceAndWorkItems: false,
     });
 
-  let currentCaseEntity = new Case(currentCase, { authorizedUser });
+  const currentCaseEntity = new Case(currentCase, { authorizedUser });
 
   const {
     consolidatedCasesToFileAcross,
@@ -107,7 +109,7 @@ export const fileExternalDocument = async (
     }
   }
 
-  let documentMetadataForConsolidatedCases: TDocumentMetaData[] = [];
+  const documentMetadataForConsolidatedCases: TDocumentMetaData[] = [];
   if (
     consolidatedCasesToFileAcross &&
     consolidatedCasesToFileAcross.length > 0
@@ -130,13 +132,14 @@ export const fileExternalDocument = async (
           .getCaseByDocketNumber({
             applicationContext,
             docketNumber: individualDocumentMetadata.docketNumber,
+            includeCorrespondenceAndWorkItems: false,
           });
 
         let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
         const servedParties = aggregatePartiesForService(caseEntity);
 
-        for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
+        for (const [docketEntryId, metadata, relationship] of documentsToAdd) {
           if (docketEntryId && metadata) {
             const docketEntryEntity = new DocketEntry(
               {
@@ -215,14 +218,9 @@ export const fileExternalDocument = async (
           applicationContext,
           authorizedUser,
           caseToUpdate: caseEntity,
+          includeCorrespondenceAndWorkItems: false,
         });
 
-        for (let workItem of workItems) {
-          await applicationContext.getPersistenceGateway().saveWorkItem({
-            applicationContext,
-            workItem: workItem.validate().toRawObject(),
-          });
-        }
         const rawCaseEntity = caseEntity.toRawObject();
         return rawCaseEntity;
       },
@@ -231,6 +229,11 @@ export const fileExternalDocument = async (
   const resolvedCaseEntities: RawCase[] = await Promise.all(
     consolidatedCaseEntities,
   );
+
+  await upsertWorkItems({
+    workItems,
+  });
+
   return resolvedCaseEntities.find(
     caseEntity => caseEntity.docketNumber === docketNumber,
   );

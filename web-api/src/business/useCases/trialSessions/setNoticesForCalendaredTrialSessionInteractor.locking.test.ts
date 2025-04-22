@@ -1,12 +1,12 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
+  
   setNoticesForCalendaredTrialSessionInteractor,
 } from './setNoticesForCalendaredTrialSessionInteractor';
 import { mockTrialClerkUser } from '@shared/test/mockAuthUsers';
@@ -52,29 +52,6 @@ describe('determineEntitiesToLock', () => {
   });
 });
 
-describe('handleLockError', () => {
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      foo: 'bar',
-    };
-
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      mockTrialClerkUser,
-    );
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'set_notices_for_calendared_trial_session',
-    });
-  });
-});
-
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockCases = [
@@ -82,7 +59,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     { ...MOCK_CASE, docketNumber: '100-23' },
     { ...MOCK_CASE, docketNumber: '101-23' },
   ];
-  let mockRequest = {
+  const mockRequest = {
     clientConnectionId: '8916f743-a22d-4946-ab06-57ddcf386912',
     trialSessionId,
   };
@@ -132,33 +109,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
       expect(
         applicationContext.getPersistenceGateway().updateCaseAndAssociations,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        setNoticesForCalendaredTrialSessionInteractor(
-          applicationContext,
-          mockRequest,
-          mockTrialClerkUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        clientConnectionId: mockRequest.clientConnectionId,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'set_notices_for_calendared_trial_session',
-        },
-        userId: mockTrialClerkUser.userId,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
       ).not.toHaveBeenCalled();
     });
   });

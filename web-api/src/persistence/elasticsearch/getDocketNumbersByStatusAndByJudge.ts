@@ -1,6 +1,7 @@
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
-import { QueryDslQueryContainer } from '@opensearch-project/opensearch/api/types';
 import { search } from './searchClient';
+import { QueryContainer } from '@opensearch-project/opensearch/api/_types/_common.query_dsl';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type DocketNumberByStatusRequest = {
   statuses: string[];
@@ -27,11 +28,11 @@ export const getDocketNumbersByStatusAndByJudge = async ({
   applicationContext,
   params,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   params: DocketNumberByStatusRequest;
 }): Promise<SubmittedCAVTableFields[]> => {
-  const shouldFilters: QueryDslQueryContainer[] = [];
-  const filters: QueryDslQueryContainer[] = [
+  const shouldFilters: QueryContainer[] = [];
+  const filters: QueryContainer[] = [
     {
       terms: { 'status.S': params.statuses },
     },
@@ -52,7 +53,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
     applicationContext,
     searchParameters: {
       body: {
-        _source: source,
+        _source: source as unknown as string[],
         query: {
           bool: {
             filter: filters,

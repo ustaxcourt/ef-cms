@@ -41,4 +41,48 @@ describe('getPractitionersByNameAction', () => {
 
     expect(results.output).toEqual({ searchResults: [{ barNumber: '11111' }] });
   });
+
+  it('should call getPractitionersByNameInteractor with the search filters and return the results received', async () => {
+    applicationContext
+      .getUseCases()
+      .getPractitionersByNameInteractor.mockReturnValue({
+        searchResults: [{ barNumber: '11111' }],
+      });
+
+    const results = await runAction(getPractitionersByNameAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          practitionerSearchByName: {
+            lastKeysOfPages: ['1234'],
+            practitionerName: 'Ricky',
+            practiceType: 'IRS',
+            practitionerType: 'Attorney',
+            admissionStatus: 'Active',
+            originalBarState: 'CA',
+          },
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().getPractitionersByNameInteractor.mock
+        .calls.length,
+    ).toEqual(1);
+
+    expect(
+      applicationContext.getUseCases().getPractitionersByNameInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      name: 'Ricky',
+      practiceType: 'IRS',
+      practitionerType: 'Attorney',
+      admissionStatus: 'Active',
+      originalBarState: 'CA',
+    });
+
+    expect(results.output).toEqual({ searchResults: [{ barNumber: '11111' }] });
+  });
 });

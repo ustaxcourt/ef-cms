@@ -91,7 +91,7 @@ import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
 import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
-import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
+import { TrialSessionPlanningReportView } from '@web-client/views/TrialSessions/TrialSessionPlanningReportView';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
@@ -106,6 +106,8 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect } from 'react';
 import classNames from 'classnames';
+import { TermBuilderView } from '@web-client/views/TermBuilderView';
+import { AsyncServiceUnavailableModal } from '@web-client/views/AsyncServiceUnavailableModal';
 
 const pages = {
   AccessibilityStatement,
@@ -190,8 +192,9 @@ const pages = {
   StatusReportOrder,
   StyleGuide,
   TrialSessionDetails,
-  TrialSessionPlanningReport,
+  TrialSessionPlanningReportView,
   TrialSessionWorkingCopy,
+  TermBuilderView,
   TrialSessions,
   UploadCourtIssuedDocument,
   UserContactEdit,
@@ -224,7 +227,7 @@ export const AppComponent = connect(
     zipInProgress,
   }) {
     const focusMain = (e?: any) => {
-      e && e.preventDefault();
+      e?.preventDefault();
       const header = window.document.querySelector(
         '#main-content h1',
       ) as HTMLElement;
@@ -241,7 +244,7 @@ export const AppComponent = connect(
       }
     }, [currentPage]);
 
-    let showHeaderAndFooter = currentPage !== 'AppMaintenance';
+    const showHeaderAndFooter = currentPage !== 'AppMaintenance';
 
     const CurrentPage = pages[currentPage];
     const IsPageWithBlueBackground = pagesWithBlueBackground[currentPage];
@@ -280,7 +283,9 @@ export const AppComponent = connect(
           <>
             <Footer />
             {zipInProgress && <BatchDownloadProgress />}
-
+            {showModal === 'AsyncServiceUnavailableModal' && (
+              <AsyncServiceUnavailableModal />
+            )}
             {showModal === 'TrialSessionPlanningModal' && (
               <TrialSessionPlanningModal />
             )}

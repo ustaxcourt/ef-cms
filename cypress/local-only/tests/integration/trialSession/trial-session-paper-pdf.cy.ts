@@ -1,10 +1,12 @@
 import { fillInCreateCaseFromPaperForm } from '../../../support/pages/create-paper-petition';
 import { getCreateACaseButton } from '../../../support/pages/document-qc';
 import { selectTypeaheadInput } from '../../../../helpers/components/typeAhead/select-typeahead-input';
+import { loginAsPetitionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
   it('should create a trial session, add a case, and generate a pdf for paper service', () => {
-    cy.login('petitionsclerk', 'trial-sessions');
+    loginAsPetitionsClerk();
+    cy.visit('/trial-sessions');
 
     cy.get('[data-testid="add-trial-session-button"]').click();
     cy.contains('Location-based').click();
@@ -52,10 +54,11 @@ describe('Trial Session Paper Pdf', { scrollBehavior: 'center' }, () => {
         cy.intercept('POST', '**/paper').as('postPaperCase');
         cy.get('#submit-case').click();
         cy.wait('@postPaperCase').then(({ response: paperCaseResponse }) => {
-          const petitionId = paperCaseResponse?.body.docketEntries.find(
-            (d: any) => d.documentTitle === 'Petition',
-          ).docketEntryId;
-          const docketNumber = paperCaseResponse?.body.docketNumber;
+          const petitionId =
+            paperCaseResponse?.body.caseDetail.docketEntries.find(
+              (d: any) => d.documentTitle === 'Petition',
+            ).docketEntryId;
+          const docketNumber = paperCaseResponse?.body.caseDetail.docketNumber;
           cy.visit(
             `/case-detail/${docketNumber}/petition-qc/document-view/${petitionId}`,
           );

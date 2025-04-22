@@ -1,4 +1,5 @@
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
+import { judgeColvin } from '@shared/test/mockUsers';
 import { validateCaseWorksheetInteractor } from './validateCaseWorksheetInteractor';
 
 describe('validateCaseWorksheetInteractor', () => {
@@ -6,6 +7,7 @@ describe('validateCaseWorksheetInteractor', () => {
     const mockInvalidCaseWorksheet: RawCaseWorksheet = {
       docketNumber: undefined as any, // Docket number is required
       entityName: 'CaseWorksheet',
+      judgeUserId: judgeColvin.userId,
     };
 
     const errors = validateCaseWorksheetInteractor({
@@ -19,6 +21,7 @@ describe('validateCaseWorksheetInteractor', () => {
     const mockValidCaseWorksheet: RawCaseWorksheet = {
       docketNumber: '111-11',
       entityName: 'CaseWorksheet',
+      judgeUserId: judgeColvin.userId,
     };
 
     const errors = validateCaseWorksheetInteractor({

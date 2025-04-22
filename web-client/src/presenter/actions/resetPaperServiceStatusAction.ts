@@ -1,6 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * sets the totalPdfs on the state.paperServiceStatusState state.
  * @param {object} providers the providers object

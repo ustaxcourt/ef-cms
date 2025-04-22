@@ -1,5 +1,6 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
+import { judgeColvin } from '@shared/test/mockUsers';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { setCourtIssuedDocumentInitialDataAction } from './setCourtIssuedDocumentInitialDataAction';
@@ -8,6 +9,8 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
   const docketEntryIds = [
     'ddfd978d-6be6-4877-b004-2b5735a41fee',
     '11597d22-0874-4c5e-ac98-a843d1472baf',
+    '22597d22-0874-4c5e-ac98-a843d1472baf',
+    '43737877-0874-4c5e-ac98-dhd83838887j',
   ];
 
   beforeAll(() => {
@@ -21,6 +24,18 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
       docketEntryId: docketEntryIds[1],
       eventCode: 'O',
       freeText: 'something',
+    });
+    MOCK_CASE.docketEntries.push({
+      docketEntryId: docketEntryIds[2],
+      eventCode: 'OJR',
+      signedByUserId: judgeColvin.userId,
+      signedJudgeName: judgeColvin.judgeFullName,
+    });
+    MOCK_CASE.docketEntries.push({
+      docketEntryId: docketEntryIds[3],
+      eventCode: 'OJR',
+      signedByUserId: 'not-colvins-id',
+      signedJudgeName: judgeColvin.judgeFullName,
     });
   });
 
@@ -107,5 +122,51 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
     });
 
     expect(result.state.form).toEqual({});
+  });
+
+  it('should set the judge name when eventcode is OJR and docketEntry was signed by the judge', async () => {
+    const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketEntryId: docketEntryIds[2],
+      },
+      state: {
+        caseDetail: MOCK_CASE,
+        form: {},
+        judges: [
+          {
+            judgeFullName: judgeColvin.judgeFullName,
+            name: judgeColvin.name,
+            userId: judgeColvin.userId,
+          },
+        ],
+      },
+    });
+    expect(result.state.form.judge).toEqual('Colvin');
+  });
+
+  it('should set the judge name when eventcode is OJR and docketEntry was signed by a non judge user', async () => {
+    const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        docketEntryId: docketEntryIds[3],
+      },
+      state: {
+        caseDetail: MOCK_CASE,
+        form: {},
+        judges: [
+          {
+            judgeFullName: judgeColvin.judgeFullName,
+            name: judgeColvin.name,
+            userId: judgeColvin.userId,
+          },
+        ],
+      },
+    });
+    expect(result.state.form.judge).toEqual('Colvin');
   });
 });

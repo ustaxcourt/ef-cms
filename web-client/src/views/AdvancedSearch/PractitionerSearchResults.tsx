@@ -17,8 +17,8 @@ export const PractitionerSearchResults = connect(
     practitionerSearchHelper,
     submitPractitionerNameSearchSequence,
   }) {
-    const paginatorTop = useRef(null);
-    const paginatorBottom = useRef(null);
+    const paginatorTop = useRef<HTMLDivElement>(null);
+    const paginatorBottom = useRef<HTMLDivElement>(null);
     return (
       <>
         {practitionerSearchHelper.showSearchResults && (
@@ -56,8 +56,11 @@ export const PractitionerSearchResults = connect(
                   <tr>
                     <th aria-label="bar number">Bar No.</th>
                     <th data-testid="results-table-header-name">Name</th>
+                    {practitionerSearchHelper.showStateColumn && (
+                      <th data-testid="results-table-header-state">State</th>
+                    )}
                     <th data-testid="results-table-header-state">
-                      {practitionerSearchHelper.stateHeaderText}
+                      Original Bar State
                     </th>
                     <th data-testid="results-table-header-admission-status">
                       Admission Status
@@ -93,7 +96,10 @@ export const PractitionerSearchResults = connect(
                           )}
                         </td>
                         <td>{result.name}</td>
-                        <td>{result.contact?.stateFullName}</td>
+                        {practitionerSearchHelper.showStateColumn && (
+                          <td>{result.stateFullName}</td>
+                        )}
+                        <td>{result.originalBarStateFullName}</td>
                         <td>{result.admissionsStatus}</td>
                         <td>{result.formattedAdmissionsDate}</td>
                         <td>{result.practitionerType}</td>

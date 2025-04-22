@@ -1,13 +1,12 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { createISODateString } from '../../../../../shared/src/business/utilities/DateHandler';
+import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -20,6 +19,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the completed work item
  */
 export const completeWorkItem = async (
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext: ServerApplicationContext,
   {
     completedMessage,
@@ -34,13 +34,13 @@ export const completeWorkItem = async (
     throw new UnauthorizedError('Unauthorized for complete workItem');
   }
 
-  const originalWorkItem = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemById({
-      applicationContext,
-      workItemId,
-    });
-  const originalWorkItemEntity = new WorkItem(originalWorkItem);
+  const originalWorkItemEntity = await getWorkItemById({
+    workItemId,
+  });
+
+  if (!originalWorkItemEntity) {
+    throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+  }
 
   const completedWorkItem = originalWorkItemEntity
     .setAsCompleted({
@@ -50,56 +50,25 @@ export const completeWorkItem = async (
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
-    applicationContext,
-    authorizedUser,
-    workItem: {
-      ...completedWorkItem,
-      createdAt: createISODateString(),
-    },
-  });
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: completedWorkItem,
-  });
-
-  const caseObject = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: completedWorkItem.docketNumber,
-    });
-
-  const caseToUpdate = new Case(caseObject, { authorizedUser });
-
-  const workItemEntity = new WorkItem(completedWorkItem);
-
-  caseToUpdate.docketEntries.forEach(doc => {
-    if (doc.workItem && doc.workItem.workItemId === workItemEntity.workItemId) {
-      doc.workItem = workItemEntity;
-    }
-  });
-
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    authorizedUser,
-    caseToUpdate,
+  await upsertWorkItems({
+    workItems: [completedWorkItem],
   });
 
   return completedWorkItem;
 };
 
-export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
-  { workItemId }: { workItemId: string },
-) => {
-  const originalWorkItem: RawWorkItem = await applicationContext
-    .getPersistenceGateway()
-    .getWorkItemById({
-      applicationContext,
-      workItemId,
-    });
+export const determineEntitiesToLock = async ({
+  workItemId,
+}: {
+  workItemId: string;
+}) => {
+  const originalWorkItem = await getWorkItemById({
+    workItemId,
+  });
+
+  if (!originalWorkItem) {
+    throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+  }
 
   return {
     identifiers: [`case|${originalWorkItem.docketNumber}`],

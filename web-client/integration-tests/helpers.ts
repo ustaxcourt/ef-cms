@@ -107,6 +107,22 @@ export const getFormattedDocketEntriesForTest = async cerebralTest => {
   });
 };
 
+export const getFilteredFormattedDocketEntriesForTest = async (
+  cerebralTest,
+  documentTypeFilter: string,
+) => {
+  await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    docketNumber: cerebralTest.docketNumber,
+  });
+  await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+    key: 'sessionMetadata.docketRecordFilter',
+    value: documentTypeFilter,
+  });
+  return runCompute(formattedDocketEntries, {
+    state: cerebralTest.getState(),
+  });
+};
+
 export const contactPrimaryFromState = cerebralTest => {
   return cerebralTest.getState('caseDetail.petitioners.0');
 };
@@ -412,7 +428,7 @@ export const assignWorkItems = async (cerebralTest, to, workItems) => {
     assigneeId: users[to].userId,
     assigneeName: users[to].name,
   });
-  for (let workItem of workItems) {
+  for (const workItem of workItems) {
     await cerebralTest.runSequence('selectWorkItemSequence', {
       workItem,
     });
@@ -615,6 +631,7 @@ export const loginAs = (cerebralTest, email, password = 'Testing1234$') =>
   });
 
 export const setupTest = ({ constantsOverrides = {} } = {}) => {
+  // eslint-disable-next-line prefer-const
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
@@ -799,8 +816,7 @@ const mockQuery = routeToGoTo => {
 };
 
 export const gotoRoute = (routes, routeToGoTo) => {
-  for (let route of routes) {
-    // eslint-disable-next-line security/detect-non-literal-regexp
+  for (const route of routes) {
     const regex = new RegExp(
       route.route.replace(/\*/g, '([a-z\\-A-Z0-9]+)').replace(/\.\./g, '(.*)') +
         '$',
@@ -957,7 +973,7 @@ export const setBatchPages = ({ cerebralTest }) => {
   const selectedDocumentType = cerebralTest.getState(
     'currentViewMetadata.documentSelectedForScan',
   );
-  let batches = cerebralTest.getState(
+  const batches = cerebralTest.getState(
     `scanner.batches.${selectedDocumentType}`,
   );
 
@@ -986,12 +1002,12 @@ export const embedWithLegalIpsumText = (phrase = '') => {
   return `While this license do not apply to, the licenses granted by such Contributor under Sections 2.1(b) and 2.2(b) are revoked effective as of the provisions set forth in the case of each Contributor, changes to the Recipient. The term of this Agreement, and b) allow the Commercial Contributor in writing by the Licensor accepting any such claim at its own expense. For example, a Contributor might include the Contribution, nor to (ii) Contributions of other Contributors.
 
   Therefore, if a Contributor with respect to some or all of the Standard Version. ${phrase} You may Distribute your Modified Version complies with the preceding Paragraph, for commercial or non-commercial purposes, provided that you duplicate all of the General Public License applies to text developed by openSEAL (http://www.openseal.org/)." Alternately, this acknowledgment may appear in the form of the <ORGANIZATION> nor the names of the Agreement will not have their licenses terminated so long as the Derived Program to replace the Derived Program from a web site). Distribution of Modified Versions is governed by the Copyright Holder may not change the License at http://www.opensource.apple.com/apsl/ and read it before using this software for any purpose, but the Licensor except as expressly stated in Sections 2(a) and 2(b) above, Recipient receives no rights or otherwise.
-  
+
   As a condition to exercising the rights set forth in the documentation and/or other rights consistent with the Work can be reasonably considered independent and separate works in conjunction with the library. If this is to make arrangements wholly outside of your status as Current Maintainer. If the Recipient shall meet all of the initial Contributor, the initial Contributor, the initial grant or subsequently acquired, any and all related documents be drafted in English.`;
 };
 
 export const updateForm = async (cerebralTest, formValues, sequenceName) => {
-  for (let [key, value] of Object.entries(formValues)) {
+  for (const [key, value] of Object.entries(formValues)) {
     await cerebralTest.runSequence(sequenceName, {
       key,
       value,
@@ -1024,14 +1040,13 @@ export const updateOrderForm = async (cerebralTest, formValues) => {
 };
 
 export const verifySortedReceivedAtDateOfPendingItems = pendingItems => {
-  return pendingItems.every((elm, i, arr) =>
+  return pendingItems.every((_elm, i, arr) =>
     i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
   );
 };
 
 export const docketClerkLoadsPendingReportOnChiefJudgeSelection = async ({
   cerebralTest,
-  shouldLoadMore = false,
 }) => {
   await refreshElasticsearchIndex();
 
@@ -1040,7 +1055,4 @@ export const docketClerkLoadsPendingReportOnChiefJudgeSelection = async ({
   await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
     judge: 'Chief Judge',
   });
-
-  shouldLoadMore &&
-    (await cerebralTest.runSequence('loadMorePendingItemsSequence'));
 };

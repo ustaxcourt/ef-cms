@@ -1,21 +1,21 @@
 import {
   FORMATS,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { ThirtyDayNoticeOfTrialRequiredInfo } from '../../../../../shared/src/business/utilities/pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
+import { ThirtyDayNoticeOfTrialRequiredInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/ThirtyDayNoticeOfTrial';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
-import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
+import { testPdfDoc } from '@shared/business/test/getFakeFile';
 
 describe('serveThirtyDayNoticeInteractor', () => {
   let trialSession: RawTrialSession;
@@ -42,6 +42,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
   });
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
+    applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById.mockResolvedValueOnce(trialSession);
+
     await expect(
       serveThirtyDayNoticeInteractor(
         applicationContext,
@@ -55,6 +59,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
   });
 
   it('should throw an invalid request error when no trial session id is provided', async () => {
+    applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById.mockResolvedValue(trialSession);
+
     await expect(
       serveThirtyDayNoticeInteractor(
         applicationContext,

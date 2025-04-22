@@ -4,6 +4,17 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import {
+  ADMISSIONS_STATUS_OPTIONS,
+  ALL_SELECTION,
+  ALL_STATE_OPTIONS,
+  MULTI_SELECT_PLACEHOLDER,
+  PRACTICE_TYPE_OPTIONS,
+  PRACTITIONER_TYPE_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
+import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
+import { getGroupedStateOptions } from '@shared/business/utilities/groupStatesOptions';
 
 export const PractitionerSearchByName = connect(
   {
@@ -25,9 +36,14 @@ export const PractitionerSearchByName = connect(
     validatePractitionerSearchByNameFormSequence,
     validationErrors,
   }) {
+    const groupedStateOptions = getGroupedStateOptions();
+    const allStateOptions = { ...ALL_STATE_OPTIONS, 'N/A': 'N/A' };
     return (
       <>
-        <div className="header-with-blue-background display-flex flex-justify">
+        <div
+          className="header-with-blue-background display-flex flex-justify"
+          id="search-by-name"
+        >
           <h3>Search by Name</h3>
         </div>
         <div className="blue-container">
@@ -63,11 +79,204 @@ export const PractitionerSearchByName = connect(
                 </FormGroup>
               </div>
             </div>
+            <div className="grid-row grid-gap">
+              <fieldset className="usa-fieldset">
+                <legend className="usa-legend">
+                  Practitioner type <span className="usa-hint">(optional)</span>
+                </legend>
+                <div className="practitioner-type-container gap-3">
+                  {[ALL_SELECTION, ...PRACTITIONER_TYPE_OPTIONS].map(type => (
+                    <div className="usa-radio margin-bottom-0" key={type}>
+                      <input
+                        checked={
+                          advancedSearchForm.practitionerSearchByName
+                            .practitionerType === type
+                        }
+                        className="usa-radio__input"
+                        id={`practitioner-type-${type}`}
+                        name="practitionerType"
+                        type="radio"
+                        value={type}
+                        onChange={e => {
+                          updateAdvancedSearchFormValueSequence({
+                            formType: 'practitionerSearchByName',
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label
+                        className="usa-radio__label margin-top-0 practitioner-type-label"
+                        data-testid={`practitioner-type-${type}-radio`}
+                        htmlFor={`practitioner-type-${type}`}
+                      >
+                        {type}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+              </fieldset>
+            </div>
+            <div className="grid-row grid-gap">
+              <fieldset className="usa-fieldset">
+                <legend className="usa-legend">
+                  Practice type <span className="usa-hint">(optional)</span>
+                </legend>
+                <div className="display-flex gap-3">
+                  {PRACTICE_TYPE_OPTIONS.map(practiceType => {
+                    return (
+                      <div
+                        className="usa-checkbox margin-bottom-0"
+                        key={practiceType}
+                        data-testid={`practice-type-${practiceType}`}
+                      >
+                        <input
+                          checked={
+                            !!advancedSearchForm.practitionerSearchByName.practiceType?.includes(
+                              practiceType,
+                            )
+                          }
+                          className="usa-checkbox__input"
+                          id={`practiceType.${practiceType}`}
+                          name={`practiceType`}
+                          type="checkbox"
+                          value={practiceType}
+                          onChange={e => {
+                            updateAdvancedSearchFormValueSequence({
+                              formType: 'practitionerSearchByName',
+                              key: 'practiceType',
+                              value: e.target.value,
+                              isMultiSelect: true,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label margin-top-0"
+                          htmlFor={`practiceType.${practiceType}`}
+                        >
+                          {practiceType}
+                        </label>
+                      </div>
+                    );
+                  })}
+                </div>
+              </fieldset>
+            </div>
 
+            <div className="grid-row grid-gap">
+              <div className="tablet:grid-col-6 margin-bottom-4">
+                <div className="margin-bottom-1">
+                  <label
+                    className="usa-label"
+                    htmlFor="admission-status"
+                    id="admission-status-label"
+                  >
+                    Admission Status{' '}
+                    <span className="usa-hint">(optional)</span>
+                  </label>
+                  <SelectSearch
+                    aria-labelledby="admission-status-label"
+                    data-testid="admission-status-filter"
+                    inputId="admission-status"
+                    name="admissionStatus"
+                    options={ADMISSIONS_STATUS_OPTIONS.map(admissionStatus => ({
+                      label: admissionStatus,
+                      value: admissionStatus,
+                    }))}
+                    placeholder={MULTI_SELECT_PLACEHOLDER}
+                    value={{
+                      label: MULTI_SELECT_PLACEHOLDER,
+                      value: '',
+                    }}
+                    onChange={admissionStatus => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'practitionerSearchByName',
+                        key: 'admissionStatus',
+                        value: admissionStatus?.value,
+                        isMultiSelect: true,
+                      });
+                    }}
+                  />
+                </div>
+                <div>
+                  {advancedSearchForm.practitionerSearchByName.admissionStatus?.map(
+                    admissionStatus => (
+                      <PillButton
+                        key={admissionStatus}
+                        buttonDataTestId={`admission-status-pill-${admissionStatus}`}
+                        text={admissionStatus}
+                        onRemove={() => {
+                          updateAdvancedSearchFormValueSequence({
+                            formType: 'practitionerSearchByName',
+                            key: 'admissionStatus',
+                            value: admissionStatus,
+                            isMultiSelect: true,
+                          });
+                        }}
+                      />
+                    ),
+                  )}
+                </div>
+              </div>
+              <div className="tablet:grid-col-6 margin-bottom-4">
+                <div className="margin-bottom-1">
+                  <label
+                    className="usa-label"
+                    htmlFor="original-bar-state"
+                    id="original-bar-state-label"
+                  >
+                    Original Bar State{' '}
+                    <span className="usa-hint">(optional)</span>
+                  </label>
+                  <SelectSearch
+                    aria-labelledby="original-bar-state-label"
+                    data-testid="original-bar-state-filter"
+                    inputId="original-bar-state"
+                    name="originalBarState"
+                    options={groupedStateOptions}
+                    placeholder={MULTI_SELECT_PLACEHOLDER}
+                    value={{
+                      label: MULTI_SELECT_PLACEHOLDER,
+                      value: '',
+                    }}
+                    onChange={originalBarState => {
+                      updateAdvancedSearchFormValueSequence({
+                        formType: 'practitionerSearchByName',
+                        key: 'originalBarState',
+                        value: originalBarState?.value,
+                        isMultiSelect: true,
+                      });
+                    }}
+                  />
+                </div>
+                <div>
+                  {advancedSearchForm.practitionerSearchByName.originalBarState?.map(
+                    originalBarState => {
+                      return (
+                        <PillButton
+                          key={originalBarState}
+                          text={allStateOptions[originalBarState]}
+                          buttonDataTestId={`bar-state-pill-${originalBarState}`}
+                          onRemove={() => {
+                            updateAdvancedSearchFormValueSequence({
+                              formType: 'practitionerSearchByName',
+                              key: 'originalBarState',
+                              value: originalBarState,
+                              isMultiSelect: true,
+                            });
+                          }}
+                        />
+                      );
+                    },
+                  )}
+                </div>
+              </div>
+            </div>
             <div className="grid-row">
-              <div className="tablet:grid-col-6">
+              <div className="button-container">
                 <Button
-                  className="advanced-search__button margin-top-2"
+                  aria-describedby="search-by-name"
+                  className="margin-bottom-0"
                   data-testid="practitioner-search-by-name-button"
                   id="practitioner-search-by-name-button"
                   onClick={e => {
@@ -81,7 +290,8 @@ export const PractitionerSearchByName = connect(
                 </Button>
                 <Button
                   link
-                  className="margin-top-1"
+                  aria-describedby="search-by-name"
+                  className="margin-bottom-0 mobile:margin-top-2 tablet:margin-top-0 tablet:margin-left-205"
                   onClick={e => {
                     e.preventDefault();
                     clearAdvancedSearchFormSequence({

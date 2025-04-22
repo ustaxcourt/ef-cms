@@ -118,7 +118,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
   const csvBuffer = Buffer.from(csvString);
 
   const today = formatNow(FORMATS.MMDDYYYY_UNDERSCORED);
-  const fileName = 'Custom Case Report - ' + today;
+  const fileName: string = 'Custom Case Report - ' + today;
 
   const fileInfo = await saveFileAndGenerateUrl({
     applicationContext,
@@ -143,7 +143,7 @@ export const createCsvCustomCaseReportFileInteractor = async (
 
 const getCsvString = (records: any[]) => {
   const CSV_DICTIONARY = [
-    { header: 'Docket No.', key: 'docketNumber' },
+    { header: 'Docket No.', key: 'docketNumberWithSuffix' },
     { header: 'Date Created', key: 'receivedAt' },
     { header: 'Case Title', key: 'caseCaption' },
     { header: 'Case Status', key: 'status' },

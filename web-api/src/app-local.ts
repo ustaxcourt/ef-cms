@@ -12,7 +12,7 @@ localApiApp.listen(localApiPort);
 console.log(`Listening on http://localhost:${localApiPort}`);
 
 // ************************ app-public-local *********************************
-const localPublicApiPort = 5000;
+const localPublicApiPort = 4001;
 
 localPublicApiApp.listen(localPublicApiPort);
 console.log(`Listening on http://localhost:${localPublicApiPort}`);
@@ -25,7 +25,7 @@ const server = http.createServer((request, response) => {
   request.on('data', chunk => {
     requestBody += chunk.toString();
   });
-  request.on('end', async () => {
+  request.on('end', () => {
     const split = request.url!.split('/');
     const connectionId = split[split.length - 1];
     if (connections[connectionId]) {
@@ -45,7 +45,7 @@ const server = http.createServer((request, response) => {
 const PORT = 3011;
 
 server.listen(PORT, function () {
-  // eslint-disable-next-line @miovision/disallow-date/no-new-date
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   console.log(new Date() + ` Server is listening on port ${PORT}`);
 });
 

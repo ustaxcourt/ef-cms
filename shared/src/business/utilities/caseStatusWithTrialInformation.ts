@@ -1,25 +1,26 @@
-import { CaseStatus } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  CaseStatus,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { abbreviateState } from './abbreviateState';
+import { formatDateString } from '@shared/business/utilities/DateHandler';
 
 export function caseStatusWithTrialInformation({
-  applicationContext,
   caseStatus,
   trialDate,
   trialLocation,
 }: {
   caseStatus: CaseStatus;
   trialLocation?: string;
-  applicationContext: IApplicationContext;
   trialDate?: string;
 }): string {
-  const { STATUS_TYPES, TRIAL_SESSION_SCOPE_TYPES } =
-    applicationContext.getConstants();
-
-  if (caseStatus !== STATUS_TYPES.calendared) {
+  if (caseStatus !== CASE_STATUS_TYPES.calendared) {
     return caseStatus;
   }
 
   const formattedTrialDate = trialDate
-    ? applicationContext.getUtilities().formatDateString(trialDate, 'MM/dd/yy')
+    ? formatDateString(trialDate, 'MM/dd/yy')
     : 'NA';
 
   let formattedTrialLocation = '';
@@ -27,7 +28,7 @@ export function caseStatusWithTrialInformation({
     formattedTrialLocation =
       trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
         ? TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
-        : applicationContext.getUtilities().abbreviateState(trialLocation);
+        : abbreviateState(trialLocation);
   }
 
   return `${caseStatus} - ${formattedTrialDate} ${formattedTrialLocation}`;

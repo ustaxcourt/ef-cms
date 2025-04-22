@@ -45,6 +45,7 @@ export const UpdateCaseModalDialog = connect(
             <textarea
               aria-labelledby="caption-label"
               className="caption usa-textarea textarea-resize-vertical"
+              data-testid="edit-case-caption-textarea"
               id="caption"
               name="caseCaption"
               value={modal.caseCaption}

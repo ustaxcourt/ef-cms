@@ -4,7 +4,7 @@ function convertBytesToString(pdfBytes: number[]): string {
   const chunkSize = 10000;
   let resultString = '';
   for (let i = 0; i < pdfBytes.length; i += chunkSize) {
-    let chunk = pdfBytes.slice(i, i + chunkSize);
+    const chunk = pdfBytes.slice(i, i + chunkSize);
     resultString += String.fromCharCode.apply(null, chunk);
   }
 
@@ -75,7 +75,7 @@ export const cleanFileMetadata = async (pdfLib, fileReader: FileReader) => {
 
   pdfDoc.setKeywords([]);
 
-  // eslint-disable-next-line @miovision/disallow-date/no-new-date
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
   const nowDateString = new Date();
   pdfDoc.setCreationDate(nowDateString);
   pdfDoc.setModificationDate(nowDateString);
@@ -104,7 +104,9 @@ export const readAndCleanFileMetadata = async (
 
       resolve(updatedFile);
     });
-    fileReader.addEventListener('error', () => reject('Failed to read file'));
+    fileReader.addEventListener('error', () =>
+      reject(new Error('Failed to read file')),
+    );
   });
 };
 

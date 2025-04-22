@@ -37,7 +37,7 @@ export const uploadExternalDocumentsAction = async ({
         user,
       );
 
-    for (let docketEntryId of docketEntryIdsAdded) {
+    for (const docketEntryId of docketEntryIdsAdded) {
       await addCoversheet({
         applicationContext,
         docketEntryId,

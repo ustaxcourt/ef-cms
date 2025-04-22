@@ -13,6 +13,22 @@ export const gatherRecords = function gatherRecords(exportColumns, output) {
   };
 };
 
+export const sortObjectByKey = (obj, sortFunction) => {
+  const sortedKeys = Object.keys(obj).sort(sortFunction);
+
+  const tempObj = {};
+
+  for (const key of sortedKeys) {
+    tempObj[key] = obj[key];
+  }
+
+  for (const key in obj) {
+    delete obj[key];
+  }
+
+  Object.assign(obj, tempObj);
+};
+
 export const getCsvOptions = (csvColumns, overrides = {}) => {
   const defaultOptions = {
     columns: csvColumns,
@@ -36,13 +52,8 @@ export const whitespaceCleanup = str => {
   return str;
 };
 
-/**
- * Returns a promise that resolves itself after the specified number of milliseconds
- *
- * @param {number} ms The number of milliseconds to wait before resolving the promise
- * @returns {Promise} resolves itself after the specified number of ms
- */
-export const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
+export const sleep = (ms: number): Promise<void> =>
+  new Promise(resolve => setTimeout(resolve, ms));
 
 /**
  * To improve the success rate of retry attempts, this function is available to

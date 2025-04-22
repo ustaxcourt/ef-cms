@@ -8,6 +8,7 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import joi from 'joi';
 
 export class PublicDocketEntry extends JoiValidationEntity {
+  public action?: string;
   public additionalInfo?: string;
   public additionalInfo2?: string;
   public attachments?: boolean;
@@ -45,6 +46,7 @@ export class PublicDocketEntry extends JoiValidationEntity {
 
   constructor(rawProps) {
     super('PublicDocketEntry');
+    this.action = rawProps.action;
     this.additionalInfo = rawProps.additionalInfo;
     this.additionalInfo2 = rawProps.additionalInfo2;
     this.attachments = rawProps.attachments;

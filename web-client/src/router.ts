@@ -91,6 +91,7 @@ const ifHasAccess = (
     }
 
     app.getSequence('clearAlertSequence')();
+    // eslint-disable-next-line prefer-spread, prefer-rest-params
     return cb.apply(null, arguments);
   };
 };
@@ -99,7 +100,7 @@ const router = {
   initialize: (app, registerRoute) => {
     setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
-    // eslint-disable-next-line no-underscore-dangle
+
     window.__cy_route = path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
 
@@ -1109,11 +1110,28 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-planning-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Trial session planning report');
-        return app.getSequence('gotoTrialSessionPlanningReportSequence')();
-      }),
+      '/trial-session-planning-report/*/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        (term: string, year: string) => {
+          setPageTitle('Trial session planning report');
+          return app.getSequence('gotoTrialSessionPlanningReportViewSequence')({
+            term: term.toLocaleLowerCase(),
+            year,
+          });
+        },
+      ),
+    );
+
+    registerRoute(
+      '/trial-session/term-builder',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        () => {
+          setPageTitle('Trial session term generator');
+          return app.getSequence('gotoTrialSessionTermBuilderSequence')();
+        },
+      ),
     );
 
     registerRoute(
@@ -1137,14 +1155,8 @@ const router = {
     );
 
     registerRoute('/idle-logout', () => {
-      if (app.getState('token')) {
-        return app.getSequence('signOutIdleSequence')();
-      } else {
-        // If not signed in, saying "we logged you off" doesn't make sense
-        return app.getSequence('navigateToPathSequence')({
-          path: BASE_ROUTE,
-        });
-      }
+      setPageTitle('Idle Logout');
+      return app.getSequence('gotoIdleLogoutSequence')();
     });
 
     registerRoute('/login', () => {
@@ -1376,10 +1388,12 @@ const router = {
     registerRoute(
       '/reports/pending-report/printable..',
       ifHasAccess({ app }, () => {
-        const { judgeFilter } = route.query();
+        const { judgeFilter, sortField, sortOrder } = route.query();
         setPageTitle('Pending report');
         return app.getSequence('gotoPrintablePendingReportSequence')({
           judgeFilter: decodeURIComponent(judgeFilter),
+          sortField: decodeURIComponent(sortField),
+          sortOrder: decodeURIComponent(sortOrder),
         });
       }),
     );

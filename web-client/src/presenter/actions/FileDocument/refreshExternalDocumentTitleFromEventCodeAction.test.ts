@@ -58,7 +58,7 @@ describe('refreshExternalDocumentTitleFromEventCodeAction', () => {
     );
   });
 
-  it('should set the state.form.secondaryDocument.documentTitle secondaryDocument eventCode and category is defined', async () => {
+  it('should set the state.form.secondaryDocument.documentTitle secondaryDocument documentType eventCode and category is defined', async () => {
     const result = await runAction(
       refreshExternalDocumentTitleFromEventCodeAction,
       {

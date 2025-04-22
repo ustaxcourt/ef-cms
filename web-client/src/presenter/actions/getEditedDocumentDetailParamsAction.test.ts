@@ -20,7 +20,7 @@ describe('getEditedDocumentDetailParamsAction', () => {
     });
   });
 
-  it('gets the docketNumber and docketEntryId for the recently edited document', async () => {
+  it('gets the docketNumber and docketEntryId for the recently edited document 2', async () => {
     const result = await runAction(getEditedDocumentDetailParamsAction, {
       props: { primaryDocumentFileId: 'abc-123' },
       state: {

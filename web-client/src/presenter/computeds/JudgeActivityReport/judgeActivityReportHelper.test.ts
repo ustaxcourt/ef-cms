@@ -411,7 +411,7 @@ describe('judgeActivityReportHelper', () => {
             ...MOCK_SUBMITTED_CASE,
             caseStatusHistory: [
               {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
                 date: '2023-05-11T14:19:28.717Z',
               },
             ],
@@ -422,7 +422,7 @@ describe('judgeActivityReportHelper', () => {
             ...MOCK_SUBMITTED_CASE,
             caseStatusHistory: [
               {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
                 date: '2023-05-29T14:19:28.717Z',
               },
             ],
@@ -432,7 +432,7 @@ describe('judgeActivityReportHelper', () => {
             ...MOCK_SUBMITTED_CASE,
             caseStatusHistory: [
               {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
                 date: '2023-05-15T14:19:28.717Z',
               },
             ],
@@ -535,7 +535,7 @@ describe('judgeActivityReportHelper', () => {
             associatedJudge: 'Colvin',
             caseStatusHistory: [
               {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
                 date: '2015-05-11T14:19:28.717Z',
               },
             ],
@@ -546,7 +546,7 @@ describe('judgeActivityReportHelper', () => {
             associatedJudge: 'Ashford',
             caseStatusHistory: [
               {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
                 date: '2023-05-11T14:19:28.717Z',
               },
             ],
@@ -557,7 +557,7 @@ describe('judgeActivityReportHelper', () => {
             associatedJudge: 'Colvin',
             caseStatusHistory: [
               {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
                 date: '2023-05-11T14:19:28.717Z',
               },
             ],
@@ -568,7 +568,7 @@ describe('judgeActivityReportHelper', () => {
             associatedJudge: 'Colvin',
             caseStatusHistory: [
               {
-                ...MOCK_SUBMITTED_CASE.caseStatusHistory[0],
+                ...MOCK_SUBMITTED_CASE.caseStatusHistory?.[0],
                 date: '2017-05-11T14:19:28.717Z',
               },
             ],

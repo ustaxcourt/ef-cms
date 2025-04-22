@@ -11,7 +11,7 @@ export const validateCaseDetailsAction = async ({
   const form = get(state.form);
   const user = get(state.user);
 
-  let errors = await applicationContext
+  const errors = await applicationContext
     .getUseCases()
     .validateCaseDetailInteractor(
       {

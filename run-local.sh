@@ -1,15 +1,21 @@
 #!/bin/bash
 # Used for running the API and necessary services (dynamo, s3, elasticsearch) locally
 
+# Determine the docker compose invocation.
+if command -v docker-compose &> /dev/null; then
+  DOCKER_COMPOSE="docker-compose"
+else
+  DOCKER_COMPOSE="docker compose"
+fi
 # shellcheck disable=SC1091
 . ./setup-local-env.sh
 
 if [[ -z "$CI" ]]; then
   echo "Stopping postgres in case it's already running"
-  docker compose -f web-api/src/persistence/postgres/docker-compose.yml down || true
+  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml down --volumes || true
 
   echo "Starting postgres"
-  docker compose -f web-api/src/persistence/postgres/docker-compose.yml up -d || { echo "Failed to start Postgres containers"; exit 1; }
+  $DOCKER_COMPOSE -f $(pwd)/web-api/src/persistence/postgres/docker-compose.yml up -d || { echo "Failed to start Postgres containers"; exit 1; }
 
   echo "Stopping dynamodb in case it's already running"
   pkill -f DynamoDBLocal

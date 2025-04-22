@@ -1,3 +1,4 @@
+jest.mock('@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase');
 import {
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
   DOCKET_SECTION,
@@ -14,6 +15,7 @@ import {
 import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIssuedDocumentInteractor';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '../../../../../shared/src/business/test/getFakeFile';
+import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 
 let MOCK_DATE;
 
@@ -29,6 +31,7 @@ jest.mock('@shared/business/utilities/DateHandler', () => {
 });
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
+  const fileAndServeDocumentOnOneCase = jest.mocked(fileAndServeDocumentOnOneCaseMock)
   let caseRecord;
   let mockWorkItem;
   let mockDocketEntryWithWorkItem;
@@ -96,9 +99,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
-    applicationContext
-      .getUseCaseHelpers()
-      .fileAndServeDocumentOnOneCase.mockImplementation(
+    fileAndServeDocumentOnOneCase.mockImplementation(
         ({ caseEntity }) => caseEntity,
       );
 
@@ -346,7 +347,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
     });
     expect(
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+      fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity.numberOfPages,
     ).toBe(mockNumberOfPages);
   });
@@ -376,7 +377,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     );
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+      fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry).toMatchObject({
       attachments: mockForm.attachments,
@@ -417,7 +418,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     );
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+      fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.filedBy).not.toBe(mockFiledBy);
   });
@@ -447,7 +448,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     );
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+     fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.isOnDocketRecord).toBe(true);
   });
@@ -478,7 +479,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     );
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+      fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.trialLocation).toBeDefined();
   });
@@ -509,7 +510,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     );
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+      fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.filingDate).toEqual(MOCK_DATE);
   });
@@ -539,7 +540,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     );
 
     const expectedDocketEntry =
-      applicationContext.getUseCaseHelpers().fileAndServeDocumentOnOneCase.mock
+      fileAndServeDocumentOnOneCase.mock
         .calls[0][0].docketEntryEntity;
     expect(expectedDocketEntry.isDraft).toBe(false);
   });

@@ -13,7 +13,7 @@ export const PublicMobileTrialSessionsTable = connect<
   PublicMobileTrialSessionsTableProps,
   typeof PublicMobileTrialSessionsTableDeps
 >(PublicMobileTrialSessionsTableDeps, function ({ publicTrialSessionsHelper }) {
-  const { groupedTrialsSessions } = publicTrialSessionsHelper;
+  const { groupedTrialSessions } = publicTrialSessionsHelper;
   return (
     <>
       <div className="grid-row margin-bottom-2 width-full flex-align-center"></div>
@@ -36,7 +36,7 @@ export const PublicMobileTrialSessionsTable = connect<
           </tr>
         </thead>
         <tbody>
-          {groupedTrialsSessions.map(tsGroup => {
+          {groupedTrialSessions.map(tsGroup => {
             return (
               <tr
                 className="padding-0"

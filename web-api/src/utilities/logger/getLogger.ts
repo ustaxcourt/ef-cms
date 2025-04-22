@@ -1,6 +1,6 @@
 import { Logger } from 'winston';
-import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createLogger } from '@web-api/createLogger';
+import type { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
 let loggerCache: LoggerType;
 

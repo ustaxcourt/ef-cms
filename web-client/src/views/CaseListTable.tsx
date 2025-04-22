@@ -184,11 +184,14 @@ export const CaseListTable = connect(
 
         <Phone>
           <div className="grid-container padding-x-0">
-            <div className="grid-row">{renderStartButton()}</div>
+            <div className="grid-row">
+              {dashboardExternalHelper.showStartButton && renderStartButton()}
+            </div>
             <div className="grid-row">
               <select
                 aria-label="additional case info"
                 className="usa-select margin-bottom-2"
+                data-testid="additional-case-select"
                 onChange={e => {
                   setCaseTypeToDisplaySequence({ tabName: e.target.value });
                 }}

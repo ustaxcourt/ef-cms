@@ -34,11 +34,10 @@ export type PendingItem = Pick<
 
 export const fetchPendingItemsInteractor = async (
   applicationContext: ServerApplicationContext,
-  { judge, page }: { judge: string; page: number },
+  { judge }: { judge: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   foundDocuments: PendingItem[];
-  total: number;
 }> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
     throw new UnauthorizedError('Unauthorized');
@@ -52,6 +51,5 @@ export const fetchPendingItemsInteractor = async (
   return await applicationContext.getPersistenceGateway().fetchPendingItems({
     applicationContext,
     judge,
-    page,
   });
 };

@@ -168,7 +168,10 @@ export const CaseDetailHeader = connect<
                         size="1x"
                       />
                     )}
-                    <CaseLink formattedCase={formattedCaseDetail}>
+                    <CaseLink
+                      className="mobile-text-wrap"
+                      formattedCase={formattedCaseDetail}
+                    >
                       Docket Number:{' '}
                       {formattedCaseDetail.docketNumberWithSuffix}
                     </CaseLink>
@@ -213,7 +216,7 @@ export const CaseDetailHeader = connect<
                         </span>
                       )}
                       {caseDetailHeaderHelper.showBlockedTag && (
-                        <span className="margin-left-1 usa-tag red-tag">
+                        <span className="margin-left-1 usa-tag red-tag" data-testid="blocked-case-icon">
                           <FontAwesomeIcon
                             className="margin-right-1"
                             icon="hand-paper"

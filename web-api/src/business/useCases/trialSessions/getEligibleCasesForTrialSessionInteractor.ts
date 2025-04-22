@@ -1,15 +1,15 @@
-import { EligibleCase } from '../../../../../shared/src/business/entities/cases/EligibleCase';
+import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { NotFoundError } from '../../../errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   type TCaseOrder,
   TrialSession,
-} from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
-import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/trialSessions/TrialSession';
+import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 
@@ -68,7 +68,7 @@ export const getEligibleCasesForTrialSessionInteractor = async (
       skPrefix: trialSessionEntity.generateSortKeyPrefix(),
     });
 
-  let eligibleCasesFiltered = calendaredCases
+  const eligibleCasesFiltered = calendaredCases
     .concat(eligibleCases)
     .map(rawCase => {
       return new EligibleCase(rawCase).validate().toRawObject();

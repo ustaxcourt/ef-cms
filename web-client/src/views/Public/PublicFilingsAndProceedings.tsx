@@ -33,6 +33,7 @@ export const PublicFilingsAndProceedings = connect<
             link
             aria-label={`View PDF: ${entry.descriptionDisplay}`}
             className={classNames('text-left', 'view-pdf-link')}
+            data-testid="Filing-and-Proceedings-link-to-docket-entry"
             onClick={() => {
               openCaseDocumentDownloadUrlSequence({
                 docketEntryId: entry.docketEntryId,

@@ -1,4 +1,7 @@
-import { MAX_SEARCH_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  CASE_TYPES_MAP,
+  MAX_SEARCH_RESULTS,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseAdvancedSearchInteractor } from './caseAdvancedSearchInteractor';
 import {
@@ -7,12 +10,40 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 
+const MOCK_CASE_SEARCH_RESULT = {
+  caseCaption: 'Test Case Caption',
+  docketNumber: '101-20',
+  docketNumberWithSuffix: '101-20L',
+  fakeField: 'Hide this',
+  irsPractitioners: [
+    {
+      address: 'Hide this',
+      name: 'TestIRSPractitioner',
+      state: 'California',
+    },
+  ],
+  petitioners: [
+    {
+      address: 'Hide this',
+      name: 'Test Petitioner',
+      state: 'California',
+    },
+  ],
+  privatePractitioners: [
+    { address: 'Hide this', name: 'TestPrivatePractitioner' },
+  ],
+  receivedAt: '2023-01-24T22:34:48.100Z',
+};
+
 describe('caseAdvancedSearchInteractor', () => {
   it('returns an unauthorized error on petitioner user role', async () => {
     await expect(
       caseAdvancedSearchInteractor(
         applicationContext,
-        { petitionerName: 'Janae Jacobs' },
+        {
+          petitionerName: 'Janae Jacobs',
+          caseTypes: [CASE_TYPES_MAP.cdp],
+        },
         mockPetitionerUser,
       ),
     ).rejects.toThrow('Unauthorized');
@@ -27,6 +58,7 @@ describe('caseAdvancedSearchInteractor', () => {
       applicationContext,
       {
         petitionerName: 'Paul Billings',
+        caseTypes: [CASE_TYPES_MAP.cdp],
       },
       mockPetitionsClerkUser,
     );
@@ -57,8 +89,8 @@ describe('caseAdvancedSearchInteractor', () => {
     );
 
     expect(results).toEqual([
-      { docketNumber: '101-20', petitioners: [] },
-      { docketNumber: '201-20', petitioners: [] },
+      { docketNumber: '101-20', petitionerNames: [], petitionerStateNames: [] },
+      { docketNumber: '201-20', petitionerNames: [], petitionerStateNames: [] },
     ]);
   });
 
@@ -87,8 +119,8 @@ describe('caseAdvancedSearchInteractor', () => {
     );
 
     expect(results).toEqual([
-      { docketNumber: '101-20', petitioners: [] },
-      { docketNumber: '201-20', petitioners: [] },
+      { docketNumber: '101-20', petitionerNames: [], petitionerStateNames: [] },
+      { docketNumber: '201-20', petitionerNames: [], petitionerStateNames: [] },
     ]);
   });
 
@@ -187,13 +219,8 @@ describe('caseAdvancedSearchInteractor', () => {
     expect(results).toEqual([
       {
         docketNumber: '101-20',
-        irsPractitioners: [
-          {
-            userId: mockIrsPractitionerUser.userId,
-          },
-        ],
-        petitioners: [],
-        sealedDate: 'yup',
+        petitionerNames: [],
+        petitionerStateNames: [],
       },
     ]);
   });
@@ -220,8 +247,36 @@ describe('caseAdvancedSearchInteractor', () => {
     expect(results).toEqual([
       {
         docketNumber: '101-20',
-        petitioners: [],
-        sealedDate: 'yup',
+        petitionerNames: [],
+        petitionerStateNames: [],
+      },
+    ]);
+  });
+
+  it('BUG: should return only necessary advanced search case data', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .caseAdvancedSearch.mockResolvedValue([MOCK_CASE_SEARCH_RESULT]);
+
+    const results = await caseAdvancedSearchInteractor(
+      applicationContext,
+      {
+        petitionerName: 'test person',
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(Object.keys(results[0])).toHaveLength(6);
+    expect(results).toMatchObject([
+      {
+        caseCaption: MOCK_CASE_SEARCH_RESULT.caseCaption,
+        docketNumber: MOCK_CASE_SEARCH_RESULT.docketNumber,
+        docketNumberWithSuffix: MOCK_CASE_SEARCH_RESULT.docketNumberWithSuffix,
+        petitionerNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(p => p.name),
+        petitionerStateNames: MOCK_CASE_SEARCH_RESULT.petitioners.map(
+          p => p.state,
+        ),
+        receivedAt: MOCK_CASE_SEARCH_RESULT.receivedAt,
       },
     ]);
   });

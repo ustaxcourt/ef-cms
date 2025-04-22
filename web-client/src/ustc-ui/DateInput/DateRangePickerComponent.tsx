@@ -12,11 +12,13 @@ export const DateRangePickerComponent = ({
   endValue,
   formGroupCls,
   maxDate,
+  minDate,
   omitFormGroupClass,
   onBlurEnd,
   onBlurStart,
   onChangeEnd,
   onChangeStart,
+  parentModalHasMounted = false,
   rangePickerCls,
   showDateHint = false,
   startDateErrorText,
@@ -26,6 +28,7 @@ export const DateRangePickerComponent = ({
   startValue,
 }: {
   showDateHint?: boolean;
+  parentModalHasMounted?: boolean;
   endDateErrorText?: string;
   endLabel?: string | React.ReactNode;
   endName: string;
@@ -44,11 +47,11 @@ export const DateRangePickerComponent = ({
   startName: string;
   startValue: string;
   maxDate?: string; // Must be in YYYY-MM-DD format
+  minDate?: string; // Must be in YYYY-MM-DD format
 }) => {
-  const dateRangePickerRef = useRef();
-  const startDatePickerRef = useRef();
-  const endDatePickerRef = useRef();
-
+  const dateRangePickerRef = useRef<HTMLInputElement>(null);
+  const startDatePickerRef = useRef<HTMLInputElement>(null);
+  const endDatePickerRef = useRef<HTMLInputElement>(null);
   const startDateInputRef = useRef<HTMLInputElement>(null);
   const endDateInputRef = useRef<HTMLInputElement>(null);
 
@@ -140,10 +143,12 @@ export const DateRangePickerComponent = ({
   }, [endValue]);
 
   useEffect(() => {
+    let dateEndInput;
+    let dateStartInput;
+
     if (startDateInputRef.current && endDateInputRef.current) {
-      const dateEndInput = window.document.getElementById(
-        `${endName}-date-end`,
-      );
+      dateEndInput = window.document.getElementById(`${endName}-date-end`);
+
       if (dateEndInput) {
         if (onChangeEnd) {
           dateEndInput.addEventListener('change', event => {
@@ -158,9 +163,10 @@ export const DateRangePickerComponent = ({
           dateEndInput.addEventListener('blur', onBlurEnd);
         }
       }
-      const dateStartInput = window.document.getElementById(
+      dateStartInput = window.document.getElementById(
         `${startName}-date-start`,
       );
+
       if (dateStartInput) {
         if (onChangeStart) {
           dateStartInput.addEventListener('change', event => {
@@ -175,22 +181,34 @@ export const DateRangePickerComponent = ({
         }
       }
     }
-  }, [startDateInputRef, endDateInputRef]);
+
+    return () => {
+      if (dateEndInput) {
+        dateEndInput.removeEventListener('change', onChangeEnd);
+        dateEndInput.removeEventListener('input', onChangeEnd);
+      }
+      if (dateStartInput) {
+        dateStartInput.removeEventListener('change', onChangeStart);
+        dateStartInput.removeEventListener('input', onChangeStart);
+      }
+    };
+  }, [startDateInputRef, endDateInputRef, parentModalHasMounted]);
 
   return (
     <FormGroup
       className={formGroupCls}
-      formGroupRef={dateRangePickerRef}
+      ref={dateRangePickerRef}
       omitFormGroupClass={omitFormGroupClass}
     >
       <div
         className={classNames('usa-date-range-picker', rangePickerCls)}
         data-max-date={maxDate}
+        data-min-date={minDate}
       >
         <div className={startPickerCls} data-testid={`${startName}-date-start`}>
           <FormGroup
             errorText={startDateErrorText}
-            formGroupRef={startDatePickerRef}
+            ref={startDatePickerRef}
           >
             <label
               className="usa-label"
@@ -218,7 +236,7 @@ export const DateRangePickerComponent = ({
         <div className={endPickerCls} data-testid={`${endName}-date-end}`}>
           <FormGroup
             errorText={endDateErrorText}
-            formGroupRef={endDatePickerRef}
+            ref={endDatePickerRef}
           >
             <label
               className="usa-label"

@@ -160,6 +160,7 @@ export const addToTrialSessionModalHelper = (
   const hearings = get(state.caseDetail.hearings);
   const hearingSessionIds = hearings.map(hearing => hearing.trialSessionId);
 
+  // eslint-disable-next-line prefer-const
   let { trialSessionsFormatted, ...helperProps } = trialSessionsModalHelper({
     applicationContext,
     excludedTrialSessionIds: hearingSessionIds,

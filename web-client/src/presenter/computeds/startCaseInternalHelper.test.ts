@@ -10,9 +10,7 @@ const startCaseInternalHelper = withAppContextDecorator(
 );
 
 describe('case detail edit computed', () => {
-  let PARTY_TYPES;
-
-  ({ PARTY_TYPES } = applicationContext.getConstants());
+  const { PARTY_TYPES } = applicationContext.getConstants();
 
   describe('partyTypes', () => {
     it('sets partyTypes from constants', () => {

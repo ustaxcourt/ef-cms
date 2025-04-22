@@ -1,6 +1,5 @@
-/* eslint-disable react/no-array-index-key */
 import { PrimaryHeader } from '../components/PrimaryHeader';
-import { ReportsHeader } from '../components/ReportsHeader.tsx';
+import { ReportsHeader } from '../components/ReportsHeader';
 import React from 'react';
 import classNames from 'classnames';
 

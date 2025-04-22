@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
@@ -7,7 +8,7 @@ import { createCaseAndAssociations } from './createCaseAndAssociations';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('createCaseAndAssociations', () => {
-  let createCaseMock = jest.fn();
+  const createCaseMock = jest.fn();
   let validMockCase;
 
   beforeAll(() => {

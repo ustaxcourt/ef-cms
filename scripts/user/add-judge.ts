@@ -1,6 +1,11 @@
-#!/usr/bin/env npx ts-node --transpile-only
-import { JudgeTitle } from '../../shared/src/business/entities/EntityConstants';
+#!/usr/bin/env -S npx ts-node --transpile-only
+
+import { JudgeTitle } from '@shared/business/entities/EntityConstants';
 import { RawUser, User } from '@shared/business/entities/User';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { createOrUpdateUser } from 'shared/admin-tools/user/admin';
 import {
@@ -12,49 +17,79 @@ import {
   phoneIsInExpectedFormat,
   promptUser,
 } from 'scripts/user/add-or-update-judge-helpers';
-import { environment } from '@web-api/environment';
-import {
-  getDestinationTableInfo,
-  getUserPoolId,
-  requireEnvVars,
-} from '../../shared/admin-tools/util';
 import { getNewPasswordForEnvironment } from './make-new-password';
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * This script will add a judge user to a deployed environment.
  * It creates both the Cognito record and the associated Dynamo record.
  * Required parameters: name, judgeFullName, and email
- * Optional parameters: phone (defaults to none), isSeniorJudge (defaults to false), judgeTitle (defaults to "Judge")
+ * Optional parameters: phone (defaults to none), judgeTitle (defaults to "Judge"), isSeniorJudge (defaults to false)
  * Note that a phone number is eventually required; otherwise, trial information will
  * lack a chambers number. To add one later, use update-judge.ts.
  *
  *  Example usage:
  *
- * $ npx ts-node --transpile-only add-judge.ts Way "Kashi Way" judge.way@ustaxcourt.gov ["(123) 123-1234" false "Special Trial Judge"]
+ * $ ./scripts/user/add-judge.ts Way "Kashi Way" judge.way@ustaxcourt.gov ["(123) 123-1234" "Special Trial Judge" --isSeniorJudge]
  *
  * Note that this script SHOULD be temporary: it is meant as a slight improvement from the current ill-defined process.
  * Please extract into application logic!
  */
 
-requireEnvVars(['ENV']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'add-judge - Creates a new Judge user in a deployed environment.',
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    env: 'ENV',
+    userPoolId: 'USER_POOL_ID',
+  },
+  parameters: {
+    email: {
+      position: 2,
+      required: true,
+      type: 'string',
+    },
+    isSeniorJudge: {
+      default: false,
+      short: 's',
+      type: 'boolean',
+    },
+    judgeFullName: {
+      position: 1,
+      required: true,
+      type: 'string',
+    },
+    judgeTitle: {
+      default: 'Judge',
+      position: 4,
+      type: 'string',
+    },
+    name: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+    phone: {
+      position: 3,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext();
+  const applicationContext = createApplicationContext({});
 
-  // Required
-  const name = process.argv[2];
-  const judgeFullName = process.argv[3];
-  const email = process.argv[4];
-
-  // Optional, though a phone number needs to be provided eventually
-  // otherwise the chambers will have no associated phone number on trial info
-  const phone = process.argv[5];
-  const isSeniorJudge = process.argv[6]
-    ? process.argv[6].toLowerCase() === 'true'
-    : false;
-  const judgeTitle = process.argv[7] ? process.argv[7] : 'Judge';
+  const { email, isSeniorJudge, judgeFullName, judgeTitle, name, phone } =
+    parseArgsAndEnvVars(scriptConfig) as {
+      email: string;
+      isSeniorJudge: boolean;
+      judgeFullName: string;
+      judgeTitle: string;
+      name: string;
+      phone: string;
+    };
 
   // Check for mistaken emails
   if (!emailIsInExpectedFormat({ email, judgeName: name })) {
@@ -90,11 +125,7 @@ requireEnvVars(['ENV']);
   const section = getChambersNameFromJudgeName(name);
   const role = 'judge';
 
-  environment.userPoolId = await getUserPoolId();
-  const { tableName } = await getDestinationTableInfo();
-  environment.dynamoDbTableName = tableName;
-
-  let dynamoUserInfo: RawUser = {
+  const dynamoUserInfo: RawUser = {
     email,
     entityName: 'User',
     isSeniorJudge,

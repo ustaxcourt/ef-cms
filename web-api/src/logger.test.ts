@@ -61,11 +61,12 @@ describe('logger', () => {
     const instance = req.locals.logger;
 
     instance.info = jest.fn();
+    jest.spyOn(instance, 'addContext');
 
     res.end();
 
-    expect(instance.info).toHaveBeenCalledWith(
-      expect.any(String),
+    expect(instance.info).toHaveBeenCalledWith(expect.any(String));
+    expect(instance.addContext).toHaveBeenCalledWith(
       expect.objectContaining({
         response: expect.objectContaining({
           statusCode: 200,

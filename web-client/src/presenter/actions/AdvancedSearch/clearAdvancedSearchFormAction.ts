@@ -1,4 +1,4 @@
-import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
+import { ALL_SELECTION } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -26,9 +26,12 @@ export const clearAdvancedSearchFormAction = ({
     };
     lastKeysOfPages?: Array<string | number>;
     total?: number;
+    practitionerType?: string;
+    procedureType?: string;
   };
   if (formType === 'caseSearchByName') {
-    defaultForm.countryType = ALL_COUNTRY_TYPE;
+    defaultForm.countryType = ALL_SELECTION;
+    defaultForm.procedureType = ALL_SELECTION;
   }
   if (formType === 'orderSearch' || formType === 'opinionSearch') {
     defaultForm.keyword = '';
@@ -37,6 +40,7 @@ export const clearAdvancedSearchFormAction = ({
   if (formType === 'practitionerSearchByName') {
     defaultForm.lastKeysOfPages = [];
     defaultForm.total = 0;
+    defaultForm.practitionerType = ALL_SELECTION;
   }
   if (formType === 'opinionSearch') {
     defaultForm.opinionTypes = {

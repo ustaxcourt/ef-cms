@@ -1,10 +1,45 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { INITIAL_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getFormattedCaseDetail } from '@shared/business/utilities/getFormattedCaseDetail';
+import { applicationContext } from '@web-client/applicationContext';
+
 export const getOptionsForCategory = ({
-  applicationContext,
   caseDetail,
   categoryInformation,
   selectedDocketEntryId,
-}) => {
-  let options = {};
+  authorizedUser,
+}: {
+  caseDetail: any;
+  categoryInformation: any;
+  selectedDocketEntryId: string;
+  authorizedUser: AuthUser;
+}): {
+  showNonstandardForm?: boolean;
+  previousDocumentSelectLabel?: string;
+  previouslyFiledDocuments?: any;
+  showTextInput?: boolean;
+  textInputLabel?: string;
+  showDateFields?: boolean;
+  showTrialLocationSelect?: boolean;
+  ordinalField?: string;
+  showSecondaryDocumentSelect?: boolean;
+  showTextInput2?: boolean;
+  textInputLabel2?: string;
+} => {
+  let options: {
+    showNonstandardForm?: boolean;
+    previousDocumentSelectLabel?: string;
+    previouslyFiledDocuments?: any;
+    showTextInput?: boolean;
+    textInputLabel?: string;
+    showDateFields?: boolean;
+    showTrialLocationSelect?: boolean;
+    ordinalField?: string;
+    showSecondaryDocumentSelect?: boolean;
+    showTextInput2?: boolean;
+    textInputLabel2?: string;
+  } = {};
   if (!categoryInformation) {
     return {}; // debugger-safe
   }
@@ -19,11 +54,11 @@ export const getOptionsForCategory = ({
     case 'Nonstandard A': {
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
-          applicationContext,
+        previouslyFiledDocuments: getValidPreviouslyFiledDocuments({
           caseDetail,
           selectedDocketEntryId,
-        ),
+          authorizedUser,
+        }),
         showNonstandardForm: true,
       };
       break;
@@ -39,11 +74,11 @@ export const getOptionsForCategory = ({
     case 'Nonstandard C': {
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
-          applicationContext,
+        previouslyFiledDocuments: getValidPreviouslyFiledDocuments({
           caseDetail,
           selectedDocketEntryId,
-        ),
+          authorizedUser,
+        }),
         showNonstandardForm: true,
         showTextInput: true,
         textInputLabel: categoryInformation.labelFreeText,
@@ -53,11 +88,11 @@ export const getOptionsForCategory = ({
     case 'Nonstandard D': {
       options = {
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
-          applicationContext,
+        previouslyFiledDocuments: getValidPreviouslyFiledDocuments({
           caseDetail,
           selectedDocketEntryId,
-        ),
+          authorizedUser,
+        }),
         showDateFields: true,
         showNonstandardForm: true,
         textInputLabel: categoryInformation.labelFreeText,
@@ -76,11 +111,11 @@ export const getOptionsForCategory = ({
       options = {
         ordinalField: categoryInformation.ordinalField,
         previousDocumentSelectLabel: categoryInformation.labelPreviousDocument,
-        previouslyFiledDocuments: getValidPreviouslyFiledDocuments(
-          applicationContext,
+        previouslyFiledDocuments: getValidPreviouslyFiledDocuments({
           caseDetail,
           selectedDocketEntryId,
-        ),
+          authorizedUser,
+        }),
         showNonstandardForm: true,
       };
       break;
@@ -133,28 +168,30 @@ export const getOrdinalValuesForUploadIteration = (): string[] => {
 };
 
 export const MAX_TITLE_LENGTH = 100;
-export const getValidPreviouslyFiledDocuments = (
-  applicationContext,
+export const getValidPreviouslyFiledDocuments = ({
   caseDetail,
   selectedDocketEntryId,
-) => {
-  const { INITIAL_DOCUMENT_TYPES } = applicationContext.getConstants();
+  authorizedUser,
+}: {
+  caseDetail: any;
+  selectedDocketEntryId: string;
+  authorizedUser: AuthUser;
+}) => {
   const withDocumentTitle = doc => {
-    let documentTitle = applicationContext
-      .getUtilities()
-      .getDocumentTitleWithAdditionalInfo({ docketEntry: doc });
+    let documentTitle = getDocumentTitleWithAdditionalInfo({
+      docketEntry: doc,
+    });
     if (documentTitle && documentTitle.length > MAX_TITLE_LENGTH) {
       documentTitle = documentTitle.substring(0, MAX_TITLE_LENGTH - 1) + '…';
     }
     return { ...doc, documentTitle };
   };
 
-  const formattedCaseDetail = applicationContext
-    .getUtilities()
-    .getFormattedCaseDetail({
-      applicationContext,
-      caseDetail,
-    });
+  const formattedCaseDetail = getFormattedCaseDetail({
+    applicationContext: applicationContext as any,
+    caseDetail,
+    authorizedUser,
+  });
 
   return formattedCaseDetail.formattedDocketEntries
     .filter(

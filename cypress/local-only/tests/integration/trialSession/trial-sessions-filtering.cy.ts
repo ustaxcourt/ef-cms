@@ -1,5 +1,6 @@
 import {
   CASE_STATUS_TYPES,
+  SESSION_STATUS_TYPES,
   SESSION_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
@@ -79,7 +80,7 @@ describe('trial sessions filtering', () => {
         setTrialSessionFilters({
           judge,
           proceedingType,
-          sessionStatus: 'Open',
+          sessionStatus: SESSION_STATUS_TYPES.open,
           sessionType,
           startDate,
           tabName: 'calendared',
@@ -107,7 +108,7 @@ describe('trial sessions filtering', () => {
         setTrialSessionFilters({
           judge,
           proceedingType,
-          sessionStatus: 'Closed',
+          sessionStatus: SESSION_STATUS_TYPES.closed,
           sessionType,
           startDate,
           tabName: 'calendared',

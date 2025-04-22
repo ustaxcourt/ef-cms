@@ -1,4 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { PDFDocumentProxy } from 'pdfjs-dist';
 
 /**
  * given a PDF document, returns a pdf.js object
@@ -16,7 +17,7 @@ export const setPDFForStampAction = async ({
 
   store.set(state.pdfForSigning.docketEntryId, docketEntryId);
 
-  let pdfObj = await applicationContext
+  const pdfObj: PDFDocumentProxy = await applicationContext
     .getUseCases()
     .loadPDFForSigningInteractor(applicationContext, {
       docketEntryId,

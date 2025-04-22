@@ -1,4 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
+import { computeJudgeNameWithTitleAction } from '@web-client/presenter/actions/computeJudgeNameWithTitleAction';
 import { generateCourtIssuedDocumentTitleAction } from '../actions/CourtIssuedDocketEntry/generateCourtIssuedDocumentTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getFilterCurrentJudgeUsersAction } from '../actions/getFilterCurrentJudgeUsersAction';
@@ -28,6 +29,7 @@ export const gotoAddCourtIssuedDocketEntrySequence =
     setDocketEntryIdAction,
     setCourtIssuedDocumentInitialDataAction,
     setDefaultServiceStampAction,
+    computeJudgeNameWithTitleAction,
     generateCourtIssuedDocumentTitleAction,
     setIsEditingDocketEntryAction(false),
     setupCurrentPageAction('CourtIssuedDocketEntry'),

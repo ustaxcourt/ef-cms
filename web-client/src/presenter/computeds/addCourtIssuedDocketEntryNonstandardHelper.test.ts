@@ -20,7 +20,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns showFreeText = true when state.form.eventCode is O (scenario = Type A)', () => {
-    let testState = { ...state, form: { eventCode: 'O' } };
+    const testState = { ...state, form: { eventCode: 'O' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -36,7 +36,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns showFreeText = true and showJudge = true when state.form.eventCode is OAJ (scenario = Type B)', () => {
-    let testState = { ...state, form: { eventCode: 'OAJ' } };
+    const testState = { ...state, form: { eventCode: 'OAJ' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -52,7 +52,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns showDocketNumbers = true when state.form.eventCode is OAL (scenario = Type C)', () => {
-    let testState = { ...state, form: { eventCode: 'OAL' } };
+    const testState = { ...state, form: { eventCode: 'OAL' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -70,7 +70,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   it('returns showDateFirst = true, showFreeText = true, and the minimun available date when state.form.eventCode is OAP (scenario = Type D)', () => {
     const mockDate = '2088-01-01';
     applicationContext.getUtilities().formatNow.mockReturnValue(mockDate);
-    let testState = { ...state, form: { eventCode: 'OAP' } };
+    const testState = { ...state, form: { eventCode: 'OAP' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -88,7 +88,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns showDateFirst = true when state.form.eventCode is OFFX (scenario = Type E)', () => {
-    let testState = { ...state, form: { eventCode: 'OFFX' } };
+    const testState = { ...state, form: { eventCode: 'OFFX' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -105,7 +105,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns showJudge = true, showTrialLocation = true, and showOptionalFreeText = true when state.form.eventCode is FTRL (scenario = Type F)', () => {
-    let testState = { ...state, form: { eventCode: 'FTRL' } };
+    const testState = { ...state, form: { eventCode: 'FTRL' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -122,7 +122,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns showDateFirst = true and showTrialLocation = true when state.form.eventCode is NTD (scenario = Type G)', () => {
-    let testState = { ...state, form: { eventCode: 'NTD' } };
+    const testState = { ...state, form: { eventCode: 'NTD' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -139,7 +139,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns showDateLast = true and showFreeText = true when state.form.eventCode is TRAN (scenario = Type H)', () => {
-    let testState = {
+    const testState = {
       ...state,
       form: { eventCode: TRANSCRIPT_EVENT_CODE },
     };
@@ -159,7 +159,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('should set dateLabel to "Trial date" when state.form.scenario is Type G', () => {
-    let testState = {
+    const testState = {
       ...state,
       form: { scenario: 'Type G' },
     };
@@ -173,7 +173,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns freeTextLabel for an order if the selected eventCode is O', () => {
-    let testState = { ...state, form: { eventCode: 'O' } };
+    const testState = { ...state, form: { eventCode: 'O' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -184,7 +184,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns freeTextLabel for a notice if the selected eventCode is NOT', () => {
-    let testState = { ...state, form: { eventCode: 'NOT' } };
+    const testState = { ...state, form: { eventCode: 'NOT' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,
@@ -195,7 +195,7 @@ describe('addCourtIssuedDocketEntryNonstandardHelper', () => {
   });
 
   it('returns default freeTextLabel if the selected eventCode is not NOT or O', () => {
-    let testState = { ...state, form: { eventCode: 'WRIT' } };
+    const testState = { ...state, form: { eventCode: 'WRIT' } };
 
     const result = runCompute(addCourtIssuedDocketEntryNonstandardHelper, {
       state: testState,

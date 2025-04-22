@@ -1,5 +1,7 @@
-import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
-import { CasePublicSearchResultsType } from '@web-api/persistence/elasticsearch/casePublicSearch';
+import {
+  CaseAdvancedSearchParamsRequestType,
+  CaseSearchResult,
+} from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   createEndOfDayISO,
@@ -14,8 +16,10 @@ export const casePublicSearchInteractor = async (
     petitionerName,
     petitionerState,
     startDate,
+    caseTypes,
+    procedureType,
   }: CaseAdvancedSearchParamsRequestType,
-): Promise<{ results: CasePublicSearchResultsType }> => {
+): Promise<{ results: CaseSearchResult[] }> => {
   let searchStartDate;
   let searchEndDate;
 
@@ -47,6 +51,8 @@ export const casePublicSearchInteractor = async (
       petitionerName,
       petitionerState,
       startDate: searchStartDate,
+      caseTypes,
+      procedureType,
     },
   });
 };

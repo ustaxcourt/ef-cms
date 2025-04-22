@@ -24,8 +24,8 @@ if [[ -n $MANIFEST ]]; then
 fi
 
 # shellcheck disable=SC2091
-aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
+aws ecr get-login-password --region us-east-1 | podman login --username AWS --password-stdin "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com"
 
-docker build --no-cache -t "ef-cms-us-east-1:${DESTINATION_TAG}" -f Dockerfile .
-docker tag "ef-cms-us-east-1:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"
-docker push "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"
+podman build --platform=linux/amd64 --no-cache -t "ef-cms-us-east-1:${DESTINATION_TAG}" -f Dockerfile .
+podman tag "ef-cms-us-east-1:${DESTINATION_TAG}" "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"
+podman push "${AWS_ACCOUNT_ID}.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:${DESTINATION_TAG}"

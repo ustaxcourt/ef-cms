@@ -23,7 +23,7 @@ import {
   getServedPartiesCode,
 } from '../../shared/src/business/entities/DocketEntry';
 import {
-  ERROR_MAP_429,
+  ERROR_429,
   getEnvironment,
   getPublicSiteUrl,
   getUniqueId,
@@ -60,8 +60,8 @@ import {
   formatNow,
   getDateFormat,
   getMonthDayYearInETObj,
+  isDateWithinGivenInterval,
   isStringISOFormatted,
-  isTodayWithinGivenInterval,
   isValidDateString,
   prepareDateFromString,
   validateDateAndCreateISO,
@@ -106,6 +106,7 @@ import { deleteTrialSessionInteractor } from '../../shared/src/proxies/trialSess
 import { deleteUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteUserCaseNoteProxy';
 import { dismissNOTTReminderForTrialInteractor } from '../../shared/src/proxies/trialSessions/dismissNOTTReminderForTrialProxy';
 import { downloadCsv } from '@web-client/presenter/utilities/downloadCsv';
+import { downloadXlsx } from '@web-client/presenter/utilities/downloadXlsx';
 import { editPaperFilingInteractor } from '../../shared/src/proxies/documents/editPaperFilingProxy';
 import { editPractitionerDocumentInteractor } from '../../shared/src/proxies/practitioners/editPractitionerDocumentProxy';
 import { exportPendingReportInteractor } from '@shared/proxies/pendingItems/exportPendingReportProxy';
@@ -148,6 +149,7 @@ import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxi
 import { generatePrintablePendingReportInteractor } from '../../shared/src/proxies/pendingItems/generatePrintablePendingReportProxy';
 import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/proxies/trialSessions/generatePrintableTrialSessionCopyReportProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
+import { generateSuggestedTrialSessionCalendarInteractor } from '@shared/proxies/trialSessions/generateSuggestedTrialSessionCalendarProxy';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
 import { getAllFeatureFlagsInteractor } from '../../shared/src/proxies/featureFlag/getAllFeatureFlagsProxy';
 import { getAllUsersByRoleInteractor } from '@shared/proxies/users/getAllUsersByRoleProxy';
@@ -220,6 +222,7 @@ import { getSelectedConsolidatedCasesToMultiDocketOn } from '@shared/business/ut
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
 import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
+import { getTrialSessionPlanningReportDataInteractor } from '@shared/proxies/trialSessions/getTrialSessionPlanningReportProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
 import { getTrialSessionsForJudgeActivityReportInteractor } from '../../shared/src/proxies/reports/getTrialSessionsForJudgeActivityReportProxy';
 import { getTrialSessionsForJudgeInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsForJudgeProxy';
@@ -356,13 +359,14 @@ import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/ver
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
 import ImageBlobReduce from 'image-blob-reduce';
 import deepFreeze from 'deep-freeze';
+import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 
 const reduce = ImageBlobReduce({
   pica: ImageBlobReduce.pica({ features: ['js'] }),
 });
 
 let user;
-let broadcastChannel;
+let broadcastChannel: BroadcastChannel;
 
 let forceRefreshCallback: () => {};
 
@@ -435,6 +439,7 @@ const allUseCases = {
   generatePrintablePendingReportInteractor,
   generatePrintableTrialSessionCopyReportInteractor,
   generateSignedDocumentInteractor,
+  generateSuggestedTrialSessionCalendarInteractor,
   generateTrialCalendarPdfInteractor,
   getAllFeatureFlagsInteractor,
   getAllUsersByRoleInteractor,
@@ -484,6 +489,8 @@ const allUseCases = {
   getPractitionersByNameInteractor,
   getPrivatePractitionersBySearchKeyInteractor,
   getTrialSessionDetailsInteractor,
+  getTrialSessionOpenCasesCountInteractor,
+  getTrialSessionPlanningReportDataInteractor,
   getTrialSessionWorkingCopyInteractor,
   getTrialSessionsForJudgeActivityReportInteractor,
   getTrialSessionsForJudgeInteractor,
@@ -610,7 +617,7 @@ tryCatchDecorator(allUseCases);
 
 const appConstants = deepFreeze({
   ...getConstants(),
-  ERROR_MAP_429,
+  ERROR_429,
 }) as ReturnType<typeof getConstants>;
 
 const applicationContext = {
@@ -654,29 +661,18 @@ const applicationContext = {
   },
   getLogger: () => ({
     error: value => {
-      // eslint-disable-next-line no-console
       console.error(value);
     },
     info: (key, value) => {
-      // eslint-disable-next-line no-console
       console.info(key, JSON.stringify(value));
     },
     time: key => {
-      // eslint-disable-next-line no-console
       console.time(key);
     },
     timeEnd: key => {
-      // eslint-disable-next-line no-console
       console.timeEnd(key);
     },
   }),
-  getPdfJs: async () => {
-    const pdfjsLib = (await import('pdfjs-dist')).default;
-    const pdfjsWorker = (await import('pdfjs-dist/build/pdf.worker.entry'))
-      .default;
-    pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
-    return pdfjsLib;
-  },
   getPdfLib: () => {
     const pdfLib = import('pdf-lib');
     return pdfLib;
@@ -731,6 +727,7 @@ const applicationContext = {
       dateStringsCompared,
       deconstructDate,
       downloadCsv,
+      downloadXlsx,
       filterEmptyStrings,
       formatAttachments,
       formatCase,
@@ -776,14 +773,13 @@ const applicationContext = {
       hasPartyWithServiceType,
       isClosed,
       isCourtIssued: DocketEntry.isCourtIssued,
+      isDateWithinGivenInterval,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       isLeadCase,
       isPending: DocketEntry.isPending,
-      isPendingOnCreation: DocketEntry.isPendingOnCreation,
       isSealedCase,
       isStringISOFormatted,
-      isTodayWithinGivenInterval,
       isUserPartOfGroup,
       isValidDateString,
       openUrlInNewTab,
@@ -806,7 +802,7 @@ const applicationContext = {
   setForceRefreshCallback(callback) {
     forceRefreshCallback = callback;
   },
-  setTimeout: (callback, timeout) => setTimeout(callback, timeout),
+  setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
 };
 
 export { applicationContext };

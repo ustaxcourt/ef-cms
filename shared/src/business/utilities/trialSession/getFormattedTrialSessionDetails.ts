@@ -242,9 +242,9 @@ export const getFormattedTrialSessionDetails = ({
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
 
-  let [hour, min] = trialSession.startTime!.split(':');
+  const [hour, min] = trialSession.startTime!.split(':');
   let hourNumber = +hour;
-  let startTimeExtension = hourNumber >= 12 ? 'pm' : 'am';
+  const startTimeExtension = hourNumber >= 12 ? 'pm' : 'am';
 
   if (hourNumber > 12) {
     hourNumber = hourNumber - 12;

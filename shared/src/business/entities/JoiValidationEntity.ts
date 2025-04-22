@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { InvalidEntityError } from '../../../../web-api/src/errors/errors';
 import { isEmpty } from 'lodash';
 import joi from 'joi';
@@ -19,7 +18,7 @@ const setIsValidated = obj => {
 function toRawObject(entity) {
   const keys = Object.keys(entity);
   const obj = {};
-  for (let key of keys) {
+  for (const key of keys) {
     const value = entity[key];
     if (Array.isArray(value)) {
       obj[key] = value.map(v => {
@@ -60,7 +59,7 @@ function getFormattedValidationErrors(entity): Record<string, any> | null {
     }
     Object.assign(obj, errors);
   }
-  for (let key of keys) {
+  for (const key of keys) {
     const value = entity[key];
     if (errors && errors[key]) {
       continue;
@@ -168,7 +167,7 @@ export abstract class JoiValidationEntity {
   validateForMigration() {
     const rules = this.getValidationRules();
     const schema = rules.validate ? rules : joi.object().keys(rules);
-    let { error } = schema.validate(this, {
+    const { error } = schema.validate(this, {
       abortEarly: false,
       allowUnknown: true,
     });

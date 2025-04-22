@@ -42,7 +42,7 @@ const renderTabFactory = ({ activeKey, asSwitch, boxed, setTab }) =>
       role: 'presentation',
     };
 
-    const buttonProps = {
+    const buttonProps: React.ButtonHTMLAttributes<HTMLButtonElement> = {
       'aria-controls': tabContentId,
       'aria-selected': isActiveTab,
       className: childClassName,
@@ -70,7 +70,7 @@ export function Tab(properties: {
   children?: React.ReactNode;
   className?: string;
   disabled?: boolean;
-  icon?: JSX.Element;
+  icon?: React.JSX.Element;
   id?: string;
   tabName?: string;
   title?: string;
@@ -147,15 +147,13 @@ export function TabsComponent({
     const isActiveTab = tabName === activeKey;
     const tabContentId = `tabContent-${camelCase(tabName)}`;
 
-    let contentProps = {
-      className: 'tab-content',
-      id: tabContentId,
-      role: 'tabpanel',
-    };
-
-    if (asSwitch) {
-      contentProps = {};
-    }
+    const contentProps = asSwitch
+      ? {}
+      : {
+          className: 'tab-content',
+          id: tabContentId,
+          role: 'tabpanel',
+        };
 
     if (tabName && isActiveTab && tabChildren) {
       return (
@@ -192,14 +190,12 @@ export function TabsComponent({
     hasNav && `ustc-num-tabs-${navItems.length}`,
   );
 
-  let baseProps = {
-    className: tabsClass,
-    id,
-  };
-
-  if (asSwitch) {
-    baseProps = {};
-  }
+  const baseProps = asSwitch
+    ? {}
+    : {
+        className: tabsClass,
+        id,
+      };
 
   const TabComponent = renderTabFactory({
     activeKey,

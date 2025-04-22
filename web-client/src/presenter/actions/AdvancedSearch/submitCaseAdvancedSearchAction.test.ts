@@ -1,5 +1,5 @@
-import { ALL_COUNTRY_TYPE } from '@shared/business/entities/cases/CaseSearch';
 import {
+  ALL_SELECTION,
   COUNTRY_TYPES,
   US_STATES,
 } from '@shared/business/entities/EntityConstants';
@@ -16,7 +16,7 @@ describe('submitCaseAdvancedSearchAction', () => {
     baseState = {
       advancedSearchForm: {
         caseSearchByName: {
-          countryType: ALL_COUNTRY_TYPE,
+          countryType: ALL_SELECTION,
           petitionerName: 'Petitioner 1',
           petitionerState: 'AK',
           yearFiledMax: '12/12/2023',

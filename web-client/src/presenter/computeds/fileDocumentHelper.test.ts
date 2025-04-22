@@ -34,7 +34,7 @@ describe('fileDocumentHelper', () => {
   });
 
   it('returns correct values when documentType is undefined', () => {
-    let testState = {
+    const testState = {
       ...state,
       form: { documentType: undefined },
       user: docketClerkUser,
@@ -685,9 +685,6 @@ describe('fileDocumentHelper', () => {
 
       expect(showPartiesFiling).toEqual(true);
     });
-  });
-
-  describe('showPartiesFiling', () => {
     it('should set showPartiesFiling to true if private practitioner is filing a document', () => {
       state.form = {
         generationType: GENERATION_TYPES.AUTO,

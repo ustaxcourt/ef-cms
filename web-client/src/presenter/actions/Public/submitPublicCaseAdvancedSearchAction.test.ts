@@ -1,4 +1,4 @@
-import { CasePublicSearchResultsType } from '@web-api/persistence/elasticsearch/casePublicSearch';
+import { CaseSearchResult } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
 import { PublicClientState } from '@web-client/presenter/state-public';
 import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-public';
@@ -16,19 +16,19 @@ describe('submitPublicCaseAdvancedSearchAction', () => {
   });
 
   it('gets the public case information', async () => {
-    await runAction<
-      { searchResults: CasePublicSearchResultsType },
-      PublicClientState
-    >(submitPublicCaseAdvancedSearchAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        advancedSearchForm: {
-          caseSearchByName: { petitionerName: 'case name' },
+    await runAction<{ searchResults: CaseSearchResult[] }, PublicClientState>(
+      submitPublicCaseAdvancedSearchAction,
+      {
+        modules: {
+          presenter,
+        },
+        state: {
+          advancedSearchForm: {
+            caseSearchByName: { petitionerName: 'case name' },
+          },
         },
       },
-    });
+    );
 
     expect(
       applicationContextForClient.getUseCases().casePublicSearchInteractor.mock

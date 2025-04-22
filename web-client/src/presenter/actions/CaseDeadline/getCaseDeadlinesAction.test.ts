@@ -14,18 +14,18 @@ describe('getCaseDeadlinesAction', () => {
       .getUseCases()
       .getCaseDeadlinesInteractor.mockReturnValue({
         deadlines: [{ description: 'hello world' }],
-        totalCount: 1,
       });
   });
 
-  it('gets all case deadlines with a default page of 1 if a page is not set', async () => {
+  it('gets all case deadlines', async () => {
+    const judgeId = '123456';
     const result = await runAction(getCaseDeadlinesAction, {
       modules: {
         presenter,
       },
       state: {
         caseDeadlineReport: {
-          judgeFilter: 'Buch',
+          judgeIdFilter: judgeId,
         },
         screenMetadata: {
           filterEndDate: END_DATE,
@@ -39,36 +39,11 @@ describe('getCaseDeadlinesAction', () => {
         .calls[0][1],
     ).toMatchObject({
       endDate: END_DATE,
-      judge: 'Buch',
-      page: 1,
+      judgeId,
       startDate: START_DATE,
     });
     expect(result.output).toEqual({
       caseDeadlines: [{ description: 'hello world' }],
-      totalCount: 1,
-    });
-  });
-
-  it('gets all case deadlines with a page from state.caseDeadlineReport.page', async () => {
-    await runAction(getCaseDeadlinesAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDeadlineReport: {
-          page: 3,
-        },
-        screenMetadata: {
-          filterEndDate: END_DATE,
-          filterStartDate: START_DATE,
-        },
-      },
-    });
-    expect(
-      applicationContext.getUseCases().getCaseDeadlinesInteractor.mock
-        .calls[0][1],
-    ).toMatchObject({
-      page: 3,
     });
   });
 });

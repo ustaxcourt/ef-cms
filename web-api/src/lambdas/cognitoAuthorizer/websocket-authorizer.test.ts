@@ -223,7 +223,7 @@ describe('websocket-authorizer', () => {
       });
     });
 
-    jwk.verify.mockImplementation((token, pem, options, callback) => {
+    jwk.verify.mockImplementation((_token, _pem, _options, callback) => {
       callback(null, { 'custom:userId': 'test-custom:userId' });
     });
 

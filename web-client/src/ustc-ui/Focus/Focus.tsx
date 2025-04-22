@@ -15,7 +15,7 @@ export const Focus = ({
   const node = useRef(null);
 
   const setFocus = e => {
-    e && e.preventDefault();
+    e?.preventDefault();
     const focusEl = node?.current?.querySelector(focusableChildren);
     if (focusEl?.focus) focusEl.focus();
     setFocused(true);
@@ -23,7 +23,7 @@ export const Focus = ({
   };
 
   useEffect(() => {
-    focused || setTimeout(setFocus, 50);
+    if (focused) setTimeout(setFocus, 50);
   }, []);
 
   const focusClassName = classNames('focus-component', className);

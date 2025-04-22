@@ -18,7 +18,7 @@ export const updateCalendaredCaseUserNoteAction = ({
   );
   caseToUpdate.notes = userNote;
 
-  let userNotes = [];
+  const userNotes = [];
   for (const calendaredCase of calendaredCases) {
     userNotes.push(calendaredCase.notes);
   }

@@ -355,7 +355,7 @@ describe('getWorkQueueFilters', () => {
       });
 
       it('returns an object containing a filter map for my work queues and boxes', () => {
-        let myWorkItems = [
+        const myWorkItems = [
           {
             // my in progress
             assigneeId: '123',
@@ -422,7 +422,7 @@ describe('getWorkQueueFilters', () => {
 
       [PETITIONS_SECTION, DOCKET_SECTION].forEach(sectionToTest => {
         it(`returns an object containing a filter map for ${sectionToTest} section work queues and boxes`, () => {
-          let sectionWorkItems = [
+          const sectionWorkItems = [
             {
               // section in progress
               assigneeId: '234',

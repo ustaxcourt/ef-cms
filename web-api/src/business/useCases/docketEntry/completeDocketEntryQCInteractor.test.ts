@@ -1,6 +1,10 @@
+import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+);
 import {
-  CASE_SERVICES_SUPERVISOR_SECTION,
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
@@ -9,19 +13,20 @@ import {
 import { MOCK_ACTIVE_LOCK } from '../../../../../shared/src/test/mockLock';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  caseServicesSupervisorUser,
-  docketClerkUser,
-} from '../../../../../shared/src/test/mockUsers';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
+import { docketClerkUser } from '../../../../../shared/src/test/mockUsers';
 import {
   mockCaseServicesSupervisorUser,
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
+  const deleteCaseTrialSortMappingRecords = jest.mocked(
+    deleteCaseTrialSortMappingRecordsMock,
+  );
 
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
@@ -140,15 +145,6 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
-        .workItem,
-    ).toMatchObject({ leadDocketNumber: caseRecord.docketNumber });
-    expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
   });
@@ -164,10 +160,6 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -487,10 +479,6 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
@@ -528,10 +516,6 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
@@ -555,10 +539,6 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual(undefined);
@@ -580,6 +560,11 @@ describe('completeDocketEntryQCInteractor', () => {
           hasOtherFilingParty: true,
           isPaper: true,
           otherFilingParty: 'Bert Brooks',
+          previousDocument: {
+            docketEntryId: 'e3f2c8f4-8c56-4d3e-9f23-7b2a6a9d55e1',
+            documentTitle: 'DocumentTitle',
+            documentType: 'Amended',
+          },
           scenario: 'Nonstandard H',
           secondaryDocument: {
             documentType: 'Notice of Change of Address',
@@ -604,6 +589,11 @@ describe('completeDocketEntryQCInteractor', () => {
         documentType: 'Notice of Change of Address',
         eventCode: 'A',
       },
+      previousDocument: {
+        docketEntryId: 'e3f2c8f4-8c56-4d3e-9f23-7b2a6a9d55e1',
+        documentTitle: 'DocumentTitle',
+        documentType: 'Amended',
+      },
     });
   });
 
@@ -624,10 +614,7 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
+    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
     expect(caseDetail.automaticBlocked).toBeTruthy();
   });
 
@@ -646,54 +633,6 @@ describe('completeDocketEntryQCInteractor', () => {
     expect(caseDetail.docketEntries[0].receivedAt).toEqual(
       '2021-01-01T05:00:00.000Z',
     );
-  });
-
-  it('sets the assigned users section from the selected section when it is defined and the user is a case services user', async () => {
-    await applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(caseServicesSupervisorUser);
-
-    await completeDocketEntryQCInteractor(
-      applicationContext,
-      {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          selectedSection: DOCKET_SECTION,
-        },
-      },
-      mockCaseServicesSupervisorUser,
-    );
-
-    const assignedWorkItem =
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
-        .workItem;
-
-    expect(assignedWorkItem.section).toEqual(DOCKET_SECTION);
-  });
-
-  it('sets the section as Case Services when selected section is NOT defined and the user is a case services user', async () => {
-    await applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(caseServicesSupervisorUser);
-
-    await completeDocketEntryQCInteractor(
-      applicationContext,
-      {
-        entryMetadata: {
-          ...caseRecord.docketEntries[0],
-          selectedSection: undefined,
-        },
-      },
-      mockCaseServicesSupervisorUser,
-    );
-
-    const assignedWorkItem =
-      applicationContext.getPersistenceGateway()
-        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
-        .workItem;
-
-    expect(assignedWorkItem.section).toEqual(CASE_SERVICES_SUPERVISOR_SECTION);
   });
 
   it('throws the expected error if the lock is already acquired by another process', async () => {

@@ -4,16 +4,23 @@
   $theme-image-path: '../../node_modules/@uswds/uswds/dist/img',
   $theme-font-weight-semibold: 600,
   $theme-utility-breakpoints: (
-    "card": true,
-    "card-lg": true,
-    "mobile": true,
-    "mobile-lg": true,
-    "tablet": true,
-    "tablet-lg": true,
-    "desktop": true,
-    "desktop-lg": true,
-    "widescreen": true
+    'card': true,
+    'card-lg': true,
+    'mobile': true,
+    'mobile-lg': true,
+    'tablet': true,
+    'tablet-lg': true,
+    'desktop': true,
+    'desktop-lg': true,
+    'widescreen': true,
   ),
+  $theme-button-icon-gap: 0,
+  $flex-settings: (
+    responsive: true,
+  ),
+  $flex-direction-settings: (
+    responsive: true,
+  )
 );
 @forward 'uswds-global';
 @forward 'usa-date-picker';
@@ -54,6 +61,6 @@
 @forward 'usa-step-indicator';
 
 * {
-	-webkit-print-color-adjust: exact;
-	print-color-adjust: exact;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
 }

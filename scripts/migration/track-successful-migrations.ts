@@ -1,12 +1,25 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { DynamoDBClient, PutItemCommand } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { migrationsToRun } from '@web-api/lambdas/migration/migrationsToRun';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 
-requireEnvVars(['DESTINATION_TABLE']);
-
-const { DESTINATION_TABLE } = process.env;
+const scriptConfig: ScriptConfig = {
+  description:
+    'track-successful-migrations - Puts a migration record into the destination table for each migration that has run',
+  environment: {
+    destinationTable: 'DESTINATION_TABLE',
+  },
+  requireActiveAwsSession: true,
+};
+const { destinationTable } = parseArgsAndEnvVars(scriptConfig) as {
+  destinationTable: string;
+};
 
 const dynamodb = new DynamoDBClient({ region: 'us-east-1' });
 const docClient = DynamoDBDocument.from(dynamodb);
@@ -19,7 +32,7 @@ const trackMigration = async (key: string) => {
       pk: { S: 'migration' },
       sk: { S: `migration|${key}` },
     },
-    TableName: DESTINATION_TABLE,
+    TableName: destinationTable,
   });
   await docClient.send(putItemCommand);
 };
@@ -27,7 +40,7 @@ const trackMigration = async (key: string) => {
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const migrationFiles = migrationsToRun;
-  for (let { key } of migrationFiles) {
+  for (const { key } of migrationFiles) {
     await trackMigration(key);
   }
 })();

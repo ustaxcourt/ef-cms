@@ -1,5 +1,4 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
-import { DOCUMENT_INTERNAL_CATEGORIES_MAP } from '@shared/business/entities/EntityConstants';
 import {
   DocketEntryWorksheet,
   RawDocketEntryWorksheet,
@@ -8,6 +7,7 @@ import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/
 import { Get } from 'cerebral';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { state } from '@web-client/presenter/app.cerebral';
+import { INTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/internalFilingEvents';
 
 type PendingMotionsHelperResults = {
   formattedPendingMotions: (Omit<
@@ -75,7 +75,7 @@ export const pendingMotionsHelper = (
 };
 
 function getDocumentTitleByEventCode(eventCode: string): string {
-  const motionInfo = DOCUMENT_INTERNAL_CATEGORIES_MAP.Motion.find(
+  const motionInfo = INTERNAL_FILING_EVENTS.Motion.find(
     motion => motion.eventCode === eventCode,
   );
 

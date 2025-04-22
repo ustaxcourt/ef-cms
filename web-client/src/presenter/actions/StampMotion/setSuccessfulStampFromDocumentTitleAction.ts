@@ -14,7 +14,7 @@ export const setSuccessfulStampFromDocumentTitleAction = ({
   const docketEntryId = get(state.docketEntryId);
   const motion = docketEntries.find(d => d.docketEntryId === docketEntryId);
 
-  let successMessage = `${
+  const successMessage = `${
     motion.documentTitle || motion.documentType
   } stamped successfully.`;
 

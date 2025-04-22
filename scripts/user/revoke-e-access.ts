@@ -1,23 +1,40 @@
-// Usage: npx ts-node --transpile-only scripts/user/revoke-e-access.ts 432143213-4321-1234-4321-432143214321 101-23
+#!/usr/bin/env -S npx ts-node --transpile-only
 
 import { Case } from '@shared/business/entities/cases/Case';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { createApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { requireEnvVars } from '../../shared/admin-tools/util';
 import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
 
-const userId = process.argv[2];
-const docketNumber = process.argv[3];
-
-if (!userId || !docketNumber) {
-  console.error('Error: missing docket number or user id.');
-  console.log(
-    'Usage:\nnpx ts-node --transpile-only scripts/user/revoke-e-access.ts 432143213-4321-1234-4321-432143214321 101-23',
-  );
-  process.exit(1);
-}
-requireEnvVars(['AWS_ACCESS_KEY_ID', 'AWS_SECRET_ACCESS_KEY', 'ENV']);
+const scriptConfig: ScriptConfig = {
+  description:
+    'revoke-e-access - Switches the provided petitioner to paper service in the provided case.',
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    env: 'ENV',
+  },
+  parameters: {
+    docketNumber: {
+      position: 1,
+      required: true,
+      type: 'string',
+    },
+    userId: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
+};
+const { docketNumber, userId } = parseArgsAndEnvVars(scriptConfig) as {
+  docketNumber: string;
+  userId: string;
+};
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {

@@ -1,10 +1,10 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_REGULAR } from '../../../../../shared/src/test/mockTrial';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import {
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { closeTrialSessionInteractor } from './closeTrialSessionInteractor';
 import {
   mockDocketClerkUser,
@@ -121,18 +121,24 @@ describe('closeTrialSessionInteractor', () => {
       ...MOCK_TRIAL_REGULAR,
       caseOrder: undefined,
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-      startDate: '2025-03-01T00:00:00.000Z',
+      startDate: FUTURE_DATE,
     };
 
-    await expect(
-      closeTrialSessionInteractor(
-        applicationContext,
-        {
-          trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.not.toThrow('Trial session cannot be closed with open cases');
+    const closeTrialSessionPromise = closeTrialSessionInteractor(
+      applicationContext,
+      {
+        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      },
+      mockDocketClerkUser,
+    );
+
+    await expect(closeTrialSessionPromise).rejects.not.toThrow(
+      'Trial session cannot be closed with open cases',
+    );
+
+    await expect(closeTrialSessionPromise).rejects.toThrow(
+      'Trial session cannot be closed until after its start date',
+    );
   });
 
   it('should not close the trial session and throws an error instead', async () => {

@@ -12,6 +12,7 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '../entities/WorkItem';
 import { isEmpty } from 'lodash';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -154,9 +155,8 @@ export const saveCaseDetailInternalEdit = async (
       { caseEntity },
     );
 
-    await applicationContext.getPersistenceGateway().saveWorkItem({
-      applicationContext,
-      workItem: workItemEntity.validate().toRawObject(),
+    await upsertWorkItems({
+      workItems: [workItemEntity.validate().toRawObject()],
     });
   }
 

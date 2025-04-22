@@ -1,4 +1,9 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getPublicTrialSessionsInteractor } from '@web-api/business/useCases/trialSessions/getPublicTrialSessionsInteractor';
 
 describe('getPublicTrialSessionsInteractor', () => {
@@ -25,9 +30,9 @@ const MOCK_TRIAL_SESSIONS = [
     judge: { name: 'Cohen', userId: 'dabbad04-18d0-43ec-bafb-654e83405416' },
     maxCases: 30,
     pk: 'trial-session|0d943468-bc2e-4631-84e3-b084cf5b1fbb',
-    proceedingType: 'In Person',
-    sessionStatus: 'Open',
-    sessionType: 'Special',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    sessionStatus: SESSION_STATUS_TYPES.open,
+    sessionType: SESSION_TYPES.special,
     sk: 'trial-session|0d943468-bc2e-4631-84e3-b084cf5b1fbb',
     startDate: '2019-12-02T05:00:00.000Z',
     startTime: '21:00',
@@ -45,10 +50,10 @@ const MOCK_TRIAL_SESSIONS = [
     judge: { name: 'Colvin', userId: 'dabbad00-18d0-43ec-bafb-654e83405416' },
     maxCases: 100,
     pk: 'trial-session|111ac21b-99f9-4321-98c8-b95db00af96b',
-    proceedingType: 'Remote',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionScope: 'Standalone Remote',
-    sessionStatus: 'Open',
-    sessionType: 'Special',
+    sessionStatus: SESSION_STATUS_TYPES.open,
+    sessionType: SESSION_TYPES.special,
     sk: 'trial-session|111ac21b-99f9-4321-98c8-b95db00af96b',
     startDate: '2020-11-25T05:00:00.000Z',
     startTime: '13:00',
@@ -65,9 +70,9 @@ const MOCK_TRIAL_SESSIONS = [
     judge: { name: 'Cohen', userId: 'dabbad04-18d0-43ec-bafb-654e83405416' },
     maxCases: 8,
     pk: 'trial-session|149159ca-f4a1-4b2b-bc24-bd1fbe6defdc',
-    proceedingType: 'In Person',
-    sessionStatus: 'New',
-    sessionType: 'Regular',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    sessionStatus: SESSION_STATUS_TYPES.new,
+    sessionType: SESSION_TYPES.regular,
     sk: 'trial-session|149159ca-f4a1-4b2b-bc24-bd1fbe6defdc',
     startDate: '2020-12-02T05:00:00.000Z',
     startTime: '09:00',

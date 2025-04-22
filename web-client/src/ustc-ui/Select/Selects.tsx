@@ -1,6 +1,38 @@
 import React from 'react';
 
-export function Select({ defaultValue, name, onChange, options, value }) {
+type FlatOptionsStructure = {
+  value: string;
+  label: string;
+};
+
+type GroupedOptionsStructure = {
+  label: string;
+  options: FlatOptionsStructure[];
+};
+
+type SelectParamsType = {
+  defaultValue: { label: string; value: string };
+  name: string;
+  onChange: (value: string) => void;
+  options: (FlatOptionsStructure | GroupedOptionsStructure)[];
+  value: string;
+};
+
+function isFlatOptionsStructure(obj: any): obj is FlatOptionsStructure {
+  return !!obj.value && !!obj.label;
+}
+
+function isGroupedOptionsStructure(obj: any): obj is GroupedOptionsStructure {
+  return !!obj.label && !!obj.options;
+}
+
+export function Select({
+  defaultValue,
+  name,
+  onChange,
+  options,
+  value,
+}: SelectParamsType) {
   return (
     <>
       <select
@@ -18,13 +50,13 @@ export function Select({ defaultValue, name, onChange, options, value }) {
         )}
 
         {options.map(option => {
-          if (option.value) {
+          if (isFlatOptionsStructure(option)) {
             return (
               <option key={option.label} value={option.value}>
                 {option.label}
               </option>
             );
-          } else if (option.options) {
+          } else if (isGroupedOptionsStructure(option)) {
             return (
               <optgroup key={option.label} label={option.label}>
                 {option.options.map(childOptions => {

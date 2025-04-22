@@ -64,6 +64,10 @@ describe('socket', () => {
     initializeSocket(mockApp, applicationContext);
   });
 
+  afterEach(() => {
+    stopSocket();
+  })
+
   it('should start and stop the socket', () => {
     startSocket();
     stopSocket();
@@ -135,7 +139,10 @@ describe('socket', () => {
     //attempt #4
     // eslint-disable-next-line jest/valid-expect-in-promise
     oncloseFn({ code: 2000 }).catch(e => {
-      expect(e).toBeUndefined();
+      // eslint-disable-next-line jest/no-conditional-expect
+      expect(e).toEqual(
+        new Error('Error connecting within 4 attempts to websocket'),
+      );
     });
     await new Promise(resolve => setTimeout(resolve, 0));
     //attempt #5

@@ -9,15 +9,19 @@ import {
 } from '../../../../support/pages/document-qc';
 import { fillInCreateCaseFromPaperForm } from '../../../../support/pages/create-paper-petition';
 
+import { getCreateACaseButton } from '../../../../support/pages/document-qc';
 import {
-  getCreateACaseButton,
-  navigateTo as navigateToDocumentQC,
-} from '../../../../support/pages/document-qc';
+  loginAsColvin,
+  loginAsColvinChambers,
+  loginAsDocketClerk,
+  loginAsPetitionsClerk,
+} from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Notes Icon triggered by Judges Notes', () => {
   let newDocketNumber: string;
   beforeEach(() => {
-    navigateToDocumentQC('petitionsclerk');
+    loginAsPetitionsClerk();
+    cy.visit('/document-qc');
 
     getCreateACaseButton().click();
     cy.get('#tab-parties').should('have.attr', 'aria-selected');
@@ -28,23 +32,25 @@ describe('Notes Icon triggered by Judges Notes', () => {
     cy.get('#submit-case').click();
 
     cy.wait('@postPaperCase').then(({ response }) => {
-      if (!response || !response.body?.docketNumber) {
+      if (!response || !response.body?.caseDetail.docketNumber) {
         throw new Error(
           'Unable to get Docket Number from postPaperCase HTTP request',
         );
       }
-      newDocketNumber = response.body?.docketNumber;
+      newDocketNumber = response.body?.caseDetail.docketNumber;
     });
   });
 
   it('should display the notes icon when logged in as a judge user and there are judges notes on the case we navigated to using the messages link', () => {
-    cy.login('judgecolvin', `/case-detail/${newDocketNumber}`);
+    loginAsColvin();
+    cy.visit(`/case-detail/${newDocketNumber}`);
     cy.get('[data-testid="tab-notes"]').click();
     cy.get('[data-testid="add-case-judge-notes-button"]').click();
     cy.get('[data-testid="case-notes"]').type('SOME RANDOM NOTES');
     cy.get('#confirm').click();
 
-    cy.login('docketclerk', `/case-detail/${newDocketNumber}`);
+    loginAsDocketClerk();
+    cy.visit(`/case-detail/${newDocketNumber}`);
     createMessage();
     selectSection('Chambers');
     selectChambers('colvinsChambers');
@@ -53,19 +59,21 @@ describe('Notes Icon triggered by Judges Notes', () => {
     fillOutMessageField();
     sendMessage();
 
-    cy.login('judgecolvin');
+    loginAsColvin();
     cy.get('[data-testid="message-header-link"]').first().click();
     cy.get('[data-testid="notes-icon"]').should('exist');
   });
 
   it('should display the notes icon when logged in as a chambers user and there are judges notes on the case we navigated to using the messages link', () => {
-    cy.login('judgecolvin', `/case-detail/${newDocketNumber}`);
+    loginAsColvin();
+    cy.visit(`/case-detail/${newDocketNumber}`);
     cy.get('[data-testid="tab-notes"]').click();
     cy.get('[data-testid="add-case-judge-notes-button"]').click();
     cy.get('[data-testid="case-notes"]').type('SOME RANDOM NOTES');
     cy.get('#confirm').click();
 
-    cy.login('docketclerk', `/case-detail/${newDocketNumber}`);
+    loginAsDocketClerk();
+    cy.visit(`/case-detail/${newDocketNumber}`);
     createMessage();
     selectSection('Chambers');
     selectChambers('colvinsChambers');
@@ -74,7 +82,7 @@ describe('Notes Icon triggered by Judges Notes', () => {
     fillOutMessageField();
     sendMessage();
 
-    cy.login('colvinschambers');
+    loginAsColvinChambers();
     cy.get('[data-testid="message-header-link"]').first().click();
     cy.get('[data-testid="notes-icon"]').should('exist');
   });

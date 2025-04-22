@@ -2,7 +2,10 @@ import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseInventory } from '@web-api/business/useCases/caseInventoryReport/getCustomCaseReportInteractor';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { CaseType } from '@shared/business/entities/EntityConstants';
+import {
+  CaseType,
+  MULTI_SELECT_PLACEHOLDER,
+} from '@shared/business/entities/EntityConstants';
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
@@ -258,8 +261,8 @@ export const CustomCaseReport = connect(
                   id="case-status"
                   name="caseStatus"
                   options={customCaseReportHelper.caseStatuses}
-                  placeholder="- Select one or more -"
-                  value={{ label: '- Select one or more -', value: '' }}
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
+                  value={{ label: MULTI_SELECT_PLACEHOLDER, value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -287,9 +290,9 @@ export const CustomCaseReport = connect(
                   id="case-type"
                   name="eventCode"
                   options={customCaseReportHelper.caseTypes}
-                  placeholder="- Select one or more -"
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
                   value={{
-                    label: '- Select one or more -',
+                    label: MULTI_SELECT_PLACEHOLDER,
                     value: '' as CaseType,
                   }}
                   onChange={inputValue => {
@@ -320,8 +323,8 @@ export const CustomCaseReport = connect(
                   id="judges"
                   name="judges"
                   options={customCaseReportHelper.judges}
-                  placeholder="- Select one or more -"
-                  value={{ label: '- Select one or more -', value: '' }}
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
+                  value={{ label: MULTI_SELECT_PLACEHOLDER, value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -349,8 +352,8 @@ export const CustomCaseReport = connect(
                   id="trial-location"
                   name="requestedPlaceOfTrial"
                   options={customCaseReportHelper.trialCitiesByState}
-                  placeholder="- Select one or more -"
-                  value={{ label: '- Select one or more -', value: '' }}
+                  placeholder={MULTI_SELECT_PLACEHOLDER}
+                  value={{ label: MULTI_SELECT_PLACEHOLDER, value: '' }}
                   onChange={inputValue => {
                     if (inputValue) {
                       setCustomCaseReportFiltersSequence({
@@ -454,25 +457,27 @@ export const CustomCaseReport = connect(
               Calendaring high priority
             </label>
           </div>
-          <Button
-            data-testid="submit-custom-case-report-button"
-            tooltip="Run Report"
-            onClick={async () => {
-              setHasRunCustomCaseReport(true);
-              await getCustomCaseReportSequence({ selectedPage: 0 });
-              setActivePage(0);
-            }}
-          >
-            Run Report
-          </Button>
-          <Button
-            link
-            disabled={customCaseReportHelper.clearFiltersIsDisabled}
-            tooltip="Clear Filters"
-            onClick={() => clearOptionalCustomCaseReportFilterSequence()}
-          >
-            Clear Filters
-          </Button>
+          <div className="button-container">
+            <Button
+              data-testid="submit-custom-case-report-button"
+              tooltip="Run Report"
+              onClick={async () => {
+                setHasRunCustomCaseReport(true);
+                await getCustomCaseReportSequence({ selectedPage: 0 });
+                setActivePage(0);
+              }}
+            >
+              Run Report
+            </Button>
+            <Button
+              link
+              disabled={customCaseReportHelper.clearFiltersIsDisabled}
+              tooltip="Clear Filters"
+              onClick={() => clearOptionalCustomCaseReportFilterSequence()}
+            >
+              Clear Filters
+            </Button>
+          </div>
           <hr className="margin-top-3 margin-bottom-3 border-top-1px border-base-lighter" />
           <div ref={paginatorTop}>
             <Paginator

@@ -14,9 +14,10 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../entities/User';
 import { caseSearchFilter } from '../utilities/caseFilter';
 import { omit } from 'lodash';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const orderAdvancedSearchInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,

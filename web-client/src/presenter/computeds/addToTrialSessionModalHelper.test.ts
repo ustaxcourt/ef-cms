@@ -1,4 +1,8 @@
 import {
+  SESSION_STATUS_TYPES,
+  SESSION_TYPES,
+} from '@shared/business/entities/EntityConstants';
+import {
   addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed,
   trialSessionOptionText,
 } from './addToTrialSessionModalHelper';
@@ -16,54 +20,54 @@ describe('addToTrialSessionModalHelper', () => {
 
   const trialSessions = [
     {
-      sessionStatus: 'Open',
-      sessionType: 'Small',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.small,
       startDate: '2019-05-01T21:40:46.415Z',
       trialLocation: 'Boise, Idaho',
       trialSessionId: '4',
     },
     {
-      sessionStatus: 'Open',
-      sessionType: 'Regular',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.regular,
       startDate: '2019-03-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '1',
     },
     {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-      sessionStatus: 'Open',
-      sessionType: 'Regular',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.regular,
       startDate: '2022-03-01T21:40:46.415Z',
       trialLocation: 'Standalone Remote',
       trialSessionId: '7',
     },
     {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-      sessionStatus: 'Open',
-      sessionType: 'Hybrid',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.hybrid,
       startDate: '2018-02-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',
       trialSessionId: '2',
     },
     {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-      sessionStatus: 'Open',
-      sessionType: 'Hybrid-S',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.hybridSmall,
       startDate: '2018-01-02T21:40:46.415Z',
       trialLocation: 'Spokane, Washington',
       trialSessionId: '8',
     },
     {
       sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-      sessionStatus: 'Open',
-      sessionType: 'Special',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.special,
       startDate: '2019-01-01T21:40:46.415Z',
       trialLocation: 'Birmingham, Alabama',
       trialSessionId: '3',
     },
     {
-      sessionStatus: 'Open',
-      sessionType: 'Motion/Hearing',
+      sessionStatus: SESSION_STATUS_TYPES.open,
+      sessionType: SESSION_TYPES.motionHearing,
       startDate: '2018-12-01T21:40:46.415Z',
       trialLocation: 'Mobile, Alabama',
       trialSessionId: '5',
@@ -78,42 +82,42 @@ describe('addToTrialSessionModalHelper', () => {
     it('should return correct trial session option text for Regular trial session types', () => {
       const optionText = trialSessionOptionText({
         ...trialSession,
-        sessionType: 'Regular',
+        sessionType: SESSION_TYPES.regular,
       });
       expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (R)`);
     });
     it('should return correct trial session option text for Small trial session types', () => {
       const optionText = trialSessionOptionText({
         ...trialSession,
-        sessionType: 'Small',
+        sessionType: SESSION_TYPES.small,
       });
       expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (S)`);
     });
     it('should return correct trial session option text for Hybrid trial session types', () => {
       const optionText = trialSessionOptionText({
         ...trialSession,
-        sessionType: 'Hybrid',
+        sessionType: SESSION_TYPES.hybrid,
       });
       expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (H)`);
     });
     it('should return correct trial session option text for Hybrid-S trial session types', () => {
       const optionText = trialSessionOptionText({
         ...trialSession,
-        sessionType: 'Hybrid-S',
+        sessionType: SESSION_TYPES.hybridSmall,
       });
       expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (HS)`);
     });
     it('should return correct trial session option text for Special trial session types', () => {
       const optionText = trialSessionOptionText({
         ...trialSession,
-        sessionType: 'Special',
+        sessionType: SESSION_TYPES.special,
       });
       expect(optionText).toEqual(`${trialSession.trialLocation} 09/27/24 (SP)`);
     });
     it('should return correct trial session option text for Motion/Hearing trial session types', () => {
       const optionText = trialSessionOptionText({
         ...trialSession,
-        sessionType: 'Motion/Hearing',
+        sessionType: SESSION_TYPES.motionHearing,
       });
       expect(optionText).toEqual(
         `${trialSession.trialLocation} 09/27/24 (M/H)`,
@@ -390,7 +394,7 @@ describe('addToTrialSessionModalHelper', () => {
               ...trialSessions,
               {
                 isCalendared: false,
-                sessionType: 'Small',
+                sessionType: SESSION_TYPES.small,
                 startDate: '2019-05-01T21:40:46.415Z',
                 trialLocation: 'Boise, Idaho',
                 trialSessionId: '6',

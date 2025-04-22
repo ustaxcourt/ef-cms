@@ -95,11 +95,10 @@ describe('computeTrialSessionFormDataAction', () => {
   });
 
   it('should store an afternoon (pm) startTime in 24hr format', async () => {
-    let result;
     form.startTimeHours = '6';
     form.startTimeMinutes = '15';
     form.startTimeExtension = 'pm';
-    result = await runAction(computeTrialSessionFormDataAction, {
+    const result = await runAction(computeTrialSessionFormDataAction, {
       modules: {
         presenter,
       },
@@ -111,11 +110,10 @@ describe('computeTrialSessionFormDataAction', () => {
   });
 
   it('should store an afternoon (pm) startTime in 12hr format if it is 12', async () => {
-    let result;
     form.startTimeHours = '12';
     form.startTimeMinutes = '15';
     form.startTimeExtension = 'pm';
-    result = await runAction(computeTrialSessionFormDataAction, {
+    const result = await runAction(computeTrialSessionFormDataAction, {
       modules: {
         presenter,
       },
@@ -127,11 +125,10 @@ describe('computeTrialSessionFormDataAction', () => {
   });
 
   it('should store a morning (am) startTime in 24hr format', async () => {
-    let result;
     form.startTimeHours = '6';
     form.startTimeMinutes = '15';
     form.startTimeExtension = 'am';
-    result = await runAction(computeTrialSessionFormDataAction, {
+    const result = await runAction(computeTrialSessionFormDataAction, {
       modules: {
         presenter,
       },
@@ -143,11 +140,10 @@ describe('computeTrialSessionFormDataAction', () => {
   });
 
   it('should store a midnight startTime in 24hr format', async () => {
-    let result;
     form.startTimeHours = '12';
     form.startTimeMinutes = '00';
     form.startTimeExtension = 'am';
-    result = await runAction(computeTrialSessionFormDataAction, {
+    const result = await runAction(computeTrialSessionFormDataAction, {
       modules: {
         presenter,
       },
@@ -159,14 +155,13 @@ describe('computeTrialSessionFormDataAction', () => {
   });
 
   it('should not store a time if hours and minutes are not set', async () => {
-    let result;
-    result = await runAction(computeTrialSessionFormDataAction, {
+    const result = await runAction(computeTrialSessionFormDataAction, {
       modules: {
         presenter,
       },
       state: { form: {} },
     });
-    expect(result.state.startTime).toBeUndefined();
+    expect((result.state as any).startTime).toBeUndefined();
   });
 
   describe('should store a startTime deliberately created as invalid', () => {

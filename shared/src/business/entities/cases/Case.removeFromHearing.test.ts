@@ -1,5 +1,6 @@
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { SESSION_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
@@ -9,7 +10,7 @@ describe('removeFromHearing', () => {
       isCalendared: true,
       judge: { name: 'Judge Buch' },
       maxCases: 100,
-      sessionType: 'Regular',
+      sessionType: SESSION_TYPES.regular,
       startDate: '2025-03-01T00:00:00.000Z',
       term: 'Fall',
       termYear: '2025',

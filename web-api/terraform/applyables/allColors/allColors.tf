@@ -17,7 +17,10 @@ terraform {
   }
 
   required_providers {
-    aws = "5.75.1"
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.94.1"
+    }
   }
 }
 
@@ -141,4 +144,11 @@ module "rds" {
     aws           = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
   }
+}
+
+module "rum" {
+  source      = "../../modules/rum"
+  domain      = var.dns_domain
+  environment = var.environment
+  sample_rate = var.rum_sample_rate
 }

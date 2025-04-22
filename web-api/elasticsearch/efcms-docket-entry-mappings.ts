@@ -1,6 +1,7 @@
+import { Property } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 import { createHash } from 'crypto';
 
-export const efcmsDocketEntryMappings = {
+export const efcmsDocketEntryMappings: Property = {
   properties: {
     'associatedJudge.S': {
       type: 'text',
@@ -33,11 +34,9 @@ export const efcmsDocketEntryMappings = {
       type: 'keyword',
     },
     'documentContents.S': {
-      analyzer: 'english_exact',
       type: 'text',
     },
     'documentTitle.S': {
-      analyzer: 'english_exact',
       type: 'text',
     },
     'documentType.S': {
@@ -110,6 +109,9 @@ export const efcmsDocketEntryMappings = {
       type: 'keyword',
     },
     'status.S': {
+      type: 'keyword',
+    },
+    'userId.S': {
       type: 'keyword',
     },
   },

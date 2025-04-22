@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.18
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.38
 
 parameters:
   run_build_and_deploy:
@@ -155,7 +155,7 @@ jobs:
           name: Test Users Setup
           command: |
             if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "$DEPLOY_EMPTY_PERSISTENCE" != "true" ]; then
-              npx ts-node --transpile-only scripts/user/setup-test-users.ts
+              ./scripts/user/setup-test-users.ts
             else
               echo "skipping…"
             fi
@@ -174,7 +174,7 @@ jobs:
                 --query 'DomainStatus.Endpoint' \
                 --output text)
               export ELASTICSEARCH_ENDPOINT="$ELASTICSEARCH_ENDPOINT"
-              npx ts-node --transpile-only ./scripts/user/setup-glued-judges.ts
+              ./scripts/user/setup-glued-judges.ts
             else
               npx ts-node --transpile-only ./scripts/circleci/judge/bulkImportJudgeUsers.ts | tee bulk-import-log.txt
             fi
@@ -186,6 +186,22 @@ jobs:
           name: 'Deploy - Public Web Client - S3'
           command: |
             ./web-client/deploy-public.sh
+      - run:
+          name: 'Deploy - Inactive Cases Email Lambda and Monthly Cron Trigger'
+          command: |
+            if [ -n "$INACTIVITY_REPORT_RECIPIENTS" ]; then
+              ES_DOMAIN="$SOURCE_ELASTICSEARCH"
+              if [ "$MIGRATE_FLAG" == "true" ]; then
+                ES_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "$ENV")
+              fi
+              ES_ENDPOINT=$(aws es describe-elasticsearch-domain \
+                --domain-name "$ES_DOMAIN" \
+                --region "us-east-1" \
+                --query 'DomainStatus.Endpoint' \
+                --output text)
+              export ELASTICSEARCH_ENDPOINT="$ES_ENDPOINT"
+              npm run deploy:stale-cases-email-cron -- $ENV
+            fi
       - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
@@ -200,7 +216,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:20.14
+      - image: cimg/node:22.14.0
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
@@ -263,6 +279,11 @@ jobs:
           command: |
             NODE_ENV=production npm run migration:postgres
       - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
+      - run:
           name: Enable Check Migration Status Cron
           command: |
             ./scripts/migration/enable-migration-cron.sh
@@ -299,7 +320,7 @@ jobs:
           name: Track successful migrations
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              npx ts-node --transpile-only ./scripts/migration/track-successful-migrations.ts
+              ./scripts/migration/track-successful-migrations.ts
             fi
       - run:
           name: Set Marker to Indicate Migration is Complete
@@ -311,7 +332,7 @@ jobs:
           name: Begin Reindexing
           command: |
             if [ "$MIGRATE_FLAG" == "false" ]; then
-              npx ts-node --transpile-only ./scripts/elasticsearch/reindex.ts
+              ./scripts/elasticsearch/reindex.ts
             fi
       - run:
           name: Deploy Check Reindex Status Cron Lambda
@@ -390,7 +411,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: Create and Enable Test User
-          command: npx ts-node --transpile-only ./scripts/user/create-and-enable-smoketest-user.ts
+          command: ./scripts/user/create-and-enable-smoketest-user.ts
       - run:
           name: 'Cypress Readonly Smoke Tests'
           command: |
@@ -400,7 +421,7 @@ jobs:
             set -e
       - run:
           name: Disable Test User
-          command: npx ts-node --transpile-only ./scripts/user/disable-smoketest-user.ts
+          command: ./scripts/user/disable-smoketest-user.ts
       - run:
           name: Kill Build if Smoketests Failed
           command: |
@@ -842,7 +863,7 @@ jobs:
       - run:
           name: Start Glue Job
           command: |
-            npx ts-node --transpile-only scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
+            ./scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
       - run:
           name: Enable Check Glue Job Run State Cron
           command: |
@@ -869,9 +890,14 @@ jobs:
               exit 1
             fi
       - run:
-          name: Restore Postgres
+          name: Restore Postgres Data
           command: |
-            TARGET_ENV=$LOWER_ENV TARGET_ACCOUNT_ID="${LOWER_ENV_ACCOUNT_ID}" npx ts-node --transpileOnly scripts/postgres/restoreDbFromSource.ts
+            TARGET_ENV="$LOWER_ENV" TARGET_ACCOUNT_ID="$LOWER_ENV_ACCOUNT_ID" ./scripts/postgres/restoreDbFromSource.ts
+      - run:
+          name: Restore Postgres User Permissions
+          command: |
+            cd ./scripts/postgres
+            DB_HOST="$POSTGRES_HOST" ./create-rds-users.sh
 
   finish-glue-job:
     docker:
@@ -994,12 +1020,10 @@ workflows:
           <<: *only-prod
       - docker-image-zipper:
           <<: *only-prod
-          requires:
-            - deploy
       - migrate:
           <<: *only-prod
           requires:
-            - docker-image-zipper
+            - deploy
       - wait-for-migration:
           <<: *only-prod
           type: approval

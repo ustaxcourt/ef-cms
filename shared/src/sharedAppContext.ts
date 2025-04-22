@@ -13,17 +13,7 @@ export const getUniqueId = (): string => {
   return uuidv4();
 };
 
-export const ERROR_MAP_429 = {
-  'advanced-query-limiter': {
-    message: 'Please wait 1 minute before trying your search again',
-    title: 'Search is experiencing high traffic',
-  },
-  'ip-limiter': {
-    message: 'Please wait 1 minute before trying your search again.',
-    title: "You've reached your search limit",
-  },
-  'user-id-limiter': {
-    message: 'Please wait 1 minute before trying your search again',
-    title: 'Search is experiencing high traffic',
-  },
+export const ERROR_429 = {
+  message: 'Please wait 1 minute before trying your search again',
+  title: 'Search is experiencing high traffic',
 };

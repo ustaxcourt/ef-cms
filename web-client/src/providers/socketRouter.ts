@@ -1,10 +1,12 @@
+import { SocketRouterNotificationMessage } from '@web-api/notifications/sendNotificationToUserTypes';
+
 /* eslint-disable complexity */
 const noop = () => {};
 
 export const socketRouter = (app, onMessageCallbackFn?) => {
   return async event => {
     const message = JSON.parse(event.data);
-    const { action } = message;
+    const { action } = message as SocketRouterNotificationMessage;
 
     switch (action) {
       case 'paper_service_started':
@@ -34,16 +36,13 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
         await app.getSequence('completeTrialSessionCalendarSequence')(message);
         break;
       case 'set_trial_session_calendar_error':
-        console.error(
-          'error setting trial session calendar: ',
-          message.message,
-        );
         await app.getSequence('setTrialSessionCalendarErrorSequence')({
           ...message,
           alertError: {
             message:
               'We could not set the trial session calendar. Please contact support.',
             title: 'Error setting trial session calendar.',
+            scrollToErrorNotification: true,
           },
         });
         break;
@@ -130,11 +129,13 @@ export const socketRouter = (app, onMessageCallbackFn?) => {
           showModal: 'WorkItemAlreadyCompletedModal',
         });
         break;
-      case 'retry_async_request':
-        await app.getSequence('retryAsyncRequestSequence')(message);
-        break;
       case 'download_csv_file':
         await app.getSequence('downloadCsvFileSequence')(message);
+        break;
+      case 'async_service_unavailable_error':
+        await app.getSequence('asyncServiceUnavailablrHandlerSequence')(
+          message,
+        );
         break;
     }
 

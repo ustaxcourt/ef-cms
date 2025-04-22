@@ -117,7 +117,9 @@ export const StateDrivenFileInput = connect<
           data-testid={id}
           id={id}
           name={fileInputName}
-          ref={ref => (inputRef = ref)}
+          ref={ref => {
+            inputRef = ref;
+          }}
           style={{
             display: fileOnForm || selectedFilename ? 'none' : 'block',
           }}

@@ -14,8 +14,8 @@ export const validateUploadCorrespondenceDocumentAction = ({
 }: ActionProps) => {
   const { documentTitle, primaryDocumentFile } = get(state.form);
 
-  let errors: Record<string, string> = {};
-  let errorDisplayOrder = ['documentTitle', 'primaryDocumentFile'];
+  const errors: Record<string, string> = {};
+  const errorDisplayOrder = ['documentTitle', 'primaryDocumentFile'];
 
   if (!documentTitle) {
     errors.documentTitle = 'Enter a description';

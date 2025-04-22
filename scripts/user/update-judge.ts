@@ -1,6 +1,11 @@
-#!/usr/bin/env npx ts-node --transpile-only
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { JudgeTitle } from '@shared/business/entities/EntityConstants';
+import {
+  type ScriptConfig,
+  parseArgsAndEnvVars,
+} from '../helpers/parseArgsAndEnvVars';
 import { User } from '@shared/business/entities/User';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { createApplicationContext } from '@web-api/applicationContext';
@@ -17,11 +22,9 @@ import { environment } from '@web-api/environment';
 import {
   getDestinationTableInfo,
   getUserPoolId,
-  requireEnvVars,
 } from '../../shared/admin-tools/util';
 import { isEmpty } from 'lodash';
 
-// eslint-disable-next-line spellcheck/spell-checker
 /**
  * This script will update the judge user in a deployed environment.
  * It updates both the Cognito record (if necessary) and the associated Dynamo record.
@@ -31,21 +34,48 @@ import { isEmpty } from 'lodash';
  *
  *  Example usage:
  *
- * $ npx ts-node --transpile-only update-judge.ts judge.someone@ustaxcourt.gov --judgeTitle Judge --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
+ * $ ./scripts/user/update-judge.ts judge.someone@ustaxcourt.gov --judgeTitle Judge --email judge.way@ustaxcourt.gov --phone "(123) 123-1234" --isSeniorJudge true
  *
  * Note that this script SHOULD be temporary: it is meant as a slight improvement from the current ill-defined process.
  * Please extract into application logic!
  */
 
-requireEnvVars(['ENV']);
-
-const getArgValue = (param: string): string => {
-  const args = process.argv.slice(3); // Skip the first three arguments (node, script path, and id)
-  const index = args.indexOf(`--${param}`);
-  if (index !== -1 && index + 1 < args.length) {
-    return args[index + 1];
-  }
-  return '';
+const scriptConfig: ScriptConfig = {
+  description:
+    'update-judge - Updates an existing Judge user in a deployed environment.',
+  environment: {
+    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
+    env: 'ENV',
+    userPoolId: 'USER_POOL_ID',
+  },
+  parameters: {
+    currentEmail: {
+      position: 0,
+      required: true,
+      type: 'string',
+    },
+    email: {
+      type: 'string',
+    },
+    isSeniorJudge: {
+      default: false,
+      short: 's',
+      type: 'boolean',
+    },
+    judgeFullName: {
+      type: 'string',
+    },
+    judgeTitle: {
+      type: 'string',
+    },
+    name: {
+      type: 'string',
+    },
+    phone: {
+      type: 'string',
+    },
+  },
+  requireActiveAwsSession: true,
 };
 
 const validateUpdates = ({ updates }: { updates: Record<string, string> }) => {
@@ -210,7 +240,7 @@ const updateDynamoChambersRecords = async ({
     .getPersistenceGateway()
     .getUsersInSection({ applicationContext, section: oldChambersSection });
 
-  for (let chambersUser of chambersUsers) {
+  for (const chambersUser of chambersUsers) {
     console.log(`Updating ${chambersUser.role} user ${chambersUser.userId}`);
     chambersUser.section = updatedChambersSection;
     const rawChambersUser = new User(chambersUser).validate().toRawObject();
@@ -239,15 +269,31 @@ const updateDynamoChambersRecords = async ({
 (async () => {
   const applicationContext = createApplicationContext();
 
-  const currentEmail = process.argv[2];
+  const {
+    currentEmail,
+    email,
+    isSeniorJudge,
+    judgeFullName,
+    judgeTitle,
+    name,
+    phone,
+  } = parseArgsAndEnvVars(scriptConfig) as {
+    currentEmail: string;
+    email: string;
+    isSeniorJudge: boolean;
+    judgeFullName: string;
+    judgeTitle: string;
+    name: string;
+    phone: string;
+  };
 
   const updates = {
-    email: getArgValue('email'),
-    isSeniorJudge: getArgValue('isSeniorJudge'),
-    judgeFullName: getArgValue('judgeFullName'),
-    judgeTitle: getArgValue('judgeTitle'),
-    name: getArgValue('name'),
-    phone: getArgValue('phone'),
+    email,
+    isSeniorJudge: isSeniorJudge ? 'true' : 'false',
+    judgeFullName,
+    judgeTitle,
+    name,
+    phone,
   };
   validateUpdates({ updates });
 

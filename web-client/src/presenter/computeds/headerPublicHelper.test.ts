@@ -3,7 +3,7 @@ import { runCompute } from 'cerebral/test';
 
 describe('headerPublicHelper', () => {
   it('should not signify being in the sign-up process when the current page is not CreatePetitionerAccount nor VerificationSent', () => {
-    let result = runCompute(headerPublicHelper, {
+    const result = runCompute(headerPublicHelper, {
       state: { currentPage: '' },
     });
 
@@ -14,7 +14,7 @@ describe('headerPublicHelper', () => {
   });
 
   it('should signify being in the sign-up process when the current page is CreatePetitionerAccount', () => {
-    let result = runCompute(headerPublicHelper, {
+    const result = runCompute(headerPublicHelper, {
       state: { currentPage: 'CreatePetitionerAccount' },
     });
 
@@ -25,7 +25,7 @@ describe('headerPublicHelper', () => {
   });
 
   it('should signify being in the sign-up process when the current page is VerificationSent', () => {
-    let result = runCompute(headerPublicHelper, {
+    const result = runCompute(headerPublicHelper, {
       state: { currentPage: 'VerificationSent' },
     });
 

@@ -408,7 +408,7 @@ describe('processStreamUtilities', () => {
     it("converts a stream event's ApproximateCreationDateTime from Date to unix timestamp", () => {
       const timestamp = deploymentTimestamp + 300;
       const timestampMillis = timestamp * 1000;
-      // eslint-disable-next-line @miovision/disallow-date/no-new-date
+      // eslint-disable-next-line custom-rules-plugin/no-new-dates
       const approxCreationDT = new Date(timestampMillis);
       // @ts-ignore
       streamEvent.Records[0].dynamodb.ApproximateCreationDateTime =

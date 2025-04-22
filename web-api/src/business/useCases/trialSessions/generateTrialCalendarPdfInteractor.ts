@@ -1,7 +1,7 @@
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { compact } from 'lodash';
-import { compareCasesByDocketNumberFactory } from '../../../../../shared/src/business/utilities/trialSession/getFormattedTrialSessionDetails';
+import { compareCasesByDocketNumberFactory } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 
@@ -40,8 +40,9 @@ export const generateTrialCalendarPdfInteractor = async (
 
   let startTimeFormatted;
   if (trialSession.startTime) {
+    // eslint-disable-next-line prefer-const
     let [hour, min]: any = trialSession.startTime.split(':');
-    let startTimeExtension = +hour >= 12 ? 'pm' : 'am';
+    const startTimeExtension = +hour >= 12 ? 'pm' : 'am';
 
     if (+hour > 12) {
       hour = +hour - 12;

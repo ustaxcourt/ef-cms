@@ -1,6 +1,6 @@
-import { A_VALID_DOCKET_ENTRY } from './DocketEntry.test';
 import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
+import { A_VALID_DOCKET_ENTRY } from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('setAsProcessingStatusAsCompleted', () => {
   it('sets the docket entry processing status as completed', () => {

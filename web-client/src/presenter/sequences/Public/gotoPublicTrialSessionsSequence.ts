@@ -1,3 +1,4 @@
+import { FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY } from '@shared/business/entities/EntityConstants';
 import { clearErrorAlertsAction } from '@web-client/presenter/actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '@web-client/presenter/actions/closeMobileMenuAction';
 import { getTrialSessionsAction } from '@web-client/presenter/actions/TrialSession/getTrialSessionsAction';
@@ -23,6 +24,6 @@ export const gotoPublicTrialSessionsSequence = [
       setAllAndCurrentJudgesAction,
     ],
   ]),
-  setTimeStampAction({ propertyName: 'FetchedTrialSessions' }),
+  setTimeStampAction({ propertyName: FETCHED_TRIAL_SESSIONS_TIMESTAMP_KEY }),
   setupCurrentPageAction('PublicTrialSessions'),
 ] as unknown as () => void;

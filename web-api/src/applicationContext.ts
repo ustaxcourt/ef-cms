@@ -1,9 +1,8 @@
-/* eslint-disable max-lines */
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
 import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf';
 import {
+  CASE_INVENTORY_PAGE_SIZE,
   CASE_STATUS_TYPES,
   CLERK_OF_THE_COURT_CONFIGURATION,
   CLOSED_CASE_STATUSES,
@@ -15,22 +14,9 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../shared/src/business/entities/cases/Case';
-import { CaseDeadline } from '../../shared/src/business/entities/CaseDeadline';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { Correspondence } from '../../shared/src/business/entities/Correspondence';
-import { DocketEntry } from '../../shared/src/business/entities/DocketEntry';
-import { IrsPractitioner } from '../../shared/src/business/entities/IrsPractitioner';
-import { Message } from '../../shared/src/business/entities/Message';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
-import { Practitioner } from '../../shared/src/business/entities/Practitioner';
-import { PrivatePractitioner } from '../../shared/src/business/entities/PrivatePractitioner';
 import { SQSClient } from '@aws-sdk/client-sqs';
-import { TrialSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
-import { TrialSessionWorkingCopy } from '../../shared/src/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { User } from '../../shared/src/business/entities/User';
-import { UserCase } from '../../shared/src/business/entities/UserCase';
-import { UserCaseNote } from '../../shared/src/business/entities/notes/UserCaseNote';
-import { WorkItem } from '../../shared/src/business/entities/WorkItem';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { environment } from '@web-api/environment';
 import { getBatchClient } from '@web-api/persistence/batch/getBatchClient';
@@ -72,25 +58,9 @@ import { workerLocal } from '@web-api/gateways/worker/workerLocal';
 import axios from 'axios';
 import pug from 'pug';
 import sass from 'sass';
-
+import { getEntityByName } from '@web-api/business/getEntityByName';
+import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
 let sqsCache: SQSClient;
-
-const entitiesByName = {
-  Case,
-  CaseDeadline,
-  Correspondence,
-  DocketEntry,
-  IrsPractitioner,
-  Message,
-  Practitioner,
-  PrivatePractitioner,
-  TrialSession,
-  TrialSessionWorkingCopy,
-  User,
-  UserCase,
-  UserCaseNote,
-  WorkItem,
-};
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
@@ -119,7 +89,7 @@ export const createApplicationContext = (appContextUser = {}) => {
     getConstants: () => ({
       ADVANCED_DOCUMENT_IP_LIMITER_KEY: 'document-search-ip-limiter',
       ADVANCED_DOCUMENT_LIMITER_KEY: 'document-search-limiter',
-      CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
+      CASE_INVENTORY_PAGE_SIZE,
       // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
       CHANGE_OF_ADDRESS_CONCURRENCY: process.env.CHANGE_OF_ADDRESS_CONCURRENCY
@@ -153,14 +123,18 @@ export const createApplicationContext = (appContextUser = {}) => {
     getDocumentGenerators,
     getDynamoClient,
     getEmailClient,
-    getEntityByName: name => {
-      return entitiesByName[name];
-    },
+    getEntityByName,
     getEnvironment,
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
-      sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {
+      sendEmailEventToQueue: async ({
+        applicationContext,
+        emailParams,
+      }: {
+        applicationContext: ServerApplicationContext;
+        emailParams: SendBulkTemplatedEmailCommandInput;
+      }) => {
         if (environment.stage !== 'local') {
           await sendEmailEventToQueue({
             applicationContext,
@@ -204,10 +178,6 @@ export const createApplicationContext = (appContextUser = {}) => {
     getNotificationClient,
     getNotificationGateway,
     getNotificationService,
-    getPdfJs: () => {
-      pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
-      return pdfjsLib;
-    },
     getPdfLib: () => {
       return pdfLib;
     },
@@ -243,7 +213,7 @@ export const createApplicationContext = (appContextUser = {}) => {
     isAuthorized,
     isCurrentColorActive,
     logger: getLogger(),
-    setTimeout: (callback, timeout) => setTimeout(callback, timeout),
+    setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
   };
 };
 

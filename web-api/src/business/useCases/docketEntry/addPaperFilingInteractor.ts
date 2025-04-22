@@ -1,23 +1,24 @@
-import {
-  Case,
-  isLeadCase,
-} from '../../../../../shared/src/business/entities/cases/Case';
-import {
-  DOCUMENT_RELATIONSHIPS,
-  DOCUMENT_SERVED_MESSAGES,
-  ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import {
-  ROLE_PERMISSIONS,
-  isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} from '@shared/authorization/authorizationClientService';
+import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  DOCUMENT_RELATIONSHIPS,
+  ROLES,
+  DOCUMENT_SERVED_MESSAGES,
+} from '@shared/business/entities/EntityConstants';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -70,7 +71,7 @@ export const addPaperFiling = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let caseEntities: Case[] = [];
+  const caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
   for (const docketNumber of consolidatedGroupDocketNumbers) {
@@ -145,9 +146,7 @@ export const addPaperFiling = async (
       docketEntryEntity.setAsServed(servedParties.all);
     }
 
-    await saveWorkItem({
-      applicationContext,
-      isReadyForService,
+    await saveWorkItemInternal({
       workItem,
     });
 
@@ -232,25 +231,11 @@ export const addPaperFiling = async (
  * @param {boolean} providers.isSavingForLater Whether or not we are saving these work items for later
  * @param {object} providers.workItem The work item we are saving
  */
-const saveWorkItem = async ({
-  applicationContext,
-  isReadyForService,
-  workItem,
-}) => {
+const saveWorkItemInternal = async ({ workItem }) => {
   const workItemRaw = workItem.validate().toRawObject();
 
-  if (isReadyForService) {
-    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-      applicationContext,
-      section: workItem.section,
-      userId: workItem.assigneeId,
-      workItem: workItemRaw,
-    });
-  }
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: workItemRaw,
+  await upsertWorkItems({
+    workItems: [workItemRaw],
   });
 };
 
@@ -286,27 +271,8 @@ export const determineEntitiesToLock = (
   ttl: 900,
 });
 
-export const handleLockError = async (
-  applicationContext,
-  originalRequest,
-  authorizedUser: UnknownAuthUser,
-) => {
-  if (authorizedUser?.userId) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId: originalRequest.clientConnectionId,
-      message: {
-        action: 'retry_async_request',
-        originalRequest,
-        requestToRetry: 'add_paper_filing',
-      },
-      userId: authorizedUser.userId,
-    });
-  }
-};
-
 export const addPaperFilingInteractor = withLocking(
   addPaperFiling,
   determineEntitiesToLock,
-  handleLockError,
+  asyncHandleLockError,
 );

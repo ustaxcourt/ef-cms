@@ -36,7 +36,7 @@ import {
   getContactSecondary,
 } from '../../shared/src/business/entities/cases/Case';
 import {
-  ERROR_MAP_429,
+  ERROR_429,
   getEnvironment,
   getPublicSiteUrl,
 } from '../../shared/src/sharedAppContext';
@@ -146,7 +146,7 @@ const frozenConstants = deepFreeze({
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  ERROR_MAP_429,
+  ERROR_429,
   INITIAL_DOCUMENT_TYPES,
   MAX_SEARCH_RESULTS,
   MOTION_EVENT_CODES,
@@ -171,7 +171,7 @@ let forceRefreshCallback: () => {};
 
 const applicationContextPublic = {
   getBaseUrl: () => {
-    return process.env.API_URL || 'http://localhost:5000';
+    return process.env.API_URL || 'http://localhost:4001';
   },
   getCaseTitle: Case.getCaseTitle,
   getConstants: () => frozenConstants,
@@ -184,19 +184,15 @@ const applicationContextPublic = {
   },
   getLogger: () => ({
     error: () => {
-      // eslint-disable-next-line no-console
       // console.error(value);
     },
     info: (key, value) => {
-      // eslint-disable-next-line no-console
       console.info(key, JSON.stringify(value));
     },
     time: key => {
-      // eslint-disable-next-line no-console
       console.time(key);
     },
     timeEnd: key => {
-      // eslint-disable-next-line no-console
       console.timeEnd(key);
     },
   }),

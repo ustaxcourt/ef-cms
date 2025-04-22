@@ -66,14 +66,13 @@ export const addDraftStampOrderDocketEntry = async (
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );
 
-  let stampedDocketEntryEntity;
   const orderDocumentInfo = COURT_ISSUED_EVENT_CODES.find(
     doc => doc.eventCode === 'O',
   );
 
   const validatedStampData = new Stamp(stampData);
 
-  stampedDocketEntryEntity = new DocketEntry(
+  const stampedDocketEntryEntity = new DocketEntry(
     {
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: stampedDocketEntryId,

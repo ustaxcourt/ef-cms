@@ -42,7 +42,7 @@ describe('Docket clerk QC-ing a paper filing', () => {
 
       selectTypeaheadInput('primary-document-type-search', 'M115');
 
-      selectTypeaheadInput('secondary-document-type-search', 'APPW');
+      selectTypeaheadInput('secondary-document-type-search', 'NCON');
 
       cy.get('[data-testid="additional-info-1-textarea"]').type(
         'Test Secondary Additional Info',

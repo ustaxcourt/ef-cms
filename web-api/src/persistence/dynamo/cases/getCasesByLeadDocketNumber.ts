@@ -13,7 +13,7 @@ export const getCasesByLeadDocketNumber = async ({
   applicationContext: IApplicationContext;
   leadDocketNumber: string;
 }) => {
-  let consolidatedCases = await queryFull<
+  const consolidatedCases = await queryFull<
     IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
   >({
     ExpressionAttributeNames: {

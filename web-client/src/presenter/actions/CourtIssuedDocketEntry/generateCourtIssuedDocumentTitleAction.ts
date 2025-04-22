@@ -18,7 +18,7 @@ export const generateCourtIssuedDocumentTitleAction = ({
   const { judgeWithTitle } = props;
   documentMetadata.judgeWithTitle = judgeWithTitle;
 
-  let documentTitle = applicationContext
+  const documentTitle = applicationContext
     .getUtilities()
     .generateCourtIssuedDocumentTitle({
       documentMetadata,

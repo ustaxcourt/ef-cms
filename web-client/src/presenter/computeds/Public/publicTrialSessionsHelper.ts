@@ -1,5 +1,6 @@
 import { Get } from 'cerebral';
 import {
+  PUBLIC_TRIAL_SESSIONS_DATA_KEY,
   SESSION_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -13,7 +14,6 @@ import { getTrialCitiesGroupedByState } from '@shared/business/utilities/trialSe
 import { state } from '@web-client/presenter/app-public.cerebral';
 
 export type PublicTrialSessionsHelperResults = {
-  fetchedDateString: string;
   sessionTypeOptions: {
     label: string;
     value: string;
@@ -30,7 +30,7 @@ export type PublicTrialSessionsHelperResults = {
   totalPages: number;
   trialSessionsCount: number;
   trialSessionRows: (TrialSessionRow | TrialSessionWeek)[];
-  groupedTrialsSessions: {
+  groupedTrialSessions: {
     header: TrialSessionWeek;
     rows: TrialSessionRow[];
   }[];
@@ -43,18 +43,16 @@ function areAnyFiltersModified(
   sessionTypes: { [key: string]: string },
 ): boolean {
   const proceedingTypeModified = proceedingType !== 'All';
-  const judgesModified = Object.values(judges).filter(j => !!j).length;
-  const locationsModified = Object.values(locations).filter(l => !!l).length;
-  const sessionTypesModified = Object.values(sessionTypes).filter(
-    st => !!st,
-  ).length;
+  const judgesModified = Object.values(judges).some(Boolean);
+  const locationsModified = Object.values(locations).some(Boolean);
+  const sessionTypesModified = Object.values(sessionTypes).some(Boolean);
 
-  return (
-    !!proceedingTypeModified ||
-    !!judgesModified ||
-    !!locationsModified ||
-    !!sessionTypesModified
-  );
+  return [
+    proceedingTypeModified,
+    judgesModified,
+    locationsModified,
+    sessionTypesModified,
+  ].some(Boolean);
 }
 
 function groupTrialSessions(
@@ -86,7 +84,6 @@ const PAGE_SIZE = 100;
 export const publicTrialSessionsHelper = (
   get: Get,
 ): PublicTrialSessionsHelperResults => {
-  const fetchedTrialSessions = get(state['FetchedTrialSessions']);
   const trialSessionJudges = get(state.judges) || [];
   const {
     judges = {},
@@ -94,13 +91,9 @@ export const publicTrialSessionsHelper = (
     pageNumber = 0,
     proceedingType = 'All',
     sessionTypes = {},
-  } = get(state.publicTrialSessionData);
+  } = get(state[PUBLIC_TRIAL_SESSIONS_DATA_KEY]);
 
   const trialSessions = get(state.trialSessionsPage.trialSessions) || [];
-  const fetchedDateString = fetchedTrialSessions.toFormat(
-    "MM/dd/yy hh:mm a 'Eastern'",
-  );
-
   const sessionTypeOptions = Object.values(SESSION_TYPES).map(sessionType => ({
     label: sessionType,
     value: sessionType,
@@ -159,12 +152,11 @@ export const publicTrialSessionsHelper = (
     trialSessions: paginatedTrialSessions,
   });
 
-  const groupedTrialsSessions = groupTrialSessions(trialSessionRows);
+  const groupedTrialSessions = groupTrialSessions(trialSessionRows);
 
   return {
-    fetchedDateString,
     filtersHaveBeenModified,
-    groupedTrialsSessions,
+    groupedTrialSessions,
     sessionTypeOptions,
     totalPages: Math.ceil(filteredTrialSessions.length / PAGE_SIZE),
     trialCitiesByState,

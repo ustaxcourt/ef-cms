@@ -11,7 +11,7 @@ export const editPractitionerDocumentAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  let { practitionerDocumentFile, practitionerDocumentFileId, ...form } = get(
+  const { practitionerDocumentFile, practitionerDocumentFileId, ...form } = get(
     state.form,
   );
   const { barNumber } = get(state.practitionerDetail);

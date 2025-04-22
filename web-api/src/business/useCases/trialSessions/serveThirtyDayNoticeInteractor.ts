@@ -1,12 +1,12 @@
 import {
   COURT_ISSUED_EVENT_CODES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import {
   InvalidRequest,
   NotFoundError,
@@ -15,15 +15,19 @@ import {
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
-import { replaceBracketed } from '../../../../../shared/src/business/utilities/replaceBracketed';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
+import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
 
-export const serveThirtyDayNoticeInteractor = async (
+export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
   {
     clientConnectionId,
@@ -285,3 +289,44 @@ export const serveThirtyDayNoticeInteractor = async (
     userId: authorizedUser.userId,
   });
 };
+
+export const determineEntitiesToLock = async (
+  applicationContext: ServerApplicationContext,
+  {
+    trialSessionId,
+  }: {
+    trialSessionId: string;
+  },
+) => {
+  const currentTrialSession = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
+      applicationContext,
+      trialSessionId,
+    });
+
+  if (!currentTrialSession) {
+    throw new NotFoundError(
+      `Trial session ${trialSessionId} was not found.`,
+    );
+  }
+
+  const { caseOrder } = currentTrialSession;
+
+  const entitiesToLock = [`trial-session|${trialSessionId}`];
+
+  caseOrder?.forEach(({ docketNumber }) =>
+    entitiesToLock.push(`case|${docketNumber}`),
+  );
+
+  return {
+    identifiers: entitiesToLock,
+    ttl: 900,
+  };
+};
+
+export const serveThirtyDayNoticeInteractor = withLocking(
+  serveThirtyDayNotice,
+  determineEntitiesToLock,
+  asyncHandleLockError,
+);

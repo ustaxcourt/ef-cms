@@ -1,9 +1,11 @@
 import { BigHeader } from '../BigHeader';
 import { Button } from '../../ustc-ui/Button/Button';
+import { CreateTermModal } from '@web-client/views/CreateTermModal';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import {
+  MULTI_SELECT_PLACEHOLDER,
   SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TrialSessionProceedingType,
@@ -13,6 +15,7 @@ import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { TrialSessionsTable } from './TrialSessionsTable';
+import { WarningNotification } from '@web-client/views/WarningNotification';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
@@ -20,16 +23,20 @@ import React from 'react';
 
 export const TrialSessions = connect(
   {
+    openCreateTermModalSequence: sequences.openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
     resetTrialSessionsFiltersSequence:
       sequences.resetTrialSessionsFiltersSequence,
+    showModal: state.modal.showModal,
     trialSessionsHelper: state.trialSessionsHelper,
     trialSessionsPageFilters: state.trialSessionsPage.filters,
   },
   function TrialSessions({
+    openCreateTermModalSequence,
     openTrialSessionPlanningModalSequence,
     resetTrialSessionsFiltersSequence,
+    showModal,
     trialSessionsHelper,
     trialSessionsPageFilters,
   }) {
@@ -37,14 +44,27 @@ export const TrialSessions = connect(
       <>
         <BigHeader text="Trial Sessions" />
         <section className="usa-section grid-container">
-          <SuccessNotification />
+          <SuccessNotification className="margin-bottom-2" />
+          <WarningNotification />
           <ErrorNotification />
           <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-205">
-            <div>
+            <div className="display-flex flex-justify-end flex-align-center flex-wrap gap-205">
+              {trialSessionsHelper.showCreateTermButton && (
+                <Button
+                  link
+                  overrideMargin
+                  data-testid="open-create-term-modal-button"
+                  icon={['far', 'calendar']}
+                  onClick={() => openCreateTermModalSequence()}
+                >
+                  Create Term
+                </Button>
+              )}
               <Button
                 link
                 noMargin
                 className="margin-right-0"
+                data-testid="trial-session-planning-report-button"
                 icon="print"
                 onClick={() => openTrialSessionPlanningModalSequence()}
               >
@@ -103,6 +123,7 @@ export const TrialSessions = connect(
             </Tab>
           </Tabs>
         </section>
+        {showModal === 'CreateTermModal' && <CreateTermModal />}
       </>
     );
   },
@@ -247,9 +268,9 @@ const TrialSessionFilters = connect(
                 inputId="session-type-filter"
                 name="sessionType"
                 options={trialSessionsHelper.sessionTypeOptions}
-                placeholder="- Select one or more -"
+                placeholder={MULTI_SELECT_PLACEHOLDER}
                 value={{
-                  label: '- Select one or more -',
+                  label: MULTI_SELECT_PLACEHOLDER,
                   value: '' as TrialSessionTypes,
                 }}
                 onChange={sessionType => {
@@ -298,9 +319,9 @@ const TrialSessionFilters = connect(
                 inputId="location-filter"
                 name="location"
                 options={trialSessionsHelper.trialCitiesByState}
-                placeholder="- Select one or more -"
+                placeholder={MULTI_SELECT_PLACEHOLDER}
                 value={{
-                  label: '- Select one or more -',
+                  label: MULTI_SELECT_PLACEHOLDER,
                   value: '',
                 }}
                 onChange={location => {
@@ -349,9 +370,9 @@ const TrialSessionFilters = connect(
                 inputId="judges-filter"
                 name="judges"
                 options={trialSessionsHelper.trialSessionJudgeOptions}
-                placeholder="- Select one or more -"
+                placeholder={MULTI_SELECT_PLACEHOLDER}
                 value={{
-                  label: '- Select one or more -',
+                  label: MULTI_SELECT_PLACEHOLDER,
                   value: { name: '', userId: '' },
                 }}
                 onChange={inputValue => {

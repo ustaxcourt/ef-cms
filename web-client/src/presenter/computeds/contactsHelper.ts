@@ -21,7 +21,7 @@ export const contactsHelper = (
   const { PARTY_TYPES, USER_ROLES } = applicationContext.getConstants();
 
   let contactPrimary, contactSecondary;
-  let showEmail = user.role !== USER_ROLES.petitioner;
+  const showEmail = user.role !== USER_ROLES.petitioner;
 
   if (user.role === USER_ROLES.petitioner) {
     ({ contactPrimary, contactSecondary } = contactHelperForPetitioner({

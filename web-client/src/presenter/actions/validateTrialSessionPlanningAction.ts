@@ -1,33 +1,43 @@
+import { SESSION_TERMS_DICT } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
-/**
- * validate the trial session planning modal
- * @param {object} providers the providers object
- * @param {Function} providers.get the cerebral get function used for getting state.modal
- * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or error)
- * @returns {object} the next path based on if validation was successful or error
- */
 export const validateTrialSessionPlanningAction = ({
   get,
   path,
-}: ActionProps) => {
-  const { term, year } = get(state.modal);
+  props,
+}: ActionProps<{ term: string; year: string }>) => {
+  const { term, year } = props;
+  const validYears = get(state.modal.trialYears).map(validYear =>
+    Number(validYear),
+  );
 
-  let errors = null;
-  if (!term || !year) {
-    errors = {};
-    if (!term) {
-      errors.term = 'Select a term';
-    }
+  const termError: string | undefined = getTermError(term);
+  const yearError: string | undefined = getYearError(Number(year), validYears);
 
-    if (!year) {
-      errors.year = 'Select a year';
-    }
+  if (termError || yearError) {
+    return path.error({
+      errors: {
+        term: termError,
+        year: yearError,
+      },
+    });
   }
 
-  if (errors) {
-    return path.error({ errors });
-  } else {
-    return path.success();
-  }
+  return path.success();
 };
+
+const validTerms = [
+  SESSION_TERMS_DICT.WINTER,
+  SESSION_TERMS_DICT.FALL,
+  SESSION_TERMS_DICT.SPRING,
+].map(str => str.toLocaleLowerCase());
+
+function getTermError(term: string): string | undefined {
+  if (!term) return 'Select a term';
+  if (!validTerms.includes(term)) return 'Select a valid term';
+}
+
+function getYearError(year: number, validYears: number[]): string | undefined {
+  if (!year) return 'Select a year';
+  if (!validYears.includes(year)) return 'Select a valid year';
+}

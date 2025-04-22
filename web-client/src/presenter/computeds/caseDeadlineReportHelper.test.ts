@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { caseDeadlineReportHelper as caseDeadlineReportHelperComputed } from './caseDeadlineReportHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import { CHIEF_JUDGE } from '@shared/business/entities/EntityConstants';
 
 describe('caseDeadlineReportHelper', () => {
   const caseDeadlineReportHelper = withAppContextDecorator(
@@ -38,16 +39,14 @@ describe('caseDeadlineReportHelper', () => {
         caseDeadlineReport: {},
       },
     });
-    expect(result.totalCount).toEqual(0);
-    expect(result.caseDeadlines).toEqual([]);
+    expect(result.formattedCaseDeadlines).toEqual([]);
     expect(result.formattedFilterDateHeader).toBeTruthy();
-    expect(result.showLoadMoreButton).toBeFalsy();
   });
 
   it('should use only the formatted startDate in header if start and end date are on the same day in ET', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
-        caseDeadlineReport: { caseDeadlines },
+        caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
         screenMetadata: {
           filterEndDate: '2019-08-21T12:59:59.000Z',
           filterStartDate: '2019-08-21T04:00:00.000Z',
@@ -57,24 +56,33 @@ describe('caseDeadlineReportHelper', () => {
     expect(result.formattedFilterDateHeader).toEqual('August 21, 2019');
   });
 
-  it('should return sorted and formatted judges with Chief Judge concatenated', () => {
+  it('should return formatted judges options sorted by name with Chief Judge included', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
-        caseDeadlineReport: { caseDeadlines },
-        judges: [{ name: 'Carluzzo' }, { name: 'Buch' }, { name: 'Dredd' }],
+        caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
+        judges: [
+          { userId: '123456', name: 'Carluzzo' },
+          { userId: '234567', name: 'Buch' },
+          { userId: '345678', name: 'Dredd' },
+        ],
         screenMetadata: {
           filterEndDate: '2019-08-21T12:59:59.000Z',
           filterStartDate: '2019-08-21T04:00:00.000Z',
         },
       },
     });
-    expect(result.judges).toEqual(['Buch', 'Carluzzo', 'Chief Judge', 'Dredd']);
+    expect(result.judgeOptions).toEqual([
+      { id: '234567', name: 'Buch' },
+      { id: '123456', name: 'Carluzzo' },
+      { id: CHIEF_JUDGE, name: CHIEF_JUDGE },
+      { id: '345678', name: 'Dredd' },
+    ]);
   });
 
   it('should format the associated judge name to remove title so only the last name is returned', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
-        caseDeadlineReport: { caseDeadlines },
+        caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
         judges: [{ name: 'Carluzzo' }, { name: 'Buch' }, { name: 'Dredd' }],
         screenMetadata: {
           filterEndDate: '2019-08-21T12:59:59.000Z',
@@ -86,12 +94,18 @@ describe('caseDeadlineReportHelper', () => {
     expect(
       applicationContext.getUtilities().getJudgeLastName,
     ).toHaveBeenCalled();
-    expect(result.caseDeadlines[0].associatedJudgeFormatted).toEqual('Hale');
-    expect(result.caseDeadlines[1].associatedJudgeFormatted).toEqual(
+    expect(result.formattedCaseDeadlines[0].associatedJudgeFormatted).toEqual(
+      'Hale',
+    );
+    expect(result.formattedCaseDeadlines[1].associatedJudgeFormatted).toEqual(
       'Brandeis',
     );
-    expect(result.caseDeadlines[2].associatedJudgeFormatted).toEqual('Rummy');
-    expect(result.caseDeadlines[3].associatedJudgeFormatted).toEqual('Barney');
+    expect(result.formattedCaseDeadlines[2].associatedJudgeFormatted).toEqual(
+      'Rummy',
+    );
+    expect(result.formattedCaseDeadlines[3].associatedJudgeFormatted).toEqual(
+      'Barney',
+    );
   });
 
   it('should format the caseDeadline with consolidated cases with correct icons and tool tips', () => {
@@ -116,7 +130,9 @@ describe('caseDeadlineReportHelper', () => {
     ];
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
-        caseDeadlineReport: { caseDeadlines: consolidatedCaseDeadlines },
+        caseDeadlineReport: {
+          caseDeadlinesForCurrentPage: consolidatedCaseDeadlines,
+        },
         judges: [{ name: 'Carluzzo' }, { name: 'Buch' }],
         screenMetadata: {
           filterEndDate: '2019-08-21T12:59:59.000Z',
@@ -125,57 +141,28 @@ describe('caseDeadlineReportHelper', () => {
       },
     });
 
-    expect(result.caseDeadlines[0].inConsolidatedGroup).toEqual(true);
-    expect(result.caseDeadlines[0].inLeadCase).toEqual(true);
-    expect(result.caseDeadlines[0].consolidatedIconTooltipText).toEqual(
-      'Lead case',
-    );
-    expect(result.caseDeadlines[1].inConsolidatedGroup).toEqual(true);
-    expect(result.caseDeadlines[1].inLeadCase).toEqual(false);
-    expect(result.caseDeadlines[1].consolidatedIconTooltipText).toEqual(
-      'Consolidated case',
-    );
-    expect(result.caseDeadlines[2].inConsolidatedGroup).toEqual(false);
-    expect(result.caseDeadlines[2].inLeadCase).toEqual(false);
-    expect(result.caseDeadlines[2].consolidatedIconTooltipText).toBeUndefined();
-  });
-
-  describe('showLoadMoreButton', () => {
-    it('should return showLoadMoreButton true when caseDeadlines length is less than totalCount', () => {
-      const result = runCompute(caseDeadlineReportHelper, {
-        state: {
-          caseDeadlineReport: { caseDeadlines, totalCount: 20 },
-          screenMetadata: {
-            filterEndDate: '2019-08-23T04:00:00.000Z',
-            filterStartDate: '2019-08-21T04:00:00.000Z',
-          },
-        },
-      });
-      expect(result.showLoadMoreButton).toBeTruthy();
-    });
-
-    it('should return showLoadMoreButton false when caseDeadlines length is equal to totalCount', () => {
-      const result = runCompute(caseDeadlineReportHelper, {
-        state: {
-          caseDeadlineReport: {
-            caseDeadlines,
-            totalCount: caseDeadlines.length,
-          },
-          screenMetadata: {
-            filterEndDate: '2019-08-23T04:00:00.000Z',
-            filterStartDate: '2019-08-21T04:00:00.000Z',
-          },
-        },
-      });
-      expect(result.showLoadMoreButton).toBeFalsy();
-    });
+    expect(result.formattedCaseDeadlines[0].inConsolidatedGroup).toEqual(true);
+    expect(result.formattedCaseDeadlines[0].inLeadCase).toEqual(true);
+    expect(
+      result.formattedCaseDeadlines[0].consolidatedIconTooltipText,
+    ).toEqual('Lead case');
+    expect(result.formattedCaseDeadlines[1].inConsolidatedGroup).toEqual(true);
+    expect(result.formattedCaseDeadlines[1].inLeadCase).toEqual(false);
+    expect(
+      result.formattedCaseDeadlines[1].consolidatedIconTooltipText,
+    ).toEqual('Consolidated case');
+    expect(result.formattedCaseDeadlines[2].inConsolidatedGroup).toEqual(false);
+    expect(result.formattedCaseDeadlines[2].inLeadCase).toEqual(false);
+    expect(
+      result.formattedCaseDeadlines[2].consolidatedIconTooltipText,
+    ).toBeUndefined();
   });
 
   describe('showJudgeSelect', () => {
     it('should return showJudgeSelect true when caseDeadlines length is greater than 0', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
-          caseDeadlineReport: { caseDeadlines, totalCount: 20 },
+          caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
             filterStartDate: '2019-08-21T04:00:00.000Z',
@@ -190,8 +177,7 @@ describe('caseDeadlineReportHelper', () => {
         state: {
           caseDeadlineReport: {
             caseDeadlines: [],
-            judgeFilter: 'Carluzzo',
-            totalCount: 0,
+            judgeIdFilter: '987654',
           },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
@@ -206,8 +192,7 @@ describe('caseDeadlineReportHelper', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
           caseDeadlineReport: {
-            caseDeadlines: [],
-            totalCount: 0,
+            caseDeadlinesForCurrentPage: [],
           },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
@@ -224,8 +209,7 @@ describe('caseDeadlineReportHelper', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
           caseDeadlineReport: {
-            caseDeadlines: [],
-            totalCount: 0,
+            caseDeadlinesForCurrentPage: [],
           },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
@@ -239,7 +223,7 @@ describe('caseDeadlineReportHelper', () => {
     it('should return showNoDeadlines false when caseDeadlines length is greater than 0', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
-          caseDeadlineReport: { caseDeadlines, totalCount: 20 },
+          caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
           screenMetadata: {
             filterEndDate: '2019-08-23T04:00:00.000Z',
             filterStartDate: '2019-08-21T04:00:00.000Z',

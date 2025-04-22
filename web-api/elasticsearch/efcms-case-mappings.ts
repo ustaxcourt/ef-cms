@@ -1,6 +1,7 @@
+import { Property } from '@opensearch-project/opensearch/api/_types/_common.mapping';
 import { createHash } from 'crypto';
 
-export const efcmsCaseMappings = {
+export const efcmsCaseMappings: Property = {
   properties: {
     'associatedJudge.S': {
       fields: {
@@ -34,6 +35,12 @@ export const efcmsCaseMappings = {
     'caseCaption.S': {
       type: 'text',
     },
+    'caseStatusHistory.L.M.date.S': {
+      type: 'date',
+    },
+    'caseStatusHistory.L.M.updatedCaseStatus.S': {
+      type: 'keyword',
+    },
     'caseType.S': {
       type: 'keyword',
     },
@@ -64,6 +71,9 @@ export const efcmsCaseMappings = {
     'indexedTimestamp.N': {
       type: 'text',
     },
+    'irsPractitioners.L.M.email.S': {
+      type: 'keyword',
+    },
     'irsPractitioners.L.M.userId.S': {
       type: 'keyword',
     },
@@ -83,6 +93,9 @@ export const efcmsCaseMappings = {
     'petitioners.L.M.countryType.S': {
       type: 'keyword',
     },
+    'petitioners.L.M.email.S': {
+      type: 'keyword',
+    },
     'petitioners.L.M.name.S': {
       type: 'text',
     },
@@ -96,6 +109,9 @@ export const efcmsCaseMappings = {
       type: 'keyword',
     },
     'preferredTrialCity.S': {
+      type: 'keyword',
+    },
+    'privatePractitioners.L.M.email.S': {
       type: 'keyword',
     },
     'privatePractitioners.L.M.userId.S': {

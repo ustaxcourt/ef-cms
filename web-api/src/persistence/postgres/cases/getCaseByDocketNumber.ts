@@ -1,23 +1,19 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { getDbReader } from '@web-api/database';
 
-export const getCaseByDocketNumber = async ({
-  docketNumber,
-}: {
-  docketNumber: string;
-}): Promise<Case | undefined> => {
-  const caseResult = await getDbReader(reader =>
-    reader
-      .selectFrom('dwCase')
-      .where('docketNumber', '=', docketNumber)
-      .selectAll()
-      .executeTakeFirst(),
-  );
-
-  return caseResult
-    ? new Case(
-        { ...caseResult, associatedJudge: null },
-        { authorizedUser: undefined },
+// Named getCaseByDocketNumberPostgres until the Dynamo getCaseByDocketNumber is removed
+export const getCaseByDocketNumberPostgres = async (docketNumber: string) => {
+  return await getDbReader(reader => {
+    return reader
+      .selectFrom('dwCase as c')
+      .leftJoin('dwWorkItem as d', 'd.docketNumber', 'c.docketNumber')
+      .leftJoin(
+        'dwCaseCorrespondence as co',
+        'c.docketNumber',
+        'co.docketNumber',
       )
-    : undefined;
+      .where('c.docketNumber', '=', docketNumber)
+      .selectAll()
+      .select('c.docketNumber')
+      .execute();
+  });
 };

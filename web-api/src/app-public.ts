@@ -1,4 +1,4 @@
-import { createApplicationContext } from './applicationContext';
+import { applicationContext } from './applicationContext';
 import { expressLogger } from './logger';
 import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
@@ -10,12 +10,10 @@ import express from 'express';
 
 export const app = express();
 
-const applicationContext = createApplicationContext({});
-
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
-app.use((req, res, next) => {
+app.use((req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
     // aws-serverless-express/middleware plugin is looking for these headers, which are needed on the lambdas
@@ -24,7 +22,7 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use(async (req, res, next) => {
+app.use(async (_req, _res, next) => {
   // This code is here so that we have a way to mock out the terminal user
   // via using dynamo locally.  This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
@@ -69,7 +67,6 @@ app.use((req, res, next) => {
 });
 app.use(expressLogger);
 
-import { advancedQueryLimiter } from './middleware/advancedQueryLimiter';
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
@@ -86,7 +83,6 @@ import { getPublicJudgesLambda } from './lambdas/public-api/getPublicJudgesLambd
 import { getPublicTrialSessionDetailsLambda } from '@web-api/lambdas/public-api/getPublicTrialSessionDetailsLambda';
 import { getPublicTrialSessionsLambda } from '@web-api/lambdas/trialSessions/getPublicTrialSessionsLambda';
 import { getUsersInSectionLambda } from '@web-api/lambdas/users/getUsersInSectionLambda';
-import { ipLimiter } from './middleware/ipLimiter';
 import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSearchLambda';
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
@@ -128,28 +124,9 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 /** Search */
 {
   app.get('/public-api/search', lambdaWrapper(casePublicSearchLambda));
-  app.get(
-    '/public-api/order-search',
-    ipLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-    }),
-    advancedQueryLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-    }),
-    lambdaWrapper(orderPublicSearchLambda),
-  );
+  app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
   app.get(
     '/public-api/opinion-search',
-    ipLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-    }),
-    advancedQueryLimiter({
-      applicationContext,
-      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-    }),
     lambdaWrapper(opinionPublicSearchLambda),
   );
   app.get(

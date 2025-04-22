@@ -1,7 +1,7 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { PARTIES_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { PARTIES_CODES } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCalendaredCasesForTrialSessionInteractor } from './getCalendaredCasesForTrialSessionInteractor';
 import {
   mockDocketClerkUser,

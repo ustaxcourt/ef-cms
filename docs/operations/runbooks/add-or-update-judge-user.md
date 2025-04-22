@@ -15,7 +15,7 @@ This runbook describes the process of onboarding or updating a Judge user. DO NO
 3. To update the test environment: Use the environment switcher and run `add-judge.ts` or `update-judge.ts` according to your needs, e.g.:
 ```
 source ./scripts/env/set-env.zsh ustc-test
-npx ts-node --transpile-only ./scripts/user/add-judge.ts ...
+./scripts/user/add-judge.ts ...
 ```
 These scripts will add/update the appropriate user records in Cognito and Dynamo.
 4. To update the production environment: If you have access to the production environment, run either `add-judge.ts` or `update-judge.ts` as above. If you do not have access, hand off to a USTC engineer, linking to this documentation.

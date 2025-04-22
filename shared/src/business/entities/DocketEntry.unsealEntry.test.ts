@@ -1,6 +1,6 @@
-import { A_VALID_DOCKET_ENTRY } from './DocketEntry.test';
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
+import { A_VALID_DOCKET_ENTRY } from '@shared/business/entities/DocketEntryTestFixtures';
 
 describe('unsealEntry', () => {
   it('should clear the sealedTo property from the docket entry', () => {

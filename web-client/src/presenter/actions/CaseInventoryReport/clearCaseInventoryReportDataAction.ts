@@ -8,5 +8,4 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const clearCaseInventoryReportDataAction = ({ store }: ActionProps) => {
   store.unset(state.caseInventoryReportData);
-  store.set(state.screenMetadata.page, 1);
 };

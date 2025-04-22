@@ -92,6 +92,7 @@ export const AddToTrialModal = connect(
             </label>
             <BindedSelect
               bind="modal.trialSessionId"
+              data-testid="trial-session-select"
               id="trial-session"
               name="trialSessionId"
               onChange={() => {

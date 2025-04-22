@@ -61,12 +61,9 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
           'Preparing Files',
         );
 
-        cy.wait(40 * 1000);
-
-        cy.get('[data-testid="progress-bar-description"]').should(
-          'contain.text',
-          'Compressing Files',
-        );
+        cy.get('[data-testid="progress-bar-description"]', {
+          timeout: 180000,
+        }).should('contain.text', 'Compressing Files');
 
         cy.get('@ZIP_NAME').then(ZIP_NAME => {
           function checkFileExists(attempt: number = 0) {

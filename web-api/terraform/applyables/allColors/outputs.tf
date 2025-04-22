@@ -61,3 +61,11 @@ output "postgres_user" {
 output "database_name" {
   value = module.rds.database_name
 }
+
+output "rum_app_monitor_id" {
+  value = module.rum.app_monitor_id
+}
+
+output "rum_identity_pool_id" {
+  value = module.rum.identity_pool_id
+}

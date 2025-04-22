@@ -50,7 +50,7 @@ const generateChangeOfAddressForPractitioner = async ({
   updatedEmail?: string;
   updatedName?: string;
   user: any;
-  websocketMessagePrefix?: string;
+  websocketMessagePrefix?: 'user' | 'admin';
   authorizedUser: AuthUser;
 }): Promise<any[] | undefined> => {
   const associatedUserCases = await applicationContext
@@ -64,11 +64,16 @@ const generateChangeOfAddressForPractitioner = async ({
     return [];
   }
 
-  let completedCases = 0;
+  const completedCases = 0;
+  const NOTIFICATION_ACTION:
+    | 'user_contact_update_progress'
+    | 'admin_contact_update_progress' =
+    `${websocketMessagePrefix}_contact_update_progress`;
+
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
-      action: `${websocketMessagePrefix}_contact_update_progress`,
+      action: NOTIFICATION_ACTION,
       completedCases,
       totalCases: associatedUserCases.length,
     },

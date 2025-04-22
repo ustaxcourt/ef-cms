@@ -17,7 +17,5 @@ export const getMessagesByDocketNumber = async ({
       .execute(),
   );
 
-  console.log('*** messages', messages);
-
   return messages.map(message => messageResultEntity(message));
 };

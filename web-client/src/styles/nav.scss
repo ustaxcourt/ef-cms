@@ -117,7 +117,10 @@
         margin-top: 15px;
         margin-right: auto;
         margin-left: 10px;
-        font-size: 26px;
+        font-family: "Noto Serif", serif;
+        font-size: 18px;
+        font-weight: 700;
+        line-height: 4.3em;
       }
 
       .usa-navbar.usa-navbar-public {
@@ -139,6 +142,10 @@
         width: 100px;
         font-weight: $font-semibold;
         text-decoration: none;
+      }
+
+      .usa-nav__primary {
+        margin-top: 1.5rem;
       }
     }
 
@@ -188,6 +195,28 @@
         }
       }
     }
+
+    /* Reordering elements for small and medium screens:
+      The flexbox `order` property visually rearranges nav elements
+      such that their natural DOM order is only used on >= $large-screen;
+      $small-screen and $medium-screen require the `usa-search` element
+      to be second in order instead of `ustc-navigation-items`.
+    */
+    .ustc-close {
+      order: 1;
+    }
+
+    .ustc-search {
+      order: 2;
+    }
+
+    .ustc-navigation-items {
+      order: 3;
+    }
+
+    .ustc-account {
+      order: 4;
+    }
   }
 
   /* large screens: */
@@ -202,8 +231,16 @@
       }
 
       .usa-navbar {
+        display: flex;
+        width: initial;
+        flex-flow: row nowrap;
+        align-items: flex-start;
         margin-top: initial;
         margin-bottom: initial;
+
+        &[data-header-available="true"] {
+          width: 100% !important;
+        }
       }
 
       .usa-logo {
@@ -212,12 +249,27 @@
         margin-bottom: 0.5rem;
       }
 
+      .header-welcome {
+        padding-bottom: .4rem;
+        margin-top: auto;
+        margin-bottom: auto;
+        margin-left: 10px;
+        font-family: "Noto Serif", serif;
+        font-size: 26px;
+        font-weight: 700;
+        line-height: 2.8em;
+      }
+
       .ustc-navigation-items {
         display: block;
 
         .usa-nav__primary-item:not(.nav-medium) {
           display: inline-block;
         }
+      }
+
+      .usa-nav__primary {
+        margin-top: 0;
       }
 
       .usa-nav__primary-item {

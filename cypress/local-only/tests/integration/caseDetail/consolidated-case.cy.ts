@@ -1,26 +1,35 @@
+import { loginAsDocketClerk } from 'cypress/helpers/authentication/login-as-helpers';
 import { attachFile } from '../../../../helpers/file/upload-file';
 import { getCaseDetailTab } from '../../../support/pages/case-detail';
 
 describe('Docket clerk views consolidated case', function () {
   describe('case detail header', () => {
     it('should display lead case tag on the lead case in a consolidated group', () => {
-      cy.login('docketclerk');
+      loginAsDocketClerk();
       cy.visit('/case-detail/111-19');
       cy.get('#lead-case-tag').should('exist');
     });
 
     it('should persist the selected sort filter by navigating away from the tab', () => {
-      cy.get('select[name="docketRecordSort.111-19"]').should(
-        'have.value',
-        'byDate',
-      );
-      cy.get('select[name="docketRecordSort.111-19"]').select('Newest');
+      cy.get('[data-testid="descriptionDisplay-sortable-button"]')
+        .find('svg')
+        .invoke('attr', 'data-icon')
+        .should('equal', 'exchange-alt');
+
+      cy.get('[data-testid="descriptionDisplay-sortable-button"]').click();
+
+      cy.get('[data-testid="descriptionDisplay-sortable-button"]')
+        .find('svg')
+        .invoke('attr', 'data-icon')
+        .should('equal', 'long-arrow-alt-up');
+
       cy.get('#tab-document-view').click();
       cy.get('#tab-docket-sub-record').click();
-      cy.get('select[name="docketRecordSort.111-19"]').should(
-        'have.value',
-        'byDateDesc',
-      );
+
+      cy.get('[data-testid="descriptionDisplay-sortable-button"]')
+        .find('svg')
+        .invoke('attr', 'data-icon')
+        .should('equal', 'long-arrow-alt-up');
     });
 
     it('should persist the populated consolidated cases in the overview tab when petitioner counsel is added to parties', () => {

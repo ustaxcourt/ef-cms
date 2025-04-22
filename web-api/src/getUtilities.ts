@@ -7,12 +7,14 @@ import {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
+  deconstructDate,
   formatDateString,
   formatNow,
   prepareDateFromString,
 } from '../../shared/src/business/utilities/DateHandler';
 import { caseStatusWithTrialInformation } from '@shared/business/utilities/caseStatusWithTrialInformation';
-import { combineTwoPdfs } from '../../shared/src/business/utilities/documentGenerators/combineTwoPdfs';
+import { combineAllPdfDocuments } from '@shared/business/utilities/pdfs/combineAllPdfDocuments';
+import { combineTwoPdfs } from '../../shared/src/business/utilities/pdfs/combineTwoPdfs';
 import {
   compareCasesByDocketNumber,
   getFormattedTrialSessionDetails,
@@ -57,6 +59,7 @@ const utilities = {
   calculateDifferenceInDays,
   calculateISODate,
   caseStatusWithTrialInformation,
+  combineAllPdfDocuments,
   combineTwoPdfs,
   compareCasesByDocketNumber,
   compareISODateStrings,
@@ -65,6 +68,7 @@ const utilities = {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
+  deconstructDate,
   documentUrlTranslator,
   formatDateString,
   formatJudgeName,

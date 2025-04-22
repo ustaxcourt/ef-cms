@@ -7,9 +7,9 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  handleLockError,
   updateUserContactInformationInteractor,
 } from './updateUserContactInformationInteractor';
+import { sleep } from '@shared/tools/helpers';
 
 const contactInfo = {
   address1: '234 Main St',
@@ -37,6 +37,10 @@ describe('determineEntitiesToLock', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesForUser.mockReturnValue(mockCases);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
   });
 
   it('should lookup the docket numbers for the specified user', async () => {
@@ -58,26 +62,33 @@ describe('determineEntitiesToLock', () => {
       expect(identifiers).toContain(`case|${mockCase.docketNumber}`);
     });
   });
-});
 
-describe('handleLockError', () => {
-  it('should send a notification to the user with "retry_async_request" and the originalRequest', async () => {
-    const mockOriginalRequest = {
-      foo: 'bar',
-    };
-    await handleLockError(
-      applicationContext,
-      mockOriginalRequest,
-      MOCK_PRACTITIONER as UnknownAuthUser,
-    );
+  it('should wait until user is free before calling getCasesForUser', async () => {
+    let resolver: Function;
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserByIdOnceAllUpdatesComplete.mockImplementation(() => {
+        return new Promise(resolve => (resolver = resolve));
+      });
+
+    void determineEntitiesToLock(applicationContext, mockParams);
+
+    await sleep(50);
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message,
-    ).toMatchObject({
-      action: 'retry_async_request',
-      originalRequest: mockOriginalRequest,
-      requestToRetry: 'update_user_contact_information',
-    });
+      applicationContext.getPersistenceGateway().getCasesForUser,
+    ).not.toHaveBeenCalled();
+
+    await sleep(50);
+    expect(
+      applicationContext.getPersistenceGateway().getCasesForUser,
+    ).not.toHaveBeenCalled();
+
+    resolver!(null);
+    await sleep(50);
+    expect(
+      applicationContext.getPersistenceGateway().getCasesForUser,
+    ).toHaveBeenCalled();
   });
 });
 
@@ -91,6 +102,7 @@ describe('updateUserContactInformationInteractor', () => {
     },
     firmName: 'some firm',
     userId: MOCK_PRACTITIONER.userId,
+    clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
   };
 
   beforeAll(() => {
@@ -106,6 +118,10 @@ describe('updateUserContactInformationInteractor', () => {
       ...MOCK_PRACTITIONER,
       entityName: 'Practitioner',
     });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
 
     applicationContext
       .getPersistenceGateway()
@@ -133,32 +149,6 @@ describe('updateUserContactInformationInteractor', () => {
           MOCK_PRACTITIONER as UnknownAuthUser,
         ),
       ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should return a "retry_async_request" notification with the original request', async () => {
-      await expect(
-        updateUserContactInformationInteractor(
-          applicationContext,
-          mockRequest,
-          MOCK_PRACTITIONER as UnknownAuthUser,
-        ),
-      ).rejects.toThrow(ServiceUnavailableError);
-
-      expect(
-        applicationContext.getNotificationGateway().sendNotificationToUser,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        message: {
-          action: 'retry_async_request',
-          originalRequest: mockRequest,
-          requestToRetry: 'update_user_contact_information',
-        },
-        userId: MOCK_PRACTITIONER.userId,
-      });
 
       expect(
         applicationContext.getPersistenceGateway().getCaseByDocketNumber,
