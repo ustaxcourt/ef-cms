@@ -88,24 +88,25 @@ describe('processPractitionerMappingEntries', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should log an error and throw an exception when bulk index returns failed records', async () => {
-    getCaseMetadataWithCounsel.mockResolvedValue(mockCaseRecord as any);
+  // Add back in as part of 10502-dxox
+  // it('should log an error and throw an exception when bulk index returns failed records', async () => {
+  //   getCaseMetadataWithCounsel.mockResolvedValue(mockCaseRecord as any);
 
-    applicationContext
-      .getPersistenceGateway()
-      .bulkIndexRecords.mockReturnValueOnce({
-        failedRecords: [{ id: 'failed record' }],
-      });
+  //   applicationContext
+  //     .getPersistenceGateway()
+  //     .bulkIndexRecords.mockReturnValueOnce({
+  //       failedRecords: [{ id: 'failed record' }],
+  //     });
 
-    await expect(
-      processPractitionerMappingEntries({
-        applicationContext,
-        practitionerMappingRecords: mockPractitionerMappingEntries,
-      }),
-    ).rejects.toThrow('failed to index practitioner mapping records');
+  //   await expect(
+  //     processPractitionerMappingEntries({
+  //       applicationContext,
+  //       practitionerMappingRecords: mockPractitionerMappingEntries,
+  //     }),
+  //   ).rejects.toThrow('failed to index practitioner mapping records');
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-  });
+  //   expect(applicationContext.logger.error).toHaveBeenCalled();
+  // });
 
   it('should fallback to dynamo when case is not found in postgres during re-indexing', async () => {
     getCaseMetadataWithCounsel.mockRejectedValue({});

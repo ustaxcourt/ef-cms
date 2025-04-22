@@ -176,6 +176,20 @@ export const MessageDocument = connect(
             Sign Stipulated Decision
           </Button>
         )}
+        {messageDocumentHelper.showOrderResponseButton && (
+          <Button
+            link
+            data-testid="order-response-button"
+            icon="stamp"
+            onClick={() => {
+              navigateToPathSequence({
+                path: messageDocumentHelper.motionOrderResponseFromMessagesLink,
+              });
+            }}
+          >
+            Order Response
+          </Button>
+        )}
         {messageDocumentHelper.showApplyStampButton && (
           <Button
             link

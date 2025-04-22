@@ -3,6 +3,10 @@
 
 .usa-form-group,
 .usa-fieldset {
+  &.maxw-full {
+    max-width: 100%;
+  }
+
   max-width: 40rem;
   margin-top: 0;
   margin-bottom: 35px;
@@ -148,13 +152,13 @@ select {
   margin: 0;
 
   &:hover:not(:disabled) {
-    border: 1px solid color($theme-color-primary);
-    box-shadow: inset 0 0 0 1px color($theme-color-primary);
+    border: 1px solid color(#{$theme-color-primary});
+    box-shadow: inset 0 0 0 1px color(#{$theme-color-primary});
     cursor: pointer;
   }
 
   &::placeholder {
-    color: color($theme-color-base-dark);
+    color: color(#{$theme-color-base-dark});
     opacity: 1;
   }
 }
@@ -168,9 +172,9 @@ select {
   appearance: none;
 
   &:disabled {
-    border-color: color($theme-color-base-light);
-    background-color: color($theme-color-base-lighter);
-    color: color($theme-color-base-light);
+    border-color: color(#{$theme-color-base-light});
+    background-color: color(#{$theme-color-base-lighter});
+    color: color(#{$theme-color-base-light});
   }
 }
 
@@ -183,11 +187,11 @@ select {
 
   &::before {
     display: inline-block;
-    box-shadow: 0 0 0 1px color($theme-color-base);
+    box-shadow: 0 0 0 1px color(#{$theme-color-base});
   }
 
   &:hover::before {
-    box-shadow: 0 0 0 2px color($theme-color-primary);
+    box-shadow: 0 0 0 2px color(#{$theme-color-primary});
   }
 
   &.inline-block {
@@ -211,7 +215,7 @@ select {
 
 .usa-checkbox__input:disabled + .usa-checkbox__label {
   &::before {
-    box-shadow: 0 0 0 1px color($theme-color-base-lighter);
+    box-shadow: 0 0 0 1px color(#{$theme-color-base-lighter});
   }
 }
 
@@ -222,7 +226,7 @@ select {
     + .usa-select,
     + .usa-range {
       &:not(:disabled) {
-        border: 1px solid color($theme-color-base);
+        border: 1px solid color(#{$theme-color-base});
         box-shadow: 0 0 0 0 transparent;
       }
     }
@@ -233,7 +237,7 @@ select {
   + .usa-select,
   + .usa-range {
     &:not(:disabled) {
-      border: 1px solid color($theme-color-base);
+      border: 1px solid color(#{$theme-color-base});
       box-shadow: 0 0 0 0 transparent;
     }
   }
@@ -243,7 +247,11 @@ select {
 .usa-textarea,
 .usa-select,
 .usa-range {
-  border: 1px solid color($theme-color-base);
+  border: 1px solid color(#{$theme-color-base});
+}
+
+.usa-input.unset-width {
+  width: unset;
 }
 
 input[type='file'] {
@@ -314,7 +322,7 @@ div.ustc-hide-radio-button {
   }
 
   label {
-    color: color($theme-color-primary);
+    color: color(#{$theme-color-primary});
     text-decoration: underline;
   }
 }
@@ -460,7 +468,7 @@ label.validated::after {
 
 .usa-form--large {
   @media only screen and (min-width: $medium-screen) {
-    max-width: units('desktop');
+    max-width: #{units('desktop')};
   }
 }
 
@@ -516,7 +524,7 @@ label.ustc-upload {
   @media only screen and (min-width: $medium-screen) {
     padding: 14px;
     margin: 10px;
-    background-color: color($theme-color-base-lightest);
+    background-color: color(#{$theme-color-base-lightest});
 
     button {
       min-width: 130px;
@@ -557,12 +565,12 @@ label.ustc-upload {
     box-sizing: border-box;
     padding-top: 4px;
     padding-bottom: 4px;
-    border: 1px solid color($theme-color-base);
+    border: 1px solid color(#{$theme-color-base});
     border-radius: 0;
 
     &:hover {
-      border: 1px solid color($theme-color-primary);
-      box-shadow: 0 0 0 1px color($theme-color-primary);
+      border: 1px solid color(#{$theme-color-primary});
+      box-shadow: 0 0 0 1px color(#{$theme-color-primary});
       cursor: pointer;
     }
 
@@ -585,7 +593,7 @@ label.ustc-upload {
   }
 
   .select-react-element__control--menu-is-open {
-    outline: 2px dotted color($theme-color-base-light) !important;
+    outline: 2px dotted color(#{$theme-color-base-light}) !important;
     outline-offset: 3px;
   }
 }
@@ -631,6 +639,34 @@ label.ustc-upload {
     .width-150 {
       width: 150px;
     }
+  }
+
+  .narrow-hr {
+    width: 90%;
+  }
+}
+
+.motion-order-response-form {
+  .usa-form-group {
+    max-width: 100%;
+    margin-bottom: 0;
+
+    &.order-response-form-group {
+      margin: 1rem;
+    }
+
+    &.order-response-form-group-error {
+      margin-left: -0.1rem;
+    }
+
+    &.denied-checkboxes {
+      padding: 0 2rem;
+    }
+
+    &.usa-label-due-date {
+      margin: 0;
+    }
+
   }
 
   .narrow-hr {
