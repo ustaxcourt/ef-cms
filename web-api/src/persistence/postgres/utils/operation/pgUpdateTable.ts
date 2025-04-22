@@ -33,6 +33,7 @@ export const pgUpdateTable = async <T extends keyof Database>({
 }) => {
   return await getDbWriter({
     cb: async writer => {
+      // @ts-ignore 10502 temp ignore while cases is going to test
       const query = writer.updateTable(table).set(values);
       return await where(query).returningAll().execute();
     },
