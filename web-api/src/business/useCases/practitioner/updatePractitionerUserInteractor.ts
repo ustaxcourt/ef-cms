@@ -20,6 +20,7 @@ import { createNewPractitionerUser } from '@web-api/persistence/postgres/practit
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { updatePractitionerUser as updatePractitionerUserFromPersistence } from '@web-api/persistence/postgres/practitioners/updatePractitionerUser';
 import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/practitioners/getPractitionerByBarNumber';
+import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -86,7 +87,6 @@ export const updatePractitionerUser = async (
 
   if (oldUser.email || oldUser.pendingEmail) {
     updatedUser = await updatePractitionerUserFromPersistence({
-      applicationContext,
       user: validatedUserData,
     });
   } else if (!oldUser.email && user.updatedEmail) {
@@ -99,6 +99,7 @@ export const updatePractitionerUser = async (
         .toRawObject(),
     });
   } else {
+    await updatePractitioner({ practitionerToUpdate: validatedUserData });
     await updateUser({ userToUpdate: validatedUserData });
   }
 

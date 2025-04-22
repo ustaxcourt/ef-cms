@@ -12,6 +12,7 @@ import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgr
 import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
 import { getCaseStatusHistory } from '@web-api/persistence/postgres/cases/getCaseStatusHistory';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getPractitionersByDocketNumber } from '@web-api/persistence/postgres/practitioners/getPractionersByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -39,6 +40,7 @@ export const getCaseByDocketNumber = async ({
     caseCorrespondences,
     statisticsWithPenalties,
     workItems,
+    practitioners,
     caseItemsRaw,
   ] = await Promise.all([
     getCaseStatusHistory({ docketNumber }),
@@ -49,6 +51,7 @@ export const getCaseByDocketNumber = async ({
     getWorkItemsByDocketNumber({
       docketNumber,
     }),
+    getPractitionersByDocketNumber({ docketNumber }),
     queryFull({
       ExpressionAttributeNames: {
         '#pk': 'pk',
@@ -100,6 +103,16 @@ export const getCaseByDocketNumber = async ({
         ...workItem,
         pk: `case|${docketNumber}`,
         sk: `work-item|${workItem.workItemId}`,
+      })),
+      ...practitioners.irsPractitioners.map(irsPractitionerItem => ({
+        ...irsPractitionerItem,
+        pk: `case|${docketNumber}`,
+        sk: `irsPractitioner|${irsPractitionerItem.userId}`,
+      })),
+      ...practitioners.privatePractitioners.map(privatePractitionerItem => ({
+        ...privatePractitionerItem,
+        pk: `case|${docketNumber}`,
+        sk: `privatePractitioner|${privatePractitionerItem.userId}`,
       })),
     ]),
     consolidatedCases: consolidatedCases.map(

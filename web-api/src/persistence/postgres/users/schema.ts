@@ -1,4 +1,4 @@
-import { Selectable, Insertable, Updateable } from 'kysely';
+import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
 
 const DEFAULT = {};
 
@@ -63,6 +63,8 @@ export const userOnCaseTableDefinition = {
   id: DEFAULT as string,
   userId: DEFAULT as string,
   docketNumber: DEFAULT as string,
+  representing: DEFAULT as ColumnType<string[], string, string> | undefined,
+  entityName: DEFAULT as string | undefined,
 };
 
 export type UserOnCaseTable = typeof userOnCaseTableDefinition;

@@ -6,10 +6,10 @@ import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '@web-api/applicationContext';
 import { createUser } from '@web-api/gateways/user/createUser';
 import { updateUser } from '@web-api/gateways/user/updateUser';
-import { getUserByEmail } from '../users/getUserByEmail';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { createUserRecord } from '../users/createUserRecord';
 import { createPractitionerRecord } from '@web-api/persistence/postgres/practitioners/createPractitionerRecord';
+import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 
 export const createOrUpdatePractitionerUser = async ({
   user,
@@ -32,7 +32,9 @@ export const createOrUpdatePractitionerUser = async ({
   const userEmail = user.email || user.pendingEmail;
 
   if (userEmail) {
-    const existingUser = await getUserByEmail({ email: userEmail });
+    const existingUser = await getUserByEmail(applicationContext, {
+      email: userEmail,
+    });
 
     if (!existingUser) {
       await createUser(applicationContext, {

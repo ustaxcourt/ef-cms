@@ -29,7 +29,6 @@ export const practitionerTableDefinition = {
   practitionerId: DEFAULT as string,
   practitionerNotes: DEFAULT as string | undefined,
   practitionerType: DEFAULT as string,
-  representing: DEFAULT as any,
   role: DEFAULT as string,
   section: DEFAULT as string | undefined,
   serviceIndicator: DEFAULT as string,

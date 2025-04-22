@@ -5,30 +5,30 @@
 All TODO comments begin with the string "10495 TODO:" to help keep track of them.
 
 - [in-progress] Figure out how to store practitioners
-  - [ ] Fix privatePractitioner `representing` field
+  - [x] Fix privatePractitioner `representing` field
   - [x] Split Up Users and Practitioners (into separate directories + functions)
   - [x] Added EntityName to User and removed UserType References
   - [x] Added User Information Back into Petitioner (role, contact, name, etc)
-  - [ ] Check all user functions and ensure using User vs Practitioner where applicable
+  - [x] Check all user functions and ensure using User vs Practitioner where applicable
     - [x] getUserById
       - [x] getUserInteractor - add new function getUserOrPractitioner
       - [x] createCaseInteractor ditto
       - [x] deleteCounselFromCaseInteractor ditto
       - [x] check getUserByIdOnceAllUpdatesComplete
       - [x] SIDE QUEST: fix all invocations of web-api/src/business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase.ts
-    - [s] getUsersById
-    - [ ] getUsersInSection
-    - [ ] updatePractitionerUser
-    - [ ] updateUsers
+    - [x] getUsersById
+    - [x] getUsersInSection
+    - [x] updatePractitionerUser
+    - [x] updateUser
     - [x] upsertUsers
-    - [ ] updatePractitionerUser
+    - [x] updatePractitionerUser
     - [x] getPractitionerByBarNumber
     - [x] createUserRecord
     - [x] createOrUpdatePractitionerUser
     - [x] createNewPractitionerUser
-  - [ ] make sure any sure any situation expecting an IrsPractitioner or a PrivatePractitioner in the application/interactor layer gets what it needs from persistence
-  - [ ] finish implementing `practitionerEntity` function in `practitioner/mapper.ts`
-- [ ] Add entity name to Practitioner
+  - [x] make sure any sure any situation expecting an IrsPractitioner or a PrivatePractitioner in the application/interactor layer gets what it needs from persistence
+  - [x] finish implementing `practitionerEntity` function in `practitioner/mapper.ts`
+- [X] Add entity name to User On Case (Practitioner On Case)
 - [ ] Update `web-api/src/lambdas/migration/utilities/getUserById.ts`
 - [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)

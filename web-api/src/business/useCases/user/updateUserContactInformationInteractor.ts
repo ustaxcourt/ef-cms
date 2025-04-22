@@ -20,6 +20,7 @@ import { PrivatePractitioner } from '@shared/business/entities/PrivatePractition
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 
 /**
  * updateUserContactInformationHelper
@@ -95,6 +96,10 @@ const updateUserContactInformationHelper = async (
   } else {
     throw new Error(`Unrecognized entityType ${user.entityName}`);
   }
+
+  await updatePractitioner({
+    practitionerToUpdate: userEntity.validate().toRawObject(),
+  });
 
   await updateUser({
     userToUpdate: userEntity.validate().toRawObject(),

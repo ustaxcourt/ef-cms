@@ -15,6 +15,7 @@ import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
+import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 
 /**
  * generateChangeOfAddressHelper
@@ -137,7 +138,9 @@ export const generateChangeOfAddressHelper = async ({
         isUpdatingInformation: false,
       });
 
-      await updateUser({ user: userEntity.validate().toRawObject() });
+      const rawUserEntity = userEntity.validate().toRawObject();
+      await updatePractitioner({ practitionerToUpdate: rawUserEntity });
+      await updateUser({ userToUpdate: rawUserEntity });
     }
 
     const CONTACT_UPDATE_COMPLETE_ACTION:

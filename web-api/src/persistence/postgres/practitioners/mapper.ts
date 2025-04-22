@@ -1,4 +1,3 @@
-import { ROLES } from '@shared/business/entities/EntityConstants';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
@@ -33,7 +32,6 @@ export function pickPractitionerFields(user: any) {
     practiceType: user.practiceType,
     practitionerNotes: user.practitionerNotes,
     practitionerType: user.practitionerType,
-    representing: user.representing,
     serviceIndicator: user.serviceIndicator,
     suffix: user.suffix,
     updatedEmail: user.updatedEmail,
@@ -101,7 +99,7 @@ export function irsPractitionerEntity(practitioner): IrsPractitioner {
   );
 }
 
-export function privatePractitioner(practitioner): PrivatePractitioner {
+export function privatePractitionerEntity(practitioner): PrivatePractitioner {
   return new PrivatePractitioner(
     transformNullToUndefined({
       ...practitioner,

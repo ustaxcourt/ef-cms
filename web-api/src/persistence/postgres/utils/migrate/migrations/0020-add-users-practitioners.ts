@@ -62,7 +62,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('practiceType', 'varchar', col => col.notNull())
     .addColumn('practitionerNotes', 'text')
     .addColumn('practitionerType', 'varchar', col => col.notNull())
-    .addColumn('representing', 'jsonb')
     .addColumn('serviceIndicator', 'varchar', col => col.notNull())
     .addColumn('suffix', 'varchar')
     .addColumn('updatedEmail', 'varchar')
@@ -81,6 +80,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('id', 'varchar', col => col.primaryKey())
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
+    .addColumn('representing', 'jsonb')
+    .addColumn('entityName', 'varchar')
     .execute();
 }
 

@@ -99,7 +99,6 @@ function hasContactInfo(contact): boolean {
   return (
     contact.address1 &&
     contact.city &&
-    contact.country &&
     contact.countryType &&
     contact.phone &&
     contact.postalCode &&
