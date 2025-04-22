@@ -128,14 +128,14 @@ export const removeConsolidatedCases = async (
     );
 
     updateCasePromises.push(
-      removeConsolidatedCaseRefences(docketNumberToRemove),
+      removeConsolidatedCaseReferences(docketNumberToRemove),
     );
   }
 
   await Promise.all(updateCasePromises);
 };
 
-async function removeConsolidatedCaseRefences(docketNumber: string) {
+async function removeConsolidatedCaseReferences(docketNumber: string) {
   const CASE_DEADLINES = await getCaseDeadlinesByDocketNumber({
     docketNumber,
   });
