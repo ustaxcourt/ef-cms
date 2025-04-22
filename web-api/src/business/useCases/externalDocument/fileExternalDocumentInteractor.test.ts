@@ -27,6 +27,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
@@ -42,7 +43,8 @@ describe('fileExternalDocumentInteractor', () => {
 
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = applicationContext.getUniqueId();
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const updateCase = jest.mocked(updateCaseMock);
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
@@ -136,6 +138,7 @@ describe('fileExternalDocumentInteractor', () => {
       .getUserById.mockReturnValue(mockIrsPractitionerUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
   });
 
   it('should throw an error when the user is not authorized to file an external document on a case', async () => {
@@ -281,10 +284,11 @@ describe('fileExternalDocumentInteractor', () => {
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(caseRecord)
-      .mockReturnValueOnce(consolidatedCase);
+    getCaseByDocketNumber.mockResolvedValueOnce(caseRecord);
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      caseRecord,
+      consolidatedCase as any,
+    ]);
 
     const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
@@ -311,7 +315,8 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalledTimes(5);
+    expect(getCaseByDocketNumber).toHaveBeenCalledTimes(3); // Once at beginning and once per updateCaseAndAssociations
+    expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
     expect(upsertWorkItems).toHaveBeenCalledTimes(1);
     expect(updateCase).toHaveBeenCalledTimes(2);
     expect(

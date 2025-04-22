@@ -19,6 +19,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
@@ -33,6 +34,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   let mockLock;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const updateCase = jest.mocked(updateCaseMock);
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
@@ -90,6 +92,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     };
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -278,10 +281,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
 
-    getCaseByDocketNumber.mockResolvedValueOnce(
+    getCasesByDocketNumbers.mockResolvedValueOnce([
       MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-    );
-    getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+      LEAD_CASE as any,
+    ]);
 
     await fileCourtIssuedDocketEntryInteractor(
       applicationContext,
