@@ -188,44 +188,43 @@ describe('consolidated cases', () => {
   it('should log the failure to call updateDocketEntryPendingServiceStatus in the finally block', async () => {
     const expectedErrorString = 'expected error';
 
-    getCaseByDocketNumber
-      .mockResolvedValueOnce({
-        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-        docketEntries: leadCaseDocketEntries,
-      })
-      .mockResolvedValueOnce({
-        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-        docketEntries: leadCaseDocketEntries,
-      })
-      .mockRejectedValueOnce(new Error(expectedErrorString));
+    const innerError = new Error(expectedErrorString);
 
-    const innerError = new Error('something else');
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      docketEntries: leadCaseDocketEntries,
+    });
+
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      // @ts-ignore // This is a bad mock. MOCK_LEAD_CASE_WITH_PAPER_SERVICE should be properly typed.
+      {
+        ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        docketEntries: leadCaseDocketEntries,
+      },
+    ]);
 
     applicationContext
       .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus.mockImplementationOnce(() => {})
+      .updateDocketEntryPendingServiceStatus.mockResolvedValueOnce([])
       .mockRejectedValueOnce(innerError);
 
-    await expect(
-      fileAndServeCourtIssuedDocumentInteractor(
-        applicationContext,
-        {
-          clientConnectionId,
-          docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-          docketNumbers: [
-            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-          ],
-          form: leadCaseDocketEntries[0],
-          subjectCaseDocketNumber:
-            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow(expectedErrorString);
+    await fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        clientConnectionId,
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: leadCaseDocketEntries[0],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      },
+      mockDocketClerkUser,
+    );
 
-    expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
-    expect(applicationContext.logger.error.mock.calls[0][1]).toEqual(
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      `Encountered an exception trying to reset isPendingService on Docket Number ${MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber}.`,
       innerError,
     );
   });
