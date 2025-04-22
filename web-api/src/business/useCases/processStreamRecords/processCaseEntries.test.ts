@@ -1,7 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseMetadataWithCounsel as getCaseMetadataWithCounselMock } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { processCaseEntries } from './processCaseEntries';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -37,10 +36,6 @@ describe('processCaseEntries', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .bulkIndexRecords.mockReturnValue({ failedRecords: [] });
-
     getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
 
     (upsertCases as jest.Mock).mockResolvedValue(undefined);
@@ -51,12 +46,10 @@ describe('processCaseEntries', () => {
       caseEntityRecords: [],
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().bulkIndexRecords,
-    ).not.toHaveBeenCalled();
+    expect(upsertCases).not.toHaveBeenCalled();
   });
 
-  it('should index the provided case record', async () => {
+  it('should upsert the provided case record', async () => {
     await processCaseEntries({
       caseEntityRecords: [mockCaseRecord],
     });

@@ -13,6 +13,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 /**
  *
@@ -75,12 +76,12 @@ export const fileCourtIssuedDocketEntry = async (
 
   const isUnservable = DocketEntry.isUnservable(documentMeta);
 
+  const casesToUpdate = await getCasesByDocketNumbers({
+    docketNumbers: [subjectDocketNumber, ...docketNumbers],
+  });
+
   await Promise.all(
-    [subjectDocketNumber, ...docketNumbers].map(async docketNumber => {
-      const caseToUpdate = await getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    casesToUpdate.map(async caseToUpdate => {
 
       const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -93,7 +94,7 @@ export const fileCourtIssuedDocketEntry = async (
           documentTitle: documentMeta.generatedDocumentTitle,
           documentType: documentMeta.documentType,
           draftOrderState: null,
-          editState: JSON.stringify({ ...documentMeta, docketNumber }),
+          editState: JSON.stringify({ ...documentMeta, docketNumber: caseToUpdate.docketNumber }),
           eventCode: documentMeta.eventCode,
           filingDate: documentMeta.filingDate,
           freeText: documentMeta.freeText,

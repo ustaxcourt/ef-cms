@@ -14,6 +14,7 @@ import {
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { removeConsolidatedCasesInteractor } from '@web-api/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
 
@@ -25,6 +26,9 @@ const updateCase = jest.mocked(updateCaseMock);
 const getCasesByLeadDocketNumber = getCasesByLeadDocketNumberMock as jest.Mock;
 const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
+
+// In this file, getCasesByDocketNumbers should be the cases that are to be removed
+const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
 describe('removeConsolidatedCasesInteractor', () => {
   beforeAll(() => {
@@ -84,6 +88,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should return an Unauthorized error if the user does not have the CONSOLIDATE_CASES permission', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
     await expect(
       removeConsolidatedCasesInteractor(
         applicationContext,
@@ -97,6 +102,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should try to get the case by its docketNumber', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
     await removeConsolidatedCasesInteractor(
       applicationContext,
       {
@@ -110,6 +116,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should return a Not Found error if the case to update can not be found', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
     await expect(
       removeConsolidatedCasesInteractor(
         applicationContext,
@@ -122,7 +129,8 @@ describe('removeConsolidatedCasesInteractor', () => {
     ).rejects.toThrow('Case 111-11 was not found.');
   });
 
-  it('Should return a Not Found error if the case to remove cannot be found', async () => {
+  it('Should return an error if any cases to remove cannot be found', async () => {
+    getCasesByDocketNumbers.mockRejectedValue(new Error('Error'));
     await expect(
       removeConsolidatedCasesInteractor(
         applicationContext,
@@ -132,10 +140,11 @@ describe('removeConsolidatedCasesInteractor', () => {
         },
         mockDocketClerkUser,
       ),
-    ).rejects.toThrow('Case to consolidate with (111-11) was not found.');
+    ).rejects.toThrow('Error');
   });
 
   it('Should only update the removed case if the case to remove is not the lead case', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['102-19']]);
     await removeConsolidatedCasesInteractor(
       applicationContext,
       {
@@ -153,6 +162,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should update the removed case and all other currently consolidated cases if the case to remove is the lead case', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
     await removeConsolidatedCasesInteractor(
       applicationContext,
       {
@@ -181,6 +191,9 @@ describe('removeConsolidatedCasesInteractor', () => {
 
   it('Should update all cases to remove consolidation if new consolidated cases length is 0', async () => {
     const docketNumbersToRemove = allDocketNumbers;
+    getCasesByDocketNumbers.mockResolvedValue(
+      docketNumbersToRemove.map(docketNumber => mockCases[docketNumber]),
+    );
     await removeConsolidatedCasesInteractor(
       applicationContext,
       {
@@ -202,6 +215,9 @@ describe('removeConsolidatedCasesInteractor', () => {
       '104-19',
       '105-19',
     ];
+    getCasesByDocketNumbers.mockResolvedValue(
+      docketNumbersToRemove.map(docketNumber => mockCases[docketNumber]),
+    );
     await removeConsolidatedCasesInteractor(
       applicationContext,
       {
@@ -224,6 +240,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should update the removed case and remove consolidation from the original lead case if there is only one case remaining after removal', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['105-19']]);
     await removeConsolidatedCasesInteractor(
       applicationContext,
       {
@@ -247,6 +264,8 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('Should update the removed case and remove consolidation from the original non-lead case if there is only one case remaining after removal', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['104-19']]);
+
     await removeConsolidatedCasesInteractor(
       applicationContext,
       {
@@ -271,6 +290,7 @@ describe('removeConsolidatedCasesInteractor', () => {
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['104-19']]);
 
     await expect(
       removeConsolidatedCasesInteractor(
@@ -287,6 +307,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('should acquire and remove the lock on the cases', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['104-19']]);
     await removeConsolidatedCasesInteractor(
       applicationContext,
       {

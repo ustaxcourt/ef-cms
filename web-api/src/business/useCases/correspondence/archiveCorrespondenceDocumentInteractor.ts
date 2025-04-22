@@ -17,7 +17,7 @@ export const archiveCorrespondenceDocument = async (
     docketNumber,
   }: { correspondenceId: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -43,7 +43,7 @@ export const archiveCorrespondenceDocument = async (
     correspondenceToArchiveEntity.validate().toRawObject(),
   ]);
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+  return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     authorizedUser,
     caseToUpdate: caseEntity,
