@@ -33,7 +33,7 @@ describe('getConsolidatedCaseDeadlinesInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should return no itesm if there are new consolidated case deadlines', async () => {
+  it('should return no items if there are new consolidated case deadlines', async () => {
     getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([]);
 
     const results = await getConsolidatedCaseDeadlinesInteractor(
@@ -47,7 +47,7 @@ describe('getConsolidatedCaseDeadlinesInteractor', () => {
     expect(results.length).toEqual(0);
   });
 
-  it('should return all the itesm if there are new consolidated case deadlines', async () => {
+  it('should return all the items if there are new consolidated case deadlines', async () => {
     getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([
       { docketNumber: '101-25' },
       { docketNumber: '102-25' },
