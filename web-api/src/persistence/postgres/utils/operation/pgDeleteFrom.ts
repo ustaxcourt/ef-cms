@@ -21,6 +21,7 @@ export const pgDeleteFrom = async <T extends keyof Database>({
   return await getDbWriter({
     cb: async writer => {
       const query = writer.deleteFrom(table);
+      // @ts-ignore 10502 temp ignore while cases is going to test
       return await where(query).returningAll().execute();
     },
     table: null,

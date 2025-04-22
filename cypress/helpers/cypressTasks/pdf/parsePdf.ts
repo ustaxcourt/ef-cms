@@ -1,6 +1,10 @@
-import * as pdfjsLib from 'pdfjs-dist/legacy/build/pdf.mjs';
 import { readFile } from 'fs/promises';
-pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
+
+async function getPdfJs(): Promise<typeof pdfJs> {
+  const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+  pdfJs.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
+  return pdfJs;
+}
 
 export async function parsePdf({
   filePath,
@@ -10,9 +14,9 @@ export async function parsePdf({
   try {
     const dataBuffer = await readFile(filePath);
     const pdfDocUint8 = new Uint8Array(dataBuffer);
+    const pdfJs = await getPdfJs();
 
-    const pdfDocument = await pdfjsLib.getDocument({ data: pdfDocUint8 })
-      .promise;
+    const pdfDocument = await pdfJs.getDocument({ data: pdfDocUint8 }).promise;
 
     const pdfText = await extractPdfText(pdfDocument);
     return pdfText;
