@@ -582,6 +582,21 @@ describe('formatMinuteSheet', () => {
         const result = formatRespondentAppearances(respondentsSection);
         expect(result).toEqual(['John Smith (Counsel) - 01/15/2023']);
       });
+
+      it('should still display note when role is not selected', () => {
+        const respondentsSection: MinuteSheet['appearances']['respondents'] = [
+          {
+            datesOfAppearance: '01/15/2023',
+            name: 'John Smith',
+            note: 'This is a note.',
+            role: '' as RespondentRoleOption,
+          },
+        ];
+        const result = formatRespondentAppearances(respondentsSection);
+        expect(result).toEqual([
+          'John Smith (<em>This is a note.</em>) - 01/15/2023',
+        ]);
+      });
     });
 
     describe('formatJurisdictionRetained', () => {

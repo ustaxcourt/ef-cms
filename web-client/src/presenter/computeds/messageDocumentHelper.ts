@@ -2,7 +2,10 @@
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  ORDER_RESPONSE_DOCUMENTS_ALLOWLIST,
+  STATUS_REPORT_ORDER_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 import { DocketEntry } from '../../../../shared/src/business/entities/DocketEntry';
@@ -27,7 +30,6 @@ export const messageDocumentHelper = (
   const permissions = get(state.permissions);
   const caseDetail = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
-
   const viewerDocumentToDisplayDocumentId = get(
     state.messageViewerDocumentToDisplay.documentId,
   );
@@ -140,6 +142,10 @@ export const messageDocumentHelper = (
     (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
       STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
 
+  const showOrderResponseButton =
+    permissions.MOTION_ORDER_RESPONSE &&
+    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode);
+
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
     (STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
@@ -191,9 +197,9 @@ export const messageDocumentHelper = (
   const applyStampFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/apply-stamp`;
   const editCorrespondenceLink = `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentToDisplayDocumentId}/${parentMessageId}`;
   const messageDetailLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}`;
+  const motionOrderResponseFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/motion-order-response-create`;
   const servePetitionLink = `/case-detail/${caseDetail.docketNumber}/petition-qc/${parentMessageId}`;
   const statusReportOrderFromMessagesLink = `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentToDisplayDocumentId}/status-report-order-create`;
-
   return {
     addDocketEntryLink,
     applySignatureLink,
@@ -205,6 +211,7 @@ export const messageDocumentHelper = (
     filingDate: caseDocument.filingDate,
     index: caseDocument.index,
     messageDetailLink,
+    motionOrderResponseFromMessagesLink,
     servePetitionLink,
     showAddDocketEntryButton,
     showApplySignatureButton,
@@ -213,6 +220,7 @@ export const messageDocumentHelper = (
     showEditButtonNotSigned,
     showEditButtonSigned,
     showEditCorrespondenceButton,
+    showOrderResponseButton,
     showRemoveSignatureButton,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,

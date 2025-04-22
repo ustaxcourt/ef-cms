@@ -646,6 +646,34 @@ label.ustc-upload {
   }
 }
 
+.motion-order-response-form {
+  .usa-form-group {
+    max-width: 100%;
+    margin-bottom: 0;
+
+    &.order-response-form-group {
+      margin: 1rem;
+    }
+
+    &.order-response-form-group-error {
+      margin-left: -0.1rem;
+    }
+
+    &.denied-checkboxes {
+      padding: 0 2rem;
+    }
+
+    &.usa-label-due-date {
+      margin: 0;
+    }
+
+  }
+
+  .narrow-hr {
+    width: 90%;
+  }
+}
+
 .status-report-order-form {
   .usa-form-group {
     max-width: 100%;

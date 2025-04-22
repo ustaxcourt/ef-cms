@@ -13,7 +13,14 @@ export const generateCaseInventoryReportPdf = async ({
   filters,
 }: {
   applicationContext: ServerApplicationContext;
-  cases: RawCase[];
+  cases: Omit<
+    RawCase,
+    | 'consolidatedCases'
+    | 'correspondence'
+    | 'docketEntries'
+    | 'hearings'
+    | 'petitioners'
+  >[];
   filters: {
     associatedJudge?: string;
     status?: string;

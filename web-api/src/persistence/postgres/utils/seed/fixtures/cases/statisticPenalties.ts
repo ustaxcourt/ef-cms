@@ -1,5 +1,9 @@
 import { PENALTY_TYPES } from '@shared/business/entities/EntityConstants';
-import { StatisticPenaltyKysely } from '@web-api/database-types';
+import {
+  calculateDate,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
+import { StatisticPenaltyKysely } from '@web-api/persistence/postgres/cases/statistics/schema';
 
 export const statisticPenalties: StatisticPenaltyKysely[] = [
   {
@@ -8,6 +12,7 @@ export const statisticPenalties: StatisticPenaltyKysely[] = [
     penaltyId: 'db557362-50ee-4440-aaff-0a9f1bfa30ed',
     penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
     statisticId: 'cb557361-50ee-4440-aaff-0a9f1bfa30ed',
+    updatedAt: calculateDate({ dateString: formatNow() }),
   },
   {
     name: 'Marie Antoinette',
@@ -15,6 +20,7 @@ export const statisticPenalties: StatisticPenaltyKysely[] = [
     penaltyId: 'cb557362-50ee-4440-aaff-0a9f1bfa30ed',
     penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
     statisticId: 'ab557361-50ee-4440-aaff-0a9f1bfa30ed',
+    updatedAt: calculateDate({ dateString: formatNow() }),
   },
   {
     name: 'Marie du Font',
@@ -22,5 +28,6 @@ export const statisticPenalties: StatisticPenaltyKysely[] = [
     penaltyId: '48128812-53b7-4c53-acc2-33eb31ebc0ef',
     penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
     statisticId: '38128813-53b7-4c53-acc2-33eb31ebc0ef',
+    updatedAt: calculateDate({ dateString: formatNow() }),
   },
 ];

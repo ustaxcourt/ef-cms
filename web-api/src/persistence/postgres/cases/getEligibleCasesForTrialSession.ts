@@ -5,13 +5,14 @@ import {
   TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { RawEligibleCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 
 export const getEligibleCasesForTrialSession = async ({
   applicationContext,
@@ -23,7 +24,7 @@ export const getEligibleCasesForTrialSession = async ({
   limit: number;
   trialCity: string;
   sessionType: TrialSessionTypes;
-}) => {
+}): Promise<RawEligibleCase[]> => {
   const dbCases = await getDbReader(async reader => {
     let query = reader
       .selectFrom('dwCase')
@@ -98,7 +99,16 @@ export const getEligibleCasesForTrialSession = async ({
   const fullEligibleCases = await Promise.all(casePromises);
 
   const casesForReturn = fullEligibleCases.map(c => {
-    return c ? transformNullToUndefined(RawEligibleCaseEntity(c)) : undefined;
+    return {
+      ...fromKyselyCase(c),
+      isSealed: !!c.isSealed,
+      irsPractitioners: c.irsPractitioners,
+      privatePractitioners: c.privatePractitioners,
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: c.docketNumber,
+        docketNumberSuffix: c.docketNumberSuffix,
+      }),
+    };
   });
 
   return casesForReturn || [];

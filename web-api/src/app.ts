@@ -208,9 +208,13 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
+import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 
 export const app = express();
+
+// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
+app.set('query parser', 'extended');
 
 const allowAccessOriginFunction = (origin, callback) => {
   //Origin header wasn't provided
@@ -638,6 +642,10 @@ app.use(expressLogger);
   app.put(
     '/case-parties/:docketNumber/petitioner-info',
     lambdaWrapper(updatePetitionerInformationLambda),
+  );
+  app.post(
+    '/case-parties/:docketNumber/remove-petitioner-email',
+    lambdaWrapper(removePetitionerEmailLambda),
   );
 }
 

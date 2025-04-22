@@ -67,7 +67,7 @@ export const getCaseByDocketNumber = async ({
 
   let consolidatedCases: Omit<
     RawCase,
-    'consolidatedCases' | 'correspondence' | 'docketEntries'
+    'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
   >[] = [];
   if (includeConsolidatedCases) {
     consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
@@ -87,7 +87,6 @@ export const getCaseByDocketNumber = async ({
       {
         ...dbCaseMetadata,
         caseStatusHistory,
-        hearings: dbCaseMetadata.hearings || [],
         pk: `case|${dbCaseMetadata.docketNumber}`,
         sk: `case|${dbCaseMetadata.docketNumber}`,
         statistics: Object.values(statisticsWithPenalties),

@@ -15,7 +15,7 @@ export class EligibleCase extends JoiValidationEntity {
   public caseType: string;
   public docketNumber: string;
   public docketNumberSuffix?: string;
-  public docketNumberWithSuffix?: string;
+  public docketNumberWithSuffix: string;
   public highPriority?: boolean;
   public leadDocketNumber?: string;
   public procedureType: string;

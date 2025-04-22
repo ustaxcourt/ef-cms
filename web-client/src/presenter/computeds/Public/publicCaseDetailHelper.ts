@@ -14,6 +14,7 @@ import {
 } from '../../../../../shared/src/business/utilities/getFormattedCaseDetail';
 import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 import { state } from '@web-client/presenter/app-public.cerebral';
+import { formatDateString } from '@shared/business/utilities/DateHandler';
 
 export const formatDocketEntryOnDocketRecord = (
   applicationContext,
@@ -67,6 +68,13 @@ export const formatDocketEntryOnDocketRecord = (
     .getUtilities()
     .formatDateString(entry.servedAt, 'MMDDYY');
 
+  if (entry.certificateOfService) {
+    entry.certificateOfServiceDateFormatted = formatDateString(
+      entry.certificateOfServiceDate,
+      'MMDDYY',
+    );
+  }
+
   entry.filingsAndProceedings = getFilingsAndProceedings(entry);
 
   const canPublicUserSeeLink = DocketEntry.isDownloadable(entry, {
@@ -75,6 +83,8 @@ export const formatDocketEntryOnDocketRecord = (
     user: {
       role: ROLES.petitioner,
       userId: '',
+      email: '',
+      name: '',
     },
     visibilityChangeDate: visibilityPolicyDate,
   });

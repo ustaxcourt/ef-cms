@@ -8,6 +8,10 @@ jest.mock('@web-api/persistence/postgres/cases/generateDocketNumber', () =>
   mockFactory('generateDocketNumber'),
 );
 
+jest.mock('@web-api/persistence/postgres/cases/getCaseExists', () =>
+  mockFactory('getCaseExists', true),
+);
+
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber', () =>
   mockFactory('getCaseByDocketNumber'),
 );
@@ -105,6 +109,11 @@ jest.mock(
   () => mockFactory('getPetitionersOnCase'),
 );
 
+jest.mock(
+  '@web-api/persistence/postgres/cases/parties/clearPetitionersOnCase',
+  () => mockFactory('clearPetitionersOnCase'),
+);
+
 // Reports
 
 jest.mock('@web-api/persistence/postgres/cases/reports/fetchPendingItems', () =>
@@ -160,4 +169,19 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/cases/statistics/updateCaseStatistic',
   () => mockFactory('updateCaseStatistic'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/statistics/clearCaseStatistics',
+  () => mockFactory('clearCaseStatistics'),
+);
+
+// Case status updates
+
+jest.mock('@web-api/persistence/postgres/cases/getCaseStatusHistory', () =>
+  mockFactory('getCaseStatusHistory'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/upsertCaseStatusUpdates', () =>
+  mockFactory('upsertCaseStatusUpdates'),
 );

@@ -4,7 +4,7 @@ import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
   consolidatedCaseDeadlineId: string,
-  leadDocketNumber?: string, // Make leadDocketNumber optional
+  leadDocketNumber?: string,
 ): Promise<RawCaseDeadline[]> => {
   const RECORDS = await getDbReader(reader => {
     const query = reader
@@ -17,7 +17,12 @@ export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
         'c.leadDocketNumber',
         // TODO: use c.sortableDocketNumber and remove from caseDeadline
       ])
-      .where('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId);
+      .where(q =>
+        q.or([
+          q('cd.caseDeadlineId', '=', consolidatedCaseDeadlineId),
+          q('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId),
+        ]),
+      );
 
     if (!leadDocketNumber) return query.execute();
     return query.where('c.leadDocketNumber', '=', leadDocketNumber).execute();

@@ -1,33 +1,7 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { NewWorkItemKysely } from '@web-api/database-types';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-
-export const DW_WORK_ITEM_COLUMNS = [
-  'assigneeId',
-  'assigneeName',
-  'associatedJudge',
-  'associatedJudgeId',
-  'caseIsInProgress',
-  'completedAt',
-  'completedBy',
-  'completedByUserId',
-  'completedMessage',
-  'createdAt',
-  'docketEntry',
-  'docketNumber',
-  'hideFromPendingMessages',
-  'highPriority',
-  'inProgress',
-  'isInitializeCase',
-  'isRead',
-  'section',
-  'sentBy',
-  'sentBySection',
-  'sentByUserId',
-  'updatedAt',
-  'workItemId',
-];
+import { NewWorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
 
 function pickFields(workItem) {
   return {

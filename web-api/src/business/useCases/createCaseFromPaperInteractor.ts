@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -28,6 +28,7 @@ import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
+import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -329,8 +330,10 @@ export const createCaseFromPaperInteractor = async (
     waitTime: 500,
   });
 
+  let caseToAdd: Case;
+  let workItem: WorkItem;
   try {
-    const { caseToAdd, workItem } = await createCaseMetadata(
+    ({ caseToAdd, workItem } = await createCaseMetadata(
       applicationContext,
       {
         applicationForWaiverOfFilingFeeFileId,
@@ -343,35 +346,35 @@ export const createCaseFromPaperInteractor = async (
         user,
       },
       authorizedUser,
-    );
+    ));
+  } finally {
     await removeLock({
       applicationContext,
       identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
     });
-    setServiceIndicatorsForPetitionersOnCase(caseToAdd);
-
-    await createPetitionersOnCase({
-      docketNumber: caseToAdd.docketNumber,
-      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-    });
-
-    caseToAdd.statistics?.forEach(statistic =>
-      createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-    );
-
-    await upsertWorkItems({
-      workItems: [workItem.validate().toRawObject()],
-    });
-
-    return {
-      caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
-      workItem: workItem.validate().toRawObject(),
-    };
-  } catch (e) {
-    await removeLock({
-      applicationContext,
-      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    });
-    throw e;
   }
+  setServiceIndicatorsForPetitionersOnCase(caseToAdd);
+
+  await createPetitionersOnCase({
+    docketNumber: caseToAdd.docketNumber,
+    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
+  });
+
+  caseToAdd.statistics?.forEach(statistic =>
+    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
+  );
+
+  await upsertCaseStatusUpdates({
+    docketNumber: caseToAdd.docketNumber,
+    statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
+  });
+
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
+
+  return {
+    caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
+    workItem: workItem.validate().toRawObject(),
+  };
 };

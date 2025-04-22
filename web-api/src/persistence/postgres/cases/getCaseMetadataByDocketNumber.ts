@@ -1,43 +1,50 @@
-import { rawCaseEntity } from '@web-api/persistence/postgres/cases/mapper';
+import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { sql } from 'kysely';
-import {
-  Petitioner,
-  RawPetitioner,
-} from '@shared/business/entities/contacts/Petitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
 
 export const getCaseMetadataByDocketNumber = async ({
   docketNumber,
 }: {
   docketNumber: string;
-}): Promise<RawCase | undefined> => {
-  const dbCase = await getDbReader(reader =>
-    reader
-      .selectFrom('dwCase as c')
-      .leftJoin('dwPetitionerOnCase as p', 'c.docketNumber', 'p.docketNumber')
-      .selectAll('c')
-      .select(
-        sql`jsonb_agg(to_jsonb(p) ORDER BY p.order_on_case)`.as('petitioners'),
-      )
-      .where('c.docketNumber', '=', docketNumber)
-      .groupBy('c.docketNumber')
-      .executeTakeFirst(),
-  );
+}): Promise<
+  | Omit<
+      RawCase,
+      'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
+    >
+  | undefined
+> => {
+  const [dbCaseMetadata, statistics] = await Promise.all([
+    getDbReader(reader =>
+      reader
+        .selectFrom('dwCase as c')
+        .leftJoin('dwPetitionerOnCase as p', 'c.docketNumber', 'p.docketNumber')
+        .selectAll('c')
+        .select(
+          sql`jsonb_agg(to_jsonb(p) ORDER BY p.order_on_case)`.as(
+            'petitioners',
+          ),
+        )
+        .where('c.docketNumber', '=', docketNumber)
+        .groupBy('c.docketNumber')
+        .executeTakeFirst(),
+    ),
+    getCaseStatistics({ docketNumber }),
+  ]);
 
-  return dbCase
-    ? {
-        ...transformNullToUndefined(rawCaseEntity(dbCase)),
-        petitioners:
-          (dbCase.petitioners as RawPetitioner[]).map(p => {
-            if (!p) {
-              return;
-            }
-            return new Petitioner({
-              ...transformNullToUndefined(p),
-              state: p.state || null, // this needs to be null
-            }).toRawObject();
-          }) || [],
-      }
+  // Note that json_agg will get [null] if there are no petitioners on the case, so filter out nulls
+  return dbCaseMetadata
+    ? fromKyselyCase({
+        ...dbCaseMetadata,
+        statistics,
+        petitioners: (dbCaseMetadata.petitioners as TPetitioner[]).filter(
+          p => p,
+        ), // This is a hack because our typing for Petitioners is yucky
+        docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+          docketNumber: dbCaseMetadata.docketNumber,
+          docketNumberSuffix: dbCaseMetadata.docketNumberSuffix,
+        }),
+      })
     : undefined;
 };
