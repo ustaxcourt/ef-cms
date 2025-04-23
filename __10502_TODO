@@ -1,0 +1,7 @@
+- validate all cases before trying to do all the trial session stuff in setTrialSessionCalendarInteractor
+- transactions? in updateCase (and maybe create?)
+- sorting of consolidated cases after removing one
+- east-west issue with adding/removing a consolidated case
+- east-west issues that do not have to do with getCaseAction
+  - example: uploadCorrespondenceDocumentSequence, which has to do with navigating back to the case details
+- fix data in test for Tenille?

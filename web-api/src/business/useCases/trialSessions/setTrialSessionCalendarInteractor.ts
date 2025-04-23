@@ -97,6 +97,14 @@ export const setTrialSessionCalendarInteractor = async (
       ]),
     );
 
+    // We are about to kick off a bunch of promises. If any of them fails, case data can get into an inconsistent state.
+    // We therefore validate cases beforehand.
+    [
+      ...eligibleCases,
+      ...manuallyAddedQcCompleteCases,
+      ...manuallyAddedQcIncompleteCases,
+    ].forEach(c => new Case(c, { authorizedUser }).validate());
+
     await acquireLock({
       applicationContext,
       authorizedUser,
