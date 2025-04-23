@@ -1,22 +1,14 @@
-import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getPractitionersBySortKey } from '@web-api/persistence/postgres/practitioners/getPractitionersBySearchKey';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
-/**
- * getIrsPractitionersBySearchKeyInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} params the params object
- * @param {string} params.searchKey the search string entered by the user
- * @returns {*} the result
- */
 export const getIrsPractitionersBySearchKeyInteractor = async (
-  applicationContext: ServerApplicationContext,
   { searchKey }: { searchKey: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -26,13 +18,10 @@ export const getIrsPractitionersBySearchKeyInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const users = await applicationContext
-    .getPersistenceGateway()
-    .getUsersBySearchKey({
-      applicationContext,
-      searchKey,
-      type: 'irsPractitioner',
-    });
+  const irsPractitioners = await getPractitionersBySortKey({
+    searchKey,
+    role: ROLES.irsPractitioner,
+  });
 
-  return IrsPractitioner.validateRawCollection(users);
+  return IrsPractitioner.validateRawCollection(irsPractitioners);
 };

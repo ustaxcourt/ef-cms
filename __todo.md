@@ -57,13 +57,11 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 
 ## Odd dynamo functions that need to be reimplemented with postgres
 
-- [ ] associateUserWithCase - association table
+- [x] associateUserWithCase - association table
 - [ ] getCasesForUser - not really concerning users
 - [ ] barNumberGenerator: Contains business logic for generating a bar number,
 does not belong in the persistence layer.
-- [ ] getUsersBySearchKey: Invoked by (1) `getPrivatePractitionersBySearchKey`
-action, interactor and (2) `getIrsPractitionersBySearchKey` action, interactor.
-Is "search key" a concept we need to hold onto?
+- [x] getUsersBySearchKey
 - [ ] removePractitionerOnCase
 - [ ] updatePractitionerOnCase
 
