@@ -239,7 +239,8 @@ export const internalPetitionPartiesHelper = (
     E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
     !isPaper &&
     (filingType === 'Myself and my spouse' ||
-      filingType === 'Petitioner and spouse') &&
+      filingType === 'Petitioner and spouse' ||
+      partyType === 'Petitioner & spouse') &&
     !isExternalUser;
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
