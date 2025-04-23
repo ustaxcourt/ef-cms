@@ -33,10 +33,6 @@ describe('removeConsolidatedCasesInteractor - Deadlines', () => {
       .getLock.mockImplementation(() => mockLock);
   });
 
-  // afterEach(() => {
-  //   jest.resetAllMocks();
-  // });
-
   beforeEach(() => {
     mockLock = undefined;
     mockCases = {
