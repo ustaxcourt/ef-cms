@@ -5,6 +5,7 @@ import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
 import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
+import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
@@ -189,7 +190,7 @@ function sortCaseFields({
 function convertDbCaseToRawCase(
   dbCase: EnrichedCaseRow,
 ): Omit<RawCase, 'consolidatedCases'> {
-  return {
+  const appCase = {
     ...fromKyselyCase(dbCase),
     statistics: dbCase.statistics.map(s => ({
       ...s,
@@ -204,10 +205,15 @@ function convertDbCaseToRawCase(
     correspondence: dbCase.correspondence.map(cc =>
       caseCorrespondenceEntity(cc),
     ),
+    archivedCorrespondences: dbCase.archivedCorrespondences?.map(cc =>
+      caseCorrespondenceEntity(cc),
+    ),
     caseStatusHistory: dbCase.caseStatusHistory.map(update => {
       return { ...update, date: update.date.toISOString() };
     }),
   };
+
+  return purgeDynamoKeys(appCase);
 }
 
 async function getCasesMetadata(docketNumbers: string[]) {
