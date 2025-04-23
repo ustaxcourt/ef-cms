@@ -205,7 +205,7 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { FILING_TYPES } from '@shared/business/entities/EntityConstants';
+import { FILING_TYPES_DICT } from '@shared/business/entities/EntityConstants';
 export const internalPetitionPartiesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -239,8 +239,8 @@ export const internalPetitionPartiesHelper = (
   const showSecondaryContactEmailFieldAndConsentBox =
     E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
     !isPaper &&
-    (filingType === FILING_TYPES.petitioner[1] ||
-      filingType === FILING_TYPES.privatePractitioner[1] ||
+    (filingType === FILING_TYPES_DICT.MYSELF_AND_SPOUSE ||
+      filingType === FILING_TYPES_DICT.PETITIONER_SPOUSE ||
       partyType === PARTY_TYPES.petitionerSpouse) &&
     !isExternalUser;
 

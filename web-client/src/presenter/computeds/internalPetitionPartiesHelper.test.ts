@@ -1,6 +1,6 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  FILING_TYPES,
+  FILING_TYPES_DICT,
   PARTY_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -505,7 +505,7 @@ describe('internalPetitionPartiesHelper', () => {
               true,
           },
           form: {
-            filingType: FILING_TYPES.petitioner[1],
+            filingType: FILING_TYPES_DICT.MYSELF_AND_SPOUSE,
             isPaper: false,
           },
           user: petitionsClerkUser,
@@ -522,7 +522,7 @@ describe('internalPetitionPartiesHelper', () => {
               true,
           },
           form: {
-            filingType: FILING_TYPES.privatePractitioner[1],
+            filingType: FILING_TYPES_DICT.PETITIONER_SPOUSE,
             isPaper: false,
           },
           user: petitionsClerkUser,
@@ -539,7 +539,7 @@ describe('internalPetitionPartiesHelper', () => {
               true,
           },
           form: {
-            filingType: FILING_TYPES.privatePractitioner[0],
+            filingType: FILING_TYPES_DICT.PETITIONER,
             partyType: PARTY_TYPES.petitionerSpouse,
             isPaper: false,
           },
