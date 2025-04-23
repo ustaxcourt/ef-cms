@@ -11,16 +11,18 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
-  ACTION_DOCUMENT_TYPE_OPTIONS,
-  ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED,
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
   MINUTE_SHEET_FORM_SECTION_MAP,
   MOTION_OBJECTION_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import React from 'react';
+import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const ActionsAndFilingsFieldset = ({
+  internalDocumentTypesHelper,
   actionsAndFilingsFormState,
   addRowHandler,
   onBlurHandler,
@@ -31,11 +33,9 @@ export const ActionsAndFilingsFieldset = ({
   onChangeHandler: OnChangeHandler;
   removeRowHandler: RemoveRowHandler;
   onBlurHandler: AutoSaveHandler;
+  internalDocumentTypesHelper: any;
   actionsAndFilingsFormState: MinuteSheetFormState['actionsAndFilingsSection'];
 }) => {
-  const SHOW_MOTION_DETAILS_TYPE =
-    ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[ACTION_DOCUMENT_TYPE_OPTIONS.motion];
-
   const renderSelectField = (
     id: string,
     name: string,
@@ -105,16 +105,6 @@ export const ActionsAndFilingsFieldset = ({
         </div>
         <div className="grid-col-2">
           {renderSelectField(
-            `actionsAndFilingsDocumentType-${rowIndex}`,
-            'Document Type',
-            row.documentType,
-            ACTION_DOCUMENT_TYPE_OPTIONS,
-            row,
-            'documentType',
-          )}
-        </div>
-        <div className="grid-col-2">
-          {renderSelectField(
             `actionsAndFilingsFiledBy-${rowIndex}`,
             'Filed by',
             row.filedBy,
@@ -122,6 +112,39 @@ export const ActionsAndFilingsFieldset = ({
             row,
             'filedBy',
           )}
+        </div>
+        <div className="grid-col-2">
+          <SelectSearch
+            aria-label="actions-and-filings-document-type-label"
+            data-testid="actions-and-filings-document-type-search"
+            id="actions-and-filings-document-type"
+            isClearable={true}
+            isMulti={false}
+            name="eventCode"
+            options={
+              internalDocumentTypesHelper.internalDocumentTypesForSelectSorted
+            }
+            value={reactSelectValue({
+              documentTypes:
+                internalDocumentTypesHelper.internalDocumentTypesForSelectSorted,
+              selectedEventCode: row.documentType,
+            })}
+            onChange={inputValue => {
+              const value = inputValue?.value || '';
+              console.log(`Selected value: ${value}`);
+              onChangeHandler({
+                name: 'actionsAndFilings',
+                rowInfo: {
+                  key: row.renderKey,
+                  nestedName: 'documentType',
+                },
+                section: MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
+                value,
+              });
+              return true;
+            }}
+            onBlur={() => onBlurHandler()}
+          />
         </div>
         <div className="grid-col-2">
           {renderSelectField(
@@ -141,7 +164,7 @@ export const ActionsAndFilingsFieldset = ({
     row: KeyedActionFilingFormFields,
     rowIndex,
   ) => {
-    if (row.documentType === SHOW_MOTION_DETAILS_TYPE) {
+    if (DocketEntry.isMotion(row.documentType)) {
       return (
         <div className="grid-row grid-gap-2 align-items-right margin-bottom-1">
           <div className="grid-col-6"></div>
@@ -226,8 +249,8 @@ export const ActionsAndFilingsFieldset = ({
       <div className="usa-label">Actions & Filings</div>
       <div className="grid-row grid-gap-2">
         <div className="grid-col-2 usa-label">Date</div>
-        <div className="grid-col-2 usa-label">Document Type</div>
         <div className="grid-col-2 usa-label">Filed By</div>
+        <div className="grid-col-2 usa-label">Document Type</div>
         <div className="grid-col-2 usa-label">Status</div>
         <div className="grid-col-fill usa-label">Description/Note</div>
       </div>

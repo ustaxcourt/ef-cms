@@ -826,7 +826,7 @@ describe('formatMinuteSheet', () => {
           [
             {
               date: '01/15/2023',
-              documentType: 'filing',
+              documentType: 'AMDC',
               filedBy: 'petitioner',
               status: 'filed',
               note: 'test note',
@@ -838,7 +838,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              '01/15/2023; Filing - <em>test note</em>; Filed by Petitioner; Filed',
+              '01/15/2023; Amended Certificate of Service - <em>test note</em>; Filed by Petitioner; FILED',
           },
         ]);
       });
@@ -848,7 +848,7 @@ describe('formatMinuteSheet', () => {
           [
             {
               date: '01/15/2023',
-              documentType: 'filing',
+              documentType: 'AMDC',
               filedBy: 'petitioner',
               status: 'filed',
               note: '',
@@ -859,7 +859,8 @@ describe('formatMinuteSheet', () => {
         const result = formatActionsAndFilings(actionsSection);
         expect(result).toEqual([
           {
-            content: '01/15/2023; Filing; Filed by Petitioner; Filed',
+            content:
+              '01/15/2023; Amended Certificate of Service; Filed by Petitioner; FILED',
           },
         ]);
       });
@@ -886,7 +887,7 @@ describe('formatMinuteSheet', () => {
           [
             {
               date: '01/15/2023',
-              documentType: 'motion',
+              documentType: 'M000',
               filedBy: 'petitioner',
               status: 'filed',
               note: 'test note',
@@ -898,7 +899,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              '01/15/2023; Motion - Oral Motion <em>test note</em>; Filed by Petitioner; Filed',
+              '01/15/2023; Motion - Oral Motion <em>test note</em>; Filed by Petitioner; FILED',
           },
         ]);
       });
@@ -908,7 +909,7 @@ describe('formatMinuteSheet', () => {
           [
             {
               date: '01/15/2023',
-              documentType: 'motion',
+              documentType: 'M000',
               filedBy: 'petitioner',
               status: 'filed',
               note: 'test note',
@@ -921,7 +922,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; Filed; No Objection',
+              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; FILED; No Objection',
           },
         ]);
       });
@@ -931,7 +932,7 @@ describe('formatMinuteSheet', () => {
           [
             {
               date: '01/15/2023',
-              documentType: 'motion',
+              documentType: 'M000',
               filedBy: 'petitioner',
               status: 'filed',
               note: 'test note',
@@ -944,7 +945,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; Filed; Obj. Unknown',
+              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; FILED; Obj. Unknown',
           },
         ]);
       });
