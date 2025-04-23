@@ -33,3 +33,16 @@ export const createJobStatus = ({
     UpdateExpression: 'SET #unfinishedCases = :unfinishedCases',
     applicationContext,
   });
+
+	// {
+	//  INITIAL DATA
+	// 	pk: `set-notices-for-trial-session-job-${jobId}`,
+	// 	sk: `set-notices-for-trial-session-job-${jobId}`,
+	// 	unfinishedCases: NUMBER
+
+
+
+	//	ADD EACH DOCKET NUMBER IN THIS OBJECT
+	//  101-25: ''
+
+	// }
