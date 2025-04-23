@@ -15,6 +15,7 @@ import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConsta
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const serveCourtIssuedDocument = async (
@@ -107,12 +108,9 @@ export const serveCourtIssuedDocument = async (
   let caseEntities = [subjectCaseEntity];
 
   try {
-    for (const docketNumber of docketNumbers) {
-      const caseToUpdate = await getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
+    for (const caseToUpdate of casesToUpdate) {
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 

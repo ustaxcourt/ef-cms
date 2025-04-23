@@ -6,14 +6,15 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { get } from '../../dynamodbClientService';
 import { getCalendaredCasesForTrialSession } from './getCalendaredCasesForTrialSession';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 jest.mock('../../dynamodbClientService', () => ({
   get: jest.fn(),
   queryFull: jest.fn(),
+  query: jest.fn(),
 }));
 const getMock = get as jest.Mock;
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
 
 describe('getCalendaredCasesForTrialSession', () => {
   beforeAll(() => {
@@ -27,25 +28,27 @@ describe('getCalendaredCasesForTrialSession', () => {
       ],
     });
 
-    getCaseByDocketNumber.mockReturnValue({
-      docketEntries: [
-        {
-          docketEntryId: 'abc-123',
-        },
-      ],
-      docketNumber: MOCK_CASE.docketNumber,
-      irsPractitioners: [
-        {
-          userId: 'abc-123',
-        },
-      ],
-      privatePractitioners: [
-        {
-          userId: 'abc-123',
-        },
-      ],
-      status: CASE_STATUS_TYPES.new,
-    });
+    getCasesByDocketNumbers.mockResolvedValue([
+      {
+        docketEntries: [
+          {
+            docketEntryId: 'abc-123',
+          },
+        ],
+        docketNumber: MOCK_CASE.docketNumber,
+        irsPractitioners: [
+          {
+            userId: 'abc-123',
+          },
+        ],
+        privatePractitioners: [
+          {
+            userId: 'abc-123',
+          },
+        ],
+        status: CASE_STATUS_TYPES.new,
+      },
+    ]);
   });
 
   it('should get the cases calendared for a trial session', async () => {

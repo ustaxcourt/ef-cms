@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -26,6 +26,7 @@ import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utili
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
+import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
@@ -368,6 +369,11 @@ export const createCaseInteractor = async (
   caseToAdd.statistics?.forEach(statistic =>
     createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
   );
+
+  await upsertCaseStatusUpdates({
+    docketNumber: caseToAdd.docketNumber,
+    statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
+  });
 
   await associateUserWithCase({
     docketNumber: caseToAdd.docketNumber,

@@ -23,6 +23,7 @@ import {
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 interface IEditPaperFilingRequest {
@@ -166,14 +167,9 @@ const multiDocketServeStrategy = async ({
     documentMetadata: request.documentMetadata,
   });
 
-  const consolidatedCaseRecords = await Promise.all(
-    request.consolidatedGroupDocketNumbers!.map(consolidatedGroupDocketNumber =>
-      getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: consolidatedGroupDocketNumber,
-      }),
-    ),
-  );
+  const consolidatedCaseRecords = await getCasesByDocketNumbers({
+    docketNumbers: request.consolidatedGroupDocketNumbers!,
+  });
 
   const consolidatedCaseEntities = consolidatedCaseRecords.map(
     consolidatedCase => new Case(consolidatedCase, { authorizedUser }),

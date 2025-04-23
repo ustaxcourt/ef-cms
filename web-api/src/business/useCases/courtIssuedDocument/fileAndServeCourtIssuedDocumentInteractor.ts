@@ -19,6 +19,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const fileAndServeCourtIssuedDocument = async (
@@ -141,12 +142,11 @@ export const fileAndServeCourtIssuedDocument = async (
   }
 
   try {
-    for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
-      const caseToUpdate = await getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const casesToUpdate = await getCasesByDocketNumbers({
+      docketNumbers: [...docketNumbers, subjectCaseDocketNumber],
+    });
 
+    for (const caseToUpdate of casesToUpdate) {
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 

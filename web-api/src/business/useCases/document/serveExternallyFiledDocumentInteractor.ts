@@ -18,6 +18,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const serveExternallyFiledDocument = async (
@@ -99,13 +100,9 @@ export const serveExternallyFiledDocument = async (
   }
 
   try {
+    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
     caseEntities = await Promise.all(
-      docketNumbers.map(async docketNumber => {
-        const rawCaseToUpdate = await getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
-
+      casesToUpdate.map(async rawCaseToUpdate => {
         const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
 
         const isSubjectCase =

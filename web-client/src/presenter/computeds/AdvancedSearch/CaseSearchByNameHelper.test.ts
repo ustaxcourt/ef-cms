@@ -1,10 +1,10 @@
 import { caseSearchByNameHelper } from '@web-client/presenter/computeds/AdvancedSearch/CaseSearchByNameHelper';
 import {
+  ALL_SELECTION,
   CASE_TYPES_MAP,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
-import { ALL_SELECTION } from '@shared/business/entities/cases/CaseSearch';
 
 describe('caseSearchByNameHelper', () => {
   it('returns appropriate defaults if permissions are not defined in state', () => {

@@ -32,7 +32,7 @@ const updateCounselOnCase = async (
     userId,
   }: { docketNumber: string; userData: any; userId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   const editableFields = {
     representing: userData.representing,
     serviceIndicator: userData.serviceIndicator,

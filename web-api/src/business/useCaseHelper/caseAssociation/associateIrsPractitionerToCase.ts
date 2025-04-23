@@ -4,50 +4,55 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
+import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 
 export const associateIrsPractitionerToCase = async ({
   applicationContext,
   authorizedUser,
   docketNumber,
   serviceIndicator,
-  irsPractitioner,
+  user,
 }: {
   applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketNumber: string;
   serviceIndicator?: string;
-  irsPractitioner: RawUser;
-}): Promise<void> => {
-  const isAssociated = await verifyCaseForUser({
-    docketNumber,
-    userId: irsPractitioner.userId,
-  });
-
-  if (!isAssociated) {
-    const caseToUpdate = await getCaseByDocketNumber({
+  user: RawUser;
+}): Promise<RawCase> => {
+  const [isAssociated, caseToUpdate] = await Promise.all([
+    verifyCaseForUser({
+      docketNumber,
+      userId: user.userId,
+    }),
+    getCaseByDocketNumber({
       applicationContext,
       docketNumber,
-    });
+    }),
+  ]);
 
-    await associateUserWithCase({
-      docketNumber,
-      userId: irsPractitioner.userId,
-    });
+  const caseEntity = new Case(caseToUpdate, {
+    authorizedUser,
+  });
 
-    const caseEntity = new Case(caseToUpdate, {
-      authorizedUser,
-    });
+  if (isAssociated) {
+    return caseEntity.toRawObject();
+  }
 
-    caseEntity.attachIrsPractitioner(
-      new IrsPractitioner({ ...irsPractitioner, serviceIndicator }),
-    );
+  await associateUserWithCase({
+    docketNumber,
+    userId: user.userId,
+  });
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+  caseEntity.attachIrsPractitioner(
+    new IrsPractitioner({ ...user, serviceIndicator }),
+  );
+
+  return await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-  }
 };
