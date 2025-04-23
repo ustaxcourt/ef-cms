@@ -29,7 +29,7 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
   - [x] make sure any sure any situation expecting an IrsPractitioner or a PrivatePractitioner in the application/interactor layer gets what it needs from persistence
   - [x] finish implementing `practitionerEntity` function in `practitioner/mapper.ts`
 - [X] Add entity name to User On Case (Practitioner On Case)
-- [ ] Update `web-api/src/lambdas/migration/utilities/getUserById.ts`
+- [x] Update `web-api/src/lambdas/migration/utilities/getUserById.ts` (no longer necessary, removed)
 - [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
 - [x] Consider replicating the name field from User on Practitioner (need to be able to search for Practitioners by name)
