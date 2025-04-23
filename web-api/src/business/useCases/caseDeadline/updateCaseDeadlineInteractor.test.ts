@@ -1,17 +1,17 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/getConsolidatedCaseDeadlines',
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
 );
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseDeadlineInteractor } from './updateCaseDeadlineInteractor';
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { getConsolidatedCaseDeadlines as getConsolidatedCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/getConsolidatedCaseDeadlines';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
 
 const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
-const getConsolidatedCaseDeadlines =
-  getConsolidatedCaseDeadlinesMock as jest.Mock;
+const getCaseDeadlinesByConsolidatedCaseDeadlineId =
+  getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
 
 describe('updateCaseDeadlineInteractor', () => {
   const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -26,7 +26,7 @@ describe('updateCaseDeadlineInteractor', () => {
   });
 
   beforeEach(() => {
-    getConsolidatedCaseDeadlines.mockReturnValue([]);
+    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue([]);
   });
 
   it('throws an error if the user is not valid or authorized', async () => {
@@ -58,7 +58,7 @@ describe('updateCaseDeadlineInteractor', () => {
     it('should update all deadlines in a consolidated group', async () => {
       const LEAD_DOCKET_NUMBER = '101-25';
       const CHILD_DOCKET_NUMBER = '102-25';
-      getConsolidatedCaseDeadlines.mockReturnValue([
+      getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue([
         {
           ...mockCaseDeadline,
           description: 'TEST_OLD_DESCRIPTION',
@@ -79,11 +79,13 @@ describe('updateCaseDeadlineInteractor', () => {
         mockPetitionsClerkUser,
       );
 
-      const getConsolidatedCaseDeadlinesCalls =
-        getConsolidatedCaseDeadlines.mock.calls;
+      const getCaseDeadlinesByConsolidatedCaseDeadlineIdCalls =
+        getCaseDeadlinesByConsolidatedCaseDeadlineId.mock.calls;
 
-      expect(getConsolidatedCaseDeadlinesCalls.length).toEqual(1);
-      expect(getConsolidatedCaseDeadlinesCalls[0]).toEqual([
+      expect(getCaseDeadlinesByConsolidatedCaseDeadlineIdCalls.length).toEqual(
+        1,
+      );
+      expect(getCaseDeadlinesByConsolidatedCaseDeadlineIdCalls[0]).toEqual([
         mockCaseDeadline.caseDeadlineId,
         LEAD_DOCKET_NUMBER,
       ]);

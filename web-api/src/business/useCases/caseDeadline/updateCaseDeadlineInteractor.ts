@@ -9,7 +9,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { getConsolidatedCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/getConsolidatedCaseDeadlines';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
 
 export const updateCaseDeadlineInteractor = async (
   { caseDeadline }: { caseDeadline: CaseDeadline },
@@ -24,22 +24,27 @@ export const updateCaseDeadlineInteractor = async (
     .toRawObject();
 
   const consolidatedCaseDeadlines: RawCaseDeadline[] =
-    await getConsolidatedCaseDeadlines(
+    await getCaseDeadlinesByConsolidatedCaseDeadlineId(
       caseDeadlineToUpdate.caseDeadlineId,
       caseDeadlineToUpdate.docketNumber,
     );
 
   const updatedConsolidatedCaseDeadlines: RawCaseDeadline[] =
-    consolidatedCaseDeadlines.map(ccd =>
-      new CaseDeadline({
-        ...ccd,
-        createdAt: caseDeadlineToUpdate.createdAt,
-        deadlineDate: caseDeadlineToUpdate.deadlineDate,
-        description: caseDeadlineToUpdate.description,
-      })
-        .validate()
-        .toRawObject(),
-    );
+    consolidatedCaseDeadlines
+      .filter(
+        ({ docketNumber: ccDocketNumber }) =>
+          ccDocketNumber !== caseDeadlineToUpdate.docketNumber,
+      )
+      .map(ccd =>
+        new CaseDeadline({
+          ...ccd,
+          createdAt: caseDeadlineToUpdate.createdAt,
+          deadlineDate: caseDeadlineToUpdate.deadlineDate,
+          description: caseDeadlineToUpdate.description,
+        })
+          .validate()
+          .toRawObject(),
+      );
 
   await upsertCaseDeadlines([
     caseDeadlineToUpdate,
