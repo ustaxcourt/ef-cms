@@ -207,6 +207,7 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
+import { regStatusLambda } from '@web-api/lambdas/automations/regStatusLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 
 export const app = express();
@@ -1080,6 +1081,11 @@ app.delete(
     lambdaWrapper(v2GetReconciliationReportLambda),
   );
 }
+
+/**
+ * ZenDesk Automations
+ */
+app.get('users/userSummary', lambdaWrapper(regStatusLambda));
 
 /**
  * work-items
