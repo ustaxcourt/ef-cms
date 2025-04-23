@@ -159,13 +159,15 @@ async function updateConsolidatedCaseDeadlineReferenceId(
     docketNumber: oldLeadDocketNumber,
   });
 
-  const TASKS = LEAD_DEADLINES.map(async (leadCaseDeadline: CaseDeadline) => {
+  const DEADLINES_TO_UPDATE: RawCaseDeadline[] = [];
+  for (let index = 0; index < LEAD_DEADLINES.length; index++) {
+    const leadCaseDeadline = LEAD_DEADLINES[index];
     const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
     const CHILD_DEADLINES = await getCaseDeadlinesByConsolidatedCaseDeadlineId(
       oldLeadCaseDeadlineId,
       oldLeadDocketNumber,
     );
-    if (!CHILD_DEADLINES.length) return;
+    if (!CHILD_DEADLINES.length) continue;
 
     const NEW_LEAD_CASE_DEADLINE = CHILD_DEADLINES.find(
       ({ docketNumber }) => docketNumber === newLeadDocketNumber,
@@ -174,22 +176,20 @@ async function updateConsolidatedCaseDeadlineReferenceId(
     const newLeadCaseDeadlineId =
       NEW_LEAD_CASE_DEADLINE?.caseDeadlineId || undefined;
 
-    const UPDATED_CHILD_CASE_DEADLINES: RawCaseDeadline[] = CHILD_DEADLINES.map(
-      (childCaseDeadline: RawCaseDeadline) => {
-        return {
-          ...childCaseDeadline,
-          consolidatedCaseDeadlineId:
-            childCaseDeadline.docketNumber === newLeadDocketNumber
-              ? undefined
-              : newLeadCaseDeadlineId,
-        } as RawCaseDeadline;
-      },
-    );
+    CHILD_DEADLINES.forEach((childCaseDeadline: RawCaseDeadline) => {
+      const updatedDeadline = {
+        ...childCaseDeadline,
+        consolidatedCaseDeadlineId:
+          childCaseDeadline.docketNumber === newLeadDocketNumber
+            ? undefined
+            : newLeadCaseDeadlineId,
+      } as RawCaseDeadline;
 
-    await upsertCaseDeadlines(UPDATED_CHILD_CASE_DEADLINES);
-  });
+      DEADLINES_TO_UPDATE.push(updatedDeadline);
+    });
+  }
 
-  await Promise.all(TASKS);
+  await upsertCaseDeadlines(DEADLINES_TO_UPDATE);
 }
 
 const determineEntitiesToLock = (
