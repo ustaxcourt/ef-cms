@@ -9,7 +9,6 @@ import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/creat
 describe('edit motion response order', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
   const motionType = 'Motion for a New Trial';
-  let storedDocketNumber;
 
   describe('judge', () => {
     before(() => {
@@ -17,7 +16,7 @@ describe('edit motion response order', () => {
       createAndServePaperPetition({
         yearReceived: '2025',
       }).then(({ docketNumber }) => {
-        storedDocketNumber = docketNumber;
+        cy.wrap(docketNumber).as('docketNumber');
         loginAsCaseServicesSupervisor();
         cy.visit(`/case-detail/${docketNumber}`);
 
@@ -26,9 +25,9 @@ describe('edit motion response order', () => {
           documentType: motionType,
         });
       });
-      cy.then(() => {
+      cy.get<string>('@docketNumber').then(docketNumber => {
         loginAsColvin();
-        cy.visit(`/case-detail/${storedDocketNumber}`);
+        cy.visit(`/case-detail/${docketNumber}`);
       });
     });
 
