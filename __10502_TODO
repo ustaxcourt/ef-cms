@@ -1,9 +1,13 @@
 - transaction in updateCase (and maybe create?)
 - promise.allSettled in setTrialSessionCalendarInteractor.ts?
 
+- validate all cases before trying to do all the trial session stuff in setTrialSessionCalendarInteractor
+- transactions? in updateCase (and maybe create?)
+- Add types to correspondence and archivedCorrespondence on case.ts
 - sorting of consolidated cases after removing one
 - east-west issue with adding/removing a consolidated case
 - east-west issues that do not have to do with getCaseAction
+
   - example: uploadCorrespondenceDocumentSequence, which has to do with navigating back to the case details
 
 - generateNoticeOfTrialIssuedInteractor issue -- timing
