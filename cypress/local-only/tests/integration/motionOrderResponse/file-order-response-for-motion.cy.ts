@@ -264,7 +264,7 @@ describe('file motion response order', () => {
       });
     });
 
-    it.only('should allow judge to strike case from trial session', () => {
+    it('should allow judge to strike case from trial session', () => {
       const expectedContents = [
         `On ${formattedToday}, petitioner filed a Motion for a New Trial`,
         'this case is stricken from the trial session.',
