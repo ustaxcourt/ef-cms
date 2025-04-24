@@ -180,7 +180,7 @@ export const MessageDocument = connect(
           <Button
             link
             data-testid="order-response-button"
-            icon="stamp"
+            icon="edit"
             onClick={() => {
               navigateToPathSequence({
                 path: messageDocumentHelper.motionOrderResponseFromMessagesLink,
