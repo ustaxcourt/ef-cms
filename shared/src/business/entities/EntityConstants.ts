@@ -1823,13 +1823,3 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
   HYBRID_CASE_MINIMUM_QUANTITY: 50,
   HYBRID_CASE_MAX_QUANTITY: 100,
 } as const;
-
-export const MOTION_ORDER_RESPONSE_OPTIONS = {
-  issueOrderOptions: {
-    ALL_CASES: 'All cases in this group',
-    THIS_CASE_ONLY: 'Just this case',
-  },
-  orderType: 'motionOrderResponse',
-};
-
-export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
