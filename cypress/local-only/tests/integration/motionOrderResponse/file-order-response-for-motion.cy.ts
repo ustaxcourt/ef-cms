@@ -11,6 +11,7 @@ import {
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 import { createAndServePaperFiling } from 'cypress/helpers/caseDetail/docketRecord/paperFiling/create-and-serve-paper-filing';
 import { retry } from 'cypress/helpers/retry';
+import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
 
 describe('file motion response order', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
@@ -231,5 +232,66 @@ describe('file motion response order', () => {
     });
   });
 
-  
+  describe('Trial Session', () => {
+    before(() => {
+      loginAsCaseServicesSupervisor();
+      createTrialSession().then(({ trialSessionId }) => {
+        cy.wrap(trialSessionId).as('trialSessionId');
+        cy.get('[data-testid="new-trial-sessions-tab"]').click();
+        cy.contains('Anchorage, Alaska').last().click();
+        cy.contains('Set Calendar').click();
+        cy.contains('Yes, Set Calendar').click();
+      });
+      createAndServePaperPetition({
+        yearReceived: '2025',
+      }).then(({ docketNumber }) => {
+        loginAsCaseServicesSupervisor();
+        cy.visit(`/case-detail/${docketNumber}`);
+        createAndServePaperFiling({
+          dateReceived: today,
+          documentType: motionType,
+        });
+        cy.get('[data-testid="tab-case-information"]').click();
+        cy.get('[data-testid="add-to-trial-session-btn"]').click();
+        cy.get('#show-all-locations-true').click({ force: true });
+
+        cy.get('[data-testid="trial-session-select"] option')
+          .eq(1)
+          .then($option => {
+            const value: string = $option.val() as string;
+            cy.get('[data-testid="trial-session-select"]').select(value);
+          });
+
+        cy.contains('Add Case').click();
+
+        loginAsColvin();
+        cy.visit(`/case-detail/${docketNumber}`);
+      });
+    });
+
+    it.only('should allow judge to strike case from trial session', () => {
+      const expectedContents = [
+        `On ${formattedToday}, petitioner filed a Motion for a New Trial`,
+        'this case is stricken from the trial session.',
+        'jurisdiction is retained by the undersigned',
+      ];
+      cy.get('#tab-document-view').click();
+      cy.contains('Motion for a New Trial').click();
+      cy.get('[data-testid="order-response-button"]').click();
+      cy.get('#response-date-input-orderResponseResponseDate-picker').type(
+        today,
+      );
+
+      cy.get('#case-is-stricken-from-trial-session').check({ force: true });
+      cy.get('#case-is-stricken-from-trial-session').should('be.checked');
+
+      cy.intercept('POST', '**/api/court-issued-order').as('courtIssuedOrder');
+      cy.get('[data-testid="save-draft-button"]').click();
+      cy.wait('@courtIssuedOrder').then(({ request: req }) => {
+        expectedContents.forEach(text => {
+          expect(req.body.contentHtml).to.include(text);
+        });
+      });
+    });
+  });
 });
