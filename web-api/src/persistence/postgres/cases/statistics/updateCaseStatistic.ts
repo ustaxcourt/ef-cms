@@ -16,9 +16,9 @@ export const updateCaseStatistic = async ({
     table: 'dwCaseStatistic',
     values: {
       determinationDeficiencyAmount:
-        statistic.determinationDeficiencyAmount || null,
+        statistic.determinationDeficiencyAmount ?? null,
       determinationTotalPenalties:
-        statistic.determinationTotalPenalties || null,
+        statistic.determinationTotalPenalties ?? null,
       irsDeficiencyAmount: statistic.irsDeficiencyAmount,
       irsTotalPenalties: statistic.irsTotalPenalties,
       lastDateOfPeriod: statistic.lastDateOfPeriod
