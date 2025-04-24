@@ -22,7 +22,7 @@ import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const ActionsAndFilingsFieldset = ({
-  internalDocumentTypesHelper,
+  trialSessionMinutesHelper,
   actionsAndFilingsFormState,
   addRowHandler,
   onBlurHandler,
@@ -33,7 +33,7 @@ export const ActionsAndFilingsFieldset = ({
   onChangeHandler: OnChangeHandler;
   removeRowHandler: RemoveRowHandler;
   onBlurHandler: AutoSaveHandler;
-  internalDocumentTypesHelper: any;
+  trialSessionMinutesHelper: any;
   actionsAndFilingsFormState: MinuteSheetFormState['actionsAndFilingsSection'];
 }) => {
   const renderSelectField = (
@@ -117,16 +117,17 @@ export const ActionsAndFilingsFieldset = ({
           <SelectSearch
             aria-label="actions-and-filings-document-type-label"
             data-testid="actions-and-filings-document-type-search"
+            isDisabled={!row.filedBy}
             id="actions-and-filings-document-type"
             isClearable={true}
             isMulti={false}
             name="eventCode"
             options={
-              internalDocumentTypesHelper.internalDocumentTypesForSelectSorted
+              trialSessionMinutesHelper.documentTypeOptions[row.renderKey]
             }
             value={reactSelectValue({
               documentTypes:
-                internalDocumentTypesHelper.internalDocumentTypesForSelectSorted,
+                trialSessionMinutesHelper.documentTypeOptions[row.renderKey],
               selectedEventCode: row.documentType,
             })}
             onChange={inputValue => {

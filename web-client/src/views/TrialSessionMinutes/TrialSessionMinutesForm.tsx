@@ -26,7 +26,7 @@ export const TrialSessionMinutesForm = connect(
       state.trialSessionMinutesFormOptionsHelper,
     updateTrialSessionMinutesFormSequence:
       sequences.updateTrialSessionMinutesFormSequence,
-    internalDocumentTypesHelper: state.internalTypesHelper,
+    trialSessionMinutesHelper: state.trialSessionMinutesHelper,
   },
   ({
     addMinuteSheetFormRowSequence,
@@ -35,7 +35,7 @@ export const TrialSessionMinutesForm = connect(
     trialSessionMinutesForm,
     trialSessionMinutesFormOptionsHelper,
     updateTrialSessionMinutesFormSequence,
-    internalDocumentTypesHelper,
+    trialSessionMinutesHelper,
   }) => {
     return (
       <form>
@@ -100,7 +100,7 @@ export const TrialSessionMinutesForm = connect(
           removeRowHandler={removeMinuteSheetFormRowSequence}
           onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
-          internalDocumentTypesHelper={internalDocumentTypesHelper}
+          trialSessionMinutesHelper={trialSessionMinutesHelper}
         />
         <hr />
         <TrialBriefFieldset
