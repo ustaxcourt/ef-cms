@@ -18,8 +18,8 @@ export const upsertCaseStatistics = async ({
     values: statistics.map((s, index) => ({
       docketNumber,
       statisticId: s.statisticId,
-      determinationDeficiencyAmount: s.determinationDeficiencyAmount || null,
-      determinationTotalPenalties: s.determinationTotalPenalties || null,
+      determinationDeficiencyAmount: s.determinationDeficiencyAmount ?? null,
+      determinationTotalPenalties: s.determinationTotalPenalties ?? null,
       irsDeficiencyAmount: s.irsDeficiencyAmount,
       irsTotalPenalties: s.irsTotalPenalties,
       lastDateOfPeriod: s.lastDateOfPeriod
