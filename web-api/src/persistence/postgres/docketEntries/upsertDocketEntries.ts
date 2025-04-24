@@ -17,7 +17,7 @@ export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
         ? false
         : docketEntry.isLegacyServed,
     isSealed: docketEntry.isSealed === undefined ? false : docketEntry.isSealed,
-    judge: docketEntry.judge || null,
+    judge: docketEntry.judge ?? null,
     numberOfPages: docketEntry.numberOfPages,
     pending: docketEntry.pending === undefined ? false : docketEntry.pending,
     receivedAt: calculateDate({ dateString: docketEntry.receivedAt }),
@@ -25,7 +25,7 @@ export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
     servedAt: docketEntry.servedAt
       ? calculateDate({ dateString: docketEntry.servedAt })
       : null,
-    signedJudgeName: docketEntry.signedJudgeName || null,
+    signedJudgeName: docketEntry.signedJudgeName ?? null,
   }));
 
   await pgInsertInto({
