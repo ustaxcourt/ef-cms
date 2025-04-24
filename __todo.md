@@ -35,7 +35,6 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
 - [ ] Odd user-related dynamodb functions
-- [ ] Do we need to tackle: "pk": "chief-judge-name" ??
 - [ ] Determine if selectAll is necessary for User functions
 - [ ] Delete `UserCase` entity
 - [ ] Make sure all user related entities are copied in & all user related functions (i.e., scrub all user-related dynamodb code)
@@ -58,8 +57,8 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 ## Odd dynamo functions that need to be reimplemented with postgres
 
 - [x] associateUserWithCase - association table
-- [ ] getCasesForUser - not really concerning users
-- [ ] barNumberGenerator: Contains business logic for generating a bar number,
+- [x] getCasesForUser - not really concerning users
+- [in-progress] barNumberGenerator: Contains business logic for generating a bar number,
 does not belong in the persistence layer.
 - [x] getUsersBySearchKey
 - [ ] removePractitionerOnCase

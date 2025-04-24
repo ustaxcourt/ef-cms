@@ -5,6 +5,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserFactory } from '@shared/business/entities/factories/UserFactory';
 import { getCasesByEmailTotal } from '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 
 async function disableIsUserUpdatingFlag({
   user,
@@ -25,12 +26,9 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
   { user }: { user: RawUser | RawPractitioner },
   authorizedUser: AuthUser,
 ): Promise<void> => {
-  const docketNumbersByUser = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
+  const docketNumbersByUser = await getDocketNumbersByUser({
+    userId: user.userId,
+  });
 
   if (!docketNumbersByUser.length) {
     await disableIsUserUpdatingFlag({ user });
@@ -77,12 +75,9 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
 }): Promise<void> {
   await applicationContext.getUtilities().sleep(WAIT_TIMEOUT);
 
-  const docketNumbersByUser = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: userEmail,
-    });
+  const docketNumbersByUser = await getDocketNumbersByUser({
+    userId: userEmail,
+  });
   const expectedCount = docketNumbersByUser.length;
 
   const actualCount = await getCasesByEmailTotal({

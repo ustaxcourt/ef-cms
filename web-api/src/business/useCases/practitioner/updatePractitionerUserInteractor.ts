@@ -21,6 +21,7 @@ import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { updatePractitionerUser as updatePractitionerUserFromPersistence } from '@web-api/persistence/postgres/practitioners/updatePractitionerUser';
 import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/practitioners/getPractitionerByBarNumber';
 import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -191,16 +192,15 @@ const getUpdatedFieldNames = ({
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext,
   { user }: { user: Practitioner },
 ) => {
-  const docketNumbers: string[] = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({ applicationContext, userId: user.userId });
+  const docketNumbers: string[] = await getDocketNumbersByUser({
+    userId: user.userId,
+  });
 
   return { identifiers: docketNumbers.map(item => `case|${item}`), ttl: 900 };
 };
-
 export const updatePractitionerUserInteractor = withLocking(
   updatePractitionerUser,
   determineEntitiesToLock,

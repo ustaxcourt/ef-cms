@@ -2,6 +2,7 @@ import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstan
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getCasesForUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 
 export type TUserContact = {
   address1: string;
@@ -53,12 +54,7 @@ const generateChangeOfAddressForPractitioner = async ({
   websocketMessagePrefix?: 'user' | 'admin';
   authorizedUser: AuthUser;
 }): Promise<any[] | undefined> => {
-  const associatedUserCases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({
-      applicationContext,
-      userId: user.userId,
-    });
+  const associatedUserCases = await getCasesForUser({ userId: user.userId });
 
   if (associatedUserCases.length === 0) {
     return [];

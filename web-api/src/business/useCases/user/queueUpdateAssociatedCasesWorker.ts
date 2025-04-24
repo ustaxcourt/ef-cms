@@ -3,18 +3,16 @@ import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
 import { RawUser } from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 
 export const queueUpdateAssociatedCasesWorker = async (
   applicationContext: ServerApplicationContext,
   { user }: { user: RawUser | RawPractitioner },
   authorizedUser: AuthUser,
 ): Promise<void> => {
-  const docketNumbersAssociatedWithUser = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
+  const docketNumbersAssociatedWithUser = await getDocketNumbersByUser({
+    userId: user.userId,
+  });
 
   await Promise.all(
     docketNumbersAssociatedWithUser.map(docketNumber =>

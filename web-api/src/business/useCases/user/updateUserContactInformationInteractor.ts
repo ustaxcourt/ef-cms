@@ -21,6 +21,7 @@ import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
+import { getCasesForUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 
 /**
  * updateUserContactInformationHelper
@@ -190,14 +191,12 @@ export const updateUserContactInformation = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext,
   { userId }: { userId: string },
 ) => {
   await getUserByIdOnceAllUpdatesComplete({ userId });
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({ applicationContext, userId });
+  const cases = await getCasesForUser({ userId });
 
   return {
     identifiers: cases?.map(item => `case|${item.docketNumber}`),

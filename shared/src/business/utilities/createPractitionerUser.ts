@@ -1,3 +1,4 @@
+import { createBarNumber } from '@web-api/persistence/postgres/practitioners/barNumberGenerator';
 import { Practitioner, RawPractitioner } from '../entities/Practitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
@@ -7,8 +8,7 @@ export const createPractitionerUser = async (
 ): Promise<RawPractitioner> => {
   const barNumber =
     user.barNumber ||
-    (await applicationContext.barNumberGenerator.createBarNumber({
-      applicationContext,
+    (await createBarNumber({
       initials:
         user.lastName.charAt(0).toUpperCase() +
         user.firstName.charAt(0).toUpperCase(),

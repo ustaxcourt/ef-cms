@@ -17,6 +17,7 @@ import {
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { updateUser } from '@web-api/gateways/user/updateUser';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 
@@ -94,16 +95,13 @@ export const userTokenHasExpired = (
 
 export const verifyUserPendingEmailInteractor = withLocking(
   verifyUserPendingEmail,
-  async (applicationContext: ServerApplicationContext, _, authorizedUser) => {
+  async (_applicationContext, _, authorizedUser) => {
     if (!authorizedUser?.userId) {
       throw new Error('No authorized User when attempting to lock');
     }
-    const docketNumbers = await applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser({
-        applicationContext,
-        userId: authorizedUser.userId,
-      });
+    const docketNumbers = await getDocketNumbersByUser({
+      userId: authorizedUser.userId,
+    });
     const identifiers = docketNumbers.map(dN => `case|${dN}`);
 
     return { identifiers };
