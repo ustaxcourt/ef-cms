@@ -17,7 +17,6 @@ describe('file motion response order', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
   const formattedToday = formatNow(FORMATS.MONTH_DAY_YEAR);
   const motionType = 'Motion for a New Trial';
-  let storedDocketNumber;
 
   describe('judge', () => {
     before(() => {
@@ -25,9 +24,7 @@ describe('file motion response order', () => {
       createAndServePaperPetition({
         yearReceived: '2025',
       }).then(({ docketNumber }) => {
-        storedDocketNumber = docketNumber;
-        cy.wrap(docketNumber).as('docketNumber');
-        // use these explicitely or delete them
+        Cypress.env('docketNumber', docketNumber);
         cy.wrap(formattedToday).as('formattedToday');
         cy.wrap(today).as('today');
         loginAsCaseServicesSupervisor();
@@ -50,7 +47,7 @@ describe('file motion response order', () => {
           `petitioner filed a ${motionType}`,
         ];
 
-        cy.visit(`/case-detail/${storedDocketNumber}`);
+        cy.visit(`/case-detail/${Cypress.env('docketNumber')}`);
 
         cy.get(
           '[data-testid="docket-entry-filingsAndProceedings-7"] > button',
@@ -80,7 +77,7 @@ describe('file motion response order', () => {
       it('should save signed draft', () => {
         const expectedContents = `On ${formattedToday}`;
 
-        cy.visit(`/case-detail/${storedDocketNumber}`);
+        cy.visit(`/case-detail/${Cypress.env('docketNumber')}`);
         cy.get('#tab-document-view').click();
 
         cy.contains('Motion for a New Trial').click();
@@ -109,7 +106,7 @@ describe('file motion response order', () => {
         // get the last order index
         const expectedContents = `On ${formattedToday}`;
 
-        cy.visit(`/case-detail/${storedDocketNumber}`);
+        cy.visit(`/case-detail/${Cypress.env('docketNumber')}`);
         cy.get('#tab-document-view').click();
 
         cy.contains('Motion for a New Trial').click();
@@ -137,7 +134,7 @@ describe('file motion response order', () => {
           `by ${formattedToday} petitioner may file a Reply. It is further`,
           'Test additional text box',
         ];
-        cy.visit(`/case-detail/${storedDocketNumber}`);
+        cy.visit(`/case-detail/${Cypress.env('docketNumber')}`);
         cy.get(
           '[data-testid="docket-entry-filingsAndProceedings-7"] > button',
         ).click();
@@ -164,7 +161,7 @@ describe('file motion response order', () => {
 
   describe('pdf preview', () => {
     it('should show a pdf preview when clicking preview pdf', () => {
-      cy.visit(`/case-detail/${storedDocketNumber}`);
+      cy.visit(`/case-detail/${Cypress.env('docketNumber')}`);
       cy.get('#tab-document-view').click();
       cy.contains('Motion for a New Trial').click(); // TODO 10586: use this everywhere
       cy.get('[data-testid="order-response-button"]').click();
