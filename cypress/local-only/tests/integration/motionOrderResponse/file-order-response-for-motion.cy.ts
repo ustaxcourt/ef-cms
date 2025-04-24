@@ -189,23 +189,18 @@ describe('file motion response order', () => {
   describe('Consolidated Cases', () => {
     before(() => {
       // create another case to add to our initial case as a consolidated case));
-      createAndServeConsolidatedGroup().then(
-        ({ leadDocketNumber, memberDocketNumber }) => {
-          cy.wrap(leadDocketNumber).as('leadDocketNumber');
-          cy.wrap(memberDocketNumber).as('memberDocketNumber');
+      createAndServeConsolidatedGroup().then(({ leadDocketNumber }) => {
+        loginAsCaseServicesSupervisor();
+        cy.visit(`/case-detail/${leadDocketNumber}`);
 
-          loginAsCaseServicesSupervisor();
-          cy.visit(`/case-detail/${leadDocketNumber}`);
+        createAndServePaperFiling({
+          dateReceived: today,
+          documentType: motionType,
+        });
 
-          createAndServePaperFiling({
-            dateReceived: today,
-            documentType: motionType,
-          });
-
-          loginAsColvin();
-          cy.visit(`/case-detail/${leadDocketNumber}`);
-        },
-      );
+        loginAsColvin();
+        cy.visit(`/case-detail/${leadDocketNumber}`);
+      });
     });
 
     it('should be able to create a motion response order for a lead case ina consolidated group', () => {
