@@ -18,7 +18,7 @@ export const createPetitionersOnCase = async ({
       address2: petitionerData.address2,
       address3: petitionerData.address3,
       city: petitionerData.city,
-      contactId: petitionerData.contactId || getUniqueId(),
+      contactId: petitionerData.contactId ?? getUniqueId(),
       contactType: petitionerData.contactType,
       country: petitionerData.country,
       countryType: petitionerData.countryType,
@@ -37,7 +37,7 @@ export const createPetitionersOnCase = async ({
       sealedAndUnavailable: petitionerData.sealedAndUnavailable,
       secondaryName: petitionerData.secondaryName,
       serviceIndicator:
-        petitionerData.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_NONE,
+        petitionerData.serviceIndicator ?? SERVICE_INDICATOR_TYPES.SI_NONE,
       state: petitionerData.state,
       title: petitionerData.title,
       orderOnCase: index,

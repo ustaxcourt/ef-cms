@@ -27,7 +27,7 @@ export const createCaseStatistic = async ({
           : null,
         statisticId: statistic.statisticId,
         year: statistic.year ? parseInt(statistic.year) : null,
-        yearOrPeriod: statistic.yearOrPeriod || null,
+        yearOrPeriod: statistic.yearOrPeriod ?? null,
         updatedAt: calculateDate({ dateString: formatNow() }),
       },
     ],
