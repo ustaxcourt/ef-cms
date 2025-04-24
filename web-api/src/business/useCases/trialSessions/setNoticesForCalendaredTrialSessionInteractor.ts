@@ -6,10 +6,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
+import { asyncHandleLockError, withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 const setNoticesForCalendaredTrialSession = async (
   applicationContext: ServerApplicationContext,
@@ -19,9 +16,9 @@ const setNoticesForCalendaredTrialSession = async (
   }: { trialSessionId: string; clientConnectionId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  // if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-  //   throw new UnauthorizedError('Unauthorized');
-  // }
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
   const calendaredCases = await applicationContext
     .getPersistenceGateway()
@@ -31,9 +28,6 @@ const setNoticesForCalendaredTrialSession = async (
     });
 
   const trialNoticePdfsKeys: string[] = [];
-
-  applicationContext.getNotificationGateway().sendNotificationToUser =
-    console.log as any;
 
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -81,10 +75,6 @@ const setNoticesForCalendaredTrialSession = async (
       trialSessionId,
     });
 
-  console.log('trialSessionProcessingStatus =>', trialSessionProcessingStatus);
-
-  // TODO: SEEMS LIKE trialSessionProcessingStatus IS AN OBJECT AND WILL NEVER EQUAL TO 'processing' || 'complete'
-  // SEEMS like the below condition will never be true.
   if (
     trialSessionProcessingStatus &&
     (trialSessionProcessingStatus === 'processing' ||
@@ -115,7 +105,6 @@ const setNoticesForCalendaredTrialSession = async (
   });
 
   for (const calendaredCase of calendaredCases) {
-    console.log('HANDLING DOCKET NUMBER => ', calendaredCase.docketNumber);
     await applicationContext
       .getMessageGateway()
       .sendSetTrialSessionCalendarEvent({
