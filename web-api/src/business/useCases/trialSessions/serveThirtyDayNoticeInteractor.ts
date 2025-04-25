@@ -241,9 +241,7 @@ export const serveThirtyDayNotice = async (
     }
   });
 
-  await settlePromises(generateNottForCases, {
-    errorMessage: `Failed to serve all NOTTs for cases in trial session ${trialSessionId}`,
-  });
+  await settlePromises(generateNottForCases);
 
   let pdfUrl: string | undefined = undefined;
   let fileId: string | undefined = undefined;

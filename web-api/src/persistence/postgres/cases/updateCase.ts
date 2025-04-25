@@ -27,19 +27,14 @@ export const updateCase = async ({
   // Because we used to have nested objects in our case records, we upserted everything.
   // Now, with separate tables, we need to update these separate tables as well.
   // In the future, we should try to avoid upserting everything.
-  await settlePromises(
-    [
-      upsertCaseStatusUpdates({
-        docketNumber: caseToUpdate.docketNumber,
-        statusUpdates: caseToUpdate.caseStatusHistory as CaseStatusChange[],
-      }),
-      clearAndUpsertPetitioners({ caseToUpdate }),
-      clearAndUpsertStatistics({ caseToUpdate }),
-    ],
-    {
-      errorMessage: `Failed to finish updating case ${caseToUpdate.docketNumber}`,
-    },
-  );
+  await settlePromises([
+    upsertCaseStatusUpdates({
+      docketNumber: caseToUpdate.docketNumber,
+      statusUpdates: caseToUpdate.caseStatusHistory as CaseStatusChange[],
+    }),
+    clearAndUpsertPetitioners({ caseToUpdate }),
+    clearAndUpsertStatistics({ caseToUpdate }),
+  ]);
 
   return caseToUpdate;
 };

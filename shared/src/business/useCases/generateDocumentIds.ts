@@ -6,7 +6,6 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const generateDocumentIds = async (
   applicationContext: ClientApplicationContext,
@@ -107,7 +106,7 @@ export const generateDocumentIds = async (
       requestForPlaceOfTrialFileId,
       stinFileId,
       ...attachmentToPetitionFileIds
-    ]: string[] = await settlePromises([
+    ]: string[] = await Promise.all([
       applicationForWaiverOfFilingFeeUpload,
       corporateDisclosureFileUpload,
       petitionFileUpload,
