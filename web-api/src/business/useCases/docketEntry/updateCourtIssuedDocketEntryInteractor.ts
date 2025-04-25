@@ -100,9 +100,7 @@ export const updateCourtIssuedDocketEntry = async (
     }),
   ];
 
-  await settlePromises(saveItems, {
-    errorMessage: `Failed to update court issued docket entry for ${docketNumber}, docketEntryId ${docketEntryId}`,
-  });
+  await settlePromises(saveItems);
 
   return caseEntity.toRawObject();
 };

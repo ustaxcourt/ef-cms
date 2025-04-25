@@ -21,24 +21,19 @@ export const addCaseToHearing = ({
   docketNumber: string;
   trialSession: RawTrialSession;
 }) =>
-  settlePromises(
-    [
-      // Create mapping record
-      put({
-        Item: {
-          ...trialSession,
-          pk: `case|${docketNumber}`,
-          sk: `hearing|${trialSession.trialSessionId}`,
-        },
-        applicationContext,
-      }),
-      // update trial session
-      updateTrialSession({
-        applicationContext,
-        trialSessionToUpdate: trialSession,
-      }),
-    ],
-    {
-      errorMessage: `Failed to add case ${docketNumber} to trial session ${trialSession.trialSessionId}`,
-    },
-  );
+  settlePromises([
+    // Create mapping record
+    put({
+      Item: {
+        ...trialSession,
+        pk: `case|${docketNumber}`,
+        sk: `hearing|${trialSession.trialSessionId}`,
+      },
+      applicationContext,
+    }),
+    // update trial session
+    updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSession,
+    }),
+  ]);

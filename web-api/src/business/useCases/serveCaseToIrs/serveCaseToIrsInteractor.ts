@@ -432,9 +432,6 @@ const createCoversheetsForServedEntries = async ({
         caseEntity.updateDocketEntry(updatedDocketEntry);
       }
     }),
-    {
-      errorMessage: `Failed to generate all cover sheets when serving case ${caseEntity.docketNumber} to IRS`,
-    },
   );
 };
 
@@ -623,9 +620,7 @@ export const serveCaseToIrs = async (
       );
     }
 
-    await settlePromises(generatedDocuments, {
-      errorMessage: `Failed to generate all draft documents when serving case ${docketNumber} to IRS`,
-    });
+    await settlePromises(generatedDocuments);
 
     await createPetitionWorkItems({
       caseEntity,

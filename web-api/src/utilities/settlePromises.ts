@@ -2,7 +2,6 @@ import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export async function settlePromises<T extends readonly unknown[]>(
   promises: readonly [...T],
-  { errorMessage }: { errorMessage?: string } = {},
 ): Promise<{ [K in keyof T]: Awaited<T[K]> }> {
   const results = await Promise.allSettled(promises);
 
@@ -16,10 +15,7 @@ export async function settlePromises<T extends readonly unknown[]>(
   });
 
   if (errors.length > 0) {
-    const errorMessagePrefix = errorMessage ? `${errorMessage}: ` : '';
-    throw new Error(
-      `${errorMessagePrefix}${errors.length} promises rejected in settlePromises`,
-    );
+    throw new Error(`{errors.length} promises rejected in settlePromises`);
   }
   return results.map(
     result => (result as PromiseFulfilledResult<unknown>).value,

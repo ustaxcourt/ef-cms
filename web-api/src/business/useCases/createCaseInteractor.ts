@@ -380,9 +380,7 @@ export const createCaseInteractor = async (
     }),
   ];
 
-  await settlePromises(caseAssociationUpdates, {
-    errorMessage: `Failed to finish creating case associations for ${caseToAdd.docketNumber}`,
-  });
+  await settlePromises(caseAssociationUpdates);
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

@@ -154,12 +154,7 @@ export const setTrialSessionCalendarInteractor = async (
     // If firing all at once, we exhaust the available connections and will run into connection timeouts.
     const chunkedFunctions = chunk(funcs, CHUNK_SIZE);
     for (const singleChunk of chunkedFunctions) {
-      await settlePromises(
-        singleChunk.map(func => func()),
-        {
-          errorMessage: `Trial session ${trialSessionId} failed to finish calendaring`,
-        },
-      );
+      await settlePromises(singleChunk.map(func => func()));
     }
 
     await Promise.all(

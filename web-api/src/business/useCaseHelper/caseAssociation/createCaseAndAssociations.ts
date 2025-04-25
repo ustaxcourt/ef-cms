@@ -150,5 +150,5 @@ export const createCaseAndAssociations = async ({
     }),
   ];
 
-  return await settlePromises(requests, {errorMessage: `Failed to fully create case ${docketNumber}`});
+  return await settlePromises(requests);
 };

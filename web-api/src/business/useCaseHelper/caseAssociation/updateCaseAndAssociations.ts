@@ -451,9 +451,7 @@ export const updateCaseAndAssociations = async ({
     persistFn();
   });
 
-  await settlePromises(persistenceRequests, {
-    errorMessage: `Failed to finish updating case and associations for ${caseToUpdate.docketNumber}`,
-  });
+  await settlePromises(persistenceRequests);
 
   return updateCase({
     caseToUpdate: validNewRawCaseEntity,

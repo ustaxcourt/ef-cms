@@ -374,9 +374,7 @@ export const createCaseFromPaperInteractor = async (
     }),
   ];
 
-  await settlePromises(caseAssociationUpdates, {
-    errorMessage: `Failed to finish creating case associations for ${caseToAdd.docketNumber}`,
-  });
+  await settlePromises(caseAssociationUpdates);
 
   return {
     caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),
