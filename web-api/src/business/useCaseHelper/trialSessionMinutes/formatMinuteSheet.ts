@@ -362,11 +362,12 @@ export const formatMotions = (
 };
 
 const formatDocumentType = (eventCode: string): string => {
-  return (
+  const documentType =
     INTERNAL_DOCUMENTS_ARRAY.find(
       internalDocument => internalDocument.eventCode === eventCode,
-    )?.documentType || ''
-  );
+    )?.documentType || '';
+
+  return documentType.replace(/\[.*?\]/g, '').trim();
 };
 
 export const formatActionsAndFilings = (
