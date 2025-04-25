@@ -43,6 +43,7 @@ export function externalUserCreatesElectronicCase(
 
   return cy
     .get('[data-testid="case-link-docket-number"]')
+    .should('be.visible')
     .invoke('text')
     .then(docketNumberWithSuffix => {
       cy.get('[data-testid="button-back-to-dashboard"]').click();

@@ -1,6 +1,9 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getPractitionersByNameInteractor } from './getPractitionersByNameInteractor';
+import {
+  getPractitionersByNameInteractor,
+  PractitionerByNameParams,
+} from './getPractitionersByNameInteractor';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
@@ -12,7 +15,7 @@ describe('getPractitionersByNameInteractor', () => {
       await expect(
         getPractitionersByNameInteractor(
           applicationContext,
-          {} as { name: string; searchAfter: string },
+          {} as PractitionerByNameParams,
           mockPetitionerUser,
         ),
       ).rejects.toThrow('Unauthorized for searching practitioners');
@@ -22,7 +25,7 @@ describe('getPractitionersByNameInteractor', () => {
       await expect(
         getPractitionersByNameInteractor(
           applicationContext,
-          {} as { name: string; searchAfter: string },
+          {} as PractitionerByNameParams,
           mockPetitionsClerkUser,
         ),
       ).rejects.toThrow('Name must be provided to search');
@@ -36,14 +39,16 @@ describe('getPractitionersByNameInteractor', () => {
           results: [
             {
               barNumber: 'PT1234',
-              contact: { flavor: 'bbq', state: 'WI' },
+              contact: { state: 'WI' },
+              originalBarState: 'NJ',
               name: 'Test Practitioner1',
               role: ROLES.irsPractitioner,
               userId: '8190d648-e643-4964-988e-141e4e0db861',
             },
             {
               barNumber: 'PT5432',
-              contact: { favoriteColor: 'chartreuse', state: 'WI' },
+              contact: { state: 'WI' },
+              originalBarState: 'NJ',
               name: 'Test Practitioner2',
               role: ROLES.privatePractitioner,
               userId: '12d5bb3a-e867-4066-bda5-2f178a76191f',
@@ -56,7 +61,7 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
-          searchAfter: undefined as unknown as string,
+          searchAfter: undefined as unknown as string[],
         },
         mockPetitionsClerkUser,
       );
@@ -67,12 +72,14 @@ describe('getPractitionersByNameInteractor', () => {
           practitioners: [
             {
               barNumber: 'PT1234',
-              contact: { state: 'WI' },
+              state: 'WI',
+              originalBarState: 'NJ',
               name: 'Test Practitioner1',
             },
             {
               barNumber: 'PT5432',
-              contact: { state: 'WI' },
+              state: 'WI',
+              originalBarState: 'NJ',
               name: 'Test Practitioner2',
             },
           ],
@@ -115,7 +122,7 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
-          searchAfter: undefined as unknown as string,
+          searchAfter: undefined as unknown as string[],
         },
         mockPetitionsClerkUser,
       );
@@ -128,7 +135,7 @@ describe('getPractitionersByNameInteractor', () => {
         applicationContext,
         {
           name: 'Test Practitioner',
-          searchAfter: undefined as unknown as string,
+          searchAfter: undefined as unknown as string[],
         },
         undefined,
       );
@@ -139,12 +146,12 @@ describe('getPractitionersByNameInteractor', () => {
           practitioners: [
             {
               barNumber: 'PT1234',
-              contact: { state: 'originalBarState_WI' },
+              state: undefined,
               name: 'Test Practitioner1',
             },
             {
               barNumber: 'PT5432',
-              contact: { state: 'originalBarState_WI' },
+              state: undefined,
               name: 'Test Practitioner2',
             },
           ],
