@@ -155,11 +155,10 @@ import { trialCitiesHelper } from './computeds/trialCitiesHelper';
 import { trialLocationHelper } from '@web-client/presenter/computeds/trialLocationHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
-import { trialSessionMinutesFormOptionsHelper } from './computeds/TrialSession/TrialSessionMinutes/trialSessionMinutesFormOptionsHelper';
+import { trialSessionMinutesFormOptionsHelper } from './computeds/TrialSessionMinutes/trialSessionMinutesFormOptionsHelper';
 import { trialSessionPlanningReportViewHelper } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
-import { trialSessionMinutesHelper } from './computeds/TrialSessionMinutes/trialSessionMinutesHelper';
 import { trialSessionsSummaryHelper } from './computeds/trialSessionsSummaryHelper';
 import { updateCaseModalHelper } from './computeds/updateCaseModalHelper';
 import { userContactEditHelper } from './computeds/userContactEditHelper';
@@ -553,9 +552,6 @@ export const computeds = {
   >,
   trialSessionHeaderHelper: trialSessionHeaderHelper as unknown as ReturnType<
     typeof trialSessionHeaderHelper
-  >,
-  trialSessionMinutesHelper: trialSessionMinutesHelper as unknown as ReturnType<
-    typeof trialSessionMinutesHelper
   >,
   trialSessionMinutesFormOptionsHelper:
     trialSessionMinutesFormOptionsHelper as unknown as ReturnType<
