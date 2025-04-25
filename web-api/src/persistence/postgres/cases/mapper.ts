@@ -130,7 +130,7 @@ export function fromKyselyCase<T extends object>(record: T) {
       _: Partial<CaseKysely>,
     ) => value?.toISOString(),
     petitioners: (value?: any[], _?: Partial<CaseKysely>) =>
-      value ? value.map(p => ({ ...p, state: p.state ?? null })) : [], // petitioner state needs to be null rather than undefined
+      value ? value.map(p => ({ ...p, state: p.state || null })) : [], // petitioner state needs to be null rather than undefined
     petitionPaymentDate: (
       value: typeof dwCaseSchema.petitionPaymentDate,
       _: Partial<CaseKysely>,
