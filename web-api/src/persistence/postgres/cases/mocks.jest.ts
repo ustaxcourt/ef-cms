@@ -142,8 +142,8 @@ jest.mock(
 // Statistics
 
 jest.mock(
-  '@web-api/persistence/postgres/cases/statistics/createCaseStatistic',
-  () => mockFactory('createCaseStatistic'),
+  '@web-api/persistence/postgres/cases/statistics/createCaseStatistics',
+  () => mockFactory('createCaseStatistics'),
 );
 
 jest.mock(
