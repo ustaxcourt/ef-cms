@@ -7,6 +7,7 @@ import { uniqBy } from 'lodash';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const checkForReadyForTrialCasesInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -90,7 +91,7 @@ export const checkForReadyForTrialCasesInteractor = async (
     docketNumbers: caseCatalogDocketNumbers,
   });
 
-  await Promise.all(casesToUpdate.map(aCase => checkReadyForTrial(aCase)));
+  await settlePromises(casesToUpdate.map(aCase => checkReadyForTrial(aCase)));
 
   applicationContext.logger.debug('Time', createISODateString());
 };

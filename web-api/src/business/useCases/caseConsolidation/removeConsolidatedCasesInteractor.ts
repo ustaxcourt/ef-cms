@@ -10,6 +10,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
 import {
@@ -128,7 +129,7 @@ const removeConsolidatedCases = async (
     );
   }
 
-  await Promise.all(updateCasePromises);
+  await settlePromises(updateCasePromises);
 };
 
 async function removeConsolidatedCaseRefences(docketNumber: string) {
@@ -185,7 +186,7 @@ async function updateConsolidatedCaseDeadlineReferenceId(
     await upsertCaseDeadlines(UPDATED_CHILD_CASE_DEADLINES);
   });
 
-  await Promise.all(TASKS);
+  await settlePromises(TASKS);
 }
 
 const determineEntitiesToLock = (

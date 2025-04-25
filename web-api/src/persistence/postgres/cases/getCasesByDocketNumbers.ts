@@ -94,13 +94,13 @@ async function getAllCaseData({
   });
   petitioners.forEach(p => {
     const caseInfo = caseMap.get(p.docketNumber)!; // We know that we have the case because of our notFoundCases check above
-    const petitioners = caseInfo.petitioners || [];
+    const petitioners = caseInfo.petitioners ?? [];
     petitioners.push(p);
     caseMap.set(p.docketNumber, { ...caseInfo, petitioners });
   });
   statistics.forEach(s => {
     const caseInfo = caseMap.get(s.docketNumber)!;
-    const statistics = caseInfo.statistics || [];
+    const statistics = caseInfo.statistics ?? [];
     statistics.push(s);
     caseMap.set(s.docketNumber, { ...caseInfo, statistics });
   });
@@ -121,7 +121,7 @@ async function getAllCaseData({
   });
   caseStatusHistories.forEach(history => {
     const caseInfo = caseMap.get(history.docketNumber)!;
-    const histories = caseInfo.caseStatusHistory || [];
+    const histories = caseInfo.caseStatusHistory ?? [];
     histories.push(history);
     caseMap.set(history.docketNumber, {
       ...caseInfo,
@@ -130,7 +130,7 @@ async function getAllCaseData({
   });
   caseCorrespondences.forEach(correspondence => {
     const caseInfo = caseMap.get(correspondence.docketNumber!)!;
-    const correspondences = caseInfo.correspondence || [];
+    const correspondences = caseInfo.correspondence ?? [];
     correspondences.push(correspondence);
     caseMap.set(correspondence.docketNumber!, {
       ...caseInfo,
@@ -194,12 +194,12 @@ function convertDbCaseToRawCase(
     ...fromKyselyCase(dbCase),
     statistics: dbCase.statistics.map(s => ({
       ...s,
-      penalties: (s.penalties as RawPenalty[]) || [],
+      penalties: (s.penalties as RawPenalty[]) ?? [],
       year: s.year?.toString(),
-      yearOrPeriod: s.yearOrPeriod || undefined,
-      determinationTotalPenalties: s.determinationTotalPenalties || undefined,
+      yearOrPeriod: s.yearOrPeriod ?? undefined,
+      determinationTotalPenalties: s.determinationTotalPenalties ?? undefined,
       determinationDeficiencyAmount:
-        s.determinationDeficiencyAmount || undefined,
+        s.determinationDeficiencyAmount ?? undefined,
       lastDateOfPeriod: s.lastDateOfPeriod?.toISOString(),
     })),
     correspondence: dbCase.correspondence.map(cc =>
@@ -253,7 +253,7 @@ async function getStatistics(docketNumbers: string[]) {
   );
   return dbStatistics.map(s => ({
     ...s,
-    penalties: (s.penalties as StatisticPenaltyKysely[]) || [],
+    penalties: (s.penalties as StatisticPenaltyKysely[]) ?? [],
   }));
 }
 

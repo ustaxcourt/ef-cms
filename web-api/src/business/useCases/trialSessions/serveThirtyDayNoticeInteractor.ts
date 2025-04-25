@@ -27,6 +27,7 @@ import {
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
@@ -240,7 +241,7 @@ export const serveThirtyDayNotice = async (
     }
   });
 
-  await Promise.all(generateNottForCases);
+  await settlePromises(generateNottForCases);
 
   let pdfUrl: string | undefined = undefined;
   let fileId: string | undefined = undefined;

@@ -49,7 +49,7 @@ import {
   RawConsolidatedCaseSummary,
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { ContactFactory } from '../contacts/ContactFactory';
-import { Correspondence } from '../Correspondence';
+import { Correspondence, RawCorrespondence } from '../Correspondence';
 import { DocketEntry } from '../DocketEntry';
 import {
   PATTERNS,
@@ -142,8 +142,8 @@ export class Case extends JoiValidationEntity {
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: any[];
-  public correspondence: any[];
-  public archivedCorrespondences?: any[];
+  public correspondence: RawCorrespondence[];
+  public archivedCorrespondences?: RawCorrespondence[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[] = [];
 
