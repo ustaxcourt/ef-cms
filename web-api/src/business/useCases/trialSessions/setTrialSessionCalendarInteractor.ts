@@ -157,7 +157,7 @@ export const setTrialSessionCalendarInteractor = async (
       await settlePromises(singleChunk.map(func => func()));
     }
 
-    await Promise.all(
+    await settlePromises(
       allDocketNumbers.map(docketNumber =>
         applicationContext.getPersistenceGateway().removeLock({
           applicationContext,
@@ -243,7 +243,7 @@ const setManuallyAddedCaseAsCalendared = async (
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
-  await Promise.all([
+  await settlePromises([
     setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
@@ -273,7 +273,7 @@ const setTrialSessionCalendarForEligibleCase = async (
   caseEntity.setAsCalendared(trialSessionEntity);
   trialSessionEntity.addCaseToCalendar(caseEntity);
 
-  await Promise.all([
+  await settlePromises([
     setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,

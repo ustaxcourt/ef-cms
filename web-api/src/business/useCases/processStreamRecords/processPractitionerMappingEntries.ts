@@ -9,6 +9,7 @@ import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getCaseDataFromDynamo } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -88,7 +89,7 @@ export const processPractitionerMappingEntries = async ({
       return caseRecords;
     };
 
-  const indexRecords = await Promise.all(
+  const indexRecords = await settlePromises(
     practitionerMappingRecords.map(indexCaseEntryForPractitionerMapping),
   );
 
