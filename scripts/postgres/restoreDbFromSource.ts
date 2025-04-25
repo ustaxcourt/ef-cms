@@ -12,7 +12,7 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { Signer } from '@aws-sdk/rds-signer';
 import { spawn } from 'child_process';
-import { replaceEmailAddresses } from 'scripts/emailReplacer';
+import { sanitizeDumpFile } from 'scripts/emailReplacer';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -77,7 +77,7 @@ async function main() {
   });
 
   const sanitizedFileName = `sanitized-${backUpFileName}`;
-  replaceEmailAddresses(backUpFileName, sanitizedFileName);
+  await sanitizeDumpFile(backUpFileName, sanitizedFileName);
 
   await restoreFromBackup({
     backUpFileName: sanitizedFileName,
