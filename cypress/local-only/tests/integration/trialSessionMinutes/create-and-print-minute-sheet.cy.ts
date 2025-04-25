@@ -344,6 +344,26 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
             'EA',
           );
 
+          cy.get(`#actionsAndFilingsOralMotion-${rowIndex}`).should(
+            'not.exist',
+          );
+
+          cy.get(`#actionsAndFilingsObjection-${rowIndex}`).should('not.exist');
+
+          selectTypeaheadInput(
+            `actionsAndFilingsDocumentType-search-${rowIndex}`,
+            'Motion to Change or Correct Caption',
+          );
+
+          cy.get(`[name=actionsAndFilingsDocumentType-${rowIndex}]`).should(
+            'have.value',
+            'M056',
+          );
+
+          cy.get(`#actionsAndFilingsOralMotion-${rowIndex}`).should('exist');
+
+          cy.get(`#actionsAndFilingsObjection-${rowIndex}`).should('exist');
+
           cy.get(`#actionsAndFilingsStatus-${rowIndex}`).select('Filed');
           cy.get(`#actionsAndFilingsStatus-${rowIndex}`).should(
             'have.value',

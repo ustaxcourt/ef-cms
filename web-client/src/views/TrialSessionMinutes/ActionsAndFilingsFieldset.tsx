@@ -169,12 +169,13 @@ export const ActionsAndFilingsFieldset = ({
                 <input
                   checked={row.oralMotion}
                   className="usa-checkbox__input"
-                  id={`actionsAndFilingsOralMotion${rowIndex}`}
+                  id={`actionsAndFilingsOralMotion-${rowIndex}`}
                   aria-label={`actionsAndFilingsOralMotion-${rowIndex}`}
-                  name={`actionsAndFilingsOralMotion${rowIndex}`}
+                  name={`actionsAndFilingsOralMotion-${rowIndex}`}
                   type="checkbox"
                   onBlur={() => onBlurHandler()}
                   onChange={e => {
+                    console.log(row);
                     onChangeHandler({
                       name: 'actionsAndFilings',
                       rowInfo: {
