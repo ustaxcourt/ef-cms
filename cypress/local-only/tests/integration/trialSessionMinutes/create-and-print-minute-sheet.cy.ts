@@ -326,7 +326,6 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
       it('Can fill out ActionsAndFilingsFieldset section', () => {
         cy.get('[id^=actionsAndFilingsDocumentType]').each($el => {
           const rowIndex = $el.attr('id')?.split('-')[1];
-          cy.log(`Row index: ${rowIndex}`);
 
           cy.get(`#actionsAndFilingsFiledBy-${rowIndex}`).select('Petitioner');
           cy.get(`#actionsAndFilingsFiledBy-${rowIndex}`).should(
