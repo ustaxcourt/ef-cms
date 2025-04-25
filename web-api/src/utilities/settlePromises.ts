@@ -15,7 +15,7 @@ export async function settlePromises<T extends readonly unknown[]>(
   });
 
   if (errors.length > 0) {
-    throw new Error(`${errors.length} promises rejected in settlePromises`);
+    throw errors[0];
   }
   return results.map(
     result => (result as PromiseFulfilledResult<unknown>).value,

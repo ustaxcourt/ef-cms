@@ -176,7 +176,7 @@ describe('fileExternalDocumentInteractor', () => {
         },
         mockIrsPractitionerUser,
       ),
-    ).rejects.toThrow('1 promises rejected in settlePromises');
+    ).rejects.toThrow('The DocketEntry entity was invalid.');
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).not.toHaveBeenCalled();

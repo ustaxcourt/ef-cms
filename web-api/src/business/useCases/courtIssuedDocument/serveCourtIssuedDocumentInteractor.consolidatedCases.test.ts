@@ -207,7 +207,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
         },
         mockDocketClerkUser,
       ),
-    ).rejects.toThrow('1 promises rejected in settlePromises');
+    ).rejects.toThrow(expectedErrorString);
 
     const initialCall = 1;
     const finallyBlockCalls = 3;
