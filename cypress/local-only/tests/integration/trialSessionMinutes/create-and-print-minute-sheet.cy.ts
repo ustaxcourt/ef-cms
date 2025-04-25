@@ -325,41 +325,46 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
     describe('Fill out ActionsAndFilingsFieldset section', () => {
       it('Can fill out ActionsAndFilingsFieldset section', () => {
         cy.get('[id^=actionsAndFilingsDocumentType]').each($el => {
-          const renderKey = $el.attr('id')?.split('-')[1];
-          cy.log(`Render key: ${renderKey}`);
+          const rowIndex = $el.attr('id')?.split('-')[1];
+          cy.log(`Row index: ${rowIndex}`);
 
-          cy.get(`#actionsAndFilingsDocumentType-${renderKey}`).select(
-            'Entry of Appearance',
-          );
-          cy.get(`#actionsAndFilingsDocumentType-${renderKey}`).should(
-            'have.value',
-            'entryOfAppearance',
-          );
-
-          cy.get(`#actionsAndFilingsFiledBy-${renderKey}`).select('Petitioner');
-          cy.get(`#actionsAndFilingsFiledBy-${renderKey}`).should(
+          cy.get(`#actionsAndFilingsFiledBy-${rowIndex}`).select('Petitioner');
+          cy.get(`#actionsAndFilingsFiledBy-${rowIndex}`).should(
             'have.value',
             'petitioner',
           );
 
-          cy.get(`#actionsAndFilingsStatus-${renderKey}`).select('Filed');
-          cy.get(`#actionsAndFilingsStatus-${renderKey}`).should(
+          selectTypeaheadInput(
+            `actionsAndFilingsDocumentType-search-${rowIndex}`,
+            'Entry of Appearance',
+          );
+
+          cy.get(`[name=actionsAndFilingsDocumentType-${rowIndex}]`).should(
+            'have.value',
+            'EA',
+          );
+
+          cy.get(`#actionsAndFilingsStatus-${rowIndex}`).select('Filed');
+          cy.get(`#actionsAndFilingsStatus-${rowIndex}`).should(
             'have.value',
             'filed',
           );
 
-          cy.get(`#actionsAndFilingsNote-${renderKey}`).type(
+          cy.get(`#actionsAndFilingsNote-${rowIndex}`).type(
             'Document description',
           );
-          cy.get(`#actionsAndFilingsNote-${renderKey}`).should(
+          cy.get(`#actionsAndFilingsNote-${rowIndex}`).should(
             'have.value',
             'Document description',
           );
 
-          cy.get(`#actionsAndFilingsDocumentType-${renderKey}`).select('');
-          cy.get(`#actionsAndFilingsNote-${renderKey}`).clear();
-          cy.get(`#actionsAndFilingsFiledBy-${renderKey}`).select('');
-          cy.get(`#actionsAndFilingsStatus-${renderKey}`).select('');
+          cy.get(`#actionsAndFilingsFiledBy-${rowIndex}`).select('');
+          // selectTypeaheadInput(
+          //   `actionsAndFilingsDocumentType-search-${rowIndex}`,
+          //   '',
+          // );
+          cy.get(`#actionsAndFilingsNote-${rowIndex}`).clear();
+          cy.get(`#actionsAndFilingsStatus-${rowIndex}`).select('');
         });
       });
     });

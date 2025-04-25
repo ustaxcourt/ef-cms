@@ -81,10 +81,10 @@ export const ActionsAndFilingsFieldset = ({
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
             <input
               className="usa-input display-inline-block maxw-full"
-              id={`actionsAndFilingsDate-${row.renderKey}`}
+              id={`actionsAndFilingsDate-${rowIndex}`}
               aria-label={`actionsAndFilingsDate-${rowIndex}`}
-              data-testid={`actionsAndFilingsDate-${row.renderKey}`}
-              name={`actionsAndFilingsDate-${row.renderKey}`}
+              data-testid={`actionsAndFilingsDate-${rowIndex}`}
+              name={`actionsAndFilingsDate-${rowIndex}`}
               type="text"
               value={row.date}
               onBlur={() => onBlurHandler()}
@@ -115,13 +115,13 @@ export const ActionsAndFilingsFieldset = ({
         </div>
         <div className="grid-col-2">
           <SelectSearch
-            aria-label="actions-and-filings-document-type-label"
-            data-testid="actions-and-filings-document-type-search"
+            aria-label={`actionsAndFilingsDocumentType-label-${rowIndex}`}
+            data-testid={`actionsAndFilingsDocumentType-search-${rowIndex}`}
             isDisabled={!row.filedBy}
-            id="actions-and-filings-document-type"
+            id={`actionsAndFilingsDocumentType-${rowIndex}`}
             isClearable={true}
             isMulti={false}
-            name="eventCode"
+            name={`actionsAndFilingsDocumentType-${rowIndex}`}
             options={
               trialSessionMinutesHelper.documentTypeOptions[row.renderKey]
             }
@@ -175,9 +175,9 @@ export const ActionsAndFilingsFieldset = ({
                 <input
                   checked={row.oralMotion}
                   className="usa-checkbox__input"
-                  id={`actionsAndFilingsOralMotion${row.renderKey}`}
+                  id={`actionsAndFilingsOralMotion${rowIndex}`}
                   aria-label={`actionsAndFilingsOralMotion-${rowIndex}`}
-                  name={`actionsAndFilingsOralMotion${row.renderKey}`}
+                  name={`actionsAndFilingsOralMotion${rowIndex}`}
                   type="checkbox"
                   onBlur={() => onBlurHandler()}
                   onChange={e => {
@@ -195,7 +195,7 @@ export const ActionsAndFilingsFieldset = ({
                 />
                 <label
                   className="usa-checkbox__label"
-                  htmlFor={`actionsAndFilingsOralMotion${row.renderKey}`}
+                  htmlFor={`actionsAndFilingsOralMotion-${rowIndex}`}
                 >
                   Oral motion
                 </label>
@@ -206,15 +206,15 @@ export const ActionsAndFilingsFieldset = ({
             <FormGroup className="margin-bottom-0 display-flex align-items-center">
               <label
                 className="margin-right-2 margin-bottom-0 display-inline-block"
-                htmlFor={`actionsAndFilingsObjection-${row.renderKey}`}
+                htmlFor={`actionsAndFilingsObjection-${rowIndex}`}
               >
                 Objection
               </label>
               <select
                 className="usa-select display-inline-block"
                 aria-label={`actionsAndFilingsObjection-${rowIndex}`}
-                id={`actionsAndFilingsObjection-${row.renderKey}`}
-                name={`actionsAndFilingsObjection-${row.renderKey}`}
+                id={`actionsAndFilingsObjection-${rowIndex}`}
+                name={`actionsAndFilingsObjection-${rowIndex}`}
                 value={row.objection}
                 onBlur={() => onBlurHandler()}
                 onChange={e => {
