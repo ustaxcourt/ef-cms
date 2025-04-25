@@ -814,7 +814,7 @@ describe('formatMinuteSheet', () => {
     });
 
     describe('formatActionsAndFilings', () => {
-      it('should return empty array when no actions', () => {
+      it('should return empty array when there are no actions', () => {
         const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
           [];
         const result = formatActionsAndFilings(actionsSection);
@@ -946,6 +946,29 @@ describe('formatMinuteSheet', () => {
           {
             content:
               '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; DENIED; Obj. Unknown',
+          },
+        ]);
+      });
+
+      it('should not include any text in square brackets in the document type', () => {
+        const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
+          [
+            {
+              date: '01/15/2023',
+              documentType: 'M126',
+              filedBy: 'petitioner',
+              status: 'denied',
+              note: 'test note',
+              isOnDocketRecord: true,
+              oralMotion: false,
+              objection: 'unknown' as MotionObjectionOption,
+            },
+          ];
+        const result = formatActionsAndFilings(actionsSection);
+        expect(result).toEqual([
+          {
+            content:
+              '01/15/2023; Motion to Dismiss for Lack of Jurisdiction as to - <em>test note</em>; Filed by Petitioner; DENIED; Obj. Unknown',
           },
         ]);
       });
