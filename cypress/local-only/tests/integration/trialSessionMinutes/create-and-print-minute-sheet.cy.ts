@@ -359,10 +359,6 @@ describe('Create a minute sheet, fill out sections of the form, navigate away an
           );
 
           cy.get(`#actionsAndFilingsFiledBy-${rowIndex}`).select('');
-          // selectTypeaheadInput(
-          //   `actionsAndFilingsDocumentType-search-${rowIndex}`,
-          //   '',
-          // );
           cy.get(`#actionsAndFilingsNote-${rowIndex}`).clear();
           cy.get(`#actionsAndFilingsStatus-${rowIndex}`).select('');
         });

@@ -17,12 +17,11 @@ import {
   MOTION_OBJECTION_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import React from 'react';
-import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHelper';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const ActionsAndFilingsFieldset = ({
-  trialSessionMinutesHelper,
+  formOptions,
   actionsAndFilingsFormState,
   addRowHandler,
   onBlurHandler,
@@ -33,7 +32,7 @@ export const ActionsAndFilingsFieldset = ({
   onChangeHandler: OnChangeHandler;
   removeRowHandler: RemoveRowHandler;
   onBlurHandler: AutoSaveHandler;
-  trialSessionMinutesHelper: any;
+  formOptions;
   actionsAndFilingsFormState: MinuteSheetFormState['actionsAndFilingsSection'];
 }) => {
   const renderSelectField = (
@@ -122,17 +121,12 @@ export const ActionsAndFilingsFieldset = ({
             isClearable={true}
             isMulti={false}
             name={`actionsAndFilingsDocumentType-${rowIndex}`}
-            options={
-              trialSessionMinutesHelper.documentTypeOptions[row.renderKey]
-            }
-            value={reactSelectValue({
-              documentTypes:
-                trialSessionMinutesHelper.documentTypeOptions[row.renderKey],
-              selectedEventCode: row.documentType,
-            })}
+            options={formOptions[row.renderKey]}
+            value={formOptions[row.renderKey].filter(
+              option => option.value === row.documentType,
+            )}
             onChange={inputValue => {
               const value = inputValue?.value || '';
-              console.log(`Selected value: ${value}`);
               onChangeHandler({
                 name: 'actionsAndFilings',
                 rowInfo: {

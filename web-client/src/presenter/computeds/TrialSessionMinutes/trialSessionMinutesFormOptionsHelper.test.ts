@@ -1,5 +1,9 @@
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { trialSessionMinutesFormOptionsHelper } from './trialSessionMinutesFormOptionsHelper';
+import {
+  ACTION_FILED_BY_OPTIONS,
+  ACTION_FILED_BY_OPTIONS_INVERTED,
+} from '@shared/business/entities/EntityConstants';
 
 describe('trialSessionMinutesFormOptionsHelper', () => {
   let mockState;
@@ -22,6 +26,9 @@ describe('trialSessionMinutesFormOptionsHelper', () => {
           respondents: {
             resp1: { name: 'IRS 1' },
           },
+        },
+        actionsAndFilingsSection: {
+          actionsAndFilings: {},
         },
       },
     };
@@ -61,5 +68,57 @@ describe('trialSessionMinutesFormOptionsHelper', () => {
       judge1: { name: 'Judge One' },
       judge2: { name: 'Judge Two' },
     });
+  });
+
+  it('should provide court document type options when an action/filing entry was filed by the court', () => {
+    const renderKey = '123456';
+    mockState.minuteSheetForm.actionsAndFilingsSection.actionsAndFilings = {
+      renderKey: {
+        renderKey,
+        filedBy:
+          ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court],
+      },
+    };
+
+    const { documentTypeOptions } = runCompute(
+      trialSessionMinutesFormOptionsHelper,
+      {
+        state: mockState,
+      },
+    );
+
+    expect(
+      documentTypeOptions[renderKey].some(option => option.value === 'O'),
+    ).toBeTruthy();
+
+    expect(
+      documentTypeOptions[renderKey].some(option => option.value === 'A'),
+    ).toBeFalsy();
+  });
+
+  it('should provide internal document type options when an action/filing entry was not filed by the court', () => {
+    const renderKey = '123456';
+    mockState.minuteSheetForm.actionsAndFilingsSection.actionsAndFilings = {
+      renderKey: {
+        renderKey,
+        filedBy:
+          ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.respondent],
+      },
+    };
+
+    const { documentTypeOptions } = runCompute(
+      trialSessionMinutesFormOptionsHelper,
+      {
+        state: mockState,
+      },
+    );
+
+    expect(
+      documentTypeOptions[renderKey].some(option => option.value === 'A'),
+    ).toBeTruthy();
+
+    expect(
+      documentTypeOptions[renderKey].some(option => option.value === 'O'),
+    ).toBeFalsy();
   });
 });
