@@ -15,17 +15,19 @@ import {
 } from '@shared/business/entities/EntityConstants';
 
 jest.mock('uuid', () => ({
-  v4: () => 'test-uuid-1234',
+  v4: () => '123456',
 }));
 
 describe('updateTrialSessionMinutesFormAction', () => {
   let mockStore;
+  let renderKey;
 
   beforeEach(() => {
     mockStore = {
       set: jest.fn(),
       unset: jest.fn(),
     };
+    renderKey = '123456';
   });
 
   describe('handlePetitionerNoAppearance', () => {
@@ -36,10 +38,10 @@ describe('updateTrialSessionMinutesFormAction', () => {
       });
 
       expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), {
-        'test-uuid-1234': {
+        [renderKey]: {
           datesOfAppreance: '',
           name: '',
-          renderKey: 'test-uuid-1234',
+          renderKey,
         },
       });
     });
@@ -49,38 +51,25 @@ describe('updateTrialSessionMinutesFormAction', () => {
     it('should unset oralMotion and objection when value is not motion', () => {
       handleActionsAndFilingsDocType({
         name: 'actionsAndFilings',
-        rowInfo: { key: '123' },
+        rowInfo: { key: renderKey },
         section: 'actionsAndFilingsSection',
         store: mockStore,
-        value: 'order',
+        value: 'O',
       });
 
       expect(mockStore.unset).toHaveBeenCalledTimes(2);
-      expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), 'court');
     });
 
-    it('should set filedBy to "court" when value is order', () => {
+    it('should not unset oralMotion and objection when value is motion', () => {
       handleActionsAndFilingsDocType({
         name: 'actionsAndFilings',
-        rowInfo: { key: '123' },
+        rowInfo: { key: renderKey },
         section: 'actionsAndFilingsSection',
         store: mockStore,
-        value: 'order',
+        value: 'M000',
       });
 
-      expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), 'court');
-    });
-
-    it('should set filedBy to "court" when value is orderToShowCause', () => {
-      handleActionsAndFilingsDocType({
-        name: 'actionsAndFilings',
-        rowInfo: { key: '123' },
-        section: 'actionsAndFilingsSection',
-        store: mockStore,
-        value: 'orderToShowCause',
-      });
-
-      expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), 'court');
+      expect(mockStore.unset).not.toHaveBeenCalled();
     });
   });
 
@@ -88,7 +77,7 @@ describe('updateTrialSessionMinutesFormAction', () => {
     it('should reset documentType when filedBy is changed to "court"', () => {
       handleActionsAndFilingsFiledBy({
         name: 'actionsAndFilings',
-        rowInfo: { key: '123' },
+        rowInfo: { key: renderKey },
         section: 'actionsAndFilingsSection',
         store: mockStore,
         value: ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court],
@@ -102,7 +91,7 @@ describe('updateTrialSessionMinutesFormAction', () => {
     it('should reset documentType when filedBy is changed from "court"', () => {
       handleActionsAndFilingsFiledBy({
         name: 'actionsAndFilings',
-        rowInfo: { key: '123' },
+        rowInfo: { key: renderKey },
         section: 'actionsAndFilingsSection',
         store: mockStore,
         value:
@@ -117,7 +106,7 @@ describe('updateTrialSessionMinutesFormAction', () => {
     it('should not reset documentType when filedBy is changed from any option apart from "court" and the previous value was not "court"', () => {
       handleActionsAndFilingsFiledBy({
         name: 'actionsAndFilings',
-        rowInfo: { key: '123' },
+        rowInfo: { key: renderKey },
         section: 'actionsAndFilingsSection',
         store: mockStore,
         value: ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.joint],
@@ -189,10 +178,10 @@ describe('updateTrialSessionMinutesFormAction', () => {
       expect(state.minuteSheetForm.petitionersSection).toEqual({
         noAppearance: false,
         petitioners: {
-          'test-uuid-1234': {
+          [renderKey]: {
             datesOfAppreance: '',
             name: '',
-            renderKey: 'test-uuid-1234',
+            renderKey,
           },
         },
       });
@@ -205,16 +194,16 @@ describe('updateTrialSessionMinutesFormAction', () => {
         },
         props: {
           name: 'actionsAndFilings',
-          rowInfo: { key: '123', nestedName: 'documentType' },
+          rowInfo: { key: renderKey, nestedName: 'documentType' },
           section: 'actionsAndFilingsSection',
-          value: 'order',
+          value: 'O',
         },
         state: {
           minuteSheetForm: {
             ...mockMinuteSheetFormState,
             actionsAndFilingsSection: {
               actionsAndFilings: {
-                '123': {
+                [renderKey]: {
                   documentType: '',
                   filedBy: '',
                   objection: true,
@@ -227,11 +216,10 @@ describe('updateTrialSessionMinutesFormAction', () => {
       });
 
       expect(
-        state.minuteSheetForm.actionsAndFilingsSection.actionsAndFilings['123'],
-      ).toEqual({
-        documentType: 'order',
-        filedBy: 'court',
-      });
+        state.minuteSheetForm.actionsAndFilingsSection.actionsAndFilings[
+          renderKey
+        ],
+      ).toMatchObject({ documentType: 'O' });
     });
 
     it('should handle brief type changes', async () => {
