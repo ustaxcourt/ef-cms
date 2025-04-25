@@ -1,14 +1,18 @@
 import {
   handleActionsAndFilingsDocType,
+  handleActionsAndFilingsFiledBy,
   handleBriefTypeChange,
   handlePetitionerNoAppearance,
-  updateFormValue,
   updateTrialSessionMinutesFormAction,
 } from './updateTrialSessionMinutesFormAction';
 import { mockMinuteSheetFormState } from './mockMinuteSheetFormState';
 import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { BRIEF_TYPE_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  ACTION_FILED_BY_OPTIONS,
+  ACTION_FILED_BY_OPTIONS_INVERTED,
+  BRIEF_TYPE_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 
 jest.mock('uuid', () => ({
   v4: () => 'test-uuid-1234',
@@ -22,20 +26,6 @@ describe('updateTrialSessionMinutesFormAction', () => {
       set: jest.fn(),
       unset: jest.fn(),
     };
-  });
-
-  describe('updateFormValue', () => {
-    it('should update nested value when nestedName and key are provided', () => {
-      updateFormValue({
-        name: 'fieldName',
-        rowInfo: { key: '123', nestedName: 'nested' },
-        section: 'testSection',
-        store: mockStore,
-        value: 'test',
-      });
-
-      expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), 'test');
-    });
   });
 
   describe('handlePetitionerNoAppearance', () => {
@@ -91,6 +81,51 @@ describe('updateTrialSessionMinutesFormAction', () => {
       });
 
       expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), 'court');
+    });
+  });
+
+  describe('handleActionsAndFilingsFiledBy', () => {
+    it('should reset documentType when filedBy is changed to "court"', () => {
+      handleActionsAndFilingsFiledBy({
+        name: 'actionsAndFilings',
+        rowInfo: { key: '123' },
+        section: 'actionsAndFilingsSection',
+        store: mockStore,
+        value: ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court],
+        previousValue:
+          ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner],
+      });
+
+      expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), '');
+    });
+
+    it('should reset documentType when filedBy is changed from "court"', () => {
+      handleActionsAndFilingsFiledBy({
+        name: 'actionsAndFilings',
+        rowInfo: { key: '123' },
+        section: 'actionsAndFilingsSection',
+        store: mockStore,
+        value:
+          ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner],
+        previousValue:
+          ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court],
+      });
+
+      expect(mockStore.set).toHaveBeenCalledWith(expect.any(Object), '');
+    });
+
+    it('should not reset documentType when filedBy is changed from any option apart from "court" and the previous value was not "court"', () => {
+      handleActionsAndFilingsFiledBy({
+        name: 'actionsAndFilings',
+        rowInfo: { key: '123' },
+        section: 'actionsAndFilingsSection',
+        store: mockStore,
+        value: ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.joint],
+        previousValue:
+          ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.petitioner],
+      });
+
+      expect(mockStore.set).not.toHaveBeenCalled();
     });
   });
 

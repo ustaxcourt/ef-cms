@@ -55,10 +55,12 @@ export const handleActionsAndFilingsFiledBy = ({
 }) => {
   const courtFiledByOption =
     ACTION_FILED_BY_OPTIONS_INVERTED[ACTION_FILED_BY_OPTIONS.court];
+
   const valueChangedFromCourt =
     previousValue === courtFiledByOption && value !== courtFiledByOption;
   const valueChangedToCourt =
     previousValue !== courtFiledByOption && value === courtFiledByOption;
+
   if (valueChangedFromCourt || valueChangedToCourt || value === '') {
     store.set(
       state.minuteSheetForm[section][name][rowInfo.key].documentType,
