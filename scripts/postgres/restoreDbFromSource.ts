@@ -12,6 +12,7 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { Signer } from '@aws-sdk/rds-signer';
 import { spawn } from 'child_process';
+import { replaceEmailAddresses } from 'scripts/emailReplacer';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -66,7 +67,7 @@ async function main() {
     useWriter: true,
   });
 
-  const backUpFileName = 'dawson.dump';
+  const backUpFileName = 'dawson-dump.sql';
   await createDbBackup({
     backUpFileName,
     dbName: sourceDbname,
@@ -75,8 +76,11 @@ async function main() {
     username: sourceUsername,
   });
 
+  const sanitizedFileName = `sanitized-${backUpFileName}`;
+  replaceEmailAddresses(backUpFileName, sanitizedFileName);
+
   await restoreFromBackup({
-    backUpFileName,
+    backUpFileName: sanitizedFileName,
     dbName: targetDbname,
     host: targetHost,
     port: targetPort,
@@ -86,6 +90,8 @@ async function main() {
     targetSessionToken,
     username: targetUsername,
   });
+
+  await removeBackupFiles({ backUpFileName, sanitizedFileName });
 }
 void main();
 
@@ -160,7 +166,6 @@ async function createDbBackup({
         `--port=${port}`,
         `--dbname=${dbName}`,
         `--file=${backUpFileName}`,
-        '--format=c',
         '--verbose',
       ],
       { env: { ...process.env, PGPASSWORD: sourcePassword }, stdio: 'pipe' },
@@ -223,8 +228,6 @@ async function restoreFromBackup({
   });
   const targetPassword = await targetSigner.getAuthToken();
 
-  // pg_restore --clean only drops tables that exist in the source dump, so we drop all target tables before calling pg_restore.
-  // We could drop the whole target db or the schema, but then we would have to deal with stricter permissions.
   await dropAllTargetTables({
     dbName,
     host,
@@ -235,17 +238,14 @@ async function restoreFromBackup({
 
   await new Promise(resolve => {
     const restoreDbResult = spawn(
-      'pg_restore',
+      'psql',
       [
         `--host=${host}`,
         `--username=${username}`,
         `--dbname=${dbName}`,
         `--port=${port}`,
-        '--format=c',
-        '--verbose',
-        '--no-privileges',
-        '--no-owner',
-        `${backUpFileName}`,
+        `--file=${backUpFileName}`,
+        '--echo-errors',
       ],
       {
         env: {
@@ -365,6 +365,25 @@ async function dropAllTargetTables({
       } else {
         console.log(`Successfully dropped all tables from DB ${dbName}.`);
       }
+      resolve(undefined);
+    });
+  });
+}
+
+function removeBackupFiles({
+  backUpFileName,
+  sanitizedFileName,
+}: {
+  backUpFileName: string;
+  sanitizedFileName: string;
+}) {
+  return new Promise(resolve => {
+    spawn('rm', ['-f', backUpFileName, sanitizedFileName], {
+      stdio: 'ignore',
+    }).on('close', () => {
+      console.log(
+        `Removed backup files ${backUpFileName} and ${sanitizedFileName}`,
+      );
       resolve(undefined);
     });
   });
