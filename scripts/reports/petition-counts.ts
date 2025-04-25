@@ -5,10 +5,7 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import {
-  ServerApplicationContext,
-  createApplicationContext,
-} from '@web-api/applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
 import {
   dateStringsCompared,
   validateDateAndCreateISO,
@@ -23,6 +20,11 @@ const scriptConfig: ScriptConfig = {
     env: 'ENV',
   },
   parameters: {
+    fiscal: {
+      default: false,
+      short: 'f',
+      type: 'boolean',
+    },
     year: {
       default: `${DateTime.now().toObject().year}`,
       position: 0,
@@ -31,13 +33,12 @@ const scriptConfig: ScriptConfig = {
   },
   requireActiveAwsSession: true,
 };
-const { year } = parseArgsAndEnvVars(scriptConfig) as { year: string };
+const { fiscal, year } = parseArgsAndEnvVars(scriptConfig) as {
+  fiscal: boolean;
+  year: string;
+};
 
-const getAllPetitions = async ({
-  applicationContext,
-}: {
-  applicationContext: ServerApplicationContext;
-}): Promise<RawDocketEntry[]> => {
+const getAllPetitions = async (): Promise<RawDocketEntry[]> => {
   const { results } = await searchAll({
     applicationContext,
     searchParameters: {
@@ -55,13 +56,13 @@ const getAllPetitions = async ({
                   'receivedAt.S': {
                     gte: validateDateAndCreateISO({
                       day: '1',
-                      month: '1',
-                      year,
+                      month: fiscal ? '10' : '1',
+                      year: fiscal ? `${Number(year) - 1}` : year,
                     }),
                     lt: validateDateAndCreateISO({
                       day: '1',
-                      month: '1',
-                      year: String(Number(year) + 1),
+                      month: fiscal ? '10' : '1',
+                      year: fiscal ? year : `${Number(year) + 1}`,
                     }),
                   },
                 },
@@ -103,9 +104,14 @@ const getCounts = ({
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-  const petitions = await getAllPetitions({ applicationContext });
-  const start = DateTime.fromISO(`${year}-01-01`);
+  const petitions = await getAllPetitions();
+  const start = DateTime.fromISO(
+    validateDateAndCreateISO({
+      day: '1',
+      month: fiscal ? '10' : '1',
+      year: fiscal ? `${Number(year) - 1}` : year,
+    })!,
+  );
 
   for (let month = 0; month < 12; month++) {
     const [gte, lt] = [
