@@ -29,9 +29,6 @@ This command informs us of known security vulnerabilities. If transitive depende
 > **Why am I seeing a medium severity for `quill`?**
 > Quill is used as our rich text editor for open text submissions. It currently has a potential XSS vulnerability if used incorrectly. This vulnerability can be avoided by using getContents/setContents in combination with the quill delta. Currently we are not at risk for how we are using Quill and this vulnerability is actively being disputed: https://github.com/quilljs/quill/issues/3364
 
-> **Why am I seeing a high severity for `pdfjs-dist`?**
-> [See below](#pdfjs-dist).
-
 > **Why am I seeing a high severity for `ws`?**
 > [See below](#ws-3rd-party-dependency-of-cerebral).
 
@@ -63,6 +60,9 @@ To update Node.js:
   - `./.circleci/config.yml`
 4. Manually update DAWSON's GitHub Actions YAML files.
   - **Note:** These files will point to `.nvmrc` in a future update.
+5. Update the node version used by our lambdas. 
+  - `web-api/terraform/modules/lambda/lambda.tf`
+  - `web-api/terraform/modules/api/layers.tf`
 
 #### 2.2 Update `Dockerfile` as needed
 
@@ -82,7 +82,7 @@ To publish a new ECR docker image:
 `efcms-docker-image: &efcms-docker-image`. e.g. `ef-cms-us-east-1:4.3.27` -> `ef-cms-us-east-1:4.3.28`
 
 - Publish a docker image tagged with the incremented version number to ECR with the command: `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`. Do this for both the USTC account AND the Flexion account (using environment switcher).
-  - example: `export DESTINATION_TAG=3.1.6 && npm run deploy:ci-image`
+  - example: `export DESTINATION_TAG=4.3.27 && npm run deploy:ci-image`
   - you can verify the image deployed on AWS ECR repository "ef-cms-us-east-1"
   - if you run into any errors similar to 'At least one invalid signature was encountered', try running  `docker builder prune` or `docker system prune` on your local machine. https://stackoverflow.com/questions/62473932/at-least-one-invalid-signature-was-encountered
 
@@ -92,7 +92,7 @@ To publish a new ECR docker image:
 
 Check if there is an update to the Terraform AWS provider and update all of the following files to use the [latest version](https://registry.terraform.io/providers/hashicorp/aws/latest) of the provider.
 
-regex search the entire project for `version = "~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
+regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the latest version.  For example, some of these files have the providers defined:
 
   - `./shared/admin-tools/glue/glue_migrations/main.tf`
   - `./shared/admin-tools/glue/remote_role/main.tf`
@@ -109,13 +109,9 @@ regex search the entire project for `version = "~> \d+.\d+.\d+"` and make sure i
 
 ## Do Not Upgrade
 
-### React and ReactDOM
-
-- cerebral version 5.2.1 and @cerebral/react version 4.2.1 are not compatible with React and ReactDOM version 19. Keep these pinned at version 18 for the time being. See https://github.com/cerebral/cerebral/pull/1441.
-
 ### cerebral and @cerebral/react
 
-- New versions of cerebral (5.2.1 to 5.2.2) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and 4.2.1 respectively for the time being.
+- New versions of cerebral (5.2.1 to 5.2.2) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
 
 ### @fortawesome
 
@@ -133,18 +129,19 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - There is a high-severity security issue with ws (ws affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q); however, we only use ws on the client side, so this should not be an issue. (Only @cypress/puppeteer depends  on vulnerable version of puppeteer-core)
 
-### pdfjs-dist
-
-- `pdfjs-dist` has a major version update to ^3.x,x. A devex card has been created to track work being done towards updating the package. Please add notes and comments to [this card](https://trello.com/c/gjDzhUkb/1111-upgrade-pdfjs-dist).
-- The high-severity security issue "vulnerable to arbitrary JavaScript execution" has been addressed by us here: https://github.com/flexion/ef-cms/issues/10407 and can therefore be ignored.
+- As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 
 ### ws, 3rd party dependency of Cerebral
 
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
 
-### @babel/runtime
+### quill
 
-- On March 11, 2025, a moderate severity vulnerability was issued for @babel/runtime versions less than 7.26.10. DAWSON uses broadcast-channel version 7.0.0, which depends on a vulnerable version of @babel/runtime. The vulnerability involves inefficient RegExp complexity.
+- Quill released version 2 in April 2024. It includes substantial changes. Because the focus is currently on Postgres, we have left it at a previous version.
+
+### pdfjs-dist
+
+- As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
 
 ## Incrementing the Node Cache Key Version
 

@@ -1,4 +1,5 @@
 import { state } from '@web-client/presenter/app.cerebral';
+import { PDFDocumentProxy } from 'pdfjs-dist';
 
 /**
  * given a PDF document, returns a pdf.js object
@@ -32,14 +33,12 @@ export const setPDFForSigningAction = async ({
     }
   }
 
-  let pdfObj = {};
-
   // if we are looking at a signed stipulated decision, we need to display the clear signature button
   if (editingSignedStipulatedDecision) {
     store.set(state.pdfForSigning.isPdfAlreadySigned, true);
   }
 
-  pdfObj = await applicationContext
+  const pdfObj: PDFDocumentProxy = await applicationContext
     .getUseCases()
     .loadPDFForSigningInteractor(applicationContext, {
       docketEntryId,
