@@ -11,6 +11,13 @@ import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import {
+  CaseDeadline,
+  RawCaseDeadline,
+} from '@shared/business/entities/CaseDeadline';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
 /**
  * removeConsolidatedCases
@@ -50,17 +57,17 @@ const removeConsolidatedCases = async (
     leadDocketNumber,
   });
 
-  const newConsolidatedCases = allConsolidatedCases.filter(
-    consolidatedCase =>
-      !docketNumbersToRemove.includes(consolidatedCase.docketNumber),
-  );
+  const newConsolidatedCases: Omit<RawCase, 'consolidatedCases'>[] =
+    allConsolidatedCases.filter(
+      consolidatedCase =>
+        !docketNumbersToRemove.includes(consolidatedCase.docketNumber),
+    );
 
   if (
     docketNumbersToRemove.includes(leadDocketNumber) &&
     newConsolidatedCases.length > 1
   ) {
-    const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases);
-
+    const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
     for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
         authorizedUser,
@@ -75,6 +82,13 @@ const removeConsolidatedCases = async (
         }),
       );
     }
+
+    updateCasePromises.push(
+      updateConsolidatedCaseDeadlineReferenceId(
+        leadDocketNumber,
+        newLeadCase.docketNumber,
+      ),
+    );
   } else if (newConsolidatedCases.length == 1) {
     // a case cannot be consolidated with itself
     const caseEntity = new Case(newConsolidatedCases[0], {
@@ -109,10 +123,71 @@ const removeConsolidatedCases = async (
         caseToUpdate: caseEntity,
       }),
     );
+
+    updateCasePromises.push(
+      removeConsolidatedCaseRefences(caseToRemove.docketNumber),
+    );
   }
 
   await settlePromises(updateCasePromises);
 };
+
+async function removeConsolidatedCaseRefences(docketNumber: string) {
+  const CASE_DEADLINES = await getCaseDeadlinesByDocketNumber({
+    docketNumber,
+  });
+
+  const UPDATED_CASE_DEADLINES = CASE_DEADLINES.map(
+    (cd: CaseDeadline) =>
+      ({
+        ...cd,
+        consolidatedCaseDeadlineId: undefined,
+      }) as CaseDeadline,
+  );
+
+  await upsertCaseDeadlines(UPDATED_CASE_DEADLINES);
+}
+
+async function updateConsolidatedCaseDeadlineReferenceId(
+  oldLeadDocketNumber: string,
+  newLeadDocketNumber: string,
+): Promise<void> {
+  const LEAD_DEADLINES = await getCaseDeadlinesByDocketNumber({
+    docketNumber: oldLeadDocketNumber,
+  });
+
+  const TASKS = LEAD_DEADLINES.map(async (leadCaseDeadline: CaseDeadline) => {
+    const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
+    const CHILD_DEADLINES = await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+      oldLeadCaseDeadlineId,
+      oldLeadDocketNumber,
+    );
+    if (!CHILD_DEADLINES.length) return;
+
+    const NEW_LEAD_CASE_DEADLINE = CHILD_DEADLINES.find(
+      ({ docketNumber }) => docketNumber === newLeadDocketNumber,
+    );
+
+    const newLeadCaseDeadlineId =
+      NEW_LEAD_CASE_DEADLINE?.caseDeadlineId || undefined;
+
+    const UPDATED_CHILD_CASE_DEADLINES: RawCaseDeadline[] = CHILD_DEADLINES.map(
+      (childCaseDeadline: RawCaseDeadline) => {
+        return {
+          ...childCaseDeadline,
+          consolidatedCaseDeadlineId:
+            childCaseDeadline.docketNumber === newLeadDocketNumber
+              ? undefined
+              : newLeadCaseDeadlineId,
+        } as RawCaseDeadline;
+      },
+    );
+
+    await upsertCaseDeadlines(UPDATED_CHILD_CASE_DEADLINES);
+  });
+
+  await settlePromises(TASKS);
+}
 
 const determineEntitiesToLock = (
   _applicationContext,

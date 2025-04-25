@@ -7,6 +7,7 @@ export const caseDeadlineTableDefinition = {
   associatedJudgeId: DEFAULT as string | undefined,
   caseDeadlineId: DEFAULT as string,
   createdAt: DEFAULT as Date,
+  consolidatedCaseDeadlineId: DEFAULT as string | undefined,
   deadlineDate: DEFAULT as Date,
   description: DEFAULT as string,
   docketNumber: DEFAULT as string,

@@ -5,10 +5,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  type TCaseOrder,
-  TrialSession,
-} from '@shared/business/entities/trialSessions/TrialSession';
+import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -43,7 +40,7 @@ export const getEligibleCasesForTrialSessionInteractor = async (
 
   // Some manually added cases are considered calendared even when the
   // trial session itself is not considered calendared (see issue #3254).
-  let calendaredCases: (RawCase & TCaseOrder)[] = [];
+  let calendaredCases = [] as any[];
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
     calendaredCases = await applicationContext
       .getPersistenceGateway()
@@ -60,12 +57,13 @@ export const getEligibleCasesForTrialSessionInteractor = async (
   const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
-      applicationContext,
       limit:
         trialSessionEntity.maxCases! +
         TRIAL_SESSION_ELIGIBLE_CASES_BUFFER -
         calendaredCases.length,
-      skPrefix: trialSessionEntity.generateSortKeyPrefix(),
+      applicationContext,
+      sessionType: trialSessionEntity.getCaseProcedureForTrial(),
+      trialCity: trialSessionEntity.trialLocation!,
     });
 
   const eligibleCasesFiltered = calendaredCases

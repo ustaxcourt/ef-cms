@@ -12,6 +12,9 @@ import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
+import { formattedEligibleCasesHelper as formattedEligibleCasesHelperComputed } from '@web-client/presenter/computeds/formattedEligibleCasesHelper';
+import { withAppContextDecorator } from '@web-client/withAppContext';
+import { runCompute } from '@web-client/presenter/test.cerebral';
 
 describe('Trial Session Eligible Cases Journey', () => {
   const cerebralTest = setupTest();
@@ -24,6 +27,10 @@ describe('Trial Session Eligible Cases Journey', () => {
     trialLocation,
   };
   const createdDocketNumbers: string[] = [];
+
+  const formattedEligibleCases = withAppContextDecorator(
+    formattedEligibleCasesHelperComputed,
+  );
 
   afterAll(() => {
     cerebralTest.closeSocket();
@@ -154,8 +161,13 @@ describe('Trial Session Eligible Cases Journey', () => {
       expect(
         cerebralTest.getState('trialSession.eligibleCases').length,
       ).toEqual(4);
-      const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
+
+      // this has long been handled in the helper function
+      const eligibleCases = runCompute(formattedEligibleCases, {
+        state: cerebralTest.getState(),
+      });
       expect(eligibleCases.length).toEqual(4);
+
       // cases with index 3 and 4 should be first because they are CDP/Passport cases
       expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[3]);
       expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[4]);
@@ -192,7 +204,10 @@ describe('Trial Session Eligible Cases Journey', () => {
         trialSessionId: cerebralTest.trialSessionId,
       });
 
-      const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
+      const eligibleCases = runCompute(formattedEligibleCases, {
+        state: cerebralTest.getState(),
+      });
+
       expect(eligibleCases.length).toEqual(4);
       // this case should be first because it's high priority
       expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[1]);
@@ -227,7 +242,10 @@ describe('Trial Session Eligible Cases Journey', () => {
         trialSessionId: cerebralTest.trialSessionId,
       });
 
-      const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
+      const eligibleCases = runCompute(formattedEligibleCases, {
+        state: cerebralTest.getState(),
+      });
+
       expect(eligibleCases.length).toEqual(4);
       // this case should be first because it's a CDP case
       expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[3]);
@@ -261,7 +279,6 @@ describe('Trial Session Eligible Cases Journey', () => {
       await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
         trialSessionId: cerebralTest.trialSessionId,
       });
-
       expect(
         cerebralTest.getState('trialSession.calendaredCases').length,
       ).toEqual(3);
@@ -335,6 +352,7 @@ describe('Trial Session Eligible Cases Journey', () => {
     });
 
     it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
+      await wait(10000);
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });
