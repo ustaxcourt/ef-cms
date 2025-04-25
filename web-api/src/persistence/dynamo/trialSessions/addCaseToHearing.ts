@@ -1,3 +1,4 @@
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { put } from '../../dynamodbClientService';
 import { updateTrialSession } from './updateTrialSession';
@@ -20,19 +21,24 @@ export const addCaseToHearing = ({
   docketNumber: string;
   trialSession: RawTrialSession;
 }) =>
-  Promise.all([
-    // Create mapping record
-    put({
-      Item: {
-        ...trialSession,
-        pk: `case|${docketNumber}`,
-        sk: `hearing|${trialSession.trialSessionId}`,
-      },
-      applicationContext,
-    }),
-    // update trial session
-    updateTrialSession({
-      applicationContext,
-      trialSessionToUpdate: trialSession,
-    }),
-  ]);
+  settlePromises(
+    [
+      // Create mapping record
+      put({
+        Item: {
+          ...trialSession,
+          pk: `case|${docketNumber}`,
+          sk: `hearing|${trialSession.trialSessionId}`,
+        },
+        applicationContext,
+      }),
+      // update trial session
+      updateTrialSession({
+        applicationContext,
+        trialSessionToUpdate: trialSession,
+      }),
+    ],
+    {
+      errorMessage: `Failed to add case ${docketNumber} to trial session ${trialSession.trialSessionId}`,
+    },
+  );

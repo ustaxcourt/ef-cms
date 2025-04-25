@@ -14,6 +14,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { chunk, flatten, partition, uniq } from 'lodash';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 const CHUNK_SIZE = 50;
 
@@ -153,7 +154,12 @@ export const setTrialSessionCalendarInteractor = async (
     // If firing all at once, we exhaust the available connections and will run into connection timeouts.
     const chunkedFunctions = chunk(funcs, CHUNK_SIZE);
     for (const singleChunk of chunkedFunctions) {
-      await Promise.all(singleChunk.map(func => func()));
+      await settlePromises(
+        singleChunk.map(func => func()),
+        {
+          errorMessage: `Trial session ${trialSessionId} failed to finish calendaring`,
+        },
+      );
     }
 
     await Promise.all(

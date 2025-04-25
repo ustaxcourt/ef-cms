@@ -4,6 +4,7 @@ import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/par
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { Statistic } from '@shared/business/entities/Statistic';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const processCaseEntries = async ({
   caseEntityRecords,
@@ -50,5 +51,5 @@ export const processCaseEntries = async ({
     }
   }
 
-  await Promise.all(postgresUpserts);
+  await settlePromises(postgresUpserts);
 };

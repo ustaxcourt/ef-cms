@@ -32,6 +32,7 @@ import { getClinicLetterKey } from '../../../../../shared/src/business/utilities
 import { random, remove } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -411,7 +412,7 @@ const createCoversheetsForServedEntries = async ({
   caseEntity: Case;
   authorizedUser: AuthUser;
 }) => {
-  return await Promise.all(
+  return await settlePromises(
     caseEntity.docketEntries.map(async doc => {
       if (doc.isFileAttached && !doc.isDraft) {
         const updatedDocketEntry = await applicationContext
@@ -431,6 +432,9 @@ const createCoversheetsForServedEntries = async ({
         caseEntity.updateDocketEntry(updatedDocketEntry);
       }
     }),
+    {
+      errorMessage: `Failed to generate all cover sheets when serving case ${caseEntity.docketNumber} to IRS`,
+    },
   );
 };
 
@@ -619,7 +623,9 @@ export const serveCaseToIrs = async (
       );
     }
 
-    await Promise.all(generatedDocuments);
+    await settlePromises(generatedDocuments, {
+      errorMessage: `Failed to generate all draft documents when serving case ${docketNumber} to IRS`,
+    });
 
     await createPetitionWorkItems({
       caseEntity,

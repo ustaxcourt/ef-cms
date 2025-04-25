@@ -14,6 +14,7 @@ import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  *
@@ -80,9 +81,8 @@ export const fileCourtIssuedDocketEntry = async (
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
   });
 
-  await Promise.all(
+  await settlePromises(
     casesToUpdate.map(async caseToUpdate => {
-
       const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
       const docketEntryEntity = new DocketEntry(
@@ -94,7 +94,10 @@ export const fileCourtIssuedDocketEntry = async (
           documentTitle: documentMeta.generatedDocumentTitle,
           documentType: documentMeta.documentType,
           draftOrderState: null,
-          editState: JSON.stringify({ ...documentMeta, docketNumber: caseToUpdate.docketNumber }),
+          editState: JSON.stringify({
+            ...documentMeta,
+            docketNumber: caseToUpdate.docketNumber,
+          }),
           eventCode: documentMeta.eventCode,
           filingDate: documentMeta.filingDate,
           freeText: documentMeta.freeText,
@@ -178,7 +181,7 @@ export const fileCourtIssuedDocketEntry = async (
         }),
       );
 
-      return Promise.all(saveItems);
+      return settlePromises(saveItems);
     }),
   );
 
