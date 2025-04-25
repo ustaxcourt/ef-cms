@@ -24,6 +24,7 @@ import {
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -273,7 +274,7 @@ const serveDocketEntry = async ({
       userId: user.userId,
     });
 
-    caseEntitiesToFileOn = await Promise.all(
+    caseEntitiesToFileOn = await settlePromises(
       caseEntitiesToFileOn.map(aCase =>
         fileAndServeDocumentOnOneCase({
           caseEntity: aCase,

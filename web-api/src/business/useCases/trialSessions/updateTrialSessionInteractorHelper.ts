@@ -10,6 +10,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/Entity
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { get } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 type GetCasesInTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -138,7 +139,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
     return newPdfDoc;
   });
 
-  const casePdfDocuments = await Promise.all(TASKS);
+  const casePdfDocuments = await settlePromises(TASKS);
   const paperServicePdfsCombined = await applicationContext
     .getUtilities()
     .combineAllPdfDocuments(applicationContext, casePdfDocuments);
@@ -158,7 +159,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
     }
   });
 
-  await Promise.all(updatedHearingPromises);
+  await settlePromises(updatedHearingPromises);
   return paperServicePdfsCombined;
 };
 

@@ -6,6 +6,7 @@ import {
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const generateDocumentIds = async (
   applicationContext: ClientApplicationContext,
@@ -106,7 +107,7 @@ export const generateDocumentIds = async (
       requestForPlaceOfTrialFileId,
       stinFileId,
       ...attachmentToPetitionFileIds
-    ]: string[] = await Promise.all([
+    ]: string[] = await settlePromises([
       applicationForWaiverOfFilingFeeUpload,
       corporateDisclosureFileUpload,
       petitionFileUpload,
@@ -123,7 +124,6 @@ export const generateDocumentIds = async (
       requestForPlaceOfTrialFileId,
       stinFileId,
     };
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     throw new Error('Error generating document Ids');
   }

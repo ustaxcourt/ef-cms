@@ -36,12 +36,11 @@ export const upsertCaseStatistics = async ({
 
   // Upsert related penalties
   const penalties = flatten(
-    statistics.map((s, index) =>
+    statistics.map(s =>
       // We had cases in which the statisticId of the penalty did not match its parent statistic, so we use statistic.statisticId
       s.penalties.map(p => ({
         ...p,
-        statsticId: s.statisticId,
-        penaltyNumber: index + 1,
+        statisticId: s.statisticId,
       })),
     ),
   );

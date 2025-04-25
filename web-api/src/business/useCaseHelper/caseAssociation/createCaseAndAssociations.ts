@@ -5,6 +5,7 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * createCaseDocketEntries
@@ -149,5 +150,5 @@ export const createCaseAndAssociations = async ({
     }),
   ];
 
-  return await Promise.all(requests);
+  return await settlePromises(requests, {errorMessage: `Failed to fully create case ${docketNumber}`});
 };

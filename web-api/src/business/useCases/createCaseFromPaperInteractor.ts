@@ -19,7 +19,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
-import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
+import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
@@ -29,6 +29,7 @@ import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCa
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -355,22 +356,26 @@ export const createCaseFromPaperInteractor = async (
   }
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
-  await createPetitionersOnCase({
-    docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-  });
+  const caseAssociationUpdates = [
+    createPetitionersOnCase({
+      docketNumber: caseToAdd.docketNumber,
+      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
+    }),
+    upsertCaseStatusUpdates({
+      docketNumber: caseToAdd.docketNumber,
+      statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
+    }),
+    upsertWorkItems({
+      workItems: [workItem.validate().toRawObject()],
+    }),
+    createCaseStatistics({
+      docketNumber: caseToAdd.docketNumber,
+      statistics: caseToAdd.statistics || [],
+    }),
+  ];
 
-  caseToAdd.statistics?.forEach(statistic =>
-    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-  );
-
-  await upsertCaseStatusUpdates({
-    docketNumber: caseToAdd.docketNumber,
-    statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
-  });
-
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
+  await settlePromises(caseAssociationUpdates, {
+    errorMessage: `Failed to finish creating case associations for ${caseToAdd.docketNumber}`,
   });
 
   return {

@@ -20,6 +20,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -151,7 +152,7 @@ export const fileAndServeCourtIssuedDocument = async (
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 
-    caseEntities = await Promise.all(
+    caseEntities = await settlePromises(
       caseEntities.map(async caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
