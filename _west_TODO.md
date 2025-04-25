@@ -1,3 +1,7 @@
+- Plan
+  - first PR/deploy: only update blue/green
+  - second PR/deploy: the rest (account-specific, allColors, etc.)
+
 - east-west issues -- gone if we delete west
 
 - Deleting west

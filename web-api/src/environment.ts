@@ -51,7 +51,6 @@ export const environment = {
       port: 5432,
       user: process.env.POSTGRES_USER || 'postgres',
     },
-    readHost: process.env.POSTGRES_READ_HOST!,
     useGlobalCert: !isLocal,
   },
   region,
