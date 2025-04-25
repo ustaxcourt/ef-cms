@@ -8,6 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 /**
  * deleteTrialSession
@@ -60,27 +61,12 @@ export const deleteTrialSessionInteractor = async (
       identifiers: docketNumbers?.map(item => `case|${item}`),
     });
 
-    for (const order of trialSessionEntity.caseOrder) {
-      const myCase = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: order.docketNumber,
-        });
+    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
+    for (const myCase of casesToUpdate) {
       const caseEntity = new Case(myCase, { authorizedUser });
 
       caseEntity.removeFromTrial({});
-
-      if (caseEntity.isReadyForTrial()) {
-        await applicationContext
-          .getPersistenceGateway()
-          .createCaseTrialSortMappingRecords({
-            applicationContext,
-            caseSortTags: caseEntity.generateTrialSortTags(),
-            docketNumber: caseEntity.docketNumber,
-          });
-      }
 
       await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
         applicationContext,

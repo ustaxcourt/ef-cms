@@ -17,8 +17,15 @@ export const getCompletedUserInboxMessages = async ({
       .where('m.completedByUserId', '=', userId)
       .where('m.isCompleted', '=', true)
       .where('m.completedAt', '>=', filterDate)
-      .selectAll()
-      .select('m.docketNumber')
+      .selectAll('m')
+      .select([
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.docketNumberSuffix',
+        'c.leadDocketNumber',
+        'c.caption',
+      ])
       .limit(5000)
       .execute(),
   );

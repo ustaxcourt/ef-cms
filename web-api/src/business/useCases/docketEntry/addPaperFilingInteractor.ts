@@ -1,24 +1,25 @@
+import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
+import {
+  DOCUMENT_RELATIONSHIPS,
+  DOCUMENT_SERVED_MESSAGES,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '@shared/authorization/authorizationClientService';
-import { Case, isLeadCase } from '@shared/business/entities/cases/Case';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import {
-  DOCUMENT_RELATIONSHIPS,
-  ROLES,
-  DOCUMENT_SERVED_MESSAGES,
-} from '@shared/business/entities/EntityConstants';
-import { WorkItem } from '@shared/business/entities/WorkItem';
-import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -74,14 +75,9 @@ export const addPaperFiling = async (
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
-  for (const docketNumber of consolidatedGroupDocketNumbers) {
-    const rawCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+  const consolidatedGroupCases = await getCasesByDocketNumbers({docketNumbers: consolidatedGroupDocketNumbers})
 
+  for (const rawCase of consolidatedGroupCases) {
     let caseEntity = new Case(rawCase, { authorizedUser });
 
     const docketEntryEntity = new DocketEntry(
@@ -167,7 +163,6 @@ export const addPaperFiling = async (
     caseEntity = await applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock({
-        applicationContext,
         caseEntity,
       });
 

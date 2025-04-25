@@ -1,5 +1,6 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const formattedOpenCases = (
@@ -85,14 +86,13 @@ export const formattedCaseDetail = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { formatCase, setServiceIndicatorsForCase } =
-    applicationContext.getUtilities();
+  const { formatCase } = applicationContext.getUtilities();
 
   const caseDetail = get(state.caseDetail);
   const user = get(state.user);
 
   const result = {
-    ...setServiceIndicatorsForCase(caseDetail),
+    ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formatCase(applicationContext, caseDetail, user),
   };
 

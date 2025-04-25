@@ -22,7 +22,6 @@ import {
   PETITIONER_CONTACT_TYPES,
   PROCEDURE_TYPES,
   ROLES,
-  Role,
   SYSTEM_ROLE,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
@@ -53,13 +52,11 @@ import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence } from '../Correspondence';
 import { DocketEntry } from '../DocketEntry';
 import {
-  FORMATS,
   PATTERNS,
   calculateDifferenceInDays,
   calculateISODate,
   createISODateString,
   dateStringsCompared,
-  formatDateString,
   prepareDateFromString,
 } from '../../utilities/DateHandler';
 import { IrsPractitioner } from '../IrsPractitioner';
@@ -92,7 +89,6 @@ export class Case extends JoiValidationEntity {
   public damages?: number;
   public highPriority?: boolean;
   public highPriorityReason?: string;
-  public judgeUserId?: string;
   public litigationCosts?: number;
   public qcCompleteForTrial?: Record<string, any>;
   public noticeOfAttachments?: boolean;
@@ -109,7 +105,7 @@ export class Case extends JoiValidationEntity {
   public closedDate?: string;
   public createdAt: string;
   public docketNumber: string;
-  public docketNumberSuffix?: string;
+  public docketNumberSuffix?: string | null;
   public filingType?: string;
   public hasVerifiedIrsNotice?: boolean;
   public irsNoticeDate?: string;
@@ -131,10 +127,10 @@ export class Case extends JoiValidationEntity {
   public trialLocation?: string;
   public trialSessionId?: string;
   public trialTime?: string;
-  public useSameAsPrimary?: string;
+  public useSameAsPrimary?: boolean;
   public initialDocketNumberSuffix?: string;
   public noticeOfTrialDate?: string;
-  public docketNumberWithSuffix?: string;
+  public docketNumberWithSuffix!: string;
   public canAllowDocumentService?: boolean;
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
@@ -292,7 +288,10 @@ export class Case extends JoiValidationEntity {
    * @param {Array} cases the cases to check for lead case computation
    * @returns {Case} the lead Case entity
    */
-  static findLeadCaseForCases(cases) {
+  static findLeadCaseForCases<T>(
+    cases: (T & { docketNumber: string })[],
+  ): T | undefined {
+    if (!cases.length) return undefined;
     const casesOrdered = Case.sortByDocketNumber([...cases]);
     return casesOrdered.shift();
   }
@@ -356,7 +355,6 @@ export class Case extends JoiValidationEntity {
     this.damages = rawCase.damages;
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
-    this.judgeUserId = rawCase.judgeUserId;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
@@ -544,9 +542,6 @@ export class Case extends JoiValidationEntity {
     irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isPaper: joi.boolean().optional(),
     isSealed: CASE_IS_SEALED_RULE,
-    judgeUserId: JoiValidationConstants.UUID.optional().description(
-      'Unique ID for the associated judge.',
-    ),
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
     litigationCosts: joi
       .number()
@@ -798,8 +793,10 @@ export class Case extends JoiValidationEntity {
 
     this.noticeOfTrialDate = rawCase.noticeOfTrialDate;
 
-    this.docketNumberWithSuffix =
-      this.docketNumber + (this.docketNumberSuffix || '');
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
 
     this.canAllowDocumentService = rawCase.canAllowDocumentService;
     this.canAllowPrintableDocketRecord = rawCase.canAllowPrintableDocketRecord;
@@ -1020,6 +1017,16 @@ export class Case extends JoiValidationEntity {
     return caseCaption.replace(/\s*,\s*Petitioner(s|\(s\))?\s*$/, '').trim();
   }
 
+  static getDocketNumberWithSuffix({
+    docketNumber,
+    docketNumberSuffix,
+  }: {
+    docketNumber: string;
+    docketNumberSuffix: string | undefined | null;
+  }): string {
+    return docketNumber + (docketNumberSuffix || '');
+  }
+
   /**
    * attaches an IRS practitioner to the case
    * @param {string} practitioner the irsPractitioner to add to the case
@@ -1104,7 +1111,7 @@ export class Case extends JoiValidationEntity {
    * @param {string} practitionerToRemove the practitioner user object to remove from the case
    */
   removePrivatePractitioner(practitionerToRemove) {
-    const index = this.privatePractitioners.findIndex(
+    const index = (this.privatePractitioners || []).findIndex(
       practitioner => practitioner.userId === practitionerToRemove.userId,
     );
     if (index > -1) this.privatePractitioners?.splice(index, 1);
@@ -1225,7 +1232,10 @@ export class Case extends JoiValidationEntity {
         ? this.initialDocketNumberSuffix
         : '');
 
-    const newDocketNumber = this.docketNumber + (this.docketNumberSuffix || '');
+    const newDocketNumber = Case.getDocketNumberWithSuffix({
+      docketNumber: this.docketNumber,
+      docketNumberSuffix: this.docketNumberSuffix,
+    });
 
     this.docketEntries.forEach(docketEntry => {
       const result = docketNumberRegex.exec(docketEntry.documentTitle);
@@ -1775,13 +1785,6 @@ export class Case extends JoiValidationEntity {
     return this;
   }
 
-  generateTrialSortTags(): {
-    hybrid: string;
-    nonHybrid: string;
-  } {
-    return generateTrialSortTags(this);
-  }
-
   /**
    * set as calendared
    * @param {object} trialSessionEntity - the trial session that is associated with the case
@@ -2012,9 +2015,7 @@ export class Case extends JoiValidationEntity {
     const statisticToUpdate = this.statistics?.find(
       statistic => statistic.statisticId === statisticId,
     );
-
     if (statisticToUpdate) Object.assign(statisticToUpdate, statisticEntity);
-
     return this;
   }
 
@@ -2023,14 +2024,10 @@ export class Case extends JoiValidationEntity {
    * @param {string} statisticId the id of the statistic to delete
    * @returns {Case} this case entity
    */
-  deleteStatistic(statisticId) {
-    const statisticIndexToDelete = this.statistics?.findIndex(
-      statistic => statistic.statisticId === statisticId,
+  deleteStatistic(statisticId: string) {
+    this.statistics = this.statistics?.filter(
+      s => !(s.statisticId === statisticId),
     );
-
-    if (statisticIndexToDelete !== -1) {
-      this.statistics!.splice(statisticIndexToDelete, 1);
-    }
 
     return this;
   }
@@ -2058,13 +2055,13 @@ export class Case extends JoiValidationEntity {
     );
   }
 
-  userHasAccessToCase(user: { userId: string; role: Role }): boolean {
+  userHasAccessToCase(user: AuthUser): boolean {
     return Case.userHasAccessToCase(this, user);
   }
 
   static userHasAccessToCase(
     rawCase: RawCase | RawPublicCase,
-    user: { userId: string; role: Role },
+    user: AuthUser,
   ): boolean {
     return rawCase.leadDocketNumber
       ? isUserPartOfGroup({
@@ -2074,69 +2071,6 @@ export class Case extends JoiValidationEntity {
       : isAssociatedUser({ caseRaw: rawCase, user });
   }
 }
-
-/**
- * generates sort tags used for sorting trials for calendaring
- * @returns {object} the sort tags
- */
-export const generateTrialSortTags = function ({
-  caseType,
-  docketNumber,
-  highPriority,
-  preferredTrialCity,
-  procedureType,
-  receivedAt,
-}: {
-  caseType: CaseType;
-  docketNumber: string;
-  highPriority?: boolean;
-  preferredTrialCity?: string;
-  procedureType: string;
-  receivedAt: string;
-}): {
-  hybrid: string;
-  nonHybrid: string;
-} {
-  const caseProcedureSymbol =
-    procedureType.toLowerCase() === 'regular' ? 'R' : 'S';
-
-  let casePrioritySymbol = 'D';
-
-  if (highPriority === true) {
-    casePrioritySymbol = 'A';
-  } else if (caseType.toLowerCase() === 'cdp (lien/levy)') {
-    casePrioritySymbol = 'B';
-  } else if (caseType.toLowerCase() === 'passport') {
-    casePrioritySymbol = 'C';
-  }
-
-  const formattedFiledTime = formatDateString(
-    receivedAt,
-    FORMATS.TRIAL_SORT_TAG,
-  );
-  const formattedTrialCity = preferredTrialCity?.replace(/[\s.,]/g, '');
-
-  const nonHybridSortKey = [
-    formattedTrialCity,
-    caseProcedureSymbol,
-    casePrioritySymbol,
-    formattedFiledTime,
-    docketNumber,
-  ].join('-');
-
-  const hybridSortKey = [
-    formattedTrialCity,
-    'H', // Hybrid Tag
-    casePrioritySymbol,
-    formattedFiledTime,
-    docketNumber,
-  ].join('-');
-
-  return {
-    hybrid: hybridSortKey,
-    nonHybrid: nonHybridSortKey,
-  };
-};
 
 /**
  * Returns true if at least one party on the case has the provided serviceIndicator type.
@@ -2304,8 +2238,11 @@ export const isAssociatedUser = function ({
   user,
 }: {
   caseRaw: any;
-  user: { userId: string; role: Role };
+  user: UnknownAuthUser;
 }) {
+  if (!user) {
+    return false;
+  }
   const isIrsPractitioner =
     caseRaw.irsPractitioners &&
     caseRaw.irsPractitioners.find(r => r.userId === user.userId);
@@ -2474,23 +2411,18 @@ export const getOtherFilers = function (rawCase) {
   );
 };
 
-/**
- * Updates the specified contact object in the case petitioner's array
- * @param {object} arguments.rawCase the raw case object
- * @param {object} arguments.updatedPetitioner the updated petitioner object
- */
 export const updatePetitioner = function (rawCase, updatedPetitioner) {
   const petitionerIndex = rawCase.petitioners.findIndex(
     p => p.contactId === updatedPetitioner.contactId,
   );
 
-  if (petitionerIndex !== -1) {
-    rawCase.petitioners[petitionerIndex] = updatedPetitioner;
-  } else {
+  if (petitionerIndex === -1) {
     throw new Error(
       `Petitioner was not found on case ${rawCase.docketNumber}.`,
     );
   }
+
+  rawCase.petitioners[petitionerIndex] = updatedPetitioner;
 };
 
 declare global {
@@ -2561,6 +2493,7 @@ const generateCaptionFromContacts = ({
 };
 
 export type CaseStatusChange = {
+  statusUpdateId?: string; // db creates this if not set thus ensuring ability to insert duplicate status (which isn't ideal but possible)
   changedBy: string;
   date: string;
   updatedCaseStatus: string;

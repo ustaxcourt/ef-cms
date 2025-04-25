@@ -1,30 +1,33 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { saveCaseNoteInteractor } from './saveCaseNoteInteractor';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('saveCaseNoteInteractor', () => {
   let mockLock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
+    updateCase.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(({ caseToUpdate }) => caseToUpdate);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
-  it('throws an error if the user is not valid or authorized', async () => {
+  it('should throw an error when the user is not valid or authorized', async () => {
     await expect(
       saveCaseNoteInteractor(
         applicationContext,
@@ -37,7 +40,7 @@ describe('saveCaseNoteInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('saves a case note', async () => {
+  it('should save a case note', async () => {
     const result = await saveCaseNoteInteractor(
       applicationContext,
       {
@@ -48,16 +51,12 @@ describe('saveCaseNoteInteractor', () => {
     );
 
     expect(result).toBeDefined();
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(updateCase).toHaveBeenCalled();
     expect(result.caseNote).toEqual('This is my case note');
   });
 
-  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+  it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
     await expect(
@@ -71,9 +70,7 @@ describe('saveCaseNoteInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

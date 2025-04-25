@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getPractitionersByName } from './getPractitionersByName';
 jest.mock('./searchClient');
 import { search } from './searchClient';

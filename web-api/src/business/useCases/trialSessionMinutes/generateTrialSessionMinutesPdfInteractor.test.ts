@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { UnauthorizedError, NotFoundError } from '@web-api/errors/errors';
 import { generateTrialSessionMinutesPdfInteractor } from './generateTrialSessionMinutesPdfInteractor';
 import {
@@ -8,7 +9,7 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { minuteSheet as minuteSheetDocumentGenerator } from '@shared/business/utilities/documentGenerators/minuteSheet';
 import { getDownloadPolicyUrl } from '@web-api/persistence/s3/getDownloadPolicyUrl';
@@ -19,9 +20,6 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { mockMinuteSheet } from '@shared/test/mockMinuteSheet';
 import { mockFormattedMinuteSheet } from '@web-api/business/useCaseHelper/trialSessionMinutes/mockFormattedMinuteSheet';
 
-jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber', () => ({
-  getCaseByDocketNumber: jest.fn(),
-}));
 const mockGetCaseByDocketNumber = getCaseByDocketNumber as jest.Mock;
 
 jest.mock(

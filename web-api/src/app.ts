@@ -93,6 +93,7 @@ import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocum
 import { getDocumentQCInboxForUserLambda } from './lambdas/workitems/getDocumentQCInboxForUserLambda';
 import { getDocumentQCServedForSectionLambda } from './lambdas/workitems/getDocumentQCServedForSectionLambda';
 import { getDocumentQCServedForUserLambda } from './lambdas/workitems/getDocumentQCServedForUserLambda';
+import { getEligibleCasesForCityLambda } from '@web-api/lambdas/trialSessions/getEligibleCasesForCityLambda';
 import { getEligibleCasesForTrialSessionLambda } from './lambdas/trialSessions/getEligibleCasesForTrialSessionLambda';
 import { getGeneratePrintableTrialSessionCopyReportLambda } from './lambdas/trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
 import { getInboxMessagesForSectionLambda } from './lambdas/messages/getInboxMessagesForSectionLambda';
@@ -177,7 +178,6 @@ import { unsealDocketEntryLambda } from './lambdas/documents/unsealDocketEntryLa
 import { updateCaseContextLambda } from './lambdas/cases/updateCaseContextLambda';
 import { updateCaseDeadlineLambda } from './lambdas/caseDeadline/updateCaseDeadlineLambda';
 import { updateCaseDetailsLambda } from './lambdas/cases/updateCaseDetailsLambda';
-import { updateCaseTrialSortTagsLambda } from './lambdas/cases/updateCaseTrialSortTagsLambda';
 import { updateCaseWorksheetLambda } from '@web-api/lambdas/caseWorksheet/updateCaseWorksheetLambda';
 import { updateContactLambda } from './lambdas/cases/updateContactLambda';
 import { updateCorrespondenceDocumentLambda } from './lambdas/correspondence/updateCorrespondenceDocumentLambda';
@@ -208,6 +208,8 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
+import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
+import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 
 export const app = express();
 
@@ -321,22 +323,39 @@ app.use(expressLogger);
  */
 {
   app.put(
-    '/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(updateCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(
+      updateCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.delete(
-    '/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(deleteCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(
+      deleteCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
+
   app.post(
-    '/case-deadlines/:docketNumber',
-    lambdaWrapper(createCaseDeadlineLambda),
+    '/async/case-deadlines/:docketNumber',
+    lambdaWrapper(
+      createCaseDeadlineLambda,
+      { isAsyncSync: true },
+      applicationContext,
+    ),
   );
   app.get(
     '/case-deadlines/:docketNumber',
     lambdaWrapper(getCaseDeadlinesForCaseLambda),
   );
   app.get('/case-deadlines', lambdaWrapper(getCaseDeadlinesLambda));
+  app.get(
+    '/consolidated-case-deadlines/:consolidatedCaseDeadlineId',
+    lambdaWrapper(getConsolidatedCaseDeadlinesLambda),
+  );
 }
 
 /**
@@ -504,10 +523,6 @@ app.use(expressLogger);
  * case-meta
  */
 {
-  app.put(
-    '/case-meta/:docketNumber/update-case-trial-sort-tags',
-    lambdaWrapper(updateCaseTrialSortTagsLambda),
-  );
   app.post(
     '/case-meta/:docketNumber/block',
     lambdaWrapper(blockCaseFromTrialLambda),
@@ -628,6 +643,10 @@ app.use(expressLogger);
     '/case-parties/:docketNumber/petitioner-info',
     lambdaWrapper(updatePetitionerInformationLambda),
   );
+  app.post(
+    '/case-parties/:docketNumber/remove-petitioner-email',
+    lambdaWrapper(removePetitionerEmailLambda),
+  );
 }
 
 /**
@@ -659,6 +678,10 @@ app.use(expressLogger);
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
+  app.get(
+    '/cases/:trialCity/eligible-cases',
+    lambdaWrapper(getEligibleCasesForCityLambda),
+  );
   app.post('/cases', lambdaWrapper(createCaseLambda));
   app.post(
     '/cases/:docketNumber/case-worksheet',

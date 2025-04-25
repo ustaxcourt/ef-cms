@@ -1,6 +1,7 @@
 import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateCoverSheetData } from '../../useCases/generateCoverSheetData';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 /**
  * a helper function which creates a coversheet with stampData on it, then returns the new coversheet pdf
@@ -50,12 +51,10 @@ export const generateStampedCoversheetInteractor = async (
   { docketEntryId, docketNumber, stampData, stampedDocketEntryId },
   authorizedUser: UnknownAuthUser,
 ) => {
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseRecord, {
     authorizedUser,

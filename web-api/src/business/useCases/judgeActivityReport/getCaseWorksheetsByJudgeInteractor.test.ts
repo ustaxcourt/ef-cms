@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/caseWorksheets/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import {
@@ -11,16 +12,23 @@ import {
 } from '@shared/test/mockCase';
 import { MOCK_CASE_WORKSHEET } from '@shared/test/mockCaseWorksheet';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseWorksheetsByDocketNumber as getCaseWorksheetsByDocketNumberMock } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
 import { judgeUser } from '@shared/test/mockUsers';
 import {
   mockJudgeUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getDocketNumbersByStatusAndByJudge as getDocketNumbersByStatusAndByJudgeMock } from '@web-api/persistence/postgres/cases/reports/getDocketNumbersByStatusAndByJudge';
+import { getConsolidatedCasesCount as getConsolidatedCasesCountMock } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 
 const getCaseWorksheetsByDocketNumber =
   getCaseWorksheetsByDocketNumberMock as jest.Mock;
+
+const getDocketNumbersByStatusAndByJudge =
+  getDocketNumbersByStatusAndByJudgeMock as jest.Mock;
+
+const getConsolidatedCasesCount = jest.mocked(getConsolidatedCasesCountMock);
 
 describe('getCaseWorksheetsByJudgeInteractor', () => {
   let mockGetDocketNumbersByStatusAndByJudgeResult: RawCase[] = [];
@@ -62,16 +70,13 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
       mockCaseWorksheet10223,
     ]);
   });
-  applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByStatusAndByJudge.mockImplementation(
-      () => mockGetDocketNumbersByStatusAndByJudgeResult,
-    );
+  getDocketNumbersByStatusAndByJudge.mockResolvedValue(
+    mockGetDocketNumbersByStatusAndByJudgeResult,
+  );
 
   it('should return an error when the user is not authorized to generate the report', async () => {
     await expect(
       getCaseWorksheetsByJudgeInteractor(
-        applicationContext,
         mockValidRequest,
         mockPetitionsClerkUser,
       ),
@@ -81,7 +86,6 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
   it('should return an error when the search parameters are not valid', async () => {
     await expect(
       getCaseWorksheetsByJudgeInteractor(
-        applicationContext,
         {
           judges: [judgeUser.name],
           statuses: [undefined as any],
@@ -92,17 +96,9 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
   });
 
   it('calls getDocketNumbersByStatusAndByJudge with excludeMemberCases flag = true (stripping out the consolidated member case)', async () => {
-    await getCaseWorksheetsByJudgeInteractor(
-      applicationContext,
-      mockValidRequest,
-      mockJudgeUser,
-    );
+    await getCaseWorksheetsByJudgeInteractor(mockValidRequest, mockJudgeUser);
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .getDocketNumbersByStatusAndByJudge,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getDocketNumbersByStatusAndByJudge).toHaveBeenCalledWith({
       params: {
         excludeMemberCases: true,
         judges: mockValidRequest.judges,
@@ -112,6 +108,8 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
   });
 
   it('should return an array of cases with formattedCaseCount', async () => {
+    getConsolidatedCasesCount.mockResolvedValue(3);
+
     mockGetDocketNumbersByStatusAndByJudgeResult = [
       {
         ...mockCaseInfo,
@@ -124,17 +122,11 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
       },
     ];
 
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
-        mockGetDocketNumbersByStatusAndByJudgeResult,
-      );
-    applicationContext
-      .getPersistenceGateway()
-      .getCountOfConsolidatedCases.mockReturnValueOnce(3);
+    getDocketNumbersByStatusAndByJudge.mockResolvedValueOnce(
+      mockGetDocketNumbersByStatusAndByJudgeResult,
+    );
 
     const result = await getCaseWorksheetsByJudgeInteractor(
-      applicationContext,
       mockValidRequest,
       mockJudgeUser,
     );
@@ -163,14 +155,11 @@ describe('getCaseWorksheetsByJudgeInteractor', () => {
       },
     ];
 
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByStatusAndByJudge.mockReturnValueOnce(
-        mockGetDocketNumbersByStatusAndByJudgeResult,
-      );
+    getDocketNumbersByStatusAndByJudge.mockResolvedValueOnce(
+      mockGetDocketNumbersByStatusAndByJudgeResult,
+    );
 
     const result = await getCaseWorksheetsByJudgeInteractor(
-      applicationContext,
       mockValidRequest,
       mockJudgeUser,
     );

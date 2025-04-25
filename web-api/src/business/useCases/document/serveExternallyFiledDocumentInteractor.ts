@@ -1,6 +1,7 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   asyncHandleLockError,
   withLocking,
@@ -17,6 +18,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -45,12 +47,10 @@ export const serveExternallyFiledDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const subjectCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: subjectCaseDocketNumber,
-    });
+  const subjectCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: subjectCaseDocketNumber,
+  });
 
   const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
@@ -101,12 +101,9 @@ export const serveExternallyFiledDocument = async (
   }
 
   try {
+    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
     caseEntities = await Promise.all(
-      docketNumbers.map(async docketNumber => {
-        const rawCaseToUpdate = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({ applicationContext, docketNumber });
-
+      casesToUpdate.map(async rawCaseToUpdate => {
         const caseEntity = new Case(rawCaseToUpdate, { authorizedUser });
 
         const isSubjectCase =
@@ -147,17 +144,15 @@ export const serveExternallyFiledDocument = async (
     const updatedSubjectDocketEntry =
       updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
 
-    await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(
-        applicationContext,
-        {
-          caseEntity: updatedSubjectCaseEntity,
-          docketEntryId: updatedSubjectDocketEntry.docketEntryId,
-          docketNumber: updatedSubjectCaseEntity!.docketNumber,
-        },
-        authorizedUser,
-      );
+    await applicationContext.getUseCases().addCoversheetInteractor(
+      applicationContext,
+      {
+        caseEntity: updatedSubjectCaseEntity,
+        docketEntryId: updatedSubjectDocketEntry.docketEntryId,
+        docketNumber: updatedSubjectCaseEntity!.docketNumber,
+      },
+      authorizedUser,
+    );
 
     paperServiceResult = await applicationContext
       .getUseCaseHelpers()
@@ -182,18 +177,16 @@ export const serveExternallyFiledDocument = async (
       ? DOCUMENT_SERVED_MESSAGES.SELECTED_CASES
       : DOCUMENT_SERVED_MESSAGES.ENTRY_ADDED;
 
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'serve_document_complete',
-        alertSuccess: { message: successMessage, overwritable: false },
-        pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
-      },
-      userId: user.userId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_document_complete',
+      alertSuccess: { message: successMessage, overwritable: false },
+      pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
+    },
+    userId: user.userId,
+  });
 };
 
 export const determineEntitiesToLock = (

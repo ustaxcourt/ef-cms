@@ -1,8 +1,8 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
-const groupKeySymbol = Symbol('group');
+export const groupKeySymbol = Symbol('group');
 
-const addGroupSymbol = (object, value) => {
+export const addGroupSymbol = (object, value) => {
   Object.defineProperty(object, groupKeySymbol, {
     enumerable: false,
     value,
@@ -11,12 +11,12 @@ const addGroupSymbol = (object, value) => {
   return object;
 };
 
-const getPriorityGroups = eligibleCases => {
+export const getPriorityGroups = eligibleCases => {
   const groups = {
-    default: [],
-    highPriority: [],
-    manuallyAdded: [],
-    suffixHighPriority: [],
+    default: [] as FormattedTrialSessionCase[],
+    highPriority: [] as FormattedTrialSessionCase[],
+    manuallyAdded: [] as FormattedTrialSessionCase[],
+    suffixHighPriority: [] as FormattedTrialSessionCase[],
   };
 
   eligibleCases.forEach(theCase => {
@@ -44,6 +44,9 @@ const getSortableDocketNumber = docketNumber => {
 };
 
 const getFullSortString = (theCase, cases) => {
+  if (!Array.isArray(cases)) {
+    return '';
+  }
   const leadCase = cases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
@@ -69,7 +72,7 @@ const getFullSortString = (theCase, cases) => {
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-const compareTrialSessionEligibleCases = eligibleCases => {
+export const compareTrialSessionEligibleCases = eligibleCases => {
   const groups = getPriorityGroups(eligibleCases);
   return (a, b) => {
     const aSortString = getFullSortString(a, groups[a[groupKeySymbol]]);
@@ -80,6 +83,7 @@ const compareTrialSessionEligibleCases = eligibleCases => {
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { FormattedTrialSessionCase } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 export const formattedEligibleCasesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -120,7 +124,7 @@ export const formattedEligibleCasesHelper = (
         );
       } else if (filter === 'Regular') {
         return (
-          eligibleCase.docketNumberSuffix === null ||
+          !eligibleCase.docketNumberSuffix ||
           (eligibleCase.docketNumberSuffix !== DOCKET_NUMBER_SUFFIXES.SMALL &&
             eligibleCase.docketNumberSuffix !==
               DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY)

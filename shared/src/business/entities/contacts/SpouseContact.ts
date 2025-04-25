@@ -10,14 +10,14 @@ export class SpouseContact extends ContactUpdated {
   getValidationRules() {
     return {
       ...super.getValidationRules(),
-      hasConsentedToEService: joi
+      hasConsentedToElectronicService: joi
         .boolean()
         .optional()
         .description(
           'Flag that indicates if the petitioner checked the "I consent to electronic service" box on their petition form',
         ),
       paperPetitionEmail: JoiValidationConstants.EMAIL.when(
-        'hasConsentedToEService',
+        'hasConsentedToElectronicService',
         {
           is: true,
           otherwise: joi.optional(),

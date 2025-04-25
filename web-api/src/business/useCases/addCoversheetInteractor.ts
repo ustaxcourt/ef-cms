@@ -1,8 +1,10 @@
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '../../../../shared/src/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { SIMULTANEOUS_DOCUMENT_EVENT_CODES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 /**
  * addCoversheetInteractor
@@ -35,12 +37,10 @@ export const addCoversheetInteractor = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!caseEntity) {
-    const caseRecord = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseRecord = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
     caseEntity = new Case(caseRecord, {
       authorizedUser,
@@ -84,21 +84,18 @@ export const addCoversheetInteractor = async (
       .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);
   }
 
+  const casesToUpdate = await getCasesByDocketNumbers({
+    docketNumbers: docketNumbersToUpdate,
+  });
+
   const updatedDocketEntries = await Promise.all(
-    docketNumbersToUpdate.map(async caseDocketNumber => {
-      // in one instance, we pass in the caseEntity which we don't want to refetch
-      let consolidatedCaseEntity = caseEntity;
-      if (caseEntity && caseDocketNumber !== docketNumber) {
-        const caseRecord = await applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber({
-            applicationContext,
-            docketNumber: caseDocketNumber,
-          });
-        consolidatedCaseEntity = new Case(caseRecord, {
-          authorizedUser,
-        });
-      }
+    casesToUpdate.map(async caseRecord => {
+      const consolidatedCaseEntity =
+        caseRecord.docketNumber === docketNumber
+          ? caseEntity
+          : new Case(caseRecord, {
+              authorizedUser,
+            });
 
       const consolidatedCaseDocketEntryEntity =
         consolidatedCaseEntity!.getDocketEntryById({
@@ -118,7 +115,7 @@ export const addCoversheetInteractor = async (
           !isSimultaneousDocType ||
           (isSimultaneousDocType &&
             caseEntity &&
-            caseDocketNumber === docketNumber)
+            caseRecord.docketNumber === docketNumber)
         ) {
           consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
         }
@@ -132,7 +129,7 @@ export const addCoversheetInteractor = async (
         await applicationContext.getPersistenceGateway().updateDocketEntry({
           applicationContext,
           docketEntryId,
-          docketNumber: caseDocketNumber,
+          docketNumber: caseRecord.docketNumber,
           document: updateConsolidatedDocketEntry,
         });
         return updateConsolidatedDocketEntry;

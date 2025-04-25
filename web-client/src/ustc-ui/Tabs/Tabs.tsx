@@ -91,6 +91,21 @@ const getTabHeadingTitle = word => {
   return word.charAt(0).toUpperCase() + word.slice(1);
 };
 
+export interface TabsProps {
+  asSwitch?: boolean;
+  bind?: string;
+  boxed?: boolean;
+  children?: ReactNode;
+  className?: string;
+  defaultActiveTab?: string;
+  headingLevel?: string;
+  id?: string;
+  marginBottom?: boolean;
+  onSelect?: any;
+  simpleSetter?: any;
+  value?: string;
+}
+
 /**
  * TabsComponent
  *
@@ -110,20 +125,7 @@ export function TabsComponent({
   onSelect,
   simpleSetter,
   value,
-}: {
-  asSwitch?: boolean;
-  bind?: string;
-  boxed?: any;
-  children: ReactNode;
-  className?: string;
-  defaultActiveTab?: string;
-  headingLevel?: string;
-  id?: string;
-  marginBottom?: boolean;
-  onSelect?: any;
-  simpleSetter?: any;
-  value?: any;
-}) {
+}: TabsProps) {
   // TODO - Refactor how tab selection sets documentSelectedForScan
   let activeKey, setTab;
 
@@ -229,7 +231,7 @@ export function TabsComponent({
   );
 }
 
-export const Tabs = connect(
+export const Tabs = connect<any, TabsProps>(
   {
     bind: props.bind,
     simpleSetter: sequences.cerebralBindSimpleSetStateSequence,
