@@ -22,7 +22,7 @@ import { UserCase } from '@shared/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
-import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
+import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistics';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';

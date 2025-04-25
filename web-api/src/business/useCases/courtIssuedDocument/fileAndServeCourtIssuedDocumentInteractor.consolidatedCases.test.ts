@@ -174,7 +174,7 @@ describe('consolidated cases', () => {
         },
         mockDocketClerkUser,
       ),
-    ).rejects.toThrow(expectedErrorString);
+    ).rejects.toThrow('1 promises rejected in settlePromises');
 
     const initialCall = 1;
     const finallyBlockCalls = 3;
