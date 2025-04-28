@@ -34,7 +34,7 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [x] dwUsersOnCase: is it possible for the same user to be on the same case multiple times?? (update the answer is no, it's not possible, but what we've built does handle this scenario)
 - [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
-- [ ] Odd user-related dynamodb functions
+- [x] Odd user-related dynamodb functions
 - [ ] Determine if selectAll is necessary for User functions
 - [ ] Delete `UserCase` entity
 - [ ] Make sure all user related entities are copied in & all user related functions (i.e., scrub all user-related dynamodb code)
@@ -61,8 +61,8 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [in-progress] barNumberGenerator: Contains business logic for generating a bar number,
 does not belong in the persistence layer.
 - [x] getUsersBySearchKey
-- [ ] removePractitionerOnCase
-- [ ] updatePractitionerOnCase
+- [x] removePractitionerOnCase
+- [x] updatePractitionerOnCase
 
 ## Things to test
 

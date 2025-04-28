@@ -65,10 +65,6 @@ import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter'
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
-import {
-  removeIrsPractitionerOnCase,
-  removePrivatePractitionerOnCase,
-} from './persistence/dynamo/cases/removePractitionerOnCase';
 import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
@@ -81,10 +77,6 @@ import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEn
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
 import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
 import { updateDocketEntryWorksheet } from '@web-api/persistence/dynamo/pendingMotion/updateDocketEntryWorksheet';
-import {
-  updateIrsPractitionerOnCase,
-  updatePrivatePractitionerOnCase,
-} from './persistence/dynamo/cases/updatePractitionerOnCase';
 import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
@@ -151,9 +143,7 @@ const gatewayMethods = {
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
     updateDocketEntryWorksheet,
-    updateIrsPractitionerOnCase,
     updateMaintenanceMode,
-    updatePrivatePractitionerOnCase,
     updateTrialSession,
     updateTrialSessionWorkingCopy,
   }),
@@ -211,9 +201,7 @@ const gatewayMethods = {
   getWebSocketConnectionsByUserId,
   isEmailAvailable,
   isFileExists,
-  removeIrsPractitionerOnCase,
   removeLock,
-  removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
   setStoredApplicationHealth,
   uploadDocument,
