@@ -4,12 +4,18 @@ export const deleteUserFromCase = async ({
   userId,
   docketNumber,
 }: {
-  docketNumber: string;
+  docketNumber?: string;
   userId: string;
 }): Promise<void> => {
   await pgDeleteFrom({
     table: 'dwUserOnCase',
-    where: cb =>
-      cb.where('userId', '=', userId).where('docketNumber', '=', docketNumber),
+    where: cb => {
+      if (docketNumber) {
+        return cb
+          .where('userId', '=', userId)
+          .where('docketNumber', '=', docketNumber);
+      }
+      return cb.where('userId', '=', userId);
+    },
   });
 };

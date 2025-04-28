@@ -1,5 +1,6 @@
 import { getUserByEmail } from '../cognito/cognito-helpers';
 import { deleteUserConfirmationCode } from '@web-api/persistence/postgres/users/deleteUserConfirmationCode';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
 
 export const getNewAccountVerificationCode = async ({
@@ -42,13 +43,7 @@ export const getEmailVerificationToken = async ({
   email: string;
 }): Promise<string> => {
   const { userId } = await getUserByEmail(email);
-  const result = await getDocumentClient().get({
-    Key: {
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-    },
-    TableName: getCypressEnv().dynamoDbTableName,
-  });
+  const user = await getUserById({ userId });
 
-  return result?.Item?.pendingEmailVerificationToken;
+  return user.pendingEmailVerificationToken || '';
 };

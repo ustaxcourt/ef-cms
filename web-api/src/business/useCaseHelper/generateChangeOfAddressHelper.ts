@@ -70,7 +70,7 @@ export const generateChangeOfAddressHelper = async ({
 
     if (!practitionerObject) {
       throw new Error(
-        `Could not find user|${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
+        `Could not find user: ${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
       );
     }
 

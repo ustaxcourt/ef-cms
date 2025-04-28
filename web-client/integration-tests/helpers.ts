@@ -40,6 +40,8 @@ import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 
 const applicationContext = clientApplicationContext as any;
 
@@ -162,16 +164,6 @@ export const getConnection = connectionId => {
   });
 };
 
-export const getUserRecordById = (userId: string) => {
-  return client.get({
-    Key: {
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-};
-
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
@@ -205,21 +197,11 @@ export const setChiefJudgeNameFlagValue = newJudgeName => {
   });
 };
 
-export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
-  return client.update({
-    ExpressionAttributeNames: {
-      '#judgeTitle': 'judgeTitle',
-    },
-    ExpressionAttributeValues: {
-      ':judgeTitle': newJudgeTitle,
-    },
-    Key: {
-      pk: `user|${judgeUserId}`,
-      sk: `user|${judgeUserId}`,
-    },
-    UpdateExpression: 'SET #judgeTitle = :judgeTitle',
-    applicationContext,
-  });
+export const setJudgeTitle = async (judgeUserId, newJudgeTitle) => {
+  const judge = await getUserById({ userId: judgeUserId });
+  judge.judgeTitle = newJudgeTitle;
+
+  return await updateUser({ userToUpdate: judge });
 };
 
 export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
