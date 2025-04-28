@@ -3,6 +3,7 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
@@ -22,7 +23,7 @@ export const processDocketEntries = async ({
     `going to index ${records.length} docketEntryRecords`,
   );
 
-  const newDocketEntryRecords: IDynamoDBRecord[] = await Promise.all(
+  const newDocketEntryRecords: IDynamoDBRecord[] = await settlePromises(
     records.map(async record => {
       const fullDocketEntry = unmarshall(record.dynamodb.NewImage);
 

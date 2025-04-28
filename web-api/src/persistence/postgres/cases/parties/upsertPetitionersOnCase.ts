@@ -36,7 +36,7 @@ export const upsertPetitionersOnCase = async ({
       postalCode: p.postalCode,
       sealedAndUnavailable: p.sealedAndUnavailable,
       secondaryName: p.secondaryName,
-      serviceIndicator: p.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_NONE,
+      serviceIndicator: p.serviceIndicator ?? SERVICE_INDICATOR_TYPES.SI_NONE,
       state: p.state,
       title: p.title,
       orderOnCase: index,

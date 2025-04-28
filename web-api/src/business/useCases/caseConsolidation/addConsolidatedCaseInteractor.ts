@@ -12,6 +12,7 @@ import {
   hashLockId,
   multiMutexLockWrapper,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * addConsolidatedCase
@@ -54,14 +55,13 @@ export const addConsolidatedCase = async (
     );
   }
 
-  let allCasesToConsolidate: RawCase[] = [];
+  let allCasesToConsolidate: Omit<RawCase, 'consolidatedCases'>[] = [];
 
   if (
     caseToUpdate.leadDocketNumber &&
     caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
   ) {
     allCasesToConsolidate = await getCasesByLeadDocketNumber({
-      applicationContext,
       leadDocketNumber: caseToUpdate.leadDocketNumber,
     });
   } else {
@@ -70,7 +70,6 @@ export const addConsolidatedCase = async (
 
   if (caseToConsolidateWith.leadDocketNumber) {
     const casesConsolidatedWithLeadCase = await getCasesByLeadDocketNumber({
-      applicationContext,
       leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
     });
     allCasesToConsolidate.push(...casesConsolidatedWithLeadCase);
@@ -100,7 +99,7 @@ export const addConsolidatedCase = async (
     );
   });
 
-  await Promise.all(updateCasePromises);
+  await settlePromises(updateCasePromises);
 };
 
 // 10505: this replicates the existing functionality, but may need to account for `allCasesToConsolidate`?

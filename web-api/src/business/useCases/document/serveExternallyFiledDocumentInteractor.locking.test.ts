@@ -1,12 +1,12 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
+jest.mock('../addCoverToPdf');
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-jest.mock('../addCoverToPdf');
 import { addCoverToPdf } from '../addCoverToPdf';
 import {
   determineEntitiesToLock,
@@ -16,8 +16,10 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -97,6 +99,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       .getUserById.mockReturnValue(mockDocketClerkUser);
 
     getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getCasesByDocketNumbers.mockResolvedValue([mockCase]);
   });
 
   describe('locked', () => {

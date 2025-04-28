@@ -22,13 +22,14 @@ import { UserCase } from '@shared/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
-import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
+import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistics';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
@@ -353,32 +354,33 @@ export const createCaseInteractor = async (
     });
   }
 
-  await createPetitionersOnCase({
-    docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-  });
-
-  caseToAdd.statistics?.forEach(statistic =>
-    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-  );
-
-  await upsertCaseStatusUpdates({
-    docketNumber: caseToAdd.docketNumber,
-    statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
-  });
-
   const userCaseEntity = new UserCase(caseToAdd);
 
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
-    applicationContext,
-    docketNumber: caseToAdd.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId: user.userId,
-  });
+  const caseAssociationUpdates = [
+    createPetitionersOnCase({
+      docketNumber: caseToAdd.docketNumber,
+      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
+    }),
+    upsertCaseStatusUpdates({
+      docketNumber: caseToAdd.docketNumber,
+      statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
+    }),
+    upsertWorkItems({
+      workItems: [workItem.validate().toRawObject()],
+    }),
+    createCaseStatistics({
+      docketNumber: caseToAdd.docketNumber,
+      statistics: caseToAdd.statistics || [],
+    }),
+    applicationContext.getPersistenceGateway().associateUserWithCase({
+      applicationContext,
+      docketNumber: caseToAdd.docketNumber,
+      userCase: userCaseEntity.validate().toRawObject(),
+      userId: user.userId,
+    }),
+  ];
 
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
+  await settlePromises(caseAssociationUpdates);
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

@@ -55,7 +55,7 @@ export const getCaseDeadlinesByDateRange = async ({
 
       return {
         results,
-        total: total?.totalCount || 0,
+        total: total?.totalCount ?? 0,
       };
     },
   );

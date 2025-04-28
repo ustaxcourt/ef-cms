@@ -7,7 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Statistic } from '@shared/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
+import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistics';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   hashLockId,
@@ -69,9 +69,9 @@ export const addDeficiencyStatistic = async (
 
   const validRawCase = newCase.validate().toRawObject();
 
-  await createCaseStatistic({
+  await createCaseStatistics({
     docketNumber: newCase.docketNumber,
-    statistic: statisticEntity,
+    statistics: [statisticEntity],
   });
 
   return validRawCase;

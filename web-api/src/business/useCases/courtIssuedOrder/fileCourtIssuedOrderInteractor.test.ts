@@ -6,6 +6,7 @@ import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
+  MOTION_ORDER_RESPONSE_OPTIONS,
   PARTY_TYPES,
   PETITIONS_SECTION,
   ROLES,
@@ -19,6 +20,7 @@ import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import {
   mockDocketClerkUser,
+  mockJudgeUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
@@ -501,6 +503,33 @@ describe('fileCourtIssuedOrderInteractor', () => {
     });
 
     describe('eventCode "O"', () => {
+      it('should return initialFreeText when eventCode is O and orderType is motion order response', async () => {
+        await fileCourtIssuedOrderInteractor(
+          applicationContext,
+          {
+            documentMetadata: {
+              docketNumber: caseRecord.docketNumber,
+              dueDate: '2024-03-22',
+              documentTitle: 'Test Document',
+              eventCode: 'O',
+              initialFreeText: 'Custom free text for motion order response',
+              jurisdiction: '',
+              orderType: MOTION_ORDER_RESPONSE_OPTIONS.orderType,
+              strickenFromTrialSessions: false,
+            },
+            primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          mockJudgeUser,
+        );
+
+        expect(
+          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+            .caseToUpdate.docketEntries[3],
+        ).toMatchObject({
+          freeText: 'Custom free text for motion order response',
+        });
+      });
+
       it('should add order document to case and set freeText and draftOrderState.freeText correctly for orderType status report', async () => {
         await fileCourtIssuedOrderInteractor(
           applicationContext,

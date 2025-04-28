@@ -19,6 +19,7 @@ import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCor
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import diff from 'diff-arrays-of-objects';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -450,7 +451,7 @@ export const updateCaseAndAssociations = async ({
     persistFn();
   });
 
-  await Promise.all(persistenceRequests);
+  await settlePromises(persistenceRequests);
 
   return updateCase({
     caseToUpdate: validNewRawCaseEntity,

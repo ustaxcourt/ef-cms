@@ -60,7 +60,7 @@ export function messageResultEntity(message) {
     transformNullToUndefined({
       ...message,
       caseStatus: message.status,
-      caseTitle: Case.getCaseTitle(message.caption || ''),
+      caseTitle: Case.getCaseTitle(message.caption ?? ''),
       completedAt: message.completedAt?.toISOString(),
       createdAt: message.createdAt.toISOString(),
       trialDate: message.trialDate?.toISOString(),

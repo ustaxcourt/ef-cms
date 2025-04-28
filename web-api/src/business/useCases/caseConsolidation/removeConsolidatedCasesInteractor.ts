@@ -12,6 +12,8 @@ import {
   hashLockId,
   multiMutexLockWrapper,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * removeConsolidatedCases
@@ -22,7 +24,7 @@ import {
  * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
  * @returns {object} the updated case data
  */
-export const removeConsolidatedCases = async (
+const removeConsolidatedCases = async (
   applicationContext: ServerApplicationContext,
   {
     docketNumber,
@@ -48,7 +50,6 @@ export const removeConsolidatedCases = async (
   const { leadDocketNumber } = caseToUpdate;
 
   const allConsolidatedCases = await getCasesByLeadDocketNumber({
-    applicationContext,
     leadDocketNumber,
   });
 
@@ -93,18 +94,14 @@ export const removeConsolidatedCases = async (
     );
   }
 
-  for (const docketNumberToRemove of docketNumbersToRemove) {
-    const caseToRemove = await getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: docketNumberToRemove,
-    });
+  // TODO: I am pretty sure getCasesByDocketNumbers here (which mimics preexisting logic) is unnecessary and, in fact, dangerous.
+  // We already got the case information above via getCasesByLeadDocketNumber.
+  // The call here allows a request to remove consolidation on arbitrary docket numbers unrelated to the lead case.
+  const casesToRemove = await getCasesByDocketNumbers({
+    docketNumbers: docketNumbersToRemove,
+  });
 
-    if (!caseToRemove) {
-      throw new NotFoundError(
-        `Case to consolidate with (${docketNumberToRemove}) was not found.`,
-      );
-    }
-
+  for (const caseToRemove of casesToRemove) {
     const caseEntity = new Case(caseToRemove, { authorizedUser });
     caseEntity.removeConsolidation();
 
@@ -117,7 +114,7 @@ export const removeConsolidatedCases = async (
     );
   }
 
-  await Promise.all(updateCasePromises);
+  await settlePromises(updateCasePromises);
 };
 
 export const removeConsolidatedCasesInteractor = async (
@@ -128,8 +125,8 @@ export const removeConsolidatedCasesInteractor = async (
   }: { docketNumber: string; docketNumbersToRemove: string[] },
   authorizedUser: UnknownAuthUser,
 ) => {
-  const lockIds = [docketNumber, ...docketNumbersToRemove].map(docketNum =>
-    hashLockId(`case|${docketNum}`),
+  const lockIds = [docketNumber, ...docketNumbersToRemove].map(docketNumber =>
+    hashLockId(`case|${docketNumber}`),
   );
 
   return multiMutexLockWrapper({

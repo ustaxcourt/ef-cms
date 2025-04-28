@@ -28,12 +28,12 @@ export const getCaseStatistics = async ({
   return Object.values(
     statistics.map(s => ({
       ...s,
-      penalties: (s.penalties as Penalty[]) || [],
+      penalties: (s.penalties as Penalty[]) ?? [],
       year: s.year?.toString(),
-      yearOrPeriod: s.yearOrPeriod || undefined,
-      determinationTotalPenalties: s.determinationTotalPenalties || undefined,
+      yearOrPeriod: s.yearOrPeriod ?? undefined,
+      determinationTotalPenalties: s.determinationTotalPenalties ?? undefined,
       determinationDeficiencyAmount:
-        s.determinationDeficiencyAmount || undefined,
+        s.determinationDeficiencyAmount ?? undefined,
       lastDateOfPeriod: s.lastDateOfPeriod?.toISOString(),
     })),
   );
