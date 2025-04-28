@@ -8,7 +8,7 @@
    3. [UI Design System](#ui-design-system)
    4. [Content Strategy](#content-strategy)
 
-# User Research
+# User Research, edit
 
 ## Initial Discovery
 [UX Research Approach ](https://docs.google.com/presentation/d/14XKR6X1xKq2E_raH8xFxeZpokAiDScUq_WVh0wmIo_E/edit?usp=sharing)
