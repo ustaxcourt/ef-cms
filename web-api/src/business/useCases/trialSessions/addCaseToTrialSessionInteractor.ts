@@ -10,7 +10,10 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * addCaseToTrialSession
@@ -104,9 +107,35 @@ export const addCaseToTrialSession = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const addCaseToTrialSessionInteractor = withLocking(
-  addCaseToTrialSession,
-  (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const addCaseToTrialSessionInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    calendarNotes,
+    docketNumber,
+    trialSessionId,
+  }: {
+    calendarNotes: string;
+    docketNumber: string;
+    trialSessionId: string;
+  },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      addCaseToTrialSession(
+        applicationContext,
+        { calendarNotes, docketNumber, trialSessionId },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const addCaseToTrialSessionInteractor = withLocking(
+//   addCaseToTrialSession,
+//   (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );
