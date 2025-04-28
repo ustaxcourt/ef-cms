@@ -1,5 +1,4 @@
 import {
-  ActionDocumentTypeOption,
   BriefTypeOption,
   ExhibitStatusOption,
   MotionFiledByOption,
@@ -113,7 +112,7 @@ export type Motion = {
 
 export type ActionAndFiling = {
   date: string;
-  documentType: ActionDocumentTypeOption | '';
+  documentType: string;
   filedBy: MotionFiledByOption | '';
   status: MotionStatusOption | '';
   note?: string;

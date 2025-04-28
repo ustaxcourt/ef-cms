@@ -1903,7 +1903,6 @@ export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   petitioner: 'Petitioner',
   respondent: 'Respondent',
-  petitionerAndRespondent: 'Petitioner and Respondent',
   joint: 'Joint',
   other: 'Other',
 } as const;
@@ -1971,7 +1970,6 @@ export const ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED = invert(
 export const ACTION_FILED_BY_OPTIONS = {
   petitioner: 'Petitioner',
   respondent: 'Respondent',
-  petitionerAndRespondent: 'Petitioner and Respondent',
   practitioner: 'Practitioner',
   joint: 'Joint',
   other: 'Other',
@@ -2028,6 +2026,7 @@ export const BRIEF_SUBTYPE = {
 export const PETITIONER_ROLE_OPTIONS = {
   counsel: 'Counsel',
   proSe: 'Pro Se',
+  proSeSe: 'Pro Se Se',
   intervenor: 'Intervenor',
   participant: 'Participant',
   translator: 'Translator',

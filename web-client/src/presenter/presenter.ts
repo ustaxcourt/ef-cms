@@ -627,9 +627,9 @@ import { validateUpdatePractitionerSequence } from './sequences/validateUpdatePr
 import { validateUploadCorrespondenceDocumentSequence } from './sequences/validateUploadCorrespondenceDocumentSequence';
 import { validateUploadCourtIssuedDocumentSequence } from './sequences/validateUploadCourtIssuedDocumentSequence';
 import { validateUserContactSequence } from './sequences/validateUserContactSequence';
+import { autosaveTrialSessionMinuteSheetSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/autosaveTrialSessionMinuteSheetSequence';
 import { navigateToTermBuilderPageSequence } from '@web-client/presenter/sequences/TrialSessions/navigateToTermBuilderPageSequence';
 import { gotoTrialSessionTermBuilderSequence } from '@web-client/presenter/sequences/gotoTrialSessionTermBuilderSequence';
-import { autosaveTrialSessionMinuteSheetSequence } from '@web-client/presenter/sequences/TrialSessionMinutes/autosaveTrialSessionMinuteSheetSequence';
 import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
 import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/sequences/showRemovePetitionerEmailModalSequence';
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
