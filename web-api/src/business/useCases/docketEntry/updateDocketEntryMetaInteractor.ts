@@ -148,7 +148,7 @@ export const updateDocketEntryMeta = async (
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+    .updateCaseAutomaticBlock({ caseEntity });
 
   if (shouldGenerateCoversheet) {
     await applicationContext.getPersistenceGateway().updateDocketEntry({

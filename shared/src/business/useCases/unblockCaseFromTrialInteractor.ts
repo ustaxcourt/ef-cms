@@ -37,16 +37,6 @@ export const unblockCaseFromTrial = async (
 
   caseEntity.unsetAsBlocked();
 
-  if (caseEntity.isReadyForTrial()) {
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-        docketNumber: caseEntity.docketNumber,
-      });
-  }
-
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({

@@ -523,8 +523,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         );
 
         expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCase.mock.calls[0][0].caseToUpdate.docketEntries[3],
         ).toMatchObject({
           freeText: 'Custom free text for motion order response',
         });

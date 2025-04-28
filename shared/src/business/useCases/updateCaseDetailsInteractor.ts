@@ -113,27 +113,6 @@ export const updateCaseDetails = async (
     }
   }
 
-  if (newCaseEntity.getShouldHaveTrialSortMappingRecords()) {
-    const oldCaseEntity = new Case(oldCase, { authorizedUser });
-    const oldTrialSortTag = oldCaseEntity.getShouldHaveTrialSortMappingRecords()
-      ? oldCaseEntity.generateTrialSortTags()
-      : { nonHybrid: undefined };
-    const newTrialSortTag = newCaseEntity.generateTrialSortTags();
-
-    // The nonHybrid sort tag will be comprised of the trial city, procedure type, and case type
-    // so we can simply check if this tag changes to determine if new records should be created
-    // rather than looking at the changed fields directly
-    if (oldTrialSortTag.nonHybrid !== newTrialSortTag.nonHybrid) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: newCaseEntity.generateTrialSortTags(),
-          docketNumber: newCaseEntity.validate().toRawObject().docketNumber,
-        });
-    }
-  }
-
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({

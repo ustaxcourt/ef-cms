@@ -19,7 +19,6 @@ export const pgUpdateTable = async <T extends keyof Database>({
   return await getDbWriter({
     table,
     cb: async writer => {
-
       // Kysely is not good at dynamically resolving tables, so we cast it here.
       const query = writer.updateTable(table) as UpdateQueryBuilder<
         Database,

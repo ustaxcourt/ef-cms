@@ -71,9 +71,10 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
     throw new UnauthorizedError('Unauthorized to generate term');
   }
 
-  const cases = await getSuggestedCalendarCases();
   const { termEndDate, termStartDate, ...calendaringConfig } =
     TERM_BUILDER_INFORMATION;
+
+  const cases = await getSuggestedCalendarCases();
 
   const sessions = await applicationContext
     .getPersistenceGateway()

@@ -47,7 +47,6 @@ export const removeCasePendingItem = async (
   updatedCaseEntity = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity: updatedCaseEntity,
     });
 

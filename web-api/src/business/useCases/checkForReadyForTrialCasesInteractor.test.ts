@@ -131,26 +131,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     });
   });
 
-  it('should not call createCaseTrialSortMappingRecords if case has no trial city', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...MOCK_CASE,
-      preferredTrialCity: null,
-      status: CASE_STATUS_TYPES.generalDocket,
-    });
-
-    updateCase.mockResolvedValue({} as RawCase);
-
-    mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
-    getReadyForTrialCases.mockResolvedValue([{ docketNumber: '101-20' }]);
-
-    await checkForReadyForTrialCasesInteractor(applicationContext);
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
-  });
-
   it('should attempt to lock the case before it processes it and unlock when done', async () => {
     applicationContext
       .getPersistenceGateway()

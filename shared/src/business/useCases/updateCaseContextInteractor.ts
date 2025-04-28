@@ -100,15 +100,6 @@ export const updateCaseContext = async (
       });
 
       newCase.removeFromTrialWithAssociatedJudge(judgeData);
-    } else if (
-      oldCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
-    ) {
-      await applicationContext
-        .getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords({
-          applicationContext,
-          docketNumber: newCase.docketNumber,
-        });
     }
 
     if (
@@ -126,16 +117,6 @@ export const updateCaseContext = async (
         }),
       );
       newCase.updateAutomaticBlocked({ hasCaseDeadline: false });
-    }
-
-    if (newCase.isReadyForTrial() && !oldCase.trialSessionId) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: newCase.generateTrialSortTags(),
-          docketNumber: newCase.docketNumber,
-        });
     }
   }
 
