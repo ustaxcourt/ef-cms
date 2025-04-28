@@ -8,7 +8,10 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { deleteCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/deleteCaseStatistic';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteDeficiencyStatistic = async (
   applicationContext: ServerApplicationContext,
@@ -33,9 +36,27 @@ export const deleteDeficiencyStatistic = async (
   return validRawCase;
 };
 
-export const deleteDeficiencyStatisticInteractor = withLocking(
-  deleteDeficiencyStatistic,
-  (_applicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const deleteDeficiencyStatisticInteractor = async (
+  applicationContext: ServerApplicationContext,
+  { docketNumber, statisticId }: { docketNumber: string; statisticId: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      deleteDeficiencyStatistic(
+        applicationContext,
+        { docketNumber, statisticId },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const deleteDeficiencyStatisticInteractor = withLocking(
+//   deleteDeficiencyStatistic,
+//   (_applicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );
