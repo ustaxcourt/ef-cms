@@ -1,10 +1,19 @@
 import { getDbWriter } from '@web-api/database';
 import { CompiledQuery } from 'kysely';
+import crypto from 'crypto';
 
 export const CREATE_CASE_LOCK = 112358;
 
 const MUTEX_NUM_ATTEMPTS = 5;
 const RETRY_DELAY_MS = 100;
+
+/**
+ * Converts a string into a consistent 32-bit integer to use as an advisory lock ID.
+ */
+export const hashLockId = (input: string): number => {
+  const hash = crypto.createHash('sha256').update(input).digest();
+  return hash.readInt32BE(0);
+};
 
 /**
  * Executes an asynchronous callback within a mutex lock to ensure exclusive access
