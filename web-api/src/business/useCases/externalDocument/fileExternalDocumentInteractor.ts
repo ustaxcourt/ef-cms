@@ -20,6 +20,10 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -226,9 +230,27 @@ export const fileExternalDocument = async (
   );
 };
 
-export const fileExternalDocumentInteractor = withLocking(
-  fileExternalDocument,
-  (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
-    identifiers: [`case|${documentMetadata.docketNumber}`],
-  }),
-);
+export const fileExternalDocumentInteractor = async (
+  applicationContext: ServerApplicationContext,
+  { documentMetadata }: { documentMetadata: any },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${documentMetadata.docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      fileExternalDocument(
+        applicationContext,
+        { documentMetadata },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const fileExternalDocumentInteractor = withLocking(
+//   fileExternalDocument,
+//   (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
+//     identifiers: [`case|${documentMetadata.docketNumber}`],
+//   }),
+// );
