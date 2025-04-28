@@ -31,7 +31,10 @@ import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -669,9 +672,30 @@ export const serveCaseToIrs = async (
   }
 };
 
-export const serveCaseToIrsInteractor = withLocking(
-  serveCaseToIrs,
-  (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const serveCaseToIrsInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    clientConnectionId,
+    docketNumber,
+  }: { clientConnectionId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      serveCaseToIrs(
+        applicationContext,
+        { clientConnectionId, docketNumber },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const serveCaseToIrsInteractor = withLocking(
+//   serveCaseToIrs,
+//   (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );

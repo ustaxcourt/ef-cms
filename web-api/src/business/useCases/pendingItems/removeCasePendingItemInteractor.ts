@@ -7,7 +7,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * removeCasePendingItem
@@ -57,9 +60,30 @@ export const removeCasePendingItem = async (
   return updatedCaseEntity.toRawObject();
 };
 
-export const removeCasePendingItemInteractor = withLocking(
-  removeCasePendingItem,
-  (_applicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const removeCasePendingItemInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    docketEntryId,
+    docketNumber,
+  }: { docketEntryId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      removeCasePendingItem(
+        applicationContext,
+        { docketEntryId, docketNumber },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const removeCasePendingItemInteractor = withLocking(
+//   removeCasePendingItem,
+//   (_applicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );
