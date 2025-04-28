@@ -14,22 +14,36 @@ export async function sanitizeDumpFile(
   inputFilePath: string,
   outputFilePath: string,
 ) {
-  const readStream = fs.createReadStream(inputFilePath, { encoding: 'utf-8' });
-  const writeStream = fs.createWriteStream(outputFilePath, {
-    encoding: 'utf-8',
-  });
+  try {
+    if (!fs.existsSync(inputFilePath)) {
+      throw new Error(`Input file does not exist: ${inputFilePath}`);
+    }
 
-  const rl = readline.createInterface({
-    input: readStream,
-    crlfDelay: Infinity,
-  });
-
-  for await (const line of rl) {
-    const sanitizedLine = line.replace(emailRegex, email => {
-      return sanitizeEmail(email);
+    const readStream = fs.createReadStream(inputFilePath, {
+      encoding: 'utf-8',
     });
-    writeStream.write(sanitizedLine + '\n');
-  }
+    const writeStream = fs.createWriteStream(outputFilePath, {
+      encoding: 'utf-8',
+    });
 
-  writeStream.end();
+    const rl = readline.createInterface({
+      input: readStream,
+      crlfDelay: Infinity,
+    });
+    let emailCount = 0;
+    for await (const line of rl) {
+      const sanitizedLine = line.replace(emailRegex, email => {
+        emailCount++;
+        return sanitizeEmail(email);
+      });
+      writeStream.write(sanitizedLine + '\n');
+    }
+
+    writeStream.end();
+
+    console.log(`Found and anonymized ${emailCount} email addresses.`);
+  } catch (error: any) {
+    console.error('Error:', error?.message);
+    process.exit(1);
+  }
 }
