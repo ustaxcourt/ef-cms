@@ -214,7 +214,7 @@ export const fileCourtIssuedDocketEntryInteractor = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   const lockIds = [...new Set([subjectDocketNumber, ...docketNumbers])].map(
-    docketNum => hashLockId(`case|${docketNum}`),
+    docketNumber => hashLockId(`case|${docketNumber}`),
   );
 
   return multiMutexLockWrapper({
