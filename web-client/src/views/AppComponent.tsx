@@ -108,6 +108,7 @@ import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { TermBuilderView } from '@web-client/views/TermBuilderView';
 import { AsyncServiceUnavailableModal } from '@web-client/views/AsyncServiceUnavailableModal';
+import { OrderResponse } from './OrderResponse/OrderResponse';
 
 const pages = {
   AccessibilityStatement,
@@ -170,6 +171,7 @@ const pages = {
   MessageDetail,
   Messages,
   MyAccount,
+  OrderResponse,
   PaperFiling,
   PendingReport,
   PetitionQc,
