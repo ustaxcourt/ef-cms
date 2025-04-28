@@ -8,9 +8,12 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -57,9 +60,30 @@ export const deleteCaseDeadline = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-export const deleteCaseDeadlineInteractor = withLocking(
-  deleteCaseDeadline,
-  (_applicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const deleteCaseDeadlineInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    caseDeadlineId,
+    docketNumber,
+  }: { caseDeadlineId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      deleteCaseDeadline(
+        applicationContext,
+        { caseDeadlineId, docketNumber },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const deleteCaseDeadlineInteractor = withLocking(
+//   deleteCaseDeadline,
+//   (_applicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );

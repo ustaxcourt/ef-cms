@@ -7,7 +7,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * used for unblocking a case
@@ -55,9 +58,27 @@ export const unblockCaseFromTrial = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const unblockCaseFromTrialInteractor = withLocking(
-  unblockCaseFromTrial,
-  (_applicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const unblockCaseFromTrialInteractor = async (
+  applicationContext: ServerApplicationContext,
+  { docketNumber }: { docketNumber: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      unblockCaseFromTrial(
+        applicationContext,
+        { docketNumber },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const unblockCaseFromTrialInteractor = withLocking(
+//   unblockCaseFromTrial,
+//   (_applicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );
