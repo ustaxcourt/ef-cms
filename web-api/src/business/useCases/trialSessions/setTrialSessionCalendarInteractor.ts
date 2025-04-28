@@ -14,6 +14,7 @@ import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workite
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
+import { createCaseStatusUpdateForCases } from '@web-api/persistence/postgres/cases/createCaseStatusUpdateForCases';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -143,6 +144,15 @@ export const setTrialSessionCalendarInteractor = async (
         ...manuallyAddedQcIncompleteCaseEntities,
         ...eligibleCaseEntities,
       ]),
+      createCaseStatusUpdateForCases({
+        docketNumbers: [...eligibleCases, ...manuallyAddedQcCompleteCases].map(
+          c => c.docketNumber,
+        ),
+        statusUpdate: [
+          ...eligibleCases,
+          ...manuallyAddedQcCompleteCases,
+        ][0].caseStatusHistory?.at(-1)!,
+      }),
       setPriorityOnAllWorkItems({
         docketNumbers: [...eligibleCases, ...manuallyAddedQcCompleteCases].map(
           c => c.docketNumber,
