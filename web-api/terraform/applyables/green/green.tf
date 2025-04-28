@@ -82,7 +82,6 @@ resource "terraform_data" "locals" {
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
     USER_POOL_IRS_ID                   = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_irs_id
     POSTGRES_HOST                      = data.terraform_remote_state.remote.outputs.rds_host_name
-    POSTGRES_READ_HOST                 = data.terraform_remote_state.remote.outputs.rds_host_name_west
     POSTGRES_USER                      = data.terraform_remote_state.remote.outputs.postgres_user
     DATABASE_NAME                      = data.terraform_remote_state.remote.outputs.database_name
   }
