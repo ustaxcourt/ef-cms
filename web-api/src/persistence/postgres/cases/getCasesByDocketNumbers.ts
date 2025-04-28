@@ -5,8 +5,6 @@ import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
 import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
@@ -21,6 +19,8 @@ import {
   CaseStatisticKysely,
   StatisticPenaltyKysely,
 } from '@web-api/persistence/postgres/cases/statistics/schema';
+import { getIrsPractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getIrsPractitionersOnCase';
+import { getPrivatePractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getPrivatePractitionersOnCase';
 import { sql } from 'kysely';
 import { difference, isEmpty, partition, sortBy } from 'lodash';
 
@@ -56,7 +56,7 @@ async function getAllCaseData({
     getCasesMetadata(docketNumbers),
     getPetitioners(docketNumbers),
     getStatistics(docketNumbers),
-    getPractitioners(docketNumbers, applicationContext),
+    getPractitioners(docketNumbers),
     getDocketEntries(docketNumbers, applicationContext),
     getCasesStatusHistory(docketNumbers),
     getCaseCorrespondenceByDocketNumber(docketNumbers),
@@ -251,10 +251,7 @@ async function getStatistics(docketNumbers: string[]) {
   }));
 }
 
-async function getPractitioners(
-  docketNumbers: string[],
-  applicationContext,
-): Promise<
+async function getPractitioners(docketNumbers: string[]): Promise<
   {
     docketNumber: string;
     irsPractitioners: any[];
@@ -265,11 +262,9 @@ async function getPractitioners(
     docketNumbers.map(async docketNumber => {
       const privatePractitioners = await getPrivatePractitionersOnCase({
         docketNumber,
-        applicationContext,
       });
 
       const irsPractitioners = await getIrsPractitionersOnCase({
-        applicationContext,
         docketNumber,
       });
 

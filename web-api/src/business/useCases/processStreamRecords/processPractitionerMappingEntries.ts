@@ -36,10 +36,7 @@ export const processPractitionerMappingEntries = async ({
       // TODO after 10502: Only rely on postgres by in-lining getCaseDataFromPostgres here.
       let caseRecord: any;
       try {
-        caseRecord = await getCaseDataFromPostgres({
-          applicationContext,
-          docketNumber,
-        });
+        caseRecord = await getCaseDataFromPostgres({ docketNumber });
       } catch (e) {
         getLogger().warn(
           `Failed to find case ${practitionerMappingData.pk.S} in postgres in processPractitionerMappingEntries: ${e}.
@@ -109,14 +106,11 @@ export const processPractitionerMappingEntries = async ({
 };
 
 const getCaseDataFromPostgres = async ({
-  applicationContext,
   docketNumber,
 }: {
-  applicationContext: ServerApplicationContext;
   docketNumber: string;
 }) => {
   const caseMetadataWithCounsel = await getCaseMetadataWithCounsel({
-    applicationContext,
     docketNumber,
   });
 

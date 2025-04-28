@@ -1,13 +1,10 @@
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
+import { getPrivatePractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getPrivatePractitionersOnCase';
+import { getIrsPractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getIrsPractitionersOnCase';
 
 export const getCaseMetadataWithCounsel = async ({
-  applicationContext,
   docketNumber,
 }: {
-  applicationContext: ServerApplicationContext;
   docketNumber: string;
 }): Promise<
   | Omit<
@@ -20,11 +17,9 @@ export const getCaseMetadataWithCounsel = async ({
     await Promise.all([
       getCaseMetadataByDocketNumber({ docketNumber }),
       getPrivatePractitionersOnCase({
-        applicationContext,
         docketNumber,
       }),
       getIrsPractitionersOnCase({
-        applicationContext,
         docketNumber,
       }),
     ]);

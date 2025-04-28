@@ -1,6 +1,5 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { type RawPractitioner } from '@shared/business/entities/Practitioner';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
@@ -10,6 +9,7 @@ import {
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import { getPrivatePractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getPrivatePractitionersOnCase';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -49,35 +49,6 @@ const getOpenCases = async ({
   return results as unknown as RawCase[];
 };
 
-const getPrivatePractitionersOnCase = async ({
-  applicationContext,
-  docketNumber,
-}: {
-  applicationContext: ServerApplicationContext;
-  docketNumber: string;
-}): Promise<RawPractitioner[]> => {
-  let privatePractitioners: RawPractitioner[] = [];
-  const result = await applicationContext
-    .getDocumentClient(applicationContext)
-    .query({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-        '#sk': 'sk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${docketNumber}`,
-        ':prefix': 'privatePractitioner',
-      },
-      KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-      TableName: applicationContext.environment.dynamoDbTableName,
-    });
-
-  if ('Items' in result && result.Items) {
-    privatePractitioners = result.Items as unknown as RawPractitioner[];
-  }
-  return privatePractitioners;
-};
-
 (async () => {
   const applicationContext = createApplicationContext({});
   const allOpenCases = await getOpenCases({ applicationContext });
@@ -97,7 +68,6 @@ const getPrivatePractitionersOnCase = async ({
     ) {
       const { email } = primaryPetitioner;
       const practitioners = await getPrivatePractitionersOnCase({
-        applicationContext,
         docketNumber: openCase.docketNumber,
       });
       if (practitioners.find(practitioner => practitioner.email === email)) {

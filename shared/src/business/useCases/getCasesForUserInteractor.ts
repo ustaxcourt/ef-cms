@@ -5,7 +5,6 @@ import {
   userIsDirectlyAssociated,
 } from '@shared/business/entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   UnknownAuthUser,
@@ -35,7 +34,6 @@ export type TAssociatedCase = {
 } & UserCaseDTO;
 
 export const getCasesForUserInteractor = async (
-  applicationContext: ServerApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   openCaseList: TAssociatedCase[];
@@ -60,7 +58,6 @@ export const getCasesForUserInteractor = async (
   });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
-    applicationContext,
     cases: allUserCases,
     userId,
   });
@@ -104,19 +101,13 @@ export const getCasesForUserInteractor = async (
  * ]
  */
 async function fetchConsolidatedGroupsAndNest({
-  applicationContext,
   cases,
   userId,
 }: {
-  applicationContext: ServerApplicationContext;
   cases: TAssociatedCase[];
   userId: string;
 }): Promise<TAssociatedCase[]> {
-  const consolidatedGroups = await getAllConsolidatedCases(
-    applicationContext,
-    cases,
-    userId,
-  );
+  const consolidatedGroups = await getAllConsolidatedCases(cases, userId);
 
   // Combine open cases and consolidated cases and remove duplicates
   const allCasesAndConsolidatedCases = uniqBy(
@@ -201,7 +192,6 @@ function convertCaseToUserCaseDTO(rawCase: UserCaseDTO): UserCaseDTO {
 }
 
 async function getAllConsolidatedCases(
-  applicationContext: ServerApplicationContext,
   cases: TAssociatedCase[],
   userId: string,
 ): Promise<
@@ -221,7 +211,6 @@ async function getAllConsolidatedCases(
     await Promise.all(
       uniqueLeadDocketNumbers.map(aCase =>
         getCasesMetadataWithCounselByLeadDocketNumber({
-          applicationContext,
           leadDocketNumber: aCase.leadDocketNumber!,
         }),
       ),

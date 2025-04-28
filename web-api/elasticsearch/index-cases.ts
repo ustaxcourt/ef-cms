@@ -27,10 +27,7 @@ export const indexOpenSearchCase = async ({
   for (const docketNumber of isArray(message.payload)
     ? message.payload
     : [message.payload]) {
-    const caseRecord = await getCaseMetadataWithCounsel({
-      applicationContext,
-      docketNumber,
-    });
+    const caseRecord = await getCaseMetadataWithCounsel({ docketNumber });
 
     if (!caseRecord) {
       getLogger().error(`Could not index case ${docketNumber}: not found!`);

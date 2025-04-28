@@ -4,9 +4,9 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getAllUsersByRole } from '@web-api/persistence/postgres/users/getAllUsersByRole';
 
 export const getAllUsersByRoleInteractor = async (
-  applicationContext: IApplicationContext,
   { roles }: { roles: string[] },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -14,9 +14,7 @@ export const getAllUsersByRoleInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const results = await applicationContext
-    .getPersistenceGateway()
-    .getAllUsersByRole(applicationContext, roles);
+  const results = await getAllUsersByRole({ roles });
 
   return results;
 };

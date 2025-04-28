@@ -1,24 +1,30 @@
-import { ROLES } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
-import { getCasesByEmailTotal as getCasesByEmailTotalElasticsearch } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 
-export const getCasesByEmailTotal = async ({
-  email,
-  role,
-}: {
-  email: string;
-  role: string;
-}) => {
-  if (role === ROLES.petitioner) {
-    const total = await getDbReader(reader =>
-      reader
-        .selectFrom('dwPetitionerOnCase')
-        .where('email', '=', email)
-        .select(({ fn }) => fn.count('docketNumber').as('count'))
-        .executeTakeFirst(),
-    );
-    return total ? Number(total.count) : 0;
-  }
-  return await getCasesByEmailTotalElasticsearch({ applicationContext, email });
+export const getCasesByEmailTotal = async ({ email }: { email: string }) => {
+  const rawTotalPetitioners = await getDbReader(reader =>
+    reader
+      .selectFrom('dwPetitionerOnCase')
+      .where('email', '=', email)
+      .select(({ fn }) => fn.count('docketNumber').as('count'))
+      .executeTakeFirst(),
+  );
+
+  const totalPetitioners = rawTotalPetitioners
+    ? Number(rawTotalPetitioners.count)
+    : 0;
+
+  const rawTotalPractitioners = await getDbReader(reader =>
+    reader
+      .selectFrom('dwPractitioner as p')
+      .leftJoin('dwUserOnCase as uoc', 'uoc.userId', 'p.userId')
+      .where('p.email', '=', email)
+      .select(({ fn }) => fn.count('uoc.docketNumber').as('count'))
+      .executeTakeFirst(),
+  );
+
+  const totalPractitioners = rawTotalPractitioners
+    ? Number(rawTotalPractitioners.count)
+    : 0;
+
+  return totalPetitioners + totalPractitioners;
 };

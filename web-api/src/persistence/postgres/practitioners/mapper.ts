@@ -70,48 +70,28 @@ export function toKyselyNewPractitioner(user: RawUser): NewPractitionerKysely {
 }
 
 export function practitionerEntity(practitioner): Practitioner {
-  return new Practitioner(
-    transformNullToUndefined({
-      ...practitioner,
-      contact: contactInfo(practitioner),
-      admissionsDate: formatDateString(
-        practitioner.admissionsDate?.toISOString(),
-        FORMATS.YYYYMMDD,
-      ),
-      pendingEmailVerificationTokenTimestamp:
-        practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
-    }),
-  );
+  return new Practitioner(transformPractitionerData(practitioner));
 }
 
 export function irsPractitionerEntity(practitioner): IrsPractitioner {
-  return new IrsPractitioner(
-    transformNullToUndefined({
-      ...practitioner,
-      contact: contactInfo(practitioner),
-      admissionsDate: formatDateString(
-        practitioner.admissionsDate?.toISOString(),
-        FORMATS.YYYYMMDD,
-      ),
-      pendingEmailVerificationTokenTimestamp:
-        practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
-    }),
-  );
+  return new IrsPractitioner(transformPractitionerData(practitioner));
 }
 
 export function privatePractitionerEntity(practitioner): PrivatePractitioner {
-  return new PrivatePractitioner(
-    transformNullToUndefined({
-      ...practitioner,
-      contact: contactInfo(practitioner),
-      admissionsDate: formatDateString(
-        practitioner.admissionsDate?.toISOString(),
-        FORMATS.YYYYMMDD,
-      ),
-      pendingEmailVerificationTokenTimestamp:
-        practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
-    }),
-  );
+  return new PrivatePractitioner(transformPractitionerData(practitioner));
+}
+
+function transformPractitionerData(practitioner) {
+  transformNullToUndefined({
+    ...practitioner,
+    contact: contactInfo(practitioner),
+    admissionsDate: formatDateString(
+      practitioner.admissionsDate?.toISOString(),
+      FORMATS.YYYYMMDD,
+    ),
+    pendingEmailVerificationTokenTimestamp:
+      practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
+  });
 }
 
 export const PRACTITIONER_ONLY_FIELDS = [

@@ -1,12 +1,9 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { getDbReader } from '@web-api/database';
 
 export const getCasesMetadataWithCounselByLeadDocketNumber = async ({
-  applicationContext,
   leadDocketNumber,
 }: {
-  applicationContext: ServerApplicationContext;
   leadDocketNumber: string;
 }): Promise<
   Omit<
@@ -25,7 +22,6 @@ export const getCasesMetadataWithCounselByLeadDocketNumber = async ({
   const cases = await Promise.all(
     dbCaseData.map(({ docketNumber }) =>
       getCaseMetadataWithCounsel({
-        applicationContext,
         docketNumber,
       }),
     ),

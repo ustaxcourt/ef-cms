@@ -74,7 +74,6 @@ export const getCaseByDocketNumber = async ({
   >[] = [];
   if (includeConsolidatedCases) {
     consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
-      applicationContext,
       leadDocketNumber: dbCaseMetadata.leadDocketNumber!,
     });
     if (user) {
