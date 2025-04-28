@@ -1,7 +1,4 @@
-import {
-  AuthUser,
-  UnknownAuthUser,
-} from '@shared/business/entities/authUser/AuthUser';
+import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -12,11 +9,11 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { chunk, flatten, partition, uniq } from 'lodash';
+import { flatten, partition, uniq } from 'lodash';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-
-const CHUNK_SIZE = 50;
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -113,58 +110,78 @@ export const setTrialSessionCalendarInteractor = async (
       ttl: 900,
     });
 
-    const funcs = [
-      ...manuallyAddedQcIncompleteCases.map(
-        caseRecord => () =>
-          removeManuallyAddedCaseFromTrialSession(
-            {
-              applicationContext,
-              caseRecord,
-              trialSessionEntity,
-            },
-            authorizedUser,
-          ),
-      ),
-      ...manuallyAddedQcCompleteCases.map(
-        aCase => () =>
-          setManuallyAddedCaseAsCalendared(
-            {
-              applicationContext,
-              caseRecord: aCase,
-              trialSessionEntity,
-            },
-            authorizedUser,
-          ),
-      ),
-      ...eligibleCases.map(
-        aCase => () =>
-          setTrialSessionCalendarForEligibleCase(
-            {
-              applicationContext,
-              caseRecord: aCase,
-              trialSessionEntity,
-            },
-            authorizedUser,
-          ),
-      ),
-    ];
+    // These we need to update work items and deadlines for
+    const manuallyAddedQcCompleteCaseEntities =
+      manuallyAddedQcCompleteCases.map(c => {
+        const theCase = new Case(c, { authorizedUser });
+        theCase.setAsCalendared(trialSessionEntity);
+        return theCase.validate().toRawObject();
+      });
 
-    // Story: 10422
-    // We chunk this array of functions so that we don't fire all of them at once.
-    // If firing all at once, we exhaust the available connections and will run into connection timeouts.
-    const chunkedFunctions = chunk(funcs, CHUNK_SIZE);
-    for (const singleChunk of chunkedFunctions) {
-      await settlePromises(singleChunk.map(func => func()));
-    }
+    // These we need to update work items and deadlines for
+    const eligibleCaseEntities = eligibleCases.map(c => {
+      const theCase = new Case(c, { authorizedUser });
+      theCase.setAsCalendared(trialSessionEntity);
+      trialSessionEntity.addCaseToCalendar(theCase);
+      return theCase.validate().toRawObject();
+    });
 
-    await settlePromises(
-      allDocketNumbers.map(docketNumber =>
-        applicationContext.getPersistenceGateway().removeLock({
-          applicationContext,
-          identifiers: [`case|${docketNumber}`],
-        }),
-      ),
-    );
+    // These we will remove from any association with the trial session
+    const manuallyAddedQcIncompleteCaseEntities =
+      manuallyAddedQcIncompleteCases.map(c => {
+        const theCase = new Case(c, { authorizedUser });
+        theCase.removeFromTrialWithAssociatedJudge();
+        trialSessionEntity.deleteCaseFromCalendar({
+          docketNumber: theCase.docketNumber,
+        });
+        return theCase.validate().toRawObject();
+      });
+
+    await settlePromises([
+      upsertCases([
+        ...manuallyAddedQcCompleteCaseEntities,
+        ...manuallyAddedQcIncompleteCaseEntities,
+        ...eligibleCaseEntities,
+      ]),
+      setPriorityOnAllWorkItems({
+        docketNumbers: [...eligibleCases, ...manuallyAddedQcCompleteCases].map(
+          c => c.docketNumber,
+        ),
+        highPriority: true,
+      }),
+      // Need to check for empty map (since kysely throws error for "in" [])
+      pgUpdateTable({
+        table: 'dwCaseDeadline',
+        values: {
+          associatedJudge: trialSessionEntity.judge?.name, // probably need null?
+          associatedJudgeId: trialSessionEntity.judge?.userId, // probably need null?
+        },
+        where: db =>
+          db.where(
+            'docketNumber',
+            'in',
+            [...eligibleCases, ...manuallyAddedQcCompleteCases].map(
+              c => c.docketNumber,
+            ),
+          ),
+      }),
+      // Need to check for empty map (since kysely throws error for "in" [])
+      pgUpdateTable({
+        table: 'dwWorkItem',
+        values: {
+          associatedJudge: trialSessionEntity.judge?.name, // probably need null?
+          associatedJudgeId: trialSessionEntity.judge?.userId, // probably need null?
+        },
+        where: db =>
+          db.where(
+            'docketNumber',
+            'in',
+            [...eligibleCases, ...manuallyAddedQcCompleteCases].map(
+              c => c.docketNumber,
+            ),
+          ),
+      }),
+    ]);
 
     await applicationContext.getPersistenceGateway().updateTrialSession({
       applicationContext,
@@ -196,98 +213,4 @@ export const setTrialSessionCalendarInteractor = async (
       userId: authorizedUser?.userId || '',
     });
   }
-};
-
-const removeManuallyAddedCaseFromTrialSession = (
-  {
-    applicationContext,
-    caseRecord,
-    trialSessionEntity,
-  }: {
-    applicationContext: ServerApplicationContext;
-    caseRecord: Omit<RawCase, 'consolidatedCases'>;
-    trialSessionEntity: TrialSession;
-  },
-  authorizedUser: AuthUser,
-): Promise<RawCase> => {
-  trialSessionEntity.deleteCaseFromCalendar({
-    docketNumber: caseRecord.docketNumber,
-  });
-
-  const caseEntity = new Case(caseRecord, {
-    authorizedUser,
-  });
-
-  caseEntity.removeFromTrialWithAssociatedJudge();
-
-  return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
-};
-
-const setManuallyAddedCaseAsCalendared = async (
-  {
-    applicationContext,
-    caseRecord,
-    trialSessionEntity,
-  }: {
-    applicationContext: ServerApplicationContext;
-    caseRecord: Omit<RawCase, 'consolidatedCases'>;
-    trialSessionEntity: TrialSession;
-  },
-  authorizedUser: AuthUser,
-): Promise<void> => {
-  const caseEntity = new Case(caseRecord, { authorizedUser });
-
-  caseEntity.setAsCalendared(trialSessionEntity);
-
-  await settlePromises([
-    setPriorityOnAllWorkItems({
-      docketNumber: caseEntity.docketNumber,
-      highPriority: true,
-    }),
-    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    }),
-  ]);
-};
-
-const setTrialSessionCalendarForEligibleCase = async (
-  {
-    applicationContext,
-    caseRecord,
-    trialSessionEntity,
-  }: {
-    applicationContext: ServerApplicationContext;
-    caseRecord: RawCase;
-    trialSessionEntity: TrialSession;
-  },
-  authorizedUser: AuthUser,
-): Promise<void> => {
-  const caseEntity = new Case(caseRecord, { authorizedUser });
-
-  caseEntity.setAsCalendared(trialSessionEntity);
-  trialSessionEntity.addCaseToCalendar(caseEntity);
-
-  await settlePromises([
-    setPriorityOnAllWorkItems({
-      docketNumber: caseEntity.docketNumber,
-      highPriority: true,
-    }),
-    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    }),
-    applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
-      }),
-  ]);
 };
