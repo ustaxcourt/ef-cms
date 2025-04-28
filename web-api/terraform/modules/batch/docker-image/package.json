@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "docketEntryBatchDownloader.js",
   "scripts": {
-    "deploy": "./deploy-to-ecr.sh us-east-1 && ./deploy-to-ecr.sh us-west-1"
+    "deploy": "./deploy-to-ecr.sh us-east-1"
   },
   "keywords": [],
   "author": "",
