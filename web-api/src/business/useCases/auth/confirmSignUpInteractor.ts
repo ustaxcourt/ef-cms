@@ -3,11 +3,11 @@ import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
 import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
-import { updateUser as updateUserFromPersistence } from '@web-api/persistence/postgres/users/updateUser';
 import { updateUser } from '@web-api/gateways/user/updateUser';
 import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 import { confirmSignUp } from '@web-api/gateways/user/confirmSignUp';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const confirmSignUpInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -61,9 +61,7 @@ const createPetitionerUser = async (
     userId,
   });
 
-  await updateUserFromPersistence({
-    userToUpdate: userEntity.validate().toRawObject(),
-  });
+  await upsertUsers([userEntity.validate().toRawObject()]);
 
   return userEntity.validate().toRawObject();
 };
