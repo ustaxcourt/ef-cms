@@ -7,7 +7,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateOtherStatistics
@@ -53,9 +56,31 @@ export const updateOtherStatistics = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const updateOtherStatisticsInteractor = withLocking(
-  updateOtherStatistics,
-  (_applicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const updateOtherStatisticsInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    damages,
+    docketNumber,
+    litigationCosts,
+  }: { damages: number; docketNumber: string; litigationCosts: number },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      updateOtherStatistics(
+        applicationContext,
+        { damages, docketNumber, litigationCosts },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const updateOtherStatisticsInteractor = withLocking(
+//   updateOtherStatistics,
+//   (_applicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );

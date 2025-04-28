@@ -10,6 +10,11 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { updateCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/updateCaseStatistic';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateDeficiencyStatistic
@@ -89,9 +94,65 @@ export const updateDeficiencyStatistic = async (
   return validRawCase;
 };
 
-export const updateDeficiencyStatisticInteractor = withLocking(
-  updateDeficiencyStatistic,
-  (_applicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const updateDeficiencyStatisticInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    determinationDeficiencyAmount,
+    determinationTotalPenalties,
+    docketNumber,
+    irsDeficiencyAmount,
+    irsTotalPenalties,
+    lastDateOfPeriod,
+    penalties,
+    statisticId,
+    year,
+    yearOrPeriod,
+  }: {
+    determinationDeficiencyAmount: number;
+    determinationTotalPenalties: number;
+    docketNumber: string;
+    irsDeficiencyAmount: number;
+    irsTotalPenalties: number;
+    lastDateOfPeriod: string;
+    penalties: {
+      penaltyId?: string;
+      name: string;
+      penaltyAmount: number;
+      statisticId?: string;
+    }[];
+    statisticId: string;
+    year: string;
+    yearOrPeriod: string;
+  },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      updateDeficiencyStatistic(
+        applicationContext,
+        {
+          determinationDeficiencyAmount,
+          determinationTotalPenalties,
+          docketNumber,
+          irsDeficiencyAmount,
+          irsTotalPenalties,
+          lastDateOfPeriod,
+          penalties,
+          statisticId,
+          year,
+          yearOrPeriod,
+        },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const updateDeficiencyStatisticInteractor = withLocking(
+//   updateDeficiencyStatistic,
+//   (_applicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );

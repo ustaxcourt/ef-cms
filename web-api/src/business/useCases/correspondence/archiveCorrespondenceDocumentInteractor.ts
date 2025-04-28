@@ -10,6 +10,10 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { Correspondence } from '@shared/business/entities/Correspondence';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const archiveCorrespondenceDocument = async (
   applicationContext: ServerApplicationContext,
@@ -57,9 +61,30 @@ export const archiveCorrespondenceDocument = async (
   });
 };
 
-export const archiveCorrespondenceDocumentInteractor = withLocking(
-  archiveCorrespondenceDocument,
-  (_applicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const archiveCorrespondenceDocumentInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    correspondenceId,
+    docketNumber,
+  }: { correspondenceId: string; docketNumber: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      archiveCorrespondenceDocument(
+        applicationContext,
+        { correspondenceId, docketNumber },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const archiveCorrespondenceDocumentInteractor = withLocking(
+//   archiveCorrespondenceDocument,
+//   (_applicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );
