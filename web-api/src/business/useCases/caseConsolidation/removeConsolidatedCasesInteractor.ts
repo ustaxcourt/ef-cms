@@ -11,6 +11,10 @@ import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import {
+  hashLockId,
+  multiMutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * removeConsolidatedCases
@@ -114,20 +118,43 @@ const removeConsolidatedCases = async (
   await settlePromises(updateCasePromises);
 };
 
-const determineEntitiesToLock = (
-  _applicationContext,
-  { docketNumber, docketNumbersToRemove = [] },
+export const removeConsolidatedCasesInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    docketNumber,
+    docketNumbersToRemove,
+  }: { docketNumber: string; docketNumbersToRemove: string[] },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const docketNumbers = [docketNumber, ...docketNumbersToRemove].map(
-    item => `case|${item}`,
+  const lockIds = [docketNumber, ...docketNumbersToRemove].map(docketNum =>
+    hashLockId(`case|${docketNum}`),
   );
 
-  return {
-    identifiers: docketNumbers,
-  };
+  return multiMutexLockWrapper({
+    lockIds,
+    callback: () =>
+      removeConsolidatedCases(
+        applicationContext,
+        { docketNumber, docketNumbersToRemove },
+        authorizedUser,
+      ),
+  });
 };
 
-export const removeConsolidatedCasesInteractor = withLocking(
-  removeConsolidatedCases,
-  determineEntitiesToLock,
-);
+// const determineEntitiesToLock = (
+//   _applicationContext,
+//   { docketNumber, docketNumbersToRemove = [] },
+// ) => {
+//   const docketNumbers = [docketNumber, ...docketNumbersToRemove].map(
+//     item => `case|${item}`,
+//   );
+
+//   return {
+//     identifiers: docketNumbers,
+//   };
+// };
+
+// export const removeConsolidatedCasesInteractor = withLocking(
+//   removeConsolidatedCases,
+//   determineEntitiesToLock,
+// );
