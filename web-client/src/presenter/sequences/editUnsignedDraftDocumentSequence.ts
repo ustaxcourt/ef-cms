@@ -1,8 +1,9 @@
 import { checkDocumentTypeAction } from '@web-client/presenter/actions/checkDocumentTypeAction';
-import { isStatusReportOrderAction } from '@web-client/presenter/actions/StatusReportOrder/isStatusReportOrderAction';
+import { getOrderTypeAction } from '@web-client/presenter/actions/StatusReportOrder/getOrderTypeAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setEditStatusReportOrderFormAction } from '@web-client/presenter/actions/StatusReportOrder/setEditStatusReportOrderFormAction';
+import { setEditMotionOrderResponseFormAction } from '@web-client/presenter/actions/MotionOrderResponse/setEditMotionOrderResponseFormAction';
 
 export const editUnsignedDraftDocumentSequence = [
   checkDocumentTypeAction,
@@ -10,9 +11,13 @@ export const editUnsignedDraftDocumentSequence = [
     documentTypeMiscellaneous: [navigateToPathAction],
     documentTypeOrder: [
       setDocumentToEditAction,
-      isStatusReportOrderAction,
+      getOrderTypeAction,
       {
-        isNotStatusReportOrder: [navigateToPathAction],
+        isMotionOrderResponse: [
+          setEditMotionOrderResponseFormAction,
+          navigateToPathAction,
+        ],
+        isStandardOrder: [navigateToPathAction],
         isStatusReportOrder: [
           setEditStatusReportOrderFormAction,
           navigateToPathAction,
