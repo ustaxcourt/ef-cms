@@ -6,7 +6,10 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -64,9 +67,27 @@ const submitCaseAssociationRequest = async (
   }
 };
 
-export const submitCaseAssociationRequestInteractor = withLocking(
-  submitCaseAssociationRequest,
-  (_applicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const submitCaseAssociationRequestInteractor = async (
+  applicationContext: ServerApplicationContext,
+  { docketNumber, filers = [] }: { docketNumber: string; filers: string[] },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      submitCaseAssociationRequest(
+        applicationContext,
+        { docketNumber, filers },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const submitCaseAssociationRequestInteractor = withLocking(
+//   submitCaseAssociationRequest,
+//   (_applicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );

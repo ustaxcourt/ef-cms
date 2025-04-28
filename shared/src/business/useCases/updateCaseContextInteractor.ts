@@ -10,9 +10,12 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const updateCaseContext = async (
   applicationContext: ServerApplicationContext,
@@ -148,9 +151,40 @@ export const updateCaseContext = async (
   }).toRawObject();
 };
 
-export const updateCaseContextInteractor = withLocking(
-  updateCaseContext,
-  (_applicationContext, { docketNumber }) => ({
-    identifiers: [`case|${docketNumber}`],
-  }),
-);
+export const updateCaseContextInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    caseCaption,
+    caseStatus,
+    docketNumber,
+    judgeData,
+  }: {
+    judgeData?: {
+      associatedJudge: string;
+      associatedJudgeId: string;
+    };
+    caseCaption?: string;
+    caseStatus?: string;
+    docketNumber: string;
+  },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      updateCaseContext(
+        applicationContext,
+        { caseCaption, caseStatus, docketNumber, judgeData },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const updateCaseContextInteractor = withLocking(
+//   updateCaseContext,
+//   (_applicationContext, { docketNumber }) => ({
+//     identifiers: [`case|${docketNumber}`],
+//   }),
+// );
