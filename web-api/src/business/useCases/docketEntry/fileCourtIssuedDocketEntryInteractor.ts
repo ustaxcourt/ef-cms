@@ -12,7 +12,10 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  multiMutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  *
@@ -192,14 +195,42 @@ export const fileCourtIssuedDocketEntry = async (
   return subjectCase.toRawObject();
 };
 
-export const fileCourtIssuedDocketEntryInteractor = withLocking(
-  fileCourtIssuedDocketEntry,
-  (
-    _applicationContext: ServerApplicationContext,
-    { docketNumbers = [], subjectDocketNumber },
-  ) => ({
-    identifiers: [...new Set([subjectDocketNumber, ...docketNumbers])].map(
-      item => `case|${item}`,
-    ),
-  }),
-);
+export const fileCourtIssuedDocketEntryInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    docketNumbers,
+    documentMeta,
+    subjectDocketNumber,
+  }: {
+    docketNumbers: string[];
+    documentMeta: any;
+    subjectDocketNumber: string;
+  },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockIds = [...new Set([subjectDocketNumber, ...docketNumbers])].map(
+    docketNum => hashLockId(`case|${docketNum}`),
+  );
+
+  return multiMutexLockWrapper({
+    lockIds,
+    callback: () =>
+      fileCourtIssuedDocketEntry(
+        applicationContext,
+        { docketNumbers, documentMeta, subjectDocketNumber },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const fileCourtIssuedDocketEntryInteractor = withLocking(
+//   fileCourtIssuedDocketEntry,
+//   (
+//     _applicationContext: ServerApplicationContext,
+//     { docketNumbers = [], subjectDocketNumber },
+//   ) => ({
+//     identifiers: [...new Set([subjectDocketNumber, ...docketNumbers])].map(
+//       item => `case|${item}`,
+//     ),
+//   }),
+// );
