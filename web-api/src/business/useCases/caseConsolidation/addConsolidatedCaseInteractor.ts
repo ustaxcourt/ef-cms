@@ -8,7 +8,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  multiMutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * addConsolidatedCase
@@ -100,16 +103,40 @@ export const addConsolidatedCase = async (
   await Promise.all(updateCasePromises);
 };
 
-export const determineEntitiesToLock = (
-  _applicationContext,
-  { docketNumber, docketNumberToConsolidateWith },
-) => ({
-  identifiers: [docketNumber, docketNumberToConsolidateWith].map(
-    item => `case|${item}`,
-  ),
-});
+// 10505: this replicates the existing functionality, but may need to account for `allCasesToConsolidate`?
+export const addConsolidatedCaseInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    docketNumber,
+    docketNumberToConsolidateWith,
+  }: { docketNumber: string; docketNumberToConsolidateWith: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockIds = [docketNumber, docketNumberToConsolidateWith].map(
+    docketNumber => hashLockId(`case|${docketNumber}`),
+  );
 
-export const addConsolidatedCaseInteractor = withLocking(
-  addConsolidatedCase,
-  determineEntitiesToLock,
-);
+  return multiMutexLockWrapper({
+    lockIds,
+    callback: () =>
+      addConsolidatedCase(
+        applicationContext,
+        { docketNumber, docketNumberToConsolidateWith },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const determineEntitiesToLock = (
+//   _applicationContext,
+//   { docketNumber, docketNumberToConsolidateWith },
+// ) => ({
+//   identifiers: [docketNumber, docketNumberToConsolidateWith].map(
+//     item => `case|${item}`,
+//   ),
+// });
+
+// export const addConsolidatedCaseInteractor = withLocking(
+//   addConsolidatedCase,
+//   determineEntitiesToLock,
+// );

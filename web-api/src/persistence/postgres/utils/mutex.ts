@@ -82,3 +82,28 @@ const releaseLock = async ({ lockId }: { lockId: number }) => {
   const releasedLock = releasedLockResult.rows[0].pgAdvisoryUnlock;
   return releasedLock;
 };
+
+/**
+ * Executes a callback while holding multiple advisory locks simultaneously.
+ * Locks are acquired in the order provided and released in reverse order.
+ */
+export const multiMutexLockWrapper = async <T>({
+  lockIds,
+  callback,
+}: {
+  lockIds: number[];
+  callback: () => Promise<T>;
+}): Promise<T> => {
+  for (const lockId of lockIds) {
+    await getLock({ lockId });
+  }
+
+  try {
+    return await callback();
+  } finally {
+    // Release locks in reverse order
+    for (const lockId of lockIds.slice().reverse()) {
+      await releaseLock({ lockId });
+    }
+  }
+};

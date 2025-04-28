@@ -8,7 +8,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  multiMutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * removeConsolidatedCases
@@ -117,20 +120,43 @@ export const removeConsolidatedCases = async (
   await Promise.all(updateCasePromises);
 };
 
-const determineEntitiesToLock = (
-  _applicationContext,
-  { docketNumber, docketNumbersToRemove = [] },
+export const removeConsolidatedCasesInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    docketNumber,
+    docketNumbersToRemove,
+  }: { docketNumber: string; docketNumbersToRemove: string[] },
+  authorizedUser: UnknownAuthUser,
 ) => {
-  const docketNumbers = [docketNumber, ...docketNumbersToRemove].map(
-    item => `case|${item}`,
+  const lockIds = [docketNumber, ...docketNumbersToRemove].map(docketNum =>
+    hashLockId(`case|${docketNum}`),
   );
 
-  return {
-    identifiers: docketNumbers,
-  };
+  return multiMutexLockWrapper({
+    lockIds,
+    callback: () =>
+      removeConsolidatedCases(
+        applicationContext,
+        { docketNumber, docketNumbersToRemove },
+        authorizedUser,
+      ),
+  });
 };
 
-export const removeConsolidatedCasesInteractor = withLocking(
-  removeConsolidatedCases,
-  determineEntitiesToLock,
-);
+// const determineEntitiesToLock = (
+//   _applicationContext,
+//   { docketNumber, docketNumbersToRemove = [] },
+// ) => {
+//   const docketNumbers = [docketNumber, ...docketNumbersToRemove].map(
+//     item => `case|${item}`,
+//   );
+
+//   return {
+//     identifiers: docketNumbers,
+//   };
+// };
+
+// export const removeConsolidatedCasesInteractor = withLocking(
+//   removeConsolidatedCases,
+//   determineEntitiesToLock,
+// );
