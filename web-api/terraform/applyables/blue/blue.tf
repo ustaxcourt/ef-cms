@@ -178,7 +178,9 @@ module "api-east-blue" {
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 1
+  route_53_regional_weight = 100
 }
+
 module "api-west-blue" {
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
@@ -218,6 +220,7 @@ module "api-west-blue" {
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 0
+  route_53_regional_weight = 0
 }
 
 module "worker-east-blue" {
