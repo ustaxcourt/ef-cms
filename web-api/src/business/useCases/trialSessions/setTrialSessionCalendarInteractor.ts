@@ -149,6 +149,7 @@ export const setTrialSessionCalendarInteractor = async (
         ),
         highPriority: true,
       }),
+      // We could fetch all case deadlines and all work items, set the judge fields, validate, and then upsert instead.
       // Need to check for empty map (since kysely throws error for "in" [])
       pgUpdateTable({
         table: 'dwCaseDeadline',
