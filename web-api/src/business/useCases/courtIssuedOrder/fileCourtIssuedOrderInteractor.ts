@@ -22,7 +22,10 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy, some } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -150,12 +153,33 @@ export const fileCourtIssuedOrder = async (
   return caseEntity.toRawObject();
 };
 
-export const fileCourtIssuedOrderInteractor = withLocking(
-  fileCourtIssuedOrder,
-  (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
-    identifiers: [`case|${documentMetadata.docketNumber}`],
-  }),
-);
+export const fileCourtIssuedOrderInteractor = async (
+  applicationContext: ServerApplicationContext,
+  {
+    documentMetadata,
+    primaryDocumentFileId,
+  }: { documentMetadata: any; primaryDocumentFileId: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${documentMetadata.docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      fileCourtIssuedOrder(
+        applicationContext,
+        { documentMetadata, primaryDocumentFileId },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const fileCourtIssuedOrderInteractor = withLocking(
+//   fileCourtIssuedOrder,
+//   (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
+//     identifiers: [`case|${documentMetadata.docketNumber}`],
+//   }),
+// );
 
 function generateFreeText(documentMetadata: {
   orderType: string;

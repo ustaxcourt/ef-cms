@@ -11,6 +11,10 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import {
+  hashLockId,
+  mutexLockWrapper,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const updateCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -105,9 +109,27 @@ export const updateCourtIssuedDocketEntry = async (
   return caseEntity.toRawObject();
 };
 
-export const updateCourtIssuedDocketEntryInteractor = withLocking(
-  updateCourtIssuedDocketEntry,
-  (_applicationContext: ServerApplicationContext, { documentMeta }) => ({
-    identifiers: [`case|${documentMeta.docketNumber}`],
-  }),
-);
+export const updateCourtIssuedDocketEntryInteractor = async (
+  applicationContext: ServerApplicationContext,
+  { documentMeta }: { documentMeta: any },
+  authorizedUser: UnknownAuthUser,
+) => {
+  const lockId = hashLockId(`case|${documentMeta.docketNumber}`);
+
+  return mutexLockWrapper({
+    lockId,
+    callback: () =>
+      updateCourtIssuedDocketEntry(
+        applicationContext,
+        { documentMeta },
+        authorizedUser,
+      ),
+  });
+};
+
+// export const updateCourtIssuedDocketEntryInteractor = withLocking(
+//   updateCourtIssuedDocketEntry,
+//   (_applicationContext: ServerApplicationContext, { documentMeta }) => ({
+//     identifiers: [`case|${documentMeta.docketNumber}`],
+//   }),
+// );
