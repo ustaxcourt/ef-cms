@@ -26,7 +26,6 @@ import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSession
 import { deleteUserConnection } from './persistence/dynamo/notifications/deleteUserConnection';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
-import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
@@ -59,7 +58,6 @@ import { getTrialSessionProcessingStatus } from './persistence/dynamo/trialSessi
 import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
 import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSessions';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
-import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getWebSocketConnectionsByUserId } from './persistence/dynamo/notifications/getWebSocketConnectionsByUserId';
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
@@ -163,7 +161,6 @@ const gatewayMethods = {
   deleteTrialSessionWorkingCopy,
   deleteUserConnection,
   fetchEventCodesCountForJudges,
-  getAllUsersByRole,
   getAllWebSocketConnections,
   getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
   getCalendaredCasesForTrialSession,
@@ -197,7 +194,6 @@ const gatewayMethods = {
   getTrialSessionWorkingCopy,
   getTrialSessions,
   getUploadPolicy,
-  getUsersBySearchKey,
   getWebSocketConnectionsByUserId,
   isEmailAvailable,
   isFileExists,

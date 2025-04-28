@@ -82,7 +82,7 @@ export function privatePractitionerEntity(practitioner): PrivatePractitioner {
 }
 
 function transformPractitionerData(practitioner) {
-  transformNullToUndefined({
+  return transformNullToUndefined({
     ...practitioner,
     contact: contactInfo(practitioner),
     admissionsDate: formatDateString(
