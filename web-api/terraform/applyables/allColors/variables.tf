@@ -102,5 +102,8 @@ variable "restoring_aws_account_id" {
 
 variable "rum_sample_rate" {
   type = number
+}
 
+variable "route_53_regional_weight" {
+  type = number
 }
