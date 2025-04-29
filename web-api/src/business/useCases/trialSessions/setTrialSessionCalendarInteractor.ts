@@ -1,12 +1,16 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  SYSTEM_ROLE,
+  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
+} from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   acquireLock,
@@ -19,6 +23,7 @@ import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgU
 import { createCaseStatusUpdateForCases } from '@web-api/persistence/postgres/cases/createCaseStatusUpdateForCases';
 import { WorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -150,12 +155,17 @@ export const setTrialSessionCalendarInteractor = async (
       ...manuallyAddedQcIncompleteCaseEntities,
     ];
 
+    const newStatus: CaseStatusChange = {
+      changedBy: SYSTEM_ROLE,
+      date: createISODateString(),
+      updatedCaseStatus: CASE_STATUS_TYPES.calendared,
+    };
+
     const updatesToPersist: Promise<any>[] = [
       upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
-
       createCaseStatusUpdateForCases({
         docketNumbers: caseEntitiesToCalendar.map(c => c.docketNumber),
-        statusUpdate: caseEntitiesToCalendar[0].caseStatusHistory?.at(-1)!,
+        statusUpdate: newStatus,
       }),
     ];
 
