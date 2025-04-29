@@ -11,11 +11,11 @@ import {
   PETITIONS_SECTION,
   ROLES,
   STATUS_REPORT_ORDER_OPTIONS,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { User } from '@shared/business/entities/User';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import {
@@ -523,8 +523,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
         );
 
         expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCase.mock.calls[0][0].caseToUpdate.docketEntries[3],
         ).toMatchObject({
           freeText: 'Custom free text for motion order response',
         });
