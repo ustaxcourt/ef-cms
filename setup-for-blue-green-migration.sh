@@ -32,7 +32,7 @@ echo "setting migrate flag to true"
 aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'
 
 echo "setting migration-queue-empty flag to false"
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migration-queue-empty"},"sk":{"S":"migration-queue-empty"},"current":{"BOOL":false}}'
+aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migration-queue-empty" --value "false" --type "String" --overwrite
 
 SOURCE_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"}}' | jq -r ".Item.current.S")
 echo "source table is currently ${SOURCE_TABLE_VERSION}"
