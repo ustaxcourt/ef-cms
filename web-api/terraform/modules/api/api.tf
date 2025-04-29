@@ -458,6 +458,10 @@ resource "aws_route53_record" "api_route53_regional_record" {
   weighted_routing_policy {
     weight = var.route_53_regional_weight
   }
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_wafv2_web_acl_association" "association" {
