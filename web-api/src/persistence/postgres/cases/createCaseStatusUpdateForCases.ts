@@ -10,6 +10,10 @@ export const createCaseStatusUpdateForCases = async ({
   docketNumbers: string[];
   statusUpdate: CaseStatusChange;
 }): Promise<void> => {
+  if (!docketNumbers.length) {
+    return;
+  }
+
   await pgInsertInto({
     table: 'dwCaseStatusUpdate',
     values: docketNumbers.map(docketNumber => ({

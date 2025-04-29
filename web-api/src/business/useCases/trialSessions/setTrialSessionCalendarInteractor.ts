@@ -1,16 +1,12 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
-  CASE_STATUS_TYPES,
-  SYSTEM_ROLE,
-  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
-} from '@shared/business/entities/EntityConstants';
+import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   acquireLock,
@@ -19,11 +15,12 @@ import {
 import { flatten, isEmpty, partition, uniq } from 'lodash';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
-import { createCaseStatusUpdateForCases } from '@web-api/persistence/postgres/cases/createCaseStatusUpdateForCases';
-import { WorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
-import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { createISODateString } from '@shared/business/utilities/DateHandler';
+import {
+  createCaseStatusesForCasesToCalendar,
+  deleteTrialSortMappingRecordsForEligibleCases,
+  updateDeadlinesForCasesToCalendar,
+  updateWorkItemsForCasesToCalendar,
+} from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -155,67 +152,30 @@ export const setTrialSessionCalendarInteractor = async (
       ...manuallyAddedQcIncompleteCaseEntities,
     ];
 
-    const newStatus: CaseStatusChange = {
-      changedBy: SYSTEM_ROLE,
-      date: createISODateString(),
-      updatedCaseStatus: CASE_STATUS_TYPES.calendared,
-    };
-
     const updatesToPersist: Promise<any>[] = [
       upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
-      createCaseStatusUpdateForCases({
-        docketNumbers: caseEntitiesToCalendar.map(c => c.docketNumber),
-        statusUpdate: newStatus,
+      deleteTrialSortMappingRecordsForEligibleCases({
+        applicationContext,
+        eligibleCases: eligibleCaseEntities,
       }),
     ];
 
-    // We may need to update related work items and deadlines for newly calendared cases depending on the trial session judge.
-    // TODO: These updates should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference these columns on dwCase.
     if (!isEmpty(caseEntitiesToCalendar)) {
-      // We could fetch all case deadlines and all work items, set the judge fields, validate, and then upsert instead.
-      updatesToPersist.push(updateDeadlinesForCasesToCalendar());
-      updatesToPersist.push(updateWorkItemsForCasesToCalendar());
-    }
-
-    async function updateDeadlinesForCasesToCalendar() {
-      if (!(trialSessionEntity.judge && trialSessionEntity.judge.name)) {
-        return; // Nothing to update if the trial session has no judge
-      }
-      const values: Pick<
-        CaseDeadline,
-        'associatedJudge' | 'associatedJudgeId'
-      > = {
-        associatedJudge: trialSessionEntity.judge?.name,
-        associatedJudgeId: trialSessionEntity.judge?.userId ?? null,
-      };
-      await pgUpdateTable({
-        table: 'dwCaseDeadline',
-        values,
-        where: db =>
-          db.where(
-            'docketNumber',
-            'in',
-            caseEntitiesToCalendar.map(c => c.docketNumber),
-          ),
-      });
-    }
-
-    async function updateWorkItemsForCasesToCalendar() {
-      const values: Partial<WorkItemKysely> = { highPriority: true }; // Set work items to high priority
-      if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
-        values.associatedJudge = trialSessionEntity.judge?.name; // And update judge info if it exists on the trial session
-        values.associatedJudgeId = trialSessionEntity.judge?.userId ?? null;
-      }
-      await pgUpdateTable({
-        table: 'dwWorkItem',
-        values,
-        where: db =>
-          db.where(
-            'docketNumber',
-            'in',
-            caseEntitiesToCalendar.map(c => c.docketNumber),
-          ),
-      });
+      updatesToPersist.push(
+        createCaseStatusesForCasesToCalendar({
+          casesToCalendar: caseEntitiesToCalendar,
+        }),
+        // We may need to update related work items and deadlines for newly calendared cases depending on the trial session judge.
+        // TODO: These updates should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference these columns on dwCase.
+        updateDeadlinesForCasesToCalendar({
+          casesToCalendar: caseEntitiesToCalendar,
+          trialSessionEntity,
+        }),
+        updateWorkItemsForCasesToCalendar({
+          casesToCalendar: caseEntitiesToCalendar,
+          trialSessionEntity,
+        }),
+      );
     }
 
     // Persist all case updates
@@ -241,7 +201,6 @@ export const setTrialSessionCalendarInteractor = async (
       `Error setting trial session calendar for trialSessionId: ${trialSessionId}`,
     );
     applicationContext.logger.error(error);
-    console.log(error);
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
