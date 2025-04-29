@@ -95,6 +95,10 @@ resource "aws_route53_record" "api_route53_main_east_regional_record" {
   weighted_routing_policy {
     weight = var.route_53_regional_weight
   }
+
+  lifecycle {
+    create_before_destroy = false
+  }
 }
 
 resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
