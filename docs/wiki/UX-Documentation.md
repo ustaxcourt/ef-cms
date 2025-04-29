@@ -8,41 +8,41 @@
    3. [UI Design System](#ui-design-system)
    4. [Content Strategy](#content-strategy)
 
-# User Research, edit
+# User Research
 
 ## Initial Discovery
-[UX Research Approach ](https://docs.google.com/presentation/d/14XKR6X1xKq2E_raH8xFxeZpokAiDScUq_WVh0wmIo_E/edit?usp=sharing)
+[UX Research Approach ](./ux-approach.pdf)
 * Our guiding principles and general approach to user research, especially related to the discovery phase, and including planned deliverables.
 
-[USTC Staff UX Research Plan ](https://docs.google.com/document/d/1_ZkL96yEGX-FZ6bgVHW90OpS2SKoPMc9PZVgESu2yqc/edit?usp=sharing)
+[USTC Staff UX Research Plan ](./user-interviews-research-plan.pdf)
 * Comprehensive plan of initial discovery research with all court user groups.
 
-[UX Discovery Research Findings](https://drive.google.com/open?id=1iapbWu6FFk6jWUdZyO_E4MUrwBpk0S9VCfhs_04yWJ0)
+[UX Discovery Research Findings](./user-research-findings-and-recommendations.pdf)
 
 * We conducted several days of onsite user research with approx. 24 court users. It consisted of a focus group that helped map out the end-to-end journey of a case that's filed, as well as one-on-one interviews with court users about their daily tasks, how they use the system, and future needs.
 
-[UX Discovery Personas](https://drive.google.com/file/d/1YhsRK8sB9rOJOefDGdFHUvxsC3I8w5Gv/view)
+[UX Discovery Personas](./personas.pdf)
 
 ## Targeted Discovery
 
 ### IRS Interview (June 2019)
 Deep dive interviews with 2 IRS attorneys and 2 administrative staff probing on their interactions with the Tax Court, internal and shared business processes, and their needs from the new CMS
 
-[IRS User Interview - Plan](https://docs.google.com/document/d/1BNalVU-dJ9nILeazqe05KD7MkwqzifxcydUoCkhbcnU/edit?usp=sharing)
+[IRS User Interview - Plan](./user-interviews-irs-counsel-script.pdf)
 
-[IRS Attorney User Interviews - Findings ](https://docs.google.com/presentation/d/1Wcj4TJ7Bq7sHUoMdH_O3huennZ7wBy8BsDgz8WjD9fw/edit?usp=sharing)
+[IRS Attorney User Interviews - Findings ](./irs-counsel-report.pdf)
 
 ### Judge User Interviews (June 2019)
 
-[Judge User Interviews Plan](https://docs.google.com/document/d/1K8oEg7GCfWamsSSixs-FP8cZwSPDC0zzFfPySFxwl5U/edit?usp=sharing)
+[Judge User Interviews Plan](./judges-interview.pdf)
 
-[Judge User Interviews (June 2019) - Findings](https://docs.google.com/presentation/d/1HBD21K_sKtOnuJTu6aXse8qt8bSn5ImpX649YmyOzZ0/edit?usp=sharing)
+[Judge User Interviews (June 2019) - Findings](./judges-report.pdf)
 
 
 ### User Management Interviews (March 2021)
-[Docket Clerk Interview Guide](https://docs.google.com/document/d/1njo72yNjZgmr2BEF2pzbjh46AT5BfI62PaP3rW8KQKQ/edit#)
+[Docket Clerk Interview Guide](./docket-clerk-interview-plan.pdf)
 
-[PR 65 Research Interviews - Recommendations](https://drive.google.com/file/d/10_HYyEr1xDiLN8xGAkiLWooRxR8a6a2D/view?usp=sharing) 
+[PR 65 Research Interviews - Recommendations](./recommendations.pdf) 
 
 ## Continuous Research
 Post-launch, the team continues with research and testing activities.
@@ -54,7 +54,7 @@ Post-launch, the team continues with research and testing activities.
 
 These document the user flow of the new system we are building. It's a work-in-progress, that's updated to include the new workflows that we developed.
 
-[High Level Case Flow](https://drive.google.com/file/d/1jn1VdIxtP0Cq6Nd8lbLpHzD8QStT304R/view?usp=sharing)
+[High Level Case Flow](./high-level-case-flow.pdf)
 
 [Create a New Case (Paper Petition)](./Create-a-new-case.pdf)
 
@@ -83,121 +83,121 @@ These document the user flow of the new system we are building. It's a work-in-p
 ### Case Form Usability Testing (January 2019)
 Conducting usability testing with pro se petitioners (public) on the Start a Case form design and user flow.
 
-[Case Form Usability Test - Petitioner  - Test Plan](https://docs.google.com/document/d/1wRmXNfXAumPpczC_P3XbOY4uxUPgUZfY6xc-RNHVmTk/edit?usp=sharing)
+[Case Form Usability Test - Petitioner  - Test Plan](./case-form-usability-test-petitioner-test-plan.pdf)
 
-[Case Form Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/1Im10X9KW-jkJ76UH6sYdjlHwawJVGMSu/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
+[Case Form Usability Test - Petitioner - Findings](./case-form-usability-test-petitioner-report.pdf)
 
 ### Petition QC Usability Testing (March 2019)
 In this study, Flexion UX Designers tested the Petitions QC Workflow in a development environment for the first time. Previously, the team conducted several iterative design studies with Petitions Clerks using Figma wireframes.
 
-[Petitions Workflow Usability Study Findings](https://docs.google.com/presentation/d/19wDxfsMNwsSF6jgCCvvBRaPBUyB2q6Mp/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
+[Petitions Workflow Usability Study Findings](./petition-qc-usability-test-petitionclerks-march-report.pdf)
 
 ### Practitioner Interviews / Usability Testing (April 2019)
 In this study, Flexion UX Designers interviewed current practitioners to understand their use of the existing Tax Court system. The Flexion UX Team then tested the new Case Form with the practitioners, as well as the file document functionality for the first time.
 
-[Case Form Interview and Usability Test - Practitioner - Test Plan](https://docs.google.com/document/d/1zrlYYbbgJsscnl6zDlhf9sooaz7ne0rKujATB2ZbJkw/edit?usp=sharing)
+[Case Form Interview and Usability Test - Practitioner - Test Plan](./user-interview-practitioner-script.pdf)
 
-[Case Form Usability Test - Practitioner - Findings](https://docs.google.com/presentation/d/1HIwkfqs4Mr2nYAmNw1BFQegLNDcm72Rt/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
+[Case Form Usability Test - Practitioner - Findings](./case-form-usabilitytest-practitioners-report.pdf)
 
 
 ### Core System Usability Testing (September 2019)
 In this comprehensive study, Flexion UX Designers performed a usability study with several user groups to test the core system functionality implemented to date.  This study included all major user roles, including both internal and external users.
 
-[Petition Clerk Research Plan](https://docs.google.com/document/d/13PbCRJ2fIl5sAtWbZQztOlCHa3YNqsZA5AOOUBsuTuI/edit?usp=sharing)
+[Petition Clerk Research Plan](./petition-clerk-usability-test-script%20.pdf)
 
-[Docket Clerk Research Plan](https://docs.google.com/document/d/1xJLyisNubcX4Px0Ve1u5EvcrsuTk3yttV-pGXrLO40g/edit?usp=sharing)
+[Docket Clerk Research Plan](./docket-clerk-usability-test-script.pdf)
 
-[Calendar Clerk Research Plan](https://docs.google.com/document/d/1KltibruaewO9-2MzZwcf1-WXGcOdL9bnGUsUE6TdStk/edit?usp=sharing)
+[Calendar Clerk Research Plan](./calendar-clerk-usability-test-script.pdf)
 
-[Judge Research Plan](https://docs.google.com/document/d/1RsgYopBO519zPcCjemXgE98jUaJojdIDTdi59q2udgw/edit?usp=sharing)
+[Judge Research Plan](./judge-usability-test-script.pdf)
 
-[Petitioner Research Plan](https://docs.google.com/document/d/1pmFUyz2I3RBVIppSgJXMsCZGKlN410GjiUaa1pStJu0/edit?usp=sharing)
+[Petitioner Research Plan](./petitioner-usability-test-script.pdf)
 
-[IRS Attorney Research Plan](https://docs.google.com/document/d/15CU2XKH2VRDXo8CtostShtK3DixRqis8RyF0oyDSehc/edit?usp=sharing)
+[IRS Attorney Research Plan](./irs-attorney-usability-test-script.pdf)
 
-[Core System Usability Testing - Findings](https://docs.google.com/presentation/d/1AK5_1L7hdrarOxXo12nuSezJbCukPMh_/edit#slide=id.p1)
+[Core System Usability Testing - Findings](./usability-testing-report.pdf)
 
 ### Petitioner Usability Testing (October 2019)
 In this study, Flexion UX Designers performed a usability study with potential petitioners to test the petitioner dashboard and file a petition flow.
 
-[File a Petition Usability Test - Plan](https://docs.google.com/document/d/1Przz2jtmD_JGSAsTFsox--jp8sdvw6M8OH5OIInVrCg/edit?usp=sharing)
+[File a Petition Usability Test - Plan](./petitioner-usability-testing-plan-oct.pdf)
 
-[File a Petition Usability Test - Findings](https://drive.google.com/open?id=1A8ma-ZUgt46NuagDmSUZcbRgEaVHfRvaMJ-G6rB_1O4)
+[File a Petition Usability Test - Findings](./petitioner-usability-testing-nov-report.pdf)
 
 ### Docket Clerk Usability Testing (January 2020)
 In this study, Flexion UX Designers observed Docket Clerks performing their normal job functions to test end-to-end processes using the new CMS.
 
-[Docket Clerk Usability Testing - Findings](https://drive.google.com/open?id=1ay3hwjE2WrUH4izPs7BHNCRUY0S7WkhNZuuOTkWCyTI)
+[Docket Clerk Usability Testing - Findings](./docket-clerk-usability-testing-jan.pdf)
 
 ### Cooperative Usability Testing (January 2020)
 In this study, Flexion UX Designers performed an end-to-end testing of a U.S. Tax Court case workflow in order to validate system features and handoffs between roles at the Court.
 
 A modified methodology for cooperative usability testing was used to meet our unique needs. Users performed their daily tasks and then reflected with the entire group on the experience.
 
-[Roundtable Cooperative Usability Testing - Findings](https://drive.google.com/open?id=1_boNwUlm-FEa5qm74bC_beud0ZJ7urBkS0prDXFCc00)
+[Roundtable Cooperative Usability Testing - Findings](./usability-roundtable-january.pdf)
 
 ### Pro-Se Petitioner: Create Case Usability Testing (May, 2020)
 In this study, Flexion UX Designers performed usability testing for creating a case as a pro-se petitioner. Goals focused on validating iterative design choices from the previous usability study and testing specifically on a mobile device.
 
-[File a Petition Usability Test - Petitioner - Plan](https://docs.google.com/document/d/1M6tj8AMpr94BGeMpqcuK7gBy1xqTaS-b8AfsHT7CWws/edit?usp=sharing)
+[File a Petition Usability Test - Petitioner - Plan](./create-case-form-usability-testing-may-plan.pdf)
 
-[File a Petition Usability Test - Petitioner - Findings](https://docs.google.com/presentation/d/14uwSvoAyevQbfA8ZZSNRCzZOfQKPCCH6/edit?usp=sharing&ouid=101093926770181931184&rtpof=true&sd=true)
+[File a Petition Usability Test - Petitioner - Findings](./petitioner-usability-testing-may-findings.pdf)
 
 
 ### Order Search Interviews (March 2021)
-[User Interview Mural Board](https://app.mural.co/invitation/mural/flexion6734/1615995967668?sender=uac81c807303039588f330143&key=34845658-c81f-4cc4-82ac-73839e18b48a)
+[User Interview Mural Board](./research-analysis.pdf)
 
 [Order Search Findings March 2021](./OrderSearchFindings_March2021.pdf)
 
 [Order Search Recommendations July 2021](./OrderSearchRecommendationsJuly2021.pdf)
 
 ### Sealing/Unsealing Cases and Documents (November 2021)
-[UX Sealing/Unsealing Research Plan October 2021](https://docs.google.com/document/d/1Kx33vIlerGeTJr7X7RvVeiSDvcMtVa8SCaC5U3NAOXk/edit?usp=sharing)
+[UX Sealing/Unsealing Research Plan October 2021](./discovery-research-plan.pdf)
 
-[UX Sealing/Unsealing Research Findings Report November 2021](https://drive.google.com/file/d/1Sa9a7FnZo-ARqqI9MsfmQKpJEweFmVvc/view?usp=sharing)
+[UX Sealing/Unsealing Research Findings Report November 2021](./sealing-unsealing-discovery.pdf)
 
-[User Interview Mural Board](https://app.mural.co/invitation/mural/flexion6734/1634754569414?sender=u9a89dc65e6273d6559349431&key=3c0af023-c471-44a1-8372-64e7e2b4db44)
+[User Interview Mural Board](./sealing_unsealing_cases.pdf)
 
 ### Consolidation Discovery Research (March-November 2022)
 
-[UX Consolidation Research Plan - Docket Clerks March 2022](https://docs.google.com/document/d/1ZWj0TnHDpd02OJja8n2KJf5IqBwQZo4kUMKexr1fkjw/edit?usp=share_link)
+[UX Consolidation Research Plan - Docket Clerks March 2022](./consolidation-discovery-research-plan-docketclerks.pdf)
 
-[Docket Clerk Process Flow - November 2022 Deliverable](https://drive.google.com/file/d/1hjFeQ6YGXJKyVgeaVPR54zcKnXfKeIZT/view?usp=share_link)
+[Docket Clerk Process Flow - November 2022 Deliverable](./consolidation-process-flow.pdf)
 
-[UX Consolidation Research Plan - Judges/CAs/Other Chambers July 2022](https://docs.google.com/document/d/1ImZ1UxoFEUMzQWLr-zs4DyQuAHNzaCzuwJbGxaAqzr4/edit?usp=share_link)
+[UX Consolidation Research Plan - Judges/CAs/Other Chambers July 2022](./consolidation-discovery-plan-judges-ca.pdf)
 
-[UX Consolidation Findings Report - Judges/CAs/Other Chambers August 2022](https://drive.google.com/file/d/1hEtzBoSJ16mm9Y_mJ-2UtkDh17yyfXkN/view?usp=share_link)
+[UX Consolidation Findings Report - Judges/CAs/Other Chambers August 2022](./consolidation-report-judges-ca-chambers.pdf)
 
-[UX Consolidation Research Plan - Trial Clerks October 2022](https://docs.google.com/document/d/1TohTBLIzkcvrps8ewo7YVFz_IcqsRkNVIoGGpFbtiII/edit?usp=share_link)
+[UX Consolidation Research Plan - Trial Clerks October 2022](./consolidation-discovery-plan-trialclerks.pdf)
 
-[UX Consolidation Findings Report - Trial Clerk November 2022](https://drive.google.com/file/d/1dhZwHl7K-Ul_9d8T_-UdMr7M-wMlNPDU/view?usp=share_link)
+[UX Consolidation Findings Report - Trial Clerk November 2022](./discovery-report-trialclerk.pdf)
 
-[User Interview Mural Board - All user types](https://app.mural.co/invitation/mural/flexion6734/1646751586915?sender=u9a89dc65e6273d6559349431&key=d1201bf3-3904-4e0e-97e0-3d878568cc32)
+[User Interview Mural Board - All user types](./consolidation_interviews.pdf)
 
 
 ### Petition's QC - Petition's Clerks (February-March 2023)
 
-[UX Petition's QC Research Plan - Petition's Clerks February 2023](https://docs.google.com/document/d/19b_8LaEf_BuuS3APjWNxnSBaBH1ydN2pevxaZP4CYok/edit?usp=sharing)
+[UX Petition's QC Research Plan - Petition's Clerks February 2023](./research-plan-5817.pdf)
 
-[UX Petition's QC Findings Report - Petition's Clerks March 2023](https://drive.google.com/file/d/1k0BJjCctmidbkhuCRIZrdxR5OQFhYKBb/view?usp=sharing)
+[UX Petition's QC Findings Report - Petition's Clerks March 2023](./discovery-report-petitions-qc.pdf)
 
-[User Interview Mural Board - Petition's Clerks](https://app.mural.co/t/flexion6734/m/flexion6734/1676650484691/d7e0f4b66540cf5af851fec027276aface62083e?sender=u9a89dc65e6273d6559349431)
+[User Interview Mural Board - Petition's Clerks](./petitions_qc_interviews.pdf)
 
 [QC Process Flow Chart - Petition's Clerks](./Petitions-Clerk-QC-Process-Flow.pdf)
 
 ### Minutes Sheet
 
-[Minutes Sheet Research Plan - Trial Clerks April 2023](https://docs.google.com/document/d/1ZRdusjqnauG3kHpvHeH8dsbJfHAi539M-AeK4j2bPVI/edit?usp=sharing)
+[Minutes Sheet Research Plan - Trial Clerks April 2023](./minutes-sheet-research-plan-trialclerks-april-2023.pdf)
 
 ### Calendaring Trial Sessions
 
-[Calendaring Trial Sessions Research Plan - April & May 2024](https://docs.google.com/document/d/136HJ_4gGGKd1HhLLBICzPIacKymgGsadzug0YqDb4ag/edit?usp=sharing)
+[Calendaring Trial Sessions Research Plan - April & May 2024](./calendaring-trial-session-research-plan-aprilmay2024.pdf)
 
-[Calendaring Trial Sessions Prototype Testing Research Plan - May 2024](https://docs.google.com/document/d/1H3JJFRn5vN8dYIvb7MWcnTg5JHqfE_NTLaW3bWFM2-4/edit?usp=sharing)
+[Calendaring Trial Sessions Prototype Testing Research Plan - May 2024](./calendaring-trial-session-prototype-testing-research-plan-may2024.pdf)
 
 # UI Design System
 
-The complete [USTC UI Design Kit](https://www.figma.com/file/5dTOjitRz6cFmDfQW2RU5p/USTC-UI-Design-Kit?node-id=0%3A1) is available as a Figma file
+The complete [USTC UI Design Kit](https://www.figma.com/design/T0PLL13VsRkrpcOC1G2yaw/UI-Design-Kit?node-id=4-6770&t=EAcqMVshgpwwORPx-1) is available as a Figma file
 
 Generally follows the UI patterns and components established in the [U.S. Web Design System (USWDS) version 3](https://designsystem.digital.gov/) with some exceptions and additions
 
