@@ -11,16 +11,17 @@ import {
 import { Button } from '@web-client/ustc-ui/Button/Button';
 import { FormGroup } from '@web-client/ustc-ui/FormGroup/FormGroup';
 import {
-  ACTION_DOCUMENT_TYPE_OPTIONS,
-  ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED,
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
   MINUTE_SHEET_FORM_SECTION_MAP,
   MOTION_OBJECTION_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
 import React from 'react';
+import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const ActionsAndFilingsFieldset = ({
+  formOptions,
   actionsAndFilingsFormState,
   addRowHandler,
   onBlurHandler,
@@ -31,11 +32,9 @@ export const ActionsAndFilingsFieldset = ({
   onChangeHandler: OnChangeHandler;
   removeRowHandler: RemoveRowHandler;
   onBlurHandler: AutoSaveHandler;
+  formOptions;
   actionsAndFilingsFormState: MinuteSheetFormState['actionsAndFilingsSection'];
 }) => {
-  const SHOW_MOTION_DETAILS_TYPE =
-    ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[ACTION_DOCUMENT_TYPE_OPTIONS.motion];
-
   const renderSelectField = (
     id: string,
     name: string,
@@ -81,10 +80,10 @@ export const ActionsAndFilingsFieldset = ({
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
             <input
               className="usa-input display-inline-block maxw-full"
-              id={`actionsAndFilingsDate-${row.renderKey}`}
+              id={`actionsAndFilingsDate-${rowIndex}`}
               aria-label={`actionsAndFilingsDate-${rowIndex}`}
-              data-testid={`actionsAndFilingsDate-${row.renderKey}`}
-              name={`actionsAndFilingsDate-${row.renderKey}`}
+              data-testid={`actionsAndFilingsDate-${rowIndex}`}
+              name={`actionsAndFilingsDate-${rowIndex}`}
               type="text"
               value={row.date}
               onBlur={() => onBlurHandler()}
@@ -105,16 +104,6 @@ export const ActionsAndFilingsFieldset = ({
         </div>
         <div className="grid-col-2">
           {renderSelectField(
-            `actionsAndFilingsDocumentType-${rowIndex}`,
-            'Document Type',
-            row.documentType,
-            ACTION_DOCUMENT_TYPE_OPTIONS,
-            row,
-            'documentType',
-          )}
-        </div>
-        <div className="grid-col-2">
-          {renderSelectField(
             `actionsAndFilingsFiledBy-${rowIndex}`,
             'Filed by',
             row.filedBy,
@@ -122,6 +111,35 @@ export const ActionsAndFilingsFieldset = ({
             row,
             'filedBy',
           )}
+        </div>
+        <div className="grid-col-2">
+          <SelectSearch
+            aria-label={`actionsAndFilingsDocumentType-label-${rowIndex}`}
+            data-testid={`actionsAndFilingsDocumentType-search-${rowIndex}`}
+            isDisabled={!row.filedBy}
+            id={`actionsAndFilingsDocumentType-${rowIndex}`}
+            isClearable={true}
+            isMulti={false}
+            name={`actionsAndFilingsDocumentType-${rowIndex}`}
+            options={formOptions[row.renderKey]}
+            value={formOptions[row.renderKey].filter(
+              option => option.value === row.documentType,
+            )}
+            onChange={inputValue => {
+              const value = inputValue?.value || '';
+              onChangeHandler({
+                name: 'actionsAndFilings',
+                rowInfo: {
+                  key: row.renderKey,
+                  nestedName: 'documentType',
+                },
+                section: MINUTE_SHEET_FORM_SECTION_MAP.actionsAndFilingsSection,
+                value,
+              });
+              return true;
+            }}
+            onBlur={() => onBlurHandler()}
+          />
         </div>
         <div className="grid-col-2">
           {renderSelectField(
@@ -141,7 +159,7 @@ export const ActionsAndFilingsFieldset = ({
     row: KeyedActionFilingFormFields,
     rowIndex,
   ) => {
-    if (row.documentType === SHOW_MOTION_DETAILS_TYPE) {
+    if (DocketEntry.isMotion(row.documentType)) {
       return (
         <div className="grid-row grid-gap-2 align-items-right margin-bottom-1">
           <div className="grid-col-6"></div>
@@ -151,12 +169,13 @@ export const ActionsAndFilingsFieldset = ({
                 <input
                   checked={row.oralMotion}
                   className="usa-checkbox__input"
-                  id={`actionsAndFilingsOralMotion${row.renderKey}`}
+                  id={`actionsAndFilingsOralMotion-${rowIndex}`}
                   aria-label={`actionsAndFilingsOralMotion-${rowIndex}`}
-                  name={`actionsAndFilingsOralMotion${row.renderKey}`}
+                  name={`actionsAndFilingsOralMotion-${rowIndex}`}
                   type="checkbox"
                   onBlur={() => onBlurHandler()}
                   onChange={e => {
+                    console.log(row);
                     onChangeHandler({
                       name: 'actionsAndFilings',
                       rowInfo: {
@@ -171,7 +190,7 @@ export const ActionsAndFilingsFieldset = ({
                 />
                 <label
                   className="usa-checkbox__label"
-                  htmlFor={`actionsAndFilingsOralMotion${row.renderKey}`}
+                  htmlFor={`actionsAndFilingsOralMotion-${rowIndex}`}
                 >
                   Oral motion
                 </label>
@@ -182,15 +201,15 @@ export const ActionsAndFilingsFieldset = ({
             <FormGroup className="margin-bottom-0 display-flex align-items-center">
               <label
                 className="margin-right-2 margin-bottom-0 display-inline-block"
-                htmlFor={`actionsAndFilingsObjection-${row.renderKey}`}
+                htmlFor={`actionsAndFilingsObjection-${rowIndex}`}
               >
                 Objection
               </label>
               <select
                 className="usa-select display-inline-block"
                 aria-label={`actionsAndFilingsObjection-${rowIndex}`}
-                id={`actionsAndFilingsObjection-${row.renderKey}`}
-                name={`actionsAndFilingsObjection-${row.renderKey}`}
+                id={`actionsAndFilingsObjection-${rowIndex}`}
+                name={`actionsAndFilingsObjection-${rowIndex}`}
                 value={row.objection}
                 onBlur={() => onBlurHandler()}
                 onChange={e => {
@@ -226,8 +245,8 @@ export const ActionsAndFilingsFieldset = ({
       <div className="usa-label">Actions & Filings</div>
       <div className="grid-row grid-gap-2">
         <div className="grid-col-2 usa-label">Date</div>
-        <div className="grid-col-2 usa-label">Document Type</div>
         <div className="grid-col-2 usa-label">Filed By</div>
+        <div className="grid-col-2 usa-label">Document Type</div>
         <div className="grid-col-2 usa-label">Status</div>
         <div className="grid-col-fill usa-label">Description/Note</div>
       </div>

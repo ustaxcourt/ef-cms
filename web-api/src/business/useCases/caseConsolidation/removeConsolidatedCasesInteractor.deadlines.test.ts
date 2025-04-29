@@ -18,31 +18,30 @@ import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persist
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
-
-let mockCases;
-let mockLock;
-
-const getCaseDeadlinesByDocketNumber =
-  getCaseDeadlinesByDocketNumberMock as jest.Mock;
-
-const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
-
-const getCaseDeadlinesByConsolidatedCaseDeadlineId =
-  getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const getCasesByLeadDocketNumber = getCasesByLeadDocketNumberMock as jest.Mock;
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('removeConsolidatedCasesInteractor - Deadlines', () => {
+  let mockCases;
+  let mockLock;
+
+  const getCaseDeadlinesByDocketNumber =
+    getCaseDeadlinesByDocketNumberMock as jest.Mock;
+
+  const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
+
+  const getCaseDeadlinesByConsolidatedCaseDeadlineId =
+    getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
+
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByLeadDocketNumber =
+    getCasesByLeadDocketNumberMock as jest.Mock;
+  // In this file, getCasesByDocketNumbers should be the cases that are to be removed
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
   });
-
-  // afterEach(() => {
-  //   jest.resetAllMocks();
-  // });
 
   beforeEach(() => {
     mockLock = undefined;
@@ -95,6 +94,7 @@ describe('removeConsolidatedCasesInteractor - Deadlines', () => {
   });
 
   it('should remove the "consolidatedDeadlineId" from all the associated Deadlines to the CHILD case', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['102-19']]);
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
       { caseDeadlineId: 2, consolidatedCaseDeadlineId: 1 },
       { caseDeadlineId: 4, consolidatedCaseDeadlineId: 3 },
@@ -120,6 +120,7 @@ describe('removeConsolidatedCasesInteractor - Deadlines', () => {
   });
 
   it('should remove the "consolidatedDeadlineId" from all the associated Deadlines to the LEAD case and update all CHILD deadline', async () => {
+    getCasesByDocketNumbers.mockResolvedValue([mockCases['101-19']]);
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
       { caseDeadlineId: 2, consolidatedCaseDeadlineId: 1 },
       { caseDeadlineId: 4, consolidatedCaseDeadlineId: 3 },

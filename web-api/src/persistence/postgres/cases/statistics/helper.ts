@@ -1,7 +1,9 @@
+/* eslint-disable custom-rules-plugin/no-new-dates */
 import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
+import { CaseStatisticKysely } from '@web-api/persistence/postgres/cases/statistics/schema';
 
 // TODO: Remove this workaround after issue 10502 and revert to using standard timestamps.
 // In DynamoDB, we depended on the order of items (e.g., index 1 vs. index 2) to determine sequence.
@@ -19,3 +21,21 @@ export const getUpdatedAtWithIndexBasedIncrement = ({
     howMuch: index,
   });
 };
+
+// Look at tests for how statistics should be sorted
+export function sortStatistics<T extends CaseStatisticKysely>(
+  statistics: T[],
+): T[] {
+  return statistics?.sort((a, b) => {
+    const aPrimarySort = a.year
+      ? new Date(a.year, 0).getTime()
+      : a.lastDateOfPeriod?.getTime();
+    const bPrimarySort = b.year
+      ? new Date(b.year, 0).getTime()
+      : b.lastDateOfPeriod?.getTime();
+    if (aPrimarySort === bPrimarySort) {
+      return b.updatedAt.getTime() - a.updatedAt.getTime();
+    }
+    return aPrimarySort! - bPrimarySort!;
+  });
+}

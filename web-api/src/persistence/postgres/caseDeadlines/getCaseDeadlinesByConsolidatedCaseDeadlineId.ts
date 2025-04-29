@@ -17,7 +17,12 @@ export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
         'c.leadDocketNumber',
         // TODO: use c.sortableDocketNumber and remove from caseDeadline
       ])
-      .where('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId);
+      .where(q =>
+        q.or([
+          q('cd.caseDeadlineId', '=', consolidatedCaseDeadlineId),
+          q('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId),
+        ]),
+      );
 
     if (!leadDocketNumber) return query.execute();
     return query.where('c.leadDocketNumber', '=', leadDocketNumber).execute();

@@ -1136,13 +1136,27 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
 // it's a separate constant.
 export const SYSTEM_ROLE = 'System';
 
+export const FILING_TYPES_DICT = {
+  MYSELF: 'Myself',
+  MYSELF_AND_SPOUSE: 'Myself and my spouse',
+  BUSINESS: 'A business',
+  OTHER: 'Other',
+  PETITIONER: 'Individual petitioner',
+  PETITIONER_SPOUSE: 'Petitioner and spouse',
+};
+
 export const FILING_TYPES = {
-  [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
+  [ROLES.petitioner]: [
+    FILING_TYPES_DICT.MYSELF,
+    FILING_TYPES_DICT.MYSELF_AND_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
+  ],
   [ROLES.privatePractitioner]: [
-    'Individual petitioner',
-    'Petitioner and spouse',
-    'A business',
-    'Other',
+    FILING_TYPES_DICT.PETITIONER,
+    FILING_TYPES_DICT.PETITIONER_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
   ],
 } as const;
 
@@ -1843,10 +1857,6 @@ export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
 export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
 
 export const MOTION_ORDER_RESPONSE_OPTIONS = {
-  orderReplyOptions: {
-    // More options may arise in future
-    REPLY: 'Order Reply',
-  },
   issueOrderOptions: {
     ALL_CASES: 'All cases in this group',
     THIS_CASE_ONLY: 'Just this case',
@@ -1893,7 +1903,6 @@ export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   petitioner: 'Petitioner',
   respondent: 'Respondent',
-  petitionerAndRespondent: 'Petitioner and Respondent',
   joint: 'Joint',
   other: 'Other',
 } as const;
@@ -1961,7 +1970,6 @@ export const ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED = invert(
 export const ACTION_FILED_BY_OPTIONS = {
   petitioner: 'Petitioner',
   respondent: 'Respondent',
-  petitionerAndRespondent: 'Petitioner and Respondent',
   practitioner: 'Practitioner',
   joint: 'Joint',
   other: 'Other',
@@ -2018,6 +2026,7 @@ export const BRIEF_SUBTYPE = {
 export const PETITIONER_ROLE_OPTIONS = {
   counsel: 'Counsel',
   proSe: 'Pro Se',
+  proSeSe: 'Pro Se Se',
   intervenor: 'Intervenor',
   participant: 'Participant',
   translator: 'Translator',

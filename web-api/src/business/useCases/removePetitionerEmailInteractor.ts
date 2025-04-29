@@ -16,7 +16,7 @@ import { deleteUserFromCase } from '@web-api/persistence/dynamo/cases/deleteUser
 export const removePetitionerEmailInteractor = async (
   { docketNumber, email }: { docketNumber: string; email: string },
   authorizedUser: UnknownAuthUser,
-): Promise<void> => {
+): Promise<Petitioner> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.REMOVE_PETITIONER_EMAIL)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -62,4 +62,6 @@ export const removePetitionerEmailInteractor = async (
     docketNumber,
     userId: petitionerToRemove.contactId,
   });
+
+  return petitionerToUpdate;
 };

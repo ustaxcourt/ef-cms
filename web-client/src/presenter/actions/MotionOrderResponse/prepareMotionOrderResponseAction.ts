@@ -55,13 +55,13 @@ export const prepareMotionOrderResponseAction = ({
   const hasAdditionalOrderText = !!additionalOrderText;
 
   const dueDateFormatted = formatDateString(dueDate, FORMATS.MONTH_DAY_YEAR);
-
   const responseDateFormatted = formatDateString(
     responseDate,
     FORMATS.MONTH_DAY_YEAR,
   );
 
   let createOrderSelectedCases = [] as any;
+  let documentNumberText = `(Document no. ${index}).`;
 
   if (
     isOnLeadCase &&
@@ -75,7 +75,9 @@ export const prepareMotionOrderResponseAction = ({
       };
     });
     createOrderSelectedCases = Case.sortByDocketNumber(consolidatedCases);
+    documentNumberText = `(Lead case Document no. ${index}).`;
   }
+
   let preamblePrepend = '';
 
   if (caseDetail.status === CASE_STATUS_TYPES.calendared) {
@@ -88,7 +90,7 @@ export const prepareMotionOrderResponseAction = ({
   }
 
   const orderVerbiage = `that by ${responseDateFormatted} ${nonMovant} shall file a Response to the ${motionDocumentTitle}.`;
-  const preamble = `<p class="indent-paragraph">${preamblePrepend} On, ${motionFilingDateFormatted}, ${movant} filed ${motionDocumentTitle} (Document no. ${index}). For cause, it is </p>`;
+  const preamble = `<p class="indent-paragraph">${preamblePrepend} On ${motionFilingDateFormatted}, ${movant} filed a ${motionDocumentTitle} ${documentNumberText} For cause, it is </p>`;
   const orderVerbiageHtml = `<p class="indent-paragraph">ORDERED ${orderVerbiage}`;
 
   const opportunityToRebut = `<p class="indent-paragraph">ORDERED that by ${dueDateFormatted} ${movant} may file a Reply.`;
@@ -126,7 +128,6 @@ export const prepareMotionOrderResponseAction = ({
   store.set(state.form.documentType, 'Order');
   store.set(state.form.dueDateFormatted, dueDateFormatted);
   store.set(state.form.eventCode, 'O');
-  store.set(state.form.isOnLeadCase, isOnLeadCase);
   store.set(state.form.richText, richTextString);
   store.set(state.form.showStrickenFromTrialSession, strickenFromTrialSession);
   store.set(state.form.motionOrderResponseFilingDate, responseDate);

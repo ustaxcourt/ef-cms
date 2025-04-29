@@ -9,6 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * addConsolidatedCase
@@ -51,14 +52,13 @@ export const addConsolidatedCase = async (
     );
   }
 
-  let allCasesToConsolidate: RawCase[] = [];
+  let allCasesToConsolidate: Omit<RawCase, 'consolidatedCases'>[] = [];
 
   if (
     caseToUpdate.leadDocketNumber &&
     caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
   ) {
     allCasesToConsolidate = await getCasesByLeadDocketNumber({
-      applicationContext,
       leadDocketNumber: caseToUpdate.leadDocketNumber,
     });
   } else {
@@ -67,7 +67,6 @@ export const addConsolidatedCase = async (
 
   if (caseToConsolidateWith.leadDocketNumber) {
     const casesConsolidatedWithLeadCase = await getCasesByLeadDocketNumber({
-      applicationContext,
       leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
     });
     allCasesToConsolidate.push(...casesConsolidatedWithLeadCase);
@@ -97,7 +96,7 @@ export const addConsolidatedCase = async (
     );
   });
 
-  await Promise.all(updateCasePromises);
+  await settlePromises(updateCasePromises);
 };
 
 export const determineEntitiesToLock = (

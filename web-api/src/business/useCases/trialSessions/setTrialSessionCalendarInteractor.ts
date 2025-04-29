@@ -17,6 +17,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { chunk, flatten, partition, uniq } from 'lodash';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getFullEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getFullEligibleCasesForTrialSession';
 
 const CHUNK_SIZE = 50;
@@ -48,10 +49,8 @@ export const setTrialSessionCalendarInteractor = async (
     }
 
     const trialSessionEntity = new TrialSession(trialSession);
-
-    trialSessionEntity.validate();
-
     trialSessionEntity.setAsCalendared();
+    trialSessionEntity.validate();
 
     //get cases that have been manually added so we can set them as calendared
     const manuallyAddedCases = await applicationContext
@@ -118,6 +117,14 @@ export const setTrialSessionCalendarInteractor = async (
       ]),
     );
 
+    // We are about to kick off a bunch of promises. If any of them fails, case data can get into an inconsistent state.
+    // We therefore validate cases beforehand.
+    [
+      ...eligibleCases,
+      ...manuallyAddedQcCompleteCases,
+      ...manuallyAddedQcIncompleteCases,
+    ].forEach(c => new Case(c, { authorizedUser }).validate());
+
     await acquireLock({
       applicationContext,
       authorizedUser,
@@ -166,10 +173,10 @@ export const setTrialSessionCalendarInteractor = async (
     // If firing all at once, we exhaust the available connections and will run into connection timeouts.
     const chunkedFunctions = chunk(funcs, CHUNK_SIZE);
     for (const singleChunk of chunkedFunctions) {
-      await Promise.all(singleChunk.map(func => func()));
+      await settlePromises(singleChunk.map(func => func()));
     }
 
-    await Promise.all(
+    await settlePromises(
       allDocketNumbers.map(docketNumber =>
         applicationContext.getPersistenceGateway().removeLock({
           applicationContext,
@@ -217,7 +224,7 @@ const removeManuallyAddedCaseFromTrialSession = (
     trialSessionEntity,
   }: {
     applicationContext: ServerApplicationContext;
-    caseRecord: RawCase;
+    caseRecord: Omit<RawCase, 'consolidatedCases'>;
     trialSessionEntity: TrialSession;
   },
   authorizedUser: AuthUser,
@@ -246,7 +253,7 @@ const setManuallyAddedCaseAsCalendared = async (
     trialSessionEntity,
   }: {
     applicationContext: ServerApplicationContext;
-    caseRecord: RawCase;
+    caseRecord: Omit<RawCase, 'consolidatedCases'>;
     trialSessionEntity: TrialSession;
   },
   authorizedUser: AuthUser,
@@ -255,7 +262,7 @@ const setManuallyAddedCaseAsCalendared = async (
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
-  await Promise.all([
+  await settlePromises([
     setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,
@@ -292,7 +299,7 @@ const setTrialSessionCalendarForEligibleCase = async (
   caseEntity.setAsCalendared(trialSessionEntity);
   trialSessionEntity.addCaseToCalendar(caseEntity);
 
-  await Promise.all([
+  await settlePromises([
     setPriorityOnAllWorkItems({
       docketNumber: caseEntity.docketNumber,
       highPriority: true,

@@ -49,7 +49,7 @@ import {
   RawConsolidatedCaseSummary,
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { ContactFactory } from '../contacts/ContactFactory';
-import { Correspondence } from '../Correspondence';
+import { Correspondence, RawCorrespondence } from '../Correspondence';
 import { DocketEntry } from '../DocketEntry';
 import {
   PATTERNS,
@@ -89,7 +89,6 @@ export class Case extends JoiValidationEntity {
   public damages?: number;
   public highPriority?: boolean;
   public highPriorityReason?: string;
-  public judgeUserId?: string;
   public litigationCosts?: number;
   public qcCompleteForTrial?: Record<string, any>;
   public noticeOfAttachments?: boolean;
@@ -143,8 +142,8 @@ export class Case extends JoiValidationEntity {
   public initialCaption?: string;
   public irsPractitioners?: any[];
   public statistics?: any[];
-  public correspondence: any[];
-  public archivedCorrespondences?: any[];
+  public correspondence: RawCorrespondence[];
+  public archivedCorrespondences?: RawCorrespondence[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[] = [];
 
@@ -356,7 +355,6 @@ export class Case extends JoiValidationEntity {
     this.damages = rawCase.damages;
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
-    this.judgeUserId = rawCase.judgeUserId;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
@@ -544,9 +542,6 @@ export class Case extends JoiValidationEntity {
     irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isPaper: joi.boolean().optional(),
     isSealed: CASE_IS_SEALED_RULE,
-    judgeUserId: JoiValidationConstants.UUID.optional().description(
-      'Unique ID for the associated judge.',
-    ),
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
     litigationCosts: joi
       .number()

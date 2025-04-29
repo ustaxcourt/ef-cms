@@ -98,6 +98,7 @@ export const TrialSessionMinutesForm = connect(
           removeRowHandler={removeMinuteSheetFormRowSequence}
           onBlurHandler={autosaveTrialSessionMinuteSheetSequence}
           onChangeHandler={updateTrialSessionMinutesFormSequence}
+          formOptions={trialSessionMinutesFormOptionsHelper.documentTypeOptions}
         />
         <hr />
         <TrialBriefFieldset

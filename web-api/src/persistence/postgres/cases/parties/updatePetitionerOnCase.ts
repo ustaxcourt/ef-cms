@@ -37,13 +37,13 @@ export const updatePetitionerOnCase = async ({
       sealedAndUnavailable: petitioner.sealedAndUnavailable,
       secondaryName: petitioner.secondaryName,
       serviceIndicator:
-        petitioner.serviceIndicator || SERVICE_INDICATOR_TYPES.SI_NONE,
+        petitioner.serviceIndicator ?? SERVICE_INDICATOR_TYPES.SI_NONE,
       state: petitioner.state,
       title: petitioner.title,
     },
     where: cb =>
       cb
-        .where('contactId', '=', oldContactId || petitioner.contactId!)
+        .where('contactId', '=', oldContactId ?? petitioner.contactId!)
         .where('docketNumber', '=', docketNumber),
   });
 
