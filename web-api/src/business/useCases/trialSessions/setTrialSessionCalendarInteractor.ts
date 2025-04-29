@@ -13,7 +13,6 @@ import {
   removeLock,
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { flatten, isEmpty, partition, uniq } from 'lodash';
-import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
@@ -153,21 +152,15 @@ export const setTrialSessionCalendarInteractor = async (
 
     const updatesToPersist: Promise<any>[] = [
       upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
+
       createCaseStatusUpdateForCases({
         docketNumbers: caseEntitiesToCalendar.map(c => c.docketNumber),
-        statusUpdate: [
-          ...eligibleCases,
-          ...manuallyAddedQcCompleteCases,
-        ][0].caseStatusHistory?.at(-1)!,
-      }),
-      setPriorityOnAllWorkItems({
-        docketNumbers: caseEntitiesToCalendar.map(c => c.docketNumber),
-        highPriority: true,
+        statusUpdate: caseEntitiesToCalendar[0].caseStatusHistory?.at(-1)!,
       }),
     ];
 
-    // If the judge exists on the trial session, we need to update related work items and deadlines for newly calendared cases.
-    // TODO: This should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference dwCase.
+    // We may need to update related work items and deadlines for newly calendared cases depending on the trial session judge.
+    // TODO: These updates should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference these columns on dwCase.
     if (!isEmpty(caseEntitiesToCalendar)) {
       // We could fetch all case deadlines and all work items, set the judge fields, validate, and then upsert instead.
       updatesToPersist.push(updateDeadlinesForCasesToCalendar());
@@ -176,7 +169,7 @@ export const setTrialSessionCalendarInteractor = async (
 
     async function updateDeadlinesForCasesToCalendar() {
       if (!(trialSessionEntity.judge && trialSessionEntity.judge.name)) {
-        return;
+        return; // Nothing to update if the trial session has no judge
       }
       const values: Pick<
         CaseDeadline,
@@ -198,9 +191,9 @@ export const setTrialSessionCalendarInteractor = async (
     }
 
     async function updateWorkItemsForCasesToCalendar() {
-      const values: Partial<WorkItemKysely> = { highPriority: true };
+      const values: Partial<WorkItemKysely> = { highPriority: true }; // Set work items to high priority
       if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
-        values.associatedJudge = trialSessionEntity.judge?.name;
+        values.associatedJudge = trialSessionEntity.judge?.name; // And update judge info if it exists on the trial session
         values.associatedJudgeId = trialSessionEntity.judge?.userId ?? null;
       }
       await pgUpdateTable({
