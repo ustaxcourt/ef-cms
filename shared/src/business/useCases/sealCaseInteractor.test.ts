@@ -9,9 +9,16 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { sealCaseInteractor } from './sealCaseInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('sealCaseInteractor', () => {
   let mockLock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
   beforeAll(() => {
     applicationContext
@@ -21,9 +28,7 @@ describe('sealCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
 
   it('should throw an error if the user is unauthorized to seal a case', async () => {
@@ -75,9 +80,7 @@ describe('sealCaseInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

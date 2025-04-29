@@ -15,8 +15,15 @@ export const getSectionInboxMessages = async ({
       .where('m.toSection', '=', section)
       .where('m.isRepliedTo', '=', false)
       .where('m.isCompleted', '=', false)
-      .selectAll()
-      .select('m.docketNumber')
+      .selectAll('m')
+      .select([
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.docketNumberSuffix',
+        'c.leadDocketNumber',
+        'c.caption',
+      ])
       .limit(5000)
       .execute(),
   );

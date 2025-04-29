@@ -1,8 +1,11 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { MessageResult } from '@shared/business/entities/MessageResult';
-import { NewMessageKysely, UpdateMessageKysely } from '@web-api/database-types';
 import { RawMessage } from '@shared/business/entities/Message';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import {
+  UpdateMessageKysely,
+  NewMessageKysely,
+} from '@web-api/persistence/postgres/messages/schema';
 
 function pickFields(message) {
   return {
@@ -57,7 +60,7 @@ export function messageResultEntity(message) {
     transformNullToUndefined({
       ...message,
       caseStatus: message.status,
-      caseTitle: Case.getCaseTitle(message.caption || ''),
+      caseTitle: Case.getCaseTitle(message.caption ?? ''),
       completedAt: message.completedAt?.toISOString(),
       createdAt: message.createdAt.toISOString(),
       trialDate: message.trialDate?.toISOString(),

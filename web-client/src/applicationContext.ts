@@ -274,7 +274,6 @@ import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { setMessageAsReadInteractor } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
-import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
@@ -786,7 +785,6 @@ const applicationContext = {
       prepareDateFromString,
       replaceBracketed,
       setConsolidationFlagsForDisplay,
-      setServiceIndicatorsForCase,
       setupPdfDocument,
       sleep,
       sortDocketEntries,
