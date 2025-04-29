@@ -94,8 +94,12 @@ resource "aws_route53_record" "api_route53_main_west_regional_record" {
     evaluate_target_health = true
   }
 
-  latency_routing_policy {
-    region = "us-west-1"
+  weighted_routing_policy {
+    weight = var.route_53_regional_weight
+  }
+
+  lifecycle {
+    create_before_destroy = false
   }
 }
 
