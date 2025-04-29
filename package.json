@@ -191,7 +191,6 @@
     "migration:cleanup": "./scripts/migration/update-deploy-table-after-migration.sh",
     "migration:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils/migrate/migrate.ts",
     "migration:rollback:postgres": "npx ts-node --transpile-only ./web-api/src/persistence/postgres/utils//rollback.ts",
-    "pending-color-switch": "./web-client/pending-color-switch.sh",
     "postinstall": "husky install",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
     "reindex:elasticsearch": "./reindex-elasticsearch.sh",

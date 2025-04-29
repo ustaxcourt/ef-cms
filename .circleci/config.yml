@@ -210,9 +210,6 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
-      - run:
-          name: 'Deploy - Pending Color Switch'
-          command: npm run pending-color-switch
 
   docker-image-zipper:
     docker:
