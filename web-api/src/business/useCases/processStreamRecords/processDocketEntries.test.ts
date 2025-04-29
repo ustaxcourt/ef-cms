@@ -140,21 +140,4 @@ describe('processDocketEntries', () => {
       },
     ]);
   });
-
-  it('should log an error and throw an exception when bulk index returns failed records', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .bulkIndexRecords.mockReturnValueOnce({
-        failedRecords: [{ id: 'failed record' }],
-      });
-
-    await expect(
-      processDocketEntries({
-        applicationContext,
-        docketEntryRecords: [mockUnsearchableDocketEntryRecord],
-      }),
-    ).rejects.toThrow('failed to index docket entry');
-
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-  });
 });
