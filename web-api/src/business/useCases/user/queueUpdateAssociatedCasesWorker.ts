@@ -3,6 +3,7 @@ import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
 import { RawUser } from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const queueUpdateAssociatedCasesWorker = async (
   applicationContext: ServerApplicationContext,
@@ -16,7 +17,7 @@ export const queueUpdateAssociatedCasesWorker = async (
       userId: user.userId,
     });
 
-  await Promise.all(
+  await settlePromises(
     docketNumbersAssociatedWithUser.map(docketNumber =>
       applicationContext.getWorkerGateway().queueWork(applicationContext, {
         message: {

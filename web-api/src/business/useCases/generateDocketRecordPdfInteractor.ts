@@ -1,15 +1,16 @@
 import {
   Case,
   getPractitionersRepresenting,
-} from '../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseCaptionMeta } from '../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { sortDocketEntryTable } from '@web-client/presenter/computeds/formattedDocketEntries';
 
 export const generateDocketRecordPdfInteractor = async (
@@ -37,12 +38,10 @@ export const generateDocketRecordPdfInteractor = async (
       userId: authorizedUser?.userId,
     });
 
-  const caseSource = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseSource = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   let caseEntity;
 
@@ -127,9 +126,10 @@ export const generateDocketRecordPdfInteractor = async (
       caseCaptionExtension,
       caseDetail: formattedCaseDetail,
       caseTitle,
-      docketNumberWithSuffix: `${caseEntity.docketNumber}${
-        caseEntity.docketNumberSuffix || ''
-      }`,
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: caseEntity.docketNumber,
+        docketNumberSuffix: caseEntity.docketNumberSuffix,
+      }),
       entries: formattedCaseDetail.formattedDocketEntries.filter(
         d => d.isOnDocketRecord,
       ),

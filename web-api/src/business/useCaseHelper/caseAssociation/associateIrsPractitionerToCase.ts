@@ -1,9 +1,10 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { UserCase } from '@shared/business/entities/UserCase';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 export const associateIrsPractitionerToCase = async ({
   applicationContext,
@@ -17,44 +18,45 @@ export const associateIrsPractitionerToCase = async ({
   docketNumber: string;
   serviceIndicator?: string;
   user: RawUser;
-}): Promise<void> => {
-  const isAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
+}): Promise<RawCase> => {
+  const [isAssociated, caseToUpdate] = await Promise.all([
+    applicationContext.getPersistenceGateway().verifyCaseForUser({
       applicationContext,
       docketNumber,
       userId: user.userId,
-    });
-
-  if (!isAssociated) {
-    const caseToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-
-    const userCaseEntity = new UserCase(caseToUpdate);
-
-    await applicationContext.getPersistenceGateway().associateUserWithCase({
+    }),
+    getCaseByDocketNumber({
       applicationContext,
       docketNumber,
-      userCase: userCaseEntity.validate().toRawObject(),
-      userId: user.userId,
-    });
+    }),
+  ]);
 
-    const caseEntity = new Case(caseToUpdate, {
-      authorizedUser,
-    });
+  const caseEntity = new Case(caseToUpdate, {
+    authorizedUser,
+  });
 
-    caseEntity.attachIrsPractitioner(
-      new IrsPractitioner({ ...user, serviceIndicator }),
-    );
+  if (isAssociated) {
+    return caseEntity.toRawObject();
+  }
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+  const userCaseEntity = new UserCase(caseToUpdate);
+
+  await applicationContext.getPersistenceGateway().associateUserWithCase({
+    applicationContext,
+    docketNumber,
+    userCase: userCaseEntity.validate().toRawObject(),
+    userId: user.userId,
+  });
+
+  caseEntity.attachIrsPractitioner(
+    new IrsPractitioner({ ...user, serviceIndicator }),
+  );
+
+  return await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
       applicationContext,
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-  }
 };

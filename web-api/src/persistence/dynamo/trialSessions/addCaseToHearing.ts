@@ -1,3 +1,4 @@
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { put } from '../../dynamodbClientService';
 import { updateTrialSession } from './updateTrialSession';
@@ -20,7 +21,7 @@ export const addCaseToHearing = ({
   docketNumber: string;
   trialSession: RawTrialSession;
 }) =>
-  Promise.all([
+  settlePromises([
     // Create mapping record
     put({
       Item: {

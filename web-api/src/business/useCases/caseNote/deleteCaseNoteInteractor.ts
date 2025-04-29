@@ -1,11 +1,12 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -25,12 +26,10 @@ export const deleteCaseNote = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   delete caseRecord.caseNote;
 

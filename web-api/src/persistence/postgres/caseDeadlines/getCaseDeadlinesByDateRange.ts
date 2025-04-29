@@ -55,7 +55,7 @@ export const getCaseDeadlinesByDateRange = async ({
 
       return {
         results,
-        total: total?.totalCount || 0,
+        total: total?.totalCount ?? 0,
       };
     },
   );
@@ -64,7 +64,7 @@ export const getCaseDeadlinesByDateRange = async ({
     foundDeadlines: caseDeadlines.map(caseDeadline =>
       caseDeadlineEntity(caseDeadline),
     ),
-    totalCount,
+    totalCount: Number(totalCount),
   };
 };
 

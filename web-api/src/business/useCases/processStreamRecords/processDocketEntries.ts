@@ -1,7 +1,9 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
@@ -21,7 +23,7 @@ export const processDocketEntries = async ({
     `going to index ${records.length} docketEntryRecords`,
   );
 
-  const newDocketEntryRecords: IDynamoDBRecord[] = await Promise.all(
+  const newDocketEntryRecords: IDynamoDBRecord[] = await settlePromises(
     records.map(async record => {
       const fullDocketEntry = unmarshall(record.dynamodb.NewImage);
 
@@ -90,4 +92,16 @@ export const processDocketEntries = async ({
     );
     throw new Error('failed to index docket entry records');
   }
+
+  const pgDocketEntries: Record<string, RawDocketEntry> = {};
+
+  for (const record of records) {
+    const unmarshalledRecord = unmarshall(record.dynamodb.NewImage);
+    const key =
+      unmarshalledRecord.docketNumber + unmarshalledRecord.docketEntryId;
+    // Only upsert the most recent update of any duplicate docket entry record since otherwise Postgres will throw an error.
+    pgDocketEntries[key] = unmarshalledRecord as RawDocketEntry;
+  }
+
+  await upsertDocketEntries(Object.values(pgDocketEntries));
 };
