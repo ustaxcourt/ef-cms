@@ -8,13 +8,18 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { flatten, partition, uniq } from 'lodash';
+import {
+  acquireLock,
+  removeLock,
+} from '@web-api/business/useCaseHelper/acquireLock';
+import { flatten, isEmpty, partition, uniq } from 'lodash';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 import { createCaseStatusUpdateForCases } from '@web-api/persistence/postgres/cases/createCaseStatusUpdateForCases';
+import { WorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
+import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -24,6 +29,7 @@ export const setTrialSessionCalendarInteractor = async (
   }: { trialSessionId: string; clientConnectionId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
+  let docketNumbersToLock: string[] = [];
   try {
     if (
       !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)
@@ -46,7 +52,7 @@ export const setTrialSessionCalendarInteractor = async (
     trialSessionEntity.setAsCalendared();
     trialSessionEntity.validate();
 
-    //get cases that have been manually added so we can set them as calendared
+    // We will get cases already associated with the trial session as well as cases that are eligible
     const manuallyAddedCases = await applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession({
@@ -54,7 +60,7 @@ export const setTrialSessionCalendarInteractor = async (
         trialSessionId,
       });
 
-    // these cases are already on the caseOrder, so if they have not been QCed we have to remove them
+    // Manually added cases are already on the caseOrder, so if they have not been QCed we have to remove them
     const [manuallyAddedQcCompleteCases, manuallyAddedQcIncompleteCases] =
       partition(
         manuallyAddedCases,
@@ -88,7 +94,7 @@ export const setTrialSessionCalendarInteractor = async (
           manuallyAddedQcCompleteCases.length,
       );
 
-    const allDocketNumbers = uniq(
+    docketNumbersToLock = uniq(
       flatten([
         eligibleCases.map(({ docketNumber }) => docketNumber),
         manuallyAddedQcCompleteCases.map(({ docketNumber }) => docketNumber),
@@ -107,11 +113,10 @@ export const setTrialSessionCalendarInteractor = async (
     await acquireLock({
       applicationContext,
       authorizedUser,
-      identifiers: allDocketNumbers.map(item => `case|${item}`),
-      ttl: 900,
+      identifiers: docketNumbersToLock.map(item => `case|${item}`),
+      ttl: 15 * 60, // Full lambda execution time
     });
 
-    // These we need to update work items and deadlines for
     const manuallyAddedQcCompleteCaseEntities =
       manuallyAddedQcCompleteCases.map(c => {
         const theCase = new Case(c, { authorizedUser });
@@ -119,7 +124,6 @@ export const setTrialSessionCalendarInteractor = async (
         return theCase.validate().toRawObject();
       });
 
-    // These we need to update work items and deadlines for
     const eligibleCaseEntities = eligibleCases.map(c => {
       const theCase = new Case(c, { authorizedUser });
       theCase.setAsCalendared(trialSessionEntity);
@@ -127,7 +131,6 @@ export const setTrialSessionCalendarInteractor = async (
       return theCase.validate().toRawObject();
     });
 
-    // These we will remove from any association with the trial session
     const manuallyAddedQcIncompleteCaseEntities =
       manuallyAddedQcIncompleteCases.map(c => {
         const theCase = new Case(c, { authorizedUser });
@@ -138,62 +141,84 @@ export const setTrialSessionCalendarInteractor = async (
         return theCase.validate().toRawObject();
       });
 
-    await settlePromises([
-      upsertCases([
-        ...manuallyAddedQcCompleteCaseEntities,
-        ...manuallyAddedQcIncompleteCaseEntities,
-        ...eligibleCaseEntities,
-      ]),
+    const caseEntitiesToCalendar = [
+      ...manuallyAddedQcCompleteCaseEntities,
+      ...eligibleCaseEntities,
+    ];
+
+    // We will remove from any association with the trial session for cases that are not yet QCed
+    const caseEntitiesToNotCalendar = [
+      ...manuallyAddedQcIncompleteCaseEntities,
+    ];
+
+    const updatesToPersist: Promise<any>[] = [
+      upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
       createCaseStatusUpdateForCases({
-        docketNumbers: [...eligibleCases, ...manuallyAddedQcCompleteCases].map(
-          c => c.docketNumber,
-        ),
+        docketNumbers: caseEntitiesToCalendar.map(c => c.docketNumber),
         statusUpdate: [
           ...eligibleCases,
           ...manuallyAddedQcCompleteCases,
         ][0].caseStatusHistory?.at(-1)!,
       }),
       setPriorityOnAllWorkItems({
-        docketNumbers: [...eligibleCases, ...manuallyAddedQcCompleteCases].map(
-          c => c.docketNumber,
-        ),
+        docketNumbers: caseEntitiesToCalendar.map(c => c.docketNumber),
         highPriority: true,
       }),
-      // We could fetch all case deadlines and all work items, set the judge fields, validate, and then upsert instead.
-      // Need to check for empty map (since kysely throws error for "in" [])
-      pgUpdateTable({
-        table: 'dwCaseDeadline',
-        values: {
-          associatedJudge: trialSessionEntity.judge?.name, // probably need null?
-          associatedJudgeId: trialSessionEntity.judge?.userId, // probably need null?
-        },
-        where: db =>
-          db.where(
-            'docketNumber',
-            'in',
-            [...eligibleCases, ...manuallyAddedQcCompleteCases].map(
-              c => c.docketNumber,
-            ),
-          ),
-      }),
-      // Need to check for empty map (since kysely throws error for "in" [])
-      pgUpdateTable({
-        table: 'dwWorkItem',
-        values: {
-          associatedJudge: trialSessionEntity.judge?.name, // probably need null?
-          associatedJudgeId: trialSessionEntity.judge?.userId, // probably need null?
-        },
-        where: db =>
-          db.where(
-            'docketNumber',
-            'in',
-            [...eligibleCases, ...manuallyAddedQcCompleteCases].map(
-              c => c.docketNumber,
-            ),
-          ),
-      }),
-    ]);
+    ];
 
+    // If the judge exists on the trial session, we need to update related work items and deadlines for newly calendared cases.
+    // TODO: This should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference dwCase.
+    if (!isEmpty(caseEntitiesToCalendar)) {
+      // We could fetch all case deadlines and all work items, set the judge fields, validate, and then upsert instead.
+      updatesToPersist.push(updateDeadlinesForCasesToCalendar());
+      updatesToPersist.push(updateWorkItemsForCasesToCalendar());
+    }
+
+    async function updateDeadlinesForCasesToCalendar() {
+      if (!(trialSessionEntity.judge && trialSessionEntity.judge.name)) {
+        return;
+      }
+      const values: Pick<
+        CaseDeadline,
+        'associatedJudge' | 'associatedJudgeId'
+      > = {
+        associatedJudge: trialSessionEntity.judge?.name,
+        associatedJudgeId: trialSessionEntity.judge?.userId ?? null,
+      };
+      await pgUpdateTable({
+        table: 'dwCaseDeadline',
+        values,
+        where: db =>
+          db.where(
+            'docketNumber',
+            'in',
+            caseEntitiesToCalendar.map(c => c.docketNumber),
+          ),
+      });
+    }
+
+    async function updateWorkItemsForCasesToCalendar() {
+      const values: Partial<WorkItemKysely> = { highPriority: true };
+      if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
+        values.associatedJudge = trialSessionEntity.judge?.name;
+        values.associatedJudgeId = trialSessionEntity.judge?.userId ?? null;
+      }
+      await pgUpdateTable({
+        table: 'dwWorkItem',
+        values,
+        where: db =>
+          db.where(
+            'docketNumber',
+            'in',
+            caseEntitiesToCalendar.map(c => c.docketNumber),
+          ),
+      });
+    }
+
+    // Persist all case updates
+    await settlePromises(updatesToPersist);
+
+    // Persist the update to the trial session itself
     await applicationContext.getPersistenceGateway().updateTrialSession({
       applicationContext,
       trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
@@ -222,6 +247,11 @@ export const setTrialSessionCalendarInteractor = async (
         message: `Error setting trial session calendar: ${error?.message}`,
       },
       userId: authorizedUser?.userId || '',
+    });
+  } finally {
+    await removeLock({
+      applicationContext,
+      identifiers: docketNumbersToLock.map(item => `case|${item}`),
     });
   }
 };
