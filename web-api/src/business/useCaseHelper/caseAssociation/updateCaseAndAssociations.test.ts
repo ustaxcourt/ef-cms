@@ -2,18 +2,16 @@ import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-jest.mock('@shared/business/entities/Message.ts');
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
 jest.mock('@web-api/persistence/postgres/messages/updateMessage');
 import { Case } from '@shared/business/entities/cases/Case';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { DOCKET_NUMBER_SUFFIXES } from '@shared/business/entities/EntityConstants';
+import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
-import { Message } from '@shared/business/entities/Message';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '@shared/test/mockUsers';
@@ -28,6 +26,7 @@ import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persist
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { MOCK_MESSAGE } from '@shared/test/mockMessage';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCase = jest.mocked(updateCaseMock);
@@ -78,10 +77,6 @@ describe('updateCaseAndAssociations', () => {
     (CaseDeadline.validateRawCollection as jest.Mock).mockReturnValue([
       { some: 'deadline' },
     ]);
-    (Message.validateRawCollection as jest.Mock).mockImplementation(
-      collection => collection,
-    );
-
     getCaseByDocketNumber.mockResolvedValue(validMockCase);
     updateCase.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
@@ -662,7 +657,7 @@ describe('updateCaseAndAssociations', () => {
 
   describe('user case messages', () => {
     beforeAll(() => {
-      const mockMessages = [{ messageId: 'abc' }];
+      const mockMessages = [MOCK_MESSAGE];
       updateMessage.mockResolvedValue(true);
       getMessagesByDocketNumber.mockResolvedValue(mockMessages);
     });
@@ -677,21 +672,16 @@ describe('updateCaseAndAssociations', () => {
     });
 
     it('gets messages and throws validation errors if updates are not valid', async () => {
-      const mockValidatorRejects = () => {
-        throw new Error('Message entity was invalid mock-implementation');
-      };
-      (Message.validateRawCollection as jest.Mock).mockImplementationOnce(
-        mockValidatorRejects,
-      );
+      getMessagesByDocketNumber.mockResolvedValue([
+        { isValidMessage: 'Nope!' },
+      ]);
       await expect(
         updateCaseAndAssociations({
           applicationContext,
           authorizedUser: mockDocketClerkUser,
           caseToUpdate: {
             ...validMockCase,
-            caseCaption: 'Some other caption',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-            status: 'Submitted',
+            caseType: CASE_TYPES_MAP.whistleblower, // This will change the docketNumberSuffix
           },
         }),
       ).rejects.toThrow('entity was invalid');
@@ -700,18 +690,17 @@ describe('updateCaseAndAssociations', () => {
     });
 
     it('gets messages and persists them if valid', async () => {
-      await expect(
-        updateCaseAndAssociations({
-          applicationContext,
-          authorizedUser: mockDocketClerkUser,
-          caseToUpdate: {
-            ...validMockCase,
-            caseCaption: 'Some other caption',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-            status: 'Submitted',
-          },
-        }),
-      ).resolves.not.toThrow();
+      getCaseByDocketNumber.mockResolvedValue({ ...MOCK_CASE });
+      getMessagesByDocketNumber.mockResolvedValue([MOCK_MESSAGE]);
+
+      await updateCaseAndAssociations({
+        applicationContext,
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate: {
+          ...MOCK_CASE,
+          caseType: CASE_TYPES_MAP.whistleblower, // This will change the docketNumberSuffix
+        },
+      });
       expect(getMessagesByDocketNumberMock).toHaveBeenCalled();
       expect(updateMessage).toHaveBeenCalled();
     });
