@@ -12,9 +12,8 @@ const route53Client = new Route53Client({
   region: 'us-east-1',
 });
 
-// I think these should be defined, double check
 const { ZONE_NAME } = process.env;
-const RECORD_NAME = ''; // TODO: Fully qualified domain name with trailing dot
+const RECORD_NAMES = []; // TODO: Fully qualified domain name(s) with trailing dot
 
 const deleteLatencyRecords = async (): Promise<void> => {
   try {
@@ -35,7 +34,7 @@ const deleteLatencyRecords = async (): Promise<void> => {
 
     const latencyRecords = data.ResourceRecordSets.filter(
       (record: ResourceRecordSet) =>
-        record.Name === RECORD_NAME &&
+        RECORD_NAMES.includes(record.Name) &&
         record.Type === 'A' &&
         record.SetIdentifier,
     );
