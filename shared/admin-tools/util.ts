@@ -2,6 +2,7 @@ import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provid
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import readline from 'readline';
+import { getSSMItem } from 'shared/admin-tools/aws/ssmHelper';
 
 const { ENV } = process.env;
 const UserPoolCache: Record<string, string> = {};
@@ -38,19 +39,10 @@ export const getDestinationTableInfo = async (): Promise<{
 }> => {
   requireEnvVars(['ENV']);
 
-  const dynamodbClient = new DynamoDBClient({ region: 'us-east-1' });
-  const documentClient = DynamoDBDocument.from(dynamodbClient, {
-    marshallOptions: { removeUndefinedValues: true },
-  });
-  const result = await documentClient.get({
-    Key: {
-      pk: 'destination-table-version',
-      sk: 'destination-table-version',
-    },
-    TableName: `efcms-deploy-${ENV}`,
-  });
+  const version = (await getSSMItem('destination-table-version')) as
+    | 'alpha'
+    | 'beta';
 
-  const version = result?.Item?.current;
   if (version) {
     return { tableName: `efcms-${ENV}-${version}`, version };
   } else {
