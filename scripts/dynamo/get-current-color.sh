@@ -15,7 +15,7 @@
 
 ENV=$1
 
-CURRENT_COLOR=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
+CURRENT_COLOR=$(aws ssm get-parameter --region us-east-1 --name "/efcms-deploy/${ENV}/current-color" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 [ -z "$CURRENT_COLOR" ] && CURRENT_COLOR="green"
 
-echo $CURRENT_COLOR
+echo "$CURRENT_COLOR"

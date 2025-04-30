@@ -45,7 +45,7 @@ npx ts-node --transpile-only ./web-api/switch-health-check-domain.ts
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_${ENV}_${CURRENT_COLOR}" -k DISABLE_HTTP_TRAFFIC -v true
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_public_${ENV}_${CURRENT_COLOR}" -k DISABLE_HTTP_TRAFFIC -v true
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"'"${DEPLOYING_COLOR}"'"}}'
+aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/current-color" --value "${DEPLOYING_COLOR}" --type "String" --overwrite
 
 # check if both streams are disabled
 UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${CURRENT_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")
