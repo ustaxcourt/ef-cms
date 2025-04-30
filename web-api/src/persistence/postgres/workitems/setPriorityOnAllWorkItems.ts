@@ -1,15 +1,15 @@
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 
 export const setPriorityOnAllWorkItems = async ({
-  docketNumber,
+  docketNumbers,
   highPriority,
 }: {
-  docketNumber: string;
+  docketNumbers: string[];
   highPriority: boolean;
 }) => {
   await pgUpdateTable({
     table: 'dwWorkItem',
     values: { highPriority },
-    where: cb => cb.where('docketNumber', '=', docketNumber),
+    where: cb => cb.where('docketNumber', 'in', docketNumbers),
   });
 };
