@@ -1,11 +1,7 @@
-/**
- * getMaintenanceModeInteractor
- *
- * @param {object} applicationContext the application context
- * @returns {boolean} the value of maintenance mode
- */
+import { ServerApplicationContext } from '@web-api/applicationContext';
+
 export const getMaintenanceModeInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
 ) => {
   const start = Date.now();
   applicationContext.logger.info('Start getMaintenanceModeInteractor');
@@ -15,5 +11,5 @@ export const getMaintenanceModeInteractor = async (
   applicationContext.logger.info(
     `End getMaintenanceModeInteractor. Time: ${Date.now() - start}ms`,
   );
-  return !!(result && result.current);
+  return result && result === 'true';
 };

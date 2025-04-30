@@ -1,4 +1,5 @@
-import { updateToDeployTable } from '../../dynamodbClientService';
+import { updateSsmParameter } from '@web-api/persistence/ssmClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * updateMaintenanceMode
@@ -12,20 +13,11 @@ export const updateMaintenanceMode = ({
   applicationContext,
   maintenanceMode,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   maintenanceMode: boolean;
 }) =>
-  updateToDeployTable({
-    ExpressionAttributeNames: {
-      '#current': 'current',
-    },
-    ExpressionAttributeValues: {
-      ':maintenanceMode': maintenanceMode,
-    },
-    Key: {
-      pk: 'maintenance-mode',
-      sk: 'maintenance-mode',
-    },
-    UpdateExpression: 'SET #current = :maintenanceMode',
+  updateSsmParameter({
     applicationContext,
+    parameterName: 'maintenance-mode',
+    value: maintenanceMode.toString(),
   });

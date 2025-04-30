@@ -1,21 +1,12 @@
-import { getFromDeployTable } from '../../dynamodbClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getSsmParameter } from '@web-api/persistence/ssmClientService';
 
-/**
- * getMaintenanceMode
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @returns {Promise<string>} the value of the maintenance-mode flag on the dynamodb deploy table
- */
 export const getMaintenanceMode = ({
   applicationContext,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
 }) =>
-  getFromDeployTable({
-    Key: {
-      pk: 'maintenance-mode',
-      sk: 'maintenance-mode',
-    },
+  getSsmParameter({
     applicationContext,
+    parameterName: 'maintenance-mode',
   });
