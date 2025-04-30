@@ -3,9 +3,13 @@
 ENV=$1
 
 MIGRATE_FLAG=$(../../../../scripts/migration/get-migrate-flag.sh "${ENV}")
-DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
 
 export MIGRATE_FLAG
+
+# temporary-remove after both blue and green records have been destroyed
+DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
+echo "Running latency record deletion script"
+npx ts-node --transpile-only ./delete-route53-latency-records.ts
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 if [ -z "${SECRETS_LOADED}" ]; then
@@ -119,10 +123,6 @@ if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then
   export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
 fi
-
-# temporary-remove after both blue and green records have been destroyed
-echo "Running latency record deletion script"
-npx ts-node --transpile-only ./delete-route53-latency-records.ts
 
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 
