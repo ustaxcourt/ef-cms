@@ -12,8 +12,15 @@ const route53Client = new Route53Client({
   region: 'us-east-1',
 });
 
-const { ZONE_NAME } = process.env;
-const RECORD_NAMES = []; // TODO: Fully qualified domain name(s) with trailing dot
+const { ZONE_NAME, DEPLOYING_COLOR, ENV } = process.env;
+
+const RECORD_NAMES = [
+  `api.${ENV}.${ZONE_NAME}.`,
+  `public-api.${ENV}.${ZONE_NAME}.`,
+  `api-${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}.`,
+  `public-api-${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}.`,
+  `ws-${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}.`,
+];
 
 const deleteLatencyRecords = async (): Promise<void> => {
   try {
@@ -21,10 +28,11 @@ const deleteLatencyRecords = async (): Promise<void> => {
       new ListHostedZonesByNameCommand({ DNSName: `${ZONE_NAME}.` }),
     );
 
-    // double check this, too
     const listCommand = new ListResourceRecordSetsCommand({
-      HostedZoneId: zone.HostedZones[0].Id,
+      HostedZoneId: zone.HostedZones![0].Id,
+      MaxItems: 1000,
     });
+
     const data = await route53Client.send(listCommand);
 
     if (!data.ResourceRecordSets) {
@@ -34,7 +42,7 @@ const deleteLatencyRecords = async (): Promise<void> => {
 
     const latencyRecords = data.ResourceRecordSets.filter(
       (record: ResourceRecordSet) =>
-        RECORD_NAMES.includes(record.Name) &&
+        RECORD_NAMES.includes(record.Name!) &&
         record.Type === 'A' &&
         record.SetIdentifier,
     );
@@ -44,7 +52,10 @@ const deleteLatencyRecords = async (): Promise<void> => {
       return;
     }
 
-    console.log(`Found ${latencyRecords.length} latency record(s) to delete.`);
+    console.log(
+      `Found ${latencyRecords.length} latency record(s) to delete.`,
+      latencyRecords,
+    );
 
     const changes = latencyRecords.map(record => ({
       Action: 'DELETE' as ChangeAction,
@@ -52,7 +63,7 @@ const deleteLatencyRecords = async (): Promise<void> => {
     }));
 
     const changeCommand = new ChangeResourceRecordSetsCommand({
-      HostedZoneId: zone.HostedZones[0].Id,
+      HostedZoneId: zone.HostedZones![0].Id,
       ChangeBatch: {
         Changes: changes,
         Comment: 'Deleting latency-based Route53 records',
