@@ -130,4 +130,22 @@ describe('documentViewerLinksHelper', () => {
       `/case-detail/${mockDocketNumber}/edit-order/${mockDocketEntryId}/sign`,
     );
   });
+
+  it('should return orderResponseFromCaseDetailsLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerLinksHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [{ docketEntryId: mockDocketEntryId }],
+          docketNumber: mockDocketNumber,
+        },
+        viewerDocumentToDisplay: {
+          docketEntryId: mockDocketEntryId,
+        },
+      },
+    });
+  
+    expect(result.orderResponseFromCaseDetailsLink).toEqual(
+      `/case-detail/${mockDocketNumber}/documents/${mockDocketEntryId}/motion-order-response`,
+    );
+  });
 });
