@@ -47,10 +47,9 @@ export const dataSecurityFilter = (
 };
 
 export const checkMaintenanceMode = async () => {
-  const maintenanceParameter = await getMaintenanceMode({ applicationContext });
+  const maintenanceRecord = await getMaintenanceMode({ applicationContext });
 
-  const maintenanceMode =
-    maintenanceParameter && maintenanceParameter === 'true';
+  const maintenanceMode = !!(maintenanceRecord && maintenanceRecord.current);
 
   if (maintenanceMode) {
     throw new Error('Maintenance mode is enabled');

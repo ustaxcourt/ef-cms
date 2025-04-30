@@ -60,7 +60,6 @@ import pug from 'pug';
 import sass from 'sass';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
-import { getSsmClient } from '@web-api/persistence/dynamo/getSsmClient';
 let sqsCache: SQSClient;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -194,7 +193,6 @@ export const createApplicationContext = (appContextUser = {}) => {
     },
     getSearchClient,
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
-    getSsmClient,
     getStorageClient,
     getUniqueId,
     getUseCaseHelpers,

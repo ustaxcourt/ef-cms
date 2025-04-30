@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# creates the entry for maintenance mode flag in the systems manager
+# creates the entry for maintenance mode flag in the dynamo deploy table
 
 # Usage
 #   ENV=dev ./setup-maintenance-mode-flag.sh
@@ -10,4 +10,22 @@
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
 
-aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/maintenance-mode" --value "false" --type "String" --overwrite
+ITEM=$(cat <<-END
+{
+    "pk": {
+        "S": "maintenance-mode"
+    },
+    "sk":{
+        "S": "maintenance-mode"
+    },
+    "current": {
+        "BOOL": false
+    }
+}
+END
+)
+
+aws dynamodb put-item \
+    --region us-east-1 \
+    --table-name "efcms-deploy-${ENV}" \
+    --item "${ITEM}"
