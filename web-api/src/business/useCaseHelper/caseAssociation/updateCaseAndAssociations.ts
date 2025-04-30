@@ -85,8 +85,6 @@ const updateCaseMessages = async ({
   oldCase,
 }) => {
   const messageUpdatesNecessary =
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix;
 
   if (!messageUpdatesNecessary) {
