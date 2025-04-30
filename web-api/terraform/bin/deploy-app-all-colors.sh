@@ -122,7 +122,7 @@ fi
 DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 echo "Running latency record deletion script"
-npx ts-node --transpile-only delete-route53-latency-records.ts
+npx ts-node --transpile-only ../../bin/delete-route53-latency-records.ts
 
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 
