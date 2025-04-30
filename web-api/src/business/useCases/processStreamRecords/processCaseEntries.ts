@@ -5,6 +5,7 @@ import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/ups
 import { Statistic } from '@shared/business/entities/Statistic';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const processCaseEntries = async ({
   caseEntityRecords,
@@ -13,43 +14,49 @@ export const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
-  const casesToUpsert: Record<string, any> = {};
+  try {
+    const casesToUpsert: Record<string, any> = {};
 
-  for (const caseRecord of caseEntityRecords) {
-    const caseNewImage = unmarshall(caseRecord.dynamodb.NewImage);
+    for (const caseRecord of caseEntityRecords) {
+      const caseNewImage = unmarshall(caseRecord.dynamodb.NewImage);
 
-    // Only upsert the most recent update of any duplicate case record since otherwise Postgres will throw an error.
-    casesToUpsert[caseNewImage.docketNumber] = caseNewImage;
-  }
+      // Only upsert the most recent update of any duplicate case record since otherwise Postgres will throw an error.
+      casesToUpsert[caseNewImage.docketNumber] = caseNewImage;
+    }
 
-  await upsertCases(Object.values(casesToUpsert));
-  const postgresUpserts: Promise<void>[] = [];
-  for (const caseRecord of Object.values(casesToUpsert)) {
-    caseRecord.petitioners?.forEach(p => {
-      p.hasConsentedToElectronicService = p?.hasConsentedToEService;
-      p.hasElectronicAccess = p?.hasEAccess;
-    });
-    postgresUpserts.push(
-      upsertPetitionersOnCase({
-        docketNumber: caseRecord.docketNumber,
-        petitionerCase: caseRecord,
-      }),
-    );
-    postgresUpserts.push(
-      upsertCaseStatusUpdates({
-        docketNumber: caseRecord.docketNumber,
-        statusUpdates: caseRecord.caseStatusHistory || [],
-      }),
-    );
-    if (caseRecord.statistics) {
+    await upsertCases(Object.values(casesToUpsert));
+    const postgresUpserts: Promise<void>[] = [];
+    for (const caseRecord of Object.values(casesToUpsert)) {
+      caseRecord.petitioners?.forEach(p => {
+        p.hasConsentedToElectronicService = p?.hasConsentedToEService;
+        p.hasElectronicAccess = p?.hasEAccess;
+      });
       postgresUpserts.push(
-        upsertCaseStatistics({
+        upsertPetitionersOnCase({
           docketNumber: caseRecord.docketNumber,
-          statistics: caseRecord.statistics.map(s => new Statistic(s)),
+          petitionerCase: caseRecord,
         }),
       );
+      postgresUpserts.push(
+        upsertCaseStatusUpdates({
+          docketNumber: caseRecord.docketNumber,
+          statusUpdates: caseRecord.caseStatusHistory || [],
+        }),
+      );
+      if (caseRecord.statistics) {
+        postgresUpserts.push(
+          upsertCaseStatistics({
+            docketNumber: caseRecord.docketNumber,
+            statistics: caseRecord.statistics.map(s => new Statistic(s)),
+          }),
+        );
+      }
     }
-  }
 
-  await settlePromises(postgresUpserts);
+    await settlePromises(postgresUpserts);
+  } catch (e) {
+    getLogger().error(
+      `Postgres re-indexing failure: Failed to process case record: ${e}`,
+    );
+  }
 };
