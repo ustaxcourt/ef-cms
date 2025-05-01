@@ -29,7 +29,7 @@ export const responseChunkTableDefinition = {
   userId: DEFAULT as string,
 };
 
-// Define types for the response_chunks table
+// Define types for the ResponseChunk table
 export type ResponseChunkRecord = typeof responseChunkTableDefinition;
 export type SelectableResponseChunkRecord = Selectable<ResponseChunkRecord>;
 export type InsertableResponseChunkRecord = Insertable<ResponseChunkRecord>;
