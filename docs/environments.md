@@ -129,7 +129,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 
 11. Setup the environment's migrate flag:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'
+    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migrate" --value "true" --type "String" --overwrite
     ```
 
 12. Setup the environment's current color:

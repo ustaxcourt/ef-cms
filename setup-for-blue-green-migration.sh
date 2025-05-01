@@ -29,7 +29,7 @@ if [[ "$SKIP_MIGRATION" == "1" ]] && [[ "$FORCE_MIGRATION" != "--force" ]]; then
 fi
 
 echo "setting migrate flag to true"
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"migrate"},"sk":{"S":"migrate"},"current":{"BOOL":true}}'
+aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migrate" --value "true" --type "String" --overwrite
 
 echo "setting migration-queue-empty flag to false"
 aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migration-queue-empty" --value "false" --type "String" --overwrite
