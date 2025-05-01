@@ -1,9 +1,8 @@
 import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
-  // Create requests table
   await db.schema
-    .createTable('requests')
+    .createTable('dwRequest')
     .addColumn('id', 'serial', col => col.primaryKey())
     .addColumn('requestId', 'text', col => col.notNull())
     .addColumn('userId', 'text', col => col.notNull())
@@ -12,9 +11,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('createdAt', 'timestamptz', col => col.notNull())
     .execute();
 
-  // Create response_chunks table
   await db.schema
-    .createTable('response_chunks')
+    .createTable('dwResponseChunk')
     .addColumn('id', 'serial', col => col.primaryKey())
     .addColumn('userId', 'text', col => col.notNull())
     .addColumn('requestId', 'text', col => col.notNull())
@@ -26,23 +24,22 @@ export async function up(db: Kysely<any>): Promise<void> {
     )
     .execute();
 
-  // Add indexes for efficient queries
   await db.schema
-    .createIndex('idx_requests_user_request')
-    .on('requests')
+    .createIndex('idxRequestUserRequest')
+    .on('dwRequest')
     .columns(['userId', 'requestId'])
     .unique()
     .execute();
 
   await db.schema
-    .createIndex('idx_response_chunks_user_request')
-    .on('response_chunks')
+    .createIndex('idxResponseChunkUserRequest')
+    .on('dwResponseChunk')
     .columns(['userId', 'requestId'])
     .execute();
 
   await db.schema
-    .createIndex('idx_response_chunks_unique')
-    .on('response_chunks')
+    .createIndex('idxResponseChunkUnique')
+    .on('dwResponseChunk')
     .columns(['userId', 'requestId', 'index'])
     .unique()
     .execute();
@@ -52,6 +49,6 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await db.schema.dropTable('response_chunks').execute();
-  await db.schema.dropTable('requests').execute();
+  await db.schema.dropTable('dwResponseChunk').execute();
+  await db.schema.dropTable('dwRequest').execute();
 }
