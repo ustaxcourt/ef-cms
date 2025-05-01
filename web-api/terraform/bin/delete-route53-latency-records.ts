@@ -44,7 +44,9 @@ const deleteLatencyRecords = async (): Promise<void> => {
       (record: ResourceRecordSet) =>
         RECORD_NAMES.includes(record.Name!) &&
         record.Type === 'A' &&
-        record.SetIdentifier,
+        record.SetIdentifier &&
+        !record.Weight &&
+        record.Region,
     );
 
     if (latencyRecords.length === 0) {
