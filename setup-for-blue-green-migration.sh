@@ -34,7 +34,7 @@ aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migrate" --value
 echo "setting migration-queue-empty flag to false"
 aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migration-queue-empty" --value "false" --type "String" --overwrite
 
-SOURCE_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"}}' | jq -r ".Item.current.S")
+SOURCE_TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/efcms-deploy/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 echo "source table is currently ${SOURCE_TABLE_VERSION}"
 
 if [[ "$SOURCE_TABLE_VERSION" == "beta" ]]; then

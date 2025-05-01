@@ -140,13 +140,8 @@ const SSM_Parameter = "/DAWSON/${ENV}/current-color"
 
 #### source-table-version
 we use this to keep track of which table is the migration going to read records from:
-
 ```javascript
-{
-  "current": "alpha",
-  "pk": "source-table-version",
-  "sk": "source-table-version"
-}
+const SSM_Parameter = "source-table-version"
 ```
 
 #### destination-table-version

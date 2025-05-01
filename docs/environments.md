@@ -143,7 +143,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     ```
 14. Setup the environment's source table version:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
+    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --value "alpha" --type "String" --overwrite
     ```
 
 15. Setup the environment's destination table version:

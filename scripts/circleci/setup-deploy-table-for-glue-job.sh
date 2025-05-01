@@ -10,7 +10,7 @@ echo "setting migrate flag to false"
 aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/migrate" --value "false" --type "String" --overwrite
 
 echo "setting source-table-version to alpha"
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"},"current":{"S":"alpha"}}'
+aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --value "alpha" --type "String" --overwrite
 
 echo "setting destination-table-version to alpha"
 aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/destination-table-version" --value "alpha" --type "String" --overwrite
