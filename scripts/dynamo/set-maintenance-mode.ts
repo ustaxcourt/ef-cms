@@ -1,13 +1,13 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
+import { getSSMItem } from 'shared/admin-tools/aws/ssmHelper';
 
+//TODO - TEST AGAINST EXP3
 const scriptConfig: ScriptConfig = {
   description: 'set-maintenance-mode - Toggles Maintenance Mode',
   environment: { env: 'ENV' },
@@ -27,18 +27,7 @@ const { env, toggle } = parseArgsAndEnvVars(scriptConfig) as {
 const enableMaintenanceMode: boolean = toggle === 'true';
 
 async function setMaintenanceMode() {
-  const dynamoClient = new DynamoDBClient({
-    region: 'us-east-1',
-  });
-  const documentClient = DynamoDBDocument.from(dynamoClient, {
-    marshallOptions: { removeUndefinedValues: true },
-  });
-  const currentColorRecord = await documentClient.get({
-    Key: { pk: 'current-color', sk: 'current-color' },
-    TableName: `efcms-deploy-${env}`,
-  });
-  const activeColor: 'blue' | 'green' | undefined =
-    currentColorRecord?.Item?.current;
+  const activeColor = await getSSMItem('current-color');
 
   if (!activeColor) {
     throw new Error('Could not determine the active color');

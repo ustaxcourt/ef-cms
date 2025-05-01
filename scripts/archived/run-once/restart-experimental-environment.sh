@@ -10,11 +10,8 @@ export SECRETS_LOADED=true
 
 # Setting up calculated environment variables
 DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
-## we use the current-color from dynamo but name the variable DEPLOYING_COLOR since it's needed in the import judge script
-DEPLOYING_COLOR=$(aws dynamodb get-item \
- --region us-east-1 \
- --table-name "efcms-deploy-${ENV}" \
- --key '{"pk":{"S":"current-color"},"sk":{"S":"current-color"}}' | jq -r ".Item.current.S")
+## we use the current-color from SSM Parameter Store but name the variable DEPLOYING_COLOR since it's needed in the import judge script
+DEPLOYING_COLOR=$(aws ssm get-parameter --region us-east-1 --name "/efcms-deploy/${ENV}/current-color" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 export DESTINATION_TABLE
 export DEPLOYING_COLOR
 

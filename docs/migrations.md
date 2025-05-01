@@ -139,11 +139,7 @@ Additionally, during our deployment process, there are a couple of other records
 We use this to keep track of which color the environment is currently on:
 
 ```javascript
-{
-  "current": "blue",
-  "pk": "current-color",
-  "sk": "current-color"
-}
+const SSM_Parameter = "/DAWSON/${ENV}/current-color"
 ```
 
 #### source-table-version

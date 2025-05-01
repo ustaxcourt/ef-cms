@@ -233,6 +233,16 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:*"
             ],
             "Effect": "Allow"
+        },
+        {
+            "Action": [
+            "ssm:GetParameter",
+            "ssm:PutParameter"
+            ],
+            "Resource": [
+            "arn:aws:ssm:us-east-1:${data.aws_caller_identity.current.account_id}:parameter/DAWSON/${var.environment}/*"
+            ],
+            "Effect": "Allow"
         }
     ]
 }

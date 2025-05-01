@@ -1,13 +1,9 @@
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getFromDeployTable } from '../../dynamodbClientService';
+import { getSsmParameter } from '@web-api/persistence/ssm/ssmClientService';
 import { isCurrentColorActive } from './isCurrentColorActive';
 
-jest.mock('../../dynamodbClientService', () => ({
-  getFromDeployTable: jest.fn().mockReturnValue({
-    current: 'blue',
-    pk: 'current-color',
-    sk: 'current-color',
-  }),
+jest.mock('@web-api/persistence/ssm/ssmClientService', () => ({
+  getSsmParameter: jest.fn().mockReturnValue('blue'),
 }));
 
 describe('isCurrentColorActive', () => {
@@ -23,14 +19,13 @@ describe('isCurrentColorActive', () => {
 
   it('checks where the current color in the deploy table matches the current color of the environment', async () => {
     process.env.CURRENT_COLOR = 'blue';
-    const val = await isCurrentColorActive(applicationContext);
+    const RESULTS = await isCurrentColorActive(applicationContext);
 
-    expect((getFromDeployTable as jest.Mock).mock.calls[0][0]).toMatchObject({
-      Key: {
-        pk: 'current-color',
-        sk: 'current-color',
-      },
+    const getSsmParameterCalls = (getSsmParameter as jest.Mock).mock.calls;
+    expect(getSsmParameterCalls.length).toEqual(1);
+    expect(getSsmParameterCalls[0][0]).toMatchObject({
+      parameterName: 'current-color',
     });
-    expect(val).toEqual(true);
+    expect(RESULTS).toEqual(true);
   });
 });

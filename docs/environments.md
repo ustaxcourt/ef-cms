@@ -134,7 +134,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
 
 12. Setup the environment's current color:
     ```bash
-    aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"blue"}}'
+    aws ssm put-parameter --region us-east-1 --name "/DAWSON/${ENV}/current-color" --value "blue" --type "String" --overwrite
     ```
 
 13. Setup all database configuration flags:
