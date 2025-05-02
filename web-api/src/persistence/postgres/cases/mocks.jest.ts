@@ -115,11 +115,6 @@ jest.mock(
   () => mockFactory('getCaseInventoryReport', { foundCases: [], total: 0 }),
 );
 
-jest.mock(
-  '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal',
-  () => mockFactory('getCasesByEmailTotal'),
-);
-
 jest.mock('@web-api/persistence/postgres/cases/reports/getCasesByFilters', () =>
   mockFactory('getCasesByFilters'),
 );
