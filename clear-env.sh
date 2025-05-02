@@ -60,10 +60,10 @@ export REGION=us-east-1
 ( ! command -v aws > /dev/null ) && echo "aws was not found on your path. Please install aws." && exit 1
 
 if [ -n "${DEPLOYING}" ]; then
-  DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
+  DEPLOYING_COLOR=$(./scripts/ssm/get-deploying-color.sh "${ENV}")
 else
-  # we use the current-color from dynamo but name the variable DEPLOYING_COLOR since it's needed in the import judge script
-  DEPLOYING_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
+  # we use the current-color from ssm but name the variable DEPLOYING_COLOR since it's needed in the import judge script
+  DEPLOYING_COLOR=$(./scripts/ssm/get-current-color.sh "${ENV}")
 fi
 
 SOURCE_TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)

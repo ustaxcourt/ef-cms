@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Returns the next color to deploy (blue or green) for the environment
+# Returns the current color that is deployed (blue or green) for the environment
 
 # Usage
-#   ./get-deploying-color.sh dev
+#   ./get-current-color.sh dev
 
 # Arguments
 #   - $1 - the environment to check
@@ -17,8 +17,4 @@ ENV=$1
 CURRENT_COLOR=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/current-color" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 [ -z "$CURRENT_COLOR" ] && CURRENT_COLOR="green"
 
-if  [[ $CURRENT_COLOR == "green" ]] ; then
-  echo "blue"
-else
-  echo "green"
-fi
+echo "$CURRENT_COLOR"

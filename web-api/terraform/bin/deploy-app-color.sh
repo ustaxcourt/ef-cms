@@ -2,7 +2,7 @@
 
 ENV=$1
 
-DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
+DEPLOYING_COLOR=$(../../../../scripts/ssm/get-deploying-color.sh "${ENV}")
 MIGRATE_FLAG=$(../../../../scripts/migration/get-migrate-flag.sh "${ENV}")
 
 export DEPLOYING_COLOR
@@ -81,20 +81,20 @@ if [ -z "${CIRCLE_BRANCH}" ]; then # Build lambda layer for generating pdfs.
 fi
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-  GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+  BLUE_TABLE_NAME=$(../../../../scripts/ssm/get-destination-table.sh "${ENV}")
+  GREEN_TABLE_NAME=$(../../../../scripts/ssm/get-destination-table.sh "${ENV}")
   DESTINATION_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
   BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
   GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    BLUE_TABLE_NAME=$(../../../../scripts/ssm/get-destination-table.sh "${ENV}")
+    GREEN_TABLE_NAME=$(../../../../scripts/ssm/get-source-table.sh "${ENV}")
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
     GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
   else
-    GREEN_TABLE_NAME=$(../../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-    BLUE_TABLE_NAME=$(../../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    GREEN_TABLE_NAME=$(../../../../scripts/ssm/get-destination-table.sh "${ENV}")
+    BLUE_TABLE_NAME=$(../../../../scripts/ssm/get-source-table.sh "${ENV}")
     GREEN_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
     BLUE_ELASTICSEARCH_DOMAIN=$(../../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
   fi

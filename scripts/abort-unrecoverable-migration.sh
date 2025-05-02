@@ -12,8 +12,8 @@
   "EFCMS_DOMAIN" \
 
 MIGRATE_FLAG=$(./scripts/migration/get-migrate-flag.sh "$ENV")
-SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "$ENV")
-DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh "$ENV")
+SOURCE_TABLE=$(./scripts/ssm/get-source-table.sh "$ENV")
+DESTINATION_TABLE=$(./scripts/ssm/get-destination-table.sh "$ENV")
 export MIGRATE_FLAG="$MIGRATE_FLAG"
 export SOURCE_TABLE="$SOURCE_TABLE"
 export DESTINATION_TABLE="$DESTINATION_TABLE"

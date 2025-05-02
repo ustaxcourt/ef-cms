@@ -15,8 +15,8 @@
 EAST_BUCKET_NAME="${EFCMS_DOMAIN}.efcms.${ENV}.us-east-1.lambdas"
 WEST_BUCKET_NAME="${EFCMS_DOMAIN}.efcms.${ENV}.us-west-1.lambdas"
 
-DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
-CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
+DEPLOYING_COLOR=$(./scripts/ssm/get-deploying-color.sh "${ENV}")
+CURRENT_COLOR=$(./scripts/ssm/get-current-color.sh "${ENV}")
 
 aws s3 cp "s3://${EAST_BUCKET_NAME}/api_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/api_${CURRENT_COLOR}.js.zip"
 aws s3 cp "s3://${EAST_BUCKET_NAME}/api_public_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/api_public_${CURRENT_COLOR}.js.zip"

@@ -2,8 +2,8 @@
 
 REGION="${DEFAULT_REGION}"
 
-CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
-SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "${ENV}")
+CURRENT_COLOR=$(./scripts/ssm/get-current-color.sh "${ENV}")
+SOURCE_TABLE=$(./scripts/ssm/get-source-table.sh "${ENV}")
 SOURCE_TABLE_VERSION="${SOURCE_TABLE//efcms-${ENV}-/}"
 DB_HOST=$(./scripts/postgres/get-host.sh -h -w)
 
@@ -77,9 +77,9 @@ RUM_IDENTITY_POOL_ID=$(aws rum get-app-monitor \
 } >> .env
 
 if [[ "$DEPLOYING" -eq 1 ]]; then
-  DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "$ENV")
+  DEPLOYING_COLOR=$(./scripts/ssm/get-deploying-color.sh "$ENV")
   DESTINATION_ELASTICSEARCH=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "$ENV")
-  DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh "$ENV")
+  DESTINATION_TABLE=$(./scripts/ssm/get-destination-table.sh "$ENV")
   DESTINATION_TABLE_VERSION="${DESTINATION_TABLE//efcms-${ENV}-/}"
   MIGRATE_FLAG=$(./scripts/migration/get-migrate-flag.sh "$ENV")
   SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh "$ENV")

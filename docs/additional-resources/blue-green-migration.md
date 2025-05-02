@@ -34,9 +34,9 @@ The `east` table is main table. AWS will throw an error if you attempt to delete
 1. Identify the **destination table**. For example, if we're performing a deployment to `dev`:
 
     ```bash
-    $ ./scripts/dynamo/get-source-table.sh dev
+    $ ./scripts/ssm/get-source-table.sh dev
     efcms-dev-beta
-    $ ./scripts/dynamo/get-destination-table.sh dev
+    $ ./scripts/ssm/get-destination-table.sh dev
     efcms-dev-beta
     ```
 

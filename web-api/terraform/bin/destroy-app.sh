@@ -21,8 +21,8 @@ REGION=us-east-1
 
 rm -rf .terraform
 
-BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENVIRONMENT}")
-GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENVIRONMENT}")
+BLUE_TABLE_NAME=$(../../../scripts/ssm/get-destination-table.sh "${ENVIRONMENT}")
+GREEN_TABLE_NAME=$(../../../scripts/ssm/get-source-table.sh "${ENVIRONMENT}")
 BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENVIRONMENT}")
 GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENVIRONMENT}")
 
