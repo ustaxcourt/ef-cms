@@ -86,7 +86,14 @@ export const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
-export const ALLOWLIST_FEATURE_FLAGS = {
+type AllowlistFeatureFlage = {
+  [key: string]: {
+    key: string;
+    disabledMessage?: string;
+  };
+};
+
+export const ALLOWLIST_FEATURE_FLAGS: AllowlistFeatureFlage = {
   AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
     key: 'aws-batch-zipper-minimum-count',
   },

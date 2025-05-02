@@ -1,5 +1,5 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty } from 'lodash';
 
 const allFeatureFlags = {};
@@ -9,7 +9,7 @@ export const getAllFeatureFlagsInteractor = async (
   hardReload: boolean = false,
 ) => {
   const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
-    (flag: any) => flag.key,
+    flag => flag.key,
   );
 
   // we use ENV so that we emulate a fresh lambda invocation each time.
