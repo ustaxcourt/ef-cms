@@ -47,6 +47,11 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
+import {
+  RequestTable,
+  ResponseChunkTable,
+  DW_REQUEST_COLUMNS,
+} from '@web-api/persistence/postgres/polling/schema';
 
 const DEFAULT = {};
 
@@ -60,6 +65,8 @@ interface DatabaseSchemaType {
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwPetitionerOnCase: DatabaseTableMetadata<PetitionerOnCaseTable>;
+  dwRequest: DatabaseTableMetadata<RequestTable>;
+  dwResponseChunk: DatabaseTableMetadata<ResponseChunkTable>;
   dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
@@ -116,6 +123,14 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwPetitionerOnCase: {
     table: DEFAULT as PetitionerOnCaseTable,
     columns: DW_PETITIONERS_ON_CASE_COLUMNS,
+  },
+  dwRequest: {
+    table: DEFAULT as RequestTable,
+    columns: DW_REQUEST_COLUMNS,
+  },
+  dwResponseChunk: {
+    table: DEFAULT as ResponseChunkTable,
+    columns: DW_REQUEST_COLUMNS,
   },
   dwStatisticPenalty: {
     table: DEFAULT as StatisticPenaltyTable,
