@@ -14,7 +14,7 @@
 
 ENV=$1
 
-CURRENT_COLOR=$(aws ssm get-parameter --region us-east-1 --name "/efcms-deploy/${ENV}/current-color" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
+CURRENT_COLOR=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/current-color" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 [ -z "$CURRENT_COLOR" ] && CURRENT_COLOR="green"
 
 if  [[ $CURRENT_COLOR == "green" ]] ; then

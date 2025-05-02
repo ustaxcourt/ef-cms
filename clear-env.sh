@@ -66,7 +66,7 @@ else
   DEPLOYING_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
 fi
 
-SOURCE_TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/efcms-deploy/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
+SOURCE_TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 
 ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
   --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" \

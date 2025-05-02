@@ -15,7 +15,7 @@
 
 REGION="us-east-1"
 # look up current table version from SSM
-TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/efcms-deploy/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
+TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 
 # get judge name from dynamo table
 NEW_JUDGE_NAME=$(aws dynamodb get-item \

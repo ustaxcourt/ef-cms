@@ -14,7 +14,7 @@
 
 ENV=$1
 
-MIGRATE_FLAG=$(aws ssm get-parameter --region us-east-1 --name "/efcms-deploy/${ENV}/migrate" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
+MIGRATE_FLAG=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/migrate" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
 [ -z "$MIGRATE_FLAG" ] && MIGRATE_FLAG="false"
 
 echo "${MIGRATE_FLAG}"
