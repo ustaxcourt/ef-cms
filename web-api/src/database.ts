@@ -123,12 +123,6 @@ export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   });
 }
 
-function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
-  return getConnection({
-    cb,
-  });
-}
-
 // Prefer pgInsertInto, pgUpdateTable, pgDeleteFrom, etc.
 export async function getDbWriter<T>({
   cb,
@@ -138,10 +132,15 @@ export async function getDbWriter<T>({
   table: keyof Database | null;
 }): Promise<T> {
   if (!table || !DatabaseSchema[table].indexOpenSearchMessage) {
-    return await executeWriter(cb);
+    return await getConnection({
+      cb,
+    });
   }
 
-  const rawResult: T = await executeWriter(cb);
+  const rawResult: T = await getConnection({
+    cb,
+  });
+
   let result: any = rawResult;
   if (DatabaseSchema[table].transformOpenSearchMessage) {
     result = DatabaseSchema[table].transformOpenSearchMessage(rawResult);
