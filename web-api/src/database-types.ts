@@ -8,6 +8,7 @@ export interface Database {
   dwMessage: MessageTable;
   dwUserCaseNote: UserCaseNoteTable;
   dwWorkItem: WorkItemTable;
+  dwFeatureFlag: FeatureFlagTable;
 }
 
 export interface MessageTable {
@@ -118,6 +119,11 @@ export interface WorkItemTable {
   sentByUserId?: string;
   updatedAt: Date;
   workItemId: string;
+}
+
+export interface FeatureFlagTable {
+  name: string;
+  value: string;
 }
 
 export type WorkItemKysely = Selectable<WorkItemTable>;
