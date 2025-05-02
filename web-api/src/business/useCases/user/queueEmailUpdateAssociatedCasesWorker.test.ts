@@ -1,5 +1,3 @@
-import '@web-api/persistence/postgres/cases/mocks.jest';
-
 import {
   MAX_ITERATIONS,
   queueEmailUpdateAssociatedCasesWorker,
@@ -9,9 +7,6 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { petitionerUser } from '@shared/test/mockUsers';
 import { sleep } from '@shared/tools/helpers';
-import { getCasesByEmailTotal as getCasesByEmailTotalMock } from '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal';
-
-const getCasesByEmailTotal = getCasesByEmailTotalMock as jest.Mock;
 
 describe('queueEmailUpdateAssociatedCasesWorker', () => {
   let TEST_USER: RawUser;
@@ -29,12 +24,14 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
       .getUseCases()
       .queueUpdateAssociatedCasesWorker.mockReturnValue(null);
 
-    getCasesByEmailTotal.mockImplementation(
-      () =>
-        new Promise(resolve => {
-          RESOLVER = resolve;
-        }),
-    );
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByEmailTotal.mockImplementation(
+        () =>
+          new Promise(resolve => {
+            RESOLVER = resolve;
+          }),
+      );
 
     applicationContext.getUtilities().sleep.mockImplementation(() => {});
   });
@@ -69,7 +66,10 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
         .calls.length,
     ).toEqual(expectedCount + 1);
 
-    expect(getCasesByEmailTotal.mock.calls.length).toEqual(expectedCount);
+    expect(
+      applicationContext.getPersistenceGateway().getCasesByEmailTotal.mock.calls
+        .length,
+    ).toEqual(expectedCount);
   }
 
   it('should call "queueUpdateAssociatedCasesWorker" with user information and wait until all expected cases to update', async () => {
@@ -123,7 +123,9 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
   });
 
   it('should call resolve the interactor when the max number of iterations is met', async () => {
-    getCasesByEmailTotal.mockResolvedValue({});
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByEmailTotal.mockImplementation(() => {});
 
     const TEST_DOCKER_NUMBERS = ['TEST_1', 'TEST_2', 'TEST_3', 'TEST_4'];
     let COMPLETE_FLAG = false;
@@ -142,15 +144,19 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
     await sleep(100);
     expect(COMPLETE_FLAG).toEqual(true);
 
-    const getCasesByEmailTotalCalls = getCasesByEmailTotal.mock.calls;
+    const getCasesByEmailTotalCalls =
+      applicationContext.getPersistenceGateway().getCasesByEmailTotal.mock
+        .calls;
 
     expect(getCasesByEmailTotalCalls.length).toEqual(MAX_ITERATIONS + 1);
   });
 
   it('should resolve the interactor when the there is an error thrown in the check method', async () => {
-    getCasesByEmailTotal.mockImplementation(() => {
-      throw Error('TEST ERROR');
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByEmailTotal.mockImplementation(() => {
+        throw Error('TEST ERROR');
+      });
 
     const TEST_DOCKER_NUMBERS = ['TEST_1', 'TEST_2', 'TEST_3', 'TEST_4'];
     applicationContext
