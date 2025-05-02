@@ -5,19 +5,26 @@ import {
   PostgresDialect,
 } from 'kysely';
 import { Database } from './database-schema';
-import { Pool } from 'pg';
+import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
 
-const POOL = {
-  ...environment.rds.pool,
-  ssl: environment.rds.useGlobalCert
-    ? {
-        ca: fs.readFileSync('global-bundle.pem').toString(),
-      }
-    : undefined,
-};
+let pool: PoolConfig;
+
+function getPool(): PoolConfig {
+  if (!pool) {
+    pool = {
+      ...environment.rds.pool,
+      ssl: environment.rds.useGlobalCert
+        ? {
+            ca: fs.readFileSync('global-bundle.pem').toString(),
+          }
+        : undefined,
+    };
+  }
+  return pool;
+}
 
 let dbInstance: Kysely<Database> | null = null;
 
@@ -81,7 +88,7 @@ export async function getConnection<T>({
     }
 
     dbInstance = connect({
-      ...POOL,
+      ...getPool(),
       password: token,
     });
 
@@ -91,7 +98,7 @@ export async function getConnection<T>({
     const token = await getToken();
 
     dbInstance = connect({
-      ...POOL,
+      ...getPool(),
       password: token,
     });
 
