@@ -8,6 +8,7 @@ const configurations = [
   'maintenance-mode',
   'current-color',
   'migrate',
+  'source-table-version',
 ];
 
 const { STAGE } = process.env;
