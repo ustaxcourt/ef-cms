@@ -8,7 +8,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('userId', 'text', col => col.notNull())
     .addColumn('status', 'text', col => col.notNull().defaultTo('pending'))
     .addColumn('totalChunks', 'integer', col => col.notNull().defaultTo(0))
-    .addColumn('createdAt', 'timestamptz', col => col.notNull())
+    .addColumn('ttl', 'integer', col => col.notNull())
     .execute();
 
   await db.schema
@@ -19,9 +19,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('chunk', 'text', col => col.notNull())
     .addColumn('index', 'integer', col => col.notNull())
     .addColumn('totalNumberOfChunks', 'integer', col => col.notNull())
-    .addColumn('createdAt', 'timestamptz', col =>
-      col.defaultTo(sql`now()`).notNull(),
-    )
+    .addColumn('ttl', 'integer', col => col.defaultTo(sql`now()`).notNull())
     .execute();
 
   await db.schema
@@ -43,9 +41,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .columns(['userId', 'requestId', 'index'])
     .unique()
     .execute();
-
-  // Add TTL implementation (could use a scheduled job or Postgres extension)
-  // For PostgreSQL 14+, you could use pg_cron to periodically clean up old records
 }
 
 export async function down(db: Kysely<any>): Promise<void> {

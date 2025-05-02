@@ -4,36 +4,38 @@ const DEFAULT = {};
 
 // Request table definition
 export const requestTableDefinition = {
-  createdAt: DEFAULT as Date,
-  id: DEFAULT as number,
   requestId: DEFAULT as string,
   status: DEFAULT as string,
-  totalChunks: DEFAULT as number,
+  totalChunks: DEFAULT as number | null,
   userId: DEFAULT as string,
+  ttl: DEFAULT as number,
 };
 
-// Define types for the request table
-export type RequestRecord = typeof requestTableDefinition;
-export type SelectableRequestRecord = Selectable<RequestRecord>;
-export type InsertableRequestRecord = Insertable<RequestRecord>;
-export type UpdateableRequestRecord = Updateable<RequestRecord>;
+export type RequestTable = typeof requestTableDefinition;
+
+export const DW_REQUEST_COLUMNS = Object.keys(requestTableDefinition) as Array<
+  keyof RequestTable
+>;
+
+export type RequestKysely = Selectable<RequestTable>;
+export type NewRequestKysely = Insertable<RequestTable>;
+export type UpdateRequestKysely = Updateable<RequestTable>;
 
 // Response chunks table definition
 export const responseChunkTableDefinition = {
   chunk: DEFAULT as string,
-  createdAt: DEFAULT as Date,
-  id: DEFAULT as number,
   index: DEFAULT as number,
   requestId: DEFAULT as string,
-  totalNumberOfChunks: DEFAULT as number,
+  totalNumberOfChunks: DEFAULT as number | null,
   userId: DEFAULT as string,
+  ttl: DEFAULT as number,
 };
 
-// Define types for the ResponseChunk table
-export type ResponseChunkRecord = typeof responseChunkTableDefinition;
-export type SelectableResponseChunkRecord = Selectable<ResponseChunkRecord>;
-export type InsertableResponseChunkRecord = Insertable<ResponseChunkRecord>;
-export type UpdateableResponseChunkRecord = Updateable<ResponseChunkRecord>;
+export type ResponseChunkTable = typeof responseChunkTableDefinition;
+
+export type ResponseChunkKysely = Selectable<ResponseChunkTable>;
+export type NewResponseChunkKysely = Insertable<ResponseChunkTable>;
+export type UpdateaResponseChunkKysely = Updateable<ResponseChunkTable>;
 
 // Export the Response Chunk type for use in functions
 export type ResponseChunk = {

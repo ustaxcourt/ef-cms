@@ -35,6 +35,11 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
+import {
+  RequestTable,
+  ResponseChunkTable,
+  DW_REQUEST_COLUMNS,
+} from '@web-api/persistence/postgres/polling/schema';
 
 const DEFAULT = {};
 
@@ -45,6 +50,13 @@ interface DatabaseSchemaType {
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
+<<<<<<< HEAD
+=======
+  dwPetitionerOnCase: DatabaseTableMetadata<PetitionerOnCaseTable>;
+  dwRequest: DatabaseTableMetadata<RequestTable>;
+  dwResponseChunk: DatabaseTableMetadata<ResponseChunkTable>;
+  dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
+>>>>>>> a64046a9b8 (10505: rm unused mapper code, use ttls)
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
@@ -88,6 +100,22 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMessage: {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
+  },
+  dwPetitionerOnCase: {
+    table: DEFAULT as PetitionerOnCaseTable,
+    columns: DW_PETITIONERS_ON_CASE_COLUMNS,
+  },
+  dwRequest: {
+    table: DEFAULT as RequestTable,
+    columns: DW_REQUEST_COLUMNS,
+  },
+  dwResponseChunk: {
+    table: DEFAULT as ResponseChunkTable,
+    columns: DW_REQUEST_COLUMNS,
+  },
+  dwStatisticPenalty: {
+    table: DEFAULT as StatisticPenaltyTable,
+    columns: DW_STATISTIC_PENALTY_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,
