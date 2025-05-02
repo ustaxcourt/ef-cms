@@ -27,14 +27,14 @@ async function script() {
     marshallOptions: { removeUndefinedValues: true },
   });
 
-	for (const index in FEATURE_FLAGS_WITH_CURRENT_PROPERTY) {
+  for (const index in FEATURE_FLAGS_WITH_CURRENT_PROPERTY) {
     const FEATURE_FLAG = FEATURE_FLAGS_WITH_CURRENT_PROPERTY[index];
     const FEATURE_FLAG_RECORD = await DOCUMENT_CLIENT.get({
       Key: { pk: FEATURE_FLAG, sk: FEATURE_FLAG },
       TableName: `efcms-deploy-${STAGE}`,
     });
 
-    if (!FEATURE_FLAG_RECORD) {
+    if (!FEATURE_FLAG_RECORD || !FEATURE_FLAG_RECORD.Item) {
       continue;
     }
 
@@ -49,13 +49,13 @@ async function script() {
   }
 
   for (const index in FEATURE_FLAGS_WITH_IP_PROPERTY) {
-    const FEATURE_FLAG = FEATURE_FLAGS_WITH_CURRENT_PROPERTY[index];
+    const FEATURE_FLAG = FEATURE_FLAGS_WITH_IP_PROPERTY[index];
     const FEATURE_FLAG_RECORD = await DOCUMENT_CLIENT.get({
       Key: { pk: FEATURE_FLAG, sk: FEATURE_FLAG },
       TableName: `efcms-deploy-${STAGE}`,
     });
 
-    if (!FEATURE_FLAG_RECORD) {
+    if (!FEATURE_FLAG_RECORD || !FEATURE_FLAG_RECORD.Item) {
       continue;
     }
 
