@@ -86,14 +86,7 @@ export const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
-type AllowlistFeatureFlage = {
-  [key: string]: {
-    key: string;
-    disabledMessage?: string;
-  };
-};
-
-export const ALLOWLIST_FEATURE_FLAGS: AllowlistFeatureFlage = {
+export const ALLOWLIST_FEATURE_FLAGS = {
   AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
     key: 'aws-batch-zipper-minimum-count',
   },
@@ -114,7 +107,10 @@ export const ALLOWLIST_FEATURE_FLAGS: AllowlistFeatureFlage = {
       'A flag to know when to use the change of address lambda for processing.',
     key: 'use-change-of-address-lambda',
   },
-};
+} as const;
+
+type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
+export type FeatureFlagKeys = FeatureFlags[keyof FeatureFlags]['key'];
 
 export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {

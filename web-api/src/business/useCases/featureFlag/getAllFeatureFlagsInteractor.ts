@@ -1,13 +1,18 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ALLOWLIST_FEATURE_FLAGS,
+  FeatureFlagKeys,
+} from '@shared/business/entities/EntityConstants';
 import { isEmpty } from 'lodash';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValue';
 
-const allFeatureFlags = {};
+type AllFeatureFlags = Partial<{ [K in FeatureFlagKeys]: any }>;
+const allFeatureFlags: AllFeatureFlags = {};
 
 export const getAllFeatureFlagsInteractor = async (
   applicationContext: ServerApplicationContext,
   hardReload: boolean = false,
-) => {
+): Promise<AllFeatureFlags> => {
   const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
     flag => flag.key,
   );
@@ -19,26 +24,11 @@ export const getAllFeatureFlagsInteractor = async (
     isEmpty(allFeatureFlags) ||
     applicationContext.environment.stage === 'local'
   ) {
-    await Promise.all(
-      allowlistFeatures.map(async featureFlagKey => {
-        const result = await applicationContext
-          .getPersistenceGateway()
-          .getFeatureFlagValue({
-            applicationContext,
-            featureFlag: featureFlagKey,
-          });
-
-        if (result) {
-          if (typeof result.current === 'boolean') {
-            allFeatureFlags[featureFlagKey] = !!result.current;
-          } else {
-            allFeatureFlags[featureFlagKey] = result.current;
-          }
-        } else {
-          allFeatureFlags[featureFlagKey] = false;
-        }
-      }),
-    );
+    const ALL_FEATURE_FLAGS = await getFeatureFlagValues(allowlistFeatures);
+    ALL_FEATURE_FLAGS.forEach(({ name, value }) => {
+      const { current } = JSON.parse(value) as { current: any };
+      allFeatureFlags[name] = current;
+    });
   }
 
   return allFeatureFlags;
