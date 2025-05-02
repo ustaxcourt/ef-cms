@@ -26,15 +26,9 @@ export const POOL = {
     : undefined,
 };
 
-const dbInstances: Record<string, Kysely<Database> | null> = {
-  reader: null,
-  writer: null,
-};
+let dbInstance: Kysely<Database> | null = null;
 
-const tokens: Record<string, string | null> = {
-  'us-east-1': null,
-  'us-west-1': null,
-};
+let dbToken: string | null = null;
 
 export function connect(pool) {
   return new Kysely<Database>({
@@ -45,11 +39,11 @@ export function connect(pool) {
   });
 }
 
-async function generateRDSAuthToken({ host, region }) {
+async function generateRDSAuthToken() {
   const signer = new Signer({
-    hostname: host,
+    hostname: environment.rds.pool.host,
     port: 5432,
-    region,
+    region: 'us-east-1', // 10502 TODO: After west is deleted use environment.region
     username: environment.rds.pool.user,
   });
 
@@ -58,68 +52,57 @@ async function generateRDSAuthToken({ host, region }) {
   return token;
 }
 
-function clearToken(region: string) {
-  tokens[region] = null;
+function clearToken() {
+  dbToken = null;
 }
 
-async function getToken(region: string, host: string) {
+async function getToken() {
   if (environment.nodeEnv !== 'production') {
     return environment.rds.pool.password;
   }
-  const token = tokens[region];
+  const token = dbToken;
 
   if (!token) {
-    const freshToken = await generateRDSAuthToken({
-      host,
-      region,
-    });
-    tokens[region] = freshToken;
+    const freshToken = await generateRDSAuthToken();
+    dbToken = freshToken;
   }
 
-  return tokens[region];
+  return dbToken;
 }
 
 async function getConnection<T>({
   cb,
-  dbKey,
-  host,
-  region,
 }: {
-  dbKey: string;
   cb: (r: Kysely<Database>) => T;
-  region: string;
-  host: string;
 }): Promise<T> {
   try {
-    if (dbInstances[dbKey] && (await isConnectionValid(dbInstances[dbKey]))) {
+    if (dbInstance && (await isConnectionValid(dbInstance))) {
       // If valid, use the existing connection
-      return await cb(dbInstances[dbKey]);
+      return await cb(dbInstance);
     }
 
-    const token = await getToken(region, host);
+    const token = await getToken();
 
     if (!token) {
       throw new Error('token does not exist');
     }
 
-    dbInstances[dbKey] = connect({
+    dbInstance = connect({
       ...POOL,
-      host,
       password: token,
     });
 
-    return await cb(dbInstances[dbKey]!);
+    return await cb(dbInstance);
   } catch (err) {
-    clearToken(region);
-    const token = await getToken(region, host);
+    clearToken();
+    const token = await getToken();
 
-    dbInstances[dbKey] = connect({
+    dbInstance = connect({
       ...POOL,
-      host,
       password: token,
     });
 
-    return await cb(dbInstances[dbKey]!);
+    return await cb(dbInstance);
   }
 }
 
@@ -137,21 +120,12 @@ async function isConnectionValid(db: Kysely<Database>): Promise<boolean> {
 export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   return getConnection({
     cb,
-    dbKey: 'reader',
-    host:
-      environment.region === 'us-west-1'
-        ? environment.rds.readHost
-        : environment.rds.pool.host,
-    region: environment.region,
   });
 }
 
 function executeWriter<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   return getConnection({
     cb,
-    dbKey: 'writer',
-    host: environment.rds.pool.host,
-    region: 'us-east-1',
   });
 }
 
