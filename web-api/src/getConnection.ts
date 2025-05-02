@@ -1,39 +1,38 @@
-import {
-  CamelCasePlugin,
-  CompiledQuery,
-  Kysely,
-  PostgresDialect,
-} from 'kysely';
+import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Database } from './database-schema';
 import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
 
-let pool: PoolConfig;
-
-function getPool(): PoolConfig {
-  if (!pool) {
-    pool = {
-      ...environment.rds.pool,
-      ssl: environment.rds.useGlobalCert
-        ? {
-            ca: fs.readFileSync('global-bundle.pem').toString(),
-          }
-        : undefined,
-    };
+let dbInstance: Promise<Kysely<Database>> | null = null;
+export async function getConnection<T>({
+  cb,
+}: {
+  cb: (r: Kysely<Database>) => T;
+}): Promise<T> {
+  if (dbInstance) {
+    const awaitedInstace = await dbInstance;
+    return await cb(awaitedInstace);
   }
-  return pool;
+
+  dbInstance = establishConnection();
+  const awaitedInstace = await dbInstance;
+  return await cb(awaitedInstace);
 }
 
-let dbInstance: Kysely<Database> | null = null;
-
-let dbToken: string | null = null;
+async function establishConnection(): Promise<Kysely<Database>> {
+  const token = await getToken();
+  return connect({
+    ...getPool(),
+    password: token,
+  });
+}
 
 function connect(pool) {
   return new Kysely<Database>({
     dialect: new PostgresDialect({
-      pool: new Pool(pool),
+      pool: new Pool({ ...pool }),
     }),
     plugins: [new CamelCasePlugin()],
   });
@@ -52,67 +51,37 @@ async function generateRDSAuthToken() {
   return token;
 }
 
-function clearToken() {
-  dbToken = null;
-}
-
 async function getToken() {
   if (environment.nodeEnv !== 'production') {
     return environment.rds.pool.password;
   }
-  const token = dbToken;
 
-  if (!token) {
-    const freshToken = await generateRDSAuthToken();
-    dbToken = freshToken;
-  }
-
-  return dbToken;
+  return await generateRDSAuthToken();
 }
 
-export async function getConnection<T>({
-  cb,
-}: {
-  cb: (r: Kysely<Database>) => T;
-}): Promise<T> {
-  try {
-    if (dbInstance && (await isConnectionValid(dbInstance))) {
-      // If valid, use the existing connection
-      return await cb(dbInstance);
-    }
+// async function isConnectionValid(db: Kysely<Database>): Promise<boolean> {
+//   try {
+//     await db.executeQuery<{ result: 1 }>(
+//       CompiledQuery.raw('select 1 as result', []),
+//     );
+//     return true;
+//   } catch (err) {
+//     return false;
+//   }
+// }
 
-    const token = await getToken();
+let pool: PoolConfig;
 
-    if (!token) {
-      throw new Error('token does not exist');
-    }
-
-    dbInstance = connect({
-      ...getPool(),
-      password: token,
-    });
-
-    return await cb(dbInstance);
-  } catch (err) {
-    clearToken();
-    const token = await getToken();
-
-    dbInstance = connect({
-      ...getPool(),
-      password: token,
-    });
-
-    return await cb(dbInstance);
+function getPool(): PoolConfig {
+  if (!pool) {
+    pool = {
+      ...environment.rds.pool,
+      ssl: environment.rds.useGlobalCert
+        ? {
+            ca: fs.readFileSync('global-bundle.pem').toString(),
+          }
+        : undefined,
+    };
   }
-}
-
-async function isConnectionValid(db: Kysely<Database>): Promise<boolean> {
-  try {
-    await db.executeQuery<{ result: 1 }>(
-      CompiledQuery.raw('select 1 as result', []),
-    );
-    return true;
-  } catch (err) {
-    return false;
-  }
+  return pool;
 }
