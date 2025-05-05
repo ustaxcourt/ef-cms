@@ -65,6 +65,7 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     orderForRatification: rawCase.orderForRatification,
     orderToShowCause: rawCase.orderToShowCause,
     partyType: rawCase.partyType,
+    petitioners: JSON.stringify(rawCase.petitioners),
     petitionPaymentDate: rawCase.petitionPaymentDate
       ? calculateDate({ dateString: rawCase.petitionPaymentDate })
       : null,

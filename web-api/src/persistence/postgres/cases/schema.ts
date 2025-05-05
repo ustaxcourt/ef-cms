@@ -46,7 +46,7 @@ export const caseTableDefinition = {
   orderForRatification: DEFAULT as boolean | undefined,
   orderToShowCause: DEFAULT as boolean | undefined,
   partyType: DEFAULT as string,
-  petitioners: DEFAULT as any, // TODO 10502
+  petitioners: DEFAULT as ColumnType<TPetitioner[], string, string>,
   petitionPaymentDate: DEFAULT as Date | null,
   petitionPaymentMethod: DEFAULT as string | undefined,
   petitionPaymentStatus: DEFAULT as string,
