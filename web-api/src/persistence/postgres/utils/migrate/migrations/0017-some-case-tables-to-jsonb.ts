@@ -7,8 +7,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('statistics', 'jsonb')
     .addColumn('caseStatusHistory', 'jsonb')
     .execute();
-  // 10502 TODO: translate data to jsonb if dwPetitionerOnCase has data
-  await db.schema.dropTable('dwPetitionerOnCase');
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -18,8 +16,4 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('statistics')
     .dropColumn('caseStatusHistory')
     .execute();
-  // TODO 10502?
-  console.error(
-    'Dropped columns petitioners and statistics from dwCase, but this could be a breaking change (no more petitioner data)',
-  );
 }
