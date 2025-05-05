@@ -16,7 +16,6 @@ import { updatePetitionerInformationInteractor } from './updatePetitionerInforma
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-import { updatePetitionerOnCase as updatePetitionerOnCaseMock } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 
@@ -25,8 +24,6 @@ const updateCase = jest.mocked(updateCaseMock);
 updateCase.mockImplementation(({ caseToUpdate }) =>
   Promise.resolve(caseToUpdate),
 );
-const updatePetitionerOnCase = updatePetitionerOnCaseMock as jest.Mock;
-updatePetitionerOnCase.mockImplementation(({ petitioner }) => petitioner);
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
   let mockCase;
