@@ -1,62 +1,46 @@
-import { MOCK_CASE } from '../../test/mockCase';
-import { applicationContext } from '../test/createTestApplicationContext';
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { getCaseExistsInteractor } from './getCaseExistsInteractor';
+import { getCaseExists as getCaseExistsMock } from '@web-api/persistence/postgres/cases/getCaseExists';
+import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 describe('getCaseExistsInteractor', () => {
-  it('should format the given docket number before querying persistence, removing leading zeroes and suffix', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+  const getCaseExists = jest.mocked(getCaseExistsMock);
+  const updateCase = jest.mocked(updateCaseMock);
+  updateCase.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
 
-    await getCaseExistsInteractor(applicationContext, {
+  it('should format the given docket number before querying persistence, removing leading zeroes and suffix', async () => {
+    getCaseExists.mockResolvedValue(true);
+
+    await getCaseExistsInteractor({
       docketNumber: '000123-19S',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
-        .calls[0][0],
-    ).toEqual({
-      applicationContext,
+    expect(getCaseExists.mock.calls[0][0]).toEqual({
       docketNumber: '123-19',
     });
   });
 
   it('should throw an error when a case with the provided docketNumber is not found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue({
-        archivedCorrespondences: [],
-        archivedDocketEntries: [],
-        associatedJudge: [],
-        correspondence: [],
-        docketEntries: [],
-        irsPractitioners: [],
-        privatePractitioners: [],
-      });
+    getCaseExists.mockResolvedValue(false);
 
     await expect(
-      getCaseExistsInteractor(applicationContext, {
+      getCaseExistsInteractor({
         docketNumber: '123-19',
       }),
     ).rejects.toThrow('Case 123-19 was not found.');
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
-        .calls.length,
-    ).toBe(1);
+    expect(getCaseExists.mock.calls.length).toBe(1);
   });
 
   it('should return true a case with the provided docketNumber is found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
+    getCaseExists.mockResolvedValue(true);
 
     await expect(
-      getCaseExistsInteractor(applicationContext, {
+      getCaseExistsInteractor({
         docketNumber: '1000-01',
       }),
     ).resolves.toEqual(true);
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseExists).toHaveBeenCalled();
   });
 });

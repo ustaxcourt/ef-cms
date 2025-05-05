@@ -46,7 +46,7 @@ describe('practitionerDetailHelper', () => {
           ADD_EDIT_PRACTITIONER_USER: false,
         },
         practitionerDetail: {
-          hasEAccess: false,
+          hasElectronicAccess: false,
           practitionerNotes: mockNote,
         },
         user: { role: 'admissionsclerk' },
@@ -137,14 +137,14 @@ describe('practitionerDetailHelper', () => {
   });
 
   describe('showEAccessFlag', () => {
-    it('should show the hasEAccess flag for an internal user', () => {
+    it('should show the hasElectronicAccess flag for an internal user', () => {
       const { showEAccessFlag } = runCompute(practitionerDetailHelper, {
         state: {
           permissions: {
             ADD_EDIT_PRACTITIONER_USER: false,
           },
           practitionerDetail: {
-            hasEAccess: true,
+            hasElectronicAccess: true,
           },
           user: { role: 'admissionsclerk' },
         },
@@ -152,14 +152,14 @@ describe('practitionerDetailHelper', () => {
       expect(showEAccessFlag).toBeTruthy();
     });
 
-    it('should not show the hasEAccess flag for an external user', () => {
+    it('should not show the hasElectronicAccess flag for an external user', () => {
       const { showEAccessFlag } = runCompute(practitionerDetailHelper, {
         state: {
           permissions: {
             ADD_EDIT_PRACTITIONER_USER: false,
           },
           practitionerDetail: {
-            hasEAccess: true,
+            hasElectronicAccess: true,
           },
           user: { role: 'petitioner' },
         },
@@ -167,14 +167,14 @@ describe('practitionerDetailHelper', () => {
       expect(showEAccessFlag).toBeFalsy();
     });
 
-    it('should not show the hasEAccess flag for an internal user when the contact has no eAccess', () => {
+    it('should not show the hasElectronicAccess flag for an internal user when the contact has no eAccess', () => {
       const { showEAccessFlag } = runCompute(practitionerDetailHelper, {
         state: {
           permissions: {
             ADD_EDIT_PRACTITIONER_USER: false,
           },
           practitionerDetail: {
-            hasEAccess: false,
+            hasElectronicAccess: false,
           },
           user: { role: 'admissionsclerk' },
         },

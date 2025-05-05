@@ -1,14 +1,16 @@
-import { Case } from '../entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnauthorizedError,
   UnprocessableEntityError,
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updatePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
@@ -30,12 +32,10 @@ export const sealCaseContactAddress = async (
     );
   }
 
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseRecord, {
     authorizedUser,
@@ -50,6 +50,8 @@ export const sealCaseContactAddress = async (
   }
   contactToSeal.isAddressSealed = true;
 
+  caseEntity.updatePetitioner(contactToSeal);
+
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({
@@ -57,6 +59,11 @@ export const sealCaseContactAddress = async (
       authorizedUser,
       caseToUpdate: caseEntity,
     });
+
+  await updatePetitionerOnCase({
+    docketNumber,
+    petitioner: contactToSeal,
+  });
 
   return new Case(updatedCase, { authorizedUser }).toRawObject();
 };

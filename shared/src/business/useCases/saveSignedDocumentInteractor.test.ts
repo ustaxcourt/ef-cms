@@ -13,9 +13,11 @@ import { getMessageThreadByParentId as getMessageThreadByParentIdMock } from '@w
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   const mockSigningName = 'Roslindis Angelino';
   const mockDocumentIdBeforeSignature = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3857';
@@ -29,9 +31,7 @@ describe('saveSignedDocumentInteractor', () => {
       caseCaption: ',',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
 
     applicationContext.getUniqueId.mockReturnValue(
       mockDocumentIdBeforeSignature,

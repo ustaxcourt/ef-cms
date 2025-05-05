@@ -6,6 +6,7 @@ import { NotFoundError } from '@web-api/errors/errors';
 import { TrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
   async ({ applicationContext, caseEntity, eventCode }) => {
@@ -25,7 +26,7 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
     const caseDeadlines = await getCaseDeadlinesByDocketNumber({
       docketNumber: caseEntity.docketNumber,
     });
-    await Promise.all(
+    await settlePromises(
       caseDeadlines.map(async deadline => {
         return deleteCaseDeadline({
           caseDeadlineId: deadline.caseDeadlineId,

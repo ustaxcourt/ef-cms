@@ -1,5 +1,5 @@
-import { MAX_SEARCH_CLIENT_RESULTS } from '../../../../shared/src/business/entities/EntityConstants';
-import { aggregateCommonQueryParams } from '../../../../shared/src/business/utilities/aggregateCommonQueryParams';
+import { MAX_SEARCH_CLIENT_RESULTS } from '@shared/business/entities/EntityConstants';
+import { aggregateCommonQueryParams } from '@shared/business/utilities/aggregateCommonQueryParams';
 import { isEmpty } from 'lodash';
 import { search } from './searchClient';
 import { ServerApplicationContext } from '@web-api/applicationContext';

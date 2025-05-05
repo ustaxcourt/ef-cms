@@ -6,7 +6,7 @@ import {
   FORMATS,
   getBusinessDateInFuture,
 } from '../../utilities/DateHandler';
-import { getTextByCount } from '../../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 const oneMonthFromNow = getBusinessDateInFuture({
   numberOfDays: 30,

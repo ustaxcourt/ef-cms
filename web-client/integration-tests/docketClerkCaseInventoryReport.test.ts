@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { caseInventoryReportHelper as caseInventoryReportHelperComputed } from '../src/presenter/computeds/caseInventoryReportHelper';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';

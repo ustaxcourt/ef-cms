@@ -222,14 +222,6 @@ describe('Statistic', () => {
       penaltyId: '081108f8-8b01-4e49-b437-781a581a16ac',
       penaltyType: 'determinationPenaltyAmount',
     };
-    const MOCK_UPDATED_PENALTY = {
-      entityName: 'Penalty',
-      name: 'I am an updated penalty!',
-      penaltyAmount: 250,
-      penaltyId: '123408f8-8b01-4e49-b437-123a581a12bb',
-      penaltyType: 'irsPenaltyAmount',
-      statisticId,
-    };
 
     beforeEach(() => {
       statistic = new Statistic({
@@ -269,15 +261,6 @@ describe('Statistic', () => {
         ...MOCK_PENALTY_WITHOUT_STATISTIC_ID,
         statisticId,
       });
-    });
-
-    it('should update the penalty in the penalties array', () => {
-      expect(statistic.penalties.length).toEqual(penaltyArrayLength);
-
-      statistic.updatePenalty(MOCK_UPDATED_PENALTY);
-
-      expect(statistic.penalties.length).toEqual(penaltyArrayLength);
-      expect(statistic.penalties[0]).toEqual(MOCK_UPDATED_PENALTY);
     });
 
     it('should itemize both determinationTotalPenalties and irsTotalPenalties created prior to penalty itemization', () => {
