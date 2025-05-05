@@ -11,14 +11,11 @@ export async function getConnection<T>({
 }: {
   cb: (r: Kysely<Database>) => T;
 }): Promise<T> {
-  if (dbInstance) {
-    const awaitedInstace = await dbInstance;
-    return await cb(awaitedInstace);
+  if (!dbInstance) {
+    dbInstance = establishConnection();
   }
-
-  dbInstance = establishConnection();
-  const awaitedInstace = await dbInstance;
-  return await cb(awaitedInstace);
+  const awaitedInstance = await dbInstance;
+  return await cb(awaitedInstance);
 }
 
 async function establishConnection(): Promise<Kysely<Database>> {
@@ -29,7 +26,7 @@ async function establishConnection(): Promise<Kysely<Database>> {
   });
 }
 
-function connect(pool) {
+export function connect(pool) {
   return new Kysely<Database>({
     dialect: new PostgresDialect({
       pool: new Pool({ ...pool }),
@@ -59,17 +56,6 @@ async function getToken() {
   return await generateRDSAuthToken();
 }
 
-// async function isConnectionValid(db: Kysely<Database>): Promise<boolean> {
-//   try {
-//     await db.executeQuery<{ result: 1 }>(
-//       CompiledQuery.raw('select 1 as result', []),
-//     );
-//     return true;
-//   } catch (err) {
-//     return false;
-//   }
-// }
-
 let pool: PoolConfig;
 
 function getPool(): PoolConfig {
@@ -85,3 +71,14 @@ function getPool(): PoolConfig {
   }
   return pool;
 }
+
+// async function isConnectionValid(db: Kysely<Database>): Promise<boolean> {
+//   try {
+//     await db.executeQuery<{ result: 1 }>(
+//       CompiledQuery.raw('select 1 as result', []),
+//     );
+//     return true;
+//   } catch (err) {
+//     return false;
+//   }
+// }
