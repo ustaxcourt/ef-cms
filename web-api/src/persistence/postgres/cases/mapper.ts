@@ -85,6 +85,7 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       ? calculateDate({ dateString: rawCase.sealedDate })
       : null,
     sortableDocketNumber: rawCase.sortableDocketNumber,
+    statistics: JSON.stringify(rawCase.statistics),
     status: rawCase.status,
     trialDate: rawCase.trialDate
       ? calculateDate({ dateString: rawCase.trialDate })

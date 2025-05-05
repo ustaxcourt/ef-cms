@@ -4,6 +4,7 @@ import {
   CHIEF_JUDGE,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PENALTY_TYPES,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
 
@@ -653,5 +654,26 @@ export const cases310_399: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     hearings: [],
     correspondence: [],
     consolidatedCases: [],
+    statistics: [
+      {
+        determinationDeficiencyAmount: undefined,
+        determinationTotalPenalties: undefined,
+        irsDeficiencyAmount: '1500.0',
+        irsTotalPenalties: '150.0',
+        lastDateOfPeriod: undefined,
+        statisticId: '38128813-53b7-4c53-acc2-33eb31ebc0ef',
+        year: '2019',
+        yearOrPeriod: 'Year',
+        penalties: [
+          {
+            name: 'Marie du Font',
+            penaltyAmount: '0.5',
+            penaltyId: '48128812-53b7-4c53-acc2-33eb31ebc0ef',
+            penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+            statisticId: '38128813-53b7-4c53-acc2-33eb31ebc0ef',
+          },
+        ],
+      },
+    ],
   },
 ];

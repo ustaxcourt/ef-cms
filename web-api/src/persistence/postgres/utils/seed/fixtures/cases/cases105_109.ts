@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
@@ -5,6 +6,7 @@ import {
   CHIEF_JUDGE,
   PARTY_TYPES,
   PAYMENT_STATUS,
+  PENALTY_TYPES,
   PROCEDURE_TYPES_MAP,
 } from '@shared/business/entities/EntityConstants';
 import { SEEDED_DOCKET_NUMBERS_100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
@@ -130,6 +132,46 @@ export const cases105_109: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     hearings: [],
     correspondence: [],
     consolidatedCases: [],
+    statistics: [
+      {
+        determinationDeficiencyAmount: undefined,
+        determinationTotalPenalties: undefined,
+        irsDeficiencyAmount: '5678',
+        irsTotalPenalties: '1234',
+        lastDateOfPeriod: undefined,
+        statisticId: 'cb557361-50ee-4440-aaff-0a9f1bfa30ed',
+        year: '2018',
+        yearOrPeriod: 'Year',
+        penalties: [
+          {
+            name: 'Marie Antoinette',
+            penaltyAmount: '50',
+            penaltyId: 'cb557362-50ee-4440-aaff-0a9f1bfa30ed',
+            penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+            statisticId: 'ab557361-50ee-4440-aaff-0a9f1bfa30ed',
+          },
+        ],
+      },
+      {
+        determinationDeficiencyAmount: undefined,
+        determinationTotalPenalties: undefined,
+        irsDeficiencyAmount: '55',
+        irsTotalPenalties: '99',
+        lastDateOfPeriod: undefined,
+        statisticId: 'ab557361-50ee-4440-aaff-0a9f1bfa30ed',
+        year: '2019',
+        yearOrPeriod: 'Year',
+        penalties: [
+          {
+            name: 'Marie de France',
+            penaltyAmount: '100',
+            penaltyId: 'db557362-50ee-4440-aaff-0a9f1bfa30ed',
+            penaltyType: PENALTY_TYPES.IRS_PENALTY_AMOUNT,
+            statisticId: 'cb557361-50ee-4440-aaff-0a9f1bfa30ed',
+          },
+        ],
+      },
+    ],
   },
   {
     associatedJudge: CHIEF_JUDGE,

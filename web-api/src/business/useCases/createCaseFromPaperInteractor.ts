@@ -17,7 +17,6 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
-import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistics';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
@@ -361,10 +360,6 @@ export const createCaseFromPaperInteractor = async (
     }),
     upsertWorkItems({
       workItems: [workItem.validate().toRawObject()],
-    }),
-    createCaseStatistics({
-      docketNumber: caseToAdd.docketNumber,
-      statistics: caseToAdd.statistics || [],
     }),
   ];
 

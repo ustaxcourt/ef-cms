@@ -67,23 +67,6 @@ jest.mock(
   () => mockFactory('getReadyForTrialCases'),
 );
 
-// Parties
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/parties/deletePetitionerOnCase',
-  () => mockFactory('deletePetitionerOnCase'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase',
-  () => mockFactory('updatePetitionerOnCase'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/parties/clearPetitionersOnCase',
-  () => mockFactory('clearPetitionersOnCase'),
-);
-
 // Reports
 
 jest.mock('@web-api/persistence/postgres/cases/reports/fetchPendingItems', () =>
@@ -117,28 +100,6 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases',
   () => mockFactory('getSuggestedCalendarCases'),
-);
-
-// Statistics
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/statistics/createCaseStatistics',
-  () => mockFactory('createCaseStatistics'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/statistics/deleteCaseStatistic',
-  () => mockFactory('deleteCaseStatistic'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/statistics/updateCaseStatistic',
-  () => mockFactory('updateCaseStatistic'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/statistics/clearCaseStatistics',
-  () => mockFactory('clearCaseStatistics'),
 );
 
 // Case status updates

@@ -1,7 +1,5 @@
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { upsertCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/upsertCaseStatistics';
 import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
-import { Statistic } from '@shared/business/entities/Statistic';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
@@ -34,14 +32,6 @@ export const processCaseEntries = async ({
         statusUpdates: caseRecord.caseStatusHistory || [],
       }),
     );
-    if (caseRecord.statistics) {
-      postgresUpserts.push(
-        upsertCaseStatistics({
-          docketNumber: caseRecord.docketNumber,
-          statistics: caseRecord.statistics.map(s => new Statistic(s)),
-        }),
-      );
-    }
   }
 
   await settlePromises(postgresUpserts);

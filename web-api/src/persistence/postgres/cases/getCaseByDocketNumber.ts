@@ -9,7 +9,6 @@ import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
-import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
 import { getCaseStatusHistory } from '@web-api/persistence/postgres/cases/getCaseStatusHistory';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
@@ -34,32 +33,26 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const [
-    caseStatusHistory,
-    caseCorrespondences,
-    statisticsWithPenalties,
-    workItems,
-    caseItemsRaw,
-  ] = await Promise.all([
-    getCaseStatusHistory({ docketNumber }),
-    getCaseCorrespondenceByDocketNumber({
-      docketNumber,
-    }),
-    getCaseStatistics({ docketNumber }),
-    getWorkItemsByDocketNumber({
-      docketNumber,
-    }),
-    queryFull({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${docketNumber}`,
-      },
-      KeyConditionExpression: '#pk = :pk',
-      applicationContext,
-    }),
-  ]);
+  const [caseStatusHistory, caseCorrespondences, workItems, caseItemsRaw] =
+    await Promise.all([
+      getCaseStatusHistory({ docketNumber }),
+      getCaseCorrespondenceByDocketNumber({
+        docketNumber,
+      }),
+      getWorkItemsByDocketNumber({
+        docketNumber,
+      }),
+      queryFull({
+        ExpressionAttributeNames: {
+          '#pk': 'pk',
+        },
+        ExpressionAttributeValues: {
+          ':pk': `case|${docketNumber}`,
+        },
+        KeyConditionExpression: '#pk = :pk',
+        applicationContext,
+      }),
+    ]);
 
   const caseItems = caseItemsRaw.filter(
     item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
@@ -89,7 +82,6 @@ export const getCaseByDocketNumber = async ({
         caseStatusHistory,
         pk: `case|${dbCaseMetadata.docketNumber}`,
         sk: `case|${dbCaseMetadata.docketNumber}`,
-        statistics: Object.values(statisticsWithPenalties),
       },
       ...caseCorrespondences.map(correspondenceItem => ({
         ...correspondenceItem,
