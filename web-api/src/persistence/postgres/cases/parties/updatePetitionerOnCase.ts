@@ -1,51 +1,40 @@
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { Case } from '@shared/business/entities/cases/Case';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
-import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
-import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 export const updatePetitionerOnCase = async ({
   docketNumber,
   petitioner,
   oldContactId,
+  authorizedUser,
 }: {
   docketNumber: string;
   petitioner: Petitioner;
   oldContactId?: string;
-}): Promise<Petitioner> => {
-  const updatedPetitionerData = await pgUpdateTable({
-    table: 'dwPetitionerOnCase',
-    values: {
-      additionalName: petitioner.additionalName,
-      address1: petitioner.address1,
-      address2: petitioner.address2,
-      address3: petitioner.address3,
-      city: petitioner.city,
-      contactId: petitioner.contactId,
-      contactType: petitioner.contactType,
-      country: petitioner.country,
-      countryType: petitioner.countryType,
-      email: petitioner.email,
-      hasConsentedToElectronicService:
-        petitioner.hasConsentedToElectronicService,
-      hasElectronicAccess: petitioner.hasElectronicAccess,
-      inCareOf: petitioner.inCareOf,
-      isAddressSealed: petitioner.isAddressSealed,
-      name: petitioner.name,
-      paperPetitionEmail: petitioner.paperPetitionEmail,
-      phone: petitioner.phone,
-      placeOfLegalResidence: petitioner.placeOfLegalResidence,
-      postalCode: petitioner.postalCode,
-      sealedAndUnavailable: petitioner.sealedAndUnavailable,
-      secondaryName: petitioner.secondaryName,
-      serviceIndicator:
-        petitioner.serviceIndicator ?? SERVICE_INDICATOR_TYPES.SI_NONE,
-      state: petitioner.state,
-      title: petitioner.title,
-    },
-    where: cb =>
-      cb
-        .where('contactId', '=', oldContactId ?? petitioner.contactId!)
-        .where('docketNumber', '=', docketNumber),
-  });
+  authorizedUser: AuthUser;
+}): Promise<void> => {
+  const theCase = await getCaseMetadataByDocketNumber({ docketNumber });
+  const caseEntity = new Case(theCase, { authorizedUser });
 
-  return new Petitioner(updatedPetitionerData);
+  const contactId = oldContactId ?? petitioner.contactId;
+
+  if (!contactId) {
+    throw new Error('Cannot update petitioner without a contactId');
+  }
+
+  // Find and replace the petitioner information on the case
+  const foundIndex = caseEntity.petitioners.findIndex(
+    p => p.contactId === contactId,
+  );
+  if (foundIndex === -1) {
+    throw new Error(
+      `Petitioner with contactId ${contactId} not found on case ${docketNumber}`,
+    );
+  }
+  caseEntity.petitioners.splice(foundIndex, 1, petitioner as TPetitioner);
+
+  const updatedCase = caseEntity.validate().toRawObject();
+  await upsertCases([updatedCase]);
 };

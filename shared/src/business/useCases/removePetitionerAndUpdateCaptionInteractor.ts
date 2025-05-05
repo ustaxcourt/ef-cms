@@ -90,6 +90,7 @@ export const removePetitionerAndUpdateCaption = async (
   await deletePetitionerOnCase({
     contactId: petitionerContactId,
     docketNumber,
+    authorizedUser
   });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();

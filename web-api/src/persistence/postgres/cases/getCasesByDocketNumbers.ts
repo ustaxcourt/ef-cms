@@ -12,7 +12,6 @@ import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
-import { PetitionerOnCaseKysely } from '@web-api/persistence/postgres/cases/parties/schema';
 import {
   CaseKysely,
   CaseStatusUpdateKysely,
@@ -46,7 +45,6 @@ async function getAllCaseData({
 }): Promise<EnrichedCaseRow[]> {
   const [
     cases,
-    petitioners,
     statistics,
     practitionerInfo,
     docketEntriesFromDb,
@@ -55,7 +53,6 @@ async function getAllCaseData({
     hearings,
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
-    getPetitioners(docketNumbers),
     getStatistics(docketNumbers),
     getPractitioners(docketNumbers, applicationContext),
     getDocketEntries(docketNumbers, applicationContext),
@@ -91,12 +88,6 @@ async function getAllCaseData({
       archivedCorrespondences: [],
       hearings: [],
     });
-  });
-  petitioners.forEach(p => {
-    const caseInfo = caseMap.get(p.docketNumber)!; // We know that we have the case because of our notFoundCases check above
-    const petitioners = caseInfo.petitioners ?? [];
-    petitioners.push(p);
-    caseMap.set(p.docketNumber, { ...caseInfo, petitioners });
   });
   statistics.forEach(s => {
     const caseInfo = caseMap.get(s.docketNumber)!;
@@ -227,17 +218,6 @@ async function getCasesMetadata(docketNumbers: string[]) {
   return caseInfo;
 }
 
-async function getPetitioners(docketNumbers: string[]) {
-  const dbPetitioners = await getDbReader(cb =>
-    cb
-      .selectFrom('dwPetitionerOnCase')
-      .where('docketNumber', 'in', docketNumbers)
-      .selectAll()
-      .execute(),
-  );
-  return dbPetitioners;
-}
-
 async function getStatistics(docketNumbers: string[]) {
   const dbStatistics = await getDbReader(cb =>
     cb
@@ -357,7 +337,6 @@ async function getHearings(
 
 type EnrichedCaseRow = CaseKysely & {
   docketNumberWithSuffix: string;
-  petitioners: PetitionerOnCaseKysely[];
   statistics: (CaseStatisticKysely & { penalties: StatisticPenaltyKysely[] })[];
   docketEntries: RawDocketEntry[];
   archivedDocketEntries: RawDocketEntry[];

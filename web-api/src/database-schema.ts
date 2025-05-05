@@ -16,10 +16,6 @@ import {
   DW_CASE_DEADLINE_COLUMNS,
 } from '@web-api/persistence/postgres/caseDeadlines/schema';
 import {
-  PetitionerOnCaseTable,
-  DW_PETITIONERS_ON_CASE_COLUMNS,
-} from '@web-api/persistence/postgres/cases/parties/schema';
-import {
   CaseTable,
   CaseStatusUpdateTable,
   DW_CASE_COLUMNS,
@@ -59,7 +55,6 @@ interface DatabaseSchemaType {
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
-  dwPetitionerOnCase: DatabaseTableMetadata<PetitionerOnCaseTable>;
   dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
@@ -112,10 +107,6 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMessage: {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
-  },
-  dwPetitionerOnCase: {
-    table: DEFAULT as PetitionerOnCaseTable,
-    columns: DW_PETITIONERS_ON_CASE_COLUMNS,
   },
   dwStatisticPenalty: {
     table: DEFAULT as StatisticPenaltyTable,

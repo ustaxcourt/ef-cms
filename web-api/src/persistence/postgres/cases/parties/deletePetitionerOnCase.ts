@@ -1,20 +1,20 @@
-import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
+import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { Case } from '@shared/business/entities/cases/Case';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 export const deletePetitionerOnCase = async ({
   contactId,
   docketNumber,
+  authorizedUser,
 }: {
   contactId: string;
   docketNumber: string;
-}): Promise<number> => {
-  const result = await pgDeleteFrom({
-    table: 'dwPetitionerOnCase',
-    where: cb =>
-      cb
-        .where('contactId', '=', contactId)
-        .where('docketNumber', '=', docketNumber),
-  });
-
-  // Rows affected
-  return result.length;
+  authorizedUser: AuthUser;
+}): Promise<void> => {
+  const theCase = await getCaseMetadataByDocketNumber({ docketNumber });
+  const caseEntity = new Case(theCase, { authorizedUser });
+  caseEntity.removePetitioner(contactId);
+  const updatedCase = caseEntity.validate().toRawObject();
+  await upsertCases([updatedCase]);
 };

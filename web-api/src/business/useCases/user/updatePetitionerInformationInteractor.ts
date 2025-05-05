@@ -312,6 +312,7 @@ export const updatePetitionerInformation = async (
     docketNumber: caseEntity.docketNumber,
     petitioner: updatedCaseContact,
     oldContactId: existingPetitionerInfo.contactId,
+    authorizedUser,
   });
 
   const updatedCase = await applicationContext

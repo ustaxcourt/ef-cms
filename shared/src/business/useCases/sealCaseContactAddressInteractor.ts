@@ -63,6 +63,7 @@ export const sealCaseContactAddress = async (
   await updatePetitionerOnCase({
     docketNumber,
     petitioner: contactToSeal,
+    authorizedUser,
   });
 
   return new Case(updatedCase, { authorizedUser }).toRawObject();

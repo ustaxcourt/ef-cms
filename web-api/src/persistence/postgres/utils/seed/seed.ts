@@ -15,7 +15,6 @@ import { caseDeadlines } from '@web-api/persistence/postgres/utils/seed/fixtures
 import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixtures/caseWorksheets';
 import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspodence';
 import { messages } from './fixtures/messages';
-import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/petitionerToCaseMappings';
 import { statisticPenalties } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/statisticPenalties';
 import { workItems } from './fixtures/workItems';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -58,12 +57,6 @@ export const seed = async () => {
         .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
         .execute(),
     table: null,
-  });
-
-  await pgInsertInto({
-    table: 'dwPetitionerOnCase',
-    values: petitionerToCaseMappings,
-    onConflictColumns: ['contactId', 'docketNumber'],
   });
 
   // Seed the cases
