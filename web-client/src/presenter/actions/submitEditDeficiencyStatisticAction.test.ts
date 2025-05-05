@@ -13,10 +13,10 @@ describe('submitEditDeficiencyStatisticAction', () => {
 
   it('calls the deficiency statistics update interactor, returning the success path', async () => {
     const statistic = {
-      determinationDeficiencyAmount: '1',
-      determinationTotalPenalties: '2',
-      irsDeficiencyAmount: '3',
-      irsTotalPenalties: '4',
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 2,
+      irsDeficiencyAmount: 3,
+      irsTotalPenalties: 4,
       lastDateOfPeriod: null,
       penalties: [
         {
@@ -54,10 +54,10 @@ describe('submitEditDeficiencyStatisticAction', () => {
 
   it('calls the deficiency statistics update interactor, returning the success path with a lastDateOfPeriod success message', async () => {
     const statistic = {
-      determinationDeficiencyAmount: '1',
-      determinationTotalPenalties: '2',
-      irsDeficiencyAmount: '3',
-      irsTotalPenalties: '4',
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 2,
+      irsDeficiencyAmount: 3,
+      irsTotalPenalties: 4,
       lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
       penalties: [
         {
@@ -101,10 +101,10 @@ describe('submitEditDeficiencyStatisticAction', () => {
       });
 
     const statistic = {
-      determinationDeficiencyAmount: '1',
-      determinationTotalPenalties: '2',
-      irsDeficiencyAmount: '3',
-      irsTotalPenalties: '4',
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 2,
+      irsDeficiencyAmount: 3,
+      irsTotalPenalties: 4,
       lastDateOfPeriod: null,
       penalites: [
         {

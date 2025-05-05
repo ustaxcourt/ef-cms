@@ -658,11 +658,11 @@ export const cases310_399: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
       {
         determinationDeficiencyAmount: undefined,
         determinationTotalPenalties: undefined,
-        irsDeficiencyAmount: '1500.0',
-        irsTotalPenalties: '150.0',
+        irsDeficiencyAmount: 1500,
+        irsTotalPenalties: 150,
         lastDateOfPeriod: undefined,
         statisticId: '38128813-53b7-4c53-acc2-33eb31ebc0ef',
-        year: '2019',
+        year: 2019,
         yearOrPeriod: 'Year',
         penalties: [
           {

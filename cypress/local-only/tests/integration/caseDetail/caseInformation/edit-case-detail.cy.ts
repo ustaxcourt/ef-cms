@@ -31,10 +31,10 @@ const getDeficiencyStatistics = (docketNumber: string): RawStatistic[] => {
       year: undefined,
       yearOrPeriod: 'Period',
       updatedAt: '',
-      irsDeficiencyAmount: '5678',
-      determinationDeficiencyAmount: '200',
-      irsTotalPenalties: '1',
-      determinationTotalPenalties: '1',
+      irsDeficiencyAmount: 5678,
+      determinationDeficiencyAmount: 200,
+      irsTotalPenalties: 1,
+      determinationTotalPenalties: 1,
       penalties: [
         {
           name: 'Hugh of St. Victor',
@@ -62,10 +62,10 @@ const getDeficiencyStatistics = (docketNumber: string): RawStatistic[] => {
       year: 2018,
       yearOrPeriod: 'Year',
       updatedAt: '',
-      irsDeficiencyAmount: '5678',
-      determinationDeficiencyAmount: '100',
-      irsTotalPenalties: '300', // Should match penalties below
-      determinationTotalPenalties: '5',
+      irsDeficiencyAmount: 5678,
+      determinationDeficiencyAmount: 100,
+      irsTotalPenalties: 300, // Should match penalties below
+      determinationTotalPenalties: 5,
       penalties: [
         {
           name: 'Marie de France',
@@ -101,10 +101,10 @@ const getDeficiencyStatistics = (docketNumber: string): RawStatistic[] => {
       year: 2019,
       yearOrPeriod: 'Year',
       updatedAt: '',
-      irsDeficiencyAmount: '5678',
-      determinationDeficiencyAmount: '300',
-      irsTotalPenalties: '3',
-      determinationTotalPenalties: '2',
+      irsDeficiencyAmount: 5678,
+      determinationDeficiencyAmount: 300,
+      irsTotalPenalties: 3,
+      determinationTotalPenalties: 2,
       penalties: [
         {
           name: 'John of Salisbury',
