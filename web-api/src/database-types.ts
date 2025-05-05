@@ -121,14 +121,19 @@ export interface WorkItemTable {
   workItemId: string;
 }
 
-export interface FeatureFlagTable {
-  name: string;
-  value: string;
-}
-
 export type WorkItemKysely = Selectable<WorkItemTable>;
 export type NewWorkItemKysely = Insertable<WorkItemTable>;
 export type UpdateWorkItemKysely = Updateable<WorkItemTable>;
+
+export interface FeatureFlagTable {
+  name: string;
+  value: { current: any };
+}
+
+export type FeatureFlagKysely = Selectable<FeatureFlagTable>;
+export type NewFeatureFlagKysely = Insertable<FeatureFlagTable>;
+export type UpdateFeatureFlagKysely = Updateable<FeatureFlagTable>;
+
 export interface UserCaseNoteTable {
   docketNumber: string;
   userId: string;

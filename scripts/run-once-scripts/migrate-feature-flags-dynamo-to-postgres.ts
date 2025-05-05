@@ -40,11 +40,15 @@ async function script() {
 
     const featureFlagRecord = {
       name: FEATURE_FLAG,
-      value: JSON.stringify({ current: FEATURE_FLAG_RECORD.Item?.current }),
+      value: { current: FEATURE_FLAG_RECORD.Item?.current },
     };
 
     await getDbWriter(writer =>
-      writer.insertInto('dwFeatureFlag').values(featureFlagRecord).execute(),
+      writer
+        .insertInto('dwFeatureFlag')
+        .values(featureFlagRecord)
+        .onConflict(oc => oc.column('name').doUpdateSet(featureFlagRecord))
+        .execute(),
     );
   }
 
@@ -61,11 +65,15 @@ async function script() {
 
     const featureFlagRecord = {
       name: FEATURE_FLAG,
-      value: JSON.stringify({ current: FEATURE_FLAG_RECORD.Item?.ips }),
+      value: { current: FEATURE_FLAG_RECORD.Item?.ips },
     };
 
     await getDbWriter(writer =>
-      writer.insertInto('dwFeatureFlag').values(featureFlagRecord).execute(),
+      writer
+        .insertInto('dwFeatureFlag')
+        .values(featureFlagRecord)
+        .onConflict(oc => oc.column('name').doUpdateSet(featureFlagRecord))
+        .execute(),
     );
   }
 }

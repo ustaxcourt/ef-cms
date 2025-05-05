@@ -26,7 +26,7 @@ export const getAllFeatureFlagsInteractor = async (
   ) {
     const ALL_FEATURE_FLAGS = await getFeatureFlagValues(allowlistFeatures);
     ALL_FEATURE_FLAGS.forEach(({ name, value }) => {
-      const { current } = JSON.parse(value) as { current: any };
+      const { current } = value;
       allFeatureFlags[name] = current;
     });
 

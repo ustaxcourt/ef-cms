@@ -1,6 +1,4 @@
-import { applicationContext } from './applicationContext';
 import { expressLogger } from './logger';
-import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
@@ -22,6 +20,7 @@ app.use((req, _res, next) => {
   }
   return next();
 });
+
 app.use(async (_req, _res, next) => {
   // This code is here so that we have a way to mock out the terminal user
   // via using dynamo locally.  This is only ran locally and on CI/CD which is
@@ -29,14 +28,17 @@ app.use(async (_req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
-    const allowlist = await get({
-      Key: {
-        pk: 'allowed-terminal-ips',
-        sk: 'allowed-terminal-ips',
-      },
-      applicationContext,
-    });
-    const ips = allowlist?.ips ?? [];
+
+    const FEATURE_FLAGS_RESULTS = await getDbReader(reader =>
+      reader
+        .selectFrom('dwFeatureFlag')
+        .selectAll()
+        .where('name', '=', 'allowed-terminal-ips')
+        .execute(),
+    );
+
+    const [allowIpList] = FEATURE_FLAGS_RESULTS;
+    const ips = allowIpList ? allowIpList.value.current : [];
 
     set(
       currentInvoke,
@@ -87,6 +89,7 @@ import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSea
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
+import { getDbReader } from '@web-api/database';
 
 /** Case */
 {
