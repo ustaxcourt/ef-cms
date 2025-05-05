@@ -1,5 +1,4 @@
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
-import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import {
   CASE_INVENTORY_PAGE_SIZE,
@@ -66,7 +65,6 @@ let sqsCache: SQSClient;
 export const createApplicationContext = (appContextUser = {}) => {
   return {
     barNumberGenerator,
-    docketNumberGenerator,
     environment,
     getBatchClient,
     getBounceAlertRecipients: () =>

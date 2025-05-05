@@ -11,8 +11,13 @@ export const getCaseDeadlinesByDocketNumber = async ({
       .selectFrom('dwCaseDeadline as cd')
       .leftJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
       .where('cd.docketNumber', '=', docketNumber)
-      .selectAll()
-      .select('cd.docketNumber')
+      .selectAll('cd')
+      .select([
+        'c.associatedJudge',
+        'c.associatedJudgeId',
+        'c.leadDocketNumber',
+        // TODO: use c.sortableDocketNumber and remove from caseDeadline
+      ])
       .execute(),
   );
 

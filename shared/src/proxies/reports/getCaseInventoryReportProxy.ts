@@ -14,14 +14,13 @@ export const getCaseInventoryReportInteractor = (
   { associatedJudge, selectedPage = 0, status },
 ): Promise<{ foundCases: RawCase[]; totalCount: number }> => {
   const { CASE_INVENTORY_PAGE_SIZE } = applicationContext.getConstants();
-  const from = selectedPage * CASE_INVENTORY_PAGE_SIZE;
 
   return get({
     applicationContext,
     endpoint: '/reports/case-inventory-report',
     params: {
       associatedJudge,
-      from,
+      selectedPage,
       pageSize: CASE_INVENTORY_PAGE_SIZE,
       status,
     },

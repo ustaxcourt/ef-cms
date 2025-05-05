@@ -3,7 +3,7 @@ import { IrsPractitioner } from '../IrsPractitioner';
 import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import { PrivatePractitioner } from '../PrivatePractitioner';
-import { isSealedCase } from '@shared/business/entities/cases/Case';
+import { Case, isSealedCase } from '@shared/business/entities/cases/Case';
 import joi from 'joi';
 
 export class EligibleCase extends JoiValidationEntity {
@@ -11,7 +11,7 @@ export class EligibleCase extends JoiValidationEntity {
   public caseType: string;
   public docketNumber: string;
   public docketNumberSuffix?: string;
-  public docketNumberWithSuffix?: string;
+  public docketNumberWithSuffix: string;
   public highPriority?: boolean;
   public leadDocketNumber?: string;
   public irsPractitioners?: IrsPractitioner[];
@@ -26,8 +26,10 @@ export class EligibleCase extends JoiValidationEntity {
     this.docketNumber = rawProps.docketNumber;
     this.leadDocketNumber = rawProps.leadDocketNumber;
     this.docketNumberSuffix = rawProps.docketNumberSuffix;
-    this.docketNumberWithSuffix =
-      rawProps.docketNumber + (rawProps.docketNumberSuffix || '');
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: rawProps.docketNumber,
+      docketNumberSuffix: rawProps.docketNumberSuffix,
+    });
     this.highPriority = rawProps.highPriority;
     this.caseType = rawProps.caseType;
     this.qcCompleteForTrial = rawProps.qcCompleteForTrial || {};
