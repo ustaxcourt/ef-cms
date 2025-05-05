@@ -46,6 +46,7 @@ export const caseTableDefinition = {
   orderForRatification: DEFAULT as boolean | undefined,
   orderToShowCause: DEFAULT as boolean | undefined,
   partyType: DEFAULT as string,
+  petitioners: DEFAULT as any, // TODO 10502
   petitionPaymentDate: DEFAULT as Date | null,
   petitionPaymentMethod: DEFAULT as string | undefined,
   petitionPaymentStatus: DEFAULT as string,
@@ -58,6 +59,7 @@ export const caseTableDefinition = {
   receivedAt: DEFAULT as Date,
   sealedDate: DEFAULT as Date | null,
   sortableDocketNumber: 0 as number,
+  statistics: DEFAULT as any, // TODO 10502
   status: DEFAULT as string,
   trialDate: DEFAULT as Date | null,
   trialLocation: DEFAULT as string | null,

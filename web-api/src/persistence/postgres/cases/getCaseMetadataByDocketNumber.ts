@@ -1,6 +1,5 @@
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
-import { sql } from 'kysely';
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
 
@@ -19,13 +18,7 @@ export const getCaseMetadataByDocketNumber = async ({
     getDbReader(reader =>
       reader
         .selectFrom('dwCase as c')
-        .leftJoin('dwPetitionerOnCase as p', 'c.docketNumber', 'p.docketNumber')
         .selectAll('c')
-        .select(
-          sql`jsonb_agg(to_jsonb(p) ORDER BY p.order_on_case)`.as(
-            'petitioners',
-          ),
-        )
         .where('c.docketNumber', '=', docketNumber)
         .groupBy('c.docketNumber')
         .executeTakeFirst(),

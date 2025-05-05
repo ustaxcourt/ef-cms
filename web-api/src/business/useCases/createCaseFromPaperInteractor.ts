@@ -5,7 +5,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { PaperPetition } from '@shared/business/entities/cases/PaperPetition';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -18,7 +17,6 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
-import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
 import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistics';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
@@ -357,10 +355,6 @@ export const createCaseFromPaperInteractor = async (
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
   const caseAssociationUpdates = [
-    createPetitionersOnCase({
-      docketNumber: caseToAdd.docketNumber,
-      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-    }),
     upsertCaseStatusUpdates({
       docketNumber: caseToAdd.docketNumber,
       statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],

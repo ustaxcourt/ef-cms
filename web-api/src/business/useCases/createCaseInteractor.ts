@@ -7,7 +7,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -21,7 +20,6 @@ import {
 import { UserCase } from '@shared/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
 import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistics';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
@@ -357,10 +355,6 @@ export const createCaseInteractor = async (
   const userCaseEntity = new UserCase(caseToAdd);
 
   const caseAssociationUpdates = [
-    createPetitionersOnCase({
-      docketNumber: caseToAdd.docketNumber,
-      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-    }),
     upsertCaseStatusUpdates({
       docketNumber: caseToAdd.docketNumber,
       statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
