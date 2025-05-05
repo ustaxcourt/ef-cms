@@ -20,7 +20,6 @@ export const getCaseMetadataByDocketNumber = async ({
         .selectFrom('dwCase as c')
         .selectAll('c')
         .where('c.docketNumber', '=', docketNumber)
-        .groupBy('c.docketNumber')
         .executeTakeFirst(),
     ),
     getCaseStatistics({ docketNumber }),
@@ -31,9 +30,6 @@ export const getCaseMetadataByDocketNumber = async ({
     ? fromKyselyCase({
         ...dbCaseMetadata,
         statistics,
-        petitioners: (dbCaseMetadata.petitioners as TPetitioner[]).filter(
-          p => p,
-        ), // This is a hack because our typing for Petitioners is yucky
         docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
           docketNumber: dbCaseMetadata.docketNumber,
           docketNumberSuffix: dbCaseMetadata.docketNumberSuffix,

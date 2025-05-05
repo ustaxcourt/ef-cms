@@ -147,9 +147,6 @@ function sortCaseFields({
   docketNumbers: string[];
 }): EnrichedCaseRow[] {
   cases.forEach(c => {
-    c.petitioners?.sort((a, b) => {
-      return a.orderOnCase - b.orderOnCase;
-    });
     const [docketEntries, archivedDocketEntries] = partition(
       c.docketEntries,
       docketEntry => !docketEntry.archived,
