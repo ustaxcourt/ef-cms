@@ -15,12 +15,12 @@ export class Statistic extends JoiValidationEntity {
   // TODO: the total penalties amount should be computed from the children penalties, not calculated and stored separately
   // In other words, to get this information, it would be better to sum over all associated penalties in the penalty table,
   // not store the (duplicative) information on the statistic table
-  public determinationDeficiencyAmount?: string;
-  public determinationTotalPenalties?: string;
-  public irsDeficiencyAmount: string;
-  public irsTotalPenalties: string;
+  public determinationDeficiencyAmount?: number;
+  public determinationTotalPenalties?: number;
+  public irsDeficiencyAmount: number;
+  public irsTotalPenalties: number;
   public lastDateOfPeriod?: string;
-  public year?: string;
+  public year?: number;
   public yearOrPeriod?: string;
   public statisticId: string;
   public penalties: any[];

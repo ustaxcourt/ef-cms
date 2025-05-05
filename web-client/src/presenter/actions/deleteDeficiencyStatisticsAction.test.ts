@@ -12,10 +12,10 @@ presenter.providers.path = {
 describe('deleteDeficiencyStatisticsAction', () => {
   it('calls the deficiency statistics delete interactor, returning the success path', async () => {
     const statistic = {
-      determinationDeficiencyAmount: '1',
-      determinationTotalPenalties: '2',
-      irsDeficiencyAmount: '3',
-      irsTotalPenalties: '4',
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 2,
+      irsDeficiencyAmount: 3,
+      irsTotalPenalties: 4,
       lastDateOfPeriod: null,
       statisticId: '3c4a440d-00c9-458d-a113-23cc833e09c5',
       year: '2019',
@@ -45,10 +45,10 @@ describe('deleteDeficiencyStatisticsAction', () => {
 
   it('calls the deficiency statistics delete interactor, returning the success path with a lastDateOfPeriod success message', async () => {
     const statistic = {
-      determinationDeficiencyAmount: '1',
-      determinationTotalPenalties: '2',
-      irsDeficiencyAmount: '3',
-      irsTotalPenalties: '4',
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 2,
+      irsDeficiencyAmount: 3,
+      irsTotalPenalties: 4,
       lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
       statisticId: '3c4a440d-00c9-458d-a113-23cc833e09c5',
       year: null,
@@ -84,10 +84,10 @@ describe('deleteDeficiencyStatisticsAction', () => {
       });
 
     const statistic = {
-      determinationDeficiencyAmount: '1',
-      determinationTotalPenalties: '2',
-      irsDeficiencyAmount: '3',
-      irsTotalPenalties: '4',
+      determinationDeficiencyAmount: 1,
+      determinationTotalPenalties: 2,
+      irsDeficiencyAmount: 3,
+      irsTotalPenalties: 4,
       lastDateOfPeriod: null,
       statisticId: '3c4a440d-00c9-458d-a113-23cc833e09c5',
       year: '2019',
