@@ -3,7 +3,7 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserFactory } from '@shared/business/entities/factories/UserFactory';
-import { getCasesByEmailTotal } from '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal';
+import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 
 async function disableIsUserUpdatingFlag({
   applicationContext,
@@ -90,8 +90,8 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
   const expectedCount = docketNumbersByUser.length;
 
   const actualCount = await getCasesByEmailTotal({
+    applicationContext,
     email: userEmail,
-    role: userRole,
   });
 
   if (actualCount >= expectedCount) return;
