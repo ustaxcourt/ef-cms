@@ -17,9 +17,7 @@ import {
 } from '@web-api/persistence/postgres/caseDeadlines/schema';
 import {
   CaseTable,
-  CaseStatusUpdateTable,
   DW_CASE_COLUMNS,
-  DW_CASE_STATUS_UPDATES_COLUMNS,
 } from '@web-api/persistence/postgres/cases/schema';
 import {
   CaseWorksheetTable,
@@ -44,7 +42,6 @@ interface DatabaseSchemaType {
   dwCase: DatabaseTableMetadata<CaseTable>;
   dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
-  dwCaseStatusUpdate: DatabaseTableMetadata<CaseStatusUpdateTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
@@ -79,10 +76,6 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwCaseDeadline: {
     table: DEFAULT as CaseDeadlineTable,
     columns: DW_CASE_DEADLINE_COLUMNS,
-  },
-  dwCaseStatusUpdate: {
-    table: DEFAULT as CaseStatusUpdateTable,
-    columns: DW_CASE_STATUS_UPDATES_COLUMNS,
   },
   dwCaseWorksheet: {
     table: DEFAULT as CaseWorksheetTable,

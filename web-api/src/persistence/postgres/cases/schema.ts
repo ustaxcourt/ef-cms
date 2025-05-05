@@ -1,3 +1,4 @@
+import { CaseStatusChange } from '@shared/business/entities/cases/Case';
 import { RawStatistic } from '@shared/business/entities/Statistic';
 import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
 
@@ -18,6 +19,7 @@ export const caseTableDefinition = {
   blockedReason: DEFAULT as string | undefined | null,
   caption: DEFAULT as string,
   caseNote: DEFAULT as string | undefined,
+  caseStatusHistory: DEFAULT as ColumnType<CaseStatusChange[], string, string>,
   caseType: DEFAULT as string,
   closedDate: DEFAULT as Date | null,
   createdAt: DEFAULT as Date,
@@ -78,21 +80,3 @@ export const DW_CASE_COLUMNS = Object.keys(caseTableDefinition) as Array<
 export type CaseKysely = Selectable<CaseTable>;
 export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
-
-export const caseStatusUpdateTableDefinition = {
-  statusUpdateId: DEFAULT as string,
-  changedBy: DEFAULT as string,
-  date: DEFAULT as Date,
-  docketNumber: DEFAULT as string,
-  updatedCaseStatus: DEFAULT as string,
-};
-
-export type CaseStatusUpdateTable = typeof caseStatusUpdateTableDefinition;
-
-export const DW_CASE_STATUS_UPDATES_COLUMNS = Object.keys(
-  caseStatusUpdateTableDefinition,
-) as Array<keyof CaseStatusUpdateTable>;
-
-export type CaseStatusUpdateKysely = Selectable<CaseStatusUpdateTable>;
-export type NewCaseStatusUpdateKysely = Insertable<CaseStatusUpdateTable>;
-export type UpdateCaseStatusUpdateKysely = Updateable<CaseStatusUpdateTable>;

@@ -5,6 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .alterTable('dwCase')
     .addColumn('petitioners', 'jsonb')
     .addColumn('statistics', 'jsonb')
+    .addColumn('caseStatusHistory', 'jsonb')
     .execute();
   // 10502 TODO: translate data to jsonb if dwPetitionerOnCase has data
   await db.schema.dropTable('dwPetitionerOnCase');
@@ -15,6 +16,7 @@ export async function down(db: Kysely<any>): Promise<void> {
     .alterTable('dwCase')
     .dropColumn('petitioners')
     .dropColumn('statistics')
+    .dropColumn('caseStatusHistory')
     .execute();
   // TODO 10502?
   console.error(

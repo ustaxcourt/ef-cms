@@ -606,6 +606,18 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
   {
     associatedJudge: CHIEF_JUDGE,
     caseCaption: 'Reading Rainbow, LeVar Burton, Trustee, Petitioner(s)',
+    caseStatusHistory: [
+      {
+        changedBy: 'Test Petitionsclerk',
+        date: '2024-06-04T22:34:46.115Z',
+        updatedCaseStatus: 'New',
+      },
+      {
+        changedBy: 'System',
+        date: '2024-06-04T22:35:01.143Z',
+        updatedCaseStatus: 'General Docket - Not at Issue',
+      },
+    ],
     caseType: CASE_TYPES_MAP.other,
     createdAt: '2024-06-04T22:34:46.115Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['101-24'],
@@ -774,6 +786,13 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
   {
     associatedJudge: CHIEF_JUDGE,
     caseCaption: 'Brett Osborne, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'New',
+      },
+    ],
     caseType: CASE_TYPES_MAP.whistleblower,
     createdAt: '2022-12-21T19:03:01.908Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['102-22'],
@@ -828,6 +847,23 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     associatedJudge: CHIEF_JUDGE,
     automaticBlocked: false,
     caseCaption: 'Something Absurd',
+    caseStatusHistory: [
+      {
+        changedBy: 'Test Petitionsclerk',
+        date: '2023-04-03T15:47:49.664Z',
+        updatedCaseStatus: CASE_STATUS_TYPES.new,
+      },
+      {
+        changedBy: 'System',
+        date: '2023-04-03T15:52:59.423Z',
+        updatedCaseStatus: CASE_STATUS_TYPES.generalDocket,
+      },
+      {
+        changedBy: 'Test Docketclerk',
+        date: '2023-04-03T15:54:48.112Z',
+        updatedCaseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    ],
     caseType: CASE_TYPES_MAP.cdp,
     createdAt: '2023-04-03T15:47:49.663Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['102-67'],
@@ -996,11 +1032,27 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     associatedJudge: CHIEF_JUDGE,
     automaticBlocked: false,
     caseCaption: 'Britanney Wiley, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Test Petitionsclerk',
+        date: '2023-04-03T15:49:19.618Z',
+        updatedCaseStatus: 'New',
+      },
+      {
+        changedBy: 'System',
+        date: '2023-04-03T15:53:18.587Z',
+        updatedCaseStatus: 'General Docket - Not at Issue',
+      },
+      {
+        changedBy: 'Test Docketclerk',
+        date: '2023-04-03T15:55:34.079Z',
+        updatedCaseStatus: 'General Docket - At Issue (Ready for Trial)',
+      },
+    ],
     caseType: CASE_TYPES_MAP.cdp,
     createdAt: '2023-04-03T15:49:19.618Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['103-67'],
     docketNumberSuffix: 'L',
-    // gsi1pk: 'leadCase|102-67',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption: 'Britanney Wiley, Petitioner',
@@ -1354,11 +1406,27 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     caseCaption:
       'Cassidy Mejia & juvek@mailinator.com, Deceased, Cassidy Mejia, Surviving Spouse, Petitioners',
+    caseStatusHistory: [
+      {
+        changedBy: 'Test Petitionsclerk',
+        date: '2023-04-03T15:50:59.961Z',
+        updatedCaseStatus: 'New',
+      },
+      {
+        changedBy: 'System',
+        date: '2023-04-03T15:53:43.150Z',
+        updatedCaseStatus: 'General Docket - Not at Issue',
+      },
+      {
+        changedBy: 'Test Docketclerk',
+        date: '2023-04-03T15:55:58.398Z',
+        updatedCaseStatus: 'General Docket - At Issue (Ready for Trial)',
+      },
+    ],
     caseType: CASE_TYPES_MAP.cdp,
     createdAt: '2023-04-03T15:50:59.961Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['104-67'],
     docketNumberSuffix: 'L',
-    // gsi1pk: 'leadCase|102-67',
     hasPendingItems: true,
     hasVerifiedIrsNotice: false,
     initialCaption:

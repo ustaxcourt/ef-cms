@@ -27,6 +27,7 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     blockedReason: rawCase.blockedReason ?? null,
     caption: rawCase.caseCaption,
     caseNote: rawCase.caseNote,
+    caseStatusHistory: JSON.stringify(rawCase.caseStatusHistory),
     caseType: rawCase.caseType,
     closedDate: rawCase.closedDate
       ? calculateDate({ dateString: rawCase.closedDate })
