@@ -1,5 +1,4 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { RawPenalty } from '@shared/business/entities/Penalty';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
@@ -16,12 +15,6 @@ import {
   CaseKysely,
   CaseStatusUpdateKysely,
 } from '@web-api/persistence/postgres/cases/schema';
-import { sortStatistics } from '@web-api/persistence/postgres/cases/statistics/helper';
-import {
-  CaseStatisticKysely,
-  StatisticPenaltyKysely,
-} from '@web-api/persistence/postgres/cases/statistics/schema';
-import { sql } from 'kysely';
 import { difference, isEmpty, partition, sortBy } from 'lodash';
 
 export async function getCasesByDocketNumbers({
@@ -45,7 +38,6 @@ async function getAllCaseData({
 }): Promise<EnrichedCaseRow[]> {
   const [
     cases,
-    statistics,
     practitionerInfo,
     docketEntriesFromDb,
     caseStatusHistories,
@@ -53,7 +45,6 @@ async function getAllCaseData({
     hearings,
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
-    getStatistics(docketNumbers),
     getPractitioners(docketNumbers, applicationContext),
     getDocketEntries(docketNumbers, applicationContext),
     getCasesStatusHistory(docketNumbers),
@@ -77,8 +68,6 @@ async function getAllCaseData({
         docketNumber: c.docketNumber,
         docketNumberSuffix: c.docketNumberSuffix,
       }),
-      petitioners: [],
-      statistics: [],
       docketEntries: [],
       archivedDocketEntries: [],
       irsPractitioners: [],
@@ -88,12 +77,6 @@ async function getAllCaseData({
       archivedCorrespondences: [],
       hearings: [],
     });
-  });
-  statistics.forEach(s => {
-    const caseInfo = caseMap.get(s.docketNumber)!;
-    const statistics = caseInfo.statistics ?? [];
-    statistics.push(s);
-    caseMap.set(s.docketNumber, { ...caseInfo, statistics });
   });
   docketEntriesFromDb.forEach(docketEntryInfo => {
     const caseInfo = caseMap.get(docketEntryInfo.docketNumber)!;
@@ -160,7 +143,6 @@ function sortCaseFields({
     );
     c.correspondence = sortBy(correspondence, 'filingDate');
     c.archivedCorrespondences = sortBy(archivedCorrespondences, 'filingDate');
-    c.statistics = sortStatistics(c.statistics);
   });
 
   // Sort the cases in the original docketNumber order
@@ -180,16 +162,6 @@ function convertDbCaseToRawCase(
 ): Omit<RawCase, 'consolidatedCases'> {
   const appCase = {
     ...fromKyselyCase(dbCase),
-    statistics: dbCase.statistics.map(s => ({
-      ...s,
-      penalties: (s.penalties as RawPenalty[]) ?? [],
-      year: s.year?.toString(),
-      yearOrPeriod: s.yearOrPeriod ?? undefined,
-      determinationTotalPenalties: s.determinationTotalPenalties ?? undefined,
-      determinationDeficiencyAmount:
-        s.determinationDeficiencyAmount ?? undefined,
-      lastDateOfPeriod: s.lastDateOfPeriod?.toISOString(),
-    })),
     correspondence: dbCase.correspondence.map(cc =>
       caseCorrespondenceEntity(cc),
     ),
@@ -213,25 +185,6 @@ async function getCasesMetadata(docketNumbers: string[]) {
       .execute(),
   );
   return caseInfo;
-}
-
-async function getStatistics(docketNumbers: string[]) {
-  const dbStatistics = await getDbReader(cb =>
-    cb
-      .selectFrom('dwCaseStatistic as cs')
-      .where('docketNumber', 'in', docketNumbers)
-      .leftJoin('dwStatisticPenalty as sp', 'sp.statisticId', 'cs.statisticId')
-      .selectAll('cs')
-      .select(
-        sql`jsonb_agg(to_jsonb(sp) ORDER BY sp.updated_at)`.as('penalties'),
-      )
-      .groupBy(['cs.docketNumber', 'cs.statisticId'])
-      .execute(),
-  );
-  return dbStatistics.map(s => ({
-    ...s,
-    penalties: (s.penalties as StatisticPenaltyKysely[]) ?? [],
-  }));
 }
 
 async function getPractitioners(
@@ -334,7 +287,6 @@ async function getHearings(
 
 type EnrichedCaseRow = CaseKysely & {
   docketNumberWithSuffix: string;
-  statistics: (CaseStatisticKysely & { penalties: StatisticPenaltyKysely[] })[];
   docketEntries: RawDocketEntry[];
   archivedDocketEntries: RawDocketEntry[];
   irsPractitioners: RawPractitioner[];

@@ -22,12 +22,6 @@ import {
   DW_CASE_STATUS_UPDATES_COLUMNS,
 } from '@web-api/persistence/postgres/cases/schema';
 import {
-  CaseStatisticTable,
-  StatisticPenaltyTable,
-  DW_CASE_STATISTIC_COLUMNS,
-  DW_STATISTIC_PENALTY_COLUMNS,
-} from '@web-api/persistence/postgres/cases/statistics/schema';
-import {
   CaseWorksheetTable,
   DW_CASE_WORKSHEET_COLUMNS,
 } from '@web-api/persistence/postgres/caseWorksheets/schema';
@@ -50,12 +44,10 @@ interface DatabaseSchemaType {
   dwCase: DatabaseTableMetadata<CaseTable>;
   dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
-  dwCaseStatistic: DatabaseTableMetadata<CaseStatisticTable>;
   dwCaseStatusUpdate: DatabaseTableMetadata<CaseStatusUpdateTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
-  dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
@@ -88,10 +80,6 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as CaseDeadlineTable,
     columns: DW_CASE_DEADLINE_COLUMNS,
   },
-  dwCaseStatistic: {
-    table: DEFAULT as CaseStatisticTable,
-    columns: DW_CASE_STATISTIC_COLUMNS,
-  },
   dwCaseStatusUpdate: {
     table: DEFAULT as CaseStatusUpdateTable,
     columns: DW_CASE_STATUS_UPDATES_COLUMNS,
@@ -107,10 +95,6 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMessage: {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
-  },
-  dwStatisticPenalty: {
-    table: DEFAULT as StatisticPenaltyTable,
-    columns: DW_STATISTIC_PENALTY_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,

@@ -1,4 +1,3 @@
-import { caseStatistics } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatistics';
 import { caseStatusUpdates } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatusUpdates';
 import { cases100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
 import { cases105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
@@ -15,7 +14,6 @@ import { caseDeadlines } from '@web-api/persistence/postgres/utils/seed/fixtures
 import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixtures/caseWorksheets';
 import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspodence';
 import { messages } from './fixtures/messages';
-import { statisticPenalties } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/statisticPenalties';
 import { workItems } from './fixtures/workItems';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
@@ -92,19 +90,6 @@ export const seed = async () => {
       date: calculateDate({ dateString: s.date }),
     })),
     onConflictColumns: ['statusUpdateId'],
-  });
-
-  // Attach the case statistics to their respective cases
-  await pgInsertInto({
-    table: 'dwCaseStatistic',
-    values: caseStatistics,
-    onConflictColumns: ['statisticId'],
-  });
-
-  await pgInsertInto({
-    table: 'dwStatisticPenalty',
-    values: statisticPenalties,
-    onConflictColumns: ['penaltyId'],
   });
 
   await Promise.all([

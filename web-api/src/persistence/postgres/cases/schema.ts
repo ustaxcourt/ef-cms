@@ -1,3 +1,4 @@
+import { RawStatistic } from '@shared/business/entities/Statistic';
 import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
 
 const DEFAULT = {};
@@ -59,7 +60,7 @@ export const caseTableDefinition = {
   receivedAt: DEFAULT as Date,
   sealedDate: DEFAULT as Date | null,
   sortableDocketNumber: 0 as number,
-  statistics: DEFAULT as any, // TODO 10502
+  statistics: DEFAULT as ColumnType<RawStatistic[], string, string>,
   status: DEFAULT as string,
   trialDate: DEFAULT as Date | null,
   trialLocation: DEFAULT as string | null,

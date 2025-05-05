@@ -20,7 +20,6 @@ import {
 import { UserCase } from '@shared/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistics';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
@@ -361,10 +360,6 @@ export const createCaseInteractor = async (
     }),
     upsertWorkItems({
       workItems: [workItem.validate().toRawObject()],
-    }),
-    createCaseStatistics({
-      docketNumber: caseToAdd.docketNumber,
-      statistics: caseToAdd.statistics || [],
     }),
     applicationContext.getPersistenceGateway().associateUserWithCase({
       applicationContext,
