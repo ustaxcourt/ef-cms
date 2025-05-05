@@ -21,6 +21,7 @@ export const ItemizedPenaltiesModal = connect(
             aria-describedby="tab-work-queue"
             className="usa-table ustc-table itemized-penalties-modal"
             id="itemized-penalties-modal-id"
+            data-testid="itemized-penalties-modal"
           >
             <thead className="itemized-penalties-modal">
               <tr>

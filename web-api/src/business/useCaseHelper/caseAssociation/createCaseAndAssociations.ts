@@ -1,10 +1,11 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
-import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
-import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { upsertCase } from '@web-api/persistence/postgres/cases/upsertCase';
+import { createCase } from '@web-api/persistence/postgres/cases/createCase';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * createCaseDocketEntries
@@ -24,7 +25,7 @@ const createCaseDocketEntries = ({
   applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketEntries: any;
-  docketNumber: any;
+  docketNumber: string;
   petitioners: any;
 }) => {
   const validDocketEntries = DocketEntry.validateRawCollection(docketEntries, {
@@ -127,11 +128,9 @@ export const createCaseAndAssociations = async ({
   } = validRawCaseEntity;
 
   const requests = [
-    applicationContext.getPersistenceGateway().createCase({
-      applicationContext,
+    createCase({
       caseToCreate,
     }),
-    upsertCase({ rawCase: caseToCreate }),
     ...createCaseDocketEntries({
       applicationContext,
       authorizedUser,
@@ -151,5 +150,5 @@ export const createCaseAndAssociations = async ({
     }),
   ];
 
-  return await Promise.all(requests);
+  return await settlePromises(requests);
 };

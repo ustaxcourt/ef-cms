@@ -1,12 +1,19 @@
+jest.mock('@web-api/persistence/elasticsearch/elasticSearchHealthCheck.ts');
 import { S3 } from '@aws-sdk/client-s3';
 import { getHealthCheckInteractor } from './getHealthCheckInteractor';
+import { elasticSearchHealthCheck as elasticSearchHealthCheckMock } from '@web-api/persistence/elasticsearch/elasticSearchHealthCheck';
+import { SearchClientResultsType } from '@web-api/persistence/elasticsearch/searchClient';
 
 const mockListObjectsV2 = jest
   .spyOn(S3.prototype, 'listObjectsV2')
   .mockResolvedValue({} as never);
 
+const elasticSearchHealthCheck = jest.mocked(elasticSearchHealthCheckMock);
+
 describe('getHealthCheckInteractor', () => {
   it('should return the expected true statuses for all services', async () => {
+    elasticSearchHealthCheck.mockResolvedValue({} as SearchClientResultsType);
+
     const statusResult = await getHealthCheckInteractor({
       environment: {
         stage: 'dev',
@@ -62,6 +69,7 @@ describe('getHealthCheckInteractor', () => {
   });
 
   it('should return false for all services when services are down', async () => {
+    elasticSearchHealthCheck.mockRejectedValue(false);
     mockListObjectsV2.mockRejectedValue(new Error('S3 is down') as never);
     const status = await getHealthCheckInteractor({
       environment: {

@@ -55,28 +55,22 @@ export async function down(db: Kysely<any>): Promise<void> {
   // Drop indexes in reverse order to ensure clean rollback
   await db.schema
     .dropIndex('idx_workItem_associatedJudge')
-    .on('dwWorkItem')
     .execute();
   await db.schema
     .dropIndex('idx_workItem_assigneeId')
-    .on('dwWorkItem')
     .execute();
   await db.schema
     .dropIndex('idx_workItem_highPriority')
-    .on('dwWorkItem')
     .execute();
 
   await db.schema
     .dropIndex('idx_workItem_createdAt')
-    .on('dwWorkItem')
     .execute();
   await db.schema
     .dropIndex('idx_workItem_completedAt')
-    .on('dwWorkItem')
     .execute();
   await db.schema.dropIndex('idx_workItem_section').on('dwWorkItem').execute();
   await db.schema
     .dropIndex('idx_workItem_docketNumber')
-    .on('dwWorkItem')
     .execute();
 }

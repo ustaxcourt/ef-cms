@@ -1,3 +1,4 @@
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { genericHandler } from '../../genericHandler';
 import { handleBounceNotificationInteractor } from '@web-api/business/useCases/email/handleBounceNotificationInteractor';
 
@@ -16,7 +17,7 @@ export const handleBounceNotificationsLambda = event =>
         ...JSON.parse(record.Sns.Message),
       }));
 
-      return await Promise.all(
+      return await settlePromises(
         records.map(record =>
           handleBounceNotificationInteractor(applicationContext, record),
         ),
