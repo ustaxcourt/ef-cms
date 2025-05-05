@@ -1,4 +1,3 @@
-import { caseStatusUpdates } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatusUpdates';
 import { cases100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
 import { cases105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 import { cases110_129 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases110_129';
@@ -12,12 +11,10 @@ import { cases440_449 } from '@web-api/persistence/postgres/utils/seed/fixtures/
 import { cases450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases450_plus';
 import { caseDeadlines } from '@web-api/persistence/postgres/utils/seed/fixtures/caseDeadlines';
 import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixtures/caseWorksheets';
-import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspodence';
+import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspondence';
 import { messages } from './fixtures/messages';
 import { workItems } from './fixtures/workItems';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getUniqueId } from '@shared/sharedAppContext';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -80,17 +77,6 @@ export const seed = async () => {
       }),
     })),
   );
-
-  // Attach the case status updates to their respective cases
-  await pgInsertInto({
-    table: 'dwCaseStatusUpdate',
-    values: caseStatusUpdates.map(s => ({
-      ...s,
-      statusUpdateId: s.statusUpdateId ? s.statusUpdateId : getUniqueId(),
-      date: calculateDate({ dateString: s.date }),
-    })),
-    onConflictColumns: ['statusUpdateId'],
-  });
 
   await Promise.all([
     insertMessages,

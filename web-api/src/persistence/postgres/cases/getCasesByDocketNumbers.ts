@@ -11,10 +11,7 @@ import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
-import {
-  CaseKysely,
-  CaseStatusUpdateKysely,
-} from '@web-api/persistence/postgres/cases/schema';
+import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { difference, isEmpty, partition, sortBy } from 'lodash';
 
 export async function getCasesByDocketNumbers({
@@ -40,14 +37,12 @@ async function getAllCaseData({
     cases,
     practitionerInfo,
     docketEntriesFromDb,
-    caseStatusHistories,
     caseCorrespondences,
     hearings,
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
     getPractitioners(docketNumbers, applicationContext),
     getDocketEntries(docketNumbers, applicationContext),
-    getCasesStatusHistory(docketNumbers),
     getCaseCorrespondenceByDocketNumber(docketNumbers),
     getHearings(docketNumbers),
   ]);
@@ -72,7 +67,6 @@ async function getAllCaseData({
       archivedDocketEntries: [],
       irsPractitioners: [],
       privatePractitioners: [],
-      caseStatusHistory: [],
       correspondence: [],
       archivedCorrespondences: [],
       hearings: [],
@@ -91,15 +85,6 @@ async function getAllCaseData({
       ...caseInfo,
       irsPractitioners: info.irsPractitioners,
       privatePractitioners: info.privatePractitioners,
-    });
-  });
-  caseStatusHistories.forEach(history => {
-    const caseInfo = caseMap.get(history.docketNumber)!;
-    const histories = caseInfo.caseStatusHistory ?? [];
-    histories.push(history);
-    caseMap.set(history.docketNumber, {
-      ...caseInfo,
-      caseStatusHistory: histories,
     });
   });
   caseCorrespondences.forEach(correspondence => {
@@ -168,9 +153,6 @@ function convertDbCaseToRawCase(
     archivedCorrespondences: dbCase.archivedCorrespondences?.map(cc =>
       caseCorrespondenceEntity(cc),
     ),
-    caseStatusHistory: dbCase.caseStatusHistory.map(update => {
-      return { ...update, date: update.date.toISOString() };
-    }),
   };
 
   return purgeDynamoKeys(appCase);
@@ -236,19 +218,6 @@ async function getDocketEntries(
   return docketEntryInfo;
 }
 
-async function getCasesStatusHistory(docketNumbers: string[]) {
-  const dbCaseStatusHistory = await getDbReader(reader =>
-    reader
-      .selectFrom('dwCaseStatusUpdate')
-      .where('docketNumber', 'in', docketNumbers)
-      .orderBy('date', 'asc')
-      .selectAll()
-      .execute(),
-  );
-
-  return dbCaseStatusHistory;
-}
-
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
   const correspondence = await getDbReader(reader =>
     reader
@@ -291,7 +260,6 @@ type EnrichedCaseRow = CaseKysely & {
   archivedDocketEntries: RawDocketEntry[];
   irsPractitioners: RawPractitioner[];
   privatePractitioners: RawPractitioner[];
-  caseStatusHistory: CaseStatusUpdateKysely[];
   correspondence: CaseCorrespondenceKysely[];
   archivedCorrespondences: CaseCorrespondenceKysely[];
   hearings: any[];

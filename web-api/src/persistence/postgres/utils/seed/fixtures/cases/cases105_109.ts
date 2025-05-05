@@ -179,6 +179,18 @@ export const cases105_109: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlockedDate: '2023-07-26T18:58:50.926Z',
     automaticBlockedReason: 'Pending Item',
     caseCaption: 'Yasir Oneal, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Petitioner',
+        date: '2023-07-26T17:03:31.707Z',
+        updatedCaseStatus: 'New',
+      },
+      {
+        changedBy: 'System',
+        date: '2023-07-26T17:04:05.684Z',
+        updatedCaseStatus: 'General Docket - Not at Issue',
+      },
+    ],
     caseType: CASE_TYPES_MAP.innocentSpouse,
     createdAt: '2023-07-26T17:03:31.706Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-23'],
@@ -248,6 +260,23 @@ export const cases105_109: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Magee Schmidt, Deceased, Magee Schmidt, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Test Petitionsclerk',
+        date: '2023-04-03T15:52:32.342Z',
+        updatedCaseStatus: 'New',
+      },
+      {
+        changedBy: 'System',
+        date: '2023-04-03T15:52:36.482Z',
+        updatedCaseStatus: 'General Docket - Not at Issue',
+      },
+      {
+        changedBy: 'Test Docketclerk',
+        date: '2023-04-03T15:57:02.387Z',
+        updatedCaseStatus: 'General Docket - At Issue (Ready for Trial)',
+      },
+    ],
     caseType: CASE_TYPES_MAP.cdp,
     createdAt: '2023-04-03T15:52:32.341Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-67'],

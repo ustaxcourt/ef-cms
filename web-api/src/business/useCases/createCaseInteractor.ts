@@ -1,4 +1,4 @@
-import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -25,7 +25,6 @@ import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utili
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
-import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
@@ -354,10 +353,6 @@ export const createCaseInteractor = async (
   const userCaseEntity = new UserCase(caseToAdd);
 
   const caseAssociationUpdates = [
-    upsertCaseStatusUpdates({
-      docketNumber: caseToAdd.docketNumber,
-      statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
-    }),
     upsertWorkItems({
       workItems: [workItem.validate().toRawObject()],
     }),

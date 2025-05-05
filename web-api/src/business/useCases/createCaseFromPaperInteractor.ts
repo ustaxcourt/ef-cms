@@ -1,4 +1,4 @@
-import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
@@ -25,8 +25,6 @@ import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
-import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -353,17 +351,9 @@ export const createCaseFromPaperInteractor = async (
   }
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
-  const caseAssociationUpdates = [
-    upsertCaseStatusUpdates({
-      docketNumber: caseToAdd.docketNumber,
-      statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
-    }),
-    upsertWorkItems({
-      workItems: [workItem.validate().toRawObject()],
-    }),
-  ];
-
-  await settlePromises(caseAssociationUpdates);
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
 
   return {
     caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),

@@ -1,7 +1,5 @@
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const processCaseEntries = async ({
   caseEntityRecords,
@@ -19,20 +17,12 @@ export const processCaseEntries = async ({
     casesToUpsert[caseNewImage.docketNumber] = caseNewImage;
   }
 
-  await upsertCases(Object.values(casesToUpsert));
-  const postgresUpserts: Promise<void>[] = [];
   for (const caseRecord of Object.values(casesToUpsert)) {
     caseRecord.petitioners?.forEach(p => {
       p.hasConsentedToElectronicService = p?.hasConsentedToEService;
       p.hasElectronicAccess = p?.hasEAccess;
     });
-    postgresUpserts.push(
-      upsertCaseStatusUpdates({
-        docketNumber: caseRecord.docketNumber,
-        statusUpdates: caseRecord.caseStatusHistory || [],
-      }),
-    );
   }
 
-  await settlePromises(postgresUpserts);
+  await upsertCases(Object.values(casesToUpsert));
 };
