@@ -37,7 +37,7 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
   - [ ] sync work: return to web-api/src/persistence/elasticsearch/getIndexNameForRecord.ts and take another look
   - [ ] web-api/src/persistence/elasticsearch/getPractitionersByName.ts ensure still works as expected
-  - [ ] review web-api/src/persistence/elasticsearch/helpers/searchClauses.ts 
+  - [ ] review web-api/src/persistence/elasticsearch/helpers/searchClauses.ts
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
 - [in-progress] barNumberGenerator: Contains business logic for generating a bar number,
 does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm business rules for generating bar numbers
@@ -167,3 +167,95 @@ sk: document|id
 How does the tax court...
 1) add a practitioner without a user account? - answer: not allowed (but support legacy w/o email)
 2) add a practitioner to the system? - answer: admissions clerk only under advanced search
+
+
+
+# Rivas (private practitioner)
+Needs to be removed from dynamodb seed data (it was re-added during work on opensearch sync) and re-added to postgres seed data and the users json file here:
+web-api/storage/fixtures/seed/users.json
+
+```json
+  {
+    "admissionsStatus": "Active",
+    "lastName": "Rivas",
+    "role": "privatePractitioner",
+    "admissionsDate": "2019-03-01",
+    "section": "privatePractitioner",
+    "practitionerType": "Attorney",
+    "userId": "29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
+    "practiceType": "Private",
+    "firstName": "Alden",
+    "serviceIndicator": "Electronic",
+    "barNumber": "RA3333",
+    "birthYear": "1950",
+    "entityName": "Practitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
+    "name": "Alden Rivas",
+    "firmName": "Law Offices of Rivas and Kathy Gee",
+    "pk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
+    "originalBarState": "FL",
+    "email": "privatePractitioner4@example.com"
+  },
+  {
+    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
+    "pk": "privatePractitioner|Alden Rivas"
+  },
+  {
+    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
+    "pk": "privatePractitioner|ALDEN RIVAS"
+  },
+  {
+    "sk": "user|29e9b4d1-63bc-4f66-b230-59a3a9ae44eb",
+    "pk": "privatePractitioner|RA3333"
+  },
+```
+
+Current flow:
+efcms-local -> DynamoDB -> partition -> processSteam -> process???Entity -> Opensearch
+
+Ideal flow:
+efcms-local -> DynamoDB -> partition -> processSteam -> [processUserEntity] -> Postgres ->
+if user table
+-> Send Message to SQS -> Indexing in Openseach (base)
+if practioner table
+-> Send Message to SQS -> Indexing in Openseach (practitioner)
+
+DynamoDB:
+
+Other Records Mapping
+pk: user|
+sk: user|
+
+Practitioner Records Mapping
+
+pk: user|
+sk: case|
+
+??? Records Mappings
+pk: privatePractitioner|UPPER_NAME
+sk: user|
+
+pk: privatePractitioner|LOWER_NAME
+sk: user|
+
+pk: privatePractitioner|BAR_NUMBER
+sk: user|
+
+Opensearch:
+efcms-user
+???
+
+Assuming User -> OtherRecords
+if yes, then we need partition out the user records into processUserEntity
+
+if no, we then where are we processing user records??

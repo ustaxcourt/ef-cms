@@ -15,7 +15,7 @@ import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 import { updateUser } from '@web-api/gateways/user/updateUser';
 import { createUser } from '@web-api/gateways/user/createUser';
 import { disableUser as disableUserGateway } from '@web-api/gateways/user/disableUser';
-import { createPractitionerRecord } from '@web-api/persistence/postgres/practitioners/createPractitionerRecord';
+import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
 
 const { USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 
@@ -116,7 +116,7 @@ export async function createOrUpdateUser(
       .validate()
       .toRawObject();
 
-    await createPractitionerRecord({ practitioner: rawUser, userId });
+    await upsertPractitionerRecord({ practitioner: rawUser, userId });
   } else {
     rawUser = new User({ ...user, userId }).validate().toRawObject();
   }

@@ -8,7 +8,7 @@ import { createUser } from '@web-api/gateways/user/createUser';
 import { updateUser } from '@web-api/gateways/user/updateUser';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { createUserRecord } from '../users/createUserRecord';
-import { createPractitionerRecord } from '@web-api/persistence/postgres/practitioners/createPractitionerRecord';
+import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
 import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 
 export const createOrUpdatePractitionerUser = async ({
@@ -62,7 +62,7 @@ export const createOrUpdatePractitionerUser = async ({
     userId,
   });
 
-  return await createPractitionerRecord({
+  return await upsertPractitionerRecord({
     practitioner: user,
     userId,
   });

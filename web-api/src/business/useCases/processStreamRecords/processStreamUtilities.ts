@@ -76,18 +76,19 @@ export const partitionRecords = (
       record.dynamodb.NewImage.entityName.S === 'CaseWorksheet',
   );
 
-  const [caseCorrespondenceRecords, nonCorrespondenceRecords] = partition(
+  const [userRecords, nonUserRecords] = partition(
     nonCaseWorksheetRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
-      record.dynamodb.NewImage.entityName.S == 'Correspondence',
+      (record.dynamodb.NewImage.entityName.S === 'User' ||
+        record.dynamodb.NewImage.entityName.S === 'Practitioner'),
   );
 
-  const [userRecords, otherRecords] = partition(
-    nonCorrespondenceRecords,
+  const [caseCorrespondenceRecords, otherRecords] = partition(
+    nonUserRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
-      record.dynamodb.NewImage.entityName.S === 'User',
+      record.dynamodb.NewImage.entityName.S === 'Correspondence',
   );
 
   return {

@@ -7,20 +7,12 @@ import { applicationContext } from '@web-api/applicationContext';
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getLogger } from 'aws-xray-sdk';
 import { flattenDeep, isArray } from 'lodash';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { pinkLog } from '@shared/tools/pinkLog';
-import { UserKysely } from '@web-api/persistence/postgres/users/schema';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { ROLES } from '@shared/business/entities/EntityConstants';
+import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 
-export const transformOpenSearchUser = (
-  userData: UserKysely | UserKysely[],
-) => {
-  const users = isArray(userData) ? userData : [userData];
-  return users.map(user => user.userId);
-};
-
-export const indexOpenSearchUser = async ({
+export const indexOpenSearchPractitioner = async ({
   message,
 }: {
   message: OpenSearchSyncMessage;
@@ -29,8 +21,8 @@ export const indexOpenSearchUser = async ({
     ? message.payload
     : [message.payload]) {
     pinkLog('userId', userId);
-    const userRecord = await getUserById({ userId });
-    pinkLog('userRecord', userRecord);
+    const userRecord = await getPractitionerById({ userId });
+    pinkLog('userRecord (indexOpenSearchPractitioner)', userRecord);
 
     if (!userRecord) {
       getLogger().error(`Could not index user ${userId}: not found!`);
@@ -63,7 +55,7 @@ export const indexOpenSearchUser = async ({
 
     const userRecords: IDynamoDBRecord[] = [];
 
-    // put array of the dynamo records into objecy
+    // put array of the dynamo records into object
 
     userRecords.push({
       dynamodb: {

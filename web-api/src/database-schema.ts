@@ -59,6 +59,11 @@ import {
   DW_PRACTITIONER_COLUMNS,
   PractitionerTable,
 } from '@web-api/persistence/postgres/practitioners/schema';
+import {
+  indexOpenSearchUser,
+  transformOpenSearchUser,
+} from 'web-api/elasticsearch/index-users';
+import { indexOpenSearchPractitioner } from 'web-api/elasticsearch/index-practitioners';
 // import {
 //   indexOpenSearchUser,
 //   transformOpenSearchUser,
@@ -152,12 +157,14 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUser: {
     table: DEFAULT as UserTable,
     columns: DW_USER_COLUMNS,
-    // indexOpenSearchMessage: indexOpenSearchUser,
-    // transformOpenSearchMessage: transformOpenSearchUser,
+    indexOpenSearchMessage: indexOpenSearchUser,
+    transformOpenSearchMessage: transformOpenSearchUser,
   },
   dwPractitioner: {
     table: DEFAULT as PractitionerTable,
     columns: DW_PRACTITIONER_COLUMNS,
+    indexOpenSearchMessage: indexOpenSearchPractitioner,
+    transformOpenSearchMessage: transformOpenSearchUser,
   },
   dwUserConfirmationCode: {
     table: DEFAULT as UserConfirmationCodeTable,

@@ -7,7 +7,7 @@ import { createUserRecord } from '@web-api/persistence/postgres/users/createUser
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
-import { createPractitionerRecord } from '@web-api/persistence/postgres/practitioners/createPractitionerRecord';
+import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
 
 export const createUsersAndPractitioners = async () => {
   const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
@@ -34,7 +34,7 @@ export const createUsersAndPractitioners = async () => {
           .validate()
           .toRawObject();
 
-        await createPractitionerRecord({
+        await upsertPractitionerRecord({
           practitioner,
           userId,
         });

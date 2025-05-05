@@ -2,7 +2,7 @@ import { pgInsertInto } from '../utils/operation/pgInsertInto';
 import { practitionerEntity, toKyselyNewPractitioner } from './mapper';
 import { getUniqueId } from '@shared/sharedAppContext';
 
-export const createPractitionerRecord = async ({
+export const upsertPractitionerRecord = async ({
   practitioner,
   userId,
 }: {
