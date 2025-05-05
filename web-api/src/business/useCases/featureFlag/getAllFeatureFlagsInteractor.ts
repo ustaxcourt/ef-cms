@@ -29,6 +29,11 @@ export const getAllFeatureFlagsInteractor = async (
       const { current } = JSON.parse(value) as { current: any };
       allFeatureFlags[name] = current;
     });
+
+    allowlistFeatures.forEach(featureFlag => {
+      if (allFeatureFlags[featureFlag] === undefined)
+        allFeatureFlags[featureFlag] = false;
+    });
   }
 
   return allFeatureFlags;
