@@ -169,7 +169,6 @@ import { serveCourtIssuedDocumentInteractor } from './business/useCases/courtIss
 import { serveExternallyFiledDocumentInteractor } from './business/useCases/document/serveExternallyFiledDocumentInteractor';
 import { serveThirtyDayNoticeInteractor } from './business/useCases/trialSessions/serveThirtyDayNoticeInteractor';
 import { setForHearingInteractor } from './business/useCases/trialSessions/setForHearingInteractor';
-import { setHealthCheckCacheInteractor } from '@web-api/business/useCases/health/setHealthCheckCacheInteractor';
 import { setMessageAsReadInteractor } from './business/useCases/messages/setMessageAsReadInteractor';
 import { setNoticesForCalendaredTrialSessionInteractor } from './business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor';
 import { setTrialSessionCalendarInteractor } from './business/useCases/trialSessions/setTrialSessionCalendarInteractor';
@@ -382,7 +381,6 @@ const useCases = {
   serveExternallyFiledDocumentInteractor,
   serveThirtyDayNoticeInteractor,
   setForHearingInteractor,
-  setHealthCheckCacheInteractor,
   setMessageAsReadInteractor,
   setNoticesForCalendaredTrialSessionInteractor,
   setTrialSessionCalendarInteractor,
