@@ -5,7 +5,7 @@ import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
 import { environment } from '@web-api/environment';
 import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { RawStatistic } from '@shared/business/entities/Statistic';
-import { writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'fs';
 import { getDbReader } from '@web-api/database';
 import { CompiledQuery } from 'kysely';
 
@@ -15,31 +15,41 @@ const documentClient = DynamoDBDocument.from(dynamoDbClient, {
 });
 const totalSegments = 10;
 let itemsScanned = 0;
-const allStatistics: { docketNumber: string; statistics: RawStatistic[] }[] =
-  [];
+// const allStatistics: { docketNumber: string; statistics: RawStatistic[] }[] =
+//   [];
 
 async function main() {
-  await Promise.all(
-    Array.from({ length: 10 }).map((_, segment) =>
-      scanContinuously({
-        TableName: environment.dynamoDbTableName,
-        Segment: segment,
-        TotalSegments: totalSegments,
-      }),
-    ),
-  );
-  console.log('done scanning dynamo');
-  writeFileSync('allStatistics.json', JSON.stringify(allStatistics));
-  console.log('done writing file');
+  // await Promise.all(
+  //   Array.from({ length: 10 }).map((_, segment) =>
+  //     scanContinuously({
+  //       TableName: environment.dynamoDbTableName,
+  //       Segment: segment,
+  //       TotalSegments: totalSegments,
+  //     }),
+  //   ),
+  // );
+  // console.log('done scanning dynamo');
+  // writeFileSync('allStatistics.json', JSON.stringify(allStatistics));
+  // console.log('done writing file');
+  const allStatisticsText = readFileSync('allStatistics.json', {
+    encoding: 'utf-8',
+  });
+  const allStatistics: { docketNumber: string; statistics: RawStatistic[] }[] =
+    JSON.parse(allStatisticsText);
   await getDbReader(db =>
     db.executeQuery(
       CompiledQuery.raw(
         `
-            INSERT INTO dw_case_clone (docket_number, statistics)
-            SELECT elem->>'docketNumber' AS docket_number, elem->'statistics' AS statistics FROM jsonb_array_elements($1::jsonb) AS elem
-            ON CONFLICT (docket_number) DO UPDATE
-            SET statistics = EXCLUDED.statistics;
-            `,
+        UPDATE dw_case
+        SET statistics = data.statistics
+        FROM (
+          SELECT
+            elem->>'docketNumber' AS docket_number,
+            elem->'statistics' AS statistics
+          FROM jsonb_array_elements($1::jsonb) AS elem
+        ) AS data
+        WHERE dw_case.docket_number = data.docket_number;
+        `,
         [JSON.stringify(allStatistics)],
       ),
     ),
