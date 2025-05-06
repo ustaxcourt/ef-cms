@@ -21,7 +21,7 @@ const config: Config = {
     '^.+\\.html?$': `${__dirname}/web-client/htmlLoader.js`,
   },
   setupFilesAfterEnv: [
-    `${__dirname}/web-api/src/persistence/postgres/featureFlag/mock.jest.js`,
+    `${__dirname}/web-api/src/persistence/postgres/featureFlag/mock.jest.ts`,
   ],
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
