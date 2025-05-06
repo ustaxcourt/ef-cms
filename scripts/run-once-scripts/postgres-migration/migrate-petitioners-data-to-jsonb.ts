@@ -55,7 +55,7 @@ async function main() {
       db.executeQuery(
         CompiledQuery.raw(
           `
-            UPDATE dw_case_clone
+            UPDATE dw_case
             SET petitioners = data.petitioners
             FROM (
               SELECT
@@ -63,7 +63,7 @@ async function main() {
                 elem->'petitioners' AS petitioners
               FROM jsonb_array_elements($1::jsonb) AS elem
             ) AS data
-            WHERE dw_case_clone.docket_number = data.docket_number;
+            WHERE dw_case.docket_number = data.docket_number;
           `,
           [JSON.stringify(petitionersPerCase)],
         ),
