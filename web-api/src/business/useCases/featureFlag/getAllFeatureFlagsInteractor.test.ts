@@ -26,7 +26,7 @@ describe('getAllFeatureFlagsInteractor', () => {
     const mockFeatureFlagValue = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
       ({ key }) => ({
         name: key,
-        value: JSON.stringify({ current: `${key}__value` }),
+        value: { current: `${key}__value` },
       }),
     );
 
@@ -81,7 +81,7 @@ describe('getAllFeatureFlagsInteractor', () => {
     const mockFeatureFlagValue = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
       ({ key }) => ({
         name: key,
-        value: JSON.stringify({ current: `${key}__value` }),
+        value: { current: `${key}__value` },
       }),
     );
 
@@ -107,7 +107,7 @@ describe('getAllFeatureFlagsInteractor', () => {
     const mockFeatureFlagValue = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
       ({ key }) => ({
         name: key,
-        value: JSON.stringify({ current: `${key}__value` }),
+        value: { current: `${key}__value` },
       }),
     );
 
