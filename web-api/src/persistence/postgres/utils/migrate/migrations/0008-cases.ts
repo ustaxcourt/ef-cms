@@ -75,7 +75,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('filingType')
     .dropColumn('hasPendingItems')
     .dropColumn('hasVerifiedIrsNotice')
-    .dropColumn('hearings')
     .dropColumn('highPriority')
     .dropColumn('highPriorityReason')
     .dropColumn('initialCaption')
