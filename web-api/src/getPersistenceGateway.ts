@@ -86,7 +86,6 @@ import { getReadyForTrialCases } from './persistence/elasticsearch/getReadyForTr
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSesStatus } from './persistence/ses/getSesStatus';
-import { getStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/getStoredApplicationHealth';
 import { getSuggestedCalendarCases } from './persistence/elasticsearch/getSuggestedCalendarCases';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
@@ -118,7 +117,6 @@ import { saveDispatchNotification } from './persistence/dynamo/notifications/sav
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
 import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
-import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCase } from './persistence/dynamo/cases/updateCase';
@@ -288,7 +286,6 @@ const gatewayMethods = {
   getReconciliationReport,
   getRequestResults,
   getSesStatus,
-  getStoredApplicationHealth,
   getSuggestedCalendarCases,
   getTableStatus,
   getTrialSessionById,
@@ -313,7 +310,6 @@ const gatewayMethods = {
   removeLock,
   removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
-  setStoredApplicationHealth,
   uploadDocument,
   verifyCaseForUser,
   verifyPendingCaseForUser,
