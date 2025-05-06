@@ -63,6 +63,9 @@ const config: Config = {
     uuid: require.resolve('uuid'),
   },
   testEnvironment: 'node',
+	setupFilesAfterEnv: [
+    `${__dirname}/../web-api/src/persistence/postgres/featureFlag/mock.jest.ts`,
+  ],
   testMatch: ['**/scripts/**/?(*.)+(spec|test).[jt]s?(x)'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],

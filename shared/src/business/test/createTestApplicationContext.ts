@@ -514,6 +514,10 @@ export const createTestApplicationContext = () => {
     verifyCaseForUser: jest.fn().mockImplementation(verifyCaseForUser),
   });
 
+  const mockConfigurationGateway = appContextProxy({
+    isCurrentColorActive: jest.fn(),
+  });
+
   const mockGetEmailClient = {
     send: jest.fn(),
   };
@@ -611,6 +615,7 @@ export const createTestApplicationContext = () => {
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
+    getConfigurationGateway: mockConfigurationGateway,
     getPersistencePrivateKeys: jest
       .fn()
       .mockReturnValue(['pk', 'sk', 'gsi1pk']),
