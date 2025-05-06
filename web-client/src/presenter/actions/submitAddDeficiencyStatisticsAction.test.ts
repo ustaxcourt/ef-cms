@@ -20,10 +20,10 @@ describe('submitAddDeficiencyStatisticsAction', () => {
           docketNumber: '123-20',
         },
         form: {
-          determinationDeficiencyAmount: 1,
-          determinationTotalPenalties: 2,
-          irsDeficiencyAmount: 3,
-          irsTotalPenalties: 4,
+          determinationDeficiencyAmount: '1',
+          determinationTotalPenalties: '2',
+          irsDeficiencyAmount: '3',
+          irsTotalPenalties: '4',
           lastDateOfPeriod: null,
           penalties: [
             {
@@ -65,10 +65,10 @@ describe('submitAddDeficiencyStatisticsAction', () => {
           docketNumber: '123-20',
         },
         form: {
-          determinationDeficiencyAmount: 1,
-          determinationTotalPenalties: 2,
-          irsDeficiencyAmount: 3,
-          irsTotalPenalties: 4,
+          determinationDeficiencyAmount: '1',
+          determinationTotalPenalties: '2',
+          irsDeficiencyAmount: '3',
+          irsTotalPenalties: '4',
           lastDateOfPeriod: null,
           penalties: [
             {
