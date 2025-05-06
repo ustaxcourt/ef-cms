@@ -47,7 +47,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('procedureType', 'varchar', col => col.defaultTo('').notNull())
     .addColumn('qcCompleteForTrial', 'jsonb')
     .addColumn('receivedAt', 'timestamptz', col =>
-      col.defaultTo(formatNow()).notNull(),
+      col.defaultTo(() => formatNow()).notNull(),
     )
     .addColumn('sealedDate', 'timestamptz')
     .addColumn('sortableDocketNumber', 'numeric')
