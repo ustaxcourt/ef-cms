@@ -5,6 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('dwPetitionerOnCase').execute();
   await db.schema.dropTable('dwCaseStatistic').execute();
   await db.schema.dropTable('dwStatisticPenalty').execute();
+  await db.schema.dropTable('dwCaseStatusUpdate').execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -41,6 +42,42 @@ export async function down(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
+    .createIndex('idxPetitionerOnCaseDocketNumber')
+    .on('dwPetitionerOnCase')
+    .column('docketNumber')
+    .execute();
+
+  await db.schema
+    .createIndex('idxPetitionerOnCaseContactId')
+    .on('dwPetitionerOnCase')
+    .column('contactId')
+    .execute();
+
+  await db.schema
+    .createIndex('idxPetitionerOnCaseName')
+    .on('dwPetitionerOnCase')
+    .column('name')
+    .execute();
+
+  await db.schema
+    .createIndex('idxPetitionerOnCaseCountryType')
+    .on('dwPetitionerOnCase')
+    .column('countryType')
+    .execute();
+
+  await db.schema
+    .createIndex('idxPetitionerOnCasePetitionerState')
+    .on('dwPetitionerOnCase')
+    .column('state')
+    .execute();
+
+  await db.schema
+    .createIndex('idxPetitionerOnCaseEmail')
+    .on('dwPetitionerOnCase')
+    .column('email')
+    .execute();
+
+  await db.schema
     .createTable('dwCaseStatistic')
     .addColumn('docketNumber', 'varchar')
     .addColumn('irsDeficiencyAmount', 'decimal')
@@ -66,5 +103,26 @@ export async function down(db: Kysely<any>): Promise<void> {
     .addColumn('updatedAt', 'timestamp', col =>
       col.notNull().defaultTo(formatNow()),
     )
+    .execute();
+
+  await db.schema
+    .createTable('dwCaseStatusUpdate')
+    .addColumn('statusUpdateId', 'varchar', col => col.primaryKey())
+    .addColumn('changedBy', 'varchar')
+    .addColumn('date', 'timestamptz')
+    .addColumn('docketNumber', 'varchar')
+    .addColumn('updatedCaseStatus', 'varchar')
+    .execute();
+
+  await db.schema
+    .createIndex('idxCaseStatusUpdateDocketNumber')
+    .on('dwCaseStatusUpdate')
+    .column('docketNumber')
+    .execute();
+
+  await db.schema
+    .createIndex('idxCaseStatusUpdateDate')
+    .on('dwCaseStatusUpdate')
+    .column('date')
     .execute();
 }
