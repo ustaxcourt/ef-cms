@@ -14,8 +14,7 @@ import { contactInfo } from '@web-api/persistence/postgres/users/mapper';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { DW_PRACTITIONER_COLUMNS } from '@web-api/persistence/postgres/practitioners/schema';
 
-// 10495 TODO: do not use `any` below please
-export function pickPractitionerFields(user: any) {
+export function pickPractitionerFields(user) {
   return {
     additionalPhone: user.additionalPhone,
     admissionsDate: user.admissionsDate,
@@ -43,7 +42,7 @@ export function pickPractitionerFields(user: any) {
     country: user.country,
     countryType: user.countryType,
     email: user.email, // 10495: Note that this field was previously trimmed and all lower-case
-    isUpdatingInformation: user.isUpdatingInformation, // 10495 TODO: is this needed?
+    isUpdatingInformation: user.isUpdatingInformation,
     name: user.name, // 10495: Note that this field was previously all upper-case
     phone: user.phone,
     postalCode: user.postalCode,

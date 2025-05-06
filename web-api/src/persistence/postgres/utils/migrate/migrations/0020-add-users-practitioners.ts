@@ -38,16 +38,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('country', 'varchar')
     .addColumn('countryType', 'varchar')
     .addColumn('email', 'varchar')
-    // .addColumn('isUpdatingInformation', 'boolean') 10495 TODO: Do practitioners have "isUpdatingInformation"?
     .addColumn('name', 'varchar', col => col.notNull())
     .addColumn('phone', 'varchar')
     .addColumn('postalCode', 'varchar')
     .addColumn('role', 'varchar', col => col.notNull())
     .addColumn('section', 'varchar')
     .addColumn('state', 'varchar')
-    // .addColumn('token', 'varchar') 10495 TODO: Do practitioners have a "token"?
     .addColumn('practitionerId', 'varchar', col => col.primaryKey())
-    .addColumn('userId', 'varchar', col => col.unique()) // make this have to be unique, but also nullable
+    .addColumn('userId', 'varchar', col => col.unique())
     .addColumn('additionalPhone', 'varchar')
     .addColumn('admissionsDate', 'timestamptz', col => col.notNull())
     .addColumn('admissionsStatus', 'varchar', col => col.notNull())

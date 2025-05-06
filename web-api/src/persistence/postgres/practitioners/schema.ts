@@ -18,7 +18,6 @@ export const practitionerTableDefinition = {
   email: DEFAULT as string | undefined,
   firmName: DEFAULT as string | undefined,
   firstName: DEFAULT as string,
-  // isUpdatingInformation: DEFAULT as boolean | undefined, 10495 TODO: Do practitioners have "isUpdatingInformation"?
   lastName: DEFAULT as string,
   middleName: DEFAULT as string | undefined,
   name: DEFAULT as string,
@@ -34,7 +33,6 @@ export const practitionerTableDefinition = {
   serviceIndicator: DEFAULT as string,
   state: DEFAULT as string | undefined, // forced optional
   suffix: DEFAULT as string | undefined,
-  // token: DEFAULT as string | undefined, 10495 TODO: Do practitioners have a "token"?
   updatedEmail: DEFAULT as string | undefined,
   userId: DEFAULT as string | undefined, // Not all Practitioners have a corresponding User
 };
