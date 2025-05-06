@@ -53,7 +53,7 @@ async function main() {
       db.executeQuery(
         CompiledQuery.raw(
           `
-            UPDATE dw_case_clone
+            UPDATE dw_case
             SET case_status_history = data.case_status_history
             FROM (
               SELECT
@@ -61,7 +61,7 @@ async function main() {
                 elem->'statuses' AS case_status_history
               FROM jsonb_array_elements($1::jsonb) AS elem
             ) AS data
-            WHERE dw_case_clone.docket_number = data.docket_number;
+            WHERE dw_case.docket_number = data.docket_number;
           `,
           [JSON.stringify(statusesPerCase)],
         ),
