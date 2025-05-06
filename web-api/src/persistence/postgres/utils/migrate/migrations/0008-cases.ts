@@ -1,5 +1,4 @@
-import { formatNow } from '@shared/business/utilities/DateHandler';
-import { Kysely } from 'kysely';
+import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
@@ -47,7 +46,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('procedureType', 'varchar', col => col.defaultTo('').notNull())
     .addColumn('qcCompleteForTrial', 'jsonb')
     .addColumn('receivedAt', 'timestamptz', col =>
-      col.defaultTo(() => formatNow()).notNull(),
+      col.defaultTo(sql`now()`).notNull(),
     )
     .addColumn('sealedDate', 'timestamptz')
     .addColumn('sortableDocketNumber', 'numeric')
