@@ -14,7 +14,7 @@ export const getUserConfirmationCode = async ({
       .selectFrom('dwUserConfirmationCode')
       .where('userId', '=', userId)
       .where('expiresAt', '<=', calculateDate({ dateString: formatNow() }))
-      .selectAll('dwUserConfirmationCode')
+      .select(['confirmationCode'])
       .executeTakeFirst(),
   );
 

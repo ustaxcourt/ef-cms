@@ -17,5 +17,5 @@ export const getPractitionerByBarNumber = async ({
       .executeTakeFirst(),
   );
 
-  return practitionerEntity(user) as Practitioner;
+  return practitionerEntity(user);
 };

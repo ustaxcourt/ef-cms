@@ -41,8 +41,8 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
 - [in-progress] barNumberGenerator: Contains business logic for generating a bar number,
 does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm business rules for generating bar numbers
-- [ ] Determine if selectAll is necessary for User functions (solo)
-- [ ] Update Mocks to include all functions (solo)
+- [x] Determine if selectAll is necessary for User functions (solo)
+- [x] Update Mocks to include all functions (solo)
 - [x] Index all where clauses (good for solo work)
 - [ ] Confirm Confirmation Codes Working as Expected
 - [ ] Implement TTL on Confirmation Codes

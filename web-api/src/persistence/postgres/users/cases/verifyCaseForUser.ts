@@ -12,7 +12,7 @@ export const verifyCaseForUser = async ({
       .selectFrom('dwUserOnCase as uoc')
       .where('uoc.userId', '=', userId)
       .where('uoc.docketNumber', '=', docketNumber)
-      .selectAll('uoc')
+      .select(['uoc.userId', 'uoc.docketNumber'])
       .executeTakeFirst(),
   );
 
