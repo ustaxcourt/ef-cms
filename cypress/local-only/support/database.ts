@@ -1,28 +1,42 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import fs from 'fs';
+import { Pool } from 'pg';
+import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 
-const dynamoClient = new DynamoDBClient({
-  credentials: {
-    accessKeyId: 'S3RVER',
-    secretAccessKey: 'S3RVER',
-  },
-  endpoint: 'http://localhost:8000',
-  region: 'us-east-1',
-});
-const documentClient = DynamoDBDocument.from(dynamoClient, {
-  marshallOptions: { removeUndefinedValues: true },
+interface Database {
+  dwFeatureFlag: {
+    name: string;
+    value: { current: any };
+  };
+}
+
+const pool = {
+  database: 'postgres',
+  host: 'localhost',
+  idleTimeoutMillis: 1000,
+  max: 1,
+  password: 'example',
+  port: 5432,
+  user: 'postgres',
+  ssl: undefined,
+};
+const postgres = new Kysely<Database>({
+  dialect: new PostgresDialect({
+    pool: new Pool(pool),
+  }),
+  plugins: [new CamelCasePlugin()],
 });
 
 export const setAllowedTerminalIpAddresses = async (ipAddresses: string[]) => {
-  return await documentClient.put({
-    Item: {
-      ips: ipAddresses,
-      pk: 'allowed-terminal-ips',
-      sk: 'allowed-terminal-ips',
-    },
-    TableName: 'efcms-local',
-  });
+  const values = {
+    name: 'allowed-terminal-ips',
+    value: { current: ipAddresses },
+  };
+  await postgres
+    .insertInto('dwFeatureFlag')
+    .values(values)
+    .onConflict(oc => oc.column('name').doUpdateSet(values))
+    .execute();
+  return null;
 };
 
 export const deleteAllFilesInFolder = (directoryPath: string) => {
