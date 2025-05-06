@@ -55,10 +55,15 @@ async function main() {
       db.executeQuery(
         CompiledQuery.raw(
           `
-          INSERT INTO dw_case (docket_number, petitioners)
-          SELECT elem->>'docketNumber' AS docket_number, elem->'petitioners' AS petitioners FROM jsonb_array_elements($1::jsonb) AS elem
-          ON CONFLICT (docket_number) DO UPDATE
-          SET petitioners = EXCLUDED.petitioners;
+            UPDATE dw_case_clone
+            SET petitioners = data.petitioners
+            FROM (
+              SELECT
+                elem->>'docketNumber' AS docket_number,
+                elem->'petitioners' AS petitioners
+              FROM jsonb_array_elements($1::jsonb) AS elem
+            ) AS data
+            WHERE dw_case_clone.docket_number = data.docket_number;
           `,
           [JSON.stringify(petitionersPerCase)],
         ),
