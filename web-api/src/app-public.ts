@@ -10,6 +10,9 @@ import express from 'express';
 
 export const app = express();
 
+// This was default in express 4.x. The default changed in express 5.x, so we have to specify it here
+app.set('query parser', 'extended');
+
 app.use(cors());
 app.use(json());
 app.use(urlencoded({ extended: true }));
