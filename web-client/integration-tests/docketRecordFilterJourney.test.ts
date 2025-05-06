@@ -7,6 +7,7 @@ import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import {
   fakeFile,
+  getFilteredFormattedDocketEntriesForTest,
   getFormattedDocketEntriesForTest,
   loginAs,
   setupTest,
@@ -58,13 +59,11 @@ describe('Docket Record Filter Journey', () => {
   });
 
   it('docket clerk views docket record filtered for exhibit document types', async () => {
-    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
-      key: 'sessionMetadata.docketRecordFilter',
-      value: DOCKET_RECORD_FILTER_OPTIONS.exhibits,
-    });
-
     const filteredDocketEntriesOnDocketRecord =
-      await getFormattedDocketEntriesForTest(cerebralTest);
+      await getFilteredFormattedDocketEntriesForTest(
+        cerebralTest,
+        DOCKET_RECORD_FILTER_OPTIONS.exhibits,
+      );
 
     expect(
       filteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
@@ -77,13 +76,11 @@ describe('Docket Record Filter Journey', () => {
   });
 
   it('docket clerk views docket record filtered for motion document types', async () => {
-    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
-      key: 'sessionMetadata.docketRecordFilter',
-      value: DOCKET_RECORD_FILTER_OPTIONS.motions,
-    });
-
     const filteredDocketEntriesOnDocketRecord =
-      await getFormattedDocketEntriesForTest(cerebralTest);
+      await getFilteredFormattedDocketEntriesForTest(
+        cerebralTest,
+        DOCKET_RECORD_FILTER_OPTIONS.motions,
+      );
 
     expect(
       filteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
@@ -96,13 +93,11 @@ describe('Docket Record Filter Journey', () => {
   });
 
   it('docket clerk views docket record filtered for order document types', async () => {
-    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
-      key: 'sessionMetadata.docketRecordFilter',
-      value: DOCKET_RECORD_FILTER_OPTIONS.orders,
-    });
-
     const filteredDocketEntriesOnDocketRecord =
-      await getFormattedDocketEntriesForTest(cerebralTest);
+      await getFilteredFormattedDocketEntriesForTest(
+        cerebralTest,
+        DOCKET_RECORD_FILTER_OPTIONS.orders,
+      );
 
     expect(
       filteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
