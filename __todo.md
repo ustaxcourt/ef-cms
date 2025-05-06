@@ -34,16 +34,16 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [x] dwUsersOnCase: is it possible for the same user to be on the same case multiple times?? (update the answer is no, it's not possible, but what we've built does handle this scenario)
 - [x] Odd user-related dynamodb functions
 - [x] Make sure all user related entities are copied in & all user related functions (i.e., scrub all user-related dynamodb code)
-- [in-progress] Implement OpenSearch sync (for example, searching for a pract by bar number in Case Information > Parties is broken)
-  - [ ] sync work: return to web-api/src/persistence/elasticsearch/getIndexNameForRecord.ts and take another look
-  - [ ] web-api/src/persistence/elasticsearch/getPractitionersByName.ts ensure still works as expected
-  - [ ] review web-api/src/persistence/elasticsearch/helpers/searchClauses.ts
+- [in-progress] Implement OpenSearch sync
+  - [looks ok] `web-api/src/persistence/elasticsearch/getPractitionersByName.ts`
+  - [looks ok] `web-api/src/persistence/elasticsearch/helpers/searchClauses.ts`
+  - [ ] `web-api/src/persistence/elasticsearch/getIndexNameForRecord.ts`
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
 - [in-progress] barNumberGenerator: Contains business logic for generating a bar number,
 does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm business rules for generating bar numbers
 - [ ] Determine if selectAll is necessary for User functions (solo)
 - [ ] Update Mocks to include all functions (solo)
-- [ ] Index all where clauses (good for solo work)
+- [x] Index all where clauses (good for solo work)
 - [ ] Confirm Confirmation Codes Working as Expected
 - [ ] Implement TTL on Confirmation Codes
 - [ ] Update api tests (Andy will tackle first half)

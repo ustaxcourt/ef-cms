@@ -83,6 +83,70 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('representing', 'jsonb')
     .addColumn('entityName', 'varchar')
     .execute();
+
+  await db.schema
+    .createIndex('idx_user_userId')
+    .on('dwUser')
+    .column('userId')
+    .execute();
+  await db.schema
+    .createIndex('idx_user_role')
+    .on('dwUser')
+    .column('role')
+    .execute();
+  await db.schema
+    .createIndex('idx_user_section')
+    .on('dwUser')
+    .column('section')
+    .execute();
+  await db.schema
+    .createIndex('idx_user_email')
+    .on('dwUser')
+    .column('email')
+    .execute();
+
+  await db.schema
+    .createIndex('idx_practitioner_userId')
+    .on('dwPractitioner')
+    .column('userId')
+    .execute();
+  await db.schema
+    .createIndex('idx_practitioner_barNumber')
+    .on('dwPractitioner')
+    .column('barNumber')
+    .execute();
+  await db.schema
+    .createIndex('idx_practitioner_role')
+    .on('dwPractitioner')
+    .column('role')
+    .execute();
+  await db.schema
+    .createIndex('idx_practitioner_name')
+    .on('dwPractitioner')
+    .column('name')
+    .execute();
+
+  await db.schema
+    .createIndex('idx_user_confirmation_code_userId')
+    .on('dwUserConfirmationCode')
+    .column('userId')
+    .execute();
+  await db.schema
+    .createIndex('idx_user_confirmation_code_expiresAt')
+    .on('dwUserConfirmationCode')
+    .column('expiresAt')
+    .execute();
+
+  await db.schema
+    .createIndex('idx_user_on_case_userId_docketNumber')
+    .on('dwUserOnCase')
+    .columns(['userId', 'docketNumber'])
+    .execute();
+  await db.schema
+    .createIndex('idx_user_on_case_docketNumber_entityName')
+    .on('dwUserOnCase')
+    .columns(['docketNumber', 'entityName'])
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
