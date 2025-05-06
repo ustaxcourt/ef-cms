@@ -22,11 +22,13 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
       isUpdatingInformation: true,
     };
 
-    applicationContext.getPersistenceGateway().updateUser.mockReturnValue(null);
+    applicationContext
+      .getPersistenceGateway()
+      .updateUser.mockResolvedValue(null);
 
     applicationContext
       .getUseCases()
-      .queueUpdateAssociatedCasesWorker.mockReturnValue(null);
+      .queueUpdateAssociatedCasesWorker.mockResolvedValue(null);
 
     getCasesByEmailTotal.mockImplementation(
       () =>
@@ -41,7 +43,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
   it('should disable user flag and short circuit if there is no associated cases to user', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue([]);
+      .getDocketNumbersByUser.mockResolvedValue([]);
 
     await queueEmailUpdateAssociatedCasesWorker(
       applicationContext,
@@ -76,7 +78,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
     let COMPLETE_FLAG = false;
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(TEST_DOCKER_NUMBERS);
+      .getDocketNumbersByUser.mockResolvedValue(TEST_DOCKER_NUMBERS);
 
     void queueEmailUpdateAssociatedCasesWorker(
       applicationContext,
@@ -128,7 +130,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
     let COMPLETE_FLAG = false;
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(TEST_DOCKER_NUMBERS);
+      .getDocketNumbersByUser.mockResolvedValue(TEST_DOCKER_NUMBERS);
 
     void queueEmailUpdateAssociatedCasesWorker(
       applicationContext,
@@ -154,7 +156,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
     const TEST_DOCKER_NUMBERS = ['TEST_1', 'TEST_2', 'TEST_3', 'TEST_4'];
     applicationContext
       .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(TEST_DOCKER_NUMBERS);
+      .getDocketNumbersByUser.mockResolvedValue(TEST_DOCKER_NUMBERS);
 
     await queueEmailUpdateAssociatedCasesWorker(
       applicationContext,

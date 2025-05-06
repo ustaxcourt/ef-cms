@@ -12,7 +12,7 @@ import {
   createApplicationContext,
 } from '@web-api/applicationContext';
 import { Signer } from '@aws-sdk/rds-signer';
-import { connect } from '@web-api/database';
+import { connect } from '@web-api/getConnection';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import PQueue from 'p-queue';
 import fs from 'fs';

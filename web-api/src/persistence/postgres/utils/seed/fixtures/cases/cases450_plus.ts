@@ -33,6 +33,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['450-23'],
@@ -71,6 +78,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['451-23'],
@@ -109,6 +123,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['452-23'],
@@ -147,6 +168,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['453-23'],
@@ -185,6 +213,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['454-23'],
@@ -223,6 +258,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['455-23'],
@@ -261,6 +303,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['456-23'],
@@ -299,6 +348,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['457-23'],
@@ -337,6 +393,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['458-23'],
@@ -375,6 +438,13 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_450_plus['459-23'],
@@ -442,7 +512,44 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     trialLocation: 'Houston, Texas',
     trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     trialTime: '10:00',
-    petitioners: [],
+    petitioners: [
+      {
+        isAddressSealed: false,
+        city: 'Los Angeles',
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        entityName: 'Petitioner',
+        address1: '123 Main St',
+        postalCode: '12345',
+        contactType: 'petitioner',
+        hasElectronicAccess: true,
+        sealedAndUnavailable: false,
+        title: 'Executor',
+        countryType: 'domestic',
+        serviceIndicator: 'Electronic',
+        phone: '323-555-6429',
+        name: 'Test Petitioner',
+        state: 'TN',
+        email: 'petitioner@example.com',
+      },
+      {
+        isAddressSealed: false,
+        country: 'USA',
+        city: 'Nashville',
+        contactId: '89d7d182-46da-4b96-b29b-260d15249c25',
+        entityName: 'Petitioner',
+        address1: '42 Lamb Sauce Blvd',
+        postalCode: '05198',
+        contactType: 'intervenor',
+        sealedAndUnavailable: false,
+        title: 'Intervenor',
+        countryType: 'domestic',
+        serviceIndicator: 'Paper',
+        phone: '123-456-7890',
+        name: 'Saturnino Nao',
+        state: 'AK',
+        email: 'testuser@example.com',
+      },
+    ],
     docketEntries: [],
     hearings: [],
     correspondence: [],
@@ -480,7 +587,25 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     receivedAt: '2021-02-16T15:38:54.239Z',
     sortableDocketNumber: 2020001338,
     status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    petitioners: [],
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        contactType: 'petitioner',
+        countryType: 'domestic',
+        entityName: 'Petitioner',
+        email: 'petitioner@example.com',
+        isAddressSealed: false,
+        name: 'Test Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        sealedAndUnavailable: false,
+        serviceIndicator: 'None',
+        state: 'TN',
+        title: 'Executor',
+      },
+    ],
     docketEntries: [],
     hearings: [],
     correspondence: [],
@@ -516,7 +641,44 @@ export const cases450_plus: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     receivedAt: '2021-02-16T16:29:48.990Z',
     sortableDocketNumber: 1987069312,
     status: CASE_STATUS_TYPES.new,
-    petitioners: [],
+    petitioners: [
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+        contactType: 'primary',
+        countryType: 'domestic',
+        entityName: 'Petitioner',
+        email: 'petitioner@example.com',
+        hasElectronicAccess: true,
+        isAddressSealed: false,
+        name: 'Test Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        sealedAndUnavailable: false,
+        serviceIndicator: 'Electronic',
+        state: 'TN',
+        title: 'Executor',
+      },
+      {
+        address1: '123 Main St',
+        city: 'Somewhere',
+        contactId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+        contactType: 'secondary',
+        countryType: 'domestic',
+        entityName: 'Petitioner',
+        email: 'petitioner2@example.com',
+        hasElectronicAccess: true,
+        isAddressSealed: false,
+        name: 'Test Petitioner',
+        phone: '1234567',
+        postalCode: '12345',
+        sealedAndUnavailable: false,
+        serviceIndicator: 'Electronic',
+        state: 'TN',
+        title: 'Executor',
+      },
+    ],
     docketEntries: [],
     hearings: [],
     correspondence: [],
