@@ -1,5 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-
+jest.mock('@web-api/persistence/elasticsearch/getCasesByEmailTotal');
 import {
   MAX_ITERATIONS,
   queueEmailUpdateAssociatedCasesWorker,
@@ -9,11 +9,10 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { petitionerUser } from '@shared/test/mockUsers';
 import { sleep } from '@shared/tools/helpers';
-import { getCasesByEmailTotal as getCasesByEmailTotalMock } from '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal';
-
-const getCasesByEmailTotal = getCasesByEmailTotalMock as jest.Mock;
+import { getCasesByEmailTotal as getCasesByEmailTotalMock } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 
 describe('queueEmailUpdateAssociatedCasesWorker', () => {
+  const getCasesByEmailTotal = jest.mocked(getCasesByEmailTotalMock);
   let TEST_USER: RawUser;
   let RESOLVER: Function;
 
@@ -123,7 +122,7 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
   });
 
   it('should call resolve the interactor when the max number of iterations is met', async () => {
-    getCasesByEmailTotal.mockResolvedValue({});
+    getCasesByEmailTotal.mockResolvedValue(0);
 
     const TEST_DOCKER_NUMBERS = ['TEST_1', 'TEST_2', 'TEST_3', 'TEST_4'];
     let COMPLETE_FLAG = false;
