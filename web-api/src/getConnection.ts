@@ -1,4 +1,9 @@
-import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
+import {
+  CamelCasePlugin,
+  CompiledQuery,
+  Kysely,
+  PostgresDialect,
+} from 'kysely';
 import { Database } from './database-schema';
 import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
@@ -15,7 +20,13 @@ export async function getConnection<T>({
     dbInstance = establishConnection();
   }
   const awaitedInstance = await dbInstance;
-  return await cb(awaitedInstance);
+  const dbIsValid = await isConnectionValid(awaitedInstance);
+  if (dbIsValid) {
+    return await cb(awaitedInstance);
+  }
+
+  dbInstance = null;
+  return getConnection({ cb });
 }
 
 async function establishConnection(): Promise<Kysely<Database>> {
@@ -72,13 +83,13 @@ function getPool(): PoolConfig {
   return pool;
 }
 
-// async function isConnectionValid(db: Kysely<Database>): Promise<boolean> {
-//   try {
-//     await db.executeQuery<{ result: 1 }>(
-//       CompiledQuery.raw('select 1 as result', []),
-//     );
-//     return true;
-//   } catch (err) {
-//     return false;
-//   }
-// }
+async function isConnectionValid(db: Kysely<Database>): Promise<boolean> {
+  try {
+    await db.executeQuery<{ result: 1 }>(
+      CompiledQuery.raw('select 1 as result', []),
+    );
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
