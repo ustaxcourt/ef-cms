@@ -31,6 +31,9 @@ const config: Config = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
+  setupFilesAfterEnv: [
+    `${__dirname}/../web-api/src/persistence/postgres/featureFlag/mock.jest.ts`,
+  ],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
     ...pathsToModuleNameMapper(tsconfig.compilerOptions.paths, {

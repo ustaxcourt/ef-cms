@@ -32,6 +32,9 @@ const config: Config = {
     uuid: require.resolve('uuid'),
   },
   setupFiles: ['core-js'],
+  setupFilesAfterEnv: [
+    `${__dirname}/../web-api/src/persistence/postgres/featureFlag/mock.jest.ts`,
+  ],
   testEnvironment: `${__dirname}/../web-client/JsdomWithTextEncoderEnvironment.ts`,
   testPathIgnorePatterns: ['src/business/utilities/documentGenerators'],
   transform: {
