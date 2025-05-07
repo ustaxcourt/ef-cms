@@ -40,6 +40,6 @@ export const associateIrsPractitionerWithCaseInteractor = async (
     authorizedUser,
     docketNumber,
     serviceIndicator,
-    irsPractitioner,
+    user: irsPractitioner,
   });
 };

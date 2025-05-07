@@ -1,9 +1,13 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeToInPersonProceeding } from './generateNoticeOfChangeToInPersonProceeding';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUsersInSection as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
+
+const getUsersInSection = getUsersInSectionMock as jest.Mock;
 
 describe('generateNoticeOfChangeToInPersonProceeding', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -20,9 +24,7 @@ describe('generateNoticeOfChangeToInPersonProceeding', () => {
   };
 
   it('should call the document generator to generate the NOIP', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([mockJudge]);
+    getUsersInSection.mockReturnValue([mockJudge]);
 
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 

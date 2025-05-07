@@ -21,5 +21,5 @@ export const getUsersInSection = async ({
       .execute(),
   );
 
-  return users.map(user => userEntity(user)) as User[];
+  return users.map(user => userEntity(user));
 };

@@ -1,16 +1,19 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CONTACT_TYPES,
   PARTY_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removeCounselFromRemovedPetitioner } from './removeCounselFromRemovedPetitioner';
+import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+
+const deleteUserFromCase = deleteUserFromCaseMock as jest.Mock;
 
 describe('removeCounselFromRemovedPetitioner', () => {
   const mockContactPrimaryId = MOCK_CASE.petitioners[0].contactId;
@@ -21,7 +24,6 @@ describe('removeCounselFromRemovedPetitioner', () => {
   it('throws an unauthorized error if user does not have correct permissions', async () => {
     await expect(
       removeCounselFromRemovedPetitioner({
-        applicationContext,
         authorizedUser: mockPetitionerUser,
         caseEntity: new Case(MOCK_CASE, {
           authorizedUser: mockPetitionerUser,
@@ -55,7 +57,6 @@ describe('removeCounselFromRemovedPetitioner', () => {
     );
 
     const updatedCase = await removeCounselFromRemovedPetitioner({
-      applicationContext,
       authorizedUser: mockPetitionsClerkUser,
       caseEntity,
       petitionerContactId: mockContactSecondaryId,
@@ -64,9 +65,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
     expect(updatedCase.privatePractitioners?.[0].representing).toEqual([
       mockContactPrimaryId,
     ]);
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).not.toHaveBeenCalled();
+    expect(deleteUserFromCase).not.toHaveBeenCalled();
   });
 
   it('should remove the privatePractitioner from the case privatePractitioner if they are only representing the petitioner being removed', async () => {
@@ -99,16 +98,14 @@ describe('removeCounselFromRemovedPetitioner', () => {
     );
 
     const updatedCase = await removeCounselFromRemovedPetitioner({
-      applicationContext,
       authorizedUser: mockPetitionsClerkUser,
       caseEntity,
       petitionerContactId: mockContactSecondaryId,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[0][0].userId,
-    ).toEqual(mockSecondPractitionerUserId);
+    expect(deleteUserFromCase.mock.calls[0][0].userId).toEqual(
+      mockSecondPractitionerUserId,
+    );
     expect(updatedCase.privatePractitioners?.length).toEqual(1);
     expect(updatedCase.privatePractitioners?.[0].representing).toEqual([
       mockContactPrimaryId,
@@ -145,15 +142,12 @@ describe('removeCounselFromRemovedPetitioner', () => {
     );
 
     const updatedCase = await removeCounselFromRemovedPetitioner({
-      applicationContext,
       authorizedUser: mockPetitionsClerkUser,
       caseEntity,
       petitionerContactId: mockContactSecondaryId,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).not.toHaveBeenCalled();
+    expect(deleteUserFromCase).not.toHaveBeenCalled();
     expect(updatedCase.privatePractitioners?.length).toEqual(2);
     expect(updatedCase.privatePractitioners?.[0].representing).toEqual([
       mockContactPrimaryId,

@@ -5,7 +5,7 @@ import { getDbReader } from '@web-api/database';
 import { irsPractitionerEntity, privatePractitionerEntity } from './mapper';
 import { sql } from 'kysely';
 
-export const getPractitionersBySortKey = async ({
+export const getPractitionersBySearchKey = async ({
   searchKey,
   role,
 }: {

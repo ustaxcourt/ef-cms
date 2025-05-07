@@ -1,5 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -21,8 +25,12 @@ import {
 import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getPractitionerById = getPractitionerByIdMock as jest.Mock;
+const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 const updateCase = jest.mocked(updateCaseMock);
 updateCase.mockImplementation(({ caseToUpdate }) =>
   Promise.resolve(caseToUpdate),
@@ -89,14 +97,17 @@ describe('updateCounselOnCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(({ userId }) => {
-        return mockPrivatePractitioners
-          .concat(mockIrsPractitioners)
-          .concat(mockPetitioners)
-          .find(user => user.userId === userId);
-      });
+    updateCaseAndAssociations.mockImplementation(async ({ caseToUpdate }) => {
+      await updateCase({ caseToUpdate });
+      return Promise.resolve(caseToUpdate);
+    });
+    getPractitionerById.mockImplementation(({ userId }) => {
+      return [
+        ...mockPrivatePractitioners,
+        ...mockIrsPractitioners,
+        ...mockPetitioners,
+      ].find(user => user.userId === userId);
+    });
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,

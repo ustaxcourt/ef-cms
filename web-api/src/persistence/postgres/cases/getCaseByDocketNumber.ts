@@ -12,7 +12,7 @@ import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgr
 import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
 import { getCaseStatusHistory } from '@web-api/persistence/postgres/cases/getCaseStatusHistory';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
-import { getPractitionersByDocketNumber } from '@web-api/persistence/postgres/practitioners/getPractionersByDocketNumber';
+import { getPractitionersByDocketNumber } from '@web-api/persistence/postgres/practitioners/getPractitionersByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,

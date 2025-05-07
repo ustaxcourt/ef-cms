@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockAdcUser,
   mockPrivatePractitionerUser,
@@ -13,7 +13,6 @@ describe('submitPendingCaseAssociationRequest', () => {
   it('should throw an error when not authorized', async () => {
     await expect(
       submitPendingCaseAssociationRequestInteractor(
-        applicationContext,
         {
           docketNumber: caseRecord.docketNumber,
         },
@@ -31,7 +30,6 @@ describe('submitPendingCaseAssociationRequest', () => {
       .verifyCaseForUser.mockReturnValue(true);
 
     await submitPendingCaseAssociationRequestInteractor(
-      applicationContext,
       {
         docketNumber: caseRecord.docketNumber,
       },
@@ -45,7 +43,6 @@ describe('submitPendingCaseAssociationRequest', () => {
 
   it('should not add mapping if these is already a pending association', async () => {
     await submitPendingCaseAssociationRequestInteractor(
-      applicationContext,
       {
         docketNumber: caseRecord.docketNumber,
       },
@@ -66,7 +63,6 @@ describe('submitPendingCaseAssociationRequest', () => {
       .verifyPendingCaseForUser.mockReturnValue(false);
 
     await submitPendingCaseAssociationRequestInteractor(
-      applicationContext,
       {
         docketNumber: caseRecord.docketNumber,
       },

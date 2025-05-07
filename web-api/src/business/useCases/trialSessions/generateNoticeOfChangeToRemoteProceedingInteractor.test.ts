@@ -1,19 +1,20 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
+  ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './generateNoticeOfChangeToRemoteProceedingInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUsersInSection as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { User } from '@shared/business/entities/User';
+
+const getUsersInSection = getUsersInSectionMock as jest.Mock;
 
 describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-
-  const TEST_JUDGE = {
-    judgeTitle: 'Judge',
-    name: 'Test Judge',
-  };
 
   const formattedPhoneNumber = '123-456-7890';
 
@@ -67,9 +68,18 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
         ({ contentHtml }) => contentHtml,
       );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([TEST_JUDGE]);
+    getUsersInSection.mockReturnValue([
+      new User({
+        isSeniorJudge: false,
+        judgeFullName: 'Test Judge',
+        judgePhoneNumber: '(123) 123-1234',
+        judgeTitle: 'Judge',
+        name: 'Test Judge',
+        role: ROLES.judge,
+        section: 'testJudge1sChambers',
+        userId: 'ce5add74-1559-448d-a67d-c887c8351b2e',
+      }),
+    ]);
   });
 
   it('should generate a template with the case and formatted trial information and call the pdf generator', async () => {

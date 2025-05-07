@@ -5,7 +5,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getPractitionersBySortKey } from '@web-api/persistence/postgres/practitioners/getPractitionersBySearchKey';
+import { getPractitionersBySearchKey } from '@web-api/persistence/postgres/practitioners/getPractitionersBySearchKey';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 
 export const getPrivatePractitionersBySearchKeyInteractor = async (
@@ -18,7 +18,7 @@ export const getPrivatePractitionersBySearchKeyInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const privatePractitioners = await getPractitionersBySortKey({
+  const privatePractitioners = await getPractitionersBySearchKey({
     searchKey,
     role: ROLES.privatePractitioner,
   });

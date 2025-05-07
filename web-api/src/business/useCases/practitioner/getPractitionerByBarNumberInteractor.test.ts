@@ -1,20 +1,23 @@
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
 import { getPractitionerByBarNumberInteractor } from './getPractitionerByBarNumberInteractor';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@web-api/persistence/postgres/practitioners/getPractitionerByBarNumber';
+import { Practitioner } from '@shared/business/entities/Practitioner';
+
+const getPractitionerByBarNumber = getPractitionerByBarNumberMock as jest.Mock;
 
 describe('getPractitionerByBarNumberInteractor', () => {
   describe('Logged in User', () => {
     it('throws an unauthorized error if the request user does not have the MANAGE_PRACTITIONER_USERS permissions', async () => {
       await expect(
         getPractitionerByBarNumberInteractor(
-          applicationContext,
           {
             barNumber: 'BN0000',
           },
@@ -24,9 +27,8 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('calls the persistence method to get a private practitioner with the given bar number', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockReturnValue({
+      getPractitionerByBarNumber.mockReturnValue(
+        new Practitioner({
           admissionsDate: '2019-03-01',
           admissionsStatus: 'Active',
           barNumber: 'PP1234',
@@ -43,10 +45,10 @@ describe('getPractitionerByBarNumberInteractor', () => {
           section: ROLES.privatePractitioner,
 
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
+        }),
+      );
 
       const practitioner = await getPractitionerByBarNumberInteractor(
-        applicationContext,
         {
           barNumber: 'PP1234',
         },
@@ -82,9 +84,8 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('calls the persistence method to get an IRS practitioner with the given bar number', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockReturnValue({
+      getPractitionerByBarNumber.mockReturnValue(
+        new Practitioner({
           admissionsDate: '2019-03-01',
           admissionsStatus: 'Active',
           barNumber: 'PI5678',
@@ -99,10 +100,10 @@ describe('getPractitionerByBarNumberInteractor', () => {
           role: ROLES.irsPractitioner,
           section: ROLES.privatePractitioner,
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
+        }),
+      );
 
       const practitioner = await getPractitionerByBarNumberInteractor(
-        applicationContext,
         {
           barNumber: 'PI5678',
         },
@@ -136,12 +137,9 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('throws a not found error if no practitioner is found with the given bar number', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockReturnValue(undefined);
+      getPractitionerByBarNumber.mockReturnValue(undefined);
 
       const practitioner = await getPractitionerByBarNumberInteractor(
-        applicationContext,
         {
           barNumber: 'BN0000',
         },
@@ -154,9 +152,8 @@ describe('getPractitionerByBarNumberInteractor', () => {
 
   describe('Public User', () => {
     beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockReturnValue({
+      getPractitionerByBarNumber.mockReturnValue(
+        new Practitioner({
           admissionsDate: '2019-03-01',
           admissionsStatus: 'Active',
           barNumber: 'PP1234',
@@ -172,12 +169,12 @@ describe('getPractitionerByBarNumberInteractor', () => {
           section: ROLES.privatePractitioner,
 
           userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
+        }),
+      );
     });
 
     it('should not throw an error when a public user access interactor', async () => {
       const results = await getPractitionerByBarNumberInteractor(
-        applicationContext,
         {
           barNumber: 'BN0000',
         },
@@ -189,7 +186,6 @@ describe('getPractitionerByBarNumberInteractor', () => {
 
     it('should return an array with Practitioner result', async () => {
       const results = await getPractitionerByBarNumberInteractor(
-        applicationContext,
         {
           barNumber: 'BN0000',
         },

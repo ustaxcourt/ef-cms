@@ -95,7 +95,7 @@ describe('updateAssociatedCaseWorker', () => {
     );
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
+      'Could not find user: 3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
     );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
@@ -121,7 +121,7 @@ describe('updateAssociatedCaseWorker', () => {
     );
 
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
-      'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
+      'Could not find user: cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
     );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
@@ -422,7 +422,7 @@ describe('updatePetitionerCases', () => {
 
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
-      `Could not find user|${mockPetitionerUser2.userId} on ${caseMock.docketNumber}`,
+      `Could not find user: ${mockPetitionerUser2.userId} on ${caseMock.docketNumber}`,
     );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,

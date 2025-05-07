@@ -1,10 +1,13 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getUserPendingEmailStatusInteractor } from './getUserPendingEmailStatusInteractor';
 import {
   mockPetitionerUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { User } from '@shared/business/entities/User';
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('getUserPendingEmailStatusInteractor', () => {
   const PENDING_EMAIL = 'pending@example.com';
@@ -13,7 +16,6 @@ describe('getUserPendingEmailStatusInteractor', () => {
   it('should throw an error when not authorized', async () => {
     await expect(
       getUserPendingEmailStatusInteractor(
-        applicationContext,
         {
           userId: USER_ID,
         },
@@ -26,15 +28,16 @@ describe('getUserPendingEmailStatusInteractor', () => {
   });
 
   it("should return user's pending email", async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
-      name: 'Test Petitioner',
-      pendingEmail: PENDING_EMAIL,
-      role: ROLES.petitioner,
-      userId: USER_ID,
-    });
+    getUserById.mockResolvedValue(
+      new User({
+        name: 'Test Petitioner',
+        pendingEmail: PENDING_EMAIL,
+        role: ROLES.petitioner,
+        userId: USER_ID,
+      }),
+    );
 
     const result = await getUserPendingEmailStatusInteractor(
-      applicationContext,
       {
         userId: USER_ID,
       },
@@ -45,14 +48,15 @@ describe('getUserPendingEmailStatusInteractor', () => {
   });
 
   it('should return undefined if user does not have a pending email', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
-      name: 'Test Petitioner',
-      role: ROLES.petitioner,
-      userId: USER_ID,
-    });
+    getUserById.mockResolvedValue(
+      new User({
+        name: 'Test Petitioner',
+        role: ROLES.petitioner,
+        userId: USER_ID,
+      }),
+    );
 
     const result = await getUserPendingEmailStatusInteractor(
-      applicationContext,
       {
         userId: USER_ID,
       },
@@ -63,12 +67,9 @@ describe('getUserPendingEmailStatusInteractor', () => {
   });
 
   it('should return undefined when the user is not found in persistence', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockResolvedValue(undefined);
+    getUserById.mockResolvedValue(undefined);
 
     const result = await getUserPendingEmailStatusInteractor(
-      applicationContext,
       {
         userId: USER_ID,
       },

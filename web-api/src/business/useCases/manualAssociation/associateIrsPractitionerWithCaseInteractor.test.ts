@@ -1,4 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_TYPES_MAP,
@@ -14,6 +16,12 @@ import { associateIrsPractitionerWithCaseInteractor } from './associateIrsPracti
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockAdcUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+
+const getPractitionerById = getPractitionerByIdMock as jest.Mock;
+const verifyCaseForUser = verifyCaseForUserMock as jest.Mock;
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -47,9 +55,7 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
   let mockUserById;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUserById);
+    getPractitionerById.mockImplementation(() => mockUserById);
 
     getCaseByDocketNumber.mockImplementation(() => caseRecord);
   });
@@ -69,15 +75,13 @@ describe('associateIrsPractitionerWithCaseInteractor', () => {
   });
 
   it('should add mapping for an irsPractitioner', async () => {
-    mockUserById = {
+    mockUserById = new IrsPractitioner({
       barNumber: 'BN1234',
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.irsPractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    };
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    });
+    verifyCaseForUser.mockReturnValue(false);
 
     await associateIrsPractitionerWithCaseInteractor(
       applicationContext,
