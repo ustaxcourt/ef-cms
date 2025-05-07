@@ -4,6 +4,9 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   DOCKET_SECTION,
   DOCUMENT_SERVED_MESSAGES,
@@ -21,18 +24,17 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
@@ -245,7 +247,7 @@ describe('editPaperFilingInteractor', () => {
 
         expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(upsertWorkItems).toHaveBeenCalled();
-        expect(updateCase).toHaveBeenCalled();
+        expect(updateCaseAndAssociations).toHaveBeenCalled();
         expect(
           applicationContext.getUseCaseHelpers().countPagesInDocument,
         ).not.toHaveBeenCalled();
