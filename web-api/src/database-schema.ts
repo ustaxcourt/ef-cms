@@ -62,12 +62,8 @@ import {
 import {
   indexOpenSearchUser,
   transformOpenSearchUser,
-} from 'web-api/elasticsearch/index-users';
-import { indexOpenSearchPractitioner } from 'web-api/elasticsearch/index-practitioners';
-// import {
-//   indexOpenSearchUser,
-//   transformOpenSearchUser,
-// } from '../elasticsearch/index-users';
+} from '../elasticsearch/index-users';
+import { indexOpenSearchPractitioner } from '../elasticsearch/index-practitioners';
 
 const DEFAULT = {};
 
