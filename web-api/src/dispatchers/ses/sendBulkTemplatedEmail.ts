@@ -101,6 +101,17 @@ export const sendWithRetry = async ({
           : 'undefined',
       )
       .join(',');
+
+    // put the message back into the queue
+    await applicationContext.getMessageGateway().sendEmailEventToQueue({
+      applicationContext,
+      emailParams: {
+        ...params,
+        Destinations: needToRetry,
+      },
+    });
+
+    // this is the end of the line for this lambda
     throw `Could not complete service to ${failures}`;
   }
 
