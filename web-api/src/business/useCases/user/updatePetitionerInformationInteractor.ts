@@ -198,15 +198,17 @@ export const updatePetitionerInformation = async (
   );
 
   petitionerCase.updatePetitioner({
-    contactId: existingPetitionerInfo.contactId,
-    email: existingPetitionerInfo.email,
-    hasConsentedToElectronicService:
-      existingPetitionerInfo.hasConsentedToElectronicService,
-    hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
-    isAddressSealed: existingPetitionerInfo.isAddressSealed,
-    paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
-    sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
-    ...editableFields,
+    updatedPetitioner: {
+      contactId: existingPetitionerInfo.contactId,
+      email: existingPetitionerInfo.email,
+      hasConsentedToElectronicService:
+        existingPetitionerInfo.hasConsentedToElectronicService,
+      hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
+      isAddressSealed: existingPetitionerInfo.isAddressSealed,
+      paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
+      sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
+      ...editableFields,
+    },
   });
 
   //send back through the constructor so the contacts are created with the contact constructor

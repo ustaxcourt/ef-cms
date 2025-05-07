@@ -1,9 +1,12 @@
+jest.mock('@shared/sharedAppContext');
 import { CONTACT_TYPES, PARTY_TYPES } from '../EntityConstants';
 import { Case } from './Case';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 
 describe('updatePetitioner', () => {
+  const getUniqueId = jest.mocked(getUniqueIdMock);
   it('should throw an error when the petitioner to update is not found on the case', () => {
     const myCase = new Case(
       {
@@ -12,9 +15,9 @@ describe('updatePetitioner', () => {
       { authorizedUser: mockDocketClerkUser },
     );
 
-    expect(() => myCase.updatePetitioner({ contactId: 'badId' })).toThrow(
-      'Petitioner was not found',
-    );
+    expect(() =>
+      myCase.updatePetitioner({ updatedPetitioner: { contactId: 'badId' } }),
+    ).toThrow('Petitioner was not found');
   });
 
   it('should update the petitioner when found on case', () => {
@@ -26,9 +29,11 @@ describe('updatePetitioner', () => {
     );
 
     myCase.updatePetitioner({
-      contactId: myCase.petitioners[0].contactId,
-      contactType: CONTACT_TYPES.primary,
-      name: undefined,
+      updatedPetitioner: {
+        contactId: myCase.petitioners[0].contactId,
+        contactType: CONTACT_TYPES.primary,
+        name: undefined,
+      },
     });
 
     const updatedCaseRaw = myCase.validate().toRawObject();
@@ -65,9 +70,11 @@ describe('updatePetitioner', () => {
     );
 
     myCase.updatePetitioner({
-      contactId: SECONDARY_CONTACT_ID,
-      contactType: CONTACT_TYPES.secondary,
-      name: undefined,
+      updatedPetitioner: {
+        contactId: SECONDARY_CONTACT_ID,
+        contactType: CONTACT_TYPES.secondary,
+        name: undefined,
+      },
     });
 
     const updatedCaseRaw = myCase.validate().toRawObject();
@@ -78,5 +85,32 @@ describe('updatePetitioner', () => {
     });
 
     expect(updatedCaseEntity.isValid()).toBeFalsy();
+  });
+
+  it('should update the petitioner contactId', () => {
+    const oldId = MOCK_CASE.petitioners[0].contactId;
+    const newId = 'bbd3a059-dafe-441a-9dfc-80e476ff24d1';
+    getUniqueId.mockReturnValue(newId);
+    const myCase = new Case(
+      {
+        ...MOCK_CASE,
+      },
+      { authorizedUser: mockDocketClerkUser },
+    );
+
+    const updatedPetitioner = myCase.updatePetitioner({
+      updatedPetitioner: {
+        contactId: oldId,
+        contactType: CONTACT_TYPES.primary,
+        name: undefined,
+      },
+      assignNewId: true,
+    });
+
+    expect(updatedPetitioner.contactId).toEqual(newId);
+
+    expect(myCase.getPetitionerById(oldId)).toBeFalsy();
+
+    myCase.validate().toRawObject();
   });
 });

@@ -4,14 +4,14 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getUniqueId } from '@shared/sharedAppContext';
-import { updatePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
-import { upsertPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase';
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { applicationContext } from '@web-api/applicationContext';
 import { deleteUserFromCase } from '@web-api/persistence/dynamo/cases/deleteUserFromCase';
+import { updateCase } from '@web-api/persistence/postgres/cases/updateCase';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 
 export const removePetitionerEmailInteractor = async (
   { docketNumber, email }: { docketNumber: string; email: string },
@@ -23,6 +23,7 @@ export const removePetitionerEmailInteractor = async (
   const rawCase = await getCaseByDocketNumber({
     applicationContext,
     docketNumber,
+    includeConsolidatedCases: false,
   });
 
   const petitionerToRemove = rawCase.petitioners.find(
@@ -33,35 +34,30 @@ export const removePetitionerEmailInteractor = async (
     throw new Error(`Petitioner with email ${email} not found`);
   }
 
-  petitionerToRemove.serviceIndicator = 'Paper';
-  petitionerToRemove.hasElectronicAccess = false;
-  delete petitionerToRemove.email;
+  const oldContactId = petitionerToRemove.contactId;
 
-  const caseToUpdate = new Case(rawCase, { authorizedUser })
-    .validate()
-    .toRawObject();
+  const caseEntity = new Case(rawCase, { authorizedUser });
 
-  await upsertPetitionersOnCase({
-    docketNumber,
-    petitionerCase: caseToUpdate,
+  const updatedPetitioner = caseEntity.updatePetitioner({
+    updatedPetitioner: {
+      ...petitionerToRemove,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      hasElectronicAccess: false,
+      email: undefined,
+    },
+    assignNewId: true,
   });
 
-  const petitionerToUpdate = new Petitioner({
-    ...petitionerToRemove,
-    contactId: getUniqueId(),
-  });
+  const caseToUpdate = caseEntity.validate().toRawObject();
 
-  await updatePetitionerOnCase({
-    docketNumber,
-    petitioner: petitionerToUpdate,
-    oldContactId: petitionerToRemove.contactId,
-  });
+  await settlePromises([
+    updateCase({ caseToUpdate }),
+    deleteUserFromCase({
+      applicationContext,
+      docketNumber,
+      userId: oldContactId,
+    }),
+  ]);
 
-  await deleteUserFromCase({
-    applicationContext,
-    docketNumber,
-    userId: petitionerToRemove.contactId,
-  });
-
-  return petitionerToUpdate;
+  return new Petitioner(updatedPetitioner);
 };
