@@ -67,7 +67,7 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
-import { Statistic } from '../Statistic';
+import { RawStatistic, Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
@@ -143,7 +143,7 @@ export class Case extends JoiValidationEntity {
   public privatePractitioners?: any[];
   public initialCaption?: string;
   public irsPractitioners?: any[];
-  public statistics?: any[];
+  public statistics?: RawStatistic[];
   public correspondence: RawCorrespondence[];
   public archivedCorrespondences?: RawCorrespondence[];
   public hasPendingItems?: boolean;
