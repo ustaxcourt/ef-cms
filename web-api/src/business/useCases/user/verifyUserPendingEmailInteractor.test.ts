@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   ROLES,

@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';

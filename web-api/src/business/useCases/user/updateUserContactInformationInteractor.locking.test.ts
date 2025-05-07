@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 import { COUNTRY_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
