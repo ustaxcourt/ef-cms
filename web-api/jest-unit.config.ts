@@ -53,9 +53,6 @@ const config: Config = {
     uuid: require.resolve('uuid'),
   },
   testEnvironment: 'node',
-  setupFilesAfterEnv: [
-    `${__dirname}/src/persistence/postgres/featureFlag/mock.jest.ts`,
-  ],
   testPathIgnorePatterns: ['hostedEnvironmentTests'],
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],

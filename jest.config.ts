@@ -20,9 +20,6 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/web-client/htmlLoader.js`,
   },
-  setupFilesAfterEnv: [
-    `${__dirname}/web-api/src/persistence/postgres/featureFlag/mock.jest.ts`,
-  ],
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
 };
