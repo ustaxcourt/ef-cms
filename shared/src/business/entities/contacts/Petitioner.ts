@@ -47,15 +47,15 @@ export class Petitioner extends JoiValidationEntity {
     this.email = rawProps.email;
     this.paperPetitionEmail = rawProps.paperPetitionEmail;
     this.hasConsentedToElectronicService =
-      rawProps.hasConsentedToElectronicService || undefined;
-    this.hasElectronicAccess = rawProps.hasElectronicAccess || undefined;
+      rawProps.hasConsentedToElectronicService ?? undefined;
+    this.hasElectronicAccess = rawProps.hasElectronicAccess ?? undefined;
     this.inCareOf = rawProps.inCareOf;
-    this.isAddressSealed = rawProps.isAddressSealed || false;
+    this.isAddressSealed = rawProps.isAddressSealed ?? false;
     this.name = rawProps.name;
     this.phone = formatPhoneNumber(rawProps.phone);
     this.postalCode = rawProps.postalCode;
     this.placeOfLegalResidence = rawProps.placeOfLegalResidence;
-    this.sealedAndUnavailable = rawProps.sealedAndUnavailable || false;
+    this.sealedAndUnavailable = rawProps.sealedAndUnavailable ?? false;
     this.secondaryName = rawProps.secondaryName;
     this.serviceIndicator = rawProps.serviceIndicator;
     this.state = rawProps.state;
