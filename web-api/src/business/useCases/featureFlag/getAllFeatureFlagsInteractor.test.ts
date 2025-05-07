@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 jest.mock('@web-api/persistence/postgres/featureFlag/getFeatureFlagValue');
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
