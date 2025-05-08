@@ -7,8 +7,8 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError } from '@web-api/errors/errors';
-import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const createCaseTrialSortMappingRecords = async ({
   applicationContext,
@@ -40,9 +40,18 @@ export const createCaseTrialSortMappingRecords = async ({
     });
   }
 
-  const theCase = await getCaseMetadataByDocketNumber({
-    docketNumber,
-  });
+  const theCase = (
+    await getCasesByDocketNumbers({
+      docketNumbers: [docketNumber],
+      excludeFields: [
+        'hearings',
+        'correspondence',
+        'docketEntries',
+        'irsPractitioners',
+        'privatePractitioners',
+      ],
+    })
+  )[0];
 
   if (!theCase) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
