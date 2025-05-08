@@ -31,7 +31,13 @@ export const getPractitionerCasesInteractor = async (
 
   const cases = await getCasesByDocketNumbers({
     docketNumbers,
-    excludeFields: ['docketEntries', 'hearings', 'correspondence'],
+    excludeFields: [
+      'docketEntries',
+      'hearings',
+      'correspondence',
+      'privatePractitioners',
+      'irsPractitioners',
+    ],
   });
 
   const caseDetails: PractitionerCaseDetail[] = cases

@@ -100,7 +100,13 @@ const assignCaseCaptionFromPersistence = async (
   });
   const casesDetails = await getCasesByDocketNumbers({
     docketNumbers,
-    excludeFields: ['docketEntries', 'hearings', 'correspondence'],
+    excludeFields: [
+      'docketEntries',
+      'hearings',
+      'correspondence',
+      'privatePractitioners',
+      'irsPractitioners',
+    ],
   });
 
   if (!casesDetails) {

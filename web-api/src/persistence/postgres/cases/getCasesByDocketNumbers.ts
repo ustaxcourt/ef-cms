@@ -24,6 +24,12 @@ export const ALL_OMITTABLE_CASE_FIELDS = [
 
 export type OmittableCaseFields = (typeof ALL_OMITTABLE_CASE_FIELDS)[number];
 
+/**
+ * Returns subsets of case data based on excludeFields. If excludeFields is not passed in,
+ * it fetches all case-related data except consolidated cases.
+ * @param {string[]} docketNumbers
+ * @param {OmittableCaseFields[]} excludeFields - OmittableCaseFields[]
+ */
 export async function getCasesByDocketNumbers<
   T extends OmittableCaseFields[] = [],
 >({

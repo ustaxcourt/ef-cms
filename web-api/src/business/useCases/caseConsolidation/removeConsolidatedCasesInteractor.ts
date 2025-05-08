@@ -48,7 +48,6 @@ const removeConsolidatedCases = async (
 
   const allConsolidatedCases = await getConsolidatedCases({
     leadDocketNumber,
-    excludeFields: ['correspondence', 'docketEntries', 'hearings'],
   });
 
   const newConsolidatedCases = allConsolidatedCases.filter(

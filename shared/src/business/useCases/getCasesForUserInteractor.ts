@@ -56,7 +56,13 @@ export const getCasesForUserInteractor = async (
   const allUserCases: TAssociatedCase[] = (
     await getCasesByDocketNumbers({
       docketNumbers,
-      excludeFields: ['docketEntries', 'hearings', 'correspondence'],
+      excludeFields: [
+        'docketEntries',
+        'hearings',
+        'correspondence',
+        'privatePractitioners',
+        'irsPractitioners',
+      ],
     })
   ).map(c => {
     return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
