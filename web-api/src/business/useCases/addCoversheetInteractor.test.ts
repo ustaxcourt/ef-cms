@@ -15,7 +15,7 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   getCasesByDocketNumbers as getCasesByDocketNumbersMock,
-  OmittableCaseFields,
+  SelectableCaseFields,
 } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 jest.mock('./addCoverToPdf', () => ({
@@ -30,7 +30,7 @@ const getCasesByDocketNumbers =
   getCasesByDocketNumbersMock as jest.MockedFunction<
     (args: {
       docketNumbers: string[];
-      excludeFields?: OmittableCaseFields[];
+      includeFields?: SelectableCaseFields[];
     }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
   >;
 

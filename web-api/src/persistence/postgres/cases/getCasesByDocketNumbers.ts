@@ -14,47 +14,64 @@ import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { difference, isEmpty, partition, sortBy } from 'lodash';
 
-export const ALL_OMITTABLE_CASE_FIELDS = [
+export const SELECTABLE_CASE_FIELDS: SelectableCaseFields[] = [
   'docketEntries',
   'privatePractitioners',
   'irsPractitioners',
   'correspondence',
   'hearings',
-] as const;
+];
 
-export type OmittableCaseFields = (typeof ALL_OMITTABLE_CASE_FIELDS)[number];
+type RawCaseMetadata = Omit<
+  RawCase,
+  | 'docketEntries'
+  | 'privatePractitioners'
+  | 'irsPractitioners'
+  | 'correspondence'
+  | 'hearings'
+  | 'consolidatedCases'
+>;
 
+export type SelectableCaseFields =
+  | 'docketEntries'
+  | 'privatePractitioners'
+  | 'irsPractitioners'
+  | 'correspondence'
+  | 'hearings';
 /**
  * Returns subsets of case data based on excludeFields. If excludeFields is not passed in,
  * it fetches all case-related data except consolidated cases.
  * @param {string[]} docketNumbers
- * @param {OmittableCaseFields[]} excludeFields - OmittableCaseFields[]
+ * @param {SelectableCaseFields[]} excludeFields - OmittableCaseFields[]
  */
 export async function getCasesByDocketNumbers<
-  T extends OmittableCaseFields[] = [],
+  T extends SelectableCaseFields[],
 >({
   docketNumbers,
-  excludeFields,
+  includeFields = SELECTABLE_CASE_FIELDS as T,
 }: {
   docketNumbers: string[];
-  excludeFields?: T;
-}): Promise<Omit<RawCase, 'consolidatedCases' | T[number]>[]> {
+  includeFields: T;
+}): Promise<(RawCaseMetadata & Pick<RawCase, T[number]>)[]> {
   if (isEmpty(docketNumbers)) {
     return [];
   }
-  const casesData = await getAllCaseData({ docketNumbers, excludeFields });
+  const casesData = await getAllCaseData({
+    docketNumbers,
+    includeFields,
+  });
   const casesDataSorted = sortCaseFields({ cases: casesData, docketNumbers });
   const rawCases = casesDataSorted.map(c => convertDbCaseToRawCase(c));
 
-  return rawCases as Omit<RawCase, 'consolidatedCases' | T[number]>[];
+  return rawCases as unknown as (RawCaseMetadata & Pick<RawCase, T[number]>)[];
 }
 
-async function getAllCaseData<T extends OmittableCaseFields[]>({
+async function getAllCaseData<T extends SelectableCaseFields[]>({
   docketNumbers,
-  excludeFields,
+  includeFields,
 }: {
   docketNumbers: string[];
-  excludeFields?: T;
+  includeFields: T;
 }): Promise<EnrichedCaseRow[]> {
   const [
     cases,
@@ -66,27 +83,27 @@ async function getAllCaseData<T extends OmittableCaseFields[]>({
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
     (async () => {
-      if (!excludeFields?.includes('privatePractitioners')) {
+      if (includeFields.includes('privatePractitioners')) {
         return await getPrivatePractitioners(docketNumbers, applicationContext);
       } else return [];
     })(),
     (async () => {
-      if (!excludeFields?.includes('irsPractitioners')) {
+      if (includeFields.includes('irsPractitioners')) {
         return await getIrsPractitioners(docketNumbers, applicationContext);
       } else return [];
     })(),
     (async () => {
-      if (!excludeFields?.includes('docketEntries')) {
+      if (includeFields.includes('docketEntries')) {
         return getDocketEntries(docketNumbers, applicationContext);
       } else return [];
     })(),
     (async () => {
-      if (!excludeFields?.includes('correspondence')) {
+      if (includeFields.includes('correspondence')) {
         return getCaseCorrespondenceByDocketNumber(docketNumbers);
       } else return [];
     })(),
     (async () => {
-      if (!excludeFields?.includes('hearings')) {
+      if (includeFields.includes('hearings')) {
         return getHearings(docketNumbers);
       } else return [];
     })(),
@@ -193,9 +210,7 @@ function sortCaseFields({
   return cases;
 }
 
-function convertDbCaseToRawCase(
-  dbCase: EnrichedCaseRow,
-): Omit<RawCase, 'consolidatedCases'> {
+function convertDbCaseToRawCase(dbCase: EnrichedCaseRow) {
   const appCase = {
     ...fromKyselyCase(dbCase),
     correspondence: dbCase.correspondence.map(cc =>
