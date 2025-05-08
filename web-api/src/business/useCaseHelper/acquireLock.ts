@@ -2,7 +2,7 @@ import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entitie
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { sleep } from '@shared/tools/helpers';
 
 export const checkLock = async ({

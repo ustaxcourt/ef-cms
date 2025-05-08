@@ -8,7 +8,7 @@ import {
   getUserFromAuthHeader,
   handle,
 } from './middleware/apiGatewayHelper';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { getMaintenanceMode } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 

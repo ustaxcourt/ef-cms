@@ -5,7 +5,7 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { createApplicationContext } from '@web-api/applicationContext';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { migrateRecords as migrations } from './migration-segments';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import type { DynamoDBStreamEvent, Handler } from 'aws-lambda';

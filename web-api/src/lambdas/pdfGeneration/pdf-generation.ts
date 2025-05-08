@@ -1,5 +1,5 @@
 import { createApplicationContext } from '../../applicationContext';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export type PdfGenerationResult = {
   tempId: string;

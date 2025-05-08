@@ -1,6 +1,6 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createApplicationContext } from '../../applicationContext';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { sealInLowerEnvironment } from '@web-api/business/useCaseHelper/sealInLowerEnvironment';
 
 /**

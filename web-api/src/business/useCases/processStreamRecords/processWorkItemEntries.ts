@@ -1,6 +1,6 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { compact } from 'lodash';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';

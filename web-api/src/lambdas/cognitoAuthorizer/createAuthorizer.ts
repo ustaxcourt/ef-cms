@@ -4,7 +4,7 @@ import {
 } from 'aws-lambda';
 import { createPublicKey } from 'crypto';
 import { environment } from '@web-api/environment';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import axios from 'axios';
 import jwk from 'jsonwebtoken';
 

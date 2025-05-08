@@ -6,7 +6,7 @@ import {
 import { createApplicationContext } from '../../src/applicationContext';
 import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
 import { createUserRecords } from '../../src/persistence/dynamo/users/createUserRecords';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
 

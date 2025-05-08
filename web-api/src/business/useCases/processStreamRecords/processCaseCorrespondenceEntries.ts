@@ -1,5 +1,5 @@
 import { RawCorrespondence } from '@shared/business/entities/Correspondence';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 

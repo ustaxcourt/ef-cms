@@ -4,7 +4,7 @@ import {
   WorkerMessage,
   workerRouter,
 } from '@web-api/gateways/worker/workerRouter';
-import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export const workerLocal: WorkerHandler = async (
   applicationContext: ServerApplicationContext,
