@@ -2,7 +2,7 @@ import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entitie
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
 import { sleep } from '@shared/tools/helpers';
 
 export const checkLock = async ({
@@ -24,11 +24,11 @@ export const checkLock = async ({
     .getLock({ applicationContext, identifier });
 
   if (!currentLock) {
-    getLogger().warn('Entity is NOT currently locked', { identifier });
+    getDawsonLogger().warn('Entity is NOT currently locked', { identifier });
     return false;
   }
 
-  getLogger().warn('Entity is currently locked', { currentLock });
+  getDawsonLogger().warn('Entity is currently locked', { currentLock });
 
   if (!isCaseLockingEnabled) {
     return false;
@@ -115,14 +115,12 @@ export const asyncHandleLockError = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!authorizedUser?.userId || !clientConnectionId) return;
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: { action: 'async_service_unavailable_error' },
-      userId: authorizedUser?.userId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: { action: 'async_service_unavailable_error' },
+    userId: authorizedUser?.userId,
+  });
 };
 
 /**

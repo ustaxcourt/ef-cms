@@ -1,5 +1,5 @@
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertCaseWorksheets } from '@web-api/persistence/postgres/caseWorksheets/upsertCaseWorksheets';
 
@@ -10,7 +10,7 @@ export const processCaseWorksheetEntries = async ({
 }) => {
   if (!caseWorksheetRecords.length) return;
 
-  getLogger().debug(
+  getDawsonLogger().debug(
     `going to upsert ${caseWorksheetRecords.length} case worksheet records`,
   );
 

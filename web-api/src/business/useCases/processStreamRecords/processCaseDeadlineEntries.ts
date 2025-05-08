@@ -1,5 +1,5 @@
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
@@ -10,7 +10,7 @@ export const processCaseDeadlineEntries = async ({
 }) => {
   if (!caseDeadlineRecords.length) return;
 
-  getLogger().debug(
+  getDawsonLogger().debug(
     `going to upsert ${caseDeadlineRecords.length} case deadline records`,
   );
 

@@ -5,7 +5,7 @@ import {
 } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { createApplicationContext } from '@web-api/applicationContext';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
 import { migrateRecords as migrations } from './migration-segments';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import type { DynamoDBStreamEvent, Handler } from 'aws-lambda';
@@ -62,8 +62,8 @@ export const handler: Handler = async (event: DynamoDBStreamEvent, context) => {
   });
 
   const applicationContext = createApplicationContext();
-  getLogger().clearContext();
-  getLogger().addContext({
+  getDawsonLogger().clearContext();
+  getDawsonLogger().addContext({
     environment: {
       stage: process.env.STAGE || 'local',
     },

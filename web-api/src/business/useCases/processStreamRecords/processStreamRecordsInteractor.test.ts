@@ -11,7 +11,7 @@ jest.mock('./processCaseWorksheetEntries');
 jest.mock('./processUserCaseNoteEntries');
 jest.mock('./processOtherEntries');
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
 import { partitionRecords } from './processStreamUtilities';
 import { processCaseCorrespondenceEntries } from '@web-api/business/useCases/processStreamRecords/processCaseCorrespondenceEntries';
 import { processCaseDeadlineEntries } from '@web-api/business/useCases/processStreamRecords/processCaseDeadlineEntries';
@@ -26,7 +26,7 @@ import { processStreamRecordsInteractor } from './processStreamRecordsInteractor
 import { processUserCaseNoteEntries } from './processUserCaseNoteEntries';
 import { processWorkItemEntries } from './processWorkItemEntries';
 
-const logger = getLogger();
+const logger = getDawsonLogger();
 const errorSpy = jest.spyOn(logger, 'error');
 
 describe('processStreamRecordsInteractor', () => {

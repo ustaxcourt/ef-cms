@@ -1,6 +1,6 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { compact } from 'lodash';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
@@ -15,7 +15,9 @@ export const processWorkItemEntries = async ({
 }) => {
   if (!workItemRecords.length) return;
 
-  getLogger().debug(`Indexing ${workItemRecords.length} work item records`);
+  getDawsonLogger().debug(
+    `Indexing ${workItemRecords.length} work item records`,
+  );
 
   const indexWorkItemEntry = workItemRecord => {
     const workItemNewImage = workItemRecord.dynamodb.NewImage;
@@ -59,7 +61,7 @@ export const processWorkItemEntries = async ({
     });
 
   if (failedRecords.length > 0) {
-    getLogger().error('the records that failed to index', {
+    getDawsonLogger().error('the records that failed to index', {
       failedRecords,
     });
     throw new Error('failed to index work item records');
@@ -71,7 +73,7 @@ export const processWorkItemEntries = async ({
     record.dynamodb.NewImage.pk.S.startsWith('case|'),
   );
 
-  getLogger().debug(
+  getDawsonLogger().debug(
     `Upserting ${nonOutboxWorkItemRecords.length} work item records into postgres`,
   );
 

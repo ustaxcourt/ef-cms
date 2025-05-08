@@ -1,5 +1,5 @@
 import { createApplicationContext } from '../../applicationContext';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
 
 export type PdfGenerationResult = {
   tempId: string;
@@ -34,7 +34,7 @@ export const changeOfAddressHandler = async event => {
   const eventBody = JSON.parse(body);
 
   const applicationContext = createApplicationContext();
-  getLogger().addUser({ user: eventBody.requestUser });
+  getDawsonLogger().addUser({ user: eventBody.requestUser });
 
   applicationContext.logger.info(
     `processing job "change-of-address-job|${eventBody.jobId}", task for case ${eventBody.docketNumber}`,

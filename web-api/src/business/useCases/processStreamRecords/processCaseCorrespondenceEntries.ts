@@ -1,5 +1,5 @@
 import { RawCorrespondence } from '@shared/business/entities/Correspondence';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
@@ -10,7 +10,7 @@ export const processCaseCorrespondenceEntries = async ({
 }) => {
   if (!caseCorrespondenceRecords.length) return;
 
-  getLogger().debug(
+  getDawsonLogger().debug(
     `going to upsert ${caseCorrespondenceRecords.length} correspondence records`,
   );
 

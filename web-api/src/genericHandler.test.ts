@@ -19,7 +19,7 @@ import {
   genericHandler,
 } from './genericHandler';
 import { getEntityByName as getEntityByNameMock } from '@web-api/business/getEntityByName';
-import { getLogger as getLoggerMock } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger as getLoggerMock } from '@web-api/utilities/logger/getLogger';
 import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
 import {
   mockAdcUser,
