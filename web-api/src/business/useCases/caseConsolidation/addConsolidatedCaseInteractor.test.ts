@@ -13,17 +13,15 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 describe('addConsolidatedCaseInteractor', () => {
   let mockCases;
   let mockLock;
 
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const getCasesByLeadDocketNumber = jest.mocked(
-    getCasesByLeadDocketNumberMock,
-  );
+  const getConsolidatedCases = jest.mocked(getConsolidatedCasesMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   beforeAll(() => {
     applicationContext
@@ -78,7 +76,7 @@ describe('addConsolidatedCaseInteractor', () => {
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
       return Promise.resolve(mockCases[docketNumber]);
     });
-    getCasesByLeadDocketNumber.mockImplementation(({ leadDocketNumber }) => {
+    getConsolidatedCases.mockImplementation(({ leadDocketNumber }) => {
       return Promise.resolve(
         Object.keys(mockCases)
           .map(key => mockCases[key])

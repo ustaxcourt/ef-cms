@@ -1,7 +1,10 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import {
+  getCasesByDocketNumbers as getCasesByDocketNumbersMock,
+  OmittableCaseFields,
+} from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getEligibleCasesForTrialSession } from './getEligibleCasesForTrialSession';
 import { query } from '../../dynamodbClientService';
 
@@ -15,7 +18,13 @@ jest.mock('../../dynamodbClientService', () => ({
 const queryMock = query as jest.Mock;
 
 describe('getEligibleCasesForTrialSession', () => {
-  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const getCasesByDocketNumbers =
+    getCasesByDocketNumbersMock as jest.MockedFunction<
+      (args: {
+        docketNumbers: string[];
+        excludeFields?: OmittableCaseFields[];
+      }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
+    >;
 
   beforeEach(() => {
     getCasesByDocketNumbers.mockResolvedValue([

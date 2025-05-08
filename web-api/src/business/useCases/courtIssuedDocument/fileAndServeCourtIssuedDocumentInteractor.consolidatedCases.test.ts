@@ -20,11 +20,20 @@ import { v4 as uuidv4 } from 'uuid';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { Case } from '@shared/business/entities/cases/Case';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import {
+  getCasesByDocketNumbers as getCasesByDocketNumbersMock,
+  OmittableCaseFields,
+} from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('consolidated cases', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const getCasesByDocketNumbers =
+    getCasesByDocketNumbersMock as jest.MockedFunction<
+      (args: {
+        docketNumbers: string[];
+        excludeFields?: OmittableCaseFields[];
+      }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
+    >;
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
