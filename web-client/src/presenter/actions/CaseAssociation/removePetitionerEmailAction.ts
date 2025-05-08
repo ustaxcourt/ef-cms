@@ -23,7 +23,7 @@ export const removePetitionerEmailAction = async ({
     );
 
     petitioners[petitionerIndex] = {
-      ...updatedPetitioner,
+      ...(updatedPetitioner as TPetitioner),
     };
   } catch (error) {
     return path.error({
