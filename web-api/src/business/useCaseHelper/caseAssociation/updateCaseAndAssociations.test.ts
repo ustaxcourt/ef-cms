@@ -25,26 +25,23 @@ import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { MOCK_MESSAGE } from '@shared/test/mockMessage';
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = jest.mocked(updateCaseMock);
-
-const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
-const updateMessage = updateMessageMock as jest.Mock;
-const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
-const getWorkItemsByDocketNumber = getWorkItemsByDocketNumberMock as jest.Mock;
-
-const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
-
-const getCaseDeadlinesByDocketNumber =
-  getCaseDeadlinesByDocketNumberMock as jest.Mock;
-
-const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 
 describe('updateCaseAndAssociations', () => {
   let validMockCase;
+
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const upsertCases = jest.mocked(upsertCasesMock);
+  const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
+  const updateMessage = updateMessageMock as jest.Mock;
+  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
+  const getWorkItemsByDocketNumber =
+    getWorkItemsByDocketNumberMock as jest.Mock;
+  const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
+  const getCaseDeadlinesByDocketNumber =
+    getCaseDeadlinesByDocketNumberMock as jest.Mock;
+  const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
 
   beforeAll(() => {
     validMockCase = new Case(
@@ -78,9 +75,6 @@ describe('updateCaseAndAssociations', () => {
       { some: 'deadline' },
     ]);
     getCaseByDocketNumber.mockResolvedValue(validMockCase);
-    updateCase.mockImplementation(({ caseToUpdate }) =>
-      Promise.resolve(caseToUpdate),
-    );
   });
 
   beforeEach(() => {
@@ -103,11 +97,9 @@ describe('updateCaseAndAssociations', () => {
     });
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(upsertCases).toHaveBeenCalled();
 
-    expect(updateCase.mock.calls[0][0]).toMatchObject({
-      caseToUpdate,
-    });
+    expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
   });
 
   it('always sends valid entities to the updateCase persistence method', async () => {
@@ -117,12 +109,12 @@ describe('updateCaseAndAssociations', () => {
       caseToUpdate: validMockCase,
     });
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
-    const updateArgs = updateCase.mock.calls[0][0];
+    expect(upsertCases).toHaveBeenCalled();
+    const updatedCase = upsertCases.mock.calls[0][0][0];
 
     // TODO: isValidated is not typed
     // @ts-ignore
-    expect(updateArgs.caseToUpdate.isValidated).toBe(true);
+    expect(updatedCase.isValidated).toBe(true);
   });
 
   it('does not attempt to make any update calls to persistence if any queries to persistence fail', async () => {
@@ -190,7 +182,7 @@ describe('updateCaseAndAssociations', () => {
     expect(upsertCaseDeadlines).not.toHaveBeenCalled();
 
     // update the case itself, final persistence call
-    expect(updateCase).not.toHaveBeenCalled();
+    expect(upsertCases).not.toHaveBeenCalled();
   });
 
   it('updates hearings, removing old ones from the given case', async () => {
@@ -226,9 +218,7 @@ describe('updateCaseAndAssociations', () => {
       caseToUpdate,
     });
 
-    expect(updateCase.mock.calls[0][0]).toMatchObject({
-      caseToUpdate,
-    });
+    expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
     expect(
       applicationContext.getPersistenceGateway().removeCaseFromHearing,
     ).toHaveBeenCalledTimes(2);
@@ -265,9 +255,7 @@ describe('updateCaseAndAssociations', () => {
       expect(
         applicationContext.getPersistenceGateway().updateDocketEntry,
       ).not.toHaveBeenCalled();
-      expect(updateCase.mock.calls[0][0]).toMatchObject({
-        caseToUpdate,
-      });
+      expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
     });
 
     it('calls updateDocketEntry for each docket entry which has been added or changed', async () => {
@@ -297,11 +285,11 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate,
       });
 
+      expect(upsertCases.mock.calls[0][0][0].docketEntries).toMatchObject(
+        caseToUpdate.docketEntries,
+      );
       expect(
-        updateCase.mock.calls[0][0].caseToUpdate.docketEntries,
-      ).toMatchObject(caseToUpdate.docketEntries);
-      expect(
-        updateCase.mock.calls[0][0].caseToUpdate.archivedDocketEntries,
+        upsertCases.mock.calls[0][0][0].archivedDocketEntries,
       ).toMatchObject(caseToUpdate.archivedDocketEntries);
       expect(
         applicationContext.getPersistenceGateway().updateDocketEntry,
