@@ -9,8 +9,8 @@ import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRe
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getLogger } from 'aws-xray-sdk';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
-import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { flattenDeep, isArray } from 'lodash';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const transformOpenSearchCase = (
   caseData: CaseKysely | CaseKysely[],
@@ -27,10 +27,11 @@ export const indexOpenSearchCase = async ({
   for (const docketNumber of isArray(message.payload)
     ? message.payload
     : [message.payload]) {
-    const caseRecord = await getCaseMetadataWithCounsel({
-      applicationContext,
-      docketNumber,
+    const caseRecordArray = await getCasesByDocketNumbers({
+      docketNumbers: [docketNumber],
+      excludeFields: ['docketEntries', 'hearings', 'correspondence'],
     });
+    const caseRecord = caseRecordArray[0];
 
     if (!caseRecord) {
       getLogger().error(`Could not index case ${docketNumber}: not found!`);

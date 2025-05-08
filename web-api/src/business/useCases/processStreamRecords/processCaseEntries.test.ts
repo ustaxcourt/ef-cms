@@ -1,15 +1,14 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { getCaseMetadataWithCounsel as getCaseMetadataWithCounselMock } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { processCaseEntries } from './processCaseEntries';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 jest.mock('@web-api/persistence/postgres/cases/upsertCases');
 
 describe('processCaseEntries', () => {
-  const getCaseMetadataWithCounsel =
-    getCaseMetadataWithCounselMock as jest.Mock;
+  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
   const mockCaseRecord = {
     dynamodb: {
       NewImage: {
@@ -36,7 +35,7 @@ describe('processCaseEntries', () => {
   };
 
   beforeEach(() => {
-    getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
+    getCasesByDocketNumbers.mockReturnValue(mockCaseRecord);
 
     (upsertCases as jest.Mock).mockResolvedValue(undefined);
   });

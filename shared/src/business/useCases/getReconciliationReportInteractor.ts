@@ -14,7 +14,7 @@ import {
 import { ReconciliationReportEntry } from '@shared/business/entities/ReconciliationReportEntry';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 function isValidTime(time: string): boolean {
   return isValidDateString(time, [FORMATS.TIME_24_HOUR]);
@@ -98,7 +98,10 @@ const assignCaseCaptionFromPersistence = async (
     e.docketNumber = docketNumber;
     return e.docketNumber;
   });
-  const casesDetails = await getCasesMetadataByDocketNumbers({ docketNumbers });
+  const casesDetails = await getCasesByDocketNumbers({
+    docketNumbers,
+    excludeFields: ['docketEntries', 'hearings', 'correspondence'],
+  });
 
   if (!casesDetails) {
     throw new Error('No cases found for the given docket numbers');

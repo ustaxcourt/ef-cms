@@ -1,11 +1,18 @@
 import { getDbReader } from '@web-api/database';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import {
+  getCasesByDocketNumbers,
+  OmittableCaseFields,
+} from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
-export const getCasesByLeadDocketNumber = async ({
+export const getConsolidatedCases = async <
+  T extends OmittableCaseFields[] = [],
+>({
   leadDocketNumber,
+  excludeFields,
 }: {
   leadDocketNumber: string;
-}): Promise<Omit<RawCase, 'consolidatedCases'>[]> => {
+  excludeFields?: T;
+}) => {
   const dbCaseData = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
@@ -15,7 +22,11 @@ export const getCasesByLeadDocketNumber = async ({
   );
 
   const docketNumbers = dbCaseData.map(({ docketNumber }) => docketNumber);
-  const cases = await getCasesByDocketNumbers({ docketNumbers });
+
+  const cases = getCasesByDocketNumbers({
+    docketNumbers,
+    excludeFields,
+  });
 
   return cases;
 };

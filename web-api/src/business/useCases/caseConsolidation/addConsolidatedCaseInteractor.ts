@@ -7,9 +7,9 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 /**
  * addConsolidatedCase
@@ -58,7 +58,7 @@ export const addConsolidatedCase = async (
     caseToUpdate.leadDocketNumber &&
     caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
   ) {
-    allCasesToConsolidate = await getCasesByLeadDocketNumber({
+    allCasesToConsolidate = await getConsolidatedCases({
       leadDocketNumber: caseToUpdate.leadDocketNumber,
     });
   } else {
@@ -66,7 +66,7 @@ export const addConsolidatedCase = async (
   }
 
   if (caseToConsolidateWith.leadDocketNumber) {
-    const casesConsolidatedWithLeadCase = await getCasesByLeadDocketNumber({
+    const casesConsolidatedWithLeadCase = await getConsolidatedCases({
       leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
     });
     allCasesToConsolidate.push(...casesConsolidatedWithLeadCase);

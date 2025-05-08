@@ -7,10 +7,10 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 /**
  * removeConsolidatedCases
@@ -46,8 +46,9 @@ const removeConsolidatedCases = async (
 
   const { leadDocketNumber } = caseToUpdate;
 
-  const allConsolidatedCases = await getCasesByLeadDocketNumber({
+  const allConsolidatedCases = await getConsolidatedCases({
     leadDocketNumber,
+    excludeFields: ['correspondence', 'docketEntries', 'hearings'],
   });
 
   const newConsolidatedCases = allConsolidatedCases.filter(

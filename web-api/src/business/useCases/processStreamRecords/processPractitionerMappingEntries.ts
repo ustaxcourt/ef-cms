@@ -5,11 +5,11 @@ import type {
   IDynamoDBRecord,
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
-import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getCaseDataFromDynamo } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -38,7 +38,6 @@ export const processPractitionerMappingEntries = async ({
       let caseRecord: any;
       try {
         caseRecord = await getCaseDataFromPostgres({
-          applicationContext,
           docketNumber,
         });
       } catch (e) {
@@ -110,20 +109,20 @@ export const processPractitionerMappingEntries = async ({
 };
 
 const getCaseDataFromPostgres = async ({
-  applicationContext,
   docketNumber,
 }: {
-  applicationContext: ServerApplicationContext;
   docketNumber: string;
 }) => {
-  const caseMetadataWithCounsel = await getCaseMetadataWithCounsel({
-    applicationContext,
-    docketNumber,
+  const caseMetadataWithCounsels = await getCasesByDocketNumbers({
+    docketNumbers: [docketNumber],
+    excludeFields: ['docketEntries', 'correspondence', 'hearings'],
   });
 
-  if (!caseMetadataWithCounsel) {
+  if (!caseMetadataWithCounsels.length) {
     throw Error(`Unable to index ${docketNumber} case data not found`);
   }
+
+  const caseMetadataWithCounsel = caseMetadataWithCounsels[0];
 
   const marshalledCase = marshall(
     transformNullToUndefined({

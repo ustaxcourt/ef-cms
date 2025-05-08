@@ -2,7 +2,6 @@ import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/Consolidated
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
-import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
@@ -10,6 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -60,9 +60,9 @@ export const getCaseByDocketNumber = async ({
     'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
   >[] = [];
   if (includeConsolidatedCases) {
-    consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
-      applicationContext,
+    consolidatedCases = await getConsolidatedCases({
       leadDocketNumber: dbCaseMetadata.leadDocketNumber!,
+      excludeFields: ['correspondence', 'docketEntries', 'hearings'],
     });
     if (user) {
       consolidatedCases = consolidatedCases.map(c =>
