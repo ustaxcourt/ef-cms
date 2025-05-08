@@ -6,12 +6,11 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { cloneDeep } from 'lodash';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
-import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 describe('getCasesForUserInteractor', () => {
-  const getCasesMetadataByDocketNumbers =
-    getCasesMetadataByDocketNumbersMock as jest.Mock;
+  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
   const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
   const mockPetitioner: AuthUser = {
     ...mockPetitionerUser,
@@ -92,7 +91,7 @@ describe('getCasesForUserInteractor', () => {
           memberCase2,
         ]);
 
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+      getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedCase3,
@@ -160,7 +159,7 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue(consolidatedGroup);
-      getCasesMetadataByDocketNumbers.mockResolvedValue(consolidatedGroup);
+      getCasesByDocketNumbers.mockResolvedValue(consolidatedGroup);
       getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
       const userCases = await getCasesForUserInteractor(
@@ -193,7 +192,7 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue([memberCase1]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([memberCase1]);
+      getCasesByDocketNumbers.mockResolvedValue([memberCase1]);
       getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
       const userCases = await getCasesForUserInteractor(
@@ -226,7 +225,7 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue([leadCase]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([leadCase]);
+      getCasesByDocketNumbers.mockResolvedValue([leadCase]);
       getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
       const userCases = await getCasesForUserInteractor(
@@ -281,7 +280,7 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue([leadCase, ...unconsolidatedCases]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+      getCasesByDocketNumbers.mockResolvedValue([
         leadCase,
         ...unconsolidatedCases,
       ]);
@@ -317,7 +316,7 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedClosedCase2,
           memberCase2,
         ]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+      getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedCase3,
@@ -360,7 +359,7 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedCase2,
           unconsolidatedClosedCase1,
         ]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+      getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedClosedCase1,
@@ -404,7 +403,7 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedClosedCase1,
           corruptedCase,
         ]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+      getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedClosedCase1,

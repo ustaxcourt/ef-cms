@@ -1,10 +1,10 @@
 import { batchWrite, query } from '../../dynamodbClientService';
 import { DeleteRequest } from '@web-api/persistence/dynamo/dynamoTypes';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getCasesInConsolidatedGroup } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { NotFoundError } from '@web-api/errors/errors';
 import { isInConsolidatedGroup } from '@shared/business/entities/cases/Case';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 export const deleteCaseTrialSortMappingRecords = async ({
   applicationContext,
@@ -27,8 +27,15 @@ export const deleteCaseTrialSortMappingRecords = async ({
   const recordsToDelete: DeleteRequest[] = [];
   if (deleteConsolidatedCases && isInConsolidatedGroup(theCase)) {
     docketNumbersToDelete = (
-      await getCasesInConsolidatedGroup({
+      await getConsolidatedCases({
         leadDocketNumber: theCase.leadDocketNumber!,
+        excludeFields: [
+          'correspondence',
+          'docketEntries',
+          'hearings',
+          'irsPractitioners',
+          'privatePractitioners',
+        ],
       })
     ).map(c => c.docketNumber);
   }

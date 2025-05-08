@@ -7,14 +7,13 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('getPractitionerCasesInteractor', () => {
-  const getCasesMetadataByDocketNumbers =
-    getCasesMetadataByDocketNumbersMock as jest.Mock;
+  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
 
   beforeEach(() => {
-    getCasesMetadataByDocketNumbers.mockResolvedValue([
+    getCasesByDocketNumbers.mockResolvedValue([
       {
         ...MOCK_CASE,
         docketNumber: '108-07',
@@ -57,7 +56,7 @@ describe('getPractitionerCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCasesMetadataByDocketNumbers).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
 
     expect(
       closedCases.map(closedCase => {

@@ -9,7 +9,12 @@ export const getCaseMetadataByDocketNumber = async ({
 }): Promise<
   | Omit<
       RawCase,
-      'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
+      | 'consolidatedCases'
+      | 'correspondence'
+      | 'hearings'
+      | 'docketEntries'
+      | 'privatePractitioners'
+      | 'irsPractitioners'
     >
   | undefined
 > => {

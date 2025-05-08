@@ -15,13 +15,12 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
-import { getCasesInConsolidatedGroup as getCasesInConsolidatedGroupMock } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 const getCaseMetadataByDocketNumber =
   getCaseMetadataByDocketNumberMock as jest.Mock;
-const getCasesInConsolidatedGroup =
-  getCasesInConsolidatedGroupMock as jest.Mock;
+const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
@@ -93,7 +92,7 @@ describe('addPaperFilingInteractor', () => {
       Promise.resolve(caseToUpdate),
     );
     getCaseMetadataByDocketNumber.mockResolvedValue(mockCase);
-    getCasesInConsolidatedGroup.mockResolvedValue([mockCase]);
+    getConsolidatedCases.mockResolvedValue([mockCase]);
   });
 
   describe('locked', () => {
