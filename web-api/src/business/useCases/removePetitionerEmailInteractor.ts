@@ -4,7 +4,10 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
+import {
+  Petitioner,
+  RawPetitioner,
+} from '@shared/business/entities/contacts/Petitioner';
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { applicationContext } from '@web-api/applicationContext';
@@ -16,7 +19,7 @@ import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 export const removePetitionerEmailInteractor = async (
   { docketNumber, email }: { docketNumber: string; email: string },
   authorizedUser: UnknownAuthUser,
-): Promise<Petitioner> => {
+): Promise<RawPetitioner> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.REMOVE_PETITIONER_EMAIL)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -59,5 +62,5 @@ export const removePetitionerEmailInteractor = async (
     }),
   ]);
 
-  return new Petitioner(updatedPetitioner);
+  return new Petitioner(updatedPetitioner).toRawObject();
 };
