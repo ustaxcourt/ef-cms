@@ -22,7 +22,6 @@ export const ALL_OMITTABLE_CASE_FIELDS = [
   'hearings',
 ] as const;
 
-// 2. Derive your type from it:
 export type OmittableCaseFields = (typeof ALL_OMITTABLE_CASE_FIELDS)[number];
 
 export async function getCasesByDocketNumbers<
