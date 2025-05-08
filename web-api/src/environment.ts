@@ -45,7 +45,7 @@ export const environment = {
         (process.env.NODE_ENV !== 'test'
           ? 'localhost'
           : getJestDBConnectionError()),
-      idleTimeoutMillis: 1000,
+      idleTimeoutMillis: 10000,
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,
