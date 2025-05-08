@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -11,6 +12,9 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { strikeDocketEntryInteractor } from './strikeDocketEntryInteractor';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('strikeDocketEntryInteractor', () => {
   let caseRecord;
@@ -58,7 +62,7 @@ describe('strikeDocketEntryInteractor', () => {
       userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
     };
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
@@ -103,9 +107,7 @@ describe('strikeDocketEntryInteractor', () => {
     );
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getUserById,
-    ).toHaveBeenCalled();
+    expect(getUserById).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry,
     ).toHaveBeenCalled();

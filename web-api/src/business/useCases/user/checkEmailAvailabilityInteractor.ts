@@ -1,12 +1,11 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 
 export const checkEmailAvailabilityInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -17,9 +16,11 @@ export const checkEmailAvailabilityInteractor = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const user = await getUserByEmail(applicationContext, {
-    email,
-  });
+  const user = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, {
+      email,
+    });
 
   const isAccountUnverified =
     user?.accountStatus === UserStatusType.UNCONFIRMED;

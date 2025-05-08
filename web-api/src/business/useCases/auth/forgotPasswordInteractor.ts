@@ -1,7 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 
 export const forgotPasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -11,7 +10,9 @@ export const forgotPasswordInteractor = async (
     email: string;
   },
 ): Promise<void> => {
-  const user = await getUserByEmail(applicationContext, { email });
+  const user = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, { email });
 
   if (!user) {
     return;

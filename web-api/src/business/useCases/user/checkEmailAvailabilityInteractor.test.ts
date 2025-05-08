@@ -1,6 +1,6 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { checkEmailAvailabilityInteractor } from './checkEmailAvailabilityInteractor';
 import {
   mockPetitionsClerkUser,

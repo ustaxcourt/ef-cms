@@ -1,7 +1,7 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { forgotPasswordInteractor } from '@web-api/business/useCases/auth/forgotPasswordInteractor';
 
 describe('forgotPasswordInteractor', () => {

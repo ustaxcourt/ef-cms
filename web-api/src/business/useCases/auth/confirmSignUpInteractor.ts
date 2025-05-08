@@ -3,9 +3,6 @@ import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
 import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
-import { updateUser } from '@web-api/gateways/user/updateUser';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
-import { confirmSignUp } from '@web-api/gateways/user/confirmSignUp';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
@@ -27,16 +24,18 @@ export const confirmSignUpInteractor = async (
     throw new InvalidRequest('Confirmation code expired');
   }
 
-  await confirmSignUp(applicationContext, {
+  await applicationContext.getUserGateway().confirmSignUp(applicationContext, {
     email,
   });
 
-  const updatePetitionerAttributes = updateUser(applicationContext, {
-    attributesToUpdate: {
+  const updatePetitionerAttributes = applicationContext
+    .getUserGateway()
+    .updateUser(applicationContext, {
+      attributesToUpdate: {
+        email,
+      },
       email,
-    },
-    email,
-  });
+    });
 
   await Promise.all([
     updatePetitionerAttributes,
@@ -48,7 +47,9 @@ const createPetitionerUser = async (
   applicationContext: ServerApplicationContext,
   { email, userId }: { email: string; userId: string },
 ) => {
-  const user = await getUserByEmail(applicationContext, { email });
+  const user = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, { email });
 
   if (!user) {
     throw new NotFoundError(`User not found with email: ${email}`);

@@ -1,5 +1,11 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { confirmSignUpInteractor } from './confirmSignUpInteractor';
+import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
+import { getUserConfirmationCode as getUserConfirmationCodeMock } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
+
+const upsertUsers = upsertUsersMock as jest.Mock;
+const getUserConfirmationCode = getUserConfirmationCodeMock as jest.Mock;
 
 describe('confirmSignUpInteractor', () => {
   const mockConfirmationCode = 'b4a9ccf0-ad83-4aa5-9241-90bc88f29c5d';
@@ -7,9 +13,7 @@ describe('confirmSignUpInteractor', () => {
   const mockEmail = 'example@example.com';
 
   it('should throw an error when the confirmation code has expired', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getAccountConfirmationCode(undefined);
+    getUserConfirmationCode(undefined);
 
     await expect(
       confirmSignUpInteractor(applicationContext, {
@@ -21,9 +25,7 @@ describe('confirmSignUpInteractor', () => {
   });
 
   it('should throw an error when the user is not found in persistence by the provided email', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getAccountConfirmationCode.mockResolvedValue(mockConfirmationCode);
+    getUserConfirmationCode.mockResolvedValue(mockConfirmationCode);
     applicationContext
       .getUserGateway()
       .getUserByEmail.mockResolvedValue(undefined);
@@ -38,9 +40,7 @@ describe('confirmSignUpInteractor', () => {
   });
 
   it('should make several calls to persistence to confirm the petitioner account', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getAccountConfirmationCode.mockResolvedValue(mockConfirmationCode);
+    getUserConfirmationCode.mockResolvedValue(mockConfirmationCode);
     applicationContext.getUserGateway().confirmSignUp.mockResolvedValue({});
     applicationContext.getUserGateway().getUserByEmail.mockResolvedValue({
       email: mockEmail,
@@ -57,8 +57,6 @@ describe('confirmSignUpInteractor', () => {
       applicationContext.getUserGateway().confirmSignUp,
     ).toHaveBeenCalled();
     expect(applicationContext.getUserGateway().updateUser).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().persistUser,
-    ).toHaveBeenCalled();
+    expect(upsertUsers).toHaveBeenCalled();
   });
 });
