@@ -1,15 +1,18 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { getInternalUsersInteractor } from './getInternalUsersInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getInternalUsers as getInternalUsersMock } from '@web-api/persistence/postgres/users/getInternalUsers';
+import { userEntity } from '@web-api/persistence/postgres/users/mapper';
+
+const getInternalUsers = getInternalUsersMock as jest.Mock;
 
 describe('Get internal users', () => {
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getInternalUsers.mockReturnValue([
+    getInternalUsers.mockReturnValue(
+      [
         {
           name: 'Saul Goodman',
           userId: '343db562-5187-49e3-97fe-90f5fa70b9d4',
@@ -22,14 +25,12 @@ describe('Get internal users', () => {
           name: 'Saul Goodman',
           userId: 'bed3b49a-283c-491b-a1c5-0ece5832c6f4',
         },
-      ]);
+      ].map(userRecord => userEntity(userRecord)),
+    );
   });
 
   it('returns the same users that were returned from mocked persistence', async () => {
-    const users = await getInternalUsersInteractor(
-      applicationContext,
-      mockDocketClerkUser,
-    );
+    const users = await getInternalUsersInteractor(mockDocketClerkUser);
     expect(users).toMatchObject([
       {
         name: 'Saul Goodman',
@@ -49,7 +50,7 @@ describe('Get internal users', () => {
   it('throws unauthorized error for unauthorized users', async () => {
     let error;
     try {
-      await getInternalUsersInteractor(applicationContext, mockPetitionerUser);
+      await getInternalUsersInteractor(mockPetitionerUser);
     } catch (err) {
       error = err;
     }

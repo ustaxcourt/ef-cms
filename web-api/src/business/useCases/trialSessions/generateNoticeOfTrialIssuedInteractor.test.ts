@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -6,8 +7,10 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfTrialIssuedInteractor } from './generateNoticeOfTrialIssuedInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUsersInSection as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getUsersInSection = getUsersInSectionMock as jest.Mock;
 
 describe('generateNoticeOfTrialIssuedInteractor', () => {
   const TEST_JUDGE = {
@@ -59,9 +62,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         ({ contentHtml }) => contentHtml,
       );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([TEST_JUDGE]);
+    getUsersInSection.mockReturnValue([TEST_JUDGE]);
   });
 
   it('should generate a template with the case and trial information and call the pdf generator', async () => {

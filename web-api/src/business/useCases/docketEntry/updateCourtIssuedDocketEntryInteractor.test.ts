@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -17,9 +18,12 @@ import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocke
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { User } from '@shared/business/entities/User';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCase = jest.mocked(updateCaseMock);
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -56,11 +60,13 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       ],
     };
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.petitioner,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    getUserById.mockReturnValue(
+      new User({
+        name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        role: ROLES.petitioner,
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      }),
+    );
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     applicationContext

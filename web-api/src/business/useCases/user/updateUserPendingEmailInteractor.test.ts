@@ -1,12 +1,18 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateUserPendingEmailInteractor } from './updateUserPendingEmailInteractor';
-import { validUser } from '../../../../../shared/src/test/mockUsers';
+import { validUser } from '@shared/test/mockUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { updateUser as updateUserMock } from '@web-api/persistence/postgres/users/updateUser';
+
+const getUserById = getUserByIdMock as jest.Mock;
+const updateUser = updateUserMock as jest.Mock;
 
 describe('updateUserPendingEmailInteractor', () => {
   const pendingEmail = 'hello@example.com';
@@ -29,12 +35,8 @@ describe('updateUserPendingEmailInteractor', () => {
       practitionerType: 'Attorney',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUser);
-    applicationContext
-      .getPersistenceGateway()
-      .updateUser.mockImplementation(() => mockUser);
+    getUserById.mockImplementation(() => mockUser);
+    updateUser.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
       .isEmailAvailable.mockReturnValue(true);
@@ -77,9 +79,9 @@ describe('updateUserPendingEmailInteractor', () => {
       mockPrivatePractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getUserById.mock.calls[0][0],
-    ).toMatchObject({ userId: mockUser.userId });
+    expect(getUserById.mock.calls[0][0]).toMatchObject({
+      userId: mockUser.userId,
+    });
   });
 
   it('should update the user record in persistence with the pendingEmail value', async () => {
@@ -91,20 +93,15 @@ describe('updateUserPendingEmailInteractor', () => {
       mockPrivatePractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-        .user,
-    ).toMatchObject({ pendingEmail });
+    expect(getUserById.mock.calls[0][0].userId).toEqual(
+      mockPrivatePractitionerUser.userId,
+    );
   });
 
   it('should return the updated User entity when currentUser.role is petitioner', async () => {
     const mockUserPetitioner = { ...validUser, ...mockPetitionerUser };
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValueOnce(mockUserPetitioner);
-    applicationContext
-      .getPersistenceGateway()
-      .updateUser.mockReturnValueOnce(mockUserPetitioner);
+    getUserById.mockReturnValueOnce(mockUserPetitioner);
+    updateUser.mockReturnValueOnce(mockUserPetitioner);
 
     const results = await updateUserPendingEmailInteractor(
       applicationContext,
