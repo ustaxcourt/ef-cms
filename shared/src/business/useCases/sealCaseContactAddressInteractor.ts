@@ -49,7 +49,7 @@ export const sealCaseContactAddress = async (
   }
   contactToSeal.isAddressSealed = true;
 
-  caseEntity.updatePetitioner(contactToSeal);
+  caseEntity.updatePetitioner({ updatedPetitioner: contactToSeal });
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()

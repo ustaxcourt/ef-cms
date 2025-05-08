@@ -6,6 +6,10 @@ jest.mock(
   '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils',
 );
 jest.mock('@web-api/business/useCaseHelper/acquireLock');
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+import { acquireLock as acquireLockMock } from '@web-api/business/useCaseHelper/acquireLock';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   CASE_STATUS_TYPES,
@@ -19,16 +23,15 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-import { acquireLock as acquireLockMock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock as removeLockMock } from '@web-api/business/useCaseHelper/acquireLock';
 import { updateWorkItemsForCasesToCalendar as updateWorkItemsForCasesToCalendarMock } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('setTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const upsertCases = jest.mocked(upsertCasesMock);
-  const updateCase = jest.mocked(updateCaseMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const acquireLock = jest.mocked(acquireLockMock);
   const removeLock = jest.mocked(removeLockMock);
   const updateWorkItemsForCasesToCalendar = jest.mocked(
@@ -60,7 +63,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue(MOCK_TRIAL);
-    updateCase.mockResolvedValue({} as RawCase);
+    updateCaseAndAssociations.mockResolvedValue({} as RawCase);
     applicationContext
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(v => v.trialSessionToUpdate);

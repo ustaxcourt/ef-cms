@@ -76,6 +76,7 @@ import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
@@ -1834,8 +1835,28 @@ export class Case extends JoiValidationEntity {
    * Updates the specified contact object in the case petitioner's array
    * @param {object} arguments.updatedPetitioner the updated petitioner object
    */
-  updatePetitioner(updatedPetitioner) {
-    updatePetitioner(this, updatedPetitioner);
+  updatePetitioner({
+    updatedPetitioner,
+    assignNewId = false,
+  }: {
+    updatedPetitioner: any;
+    assignNewId?: boolean;
+  }) {
+    const petitionerIndex = this.petitioners.findIndex(
+      p => p.contactId === updatedPetitioner.contactId,
+    );
+
+    if (petitionerIndex === -1) {
+      throw new Error(`Petitioner was not found on case ${this.docketNumber}.`);
+    }
+
+    // reassign contactId to disassociate old contactId from login userId
+    if (assignNewId) {
+      updatedPetitioner.contactId = getUniqueId();
+    }
+
+    this.petitioners[petitionerIndex] = updatedPetitioner;
+    return updatedPetitioner;
   }
 
   /**
@@ -2478,20 +2499,6 @@ export const getOtherFilers = function (rawCase) {
       p.contactType === CONTACT_TYPES.participant ||
       p.contactType === CONTACT_TYPES.intervenor,
   );
-};
-
-export const updatePetitioner = function (rawCase, updatedPetitioner) {
-  const petitionerIndex = rawCase.petitioners.findIndex(
-    p => p.contactId === updatedPetitioner.contactId,
-  );
-
-  if (petitionerIndex === -1) {
-    throw new Error(
-      `Petitioner was not found on case ${rawCase.docketNumber}.`,
-    );
-  }
-
-  rawCase.petitioners[petitionerIndex] = updatedPetitioner;
 };
 
 declare global {

@@ -1,16 +1,15 @@
-import {
-  CamelCasePlugin,
-  CompiledQuery,
-  Kysely,
-  PostgresDialect,
-} from 'kysely';
+import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
 import { Database } from './database-schema';
 import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
 
+const TOKEN_REFRESH_RATE = 13 * 60 * 1000;
+
 let dbInstance: Promise<Kysely<Database>> | null = null;
+let pool: Pool | null = null;
+let poolConfig: PoolConfig;
 export async function getConnection<T>({
   cb,
 }: {
@@ -20,27 +19,20 @@ export async function getConnection<T>({
     dbInstance = establishConnection();
   }
   const awaitedInstance = await dbInstance;
-  const dbIsValid = await isConnectionValid(awaitedInstance);
-  if (dbIsValid) {
-    return await cb(awaitedInstance);
-  }
-
-  dbInstance = null;
-  return getConnection({ cb });
+  return await cb(awaitedInstance);
 }
 
 async function establishConnection(): Promise<Kysely<Database>> {
+  poolConfig = getPoolConfig();
   const token = await getToken();
-  return connect({
-    ...getPool(),
-    password: token,
-  });
-}
-
-export function connect(pool) {
+  pool = new Pool({ ...poolConfig, password: token });
+  // To avoid expired token on a long running warm lambda, refresh periodically
+  setInterval(async () => {
+    await resetPoolPassword();
+  }, TOKEN_REFRESH_RATE);
   return new Kysely<Database>({
     dialect: new PostgresDialect({
-      pool: new Pool({ ...pool }),
+      pool,
     }),
     plugins: [new CamelCasePlugin()],
   });
@@ -67,11 +59,15 @@ async function getToken() {
   return await generateRDSAuthToken();
 }
 
-let pool: PoolConfig;
+async function resetPoolPassword() {
+  if (pool) {
+    pool.options.password = await getToken();
+  }
+}
 
-function getPool(): PoolConfig {
-  if (!pool) {
-    pool = {
+function getPoolConfig(): PoolConfig {
+  if (!poolConfig) {
+    poolConfig = {
       ...environment.rds.pool,
       ssl: environment.rds.useGlobalCert
         ? {
@@ -80,16 +76,5 @@ function getPool(): PoolConfig {
         : undefined,
     };
   }
-  return pool;
-}
-
-async function isConnectionValid(db: Kysely<Database>): Promise<boolean> {
-  try {
-    await db.executeQuery<{ result: 1 }>(
-      CompiledQuery.raw('select 1 as result', []),
-    );
-    return true;
-  } catch (err) {
-    return false;
-  }
+  return poolConfig;
 }
