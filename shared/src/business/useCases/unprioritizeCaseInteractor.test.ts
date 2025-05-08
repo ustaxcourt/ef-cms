@@ -25,7 +25,9 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { getLock as mockGetLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
@@ -37,10 +39,9 @@ describe('unprioritizeCaseInteractor', () => {
   const getLock = jest.mocked(mockGetLock);
   const updateCaseAutomaticBlock = jest.mocked(updateCaseAutomaticBlockMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const createCaseTrialSortMappingRecords = jest.mocked(
     createCaseTrialSortMappingRecordsMock,
   );

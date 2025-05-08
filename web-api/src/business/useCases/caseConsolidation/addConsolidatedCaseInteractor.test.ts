@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -12,16 +15,17 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-
-let mockCases;
-let mockLock;
-
-const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-const getCasesByLeadDocketNumber = jest.mocked(getCasesByLeadDocketNumberMock);
-const updateCase = jest.mocked(updateCaseMock);
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('addConsolidatedCaseInteractor', () => {
+  let mockCases;
+  let mockLock;
+
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getCasesByLeadDocketNumber = jest.mocked(
+    getCasesByLeadDocketNumberMock,
+  );
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -82,7 +86,7 @@ describe('addConsolidatedCaseInteractor', () => {
           .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber),
       );
     });
-    updateCase.mockImplementation(({ caseToUpdate }) =>
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
   });
@@ -188,7 +192,7 @@ describe('addConsolidatedCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls.length).toEqual(2);
+    expect(updateCaseAndAssociations.mock.calls.length).toEqual(2);
   });
 
   it('Should NOT update the case to consolidate with if it already has the leadDocketNumber and is the lead case', async () => {
@@ -201,7 +205,7 @@ describe('addConsolidatedCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls.length).toEqual(1);
+    expect(updateCaseAndAssociations.mock.calls.length).toEqual(1);
   });
 
   it('Should update both cases with the leadDocketNumber if neither have one', async () => {
@@ -214,10 +218,10 @@ describe('addConsolidatedCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
-    expect(updateCase.mock.calls[0][0].caseToUpdate.leadDocketNumber).toEqual(
-      '319-19',
-    );
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.leadDocketNumber,
+    ).toEqual('319-19');
   });
 
   it('Should update all leadDocketNumber fields if the new case has the lower docket number', async () => {
@@ -230,10 +234,10 @@ describe('addConsolidatedCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls.length).toEqual(3);
-    expect(updateCase.mock.calls[0][0].caseToUpdate.leadDocketNumber).toEqual(
-      '219-19',
-    );
+    expect(updateCaseAndAssociations.mock.calls.length).toEqual(3);
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.leadDocketNumber,
+    ).toEqual('219-19');
   });
 
   it('Should combine all cases when both the case and case to consolidate with are in separate consolidated sets', async () => {
@@ -246,9 +250,9 @@ describe('addConsolidatedCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls.length).toEqual(2);
-    expect(updateCase.mock.calls[0][0].caseToUpdate.leadDocketNumber).toEqual(
-      '119-19',
-    );
+    expect(updateCaseAndAssociations.mock.calls.length).toEqual(2);
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.leadDocketNumber,
+    ).toEqual('119-19');
   });
 });

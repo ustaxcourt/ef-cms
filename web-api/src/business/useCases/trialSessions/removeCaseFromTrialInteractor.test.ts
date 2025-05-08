@@ -3,6 +3,9 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
@@ -24,8 +27,8 @@ import {
 import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('removeCaseFromTrialInteractor', () => {
   const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
@@ -36,7 +39,9 @@ describe('removeCaseFromTrialInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getCaseMetadataByDocketNumber =
     getCaseMetadataByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext
@@ -61,10 +66,6 @@ describe('removeCaseFromTrialInteractor', () => {
     };
     getCaseByDocketNumber.mockResolvedValue(mockCase);
     getCaseMetadataByDocketNumber.mockResolvedValue(mockCase);
-
-    updateCase.mockImplementation(({ caseToUpdate }) =>
-      Promise.resolve(caseToUpdate),
-    );
   });
 
   it('should throw an error when the user is unauthorized to remove a case from a trial session', async () => {
@@ -136,8 +137,8 @@ describe('removeCaseFromTrialInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
-    expect(updateCase).toHaveBeenCalled();
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
@@ -185,7 +186,7 @@ describe('removeCaseFromTrialInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
         .calls[0][0].caseEntity,
     ).toMatchObject({ docketNumber: '101-18' });
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
@@ -302,8 +303,8 @@ describe('removeCaseFromTrialInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).not.toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
       docketNumber: MOCK_CASE.docketNumber,
       hearings: [],
     });

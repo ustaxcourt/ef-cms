@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { MOCK_CASE } from '../../test/mockCase';
 import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -11,15 +14,15 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { updateQcCompleteForTrialInteractor } from './updateQcCompleteForTrialInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+
 
 describe('updateQcCompleteForTrialInteractor', () => {
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext

@@ -1,4 +1,7 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -8,20 +11,20 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { updateOtherStatisticsInteractor } from './updateOtherStatisticsInteractor';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('updateOtherStatisticsInteractor', () => {
   let mockLock;
   let authorizedUser: UnknownAuthUser;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    updateCase.mockImplementation(({ caseToUpdate }) =>
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
   });

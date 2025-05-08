@@ -124,7 +124,7 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
-};
+} as const;
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',

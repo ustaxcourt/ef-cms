@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
@@ -12,15 +15,14 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { prioritizeCaseInteractor } from './prioritizeCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('prioritizeCaseInteractor', () => {
   let mockLock;
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext

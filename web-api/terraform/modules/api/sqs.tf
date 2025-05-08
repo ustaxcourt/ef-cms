@@ -17,11 +17,11 @@ resource "aws_sqs_queue" "send_emails_queue" {
   name                        = "send_emails_queue_${var.environment}_${var.current_color}.fifo"
   fifo_queue                  = true
   content_based_deduplication = true
-  visibility_timeout_seconds  = "30"
+  visibility_timeout_seconds  = "60" #  60 visibility timeout seconds * 90 attempts = 90 minutes of retrying
 
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.send_emails_dl_queue.arn
-    maxReceiveCount     = 3
+    maxReceiveCount     = 90 # 90 attempts * 60 visibility timeout seconds = 90 minutes of retrying
   })
 }
 
@@ -34,7 +34,7 @@ resource "aws_cloudwatch_metric_alarm" "send_emails_dl_queue_check" {
   alarm_name          = "efcms_${var.environment}_${var.current_color}: SendEmails-DLQueueCheck"
   alarm_description   = "Alarm that triggers when a message is sent to send_emails_dl_queue_${var.environment}_${var.current_color}.fifo"
   namespace           = "AWS/SQS"
-  metric_name         = "NumberOfMessagesSent"
+  metric_name         = "ApproximateNumberOfMessagesVisible" 
   comparison_operator = "GreaterThanThreshold"
   statistic           = "Sum"
   threshold           = 0

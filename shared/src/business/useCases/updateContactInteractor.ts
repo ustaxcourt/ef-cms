@@ -83,7 +83,7 @@ export const updateContact = async (
   };
 
   try {
-    caseEntity.updatePetitioner(updatedCaseContact);
+    caseEntity.updatePetitioner({ updatedPetitioner: updatedCaseContact });
   } catch (e) {
     throw new NotFoundError(e);
   }

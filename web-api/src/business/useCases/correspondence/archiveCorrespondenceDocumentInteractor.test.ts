@@ -2,6 +2,9 @@ import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { Correspondence } from '@shared/business/entities/Correspondence';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
@@ -11,25 +14,24 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondenceDocumentInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
-
-const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('archiveCorrespondenceDocumentInteractor', () => {
+  const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
   const mockUserId = '2474e5c0-f741-4120-befa-b77378ac8bf0';
   const mockCorrespondenceId = applicationContext.getUniqueId();
   let mockCorrespondence;
   let mockLock;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    updateCase.mockImplementation(({ caseToUpdate }) =>
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
   });
@@ -108,9 +110,12 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls[0][0].caseToUpdate.correspondence).toEqual([]);
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.archivedCorrespondences,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.correspondence,
+    ).toEqual([]);
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+        .archivedCorrespondences,
     ).toEqual([{ ...mockCorrespondence, archived: true }]);
   });
 

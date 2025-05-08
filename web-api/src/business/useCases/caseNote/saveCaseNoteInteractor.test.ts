@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -8,18 +11,18 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockJudgeUser, mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { saveCaseNoteInteractor } from './saveCaseNoteInteractor';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('saveCaseNoteInteractor', () => {
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    updateCase.mockImplementation(({ caseToUpdate }) =>
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
   });
@@ -53,7 +56,7 @@ describe('saveCaseNoteInteractor', () => {
 
     expect(result).toBeDefined();
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.caseNote).toEqual('This is my case note');
   });
 

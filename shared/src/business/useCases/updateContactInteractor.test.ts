@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
@@ -20,17 +23,16 @@ import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { updateContactInteractor } from './updateContactInteractor';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('updates the contact on a case', () => {
   let mockCase;
   let mockCaseContactPrimary;
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -101,7 +103,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    const updatedCase = updateCase.mock.calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     const changeOfAddressDocument = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
@@ -304,7 +306,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
@@ -366,7 +368,7 @@ describe('updates the contact on a case', () => {
       mockPetitionerUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).not.toHaveBeenCalled();

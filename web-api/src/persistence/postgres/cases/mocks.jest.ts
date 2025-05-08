@@ -54,10 +54,6 @@ jest.mock(
   () => mockFactory('getCasesInConsolidatedGroup'),
 );
 
-jest.mock('@web-api/persistence/postgres/cases/updateCase', () =>
-  mockFactory('updateCase'),
-);
-
 jest.mock('@web-api/persistence/postgres/cases/upsertCases', () =>
   mockFactory('upsertCases'),
 );

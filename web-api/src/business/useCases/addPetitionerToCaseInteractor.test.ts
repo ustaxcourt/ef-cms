@@ -2,6 +2,9 @@ import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -18,11 +21,12 @@ import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+
 
 describe('addPetitionerToCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   let mockContact;
   let mockLock;
 
@@ -50,7 +54,7 @@ describe('addPetitionerToCaseInteractor', () => {
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocket,
     });
-    updateCase.mockImplementation(({ caseToUpdate }) =>
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
   });
@@ -107,7 +111,7 @@ describe('addPetitionerToCaseInteractor', () => {
     );
 
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.petitioners[1],
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[1],
     ).toMatchObject({
       ...mockContact,
       countryType: COUNTRY_TYPES.INTERNATIONAL,
@@ -147,7 +151,7 @@ describe('addPetitionerToCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls[0][0].caseToUpdate.caseCaption).toEqual(
+    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.caseCaption).toEqual(
       mockUpdatedCaption,
     );
   });

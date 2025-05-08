@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -11,21 +14,21 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { removeConsolidatedCasesInteractor } from './removeConsolidatedCasesInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-
-let mockCases;
-let mockLock;
-const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = jest.mocked(updateCaseMock);
-const getCasesByLeadDocketNumber = getCasesByLeadDocketNumberMock as jest.Mock;
-
-// In this file, getCasesByDocketNumbers should be the cases that are to be removed
-const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('removeConsolidatedCasesInteractor', () => {
+  let mockCases;
+  let mockLock;
+  const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getCasesByLeadDocketNumber =
+    getCasesByLeadDocketNumberMock as jest.Mock;
+
+  // In this file, getCasesByDocketNumbers should be the cases that are to be removed
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -75,7 +78,7 @@ describe('removeConsolidatedCasesInteractor', () => {
         .map(key => mockCases[key])
         .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
     });
-    updateCase.mockImplementation(({ caseToUpdate }) =>
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
   });
@@ -147,8 +150,10 @@ describe('removeConsolidatedCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls.length).toEqual(1);
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(updateCaseAndAssociations.mock.calls.length).toEqual(1);
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: '102-19',
       leadDocketNumber: undefined,
     });
@@ -165,18 +170,24 @@ describe('removeConsolidatedCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls.length).toEqual(3);
+    expect(updateCaseAndAssociations.mock.calls.length).toEqual(3);
     // first updates cases with new lead docket number
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: '102-19',
       leadDocketNumber: '102-19',
     });
-    expect(updateCase.mock.calls[1][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[1][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: '103-19',
       leadDocketNumber: '102-19',
     });
     // then removes leadDocketNumber from case to remove
-    expect(updateCase.mock.calls[2][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[2][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: '101-19',
       leadDocketNumber: undefined,
     });
@@ -243,14 +254,18 @@ describe('removeConsolidatedCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls.length).toEqual(2);
+    expect(updateCaseAndAssociations.mock.calls.length).toEqual(2);
     // first removes leadDocketNumber from original case
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: '104-19',
       leadDocketNumber: undefined,
     });
     // then removes leadDocketNumber from case to remove
-    expect(updateCase.mock.calls[1][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[1][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: '105-19',
       leadDocketNumber: undefined,
     });
@@ -268,14 +283,18 @@ describe('removeConsolidatedCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase.mock.calls.length).toEqual(2);
+    expect(updateCaseAndAssociations.mock.calls.length).toEqual(2);
     // first removes leadDocketNumber from original case
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: '105-19',
       leadDocketNumber: undefined,
     });
     // then removes leadDocketNumber from case to remove
-    expect(updateCase.mock.calls[1][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[1][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: '104-19',
       leadDocketNumber: undefined,
     });

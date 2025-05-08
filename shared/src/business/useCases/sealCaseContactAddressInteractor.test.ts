@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
@@ -15,15 +18,14 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { sealCaseContactAddressInteractor } from './sealCaseContactAddressInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('sealCaseContactAddressInteractor', () => {
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -93,7 +95,7 @@ describe('sealCaseContactAddressInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.petitioners[0].isAddressSealed).toBe(true);
   });
 
@@ -109,7 +111,7 @@ describe('sealCaseContactAddressInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.petitioners[5].isAddressSealed).toBe(true);
   });
 
@@ -125,7 +127,7 @@ describe('sealCaseContactAddressInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(getOtherFilers(result)[1].isAddressSealed).toBe(true);
   });
 
