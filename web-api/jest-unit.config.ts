@@ -57,7 +57,6 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  maxWorkers: 1,
   verbose: false,
 };
 // eslint-disable-next-line import/no-default-export
