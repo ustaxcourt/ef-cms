@@ -9,9 +9,6 @@ jest.mock('@aws-sdk/rds-signer', () => {
     Signer,
   };
 });
-jest.spyOn(global, 'setInterval').mockImplementation(() => {
-  return undefined as any;
-});
 import { getConnection } from '@web-api/getConnection';
 import { environment } from '@web-api/environment';
 
