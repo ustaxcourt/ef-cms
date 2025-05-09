@@ -45,13 +45,12 @@ export const environment = {
         (process.env.NODE_ENV !== 'test'
           ? 'localhost'
           : getJestDBConnectionError()),
-      idleTimeoutMillis: 1000,
+      idleTimeoutMillis: 10000,
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,
       user: process.env.POSTGRES_USER || 'postgres',
     },
-    readHost: process.env.POSTGRES_READ_HOST!,
     useGlobalCert: !isLocal,
   },
   region,
@@ -65,5 +64,7 @@ export const environment = {
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   userPoolIrsId: process.env.USER_POOL_IRS_ID || 'NOT_REAL_USER_POOL_ID',
   workerQueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+  opensearchQueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/opensearch_sync_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };

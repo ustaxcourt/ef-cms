@@ -9,9 +9,8 @@ export const getCaseWorksheetsByJudgeLambda = (
   genericHandler(
     event,
 
-    async ({ applicationContext }) => {
+    async () => {
       return await getCaseWorksheetsByJudgeInteractor(
-        applicationContext,
         event.queryStringParameters,
         authorizedUser,
       );

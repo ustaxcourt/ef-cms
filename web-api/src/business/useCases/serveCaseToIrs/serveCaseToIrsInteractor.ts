@@ -26,11 +26,13 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -178,7 +180,8 @@ const generateNoticeOfReceipt = async ({
 
   const isSetupForEService = contactInfo => {
     return (
-      contactInfo.hasConsentedToEService && !!contactInfo.paperPetitionEmail
+      contactInfo.hasConsentedToElectronicService &&
+      !!contactInfo.paperPetitionEmail
     );
   };
 
@@ -409,7 +412,7 @@ const createCoversheetsForServedEntries = async ({
   caseEntity: Case;
   authorizedUser: AuthUser;
 }) => {
-  return await Promise.all(
+  return await settlePromises(
     caseEntity.docketEntries.map(async doc => {
       if (doc.isFileAttached && !doc.isDraft) {
         const updatedDocketEntry = await applicationContext
@@ -475,12 +478,10 @@ export const serveCaseToIrs = async (
       throw new UnauthorizedError('Unauthorized');
     }
 
-    const caseToBatch = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const caseToBatch = await getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
     const caseEntity = new Case(caseToBatch, { authorizedUser });
 
@@ -619,7 +620,7 @@ export const serveCaseToIrs = async (
       );
     }
 
-    await Promise.all(generatedDocuments);
+    await settlePromises(generatedDocuments);
 
     await createPetitionWorkItems({
       caseEntity,

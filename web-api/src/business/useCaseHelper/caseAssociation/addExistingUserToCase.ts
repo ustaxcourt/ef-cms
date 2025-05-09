@@ -62,7 +62,7 @@ export const addExistingUserToCase = async ({
     if (!userToAdd.pendingEmail) {
       contact.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
       contact.email = email;
-      contact.hasEAccess = true;
+      contact.hasElectronicAccess = true;
     }
   } else {
     throw new Error(`no contact found with that user name of ${name}`);

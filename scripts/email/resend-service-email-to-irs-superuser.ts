@@ -12,6 +12,7 @@ import {
 } from '@web-api/applicationContext';
 import { sendIrsSuperuserPetitionEmail } from '@web-api/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail';
 import { sendServedPartiesEmails } from '@web-api/business/useCaseHelper/service/sendServedPartiesEmails';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -45,12 +46,10 @@ const getCase = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
 ): Promise<Case> => {
-  const caseToBatch = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToBatch = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   return new Case(caseToBatch, { authorizedUser: undefined });
 };

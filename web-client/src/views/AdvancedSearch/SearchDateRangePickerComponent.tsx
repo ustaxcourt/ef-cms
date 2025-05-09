@@ -46,6 +46,16 @@ export const SearchDateRangePickerComponent = connect(
         'input[name="startDate-date-start"]',
       );
 
+      if (
+        !startInput ||
+        !(startInput instanceof HTMLInputElement) ||
+        !startHiddenInput ||
+        !(startHiddenInput instanceof HTMLInputElement)
+      ) {
+        console.error('Missing or invalid input element(s) for start date.');
+        return;
+      }
+
       if (advancedSearchForm[formType].startDate && startInput) {
         startInput.value = advancedSearchForm[formType].startDate;
         startHiddenInput.value = advancedSearchForm[formType].startDate;
@@ -70,6 +80,16 @@ export const SearchDateRangePickerComponent = connect(
         'input[name="endDate-date-end"]',
       );
 
+      if (
+        !endInput ||
+        !(endInput instanceof HTMLInputElement) ||
+        !endHiddenInput ||
+        !(endHiddenInput instanceof HTMLInputElement)
+      ) {
+        console.error('Missing or invalid input element(s) for end date.');
+        return;
+      }
+
       if (advancedSearchForm[formType].endDate && endInput) {
         endInput.value = advancedSearchForm[formType].endDate;
         endHiddenInput.value = advancedSearchForm[formType].endDate;
@@ -92,19 +112,21 @@ export const SearchDateRangePickerComponent = connect(
       if (startDateInputRef.current && endDateInputRef.current) {
         window.document
           .getElementById('endDate-date-end')
-          .addEventListener('change', e => {
+          ?.addEventListener('change', e => {
+            const input = e.target as HTMLInputElement;
             updateSequence({
               key: 'endDate',
-              value: e.target.value,
+              value: input.value,
             });
             validateSequence();
           });
         window.document
           .getElementById('startDate-date-start')
-          .addEventListener('change', e => {
+          ?.addEventListener('change', e => {
+            const input = e.target as HTMLInputElement;
             updateSequence({
               key: 'startDate',
-              value: e.target.value,
+              value: input.value,
             });
             validateSequence();
           });
