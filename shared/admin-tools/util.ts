@@ -1,6 +1,6 @@
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import readline from 'readline';
-import { getSSMItem } from 'shared/admin-tools/aws/ssmHelper';
+import { getSSMItem } from '../admin-tools/aws/ssmHelper';
 
 const { ENV } = process.env;
 const UserPoolCache: Record<string, string> = {};

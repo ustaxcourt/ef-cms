@@ -209,7 +209,9 @@ export const createApplicationContext = (appContextUser = {}) => {
       },
     }),
     isAuthorized,
-    isCurrentColorActive,
+    getConfigurationGateway: () => ({
+      isCurrentColorActive,
+    }),
     logger: getLogger(),
     setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
   };
