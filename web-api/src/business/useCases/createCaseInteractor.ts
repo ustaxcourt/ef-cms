@@ -28,7 +28,7 @@ import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
-export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
+export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
 
 const addPetitionDocketEntryToCase = ({
   caseToAdd,
