@@ -626,6 +626,7 @@ export const createTestApplicationContext = () => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
     getUserGateway: appContextProxy({}),
+    getConfigurationGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
       initialize: jest.fn().mockReturnValue({ promise: () => {} }),
