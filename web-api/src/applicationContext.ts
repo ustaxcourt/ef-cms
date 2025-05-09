@@ -208,8 +208,10 @@ export const createApplicationContext = (appContextUser = {}) => {
         return worker(applicationContext, { message });
       },
     }),
+    getConfigurationGateway: () => ({
+      isCurrentColorActive,
+    }),
     isAuthorized,
-    isCurrentColorActive,
     logger: getLogger(),
     setTimeout: (callback: Function, timeout) => setTimeout(callback, timeout),
   };
