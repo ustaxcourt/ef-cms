@@ -9,9 +9,9 @@ const mockLogger = {
   debug: jest.fn(),
   error: jest.fn(),
 };
-jest.mock('@web-api/utilities/logger/getLogger', () => {
+jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   return {
-    getLogger: () => mockLogger,
+    getDawsonLogger: () => mockLogger,
   };
 });
 describe('processWorkItemEntries', () => {

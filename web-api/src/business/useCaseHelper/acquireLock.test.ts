@@ -4,9 +4,9 @@ const mockLogger = {
   info: jest.fn(),
   warn: jest.fn(),
 };
-jest.mock('@web-api/utilities/logger/getLogger', () => {
+jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   return {
-    getLogger: () => mockLogger,
+    getDawsonLogger: () => mockLogger,
   };
 });
 jest.mock('@shared/tools/helpers');

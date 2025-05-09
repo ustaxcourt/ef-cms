@@ -1,4 +1,4 @@
-jest.mock('@web-api/utilities/logger/getLogger', () => {
+jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   const mockLogger = {
     addContext: jest.fn(),
     addUser: jest.fn(),
@@ -9,7 +9,7 @@ jest.mock('@web-api/utilities/logger/getLogger', () => {
     info: jest.fn(),
     warn: jest.fn(),
   };
-  return { getLogger: () => mockLogger };
+  return { getDawsonLogger: () => mockLogger };
 });
 jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
 jest.mock('@web-api/business/getEntityByName');
