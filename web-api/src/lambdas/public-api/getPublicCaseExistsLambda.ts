@@ -8,8 +8,8 @@ import { getCaseExistsInteractor } from '@shared/business/useCases/getCaseExists
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getPublicCaseExistsLambda = event =>
-  genericHandler(event, ({ applicationContext }) =>
-    getCaseExistsInteractor(applicationContext, {
+  genericHandler(event, () =>
+    getCaseExistsInteractor({
       docketNumber: event.pathParameters.docketNumber,
     }),
   );

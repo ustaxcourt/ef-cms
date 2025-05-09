@@ -1,4 +1,4 @@
-import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
@@ -47,8 +47,11 @@ describe('messages table journey', () => {
 
     const messages = cerebralTest.getState('messages');
 
+    // The last created message should be found, attached to the right docket number
     const foundMessage = messages.find(
-      message => message.docketNumber === calendaredCaseDocketNumber,
+      message =>
+        message.docketNumber === calendaredCaseDocketNumber &&
+        message.messageId === cerebralTest.lastCreatedMessage.messageId,
     );
 
     expect(foundMessage).toMatchObject(expectedMessageResult);
@@ -63,7 +66,9 @@ describe('messages table journey', () => {
     const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.docketNumber === calendaredCaseDocketNumber,
+      message =>
+        message.docketNumber === calendaredCaseDocketNumber &&
+        message.messageId === cerebralTest.lastCreatedMessage.messageId,
     );
 
     expect(foundMessage).toMatchObject(expectedMessageResult);
@@ -79,7 +84,9 @@ describe('messages table journey', () => {
     const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.docketNumber === calendaredCaseDocketNumber,
+      message =>
+        message.docketNumber === calendaredCaseDocketNumber &&
+        message.messageId === cerebralTest.lastCreatedMessage.messageId,
     );
 
     expect(foundMessage).toMatchObject(expectedMessageResult);
@@ -94,7 +101,9 @@ describe('messages table journey', () => {
     const messages = cerebralTest.getState('messages');
 
     const foundMessage = messages.find(
-      message => message.docketNumber === calendaredCaseDocketNumber,
+      message =>
+        message.docketNumber === calendaredCaseDocketNumber &&
+        message.messageId === cerebralTest.lastCreatedMessage.messageId,
     );
 
     expect(foundMessage).toMatchObject(expectedMessageResult);
@@ -130,11 +139,11 @@ describe('messages table journey', () => {
       state: cerebralTest.getState(),
     });
 
-    const orignalMessage = completedMessagesFormatted.messages.find(
+    const originalMessage = completedMessagesFormatted.messages.find(
       m => m.messageId === cerebralTest.messageId,
     );
 
-    expect(orignalMessage).toBeDefined();
+    expect(originalMessage).toBeDefined();
   });
 
   it('petitions clerk 1 verify the message is also in section completed', async () => {
@@ -147,11 +156,11 @@ describe('messages table journey', () => {
       state: cerebralTest.getState(),
     });
 
-    const orignalMessage = completedMessagesFormatted.messages.find(
+    const originalMessage = completedMessagesFormatted.messages.find(
       m => m.messageId === cerebralTest.messageId,
     );
 
-    expect(orignalMessage).toBeDefined();
+    expect(originalMessage).toBeDefined();
   });
 
   userSendsMessage(

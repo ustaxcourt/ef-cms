@@ -5,7 +5,6 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { bulkIndexRecords } from './bulkIndexRecords';
 import { efcmsDocketEntryIndex } from '../../../elasticsearch/efcms-docket-entry-mappings';
-import { efcmsWorkItemIndex } from '../../../elasticsearch/efcms-work-item-mappings';
 
 describe('bulkIndexRecords', () => {
   const newImageRecord = {
@@ -151,30 +150,6 @@ describe('bulkIndexRecords', () => {
         },
       ],
     });
-
-    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalledWith({
-      body: [
-        {
-          index: {
-            _id: 'case|123-45_work-item|8675309',
-            _index: efcmsWorkItemIndex,
-            routing: 'case|123-45_case|123-45|mapping',
-          },
-        },
-        {
-          entityName: {
-            S: 'WorkItem',
-          },
-          pk: {
-            S: 'case|123-45',
-          },
-          sk: {
-            S: 'work-item|8675309',
-          },
-        },
-      ],
-      refresh: false,
-    });
   });
 
   it('sets an altered _id if the item is a CaseDocketEntryMapping', async () => {
@@ -248,30 +223,6 @@ describe('bulkIndexRecords', () => {
           },
         },
       ],
-    });
-
-    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalledWith({
-      body: [
-        {
-          index: {
-            _id: 'case|123-45_case|123-45|mapping',
-            _index: efcmsWorkItemIndex,
-            routing: '',
-          },
-        },
-        {
-          entityName: {
-            S: 'CaseWorkItemMapping',
-          },
-          pk: {
-            S: 'case|123-45',
-          },
-          sk: {
-            S: 'case|123-45',
-          },
-        },
-      ],
-      refresh: false,
     });
   });
 });

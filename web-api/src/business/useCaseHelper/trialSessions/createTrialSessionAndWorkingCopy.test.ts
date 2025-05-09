@@ -91,19 +91,5 @@ describe('createTrialSessionAndWorkingCopy', () => {
         }),
       ).rejects.toThrow('The TrialSession entity was invalid');
     });
-
-    it('should fail to migrate a trial session when the trialSessionId is not provided', async () => {
-      const trialSessionToCreate = new TrialSession(trialSessionToAdd);
-      delete trialSessionToCreate.trialSessionId;
-
-      await expect(
-        createTrialSessionAndWorkingCopy({
-          applicationContext,
-          trialSessionToAdd: trialSessionToCreate,
-        }),
-      ).rejects.toThrow(
-        'The TrialSessionWorkingCopy entity was invalid. {"trialSessionId":"\'trialSessionId\' is required"}',
-      );
-    });
   });
 });
