@@ -1,5 +1,5 @@
+import { logLambdaStats } from '@web-api/lambdas/pdfGeneration/lambdaStats';
 import { createApplicationContext } from '../../applicationContext';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export type PdfGenerationResult = {
   tempId: string;
@@ -7,14 +7,35 @@ export type PdfGenerationResult = {
 
 export const handler = async event => {
   const applicationContext = createApplicationContext({});
-
-  const browser = await applicationContext.getChromiumBrowser();
+  let browser;
+  console.log('PDF Investigation: About to get chromium browser');
+  logLambdaStats();
+  try {
+    browser = await applicationContext.getChromiumBrowser();
+  } catch (err: any) {
+    console.error('PDF Investigation: stderr:', err?.stderr);
+    console.error(
+      'PDF Investigation: Browser launch error: ',
+      JSON.stringify(err),
+    );
+    logLambdaStats();
+    throw err;
+  }
+  logLambdaStats();
+  console.log('PDF Investigation: About to generate pdf from html');
 
   const results = await applicationContext
     .getUseCaseHelpers()
     .generatePdfFromHtmlHelper(applicationContext, event, browser);
 
+  console.log(
+    'PDF Investigation: Finished generating pdf; about to close browser',
+  );
+
   await browser.close();
+
+  console.log('PDF Investigation: Closed browser');
+  logLambdaStats();
 
   const tempId = applicationContext.getUniqueId();
 
@@ -33,8 +54,7 @@ export const changeOfAddressHandler = async event => {
   const { body } = Records[0];
   const eventBody = JSON.parse(body);
 
-  const applicationContext = createApplicationContext();
-  getLogger().addUser({ user: eventBody.requestUser });
+  const applicationContext = createApplicationContext(eventBody.requestUser);
 
   applicationContext.logger.info(
     `processing job "change-of-address-job|${eventBody.jobId}", task for case ${eventBody.docketNumber}`,
