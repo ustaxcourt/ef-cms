@@ -1,0 +1,50 @@
+import { readdirSync, statSync } from 'fs';
+import * as path from 'path';
+import { env, memoryUsage, resourceUsage } from 'process';
+
+function getDirectorySize(dirPath: string): number {
+  let totalSize = 0;
+
+  const entries = readdirSync(dirPath, {
+    recursive: true,
+    withFileTypes: true,
+  });
+
+  for (const entry of entries) {
+    // console.log({ name: entry.name, parentPath: entry.parentPath });
+    if (entry.isFile()) {
+      const fullPath = path.join(entry.parentPath, entry.name);
+      const stat = statSync(fullPath, { throwIfNoEntry: false });
+      totalSize += stat?.size || 0;
+    }
+  }
+
+  return totalSize;
+}
+
+export function logLambdaStats() {
+  const memoryUsedMB = memoryUsage.rss() / (1024 * 1024);
+  const memoryAllocatedMB = parseInt(
+    env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || '0',
+  );
+
+  const tmpUsedMB = getDirectorySize('/tmp') / 1024 / 1024;
+
+  // Number of open file descriptors
+  let openFileDescriptors = 0;
+  try {
+    openFileDescriptors = readdirSync('/proc/self/fd').length;
+  } catch {
+    console.warn(
+      'PDF Investigation: Could not determine open file descriptors.',
+    );
+  }
+
+  // Log stats
+  console.log(`PDF Investigation: Lambda Runtime Stats:
+  - Memory Used: ${memoryUsedMB.toFixed(2)} MB / ${memoryAllocatedMB} MB
+  - Open File Descriptors: ${openFileDescriptors} / 1024
+  - Ephemeral Storage: ${tmpUsedMB} / 512 MB
+  `);
+  console.log('PDF Investigation: Resource Usage: ', resourceUsage());
+}
