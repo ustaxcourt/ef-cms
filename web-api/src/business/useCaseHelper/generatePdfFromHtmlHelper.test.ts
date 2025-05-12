@@ -9,6 +9,7 @@ describe('generatePdfFromHtmlHelper', () => {
       return {
         pdf: pdfMock,
         setContent: setContentMock,
+        close: jest.fn(),
       };
     },
     process() {
@@ -16,7 +17,7 @@ describe('generatePdfFromHtmlHelper', () => {
         pid: '123',
       };
     },
-  };
+  } as any;
   const setContentMock = jest.fn(contentHtml => (pageContent = contentHtml));
   const pdfMock = jest.fn(
     ({ displayHeaderFooter, footerTemplate, headerTemplate }) => {
@@ -35,7 +36,7 @@ describe('generatePdfFromHtmlHelper', () => {
   it('should call the error logger when an error is thrown', async () => {
     const mockErrorBrowser = jest.fn(() => {
       throw new Error('something');
-    });
+    }) as any;
 
     await expect(
       generatePdfFromHtmlHelper(
