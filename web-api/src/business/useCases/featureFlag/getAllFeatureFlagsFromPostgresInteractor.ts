@@ -24,6 +24,10 @@ export const getAllFeatureFlagsFromPostgresInteractor = async (
     isEmpty(allFeatureFlags) ||
     applicationContext.environment.stage === 'local'
   ) {
+    Object.keys(allFeatureFlags).forEach(
+      ffKey => delete allFeatureFlags[ffKey],
+    );
+
     const ALL_FEATURE_FLAGS = await getFeatureFlagValues(allowlistFeatures);
     ALL_FEATURE_FLAGS.forEach(({ name, value }) => {
       const { current } = value;
