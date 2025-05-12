@@ -14,7 +14,7 @@ export const validateUploadCourtIssuedDocumentAction = ({
 }: ActionProps) => {
   const { freeText, primaryDocumentFile } = get(state.form);
 
-  const errors = {};
+  const errors: Record<string, string> = {};
   const errorDisplayOrder = ['freeText', 'primaryDocumentFile'];
 
   if (!freeText) {

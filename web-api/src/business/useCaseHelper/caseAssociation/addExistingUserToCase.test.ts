@@ -119,7 +119,7 @@ describe('addExistingUserToCase', () => {
     expect(getContactPrimary(caseEntity)).toMatchObject({
       contactId: mockUserId, // contactId was updated to new userId
       email: mockUpdatedEmail,
-      hasEAccess: true,
+      hasElectronicAccess: true,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   });
@@ -245,7 +245,7 @@ describe('addExistingUserToCase', () => {
             ...getContactPrimary(MOCK_CASE),
             contactId: mockContactId,
             email: undefined,
-            hasEAccess: false,
+            hasElectronicAccess: false,
             name: 'Bob Ross',
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
@@ -266,7 +266,7 @@ describe('addExistingUserToCase', () => {
     expect(getContactPrimary(caseEntity)).toMatchObject({
       contactId: mockUserId, // contactId was updated to new userId
       email: undefined,
-      hasEAccess: undefined,
+      hasElectronicAccess: false,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
   });

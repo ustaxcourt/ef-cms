@@ -68,6 +68,9 @@ export const acquireLock = async ({
       } else if (typeof onLockError === 'function') {
         await onLockError(applicationContext, options, authorizedUser);
       }
+      getLogger().error(
+        `Error: failed to acquire lock for ${identifiers.join(', ')}`,
+      );
       throw new ServiceUnavailableError(
         'One of the items you are trying to update is being updated by someone else',
       );
@@ -115,14 +118,12 @@ export const asyncHandleLockError = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!authorizedUser?.userId || !clientConnectionId) return;
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: { action: 'async_service_unavailable_error' },
-      userId: authorizedUser?.userId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: { action: 'async_service_unavailable_error' },
+    userId: authorizedUser?.userId,
+  });
 };
 
 /**
