@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -7,6 +8,7 @@ import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { updateUserCaseNoteInteractor } from './updateUserCaseNoteInteractor';
 import { upsertUserCaseNotes as upsertUserCaseNotesMock } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNotes';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('updateUserCaseNoteInteractor', () => {
   const mockCaseNote = {
@@ -16,6 +18,7 @@ describe('updateUserCaseNoteInteractor', () => {
   };
 
   const upsertUserCaseNotes = upsertUserCaseNotesMock as jest.Mock;
+  const getUserById = getUserByIdMock as jest.Mock;
 
   it('throws an error if the user is not valid or authorized', async () => {
     await expect(
@@ -35,9 +38,7 @@ describe('updateUserCaseNoteInteractor', () => {
       ...mockJudgeUser,
       section: 'colvinChambers',
     } as UnknownAuthUser;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUser);
+    getUserById.mockImplementation(() => mockUser);
     upsertUserCaseNotes.mockImplementation(v => v.caseNoteToUpsert);
     applicationContext
       .getUseCaseHelpers()
@@ -66,9 +67,7 @@ describe('updateUserCaseNoteInteractor', () => {
       userId: userIdToExpect,
     } as UnknownAuthUser;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUser);
+    getUserById.mockImplementation(() => mockUser);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);

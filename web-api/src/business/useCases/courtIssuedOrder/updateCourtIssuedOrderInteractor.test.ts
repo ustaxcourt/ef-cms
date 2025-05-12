@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -19,6 +20,9 @@ import {
 import { updateCourtIssuedOrderInteractor } from './updateCourtIssuedOrderInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('updateCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
@@ -100,9 +104,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUserById);
+    getUserById.mockImplementation(() => mockUserById);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
@@ -128,7 +130,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw an error if document is not found', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue();
+    getUserById.mockResolvedValue(undefined);
 
     await expect(
       updateCourtIssuedOrderInteractor(

@@ -1,16 +1,15 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
-import {
-  MOCK_PRACTITIONER,
-  petitionerUser,
-} from '../../../../../shared/src/test/mockUsers';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { MOCK_PRACTITIONER, petitionerUser } from '@shared/test/mockUsers';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { queueUpdateAssociatedCasesWorker } from './queueUpdateAssociatedCasesWorker';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+
+const getDocketNumbersByUser = getDocketNumbersByUserMock as jest.Mock;
 
 describe('queueUpdateAssociatedCasesWorker', () => {
   it('should lookup the docket numbers for the current user', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
+    getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
 
     await queueUpdateAssociatedCasesWorker(
       applicationContext,
@@ -25,18 +24,13 @@ describe('queueUpdateAssociatedCasesWorker', () => {
       },
     );
 
-    expect(
-      await applicationContext.getPersistenceGateway().getDocketNumbersByUser,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getDocketNumbersByUser).toHaveBeenCalledWith({
       userId: MOCK_PRACTITIONER.userId,
     });
   });
 
   it('should return an object that includes all of the docketNumbers associated with the practitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
+    getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
     applicationContext.getWorkerGateway().queueWork.mockReturnValue({});
     const authorizedUser = {
       email: MOCK_PRACTITIONER.email!,
@@ -83,12 +77,10 @@ describe('queueUpdateAssociatedCasesWorker', () => {
   });
 
   it('should attempt to send a message to update the petitioner cases via the worker gateway', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
+    getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
     applicationContext.getWorkerGateway().queueWork.mockReturnValue({});
     const authorizedUser = {
-      email: petitionerUser.email,
+      email: petitionerUser.email || 'petitioner@example.com',
       name: petitionerUser.name,
       role: petitionerUser.role,
       userId: petitionerUser.userId,

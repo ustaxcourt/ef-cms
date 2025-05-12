@@ -2,7 +2,6 @@ import { NewPetitionerUser } from '@shared/business/entities/NewPetitionerUser';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 
 export type SignUpUserResponse = {
   email: string;
@@ -23,9 +22,11 @@ export const signUpUserInteractor = async (
     };
   },
 ): Promise<SignUpUserResponse> => {
-  const existingAccount = await getUserByEmail(applicationContext, {
-    email: user.email,
-  });
+  const existingAccount = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, {
+      email: user.email,
+    });
 
   // Note that this check can fail to catch two (nearly) simultaneous requests,
   // and Cognito can therefore create accounts with the same email.

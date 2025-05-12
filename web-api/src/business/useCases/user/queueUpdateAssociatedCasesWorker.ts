@@ -1,7 +1,7 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
-import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
-import { RawUser } from '../../../../../shared/src/business/entities/User';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 

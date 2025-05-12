@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import {
@@ -18,11 +19,15 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 
 const logger = getLogger();
 const errorSpy = jest.spyOn(logger, 'error');
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
+const verifyCaseForUser = verifyCaseForUserMock as jest.Mock;
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
@@ -96,9 +101,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('should not add mapping if already there', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(true);
+    verifyCaseForUser.mockReturnValue(true);
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -108,18 +111,14 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).not.toHaveBeenCalled();
   });
 
   it('should add mapping for a practitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -129,18 +128,14 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
   });
 
   it('should set petitioners to receive no service if the practitioner is representing them', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -157,9 +152,7 @@ describe('associatePrivatePractitionerToCase', () => {
     const updatedCase =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0].caseToUpdate;
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
@@ -171,9 +164,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('should only set a petitioner to receive no service if the practitioner is only representing that petitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -186,9 +177,7 @@ describe('associatePrivatePractitionerToCase', () => {
     const updatedCase =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0].caseToUpdate;
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();
@@ -201,9 +190,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('BUG 9323: should create log if practitioner is already associated with case but does not appear in the privatePractitioners array', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockResolvedValueOnce(true);
+    verifyCaseForUser.mockResolvedValueOnce(true);
 
     getCaseByDocketNumber.mockResolvedValueOnce({
       ...caseRecord,
@@ -218,9 +205,7 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
 
     expect(errorSpy).toHaveBeenCalledWith(
       `BUG 9323: Private Practitioner with userId: ${MOCK_PRACTITIONER.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
@@ -228,9 +213,7 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('BUG 9323: should create NO log if practitioner is already associated with case and DOES appear in the privatePractitioners array', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockResolvedValueOnce(true);
+    verifyCaseForUser.mockResolvedValueOnce(true);
 
     getCaseByDocketNumber.mockResolvedValueOnce({
       ...caseRecord,
@@ -245,9 +228,7 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 });
