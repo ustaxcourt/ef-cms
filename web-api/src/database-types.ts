@@ -8,8 +8,13 @@ export interface Database {
   dwMessage: MessageTable;
   dwUserCaseNote: UserCaseNoteTable;
   dwWorkItem: WorkItemTable;
+  dwFeatureFlag: FeatureFlagTable;
 }
 
+export interface FeatureFlagTable {
+  name: string;
+  value: { current: any };
+}
 export interface MessageTable {
   attachments?: ColumnType<{ documentId: string }[], string, string>;
   completedAt?: Date;
