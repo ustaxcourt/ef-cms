@@ -3,6 +3,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { headerFontFace } from '../../../../shared/src/business/useCases/headerFontFace';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import { Browser, Page } from 'puppeteer-core';
 
 /**
  * generatePdfFromHtmlHelper
@@ -30,12 +31,13 @@ export const generatePdfFromHtmlHelper = async (
     headerHtml?: string;
     overwriteFooter?: boolean;
   },
-  browser,
+  browser: Browser,
 ) => {
   let result: any = null;
+  let page: Page | null = null;
 
   try {
-    const page = await browser?.newPage()!;
+    page = await browser?.newPage()!;
 
     await page.setContent(contentHtml);
 
@@ -107,6 +109,8 @@ export const generatePdfFromHtmlHelper = async (
   } catch (error) {
     applicationContext.logger.error(error);
     throw error;
+  } finally {
+    await page?.close();
   }
 
   return result;
