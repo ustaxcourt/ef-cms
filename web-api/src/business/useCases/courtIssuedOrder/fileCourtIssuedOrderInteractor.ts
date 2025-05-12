@@ -2,18 +2,18 @@ import {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_RELATIONSHIPS,
   EVENT_CODES_THAT_ALLOW_FREE_TEXT,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { Message } from '../../../../../shared/src/business/entities/Message';
+import { Message } from '@shared/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';

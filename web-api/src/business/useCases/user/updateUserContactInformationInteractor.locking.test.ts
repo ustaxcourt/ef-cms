@@ -1,15 +1,20 @@
-import { COUNTRY_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   updateUserContactInformationInteractor,
 } from './updateUserContactInformationInteractor';
 import { sleep } from '@shared/tools/helpers';
+import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 
 const contactInfo = {
   address1: '234 Main St',
@@ -23,6 +28,11 @@ const contactInfo = {
   state: 'IL',
 };
 
+const getPractitionerById = getPractitionerByIdMock as jest.Mock;
+const getCasesForUser = getCasesForUserMock as jest.Mock;
+const getUserByIdOnceAllUpdatesComplete =
+  getUserByIdOnceAllUpdatesCompleteMock as jest.Mock;
+
 describe('determineEntitiesToLock', () => {
   let mockParams;
   const mockCases = ['111-20', '222-20', '333-20'].map(docketNumber => ({
@@ -34,21 +44,14 @@ describe('determineEntitiesToLock', () => {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue(mockCases);
+    getCasesForUser.mockReturnValue(mockCases);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
+    getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
   });
 
   it('should lookup the docket numbers for the specified user', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getCasesForUser).toHaveBeenCalledWith({
       userId: mockParams.userId,
     });
   });
@@ -66,29 +69,21 @@ describe('determineEntitiesToLock', () => {
   it('should wait until user is free before calling getCasesForUser', async () => {
     let resolver: Function;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserByIdOnceAllUpdatesComplete.mockImplementation(() => {
-        return new Promise(resolve => (resolver = resolve));
-      });
+    getUserByIdOnceAllUpdatesComplete.mockImplementation(() => {
+      return new Promise(resolve => (resolver = resolve));
+    });
 
     void determineEntitiesToLock(applicationContext, mockParams);
 
     await sleep(50);
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser,
-    ).not.toHaveBeenCalled();
+    expect(getCasesForUser).not.toHaveBeenCalled();
 
     await sleep(50);
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser,
-    ).not.toHaveBeenCalled();
+    expect(getCasesForUser).not.toHaveBeenCalled();
 
     resolver!(null);
     await sleep(50);
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser,
-    ).toHaveBeenCalled();
+    expect(getCasesForUser).toHaveBeenCalled();
   });
 });
 
@@ -114,22 +109,18 @@ describe('updateUserContactInformationInteractor', () => {
   beforeEach(() => {
     mockLock = undefined; // unlocked
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getPractitionerById.mockReturnValue({
       ...MOCK_PRACTITIONER,
       entityName: 'Practitioner',
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
+    getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
 
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([MOCK_CASE]);
+    getCasesForUser.mockReturnValue([MOCK_CASE]);
 
     applicationContext
       .getPersistenceGateway()

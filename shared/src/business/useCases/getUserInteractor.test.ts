@@ -27,7 +27,7 @@ describe('getUserInteractor', () => {
     });
 
     const user = await getUserInteractor(mockPetitionsClerkUser);
-    console.log('user', user);
+
     expect(user).toEqual({
       ...mockPetitionsClerkUser,
       barNumber: undefined,

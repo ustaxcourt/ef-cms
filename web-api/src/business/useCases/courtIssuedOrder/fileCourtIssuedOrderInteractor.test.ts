@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -10,11 +11,11 @@ import {
   PETITIONS_SECTION,
   ROLES,
   STATUS_REPORT_ORDER_OPTIONS,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { User } from '@shared/business/entities/User';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import {
@@ -24,9 +25,11 @@ import {
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCase = jest.mocked(updateCaseMock);
+const getUserById = getUserByIdMock as jest.Mock;
 
 /* eslint-disable max-lines */
 describe('fileCourtIssuedOrderInteractor', () => {
@@ -98,7 +101,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
+    getUserById.mockReturnValue(
       new User({
         name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
         role: ROLES.petitionsClerk,

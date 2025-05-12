@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -115,14 +115,12 @@ export const asyncHandleLockError = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!authorizedUser?.userId || !clientConnectionId) return;
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: { action: 'async_service_unavailable_error' },
-      userId: authorizedUser?.userId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: { action: 'async_service_unavailable_error' },
+    userId: authorizedUser?.userId,
+  });
 };
 
 /**

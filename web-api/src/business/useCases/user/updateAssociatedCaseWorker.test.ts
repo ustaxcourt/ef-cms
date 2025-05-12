@@ -1,6 +1,7 @@
 jest.mock('@shared/tools/helpers');
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -31,6 +32,7 @@ import {
 } from './updateAssociatedCaseWorker';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const mockPractitioner = {
   ...validUser,
@@ -73,6 +75,7 @@ const mockCase = {
 };
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getUserById = getUserByIdMock as jest.Mock;
 const updateCase = jest.mocked(updateCaseMock);
 updateCase.mockImplementation(({ caseToUpdate }) =>
   Promise.resolve(caseToUpdate),
@@ -103,7 +106,7 @@ describe('updateAssociatedCaseWorker', () => {
   });
 
   it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockReturnValue({
       ...mockPetitioner,
       userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
     });
@@ -286,9 +289,7 @@ describe('updateAssociatedCaseWorker', () => {
           },
         });
 
-      applicationContext
-        .getPersistenceGateway()
-        .getUserById.mockReturnValue(mockPetitioner);
+      getUserById.mockReturnValue(mockPetitioner);
     });
 
     it('should call generateAndServeDocketEntry if case is open', async () => {

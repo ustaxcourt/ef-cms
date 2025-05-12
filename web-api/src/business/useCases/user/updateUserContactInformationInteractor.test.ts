@@ -1,19 +1,30 @@
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   ADMISSIONS_STATUS_OPTIONS,
   COUNTRY_TYPES,
   PRACTICE_TYPE_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { irsPractitionerUser } from '../../../../../shared/src/test/mockUsers';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { irsPractitionerUser } from '@shared/test/mockUsers';
 import { updateUserContactInformation } from './updateUserContactInformationInteractor';
 jest.mock('./generateChangeOfAddress');
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { updatePractitioner as updatePractitionerMock } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
+import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { updateUser as updateUserMock } from '@web-api/persistence/postgres/users/updateUser';
+
+const getCasesForUser = getCasesForUserMock as jest.Mock;
+const updatePractitioner = updatePractitionerMock as jest.Mock;
+const getPractitionerById = getPractitionerByIdMock as jest.Mock;
+const updateUser = updateUserMock as jest.Mock;
 
 describe('updateUserContactInformation', () => {
   let mockUser;
@@ -47,15 +58,9 @@ describe('updateUserContactInformation', () => {
       role: ROLES.irsPractitioner,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue();
-
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockResolvedValue(mockUser);
-
-    applicationContext.getPersistenceGateway().updateUser.mockResolvedValue({});
+    getCasesForUser.mockReturnValue(undefined);
+    getPractitionerById.mockResolvedValue(mockUser);
+    updatePractitioner.mockResolvedValue({});
   });
 
   it('should throw unauthorized error when user does not have permission to update contact information', async () => {
@@ -98,7 +103,7 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(applicationContext.getUseCases().updateUser).not.toHaveBeenCalled();
+    expect(updateUser).not.toHaveBeenCalled();
     expect(generateChangeOfAddress).not.toHaveBeenCalled();
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -116,33 +121,6 @@ describe('updateUserContactInformation', () => {
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[1][0].message.user,
     ).toBeDefined();
-  });
-
-  it('should throw an error when updateUser throws an error', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .updateUser.mockImplementation(() => {
-        throw new Error('something wicked');
-      });
-
-    await expect(
-      updateUserContactInformation(
-        applicationContext,
-        {
-          contactInfo,
-          userId: mockUser.userId,
-        } as any,
-        mockUser,
-      ),
-    ).rejects.toThrow('something wicked');
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.action,
-    ).toEqual('user_contact_update_error');
   });
 
   it('should update the user with the new contact information and mark it as having an update in progress', async () => {
@@ -168,10 +146,7 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-        .user,
-    ).toMatchObject({
+    expect(updateUser.mock.calls[0][0].userToUpdate).toMatchObject({
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -206,16 +181,13 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-        .user,
-    ).toMatchObject({
+    expect(updateUser.mock.calls[0][0].userToUpdate).toMatchObject({
       isUpdatingInformation: true,
     });
   });
 
   it('should notify and not update the user when the user being updated is not a privatePractitioner, irsPractitioner, or petitioner', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getPractitionerById.mockResolvedValue({
       ...mockUser,
       entityName: 'notapractitioner',
     });
@@ -271,10 +243,7 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
-        .isUpdatingInformation,
-    ).not.toBeDefined();
+    expect(updateUser.mock.calls[1][0].isUpdatingInformation).not.toBeDefined();
 
     const notificationCalls =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -303,9 +272,7 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls.length,
-    ).toEqual(1);
+    expect(updateUser.mock.calls.length).toEqual(1);
 
     const notificatsionCalls =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -327,21 +294,16 @@ describe('updateUserContactInformation', () => {
       },
       mockUser,
     );
-    expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-        .user,
-    ).toMatchObject({
+    expect(updateUser.mock.calls[0][0].userToUpdate).toMatchObject({
       firmName: 'testing',
     });
   });
 
   it('should return early if the firmName and contact info was not changed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => ({
-        ...mockUser,
-        contact: contactInfo,
-      }));
+    getPractitionerById.mockImplementation(() => ({
+      ...mockUser,
+      contact: contactInfo,
+    }));
 
     await updateUserContactInformation(
       applicationContext,
@@ -354,8 +316,31 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
+    expect(updateUser).not.toHaveBeenCalled();
+  });
+
+  it('should throw an error when updateUser throws an error', async () => {
+    updateUser.mockImplementation(() => {
+      throw new Error('something wicked');
+    });
+
+    await expect(
+      updateUserContactInformation(
+        applicationContext,
+        {
+          contactInfo,
+          userId: mockUser.userId,
+        } as any,
+        mockUser,
+      ),
+    ).rejects.toThrow('something wicked');
+
     expect(
-      applicationContext.getPersistenceGateway().updateUser,
-    ).not.toHaveBeenCalled();
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message.action,
+    ).toEqual('user_contact_update_error');
   });
 });
