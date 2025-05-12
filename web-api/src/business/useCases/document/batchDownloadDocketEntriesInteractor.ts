@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
 import {
   AuthUser,
   UnknownAuthUser,
@@ -130,10 +130,12 @@ const batchDownloadDocketEntriesHelper = async (
 
   const featureFlags = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext, true);
+    .getAllFeatureFlagsFromPostgresInteractor(applicationContext, true);
 
   const awsBatchMinimumCount =
-    featureFlags[ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key];
+    featureFlags[
+      ALLOWLIST_FEATURE_FLAGS_POSTGRES.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key
+    ];
 
   const useAwsBatchMechanism =
     applicationContext.environment.stage !== 'local' &&

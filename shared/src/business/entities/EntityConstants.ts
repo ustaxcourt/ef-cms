@@ -87,9 +87,6 @@ export const PARTY_VIEW_TABS = {
 };
 
 export const ALLOWLIST_FEATURE_FLAGS = {
-  AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
-    key: 'aws-batch-zipper-minimum-count',
-  },
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
   },
@@ -108,6 +105,16 @@ export const ALLOWLIST_FEATURE_FLAGS = {
     key: 'use-change-of-address-lambda',
   },
 };
+
+export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
+  AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
+    key: 'aws-batch-zipper-minimum-count',
+  },
+};
+
+type PostgresFeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS_POSTGRES;
+export type PostgresFeatureFlagKeys =
+  PostgresFeatureFlags[keyof PostgresFeatureFlags]['key'];
 
 export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {

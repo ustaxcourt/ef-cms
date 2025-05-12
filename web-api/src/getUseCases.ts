@@ -209,6 +209,7 @@ import { updateUserPendingEmailInteractor } from './business/useCases/user/updat
 import { validatePdfInteractor } from './business/useCases/pdf/validatePdfInteractor';
 import { verifyPendingCaseForUserInteractor } from './business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor';
 import { verifyUserPendingEmailInteractor } from './business/useCases/user/verifyUserPendingEmailInteractor';
+import { getAllFeatureFlagsFromPostgresInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor';
 
 const useCases = {
   addCaseToTrialSessionInteractor,
@@ -285,6 +286,7 @@ const useCases = {
   generateTrialCalendarPdfInteractor,
   generateTrialSessionPaperServicePdfInteractor,
   getAllFeatureFlagsInteractor,
+  getAllFeatureFlagsFromPostgresInteractor,
   getAllUsersByRoleInteractor,
   getCachedHealthCheckInteractor,
   getCalendaredCasesForTrialSessionInteractor,
