@@ -346,6 +346,7 @@ export const createTestApplicationContext = () => {
     getAllFeatureFlagsInteractor: jest
       .fn()
       .mockImplementation(getAllFeatureFlagsInteractor),
+    getAllFeatureFlagsFromPostgresInteractor: jest.fn().mockResolvedValue({}),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
