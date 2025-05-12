@@ -23,6 +23,10 @@ import {
   getRawFeatureFlagValue,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+import {
+  getRawFeatureFlagFromPostgresValue,
+  toggleFeatureFlagFromPostgres,
+} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
@@ -104,6 +108,9 @@ export default defineConfig({
         getRawFeatureFlagValue({ flag }) {
           return getRawFeatureFlagValue({ flag });
         },
+        getRawFeatureFlagFromPostgresValue({ flag }) {
+          return getRawFeatureFlagFromPostgresValue({ flag });
+        },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
         },
@@ -115,6 +122,9 @@ export default defineConfig({
           retries: number;
         }) {
           return readAllItemsInBucket({ bucketName, retries });
+        },
+        toggleFeatureFlagFromPostgres(args) {
+          return toggleFeatureFlagFromPostgres(args);
         },
         toggleFeatureFlag(args) {
           return toggleFeatureFlag(args);
