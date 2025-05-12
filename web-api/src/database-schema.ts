@@ -35,6 +35,10 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
+import {
+  DW_FEATURE_FLAG_COLUMNS,
+  FeatureFlagTable,
+} from '@web-api/persistence/postgres/featureFlag/schema';
 
 const DEFAULT = {};
 
@@ -47,6 +51,7 @@ interface DatabaseSchemaType {
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
+  dwFeatureFlag: DatabaseTableMetadata<FeatureFlagTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -96,6 +101,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwWorkItem: {
     table: DEFAULT as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
+  },
+  dwFeatureFlag: {
+    table: DEFAULT as FeatureFlagTable,
+    columns: DW_FEATURE_FLAG_COLUMNS,
   },
 };
 
