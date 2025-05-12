@@ -7,7 +7,6 @@ import {
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 
@@ -30,9 +29,11 @@ export const addExistingUserToCase = async ({
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await getUserByEmail(applicationContext, {
-    email,
-  });
+  const user = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, {
+      email,
+    });
 
   if (!user) {
     throw new Error(`no user found with the provided email of ${email}`);

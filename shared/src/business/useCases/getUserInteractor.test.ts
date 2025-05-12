@@ -1,8 +1,11 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { PETITIONS_SECTION, ROLES } from '../entities/EntityConstants';
+import {
+  PETITIONS_SECTION,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { getUserInteractor } from './getUserInteractor';
 import {
   mockIrsPractitionerUser,
@@ -10,19 +13,21 @@ import {
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserByIdWithPractitioner as getUserByIdWithPractitionerMock } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
+
+const getUserByIdWithPractitioner =
+  getUserByIdWithPractitionerMock as jest.Mock;
 
 describe('getUserInteractor', () => {
   it('should call the persistence method to get the user', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserByIdWithPractitioner.mockReturnValue({
       ...mockPetitionsClerkUser,
+      entityName: 'User',
       section: PETITIONS_SECTION,
     });
 
-    const user = await getUserInteractor(
-      applicationContext,
-      mockPetitionsClerkUser,
-    );
-
+    const user = await getUserInteractor(mockPetitionsClerkUser);
+    console.log('user', user);
     expect(user).toEqual({
       ...mockPetitionsClerkUser,
       barNumber: undefined,
@@ -33,13 +38,9 @@ describe('getUserInteractor', () => {
   });
 
   it('should throw an error if the user is not found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(null);
+    getUserByIdWithPractitioner.mockReturnValue(null);
 
-    await expect(
-      getUserInteractor(applicationContext, mockPetitionsClerkUser),
-    ).rejects.toThrow(
+    await expect(getUserInteractor(mockPetitionsClerkUser)).rejects.toThrow(
       `User id "${mockPetitionsClerkUser.userId}" not found in persistence.`,
     );
   });
@@ -53,12 +54,13 @@ describe('getUserInteractor', () => {
       role: ROLES.judge,
       userId: mockJudgeUser.userId,
     };
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserByIdWithPractitioner.mockReturnValue({
       ...mockJudge,
+      entityName: 'User',
       section: 'judge',
     });
 
-    const user = await getUserInteractor(applicationContext, mockJudgeUser);
+    const user = await getUserInteractor(mockJudgeUser);
 
     expect(user).toEqual({
       ...mockJudge,
@@ -71,44 +73,40 @@ describe('getUserInteractor', () => {
   });
 
   it('should return a PrivatePractitioner entity when the entity returned from persistence is a PrivatePractitioner', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserByIdWithPractitioner.mockReturnValue({
       ...mockPrivatePractitionerUser,
       barNumber: 'PT1234',
       entityName: PrivatePractitioner.ENTITY_NAME,
+      representing: [],
     });
 
-    const user = await getUserInteractor(
-      applicationContext,
-      mockPrivatePractitionerUser,
-    );
+    const user = await getUserInteractor(mockPrivatePractitionerUser);
 
     expect(user).toMatchObject({
       ...mockPrivatePractitionerUser,
       barNumber: 'PT1234',
-      isUpdatingInformation: undefined,
+      entityName: PrivatePractitioner.ENTITY_NAME,
       representing: [],
-      token: undefined,
     });
+    expect(user.isUpdatingInformation).toBeUndefined();
+    expect(user.token).toBeUndefined();
   });
 
   it('should return an IrsPractitioner entity when the entity returned from persistence is a IrsPractitioner', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserByIdWithPractitioner.mockReturnValue({
       ...mockIrsPractitionerUser,
       barNumber: 'PT5678',
       entityName: IrsPractitioner.ENTITY_NAME,
     });
 
-    const user = await getUserInteractor(
-      applicationContext,
-      mockIrsPractitionerUser,
-    );
+    const user = await getUserInteractor(mockIrsPractitionerUser);
 
     expect(user).toMatchObject({
       ...mockIrsPractitionerUser,
       barNumber: 'PT5678',
-      isUpdatingInformation: undefined,
-      token: undefined,
     });
+    expect(user.isUpdatingInformation).toBeUndefined();
+    expect(user.token).toBeUndefined();
   });
 
   it('should return a Practitioner entity when the entity returned from persistence is a Practitioner', async () => {
@@ -126,22 +124,19 @@ describe('getUserInteractor', () => {
       role: ROLES.irsPractitioner,
       userId: mockIrsPractitionerUser.userId,
     };
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserByIdWithPractitioner.mockReturnValue({
       ...mockPractitioner,
       barNumber: 'PT9012',
     });
 
-    const user = await getUserInteractor(
-      applicationContext,
-      mockIrsPractitionerUser,
-    );
+    const user = await getUserInteractor(mockIrsPractitionerUser);
 
     expect(user).toMatchObject({
       ...mockPractitioner,
       barNumber: 'PT9012',
-      email: undefined,
-      isUpdatingInformation: undefined,
-      token: undefined,
     });
+    expect(user.email).toBeUndefined();
+    expect(user.isUpdatingInformation).toBeUndefined();
+    expect(user.token).toBeUndefined();
   });
 });

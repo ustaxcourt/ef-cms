@@ -1,20 +1,22 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
-import { caseServicesSupervisorUser } from '../../../../../shared/src/test/mockUsers';
+import { caseServicesSupervisorUser } from '@shared/test/mockUsers';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('assignWorkItemsInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
+  const getUserById = getUserByIdMock as jest.Mock;
 
   const options = { assigneeId: 'ss', assigneeName: 'ss', workItemId: '' };
   let mockWorkItem;
@@ -50,7 +52,7 @@ describe('assignWorkItemsInteractor', () => {
       workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
     };
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockReturnValue({
       ...mockDocketClerkUser,
       section: DOCKET_SECTION,
     });
@@ -60,11 +62,7 @@ describe('assignWorkItemsInteractor', () => {
 
   it('should throw an unauthorized error when the user does not have permission to assign work items', async () => {
     await expect(
-      assignWorkItemsInteractor(
-        applicationContext,
-        options,
-        mockDocketClerkUser,
-      ),
+      assignWorkItemsInteractor(options, mockDocketClerkUser),
     ).rejects.toThrow();
   });
 
@@ -77,18 +75,13 @@ describe('assignWorkItemsInteractor', () => {
     );
 
     await expect(
-      assignWorkItemsInteractor(
-        applicationContext,
-        options,
-        mockDocketClerkUser,
-      ),
+      assignWorkItemsInteractor(options, mockDocketClerkUser),
     ).rejects.toThrow();
   });
 
   it('should throw an error when not given work item or work item id', async () => {
     await expect(
       assignWorkItemsInteractor(
-        applicationContext,
         {
           assigneeId: mockDocketClerkUser.userId,
           assigneeName: 'Ted Docket',
@@ -102,7 +95,6 @@ describe('assignWorkItemsInteractor', () => {
 
   it('should assign work item to current user when given work item', async () => {
     await assignWorkItemsInteractor(
-      applicationContext,
       {
         assigneeId: mockDocketClerkUser.userId,
         assigneeName: 'Ted Docket',
@@ -123,7 +115,6 @@ describe('assignWorkItemsInteractor', () => {
 
   it('assigns a work item to the current user', async () => {
     await assignWorkItemsInteractor(
-      applicationContext,
       {
         assigneeId: mockDocketClerkUser.userId,
         assigneeName: 'Ted Docket',
@@ -143,16 +134,14 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('assigns a work item to a user with their original section value when the person making the assignment is a case services user', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValueOnce(caseServicesSupervisorUser)
+    getUserById
+      .mockReturnValueOnce(caseServicesSupervisorUser)
       .mockReturnValueOnce({
         ...mockDocketClerkUser,
         section: DOCKET_SECTION,
       });
 
     await assignWorkItemsInteractor(
-      applicationContext,
       {
         assigneeId: mockDocketClerkUser.userId,
         assigneeName: 'Ted Docket',

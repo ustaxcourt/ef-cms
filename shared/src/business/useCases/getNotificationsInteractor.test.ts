@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   ADC_SECTION,
@@ -7,9 +8,9 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} from '../entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
-import { caseServicesSupervisorUser } from '../../test/mockUsers';
+import { caseServicesSupervisorUser } from '@shared/test/mockUsers';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionMock } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
 import { getDocumentQCInboxForUser as getDocumentQCInboxForUserMock } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { getNotificationsInteractor } from './getNotificationsInteractor';
@@ -20,12 +21,14 @@ import {
   mockDocketClerkUser,
   mockJudgeUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getUserInboxMessages = getUserInboxMessagesMock as jest.Mock;
 const getSectionInboxMessages = getSectionInboxMessagesMock as jest.Mock;
 const getDocumentQCInboxForUser = getDocumentQCInboxForUserMock as jest.Mock;
 const getDocumentQCInboxForSection =
   getDocumentQCInboxForSectionMock as jest.Mock;
+const getUserById = getUserByIdMock as jest.Mock;
 
 const workItems = [
   {
@@ -112,7 +115,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns an unread count for my messages', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -146,7 +149,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns the total user inbox count', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -162,7 +165,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns the total section messages count', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -178,7 +181,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns an accurate unread count for legacy items marked complete', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -194,7 +197,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns the qcIndividualInProgressCount for qc individual items with caseIsInProgress true, isFileAttached true and a judgeUserId supplied', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -248,7 +251,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns the qcIndividualInboxCount for qc individual items with caseIsInProgress false, isFileAttached true and a judgeUserId supplied', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -302,7 +305,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns the qcSectionInProgressCount for qc section items with caseIsInProgress true, isFileAttached true and a judgeUserId supplied', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -374,7 +377,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns the qcSectionInboxCount for qc section items with caseIsInProgress true, isFileAttached true and a judgeUserId supplied', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -441,7 +444,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('should fetch the qc section items for the provided judgeUserId', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       name: 'Some Judge',
       role: ROLES.judge,
       section: CHAMBERS_SECTION,
@@ -463,7 +466,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('should fetch the qc section items without a judgeName when a judgeUserId is not provided', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -481,7 +484,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('should fetch the qc section items with judgeName of CHIEF_JUDGE when a judgeUserId is not provided and the user role is adc', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       role: ROLES.adc,
       section: ADC_SECTION,
       userId: mockAdcUser.userId,

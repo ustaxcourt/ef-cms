@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
@@ -14,9 +15,11 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { replyToMessageInteractor } from './replyToMessageInteractor';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const createMessageAsReply = createMessageAsReplyMock as jest.Mock;
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('replyToMessageInteractor', () => {
   const mockAttachments = [
@@ -55,9 +58,8 @@ describe('replyToMessageInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValueOnce({
+    getUserById
+      .mockReturnValueOnce({
         name: 'Test Petitionsclerk',
         role: ROLES.petitionsClerk,
         section: PETITIONS_SECTION,

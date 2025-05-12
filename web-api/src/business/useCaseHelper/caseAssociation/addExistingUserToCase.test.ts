@@ -1,19 +1,22 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CONTACT_TYPES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  getContactPrimary,
-} from '../../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+} from '@shared/business/entities/EntityConstants';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { addExistingUserToCase } from './addExistingUserToCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockAdmissionsClerkUser,
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+
+const getUserById = getUserByIdMock as jest.Mock;
+const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
 
 describe('addExistingUserToCase', () => {
   const mockUserId = '674fdded-1d17-4081-b9fa-950abc677cee';
@@ -25,7 +28,7 @@ describe('addExistingUserToCase', () => {
       userId: mockUserId,
     });
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockReturnValue({
       userId: mockUserId,
     });
   });
@@ -110,10 +113,7 @@ describe('addExistingUserToCase', () => {
       name: 'Bob Ross',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
       userId: mockUserId,
     });
     expect(getContactPrimary(caseEntity)).toMatchObject({
@@ -233,7 +233,7 @@ describe('addExistingUserToCase', () => {
   });
 
   it('should not change the service indicator to electronic when the user has a pendingEmail', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockReturnValue({
       pendingEmail: 'testing@example.com',
       userId: mockUserId,
     });

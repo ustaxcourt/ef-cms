@@ -1,4 +1,4 @@
-import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
+import { CHIEF_JUDGE, ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {

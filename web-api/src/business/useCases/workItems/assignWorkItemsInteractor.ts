@@ -2,23 +2,14 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
+import { User } from '@shared/business/entities/User';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
-/**
- * getWorkItem
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.assigneeId the id of the user to assign the work item to
- * @param {string} providers.assigneeName the name of the user to assign the work item to
- * @param {string} providers.workItemId the id of the work item to assign
- */
 export const assignWorkItemsInteractor = async (
   {
     assigneeId,

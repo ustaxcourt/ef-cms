@@ -1,8 +1,8 @@
-import { RawIrsPractitioner } from '../entities/IrsPractitioner';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { RawPractitioner } from '../entities/Practitioner';
-import { RawPrivatePractitioner } from '../entities/PrivatePractitioner';
-import { RawUser } from '../entities/User';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { RawUser } from '@shared/business/entities/User';
 import {
   UnknownAuthUser,
   isAuthUser,

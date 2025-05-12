@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -22,7 +23,7 @@ import {
 import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
 
 describe('removePdfFromDocketEntryInteractor', () => {
-  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCase = jest.mocked(updateCaseMock);
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
@@ -87,11 +88,6 @@ describe('removePdfFromDocketEntryInteractor', () => {
 
   beforeAll(() => {
     applicationContext.getPersistenceGateway().deleteDocumentFile = jest.fn();
-
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      ...mockDocketClerkUser,
-      name: 'docket clerk',
-    });
 
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 

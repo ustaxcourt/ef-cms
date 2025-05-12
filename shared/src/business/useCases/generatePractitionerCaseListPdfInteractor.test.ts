@@ -1,16 +1,20 @@
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generatePractitionerCaseListPdfInteractor } from './generatePractitionerCaseListPdfInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+
+const getPractitionerById = getPractitionerByIdMock as jest.Mock;
 
 describe('generatePractitionerCaseListPdfInteractor', () => {
   beforeEach(() => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getPractitionerById.mockResolvedValue({
       barNumber: 'PT1234',
       name: 'Ben Matlock',
     });
@@ -67,16 +71,13 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getUserById,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getPractitionerById).toHaveBeenCalledWith({
       userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
   });
 
   it('throws an error if a practitioner user with the given userId does not exist', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getPractitionerById.mockResolvedValue({
       firstName: 'Nadia',
       lastName: 'Practitioner',
     });
