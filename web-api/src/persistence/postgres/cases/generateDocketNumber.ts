@@ -6,10 +6,13 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
 
-const incrementCounter = async (twoDigitYear: number): Promise<number> => {
+const incrementCounter = async (twoDigitYear: string): Promise<number> => {
+  const nextTwoDigitYear = parseInt(twoDigitYear) + 1;
+  const nextTwoDigitYearString = nextTwoDigitYear.toString().padStart(2, '0');
+
   const biggerThanThis = Case.getSortableDocketNumber(`101-${twoDigitYear}`)!;
   const smallerThanThis = Case.getSortableDocketNumber(
-    `101-${twoDigitYear + 1}`,
+    `101-${nextTwoDigitYearString}`,
   )!;
 
   // Using DbWriter instead of DbReader to avoid latency between writer and reader
@@ -33,9 +36,8 @@ const incrementCounter = async (twoDigitYear: number): Promise<number> => {
 };
 
 const getNextDocketNumber = async ({ year }: { year: string }) => {
-  const twoDigitYear = parseInt(year.slice(-2));
+  const twoDigitYear = year.slice(-2);
   const id = await incrementCounter(twoDigitYear);
-
   return `${id}-${twoDigitYear}`;
 };
 
