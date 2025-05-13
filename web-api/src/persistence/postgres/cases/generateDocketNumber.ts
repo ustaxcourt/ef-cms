@@ -48,7 +48,7 @@ export const generateDocketNumber = async ({
     : formatNow(FORMATS.YEAR);
 
   console.time('docketNumber investigation getNextDocketNumber');
-  const docketNumber = getNextDocketNumber({ year });
+  const docketNumber = await getNextDocketNumber({ year });
   console.timeEnd('docketNumber investigation getNextDocketNumber');
 
   return docketNumber;
