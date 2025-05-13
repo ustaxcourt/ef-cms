@@ -5,7 +5,6 @@ import {
   UnidentifiedUserError,
 } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 
 export const loginInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -81,7 +80,9 @@ async function resendAccountConfirmation(
   applicationContext: ServerApplicationContext,
   { email }: { email: string },
 ): Promise<void> {
-  const user = await getUserByEmail(applicationContext, { email });
+  const user = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, { email });
 
   if (!user) {
     throw new NotFoundError(

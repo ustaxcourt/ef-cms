@@ -1,7 +1,4 @@
-import {
-  ROLES,
-  Role,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { ROLES, Role } from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '@web-api/applicationContext';
 import { createUser } from '@web-api/gateways/user/createUser';

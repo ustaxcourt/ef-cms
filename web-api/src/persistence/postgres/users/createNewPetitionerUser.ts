@@ -1,6 +1,5 @@
 import { RawUser, User } from '@shared/business/entities/User';
 import { toKyselyNewUser, userEntity } from './mapper';
-import { createUser } from '@web-api/gateways/user/createUser';
 import { applicationContext } from '@web-api/applicationContext';
 import { pgInsertInto } from '../utils/operation/pgInsertInto';
 import { ROLES } from '@shared/business/entities/EntityConstants';
@@ -10,7 +9,7 @@ export const createNewPetitionerUser = async ({
 }: {
   userToCreate: RawUser;
 }): Promise<User> => {
-  await createUser(applicationContext, {
+  await applicationContext.getUserGateway().createUser(applicationContext, {
     email: userToCreate.pendingEmail!,
     name: userToCreate.name,
     role: ROLES.petitioner,

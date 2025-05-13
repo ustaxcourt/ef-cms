@@ -8,7 +8,7 @@ import {
   UnauthorizedError,
   UnidentifiedUserError,
 } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
 
 describe('loginInteractor', () => {
