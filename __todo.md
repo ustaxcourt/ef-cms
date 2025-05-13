@@ -37,19 +37,20 @@ All TODO comments begin with the string "10495 TODO:" to help keep track of them
 - [in-progress] Implement OpenSearch sync
   - [looks ok] `web-api/src/persistence/elasticsearch/getPractitionersByName.ts`
   - [looks ok] `web-api/src/persistence/elasticsearch/helpers/searchClauses.ts`
-  - [ ] `web-api/src/persistence/elasticsearch/getIndexNameForRecord.ts`
+  - [x] `web-api/src/persistence/elasticsearch/getIndexNameForRecord.ts`
 - [in-progress] Upsert Users from DynamoDB into Postgres (dynamoDB stream + process records)
-- [in-progress] barNumberGenerator: Contains business logic for generating a bar number,
+- [x] barNumberGenerator: Contains business logic for generating a bar number,
 does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm business rules for generating bar numbers
 - [x] Determine if selectAll is necessary for User functions (solo)
 - [x] Update Mocks to include all functions (solo)
 - [x] Index all where clauses (good for solo work)
-- [ ] Confirm Confirmation Codes Working as Expected
+- [x] Confirm Confirmation Codes Working as Expected
 - [ ] Implement TTL on Confirmation Codes
 - [ ] Update api tests (Andy will tackle first half)
-- [ ] Update shared tests (Kaitlyn will look at shared)
+- [ ] Update shared tests (Andy will look at shared)
 - [ ] Update legacy client integration tests (Kaitlyn will look at legacy client integration)
-- [ ] Update cypress e2e tests (Andy will tackle first half)
+- [ ] Update cypress e2e tests (Kaitlyn will tackle first half)
+- [ ] Parking lot with devs and Tenille Wednesday 5/14 concerning the `pending-case` sk
 
 ## Todo part 2
 
