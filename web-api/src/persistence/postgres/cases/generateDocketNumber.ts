@@ -11,12 +11,7 @@ const incrementCounter = async (twoDigitYear: number): Promise<number> => {
   const smallerThanThis = Case.getSortableDocketNumber(
     `101-${twoDigitYear + 1}`,
   )!;
-  console.log({
-    twoDigitYear,
-    biggerThanThis,
-    smallerThanThis,
-  });
-  // 2024020545
+
   // Using DbWriter instead of DbReader to avoid latency between writer and reader
   const theCase = await getDbWriter({
     cb: writer =>
