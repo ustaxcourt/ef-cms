@@ -330,7 +330,7 @@ export const createCaseFromPaperInteractor = async (
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    retries: 10,
+    retries: 25,
     waitTime: 500,
   });
   console.timeEnd('docketNumber investigation, acquiring lock');
