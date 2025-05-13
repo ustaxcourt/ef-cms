@@ -1,21 +1,22 @@
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
   formatNow,
-  getMonthDayYearInETObj,
 } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
 
-const incrementCounter = async (year: string): Promise<number> => {
-  if (!year) {
-    year = `${getMonthDayYearInETObj().year}`;
-  }
+const incrementCounter = async (twoDigitYear: number): Promise<number> => {
+  // if (!twoDigitYear) {
+  //   twoDigitYear = `${getMonthDayYearInETObj().year}.slice(-2)`;
+  // }
 
-  const yearAsNum = parseInt(year);
-  const biggerThanThis = parseInt(`${yearAsNum}000000`);
-  const smallerThanThis = parseInt(`${yearAsNum + 1}000000`);
+  const biggerThanThis = Case.getSortableDocketNumber(`101-${twoDigitYear}`)!;
+  const smallerThanThis = Case.getSortableDocketNumber(
+    `101-${twoDigitYear + 1}`,
+  )!;
   console.log({
-    yearAsNum,
+    twoDigitYear,
     biggerThanThis,
     smallerThanThis,
   });
@@ -41,8 +42,9 @@ const incrementCounter = async (year: string): Promise<number> => {
 };
 
 export const getNextDocketNumber = async ({ year }: { year: string }) => {
-  const id = await incrementCounter(year);
-  const twoDigitYear = year.slice(-2);
+  const twoDigitYear = parseInt(year.slice(-2));
+  const id = await incrementCounter(twoDigitYear);
+
   return `${id}-${twoDigitYear}`;
 };
 
@@ -57,6 +59,7 @@ export const generateDocketNumber = async ({
     : formatNow(FORMATS.YEAR);
 
   const start = Date.now();
+
   const docketNumber = await getNextDocketNumber({ year });
   console.log(
     'docketNumber investigation 2 getNextDocketNumber',
