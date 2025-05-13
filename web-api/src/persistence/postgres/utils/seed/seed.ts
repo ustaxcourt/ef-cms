@@ -4,6 +4,7 @@ import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixture
 import { getDbWriter } from '../../../../database';
 import { messages } from './fixtures/messages';
 import { workItems } from './fixtures/workItems';
+import { featureFlags } from '@web-api/persistence/postgres/utils/seed/fixtures/featureFlags';
 
 export const seed = async () => {
   const insertMessages = getDbWriter(writer =>
@@ -46,12 +47,21 @@ export const seed = async () => {
       .execute(),
   );
 
+  const insertFeatureFlags = await getDbWriter(writer =>
+    writer
+      .insertInto('dwFeatureFlag')
+      .values(featureFlags)
+      .onConflict(oc => oc.column('name').doNothing()) // ensure doesn't fail if exists
+      .execute(),
+  );
+
   await Promise.all([
     insertMessages,
     insertCaseDeadline,
     insertCorrespondence,
     insertCaseWorksheet,
     insertWorkItem,
+    insertFeatureFlags,
   ]);
 };
 

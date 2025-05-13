@@ -30147,11 +30147,6 @@
     "email": "privatePractitioner@example.com"
   },
   {
-    "sk": "chief-judge-name",
-    "current": "Maurice B. Foley",
-    "pk": "chief-judge-name"
-  },
-  {
     "sk": "clerk-of-court-configuration",
     "current": {
       "name": "Stephanie A. Servoss",

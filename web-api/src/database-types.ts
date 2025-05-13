@@ -15,6 +15,11 @@ export interface FeatureFlagTable {
   name: string;
   value: { current: any };
 }
+
+export type FeatureFlagKysely = Selectable<FeatureFlagTable>;
+export type NewFeatureFlagKysely = Insertable<FeatureFlagTable>;
+export type UpdateFeatureFlagKysely = Updateable<FeatureFlagTable>;
+
 export interface MessageTable {
   attachments?: ColumnType<{ documentId: string }[], string, string>;
   completedAt?: Date;
