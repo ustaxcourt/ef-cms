@@ -70,8 +70,8 @@ jest.mock('@web-api/persistence/postgres/users/getUsersInSection', () =>
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/users/refreshConfirmationCodeExpiration',
-  () => mockFactory('refreshConfirmationCodeExpiration'),
+  '@web-api/persistence/postgres/users/refreshUserConfirmationCodeExpiration',
+  () => mockFactory('refreshUserConfirmationCodeExpiration'),
 );
 
 jest.mock('@web-api/persistence/postgres/users/updateUser', () =>

@@ -2,7 +2,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 import qs from 'qs';
 import { generateUserConfirmationCode } from '@web-api/persistence/postgres/users/generateUserConfirmationCode';
-import { refreshUserConfirmationCodeExpiration } from '@web-api/persistence/postgres/users/refreshConfirmationCodeExpiration';
+import { refreshUserConfirmationCodeExpiration } from '@web-api/persistence/postgres/users/refreshUserConfirmationCodeExpiration';
 import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
 
 export async function createUserConfirmation(

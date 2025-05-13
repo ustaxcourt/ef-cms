@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -20,12 +21,13 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 
 describe('generateDocketRecordPdfInteractor', () => {
   const mockId = '12345';
   const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-
+  const verifyCaseForUser = verifyCaseForUserMock as jest.Mock;
   let caseDetail;
 
   beforeEach(() => {
@@ -65,9 +67,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       privatePractitioners: [],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(true);
+    verifyCaseForUser.mockReturnValue(true);
     getCaseByDocketNumber.mockResolvedValue(caseDetail);
     applicationContext
       .getUseCases()
@@ -181,9 +181,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('throws an Unauthorized error for an unassociated user attempting to view a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockReturnValue(false);
     getCaseByDocketNumber.mockResolvedValue({
       ...caseDetail,
       isSealed: true,
@@ -203,9 +201,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('throws an Unauthorized error for a public user attempting to view a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockReturnValue(false);
     getCaseByDocketNumber.mockResolvedValue({
       ...caseDetail,
       sealedDate: '2019-08-25T05:00:00.000Z',
@@ -223,9 +219,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('returns a PDF url for an internal user attempting to view a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockReturnValue(false);
     getCaseByDocketNumber.mockResolvedValue({
       ...caseDetail,
       sealedDate: '2019-08-25T05:00:00.000Z',
@@ -243,9 +237,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('returns a PDF url for an external, associated user attempting to view a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(true);
+    verifyCaseForUser.mockReturnValue(true);
     getCaseByDocketNumber.mockResolvedValue({
       ...caseDetail,
       userId: petitionerUser.userId,
@@ -263,9 +255,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('returns a PDF url for an external, indirectly associated user attempting to view a sealed case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockReturnValue(false);
     getCaseByDocketNumber.mockResolvedValue({
       ...caseDetail,
       userId: petitionerUser.userId,

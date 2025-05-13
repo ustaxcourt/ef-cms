@@ -1,5 +1,10 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
+import { getUserConfirmationCode as getUserConfirmationCodeMock } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
+import { refreshUserConfirmationCodeExpiration as refreshUserConfirmationCodeExpirationMock } from '@web-api/persistence/postgres/users/refreshUserConfirmationCodeExpiration';
+import { generateUserConfirmationCode as generateUserConfirmationCodeMock } from '@web-api/persistence/postgres/users/generateUserConfirmationCode';
+
 import qs from 'qs';
 
 describe('createUserConfirmation', () => {
@@ -7,23 +12,22 @@ describe('createUserConfirmation', () => {
   const mockConfirmationCode = '60dd21b3-5abb-447f-b036-9794962252a0';
   const mockNewConfirmationCode = '6811248a-e7c1-400e-b11c-63bc0f476d35';
   const mockEmail = 'testing@example.com';
+  const getUserConfirmationCode = getUserConfirmationCodeMock as jest.Mock;
+  const refreshUserConfirmationCodeExpiration =
+    refreshUserConfirmationCodeExpirationMock as jest.Mock;
+  const generateUserConfirmationCode =
+    generateUserConfirmationCodeMock as jest.Mock;
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getAccountConfirmationCode.mockReturnValue(mockConfirmationCode);
+    getUserConfirmationCode.mockReturnValue(mockConfirmationCode);
 
-    applicationContext
-      .getPersistenceGateway()
-      .generateAccountConfirmationCode.mockReturnValue({
-        confirmationCode: mockNewConfirmationCode,
-      });
+    generateUserConfirmationCode.mockReturnValue({
+      confirmationCode: mockNewConfirmationCode,
+    });
 
-    applicationContext
-      .getPersistenceGateway()
-      .refreshConfirmationCodeExpiration.mockReturnValueOnce({
-        confirmationCode: mockConfirmationCode,
-      });
+    refreshUserConfirmationCodeExpiration.mockReturnValueOnce({
+      confirmationCode: mockConfirmationCode,
+    });
   });
 
   it('should generate a new confirmation code when one does not already exist and add said code to the verification email sent', async () => {
@@ -37,25 +41,15 @@ describe('createUserConfirmation', () => {
     );
     const mockVerificationLink = `https://app.${process.env.EFCMS_DOMAIN}/confirm-signup?${queryString}`;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getAccountConfirmationCode.mockReturnValueOnce(undefined);
+    getUserConfirmationCode.mockReturnValueOnce(undefined);
 
     await createUserConfirmation(applicationContext, {
       email: mockEmail,
       userId: mockUserId,
     });
-    expect(
-      applicationContext.getPersistenceGateway().getAccountConfirmationCode,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .generateAccountConfirmationCode,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .refreshConfirmationCodeExpiration,
-    ).not.toHaveBeenCalled();
+    expect(getUserConfirmationCode).toHaveBeenCalledTimes(1);
+    expect(generateUserConfirmationCode).toHaveBeenCalledTimes(1);
+    expect(refreshUserConfirmationCodeExpiration).not.toHaveBeenCalled();
     expect(
       applicationContext.getMessageGateway().sendEmailToUser.mock.calls[0][1]
         .to,
@@ -83,17 +77,9 @@ describe('createUserConfirmation', () => {
     });
 
     expect(result).toEqual({ confirmationCode: mockConfirmationCode });
-    expect(
-      applicationContext.getPersistenceGateway().getAccountConfirmationCode,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .refreshConfirmationCodeExpiration,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .generateAccountConfirmationCode,
-    ).not.toHaveBeenCalled();
+    expect(getUserConfirmationCode).toHaveBeenCalledTimes(1);
+    expect(refreshUserConfirmationCodeExpiration).toHaveBeenCalledTimes(1);
+    expect(generateUserConfirmationCode).not.toHaveBeenCalled();
     expect(
       applicationContext.getMessageGateway().sendEmailToUser.mock.calls[0][1]
         .to,
