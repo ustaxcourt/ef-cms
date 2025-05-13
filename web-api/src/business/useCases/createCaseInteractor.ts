@@ -250,11 +250,13 @@ const createCaseMetadata = async (
     });
   }
 
+  console.time('docketNumber investigation createCaseAndAssociations');
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
+  console.timeEnd('docketNumber investigation createCaseAndAssociations');
 
   return { caseToAdd, workItem: newWorkItem };
 };
@@ -317,6 +319,8 @@ export const createCaseInteractor = async (
     privatePractitioners = [practitionerUser];
   }
 
+  console.time('docketNumber investigation, create case');
+  console.time('docketNumber investigation, acquiring lock');
   await acquireLock({
     applicationContext,
     authorizedUser,
@@ -324,7 +328,7 @@ export const createCaseInteractor = async (
     retries: 10,
     waitTime: 500,
   });
-
+  console.timeEnd('docketNumber investigation, acquiring lock');
   let caseToAdd: Case;
   let workItem: WorkItem;
 
@@ -348,6 +352,7 @@ export const createCaseInteractor = async (
       applicationContext,
       identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
     });
+    console.timeEnd('docketNumber investigation, create case');
   }
 
   const userCaseEntity = new UserCase(caseToAdd);
