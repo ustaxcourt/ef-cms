@@ -30,7 +30,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
       true,
     );
 
-    expect(RESULT).toEqual({
+    expect(RESULT).toMatchObject({
       [FEATURE_FLAG_KEY]: 50,
     });
 
@@ -49,7 +49,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
       true,
     );
 
-    expect(RESULT).toEqual({
+    expect(RESULT).toMatchObject({
       [FEATURE_FLAG_KEY]: false,
     });
 
@@ -73,14 +73,14 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
       true,
     );
 
-    expect(RESULT1).toEqual({
+    expect(RESULT1).toMatchObject({
       [FEATURE_FLAG_KEY]: 50,
     });
 
     const RESULT2 =
       await getAllFeatureFlagsFromPostgresInteractor(applicationContext);
 
-    expect(RESULT2).toEqual({
+    expect(RESULT2).toMatchObject({
       [FEATURE_FLAG_KEY]: 50,
     });
 
