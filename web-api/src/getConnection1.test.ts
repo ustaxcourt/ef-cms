@@ -23,5 +23,4 @@ describe('getConnection', () => {
     ]);
     expect(mockGetAuthToken).toHaveBeenCalledTimes(1);
   });
-
 });

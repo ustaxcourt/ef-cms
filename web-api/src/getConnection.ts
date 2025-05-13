@@ -17,9 +17,8 @@ export async function getConnection<T>({
   if (!dbInstance) {
     dbInstance = establishConnection();
   }
-  const ourDate = Date.now();
-  console.log('ourDate', ourDate);
-  if (ourDate > tokenExpirationTime) {
+
+  if (Date.now() > tokenExpirationTime) {
     if (pool) {
       await resetPoolPassword();
     }
@@ -29,7 +28,6 @@ export async function getConnection<T>({
 }
 
 async function establishConnection(): Promise<Kysely<Database>> {
-  console.log('GETTING CONNECTION!');
   try {
     poolConfig = getPoolConfig();
     let token: string | null = null;
@@ -70,26 +68,21 @@ async function getToken() {
   return token;
 }
 
-// let isResettingPassword: Promise<string> | null;
-// async function resetPoolPassword() {
-//   if (pool) {
-//     if (!isResettingPassword) {
-//       isResettingPassword = getToken();
-//     }
-//     const token = await isResettingPassword;
-//     pool.options.password = token;
-//     isResettingPassword = null;
-//   }
-// }
-
-let isResettingPassword: boolean;
+let tokenPromise: Promise<string> | null;
 async function resetPoolPassword() {
-  if (!isResettingPassword && pool) {
-    isResettingPassword = true;
+  if (pool) {
+    if (!tokenPromise) {
+      tokenPromise = getToken();
+    }
+    let token;
     try {
-      pool.options.password = await getToken();
+      token = await tokenPromise;
+      pool.options.password = token;
+    } catch (e) {
+      tokenExpirationTime = 0;
+      throw new Error(`Could not reset db password: ${e}`);
     } finally {
-      isResettingPassword = false;
+      tokenPromise = null;
     }
   }
 }
