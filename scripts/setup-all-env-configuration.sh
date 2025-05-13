@@ -5,6 +5,8 @@
 # Usage
 #   ENV=dev ./setup-all-env-configuration.sh
 
+# TODO: REFACTOR TO TYPESCRIPT
+
 ./check-env-variables.sh \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \

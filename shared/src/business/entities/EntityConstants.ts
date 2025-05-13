@@ -87,9 +87,6 @@ export const PARTY_VIEW_TABS = {
 };
 
 export const ALLOWLIST_FEATURE_FLAGS = {
-  CHIEF_JUDGE_NAME: {
-    key: 'chief-judge-name',
-  },
   DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
     key: 'document-visibility-policy-change-date',
   },
@@ -109,6 +106,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
 export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
   AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
     key: 'aws-batch-zipper-minimum-count',
+  },
+  CHIEF_JUDGE_NAME: {
+    key: 'chief-judge-name',
   },
 };
 
