@@ -10,14 +10,23 @@ const incrementCounter = async (year: string): Promise<number> => {
   if (!year) {
     year = `${getMonthDayYearInETObj().year}`;
   }
-  const twoDigitYear = year.slice(-2);
 
+  const yearAsNum = parseInt(year);
+  const biggerThanThis = parseInt(`${yearAsNum}000000`);
+  const smallerThanThis = parseInt(`${yearAsNum + 1}000000`);
+  console.log({
+    yearAsNum,
+    biggerThanThis,
+    smallerThanThis,
+  });
+  // 2024020545
   // Using DbWriter instead of DbReader to avoid latency between writer and reader
   const theCase = await getDbWriter({
     cb: writer =>
       writer
         .selectFrom('dwCase')
-        .where('docketNumber', 'like', `%-${twoDigitYear}`)
+        .where('sortableDocketNumber', '>=', biggerThanThis)
+        .where('sortableDocketNumber', '<', smallerThanThis)
         .select(['docketNumber', 'sortableDocketNumber'])
         .orderBy('sortableDocketNumber', 'desc')
         .executeTakeFirst(),
@@ -32,8 +41,8 @@ const incrementCounter = async (year: string): Promise<number> => {
 };
 
 export const getNextDocketNumber = async ({ year }: { year: string }) => {
+  const id = await incrementCounter(year);
   const twoDigitYear = year.slice(-2);
-  const id = await incrementCounter(twoDigitYear);
   return `${id}-${twoDigitYear}`;
 };
 
