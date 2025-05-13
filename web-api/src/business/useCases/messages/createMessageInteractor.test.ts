@@ -1,6 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
-import '@web-api/persistence/postgres/user/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,

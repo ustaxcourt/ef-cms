@@ -1,6 +1,6 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { PETITIONS_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { PETITIONS_SECTION } from '@shared/business/entities/EntityConstants';
 import { getUsersInSectionInteractor } from './getUsersInSectionInteractor';
 import {
   mockDocketClerkUser,
@@ -8,6 +8,9 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getUsersInSection as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
+
+const getUsersInSection = getUsersInSectionMock as jest.Mock;
 
 describe('Get users in section', () => {
   const MOCK_SECTION = [
@@ -38,13 +41,10 @@ describe('Get users in section', () => {
   ];
 
   it('retrieves the users in the petitions section', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue(MOCK_SECTION);
+    getUsersInSection.mockReturnValue(MOCK_SECTION);
     const sectionToGet = { section: PETITIONS_SECTION };
 
     const section = await getUsersInSectionInteractor(
-      applicationContext,
       sectionToGet,
       mockPetitionsClerkUser,
     );
@@ -54,17 +54,11 @@ describe('Get users in section', () => {
   });
 
   it('returns notfounderror when section not found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue(MOCK_SECTION);
+    getUsersInSection.mockReturnValue(MOCK_SECTION);
     let result = 'error';
     try {
       const sectionToGet = { section: 'unknown' };
-      await getUsersInSectionInteractor(
-        applicationContext,
-        sectionToGet,
-        mockPetitionsClerkUser,
-      );
+      await getUsersInSectionInteractor(sectionToGet, mockPetitionsClerkUser);
     } catch (e) {
       if (e instanceof NotFoundError) {
         result = 'error';
@@ -74,18 +68,12 @@ describe('Get users in section', () => {
   });
 
   it('returns unauthorizederror when user not authorized', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue(MOCK_SECTION);
+    getUsersInSection.mockReturnValue(MOCK_SECTION);
 
     let result = 'error';
     try {
       const sectionToGet = { section: 'unknown' };
-      await getUsersInSectionInteractor(
-        applicationContext,
-        sectionToGet,
-        mockPetitionerUser,
-      );
+      await getUsersInSectionInteractor(sectionToGet, mockPetitionerUser);
     } catch (e) {
       if (e instanceof UnauthorizedError) {
         result = 'error';
@@ -95,12 +83,9 @@ describe('Get users in section', () => {
   });
 
   it('retrieves the users in the judge section when the current user has the appropriate permissions', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue(MOCK_JUDGE_SECTION);
+    getUsersInSection.mockReturnValue(MOCK_JUDGE_SECTION);
     const sectionToGet = { section: 'judge' };
     const section = await getUsersInSectionInteractor(
-      applicationContext,
       sectionToGet,
       mockDocketClerkUser,
     );
@@ -109,16 +94,10 @@ describe('Get users in section', () => {
   });
 
   it('returns unauthorizedError when the desired section is judge and current user does not have appropriate permissions', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue(MOCK_JUDGE_SECTION);
+    getUsersInSection.mockReturnValue(MOCK_JUDGE_SECTION);
     const sectionToGet = { section: 'judge' };
     await expect(
-      getUsersInSectionInteractor(
-        applicationContext,
-        sectionToGet,
-        mockPetitionerUser,
-      ),
+      getUsersInSectionInteractor(sectionToGet, mockPetitionerUser),
     ).rejects.toThrow('Unauthorized');
   });
 });

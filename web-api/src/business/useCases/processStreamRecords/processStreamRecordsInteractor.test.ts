@@ -10,7 +10,7 @@ jest.mock('./processCaseCorrespondenceEntries');
 jest.mock('./processCaseWorksheetEntries');
 jest.mock('./processUserCaseNoteEntries');
 jest.mock('./processOtherEntries');
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { partitionRecords } from './processStreamUtilities';
 import { processCaseCorrespondenceEntries } from '@web-api/business/useCases/processStreamRecords/processCaseCorrespondenceEntries';
