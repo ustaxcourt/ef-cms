@@ -22,7 +22,16 @@ export const getDocumentQCInboxForSection = async ({
       builder = builder.where('w.associatedJudge', '=', judgeUserName);
     }
 
-    return builder.selectAll().select('w.docketNumber').execute();
+    return builder
+      .selectAll('w')
+      .select([
+        'c.caption',
+        'c.status',
+        'c.trialDate',
+        'c.trialLocation',
+        'c.leadDocketNumber',
+      ])
+      .execute();
   });
 
   return workItems.map(workItem => workItemEntity(workItem));

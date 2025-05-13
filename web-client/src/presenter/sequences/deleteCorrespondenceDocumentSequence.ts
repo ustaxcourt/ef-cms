@@ -1,7 +1,6 @@
 import { archiveCorrespondenceDocumentAction } from '../actions/CorrespondenceDocument/archiveCorrespondenceDocumentAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { getCaseAction } from '../actions/getCaseAction';
 import { getDeleteCorrespondenceDocumentAlertErrorAction } from '../actions/CorrespondenceDocument/getDeleteCorrespondenceDocumentAlertErrorAction';
 import { getDeleteCorrespondenceDocumentAlertSuccessAction } from '../actions/CorrespondenceDocument/getDeleteCorrespondenceDocumentAlertSuccessAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
@@ -22,7 +21,6 @@ export const deleteCorrespondenceDocumentSequence =
       success: [
         getDeleteCorrespondenceDocumentAlertSuccessAction,
         setAlertSuccessAction,
-        getCaseAction,
         setCaseAction,
         getMessagesForCaseAction,
         ...loadDefaultViewerCorrespondenceSequence,

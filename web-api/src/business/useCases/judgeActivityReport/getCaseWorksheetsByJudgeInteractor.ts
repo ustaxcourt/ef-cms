@@ -1,13 +1,16 @@
 import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
-import { JudgeActivityReportSearch } from '../../../../../shared/src/business/entities/judgeActivityReport/JudgeActivityReportSearch';
+import { JudgeActivityReportSearch } from '@shared/business/entities/judgeActivityReport/JudgeActivityReportSearch';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { RawCaseWorksheet } from '@shared/business/entities/caseWorksheet/CaseWorksheet';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { SubmittedCAVTableFields } from '@web-api/persistence/elasticsearch/getDocketNumbersByStatusAndByJudge';
+import {
+  SubmittedCAVTableFields,
+  getDocketNumbersByStatusAndByJudge,
+} from '@web-api/persistence/postgres/cases/reports/getDocketNumbersByStatusAndByJudge';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getConsolidatedCasesCount } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getCaseWorksheetsByDocketNumber } from '@web-api/persistence/postgres/caseWorksheets/getCaseWorksheetsByDocketNumber';
 
 export type GetCasesByStatusAndByJudgeRequest = {
@@ -21,7 +24,6 @@ export type GetCasesByStatusAndByJudgeResponse = SubmittedCAVTableFields & {
 };
 
 export const getCaseWorksheetsByJudgeInteractor = async (
-  applicationContext: ServerApplicationContext,
   params: GetCasesByStatusAndByJudgeRequest,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
@@ -36,14 +38,12 @@ export const getCaseWorksheetsByJudgeInteractor = async (
     throw new InvalidRequest('Invalid search terms');
   }
 
-  const caseRecords = await getCases(applicationContext, searchEntity);
+  const caseRecords = await getCases(searchEntity);
 
   const allCaseResults = await Promise.all(
     caseRecords.map(async caseRecord => {
-      const numConsolidatedCases = await calculateNumberOfConsolidatedCases(
-        applicationContext,
-        caseRecord,
-      );
+      const numConsolidatedCases =
+        await calculateNumberOfConsolidatedCases(caseRecord);
 
       return {
         ...caseRecord,
@@ -57,40 +57,30 @@ export const getCaseWorksheetsByJudgeInteractor = async (
   };
 };
 
-const getCases = async (
-  applicationContext: ServerApplicationContext,
-  searchEntity: JudgeActivityReportSearch,
-) => {
-  const allCaseRecords = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByStatusAndByJudge({
-      applicationContext,
-      params: {
-        excludeMemberCases: true,
-        judges: searchEntity.judges,
-        statuses: searchEntity.statuses,
-      },
-    });
+const getCases = async (searchEntity: JudgeActivityReportSearch) => {
+  const allCaseRecords = await getDocketNumbersByStatusAndByJudge({
+    params: {
+      excludeMemberCases: true,
+      judges: searchEntity.judges,
+      statuses: searchEntity.statuses,
+    },
+  });
 
   const completeCaseRecords = await attachCaseWorkSheets(allCaseRecords);
 
   return completeCaseRecords;
 };
 
-const calculateNumberOfConsolidatedCases = async (
-  applicationContext: ServerApplicationContext,
-  caseInfo: { leadDocketNumber?: string },
-) => {
+const calculateNumberOfConsolidatedCases = async (caseInfo: {
+  leadDocketNumber?: string;
+}) => {
   if (!caseInfo.leadDocketNumber) {
     return 1;
   }
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .getCountOfConsolidatedCases({
-      applicationContext,
-      leadDocketNumber: caseInfo.leadDocketNumber,
-    });
+  return await getConsolidatedCasesCount({
+    leadDocketNumber: caseInfo.leadDocketNumber,
+  });
 };
 
 async function attachCaseWorkSheets(cases: SubmittedCAVTableFields[]) {

@@ -18,8 +18,8 @@ export class Petitioner extends JoiValidationEntity {
   public countryType: string;
   public email?: string;
   public paperPetitionEmail?: string;
-  public hasConsentedToEService?: boolean;
-  public hasEAccess?: boolean;
+  public hasConsentedToElectronicService?: boolean;
+  public hasElectronicAccess?: boolean;
   public inCareOf?: string;
   public isAddressSealed: boolean;
   public name: string;
@@ -46,15 +46,16 @@ export class Petitioner extends JoiValidationEntity {
     this.countryType = rawProps.countryType;
     this.email = rawProps.email;
     this.paperPetitionEmail = rawProps.paperPetitionEmail;
-    this.hasConsentedToEService = rawProps.hasConsentedToEService;
-    this.hasEAccess = rawProps.hasEAccess || undefined;
+    this.hasConsentedToElectronicService =
+      rawProps.hasConsentedToElectronicService ?? undefined;
+    this.hasElectronicAccess = rawProps.hasElectronicAccess ?? undefined;
     this.inCareOf = rawProps.inCareOf;
-    this.isAddressSealed = rawProps.isAddressSealed || false;
+    this.isAddressSealed = rawProps.isAddressSealed ?? false;
     this.name = rawProps.name;
     this.phone = formatPhoneNumber(rawProps.phone);
     this.postalCode = rawProps.postalCode;
     this.placeOfLegalResidence = rawProps.placeOfLegalResidence;
-    this.sealedAndUnavailable = rawProps.sealedAndUnavailable || false;
+    this.sealedAndUnavailable = rawProps.sealedAndUnavailable ?? false;
     this.secondaryName = rawProps.secondaryName;
     this.serviceIndicator = rawProps.serviceIndicator;
     this.state = rawProps.state;
@@ -74,7 +75,7 @@ export class Petitioner extends JoiValidationEntity {
     )
       .required()
       .messages({ '*': 'Select a role type' }),
-    email: JoiValidationConstants.EMAIL.when('hasEAccess', {
+    email: JoiValidationConstants.EMAIL.when('hasElectronicAccess', {
       is: true,
       otherwise: joi.optional(),
       then: joi.required(),
@@ -82,13 +83,13 @@ export class Petitioner extends JoiValidationEntity {
       'any.required': 'Enter a valid email address',
       'string.email': 'Enter email address in format: yourname@example.com',
     }),
-    hasConsentedToEService: joi
+    hasConsentedToElectronicService: joi
       .boolean()
       .optional()
       .description(
         'Flag that indicates the petitioner has consented to receive electronic service on a paper petition',
       ),
-    hasEAccess: joi
+    hasElectronicAccess: joi
       .boolean()
       .optional()
       .description(

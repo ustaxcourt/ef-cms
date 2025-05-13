@@ -1,11 +1,11 @@
-import {
-  image1,
-  image2,
-} from '../../../../shared/src/business/useCases/scannerMockFiles';
+import { image1, image2 } from '@shared/business/useCases/scannerMockFiles';
 
 let scanBuffer: Blob[] = [];
 
 const DWObject = {
+  IfDisableSourceAfterAcquire: false,
+  IfDuplexEnabled: false,
+  IfFeederEnabled: false,
   AcquireImage: () => {
     const b64toBlob = (b64Data, contentType = '', sliceSize = 512) => {
       const byteCharacters = atob(b64Data);
@@ -49,7 +49,7 @@ const DWObject = {
     scanBuffer = [];
     DWObject.HowManyImagesInBuffer = 0;
   },
-  SelectSourceByIndex: () => null,
+  SelectSourceByIndex: index => index,
 };
 
 export const getScannerMockInterface = () => {
@@ -113,12 +113,13 @@ export const getScannerMockInterface = () => {
     DWObject.AcquireImage();
 
     const count = DWObject.HowManyImagesInBuffer;
-    const promises = [];
-    const response = { error: null, scannedBuffer: null };
+    const promises: Promise<unknown>[] = [];
+    const response: { error: string | null; scannedBuffer: unknown[] | null } =
+      { error: null, scannedBuffer: null };
     for (let index = 0; index < count; index++) {
       promises.push(
-        new Promise((resolve, reject) => {
-          DWObject.ConvertToBlob([index], null, resolve, reject);
+        new Promise(resolve => {
+          DWObject.ConvertToBlob([index], null, resolve);
         }),
       );
     }

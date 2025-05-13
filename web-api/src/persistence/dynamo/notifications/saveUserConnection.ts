@@ -1,3 +1,4 @@
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { put } from '../../dynamodbClientService';
 
 const TIME_TO_EXIST = 60 * 60 * 24;
@@ -25,7 +26,7 @@ export const saveUserConnection = ({
   endpoint: string;
   userId: string;
 }) =>
-  Promise.all([
+  settlePromises([
     put({
       Item: {
         clientConnectionId,
