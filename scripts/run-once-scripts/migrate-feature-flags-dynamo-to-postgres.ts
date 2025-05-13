@@ -2,7 +2,10 @@ import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { getDbWriter } from '@web-api/database';
 
-const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = ['aws-batch-zipper-minimum-count'];
+const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
+	'aws-batch-zipper-minimum-count',
+	'chief-judge-name'
+];
 
 const { STAGE } = process.env;
 
