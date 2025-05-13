@@ -2,7 +2,7 @@ import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -16,7 +16,6 @@ import {
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
-import { updateUser } from '@web-api/gateways/user/updateUser';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
@@ -33,6 +32,8 @@ export const verifyUserPendingEmail = async (
   const user = await getUserByIdOnceAllUpdatesComplete({
     userId: authorizedUser.userId,
   });
+
+  // 10495 TODO: add logic to throw error if no user is retrieved?
 
   if (
     !user.pendingEmailVerificationToken ||
@@ -65,7 +66,7 @@ export const verifyUserPendingEmail = async (
     user,
   });
 
-  await updateUser(applicationContext, {
+  await applicationContext.getUserGateway().updateUser(applicationContext, {
     attributesToUpdate: { email: updatedUser.email },
     email: user.email!,
   });

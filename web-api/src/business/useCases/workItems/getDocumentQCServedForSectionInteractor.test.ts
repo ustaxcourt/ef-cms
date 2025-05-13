@@ -1,11 +1,12 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_USERS } from '../../../../../shared/src/test/mockUsers';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_USERS } from '@shared/test/mockUsers';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   calculateAfterDate,
   getDocumentQCServedForSectionInteractor,
@@ -13,13 +14,16 @@ import {
 import {
   calculateDate,
   createISODateAtStartOfDayEST,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { getDocumentQCServedForSection as getDocumentQCServedForSectionMock } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('getDocumentQCServedForSectionInteractor', () => {
   const getDocumentQCServedForSection =
@@ -69,8 +73,7 @@ describe('getDocumentQCServedForSectionInteractor', () => {
           section: DOCKET_SECTION,
         },
       ]);
-      applicationContext.getPersistenceGateway().getUserById = ({ userId }) =>
-        MOCK_USERS[userId];
+      getUserById.mockResolvedValue(({ userId }) => MOCK_USERS[userId]);
 
       applicationContext.getUniqueId.mockReturnValue(
         'eca3e1ba-7ee6-4097-958e-2365a6515f8e',

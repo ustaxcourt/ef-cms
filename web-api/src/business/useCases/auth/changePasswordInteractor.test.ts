@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   ChallengeNameType,
   CodeMismatchException,
@@ -19,6 +20,11 @@ import {
   updateUserPendingEmailRecord,
 } from './changePasswordInteractor';
 import jwt from 'jsonwebtoken';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { updateUser as updateUserMock } from '@web-api/persistence/postgres/users/updateUser';
+
+const getUserById = getUserByIdMock as jest.Mock;
+const updateUser = updateUserMock as jest.Mock;
 
 describe('changePasswordInteractor', () => {
   const mockUserId = '8c2af03d-d736-4561-afe3-c78b67b7cc59';
@@ -76,9 +82,7 @@ describe('changePasswordInteractor', () => {
           mockRespondToAuthChallengeResponse,
         );
 
-      applicationContext
-        .getPersistenceGateway()
-        .getUserById.mockImplementation(() => mockUserWithPendingEmail);
+      getUserById.mockImplementation(() => mockUserWithPendingEmail);
     });
 
     it('should throw an error when the user is NOT in NEW_PASSWORD_REQUIRED state', async () => {
@@ -114,11 +118,8 @@ describe('changePasswordInteractor', () => {
           tempPassword: mockPassword,
         });
 
-        expect(
-          applicationContext.getPersistenceGateway().updateUser.mock
-            .calls[0][0],
-        ).toMatchObject({
-          user: {
+        expect(updateUser.mock.calls[0][0]).toMatchObject({
+          userToUpdate: {
             email: mockUserWithPendingEmail.pendingEmail,
             pendingEmail: undefined,
             pendingEmailVerificationToken: undefined,
@@ -157,11 +158,8 @@ describe('changePasswordInteractor', () => {
           tempPassword: mockPassword,
         });
 
-        expect(
-          applicationContext.getPersistenceGateway().updateUser.mock
-            .calls[0][0],
-        ).toMatchObject({
-          user: {
+        expect(updateUser.mock.calls[0][0]).toMatchObject({
+          userToUpdate: {
             email: mockUserWithPendingEmail.pendingEmail,
             pendingEmail: undefined,
             pendingEmailVerificationToken: undefined,
@@ -338,7 +336,7 @@ describe('updateUserPendingEmailRecord', () => {
   });
 
   it('should set isUpdatingInformation to true if flag is enabled', async () => {
-    await updateUserPendingEmailRecord(applicationContext, {
+    await updateUserPendingEmailRecord({
       setIsUpdatingInformation: true,
       user: {
         ...petitionerUser,
@@ -346,16 +344,15 @@ describe('updateUserPendingEmailRecord', () => {
       },
     });
 
-    const updateUserCalls =
-      applicationContext.getPersistenceGateway().updateUser.mock.calls;
+    const updateUserCalls = updateUser.mock.calls;
     expect(updateUserCalls.length).toEqual(1);
-    expect(updateUserCalls[0][0].user).toMatchObject({
+    expect(updateUserCalls[0][0].userToUpdate).toMatchObject({
       isUpdatingInformation: true,
     });
   });
 
   it('should not update isUpdatingInformation property when flag is disabled', async () => {
-    await updateUserPendingEmailRecord(applicationContext, {
+    await updateUserPendingEmailRecord({
       setIsUpdatingInformation: false,
       user: {
         ...petitionerUser,
@@ -363,10 +360,9 @@ describe('updateUserPendingEmailRecord', () => {
       },
     });
 
-    const updateUserCalls =
-      applicationContext.getPersistenceGateway().updateUser.mock.calls;
+    const updateUserCalls = updateUser.mock.calls;
     expect(updateUserCalls.length).toEqual(1);
-    expect(updateUserCalls[0][0].user).toMatchObject({
+    expect(updateUserCalls[0][0].userToUpdate).toMatchObject({
       isUpdatingInformation: false,
     });
   });

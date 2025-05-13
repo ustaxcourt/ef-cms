@@ -14,7 +14,6 @@ import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 import jwt from 'jsonwebtoken';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 
@@ -81,7 +80,9 @@ export const changePasswordInteractor = async (
 
       return result;
     } else {
-      const user = await getUserByEmail(applicationContext, { email });
+      const user = await applicationContext
+        .getUserGateway()
+        .getUserByEmail(applicationContext, { email });
 
       if (!user) {
         throw new NotFoundError(`User not found with email: ${email}`);

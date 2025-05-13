@@ -1,25 +1,34 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { DateTime } from 'luxon';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   TOKEN_EXPIRATION_TIME_HOURS,
   userTokenHasExpired,
   verifyUserPendingEmailInteractor,
 } from './verifyUserPendingEmailInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
-import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { sleep } from '@shared/tools/helpers';
-import { validUser } from '../../../../../shared/src/test/mockUsers';
+import { validUser } from '@shared/test/mockUsers';
+import { updateUser as updateUserMock } from '@web-api/persistence/postgres/users/updateUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+
+const updateUser = updateUserMock as jest.Mock;
+const getDocketNumbersByUser = getDocketNumbersByUserMock as jest.Mock;
+const getUserByIdOnceAllUpdatesComplete =
+  getUserByIdOnceAllUpdatesCompleteMock as jest.Mock;
 
 describe('Verify User Pending Email', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
@@ -39,11 +48,9 @@ describe('Verify User Pending Email', () => {
   beforeEach(() => {
     const TOTAL_CASE_COUNT = 100;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockResolvedValue(
-        Array(TOTAL_CASE_COUNT).fill(undefined),
-      );
+    getDocketNumbersByUser.mockResolvedValue(
+      Array(TOTAL_CASE_COUNT).fill(undefined),
+    );
 
     applicationContext
       .getPersistenceGateway()
@@ -112,9 +119,7 @@ describe('Verify User Pending Email', () => {
     };
 
     beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getUserByIdOnceAllUpdatesComplete.mockReturnValue(mockPractitioner);
+      getUserByIdOnceAllUpdatesComplete.mockReturnValue(mockPractitioner);
 
       applicationContext
         .getPersistenceGateway()
@@ -150,12 +155,10 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw an unauthorized error when the token passed as an argument and the token store on the user are both undefined', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getUserByIdOnceAllUpdatesComplete.mockReturnValue({
-          ...mockPractitioner,
-          pendingEmailVerificationToken: undefined,
-        });
+      getUserByIdOnceAllUpdatesComplete.mockReturnValue({
+        ...mockPractitioner,
+        pendingEmailVerificationToken: undefined,
+      });
 
       await expect(
         verifyUserPendingEmailInteractor(
@@ -169,12 +172,10 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw an unauthorized error when there is no token timestamp', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getUserByIdOnceAllUpdatesComplete.mockReturnValue({
-          ...mockPractitioner,
-          pendingEmailVerificationTokenTimestamp: undefined,
-        });
+      getUserByIdOnceAllUpdatesComplete.mockReturnValue({
+        ...mockPractitioner,
+        pendingEmailVerificationTokenTimestamp: undefined,
+      });
 
       await expect(
         verifyUserPendingEmailInteractor(
@@ -188,12 +189,10 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw an unauthorized error when token timestamp is expired', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getUserByIdOnceAllUpdatesComplete.mockReturnValue({
-          ...mockPractitioner,
-          pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
-        });
+      getUserByIdOnceAllUpdatesComplete.mockReturnValue({
+        ...mockPractitioner,
+        pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
+      });
 
       await expect(
         verifyUserPendingEmailInteractor(
@@ -250,10 +249,7 @@ describe('Verify User Pending Email', () => {
         mockPrivatePractitionerUser,
       );
 
-      expect(
-        applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-          .user,
-      ).toMatchObject({
+      expect(updateUser.mock.calls[0][0].userToUpdate).toMatchObject({
         email: 'other@example.com',
         pendingEmail: undefined,
         pendingEmailVerificationToken: undefined,
@@ -270,10 +266,7 @@ describe('Verify User Pending Email', () => {
         mockPrivatePractitionerUser,
       );
 
-      expect(
-        applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-          .user,
-      ).toMatchObject({
+      expect(updateUser.mock.calls[0][0].userToUpdate).toMatchObject({
         email: 'other@example.com',
         entityName: 'Practitioner',
         pendingEmail: undefined,
@@ -284,9 +277,7 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should call updateUser with email set to pendingEmail and pending fields set to undefined', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getUserByIdOnceAllUpdatesComplete.mockReturnValue(mockPetitioner);
+      getUserByIdOnceAllUpdatesComplete.mockReturnValue(mockPetitioner);
 
       await verifyUserPendingEmailInteractor(
         applicationContext,
@@ -296,10 +287,7 @@ describe('Verify User Pending Email', () => {
         mockPetitionerUser,
       );
 
-      expect(
-        applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-          .user,
-      ).toMatchObject({
+      expect(updateUser.mock.calls[0][0].userToUpdate).toMatchObject({
         email: 'other@example.com',
         pendingEmail: undefined,
         pendingEmailVerificationToken: undefined,
@@ -313,11 +301,9 @@ describe('Verify User Pending Email', () => {
       let resolver: Function;
       let errorMessage: string;
 
-      applicationContext
-        .getPersistenceGateway()
-        .getUserByIdOnceAllUpdatesComplete.mockImplementation(() => {
-          return new Promise(resolve => (resolver = resolve));
-        });
+      getUserByIdOnceAllUpdatesComplete.mockImplementation(() => {
+        return new Promise(resolve => (resolver = resolve));
+      });
 
       verifyUserPendingEmailInteractor(
         applicationContext,
