@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
@@ -17,6 +18,7 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getCasesInConsolidatedGroup as getCasesInConsolidatedGroupMock } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getCaseMetadataByDocketNumber =
   getCaseMetadataByDocketNumberMock as jest.Mock;
@@ -24,6 +26,7 @@ const getCasesInConsolidatedGroup =
   getCasesInConsolidatedGroupMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -84,9 +87,7 @@ describe('addPaperFilingInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined; // unlocked
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
     updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>

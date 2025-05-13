@@ -1,13 +1,14 @@
-import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/user/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createMessageInteractor } from './createMessageInteractor';
 import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -15,9 +16,11 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const createMessage = createMessageMock as jest.Mock;
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('createMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -55,9 +58,8 @@ describe('createMessageInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValueOnce({
+    getUserById
+      .mockReturnValueOnce({
         name: 'Test Petitionsclerk',
         role: ROLES.petitionsClerk,
         section: PETITIONS_SECTION,

@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
@@ -32,6 +33,7 @@ import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/case
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('fileExternalDocumentInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -49,6 +51,7 @@ describe('fileExternalDocumentInteractor', () => {
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
   );
+  const getUserById = getUserByIdMock as jest.Mock;
 
   let caseRecord;
   let mockLock;
@@ -133,9 +136,7 @@ describe('fileExternalDocumentInteractor', () => {
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockIrsPractitionerUser);
+    getUserById.mockReturnValue(mockIrsPractitionerUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     getCasesByDocketNumbers.mockResolvedValue([caseRecord]);

@@ -2,6 +2,7 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -34,12 +35,14 @@ import {
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCase = jest.mocked(updateCaseMock);
+  const getUserById = getUserByIdMock as jest.Mock;
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
   );
@@ -557,9 +560,7 @@ describe('updatePetitionerInformationInteractor', () => {
       email: undefined,
       userId: applicationContext.getUniqueId(),
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(unverifiedNewPetitioner);
+    getUserById.mockReturnValue(unverifiedNewPetitioner);
 
     await updatePetitionerInformationInteractor(
       applicationContext,
@@ -629,9 +630,7 @@ describe('updatePetitionerInformationInteractor', () => {
         .getUserGateway()
         .getUserByEmail.mockReturnValue('someMockId');
 
-      applicationContext
-        .getPersistenceGateway()
-        .getUserById.mockReturnValue(foundMockVerifiedPetitioner);
+      getUserById.mockReturnValue(foundMockVerifiedPetitioner);
 
       applicationContext
         .getUseCaseHelpers()

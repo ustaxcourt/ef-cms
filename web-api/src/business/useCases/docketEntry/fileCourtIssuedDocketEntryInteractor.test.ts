@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   DOCKET_SECTION,
@@ -21,6 +22,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -39,6 +41,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
   );
+  const getUserById = getUserByIdMock as jest.Mock;
 
   beforeAll(() => {
     applicationContext
@@ -48,9 +51,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     caseRecord = {
       ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,

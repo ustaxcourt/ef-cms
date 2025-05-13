@@ -1,6 +1,6 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getDocumentQCInboxForUserInteractor } from './getDocumentQCInboxForUserInteractor';
 import { getDocumentQCInboxForUser as getDocumentQCInboxForUserMock } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
@@ -8,9 +8,11 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('getDocumentQCInboxForUserInteractor', () => {
   const getDocumentQCInboxForUser = getDocumentQCInboxForUserMock as jest.Mock;
+  const getUserById = getUserByIdMock as jest.Mock;
 
   const workItems = [
     {
@@ -28,9 +30,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
   beforeEach(() => {
     getDocumentQCInboxForUser.mockResolvedValue(workItems);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
   });
 
   it('should throw an error when the user does not have access retrieve work items', async () => {
