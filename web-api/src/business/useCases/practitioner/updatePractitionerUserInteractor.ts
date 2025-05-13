@@ -48,14 +48,13 @@ export const updatePractitionerUser = async (
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
-  const oldUser = (
-    await getPractitionerByBarNumber({ barNumber })
-  ).toRawObject();
+  const oldUserEntity = await getPractitionerByBarNumber({ barNumber });
 
-  if (!oldUser) {
+  if (!oldUserEntity) {
     throw new NotFoundError('Could not find user');
   }
 
+  const oldUser = oldUserEntity.toRawObject();
   const userHasAccount = !!oldUser.email;
   const userIsUpdatingEmail = !!user.updatedEmail;
 

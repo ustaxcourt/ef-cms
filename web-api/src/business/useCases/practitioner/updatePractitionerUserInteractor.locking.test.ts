@@ -1,16 +1,26 @@
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import {
-  MOCK_PRACTITIONER,
-} from '../../../../../shared/src/test/mockUsers';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
+  Practitioner,
+  RawPractitioner,
+} from '@shared/business/entities/Practitioner';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
   updatePractitionerUserInteractor,
 } from './updatePractitionerUserInteractor';
 import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
+import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@web-api/persistence/postgres/practitioners/getPractitionerByBarNumber';
+import { updatePractitionerUser as updatePractitionerUserMock } from '@web-api/persistence/postgres/practitioners/updatePractitionerUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+
+const getPractitionerByBarNumber = getPractitionerByBarNumberMock as jest.Mock;
+const updatePractitionerUser = updatePractitionerUserMock as jest.Mock;
+const getDocketNumbersByUser = getDocketNumbersByUserMock as jest.Mock;
 
 describe('determineEntitiesToLock', () => {
   const mockPractitioner: RawPractitioner = MOCK_PRACTITIONER;
@@ -20,16 +30,11 @@ describe('determineEntitiesToLock', () => {
       barNumber: 'pt101',
       user: mockPractitioner,
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
+    getDocketNumbersByUser.mockReturnValue(['111-20', '222-20', '333-20']);
   });
   it('should lookup the docket numbers for the specified user', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
-    expect(
-      applicationContext.getPersistenceGateway().getDocketNumbersByUser,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getDocketNumbersByUser).toHaveBeenCalledWith({
       userId: mockPractitioner.userId,
     });
   });
@@ -59,13 +64,11 @@ describe('updatePractitionerUserInteractor', () => {
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getPractitionerByBarNumber.mockReturnValue(MOCK_PRACTITIONER);
+    getPractitionerByBarNumber.mockReturnValue(
+      new Practitioner(MOCK_PRACTITIONER),
+    );
 
-    applicationContext
-      .getPersistenceGateway()
-      .updatePractitionerUser.mockImplementation(({ user }) => user);
+    updatePractitionerUser.mockImplementation(({ user }) => user);
   });
 
   beforeEach(() => {
@@ -75,9 +78,7 @@ describe('updatePractitionerUserInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockReturnValue([MOCK_CASE.docketNumber]);
+    getDocketNumbersByUser.mockReturnValue([MOCK_CASE.docketNumber]);
   });
 
   describe('locked', () => {

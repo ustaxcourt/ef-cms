@@ -91,10 +91,6 @@ jest.mock('@web-api/persistence/postgres/users/cases/deleteUserFromCase', () =>
   mockFactory('deleteUserFromCase'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/cases/getCasesForUser', () =>
-  mockFactory('getCasesForUser'),
-);
-
 jest.mock('@web-api/persistence/postgres/users/cases/verifyCaseForUser', () =>
   mockFactory('verifyCaseForUser'),
 );

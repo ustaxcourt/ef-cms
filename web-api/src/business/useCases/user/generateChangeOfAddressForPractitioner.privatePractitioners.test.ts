@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -11,8 +12,9 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
-import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
@@ -21,6 +23,8 @@ jest.mock('../addCoversheetInteractor', () => ({
 }));
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCasesForUser = getCasesForUserMock as jest.Mock;
+const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
 
 describe('generateChangeOfAddress', () => {
   const { docketNumber } = MOCK_CASE;
@@ -72,9 +76,7 @@ describe('generateChangeOfAddress', () => {
       );
   });
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([{ docketNumber }]);
+    getCasesForUser.mockReturnValue([{ docketNumber }]);
 
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithPrivatePractitioner);
 
@@ -104,9 +106,7 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
 
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser,
-    ).toHaveBeenCalled();
+    expect(getCasesForUser).toHaveBeenCalled();
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -137,12 +137,10 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should call applicationContext.logger.error and continue processing the next case if the case currently being processed is invalid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValueOnce([
-        { ...mockCaseWithPrivatePractitioner, docketNumber: undefined },
-        mockCaseWithPrivatePractitioner,
-      ]);
+    getCasesForUser.mockReturnValueOnce([
+      { ...mockCaseWithPrivatePractitioner, docketNumber: undefined },
+      mockCaseWithPrivatePractitioner,
+    ]);
     getCaseByDocketNumber
       .mockResolvedValue({
         ...mockCaseWithPrivatePractitioner,

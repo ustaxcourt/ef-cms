@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
@@ -14,6 +15,7 @@ import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@w
 import { updatePractitionerUser as updatePractitionerUserMock } from '@web-api/persistence/postgres/practitioners/updatePractitionerUser';
 import { createNewPractitionerUser as createNewPractitionerUserMock } from '@web-api/persistence/postgres/practitioners/createNewPractitionerUser';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
+import { Practitioner } from '@shared/business/entities/Practitioner';
 
 const getPractitionerByBarNumber = getPractitionerByBarNumberMock as jest.Mock;
 const updatePractitionerUser = updatePractitionerUserMock as jest.Mock;
@@ -29,7 +31,9 @@ describe('updatePractitionerUser', () => {
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockReturnValue(['123-23']);
 
-    getPractitionerByBarNumber.mockImplementation(() => mockPractitioner);
+    getPractitionerByBarNumber.mockImplementation(
+      () => new Practitioner(mockPractitioner),
+    );
     updatePractitionerUser.mockImplementation(({ user }) => user);
     createNewPractitionerUser.mockImplementation(({ user }) => user);
 
@@ -75,10 +79,12 @@ describe('updatePractitionerUser', () => {
   });
 
   it('throws an error if the barNumber/userId combo passed in does not match the user retrieved from getPractitionerByBarNumber', async () => {
-    getPractitionerByBarNumber.mockResolvedValue({
-      ...mockPractitioner,
-      userId: '2c14ebbc-a6e1-4267-b6b7-e329e592ec93',
-    });
+    getPractitionerByBarNumber.mockResolvedValue(
+      new Practitioner({
+        ...mockPractitioner,
+        userId: '2c14ebbc-a6e1-4267-b6b7-e329e592ec93',
+      }),
+    );
 
     await expect(
       updatePractitionerUserInteractor(
@@ -174,10 +180,12 @@ describe('updatePractitionerUser', () => {
   });
 
   it('creates and updates the practitioner user and adds a pending email when the original user did not have an email', async () => {
-    getPractitionerByBarNumber.mockResolvedValue({
-      ...mockPractitioner,
-      email: undefined,
-    });
+    getPractitionerByBarNumber.mockResolvedValue(
+      new Practitioner({
+        ...mockPractitioner,
+        email: undefined,
+      }),
+    );
 
     await updatePractitionerUserInteractor(
       applicationContext,
@@ -200,10 +208,12 @@ describe('updatePractitionerUser', () => {
   });
 
   it('should update practitioner information when the practitioner does not have an email and is not updating their email', async () => {
-    getPractitionerByBarNumber.mockResolvedValue({
-      ...mockPractitioner,
-      email: undefined,
-    });
+    getPractitionerByBarNumber.mockResolvedValue(
+      new Practitioner({
+        ...mockPractitioner,
+        email: undefined,
+      }),
+    );
 
     await updatePractitionerUserInteractor(
       applicationContext,
