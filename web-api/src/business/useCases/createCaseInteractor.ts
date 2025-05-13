@@ -28,7 +28,7 @@ import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
-export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
+export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
 
 const addPetitionDocketEntryToCase = ({
   caseToAdd,
@@ -250,11 +250,13 @@ const createCaseMetadata = async (
     });
   }
 
+  console.time('docketNumber investigation createCaseAndAssociations');
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
+  console.timeEnd('docketNumber investigation createCaseAndAssociations');
 
   return { caseToAdd, workItem: newWorkItem };
 };
@@ -317,14 +319,16 @@ export const createCaseInteractor = async (
     privatePractitioners = [practitionerUser];
   }
 
+  console.time('docketNumber investigation, create case');
+  console.time('docketNumber investigation, acquiring lock');
   await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    retries: 10,
+    retries: 25,
     waitTime: 500,
   });
-
+  console.timeEnd('docketNumber investigation, acquiring lock');
   let caseToAdd: Case;
   let workItem: WorkItem;
 
@@ -348,6 +352,7 @@ export const createCaseInteractor = async (
       applicationContext,
       identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
     });
+    console.timeEnd('docketNumber investigation, create case');
   }
 
   const userCaseEntity = new UserCase(caseToAdd);
