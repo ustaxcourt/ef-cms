@@ -1,4 +1,4 @@
-import { NewFeatureFlagKysely } from '@web-api/database-types';
+import { NewFeatureFlagKysely } from '@web-api/persistence/postgres/featureFlags/schema';
 
 export const featureFlags: NewFeatureFlagKysely[] = [
   {
