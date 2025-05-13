@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -18,8 +19,10 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -67,9 +70,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCorrespondenceId = '14bb669b-0962-4781-87a0-50718f556e2b';
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     updateCase.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
@@ -107,9 +108,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   });
 
   it('should add the correspondence document to the case when the case entity is valid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
     getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await fileCorrespondenceDocumentInteractor(

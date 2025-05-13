@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
@@ -18,6 +19,7 @@ import { testPdfDoc } from '@shared/business/test/getFakeFile';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 let MOCK_DATE;
 
@@ -38,6 +40,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const getUserById = getUserByIdMock as jest.Mock;
   let caseRecord: RawCase;
   let mockWorkItem;
   let mockDocketEntryWithWorkItem;
@@ -97,9 +100,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     getCasesByDocketNumbers.mockResolvedValue([caseRecord]);

@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
@@ -18,6 +19,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getCasesByDocketNumber = jest.mocked(getCasesByDocketNumbersMock);
@@ -25,6 +27,7 @@ const updateCase = jest.mocked(updateCaseMock);
 updateCase.mockImplementation(({ caseToUpdate }) =>
   Promise.resolve(caseToUpdate),
 );
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -91,9 +94,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getLock.mockImplementation(() => mockLock);
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     getCasesByDocketNumber.mockResolvedValue([mockCase]);
     getCaseByDocketNumber.mockResolvedValue(mockCase);

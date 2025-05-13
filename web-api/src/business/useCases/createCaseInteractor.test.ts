@@ -1,4 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -21,6 +23,9 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -32,6 +37,9 @@ jest.mock('@shared/business/utilities/DateHandler', () => {
     createISODateString: jest.fn(),
   };
 });
+const getUserById = getUserByIdMock as jest.Mock;
+const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
+const getPractitionerById = getPractitionerByIdMock as jest.Mock;
 
 describe('createCaseInteractor', () => {
   let user;
@@ -75,13 +83,9 @@ describe('createCaseInteractor', () => {
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    (generateDocketNumber as jest.Mock).mockResolvedValue(
-      '00101-00',
-    );
+    (generateDocketNumber as jest.Mock).mockResolvedValue('00101-00');
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => user);
+    getUserById.mockImplementation(() => user);
 
     applicationContext
       .getUseCases()
@@ -144,9 +148,7 @@ describe('createCaseInteractor', () => {
         },
       ],
     });
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
   });
 
@@ -158,6 +160,8 @@ describe('createCaseInteractor', () => {
       role: ROLES.privatePractitioner,
       userId: '330d4b65-620a-489d-8414-6623653ebc4f',
     };
+
+    getPractitionerById.mockResolvedValue(user);
 
     const result = await createCaseInteractor(
       applicationContext,
@@ -182,9 +186,7 @@ describe('createCaseInteractor', () => {
         },
       ],
     });
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
   });
 
@@ -253,6 +255,8 @@ describe('createCaseInteractor', () => {
       role: ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
+
+    getPractitionerById.mockResolvedValue(user);
 
     const result = await createCaseInteractor(
       applicationContext,
@@ -417,6 +421,8 @@ describe('createCaseInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
+    getPractitionerById.mockResolvedValue(user);
+
     const result = await createCaseInteractor(
       applicationContext,
       {
@@ -485,6 +491,8 @@ describe('createCaseInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
+    getPractitionerById.mockResolvedValue(user);
+
     const result = await createCaseInteractor(
       applicationContext,
       {
@@ -550,6 +558,8 @@ describe('createCaseInteractor', () => {
       role: ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
+
+    getPractitionerById.mockResolvedValue(user);
 
     const result = await createCaseInteractor(
       applicationContext,

@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
@@ -21,6 +22,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('consolidated cases', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -28,6 +30,7 @@ describe('consolidated cases', () => {
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const getUserById = getUserByIdMock as jest.Mock;
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -62,9 +65,7 @@ describe('consolidated cases', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getUseCaseHelpers()

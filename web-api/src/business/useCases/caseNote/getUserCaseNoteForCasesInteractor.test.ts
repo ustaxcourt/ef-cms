@@ -1,13 +1,17 @@
 import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUserCaseNoteForCasesInteractor } from './getUserCaseNoteForCasesInteractor';
 import { getUserCaseNoteForCases as getUserCaseNoteForCasesMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNoteForCases';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('getUserCaseNoteForCasesInteractor', () => {
   let mockCurrentUser: UnknownAuthUser;
@@ -29,9 +33,7 @@ describe('getUserCaseNoteForCasesInteractor', () => {
   beforeEach(() => {
     mockCurrentUser = mockJudge;
     mockNote = MOCK_NOTE;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockCurrentUser);
+    getUserById.mockImplementation(() => mockCurrentUser);
     getUserCaseNoteForCases.mockResolvedValue([new UserCaseNote(mockNote)]);
     applicationContext
       .getUseCaseHelpers()
@@ -88,9 +90,7 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       ...mockJudge,
       userId: userIdToExpect,
     } as UnknownAuthUser;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockUser);
+    getUserById.mockImplementation(() => mockUser);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);

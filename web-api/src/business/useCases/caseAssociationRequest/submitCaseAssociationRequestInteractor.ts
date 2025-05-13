@@ -1,8 +1,8 @@
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -50,7 +50,7 @@ const submitCaseAssociationRequest = async (
         authorizedUser,
         docketNumber,
         representing: filers,
-        privatePractitioner: user.toRawObject() as RawPractitioner,
+        user: user.toRawObject() as RawPractitioner,
       });
   } else if (isIrsPractitioner) {
     return await applicationContext
@@ -59,7 +59,7 @@ const submitCaseAssociationRequest = async (
         applicationContext,
         authorizedUser,
         docketNumber,
-        irsPractitioner: user.toRawObject() as RawPractitioner,
+        user: user.toRawObject() as RawPractitioner,
       });
   }
 };

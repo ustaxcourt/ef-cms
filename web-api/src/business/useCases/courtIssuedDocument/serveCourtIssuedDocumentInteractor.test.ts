@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
@@ -14,6 +15,7 @@ import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentIn
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -23,11 +25,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const getUserById = getUserByIdMock as jest.Mock;
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     getCasesByDocketNumbers.mockResolvedValue([MOCK_CASE]);

@@ -1,26 +1,31 @@
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import {
   COUNTRY_TYPES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getContactPrimary } from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   mockAdcUser,
   mockIrsPractitionerUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { submitCaseAssociationRequestInteractor } from './submitCaseAssociationRequestInteractor';
+import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { Practitioner } from '@shared/business/entities/Practitioner';
+
+const getPractitionerById = getPractitionerByIdMock as jest.Mock;
 
 describe('submitCaseAssociationRequest', () => {
   const mockContactId = getContactPrimary(MOCK_CASE).contactId;
 
-  let mockGetUserById;
+  let mockPractitionerData;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockGetUserById);
+    getPractitionerById.mockImplementation(
+      () => new Practitioner(mockPractitionerData),
+    );
 
     applicationContext
       .getPersistenceGateway()
@@ -41,7 +46,7 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should not add mapping if already there', async () => {
-    mockGetUserById = {
+    mockPractitionerData = {
       barNumber: 'BN1234',
       contact: {
         address1: '234 Main St',
@@ -95,7 +100,7 @@ describe('submitCaseAssociationRequest', () => {
   });
 
   it('should add mapping for an irsPractitioner', async () => {
-    mockGetUserById = {
+    mockPractitionerData = {
       barNumber: 'BN1234',
       contact: {
         address1: '234 Main St',
