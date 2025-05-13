@@ -1,20 +1,23 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  getContactPrimary,
-} from '../../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createUserForContact } from './createUserForContact';
 import {
   mockAdmissionsClerkUser,
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { createNewPetitionerUser as createNewPetitionerUserMock } from '@web-api/persistence/postgres/users/createNewPetitionerUser';
+import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+
+const createNewPetitionerUser = createNewPetitionerUserMock as jest.Mock;
+const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
 
 describe('createUserForContact', () => {
   const USER_ID = '674fdded-1d17-4081-b9fa-950abc677cee';
@@ -66,16 +69,15 @@ describe('createUserForContact', () => {
       name: 'Bob Ross',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().createNewPetitionerUser.mock
-        .calls[0][0].user,
-    ).toMatchObject({
-      contact: {},
-      name: 'Bob Ross',
-      pendingEmail: UPDATED_EMAIL,
-      role: ROLES.petitioner,
-      userId: USER_ID,
-    });
+    expect(createNewPetitionerUser.mock.calls[0][0].userToCreate).toMatchObject(
+      {
+        contact: {},
+        name: 'Bob Ross',
+        pendingEmail: UPDATED_EMAIL,
+        role: ROLES.petitioner,
+        userId: USER_ID,
+      },
+    );
   });
 
   it('should return the caseEntity', async () => {
@@ -135,10 +137,7 @@ describe('createUserForContact', () => {
       name: 'Bob Ross',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
       docketNumber: caseEntity.docketNumber,
       userId: USER_ID,
     });

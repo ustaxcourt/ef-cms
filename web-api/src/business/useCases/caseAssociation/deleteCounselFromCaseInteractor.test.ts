@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CONTACT_TYPES,
@@ -20,9 +21,13 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
 
 describe('deleteCounselFromCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getUserById = getUserByIdMock as jest.Mock;
+  const deleteUserFromCase = deleteUserFromCaseMock as jest.Mock;
   const updateCase = jest.mocked(updateCaseMock);
   updateCase.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
@@ -87,16 +92,14 @@ describe('deleteCounselFromCaseInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(({ userId }) => {
-        const allUsers = [
-          ...mockPrivatePractitioners,
-          ...mockIrsPractitioners,
-          ...mockPetitioners,
-        ];
-        return allUsers.find(user => user.userId === userId);
-      });
+    getUserById.mockImplementation(({ userId }) => {
+      const allUsers = [
+        ...mockPrivatePractitioners,
+        ...mockIrsPractitioners,
+        ...mockPetitioners,
+      ];
+      return allUsers.find(user => user.userId === userId);
+    });
 
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
       ...MOCK_CASE,
@@ -171,9 +174,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).toHaveBeenCalled();
+    expect(deleteUserFromCase).toHaveBeenCalled();
     expect(updateCase).toHaveBeenCalled();
   });
 
@@ -187,9 +188,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).toHaveBeenCalled();
+    expect(deleteUserFromCase).toHaveBeenCalled();
     expect(updateCase).toHaveBeenCalled();
   });
 

@@ -1,24 +1,24 @@
-import { applicationContext } from '../test/createTestApplicationContext';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { getAllUsersByRoleInteractor } from '@shared/business/useCases/getAllUsersByRoleInteractor';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getAllUsersByRole as getAllUsersByRoleMock } from '@web-api/persistence/postgres/users/getAllUsersByRole';
+
+const getAllUsersByRole = getAllUsersByRoleMock as jest.Mock;
 
 describe('getAllUsersByRoleInteractor', () => {
   const TEST_ROLES = ['SOME', 'ROLES'];
   const EXPECTED_RESULTS = ['user1', 'user2'];
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getAllUsersByRole.mockReturnValue(EXPECTED_RESULTS);
+    getAllUsersByRole.mockReturnValue(EXPECTED_RESULTS);
   });
 
   it('should throw an Unauthorized error when user does not have permission', async () => {
     await expect(
       getAllUsersByRoleInteractor(
-        applicationContext,
         {
           roles: TEST_ROLES,
         },
@@ -29,7 +29,6 @@ describe('getAllUsersByRoleInteractor', () => {
 
   it('should call the persistance method with corred params', async () => {
     const results = await getAllUsersByRoleInteractor(
-      applicationContext,
       {
         roles: TEST_ROLES,
       },
@@ -38,9 +37,8 @@ describe('getAllUsersByRoleInteractor', () => {
 
     expect(results).toEqual(EXPECTED_RESULTS);
 
-    const { calls } =
-      applicationContext.getPersistenceGateway().getAllUsersByRole.mock;
+    const { calls } = getAllUsersByRole.mock;
     expect(calls.length).toEqual(1);
-    expect(calls[0][1]).toEqual(TEST_ROLES);
+    expect(calls[0][0].roles).toEqual(TEST_ROLES);
   });
 });
