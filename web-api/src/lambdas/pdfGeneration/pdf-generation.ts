@@ -1,20 +1,39 @@
-import { createApplicationContext } from '../../applicationContext';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { logLambdaStats } from '@web-api/lambdas/pdfGeneration/lambdaStats';
+import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
+import { applicationContext } from '@web-api/applicationContext';
+import { Browser } from 'puppeteer-core';
 
 export type PdfGenerationResult = {
   tempId: string;
 };
 
 export const handler = async event => {
-  const applicationContext = createApplicationContext({});
-
-  const browser = await applicationContext.getChromiumBrowser();
+  let browser: Browser;
+  console.log('PDF Investigation: About to get chromium browser');
+  logLambdaStats();
+  try {
+    browser = await getChromiumBrowser();
+  } catch (err) {
+    console.log('PDF Investigation: launch error');
+    logLambdaStats();
+    throw err;
+  }
+  logLambdaStats();
+  console.log('PDF Investigation: About to generate pdf from html');
 
   const results = await applicationContext
     .getUseCaseHelpers()
     .generatePdfFromHtmlHelper(applicationContext, event, browser);
 
-  await browser.close();
+  const pages = await browser.pages();
+  await Promise.all(pages.map(p => p.close()));
+
+  console.log(
+    'PDF Investigation: Finished generating pdf; about to close browser',
+  );
+
+  console.log('PDF Investigation: Closed browser');
+  logLambdaStats();
 
   const tempId = applicationContext.getUniqueId();
 
@@ -32,9 +51,6 @@ export const changeOfAddressHandler = async event => {
   const { Records } = event;
   const { body } = Records[0];
   const eventBody = JSON.parse(body);
-
-  const applicationContext = createApplicationContext();
-  getLogger().addUser({ user: eventBody.requestUser });
 
   applicationContext.logger.info(
     `processing job "change-of-address-job|${eventBody.jobId}", task for case ${eventBody.docketNumber}`,
