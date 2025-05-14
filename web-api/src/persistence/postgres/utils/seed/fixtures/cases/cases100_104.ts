@@ -11,7 +11,6 @@ import {
 import { judgeColvin } from '@shared/test/mockUsers';
 
 export const SEEDED_DOCKET_NUMBERS_100_104 = {
-  '100-22': '100-22',
   '101-11': '101-11',
   '101-16': '101-16',
   '101-19': '101-19',
@@ -26,6 +25,7 @@ export const SEEDED_DOCKET_NUMBERS_100_104 = {
   '102-67': '102-67',
   '103-19': '103-19',
   '103-20': '103-20',
+  '103-22': '103-22',
   '103-67': '103-67',
   '104-17': '104-17',
   '104-18': '104-18',
@@ -45,7 +45,7 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     caseType: CASE_TYPES_MAP.whistleblower,
     closedDate: '2022-02-01T17:21:07.674Z',
     createdAt: '2022-02-01T17:21:05.483Z',
-    docketNumber: SEEDED_DOCKET_NUMBERS_100_104['100-22'],
+    docketNumber: SEEDED_DOCKET_NUMBERS_100_104['103-22'],
     docketNumberSuffix: 'W',
     filingType: 'Myself',
     hasPendingItems: false,
@@ -88,7 +88,7 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     qcCompleteForTrial: {},
     receivedAt: '2022-02-01T17:21:05.483Z',
-    sortableDocketNumber: 2022000100,
+    sortableDocketNumber: 2022000103,
     status: CASE_STATUS_TYPES.closed,
     trialLocation: undefined,
     docketEntries: [],
