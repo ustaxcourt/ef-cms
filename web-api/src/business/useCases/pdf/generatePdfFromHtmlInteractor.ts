@@ -68,13 +68,13 @@ export const generatePdfFromHtmlInteractor = async (
     const pdfGenerationResult: PdfGenerationResult = JSON.parse(responseStr);
     if (!pdfGenerationResult.tempId) {
       throw new Error(
-        `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda for errors`,
+        `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda with requestId: ${response.$metadata?.requestId} for errors.`,
       );
     }
     key = pdfGenerationResult.tempId;
   } catch (e) {
     throw new Error(
-      `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda for errors`,
+      `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda with requestId: ${response.$metadata?.requestId} for errors.`,
     );
   }
 
