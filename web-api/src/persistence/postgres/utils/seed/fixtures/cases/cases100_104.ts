@@ -88,7 +88,7 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     procedureType: PROCEDURE_TYPES_MAP.regular,
     qcCompleteForTrial: {},
     receivedAt: '2022-02-01T17:21:05.483Z',
-    sortableDocketNumber: 2022000100,
+    sortableDocketNumber: 2022000103,
     status: CASE_STATUS_TYPES.closed,
     trialLocation: undefined,
     docketEntries: [],
