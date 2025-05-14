@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@shared/business/entities/Message.ts');
 jest.mock('@shared/business/entities/CaseDeadline');
@@ -28,6 +29,8 @@ import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persist
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCase = jest.mocked(updateCaseMock);
@@ -43,6 +46,8 @@ const getCaseDeadlinesByDocketNumber =
   getCaseDeadlinesByDocketNumberMock as jest.Mock;
 
 const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
+const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
+const deleteUserFromCase = deleteUserFromCaseMock as jest.Mock;
 
 describe('updateCaseAndAssociations', () => {
   let validMockCase;
@@ -166,22 +171,12 @@ describe('updateCaseAndAssociations', () => {
     ).not.toHaveBeenCalled();
 
     // updateIrsPractitioners
-    expect(
-      applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-    ).not.toHaveBeenCalled();
+    expect(deleteUserFromCase).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
 
     // updatePrivatePractitioners
-    expect(
-      applicationContext.getPersistenceGateway()
-        .removePrivatePractitionerOnCase,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updatePrivatePractitionerOnCase,
-    ).not.toHaveBeenCalled();
+    expect(deleteUserFromCase).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
 
     // updateCaseWorkItems
     expect(upsertWorkItems).not.toHaveBeenCalled();
@@ -440,9 +435,7 @@ describe('updateCaseAndAssociations', () => {
       expect(
         applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
       ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
-      ).not.toHaveBeenCalled();
+      expect(deleteUserFromCase).not.toHaveBeenCalled();
     });
 
     it('calls updateIrsPractitionerOnCase on changed entries in irsPractitioners', async () => {
@@ -461,18 +454,10 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase
-          .mock.calls[0][0],
-      ).toMatchObject({
+      expect(deleteUserFromCase).not.toHaveBeenCalled();
+      expect(associateUserWithCase).toHaveBeenCalled();
+      expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
-        practitioner: updatedPractitioner,
         userId: practitionerId,
       });
     });
@@ -487,16 +472,9 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase
-          .mock.calls[0][0],
-      ).toMatchObject({
+      expect(associateUserWithCase).not.toHaveBeenCalled();
+      expect(deleteUserFromCase).toHaveBeenCalled();
+      expect(deleteUserFromCase.mock.calls[0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
         userId: practitionerId,
       });
@@ -512,19 +490,10 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase
-          .mock.calls[0][0],
-      ).toMatchObject({
+      expect(deleteUserFromCase).not.toHaveBeenCalled();
+      expect(associateUserWithCase).toHaveBeenCalled();
+      expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
-        practitioner: mockCaseWithIrsPractitioners.irsPractitioners![0],
         userId: practitionerId,
       });
     });
@@ -553,20 +522,14 @@ describe('updateCaseAndAssociations', () => {
       );
     });
 
-    it('does not call updatePrivatePractitionerOnCase or removePrivatePractitionerOnCase if all private practitioners are unchanged', async () => {
+    it('does not call updatePrivatePractitionerOnCase or deleteUserFromCase if all private practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
         applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: mockCaseWithIrsAndPrivatePractitioners,
       });
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
+      expect(associateUserWithCase).not.toHaveBeenCalled();
+      expect(deleteUserFromCase).not.toHaveBeenCalled();
     });
 
     it('calls updatePrivatePractitionerOnCase on changed entries in privatePractitioners', async () => {
@@ -585,20 +548,10 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase.mock.calls[0][0],
-      ).toMatchObject({
+      expect(deleteUserFromCase).not.toHaveBeenCalled();
+      expect(associateUserWithCase).toHaveBeenCalled();
+      expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
-        practitioner: updatedPractitioner,
         userId: practitionerId,
       });
     });
@@ -613,21 +566,10 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase.mock.calls[0][0],
-      ).toMatchObject({
+      expect(deleteUserFromCase).not.toHaveBeenCalled();
+      expect(associateUserWithCase).toHaveBeenCalled();
+      expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
-        practitioner:
-          mockCaseWithIrsAndPrivatePractitioners.privatePractitioners![0],
         userId: practitionerId,
       });
     });
@@ -642,18 +584,9 @@ describe('updateCaseAndAssociations', () => {
         },
       });
 
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase,
-      ).not.toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .removePrivatePractitionerOnCase.mock.calls[0][0],
-      ).toMatchObject({
+      expect(associateUserWithCase).not.toHaveBeenCalled();
+      expect(deleteUserFromCase).toHaveBeenCalled();
+      expect(deleteUserFromCase.mock.calls[0][0]).toMatchObject({
         docketNumber: validMockCase.docketNumber,
         userId: practitionerId,
       });

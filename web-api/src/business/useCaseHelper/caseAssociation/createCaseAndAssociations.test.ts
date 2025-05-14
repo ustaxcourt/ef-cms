@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -7,8 +8,10 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { createCaseAndAssociations } from './createCaseAndAssociations';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { createCase as createCaseMock } from '@web-api/persistence/postgres/cases/createCase';
+import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 
 const createCase = createCaseMock as jest.Mock;
+const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
 
 describe('createCaseAndAssociations', () => {
   const createCaseMock = jest.fn();
@@ -138,15 +141,9 @@ describe('createCaseAndAssociations', () => {
         caseToCreate: mockCaseWithIrsPractitioners,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase,
-      ).toHaveBeenCalledTimes(1);
-      expect(
-        applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase
-          .mock.calls[0][0],
-      ).toMatchObject({
+      expect(associateUserWithCase).toHaveBeenCalledTimes(1);
+      expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
         docketNumber: mockCaseWithIrsPractitioners.docketNumber,
-        practitioner,
         userId: practitionerId,
       });
     });
@@ -192,16 +189,9 @@ describe('createCaseAndAssociations', () => {
         caseToCreate: mockCaseWithPrivatePractitioners,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase,
-      ).toHaveBeenCalledTimes(1);
-      expect(
-        applicationContext.getPersistenceGateway()
-          .updatePrivatePractitionerOnCase.mock.calls[0][0],
-      ).toMatchObject({
+      expect(associateUserWithCase).toHaveBeenCalledTimes(1);
+      expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
         docketNumber: mockCaseWithPrivatePractitioners.docketNumber,
-        practitioner,
         userId: practitionerId,
       });
     });
