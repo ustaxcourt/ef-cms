@@ -17,7 +17,6 @@ export async function getConnection<T>({
   if (!dbInstance) {
     dbInstance = establishConnection();
   }
-
   if (Date.now() > tokenExpirationTime) {
     if (pool) {
       await resetPoolPassword();
@@ -28,21 +27,15 @@ export async function getConnection<T>({
 }
 
 async function establishConnection(): Promise<Kysely<Database>> {
-  try {
-    poolConfig = getPoolConfig();
-    let token: string | null = null;
-    token = await getToken();
-    pool = new Pool({ ...poolConfig, password: token });
-    return new Kysely<Database>({
-      dialect: new PostgresDialect({
-        pool,
-      }),
-      plugins: [new CamelCasePlugin()],
-    });
-  } catch (e) {
-    dbInstance = null;
-    throw new Error(`Failed to connect to database: ${e}`);
-  }
+  poolConfig = getPoolConfig();
+  const token = await getToken();
+  pool = new Pool({ ...poolConfig, password: token });
+  return new Kysely<Database>({
+    dialect: new PostgresDialect({
+      pool,
+    }),
+    plugins: [new CamelCasePlugin()],
+  });
 }
 
 async function generateRDSAuthToken() {
@@ -68,21 +61,14 @@ async function getToken() {
   return token;
 }
 
-let tokenPromise: Promise<string> | null;
+let isResettingPassword: boolean;
 async function resetPoolPassword() {
-  if (pool) {
-    if (!tokenPromise) {
-      tokenPromise = getToken();
-    }
-    let token;
+  if (!isResettingPassword && pool) {
+    isResettingPassword = true;
     try {
-      token = await tokenPromise;
-      pool.options.password = token;
-    } catch (e) {
-      tokenExpirationTime = 0;
-      throw new Error(`Could not reset db password: ${e}`);
+      pool.options.password = await getToken();
     } finally {
-      tokenPromise = null;
+      isResettingPassword = false;
     }
   }
 }

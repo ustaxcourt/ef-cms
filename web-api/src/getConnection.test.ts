@@ -2,7 +2,7 @@ const mockGetAuthToken = jest.fn();
 jest.mock('@aws-sdk/rds-signer', () => {
   class Signer {
     getAuthToken() {
-      return mockGetAuthToken();
+      mockGetAuthToken();
     }
   }
   return {
@@ -14,11 +14,12 @@ import { environment } from '@web-api/environment';
 
 describe('getConnection', () => {
   environment.nodeEnv = 'production';
-  it('should re-establish db connection after failure', async () => {
-    mockGetAuthToken.mockRejectedValueOnce(new Error('Failed!'));
-    await expect(() => getConnection({ cb: () => {} })).rejects.toThrow();
-
-    mockGetAuthToken.mockResolvedValueOnce('12346789');
-    await getConnection({ cb: () => {} });
+  test('should not establish multiple connections at the same time', async () => {
+    await Promise.all([
+      getConnection({ cb: () => {} }),
+      getConnection({ cb: () => {} }),
+      getConnection({ cb: () => {} }),
+    ]);
+    expect(mockGetAuthToken).toHaveBeenCalledTimes(1);
   });
 });

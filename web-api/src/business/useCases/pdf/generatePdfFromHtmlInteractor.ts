@@ -38,6 +38,8 @@ export const generatePdfFromHtmlInteractor = async (
         browserLocal,
       );
 
+    await browserLocal.close();
+
     return result;
   }
 
