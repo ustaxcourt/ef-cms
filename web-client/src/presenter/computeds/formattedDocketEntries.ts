@@ -202,7 +202,8 @@ export const formattedDocketEntries = (
   const user = get(state.user);
   const permissions = get(state.permissions);
   const { docketRecordFilter } = get(state.sessionMetadata);
-  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+  const { ALLOWLIST_FEATURE_FLAGS_POSTGRES } =
+    applicationContext.getConstants();
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
   let docketRecordSort;
@@ -222,7 +223,8 @@ export const formattedDocketEntries = (
 
   const DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE = get(
     state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+      ALLOWLIST_FEATURE_FLAGS_POSTGRES.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE
+        .key
     ],
   );
   const visibilityPolicyDateFormatted = applicationContext
