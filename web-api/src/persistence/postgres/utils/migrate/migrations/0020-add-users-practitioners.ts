@@ -75,11 +75,18 @@ export async function up(db: Kysely<any>): Promise<void> {
 
   await db.schema
     .createTable('dwUserOnCase')
-    .addColumn('id', 'varchar', col => col.primaryKey())
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('representing', 'jsonb')
     .addColumn('entityName', 'varchar')
+    .addPrimaryKeyConstraint('pkUserOnCase', ['docketNumber', 'userId'])
+    .execute();
+
+  await db.schema
+    .createTable('dwUserOnCasePending')
+    .addColumn('userId', 'varchar', col => col.notNull())
+    .addColumn('docketNumber', 'varchar', col => col.notNull())
+    .addPrimaryKeyConstraint('pkUserOnCasePending', ['docketNumber', 'userId'])
     .execute();
 
   await db.schema
@@ -148,6 +155,7 @@ export async function up(db: Kysely<any>): Promise<void> {
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
+  await db.schema.dropTable('dwUserOnCasePending').execute();
   await db.schema.dropTable('dwUserOnCase').execute();
   await db.schema.dropTable('dwUserConfirmationCode').execute();
   await db.schema.dropTable('dwPractitioner').execute();

@@ -63,6 +63,8 @@ export const associatePrivatePractitionerToCase = async ({
   await associateUserWithCase({
     docketNumber,
     userId: user.userId,
+    representing,
+    entityName: PrivatePractitioner.ENTITY_NAME,
   });
 
   const { petitioners } = caseEntity;

@@ -1,4 +1,4 @@
-import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
+import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyPendingCaseForUser';
 
 export const verifyPendingCaseForUserInteractor = async ({
   docketNumber,
@@ -7,7 +7,7 @@ export const verifyPendingCaseForUserInteractor = async ({
   docketNumber: string;
   userId: string;
 }) => {
-  return await verifyCaseForUser({
+  return await verifyPendingCaseForUser({
     docketNumber,
     userId,
   });

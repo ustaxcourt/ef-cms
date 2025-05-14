@@ -42,6 +42,7 @@ export const associateIrsPractitionerToCase = async ({
   await associateUserWithCase({
     docketNumber,
     userId: user.userId,
+    entityName: IrsPractitioner.ENTITY_NAME,
   });
 
   caseEntity.attachIrsPractitioner(
