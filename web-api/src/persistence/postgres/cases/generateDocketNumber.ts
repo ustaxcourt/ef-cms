@@ -54,6 +54,7 @@ export const generateDocketNumber = async ({
   const start = Date.now();
 
   const docketNumber = await getNextDocketNumber({ year });
+
   console.log(
     'docketNumber investigation 2 getNextDocketNumber',
     Date.now() - start,
