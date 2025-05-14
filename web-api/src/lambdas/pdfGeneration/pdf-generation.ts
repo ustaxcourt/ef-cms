@@ -6,21 +6,37 @@ export type PdfGenerationResult = {
 };
 
 export const handler = async event => {
+  const MAX_RETRIES = 4;
+  const RETRY_DELAY_MS = 100;
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
   const applicationContext = createApplicationContext({});
   let browser;
+
   console.log('PDF Investigation: About to get chromium browser');
   logLambdaStats();
-  try {
-    browser = await applicationContext.getChromiumBrowser();
-  } catch (err: any) {
-    console.error('PDF Investigation: stderr:', err?.stderr);
-    console.error(
-      'PDF Investigation: Browser launch error: ',
-      JSON.stringify(err),
-    );
-    logLambdaStats();
-    throw err;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      browser = await applicationContext.getChromiumBrowser();
+    } catch (err: any) {
+      console.error('PDF Investigation: stderr:', err?.stderr);
+      console.error(
+        'PDF Investigation: Browser launch error: ',
+        JSON.stringify(err),
+      );
+
+      browser = null;
+
+      logLambdaStats();
+      await delay(RETRY_DELAY_MS);
+    }
   }
+
+  if (!browser) {
+    throw new Error('Failed to launch chromium after multiple attempts.');
+  }
+
   logLambdaStats();
   console.log('PDF Investigation: About to generate pdf from html');
 
