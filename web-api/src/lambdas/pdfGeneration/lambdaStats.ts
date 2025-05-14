@@ -21,7 +21,7 @@ function getDirectorySize(dirPath: string): number {
   return totalSize;
 }
 
-export function logLambdaStats() {
+export function logLambdaStats(message?: string) {
   const memoryUsedMB = memoryUsage.rss() / (1024 * 1024);
   const memoryAllocatedMB = parseInt(
     env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || '0',
@@ -30,7 +30,9 @@ export function logLambdaStats() {
   const tmpUsedMB = getDirectorySize('/tmp') / 1024 / 1024;
 
   // Log stats
-  console.log(`PDF Investigation: Lambda Runtime Stats:
+  console.log(`
+    ${message}
+    PDF Investigation: Lambda Runtime Stats:
   - Memory Used: ${memoryUsedMB.toFixed(2)} MB / ${memoryAllocatedMB} MB
   - Ephemeral Storage: ${tmpUsedMB} / 512 MB
   `);
