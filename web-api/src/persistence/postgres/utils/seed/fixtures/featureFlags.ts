@@ -5,4 +5,8 @@ export const featureFlags: NewFeatureFlagTableKysely[] = [
     name: 'chief-judge-name',
     value: { current: 'Maurice B. Foley' },
   },
+  {
+    name: 'document-visibility-policy-change-date',
+    value: { current: '2023-05-01' },
+  },
 ];

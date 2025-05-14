@@ -1,13 +1,13 @@
 /* eslint-disable max-lines */
 
 import {
-  ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_ENTRY_SEALED_TO_TYPES,
+  ALLOWLIST_FEATURE_FLAGS_POSTGRES,
   DOCKET_RECORD_FILTER_OPTIONS,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   ROLES,
   STATE_KEYS,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   casePetitioner,
@@ -19,7 +19,7 @@ import {
   formattedDocketEntries as formattedDocketEntriesComputed,
   setupIconsToDisplay,
 } from './formattedDocketEntries';
-import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
+import { getUserPermissions } from '@shared/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -52,8 +52,8 @@ describe('formattedDocketEntries', () => {
     return {
       documentsSelectedForDownload: [],
       featureFlags: {
-        [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
-          '2023-05-01',
+        [ALLOWLIST_FEATURE_FLAGS_POSTGRES.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE
+          .key]: '2023-05-01',
       },
       permissions: getUserPermissions(user),
       sessionMetadata: {
