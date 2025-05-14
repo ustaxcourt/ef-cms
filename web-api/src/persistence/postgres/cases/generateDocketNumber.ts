@@ -4,56 +4,63 @@ import {
   formatDateString,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { getDbWriter } from '@web-api/database';
+import { getDbReader } from '@web-api/database';
 
 const incrementCounter = async (twoDigitYear: string): Promise<number> => {
   const nextTwoDigitYear = parseInt(twoDigitYear) + 1;
-  const nextTwoDigitYearString = nextTwoDigitYear.toString().padStart(2, '0');
+  const nextTwoDigitYearString = nextTwoDigitYear
+    .toString()
+    .padStart(2, '0')
+    .slice(-2);
 
-  const biggerThanThis = Case.getSortableDocketNumber(`101-${twoDigitYear}`)!;
-  const smallerThanThis = Case.getSortableDocketNumber(
+  const currentYearSortableDocketNumber = Case.getSortableDocketNumber(
+    `101-${twoDigitYear}`,
+  )!;
+  const nextYearSortableDocketNumber = Case.getSortableDocketNumber(
     `101-${nextTwoDigitYearString}`,
   )!;
 
-  // Using DbWriter instead of DbReader to avoid latency between writer and reader
-  const theCase = await getDbWriter({
-    cb: writer =>
-      writer
-        .selectFrom('dwCase')
-        .where('sortableDocketNumber', '>=', biggerThanThis)
-        .where('sortableDocketNumber', '<', smallerThanThis)
-        .select(['docketNumber', 'sortableDocketNumber'])
-        .orderBy('sortableDocketNumber', 'desc')
-        .executeTakeFirst(),
-    table: null,
-  });
+  const lastCreatedCase = await getDbReader(reader =>
+    reader
+      .selectFrom('dwCase')
+      .where('sortableDocketNumber', '>=', currentYearSortableDocketNumber)
+      .where('sortableDocketNumber', '<', nextYearSortableDocketNumber)
+      .select(['docketNumber', 'sortableDocketNumber'])
+      .orderBy('sortableDocketNumber', 'desc')
+      .executeTakeFirst(),
+  );
 
-  if (!theCase) {
+  if (!lastCreatedCase) {
     return 101;
   }
 
-  return parseInt(theCase.docketNumber.slice(0, -3)) + 1;
+  return parseInt(lastCreatedCase.docketNumber.slice(0, -3)) + 1;
 };
 
-const getNextDocketNumber = async ({ year }: { year: string }) => {
-  const twoDigitYear = year.slice(-2);
+const getNextDocketNumber = async ({
+  fourDigitYear,
+}: {
+  fourDigitYear: string;
+}) => {
+  const twoDigitYear = fourDigitYear.slice(-2);
   const id = await incrementCounter(twoDigitYear);
   return `${id}-${twoDigitYear}`;
 };
 
 // Note that this DOES NOT handle concurrency for free, so it should be used within the context of a mutex lock or something similar.
+// In the future, this whole process should be outsourced to the DB so the docket number is generated automatically upon successfully saving to DB.
 export const generateDocketNumber = async ({
   receivedAt,
 }: {
   receivedAt?: string;
 }) => {
-  const year = receivedAt
+  const fourDigitYear = receivedAt
     ? formatDateString(receivedAt, FORMATS.YEAR)
     : formatNow(FORMATS.YEAR);
 
   const start = Date.now();
 
-  const docketNumber = await getNextDocketNumber({ year });
+  const docketNumber = await getNextDocketNumber({ fourDigitYear });
 
   console.log(
     'docketNumber investigation 2 getNextDocketNumber',
