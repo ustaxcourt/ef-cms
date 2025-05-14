@@ -3,8 +3,9 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { getDbWriter } from '@web-api/database';
 
 const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
-	'aws-batch-zipper-minimum-count',
-	'chief-judge-name'
+  'aws-batch-zipper-minimum-count',
+  'chief-judge-name',
+  'document-visibility-policy-change-date',
 ];
 
 const { STAGE } = process.env;
