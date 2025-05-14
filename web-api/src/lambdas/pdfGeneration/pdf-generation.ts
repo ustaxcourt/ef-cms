@@ -29,7 +29,7 @@ export const handler = async event => {
       browser = null;
 
       logLambdaStats();
-      await delay(RETRY_DELAY_MS * Math.pow(2, attempt - 1));
+      await delay(RETRY_DELAY_MS);
     }
   }
 
