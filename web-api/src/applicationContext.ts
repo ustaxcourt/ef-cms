@@ -19,7 +19,10 @@ import { SQSClient } from '@aws-sdk/client-sqs';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { environment } from '@web-api/environment';
 import { getBatchClient } from '@web-api/persistence/batch/getBatchClient';
-import { getChromiumBrowser } from '../../shared/src/business/utilities/getChromiumBrowser';
+import {
+  getChromiumBrowser,
+  getChromiumBrowserAWS,
+} from '../../shared/src/business/utilities/getChromiumBrowser';
 import {
   getCognito,
   getLocalCognito,
@@ -67,7 +70,13 @@ export const createApplicationContext = (appContextUser = {}) => {
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser,
+    getChromiumBrowser: async () => {
+      if (environment.stage === 'local') {
+        return await getChromiumBrowser();
+      } else {
+        return await getChromiumBrowserAWS();
+      }
+    },
     getCognito: (): CognitoIdentityProvider => {
       if (environment.stage === 'local') {
         return getLocalCognito();
