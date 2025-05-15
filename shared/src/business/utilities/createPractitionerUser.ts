@@ -1,4 +1,4 @@
-import { createBarNumber } from '@web-api/persistence/postgres/practitioners/barNumberGenerator';
+import { createBarNumber } from '@web-api/persistence/postgres/practitioners/createBarNumber';
 import { Practitioner, RawPractitioner } from '../entities/Practitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 

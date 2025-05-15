@@ -1,4 +1,4 @@
-import * as barNumberGenerator from './persistence/postgres/practitioners/barNumberGenerator';
+import * as barNumberGenerator from './persistence/postgres/practitioners/createBarNumber';
 import * as pdfLib from 'pdf-lib';
 import {
   CASE_INVENTORY_PAGE_SIZE,

@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -8,10 +9,12 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 
 describe('getPractitionerCasesInteractor', () => {
   const getCasesMetadataByDocketNumbers =
     getCasesMetadataByDocketNumbersMock as jest.Mock;
+  const getDocketNumbersByUser = getDocketNumbersByUserMock as jest.Mock;
 
   beforeEach(() => {
     getCasesMetadataByDocketNumbers.mockResolvedValue([
@@ -33,6 +36,15 @@ describe('getPractitionerCasesInteractor', () => {
       { ...MOCK_CASE, docketNumber: '201-07' },
       { ...MOCK_CASE, docketNumber: '1002-17' },
       { ...MOCK_CASE, docketNumber: '902-17' },
+    ]);
+
+    getDocketNumbersByUser.mockResolvedValue([
+      '108-07',
+      '2001-17',
+      '501-17',
+      '201-07',
+      '1002-17',
+      '902-17',
     ]);
   });
 

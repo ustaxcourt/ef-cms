@@ -1,8 +1,7 @@
 import { mockFactory } from '@shared/test/mockFactory';
 
-jest.mock(
-  '@web-api/persistence/postgres/practitioners/barNumberGenerator',
-  () => mockFactory('barNumberGenerator'),
+jest.mock('@web-api/persistence/postgres/practitioners/createBarNumber', () =>
+  mockFactory('createBarNumber'),
 );
 
 jest.mock(

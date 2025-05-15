@@ -1,10 +1,21 @@
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../entities/EntityConstants';
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
+import {
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '@shared/business/entities/EntityConstants';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { createPractitionerUser } from './createPractitionerUser';
+import { createBarNumber as createBarNumberMock } from '@web-api/persistence/postgres/practitioners/createBarNumber';
+
+const createBarNumber = createBarNumberMock as jest.Mock;
 
 describe('createPractitionerUser', () => {
   it('should generate a bar number and userId when they are not provided', async () => {
+    const mockGeneratedBarNumber = 'AB1234';
+
+    createBarNumber.mockResolvedValue(mockGeneratedBarNumber);
+
     const { barNumber, userId } = await createPractitionerUser(
       applicationContext,
       {
@@ -27,7 +38,7 @@ describe('createPractitionerUser', () => {
       },
     );
 
-    expect(barNumber).toBeDefined();
+    expect(barNumber).toBe(mockGeneratedBarNumber);
     expect(userId).toBeDefined();
   });
 
