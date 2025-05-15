@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import {
   COUNTRY_TYPES,
   ROLES,
