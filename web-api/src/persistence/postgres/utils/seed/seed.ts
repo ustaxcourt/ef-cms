@@ -14,11 +14,11 @@ import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixture
 import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspondence';
 import { messages } from './fixtures/messages';
 import { workItems } from './fixtures/workItems';
+import { featureFlags } from '@web-api/persistence/postgres/utils/seed/fixtures/featureFlags';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
-import { featureFlags } from '@web-api/persistence/postgres/utils/seed/fixtures/featureFlags';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -45,22 +45,18 @@ export const seed = async () => {
     onConflictColumns: ['docketNumber'],
   });
 
+  const insertFeatureFlags = pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: featureFlags,
+    onConflictColumns: ['name'],
+  });
+
   const insertWorkItem = await getDbWriter({
     cb: writer =>
       writer
         .insertInto('dwWorkItem')
         .values(workItems)
         .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
-        .execute(),
-    table: null,
-  });
-
-  const insertFeatureFlags = await getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwFeatureFlag')
-        .values(featureFlags)
-        .onConflict(oc => oc.column('name').doNothing()) // ensure doesn't fail if exists
         .execute(),
     table: null,
   });
