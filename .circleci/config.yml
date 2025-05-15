@@ -345,6 +345,15 @@ jobs:
             if [ "$MIGRATE_FLAG" == "true" ]; then
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: migrate Feature flags from dynamo to postgres
+          command: |
+            NODE_ENV=production npx ts-node --transpileOnly ./scripts/run-once-scripts/migrate-feature-flags-dynamo-to-postgres.ts
+
 
   disable-reindex-cron:
     docker:
