@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import {
   ATP_DOCKET_ENTRY,
   MOCK_DOCUMENTS,

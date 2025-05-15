@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 /* eslint-disable max-lines */
 import {
   CASE_STATUS_TYPES,

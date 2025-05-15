@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 jest.mock('@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase');
 import {
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
