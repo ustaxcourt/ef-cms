@@ -3,8 +3,10 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
-	'aws-batch-zipper-minimum-count',
-	'chief-judge-name'
+  'aws-batch-zipper-minimum-count',
+  'chief-judge-name',
+  'document-visibility-policy-change-date',
+  'e-consent-fields-enabled-feature-flag',
 ];
 
 const { STAGE } = process.env;
