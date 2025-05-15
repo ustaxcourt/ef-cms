@@ -1,15 +1,20 @@
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createPractitionerUserInteractor } from './createPractitionerUserInteractor';
 import {
   mockAdmissionsClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { createOrUpdatePractitionerUser as createOrUpdatePractitionerUserMock } from '@web-api/persistence/postgres/practitioners/createOrUpdatePractitionerUser';
+
+const createOrUpdatePractitionerUser =
+  createOrUpdatePractitionerUserMock as jest.Mock;
 
 describe('createPractitionerUserInteractor', () => {
   const mockUser: RawPractitioner = {
@@ -31,9 +36,7 @@ describe('createPractitionerUserInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .createOrUpdatePractitionerUser.mockResolvedValue(mockUser);
+    createOrUpdatePractitionerUser.mockResolvedValue(mockUser);
   });
 
   it('should throw an error when the user is unauthorized to create a practitioner user', async () => {
@@ -74,9 +77,7 @@ describe('createPractitionerUserInteractor', () => {
       mockAdmissionsClerkUser,
     );
 
-    const mockUserCall =
-      applicationContext.getPersistenceGateway().createOrUpdatePractitionerUser
-        .mock.calls[0][0].user;
+    const mockUserCall = createOrUpdatePractitionerUser.mock.calls[0][0].user;
     expect(mockUserCall.email).toBeUndefined();
     expect(mockUserCall.pendingEmail).toEqual(mockEmail);
     expect(mockUserCall.serviceIndicator).toEqual(

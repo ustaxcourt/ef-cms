@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -14,6 +15,12 @@ import { associateIrsPractitionerToCase } from './associateIrsPractitionerToCase
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { irsPractitionerUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
+
+import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+
+const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
+const verifyCaseForUser = verifyCaseForUserMock as jest.Mock;
 
 describe('associateIrsPractitionerToCase', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -48,9 +55,7 @@ describe('associateIrsPractitionerToCase', () => {
   });
 
   it('should not add mapping when the user is already associated with the case', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(true);
+    verifyCaseForUser.mockReturnValue(true);
 
     await associateIrsPractitionerToCase({
       applicationContext,
@@ -60,18 +65,14 @@ describe('associateIrsPractitionerToCase', () => {
       user: irsPractitionerUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).not.toHaveBeenCalled();
   });
 
   it('should add mapping for an irsPractitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockReturnValue(false);
 
     await associateIrsPractitionerToCase({
       applicationContext,
@@ -81,9 +82,7 @@ describe('associateIrsPractitionerToCase', () => {
       user: irsPractitionerUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalled();

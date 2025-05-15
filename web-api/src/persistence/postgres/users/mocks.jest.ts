@@ -87,12 +87,22 @@ jest.mock(
   () => mockFactory('associateUserWithCase'),
 );
 
+jest.mock(
+  '@web-api/persistence/postgres/users/cases/associateUserWithCasePending',
+  () => mockFactory('associateUserWithCasePending'),
+);
+
 jest.mock('@web-api/persistence/postgres/users/cases/deleteUserFromCase', () =>
   mockFactory('deleteUserFromCase'),
 );
 
 jest.mock('@web-api/persistence/postgres/users/cases/verifyCaseForUser', () =>
   mockFactory('verifyCaseForUser'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/users/cases/verifyPendingCaseForUser',
+  () => mockFactory('verifyPendingCaseForUser'),
 );
 
 jest.mock('@web-api/persistence/postgres/users/cases/getCasesForUser', () => ({

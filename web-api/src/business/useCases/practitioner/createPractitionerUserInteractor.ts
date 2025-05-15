@@ -1,12 +1,12 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
+} from '@shared/authorization/authorizationClientService';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createPractitionerUser } from '../../../../../shared/src/business/utilities/createPractitionerUser';
+import { createPractitionerUser } from '@shared/business/utilities/createPractitionerUser';
 import { createOrUpdatePractitionerUser } from '@web-api/persistence/postgres/practitioners/createOrUpdatePractitionerUser';
 
 export const createPractitionerUserInteractor = async (
