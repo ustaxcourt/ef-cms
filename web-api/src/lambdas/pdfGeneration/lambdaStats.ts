@@ -22,18 +22,22 @@ function getDirectorySize(dirPath: string): number {
 }
 
 export function logLambdaStats(message?: string) {
-  const memoryUsedMB = memoryUsage.rss() / (1024 * 1024);
-  const memoryAllocatedMB = parseInt(
-    env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || '0',
-  );
+  try {
+    const memoryUsedMB = memoryUsage.rss() / (1024 * 1024);
+    const memoryAllocatedMB = parseInt(
+      env.AWS_LAMBDA_FUNCTION_MEMORY_SIZE || '0',
+    );
 
-  const tmpUsedMB = getDirectorySize('/tmp') / 1024 / 1024;
+    const tmpUsedMB = getDirectorySize('/tmp') / 1024 / 1024;
 
-  // Log stats
-  console.log(`
-    ${message}
-    PDF Investigation: Lambda Runtime Stats:
-  - Memory Used: ${memoryUsedMB.toFixed(2)} MB / ${memoryAllocatedMB} MB
-  - Ephemeral Storage: ${tmpUsedMB} / 512 MB
-  `);
+    // Log stats
+    console.log(`
+      ${message}
+      PDF Investigation: Lambda Runtime Stats:
+    - Memory Used: ${memoryUsedMB.toFixed(2)} MB / ${memoryAllocatedMB} MB
+    - Ephemeral Storage: ${tmpUsedMB} / 512 MB
+    `);
+  } catch (e) {
+    console.log('logLambdaStats no worky');
+  }
 }
