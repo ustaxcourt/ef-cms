@@ -1,13 +1,23 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 
 describe('getAllFeatureFlagsInteractor', () => {
-  const mockFeatureFlagKey = 'chief-judge-name';
+  const mockFeatureFlagRootKey = 'JEST_TEST_FEATURE_FLAG';
+  const mockFeatureFlagKey = 'jest-test-feature-flag';
+
   beforeEach(() => {
     jest.resetModules();
     applicationContext.environment = { stage: 'prod' };
   });
 
   it('should retrieve the value of the feature flag from persistence when the feature flag is included in the allowlist', async () => {
+    const { ALLOWLIST_FEATURE_FLAGS } = await import(
+      '@shared/business/entities/EntityConstants'
+    );
+
+    ALLOWLIST_FEATURE_FLAGS[mockFeatureFlagRootKey] = {
+      key: mockFeatureFlagKey,
+    };
+
     const { getAllFeatureFlagsInteractor } = await import(
       './getAllFeatureFlagsInteractor'
     );
@@ -27,6 +37,14 @@ describe('getAllFeatureFlagsInteractor', () => {
   });
 
   it('should return false if the persistence method returns undefined', async () => {
+    const { ALLOWLIST_FEATURE_FLAGS } = await import(
+      '@shared/business/entities/EntityConstants'
+    );
+
+    ALLOWLIST_FEATURE_FLAGS[mockFeatureFlagRootKey] = {
+      key: mockFeatureFlagKey,
+    };
+
     const { getAllFeatureFlagsInteractor } = await import(
       './getAllFeatureFlagsInteractor'
     );
@@ -44,6 +62,13 @@ describe('getAllFeatureFlagsInteractor', () => {
   });
 
   it('should return a string if the feature flag is a string', async () => {
+    const { ALLOWLIST_FEATURE_FLAGS } = await import(
+      '@shared/business/entities/EntityConstants'
+    );
+
+    ALLOWLIST_FEATURE_FLAGS[mockFeatureFlagRootKey] = {
+      key: mockFeatureFlagKey,
+    };
     const { getAllFeatureFlagsInteractor } = await import(
       './getAllFeatureFlagsInteractor'
     );
@@ -61,6 +86,13 @@ describe('getAllFeatureFlagsInteractor', () => {
   });
 
   it('should cache the feature flag values when they have already been fetched', async () => {
+    const { ALLOWLIST_FEATURE_FLAGS } = await import(
+      '@shared/business/entities/EntityConstants'
+    );
+
+    ALLOWLIST_FEATURE_FLAGS[mockFeatureFlagRootKey] = {
+      key: mockFeatureFlagKey,
+    };
     const { getAllFeatureFlagsInteractor } = await import(
       './getAllFeatureFlagsInteractor'
     );

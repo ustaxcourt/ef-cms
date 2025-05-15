@@ -1,3 +1,4 @@
+import { getAllFeatureFlagsFromPostgresInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor';
 import { genericHandler } from '../../genericHandler';
 import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 
@@ -10,8 +11,17 @@ import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/feature
 export const getAllFeatureFlagsLambda = event =>
   genericHandler(
     event,
-    ({ applicationContext }) => {
-      return getAllFeatureFlagsInteractor(applicationContext);
+    async ({ applicationContext }) => {
+			// TODO: THIS IS TEMPORARY UNTIL WE STRANGLE OUT DYNAMO FEATURE FLAGS;
+      const DYNAMO_FEATURE_FLAGS =
+        await getAllFeatureFlagsInteractor(applicationContext);
+      const POSTGRES_FEATURE_FLAGS =
+        await getAllFeatureFlagsFromPostgresInteractor(applicationContext);
+
+      return {
+        ...DYNAMO_FEATURE_FLAGS,
+        ...POSTGRES_FEATURE_FLAGS,
+      };
     },
     { bypassMaintenanceCheck: true },
   );

@@ -194,17 +194,6 @@ export const setTerminalUserIps = (ips: string[]) => {
   });
 };
 
-export const setChiefJudgeNameFlagValue = newJudgeName => {
-  return client.put({
-    Item: {
-      current: newJudgeName,
-      pk: 'chief-judge-name',
-      sk: 'chief-judge-name',
-    },
-    applicationContext,
-  });
-};
-
 export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
   return client.update({
     ExpressionAttributeNames: {

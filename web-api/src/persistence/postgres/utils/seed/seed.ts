@@ -18,6 +18,7 @@ import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
+import { featureFlags } from '@web-api/persistence/postgres/utils/seed/fixtures/featureFlags';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -54,6 +55,16 @@ export const seed = async () => {
     table: null,
   });
 
+  const insertFeatureFlags = await getDbWriter({
+    cb: writer =>
+      writer
+        .insertInto('dwFeatureFlag')
+        .values(featureFlags)
+        .onConflict(oc => oc.column('name').doNothing()) // ensure doesn't fail if exists
+        .execute(),
+    table: null,
+  });
+
   // Seed the cases
   const cases = [
     ...cases100_104,
@@ -84,6 +95,7 @@ export const seed = async () => {
     insertCorrespondence,
     insertCaseWorksheet,
     insertWorkItem,
+    insertFeatureFlags,
   ]);
 };
 

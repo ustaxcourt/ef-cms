@@ -1,11 +1,8 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
+  ALLOWLIST_FEATURE_FLAGS_POSTGRES,
   ROLES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  isSealedCase,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case, isSealedCase } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -61,11 +58,12 @@ export const getPublicDownloadPolicyUrlInteractor = async (
 
   const featureFlags = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
+    .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
 
   const documentVisibilityChangeDate =
     featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
+      ALLOWLIST_FEATURE_FLAGS_POSTGRES.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE
+        .key
     ];
 
   if (
