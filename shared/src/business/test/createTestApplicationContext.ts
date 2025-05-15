@@ -1,6 +1,6 @@
 import * as DateHandler from '@shared/business/utilities/DateHandler';
 import * as pdfLib from 'pdf-lib';
-import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -486,7 +486,7 @@ export const createTestApplicationContext = () => {
     getElasticsearchReindexRecords: jest.fn(),
     getFeatureFlagValue: jest.fn().mockImplementation(({ featureFlag }) => {
       switch (featureFlag) {
-        case ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key:
+        case ALLOWLIST_FEATURE_FLAGS_POSTGRES.ENTITY_LOCKING_FEATURE_FLAG.key:
           return { current: true };
       }
     }),

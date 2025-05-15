@@ -30491,11 +30491,6 @@
     "pk": "email-undefined"
   },
   {
-    "sk": "entity-locking-feature-flag",
-    "current": true,
-    "pk": "entity-locking-feature-flag"
-  },
-  {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "pk": "inactivePractitioner|IP1111"
   },
