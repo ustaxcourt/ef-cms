@@ -1,19 +1,8 @@
-import { logLambdaStats } from '@web-api/lambdas/pdfGeneration/lambdaStats';
-
 export const openAndCloseAlot = async () => {
-  logLambdaStats('About to get chromium browser');
-  try {
-    for (let index = 0; index < 30; index++) {
-      const browser = await getChromiumBrowserAWS();
-      logLambdaStats(`Created chromium browser ${index}`);
-      await Promise.race([browser.close(), browser.close(), browser.close()]);
-      logLambdaStats(`closed browser ${index}`);
-    }
-  } catch (err) {
-    logLambdaStats('launch error');
-    throw err;
+  for (let index = 0; index < 30; index++) {
+    const browser = await getChromiumBrowserAWS();
+    await Promise.race([browser.close(), browser.close(), browser.close()]);
   }
-  logLambdaStats('exiting');
 };
 
 const getChromiumBrowserAWS = async () => {
