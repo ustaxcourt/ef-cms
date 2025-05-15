@@ -1,9 +1,6 @@
 import { logLambdaStats } from '@web-api/lambdas/pdfGeneration/lambdaStats';
 
 export const openAndCloseAlot = async () => {
-  process.env.DEBUG = 'puppeteer:*,chrome:*';
-  process.env.PUPPETEER_LOGLEVEL = 'debug';
-
   logLambdaStats('About to get chromium browser');
   try {
     for (let index = 0; index < 30; index++) {
