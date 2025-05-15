@@ -87,9 +87,6 @@ export const PARTY_VIEW_TABS = {
 };
 
 export const ALLOWLIST_FEATURE_FLAGS = {
-  E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
-    key: 'e-consent-fields-enabled-feature-flag',
-  },
   ENTITY_LOCKING_FEATURE_FLAG: {
     key: 'entity-locking-feature-flag',
   },
@@ -109,6 +106,9 @@ export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
   },
   DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE: {
     key: 'document-visibility-policy-change-date',
+  },
+  E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
+    key: 'e-consent-fields-enabled-feature-flag',
   },
 };
 

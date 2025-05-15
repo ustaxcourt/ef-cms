@@ -52,8 +52,11 @@ export const reviewSavedPetitionHelper = (
     ...caseDetail
   } = get(state.form);
 
-  const { ALLOWLIST_FEATURE_FLAGS, INITIAL_DOCUMENT_TYPES, PAYMENT_STATUS } =
-    applicationContext.getConstants();
+  const {
+    ALLOWLIST_FEATURE_FLAGS_POSTGRES,
+    INITIAL_DOCUMENT_TYPES,
+    PAYMENT_STATUS,
+  } = applicationContext.getConstants();
 
   const receivedAtFormatted = applicationContext
     .getUtilities()
@@ -156,7 +159,7 @@ export const reviewSavedPetitionHelper = (
 
   const eConsentFieldsEnabledFeatureFlag = get(
     state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+      ALLOWLIST_FEATURE_FLAGS_POSTGRES.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
     ],
   );
 

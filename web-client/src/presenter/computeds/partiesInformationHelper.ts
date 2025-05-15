@@ -54,7 +54,7 @@ export const partiesInformationHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { ALLOWLIST_FEATURE_FLAGS, CONTACT_TYPES } =
+  const { ALLOWLIST_FEATURE_FLAGS_POSTGRES, CONTACT_TYPES } =
     applicationContext.getConstants();
   const otherContactTypes = [
     CONTACT_TYPES.intervenor,
@@ -138,7 +138,8 @@ export const partiesInformationHelper = (
 
     const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
       state.featureFlags[
-        ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+        ALLOWLIST_FEATURE_FLAGS_POSTGRES.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG
+          .key
       ],
     );
 
