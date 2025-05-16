@@ -2,7 +2,7 @@ jest.mock(
   '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
 );
 jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
-jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
+jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '../../../../shared/src/test/mockCase';
 import { MOCK_COMPLEX_CASE } from '../../../../shared/src/test/mockComplexCase';
 import { MOCK_PRACTITIONER } from '../../../../shared/src/test/mockUsers';
