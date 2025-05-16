@@ -1,23 +1,42 @@
 import { logLambdaStats } from '@web-api/lambdas/pdfGeneration/lambdaStats';
-import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
-import { applicationContext } from '@web-api/applicationContext';
-import { Browser } from 'puppeteer-core';
+import { createApplicationContext } from '../../applicationContext';
 
 export type PdfGenerationResult = {
   tempId: string;
 };
 
 export const handler = async event => {
-  let browser: Browser;
+  const MAX_RETRIES = 4;
+  const RETRY_DELAY_MS = 100;
+  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+
+  const applicationContext = createApplicationContext({});
+  let browser;
+
   console.log('PDF Investigation: About to get chromium browser');
   logLambdaStats();
-  try {
-    browser = await getChromiumBrowser();
-  } catch (err) {
-    console.log('PDF Investigation: launch error');
-    logLambdaStats();
-    throw err;
+
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      browser = await applicationContext.getChromiumBrowser();
+    } catch (err: any) {
+      console.error('PDF Investigation: stderr:', err?.stderr);
+      console.error(
+        'PDF Investigation: Browser launch error: ',
+        JSON.stringify(err),
+      );
+
+      browser = null;
+
+      logLambdaStats();
+      await delay(RETRY_DELAY_MS);
+    }
   }
+
+  if (!browser) {
+    throw new Error('Failed to launch chromium after multiple attempts.');
+  }
+
   logLambdaStats();
   console.log('PDF Investigation: About to generate pdf from html');
 
@@ -25,12 +44,11 @@ export const handler = async event => {
     .getUseCaseHelpers()
     .generatePdfFromHtmlHelper(applicationContext, event, browser);
 
-  const pages = await browser.pages();
-  await Promise.all(pages.map(p => p.close()));
-
   console.log(
     'PDF Investigation: Finished generating pdf; about to close browser',
   );
+
+  await browser.close();
 
   console.log('PDF Investigation: Closed browser');
   logLambdaStats();
@@ -51,6 +69,8 @@ export const changeOfAddressHandler = async event => {
   const { Records } = event;
   const { body } = Records[0];
   const eventBody = JSON.parse(body);
+
+  const applicationContext = createApplicationContext(eventBody.requestUser);
 
   applicationContext.logger.info(
     `processing job "change-of-address-job|${eventBody.jobId}", task for case ${eventBody.docketNumber}`,
