@@ -27,8 +27,14 @@ const getChromiumBrowserAWS = async (): Promise<Browser> => {
   });
 };
 
-export async function getChromiumBrowser(): Promise<Browser> {
-  if (!browser) {
+export async function getChromiumBrowser(
+  {
+    resetSingleton = false,
+  }: {
+    resetSingleton?: boolean;
+  } = { resetSingleton: false },
+): Promise<Browser> {
+  if (!browser || resetSingleton) {
     browser =
       environment.stage === 'local'
         ? getChromiumBrowserLocal()

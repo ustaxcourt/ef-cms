@@ -1,5 +1,4 @@
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
-import * as pdfLib from 'pdf-lib';
 import {
   CASE_INVENTORY_PAGE_SIZE,
   CASE_STATUS_TYPES,
@@ -19,10 +18,6 @@ import { SQSClient } from '@aws-sdk/client-sqs';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { environment } from '@web-api/environment';
 import { getBatchClient } from '@web-api/persistence/batch/getBatchClient';
-import {
-  getChromiumBrowser,
-  getChromiumBrowserAWS,
-} from '../../shared/src/business/utilities/getChromiumBrowser';
 import {
   getCognito,
   getLocalCognito,
@@ -59,6 +54,7 @@ import pug from 'pug';
 import sass from 'sass';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
+import { getPdfLib } from '@shared/business/utilities/pdfs/getPdfLib';
 let sqsCache: SQSClient;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -70,13 +66,6 @@ export const createApplicationContext = (appContextUser = {}) => {
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser: async () => {
-      if (environment.stage === 'local') {
-        return await getChromiumBrowser();
-      } else {
-        return await getChromiumBrowserAWS();
-      }
-    },
     getCognito: (): CognitoIdentityProvider => {
       if (environment.stage === 'local') {
         return getLocalCognito();
@@ -176,9 +165,7 @@ export const createApplicationContext = (appContextUser = {}) => {
     getNotificationClient,
     getNotificationGateway,
     getNotificationService,
-    getPdfLib: () => {
-      return pdfLib;
-    },
+    getPdfLib,
     getPersistenceGateway,
     getPersistencePrivateKeys: () => ['pk', 'sk', 'gsi1pk'],
     getPug: () => {

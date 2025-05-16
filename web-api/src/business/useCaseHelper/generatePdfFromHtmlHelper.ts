@@ -1,8 +1,19 @@
 import { PageMetaHeaderDocket } from '@shared/business/utilities/pdfGenerator/components/PageMetaHeaderDocket';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { headerFontFace } from '../../../../shared/src/business/useCases/headerFontFace';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import { Browser } from 'puppeteer-core';
+import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
+
+export type GeneratePdfRequest = {
+  contentHtml: string;
+  displayHeaderFooter?: boolean;
+  docketNumber?: string;
+  footerHtml?: string;
+  headerHtml?: string;
+  overwriteFooter?: boolean;
+};
 
 /**
  * generatePdfFromHtmlHelper
@@ -14,7 +25,6 @@ import ReactDOM from 'react-dom/server';
  * @returns {Buffer} the pdf as a binary buffer
  */
 export const generatePdfFromHtmlHelper = async (
-  applicationContext: ServerApplicationContext,
   {
     contentHtml,
     displayHeaderFooter = true,
@@ -22,20 +32,13 @@ export const generatePdfFromHtmlHelper = async (
     footerHtml,
     headerHtml,
     overwriteFooter,
-  }: {
-    contentHtml: string;
-    displayHeaderFooter?: boolean;
-    docketNumber?: string;
-    footerHtml?: string;
-    headerHtml?: string;
-    overwriteFooter?: boolean;
-  },
-  browser,
+  }: GeneratePdfRequest,
+  browser: Browser,
 ) => {
   let result: any = null;
 
   try {
-    const page = await browser?.newPage()!;
+    const page = await browser.newPage()!;
 
     await page.setContent(contentHtml);
 
@@ -95,8 +98,7 @@ export const generatePdfFromHtmlHelper = async (
     }
 
     if (remainingPages) {
-      const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
-        applicationContext,
+      const returnVal = await combineTwoPdfs({
         firstPdf: firstPage,
         secondPdf: remainingPages,
       });
@@ -105,7 +107,7 @@ export const generatePdfFromHtmlHelper = async (
       result = firstPage;
     }
   } catch (error) {
-    applicationContext.logger.error(error);
+    getLogger().error(error);
     throw error;
   }
 

@@ -1,5 +1,6 @@
 import { logLambdaStats } from '@web-api/lambdas/pdfGeneration/lambdaStats';
 import { createApplicationContext } from '../../applicationContext';
+import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
 
 export type PdfGenerationResult = {
   tempId: string;
@@ -18,7 +19,7 @@ export const handler = async event => {
 
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      browser = await applicationContext.getChromiumBrowser();
+      browser = await getChromiumBrowser();
     } catch (err: any) {
       console.error('PDF Investigation: stderr:', err?.stderr);
       console.error(
@@ -42,7 +43,7 @@ export const handler = async event => {
 
   const results = await applicationContext
     .getUseCaseHelpers()
-    .generatePdfFromHtmlHelper(applicationContext, event, browser);
+    .generatePdfFromHtmlHelper(event, browser);
 
   console.log(
     'PDF Investigation: Finished generating pdf; about to close browser',
