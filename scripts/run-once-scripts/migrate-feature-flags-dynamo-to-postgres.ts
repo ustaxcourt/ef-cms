@@ -5,6 +5,7 @@ import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgIn
 const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
   'aws-batch-zipper-minimum-count',
   'chief-judge-name',
+  'maintenance-mode',
   'entity-locking-feature-flag',
   'document-visibility-policy-change-date',
   'e-consent-fields-enabled-feature-flag',
