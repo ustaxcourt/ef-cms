@@ -6,11 +6,3 @@ export const openAndCloseAlot = async () => {
     await Promise.race([browser.close(), browser.close(), browser.close()]);
   }
 };
-
-/*
- - Use a singleton
- - Promise.race([browser.close])
- - retry multiple times
- - Add an alarm
- - Maybe add to DLQ?
-*/
