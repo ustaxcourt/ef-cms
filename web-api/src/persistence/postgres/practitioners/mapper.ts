@@ -64,6 +64,12 @@ export function toKyselyUpdatePractitioners(
   return users.map(pickPractitionerFields);
 }
 
+export function toKyselyNewPractitioners(
+  users: RawUser[],
+): NewPractitionerKysely[] {
+  return users.map(pickPractitionerFields);
+}
+
 export function toKyselyNewPractitioner(user: RawUser): NewPractitionerKysely {
   return pickPractitionerFields(user);
 }

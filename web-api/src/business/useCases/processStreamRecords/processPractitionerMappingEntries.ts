@@ -1,5 +1,5 @@
-import { flattenDeep } from 'lodash';
-import { marshall } from '@aws-sdk/util-dynamodb';
+import { flattenDeep, merge } from 'lodash';
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import type {
   AttributeValueWithName,
   IDynamoDBRecord,
@@ -9,6 +9,7 @@ import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getCaseDataFromDynamo } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
+import { upsertPractitionerRecords } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecords';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -19,11 +20,24 @@ export const processPractitionerMappingEntries = async ({
 }) => {
   if (!practitionerMappingRecords.length) return;
 
+  await upsertPractitionerRecords(
+    practitionerMappingRecords.map(userRecord => {
+      const practitioner = unmarshall(userRecord.dynamodb.NewImage);
+
+      const { contact, ...rest } = practitioner;
+      const flatPractitioner = merge({}, rest, contact || {});
+
+      return flatPractitioner;
+    }),
+  );
+  await upsertUserOnCase();
+
   const indexCaseEntryForPractitionerMapping =
     async practitionerMappingRecord => {
       const practitionerMappingData =
         practitionerMappingRecord.dynamodb.NewImage ||
         practitionerMappingRecord.dynamodb.OldImage;
+
       const caseRecords: IDynamoDBRecord[] = [];
 
       const docketNumber = practitionerMappingData.pk.S.substring(

@@ -234,15 +234,27 @@ if practioner table
 
 DynamoDB:
 
-Other Records Mapping
 pk: user|
 sk: user|
+entityName: User|Practitioner
 
-Practitioner Records Mapping
+
+
+pk: user|{userId}
+sk: pending-case|{docketNumber}
+
 
 pk: user|
 sk: case|
 
+"sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
+"pk": "case|101-21",
+
+"sk": "privatePractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
+"pk": "case|101-21",
+
+
+---------------------------------------------------------------------
 ??? Records Mappings
 pk: privatePractitioner|UPPER_NAME
 sk: user|
@@ -255,7 +267,6 @@ sk: user|
 
 Opensearch:
 efcms-user
-???
 
 Assuming User -> OtherRecords
 if yes, then we need partition out the user records into processUserEntity
