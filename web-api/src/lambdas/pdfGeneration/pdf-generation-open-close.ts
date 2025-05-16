@@ -1,20 +1,18 @@
+import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
+
 export const openAndCloseAlot = async () => {
   for (let index = 0; index < 30; index++) {
-    const browser = await getChromiumBrowserAWS();
+    const browser = await getChromiumBrowser();
     await Promise.race([browser.close(), browser.close(), browser.close()]);
   }
 };
 
-const getChromiumBrowserAWS = async () => {
-  // we need to import these as external dependencies to allow us to reuse the application
-  // context in lambdas that DO NOT have the layer.
-  const { default: chromium } = await import('@sparticuz/chromium');
-  const { default: puppeteerCore } = await import('puppeteer-core');
 
-  return await puppeteerCore.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(),
-    headless: chromium.headless as 'shell' | boolean,
-  });
-};
+
+/*
+ - Use a singleton
+ - Promise.race([browser.close])
+ - retry multiple times
+ - Add an alarm
+ - Maybe add to DLQ?
+*/
