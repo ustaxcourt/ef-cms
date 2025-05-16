@@ -223,7 +223,6 @@ export const updateContact = async (
     });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: changeOfAddressPdfWithCover,
       key: newDocketEntryId,
     });
