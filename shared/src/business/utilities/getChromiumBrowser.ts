@@ -14,7 +14,7 @@ const getChromiumBrowserLocal = async (): Promise<Browser> => {
   return theBrowser as unknown as Browser;
 };
 
-const getChromiumBrowserAWS = async (): Promise<Browser> => {
+export const getChromiumBrowserAWS = async (): Promise<Browser> => {
   const { default: chromium } = await import('@sparticuz/chromium');
   const { default: puppeteerCore } = await import('puppeteer-core');
 

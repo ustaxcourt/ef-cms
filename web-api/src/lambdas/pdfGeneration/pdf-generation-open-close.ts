@@ -1,28 +1,10 @@
-import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
-import { getUniqueId } from '@shared/sharedAppContext';
-import {
-  generatePdfFromHtmlHelper,
-  GeneratePdfRequest,
-} from '@web-api/business/useCaseHelper/generatePdfFromHtmlHelper';
-import { saveDocumentFromLambda } from '@web-api/persistence/s3/saveDocumentFromLambda';
+import { getChromiumBrowserAWS } from '@shared/business/utilities/getChromiumBrowser';
 
-export const openAndCloseAlot = async (event: GeneratePdfRequest) => {
-  const browser = await getChromiumBrowser();
-
-  const results = await generatePdfFromHtmlHelper(event, browser);
-
-  const pages = await browser.pages();
-  await Promise.all(pages.map(p => p.close()));
-
-  const tempId = getUniqueId();
-
-  await saveDocumentFromLambda({
-    document: results,
-    key: tempId,
-    useTempBucket: true,
-  });
-
-  return { tempId };
+export const openAndCloseAlot = async () => {
+  for (let index = 0; index < 30; index++) {
+    const browser = await getChromiumBrowserAWS();
+    await Promise.race([browser.close(), browser.close(), browser.close()]);
+  }
 };
 
 /*
