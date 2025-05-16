@@ -1,4 +1,6 @@
+import { sleep } from '@shared/tools/helpers';
 import { environment } from '@web-api/environment';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { Browser } from 'puppeteer-core';
 
 let browser: Promise<Browser> | null = null;
@@ -13,28 +15,30 @@ const getChromiumBrowserLocal = async (): Promise<Browser> => {
 };
 
 const getChromiumBrowserAWS = async (): Promise<Browser> => {
-  // we need to import these as external dependencies to allow us to reuse the application
-  // context in lambdas that DO NOT have the layer.
-
   const { default: chromium } = await import('@sparticuz/chromium');
   const { default: puppeteerCore } = await import('puppeteer-core');
 
-  return await puppeteerCore.launch({
-    args: chromium.args,
-    defaultViewport: chromium.defaultViewport,
-    executablePath: await chromium.executablePath(),
-    headless: chromium.headless as 'shell' | boolean,
-  });
+  for (let i = 0; i < 10; i++) {
+    try {
+      // There is a 1/1000 chance that launching a browser will spontaneously fail. In that event we can recover simply by retrying
+      const theBrowser = await puppeteerCore.launch({
+        args: chromium.args,
+        defaultViewport: chromium.defaultViewport,
+        executablePath: await chromium.executablePath(),
+        headless: chromium.headless as 'shell' | boolean,
+      });
+      await theBrowser;
+    } catch (e) {
+      getLogger().error(`Unable to launch chromium browser on attempt: ${i}`);
+      await sleep(100);
+    }
+  }
+
+  throw new Error('Failed to launch chromium, so cannot produce a pdf');
 };
 
-export async function getChromiumBrowser(
-  {
-    resetSingleton = false,
-  }: {
-    resetSingleton?: boolean;
-  } = { resetSingleton: false },
-): Promise<Browser> {
-  if (!browser || resetSingleton) {
+export async function getChromiumBrowser(): Promise<Browser> {
+  if (!browser) {
     browser =
       environment.stage === 'local'
         ? getChromiumBrowserLocal()
