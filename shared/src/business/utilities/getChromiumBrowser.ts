@@ -27,7 +27,7 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
         executablePath: await chromium.executablePath(),
         headless: chromium.headless as 'shell' | boolean,
       });
-      await theBrowser;
+      return theBrowser;
     } catch (e) {
       getLogger().error(`Unable to launch chromium browser on attempt: ${i}`);
       await sleep(100);
