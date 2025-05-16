@@ -35,7 +35,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   };
 
   const twoPageClinicLetter = combineTwoPdfs({
-    applicationContext,
     firstPdf: testPdfDoc,
     secondPdf: testPdfDoc,
   });

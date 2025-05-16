@@ -20,7 +20,6 @@ describe('saveDocumentFromLambda', () => {
     });
 
     await saveDocumentFromLambda({
-      applicationContext,
       document: expectedArray,
       key: expectedDocketEntryId,
     });
@@ -39,7 +38,6 @@ describe('saveDocumentFromLambda', () => {
     });
 
     await saveDocumentFromLambda({
-      applicationContext,
       document: expectedArray,
       key: expectedDocketEntryId,
       useTempBucket: true,
@@ -59,7 +57,6 @@ describe('saveDocumentFromLambda', () => {
     });
 
     await saveDocumentFromLambda({
-      applicationContext,
       contentType: 'text/plain',
       document: expectedArray,
       key: expectedDocketEntryId,
@@ -84,7 +81,6 @@ describe('saveDocumentFromLambda', () => {
     });
 
     await saveDocumentFromLambda({
-      applicationContext,
       contentType: 'text/plain',
       document: expectedArray,
       key: expectedDocketEntryId,
@@ -104,7 +100,6 @@ describe('saveDocumentFromLambda', () => {
 
     await expect(
       saveDocumentFromLambda({
-        applicationContext,
         contentType: 'text/plain',
         document: expectedArray,
         key: expectedDocketEntryId,

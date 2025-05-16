@@ -57,7 +57,6 @@ export const handler = async event => {
   const tempId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: results,
     key: tempId,
     useTempBucket: true,
