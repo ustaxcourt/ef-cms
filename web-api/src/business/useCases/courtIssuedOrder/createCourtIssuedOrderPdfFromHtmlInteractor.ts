@@ -11,6 +11,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -52,12 +53,14 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   let titleOfClerk = '';
 
   if (isNoticeEvent) {
-    const { name, title } = await applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue({
-        applicationContext,
-        configurationItemKey: CLERK_OF_THE_COURT_CONFIGURATION,
-      });
+    const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+      CLERK_OF_THE_COURT_CONFIGURATION,
+    ]);
+
+    const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+      name: string;
+      title: string;
+    };
     nameOfClerk = name;
     titleOfClerk = title;
   }

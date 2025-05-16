@@ -7,6 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { formatPhoneNumber } from '../../../../../shared/src/business/utilities/formatPhoneNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '../../../../../shared/src/business/utilities/getJudgeWithTitle';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 export const generateNoticeOfChangeToInPersonProceeding = async (
   applicationContext: ServerApplicationContext,
@@ -51,15 +52,17 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
 
   const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
-  const clerkOftheCourtConfigurationKey: string =
-    applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION;
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey: clerkOftheCourtConfigurationKey,
-    });
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
 
   return await applicationContext
     .getDocumentGenerators()
