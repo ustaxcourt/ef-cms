@@ -1,3 +1,4 @@
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { CASE_STATUS_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext as applicationContextFactory } from '../../web-api/src/applicationContext';
 import {
@@ -39,12 +40,11 @@ describe('verify old sent work items do not show up in the outbox', () => {
     const daysToRetrieveKey =
       applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
         .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
-    const daysToRetrieve = await applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue({
-        applicationContext,
-        configurationItemKey: daysToRetrieveKey,
-      });
+
+    const daysToRetrieveRecord = await getFeatureFlagValues([
+      daysToRetrieveKey,
+    ]);
+    const { current: daysToRetrieve } = daysToRetrieveRecord[0].value;
 
     const CREATED_N_PLUS_1_DAYS_AGO = applicationContext
       .getUtilities()
