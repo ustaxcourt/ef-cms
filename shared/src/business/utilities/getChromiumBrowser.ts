@@ -24,6 +24,11 @@ const getChromiumBrowserAWS = async (): Promise<Browser> => {
     defaultViewport: chromium.defaultViewport,
     executablePath: await chromium.executablePath(),
     headless: chromium.headless as 'shell' | boolean,
+    env: {
+      LD_LIBRARY_PATH: process.env.LD_LIBRARY_PATH, // be careful editing this; see 10658
+      PATH: process.env.PATH,
+      FONTCONFIG_PATH: process.env.FONTCONFIG_PATH,
+    },
   });
 };
 
