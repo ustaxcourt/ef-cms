@@ -24,27 +24,27 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
-import { users } from '@web-api/persistence/postgres/utils/seed/fixtures/users/users';
-import { practitioners } from '@web-api/persistence/postgres/utils/seed/fixtures/practitioners';
-import { usersOnCase } from './fixtures/users/usersOnCase';
+// import { users } from '@web-api/persistence/postgres/utils/seed/fixtures/users/users';
+// import { practitioners } from '@web-api/persistence/postgres/utils/seed/fixtures/practitioners';
+// import { usersOnCase } from './fixtures/users/usersOnCase';
 
 export const seed = async () => {
-  const insertUsers = pgInsertInto({
-    table: 'dwUser',
-    values: users,
-    onConflictColumns: ['userId'],
-  });
+  // const insertUsers = pgInsertInto({
+  //   table: 'dwUser',
+  //   values: users,
+  //   onConflictColumns: ['userId'],
+  // });
 
-  const insertPractitioners = pgInsertInto({
-    table: 'dwPractitioner',
-    values: practitioners,
-    onConflictColumns: ['userId'],
-  });
+  // const insertPractitioners = pgInsertInto({
+  //   table: 'dwPractitioner',
+  //   values: practitioners,
+  //   onConflictColumns: ['userId'],
+  // });
 
-  const insertUsersOnCase = pgInsertInto({
-    table: 'dwUserOnCase',
-    values: usersOnCase,
-  });
+  // const insertUsersOnCase = pgInsertInto({
+  //   table: 'dwUserOnCase',
+  //   values: usersOnCase,
+  // });
 
   const insertMessages = pgInsertInto({
     table: 'dwMessage',
@@ -135,9 +135,9 @@ export const seed = async () => {
   });
 
   await Promise.all([
-    insertUsers,
-    insertPractitioners,
-    insertUsersOnCase,
+    // insertUsers,
+    // insertPractitioners,
+    // insertUsersOnCase,
     insertMessages,
     insertCaseDeadline,
     insertCorrespondence,

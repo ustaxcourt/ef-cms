@@ -48,6 +48,21 @@ function pickUserFields(user) {
   };
 }
 
+function pickUserOnCase(record) {
+  return {
+    userId: record.userId,
+    docketNumber: record.docketNumber,
+    representing: record.representing
+      ? JSON.stringify(record.representing)
+      : undefined,
+    entityName: record.entityName,
+  };
+}
+
+export function toKyselyNewUserOnCaseRecords(records) {
+  return records.map(pickUserOnCase);
+}
+
 export function toKyselyUpdateUser(user: RawUser): UpdateUserKysely {
   return pickUserFields(user);
 }
@@ -60,7 +75,7 @@ export function toKyselyNewUser(user: RawUser): NewUserKysely {
   return pickUserFields(user);
 }
 
-export function toKyselyNewMessages(users: RawUser[]): NewUserKysely[] {
+export function toKyselyNewUsers(users: RawUser[]): NewUserKysely[] {
   return users.map(pickUserFields);
 }
 
@@ -104,10 +119,6 @@ function hasContactInfo(contact): boolean {
     contact.postalCode &&
     contact.state
   );
-}
-
-export function toKyselyNewUsers(users: RawUser[]): NewUserKysely[] {
-  return users.map(pickUserFields);
 }
 
 export function rawUserWithPractitionerEntity(

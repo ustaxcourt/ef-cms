@@ -8328,6 +8328,29 @@
     "docketNumber": "103-20"
   },
   {
+    "role": "privatePractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "firmName": "GW Law Offices",
+    "pk": "case|103-20",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "privatePractitioner@example.com"
+  },
+  {
     "associatedJudge": "Chief Judge",
     "petitionPaymentMethod": "cc",
     "isSealed": false,
@@ -10262,6 +10285,30 @@
     "docketNumber": "105-19"
   },
   {
+    "role": "privatePractitioner",
+    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "case|105-19",
+    "email": "privatePractitioner@example.com"
+  },
+  {
     "isSealed": true,
     "qcCompleteForTrial": {},
     "irsNoticeDate": null,
@@ -10578,6 +10625,30 @@
     "pk": "case|105-20",
     "servedAt": "2020-09-25T19:27:16.469Z",
     "docketNumber": "105-20"
+  },
+  {
+    "role": "privatePractitioner",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Private Practitioner",
+    "pk": "case|105-20",
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -12648,6 +12719,31 @@
     "email": "irspractitioner@example.com"
   },
   {
+    "role": "privatePractitioner",
+    "gsi1pk": "leadCase|102-67",
+    "representing": ["bc936c44-ff22-478b-a9e9-971f250d599c"],
+    "section": "privatePractitioner",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "firmName": "GW Law Offices",
+    "pk": "case|105-67",
+    "email": "privatePractitioner@example.com"
+  },
+  {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
     "isPaper": false,
@@ -13081,6 +13177,31 @@
     "documentTitle": "Order",
     "docketNumber": "106-23",
     "addToCoversheet": false
+  },
+  {
+    "role": "privatePractitioner",
+    "gsi1pk": "leadCase|104-23",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405417"],
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "case|106-23",
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -13554,6 +13675,30 @@
     "pk": "case|107-19",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "irspractitioner@example.com"
+  },
+  {
+    "role": "privatePractitioner",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "section": "privatePractitioner",
+    "representingPrimary": true,
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "serviceIndicator": "Electronic",
+    "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test Private Practitioner",
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "case|107-19",
+    "email": "privatePractitioner@example.com"
   },
   {
     "associatedJudge": "Colvin",
@@ -29978,6 +30123,28 @@
     "pk": "case|999-15",
     "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "irspractitioner@example.com"
+  },
+  {
+    "role": "privatePractitioner",
+    "serviceIndicator": "None",
+    "barNumber": "PT1234",
+    "entityName": "PrivatePractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
+    "name": "Test Private Practitioner",
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "pk": "case|999-15",
+    "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "privatePractitioner@example.com"
   },
   {
     "sk": "chief-judge-name",

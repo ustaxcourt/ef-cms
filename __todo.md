@@ -61,6 +61,9 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
 - [ ] Test Deletion Script on Deployed Environment
 - [ ] Update DynamoDB DrawIO Entity Map
 - [ ] Update ERD for new tables
+- [ ] Do we really need optional fields for...
+  - [ ] practitioner.admissions_data
+  - [ ] many other practitioner fields
 
 ## Odd dynamo functions that need to be reimplemented with postgres
 

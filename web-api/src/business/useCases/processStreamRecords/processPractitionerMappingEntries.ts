@@ -10,6 +10,7 @@ import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getCaseDataFromDynamo } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
 import { upsertPractitionerRecords } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecords';
+import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -21,8 +22,10 @@ export const processPractitionerMappingEntries = async ({
   if (!practitionerMappingRecords.length) return;
 
   await upsertPractitionerRecords(
-    practitionerMappingRecords.map(userRecord => {
-      const practitioner = unmarshall(userRecord.dynamodb.NewImage);
+    practitionerMappingRecords.map(practitionerMappingRecord => {
+      const practitioner = unmarshall(
+        practitionerMappingRecord.dynamodb.NewImage,
+      );
 
       const { contact, ...rest } = practitioner;
       const flatPractitioner = merge({}, rest, contact || {});
@@ -30,7 +33,20 @@ export const processPractitionerMappingEntries = async ({
       return flatPractitioner;
     }),
   );
-  await upsertUserOnCase();
+  // await upsertUserOnCaseRecords(
+  //   practitionerMappingRecords.map(practitionerMappingRecord => {
+  //     const practitionerMapping = unmarshall(
+  //       practitionerMappingRecord.dynamodb.NewImage,
+  //     );
+
+  //     return {
+  //       userId: practitionerMapping.userId,
+  //       docketNumber: practitionerMapping.docketNumber,
+  //       entityName: practitionerMapping.entityName,
+  //       representing: practitionerMapping.representing,
+  //     };
+  //   }),
+  // );
 
   const indexCaseEntryForPractitionerMapping =
     async practitionerMappingRecord => {

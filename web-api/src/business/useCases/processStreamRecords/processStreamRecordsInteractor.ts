@@ -15,6 +15,8 @@ import { processUserCaseNoteEntries } from '@web-api/business/useCases/processSt
 import { processWorkItemEntries } from './processWorkItemEntries';
 import type { DynamoDBRecord } from 'aws-lambda';
 import { processUserEntities } from '@web-api/business/useCases/processStreamRecords/processUserEntries';
+import { processUserOnCasePendingEntries } from './processUserOnCasePendingEntries';
+import { processUserOnCaseEntries } from './processUserOnCaseEntries';
 
 export const processStreamRecordsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -32,6 +34,8 @@ export const processStreamRecordsInteractor = async (
     practitionerMappingRecords,
     removeRecords,
     userCaseNoteRecords,
+    userOnCasePendingRecords,
+    userOnCaseRecords,
     userRecords,
     workItemRecords,
   } = partitionRecords(recordsToProcess);
@@ -145,6 +149,22 @@ export const processStreamRecordsInteractor = async (
       });
       throw err;
     });
+
+    await processUserOnCasePendingEntries({ userOnCasePendingRecords }).catch(
+      err => {
+        getLogger().error('failed to processUserOnCasePendingEntries', {
+          err,
+        });
+        throw err;
+      },
+    );
+
+    // await processUserOnCaseEntries({ userOnCaseRecords }).catch(err => {
+    //   getLogger().error('failed to processUserOnCaseEntries', {
+    //     err,
+    //   });
+    //   throw err;
+    // });
 
     await processOtherEntries({ applicationContext, otherRecords }).catch(
       err => {

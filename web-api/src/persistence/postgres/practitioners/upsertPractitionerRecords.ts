@@ -1,11 +1,18 @@
-// import { RawUser } from '@shared/business/entities/User';
+import { getUniqueId } from '@shared/sharedAppContext';
 import { pgInsertInto } from '../utils/operation/pgInsertInto';
-import { toKyselyNewPractitioners } from './mapper';
+import { pickPractitionerFields } from './mapper';
+import { pinkLog } from '@shared/tools/pinkLog';
 
 export const upsertPractitionerRecords = async practitioners => {
   await pgInsertInto({
     table: 'dwPractitioner',
-    values: toKyselyNewPractitioners(practitioners),
+    values: practitioners.map((practitioner, i) => {
+      pinkLog(`Practitioner #${i}`, practitioner);
+      return {
+        ...pickPractitionerFields(practitioner),
+        practitionerId: getUniqueId(),
+      };
+    }),
     onConflictColumns: ['userId'],
   });
 };
