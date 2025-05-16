@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import {
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -386,6 +387,7 @@ describe('updateCase', () => {
 
     expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
   });
+
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 

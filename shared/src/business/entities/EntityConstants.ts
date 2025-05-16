@@ -87,9 +87,6 @@ export const PARTY_VIEW_TABS = {
 };
 
 export const ALLOWLIST_FEATURE_FLAGS = {
-  ENTITY_LOCKING_FEATURE_FLAG: {
-    key: 'entity-locking-feature-flag',
-  },
   USE_CHANGE_OF_ADDRESS_LAMBDA: {
     disabledMessage:
       'A flag to know when to use the change of address lambda for processing.',
@@ -109,6 +106,9 @@ export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
   },
   E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG: {
     key: 'e-consent-fields-enabled-feature-flag',
+  },
+  ENTITY_LOCKING_FEATURE_FLAG: {
+    key: 'entity-locking-feature-flag',
   },
 };
 
