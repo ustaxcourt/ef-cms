@@ -29,6 +29,7 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
       });
       return theBrowser;
     } catch (e) {
+      getLogger().error('puppeteer failed to launch', e);
       getLogger().error(`Unable to launch chromium browser on attempt: ${i}`);
       await sleep(100);
     }
