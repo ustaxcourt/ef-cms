@@ -3,6 +3,7 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
+  'clerk-of-court-configuration',
   'aws-batch-zipper-minimum-count',
   'chief-judge-name',
   'entity-locking-feature-flag',

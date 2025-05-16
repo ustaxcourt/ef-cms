@@ -17,4 +17,13 @@ export const featureFlags: NewFeatureFlagTableKysely[] = [
     name: 'e-consent-fields-enabled-feature-flag',
     value: { current: true },
   },
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'Stephanie A. Servoss',
+        title: 'Clerk of the Court',
+      },
+    },
+  },
 ];
