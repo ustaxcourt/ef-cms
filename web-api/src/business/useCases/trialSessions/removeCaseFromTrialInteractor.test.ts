@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
@@ -137,7 +138,9 @@ describe('removeCaseFromTrialInteractor', () => {
         .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
@@ -185,7 +188,9 @@ describe('removeCaseFromTrialInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
         .calls[0][0].caseEntity,
     ).toMatchObject({ docketNumber: '101-18' });
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
@@ -303,7 +308,9 @@ describe('removeCaseFromTrialInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).not.toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: MOCK_CASE.docketNumber,
       hearings: [],
     });

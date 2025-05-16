@@ -1,12 +1,13 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 jest.mock(
   '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
 );
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { blockCaseFromTrialInteractor } from './blockCaseFromTrialInteractor';
