@@ -1,62 +1,26 @@
-import { logLambdaStats } from '@web-api/lambdas/pdfGeneration/lambdaStats';
-import { createApplicationContext } from '../../applicationContext';
 import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
+import { getUniqueId } from '@shared/sharedAppContext';
+import {
+  generatePdfFromHtmlHelper,
+  GeneratePdfRequest,
+} from '@web-api/business/useCaseHelper/generatePdfFromHtmlHelper';
+import { saveDocumentFromLambda } from '@web-api/persistence/s3/saveDocumentFromLambda';
 
 export type PdfGenerationResult = {
   tempId: string;
 };
 
-export const handler = async event => {
-  const MAX_RETRIES = 4;
-  const RETRY_DELAY_MS = 100;
-  const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+export const handler = async (event: GeneratePdfRequest) => {
+  const browser = await getChromiumBrowser();
 
-  const applicationContext = createApplicationContext({});
-  let browser;
+  const results = await generatePdfFromHtmlHelper(event, browser);
 
-  console.log('PDF Investigation: About to get chromium browser');
-  logLambdaStats();
+  const pages = await browser.pages();
+  await Promise.all(pages.map(p => p.close()));
 
-  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
-    try {
-      browser = await getChromiumBrowser();
-    } catch (err: any) {
-      console.error('PDF Investigation: stderr:', err?.stderr);
-      console.error(
-        'PDF Investigation: Browser launch error: ',
-        JSON.stringify(err),
-      );
+  const tempId = getUniqueId();
 
-      browser = null;
-
-      logLambdaStats();
-      await delay(RETRY_DELAY_MS);
-    }
-  }
-
-  if (!browser) {
-    throw new Error('Failed to launch chromium after multiple attempts.');
-  }
-
-  logLambdaStats();
-  console.log('PDF Investigation: About to generate pdf from html');
-
-  const results = await applicationContext
-    .getUseCaseHelpers()
-    .generatePdfFromHtmlHelper(event, browser);
-
-  console.log(
-    'PDF Investigation: Finished generating pdf; about to close browser',
-  );
-
-  await browser.close();
-
-  console.log('PDF Investigation: Closed browser');
-  logLambdaStats();
-
-  const tempId = applicationContext.getUniqueId();
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+  await saveDocumentFromLambda({
     document: results,
     key: tempId,
     useTempBucket: true,
