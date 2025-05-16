@@ -18,7 +18,7 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
   const { default: chromium } = await import('@sparticuz/chromium');
   const { default: puppeteerCore } = await import('puppeteer-core');
 
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 5; i++) {
     try {
       // There is a 1/1000 chance that launching a browser will spontaneously fail. In that event we can recover simply by retrying
       const theBrowser = await puppeteerCore.launch({
@@ -29,13 +29,15 @@ export const getChromiumBrowserAWS = async (): Promise<Browser> => {
       });
       return theBrowser;
     } catch (e) {
-      getLogger().error('puppeteer failed to launch', e);
-      getLogger().error(`Unable to launch chromium browser on attempt: ${i}`);
+      getLogger().error(
+        `Unable to launch chromium browser on attempt: ${i}`,
+        e,
+      );
       await sleep(100);
     }
   }
 
-  throw new Error('Failed to launch chromium, so cannot produce a pdf');
+  throw new Error('Error: Failed to launch chromium, so cannot produce a pdf');
 };
 
 export async function getChromiumBrowser(): Promise<Browser> {
