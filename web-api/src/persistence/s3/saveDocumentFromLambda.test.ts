@@ -1,30 +1,42 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+let mockPutObject = jest.fn();
+const mockLogger = {
+  addContext: jest.fn(),
+  clearContext: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+};
+jest.mock('@web-api/persistence/s3/getStorageClient', () => ({
+  getStorageClient: () => {
+    return { putObject: mockPutObject };
+  },
+}));
+jest.mock('@web-api/utilities/logger/getLogger', () => {
+  return {
+    getLogger: () => mockLogger,
+  };
+});
+import { environment } from '@web-api/environment';
 import { saveDocumentFromLambda } from './saveDocumentFromLambda';
 
 describe('saveDocumentFromLambda', () => {
-  let putObjectStub = jest.fn();
-
   const expectedDocketEntryId = 'abc';
   const expectedArray = new Uint8Array([123]);
   const defaultBucketName = 'aBucket';
   const tempBucketName = 'aTempBucket';
 
   beforeEach(() => {
-    applicationContext.environment.documentsBucketName = defaultBucketName;
-    applicationContext.environment.tempDocumentsBucketName = tempBucketName;
+    environment.documentsBucketName = defaultBucketName;
+    environment.tempDocumentsBucketName = tempBucketName;
   });
 
   it('saves the document', async () => {
-    applicationContext.getStorageClient = () => ({
-      putObject: putObjectStub,
-    });
-
     await saveDocumentFromLambda({
       document: expectedArray,
       key: expectedDocketEntryId,
     });
 
-    expect(putObjectStub).toHaveBeenCalledWith({
+    expect(mockPutObject).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
       Bucket: defaultBucketName,
       ContentType: 'application/pdf',
@@ -33,17 +45,13 @@ describe('saveDocumentFromLambda', () => {
   });
 
   it('saves the document in the temp bucket', async () => {
-    applicationContext.getStorageClient = () => ({
-      putObject: putObjectStub,
-    });
-
     await saveDocumentFromLambda({
       document: expectedArray,
       key: expectedDocketEntryId,
       useTempBucket: true,
     });
 
-    expect(putObjectStub).toHaveBeenCalledWith({
+    expect(mockPutObject).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
       Bucket: tempBucketName,
       ContentType: 'application/pdf',
@@ -52,17 +60,13 @@ describe('saveDocumentFromLambda', () => {
   });
 
   it('saves the document with a custom mime type (contentType)', async () => {
-    applicationContext.getStorageClient = () => ({
-      putObject: putObjectStub,
-    });
-
     await saveDocumentFromLambda({
       contentType: 'text/plain',
       document: expectedArray,
       key: expectedDocketEntryId,
     });
 
-    expect(putObjectStub).toHaveBeenCalledWith({
+    expect(mockPutObject).toHaveBeenCalledWith({
       Body: Buffer.from(expectedArray),
       Bucket: defaultBucketName,
       ContentType: 'text/plain',
@@ -71,14 +75,10 @@ describe('saveDocumentFromLambda', () => {
   });
 
   it('should retry putObject call if it fails the first time', async () => {
-    putObjectStub = jest
+    mockPutObject = jest
       .fn()
       .mockRejectedValueOnce(new Error('fail'))
       .mockResolvedValueOnce({});
-
-    applicationContext.getStorageClient = () => ({
-      putObject: putObjectStub,
-    });
 
     await saveDocumentFromLambda({
       contentType: 'text/plain',
@@ -86,16 +86,12 @@ describe('saveDocumentFromLambda', () => {
       key: expectedDocketEntryId,
     });
 
-    expect(putObjectStub).toHaveBeenCalledTimes(2);
+    expect(mockPutObject).toHaveBeenCalledTimes(2);
   });
 
   it('should log and rethrow error if putObject fails every time', async () => {
-    putObjectStub = jest.fn().mockImplementation(() => {
+    mockPutObject = jest.fn().mockImplementation(() => {
       throw new Error('fail');
-    });
-
-    applicationContext.getStorageClient = () => ({
-      putObject: putObjectStub,
     });
 
     await expect(
@@ -106,6 +102,6 @@ describe('saveDocumentFromLambda', () => {
       }),
     ).rejects.toThrow('fail');
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(mockLogger.error).toHaveBeenCalled();
   });
 });

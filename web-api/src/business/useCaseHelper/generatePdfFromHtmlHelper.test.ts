@@ -1,8 +1,24 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+jest.mock('@shared/business/utilities/pdfs/combineTwoPdfs');
+const mockLogger = {
+  addContext: jest.fn(),
+  clearContext: jest.fn(),
+  info: jest.fn(),
+  warn: jest.fn(),
+  error: jest.fn(),
+};
+jest.mock('@web-api/utilities/logger/getLogger', () => {
+  return {
+    getLogger: () => mockLogger,
+  };
+});
+import { combineTwoPdfs as combineTwoPdfsMock } from '@shared/business/utilities/pdfs/combineTwoPdfs';
 import { generatePdfFromHtmlHelper } from './generatePdfFromHtmlHelper';
 
 describe('generatePdfFromHtmlHelper', () => {
   let pageContent = '';
+
+  const combineTwoPdfs = jest.mocked(combineTwoPdfsMock);
+  combineTwoPdfs.mockImplementation(() => Promise.resolve(Buffer.from('hi')));
 
   const launchMock = {
     newPage: () => {
@@ -16,7 +32,7 @@ describe('generatePdfFromHtmlHelper', () => {
         pid: '123',
       };
     },
-  };
+  } as any;
   const setContentMock = jest.fn(contentHtml => (pageContent = contentHtml));
   const pdfMock = jest.fn(
     ({ displayHeaderFooter, footerTemplate, headerTemplate }) => {
@@ -26,20 +42,13 @@ describe('generatePdfFromHtmlHelper', () => {
     },
   );
 
-  beforeEach(() => {
-    applicationContext
-      .getUtilities()
-      .combineTwoPdfs.mockImplementation(() => Buffer.from('hi'));
-  });
-
   it('should call the error logger when an error is thrown', async () => {
     const mockErrorBrowser = jest.fn(() => {
       throw new Error('something');
-    });
+    }) as any;
 
     await expect(
       generatePdfFromHtmlHelper(
-        applicationContext,
         {
           contentHtml:
             '<!doctype html><html><head></head><body>Hello World</body></html>',
@@ -48,12 +57,11 @@ describe('generatePdfFromHtmlHelper', () => {
         mockErrorBrowser,
       ),
     ).rejects.toThrow();
-    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(mockLogger.error).toHaveBeenCalled();
   });
 
   it('should not show the header on 1 page documents', async () => {
     const result = await generatePdfFromHtmlHelper(
-      applicationContext,
       {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
@@ -70,7 +78,6 @@ describe('generatePdfFromHtmlHelper', () => {
     const customHeader = 'Test Header';
 
     await generatePdfFromHtmlHelper(
-      applicationContext,
       {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
@@ -89,7 +96,6 @@ describe('generatePdfFromHtmlHelper', () => {
 
   it('should display no header html when headerHtml is empty string', async () => {
     const result = await generatePdfFromHtmlHelper(
-      applicationContext,
       {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
@@ -104,7 +110,6 @@ describe('generatePdfFromHtmlHelper', () => {
 
   it('should display alternate footer html when footerHtml is given', async () => {
     await generatePdfFromHtmlHelper(
-      applicationContext,
       {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
@@ -120,7 +125,6 @@ describe('generatePdfFromHtmlHelper', () => {
 
   it('should not show the default footer or additional footer content when overwriteFooter is set and footerHTML is not set', async () => {
     const result = await generatePdfFromHtmlHelper(
-      applicationContext,
       {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
@@ -138,7 +142,6 @@ describe('generatePdfFromHtmlHelper', () => {
     const defaultFooterContent = 'class="footer-default"'; // This is in the footer by default
 
     await generatePdfFromHtmlHelper(
-      applicationContext,
       {
         contentHtml:
           '<!doctype html><html><head></head><body>Hello World</body></html>',
