@@ -1,8 +1,9 @@
-import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
+import { InvokeCommand } from '@aws-sdk/client-lambda';
 import { PdfGenerationResult } from '@web-api/lambdas/pdfGeneration/pdf-generation';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
 import { GeneratePdfRequest } from '@web-api/business/useCaseHelper/generatePdfFromHtmlHelper';
+import { getLambdaClient } from '@web-api/gateways/lambda/getLambdaClient';
 
 export const generatePdfFromHtmlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -35,10 +36,8 @@ export const generatePdfFromHtmlInteractor = async (
     return result;
   }
 
-  const { currentColor, region, stage } = applicationContext.environment;
-  const client = new LambdaClient({
-    region,
-  });
+  const { currentColor, stage } = applicationContext.environment;
+  const client = getLambdaClient();
   const command = new InvokeCommand({
     FunctionName: `pdf_generator_${stage}_${currentColor}`,
     InvocationType: 'RequestResponse',
