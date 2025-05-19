@@ -48,7 +48,7 @@ class MockEntity {
 }
 
 describe('genericHandler', () => {
-  const getMaintenanceMode = jest.mocked(getMaintenanceModeMock);
+  const getMaintenanceMode = getMaintenanceModeMock as jest.Mock;
   const getEntityByName = jest.mocked(getEntityByNameMock);
   beforeEach(() => {
     getMaintenanceMode.mockResolvedValue({ current: false });
