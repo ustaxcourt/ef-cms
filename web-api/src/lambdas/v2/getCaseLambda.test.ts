@@ -1,8 +1,8 @@
 jest.mock(
   '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
 );
-jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
-import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock('@web-api/persistence/dynamo/cases/getCaseByDocketNumber');
+jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
 import { MOCK_CASE_WITH_TRIAL_SESSION } from '@shared/test/mockCase';
 import { MOCK_COMPLEX_CASE } from '@shared/test/mockComplexCase';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
