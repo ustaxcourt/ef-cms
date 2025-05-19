@@ -37,6 +37,8 @@ describe('generatePdfFromHtmlInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().generatePdfFromHtmlHelper,
     ).toHaveBeenCalled();
+
+    // this is to close the singleton browser and keep it from running indefinitely in the test
     const browser = await getChromiumBrowser();
     await browser.close();
   });
