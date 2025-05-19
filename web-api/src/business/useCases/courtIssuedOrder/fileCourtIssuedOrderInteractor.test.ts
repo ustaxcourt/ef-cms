@@ -2,6 +2,9 @@ import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -12,11 +15,11 @@ import {
   PETITIONS_SECTION,
   ROLES,
   STATUS_REPORT_ORDER_OPTIONS,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { User } from '@shared/business/entities/User';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import {
@@ -25,6 +28,11 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
 /* eslint-disable max-lines */
 describe('fileCourtIssuedOrderInteractor', () => {
@@ -104,9 +112,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       }),
     );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+    getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -143,12 +149,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length,
     ).toEqual(4);
   });
 
@@ -177,16 +181,16 @@ describe('fileCourtIssuedOrderInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3].draftOrderState.documentContents,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[3]
+        .draftOrderState.documentContents,
     ).toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3].draftOrderState.editorDelta,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[3]
+        .draftOrderState.editorDelta,
     ).toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3].draftOrderState.richText,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[3]
+        .draftOrderState.richText,
     ).toBeUndefined();
   });
 
@@ -208,16 +212,13 @@ describe('fileCourtIssuedOrderInteractor', () => {
       mockDocketClerkUser,
     );
 
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length,
     ).toEqual(4);
     const result =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3];
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[3];
     expect(result).toMatchObject({ freeText: 'Notice to be nice' });
     expect(result.signedAt).toBeTruthy();
   });
@@ -247,12 +248,11 @@ describe('fileCourtIssuedOrderInteractor', () => {
       useTempBucket: false,
     });
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3].documentContents,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[3]
+        .documentContents,
     ).toBeUndefined();
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[3],
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[3],
     ).toMatchObject({
       documentContentsId: expect.anything(),
       draftOrderState: {},
@@ -406,12 +406,13 @@ describe('fileCourtIssuedOrderInteractor', () => {
     );
 
     const lastDocumentIndex =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries.length - 1;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length - 1;
 
     const newlyFiledDocument =
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries[lastDocumentIndex];
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[
+        lastDocumentIndex
+      ];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: true,
@@ -440,9 +441,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {
@@ -500,16 +499,14 @@ describe('fileCourtIssuedOrderInteractor', () => {
           mockDocketClerkUser,
         );
 
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries.length,
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+            .length,
         ).toEqual(4);
         expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: { freeText: 'Order to do anything' },
           freeText: 'Order to do anything',
@@ -538,8 +535,8 @@ describe('fileCourtIssuedOrderInteractor', () => {
         );
 
         expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           freeText: 'Custom free text for motion order response',
         });
@@ -562,12 +559,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
           mockDocketClerkUser,
         );
 
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: {
             freeText: 'Order parties by 11/05/2024 shall file a status report.',
@@ -593,12 +588,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
           mockDocketClerkUser,
         );
 
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: {
             freeText:
@@ -628,12 +621,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
           mockDocketClerkUser,
         );
 
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: {
             freeText:
@@ -661,12 +652,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
           mockDocketClerkUser,
         );
 
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: {
             freeText:
@@ -694,12 +683,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
           mockDocketClerkUser,
         );
 
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: {
             freeText:
@@ -729,12 +716,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
           mockDocketClerkUser,
         );
 
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: {
             freeText:
@@ -766,12 +751,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
           },
           mockDocketClerkUser,
         );
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: {
             freeText:
@@ -801,12 +784,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
           },
           mockDocketClerkUser,
         );
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: {
             freeText:
@@ -833,12 +814,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
           },
           mockDocketClerkUser,
         );
+        expect(getCaseByDocketNumber).toHaveBeenCalled();
         expect(
-          applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-        ).toHaveBeenCalled();
-        expect(
-          applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-            .caseToUpdate.docketEntries[3],
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+            .docketEntries[3],
         ).toMatchObject({
           draftOrderState: {
             freeText: '. Case is stricken from the current trial session.',

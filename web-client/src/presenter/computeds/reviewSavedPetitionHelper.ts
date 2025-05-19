@@ -23,9 +23,9 @@ const getEConsentAttributesForContact = (
   contact: any = {},
 ): { eServiceConsentText: string; shouldDisplayEConsentText: boolean } => {
   const shouldDisplayEConsentText =
-    !!contact.paperPetitionEmail || contact.hasConsentedToEService;
+    !!contact.paperPetitionEmail || contact.hasConsentedToElectronicService;
 
-  const eServiceConsentText = contact.hasConsentedToEService
+  const eServiceConsentText = contact.hasConsentedToElectronicService
     ? 'E-service consent'
     : 'No e-service consent';
 

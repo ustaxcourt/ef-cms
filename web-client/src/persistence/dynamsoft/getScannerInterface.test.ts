@@ -150,7 +150,10 @@ describe('getScannerInterface', () => {
     scannerAPI.setDWObject(DWObject);
     expect(scannerAPI).toHaveProperty('startScanSession');
 
-    await scannerAPI.startScanSession({ applicationContext });
+    await scannerAPI.startScanSession({
+      applicationContext,
+      scanMode: 'fakeScanMode',
+    });
     expect(DWObject.IfDisableSourceAfterAcquire).toBeTruthy();
     expect(mockOpenSource).toHaveBeenCalled();
     expect(mockAcquireImage).toHaveBeenCalled();
@@ -170,7 +173,10 @@ describe('getScannerInterface', () => {
 
       let error;
       try {
-        await scannerAPI.startScanSession({ applicationContext });
+        await scannerAPI.startScanSession({
+          applicationContext,
+          scanMode: 'fakeScanMode',
+        });
       } catch (err) {
         error = err;
       }

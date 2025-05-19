@@ -4,7 +4,7 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from './EntityConstants';
 import { Practitioner, RawPractitioner } from './Practitioner';
-import { getTextByCount } from '../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('Practitioner', () => {
   let validPractitioner;

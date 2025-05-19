@@ -16,35 +16,33 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  getContactPrimary,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/EntityConstants';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
   formatNow,
   getBusinessDateInFuture,
-} from '../../../../../shared/src/business/utilities/DateHandler';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+} from '@shared/business/utilities/DateHandler';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
 } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import {
-  getFakeFile,
-  testPdfDoc,
-} from '../../../../../shared/src/business/test/getFakeFile';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getFakeFile, testPdfDoc } from '@shared/business/test/getFakeFile';
 import {
   mockDocketClerkUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 
 describe('serveCaseToIrsInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const upsertCases = jest.mocked(upsertCasesMock);
   const clientConnectionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockParams = {
     clientConnectionId,
@@ -122,9 +120,7 @@ describe('serveCaseToIrsInteractor', () => {
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({ url: 'www.example.com' });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockImplementation(() => mockCase);
 
     applicationContext
       .getUseCases()
@@ -328,14 +324,14 @@ describe('serveCaseToIrsInteractor', () => {
       isPaper: false,
       partyType: PARTY_TYPES.petitionerSpouse,
       petitioners: [
-        { ...MOCK_CASE.petitioners[0], hasConsentedToEService: false },
+        { ...MOCK_CASE.petitioners[0], hasConsentedToElectronicService: false },
         {
           ...MOCK_CASE.petitioners[0],
           contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -387,7 +383,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing@example.com',
         },
         {
@@ -396,7 +392,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: false,
+          hasConsentedToElectronicService: false,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: undefined,
           phone: '1234547',
@@ -426,7 +422,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing@example.com',
         },
         {
@@ -434,7 +430,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
           contactType: CONTACT_TYPES.secondary,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -472,7 +468,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing@example.com',
         },
         {
@@ -482,7 +478,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -520,7 +516,7 @@ describe('serveCaseToIrsInteractor', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           paperPetitionEmail: 'testing1@example.com',
         },
         {
@@ -529,7 +525,7 @@ describe('serveCaseToIrsInteractor', () => {
           contactType: CONTACT_TYPES.secondary,
           countryType: COUNTRY_TYPES.DOMESTIC,
           email: 'petitioner@example.com',
-          hasConsentedToEService: true,
+          hasConsentedToElectronicService: true,
           name: 'Test Petitioner Secondary',
           paperPetitionEmail: 'testing@example.com',
           phone: '1234547',
@@ -1130,11 +1126,8 @@ describe('serveCaseToIrsInteractor', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(
-        mockCaseWithoutServedDocketEntries,
-      )
+    getCaseByDocketNumber
+      .mockResolvedValueOnce(mockCaseWithoutServedDocketEntries)
       .mockReturnValueOnce(mockCase)
       .mockReturnValueOnce(mockCaseWithServedDocketEntries)
       .mockReturnValueOnce(mockCaseWithServedDocketEntries);
@@ -1146,8 +1139,7 @@ describe('serveCaseToIrsInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.docketEntries,
+      upsertCases.mock.calls[0][0][0].docketEntries,
     ).toMatchObject([
       {
         documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
@@ -1554,9 +1546,7 @@ describe('serveCaseToIrsInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire and remove the lock on the case', async () => {

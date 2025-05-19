@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -20,8 +21,11 @@ import {
   shouldGenerateNoticeOfChangeToRemoteProceeding,
   updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('updateTrialSessionInteractorHelper', () => {
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+
   describe('updateCasesAndSetNoticeOfChange', () => {
     const TEST_DOCKET_NUMBERS = ['111-25', '222-25', '333-25', '444-25'];
     const TEST_TRIAL_SESSION_ID: string = getUniqueId();
@@ -29,9 +33,8 @@ describe('updateTrialSessionInteractorHelper', () => {
     const VALIDATED_TRIAL_SESSION_ENTITY = 'VALIDATED_TRIAL_SESSION_ENTITY';
 
     beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      getCasesByDocketNumbers.mockImplementation(({ docketNumbers }) => {
+        function getMockedCase(docketNumber: string) {
           return {
             ...MOCK_CASE,
             docketNumber,
@@ -47,7 +50,11 @@ describe('updateTrialSessionInteractorHelper', () => {
                 ? [{ trialSessionId: TEST_TRIAL_SESSION_ID }]
                 : [],
           } as RawCase;
-        });
+        }
+        return Promise.resolve(
+          docketNumbers.map(docketNumber => getMockedCase(docketNumber)),
+        );
+      });
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeToRemoteProceeding =
         jest.fn();

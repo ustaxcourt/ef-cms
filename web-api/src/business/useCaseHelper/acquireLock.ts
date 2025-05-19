@@ -62,7 +62,7 @@ export const acquireLock = async ({
     return;
   }
   let attempts = 0;
-  let hasLockedItems = true;
+  let lockedItems: string[] = [];
   do {
     if (attempts > retries) {
       if (onLockError instanceof Error) {
@@ -70,6 +70,9 @@ export const acquireLock = async ({
       } else if (typeof onLockError === 'function') {
         await onLockError(applicationContext, options, authorizedUser);
       }
+      getLogger().error(
+        `Error: failed to acquire lock for ${lockedItems.join(', ')} when attempting to get lock for ${identifiers.join(', ')}`,
+      );
       throw new ServiceUnavailableError(
         'One of the items you are trying to update is being updated by someone else',
       );
@@ -80,14 +83,22 @@ export const acquireLock = async ({
     }
 
     const results = await Promise.all(
-      identifiers.map(entityIdentifier =>
-        checkLock({ applicationContext, identifier: entityIdentifier }),
-      ),
+      identifiers.map(async entityIdentifier => {
+        return {
+          identifier: entityIdentifier,
+          isLocked: await checkLock({
+            applicationContext,
+            identifier: entityIdentifier,
+          }),
+        };
+      }),
     );
 
-    hasLockedItems = results.some(isLocked => isLocked);
+    lockedItems = results
+      .filter(result => result.isLocked)
+      .map(result => result.identifier);
     attempts++;
-  } while (hasLockedItems);
+  } while (lockedItems.length || attempts === 0);
 
   // Second, lock them up so the are unavailable
   await Promise.all(
@@ -176,10 +187,15 @@ export function withLocking<InteractorInput, InteractorOutput>(
     try {
       results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
+      getLogger().error(`withLocking: failed to execute interactor: ${err}`);
       caughtError = err;
     }
-
-    await removeLock({ applicationContext, identifiers });
+    try {
+      await removeLock({ applicationContext, identifiers });
+    } catch (e) {
+      getLogger().error(`withLocking: failed to remove lock: ${e}`);
+      throw e;
+    }
 
     if (caughtError) {
       throw caughtError;

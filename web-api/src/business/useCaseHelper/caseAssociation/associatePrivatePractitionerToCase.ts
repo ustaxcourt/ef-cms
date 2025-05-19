@@ -1,10 +1,12 @@
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
+import { Case } from '@shared/business/entities/cases/Case';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { UserCase } from '@shared/business/entities/UserCase';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 /**
  * associatePrivatePractitionerToCase
@@ -30,7 +32,7 @@ export const associatePrivatePractitionerToCase = async ({
   serviceIndicator?: string;
   user: RawPractitioner;
   representing: string[];
-}) => {
+}): Promise<RawCase> => {
   const isAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
@@ -39,57 +41,57 @@ export const associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
+  const caseEntity = new Case(caseToUpdate, {
+    authorizedUser,
+  });
 
   const isPrivatePractitionerOnCase = caseToUpdate.privatePractitioners?.some(
     practitioner => practitioner.userId === user.userId,
   );
 
-  if (!isAssociated) {
-    const userCaseEntity = new UserCase(caseToUpdate);
-
-    await applicationContext.getPersistenceGateway().associateUserWithCase({
-      applicationContext,
-      docketNumber,
-      userCase: userCaseEntity.validate().toRawObject(),
-      userId: user.userId,
-    });
-
-    const caseEntity = new Case(caseToUpdate, {
-      authorizedUser,
-    });
-
-    const { petitioners } = caseEntity;
-
-    petitioners.map(petitioner => {
-      if (representing.includes(petitioner.contactId)) {
-        petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-      }
-    });
-
-    caseEntity.attachPrivatePractitioner(
-      new PrivatePractitioner({
-        ...user,
-        representing,
-        serviceIndicator,
-      }),
-    );
-
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
-
+  if (isAssociated) {
+    if (!isPrivatePractitionerOnCase) {
+      getLogger().error(
+        `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
+      );
+    }
     return caseEntity.toRawObject();
-  } else if (!isPrivatePractitionerOnCase) {
-    applicationContext.logger.error(
-      `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
-    );
   }
+
+  const userCaseEntity = new UserCase(caseToUpdate);
+
+  await applicationContext.getPersistenceGateway().associateUserWithCase({
+    applicationContext,
+    docketNumber,
+    userCase: userCaseEntity.validate().toRawObject(),
+    userId: user.userId,
+  });
+
+  const { petitioners } = caseEntity;
+
+  petitioners.map(petitioner => {
+    if (representing.includes(petitioner.contactId)) {
+      petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+    }
+  });
+
+  caseEntity.attachPrivatePractitioner(
+    new PrivatePractitioner({
+      ...user,
+      representing,
+      serviceIndicator,
+    }),
+  );
+
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
+
+  return caseEntity.toRawObject();
 };
