@@ -1,6 +1,6 @@
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
-import { getDbWriter } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
   'clerk-of-court-configuration',
@@ -38,17 +38,11 @@ async function script() {
       value: { current: FEATURE_FLAG_RECORD.Item?.current },
     };
 
-    await getDbWriter(writer =>
-      writer
-        .insertInto('dwFeatureFlag')
-        .values(featureFlagRecord)
-        .onConflict(oc =>
-          oc.column('name').doUpdateSet({
-            value: featureFlagRecord.value,
-          }),
-        )
-        .execute(),
-    );
+    await pgInsertInto({
+      table: 'dwFeatureFlag',
+      values: featureFlagRecord,
+      onConflictColumns: ['name'],
+    });
   }
 }
 
