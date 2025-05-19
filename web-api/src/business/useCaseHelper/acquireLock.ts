@@ -185,10 +185,15 @@ export function withLocking<InteractorInput, InteractorOutput>(
     try {
       results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
+      getLogger().error(`withLocking: failed to execute interactor: ${err}`);
       caughtError = err;
     }
-
-    await removeLock({ applicationContext, identifiers });
+    try {
+      await removeLock({ applicationContext, identifiers });
+    } catch (e) {
+      getLogger().error(`withLocking: failed to remove lock: ${e}`);
+      throw e;
+    }
 
     if (caughtError) {
       throw caughtError;
