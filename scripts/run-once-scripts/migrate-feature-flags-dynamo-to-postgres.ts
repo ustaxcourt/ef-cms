@@ -11,7 +11,7 @@ const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
   'use-change-of-address-lambda',
 ];
 
-const { STAGE } = process.env;
+const { STAGE, ENV } = process.env;
 
 async function script() {
   const DYNAMO_CLIENT = new DynamoDBClient({
@@ -26,7 +26,7 @@ async function script() {
     const FEATURE_FLAG = FEATURE_FLAGS_WITH_CURRENT_PROPERTY[index];
     const FEATURE_FLAG_RECORD = await DOCUMENT_CLIENT.get({
       Key: { pk: FEATURE_FLAG, sk: FEATURE_FLAG },
-      TableName: `efcms-deploy-${STAGE}`,
+      TableName: `efcms-deploy-${STAGE || ENV}`,
     });
 
     if (!FEATURE_FLAG_RECORD || !FEATURE_FLAG_RECORD.Item) {
