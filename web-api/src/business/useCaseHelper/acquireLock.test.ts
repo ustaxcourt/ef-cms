@@ -1,7 +1,6 @@
 const mockLogger = {
   addContext: jest.fn(),
   clearContext: jest.fn(),
-  error: jest.fn(),
   info: jest.fn(),
   warn: jest.fn(),
   error: jest.fn(),
