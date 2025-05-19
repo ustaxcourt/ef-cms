@@ -5,10 +5,10 @@ import {
 } from '@aws-sdk/client-ssm';
 
 const ssmClient = new SSMClient({ region: 'us-east-1' });
-const { STAGE } = process.env;
+const { STAGE, ENV } = process.env;
 
 export async function putSSMItem(name: string, value: any): Promise<boolean> {
-  const paramName = `/DAWSON/${STAGE}/${name}`;
+  const paramName = `/DAWSON/${STAGE || ENV}/${name}`;
   const command = new PutParameterCommand({
     Name: paramName,
     Value: value.toString(),
@@ -23,7 +23,7 @@ export async function putSSMItem(name: string, value: any): Promise<boolean> {
 }
 
 export async function getSSMItem(name: string): Promise<string | undefined> {
-  const paramName = `/DAWSON/${STAGE}/${name}`;
+  const paramName = `/DAWSON/${STAGE || ENV}/${name}`;
 
   const command = new GetParameterCommand({
     Name: paramName,
