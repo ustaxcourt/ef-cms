@@ -269,7 +269,6 @@ const generateNoticeOfReceipt = async ({
     primaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: primaryContactNotrPdfData,
         secondPdf: clinicLetter,
       });
@@ -279,7 +278,6 @@ const generateNoticeOfReceipt = async ({
     secondaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: secondaryContactNotrPdfData,
         secondPdf: clinicLetter,
       });
@@ -290,7 +288,6 @@ const generateNoticeOfReceipt = async ({
     combinedNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: primaryContactNotrPdfData,
         secondPdf: secondaryContactNotrPdfData,
       });

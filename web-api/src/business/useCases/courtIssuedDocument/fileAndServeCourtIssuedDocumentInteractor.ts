@@ -132,7 +132,6 @@ export const fileAndServeCourtIssuedDocument = async (
       const contentToStore = { documentContents };
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-        applicationContext,
         contentType: 'application/json',
         document: Buffer.from(JSON.stringify(contentToStore)),
         key: documentContentsId,
@@ -239,7 +238,6 @@ export const fileAndServeCourtIssuedDocument = async (
   }
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: stampedPdf,
     key: docketEntryToServe.docketEntryId,
   });

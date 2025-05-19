@@ -166,7 +166,6 @@ export const serveCourtIssuedDocument = async (
   }
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: stampedPdf,
     key: docketEntryId,
   });
