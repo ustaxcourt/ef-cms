@@ -21251,11 +21251,6 @@
     "pk": "privatePractitioner|TEST PRIVATE PRACTITIONER"
   },
   {
-    "sk": "section-outbox-number-of-days",
-    "current": 7,
-    "pk": "section-outbox-number-of-days"
-  },
-  {
     "completedAt": "2019-07-12T17:11:27.244Z",
     "docketNumberSuffix": null,
     "caseStatus": "New",
