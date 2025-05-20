@@ -12,8 +12,6 @@ import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitio
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { Case } from '@shared/business/entities/cases/Case';
-import { getPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase';
-import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
 
 export const getFullEligibleCasesForTrialSession = async ({
   applicationContext,
@@ -67,12 +65,7 @@ export const getFullEligibleCasesForTrialSession = async ({
   });
 
   const casePromises = dbCases.map(async c => {
-    const [
-      privatePractitioners,
-      irsPractitioners,
-      petitioners,
-      caseStatistics,
-    ] = await Promise.all([
+    const [privatePractitioners, irsPractitioners] = await Promise.all([
       getPrivatePractitionersOnCase({
         docketNumber: c.docketNumber,
         applicationContext,
@@ -81,8 +74,6 @@ export const getFullEligibleCasesForTrialSession = async ({
         docketNumber: c.docketNumber,
         applicationContext,
       }),
-      getPetitionersOnCase({ docketNumber: c.docketNumber }),
-      getCaseStatistics({ docketNumber: c.docketNumber }),
     ]);
 
     const dynamoData = purgeDynamoKeys<
@@ -96,7 +87,7 @@ export const getFullEligibleCasesForTrialSession = async ({
       irsPractitioners,
       privatePractitioners,
     });
-    return { ...c, ...dynamoData, petitioners, statistics: caseStatistics };
+    return { ...c, ...dynamoData };
   });
 
   const fullEligibleCases = await Promise.all(casePromises);
