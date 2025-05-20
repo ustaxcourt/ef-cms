@@ -2,6 +2,10 @@ import { NewFeatureFlagKysely } from '@web-api/persistence/postgres/featureFlag/
 
 export const featureFlags: NewFeatureFlagKysely[] = [
   {
+    name: 'section-outbox-number-of-days',
+    value: { current: 7 },
+  },
+  {
     name: 'chief-judge-name',
     value: { current: 'Maurice B. Foley' },
   },
