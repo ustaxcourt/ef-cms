@@ -19,7 +19,6 @@ import {
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import {
-  deleteTrialSortMappingRecordsForEligibleCases,
   updateDeadlinesForCasesToCalendar,
   updateWorkItemsForCasesToCalendar,
 } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
@@ -80,7 +79,6 @@ export const setTrialSessionCalendarInteractor = async (
 
     const eligibleCases = (
       await getEligibleCasesForTrialSession({
-        applicationContext,
         limit: eligibleCasesLimit,
         sessionType: trialSessionEntity.getCaseProcedureForTrial(),
         trialCity: trialSessionEntity.trialLocation!,
@@ -172,10 +170,6 @@ export const setTrialSessionCalendarInteractor = async (
 
     const updatesToPersist: Promise<any>[] = [
       upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
-      deleteTrialSortMappingRecordsForEligibleCases({
-        applicationContext,
-        eligibleCases: eligibleCaseEntities,
-      }),
     ];
 
     if (!isEmpty(caseEntitiesToCalendar)) {
