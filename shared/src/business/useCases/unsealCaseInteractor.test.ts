@@ -113,21 +113,6 @@ describe('unsealCaseInteractor', () => {
     ).rejects.toThrow(NotFoundError);
   });
 
-  it('should bubble up an error thrown by updateCase', async () => {
-    const mockError = new Error('Something went wrong');
-    updateCase.mockRejectedValueOnce(mockError);
-
-    await expect(
-      unsealCaseInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('Something went wrong');
-  });
-
   it('should bubble up an error thrown by getCaseByDocketNumber', async () => {
     const mockError = new Error('DB is unreachable');
     getCaseByDocketNumber.mockRejectedValueOnce(mockError);

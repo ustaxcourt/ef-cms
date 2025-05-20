@@ -291,7 +291,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    acquireLock.mockRejectedValue(new Error('Could not get lock'));
+    acquireLock.mockRejectedValueOnce(new Error('Could not get lock'));
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -312,10 +312,10 @@ describe('setTrialSessionCalendarInteractor', () => {
   it('should acquire and remove the lock on the case', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockResolvedValue([]);
+      .getCalendaredCasesForTrialSession.mockResolvedValueOnce([]);
     applicationContext
       .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockResolvedValue([
+      .getEligibleCasesForTrialSession.mockResolvedValueOnce([
         {
           ...MOCK_CASE,
           qcCompleteForTrial: {
