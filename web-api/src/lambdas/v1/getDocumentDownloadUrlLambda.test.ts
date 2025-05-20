@@ -1,9 +1,8 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 jest.mock(
   '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor',
 );
 jest.mock('@web-api/persistence/s3/getDownloadPolicyUrl');
-jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
-import '@web-api/persistence/postgres/cases/mocks.jest';
 jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
