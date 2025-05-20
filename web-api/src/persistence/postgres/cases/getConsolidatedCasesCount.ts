@@ -13,5 +13,5 @@ export const getConsolidatedCasesCount = async ({
       .executeTakeFirst(),
   );
 
-  return Number(countResult?.count) || 0;
+  return Number(countResult?.count ?? 0);
 };

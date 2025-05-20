@@ -2,24 +2,8 @@ import {
   CaseRecord,
   IrsPractitionerOnCaseRecord,
   PrivatePractitionerOnCaseRecord,
-  TDynamoRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
-import {
-  ConsolidatedCaseSummary,
-  RawConsolidatedCaseSummary,
-} from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { sortBy } from 'lodash';
-
-export const getAssociatedJudge = (theCase, caseAndCaseItems) => {
-  if (theCase && theCase.judgeUserId) {
-    const associatedJudgeId = caseAndCaseItems.find(
-      item => item.sk === `user|${theCase.judgeUserId}`,
-    );
-    return associatedJudgeId ? associatedJudgeId.name : undefined;
-  } else if (theCase && theCase.associatedJudge) {
-    return theCase.associatedJudge;
-  }
-};
 
 export const isArchivedCorrespondenceItem = item =>
   item.sk.startsWith('correspondence|') && item.archived;
@@ -113,35 +97,10 @@ export const aggregateCaseItems = (caseAndCaseItems): RawCase => {
     ...theCase,
     archivedCorrespondences: sortedArchivedCorrespondences,
     archivedDocketEntries: sortedArchivedDocketEntries,
-    associatedJudge: getAssociatedJudge(theCase, caseAndCaseItems),
     correspondence: sortedCorrespondences,
     docketEntries: sortedDocketEntries,
     hearings,
     irsPractitioners,
     privatePractitioners,
   };
-};
-
-export const aggregateConsolidatedCaseItems = (
-  consolidatedCaseItems: TDynamoRecord<
-    IrsPractitionerOnCaseRecord | PrivatePractitionerOnCaseRecord | CaseRecord
-  >[],
-): RawConsolidatedCaseSummary[] => {
-  const caseMap: Map<string, RawConsolidatedCaseSummary> = new Map();
-  consolidatedCaseItems
-    .filter((item): item is CaseRecord => isCaseItem(item))
-    .forEach(item =>
-      caseMap.set(item.pk, new ConsolidatedCaseSummary(item).toRawObject()),
-    );
-
-  consolidatedCaseItems.forEach(item => {
-    if (isIrsPractitionerItem(item)) {
-      caseMap.get(item.pk)?.irsPractitioners.push(item);
-    }
-    if (isPrivatePractitionerItem(item)) {
-      caseMap.get(item.pk)?.privatePractitioners.push(item);
-    }
-  });
-
-  return [...caseMap.values()];
 };

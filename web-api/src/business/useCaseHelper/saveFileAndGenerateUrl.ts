@@ -24,7 +24,6 @@ export const saveFileAndGenerateUrl = async ({
   const fileName = fileNamePrefix ? `${fileNamePrefix}${fileId}` : fileId;
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     contentType,
     document: file,
     key: fileName,

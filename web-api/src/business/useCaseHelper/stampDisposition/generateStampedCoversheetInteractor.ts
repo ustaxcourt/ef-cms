@@ -72,7 +72,6 @@ export const generateStampedCoversheetInteractor = async (
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: newPdfData,
     key: stampedDocketEntryId,
   });

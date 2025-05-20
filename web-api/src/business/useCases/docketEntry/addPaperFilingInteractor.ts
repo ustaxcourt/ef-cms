@@ -14,12 +14,12 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -75,12 +75,9 @@ export const addPaperFiling = async (
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
-  for (const docketNumber of consolidatedGroupDocketNumbers) {
-    const rawCase = await getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const consolidatedGroupCases = await getCasesByDocketNumbers({docketNumbers: consolidatedGroupDocketNumbers})
 
+  for (const rawCase of consolidatedGroupCases) {
     let caseEntity = new Case(rawCase, { authorizedUser });
 
     const docketEntryEntity = new DocketEntry(

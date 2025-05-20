@@ -121,7 +121,7 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
-};
+} as const;
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
@@ -1804,6 +1804,7 @@ export const TROUBLESHOOTING_INFO = {
 
 export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
 export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
+
 export const MOTION_ORDER_RESPONSE_OPTIONS = {
   issueOrderOptions: {
     ALL_CASES: 'All cases in this group',

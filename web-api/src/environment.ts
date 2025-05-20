@@ -5,6 +5,7 @@ const currentColor = process.env.CURRENT_COLOR || 'green';
 const emailFromAddress =
   process.env.EMAIL_SOURCE ||
   `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`;
+const isRunningOnLambda = !!process.env.LAMBDA_TASK_ROOT;
 
 function getJestDBConnectionError(): string {
   return [
@@ -34,7 +35,7 @@ export const environment = {
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress,
-  isRunningOnLambda: !!process.env.LAMBDA_TASK_ROOT,
+  isRunningOnLambda,
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   nodeEnv: process.env.NODE_ENV,
   rds: {
@@ -45,13 +46,12 @@ export const environment = {
         (process.env.NODE_ENV !== 'test'
           ? 'localhost'
           : getJestDBConnectionError()),
-      idleTimeoutMillis: 1000,
+      idleTimeoutMillis: isRunningOnLambda ? 10000 : 1000,
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,
       user: process.env.POSTGRES_USER || 'postgres',
     },
-    readHost: process.env.POSTGRES_READ_HOST!,
     useGlobalCert: !isLocal,
   },
   region,

@@ -1,14 +1,11 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDbReader } from '@web-api/database';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const getCasesByLeadDocketNumber = async ({
-  applicationContext,
   leadDocketNumber,
 }: {
-  applicationContext: ServerApplicationContext;
   leadDocketNumber: string;
-}): Promise<RawCase[]> => {
+}): Promise<Omit<RawCase, 'consolidatedCases'>[]> => {
   const dbCaseData = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
@@ -17,14 +14,8 @@ export const getCasesByLeadDocketNumber = async ({
       .execute(),
   );
 
-  const cases = await Promise.all(
-    dbCaseData.map(({ docketNumber }) =>
-      getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      }),
-    ),
-  );
+  const docketNumbers = dbCaseData.map(({ docketNumber }) => docketNumber);
+  const cases = await getCasesByDocketNumbers({ docketNumbers });
 
-  return cases.filter(c => !!c);
+  return cases;
 };

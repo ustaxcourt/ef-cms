@@ -32,7 +32,7 @@ export const associatePrivatePractitionerWithCase = async (
     userId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {

@@ -7,7 +7,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { ElectronicPetition } from '@shared/business/entities/cases/ElectronicPetition';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -21,16 +20,15 @@ import {
 import { UserCase } from '@shared/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
-import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
-export const CREATE_CASE_LOCK_IDENTIFIER = '11235';
+export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
 
 const addPetitionDocketEntryToCase = ({
   caseToAdd,
@@ -243,11 +241,16 @@ const createCaseMetadata = async (
     });
   }
 
+  const createCaseAndAssociationsStart = Date.now();
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
+  console.log(
+    'docketNumber investigation 2 createCaseAndAssociations',
+    Date.now() - createCaseAndAssociationsStart,
+  );
 
   return { caseToAdd, workItem: newWorkItem };
 };
@@ -310,14 +313,18 @@ export const createCaseInteractor = async (
     privatePractitioners = [practitionerUser];
   }
 
+  const start = Date.now();
   await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    retries: 10,
+    retries: 25,
     waitTime: 500,
   });
-
+  console.log(
+    'docketNumber investigation 2, acquiring lock',
+    Date.now() - start,
+  );
   let caseToAdd: Case;
   let workItem: WorkItem;
 
@@ -341,29 +348,27 @@ export const createCaseInteractor = async (
       applicationContext,
       identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
     });
+    console.log(
+      'docketNumber investigation 2, create case',
+      Date.now() - start,
+    );
   }
-
-  await createPetitionersOnCase({
-    docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-  });
-
-  caseToAdd.statistics?.forEach(statistic =>
-    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-  );
 
   const userCaseEntity = new UserCase(caseToAdd);
 
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
-    applicationContext,
-    docketNumber: caseToAdd.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId: user.userId,
-  });
+  const caseAssociationUpdates = [
+    upsertWorkItems({
+      workItems: [workItem.validate().toRawObject()],
+    }),
+    applicationContext.getPersistenceGateway().associateUserWithCase({
+      applicationContext,
+      docketNumber: caseToAdd.docketNumber,
+      userCase: userCaseEntity.validate().toRawObject(),
+      userId: user.userId,
+    }),
+  ];
 
-  await upsertWorkItems({
-    workItems: [workItem.validate().toRawObject()],
-  });
+  await settlePromises(caseAssociationUpdates);
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

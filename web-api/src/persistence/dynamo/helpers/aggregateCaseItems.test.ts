@@ -1,6 +1,5 @@
 import {
   aggregateCaseItems,
-  getAssociatedJudge,
   isArchivedCorrespondenceItem,
   isArchivedDocketEntryItem,
   isCaseItem,
@@ -19,7 +18,6 @@ describe('aggregateCaseItems', () => {
     caseId: '123',
     docketNumber: caseDocketNumber,
     entityName: 'Case',
-    judgeUserId: '789',
     pk: `case|${caseDocketNumber}`,
     sk: `case|${caseDocketNumber}`,
   };
@@ -95,7 +93,6 @@ describe('aggregateCaseItems', () => {
       archivedDocketEntryRecord,
       hearingRecord,
       irsPractitionerRecord,
-      judgeRecord,
       privatePractitionerRecord,
     ];
 
@@ -105,63 +102,11 @@ describe('aggregateCaseItems', () => {
       ...caseRecord,
       archivedCorrespondences: [archivedCorrespondenceRecord],
       archivedDocketEntries: [archivedDocketEntryRecord],
-      associatedJudge: judgeRecord.name,
       correspondence: [correspondenceRecord],
       docketEntries: [{ ...docketEntryRecord, workItem: workItemRecord }],
       hearings: [hearingRecord],
       irsPractitioners: [irsPractitionerRecord],
       privatePractitioners: [privatePractitionerRecord],
-    });
-  });
-
-  describe('getAssociatedJudge', () => {
-    it('returns the associated judge by id if judgeUserId is set on the case', () => {
-      const mockCaseRecord = {
-        ...caseRecord,
-        judgeUserId: '789',
-      };
-
-      const mockJudgeRecord = {
-        name: 'Judge Dredd',
-        pk: `case|${caseDocketNumber}`,
-        sk: 'user|789',
-      };
-
-      const judgeResult = getAssociatedJudge(mockCaseRecord, [
-        mockCaseRecord,
-        mockJudgeRecord,
-      ]);
-
-      expect(judgeResult).toEqual('Judge Dredd');
-    });
-
-    it('returns the associated judge by name if judgeUserId is not set on the case', () => {
-      const differentCaseRecord = {
-        ...caseRecord,
-        associatedJudge: 'Judge Reinhold',
-        judgeUserId: undefined,
-      };
-
-      const judgeResult = getAssociatedJudge(differentCaseRecord, [
-        differentCaseRecord,
-        judgeRecord,
-      ]);
-
-      expect(judgeResult).toEqual('Judge Reinhold');
-    });
-
-    it('returns undefined if the judgeUserId is not found in associated case records', () => {
-      const differentJudgeRecord = {
-        ...judgeRecord,
-        sk: 'user|123', // NOT 789
-      };
-
-      const judgeResult = getAssociatedJudge(caseRecord, [
-        caseRecord,
-        differentJudgeRecord,
-      ]);
-
-      expect(judgeResult).toEqual(undefined);
     });
   });
 

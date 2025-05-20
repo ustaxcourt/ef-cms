@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -21,16 +24,15 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('updateCaseDetailsInteractor', () => {
   let mockCase, generalDocketReadyForTrialCase;
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext
@@ -126,7 +128,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.petitionPaymentWaivedDate).toBe(null);
     expect(result.petitionPaymentMethod).toBe(null);
     expect(result.petitionPaymentDate).toBe(null);
@@ -148,7 +150,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.petitionPaymentWaivedDate).toBe(null);
     expect(result.petitionPaymentDate).toEqual('2019-11-30T09:10:11.000Z');
     expect(result.petitionPaymentMethod).toEqual('check');
@@ -169,7 +171,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.petitionPaymentDate).toBe(null);
     expect(result.petitionPaymentMethod).toBe(null);
     expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.WAIVED);
@@ -275,7 +277,7 @@ describe('updateCaseDetailsInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
   });
 
@@ -303,7 +305,7 @@ describe('updateCaseDetailsInteractor', () => {
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
     ).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
   });
 

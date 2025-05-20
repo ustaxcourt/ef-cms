@@ -21,10 +21,10 @@ import {
   shouldGenerateNoticeOfChangeToRemoteProceeding,
   updateCasesAndSetNoticeOfChange,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractorHelper';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('updateTrialSessionInteractorHelper', () => {
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
   describe('updateCasesAndSetNoticeOfChange', () => {
     const TEST_DOCKET_NUMBERS = ['111-25', '222-25', '333-25', '444-25'];
@@ -33,22 +33,27 @@ describe('updateTrialSessionInteractorHelper', () => {
     const VALIDATED_TRIAL_SESSION_ENTITY = 'VALIDATED_TRIAL_SESSION_ENTITY';
 
     beforeEach(() => {
-      getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        return {
-          ...MOCK_CASE,
-          docketNumber,
-          status:
-            docketNumber === '222-25'
-              ? CASE_STATUS_TYPES.closed
-              : CASE_STATUS_TYPES.calendared,
-          trialSessionId:
-            docketNumber === '333-25' ? getUniqueId() : TEST_TRIAL_SESSION_ID,
-          trialDate: '9999-03-01T21:40:46.415Z',
-          hearings:
-            docketNumber === '222-25'
-              ? [{ trialSessionId: TEST_TRIAL_SESSION_ID }]
-              : [],
-        } as RawCase;
+      getCasesByDocketNumbers.mockImplementation(({ docketNumbers }) => {
+        function getMockedCase(docketNumber: string) {
+          return {
+            ...MOCK_CASE,
+            docketNumber,
+            status:
+              docketNumber === '222-25'
+                ? CASE_STATUS_TYPES.closed
+                : CASE_STATUS_TYPES.calendared,
+            trialSessionId:
+              docketNumber === '333-25' ? getUniqueId() : TEST_TRIAL_SESSION_ID,
+            trialDate: '9999-03-01T21:40:46.415Z',
+            hearings:
+              docketNumber === '222-25'
+                ? [{ trialSessionId: TEST_TRIAL_SESSION_ID }]
+                : [],
+          } as RawCase;
+        }
+        return Promise.resolve(
+          docketNumbers.map(docketNumber => getMockedCase(docketNumber)),
+        );
       });
 
       applicationContext.getUseCaseHelpers().setNoticeOfChangeToRemoteProceeding =
