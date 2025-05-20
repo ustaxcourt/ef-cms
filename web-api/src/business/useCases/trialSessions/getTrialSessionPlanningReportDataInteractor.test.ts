@@ -134,7 +134,6 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
   ];
 
   const BLOCKED_CASES_COUNT_MOCK = 3;
-
   const REGULAR_ELIGIBLE_CASES_COUNT = 2;
   const SMALL_ELIGIBLE_CASES_COUNT = 1;
 

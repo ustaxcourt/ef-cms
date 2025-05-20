@@ -24,18 +24,17 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getFullEligibleCasesForTrialSession as getFullEligibleCasesForTrialSessionMock } from '@web-api/persistence/postgres/cases/getFullEligibleCasesForTrialSession';
+import { getEligibleCasesForTrialSession as getEligibleCasesForTrialSessionMock } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 import { removeLock as removeLockMock } from '@web-api/business/useCaseHelper/acquireLock';
 import { updateWorkItemsForCasesToCalendar as updateWorkItemsForCasesToCalendarMock } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
-const getFullEligibleCasesForTrialSession = jest.mocked(
-  getFullEligibleCasesForTrialSessionMock,
-);
-
 describe('setTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getEligibleCasesForTrialSession = jest.mocked(
+    getEligibleCasesForTrialSessionMock,
+  );
   const upsertCases = jest.mocked(upsertCasesMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const acquireLock = jest.mocked(acquireLockMock);
@@ -107,7 +106,7 @@ describe('setTrialSessionCalendarInteractor', () => {
           },
         },
       ]);
-    getFullEligibleCasesForTrialSession.mockResolvedValue([
+    getEligibleCasesForTrialSession.mockResolvedValue([
       {
         ...MOCK_CASE,
         qcCompleteForTrial: {
@@ -163,7 +162,7 @@ describe('setTrialSessionCalendarInteractor', () => {
           trialTime: '11:00',
         },
       ]);
-    getFullEligibleCasesForTrialSession.mockResolvedValue([
+    getEligibleCasesForTrialSession.mockResolvedValue([
       {
         ...MOCK_CASE,
         qcCompleteForTrial: {
@@ -213,7 +212,7 @@ describe('setTrialSessionCalendarInteractor', () => {
           },
         },
       ]);
-    getFullEligibleCasesForTrialSession.mockResolvedValue([
+    getEligibleCasesForTrialSession.mockResolvedValue([
       {
         ...MOCK_CASE,
         qcCompleteForTrial: {
@@ -258,7 +257,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(getFullEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
+    expect(getEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
       limit: 150, // max cases + buffer
     });
   });
@@ -285,7 +284,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(getFullEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
+    expect(getEligibleCasesForTrialSession.mock.calls[0][0]).toMatchObject({
       limit: 149, // max cases + buffer - manually added case
     });
   });
@@ -355,7 +354,7 @@ describe('setTrialSessionCalendarInteractor', () => {
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([]);
 
-    getFullEligibleCasesForTrialSession.mockResolvedValue([
+    getEligibleCasesForTrialSession.mockResolvedValue([
       {
         ...MOCK_CASE,
         docketNumber: hpSuffixDocketNumber,
