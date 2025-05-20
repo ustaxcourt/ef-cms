@@ -78,7 +78,7 @@ describe('genericHandler', () => {
   it('does not call application.logger.error if the skipLogging flag is present on the error', async () => {
     const callback = () => {
       const error = new Error('Test Error');
-      error.skipLogging = true;
+      error['skipLogging'] = true;
       throw error;
     };
 
