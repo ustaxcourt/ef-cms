@@ -4,6 +4,7 @@ import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgIn
 
 const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
   'clerk-of-court-configuration',
+  'section-outbox-number-of-days',
   'aws-batch-zipper-minimum-count',
   'chief-judge-name',
   'entity-locking-feature-flag',
