@@ -13,3 +13,21 @@ export const validatePermissions = async (
   const permissions = await pdfDocument.getPermissions();
   return !permissions;
 };
+
+export const getPdfErrorDetails = (error): string => {
+  if (error === null) return 'null';
+  if (typeof error === 'undefined') return 'undefined';
+
+  if (error instanceof Error || error instanceof DOMException)
+    return error.message || error.name || 'Error object without message';
+
+  if (typeof error === 'object') {
+    try {
+      return `Object with properties: ${Object.keys(error).join(', ')}`;
+    } catch {
+      return 'Unserializable object';
+    }
+  }
+
+  return error.toString();
+};

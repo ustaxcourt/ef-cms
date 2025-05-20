@@ -3,6 +3,7 @@ import {
   FileValidationResponse,
 } from '@web-client/views/FileHandlingHelpers/fileValidation';
 import {
+  getPdfErrorDetails,
   validatePdfHeader,
   validatePermissions,
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
@@ -97,7 +98,7 @@ export const validatePdf = ({
         resolve({
           errorInformation: {
             errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-            errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} (An unknown error occurred: ${err})`,
+            errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} (An unknown error occurred: ${getPdfErrorDetails(err)})`,
             errorType: ErrorTypes.UNKNOWN,
           },
           isValid: false,
@@ -110,7 +111,7 @@ export const validatePdf = ({
       resolve({
         errorInformation: {
           errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-          errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} (FileReader encountered an error: ${error}.)`,
+          errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} (FileReader encountered an error: ${getPdfErrorDetails(error)}.)`,
           errorType: ErrorTypes.UNKNOWN,
         },
         isValid: false,
