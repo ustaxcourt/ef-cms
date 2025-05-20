@@ -15,6 +15,7 @@ import {
   createISODateAtStartOfDayEST,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 /**
  *
@@ -49,21 +50,25 @@ export const getDocumentQCServedForSectionInteractor = async (
   });
 };
 
-export const calculateAfterDate = async applicationContext => {
+async function getDaysToRetrieve(
+  applicationContext: ServerApplicationContext,
+): Promise<number> {
+  const { CONFIGURATION_ITEM_KEYS } = applicationContext.getConstants();
   const daysToRetrieveKey =
-    applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
-      .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
-  let daysToRetrieve = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey: daysToRetrieveKey,
-    });
-  if (!daysToRetrieve || !Number.isInteger(daysToRetrieve)) {
-    daysToRetrieve = 7;
-  }
-  daysToRetrieve = Math.abs(daysToRetrieve);
+    CONFIGURATION_ITEM_KEYS.SECTION_OUTBOX_NUMBER_OF_DAYS.key;
 
+  const daysToRetrieveRecord = await getFeatureFlagValues([daysToRetrieveKey]);
+  if (!daysToRetrieveRecord || daysToRetrieveRecord.length === 0) return 7;
+
+  const { current } = daysToRetrieveRecord[0].value;
+  if (!current || !Number.isInteger(current)) {
+    return 7;
+  }
+  return Math.abs(current);
+}
+
+export const calculateAfterDate = async applicationContext => {
+  const daysToRetrieve = await getDaysToRetrieve(applicationContext);
   const startOfDay = createISODateAtStartOfDayEST();
   const afterDate = calculateDate({
     dateString: startOfDay,
