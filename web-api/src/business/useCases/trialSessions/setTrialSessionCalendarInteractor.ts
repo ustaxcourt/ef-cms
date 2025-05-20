@@ -12,7 +12,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { isEmpty, flatten, partition, uniq } from 'lodash';
-import { getFullEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getFullEligibleCasesForTrialSession';
 import {
   acquireLock,
   removeLock,
@@ -24,6 +23,7 @@ import {
   updateDeadlinesForCasesToCalendar,
   updateWorkItemsForCasesToCalendar,
 } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
+import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -79,7 +79,7 @@ export const setTrialSessionCalendarInteractor = async (
     eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
 
     const eligibleCases = (
-      await getFullEligibleCasesForTrialSession({
+      await getEligibleCasesForTrialSession({
         applicationContext,
         limit: eligibleCasesLimit,
         sessionType: trialSessionEntity.getCaseProcedureForTrial(),
