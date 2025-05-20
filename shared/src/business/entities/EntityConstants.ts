@@ -86,13 +86,7 @@ export const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
-export const ALLOWLIST_FEATURE_FLAGS = {
-  USE_CHANGE_OF_ADDRESS_LAMBDA: {
-    disabledMessage:
-      'A flag to know when to use the change of address lambda for processing.',
-    key: 'use-change-of-address-lambda',
-  },
-};
+export const ALLOWLIST_FEATURE_FLAGS = {};
 
 export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
   AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
@@ -109,6 +103,11 @@ export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
   },
   ENTITY_LOCKING_FEATURE_FLAG: {
     key: 'entity-locking-feature-flag',
+  },
+  USE_CHANGE_OF_ADDRESS_LAMBDA: {
+    disabledMessage:
+      'A flag to know when to use the change of address lambda for processing.',
+    key: 'use-change-of-address-lambda',
   },
 };
 
