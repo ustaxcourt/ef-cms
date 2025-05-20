@@ -1471,6 +1471,12 @@ hr.lighter {
   }
 }
 
+.motionResponseOrderPdfPreview {
+  .pdf-preview-viewer {
+    height: 846px;
+  }
+}
+
 .ustc-ui-tabs.container-tabs {
   border-bottom: 0;
   background-color: white;
@@ -2456,6 +2462,21 @@ button.change-scanner-button {
 
 .cities-not-calendated-yellow-background {
   background-color: #ffe396;
+}
+
+.practitioner-type-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+@media (max-width: ($medium-screen - 1)) {
+  .practitioner-type-container {
+    flex-direction: column;
+  }
+}
+
+.practitioner-type-label {
+  text-transform: capitalize;
 }
 
 .term-builder-form {
