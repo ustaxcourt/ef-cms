@@ -30,7 +30,6 @@ export const getTrialSessionAssociatedCasesCountInteractor = async (
 
   const { calendaredCaseEntities, casesThatShouldReceiveNotices } =
     await getCasesInTrialSession({
-      applicationContext,
       trialSession: TRIAL_SESSION,
       authorizedUser,
     });

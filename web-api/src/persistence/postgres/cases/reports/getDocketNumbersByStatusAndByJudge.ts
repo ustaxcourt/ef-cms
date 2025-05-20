@@ -25,37 +25,28 @@ export const getDocketNumbersByStatusAndByJudge = async ({
 }: {
   params: DocketNumberByStatusRequest;
 }): Promise<SubmittedCAVTableFields[]> => {
-  const rawResults = await getDbReader(reader => {
+  const rawResults = await getDbReader(async reader => {
     let query = reader
       .selectFrom('dwCase as c')
-      .leftJoin('dwCaseStatusUpdate as cs', 'c.docketNumber', 'cs.docketNumber')
-      .where('c.status', 'in', params.statuses);
-
-    if (!isEmpty(params.judges)) {
-      query = query.where('c.associatedJudge', 'in', params.judges);
-    }
-
-    return query
-      .select(({ fn }) => [
+      .select([
         'c.associatedJudge',
         'c.status',
         'c.caption',
         'c.docketNumber',
         'c.leadDocketNumber',
         'c.docketNumberSuffix',
-        fn.max('cs.date').as('statusDate'),
+        'c.caseStatusHistory',
       ])
-      .groupBy([
-        'c.associatedJudge',
-        'c.status',
-        'c.caption',
-        'c.docketNumber',
-        'c.docketNumberSuffix',
-      ])
-      .limit(MAX_ELASTICSEARCH_PAGINATION)
-      .execute();
+      .where('c.status', 'in', params.statuses);
+
+    if (!isEmpty(params.judges)) {
+      query = query.where('c.associatedJudge', 'in', params.judges);
+    }
+
+    return await query.limit(MAX_ELASTICSEARCH_PAGINATION).execute();
   });
 
+  // for each case, statusDate as the max date of caseStatusHistory
   let results = rawResults.map(result =>
     fromKyselyCase({
       ...result,
@@ -64,7 +55,9 @@ export const getDocketNumbersByStatusAndByJudge = async ({
         docketNumber: result.docketNumber,
         docketNumberSuffix: result.docketNumberSuffix,
       }),
-      statusDate: result.statusDate ? result.statusDate.toISOString() : '',
+      statusDate: result.caseStatusHistory.length
+        ? result.caseStatusHistory.at(-1)!.date
+        : '',
     }),
   );
 

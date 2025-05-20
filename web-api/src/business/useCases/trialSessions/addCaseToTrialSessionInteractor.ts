@@ -76,7 +76,7 @@ export const addCaseToTrialSession = async (
 
   if (trialSessionEntity.isCalendared) {
     await setPriorityOnAllWorkItems({
-      docketNumber: caseEntity.docketNumber,
+      docketNumbers: [caseEntity.docketNumber],
       highPriority: true,
     });
   }

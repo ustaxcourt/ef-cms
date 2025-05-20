@@ -84,3 +84,7 @@ variable "health_check_id" {
 variable "alert_sns_topic_arn" {
   type = string
 }
+
+variable "route_53_regional_weight" {
+  type = number
+}

@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
@@ -11,13 +14,13 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { deleteCaseNoteInteractor } from './deleteCaseNoteInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('deleteCaseNoteInteractor', () => {
   let mockLock;
   let mockUser: AuthUser;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   beforeAll(() => {
     applicationContext
@@ -54,7 +57,7 @@ describe('deleteCaseNoteInteractor', () => {
       caseNote: 'My Procedural Note',
     });
 
-    updateCase.mockImplementation(({ caseToUpdate }) =>
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
     applicationContext.getUniqueId.mockReturnValue(
@@ -79,7 +82,7 @@ describe('deleteCaseNoteInteractor', () => {
     expect(error).toBeUndefined();
     expect(result).toBeDefined();
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.caseNote).not.toBeDefined();
   });
 

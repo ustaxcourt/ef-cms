@@ -4,7 +4,7 @@ const DEFAULT = {};
 
 export const caseDeadlineTableDefinition = {
   associatedJudge: DEFAULT as string,
-  associatedJudgeId: DEFAULT as string | undefined,
+  associatedJudgeId: DEFAULT as string | undefined | null,
   caseDeadlineId: DEFAULT as string,
   createdAt: DEFAULT as Date,
   deadlineDate: DEFAULT as Date,

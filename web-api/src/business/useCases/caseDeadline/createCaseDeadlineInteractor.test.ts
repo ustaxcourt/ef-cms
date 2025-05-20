@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CHIEF_JUDGE,
@@ -17,15 +20,14 @@ import { createCaseDeadlineInteractor } from './createCaseDeadlineInteractor';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-
-const updateCase = jest.mocked(updateCaseMock);
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 
 describe('createCaseDeadlineInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
@@ -51,7 +53,7 @@ describe('createCaseDeadlineInteractor', () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
       new CaseDeadline(MOCK_CASE_DEADLINE),
     ]);
-    updateCase.mockImplementation(({ caseToUpdate }) =>
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
   });
@@ -81,8 +83,10 @@ describe('createCaseDeadlineInteractor', () => {
     expect(caseDeadline).toBeDefined();
     expect(caseDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
     expect(caseDeadline.associatedJudgeId).toEqual(undefined); // judge is not set on the mock case, so judgeId is not set
-    expect(updateCase).toHaveBeenCalled();
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
@@ -105,8 +109,10 @@ describe('createCaseDeadlineInteractor', () => {
     expect(caseDeadline.associatedJudgeId).toEqual(
       'dabbad02-18d0-43ec-bafb-654e83405416',
     );
-    expect(updateCase).toHaveBeenCalled();
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,

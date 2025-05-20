@@ -114,6 +114,7 @@ import { messageDocumentHelper } from './computeds/messageDocumentHelper';
 import { messageModalHelper } from './computeds/messageModalHelper';
 import { messagesHelper } from './computeds/messagesHelper';
 import { messagesIndividualInboxHelper } from './computeds/messagesIndividualInboxHelper';
+import { motionOrderResponseFormHelper } from './computeds/motionOrderResponseFormHelper';
 import { myAccountHelper } from './computeds/myAccountHelper';
 import { noticeStatusHelper } from './computeds/noticeStatusHelper';
 import { orderTypesHelper } from './computeds/orderTypesHelper';
@@ -425,6 +426,10 @@ export const computeds = {
   messagesIndividualInboxHelper:
     messagesIndividualInboxHelper as unknown as ReturnType<
       typeof messagesIndividualInboxHelper
+    >,
+  motionOrderResponseFormHelper:
+    motionOrderResponseFormHelper as unknown as ReturnType<
+      typeof motionOrderResponseFormHelper
     >,
   myAccountHelper: myAccountHelper as unknown as ReturnType<
     typeof myAccountHelper

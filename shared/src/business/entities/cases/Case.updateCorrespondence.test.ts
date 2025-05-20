@@ -26,7 +26,7 @@ describe('updateCorrespondence', () => {
     expect(
       myCase.correspondence.find(
         d => d.correspondenceId === mockCorrespondence.correspondenceId,
-      ).documentTitle,
+      )?.documentTitle,
     ).toEqual('updated title');
   });
 
@@ -52,7 +52,7 @@ describe('updateCorrespondence', () => {
     expect(
       myCase.correspondence.find(
         d => d.correspondenceId === mockCorrespondence.correspondenceId,
-      ).documentTitle,
+      )?.documentTitle,
     ).toEqual('My Correspondence');
   });
 });

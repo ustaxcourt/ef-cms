@@ -4,6 +4,9 @@ import {
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import { TDynamoRecord } from '../dynamoTypes';
 import { getTableName } from '../../dynamodbClientService';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type TLockDynamoRecord = TDynamoRecord & { timestamp: string };
 
@@ -47,10 +50,10 @@ export async function removeLock({
   applicationContext,
   identifiers,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   identifiers: string[];
 }): Promise<void> {
-  await Promise.all(
+  await settlePromises(
     identifiers.map(identifierToUnlock =>
       applicationContext
         .getDocumentClient(applicationContext, {
@@ -64,6 +67,10 @@ export async function removeLock({
           TableName: getTableName({
             applicationContext,
           }),
+        })
+        .catch(e => {
+          getLogger().error(`Failed to remove lock for ${identifierToUnlock}`);
+          throw e;
         }),
     ),
   );
