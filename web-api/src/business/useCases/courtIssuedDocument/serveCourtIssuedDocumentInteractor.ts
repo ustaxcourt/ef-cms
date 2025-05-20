@@ -16,6 +16,8 @@ import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -106,16 +108,13 @@ export const serveCourtIssuedDocument = async (
   let caseEntities = [subjectCaseEntity];
 
   try {
-    for (const docketNumber of docketNumbers) {
-      const caseToUpdate = await getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const casesToUpdate = await getCasesByDocketNumbers({ docketNumbers });
 
+    for (const caseToUpdate of casesToUpdate) {
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 
-    caseEntities = await Promise.all(
+    caseEntities = await settlePromises(
       caseEntities.map(caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
@@ -162,7 +161,6 @@ export const serveCourtIssuedDocument = async (
   }
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: stampedPdf,
     key: docketEntryId,
   });

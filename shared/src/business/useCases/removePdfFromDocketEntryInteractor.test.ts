@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -12,7 +15,6 @@ import {
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
@@ -20,13 +22,13 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('removePdfFromDocketEntryInteractor', () => {
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   const MOCK_CASE: RawCase = {
     caseCaption: 'Caption',
@@ -144,7 +146,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).toHaveBeenCalled();
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should set the docketEntry isFileAttached flag to false', async () => {
@@ -158,7 +160,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     );
 
     const docketEntry =
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.docketEntryId === '7805d1ab-18d0-43ec-bafb-654e83405416',
       );
 
@@ -179,7 +181,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).not.toHaveBeenCalled();
 
-    expect(updateCase).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('does not modify the docketEntry or case if the docketEntry can not be found on the case', async () => {
@@ -196,7 +198,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
       applicationContext.getPersistenceGateway().deleteDocumentFile,
     ).not.toHaveBeenCalled();
 
-    expect(updateCase).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;

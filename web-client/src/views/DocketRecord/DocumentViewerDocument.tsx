@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
@@ -170,7 +171,21 @@ export const DocumentViewerDocument = connect(
                   Complete QC
                 </Button>
               )}
-
+              {documentViewerHelper.showOrderResponseButton && (
+                <Button
+                  link
+                  data-testid="order-response-button"
+                  icon="edit"
+                  onClick={() => {
+                    navigateToPathAndSetRedirectUrlSequence({
+                      path: documentViewerLinksHelper.orderResponseFromCaseDetailsLink,
+                      redirectUrl: documentViewerLinksHelper.redirectUrl,
+                    });
+                  }}
+                >
+                  Order Response
+                </Button>
+              )}
               {documentViewerHelper.showApplyStampButton && (
                 <Button
                   link

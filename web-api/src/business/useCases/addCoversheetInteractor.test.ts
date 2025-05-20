@@ -15,6 +15,7 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 jest.mock('./addCoverToPdf', () => ({
   __esModule: true,
@@ -25,6 +26,7 @@ jest.mock('./addCoverToPdf', () => ({
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
+const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
 describe('addCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
@@ -81,7 +83,8 @@ describe('addCoversheetInteractor', () => {
   };
 
   beforeEach(() => {
-    getCaseByDocketNumber.mockReturnValue(testingCaseData);
+    getCaseByDocketNumber.mockResolvedValue(testingCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([testingCaseData]);
   });
 
   it('adds a cover page to a pdf document', async () => {
@@ -217,33 +220,29 @@ describe('addCoversheetInteractor', () => {
       numberOfPages: 5,
       pdfData: 'gg',
     });
-
-    getCaseByDocketNumber
-      .mockResolvedValueOnce({
-        ...testingCaseData,
-        docketNumber: MOCK_CASE.docketNumber,
-      })
-      .mockResolvedValueOnce({
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
         ...testingCaseData,
         docketNumber: '102-20',
         docketEntries: [
           { ...MOCK_CASE.docketEntries[0], docketNumber: '102-20' },
         ],
-      })
-      .mockResolvedValueOnce({
+      },
+      {
         ...testingCaseData,
         docketNumber: '103-20',
         docketEntries: [
           { ...MOCK_CASE.docketEntries[0], docketNumber: '103-20' },
         ],
-      });
+      },
+    ]);
 
     await addCoversheetInteractor(
       applicationContext,
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -300,20 +299,22 @@ describe('addCoversheetInteractor', () => {
       ],
     });
 
-    getCaseByDocketNumber.mockResolvedValueOnce({
-      ...testingCaseData,
-      docketEntries: [
-        {
-          ...MOCK_CASE.docketEntries[0],
-          createdAt: '2019-04-19T14:45:15.595Z',
-          documentType: 'Simultaneous Answering Brief',
-          eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-          processingStatus: mockProcessingStatus,
-          docketNumber: '102-20',
-        },
-      ],
-      docketNumber: mockConsolidatedCaseNonSubjectCase,
-    });
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...testingCaseData,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            createdAt: '2019-04-19T14:45:15.595Z',
+            documentType: 'Simultaneous Answering Brief',
+            eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
+            processingStatus: mockProcessingStatus,
+            docketNumber: '102-20',
+          },
+        ],
+        docketNumber: mockConsolidatedCaseNonSubjectCase,
+      },
+    ]);
 
     await addCoversheetInteractor(
       applicationContext,
@@ -353,20 +354,22 @@ describe('addCoversheetInteractor', () => {
       ],
     });
 
-    getCaseByDocketNumber.mockResolvedValueOnce({
-      ...testingCaseData,
-      docketEntries: [
-        {
-          ...MOCK_CASE.docketEntries[0],
-          createdAt: '2019-04-19T14:45:15.595Z',
-          documentTitle: 'Super Duper Simultaneous but not really',
-          documentType: 'Answer',
-          processingStatus: mockProcessingStatus,
-          docketNumber: '102-20',
-        },
-      ],
-      docketNumber: mockConsolidatedCaseNonSubjectCase,
-    });
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
+        ...testingCaseData,
+        docketEntries: [
+          {
+            ...MOCK_CASE.docketEntries[0],
+            createdAt: '2019-04-19T14:45:15.595Z',
+            documentTitle: 'Super Duper Simultaneous but not really',
+            documentType: 'Answer',
+            processingStatus: mockProcessingStatus,
+            docketNumber: '102-20',
+          },
+        ],
+        docketNumber: mockConsolidatedCaseNonSubjectCase,
+      },
+    ]);
 
     await addCoversheetInteractor(
       applicationContext,

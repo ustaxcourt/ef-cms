@@ -49,7 +49,7 @@ import {
   RawConsolidatedCaseSummary,
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { ContactFactory } from '../contacts/ContactFactory';
-import { Correspondence } from '../Correspondence';
+import { Correspondence, RawCorrespondence } from '../Correspondence';
 import { DocketEntry } from '../DocketEntry';
 import {
   FORMATS,
@@ -67,7 +67,7 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
-import { Statistic } from '../Statistic';
+import { RawStatistic, Statistic } from '../Statistic';
 import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
@@ -76,6 +76,7 @@ import { compareStrings } from '../../utilities/sortFunctions';
 import { getDocketNumberSuffix } from '../../utilities/getDocketNumberSuffix';
 import { shouldGenerateDocketRecordIndex } from '../../utilities/shouldGenerateDocketRecordIndex';
 import joi from 'joi';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export class Case extends JoiValidationEntity {
   public associatedJudge?: string;
@@ -91,7 +92,6 @@ export class Case extends JoiValidationEntity {
   public damages?: number;
   public highPriority?: boolean;
   public highPriorityReason?: string;
-  public judgeUserId?: string;
   public litigationCosts?: number;
   public qcCompleteForTrial?: Record<string, any>;
   public noticeOfAttachments?: boolean;
@@ -144,9 +144,9 @@ export class Case extends JoiValidationEntity {
   public privatePractitioners?: any[];
   public initialCaption?: string;
   public irsPractitioners?: any[];
-  public statistics?: any[];
-  public correspondence: any[];
-  public archivedCorrespondences?: any[];
+  public statistics?: RawStatistic[];
+  public correspondence: RawCorrespondence[];
+  public archivedCorrespondences?: RawCorrespondence[];
   public hasPendingItems?: boolean;
   public consolidatedCases: RawConsolidatedCaseSummary[] = [];
 
@@ -355,7 +355,6 @@ export class Case extends JoiValidationEntity {
     this.damages = rawCase.damages;
     this.highPriority = rawCase.highPriority;
     this.highPriorityReason = rawCase.highPriorityReason;
-    this.judgeUserId = rawCase.judgeUserId;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
@@ -543,9 +542,6 @@ export class Case extends JoiValidationEntity {
     irsPractitioners: CASE_IRS_PRACTITIONERS_RULE,
     isPaper: joi.boolean().optional(),
     isSealed: CASE_IS_SEALED_RULE,
-    judgeUserId: JoiValidationConstants.UUID.optional().description(
-      'Unique ID for the associated judge.',
-    ),
     leadDocketNumber: CASE_LEAD_DOCKET_NUMBER_RULE,
     litigationCosts: joi
       .number()
@@ -1839,8 +1835,28 @@ export class Case extends JoiValidationEntity {
    * Updates the specified contact object in the case petitioner's array
    * @param {object} arguments.updatedPetitioner the updated petitioner object
    */
-  updatePetitioner(updatedPetitioner) {
-    updatePetitioner(this, updatedPetitioner);
+  updatePetitioner({
+    updatedPetitioner,
+    assignNewId = false,
+  }: {
+    updatedPetitioner: any;
+    assignNewId?: boolean;
+  }) {
+    const petitionerIndex = this.petitioners.findIndex(
+      p => p.contactId === updatedPetitioner.contactId,
+    );
+
+    if (petitionerIndex === -1) {
+      throw new Error(`Petitioner was not found on case ${this.docketNumber}.`);
+    }
+
+    // reassign contactId to disassociate old contactId from login userId
+    if (assignNewId) {
+      updatedPetitioner.contactId = getUniqueId();
+    }
+
+    this.petitioners[petitionerIndex] = updatedPetitioner;
+    return updatedPetitioner;
   }
 
   /**
@@ -2483,20 +2499,6 @@ export const getOtherFilers = function (rawCase) {
       p.contactType === CONTACT_TYPES.participant ||
       p.contactType === CONTACT_TYPES.intervenor,
   );
-};
-
-export const updatePetitioner = function (rawCase, updatedPetitioner) {
-  const petitionerIndex = rawCase.petitioners.findIndex(
-    p => p.contactId === updatedPetitioner.contactId,
-  );
-
-  if (petitionerIndex === -1) {
-    throw new Error(
-      `Petitioner was not found on case ${rawCase.docketNumber}.`,
-    );
-  }
-
-  rawCase.petitioners[petitionerIndex] = updatedPetitioner;
 };
 
 declare global {

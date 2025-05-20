@@ -1,7 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getEligibleCasesForTrialSession } from './getEligibleCasesForTrialSession';
 import { query } from '../../dynamodbClientService';
 
@@ -15,14 +15,16 @@ jest.mock('../../dynamodbClientService', () => ({
 const queryMock = query as jest.Mock;
 
 describe('getEligibleCasesForTrialSession', () => {
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
   beforeEach(() => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...MOCK_CASE,
-      irsPractitioners: [{ userId: 'abc-123' }],
-      privatePractitioners: [{ userId: 'abc-123' }],
-    });
+    getCasesByDocketNumbers.mockResolvedValue([
+      {
+        ...MOCK_CASE,
+        irsPractitioners: [{ userId: 'abc-123' }],
+        privatePractitioners: [{ userId: 'abc-123' }],
+      },
+    ]);
 
     queryMock.mockResolvedValue([
       {
@@ -39,7 +41,7 @@ describe('getEligibleCasesForTrialSession', () => {
       limit,
       skPrefix,
     });
-    expect(getCaseByDocketNumber).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
     expect(result).toEqual([
       {
         ...MOCK_CASE,
@@ -70,30 +72,4 @@ describe('getEligibleCasesForTrialSession', () => {
     });
     expect(result).toMatchObject([{ docketNumber: '101-18' }]);
   });
-
-  it('should return the eligible cases in a timely manner', async () => {
-    const CASES_TO_TEST = 105;
-    getCaseByDocketNumber.mockImplementation(async () => {
-      await new Promise(resolve => setTimeout(resolve, 200));
-      return {
-        ...MOCK_CASE,
-        irsPractitioners: [{ userId: 'abc-123' }],
-        privatePractitioners: [{ userId: 'abc-123' }],
-      };
-    });
-
-    queryMock.mockResolvedValue(
-      new Array(CASES_TO_TEST).fill({
-        docketNumber: MOCK_CASE.docketNumber,
-        pk: 'eligible-for-trial-case-catalog',
-        sk: 'WashingtonDistrictofColumbia-R-A-20181212000000-101-18',
-      }),
-    );
-
-    await getEligibleCasesForTrialSession({
-      applicationContext,
-      limit,
-      skPrefix,
-    });
-  }, 1000);
 });

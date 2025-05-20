@@ -15,25 +15,31 @@ export const processDocketEntries = async ({
 }) => {
   if (!records.length) return;
 
-  getLogger().debug(`going to index ${records.length} docketEntryRecords`);
+  try {
+    getLogger().debug(`going to index ${records.length} docketEntryRecords`);
 
-  const pgDocketEntries: Record<string, RawDocketEntry> = {};
+    const pgDocketEntries: Record<string, RawDocketEntry> = {};
 
-  for (const record of records) {
-    const unmarshalledRecord = unmarshall(record.dynamodb.NewImage);
-    const key =
-      unmarshalledRecord.docketNumber + unmarshalledRecord.docketEntryId;
-    // Only upsert the most recent update of any duplicate docket entry record since otherwise Postgres will throw an error.
-    pgDocketEntries[key] = unmarshalledRecord as RawDocketEntry;
+    for (const record of records) {
+      const unmarshalledRecord = unmarshall(record.dynamodb.NewImage);
+      const key =
+        unmarshalledRecord.docketNumber + unmarshalledRecord.docketEntryId;
+      // Only upsert the most recent update of any duplicate docket entry record since otherwise Postgres will throw an error.
+      pgDocketEntries[key] = unmarshalledRecord as RawDocketEntry;
+    }
+    const docketEntries = Object.values(pgDocketEntries);
+    const validatedEntries = DocketEntry.validateRawCollection(docketEntries, {
+      authorizedUser: {
+        email: 'system@ustc.gov',
+        name: 'ustc automated system',
+        role: 'docketclerk',
+        userId: 'N/A',
+      },
+    });
+    await upsertDocketEntries(validatedEntries);
+  } catch (e) {
+    getLogger().error(
+      `Postgres re-indexing failure: Failed to process docket entry records: ${e}`,
+    );
   }
-  const docketEntries = Object.values(pgDocketEntries);
-  const validatedEntries = DocketEntry.validateRawCollection(docketEntries, {
-    authorizedUser: {
-      email: 'system@ustc.gov',
-      name: 'ustc automated system',
-      role: 'docketclerk',
-      userId: 'N/A',
-    },
-  });
-  await upsertDocketEntries(validatedEntries);
 };

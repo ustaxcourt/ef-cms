@@ -16,6 +16,10 @@ jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber', () =>
   mockFactory('getCaseByDocketNumber'),
 );
 
+jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers', () =>
+  mockFactory('getCasesByDocketNumbers'),
+);
+
 jest.mock(
   '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber',
   () => mockFactory('getCaseMetadataByDocketNumber'),
@@ -50,10 +54,6 @@ jest.mock(
   () => mockFactory('getCasesInConsolidatedGroup'),
 );
 
-jest.mock('@web-api/persistence/postgres/cases/updateCase', () =>
-  mockFactory('updateCase'),
-);
-
 jest.mock('@web-api/persistence/postgres/cases/upsertCases', () =>
   mockFactory('upsertCases'),
 );
@@ -61,38 +61,6 @@ jest.mock('@web-api/persistence/postgres/cases/upsertCases', () =>
 jest.mock(
   '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases',
   () => mockFactory('getReadyForTrialCases'),
-);
-
-// Parties
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase',
-  () => mockFactory('createPetitionersOnCase'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/parties/deletePetitionerOnCase',
-  () => mockFactory('deletePetitionerOnCase'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase',
-  () => mockFactory('updatePetitionerOnCase'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/parties/upsertPetitionersOnCase',
-  () => mockFactory('upsertPetitionersOnCase'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/parties/getPetitionersOnCase',
-  () => mockFactory('getPetitionersOnCase'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/parties/clearPetitionersOnCase',
-  () => mockFactory('clearPetitionersOnCase'),
 );
 
 // Reports
@@ -109,11 +77,6 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/cases/reports/getCaseInventoryReport',
   () => mockFactory('getCaseInventoryReport', { foundCases: [], total: 0 }),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal',
-  () => mockFactory('getCasesByEmailTotal'),
 );
 
 jest.mock('@web-api/persistence/postgres/cases/reports/getCasesByFilters', () =>
@@ -133,26 +96,4 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases',
   () => mockFactory('getSuggestedCalendarCases'),
-);
-
-// Statistics
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/statistics/createCaseStatistic',
-  () => mockFactory('createCaseStatistic'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/statistics/deleteCaseStatistic',
-  () => mockFactory('deleteCaseStatistic'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/statistics/updateCaseStatistic',
-  () => mockFactory('updateCaseStatistic'),
-);
-
-jest.mock(
-  '@web-api/persistence/postgres/cases/statistics/clearCaseStatistics',
-  () => mockFactory('clearCaseStatistics'),
 );

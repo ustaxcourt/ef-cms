@@ -5,6 +5,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 /**
  * addCoversheetInteractor
@@ -71,7 +72,6 @@ export const addCoversheetInteractor = async (
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: newPdfData,
     key: docketEntryId,
   });
@@ -84,53 +84,50 @@ export const addCoversheetInteractor = async (
       .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);
   }
 
-  const updatedDocketEntries = await Promise.all(
-    docketNumbersToUpdate.map(async caseDocketNumber => {
-      // in one instance, we pass in the caseEntity which we don't want to refetch
-      let consolidatedCaseEntity = caseEntity;
-      if (caseEntity && caseDocketNumber !== docketNumber) {
-        const caseRecord = await getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: caseDocketNumber,
-        });
-        consolidatedCaseEntity = new Case(caseRecord, {
-          authorizedUser,
-        });
+  const casesToUpdate = await getCasesByDocketNumbers({
+    docketNumbers: docketNumbersToUpdate,
+  });
+
+  const updatedDocketEntries = casesToUpdate.map(caseRecord => {
+    const consolidatedCaseEntity =
+      caseRecord.docketNumber === docketNumber
+        ? caseEntity
+        : new Case(caseRecord, {
+            authorizedUser,
+          });
+
+    const consolidatedCaseDocketEntryEntity =
+      consolidatedCaseEntity!.getDocketEntryById({
+        docketEntryId,
+      });
+
+    if (consolidatedCaseDocketEntryEntity) {
+      const isSimultaneousDocType =
+        SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+          consolidatedCaseDocketEntryEntity.eventCode,
+        ) ||
+        consolidatedCaseDocketEntryEntity.documentTitle?.includes(
+          'Simultaneous',
+        );
+
+      if (
+        !isSimultaneousDocType ||
+        (isSimultaneousDocType &&
+          caseEntity &&
+          caseRecord.docketNumber === docketNumber)
+      ) {
+        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
       }
 
-      const consolidatedCaseDocketEntryEntity =
-        consolidatedCaseEntity!.getDocketEntryById({
-          docketEntryId,
-        });
+      consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
 
-      if (consolidatedCaseDocketEntryEntity) {
-        const isSimultaneousDocType =
-          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-            consolidatedCaseDocketEntryEntity.eventCode,
-          ) ||
-          consolidatedCaseDocketEntryEntity.documentTitle?.includes(
-            'Simultaneous',
-          );
+      const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
+        .validate()
+        .toRawObject();
 
-        if (
-          !isSimultaneousDocType ||
-          (isSimultaneousDocType &&
-            caseEntity &&
-            caseDocketNumber === docketNumber)
-        ) {
-          consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
-        }
-
-        consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
-
-        const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
-          .validate()
-          .toRawObject();
-
-        return updateConsolidatedDocketEntry;
-      }
-    }),
-  );
+      return updateConsolidatedDocketEntry;
+    }
+  });
 
   await upsertDocketEntries(updatedDocketEntries);
 

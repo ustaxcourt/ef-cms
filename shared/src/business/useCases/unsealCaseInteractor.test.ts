@@ -13,17 +13,14 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { unsealCaseInteractor } from './unsealCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('unsealCaseInteractor', () => {
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
-  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext
@@ -34,9 +31,6 @@ describe('unsealCaseInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-    updateCaseAndAssociations.mockImplementation(
-      ({ caseToUpdate }) => caseToUpdate,
-    );
   });
 
   it('should throw an error if the user is unauthorized to unseal a case', async () => {

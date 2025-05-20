@@ -11,7 +11,6 @@ describe('combineTwoPdfs', () => {
 
   it('should combine two pdfs into single pdf', async () => {
     const newPdfData = await combineTwoPdfs({
-      applicationContext,
       firstPdf: testPdfDoc,
       secondPdf: testPdfDoc,
     });

@@ -4,6 +4,9 @@ import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 jest.mock('@web-api/business/useCaseHelper/service/createChangeItems');
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -32,19 +35,18 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
   const generateAndServeDocketEntry = jest.mocked(
     generateAndServeDocketEntryMock,
   );
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const PRIMARY_CONTACT_ID = MOCK_CASE.petitioners[0].contactId;
   const mockUrl = 'madeUpurl.com';
 
@@ -231,7 +233,7 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
-    expect(updateCase).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should update the petitioner contact when their info changes and serves the notice created', async () => {
@@ -265,7 +267,8 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.petitioners[0].address2,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0]
+        .address2,
     ).toBeUndefined();
   });
 
@@ -283,7 +286,7 @@ describe('updatePetitionerInformationInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual(mockUrl);
   });
 
@@ -300,7 +303,7 @@ describe('updatePetitionerInformationInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
@@ -324,7 +327,8 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.petitioners[0].email,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0]
+        .email,
     ).not.toBe('test2@example.com');
   });
 
@@ -344,7 +348,7 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.petitioners[0],
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0],
     ).toMatchObject({
       hasConsentedToElectronicService: true,
       paperPetitionEmail: 'paperPetitionEmail@example.com',
@@ -367,7 +371,7 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     const updatedPetitioners =
-      updateCase.mock.calls[0][0].caseToUpdate.petitioners;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners;
 
     expect(updatedPetitioners[0].additionalName).toBe(mockAdditionalName);
   });
@@ -392,7 +396,7 @@ describe('updatePetitionerInformationInteractor', () => {
     );
 
     const updatedPetitioners =
-      updateCase.mock.calls[0][0].caseToUpdate.petitioners;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners;
 
     const updatedOtherFiler = updatedPetitioners.find(
       p => p.contactId === otherFilerToUpdate.contactId,
@@ -416,7 +420,7 @@ describe('updatePetitionerInformationInteractor', () => {
       ),
     ).rejects.toThrow('The Case entity was invalid');
 
-    expect(updateCase).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it("should not generate a notice of change address when petitioner's information is sealed", async () => {

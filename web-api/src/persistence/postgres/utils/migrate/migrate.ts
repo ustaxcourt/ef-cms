@@ -13,6 +13,7 @@ async function migrateToLatest() {
           migrationFolder: path.join(__dirname, 'migrations'),
           path,
         }),
+        allowUnorderedMigrations: true,
       });
 
       const { error, results } = await migrator.migrateToLatest();
