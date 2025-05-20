@@ -4,6 +4,7 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -39,6 +40,19 @@ import {
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+getFeatureFlagValues.mockResolvedValue([
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      },
+    },
+  },
+]);
 
 describe('serveCaseToIrsInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -1138,9 +1152,7 @@ describe('serveCaseToIrsInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      upsertCases.mock.calls[0][0][0].docketEntries,
-    ).toMatchObject([
+    expect(upsertCases.mock.calls[0][0][0].docketEntries).toMatchObject([
       {
         documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
         index: 1,

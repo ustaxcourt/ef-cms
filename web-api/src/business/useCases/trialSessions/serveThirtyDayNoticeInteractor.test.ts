@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import {
   FORMATS,
   formatDateString,
@@ -19,6 +20,19 @@ import {
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+getFeatureFlagValues.mockResolvedValue([
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'bob',
+        title: 'clerk of court',
+      },
+    },
+  },
+]);
 
 describe('serveThirtyDayNoticeInteractor', () => {
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);

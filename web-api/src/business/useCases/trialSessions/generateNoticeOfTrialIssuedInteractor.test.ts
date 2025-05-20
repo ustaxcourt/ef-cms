@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -6,6 +7,19 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfTrialIssuedInteractor } from './generateNoticeOfTrialIssuedInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+getFeatureFlagValues.mockResolvedValue([
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'bob',
+        title: 'clerk of court',
+      },
+    },
+  },
+]);
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 

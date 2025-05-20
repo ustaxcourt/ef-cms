@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import {
   AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
@@ -8,6 +9,19 @@ import { addDocketEntryForSystemGeneratedOrder } from './addDocketEntryForSystem
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+getFeatureFlagValues.mockResolvedValue([
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'James Bond',
+        title: 'Clerk of the Court (Interim)',
+      },
+    },
+  },
+]);
 
 describe('addDocketEntryForSystemGeneratedOrder', () => {
   const caseEntity = new Case(MOCK_CASE, { authorizedUser: undefined });
