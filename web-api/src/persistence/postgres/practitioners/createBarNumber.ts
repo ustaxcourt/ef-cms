@@ -12,7 +12,7 @@ export const createBarNumber = async ({ initials }: { initials: string }) => {
       writer
         .selectFrom('dwPractitioner')
         .select(_eb => [
-          sql<number>`MAX(CAST(SUBSTRING("barNumber", 5) AS INTEGER))`.as(
+          sql<number>`MAX(CAST(SUBSTRING("bar_number", 5) AS INTEGER))`.as(
             'maxBarNumber',
           ),
         ])

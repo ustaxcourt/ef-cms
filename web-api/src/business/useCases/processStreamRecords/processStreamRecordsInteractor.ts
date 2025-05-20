@@ -159,12 +159,12 @@ export const processStreamRecordsInteractor = async (
       },
     );
 
-    // await processUserOnCaseEntries({ userOnCaseRecords }).catch(err => {
-    //   getLogger().error('failed to processUserOnCaseEntries', {
-    //     err,
-    //   });
-    //   throw err;
-    // });
+    await processUserOnCaseEntries({ userOnCaseRecords }).catch(err => {
+      getLogger().error('failed to processUserOnCaseEntries', {
+        err,
+      });
+      throw err;
+    });
 
     await processOtherEntries({ applicationContext, otherRecords }).catch(
       err => {

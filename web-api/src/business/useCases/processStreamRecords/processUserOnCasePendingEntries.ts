@@ -1,5 +1,6 @@
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertUserOnCasePendingRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCasePendingRecords';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const processUserOnCasePendingEntries = async ({
   userOnCasePendingRecords,
@@ -7,6 +8,10 @@ export const processUserOnCasePendingEntries = async ({
   userOnCasePendingRecords: any[];
 }) => {
   if (!userOnCasePendingRecords.length) return;
+
+  getLogger().debug(
+    `going to upsert ${userOnCasePendingRecords.length} userOnCasePending records`,
+  );
 
   await upsertUserOnCasePendingRecords(
     userOnCasePendingRecords.map(userOnCasePendingRecord => {

@@ -1,5 +1,6 @@
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const processUserOnCaseEntries = async ({
   userOnCaseRecords,
@@ -7,6 +8,10 @@ export const processUserOnCaseEntries = async ({
   userOnCaseRecords: any[];
 }) => {
   if (!userOnCaseRecords.length) return;
+
+  getLogger().debug(
+    `going to upsert ${userOnCaseRecords.length} userOnCase records`,
+  );
 
   await userOnCaseRecords.forEach(async userOnCaseRecord => {
     const record = unmarshall(userOnCaseRecord.dynamodb.NewImage);

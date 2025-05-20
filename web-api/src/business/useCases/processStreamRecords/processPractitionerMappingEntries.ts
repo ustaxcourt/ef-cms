@@ -33,15 +33,20 @@ export const processPractitionerMappingEntries = async ({
       return flatPractitioner;
     }),
   );
+
   // await upsertUserOnCaseRecords(
   //   practitionerMappingRecords.map(practitionerMappingRecord => {
   //     const practitionerMapping = unmarshall(
   //       practitionerMappingRecord.dynamodb.NewImage,
   //     );
 
+  //     const docketNumber = practitionerMapping.docketNumber
+  //       ? practitionerMapping.docketNumber
+  //       : practitionerMapping.pk.split('|')[1];
+
   //     return {
   //       userId: practitionerMapping.userId,
-  //       docketNumber: practitionerMapping.docketNumber,
+  //       docketNumber,
   //       entityName: practitionerMapping.entityName,
   //       representing: practitionerMapping.representing,
   //     };

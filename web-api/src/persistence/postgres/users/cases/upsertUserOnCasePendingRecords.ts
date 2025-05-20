@@ -8,12 +8,7 @@ export const upsertUserOnCasePendingRecords = async (
 ) => {
   await pgInsertInto({
     table: 'dwUserOnCasePending',
-    values: userOnCaseRecords.map(userOnCaseRecord => {
-      return {
-        docketNumber: userOnCaseRecord.docketNumber,
-        userId: userOnCaseRecord.userId,
-      };
-    }),
+    values: userOnCaseRecords,
     onConflictColumns: ['docketNumber', 'userId'],
   });
 };

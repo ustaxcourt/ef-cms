@@ -8070,35 +8070,6 @@
   },
   {
     "stampData": {},
-    "draftOrderState": {
-      "eventCode": "OF",
-      "documentTitle": "Order",
-      "docketNumber": "104-23",
-      "documentType": "Order for Filing Fee"
-    },
-    "isStricken": false,
-    "documentType": "Order for Filing Fee",
-    "filingDate": "2023-01-06T22:33:13.836Z",
-    "pending": false,
-    "isDraft": true,
-    "receivedAt": "2023-01-06T05:00:00.000Z",
-    "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
-    "isOnDocketRecord": false,
-    "eventCode": "OF",
-    "createdAt": "2023-01-06T22:33:13.835Z",
-    "documentContentsId": "5d2ab4e4-1e53-46e8-88b9-75248d9a87a1",
-    "processingStatus": "pending",
-    "filers": [],
-    "entityName": "DocketEntry",
-    "docketEntryId": "5157315b-1116-465e-9fa9-f81be578d6b8",
-    "sk": "docket-entry|5157315b-1116-465e-9fa9-f81be578d6b8",
-    "pk": "case|104-23",
-    "documentTitle": "Order",
-    "docketNumber": "104-23",
-    "addToCoversheet": false
-  },
-  {
-    "stampData": {},
     "servedParties": [
       {
         "name": "IRS",
