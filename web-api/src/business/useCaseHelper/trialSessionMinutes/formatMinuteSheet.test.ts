@@ -922,7 +922,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; GRANTED; No Objection',
+              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; FILED; No Objection',
           },
         ]);
       });
@@ -945,7 +945,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([
           {
             content:
-              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; DENIED; Obj. Unknown',
+              '01/15/2023; Motion - <em>test note</em>; Filed by Petitioner; FILED; Obj. Unknown',
           },
         ]);
       });
