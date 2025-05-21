@@ -9,6 +9,7 @@ import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber'
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 export type TrialInfoType = TrialSessionInformationType & {
   formattedJudge: string;
@@ -50,13 +51,17 @@ export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
     joinPhoneNumber: formatPhoneNumber(trialSessionInformation.joinPhoneNumber),
   };
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
+
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
 
   const caseDetail = await getCaseByDocketNumber({
     applicationContext,
