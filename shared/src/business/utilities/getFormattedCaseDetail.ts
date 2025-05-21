@@ -17,6 +17,7 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
+import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 
 export type FormattedCaseInventoryReportEntry = {
   docketNumber: string;
@@ -506,9 +507,7 @@ export const getFormattedCaseDetail = ({
   authorizedUser: UnknownAuthUser;
 }) => {
   const result = {
-    ...applicationContext
-      .getUtilities()
-      .setServiceIndicatorsForCase(caseDetail),
+    ...setServiceIndicatorsForPetitionersOnCase(caseDetail),
     ...formatCase(applicationContext, caseDetail, authorizedUser),
   };
   result.formattedDocketEntries = sortDocketEntries(

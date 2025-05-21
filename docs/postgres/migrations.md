@@ -10,9 +10,9 @@ We follow the expand and contract method of creating migrations. You can learn m
 
 Kysely uses up/down pattern for running migrations.
 
-When creating a new migration follow the pattern of <####>-<migration-description>. 
+When creating a new migration follow the pattern of <TIMESTAMP>-<migration-description>. Use the migration generator `npm run migration:generate:postgres` to generate a new empty migration file.
 
-Kysely will run migrations in order, so 0001-init, 0002-init-indexes, 0003-new-migration, etc. 
+Kysely will run migrations in order, so 2025-05-21T15_31_03Z-init, 2025-05-23T15_31_03Z-status-table, etc.
 
 Use the Kysely query builder to add new columns, remove existing columns, and to add indexes.
 

@@ -5,6 +5,7 @@ const currentColor = process.env.CURRENT_COLOR || 'green';
 const emailFromAddress =
   process.env.EMAIL_SOURCE ||
   `U.S. Tax Court <noreply@${process.env.EFCMS_DOMAIN}>`;
+const isRunningOnLambda = !!process.env.LAMBDA_TASK_ROOT;
 
 function getJestDBConnectionError(): string {
   return [
@@ -34,7 +35,7 @@ export const environment = {
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress,
-  isRunningOnLambda: !!process.env.LAMBDA_TASK_ROOT,
+  isRunningOnLambda,
   nodeEnv: process.env.NODE_ENV,
   rds: {
     pool: {
@@ -44,7 +45,7 @@ export const environment = {
         (process.env.NODE_ENV !== 'test'
           ? 'localhost'
           : getJestDBConnectionError()),
-      idleTimeoutMillis: 1000,
+      idleTimeoutMillis: isRunningOnLambda ? 10000 : 1000,
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,
@@ -63,5 +64,6 @@ export const environment = {
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   userPoolIrsId: process.env.USER_POOL_IRS_ID || 'NOT_REAL_USER_POOL_ID',
   workerQueueUrl: `https://sqs.${region}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+  opensearchQueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/opensearch_sync_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };

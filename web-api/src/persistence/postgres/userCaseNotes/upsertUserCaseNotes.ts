@@ -1,5 +1,5 @@
 import { RawUserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
-import { getDbWriter } from '@web-api/database';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const upsertUserCaseNotes = async (userCaseNotes: RawUserCaseNote[]) => {
   if (userCaseNotes.length === 0) return;
@@ -10,17 +10,9 @@ export const upsertUserCaseNotes = async (userCaseNotes: RawUserCaseNote[]) => {
     userId: rawUserCaseNote.userId,
   }));
 
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwUserCaseNote')
-      .values(userCaseNotesToUpsert)
-      .onConflict(oc =>
-        oc.columns(['docketNumber', 'userId']).doUpdateSet(c => {
-          return {
-            notes: c.ref('excluded.notes'),
-          };
-        }),
-      )
-      .execute(),
-  );
+  await pgInsertInto({
+    table: 'dwUserCaseNote',
+    values: userCaseNotesToUpsert,
+    onConflictColumns: ['docketNumber', 'userId'],
+  });
 };

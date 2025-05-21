@@ -1,5 +1,4 @@
 import * as barNumberGenerator from './persistence/dynamo/users/barNumberGenerator';
-import * as docketNumberGenerator from './persistence/dynamo/cases/docketNumberGenerator';
 import * as pdfLib from 'pdf-lib';
 import {
   CASE_INVENTORY_PAGE_SIZE,
@@ -20,10 +19,6 @@ import { SQSClient } from '@aws-sdk/client-sqs';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { environment } from '@web-api/environment';
 import { getBatchClient } from '@web-api/persistence/batch/getBatchClient';
-import {
-  getChromiumBrowser,
-  getChromiumBrowserAWS,
-} from '../../shared/src/business/utilities/getChromiumBrowser';
 import {
   getCognito,
   getLocalCognito,
@@ -66,19 +61,11 @@ let sqsCache: SQSClient;
 export const createApplicationContext = (appContextUser = {}) => {
   return {
     barNumberGenerator,
-    docketNumberGenerator,
     environment,
     getBatchClient,
     getBounceAlertRecipients: () =>
       process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
-    getChromiumBrowser: async () => {
-      if (environment.stage === 'local') {
-        return await getChromiumBrowser();
-      } else {
-        return await getChromiumBrowserAWS();
-      }
-    },
     getCognito: (): CognitoIdentityProvider => {
       if (environment.stage === 'local') {
         return getLocalCognito();

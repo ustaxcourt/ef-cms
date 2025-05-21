@@ -148,6 +148,7 @@ module "api-east-green" {
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 1
+  route_53_regional_weight = 100
 }
 
 module "worker-east-green" {

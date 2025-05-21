@@ -1,16 +1,19 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   OBJECTIONS_OPTIONS_MAP,
   PARTY_TYPES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
-} from '../../../../shared/src/business/entities/EntityConstants';
-import { Case } from '../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+} from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { addCoverToPdf } from './addCoverToPdf';
 import { addCoversheetInteractor } from './addCoversheetInteractor';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 jest.mock('./addCoverToPdf', () => ({
   __esModule: true,
@@ -18,6 +21,9 @@ jest.mock('./addCoverToPdf', () => ({
     .fn()
     .mockImplementation(jest.requireActual('./addCoverToPdf').addCoverToPdf),
 }));
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
 describe('addCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
@@ -74,9 +80,8 @@ describe('addCoversheetInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(testingCaseData);
+    getCaseByDocketNumber.mockResolvedValue(testingCaseData);
+    getCasesByDocketNumbers.mockResolvedValue([testingCaseData]);
   });
 
   it('adds a cover page to a pdf document', async () => {
@@ -132,9 +137,7 @@ describe('addCoversheetInteractor', () => {
   });
 
   it('adds a cover page to a pdf document with optional data', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(optionalTestingCaseData);
+    getCaseByDocketNumber.mockResolvedValue(optionalTestingCaseData);
 
     await addCoversheetInteractor(
       applicationContext,
@@ -176,10 +179,9 @@ describe('addCoversheetInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
-        .calls[0][0].docketNumber,
-    ).toBe(MOCK_CASE.docketNumber);
+    expect(getCaseByDocketNumber.mock.calls[0][0].docketNumber).toBe(
+      MOCK_CASE.docketNumber,
+    );
   });
 
   it('should not call getCaseByDocketNumber if case entity is passed in', async () => {
@@ -195,9 +197,7 @@ describe('addCoversheetInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('updates only the page numbers for the docket entires existing in the consolidated group case docket record', async () => {
@@ -219,24 +219,23 @@ describe('addCoversheetInteractor', () => {
       numberOfPages: 5,
       pdfData: 'gg',
     });
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
         ...testingCaseData,
         docketNumber: '102-20',
-      })
-      .mockResolvedValueOnce({
+      },
+      {
         ...testingCaseData,
         docketNumber: '103-20',
-      });
+      },
+    ]);
 
     await addCoversheetInteractor(
       applicationContext,
       {
         docketEntryId: mockDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,
-      } as any,
+      },
       mockDocketClerkUser,
     );
 
@@ -314,9 +313,8 @@ describe('addCoversheetInteractor', () => {
       ],
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
         ...testingCaseData,
         docketEntries: [
           {
@@ -328,7 +326,8 @@ describe('addCoversheetInteractor', () => {
           },
         ],
         docketNumber: mockConsolidatedCaseNonSubjectCase,
-      });
+      },
+    ]);
 
     await addCoversheetInteractor(
       applicationContext,
@@ -375,9 +374,8 @@ describe('addCoversheetInteractor', () => {
       ],
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
+    getCasesByDocketNumbers.mockResolvedValueOnce([
+      {
         ...testingCaseData,
         docketEntries: [
           {
@@ -389,7 +387,8 @@ describe('addCoversheetInteractor', () => {
           },
         ],
         docketNumber: mockConsolidatedCaseNonSubjectCase,
-      });
+      },
+    ]);
 
     await addCoversheetInteractor(
       applicationContext,

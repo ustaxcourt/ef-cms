@@ -4,6 +4,7 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { createISODateString } from '../utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
 import joi from 'joi';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export class Message extends JoiValidationEntity {
   public attachments?: {
@@ -50,9 +51,10 @@ export class Message extends JoiValidationEntity {
     this.createdAt = rawMessage.createdAt || createISODateString();
     this.leadDocketNumber = rawMessage.leadDocketNumber;
     this.docketNumber = rawMessage.docketNumber;
-    this.docketNumberWithSuffix = `${rawMessage.docketNumber}${
-      rawMessage.docketNumberSuffix ? rawMessage.docketNumberSuffix : ''
-    }`;
+    this.docketNumberWithSuffix = Case.getDocketNumberWithSuffix({
+      docketNumber: rawMessage.docketNumber,
+      docketNumberSuffix: rawMessage.docketNumberSuffix,
+    });
     this.from = rawMessage.from;
     this.fromSection = rawMessage.fromSection;
     this.fromUserId = rawMessage.fromUserId;
