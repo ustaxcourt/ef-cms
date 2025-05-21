@@ -16,6 +16,10 @@ import {
   DW_CASE_DEADLINE_COLUMNS,
 } from '@web-api/persistence/postgres/caseDeadlines/schema';
 import {
+  DW_FEATURE_FLAG_COLUMNS,
+  FeatureFlagTable,
+} from '@web-api/persistence/postgres/featureFlag/schema';
+import {
   CaseTable,
   DW_CASE_COLUMNS,
 } from '@web-api/persistence/postgres/cases/schema';
@@ -35,10 +39,6 @@ import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
-import {
-  DW_FEATURE_FLAG_COLUMNS,
-  FeatureFlagTable,
-} from '@web-api/persistence/postgres/featureFlag/schema';
 
 const DEFAULT = {};
 
