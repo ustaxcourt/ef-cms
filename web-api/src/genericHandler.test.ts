@@ -11,7 +11,7 @@ jest.mock('@web-api/utilities/logger/getLogger', () => {
   };
   return { getLogger: () => mockLogger };
 });
-jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
+jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
 jest.mock('@web-api/business/getEntityByName');
 import {
   checkMaintenanceMode,
@@ -20,7 +20,7 @@ import {
 } from './genericHandler';
 import { getEntityByName as getEntityByNameMock } from '@web-api/business/getEntityByName';
 import { getLogger as getLoggerMock } from '@web-api/utilities/logger/getLogger';
-import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
+import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
 import {
   mockAdcUser,
   mockDocketClerkUser,
@@ -78,7 +78,7 @@ describe('genericHandler', () => {
   it('does not call application.logger.error if the skipLogging flag is present on the error', async () => {
     const callback = () => {
       const error = new Error('Test Error');
-      error.skipLogging = true;
+      error['skipLogging'] = true;
       throw error;
     };
 

@@ -9,7 +9,7 @@ import {
   handle,
 } from './middleware/apiGatewayHelper';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
-import { getMaintenanceMode } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
+import { getMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 
 export const dataSecurityFilter = (
@@ -47,7 +47,7 @@ export const dataSecurityFilter = (
 };
 
 export const checkMaintenanceMode = async () => {
-  const maintenanceRecord = await getMaintenanceMode({ applicationContext });
+  const maintenanceRecord = await getMaintenanceMode();
 
   const maintenanceMode = !!(maintenanceRecord && maintenanceRecord.current);
 

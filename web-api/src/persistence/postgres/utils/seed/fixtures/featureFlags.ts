@@ -14,6 +14,10 @@ export const featureFlags: NewFeatureFlagKysely[] = [
     value: { current: true },
   },
   {
+    name: 'maintenance-mode',
+    value: { current: false },
+  },
+  {
     name: 'document-visibility-policy-change-date',
     value: { current: '2023-05-01' },
   },

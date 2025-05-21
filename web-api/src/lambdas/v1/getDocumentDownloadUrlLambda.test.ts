@@ -2,7 +2,7 @@ jest.mock(
   '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor',
 );
 jest.mock('@web-api/persistence/s3/getDownloadPolicyUrl');
-jest.mock('@web-api/persistence/dynamo/deployTable/getMaintenanceMode');
+jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
@@ -10,7 +10,7 @@ import { getAllFeatureFlagsFromPostgresInteractor as getAllFeatureFlagsFromPostg
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
 import { getDownloadPolicyUrl as getDownloadPolicyUrlMock } from '@web-api/persistence/s3/getDownloadPolicyUrl';
-import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/dynamo/deployTable/getMaintenanceMode';
+import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
