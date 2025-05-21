@@ -39,6 +39,7 @@ export const caseTableDefinition = {
   leadDocketNumber: DEFAULT as string | null | undefined,
   litigationCosts: DEFAULT as number | undefined,
   mailingDate: DEFAULT as string | undefined,
+  manuallyAddedToTrial: DEFAULT as boolean | undefined,
   noticeOfAttachments: DEFAULT as boolean | undefined,
   noticeOfTrialDate: DEFAULT as Date | null,
   orderDesignatingPlaceOfTrial: DEFAULT as boolean | undefined,

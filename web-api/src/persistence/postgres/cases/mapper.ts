@@ -53,6 +53,7 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     leadDocketNumber: rawCase.leadDocketNumber ?? null,
     litigationCosts: rawCase.litigationCosts,
     mailingDate: rawCase.mailingDate,
+    manuallyAddedToTrial: rawCase.manuallyAddedToTrial ?? undefined,
     noticeOfAttachments: rawCase.noticeOfAttachments,
     noticeOfTrialDate: rawCase.noticeOfTrialDate
       ? calculateDate({ dateString: rawCase.noticeOfTrialDate })

@@ -21,6 +21,7 @@ export const getEligibleCasesForTrialSession = async ({
       .select('docketNumber')
       .where('preferredTrialCity', '=', trialCity)
       .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
+      .where('manuallyAddedToTrial', 'is not', true)
       .where(eb =>
         eb.and([
           eb('automaticBlocked', 'is not', true),

@@ -93,6 +93,7 @@ export class Case extends JoiValidationEntity {
   public litigationCosts?: number;
   public qcCompleteForTrial?: Record<string, any>;
   public noticeOfAttachments?: boolean;
+  public manuallyAddedToTrial?: boolean;
   public orderDesignatingPlaceOfTrial?: boolean;
   public orderForAmendedPetition?: boolean;
   public orderForAmendedPetitionAndFilingFee?: boolean;
@@ -554,6 +555,7 @@ export class Case extends JoiValidationEntity {
       })
       .description('Date that petition was mailed to the court.')
       .messages({ '*': 'Enter a mailing date' }),
+    manuallyAddedToTrial: joi.boolean().optional(),
     noticeOfAttachments: joi
       .boolean()
       .optional()
@@ -758,6 +760,7 @@ export class Case extends JoiValidationEntity {
     this.isPaper = rawCase.isPaper;
     this.leadDocketNumber = rawCase.leadDocketNumber;
     this.mailingDate = rawCase.mailingDate;
+    this.manuallyAddedToTrial = rawCase.manuallyAddedToTrial;
     this.partyType = rawCase.partyType;
     this.petitionPaymentDate = rawCase.petitionPaymentDate;
     this.petitionPaymentMethod = rawCase.petitionPaymentMethod;
@@ -1479,6 +1482,7 @@ export class Case extends JoiValidationEntity {
     this.trialLocation = undefined;
     this.trialSessionId = undefined;
     this.trialTime = undefined;
+    this.manuallyAddedToTrial = false;
 
     return this;
   }
@@ -1790,6 +1794,7 @@ export class Case extends JoiValidationEntity {
    */
   setAsCalendared(trialSessionEntity) {
     this.updateTrialSessionInformation(trialSessionEntity);
+    this.manuallyAddedToTrial = true;
     if (trialSessionEntity.isCalendared === true) {
       this.setCaseStatus({
         changedBy: SYSTEM_ROLE,
