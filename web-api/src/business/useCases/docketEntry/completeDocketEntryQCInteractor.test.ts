@@ -30,17 +30,6 @@ import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsM
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
-getFeatureFlagValues.mockResolvedValue([
-  {
-    name: 'clerk-of-court-configuration',
-    value: {
-      current: {
-        name: 'bob',
-        title: 'clerk of court',
-      },
-    },
-  },
-]);
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -70,6 +59,17 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   beforeEach(() => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'clerk-of-court-configuration',
+        value: {
+          current: {
+            name: 'bob',
+            title: 'clerk of court',
+          },
+        },
+      },
+    ]);
     mockLock = undefined;
     const workItem = {
       docketEntry: {
@@ -634,6 +634,14 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('throws the expected error if the lock is already acquired by another process', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: true,
+        },
+      },
+    ]);
     mockLock = MOCK_ACTIVE_LOCK;
 
     await expect(() =>
