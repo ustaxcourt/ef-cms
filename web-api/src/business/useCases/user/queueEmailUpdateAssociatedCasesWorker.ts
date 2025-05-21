@@ -3,9 +3,9 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserFactory } from '@shared/business/entities/factories/UserFactory';
-import { getCasesByEmailTotal } from '@web-api/persistence/postgres/cases/reports/getCasesByEmailTotal';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 
 async function disableIsUserUpdatingFlag({
   user,
@@ -78,6 +78,7 @@ async function waitUntilAllExpectedCasesAreUpdatedWithEmail({
   const expectedCount = docketNumbersByUser.length;
 
   const actualCount = await getCasesByEmailTotal({
+    applicationContext,
     email: userEmail,
   });
 

@@ -3,6 +3,7 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCasesForUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export type TUserContact = {
   address1: string;
@@ -116,9 +117,9 @@ const generateChangeOfAddressForPractitioner = async ({
         QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/change_of_address_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
       });
     });
-    await Promise.all(cmds.map(cmd => sqs.send(cmd)));
+    await settlePromises(cmds.map(cmd => sqs.send(cmd)));
   } else {
-    await Promise.all(
+    await settlePromises(
       associatedUserCases.map(async caseInfo => {
         return await applicationContext
           .getUseCaseHelpers()

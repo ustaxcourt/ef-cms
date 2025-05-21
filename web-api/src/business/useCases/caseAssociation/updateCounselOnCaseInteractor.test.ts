@@ -24,17 +24,14 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getPractitionerById = getPractitionerByIdMock as jest.Mock;
-const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-const updateCase = jest.mocked(updateCaseMock);
-updateCase.mockImplementation(({ caseToUpdate }) =>
-  Promise.resolve(caseToUpdate),
-);
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const updateCaseAndAssociations = jest
+  .mocked(updateCaseAndAssociationsMock)
+  .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
 describe('updateCounselOnCaseInteractor', () => {
   const mockPrivatePractitioners = [
@@ -98,7 +95,6 @@ describe('updateCounselOnCaseInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
     updateCaseAndAssociations.mockImplementation(async ({ caseToUpdate }) => {
-      await updateCase({ caseToUpdate });
       return Promise.resolve(caseToUpdate);
     });
     getPractitionerById.mockImplementation(({ userId }) => {
@@ -236,7 +232,7 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('updates an irsPractitioner with the given userId on the associated case', async () => {
@@ -254,7 +250,7 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('updates only editable practitioner fields on the case', async () => {
@@ -274,7 +270,7 @@ describe('updateCounselOnCaseInteractor', () => {
     );
 
     const updatedPractitioner =
-      updateCase.mock.calls[0][0].caseToUpdate.irsPractitioners?.find(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.irsPractitioners?.find(
         p => p.userId === '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
       );
     expect(updatedPractitioner.email).toBeUndefined();

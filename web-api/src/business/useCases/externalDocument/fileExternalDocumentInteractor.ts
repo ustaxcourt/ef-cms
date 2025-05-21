@@ -20,6 +20,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -211,7 +212,7 @@ export const fileExternalDocument = async (
     },
   );
 
-  const resolvedCaseEntities: RawCase[] = await Promise.all(
+  const resolvedCaseEntities: RawCase[] = await settlePromises(
     consolidatedCaseEntities,
   );
 

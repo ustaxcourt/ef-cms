@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.94.0"
+      version = "~> 5.94.1"
     }
   }
 }
@@ -82,7 +82,6 @@ resource "terraform_data" "locals" {
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
     USER_POOL_IRS_ID                   = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_irs_id
     POSTGRES_HOST                      = data.terraform_remote_state.remote.outputs.rds_host_name
-    POSTGRES_READ_HOST                 = data.terraform_remote_state.remote.outputs.rds_host_name_west
     POSTGRES_USER                      = data.terraform_remote_state.remote.outputs.postgres_user
     DATABASE_NAME                      = data.terraform_remote_state.remote.outputs.database_name
   }
@@ -178,7 +177,9 @@ module "api-east-green" {
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 1
+  route_53_regional_weight = 100
 }
+
 module "api-west-green" {
   source              = "../../modules/api"
   lambda_role_arn     = module.lambda_role_green.role_arn
@@ -218,6 +219,7 @@ module "api-west-green" {
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 0
+  route_53_regional_weight = 0
 }
 
 module "worker-east-green" {

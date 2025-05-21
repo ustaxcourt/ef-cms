@@ -11,7 +11,6 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { updateCase } from '@web-api/persistence/postgres/cases/updateCase';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { isEmpty } from 'lodash';
@@ -21,6 +20,8 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import diff from 'diff-arrays-of-objects';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 import { deleteUserFromCase } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -86,8 +87,6 @@ const updateCaseMessages = async ({
   oldCase,
 }) => {
   const messageUpdatesNecessary =
-    oldCase.status !== caseToUpdate.status ||
-    oldCase.caseCaption !== caseToUpdate.caseCaption ||
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix;
 
   if (!messageUpdatesNecessary) {
@@ -424,14 +423,15 @@ export const updateCaseAndAssociations = async ({
   // wait for all validation tasks to complete and for callbacks to be generated
   const persistenceCallbacks = (await Promise.all(validationRequests)).flat();
 
+  // Persist primary case data first to ensure no errors
+  await upsertCases([validNewRawCaseEntity]);
+
+  // Then persist related data
   // all validation has passed, so now execute all persistence callbacks from results
   const persistenceRequests = persistenceCallbacks.map(persistFn => {
     persistFn();
   });
+  await settlePromises(persistenceRequests);
 
-  await Promise.all(persistenceRequests);
-
-  return updateCase({
-    caseToUpdate: validNewRawCaseEntity,
-  });
+  return validNewRawCaseEntity;
 };

@@ -1,11 +1,10 @@
-import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { PaperPetition } from '@shared/business/entities/cases/PaperPetition';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -18,8 +17,6 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
-import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
-import { createCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistic';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
@@ -27,7 +24,6 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
-import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
@@ -284,11 +280,16 @@ const createCaseMetadata = async (
     caseToAdd.addDocketEntry(atpDocketEntryEntity);
   }
 
+  const createCaseAndAssociationsStart = Date.now();
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
+  console.log(
+    'docketNumber investigation 2 createCaseAndAssociations from paper',
+    Date.now() - createCaseAndAssociationsStart,
+  );
 
   return { caseToAdd, workItem: newWorkItem };
 };
@@ -320,14 +321,18 @@ export const createCaseFromPaperInteractor = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  const start = Date.now();
   await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    retries: 10,
+    retries: 25,
     waitTime: 500,
   });
-
+  console.log(
+    'docketNumber investigation 2, acquiring lock',
+    Date.now() - start,
+  );
   let caseToAdd: Case;
   let workItem: WorkItem;
   try {
@@ -350,22 +355,12 @@ export const createCaseFromPaperInteractor = async (
       applicationContext,
       identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
     });
+    console.log(
+      'docketNumber investigation 2, create case from paper',
+      Date.now() - start,
+    );
   }
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
-
-  await createPetitionersOnCase({
-    docketNumber: caseToAdd.docketNumber,
-    petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-  });
-
-  caseToAdd.statistics?.forEach(statistic =>
-    createCaseStatistic({ docketNumber: caseToAdd.docketNumber, statistic }),
-  );
-
-  await upsertCaseStatusUpdates({
-    docketNumber: caseToAdd.docketNumber,
-    statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
-  });
 
   await upsertWorkItems({
     workItems: [workItem.validate().toRawObject()],

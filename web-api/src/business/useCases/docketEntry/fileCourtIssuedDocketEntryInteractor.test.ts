@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   DOCKET_SECTION,
   ROLES,
@@ -21,8 +24,8 @@ import {
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -37,11 +40,11 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
   const getUserById = getUserByIdMock as jest.Mock;
+
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext
@@ -166,7 +169,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
   });
 
@@ -188,8 +191,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
-    const { caseToUpdate } = updateCase.mock.calls[0][0];
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
     const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
       d => d.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
     );
@@ -221,10 +224,13 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     );
 
     const lastDocumentIndex =
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length - 1;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length - 1;
 
     const newlyFiledDocument =
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries[lastDocumentIndex];
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[
+        lastDocumentIndex
+      ];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: false,

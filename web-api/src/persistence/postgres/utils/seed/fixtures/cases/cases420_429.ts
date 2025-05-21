@@ -39,6 +39,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['420-22'],
@@ -77,6 +84,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['420-23'],
@@ -115,6 +129,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['421-22'],
@@ -153,6 +174,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['421-23'],
@@ -191,6 +219,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['422-22'],
@@ -229,6 +264,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['422-23'],
@@ -267,6 +309,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['423-22'],
@@ -305,6 +354,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['423-23'],
@@ -343,6 +399,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['424-22'],
@@ -381,6 +444,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['424-23'],
@@ -419,6 +489,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['425-22'],
@@ -457,6 +534,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['425-23'],
@@ -495,6 +579,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['426-22'],
@@ -533,6 +624,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['426-23'],
@@ -571,6 +669,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['427-22'],
@@ -609,6 +714,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['427-23'],
@@ -647,6 +759,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['428-22'],
@@ -685,6 +804,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['428-23'],
@@ -723,6 +849,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'Submitted',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['429-22'],
@@ -761,6 +894,13 @@ export const cases420_429: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     automaticBlocked: false,
     caseCaption:
       'Virginia Vincent, Deceased, Virginia Vincent, Surviving Spouse, Petitioner',
+    caseStatusHistory: [
+      {
+        changedBy: 'Docketclerk',
+        date: '2022-12-21T19:03:01.908Z',
+        updatedCaseStatus: 'CAV',
+      },
+    ],
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_420_429['429-23'],

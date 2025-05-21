@@ -266,7 +266,7 @@ describe('addExistingUserToCase', () => {
     expect(getContactPrimary(caseEntity)).toMatchObject({
       contactId: mockUserId, // contactId was updated to new userId
       email: undefined,
-      hasElectronicAccess: undefined,
+      hasElectronicAccess: false,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     });
   });

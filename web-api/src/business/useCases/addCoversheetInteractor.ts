@@ -5,6 +5,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * addCoversheetInteractor
@@ -71,7 +72,6 @@ export const addCoversheetInteractor = async (
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: newPdfData,
     key: docketEntryId,
   });
@@ -88,7 +88,7 @@ export const addCoversheetInteractor = async (
     docketNumbers: docketNumbersToUpdate,
   });
 
-  const updatedDocketEntries = await Promise.all(
+  const updatedDocketEntries = await settlePromises(
     casesToUpdate.map(async caseRecord => {
       const consolidatedCaseEntity =
         caseRecord.docketNumber === docketNumber

@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -19,19 +22,18 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { updateCourtIssuedOrderInteractor } from './updateCourtIssuedOrderInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getUserById = getUserByIdMock as jest.Mock;
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('updateCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
   let mockUserById;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   const caseRecord = {
     caseCaption: 'Caption',
@@ -169,9 +171,10 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length,
     ).toEqual(3);
-    expect(updateCase).toHaveBeenCalledWith(
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -209,9 +212,10 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length,
     ).toEqual(3);
-    expect(updateCase).toHaveBeenCalledWith(
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -247,9 +251,10 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length,
     ).toEqual(3);
-    expect(updateCase).toHaveBeenCalledWith(
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -284,9 +289,10 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length,
     ).toEqual(3);
-    expect(updateCase).toHaveBeenCalledWith(
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -316,9 +322,10 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length,
     ).toEqual(3);
-    expect(updateCase).toHaveBeenCalledWith(
+    expect(updateCaseAndAssociations).toHaveBeenCalledWith(
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
@@ -361,11 +368,12 @@ describe('updateCourtIssuedOrderInteractor', () => {
         .calls[0][0],
     ).toMatchObject({ useTempBucket: false });
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries[2]
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[2]
         .documentContents,
     ).toBeUndefined();
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries[2].draftOrderState,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[2]
+        .draftOrderState,
     ).toBeUndefined();
   });
 
@@ -433,7 +441,8 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length,
     ).toEqual(3);
   });
 

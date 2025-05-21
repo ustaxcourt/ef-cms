@@ -1,6 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { query } from '../../dynamodbClientService';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const getEligibleCasesForTrialSession = async ({
   applicationContext,
@@ -10,7 +10,7 @@ export const getEligibleCasesForTrialSession = async ({
   applicationContext: ServerApplicationContext;
   limit: number;
   skPrefix: string;
-}) => {
+}): Promise<Omit<RawCase, 'consolidatedCases'>[]> => {
   const mappings = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -39,14 +39,9 @@ export const getEligibleCasesForTrialSession = async ({
     }
   });
 
-  const aggregatedResults = await Promise.all(
-    [...docketNumbers].map(async docketNumber => {
-      return await getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-    }),
-  );
+  const aggregatedResults = await getCasesByDocketNumbers({
+    docketNumbers: [...docketNumbers],
+  });
 
   return aggregatedResults;
 };

@@ -6,6 +6,7 @@ import { PrivatePractitioner } from '@shared/business/entities/PrivatePractition
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * createCaseDocketEntries
@@ -125,5 +126,5 @@ export const createCaseAndAssociations = async ({
     }),
   ];
 
-  return await Promise.all(requests);
+  return await settlePromises(requests);
 };

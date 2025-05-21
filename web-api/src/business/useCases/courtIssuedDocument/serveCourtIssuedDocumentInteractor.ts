@@ -17,6 +17,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -114,7 +115,7 @@ export const serveCourtIssuedDocument = async (
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 
-    caseEntities = await Promise.all(
+    caseEntities = await settlePromises(
       caseEntities.map(caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
@@ -164,7 +165,6 @@ export const serveCourtIssuedDocument = async (
   }
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: stampedPdf,
     key: docketEntryId,
   });

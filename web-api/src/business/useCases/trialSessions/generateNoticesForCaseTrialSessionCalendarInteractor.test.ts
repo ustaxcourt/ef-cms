@@ -1,6 +1,10 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock('@shared/business/utilities/shouldAppendClinicLetter');
 import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
@@ -18,18 +22,17 @@ import { fakeData, testPdfDoc } from '@shared/business/test/getFakeFile';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 jest.mock('@shared/business/utilities/shouldAppendClinicLetter');
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
   const getUserById = getUserByIdMock as jest.Mock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   const trialSession = {
     ...MOCK_TRIAL_REGULAR,
@@ -37,7 +40,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   };
 
   const twoPageClinicLetter = combineTwoPdfs({
-    applicationContext,
     firstPdf: testPdfDoc,
     secondPdf: testPdfDoc,
   });

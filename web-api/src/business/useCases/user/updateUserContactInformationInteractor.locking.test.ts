@@ -16,6 +16,8 @@ import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persist
 import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 
+jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
+
 const contactInfo = {
   address1: '234 Main St',
   address2: 'Apartment 4',

@@ -40,13 +40,13 @@ export const getCasesClosedCountByJudge = async ({
   const closedTotal = parseInt(
     casesAggregatedByStatus.find(
       element => element.status === CASE_STATUS_TYPES.closed,
-    )?.count || '0',
+    )?.count ?? '0',
   );
 
   const closedAndDismissedTotal = parseInt(
     casesAggregatedByStatus.find(
       element => element.status === CASE_STATUS_TYPES.closedDismissed,
-    )?.count || '0',
+    )?.count ?? '0',
   );
 
   const results = {

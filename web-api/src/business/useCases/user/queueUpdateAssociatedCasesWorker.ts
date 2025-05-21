@@ -4,6 +4,7 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const queueUpdateAssociatedCasesWorker = async (
   applicationContext: ServerApplicationContext,
@@ -14,7 +15,7 @@ export const queueUpdateAssociatedCasesWorker = async (
     userId: user.userId,
   });
 
-  await Promise.all(
+  await settlePromises(
     docketNumbersAssociatedWithUser.map(docketNumber =>
       applicationContext.getWorkerGateway().queueWork(applicationContext, {
         message: {

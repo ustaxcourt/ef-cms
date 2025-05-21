@@ -6,6 +6,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
+import { ORDER_RESPONSE_DOCUMENTS_ALLOWLIST } from '@shared/business/entities/EntityConstants';
 export const documentViewerHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -22,7 +23,6 @@ export const documentViewerHelper = (
   const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
   const user = get(state.user);
-
   const formattedCaseDetail = applicationContext
     .getUtilities()
     .getFormattedCaseDetail({
@@ -34,14 +34,12 @@ export const documentViewerHelper = (
   const canAllowDocumentServiceForCase = !!applicationContext
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
-
   const formattedDocumentToDisplay =
     viewerDocumentToDisplay &&
     formattedCaseDetail.formattedDocketEntries.find(
       entry =>
         entry && entry.docketEntryId === viewerDocumentToDisplay.docketEntryId,
     );
-
   if (!formattedDocumentToDisplay) {
     return {};
   }
@@ -101,6 +99,12 @@ export const documentViewerHelper = (
     permissions.STAMP_MOTION &&
     STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
+  const showOrderResponseButton =
+    permissions.MOTION_ORDER_RESPONSE &&
+    ORDER_RESPONSE_DOCUMENTS_ALLOWLIST.includes(
+      formattedDocumentToDisplay.eventCode,
+    );
+
   const showStatusReportOrderButton =
     permissions.STATUS_REPORT_ORDER &&
     STATUS_REPORT_ORDER_DOCUMENTS_ALLOWLIST.includes(
@@ -112,6 +116,7 @@ export const documentViewerHelper = (
     filedLabel,
     servedLabel,
     showApplyStampButton,
+    showOrderResponseButton,
     showCompleteQcButton,
     showNotServed,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,

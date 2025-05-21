@@ -15,6 +15,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  *
@@ -79,7 +80,7 @@ export const fileCourtIssuedDocketEntry = async (
     docketNumbers: [subjectDocketNumber, ...docketNumbers],
   });
 
-  await Promise.all(
+  await settlePromises(
     casesToUpdate.map(async caseToUpdate => {
       const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -179,7 +180,7 @@ export const fileCourtIssuedDocketEntry = async (
         }),
       );
 
-      return Promise.all(saveItems);
+      return settlePromises(saveItems);
     }),
   );
 

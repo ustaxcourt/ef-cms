@@ -48,9 +48,6 @@ describe('setEditDeficiencyStatisticFormAction', () => {
     expect(result.state.form).toEqual({
       irsTotalPenalties: 1,
       lastDateOfPeriod: '2019-03-01T21:40:46.415Z',
-      lastDateOfPeriodDay: '1',
-      lastDateOfPeriodMonth: '3',
-      lastDateOfPeriodYear: '2019',
       statisticId: '771997ff-ff16-4de6-8143-2b10e6eafe98',
     });
   });
@@ -68,9 +65,6 @@ describe('setEditDeficiencyStatisticFormAction', () => {
             {
               irsTotalPenalties: 1,
               lastDateOfPeriod: 'definitely not a date',
-              lastDateOfPeriodDay: '7',
-              lastDateOfPeriodMonth: '7',
-              lastDateOfPeriodYear: '2017',
               statisticId: '771997ff-ff16-4de6-8143-2b10e6eafe98',
             },
           ],
@@ -81,9 +75,6 @@ describe('setEditDeficiencyStatisticFormAction', () => {
     expect(result.state.form).toEqual({
       irsTotalPenalties: 1,
       lastDateOfPeriod: 'definitely not a date',
-      lastDateOfPeriodDay: '7',
-      lastDateOfPeriodMonth: '7',
-      lastDateOfPeriodYear: '2017',
       statisticId: '771997ff-ff16-4de6-8143-2b10e6eafe98',
     });
   });
