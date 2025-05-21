@@ -182,7 +182,6 @@ export const serveThirtyDayNotice = async (
 
       if (doesClinicLetterExist) {
         noticePdf = await applicationContext.getUtilities().combineTwoPdfs({
-          applicationContext,
           firstPdf: noticePdf,
           secondPdf: clinicLetter,
         });

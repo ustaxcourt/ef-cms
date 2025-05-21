@@ -116,7 +116,6 @@ const createDocketEntryForChange = async ({
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: changeOfAddressPdfWithCover,
     key: newDocketEntryId,
   });

@@ -66,7 +66,7 @@ describe('generatePdfFromHtmlInteractor', () => {
         overwriteFooter: false,
       }),
     ).rejects.toThrow(
-      `Unable to generate pdf. Check pdf_generator_${applicationContext.environment.stage}_${applicationContext.environment.currentColor} lambda for errors`,
+      `Unable to generate pdf. Check pdf_generator_${applicationContext.environment.stage}_${applicationContext.environment.currentColor} lambda with requestId: undefined for errors.`,
     );
 
     expect(lambdaClientMock).toHaveBeenCalled();

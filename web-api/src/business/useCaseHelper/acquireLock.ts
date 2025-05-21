@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -14,10 +14,12 @@ export const checkLock = async ({
 }): Promise<boolean> => {
   const featureFlags = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsInteractor(applicationContext);
+    .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
 
   const isCaseLockingEnabled =
-    featureFlags[ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key];
+    featureFlags[
+      ALLOWLIST_FEATURE_FLAGS_POSTGRES.ENTITY_LOCKING_FEATURE_FLAG.key
+    ];
 
   const currentLock = await applicationContext
     .getPersistenceGateway()
@@ -60,7 +62,7 @@ export const acquireLock = async ({
     return;
   }
   let attempts = 0;
-  let hasLockedItems = true;
+  let lockedItems: string[] = [];
   do {
     if (attempts > retries) {
       if (onLockError instanceof Error) {
@@ -69,7 +71,7 @@ export const acquireLock = async ({
         await onLockError(applicationContext, options, authorizedUser);
       }
       getLogger().error(
-        `Error: failed to acquire lock for ${identifiers.join(', ')}`,
+        `Error: failed to acquire lock for ${lockedItems.join(', ')} when attempting to get lock for ${identifiers.join(', ')}`,
       );
       throw new ServiceUnavailableError(
         'One of the items you are trying to update is being updated by someone else',
@@ -81,14 +83,22 @@ export const acquireLock = async ({
     }
 
     const results = await Promise.all(
-      identifiers.map(entityIdentifier =>
-        checkLock({ applicationContext, identifier: entityIdentifier }),
-      ),
+      identifiers.map(async entityIdentifier => {
+        return {
+          identifier: entityIdentifier,
+          isLocked: await checkLock({
+            applicationContext,
+            identifier: entityIdentifier,
+          }),
+        };
+      }),
     );
 
-    hasLockedItems = results.some(isLocked => isLocked);
+    lockedItems = results
+      .filter(result => result.isLocked)
+      .map(result => result.identifier);
     attempts++;
-  } while (hasLockedItems);
+  } while (lockedItems.length || attempts === 0);
 
   // Second, lock them up so the are unavailable
   await Promise.all(
@@ -177,10 +187,15 @@ export function withLocking<InteractorInput, InteractorOutput>(
     try {
       results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
+      getLogger().error(`withLocking: failed to execute interactor: ${err}`);
       caughtError = err;
     }
-
-    await removeLock({ applicationContext, identifiers });
+    try {
+      await removeLock({ applicationContext, identifiers });
+    } catch (e) {
+      getLogger().error(`withLocking: failed to remove lock: ${e}`);
+      throw e;
+    }
 
     if (caughtError) {
       throw caughtError;

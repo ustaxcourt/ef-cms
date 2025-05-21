@@ -1,6 +1,8 @@
 import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
 import { PdfGenerationResult } from '@web-api/lambdas/pdfGeneration/pdf-generation';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
+import { GeneratePdfRequest } from '@web-api/business/useCaseHelper/generatePdfFromHtmlHelper';
 
 export const generatePdfFromHtmlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -11,22 +13,14 @@ export const generatePdfFromHtmlInteractor = async (
     footerHtml,
     headerHtml,
     overwriteFooter,
-  }: {
-    contentHtml: string;
-    displayHeaderFooter?: boolean;
-    docketNumber?: string;
-    footerHtml?: string;
-    headerHtml?: string;
-    overwriteFooter?: boolean;
-  },
+  }: GeneratePdfRequest,
 ): Promise<Uint8Array> => {
   if (applicationContext.environment.stage === 'local') {
-    const browserLocal = await applicationContext.getChromiumBrowser();
+    const browserLocal = await getChromiumBrowser();
 
     const result = await applicationContext
       .getUseCaseHelpers()
       .generatePdfFromHtmlHelper(
-        applicationContext,
         {
           contentHtml,
           displayHeaderFooter,
@@ -68,13 +62,13 @@ export const generatePdfFromHtmlInteractor = async (
     const pdfGenerationResult: PdfGenerationResult = JSON.parse(responseStr);
     if (!pdfGenerationResult.tempId) {
       throw new Error(
-        `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda for errors`,
+        `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda with requestId: ${response.$metadata?.requestId} for errors.`,
       );
     }
     key = pdfGenerationResult.tempId;
   } catch (e) {
     throw new Error(
-      `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda for errors`,
+      `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda with requestId: ${response.$metadata?.requestId} for errors.`,
     );
   }
 

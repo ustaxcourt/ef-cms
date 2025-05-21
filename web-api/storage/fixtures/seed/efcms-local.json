@@ -119,9 +119,9 @@
     "entityName": "DocketEntry",
     "docketEntryId": "06115c26-ecd8-425a-b58b-4d25649f1d96",
     "sk": "docket-entry|06115c26-ecd8-425a-b58b-4d25649f1d96",
-    "pk": "case|100-22",
+    "pk": "case|103-22",
     "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
-    "docketNumber": "100-22",
+    "docketNumber": "103-22",
     "addToCoversheet": false
   },
   {
@@ -164,11 +164,11 @@
     "freeText": "abcdef",
     "servedPartiesCode": "B",
     "signedAt": "2022-02-01T17:21:07.439Z",
-    "editState": "{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"richText\":\"<p>Testing</p>\",\"serviceStamp\":\"Served\",\"draftOrderState\":{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"serviceStamp\":\"Served\"},\"documentContentsId\":\"97248a8b-d393-446a-9907-d7743b5cc56c\"}",
-    "pk": "case|100-22",
+    "editState": "{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"103-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"richText\":\"<p>Testing</p>\",\"serviceStamp\":\"Served\",\"draftOrderState\":{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"103-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"serviceStamp\":\"Served\"},\"documentContentsId\":\"97248a8b-d393-446a-9907-d7743b5cc56c\"}",
+    "pk": "case|103-22",
     "servedAt": "2022-02-01T17:21:07.581Z",
     "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "100-22"
+    "docketNumber": "103-22"
   },
   {
     "isStricken": false,
@@ -194,8 +194,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "pk": "case|100-22",
-    "docketNumber": "100-22"
+    "pk": "case|103-22",
+    "docketNumber": "103-22"
   },
   {
     "isStricken": false,
@@ -221,8 +221,8 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "pk": "case|100-22",
-    "docketNumber": "100-22"
+    "pk": "case|103-22",
+    "docketNumber": "103-22"
   },
   {
     "date": null,
@@ -20972,11 +20972,6 @@
     "expiresAt": 1638454069047
   },
   {
-    "sk": "e-consent-fields-enabled-feature-flag",
-    "current": true,
-    "pk": "e-consent-fields-enabled-feature-flag"
-  },
-  {
     "sk": "AnchorageAlaska-H-B-20230311000000-105-67",
     "pk": "eligible-for-trial-case-catalog",
     "docketNumber": "105-67",
@@ -21055,11 +21050,6 @@
     "pk": "email-undefined"
   },
   {
-    "sk": "entity-locking-feature-flag",
-    "current": true,
-    "pk": "entity-locking-feature-flag"
-  },
-  {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
     "pk": "inactivePractitioner|IP1111"
   },
@@ -21136,11 +21126,6 @@
   {
     "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "pk": "irsPractitioner|WN7777"
-  },
-  {
-    "sk": "maintenance-mode",
-    "current": false,
-    "pk": "maintenance-mode"
   },
   {
     "sk": "migrationSchema",
@@ -21259,11 +21244,6 @@
   {
     "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "pk": "privatePractitioner|TEST PRIVATE PRACTITIONER"
-  },
-  {
-    "sk": "section-outbox-number-of-days",
-    "current": 7,
-    "pk": "section-outbox-number-of-days"
   },
   {
     "completedAt": "2019-07-12T17:11:27.244Z",
@@ -23610,10 +23590,10 @@
     "email": "irspractitioner4@example.com"
   },
   {
-    "sk": "case|100-22",
+    "sk": "case|103-22",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "100-22",
-    "gsi1pk": "user-case|100-22"
+    "docketNumber": "103-22",
+    "gsi1pk": "user-case|103-22"
   },
   {
     "sk": "case|101-19",

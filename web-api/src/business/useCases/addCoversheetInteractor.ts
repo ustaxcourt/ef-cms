@@ -72,7 +72,6 @@ export const addCoversheetInteractor = async (
   });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: newPdfData,
     key: docketEntryId,
   });
