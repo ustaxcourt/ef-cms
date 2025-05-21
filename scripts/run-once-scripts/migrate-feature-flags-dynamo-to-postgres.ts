@@ -4,14 +4,16 @@ import { getDbWriter } from '@web-api/database';
 
 const FEATURE_FLAGS_WITH_CURRENT_PROPERTY = [
   'clerk-of-court-configuration',
+  'section-outbox-number-of-days',
   'aws-batch-zipper-minimum-count',
   'chief-judge-name',
   'entity-locking-feature-flag',
   'document-visibility-policy-change-date',
   'e-consent-fields-enabled-feature-flag',
+  'use-change-of-address-lambda',
 ];
 
-const { STAGE } = process.env;
+const { STAGE, ENV } = process.env;
 
 async function script() {
   const DYNAMO_CLIENT = new DynamoDBClient({
@@ -26,7 +28,7 @@ async function script() {
     const FEATURE_FLAG = FEATURE_FLAGS_WITH_CURRENT_PROPERTY[index];
     const FEATURE_FLAG_RECORD = await DOCUMENT_CLIENT.get({
       Key: { pk: FEATURE_FLAG, sk: FEATURE_FLAG },
-      TableName: `efcms-deploy-${STAGE}`,
+      TableName: `efcms-deploy-${STAGE || ENV}`,
     });
 
     if (!FEATURE_FLAG_RECORD || !FEATURE_FLAG_RECORD.Item) {
