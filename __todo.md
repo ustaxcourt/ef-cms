@@ -45,6 +45,7 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
 - [x] Update Mocks to include all functions (solo)
 - [x] Index all where clauses (good for solo work)
 - [x] Confirm Confirmation Codes Working as Expected
+- [ ] getCasesByEmailTotal, figure out what to do with this, will it all be in opensearch or postgres
 - [ ] Fix representing for associateUserWithCase
 - [ ] Implement TTL on Confirmation Codes
 - [ ] Update api tests (Andy will tackle first half)
