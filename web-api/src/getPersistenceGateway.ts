@@ -78,7 +78,7 @@ import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessi
 import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
 import { getFirstSingleCaseRecord } from './persistence/elasticsearch/getFirstSingleCaseRecord';
 import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
-import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
+import { getMaintenanceMode } from './persistence/postgres/featureFlag/getMaintenanceMode';
 import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPractitionerByBarNumber';
 import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
 import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
@@ -132,7 +132,7 @@ import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/updatePractitionerOnCase';
-import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
+import { updateMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/updateMaintenanceMode';
 import { updatePractitionerUser } from './persistence/dynamo/users/updatePractitionerUser';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';

@@ -5,7 +5,6 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 const configurations = [
   'migration-queue-empty',
   'destination-table-version',
-  'maintenance-mode',
   'current-color',
   'migrate',
   'source-table-version',

@@ -30564,11 +30564,6 @@
     "pk": "irsPractitioner|WN7777"
   },
   {
-    "sk": "maintenance-mode",
-    "current": false,
-    "pk": "maintenance-mode"
-  },
-  {
     "sk": "migrationSchema",
     "executed": [
       "00001-statistics.js",
