@@ -42,17 +42,6 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
-getFeatureFlagValues.mockResolvedValue([
-  {
-    name: 'clerk-of-court-configuration',
-    value: {
-      current: {
-        name: 'James Bond',
-        title: 'Clerk of the Court (Interim)',
-      },
-    },
-  },
-]);
 
 describe('serveCaseToIrsInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -119,6 +108,17 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   beforeEach(() => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'clerk-of-court-configuration',
+        value: {
+          current: {
+            name: 'James Bond',
+            title: 'Clerk of the Court (Interim)',
+          },
+        },
+      },
+    ]);
     mockLock = undefined;
     mockCase = { ...MOCK_CASE };
     mockCase.docketEntries[0].workItem = { ...MOCK_WORK_ITEM };
@@ -1548,6 +1548,14 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: true,
+        },
+      },
+    ]);
     mockLock = MOCK_LOCK;
 
     await expect(
