@@ -11,10 +11,10 @@ import {
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { applicationContext } from '@web-api/applicationContext';
-import { deleteUserFromCase } from '@web-api/persistence/dynamo/cases/deleteUserFromCase';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { deleteUserFromCase } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
 
 export const removePetitionerEmailInteractor = async (
   { docketNumber, email }: { docketNumber: string; email: string },
@@ -56,7 +56,6 @@ export const removePetitionerEmailInteractor = async (
   await settlePromises([
     upsertCases([caseToUpdate]),
     deleteUserFromCase({
-      applicationContext,
       docketNumber,
       userId: oldContactId,
     }),
