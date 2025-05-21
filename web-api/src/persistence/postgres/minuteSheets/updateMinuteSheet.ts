@@ -11,22 +11,24 @@ export const upsertMinuteSheet = async ({
     content: MinuteSheet;
   };
 }) => {
-  const newOrUpdatedMinuteSheet = await getDbWriter(writer =>
-    writer
-      .insertInto('dwMinuteSheet')
-      .values({
-        content: minuteSheetToUpsert.content,
-        docketNumber: minuteSheetToUpsert.docketNumber,
-        trialSessionId: minuteSheetToUpsert.trialSessionId,
-      })
-      .returning(['content', 'docketNumber', 'trialSessionId'])
-      .onConflict(oc =>
-        oc.columns(['docketNumber', 'trialSessionId']).doUpdateSet({
+  const newOrUpdatedMinuteSheet = await getDbWriter({
+    cb: writer =>
+      writer
+        .insertInto('dwMinuteSheet')
+        .values({
           content: minuteSheetToUpsert.content,
-        }),
-      )
-      .executeTakeFirst(),
-  );
+          docketNumber: minuteSheetToUpsert.docketNumber,
+          trialSessionId: minuteSheetToUpsert.trialSessionId,
+        })
+        .returning(['content', 'docketNumber', 'trialSessionId'])
+        .onConflict(oc =>
+          oc.columns(['docketNumber', 'trialSessionId']).doUpdateSet({
+            content: minuteSheetToUpsert.content,
+          }),
+        )
+        .executeTakeFirst(),
+    table: 'dwMinuteSheet',
+  });
 
   return transformNullToUndefined(newOrUpdatedMinuteSheet) as {
     trialSessionId: string;

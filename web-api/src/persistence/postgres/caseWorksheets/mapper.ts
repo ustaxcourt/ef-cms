@@ -6,6 +6,7 @@ export function caseWorksheetEntity(caseWorksheet) {
     transformNullToUndefined({
       ...caseWorksheet,
       filingDate: caseWorksheet.finalBriefDueDate?.toISOString(),
+      finalBriefDueDate: caseWorksheet.finalBriefDueDate?.toISOString(),
     }),
   );
 }

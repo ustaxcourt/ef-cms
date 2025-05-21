@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
-import { getCaseAction } from '../actions/getCaseAction';
 import { navigateToCaseDetailCaseInformationActionFactory } from '../actions/navigateToCaseDetailCaseInformationActionFactory';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -35,7 +34,6 @@ export const submitEditPetitionerCounselSequence = [
           setAlertSuccessAction,
           clearModalAction,
           setCasePropFromStateAction,
-          getCaseAction,
           setCaseAction,
           navigateToCaseDetailCaseInformationActionFactory('parties'),
           clearFormAction,

@@ -116,7 +116,6 @@ const createDocketEntryForChange = async ({
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: changeOfAddressPdfWithCover,
     key: newDocketEntryId,
   });
@@ -173,9 +172,7 @@ const createWorkItemForChange = async ({
 export const generateAndServeDocketEntry = async ({
   applicationContext,
   authorizedUser,
-  barNumber,
   caseEntity,
-  contactName,
   docketMeta,
   documentType,
   newData,
@@ -185,9 +182,7 @@ export const generateAndServeDocketEntry = async ({
   user,
 }: {
   applicationContext: ServerApplicationContext;
-  barNumber: any;
   caseEntity: any;
-  contactName: any;
   docketMeta: any;
   documentType: any;
   newData: any;
@@ -221,9 +216,7 @@ export const generateAndServeDocketEntry = async ({
   const { changeOfAddressDocketEntry, url } = await createDocketEntryForChange({
     applicationContext,
     authorizedUser,
-    barNumber,
     caseEntity,
-    contactName,
     docketMeta,
     documentType,
     newData,

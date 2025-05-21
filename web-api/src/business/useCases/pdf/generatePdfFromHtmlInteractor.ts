@@ -1,6 +1,9 @@
-import { InvokeCommand, LambdaClient } from '@aws-sdk/client-lambda';
+import { InvokeCommand } from '@aws-sdk/client-lambda';
 import { PdfGenerationResult } from '@web-api/lambdas/pdfGeneration/pdf-generation';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
+import { GeneratePdfRequest } from '@web-api/business/useCaseHelper/generatePdfFromHtmlHelper';
+import { getLambdaClient } from '@web-api/gateways/lambda/getLambdaClient';
 
 export const generatePdfFromHtmlInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -11,22 +14,14 @@ export const generatePdfFromHtmlInteractor = async (
     footerHtml,
     headerHtml,
     overwriteFooter,
-  }: {
-    contentHtml: string;
-    displayHeaderFooter?: boolean;
-    docketNumber?: string;
-    footerHtml?: string;
-    headerHtml?: string;
-    overwriteFooter?: boolean;
-  },
+  }: GeneratePdfRequest,
 ): Promise<Uint8Array> => {
   if (applicationContext.environment.stage === 'local') {
-    const browserLocal = await applicationContext.getChromiumBrowser();
+    const browserLocal = await getChromiumBrowser();
 
     const result = await applicationContext
       .getUseCaseHelpers()
       .generatePdfFromHtmlHelper(
-        applicationContext,
         {
           contentHtml,
           displayHeaderFooter,
@@ -38,15 +33,11 @@ export const generatePdfFromHtmlInteractor = async (
         browserLocal,
       );
 
-    await browserLocal.close();
-
     return result;
   }
 
-  const { currentColor, region, stage } = applicationContext.environment;
-  const client = new LambdaClient({
-    region,
-  });
+  const { currentColor, stage } = applicationContext.environment;
+  const client = getLambdaClient();
   const command = new InvokeCommand({
     FunctionName: `pdf_generator_${stage}_${currentColor}`,
     InvocationType: 'RequestResponse',
@@ -70,13 +61,13 @@ export const generatePdfFromHtmlInteractor = async (
     const pdfGenerationResult: PdfGenerationResult = JSON.parse(responseStr);
     if (!pdfGenerationResult.tempId) {
       throw new Error(
-        `Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda for errors`,
+        `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda with requestId: ${response.$metadata?.requestId} for errors.`,
       );
     }
     key = pdfGenerationResult.tempId;
   } catch (e) {
     throw new Error(
-      `Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda for errors`,
+      `Error: docketNumber ${docketNumber} Unable to generate pdf. Check pdf_generator_${stage}_${currentColor} lambda with requestId: ${response.$metadata?.requestId} for errors.`,
     );
   }
 

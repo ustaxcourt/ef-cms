@@ -2,6 +2,7 @@ import * as client from '../../dynamodbClientService';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const createUserRecords = async ({
   applicationContext,
@@ -51,5 +52,5 @@ export const createNewPetitionerUser = async ({
     userId: user.userId,
   });
 
-  await Promise.all([createUserPromise, createUserRecordsPromise]);
+  await settlePromises([createUserPromise, createUserRecordsPromise]);
 };

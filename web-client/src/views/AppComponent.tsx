@@ -109,6 +109,8 @@ import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { TermBuilderView } from '@web-client/views/TermBuilderView';
 import { AsyncServiceUnavailableModal } from '@web-client/views/AsyncServiceUnavailableModal';
+import { OrderResponse } from './OrderResponse/OrderResponse';
+import { RemovePetitionerEmailModal } from '@web-client/views/CaseDetail/RemovePetitionerEmailModal';
 
 const pages = {
   AccessibilityStatement,
@@ -171,6 +173,7 @@ const pages = {
   MessageDetail,
   Messages,
   MyAccount,
+  OrderResponse,
   PaperFiling,
   PendingReport,
   PetitionQc,
@@ -311,6 +314,9 @@ export const AppComponent = connect(
         {showModal === 'GenericErrorModal' && <GenericErrorModal />}
         {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
         {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
+        {showModal === 'RemovePetitionerEmailModal' && (
+          <RemovePetitionerEmailModal />
+        )}
       </>
     );
   },
