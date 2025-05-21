@@ -64,7 +64,6 @@ export const getEligibleCasesForTrialSessionInteractor = async (
         trialSessionEntity.maxCases! +
         TRIAL_SESSION_ELIGIBLE_CASES_BUFFER -
         calendaredCases.length,
-      applicationContext,
       sessionType: trialSessionEntity.getCaseProcedureForTrial(),
       trialCity: trialSessionEntity.trialLocation!,
     });
