@@ -1,5 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-jest.mock('@web-api/persistence/dynamo/cases/deleteUserFromCase');
+import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock('@shared/sharedAppContext');
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -8,7 +8,7 @@ import {
   mockDocketClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removePetitionerEmailInteractor } from '@web-api/business/useCases/removePetitionerEmailInteractor';
-import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/dynamo/cases/deleteUserFromCase';
+import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -42,9 +42,7 @@ describe('removePetitionerEmailInteractor', () => {
       email: undefined,
     };
 
-    expect(
-      upsertCases.mock.calls[0][0][0].petitioners[0],
-    ).toMatchObject({
+    expect(upsertCases.mock.calls[0][0][0].petitioners[0]).toMatchObject({
       contactId: mockedUniqueId,
       hasElectronicAccess: false,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,

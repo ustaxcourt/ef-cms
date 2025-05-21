@@ -1,4 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
   CASE_STATUS_TYPES,
@@ -11,7 +13,7 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-
+import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -19,6 +21,7 @@ jest.mock('../addCoversheetInteractor', () => ({
 }));
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCasesForUser = getCasesForUserMock as jest.Mock;
 
 describe('generateChangeOfAddress', () => {
   const { docketNumber } = MOCK_CASE;
@@ -67,9 +70,7 @@ describe('generateChangeOfAddress', () => {
         ({ caseToUpdate }) => caseToUpdate,
       );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([{ docketNumber }]);
+    getCasesForUser.mockReturnValue([{ docketNumber }]);
 
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithIrsPractitioner);
 
@@ -178,9 +179,7 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should NOT send a notification to the user if they have no associated cases', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValueOnce([]);
+    getCasesForUser.mockReturnValueOnce([]);
 
     await generateChangeOfAddress({
       applicationContext,
