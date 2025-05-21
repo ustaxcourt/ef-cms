@@ -11,7 +11,7 @@ export const getMaintenanceModeInteractor = async (
   applicationContext.logger.info('Start getMaintenanceModeInteractor');
   const result = await applicationContext
     .getPersistenceGateway()
-    .getMaintenanceMode({ applicationContext });
+    .getMaintenanceMode();
   applicationContext.logger.info(
     `End getMaintenanceModeInteractor. Time: ${Date.now() - start}ms`,
   );

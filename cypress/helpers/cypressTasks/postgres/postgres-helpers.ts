@@ -27,17 +27,19 @@ export async function toggleFeatureFlagFromPostgres({
   console.log('flag', flag);
   console.log('flagValue', flagValue);
 
-  await getDbWriter(writer =>
-    writer
-      .insertInto('dwFeatureFlag')
-      .values({ name: flag, value: { current: flagValue } })
-      .onConflict(oc =>
-        oc.column('name').doUpdateSet({
-          value: { current: flagValue },
-        }),
-      )
-      .execute(),
-  );
+  await getDbWriter({
+    cb: writer =>
+      writer
+        .insertInto('dwFeatureFlag')
+        .values({ name: flag, value: { current: flagValue } })
+        .onConflict(oc =>
+          oc.column('name').doUpdateSet({
+            value: { current: flagValue },
+          }),
+        )
+        .execute(),
+    table: null,
+  });
 
   return null;
 }

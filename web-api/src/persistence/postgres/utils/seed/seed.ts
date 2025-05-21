@@ -45,6 +45,12 @@ export const seed = async () => {
     onConflictColumns: ['docketNumber'],
   });
 
+  const insertFeatureFlags = pgInsertInto({
+    table: 'dwFeatureFlag',
+    values: featureFlags,
+    onConflictColumns: ['name'],
+  });
+
   const insertWorkItem = await getDbWriter({
     cb: writer =>
       writer
