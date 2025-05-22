@@ -1,5 +1,4 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_ELIGIBLE_CASE } from '@shared/test/mockCase';
 import { getEligibleCasesForTrialCity as getEligibleCasesForTrialCityMock } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
 import { getEligibleCasesForCityInteractor } from '@shared/business/useCases/getEligibleCasesForCityInteractor';
@@ -14,13 +13,14 @@ describe('getEligibleCasesForCityInteractor', () => {
   );
   const mockTrialCity = 'Birmingham, Alabama';
   beforeAll(() => {
-    getEligibleCasesForTrialCity.mockResolvedValue([MOCK_ELIGIBLE_CASE]);
+    getEligibleCasesForTrialCity.mockResolvedValue([
+      MOCK_ELIGIBLE_CASE as Omit<RawCase, 'consolidatedCases'>,
+    ]);
   });
 
   it('should throw an unauthorized error when the user does not have permission to view eligible cases', async () => {
     await expect(
       getEligibleCasesForCityInteractor(
-        applicationContext,
         {
           trialCity: mockTrialCity,
         },
@@ -33,7 +33,6 @@ describe('getEligibleCasesForCityInteractor', () => {
 
   it('should call getEligibleCasesForTrialCity with the correct trialCity', async () => {
     await getEligibleCasesForCityInteractor(
-      applicationContext,
       {
         trialCity: mockTrialCity,
       },
