@@ -8,6 +8,10 @@ import {
   getFormattedTrialSessionDetails,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
+import {
+  mockTrialClerkUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getFormattedTrialSessionDetails', () => {
   let TRIAL_SESSION: TrialSessionState;
@@ -50,6 +54,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: TRIAL_SESSION,
     });
 
@@ -76,6 +81,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         irsCalendarAdministratorInfo,
@@ -90,6 +96,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('formats trial session when address fields are empty', () => {
     let result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['city', 'state', 'postalCode']),
     });
 
@@ -100,6 +107,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['city']),
     });
     expect(result).toMatchObject({
@@ -109,6 +117,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['state']),
     });
     expect(result).toMatchObject({
@@ -118,6 +127,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['state']),
     });
     expect(result).toMatchObject({
@@ -127,6 +137,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: omit(TRIAL_SESSION, ['postalCode']),
     });
     expect(result).toMatchObject({
@@ -138,6 +149,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('formats trial session when session assignments are empty', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...omit(TRIAL_SESSION, [
           'courtReporter',
@@ -163,6 +175,7 @@ describe('getFormattedTrialSessionDetails', () => {
 
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         alternateTrialClerkName,
@@ -179,6 +192,7 @@ describe('getFormattedTrialSessionDetails', () => {
     it('formats trial session start time in the morning', () => {
       const result = getFormattedTrialSessionDetails({
         applicationContext,
+        currentUser: mockTrialClerkUser,
         trialSession: {
           ...TRIAL_SESSION,
           startTime: '10:00',
@@ -193,6 +207,7 @@ describe('getFormattedTrialSessionDetails', () => {
     it('formats trial session start time at noon', () => {
       const result = getFormattedTrialSessionDetails({
         applicationContext,
+        currentUser: mockTrialClerkUser,
         trialSession: {
           ...TRIAL_SESSION,
           startTime: '12:00',
@@ -208,6 +223,7 @@ describe('getFormattedTrialSessionDetails', () => {
     it('does not format trial session estimated end date when estimatedEndDate is an invalid DateTime', () => {
       const result = getFormattedTrialSessionDetails({
         applicationContext,
+        currentUser: mockTrialClerkUser,
         trialSession: {
           ...TRIAL_SESSION,
           estimatedEndDate: 'Am I an ISO8601 date string?',
@@ -222,6 +238,7 @@ describe('getFormattedTrialSessionDetails', () => {
     it('formats trial session estimated end date', () => {
       const result = getFormattedTrialSessionDetails({
         applicationContext,
+        currentUser: mockTrialClerkUser,
         trialSession: {
           ...TRIAL_SESSION,
           estimatedEndDate: '2040-11-25T15:00:00.000Z',
@@ -236,6 +253,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('displays swing session area if session is a swing session', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         swingSession: true,
@@ -252,6 +270,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('formats docket numbers with suffixes and case caption names without postfix on calendared cases and splits them by open and closed cases', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         calendaredCases: [
@@ -299,6 +318,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('sorts calendared cases by docket number', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         calendaredCases: [
@@ -326,6 +346,7 @@ describe('getFormattedTrialSessionDetails', () => {
   it('should set the correct consolidated case flags', () => {
     const result = getFormattedTrialSessionDetails({
       applicationContext,
+      currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
         calendaredCases: [
@@ -368,6 +389,182 @@ describe('getFormattedTrialSessionDetails', () => {
       expect.objectContaining({ docketNumber: '5000-17' }),
       expect.objectContaining({ docketNumber: '102-19' }),
     ]);
+  });
+
+  it('should format trial session cases with minute sheet buttons based on user permissions', () => {
+    applicationContext.getCurrentUser = () => ({
+      ...mockTrialClerkUser,
+      role: 'docketClerk', // user without MANAGE_MINUTE_SHEET permission
+    });
+
+    let result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: applicationContext.getCurrentUser(),
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [mockCase],
+        isCalendared: true,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeFalsy();
+    expect(result.openCases[0].minuteSheetRoute).toBeUndefined();
+
+    applicationContext.getCurrentUser = () => ({
+      ...mockTrialClerkUser, // user with MANAGE_MINUTE_SHEET permission
+    });
+
+    result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: applicationContext.getCurrentUser(),
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [mockCase],
+        isCalendared: true,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeTruthy();
+    expect(result.openCases[0].minuteSheetRoute).toBe(
+      `/trial-session-detail/${TRIAL_SESSION.trialSessionId}/case/${mockCase.docketNumber}/minutes`,
+    );
+  });
+
+  it('should not display minute sheet button for non-calendared trial sessions', () => {
+    const result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: mockTrialClerkUser,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [mockCase],
+        isCalendared: false,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeFalsy();
+    expect(result.openCases[0].minuteSheetRoute).toBeUndefined();
+  });
+
+  it('should display minute sheet button only for lead case in consolidated group', () => {
+    const result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: mockTrialClerkUser,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [
+          {
+            ...mockCase,
+            docketNumber: '101-20',
+            leadDocketNumber: '101-20',
+          },
+          {
+            ...mockCase,
+            docketNumber: '102-20',
+            leadDocketNumber: '101-20',
+          },
+        ],
+        isCalendared: true,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeTruthy();
+    expect(result.openCases[0].minuteSheetRoute).toBeDefined();
+    expect(result.openCases[1].displayMinuteSheetFormButton).toBeFalsy();
+    expect(result.openCases[1].minuteSheetRoute).toBeUndefined();
+  });
+
+  it('should display minute sheet button for non-consolidated cases', () => {
+    const result = getFormattedTrialSessionDetails({
+      applicationContext,
+      currentUser: mockTrialClerkUser,
+      trialSession: {
+        ...TRIAL_SESSION,
+        calendaredCases: [
+          {
+            ...mockCase,
+            docketNumber: '101-20',
+            leadDocketNumber: undefined,
+          },
+        ],
+        isCalendared: true,
+      },
+    });
+
+    expect(result.openCases[0].displayMinuteSheetFormButton).toBeTruthy();
+    expect(result.openCases[0].minuteSheetRoute).toBeDefined();
+  });
+
+  describe('minute sheet button display logic', () => {
+    beforeEach(() => {
+      mockCase = {
+        ...MOCK_CASE,
+        removedFromTrial: false,
+      };
+    });
+
+    it('should not display minute sheet button when user does not have MANAGE_MINUTE_SHEET permission and case is eligible', () => {
+      const result = getFormattedTrialSessionDetails({
+        applicationContext,
+        currentUser: mockPetitionsClerkUser,
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [mockCase],
+          isCalendared: true,
+        },
+      });
+
+      expect(result.openCases[0].displayMinuteSheetFormButton).toBeFalsy();
+      expect(result.openCases[0].minuteSheetRoute).toBeUndefined();
+    });
+
+    it('should not display minute sheet button when user has permission but case is not eligible', () => {
+      const result = getFormattedTrialSessionDetails({
+        applicationContext,
+        currentUser: mockTrialClerkUser,
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [{ ...mockCase, status: 'Closed' }],
+          isCalendared: true,
+        },
+      });
+
+      expect(result.openCases[0].displayMinuteSheetFormButton).toBeFalsy();
+      expect(result.openCases[0].minuteSheetRoute).toBeUndefined();
+    });
+
+    it('should display minute sheet button and correct route when user has permission and case is eligible', () => {
+      const result = getFormattedTrialSessionDetails({
+        applicationContext,
+        currentUser: mockTrialClerkUser,
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [mockCase],
+          isCalendared: true,
+        },
+      });
+
+      expect(result.openCases[0].displayMinuteSheetFormButton).toBeTruthy();
+      expect(result.openCases[0].minuteSheetRoute).toBe(
+        `/trial-session-detail/${TRIAL_SESSION.trialSessionId}/case/${mockCase.docketNumber}/minutes`,
+      );
+    });
+
+    it('should set minute sheet properties for inactive cases as well', () => {
+      const result = getFormattedTrialSessionDetails({
+        applicationContext,
+        currentUser: mockTrialClerkUser,
+        trialSession: {
+          ...TRIAL_SESSION,
+          calendaredCases: [{ ...mockCase, removedFromTrial: true }],
+          isCalendared: true,
+        },
+      });
+
+      expect(result.inactiveCases[0].displayMinuteSheetFormButton).toBeTruthy();
+      expect(result.inactiveCases[0].minuteSheetRoute).toBe(
+        `/trial-session-detail/${TRIAL_SESSION.trialSessionId}/case/${mockCase.docketNumber}/minutes`,
+      );
+    });
   });
 });
 
