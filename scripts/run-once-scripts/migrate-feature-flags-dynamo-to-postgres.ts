@@ -25,34 +25,40 @@ async function script() {
     marshallOptions: { removeUndefinedValues: true },
   });
 
+  const FEATURE_FLAG_RECORDS: { name: string; value: { current: any } }[] = [];
+
   for (const index in FEATURE_FLAGS_WITH_CURRENT_PROPERTY) {
     const FEATURE_FLAG = FEATURE_FLAGS_WITH_CURRENT_PROPERTY[index];
-    const FEATURE_FLAG_RECORD = await DOCUMENT_CLIENT.get({
+    const DYNAMO_FEATURE_FLAG_RECORD = await DOCUMENT_CLIENT.get({
       Key: { pk: FEATURE_FLAG, sk: FEATURE_FLAG },
       TableName: `efcms-deploy-${STAGE || ENV}`,
     });
 
-    if (!FEATURE_FLAG_RECORD || !FEATURE_FLAG_RECORD.Item) {
+    if (!DYNAMO_FEATURE_FLAG_RECORD || !DYNAMO_FEATURE_FLAG_RECORD.Item) {
       continue;
     }
 
-    const featureFlagRecord = {
+    const FEATURE_FLAG_RECORD = {
       name: FEATURE_FLAG,
-      value: { current: FEATURE_FLAG_RECORD.Item?.current },
+      value: { current: DYNAMO_FEATURE_FLAG_RECORD.Item?.current },
     };
 
-    await getDbWriter(writer =>
-      writer
-        .insertInto('dwFeatureFlag')
-        .values(featureFlagRecord)
-        .onConflict(oc =>
-          oc.column('name').doUpdateSet({
-            value: featureFlagRecord.value,
-          }),
-        )
-        .execute(),
-    );
+    FEATURE_FLAG_RECORDS.push(FEATURE_FLAG_RECORD);
   }
+
+  await getDbWriter(writer =>
+    writer
+      .insertInto('dwFeatureFlag')
+      .values(FEATURE_FLAG_RECORDS)
+      .onConflict(oc =>
+        oc.column('name').doUpdateSet(c => {
+          return {
+            value: c.ref('excluded.value'),
+          };
+        }),
+      )
+      .execute(),
+  );
 }
 
 void script();
