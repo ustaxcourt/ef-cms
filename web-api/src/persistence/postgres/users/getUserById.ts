@@ -6,7 +6,7 @@ export const getUserById = async ({
   userId,
 }: {
   userId: string;
-}): Promise<User> => {
+}): Promise<User | undefined> => {
   const user = await getDbReader(reader =>
     reader
       .selectFrom('dwUser as u')
@@ -14,6 +14,8 @@ export const getUserById = async ({
       .selectAll('u')
       .executeTakeFirst(),
   );
+
+  if (!user) return undefined;
 
   return userEntity(user);
 };

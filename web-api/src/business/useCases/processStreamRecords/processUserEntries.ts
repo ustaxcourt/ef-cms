@@ -11,7 +11,7 @@ export const processUserEntities = async ({
 }: {
   userRecords: any[];
 }) => {
-  if (!userRecords.length) return;
+  if (!userRecords?.length) return;
 
   getLogger().debug(`going to index ${userRecords.length} user records`);
 
