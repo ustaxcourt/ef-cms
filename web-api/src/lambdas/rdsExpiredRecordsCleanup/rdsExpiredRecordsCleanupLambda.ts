@@ -19,7 +19,7 @@ export const handler: Handler = async (_event, context) => {
         await pgDeleteFrom({
           // fix the type
           table: tableName as any,
-          where: cb =>
+          where: (cb: any) =>
             cb.where(TIME_TO_LIVE_COLUMN, '<', Math.floor(Date.now() / 1000)),
         });
       }),
