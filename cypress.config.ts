@@ -11,9 +11,7 @@ import {
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
-  getFeatureFlagValue,
   getNewAccountVerificationCode,
-  toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { parsePdf } from './cypress/helpers/cypressTasks/pdf/parsePdf';
 import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
@@ -22,6 +20,10 @@ import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
+import {
+  getFeatureFlagFromPostgresValue,
+  toggleFeatureFlagFromPostgres,
+} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -49,8 +51,8 @@ export default defineConfig({
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
-        getFeatureFlagValue({ flag }) {
-          return getFeatureFlagValue({ flag });
+        getFeatureFlagFromPostgresValue({ flag }) {
+          return getFeatureFlagFromPostgresValue({ flag });
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
@@ -65,8 +67,8 @@ export default defineConfig({
           console.table(message);
           return null;
         },
-        toggleFeatureFlag(args) {
-          return toggleFeatureFlag(args);
+        toggleFeatureFlagFromPostgres(args) {
+          return toggleFeatureFlagFromPostgres(args);
         },
         unzipFile({ fileName }) {
           return unzipFile({ fileName });

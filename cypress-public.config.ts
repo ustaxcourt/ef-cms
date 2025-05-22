@@ -1,8 +1,8 @@
 import { defineConfig } from 'cypress';
 import { setAllowedTerminalIpAddresses } from './cypress/local-only/support/database';
-import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import fs from 'fs';
 import path from 'path';
+import { toggleFeatureFlagFromPostgres } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 
 export default defineConfig({
   defaultCommandTimeout: 60000,
@@ -24,8 +24,8 @@ export default defineConfig({
           console.table(message);
           return null;
         },
-        toggleFeatureFlag(args) {
-          return toggleFeatureFlag(args);
+        toggleFeatureFlagFromPostgres(args) {
+          return toggleFeatureFlagFromPostgres(args);
         },
       });
     },
