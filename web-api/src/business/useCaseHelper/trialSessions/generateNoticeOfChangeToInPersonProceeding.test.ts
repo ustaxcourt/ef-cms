@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';

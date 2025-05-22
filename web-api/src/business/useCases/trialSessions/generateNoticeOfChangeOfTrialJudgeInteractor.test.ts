@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   PROCEDURE_TYPES_MAP,
