@@ -76,7 +76,7 @@ async function deleteJobQueue() {
 export async function deleteComputeEnvironment() {
   try {
     await deleteJobQueue();
-    const computeEnvName = `compute_environment_${env}_${deployingColor}_us-west-1 `;
+    const computeEnvName = `compute_environment_${env}_${deployingColor}_us-west-1`;
 
     // Step 1: Check if the compute environment exists
     const describeResponse = await client.send(
