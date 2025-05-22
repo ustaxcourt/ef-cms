@@ -1,6 +1,4 @@
-import { applicationContext } from './applicationContext';
 import { expressLogger } from './logger';
-import { get } from './persistence/dynamodbClientService';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { json, urlencoded } from 'body-parser';
 import { lambdaWrapper } from './lambdaWrapper';
@@ -32,41 +30,24 @@ app.use(async (_req, _res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     const currentInvoke = getCurrentInvoke();
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
-    const allowlist = await get({
-      Key: {
-        pk: 'allowed-terminal-ips',
-        sk: 'allowed-terminal-ips',
-      },
-      applicationContext,
-    });
-    const ips = allowlist?.ips ?? [];
+
+    const [IPS_RECORD] = await getDbReader(reader =>
+      reader
+        .selectFrom('dwFeatureFlag')
+        .select(['value'])
+        .where('name', '=', 'allowed-terminal-ips')
+        .execute(),
+    );
+
+    const IPS = IPS_RECORD ? (IPS_RECORD.value.current as string[]) : [];
 
     set(
       currentInvoke,
       'event.requestContext.authorizer.isTerminalUser',
-      ips.includes('localhost') ? 'true' : 'false',
+      IPS.includes('localhost') ? 'true' : 'false',
     );
   }
   return next();
-});
-app.use((req, res, next) => {
-  /**
-   * This environment variable is set to true by default on deployment of the API lambdas
-   * to prevent traffic from hitting the deploying color during deployment.
-   * It is also set to true on the newly-passive color at the end of a deployment as we switch colors
-   * to prevent traffic to the inactive color.
-   */
-  const shouldForceRefresh =
-    process.env.DISABLE_HTTP_TRAFFIC === 'true' && !req.headers['x-test-user'];
-
-  if (shouldForceRefresh) {
-    res.set('X-Force-Refresh', 'true');
-    res.set('Access-Control-Expose-Headers', 'X-Force-Refresh');
-    res.status(500).send('this api is disabled due to a deployment');
-    return;
-  }
-
-  next();
 });
 app.use(expressLogger);
 
@@ -89,6 +70,7 @@ import { opinionPublicSearchLambda } from './lambdas/public-api/opinionPublicSea
 import { orderPublicSearchLambda } from './lambdas/public-api/orderPublicSearchLambda';
 import { todaysOpinionsLambda } from './lambdas/public-api/todaysOpinionsLambda';
 import { todaysOrdersLambda } from './lambdas/public-api/todaysOrdersLambda';
+import { getDbReader } from '@web-api/database';
 
 /** Case */
 {

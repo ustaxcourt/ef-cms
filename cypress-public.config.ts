@@ -1,8 +1,7 @@
 import { defineConfig } from 'cypress';
-import { setAllowedTerminalIpAddresses } from './cypress/local-only/support/database';
+import { toggleFeatureFlagFromPostgres } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import fs from 'fs';
 import path from 'path';
-import { toggleFeatureFlagFromPostgres } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 
 export default defineConfig({
   defaultCommandTimeout: 60000,
@@ -18,7 +17,10 @@ export default defineConfig({
           return null;
         },
         setAllowedTerminalIpAddresses(ipAddresses) {
-          return setAllowedTerminalIpAddresses(ipAddresses);
+          return toggleFeatureFlagFromPostgres({
+            flag: 'allowed-terminal-ips',
+            flagValue: ipAddresses,
+          });
         },
         table(message) {
           console.table(message);
