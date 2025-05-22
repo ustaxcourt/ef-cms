@@ -27,8 +27,7 @@ const { env, deployingColor } = parseArgsAndEnvVars(scriptConfig) as {
 const REGION = 'us-west-1';
 const client = new ECRClient({ region: REGION });
 
-
-async function deleteAllImages() {
+export async function deleteAllImages() {
   const repoName = `docket-entry-zipper-${env}-${deployingColor}-us-west-1`;
   try {
     const describeRepos = await client.send(
@@ -71,5 +70,3 @@ async function deleteAllImages() {
     console.error('Error deleting images:', err);
   }
 }
-
-void deleteAllImages();
