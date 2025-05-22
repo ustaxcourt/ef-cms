@@ -14,6 +14,10 @@ export const featureFlags: NewFeatureFlagKysely[] = [
     value: { current: true },
   },
   {
+    name: 'allowed-terminal-ips',
+    value: { current: [] },
+  },
+  {
     name: 'maintenance-mode',
     value: { current: false },
   },
