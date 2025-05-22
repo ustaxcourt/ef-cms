@@ -22,7 +22,7 @@ export const getEligibleCasesForTrialSession = async ({
       query = query.where('procedureType', '=', sessionType);
     }
 
-    return query.limit(limit).execute();
+    return query.select('docketNumber').limit(limit).execute();
   });
 
   const docketNumbers = ecDocketNumbers.map(n => n.docketNumber);
