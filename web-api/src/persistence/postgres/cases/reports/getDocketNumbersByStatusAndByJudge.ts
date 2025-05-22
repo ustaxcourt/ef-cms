@@ -1,7 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
-import { isEmpty } from 'lodash';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 
 export type DocketNumberByStatusRequest = {
@@ -39,7 +38,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
       ])
       .where('c.status', 'in', params.statuses);
 
-    if (!isEmpty(params.judges)) {
+    if (params.judges && params.judges.length) {
       query = query.where('c.associatedJudge', 'in', params.judges);
     }
 
