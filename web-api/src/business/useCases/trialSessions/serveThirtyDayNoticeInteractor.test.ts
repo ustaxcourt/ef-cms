@@ -17,6 +17,19 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
+getFeatureFlagValues.mockResolvedValue([
+  {
+    name: 'clerk-of-court-configuration',
+    value: {
+      current: {
+        name: 'bob',
+        title: 'clerk of court',
+      },
+    },
+  },
+]);
 
 describe('serveThirtyDayNoticeInteractor', () => {
   let trialSession: RawTrialSession;
@@ -44,8 +57,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
     applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById.mockResolvedValueOnce(trialSession);
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValueOnce(trialSession);
 
     await expect(
       serveThirtyDayNoticeInteractor(
@@ -61,8 +74,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
   it('should throw an invalid request error when no trial session id is provided', async () => {
     applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById.mockResolvedValue(trialSession);
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue(trialSession);
 
     await expect(
       serveThirtyDayNoticeInteractor(
