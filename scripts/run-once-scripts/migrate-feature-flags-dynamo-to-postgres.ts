@@ -46,6 +46,23 @@ async function script() {
     FEATURE_FLAG_RECORDS.push(FEATURE_FLAG_RECORD);
   }
 
+  const DYNAMO_ALLOWED_TERMINAL_IPS_RECORD = await DOCUMENT_CLIENT.get({
+    Key: { pk: 'allowed-terminal-ips', sk: 'allowed-terminal-ips' },
+    TableName: `efcms-deploy-${STAGE || ENV}`,
+  });
+
+  if (
+    DYNAMO_ALLOWED_TERMINAL_IPS_RECORD &&
+    DYNAMO_ALLOWED_TERMINAL_IPS_RECORD.Item
+  ) {
+    const FEATURE_FLAG_ALLOWED_TERMINAL_IPS_RECORD = {
+      name: 'allowed-terminal-ips',
+      value: { current: DYNAMO_ALLOWED_TERMINAL_IPS_RECORD.Item?.current },
+    };
+
+    FEATURE_FLAG_RECORDS.push(FEATURE_FLAG_ALLOWED_TERMINAL_IPS_RECORD);
+  }
+
   await getDbWriter(writer =>
     writer
       .insertInto('dwFeatureFlag')
