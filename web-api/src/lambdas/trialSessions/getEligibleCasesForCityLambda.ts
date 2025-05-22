@@ -6,11 +6,10 @@ export const getEligibleCasesForCityLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const { trialCity } = event.pathParameters || {};
 
     return await getEligibleCasesForCityInteractor(
-      applicationContext,
       {
         trialCity,
       },
