@@ -61,16 +61,6 @@ export const seed = async () => {
     table: null,
   });
 
-  const insertFeatureFlags = await getDbWriter({
-    cb: writer =>
-      writer
-        .insertInto('dwFeatureFlag')
-        .values(featureFlags)
-        .onConflict(oc => oc.column('name').doNothing()) // ensure doesn't fail if exists
-        .execute(),
-    table: null,
-  });
-
   // Seed the cases
   const cases = [
     ...cases100_104,
