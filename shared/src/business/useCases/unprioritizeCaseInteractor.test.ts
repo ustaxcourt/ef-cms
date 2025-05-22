@@ -30,18 +30,6 @@ describe('unprioritizeCaseInteractor', () => {
   const getLock = jest.mocked(mockGetLock);
   const updateCaseAutomaticBlock = jest.mocked(updateCaseAutomaticBlockMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  // const updateCase = jest.mocked(updateCaseMock);
-  // updateCase.mockImplementation(({ caseToUpdate }) =>
-  //   Promise.resolve(caseToUpdate),
-  // jest
-  //   .mocked(updateCaseAndAssociationsMock)
-  //   .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  // const createCaseTrialSortMappingRecords = jest.mocked(
-  //   createCaseTrialSortMappingRecordsMock,
-  // );
-  // const deleteCaseTrialSortMappingRecords = jest.mocked(
-  //   deleteCaseTrialSortMappingRecordsMock,
-  // );
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   beforeAll(() => {
