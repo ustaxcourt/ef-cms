@@ -7,6 +7,7 @@ import {
   OBJECTIONS_OPTIONS_MAP,
   PETITIONER_ROLE_OPTIONS,
   PETITIONER_ROLE_OPTIONS_INVERTED,
+  SESSION_TYPES,
   TrialSessionProceedingType,
   TrialSessionScope,
 } from '@shared/business/entities/EntityConstants';
@@ -122,7 +123,7 @@ describe('initializeMinuteSheet', () => {
     proceedingType: 'In Person' as TrialSessionProceedingType,
     sessionScope: 'Location-based' as TrialSessionScope,
     sessionStatus: 'Open',
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '2019-11-25T15:00:00.000Z',
     startTime: '10:00',
     term: 'Fall',
