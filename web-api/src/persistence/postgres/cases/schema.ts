@@ -1,3 +1,5 @@
+import { CaseStatusChange } from '@shared/business/entities/cases/Case';
+import { RawStatistic } from '@shared/business/entities/Statistic';
 import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
 
 const DEFAULT = {};
@@ -17,6 +19,7 @@ export const caseTableDefinition = {
   blockedReason: DEFAULT as string | undefined | null,
   caption: DEFAULT as string,
   caseNote: DEFAULT as string | undefined,
+  caseStatusHistory: DEFAULT as ColumnType<CaseStatusChange[], string, string>,
   caseType: DEFAULT as string,
   closedDate: DEFAULT as Date | null,
   createdAt: DEFAULT as Date,
@@ -46,6 +49,7 @@ export const caseTableDefinition = {
   orderForRatification: DEFAULT as boolean | undefined,
   orderToShowCause: DEFAULT as boolean | undefined,
   partyType: DEFAULT as string,
+  petitioners: DEFAULT as ColumnType<TPetitioner[], string, string>,
   petitionPaymentDate: DEFAULT as Date | null,
   petitionPaymentMethod: DEFAULT as string | undefined,
   petitionPaymentStatus: DEFAULT as string,
@@ -58,6 +62,7 @@ export const caseTableDefinition = {
   receivedAt: DEFAULT as Date,
   sealedDate: DEFAULT as Date | null,
   sortableDocketNumber: 0 as number,
+  statistics: DEFAULT as ColumnType<RawStatistic[], string, string>,
   status: DEFAULT as string,
   trialDate: DEFAULT as Date | null,
   trialLocation: DEFAULT as string | null,
@@ -75,21 +80,3 @@ export const DW_CASE_COLUMNS = Object.keys(caseTableDefinition) as Array<
 export type CaseKysely = Selectable<CaseTable>;
 export type NewCaseKysely = Insertable<CaseTable>;
 export type UpdateCaseKysely = Updateable<CaseTable>;
-
-export const caseStatusUpdateTableDefinition = {
-  statusUpdateId: DEFAULT as string,
-  changedBy: DEFAULT as string,
-  date: DEFAULT as Date,
-  docketNumber: DEFAULT as string,
-  updatedCaseStatus: DEFAULT as string,
-};
-
-export type CaseStatusUpdateTable = typeof caseStatusUpdateTableDefinition;
-
-export const DW_CASE_STATUS_UPDATES_COLUMNS = Object.keys(
-  caseStatusUpdateTableDefinition,
-) as Array<keyof CaseStatusUpdateTable>;
-
-export type CaseStatusUpdateKysely = Selectable<CaseStatusUpdateTable>;
-export type NewCaseStatusUpdateKysely = Insertable<CaseStatusUpdateTable>;
-export type UpdateCaseStatusUpdateKysely = Updateable<CaseStatusUpdateTable>;

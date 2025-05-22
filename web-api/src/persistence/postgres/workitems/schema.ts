@@ -6,7 +6,7 @@ export const workItemTableDefinition = {
   assigneeId: DEFAULT as string | undefined,
   assigneeName: DEFAULT as string | undefined,
   associatedJudge: DEFAULT as string,
-  associatedJudgeId: DEFAULT as string | undefined,
+  associatedJudgeId: DEFAULT as string | undefined | null,
   caseIsInProgress: DEFAULT as boolean | undefined,
   completedAt: DEFAULT as Date | undefined,
   completedBy: DEFAULT as string | undefined,

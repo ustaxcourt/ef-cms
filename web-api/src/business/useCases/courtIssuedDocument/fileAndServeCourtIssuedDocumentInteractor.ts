@@ -19,6 +19,8 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -130,7 +132,6 @@ export const fileAndServeCourtIssuedDocument = async (
       const contentToStore = { documentContents };
 
       await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-        applicationContext,
         contentType: 'application/json',
         document: Buffer.from(JSON.stringify(contentToStore)),
         key: documentContentsId,
@@ -142,16 +143,15 @@ export const fileAndServeCourtIssuedDocument = async (
   }
 
   try {
-    for (const docketNumber of [...docketNumbers, subjectCaseDocketNumber]) {
-      const caseToUpdate = await getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+    const casesToUpdate = await getCasesByDocketNumbers({
+      docketNumbers: [...docketNumbers, subjectCaseDocketNumber],
+    });
 
+    for (const caseToUpdate of casesToUpdate) {
       caseEntities.push(new Case(caseToUpdate, { authorizedUser }));
     }
 
-    caseEntities = await Promise.all(
+    caseEntities = await settlePromises(
       caseEntities.map(async caseEntity => {
         const docketEntryEntity = new DocketEntry(
           {
@@ -238,7 +238,6 @@ export const fileAndServeCourtIssuedDocument = async (
   }
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: stampedPdf,
     key: docketEntryToServe.docketEntryId,
   });

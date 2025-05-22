@@ -2,12 +2,29 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { caseStatusHistoryHelper as ccaseStatusHistoryHelperComputed } from './caseStatusHistoryHelper';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import {
+  getBusinessDateInFuture,
+  FORMATS,
+  createISODateString,
+  formatDateString,
+} from '@shared/business/utilities/DateHandler';
 
 const caseStatusHistoryHelper = withAppContextDecorator(
   ccaseStatusHistoryHelperComputed,
 );
 
 const { CASE_STATUS_TYPES } = applicationContext.getConstants();
+
+const oneMonthFromNow = getBusinessDateInFuture({
+  numberOfDays: 30,
+  outputFormat: FORMATS.ISO,
+  startDate: createISODateString(),
+});
+
+const oneMonthFromNowInSlashedFormat = formatDateString(
+  oneMonthFromNow,
+  'MMDDYY',
+);
 
 describe('caseTypeDescriptionHelper', () => {
   it('should return a array of formatted case status history objects with a formattedDateChanged', () => {
@@ -17,7 +34,7 @@ describe('caseTypeDescriptionHelper', () => {
           caseStatusHistory: [
             {
               changedBy: 'Test Docketclerk',
-              date: '2025-04-10T04:00:00.000Z',
+              date: oneMonthFromNow,
               updatedCaseStatus: CASE_STATUS_TYPES.new,
             },
           ],
@@ -28,8 +45,8 @@ describe('caseTypeDescriptionHelper', () => {
     expect(result.formattedCaseStatusHistory).toMatchObject([
       {
         changedBy: 'Test Docketclerk',
-        date: '2025-04-10T04:00:00.000Z',
-        formattedDateChanged: '04/10/25',
+        date: oneMonthFromNow,
+        formattedDateChanged: oneMonthFromNowInSlashedFormat,
         updatedCaseStatus: CASE_STATUS_TYPES.new,
       },
     ]);
@@ -42,7 +59,7 @@ describe('caseTypeDescriptionHelper', () => {
           caseStatusHistory: [
             {
               changedBy: 'Test Docketclerk',
-              date: '2025-04-10T04:00:00.000Z',
+              date: oneMonthFromNow,
               updatedCaseStatus: CASE_STATUS_TYPES.new,
             },
           ],

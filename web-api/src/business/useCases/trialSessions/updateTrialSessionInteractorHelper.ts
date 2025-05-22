@@ -9,33 +9,28 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { get } from 'lodash';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 type GetCasesInTrialSessionParams = {
-  applicationContext: ServerApplicationContext;
   trialSession: RawTrialSession;
   authorizedUser: AuthUser;
 };
 
 export async function getCasesInTrialSession({
-  applicationContext,
   trialSession,
   authorizedUser,
 }: GetCasesInTrialSessionParams): Promise<{
   calendaredCaseEntities: Case[];
   casesThatShouldReceiveNotices: Case[];
 }> {
-  const calendaredCaseEntities = await Promise.all(
-    trialSession
-      .caseOrder!.filter(c => !c.removedFromTrial)
-      .map(async c => {
-        const aCase = await getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: c.docketNumber,
-        });
-        return new Case(aCase, { authorizedUser });
-      }),
-  );
+  const docketNumbers = trialSession
+    .caseOrder!.filter(c => !c.removedFromTrial)
+    .map(c => c.docketNumber);
+  const rawCases = await getCasesByDocketNumbers({ docketNumbers });
+  const calendaredCaseEntities = rawCases.map(aCase => {
+    return new Case(aCase, { authorizedUser });
+  });
 
   const casesThatShouldReceiveNotices = calendaredCaseEntities
     .filter(aCase => !aCase.isClosed())
@@ -67,7 +62,6 @@ export const updateCasesAndSetNoticeOfChange = async ({
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
   const { calendaredCaseEntities, casesThatShouldReceiveNotices } =
     await getCasesInTrialSession({
-      applicationContext,
       trialSession: currentTrialSession,
       authorizedUser,
     });
@@ -145,7 +139,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
     return newPdfDoc;
   });
 
-  const casePdfDocuments = await Promise.all(TASKS);
+  const casePdfDocuments = await settlePromises(TASKS);
   const paperServicePdfsCombined = await applicationContext
     .getUtilities()
     .combineAllPdfDocuments(applicationContext, casePdfDocuments);
@@ -165,7 +159,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
     }
   });
 
-  await Promise.all(updatedHearingPromises);
+  await settlePromises(updatedHearingPromises);
   return paperServicePdfsCombined;
 };
 

@@ -6,6 +6,7 @@ import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstan
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserCase } from '@shared/business/entities/UserCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 /**
  * associatePrivatePractitionerToCase
@@ -31,7 +32,7 @@ export const associatePrivatePractitionerToCase = async ({
   serviceIndicator?: string;
   user: RawPractitioner;
   representing: string[];
-}) => {
+}): Promise<RawCase> => {
   const isAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
@@ -44,51 +45,53 @@ export const associatePrivatePractitionerToCase = async ({
     applicationContext,
     docketNumber,
   });
+  const caseEntity = new Case(caseToUpdate, {
+    authorizedUser,
+  });
 
   const isPrivatePractitionerOnCase = caseToUpdate.privatePractitioners?.some(
     practitioner => practitioner.userId === user.userId,
   );
 
-  if (!isAssociated) {
-    const userCaseEntity = new UserCase(caseToUpdate);
-
-    await applicationContext.getPersistenceGateway().associateUserWithCase({
-      applicationContext,
-      docketNumber,
-      userCase: userCaseEntity.validate().toRawObject(),
-      userId: user.userId,
-    });
-
-    const caseEntity = new Case(caseToUpdate, {
-      authorizedUser,
-    });
-
-    const { petitioners } = caseEntity;
-
-    petitioners.map(petitioner => {
-      if (representing.includes(petitioner.contactId)) {
-        petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-      }
-    });
-
-    caseEntity.attachPrivatePractitioner(
-      new PrivatePractitioner({
-        ...user,
-        representing,
-        serviceIndicator,
-      }),
-    );
-
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
-
+  if (isAssociated) {
+    if (!isPrivatePractitionerOnCase) {
+      getLogger().error(
+        `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
+      );
+    }
     return caseEntity.toRawObject();
-  } else if (!isPrivatePractitionerOnCase) {
-    applicationContext.logger.error(
-      `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
-    );
   }
+
+  const userCaseEntity = new UserCase(caseToUpdate);
+
+  await applicationContext.getPersistenceGateway().associateUserWithCase({
+    applicationContext,
+    docketNumber,
+    userCase: userCaseEntity.validate().toRawObject(),
+    userId: user.userId,
+  });
+
+  const { petitioners } = caseEntity;
+
+  petitioners.map(petitioner => {
+    if (representing.includes(petitioner.contactId)) {
+      petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+    }
+  });
+
+  caseEntity.attachPrivatePractitioner(
+    new PrivatePractitioner({
+      ...user,
+      representing,
+      serviceIndicator,
+    }),
+  );
+
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
+
+  return caseEntity.toRawObject();
 };
