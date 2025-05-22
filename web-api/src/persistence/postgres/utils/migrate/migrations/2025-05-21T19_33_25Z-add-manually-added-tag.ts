@@ -3,21 +3,21 @@ import { Kysely } from 'kysely';
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .alterTable('dwCase')
-    .addColumn('manuallyAddedToTrial', 'boolean', col => col.defaultTo(false))
+    .addColumn('addedToTrialSession', 'boolean', col => col.defaultTo(false))
     .execute();
 
   await db.schema
-    .createIndex('idxManuallyAddedToTrial')
+    .createIndex('idxAddedToTrialSession')
     .on('dwCase')
-    .column('manuallyAddedToTrial')
+    .column('addedToTrialSession')
     .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema
     .alterTable('dwCase')
-    .dropColumn('manuallyAddedToTrial')
+    .dropColumn('addedToTrialSession')
     .execute();
 
-  await db.schema.dropIndex('idxManuallyAddedToTrial').execute();
+  await db.schema.dropIndex('idxAddedToTrialSession').execute();
 }

@@ -16,7 +16,7 @@ export const eligibleCasesQuery = ({
     .select('docketNumber')
     .where('preferredTrialCity', '=', trialCity)
     .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
-    .where('manuallyAddedToTrial', 'is not', true)
+    .where('addedToTrialSession', 'is not', true)
     .where('automaticBlocked', 'is not', true)
     .where('blocked', 'is not', true)
     .where(eb =>
