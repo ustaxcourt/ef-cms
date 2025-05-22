@@ -5,6 +5,7 @@
 # Usage
 #   ENV=dev ./setup-terminal-ip-allowlist.sh
 
+# TODO: Migrate to typescript
 ./check-env-variables.sh \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \

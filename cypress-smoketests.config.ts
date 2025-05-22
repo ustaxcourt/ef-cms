@@ -18,12 +18,10 @@ import {
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
-  getFeatureFlagValue,
   getNewAccountVerificationCode,
-  getRawFeatureFlagValue,
-  toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import {
+  getFeatureFlagFromPostgresValue,
   getRawFeatureFlagFromPostgresValue,
   toggleFeatureFlagFromPostgres,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
@@ -93,8 +91,8 @@ export default defineConfig({
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
         },
-        getFeatureFlagValue({ flag }) {
-          return getFeatureFlagValue({ flag });
+        getFeatureFlagFromPostgresValue({ flag }) {
+          return getFeatureFlagFromPostgresValue({ flag });
         },
         getIrsBearerToken({ password, userName }) {
           return getIrsBearerToken({
@@ -104,9 +102,6 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
-        },
-        getRawFeatureFlagValue({ flag }) {
-          return getRawFeatureFlagValue({ flag });
         },
         getRawFeatureFlagFromPostgresValue({ flag }) {
           return getRawFeatureFlagFromPostgresValue({ flag });
@@ -125,9 +120,6 @@ export default defineConfig({
         },
         toggleFeatureFlagFromPostgres(args) {
           return toggleFeatureFlagFromPostgres(args);
-        },
-        toggleFeatureFlag(args) {
-          return toggleFeatureFlag(args);
         },
         unzipFile({ fileName }) {
           return unzipFile({ fileName });
