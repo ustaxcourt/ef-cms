@@ -256,7 +256,7 @@ resource "terraform_data" "api_lambda_last_modified" {
 }
 
 resource "aws_lambda_permission" "apigw_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.api_lambda.function_name
   principal     = "apigateway.amazonaws.com"

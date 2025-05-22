@@ -106,7 +106,7 @@ resource "terraform_data" "websockets_connect_lambda_last_modified" {
 }
 
 resource "aws_lambda_permission" "apigw_connect_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.websockets_connect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
@@ -125,7 +125,7 @@ resource "terraform_data" "websockets_disconnect_lambda_last_modified" {
 }
 
 resource "aws_lambda_permission" "apigw_disconnect_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.websockets_disconnect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
@@ -143,7 +143,7 @@ resource "terraform_data" "websockets_default_lambda_last_modified" {
 }
 
 resource "aws_lambda_permission" "apigw_default_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.websockets_default_lambda.function_name
   principal     = "apigateway.amazonaws.com"
