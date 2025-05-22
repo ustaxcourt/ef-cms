@@ -183,17 +183,6 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   });
 };
 
-export const setTerminalUserIps = (ips: string[]) => {
-  return client.put({
-    Item: {
-      ips,
-      pk: 'allowed-terminal-ips',
-      sk: 'allowed-terminal-ips',
-    },
-    applicationContext,
-  });
-};
-
 export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
   return client.update({
     ExpressionAttributeNames: {
