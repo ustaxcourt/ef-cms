@@ -353,7 +353,6 @@ describe('Trial Session Eligible Cases Journey', () => {
     });
 
     it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
-      await wait(10000);
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });

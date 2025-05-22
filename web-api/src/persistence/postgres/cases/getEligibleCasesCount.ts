@@ -18,6 +18,7 @@ export const getEligibleCasesCount = async ({
       .where('preferredTrialCity', '=', trialCity)
       .where('procedureType', '=', procedureType)
       .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
+      .where('manuallyAddedToTrial', 'is not', true)
       .where(eb =>
         eb.and([
           eb('automaticBlocked', 'is not', true),
