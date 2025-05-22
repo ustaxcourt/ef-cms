@@ -13,7 +13,6 @@ export const eligibleCasesQuery = ({
 }) => {
   return db
     .selectFrom('dwCase')
-    .select('docketNumber')
     .where('preferredTrialCity', '=', trialCity)
     .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
     .where('addedToTrialSession', 'is not', true)
@@ -44,7 +43,9 @@ export const getEligibleCasesForTrialCity = async ({
   trialCity: string;
 }): Promise<Omit<RawCase, 'consolidatedCases'>[]> => {
   const ecDocketNumbers = await getDbReader(reader => {
-    return eligibleCasesQuery({ db: reader, trialCity }).execute();
+    return eligibleCasesQuery({ db: reader, trialCity })
+      .select('docketNumber')
+      .execute();
   });
 
   const docketNumbers = ecDocketNumbers.map(n => n.docketNumber);
