@@ -1,38 +1,19 @@
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { Case } from '@shared/business/entities/cases/Case';
-import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
-import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
-import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const getEligibleCasesForTrialCity = async ({
-  applicationContext,
   trialCity,
 }: {
   trialCity: string;
-  applicationContext: ServerApplicationContext;
-}): Promise<RawEligibleCase[]> => {
-  const dbCases = await getDbReader(reader =>
+}): Promise<Omit<RawCase, 'consolidatedCases'>[]> => {
+  const ecDocketNumbers = await getDbReader(reader =>
     reader
       .selectFrom('dwCase')
-      .select([
-        'caption',
-        'caseType',
-        'docketNumber',
-        'docketNumberSuffix',
-        'leadDocketNumber',
-        'procedureType',
-        'highPriority',
-        'qcCompleteForTrial',
-        'isSealed',
-      ])
+      .select('docketNumber')
       .where('preferredTrialCity', '=', trialCity)
       .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
+      .where('manuallyAddedToTrial', 'is not', true)
       .where(eb =>
         eb.and([
           eb('automaticBlocked', 'is not', true),
@@ -57,49 +38,10 @@ export const getEligibleCasesForTrialCity = async ({
       .execute(),
   );
 
-  const casePromises = dbCases.map(async c => {
-    const [privatePractitioners, irsPractitioners] = await Promise.all([
-      getPrivatePractitionersOnCase({
-        docketNumber: c.docketNumber,
-        applicationContext,
-      }),
-      getIrsPractitionersOnCase({
-        docketNumber: c.docketNumber,
-        applicationContext,
-      }),
-    ]);
-
-    const dynamoData = purgeDynamoKeys<
-      any,
-      {
-        irsPractitioners: IrsPractitioner[];
-        privatePractitioners: PrivatePractitioner[];
-      }
-    >({
-      ...c,
-      irsPractitioners,
-      privatePractitioners,
-    });
-
-    return { ...c, ...dynamoData };
+  const docketNumbers = ecDocketNumbers.map(n => n.docketNumber);
+  const fullEligibleCases = await getCasesByDocketNumbers({
+    docketNumbers,
   });
 
-  const fullEligibleCases = await Promise.all(casePromises);
-
-  const casesForReturn = fullEligibleCases
-    .filter(c => c)
-    .map(c => {
-      return {
-        ...fromKyselyCase(c),
-        isSealed: !!c.isSealed,
-        irsPractitioners: c.irsPractitioners,
-        privatePractitioners: c.privatePractitioners,
-        docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
-          docketNumber: c.docketNumber,
-          docketNumberSuffix: c.docketNumberSuffix,
-        }),
-      };
-    });
-
-  return casesForReturn || [];
+  return fullEligibleCases || [];
 };
