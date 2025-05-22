@@ -1,5 +1,5 @@
-- Manual deploy steps
-  - Delete ecr images and containers out of west (since cannot delete ECR without it being empty)
+- Script deploy steps
+  - Delete ecr images out of west (since cannot delete ECR without it being empty)
   
 
 - Jim Questions:

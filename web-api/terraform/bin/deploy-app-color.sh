@@ -135,6 +135,10 @@ then
   export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
 fi
 
+# temporary-remove once all west resources have been destroyed
+echo "About to remove all ecr images in west"
+npx ts-node --transpile-only ../../../../scripts/run-once-scripts/deleteWest/deleteEcrImages.ts
+
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
 terraform apply -auto-approve execution-plan
