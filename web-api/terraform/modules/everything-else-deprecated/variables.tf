@@ -54,6 +54,3 @@ variable "should_es_beta_exist" {
   type = bool
 }
 
-variable "route_53_regional_weight" {
-  type = number
-}

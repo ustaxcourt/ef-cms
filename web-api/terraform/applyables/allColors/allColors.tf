@@ -36,14 +36,12 @@ module "ef-cms_apis" {
   cognito_suffix           = var.cognito_suffix
   dns_domain               = var.dns_domain
   email_dmarc_policy       = var.email_dmarc_policy
-  enable_health_checks     = var.enable_health_checks
   environment              = var.environment
   es_instance_count        = var.es_instance_count
   es_instance_type         = var.es_instance_type
   es_volume_size           = var.es_volume_size
   lower_env_account_id     = var.lower_env_account_id
   prod_env_account_id      = var.prod_env_account_id
-  route_53_regional_weight = 100
   should_es_alpha_exist    = var.should_es_alpha_exist
   should_es_beta_exist     = var.should_es_beta_exist
   zone_name                = var.zone_name

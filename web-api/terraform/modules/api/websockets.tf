@@ -245,11 +245,7 @@ resource "aws_route53_record" "websocket_regional_record" {
   alias {
     name                   = aws_apigatewayv2_domain_name.websockets_domain.domain_name_configuration.0.target_domain_name
     zone_id                = aws_apigatewayv2_domain_name.websockets_domain.domain_name_configuration.0.hosted_zone_id
-    evaluate_target_health = true
-  }
-
-  weighted_routing_policy {
-    weight = var.route_53_regional_weight
+    evaluate_target_health = false
   }
 
   lifecycle {
