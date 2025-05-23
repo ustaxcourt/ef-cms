@@ -124,6 +124,15 @@ DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
 echo "Running latency record deletion script"
 npx ts-node --transpile-only ../../bin/delete-route53-latency-records.ts
 
+# temporary-remove after west has been deleted
+BUCKET="${EFCMS_DOMAIN}.efcms.${ENV}.us-west-1.lambdas"
+if aws s3api head-bucket --bucket "$BUCKET" 2>/dev/null; then
+  echo "West lambdas Bucket exists. Emptying..."
+  aws s3 rm "s3://$BUCKET" --recursive
+else
+  echo "West lambda Bucket does not exist or access denied."
+fi
+
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 
 if [ -z "${OUTPUT_ONLY}" ]; then 
