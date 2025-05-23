@@ -57,7 +57,7 @@ async function script() {
   ) {
     const FEATURE_FLAG_ALLOWED_TERMINAL_IPS_RECORD = {
       name: 'allowed-terminal-ips',
-      value: { current: DYNAMO_ALLOWED_TERMINAL_IPS_RECORD.Item?.current },
+      value: { current: DYNAMO_ALLOWED_TERMINAL_IPS_RECORD.Item?.ips },
     };
 
     FEATURE_FLAG_RECORDS.push(FEATURE_FLAG_ALLOWED_TERMINAL_IPS_RECORD);
