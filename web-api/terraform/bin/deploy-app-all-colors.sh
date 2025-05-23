@@ -125,10 +125,10 @@ echo "Running latency record deletion script"
 npx ts-node --transpile-only ../../bin/delete-route53-latency-records.ts
 
 # temporary-remove after west has been deleted
-BUCKET="${EFCMS_DOMAIN}.efcms.${ENV}.us-west-1.lambdas"
-if aws s3api head-bucket --bucket "$BUCKET" 2>/dev/null; then
+WEST_LAMBDA_BUCKET="${EFCMS_DOMAIN}.efcms.${ENV}.us-west-1.lambdas"
+if aws s3api head-bucket --bucket "$WEST_LAMBDA_BUCKET" 2>/dev/null; then
   echo "West lambdas Bucket exists. Emptying..."
-  aws s3 rm "s3://$BUCKET" --recursive
+  aws s3 rb "s3://$WEST_LAMBDA_BUCKET" --force
 else
   echo "West lambda Bucket does not exist or access denied."
 fi

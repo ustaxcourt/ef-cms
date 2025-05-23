@@ -1,7 +1,6 @@
 TODO
 - Maybe make west delete scripts fail
 - delete smircleCi
-- delete web-api/src/lambdas/health/setHealthCheckCacheLambda.ts
 
 
 - Jim Questions:
