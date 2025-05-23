@@ -2,13 +2,16 @@ jest.mock(
   '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo',
 );
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { processPractitionerMappingEntries } from '@web-api/business/useCases/processStreamRecords/processPractitionerMappingEntries';
 import { getCaseMetadataWithCounsel as getCaseMetadataWithCounselMock } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { getCaseDataFromDynamo as getCaseDataFromDynamoMock } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
+import { upsertPractitionerRecords as upsertPractitionerRecordsMock } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecords';
 
 const getCaseMetadataWithCounsel = jest.mocked(getCaseMetadataWithCounselMock);
 const getCaseDataFromDynamo = jest.mocked(getCaseDataFromDynamoMock);
+const upsertPractitionerRecords = upsertPractitionerRecordsMock as jest.Mock;
 
 describe('processPractitionerMappingEntries', () => {
   const mockCaseRecord = {
@@ -53,6 +56,8 @@ describe('processPractitionerMappingEntries', () => {
     applicationContext
       .getPersistenceGateway()
       .bulkIndexRecords.mockReturnValue({ failedRecords: [] });
+
+    upsertPractitionerRecords.mockResolvedValue(() => {});
   });
 
   it('should do nothing when no practitioner mapping records are found', async () => {
