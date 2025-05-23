@@ -76,7 +76,7 @@ async function deleteJobQueue() {
 export async function deleteComputeEnvironment() {
   try {
     await deleteJobQueue();
-    const computeEnvName = `compute_environment_${env}_${deployingColor}_us-west-1 `;
+    const computeEnvName = `compute_environment_${env}_${deployingColor}_us-west-1`;
 
     // Step 1: Check if the compute environment exists
     const describeResponse = await client.send(
@@ -116,10 +116,37 @@ export async function deleteComputeEnvironment() {
         computeEnvironment: computeEnvName,
       }),
     );
-
-    console.log(
-      `Compute Environment "${computeEnvName}" deleted successfully.`,
-    );
+    // Step 4: Poll until deleted or an error occurs
+    for (let i = 0; i < 20; i++) {
+      // Limit to 20 iterations to prevent potential infinite loop
+      try {
+        const { computeEnvironments } = await client.send(
+          new DescribeComputeEnvironmentsCommand({
+            computeEnvironments: [computeEnvName],
+          }),
+        );
+        if (computeEnvironments?.[0]?.status === 'INVALID') {
+          throw new Error(
+            'compute environment has invalid status, likely due to missing delete permissions',
+          );
+        }
+        if (!computeEnvironments || computeEnvironments.length === 0) {
+          console.log(`${computeEnvName} has been deleted.`);
+          return;
+        }
+        console.log(
+          `Waiting for to ${computeEnvName} to delete, current status: ${computeEnvironments[0].status}`,
+        );
+      } catch (err: any) {
+        if (err.name === 'ClientException' && /not found/i.test(err.message)) {
+          console.log(`${computeEnvName} not found.`);
+          return;
+        }
+        throw err;
+      }
+      await new Promise(r => setTimeout(r, 5000));
+    }
+    throw new Error('Failed to delete compute environment after 20 iterations');
   } catch (error) {
     console.error('Error deleting compute environment:', error);
   }
