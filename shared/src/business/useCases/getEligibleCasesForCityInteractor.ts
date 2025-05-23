@@ -5,18 +5,26 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
+import {
+  EligibleCase,
+  RawEligibleCase,
+} from '@shared/business/entities/cases/EligibleCase';
 
 export const getEligibleCasesForCityInteractor = async (
   { trialCity }: { trialCity: string },
   authorizedUser: UnknownAuthUser,
-): Promise<Omit<RawCase, 'consolidatedCases'>[] | undefined> => {
+): Promise<RawEligibleCase[] | undefined> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError(
       `Invalid User attempting to view eligible cases for: ${trialCity}`,
     );
   }
 
-  return await getEligibleCasesForTrialCity({
+  const eligibleCases = await getEligibleCasesForTrialCity({
     trialCity,
+  });
+
+  return eligibleCases.map(rawCase => {
+    return new EligibleCase(rawCase).validate().toRawObject();
   });
 };

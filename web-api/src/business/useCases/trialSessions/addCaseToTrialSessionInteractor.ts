@@ -57,6 +57,7 @@ export const addCaseToTrialSession = async (
   });
 
   const caseEntity = new Case(caseDetails, { authorizedUser });
+  console.log('caseEntity 1', caseEntity);
 
   const trialSessionEntity = new TrialSession(trialSession);
 
@@ -88,7 +89,7 @@ export const addCaseToTrialSession = async (
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-
+  console.log('caseEntity 2', updatedCase);
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),

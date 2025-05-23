@@ -15,7 +15,7 @@ export const eligibleCasesQuery = ({
     .selectFrom('dwCase')
     .where('preferredTrialCity', '=', trialCity)
     .where('status', '=', CASE_STATUS_TYPES.generalDocketReadyForTrial)
-    .where('addedToTrialSession', 'is not', true)
+    .where('trialSessionId', 'is', null)
     .where('automaticBlocked', 'is not', true)
     .where('blocked', 'is not', true)
     .where(eb =>
