@@ -50,13 +50,10 @@ interface DatabaseSchemaType {
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
-<<<<<<< HEAD
-=======
   dwPetitionerOnCase: DatabaseTableMetadata<PetitionerOnCaseTable>;
   dwRequest: DatabaseTableMetadata<RequestTable>;
   dwResponseChunk: DatabaseTableMetadata<ResponseChunkTable>;
   dwStatisticPenalty: DatabaseTableMetadata<StatisticPenaltyTable>;
->>>>>>> a64046a9b8 (10505: rm unused mapper code, use ttls)
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
