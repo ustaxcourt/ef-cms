@@ -1,4 +1,4 @@
-import { formatNow } from '@shared/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { pgInsertInto } from '../utils/operation/pgInsertInto';
 import { NewRequestKysely, NewResponseChunkKysely } from './schema';
 
@@ -18,7 +18,7 @@ export const saveRequestResponse = async ({
   index: number;
   totalNumberOfChunks: number;
 }) => {
-  const nowUnix = Number(formatNow('UNIX_TIMESTAMP_SECONDS'));
+  const nowUnix = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const ttl = nowUnix + 16 * 60;
 
   // If this is the first chunk, create/update the request record

@@ -1,4 +1,4 @@
-import { formatNow } from '@shared/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import {
   NewRequestKysely,
   NewResponseChunkKysely,
@@ -15,7 +15,7 @@ export const toKyselyNewRequest = (rawRequest: {
   totalChunks?: number;
   ttl?: number;
 }): NewRequestKysely => {
-  const ttl = Number(formatNow('UNIX_TIMESTAMP_SECONDS') + SIXTEEN_MINUTES);
+  const ttl = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS) + SIXTEEN_MINUTES);
 
   return {
     requestId: rawRequest.requestId,
@@ -37,7 +37,7 @@ export const toKyselyNewResponseChunk = (rawChunk: {
   totalNumberOfChunks: number;
   ttl?: number;
 }): NewResponseChunkKysely => {
-  const ttl = Number(formatNow('UNIX_TIMESTAMP_SECONDS') + SIXTEEN_MINUTES);
+  const ttl = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS) + SIXTEEN_MINUTES);
 
   return {
     requestId: rawChunk.requestId,
