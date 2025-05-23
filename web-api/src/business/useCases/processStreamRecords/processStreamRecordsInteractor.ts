@@ -14,7 +14,7 @@ import { processRemoveEntries } from './processRemoveEntries';
 import { processUserCaseNoteEntries } from '@web-api/business/useCases/processStreamRecords/processUserCaseNoteEntries';
 import { processWorkItemEntries } from './processWorkItemEntries';
 import type { DynamoDBRecord } from 'aws-lambda';
-import { processUserEntities } from '@web-api/business/useCases/processStreamRecords/processUserEntries';
+import { processUserEntries } from '@web-api/business/useCases/processStreamRecords/processUserEntries';
 import { processUserOnCasePendingEntries } from './processUserOnCasePendingEntries';
 import { processUserOnCaseEntries } from './processUserOnCaseEntries';
 
@@ -143,7 +143,7 @@ export const processStreamRecordsInteractor = async (
       throw err;
     });
 
-    await processUserEntities({ userRecords }).catch(err => {
+    await processUserEntries({ userRecords }).catch(err => {
       getLogger().error('failed to process user records', {
         err,
       });

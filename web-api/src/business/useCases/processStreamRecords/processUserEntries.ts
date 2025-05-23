@@ -6,7 +6,7 @@ import { Practitioner } from '@shared/business/entities/Practitioner';
 import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
 import { merge } from 'lodash';
 
-export const processUserEntities = async ({
+export const processUserEntries = async ({
   userRecords,
 }: {
   userRecords: any[];
