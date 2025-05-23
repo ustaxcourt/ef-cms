@@ -76,33 +76,32 @@ export const partitionRecords = (
       record.dynamodb.NewImage.entityName.S === 'CaseWorksheet',
   );
 
-  const [userRecords, nonUserRecords] = partition(
+  const [caseCorrespondenceRecords, nonCaseCorrespondenceRecords] = partition(
     nonCaseWorksheetRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'Correspondence',
+  );
+  const [userRecords, nonUserRecords] = partition(
+    nonCaseCorrespondenceRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
       (record.dynamodb.NewImage.entityName.S === 'User' ||
         record.dynamodb.NewImage.entityName.S === 'Practitioner'),
   );
 
-  const [userOnCaseRecords, nonUserOnCaseRecords] = partition(
+  const [userOnCasePendingRecords, nonUserOnCasePendingRecords] = partition(
     nonUserRecords,
-    record =>
-      record.dynamodb?.NewImage?.entityName &&
-      record.dynamodb.NewImage.entityName.S === 'UserCase',
-  );
-
-  const [caseCorrespondenceRecords, nonCaseCorrespondenceRecords] = partition(
-    nonUserOnCaseRecords,
-    record =>
-      record.dynamodb?.NewImage?.entityName &&
-      record.dynamodb.NewImage.entityName.S === 'Correspondence',
-  );
-
-  const [userOnCasePendingRecords, otherRecords] = partition(
-    nonCaseCorrespondenceRecords,
     record =>
       record.dynamodb?.NewImage?.sk &&
       record.dynamodb.NewImage.sk.S?.startsWith('pending-case|'),
+  );
+
+  const [userOnCaseRecords, otherRecords] = partition(
+    nonUserOnCasePendingRecords,
+    record =>
+      record.dynamodb?.NewImage?.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'UserCase',
   );
 
   return {
