@@ -53,7 +53,10 @@ import {
   indexOpenSearchUser,
   transformOpenSearchUser,
 } from '../elasticsearch/index-users';
-import { indexOpenSearchPractitioner } from '../elasticsearch/index-practitioners';
+import {
+  indexOpenSearchUserOnCase,
+  transformOpenSearchUserOnCase,
+} from '../elasticsearch/index-user-on-case';
 
 const DEFAULT = {};
 
@@ -130,8 +133,6 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwPractitioner: {
     table: DEFAULT as PractitionerTable,
     columns: DW_PRACTITIONER_COLUMNS,
-    indexOpenSearchMessage: indexOpenSearchPractitioner,
-    transformOpenSearchMessage: transformOpenSearchUser,
   },
   dwUserConfirmationCode: {
     table: DEFAULT as UserConfirmationCodeTable,
@@ -140,6 +141,8 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUserOnCase: {
     table: DEFAULT as UserOnCaseTable,
     columns: DW_USER_ON_CASE_COLUMNS,
+    indexOpenSearchMessage: indexOpenSearchUserOnCase,
+    transformOpenSearchMessage: transformOpenSearchUserOnCase,
   },
   dwUserOnCasePending: {
     table: DEFAULT as UserOnCasePendingTable,

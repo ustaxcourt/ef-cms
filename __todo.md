@@ -247,10 +247,11 @@ entityName: User|Practitioner
 pk: user|{userId}
 sk: pending-case|{docketNumber}
 
-
+process User on Case
 pk: user|
 sk: case|
 
+process Practitioner on Case (Process Practitioner Mapping)
 "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
 "pk": "case|101-21",
 
@@ -276,3 +277,10 @@ Assuming User -> OtherRecords
 if yes, then we need partition out the user records into processUserEntity
 
 if no, we then where are we processing user records??
+
+---
+
+stream pieces
+
+`web-api/src/business/useCases/processStreamRecords/processStreamRecordsInteractor.ts`
+This interactor only deals with dynamodb records: its purpose is to populate postgres.

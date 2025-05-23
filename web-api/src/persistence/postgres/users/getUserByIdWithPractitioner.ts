@@ -23,5 +23,7 @@ export const getUserByIdWithPractitioner = async ({
       .executeTakeFirst(),
   );
 
+  // 10495 TODO: what if undefined?? Need to figure out for all user/practitioner persistence functions
+
   return rawUserWithPractitionerEntity(user);
 };
