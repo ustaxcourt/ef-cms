@@ -47,6 +47,10 @@ module "ef-cms_apis" {
   should_es_alpha_exist    = var.should_es_alpha_exist
   should_es_beta_exist     = var.should_es_beta_exist
   zone_name                = var.zone_name
+  providers = {
+    aws           = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
 }
 
 module "ui-public-certificate" {

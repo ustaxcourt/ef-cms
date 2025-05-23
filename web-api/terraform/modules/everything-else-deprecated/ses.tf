@@ -1,6 +1,5 @@
 # Domain Identity, Verification and From
 resource "aws_ses_domain_identity" "main" {
-  provider = aws.us-east-1
   domain   = var.dns_domain
 }
 

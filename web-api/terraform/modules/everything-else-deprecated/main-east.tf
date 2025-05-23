@@ -56,7 +56,6 @@ resource "aws_route53_record" "route53_record_east" {
 resource "aws_acm_certificate_validation" "wildcard_dns_validation_east" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert_east.arn
   validation_record_fqdns = [for record in aws_route53_record.route53_record_east : record.fqdn]
-  provider                = aws.us-east-1
 }
 
 
@@ -124,9 +123,6 @@ resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
 
 module "api-east-waf" {
   environment = var.environment
-  providers = {
-    aws = aws.us-east-1
-  }
   source = "../waf/"
 }
 
