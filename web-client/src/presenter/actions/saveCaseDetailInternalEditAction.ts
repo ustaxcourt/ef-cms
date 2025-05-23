@@ -8,11 +8,8 @@ export const saveCaseDetailInternalEditAction = async ({
 }: ActionProps<{
   fileUploadProgressMap: Record<string, FileUploadProgressType>;
 }>) => {
-  const {
-    INITIAL_DOCUMENT_TYPES,
-    INITIAL_DOCUMENT_TYPES_FILE_MAP,
-    STATUS_TYPES,
-  } = applicationContext.getConstants();
+  const { INITIAL_DOCUMENT_TYPES, INITIAL_DOCUMENT_TYPES_FILE_MAP } =
+    applicationContext.getConstants();
   const originalCase = get(state.caseDetail);
   const { fileUploadProgressMap } = props;
   const caseToUpdate = get(state.form);
@@ -69,14 +66,6 @@ export const saveCaseDetailInternalEditAction = async ({
     .saveCaseDetailInternalEditInteractor(applicationContext, {
       caseToUpdate,
     });
-
-  if (caseDetail.status === STATUS_TYPES.generalDocketReadyForTrial) {
-    await applicationContext
-      .getUseCases()
-      .updateCaseTrialSortTagsInteractor(applicationContext, {
-        docketNumber: caseDetail.docketNumber,
-      });
-  }
 
   return {
     alertSuccess: {
