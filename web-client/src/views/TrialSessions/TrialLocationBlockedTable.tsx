@@ -45,7 +45,10 @@ export const TrialLocationBlockedTable = connect(
         <div className="padding-1"></div>
         <div className="overflow-x-auto">
           <div className="minw-tablet-lg">
-            <table className="usa-table ustc-table trial-sessions">
+            <table
+              className="usa-table ustc-table trial-sessions"
+              aria-label={`${trialLocationPage.currentTab}`}
+            >
               <thead>
                 <tr>
                   <th
