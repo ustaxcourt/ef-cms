@@ -7,7 +7,7 @@ export const processUserOnCasePendingEntries = async ({
 }: {
   userOnCasePendingRecords: any[];
 }) => {
-  if (!userOnCasePendingRecords.length) return;
+  if (!userOnCasePendingRecords?.length) return;
 
   getLogger().debug(
     `going to upsert ${userOnCasePendingRecords.length} userOnCasePending records`,

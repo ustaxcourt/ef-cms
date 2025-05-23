@@ -20,7 +20,7 @@ export const processPractitionerMappingEntries = async ({
   applicationContext: ServerApplicationContext;
   practitionerMappingRecords: any[];
 }) => {
-  if (!practitionerMappingRecords.length) return;
+  if (!practitionerMappingRecords?.length) return;
   await upsertPractitionerRecords(
     practitionerMappingRecords.map(practitionerMappingRecord => {
       const practitioner = unmarshall(
