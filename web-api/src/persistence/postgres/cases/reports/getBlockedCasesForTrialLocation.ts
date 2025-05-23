@@ -3,6 +3,7 @@ import { getDbReader } from '@web-api/database';
 import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 import { Kysely } from 'kysely';
 import { Database } from '@web-api/database-schema';
+import { Case } from '@shared/business/entities/cases/Case';
 
 const MAX_RESULTS = 5000;
 
@@ -86,5 +87,13 @@ export const getBlockedCasesForTrialLocation = async (
     return await query.execute();
   });
 
-  return results.map(result => fromKyselyCase(result));
+  return results.map(result => {
+    return {
+      ...fromKyselyCase(result),
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: result.docketNumber,
+        docketNumberSuffix: result.docketNumberSuffix,
+      }),
+    };
+  });
 };
