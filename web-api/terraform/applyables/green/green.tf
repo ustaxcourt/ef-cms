@@ -112,13 +112,13 @@ module "zip_batch_east" {
 }
 
 module "api-east-green" {
-  lambda_role_arn     = module.lambda_role_green.role_arn
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
   environment         = var.environment
   pool_arn            = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
   dns_domain          = var.dns_domain
   zone_id             = data.aws_route53_zone.zone.id
+  lambda_role_arn     = module.lambda_role_green.role_arn
   lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "green"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp

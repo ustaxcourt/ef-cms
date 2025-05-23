@@ -111,7 +111,6 @@ module "zip_batch_east" {
   }
 }
 
-
 module "api-east-blue" {
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
@@ -139,8 +138,6 @@ module "api-east-blue" {
   create_streams         = 1
   stream_arn             = data.aws_dynamodb_table.blue_dynamo_table.stream_arn
   web_acl_arn            = data.terraform_remote_state.remote.outputs.east_web_acl_arn
-  enable_health_checks   = var.enable_health_checks
-  health_check_id        = data.terraform_remote_state.remote.outputs.aws_route53_health_check_failover_east_id
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   create_seal_in_lower = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
