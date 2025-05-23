@@ -19,7 +19,7 @@ const scriptConfig: ScriptConfig = {
     env: 'ENV',
     deployingColor: 'DEPLOYING_COLOR',
   },
-  requireActiveAwsSession: true,
+  requireActiveAwsSession: false,
 };
 const { env, deployingColor } = parseArgsAndEnvVars(scriptConfig) as {
   env: string;
