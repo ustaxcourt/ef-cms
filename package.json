@@ -261,6 +261,7 @@
     "@aws-sdk/client-rds": "3.787.0",
     "@aws-sdk/client-secrets-manager": "3.787.0",
     "@aws-sdk/client-sts": "3.787.0",
+    "@aws-sdk/client-wafv2": "^3.817.0",
     "@babel/cli": "7.27.0",
     "@babel/core": "7.26.10",
     "@babel/preset-env": "7.26.9",
