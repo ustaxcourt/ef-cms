@@ -240,7 +240,6 @@ resource "aws_route53_record" "websocket_regional_record" {
   name           = aws_apigatewayv2_domain_name.websockets_domain.domain_name
   type           = "A"
   zone_id        = var.zone_id
-  set_identifier = "ws_${var.region}_${var.current_color}"
 
   alias {
     name                   = aws_apigatewayv2_domain_name.websockets_domain.domain_name_configuration.0.target_domain_name
