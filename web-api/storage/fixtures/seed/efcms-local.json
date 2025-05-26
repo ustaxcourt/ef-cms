@@ -20923,14 +20923,6 @@
     "pk": "consolidated-cases-party-association"
   },
   {
-    "sk": "docket-entry-worksheet|15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
-    "judgeUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "pk": "docket-entry|15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
-    "entityName": "DocketEntryWorksheet",
-    "gsi1pk": "judge-case-worksheet|dabbad00-18d0-43ec-bafb-654e83405416",
-    "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5"
-  },
-  {
     "sk": "docketNumberCounter-2011",
     "id": 1,
     "pk": "docketNumberCounter-2011"
