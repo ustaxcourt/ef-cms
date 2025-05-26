@@ -30,7 +30,6 @@ const saveOriginalDocumentWithNewId = async ({
 
   const documentIdBeforeSignature = applicationContext.getUniqueId();
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: originalDocument,
     key: documentIdBeforeSignature,
   });
@@ -52,7 +51,6 @@ const replaceOriginalWithSignedDocument = async ({
     });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: signedDocument,
     key: originalDocketEntryId,
   });

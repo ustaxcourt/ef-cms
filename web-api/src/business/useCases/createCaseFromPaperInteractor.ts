@@ -322,12 +322,13 @@ export const createCaseFromPaperInteractor = async (
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    retries: 10,
+    retries: 25,
     waitTime: 500,
   });
 
   let caseToAdd: Case;
   let workItem: WorkItem;
+
   try {
     ({ caseToAdd, workItem } = await createCaseMetadata(
       applicationContext,

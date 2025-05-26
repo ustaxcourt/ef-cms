@@ -67,7 +67,6 @@ export const standingPretrialOrder = async ({ applicationContext, data }) => {
     });
 
   return await combineTwoPdfs({
-    applicationContext,
     firstPdf: new Uint8Array(pretrialOrderPdf),
     secondPdf: new Uint8Array(checklistPdf),
   });

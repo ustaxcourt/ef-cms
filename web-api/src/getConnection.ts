@@ -5,9 +5,8 @@ import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
 
-const TOKEN_REFRESH_RATE = 13 * 60 * 1000;
-
 let dbInstance: Promise<Kysely<Database>> | null = null;
+let tokenExpirationTime: number = 0;
 let pool: Pool | null = null;
 let poolConfig: PoolConfig;
 export async function getConnection<T>({
@@ -18,24 +17,32 @@ export async function getConnection<T>({
   if (!dbInstance) {
     dbInstance = establishConnection();
   }
+
+  if (Date.now() > tokenExpirationTime) {
+    if (pool) {
+      await resetPoolPassword();
+    }
+  }
   const awaitedInstance = await dbInstance;
   return await cb(awaitedInstance);
 }
 
 async function establishConnection(): Promise<Kysely<Database>> {
-  poolConfig = getPoolConfig();
-  const token = await getToken();
-  pool = new Pool({ ...poolConfig, password: token });
-  // To avoid expired token on a long running warm lambda, refresh periodically
-  setInterval(async () => {
-    await resetPoolPassword();
-  }, TOKEN_REFRESH_RATE);
-  return new Kysely<Database>({
-    dialect: new PostgresDialect({
-      pool,
-    }),
-    plugins: [new CamelCasePlugin()],
-  });
+  try {
+    poolConfig = getPoolConfig();
+    let token: string | null = null;
+    token = await getToken();
+    pool = new Pool({ ...poolConfig, password: token });
+    return new Kysely<Database>({
+      dialect: new PostgresDialect({
+        pool,
+      }),
+      plugins: [new CamelCasePlugin()],
+    });
+  } catch (e) {
+    dbInstance = null;
+    throw new Error(`Failed to connect to database: ${e}`);
+  }
 }
 
 async function generateRDSAuthToken() {
@@ -52,16 +59,31 @@ async function generateRDSAuthToken() {
 }
 
 async function getToken() {
-  if (environment.nodeEnv !== 'production') {
-    return environment.rds.pool.password;
-  }
+  const token =
+    environment.nodeEnv !== 'production'
+      ? environment.rds.pool.password
+      : await generateRDSAuthToken();
 
-  return await generateRDSAuthToken();
+  tokenExpirationTime = Date.now() + 13 * 60 * 1000; // rds auth token expires every 15min. So refresh every 13min
+  return token;
 }
 
+let tokenPromise: Promise<string> | null;
 async function resetPoolPassword() {
   if (pool) {
-    pool.options.password = await getToken();
+    if (!tokenPromise) {
+      tokenPromise = getToken();
+    }
+    let token;
+    try {
+      token = await tokenPromise;
+      pool.options.password = token;
+    } catch (e) {
+      tokenExpirationTime = 0;
+      throw new Error(`Could not reset db password: ${e}`);
+    } finally {
+      tokenPromise = null;
+    }
   }
 }
 
