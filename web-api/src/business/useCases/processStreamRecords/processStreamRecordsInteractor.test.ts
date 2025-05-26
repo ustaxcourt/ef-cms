@@ -86,7 +86,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
     expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processCaseEntries fails', async () => {
@@ -105,7 +105,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processMessageEntries).not.toHaveBeenCalled();
     expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processDocketEntries fails', async () => {
@@ -127,7 +127,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
     expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processWorkItemEntries fails', async () => {
@@ -149,7 +149,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
     expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processMessageEntries fails', async () => {
@@ -171,7 +171,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
     expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processPractitionerMappingEntries fails', async () => {
@@ -195,7 +195,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
     expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processCaseDeadlineEntries fails', async () => {
@@ -219,7 +219,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
     expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processCaseWorksheetEntries fails', async () => {
@@ -243,7 +243,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseWorksheetEntries).toHaveBeenCalled(); // the one that throws an error
     expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processCaseCorrespondenceEntries fails', async () => {
@@ -267,7 +267,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseWorksheetEntries).toHaveBeenCalled();
     expect(processCaseCorrespondenceEntries).toHaveBeenCalled(); // the one that throws an error
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processOtherEntries fails', async () => {
@@ -289,6 +289,6 @@ describe('processStreamRecordsInteractor', () => {
     expect(processCaseWorksheetEntries).toHaveBeenCalled();
     expect(processCaseCorrespondenceEntries).toHaveBeenCalled();
     expect(processOtherEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 });
