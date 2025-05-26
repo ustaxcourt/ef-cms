@@ -3,7 +3,7 @@ jest.mock(
 );
 import { InvalidEntityError, UnauthorizedError } from '@web-api/errors/errors';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockJudgeUser,
   mockPetitionsClerkUser,
