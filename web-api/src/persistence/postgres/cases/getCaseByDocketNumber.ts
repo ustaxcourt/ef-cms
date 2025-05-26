@@ -31,6 +31,8 @@ export const getCaseByDocketNumber = async ({
       leadDocketNumber: theCase.leadDocketNumber!,
       excludeFields: ['correspondence', 'docketEntries', 'hearings'],
     });
+    // This formatting should not be done here; we are mixing the data persistence layer with the interactor layer.
+    // It was done here to quickly fix a high-severity bug.
     if (user) {
       consolidatedCases = consolidatedCases.map(c =>
         formatSealedAddresses(c, user),
