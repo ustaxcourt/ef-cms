@@ -18,3 +18,5 @@ While we made some sweeping changes to the codebase in the migration from Dynamo
 - Case creation/docket number generation can be improved as needed. The current setup is to acquire a mutex lock so that only one case can be created at a time (and in the process obtain/save a docket number). This is because we need the docket number in the process of making the case BEFORE saving--it is the primary key/ID--but we also cannot skip docket numbers. A better method: user a uuid for the ID and outsource the incrementing of docket numbers to the database so that the case is assigned a docket number on save. This avoid locking.
   - We have sometimes observed flakiness in deployed CI tests due to conflicts trying to obtain the lock.
 
+- Add table metadata to all tables
+  - created_at, modified_at, created_at_user, modified_at_user (and maybe others pending discussion)
