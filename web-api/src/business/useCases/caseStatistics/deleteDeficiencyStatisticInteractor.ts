@@ -7,10 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 export const deleteDeficiencyStatistic = async (
@@ -36,27 +33,27 @@ export const deleteDeficiencyStatistic = async (
   return validRawCase;
 };
 
-export const deleteDeficiencyStatisticInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { docketNumber, statisticId }: { docketNumber: string; statisticId: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const deleteDeficiencyStatisticInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { docketNumber, statisticId }: { docketNumber: string; statisticId: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      deleteDeficiencyStatistic(
-        applicationContext,
-        { docketNumber, statisticId },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       deleteDeficiencyStatistic(
+//         applicationContext,
+//         { docketNumber, statisticId },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const deleteDeficiencyStatisticInteractor = withLocking(
-//   deleteDeficiencyStatistic,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const deleteDeficiencyStatisticInteractor = withLocking(
+  deleteDeficiencyStatistic,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

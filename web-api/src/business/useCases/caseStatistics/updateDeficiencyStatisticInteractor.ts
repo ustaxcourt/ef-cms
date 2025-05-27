@@ -8,10 +8,7 @@ import { Statistic } from '@shared/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 /**
@@ -92,65 +89,65 @@ export const updateDeficiencyStatistic = async (
   return validRawCase;
 };
 
-export const updateDeficiencyStatisticInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    determinationDeficiencyAmount,
-    determinationTotalPenalties,
-    docketNumber,
-    irsDeficiencyAmount,
-    irsTotalPenalties,
-    lastDateOfPeriod,
-    penalties,
-    statisticId,
-    year,
-    yearOrPeriod,
-  }: {
-    determinationDeficiencyAmount: number;
-    determinationTotalPenalties: number;
-    docketNumber: string;
-    irsDeficiencyAmount: number;
-    irsTotalPenalties: number;
-    lastDateOfPeriod: string;
-    penalties: {
-      penaltyId?: string;
-      name: string;
-      penaltyAmount: number;
-      statisticId?: string;
-    }[];
-    statisticId: string;
-    year: string;
-    yearOrPeriod: string;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const updateDeficiencyStatisticInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     determinationDeficiencyAmount,
+//     determinationTotalPenalties,
+//     docketNumber,
+//     irsDeficiencyAmount,
+//     irsTotalPenalties,
+//     lastDateOfPeriod,
+//     penalties,
+//     statisticId,
+//     year,
+//     yearOrPeriod,
+//   }: {
+//     determinationDeficiencyAmount: number;
+//     determinationTotalPenalties: number;
+//     docketNumber: string;
+//     irsDeficiencyAmount: number;
+//     irsTotalPenalties: number;
+//     lastDateOfPeriod: string;
+//     penalties: {
+//       penaltyId?: string;
+//       name: string;
+//       penaltyAmount: number;
+//       statisticId?: string;
+//     }[];
+//     statisticId: string;
+//     year: string;
+//     yearOrPeriod: string;
+//   },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      updateDeficiencyStatistic(
-        applicationContext,
-        {
-          determinationDeficiencyAmount,
-          determinationTotalPenalties,
-          docketNumber,
-          irsDeficiencyAmount,
-          irsTotalPenalties,
-          lastDateOfPeriod,
-          penalties,
-          statisticId,
-          year,
-          yearOrPeriod,
-        },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       updateDeficiencyStatistic(
+//         applicationContext,
+//         {
+//           determinationDeficiencyAmount,
+//           determinationTotalPenalties,
+//           docketNumber,
+//           irsDeficiencyAmount,
+//           irsTotalPenalties,
+//           lastDateOfPeriod,
+//           penalties,
+//           statisticId,
+//           year,
+//           yearOrPeriod,
+//         },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const updateDeficiencyStatisticInteractor = withLocking(
-//   updateDeficiencyStatistic,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const updateDeficiencyStatisticInteractor = withLocking(
+  updateDeficiencyStatistic,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

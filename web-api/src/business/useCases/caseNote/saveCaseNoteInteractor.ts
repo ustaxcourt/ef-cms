@@ -7,10 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * saveCaseNote
@@ -55,27 +52,27 @@ export const saveCaseNote = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-export const saveCaseNoteInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const saveCaseNoteInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      saveCaseNote(
-        applicationContext,
-        { caseNote, docketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       saveCaseNote(
+//         applicationContext,
+//         { caseNote, docketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const saveCaseNoteInteractor = withLocking(
-//   saveCaseNote,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const saveCaseNoteInteractor = withLocking(
+  saveCaseNote,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

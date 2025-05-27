@@ -8,10 +8,7 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { Correspondence } from '@shared/business/entities/Correspondence';
 
 export const archiveCorrespondenceDocument = async (
@@ -60,30 +57,30 @@ export const archiveCorrespondenceDocument = async (
   });
 };
 
-export const archiveCorrespondenceDocumentInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    correspondenceId,
-    docketNumber,
-  }: { correspondenceId: string; docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const archiveCorrespondenceDocumentInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     correspondenceId,
+//     docketNumber,
+//   }: { correspondenceId: string; docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      archiveCorrespondenceDocument(
-        applicationContext,
-        { correspondenceId, docketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       archiveCorrespondenceDocument(
+//         applicationContext,
+//         { correspondenceId, docketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const archiveCorrespondenceDocumentInteractor = withLocking(
-//   archiveCorrespondenceDocument,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const archiveCorrespondenceDocumentInteractor = withLocking(
+  archiveCorrespondenceDocument,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

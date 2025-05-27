@@ -14,10 +14,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -214,30 +211,30 @@ export const shouldGenerateCoversheetForDocketEntry = ({
   );
 };
 
-export const updateDocketEntryMetaInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    docketEntryMeta,
-    docketNumber,
-  }: { docketEntryMeta: any; docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const updateDocketEntryMetaInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     docketEntryMeta,
+//     docketNumber,
+//   }: { docketEntryMeta: any; docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      updateDocketEntryMeta(
-        applicationContext,
-        { docketEntryMeta, docketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       updateDocketEntryMeta(
+//         applicationContext,
+//         { docketEntryMeta, docketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const updateDocketEntryMetaInteractor = withLocking(
-//   updateDocketEntryMeta,
-//   (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const updateDocketEntryMetaInteractor = withLocking(
+  updateDocketEntryMeta,
+  (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

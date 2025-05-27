@@ -7,10 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * deleteCaseNote
@@ -47,23 +44,23 @@ export const deleteCaseNote = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-export const deleteCaseNoteInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { docketNumber }: { docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const deleteCaseNoteInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { docketNumber }: { docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      deleteCaseNote(applicationContext, { docketNumber }, authorizedUser),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       deleteCaseNote(applicationContext, { docketNumber }, authorizedUser),
+//   });
+// };
 
-// export const deleteCaseNoteInteractor = withLocking(
-//   deleteCaseNote,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const deleteCaseNoteInteractor = withLocking(
+  deleteCaseNote,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

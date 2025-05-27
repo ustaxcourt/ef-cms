@@ -10,10 +10,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -60,30 +57,30 @@ export const deleteCaseDeadline = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-export const deleteCaseDeadlineInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    caseDeadlineId,
-    docketNumber,
-  }: { caseDeadlineId: string; docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const deleteCaseDeadlineInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     caseDeadlineId,
+//     docketNumber,
+//   }: { caseDeadlineId: string; docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      deleteCaseDeadline(
-        applicationContext,
-        { caseDeadlineId, docketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       deleteCaseDeadline(
+//         applicationContext,
+//         { caseDeadlineId, docketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const deleteCaseDeadlineInteractor = withLocking(
-//   deleteCaseDeadline,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const deleteCaseDeadlineInteractor = withLocking(
+  deleteCaseDeadline,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

@@ -9,10 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const createCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -56,23 +53,23 @@ export const createCaseDeadline = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-export const createCaseDeadlineInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { caseDeadline }: { caseDeadline: CaseDeadline },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${caseDeadline.docketNumber}`);
+// export const createCaseDeadlineInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { caseDeadline }: { caseDeadline: CaseDeadline },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${caseDeadline.docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      createCaseDeadline(applicationContext, { caseDeadline }, authorizedUser),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       createCaseDeadline(applicationContext, { caseDeadline }, authorizedUser),
+//   });
+// };
 
-// export const createCaseDeadlineInteractor = withLocking(
-//   createCaseDeadline,
-//   (_applicationContext, { caseDeadline }) => ({
-//     identifiers: [`case|${caseDeadline.docketNumber}`],
-//   }),
-// );
+export const createCaseDeadlineInteractor = withLocking(
+  createCaseDeadline,
+  (_applicationContext, { caseDeadline }) => ({
+    identifiers: [`case|${caseDeadline.docketNumber}`],
+  }),
+);
