@@ -105,6 +105,11 @@ jest.mock(
   () => mockFactory('verifyPendingCaseForUser'),
 );
 
+jest.mock(
+  '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords',
+  () => mockFactory('upsertUserOnCaseRecords'),
+);
+
 jest.mock('@web-api/persistence/postgres/users/cases/getCasesForUser', () => ({
   getDocketNumbersByUser: jest.fn(),
   getCasesForUser: jest.fn(),
