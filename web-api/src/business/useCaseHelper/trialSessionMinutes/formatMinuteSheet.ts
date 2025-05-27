@@ -365,7 +365,7 @@ export const formatMotions = (
 const formatDocumentType = (eventCode: string): string => {
   const documentType =
     [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY].find(
-      internalDocument => internalDocument.eventCode === eventCode,
+      doc => doc.eventCode === eventCode,
     )?.documentType || '';
 
   return documentType.replace(/\[.*?\]/g, '').trim();

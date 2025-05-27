@@ -669,8 +669,6 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
         user: {},
       });
 
-      console.log('result', result);
-
       const entries = Object.values(result);
       expect(entries).toHaveLength(2); // One pending item + one empty row
       expect(entries[0]).toMatchObject({
