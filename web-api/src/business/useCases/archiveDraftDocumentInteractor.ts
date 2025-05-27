@@ -8,10 +8,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { deleteWorkItem } from '@web-api/persistence/postgres/workitems/deleteWorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const archiveDraftDocument = async (
   applicationContext: ServerApplicationContext,
@@ -57,30 +54,30 @@ export const archiveDraftDocument = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const archiveDraftDocumentInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    docketEntryId,
-    docketNumber,
-  }: { docketEntryId: string; docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const archiveDraftDocumentInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     docketEntryId,
+//     docketNumber,
+//   }: { docketEntryId: string; docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      archiveDraftDocument(
-        applicationContext,
-        { docketEntryId, docketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       archiveDraftDocument(
+//         applicationContext,
+//         { docketEntryId, docketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const archiveDraftDocumentInteractor = withLocking(
-//   archiveDraftDocument,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const archiveDraftDocumentInteractor = withLocking(
+  archiveDraftDocument,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

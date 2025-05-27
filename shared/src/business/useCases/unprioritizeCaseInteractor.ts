@@ -12,10 +12,7 @@ import { createCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/c
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { applicationContext } from '@web-api/applicationContext';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * used for removing the high priority from a case
@@ -69,23 +66,23 @@ export const unprioritizeCase = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const unprioritizeCaseInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { docketNumber }: { docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const unprioritizeCaseInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { docketNumber }: { docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      unprioritizeCase(applicationContext, { docketNumber }, authorizedUser),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       unprioritizeCase(applicationContext, { docketNumber }, authorizedUser),
+//   });
+// };
 
-// export const unprioritizeCaseInteractor = withLocking(
-//   unprioritizeCase,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const unprioritizeCaseInteractor = withLocking(
+  unprioritizeCase,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

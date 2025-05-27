@@ -7,10 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateQcCompleteForTrial
@@ -62,35 +59,35 @@ export const updateQcCompleteForTrial = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const updateQcCompleteForTrialInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    docketNumber,
-    qcCompleteForTrial,
-    trialSessionId,
-  }: {
-    docketNumber: string;
-    qcCompleteForTrial: boolean;
-    trialSessionId: string;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const updateQcCompleteForTrialInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     docketNumber,
+//     qcCompleteForTrial,
+//     trialSessionId,
+//   }: {
+//     docketNumber: string;
+//     qcCompleteForTrial: boolean;
+//     trialSessionId: string;
+//   },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      updateQcCompleteForTrial(
-        applicationContext,
-        { docketNumber, qcCompleteForTrial, trialSessionId },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       updateQcCompleteForTrial(
+//         applicationContext,
+//         { docketNumber, qcCompleteForTrial, trialSessionId },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const updateQcCompleteForTrialInteractor = withLocking(
-//   updateQcCompleteForTrial,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const updateQcCompleteForTrialInteractor = withLocking(
+  updateQcCompleteForTrial,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

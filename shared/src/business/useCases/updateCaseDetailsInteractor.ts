@@ -12,10 +12,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateCaseDetails
@@ -145,27 +142,27 @@ export const updateCaseDetails = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const updateCaseDetailsInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const updateCaseDetailsInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      updateCaseDetails(
-        applicationContext,
-        { caseDetails, docketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       updateCaseDetails(
+//         applicationContext,
+//         { caseDetails, docketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const updateCaseDetailsInteractor = withLocking(
-//   updateCaseDetails,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const updateCaseDetailsInteractor = withLocking(
+  updateCaseDetails,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

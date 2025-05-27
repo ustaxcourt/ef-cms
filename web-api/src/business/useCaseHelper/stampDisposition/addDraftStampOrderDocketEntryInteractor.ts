@@ -17,10 +17,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * addDraftStampOrderDocketEntryInteractor
@@ -134,51 +131,51 @@ export const addDraftStampOrderDocketEntry = async (
   });
 };
 
-export const addDraftStampOrderDocketEntryInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    docketNumber,
-    formattedDraftDocumentTitle,
-    originalDocketEntryId,
-    parentMessageId,
-    stampData,
-    stampedDocketEntryId,
-  }: {
-    docketNumber: string;
-    formattedDraftDocumentTitle: string;
-    originalDocketEntryId: string;
-    parentMessageId?: string;
-    stampData: {
-      disposition: string;
-      nameForSigning: string;
-    };
-    stampedDocketEntryId: string;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const addDraftStampOrderDocketEntryInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     docketNumber,
+//     formattedDraftDocumentTitle,
+//     originalDocketEntryId,
+//     parentMessageId,
+//     stampData,
+//     stampedDocketEntryId,
+//   }: {
+//     docketNumber: string;
+//     formattedDraftDocumentTitle: string;
+//     originalDocketEntryId: string;
+//     parentMessageId?: string;
+//     stampData: {
+//       disposition: string;
+//       nameForSigning: string;
+//     };
+//     stampedDocketEntryId: string;
+//   },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      addDraftStampOrderDocketEntry(
-        applicationContext,
-        {
-          docketNumber,
-          formattedDraftDocumentTitle,
-          originalDocketEntryId,
-          parentMessageId,
-          stampData,
-          stampedDocketEntryId,
-        },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       addDraftStampOrderDocketEntry(
+//         applicationContext,
+//         {
+//           docketNumber,
+//           formattedDraftDocumentTitle,
+//           originalDocketEntryId,
+//           parentMessageId,
+//           stampData,
+//           stampedDocketEntryId,
+//         },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const addDraftStampOrderDocketEntryInteractor = withLocking(
-//   addDraftStampOrderDocketEntry,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const addDraftStampOrderDocketEntryInteractor = withLocking(
+  addDraftStampOrderDocketEntry,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

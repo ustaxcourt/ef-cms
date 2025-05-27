@@ -22,10 +22,7 @@ import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateContact
@@ -249,27 +246,27 @@ export const updateContact = async (
   return caseEntity.toRawObject();
 };
 
-export const updateContactInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { contactInfo, docketNumber }: { contactInfo: any; docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const updateContactInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { contactInfo, docketNumber }: { contactInfo: any; docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      updateContact(
-        applicationContext,
-        { contactInfo, docketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       updateContact(
+//         applicationContext,
+//         { contactInfo, docketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const updateContactInteractor = withLocking(
-//   updateContact,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const updateContactInteractor = withLocking(
+  updateContact,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
