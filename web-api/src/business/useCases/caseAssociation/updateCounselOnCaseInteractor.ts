@@ -11,10 +11,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateCounselOnCase
@@ -98,31 +95,31 @@ const updateCounselOnCase = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const updateCounselOnCaseInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    docketNumber,
-    userData,
-    userId,
-  }: { docketNumber: string; userData: any; userId: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const updateCounselOnCaseInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     docketNumber,
+//     userData,
+//     userId,
+//   }: { docketNumber: string; userData: any; userId: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      updateCounselOnCase(
-        applicationContext,
-        { docketNumber, userData, userId },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       updateCounselOnCase(
+//         applicationContext,
+//         { docketNumber, userData, userId },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const updateCounselOnCaseInteractor = withLocking(
-//   updateCounselOnCase,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const updateCounselOnCaseInteractor = withLocking(
+  updateCounselOnCase,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

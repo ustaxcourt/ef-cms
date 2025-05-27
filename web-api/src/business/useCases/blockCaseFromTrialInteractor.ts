@@ -12,10 +12,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * used for setting a case as blocked
@@ -58,27 +55,27 @@ export const blockCaseFromTrial = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const blockCaseFromTrialInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { docketNumber, reason }: { docketNumber: string; reason: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const blockCaseFromTrialInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { docketNumber, reason }: { docketNumber: string; reason: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      blockCaseFromTrial(
-        applicationContext,
-        { docketNumber, reason },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       blockCaseFromTrial(
+//         applicationContext,
+//         { docketNumber, reason },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const blockCaseFromTrialInteractor = withLocking(
-//   blockCaseFromTrial,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const blockCaseFromTrialInteractor = withLocking(
+  blockCaseFromTrial,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
