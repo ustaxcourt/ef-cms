@@ -165,6 +165,24 @@ module "worker-east-blue" {
   environment = var.environment
 }
 
+module "opensearch-sync-east-blue" {
+  source              = "../../modules/opensearch-sync"
+  color               = "blue"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
+  lambda_role_arn     = module.lambda_role_blue.role_arn
+  lambda_environment = merge(terraform_data.locals.output, {
+    CURRENT_COLOR          = "blue"
+    DYNAMODB_TABLE_NAME    = var.blue_table_name
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    REGION                 = "us-east-1"
+  })
+  providers = {
+    aws = aws.us-east-1
+  }
+
+  environment = var.environment
+}
+
 module "ui-blue" {
   source                 = "../../modules/ui"
   current_color          = "blue"
