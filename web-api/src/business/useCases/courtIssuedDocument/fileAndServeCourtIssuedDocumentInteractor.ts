@@ -67,6 +67,7 @@ export const fileAndServeCourtIssuedDocument = async (
   });
 
   let error: Error | undefined;
+
   if (!docketEntryToServe) {
     error = new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   } else if (docketEntryToServe.servedAt) {
