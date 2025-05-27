@@ -11,10 +11,8 @@ import {
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
-import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
+import { asyncHandleLockError } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 
@@ -65,22 +63,18 @@ export const verifyUserPendingEmail = async (
     { setIsUpdatingInformation: true, user },
   );
 
-  await applicationContext
-    .getUserGateway()
-    .updateUser(applicationContext, {
-      attributesToUpdate: { email: updatedUser.email },
-      email: user.email!,
-    });
+  await applicationContext.getUserGateway().updateUser(applicationContext, {
+    attributesToUpdate: { email: updatedUser.email },
+    email: user.email!,
+  });
 
-  await applicationContext
-    .getWorkerGateway()
-    .queueWork(applicationContext, {
-      message: {
-        authorizedUser,
-        payload: { user: updatedUser },
-        type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
-      },
-    });
+  await applicationContext.getWorkerGateway().queueWork(applicationContext, {
+    message: {
+      authorizedUser,
+      payload: { user: updatedUser },
+      type: MESSAGE_TYPES.QUEUE_EMAIL_UPDATE_ASSOCIATED_CASES,
+    },
+  });
 };
 
 export const userTokenHasExpired = (

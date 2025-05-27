@@ -6,10 +6,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * associatePrivatePractitionerWithCaseInteractor
@@ -56,37 +53,37 @@ export const associatePrivatePractitionerWithCase = async (
   });
 };
 
-export const associatePrivatePractitionerWithCaseInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    docketNumber,
-    representing,
-    serviceIndicator,
-    userId,
-  }: {
-    docketNumber: string;
-    representing: string[];
-    serviceIndicator: string;
-    userId: string;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const associatePrivatePractitionerWithCaseInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     docketNumber,
+//     representing,
+//     serviceIndicator,
+//     userId,
+//   }: {
+//     docketNumber: string;
+//     representing: string[];
+//     serviceIndicator: string;
+//     userId: string;
+//   },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      associatePrivatePractitionerWithCase(
-        applicationContext,
-        { docketNumber, representing, serviceIndicator, userId },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       associatePrivatePractitionerWithCase(
+//         applicationContext,
+//         { docketNumber, representing, serviceIndicator, userId },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const associatePrivatePractitionerWithCaseInteractor = withLocking(
-//   associatePrivatePractitionerWithCase,
-//   (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const associatePrivatePractitionerWithCaseInteractor = withLocking(
+  associatePrivatePractitionerWithCase,
+  (_applicationContext: ServerApplicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

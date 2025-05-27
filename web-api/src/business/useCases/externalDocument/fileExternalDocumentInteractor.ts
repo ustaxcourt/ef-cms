@@ -17,10 +17,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
@@ -229,27 +226,27 @@ export const fileExternalDocument = async (
   );
 };
 
-export const fileExternalDocumentInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { documentMetadata }: { documentMetadata: any },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${documentMetadata.docketNumber}`);
+// export const fileExternalDocumentInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { documentMetadata }: { documentMetadata: any },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${documentMetadata.docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      fileExternalDocument(
-        applicationContext,
-        { documentMetadata },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       fileExternalDocument(
+//         applicationContext,
+//         { documentMetadata },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const fileExternalDocumentInteractor = withLocking(
-//   fileExternalDocument,
-//   (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
-//     identifiers: [`case|${documentMetadata.docketNumber}`],
-//   }),
-// );
+export const fileExternalDocumentInteractor = withLocking(
+  fileExternalDocument,
+  (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
+    identifiers: [`case|${documentMetadata.docketNumber}`],
+  }),
+);

@@ -72,7 +72,7 @@ export const acquireLock = async ({
     lockedItems = results.filter(r => r.isLocked).map(r => r.lockId);
 
     attempts++;
-  } while (lockedItems.length || attempts === 0);
+  } while (lockedItems.length);
 };
 
 export const removeLock = async (
@@ -85,7 +85,7 @@ export const removeLock = async (
 
 export function withLocking<InteractorInput, InteractorOutput>(
   interactor: (
-    applicationContext: ServerApplicationContext,
+    applicationContext: any,
     options: InteractorInput,
     authorizedUser: UnknownAuthUser,
   ) => Promise<InteractorOutput>,
@@ -101,7 +101,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
   authorizedUser: UnknownAuthUser,
 ) => Promise<InteractorOutput> {
   return async function (
-    applicationContext: ServerApplicationContext,
+    applicationContext: any,
     options: InteractorInput,
     authorizedUser: UnknownAuthUser,
   ) {

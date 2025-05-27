@@ -7,10 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * completeWorkItemInteractor
@@ -60,55 +57,55 @@ export const completeWorkItem = async (
   return completedWorkItem;
 };
 
-export const completeWorkItemInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    completedMessage,
-    workItemId,
-  }: {
-    completedMessage: string;
-    workItemId: string;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const originalWorkItem = await getWorkItemById({ workItemId });
-
-  if (!originalWorkItem) {
-    throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
-  }
-
-  const lockId = hashLockId(`case|${originalWorkItem.docketNumber}`);
-
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      completeWorkItem(
-        applicationContext,
-        { completedMessage, workItemId },
-        authorizedUser,
-      ),
-  });
-};
-
-// export const determineEntitiesToLock = async ({
-//   workItemId,
-// }: {
-//   workItemId: string;
-// }) => {
-//   const originalWorkItem = await getWorkItemById({
+// export const completeWorkItemInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     completedMessage,
 //     workItemId,
-//   });
+//   }: {
+//     completedMessage: string;
+//     workItemId: string;
+//   },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const originalWorkItem = await getWorkItemById({ workItemId });
 
 //   if (!originalWorkItem) {
 //     throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
 //   }
 
-//   return {
-//     identifiers: [`case|${originalWorkItem.docketNumber}`],
-//   };
+//   const lockId = hashLockId(`case|${originalWorkItem.docketNumber}`);
+
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       completeWorkItem(
+//         applicationContext,
+//         { completedMessage, workItemId },
+//         authorizedUser,
+//       ),
+//   });
 // };
 
-// export const completeWorkItemInteractor = withLocking(
-//   completeWorkItem,
-//   determineEntitiesToLock,
-// );
+export const determineEntitiesToLock = async ({
+  workItemId,
+}: {
+  workItemId: string;
+}) => {
+  const originalWorkItem = await getWorkItemById({
+    workItemId,
+  });
+
+  if (!originalWorkItem) {
+    throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
+  }
+
+  return {
+    identifiers: [`case|${originalWorkItem.docketNumber}`],
+  };
+};
+
+export const completeWorkItemInteractor = withLocking(
+  completeWorkItem,
+  determineEntitiesToLock,
+);

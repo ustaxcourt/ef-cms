@@ -12,10 +12,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import {
-  hashLockId,
-  multiMutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
@@ -199,42 +196,42 @@ export const fileCourtIssuedDocketEntry = async (
   return subjectCase.toRawObject();
 };
 
-export const fileCourtIssuedDocketEntryInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    docketNumbers,
-    documentMeta,
-    subjectDocketNumber,
-  }: {
-    docketNumbers: string[];
-    documentMeta: any;
-    subjectDocketNumber: string;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockIds = [...new Set([subjectDocketNumber, ...docketNumbers])].map(
-    docketNumber => hashLockId(`case|${docketNumber}`),
-  );
+// export const fileCourtIssuedDocketEntryInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     docketNumbers,
+//     documentMeta,
+//     subjectDocketNumber,
+//   }: {
+//     docketNumbers: string[];
+//     documentMeta: any;
+//     subjectDocketNumber: string;
+//   },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockIds = [...new Set([subjectDocketNumber, ...docketNumbers])].map(
+//     docketNumber => hashLockId(`case|${docketNumber}`),
+//   );
 
-  return multiMutexLockWrapper({
-    lockIds,
-    callback: () =>
-      fileCourtIssuedDocketEntry(
-        applicationContext,
-        { docketNumbers, documentMeta, subjectDocketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return multiMutexLockWrapper({
+//     lockIds,
+//     callback: () =>
+//       fileCourtIssuedDocketEntry(
+//         applicationContext,
+//         { docketNumbers, documentMeta, subjectDocketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const fileCourtIssuedDocketEntryInteractor = withLocking(
-//   fileCourtIssuedDocketEntry,
-//   (
-//     _applicationContext: ServerApplicationContext,
-//     { docketNumbers = [], subjectDocketNumber },
-//   ) => ({
-//     identifiers: [...new Set([subjectDocketNumber, ...docketNumbers])].map(
-//       item => `case|${item}`,
-//     ),
-//   }),
-// );
+export const fileCourtIssuedDocketEntryInteractor = withLocking(
+  fileCourtIssuedDocketEntry,
+  (
+    _applicationContext: ServerApplicationContext,
+    { docketNumbers = [], subjectDocketNumber },
+  ) => ({
+    identifiers: [...new Set([subjectDocketNumber, ...docketNumbers])].map(
+      item => `case|${item}`,
+    ),
+  }),
+);

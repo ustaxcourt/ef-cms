@@ -2,10 +2,7 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
+import { asyncHandleLockError } from '@web-api/business/useCaseHelper/acquireLock';
 import {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -20,6 +17,7 @@ import {
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,

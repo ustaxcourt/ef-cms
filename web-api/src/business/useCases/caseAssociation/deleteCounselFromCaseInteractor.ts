@@ -9,10 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteCounselFromCase = async (
   applicationContext: ServerApplicationContext,
@@ -57,6 +54,7 @@ export const deleteCounselFromCase = async (
     userId,
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     authorizedUser,
@@ -76,27 +74,27 @@ export const setupServiceIndicatorForUnrepresentedPetitioners = (
   return caseEntity;
 };
 
-export const deleteCounselFromCaseInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { docketNumber, userId }: { docketNumber: string; userId: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const deleteCounselFromCaseInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { docketNumber, userId }: { docketNumber: string; userId: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      deleteCounselFromCase(
-        applicationContext,
-        { docketNumber, userId },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       deleteCounselFromCase(
+//         applicationContext,
+//         { docketNumber, userId },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const deleteCounselFromCaseInteractor = withLocking(
-//   deleteCounselFromCase,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const deleteCounselFromCaseInteractor = withLocking(
+  deleteCounselFromCase,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

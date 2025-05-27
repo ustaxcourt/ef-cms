@@ -11,10 +11,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -111,51 +108,51 @@ export const removeCaseFromTrial = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const removeCaseFromTrialInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    associatedJudge,
-    associatedJudgeId,
-    caseStatus,
-    disposition,
-    docketNumber,
-    trialSessionId,
-  }: {
-    associatedJudge: string;
-    associatedJudgeId: string;
-    caseStatus: CaseStatus;
-    disposition: string;
-    docketNumber: string;
-    trialSessionId: string;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const removeCaseFromTrialInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     associatedJudge,
+//     associatedJudgeId,
+//     caseStatus,
+//     disposition,
+//     docketNumber,
+//     trialSessionId,
+//   }: {
+//     associatedJudge: string;
+//     associatedJudgeId: string;
+//     caseStatus: CaseStatus;
+//     disposition: string;
+//     docketNumber: string;
+//     trialSessionId: string;
+//   },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      removeCaseFromTrial(
-        applicationContext,
-        {
-          associatedJudge,
-          associatedJudgeId,
-          caseStatus,
-          disposition,
-          docketNumber,
-          trialSessionId,
-        },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       removeCaseFromTrial(
+//         applicationContext,
+//         {
+//           associatedJudge,
+//           associatedJudgeId,
+//           caseStatus,
+//           disposition,
+//           docketNumber,
+//           trialSessionId,
+//         },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const removeCaseFromTrialInteractor = withLocking(
-//   removeCaseFromTrial,
-//   (
-//     _applicationContext: ServerApplicationContext,
-//     { docketNumber }: { docketNumber: string },
-//   ) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const removeCaseFromTrialInteractor = withLocking(
+  removeCaseFromTrial,
+  (
+    _applicationContext: ServerApplicationContext,
+    { docketNumber }: { docketNumber: string },
+  ) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

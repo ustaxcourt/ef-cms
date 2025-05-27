@@ -22,10 +22,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -327,33 +324,33 @@ export const updatePetitionerInformation = async (
   };
 };
 
-export const updatePetitionerInformationInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    docketNumber,
-    updatedPetitionerData,
-  }: {
-    docketNumber: string;
-    updatedPetitionerData: any;
-  },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const updatePetitionerInformationInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     docketNumber,
+//     updatedPetitionerData,
+//   }: {
+//     docketNumber: string;
+//     updatedPetitionerData: any;
+//   },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      updatePetitionerInformation(
-        applicationContext,
-        { docketNumber, updatedPetitionerData },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       updatePetitionerInformation(
+//         applicationContext,
+//         { docketNumber, updatedPetitionerData },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const updatePetitionerInformationInteractor = withLocking(
-//   updatePetitionerInformation,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const updatePetitionerInformationInteractor = withLocking(
+  updatePetitionerInformation,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
