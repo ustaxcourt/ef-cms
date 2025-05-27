@@ -8,10 +8,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * used to remove a petitioner from a case
@@ -92,31 +89,31 @@ export const removePetitionerAndUpdateCaption = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-export const removePetitionerAndUpdateCaptionInteractor = async (
-  applicationContext: ServerApplicationContext,
-  {
-    caseCaption,
-    contactId,
-    docketNumber,
-  }: { caseCaption: string; contactId: string; docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const removePetitionerAndUpdateCaptionInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   {
+//     caseCaption,
+//     contactId,
+//     docketNumber,
+//   }: { caseCaption: string; contactId: string; docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      removePetitionerAndUpdateCaption(
-        applicationContext,
-        { caseCaption, contactId, docketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       removePetitionerAndUpdateCaption(
+//         applicationContext,
+//         { caseCaption, contactId, docketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const removePetitionerAndUpdateCaptionInteractor = withLocking(
-//   removePetitionerAndUpdateCaption,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const removePetitionerAndUpdateCaptionInteractor = withLocking(
+  removePetitionerAndUpdateCaption,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

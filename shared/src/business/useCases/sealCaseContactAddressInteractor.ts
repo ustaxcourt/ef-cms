@@ -10,10 +10,7 @@ import {
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * sealCaseContactAddress
@@ -65,27 +62,27 @@ export const sealCaseContactAddress = async (
   return new Case(updatedCase, { authorizedUser }).toRawObject();
 };
 
-export const sealCaseContactAddressInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { contactId, docketNumber }: { contactId: string; docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const sealCaseContactAddressInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { contactId, docketNumber }: { contactId: string; docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      sealCaseContactAddress(
-        applicationContext,
-        { contactId, docketNumber },
-        authorizedUser,
-      ),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       sealCaseContactAddress(
+//         applicationContext,
+//         { contactId, docketNumber },
+//         authorizedUser,
+//       ),
+//   });
+// };
 
-// export const sealCaseContactAddressInteractor = withLocking(
-//   sealCaseContactAddress,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const sealCaseContactAddressInteractor = withLocking(
+  sealCaseContactAddress,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);

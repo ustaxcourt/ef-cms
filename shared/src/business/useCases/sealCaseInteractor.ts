@@ -8,10 +8,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import {
-  hashLockId,
-  mutexLockWrapper,
-} from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * sealCase
@@ -55,23 +52,23 @@ export const sealCase = async (
     .toRawObject();
 };
 
-export const sealCaseInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { docketNumber }: { docketNumber: string },
-  authorizedUser: UnknownAuthUser,
-) => {
-  const lockId = hashLockId(`case|${docketNumber}`);
+// export const sealCaseInteractor = async (
+//   applicationContext: ServerApplicationContext,
+//   { docketNumber }: { docketNumber: string },
+//   authorizedUser: UnknownAuthUser,
+// ) => {
+//   const lockId = hashLockId(`case|${docketNumber}`);
 
-  return mutexLockWrapper({
-    lockId,
-    callback: () =>
-      sealCase(applicationContext, { docketNumber }, authorizedUser),
-  });
-};
+//   return mutexLockWrapper({
+//     lockId,
+//     callback: () =>
+//       sealCase(applicationContext, { docketNumber }, authorizedUser),
+//   });
+// };
 
-// export const sealCaseInteractor = withLocking(
-//   sealCase,
-//   (_applicationContext, { docketNumber }) => ({
-//     identifiers: [`case|${docketNumber}`],
-//   }),
-// );
+export const sealCaseInteractor = withLocking(
+  sealCase,
+  (_applicationContext, { docketNumber }) => ({
+    identifiers: [`case|${docketNumber}`],
+  }),
+);
