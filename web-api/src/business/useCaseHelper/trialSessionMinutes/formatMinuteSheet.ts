@@ -11,6 +11,7 @@ import {
   TRIAL_HEARING_OPTIONS,
   EXHIBIT_STATUS_OPTIONS,
   INTERNAL_DOCUMENTS_ARRAY,
+  EXTERNAL_DOCUMENTS_ARRAY,
 } from '@shared/business/entities/EntityConstants';
 import {
   BriefDetailsType,
@@ -363,7 +364,7 @@ export const formatMotions = (
 
 const formatDocumentType = (eventCode: string): string => {
   const documentType =
-    INTERNAL_DOCUMENTS_ARRAY.find(
+    [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY].find(
       internalDocument => internalDocument.eventCode === eventCode,
     )?.documentType || '';
 
