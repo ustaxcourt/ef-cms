@@ -19,14 +19,15 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     automaticBlockedDate: rawCase.automaticBlockedDate
       ? calculateDate({ dateString: rawCase.automaticBlockedDate })
       : null,
-    automaticBlockedReason: rawCase.automaticBlockedReason || null,
+    automaticBlockedReason: rawCase.automaticBlockedReason ?? null,
     blocked: rawCase.blocked,
     blockedDate: rawCase.blockedDate
       ? calculateDate({ dateString: rawCase.blockedDate })
       : null,
-    blockedReason: rawCase.blockedReason || null,
+    blockedReason: rawCase.blockedReason ?? null,
     caption: rawCase.caseCaption,
     caseNote: rawCase.caseNote,
+    caseStatusHistory: JSON.stringify(rawCase.caseStatusHistory),
     caseType: rawCase.caseType,
     closedDate: rawCase.closedDate
       ? calculateDate({ dateString: rawCase.closedDate })
@@ -36,7 +37,7 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       : calculateDate({ dateString: formatNow() }),
     damages: rawCase.damages,
     docketNumber: rawCase.docketNumber,
-    docketNumberSuffix: rawCase.docketNumberSuffix || undefined,
+    docketNumberSuffix: rawCase.docketNumberSuffix ?? undefined,
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,
     hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,
@@ -49,7 +50,7 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       : null,
     isPaper: rawCase.isPaper,
     isSealed: rawCase.isSealed,
-    leadDocketNumber: rawCase.leadDocketNumber || null,
+    leadDocketNumber: rawCase.leadDocketNumber ?? null,
     litigationCosts: rawCase.litigationCosts,
     mailingDate: rawCase.mailingDate,
     noticeOfAttachments: rawCase.noticeOfAttachments,
@@ -65,6 +66,7 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
     orderForRatification: rawCase.orderForRatification,
     orderToShowCause: rawCase.orderToShowCause,
     partyType: rawCase.partyType,
+    petitioners: JSON.stringify(rawCase.petitioners),
     petitionPaymentDate: rawCase.petitionPaymentDate
       ? calculateDate({ dateString: rawCase.petitionPaymentDate })
       : null,
@@ -84,13 +86,14 @@ export const toKyselyNewCase = (rawCase: RawCase) => {
       ? calculateDate({ dateString: rawCase.sealedDate })
       : null,
     sortableDocketNumber: rawCase.sortableDocketNumber,
+    statistics: JSON.stringify(rawCase.statistics),
     status: rawCase.status,
     trialDate: rawCase.trialDate
       ? calculateDate({ dateString: rawCase.trialDate })
       : null,
-    trialLocation: rawCase.trialLocation || null,
-    trialSessionId: rawCase.trialSessionId || null,
-    trialTime: rawCase.trialTime || null,
+    trialLocation: rawCase.trialLocation ?? null,
+    trialSessionId: rawCase.trialSessionId ?? null,
+    trialTime: rawCase.trialTime ?? null,
     useSameAsPrimary: rawCase.useSameAsPrimary,
   };
 };

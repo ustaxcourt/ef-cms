@@ -8,11 +8,11 @@ import { Statistic } from '@shared/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseStatistic } from '@web-api/persistence/postgres/cases/statistics/updateCaseStatistic';
 import {
   hashLockId,
   mutexLockWrapper,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 /**
  * updateDeficiencyStatistic
@@ -87,7 +87,7 @@ export const updateDeficiencyStatistic = async (
   newCase.updateStatistic(statisticEntity, statisticId);
   const validRawCase = newCase.validate().toRawObject();
 
-  await updateCaseStatistic({ statistic: statisticEntity });
+  await upsertCases([validRawCase]);
 
   return validRawCase;
 };

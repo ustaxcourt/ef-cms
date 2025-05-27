@@ -16,6 +16,7 @@ import {
   hashLockId,
   mutexLockWrapper,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const updateCaseContext = async (
   applicationContext: ServerApplicationContext,
@@ -117,7 +118,7 @@ export const updateCaseContext = async (
       const caseDeadlines = await getCaseDeadlinesByDocketNumber({
         docketNumber,
       });
-      await Promise.all(
+      await settlePromises(
         caseDeadlines.map(async deadline => {
           return deleteCaseDeadline({
             caseDeadlineId: deadline.caseDeadlineId,

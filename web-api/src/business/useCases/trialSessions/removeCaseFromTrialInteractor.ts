@@ -79,7 +79,7 @@ export const removeCaseFromTrial = async (
     });
 
     await setPriorityOnAllWorkItems({
-      docketNumber: caseEntity.docketNumber,
+      docketNumbers: [caseEntity.docketNumber],
       highPriority: false,
     });
 

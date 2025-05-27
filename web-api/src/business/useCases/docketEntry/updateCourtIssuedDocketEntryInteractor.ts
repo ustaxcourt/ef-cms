@@ -13,6 +13,7 @@ import {
   hashLockId,
   mutexLockWrapper,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const updateCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -102,7 +103,7 @@ export const updateCourtIssuedDocketEntry = async (
     }),
   ];
 
-  await Promise.all(saveItems);
+  await settlePromises(saveItems);
 
   return caseEntity.toRawObject();
 };

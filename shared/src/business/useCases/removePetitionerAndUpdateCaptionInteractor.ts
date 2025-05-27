@@ -7,7 +7,6 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { deletePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/deletePetitionerOnCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   hashLockId,
@@ -89,11 +88,6 @@ export const removePetitionerAndUpdateCaption = async (
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-
-  await deletePetitionerOnCase({
-    contactId: petitionerContactId,
-    docketNumber,
-  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

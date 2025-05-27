@@ -22,7 +22,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updatePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 import {
   hashLockId,
   mutexLockWrapper,
@@ -202,15 +201,17 @@ export const updatePetitionerInformation = async (
   );
 
   petitionerCase.updatePetitioner({
-    contactId: existingPetitionerInfo.contactId,
-    email: existingPetitionerInfo.email,
-    hasConsentedToElectronicService:
-      existingPetitionerInfo.hasConsentedToElectronicService,
-    hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
-    isAddressSealed: existingPetitionerInfo.isAddressSealed,
-    paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
-    sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
-    ...editableFields,
+    updatedPetitioner: {
+      contactId: existingPetitionerInfo.contactId,
+      email: existingPetitionerInfo.email,
+      hasConsentedToElectronicService:
+        existingPetitionerInfo.hasConsentedToElectronicService,
+      hasElectronicAccess: existingPetitionerInfo.hasElectronicAccess,
+      isAddressSealed: existingPetitionerInfo.isAddressSealed,
+      paperPetitionEmail: existingPetitionerInfo.paperPetitionEmail,
+      sealedAndUnavailable: existingPetitionerInfo.sealedAndUnavailable,
+      ...editableFields,
+    },
   });
 
   //send back through the constructor so the contacts are created with the contact constructor
@@ -310,12 +311,6 @@ export const updatePetitionerInformation = async (
       });
     }
   }
-
-  await updatePetitionerOnCase({
-    docketNumber: caseEntity.docketNumber,
-    petitioner: updatedCaseContact,
-    oldContactId: existingPetitionerInfo.contactId,
-  });
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()

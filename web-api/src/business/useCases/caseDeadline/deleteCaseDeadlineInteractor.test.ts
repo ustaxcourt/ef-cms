@@ -2,12 +2,15 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { AUTOMATIC_BLOCKED_REASONS } from '@shared/business/entities/EntityConstants';
-import { MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 jest.mock(
   '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
 );
+import { AUTOMATIC_BLOCKED_REASONS } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
@@ -18,8 +21,8 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('deleteCaseDeadlineInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -33,8 +36,9 @@ describe('deleteCaseDeadlineInteractor', () => {
   let mockDeadlines;
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+
+  updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
   );
 
@@ -126,7 +130,9 @@ describe('deleteCaseDeadlineInteractor', () => {
     expect(deleteCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: false,
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
@@ -152,7 +158,9 @@ describe('deleteCaseDeadlineInteractor', () => {
     expect(deleteCaseDeadline.mock.calls[0][0]).toMatchObject({
       caseDeadlineId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,

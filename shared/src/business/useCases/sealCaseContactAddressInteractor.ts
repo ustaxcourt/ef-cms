@@ -10,7 +10,6 @@ import {
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updatePetitionerOnCase } from '@web-api/persistence/postgres/cases/parties/updatePetitionerOnCase';
 import {
   hashLockId,
   mutexLockWrapper,
@@ -53,7 +52,7 @@ export const sealCaseContactAddress = async (
   }
   contactToSeal.isAddressSealed = true;
 
-  caseEntity.updatePetitioner(contactToSeal);
+  caseEntity.updatePetitioner({ updatedPetitioner: contactToSeal });
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
@@ -62,11 +61,6 @@ export const sealCaseContactAddress = async (
       authorizedUser,
       caseToUpdate: caseEntity,
     });
-
-  await updatePetitionerOnCase({
-    docketNumber,
-    petitioner: contactToSeal,
-  });
 
   return new Case(updatedCase, { authorizedUser }).toRawObject();
 };

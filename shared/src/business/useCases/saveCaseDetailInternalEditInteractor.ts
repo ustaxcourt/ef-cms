@@ -100,9 +100,11 @@ export const saveCaseDetailInternalEdit = async (
     const primaryContactId = originalCaseEntity.getContactPrimary().contactId;
 
     caseEntityWithFormEdits.updatePetitioner({
-      ...caseToUpdate.contactPrimary,
-      contactId: primaryContactId,
-      contactType: CONTACT_TYPES.primary,
+      updatedPetitioner: {
+        ...caseToUpdate.contactPrimary,
+        contactId: primaryContactId,
+        contactType: CONTACT_TYPES.primary,
+      },
     });
   }
 
@@ -111,9 +113,11 @@ export const saveCaseDetailInternalEdit = async (
       caseEntityWithFormEdits.getContactSecondary()?.contactId;
 
     caseEntityWithFormEdits.updatePetitioner({
-      ...caseToUpdate.contactSecondary,
-      contactId: secondaryContactId,
-      contactType: CONTACT_TYPES.secondary,
+      updatedPetitioner: {
+        ...caseToUpdate.contactSecondary,
+        contactId: secondaryContactId,
+        contactType: CONTACT_TYPES.secondary,
+      },
     });
   } else if (originalCaseEntity.getContactSecondary()) {
     const originalSecondaryContactId =

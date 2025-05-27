@@ -35,6 +35,7 @@ import {
   hashLockId,
   mutexLockWrapper,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -271,7 +272,6 @@ const generateNoticeOfReceipt = async ({
     primaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: primaryContactNotrPdfData,
         secondPdf: clinicLetter,
       });
@@ -281,7 +281,6 @@ const generateNoticeOfReceipt = async ({
     secondaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: secondaryContactNotrPdfData,
         secondPdf: clinicLetter,
       });
@@ -292,7 +291,6 @@ const generateNoticeOfReceipt = async ({
     combinedNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: primaryContactNotrPdfData,
         secondPdf: secondaryContactNotrPdfData,
       });
@@ -414,7 +412,7 @@ const createCoversheetsForServedEntries = async ({
   caseEntity: Case;
   authorizedUser: AuthUser;
 }) => {
-  return await Promise.all(
+  return await settlePromises(
     caseEntity.docketEntries.map(async doc => {
       if (doc.isFileAttached && !doc.isDraft) {
         const updatedDocketEntry = await applicationContext
@@ -622,7 +620,7 @@ export const serveCaseToIrs = async (
       );
     }
 
-    await Promise.all(generatedDocuments);
+    await settlePromises(generatedDocuments);
 
     await createPetitionWorkItems({
       caseEntity,

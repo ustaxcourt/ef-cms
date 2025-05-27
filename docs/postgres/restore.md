@@ -73,10 +73,6 @@ PGPASSWORD="$DB_TOKEN" pg_dump \ # change to restore instance password
   output "rds_host_name" {
     value = module.rds.address
   }
-
-  output "rds_host_name_west" {
-    value = module.rds.address_west
-  }
   ```
 - Run deploy allColors (ex: `npm run deploy:allColors exp4`)
 - May error trying to remove due to final snapshot, simply ignore, and manually delete inside aws console.
@@ -91,7 +87,6 @@ PGPASSWORD="$DB_TOKEN" pg_dump \ # change to restore instance password
   - Comment out aws_rds_global_cluster
   - Comment out global_cluster_identifier on the `aws_rds_cluster.postgres`
   - Comment out the west related clusters
-  - Comment out the `output.address_west` inside of `rds/outputs.tf`
   - East cluster
     - Uncomment snapshot_identifier and update to the snapshot identifier of your choice
     - Toggle prevent_destroy from false to true
