@@ -1,6 +1,6 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  FILING_TYPES,
+  FILING_TYPES_DICT,
   PARTY_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
@@ -505,7 +505,7 @@ describe('internalPetitionPartiesHelper', () => {
               true,
           },
           form: {
-            filingType: FILING_TYPES.petitioner[1],
+            filingType: FILING_TYPES_DICT.MYSELF_AND_SPOUSE,
             isPaper: false,
           },
           user: petitionsClerkUser,
@@ -514,6 +514,7 @@ describe('internalPetitionPartiesHelper', () => {
 
       expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
     });
+
     it('should display secondary contact email field when petition is filed by a private practitioner', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
@@ -522,7 +523,26 @@ describe('internalPetitionPartiesHelper', () => {
               true,
           },
           form: {
-            filingType: FILING_TYPES.privatePractitioner[1],
+            filingType: FILING_TYPES_DICT.PETITIONER_SPOUSE,
+            isPaper: false,
+          },
+          user: petitionsClerkUser,
+        },
+      });
+
+      expect(result.showSecondaryContactEmailFieldAndConsentBox).toEqual(true);
+    });
+
+    it('should display secondary contact email field when petition is filed by a petitioner updating party type to petitioner and spouse', () => {
+      const result = runCompute(internalPetitionPartiesHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
+          },
+          form: {
+            filingType: FILING_TYPES_DICT.PETITIONER,
+            partyType: PARTY_TYPES.petitionerSpouse,
             isPaper: false,
           },
           user: petitionsClerkUser,
