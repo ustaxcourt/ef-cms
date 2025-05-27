@@ -2,6 +2,10 @@ TODO
 - Maybe make west delete scripts fail
 - delete smircleCi
 
+Finished
+- account specific
+- all-colors
+- green/blue
 
 - Jim Questions:
   - Should we keep or remove the health check and associated alarm for the east? We can remove the health check, cloudwatch alarm, and the custom health check interactors.
