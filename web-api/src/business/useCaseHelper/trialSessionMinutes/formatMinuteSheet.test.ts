@@ -995,7 +995,7 @@ describe('formatMinuteSheet', () => {
         ]);
       });
 
-      it("should format a court issued event's documnet type correctly", () => {
+      it("should format a court issued event's document type correctly", () => {
         const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
           [
             {
