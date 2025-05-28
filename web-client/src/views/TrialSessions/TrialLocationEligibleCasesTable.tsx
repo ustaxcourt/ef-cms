@@ -72,7 +72,10 @@ export const TrialLocationEligibleCasesTable = connect(
                         <CaseIcons formattedCase={eligibleCase} />
                       </td>
                       <td>
-                        <CaseLink formattedCase={eligibleCase} />
+                        <CaseLink
+                          formattedCase={eligibleCase}
+                          target="_blank"
+                        />
                       </td>
                       <td>{eligibleCase.caseTitle}</td>
                       <td>

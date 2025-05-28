@@ -68,7 +68,7 @@ export const TrialLocationBlockedTable = connect(
                       <CaseIcons formattedCase={blockedCase} />
                     </td>
                     <td>
-                      <CaseLink formattedCase={blockedCase} />
+                      <CaseLink formattedCase={blockedCase} target="_blank" />
                     </td>
                     <td>{blockedCase.blockedDateEarliest}</td>
                     <td>{blockedCase.caseTitle}</td>
