@@ -2,7 +2,6 @@ jest.mock('./processStreamUtilities');
 jest.mock('./processDocketEntries');
 jest.mock('./processPractitionerMappingEntries');
 jest.mock('./processRemoveEntries');
-jest.mock('./processCaseEntries');
 jest.mock('./processOtherEntries');
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
