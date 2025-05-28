@@ -994,6 +994,27 @@ describe('formatMinuteSheet', () => {
           },
         ]);
       });
+
+      it("should format a court issued event's documnet type correctly", () => {
+        const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
+          [
+            {
+              date: '4/25/25',
+              documentType: 'RM',
+              filedBy: 'court',
+              status: 'cav',
+              isOnDocketRecord: true,
+              oralMotion: false,
+              objection: undefined,
+            },
+          ];
+        const result = formatActionsAndFilings(actionsSection);
+        expect(result).toEqual([
+          {
+            content: '4/25/25; Returned Mail; Filed by Court; CAV',
+          },
+        ]);
+      });
     });
 
     describe('formatTrialBrief', () => {

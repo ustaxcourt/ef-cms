@@ -13,6 +13,7 @@ import {
   INTERNAL_DOCUMENTS_ARRAY,
   EXTERNAL_DOCUMENTS_ARRAY,
 } from '@shared/business/entities/EntityConstants';
+import { COURT_ISSUED_EVENTS } from '@shared/business/entities/docketEntry/courtIssuedEventCodes';
 import {
   BriefDetailsType,
   MinuteSheet,
@@ -364,9 +365,11 @@ export const formatMotions = (
 
 const formatDocumentType = (eventCode: string): string => {
   const documentType =
-    [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY].find(
-      doc => doc.eventCode === eventCode,
-    )?.documentType || '';
+    [
+      ...EXTERNAL_DOCUMENTS_ARRAY,
+      ...INTERNAL_DOCUMENTS_ARRAY,
+      ...COURT_ISSUED_EVENTS,
+    ].find(doc => doc.eventCode === eventCode)?.documentType || '';
 
   return documentType.replace(/\[.*?\]/g, '').trim();
 };
