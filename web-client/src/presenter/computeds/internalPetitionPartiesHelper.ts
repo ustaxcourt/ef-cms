@@ -205,7 +205,6 @@ export const getOptionsForContact = ({ PARTY_TYPES, partyType }) => {
  */
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { FILING_TYPES_DICT } from '@shared/business/entities/EntityConstants';
 export const internalPetitionPartiesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
@@ -214,9 +213,7 @@ export const internalPetitionPartiesHelper = (
     applicationContext.getConstants();
   const user = get(state.user);
 
-  const { filingType, isPaper, partyType, privatePractitioners } = get(
-    state.form,
-  );
+  const { isPaper, partyType, privatePractitioners } = get(state.form);
 
   const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
     state.featureFlags[
@@ -239,9 +236,7 @@ export const internalPetitionPartiesHelper = (
   const showSecondaryContactEmailFieldAndConsentBox =
     E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG &&
     !isPaper &&
-    (filingType === FILING_TYPES_DICT.MYSELF_AND_SPOUSE ||
-      filingType === FILING_TYPES_DICT.PETITIONER_SPOUSE ||
-      partyType === PARTY_TYPES.petitionerSpouse) &&
+    partyType === PARTY_TYPES.petitionerSpouse &&
     !isExternalUser;
 
   const contacts = getOptionsForContact({ PARTY_TYPES, partyType });
