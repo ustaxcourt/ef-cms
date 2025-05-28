@@ -347,7 +347,7 @@ export const getPendingItemsFromCase = ({
         date: formatDateString(pendingItem.createdAt, FORMATS.MMDDYYYY),
         documentType: transformedPendingItemDetails.documentType,
         filedBy: transformFiledBy(pendingItem),
-        note: transformedPendingItemDetails.description,
+        note: '',
         objection: transformedPendingItemDetails.objection,
         renderKey,
         status: '',
@@ -372,7 +372,7 @@ export const getPendingItemsFromCase = ({
 
 export const getTransformedPendingItemDetails = (
   pendingItem,
-): { documentType: string; description: string; objection: string } => {
+): { documentType: string; objection: string } => {
   const getMatchingObjection = (
     pendingItem: {
       eventCode: string;
@@ -395,7 +395,6 @@ export const getTransformedPendingItemDetails = (
   };
 
   return {
-    description: pendingItem.documentType,
     documentType: pendingItem.eventCode,
     objection: getMatchingObjection(pendingItem),
   };
