@@ -2,14 +2,14 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
+import { Case } from '@shared/business/entities/cases/Case';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   FORMATS,
   formatDateString,
   formatNow,
   getBusinessDateInFuture,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
@@ -23,17 +23,16 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
+import { UnauthorizedError } from '@web-api/errors/errors';
+import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
-import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
+import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getWorkItemByDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketEntryId';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -101,16 +100,7 @@ const createPetitionWorkItems = async ({ caseEntity, user }) => {
   const petitionDocument = caseEntity.docketEntries.find(
     doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-  const initializeCaseWorkItem = await getWorkItemByDocketEntryId({
-    docketNumber: caseEntity.docketNumber,
-    docketEntryId: petitionDocument.docketEntryId,
-  });
-
-  if (!initializeCaseWorkItem) {
-    throw new NotFoundError(
-      `Could not find work item associated with the petition on case ${caseEntity.docketNumber}`,
-    );
-  }
+  const initializeCaseWorkItem = petitionDocument.workItem;
 
   initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
   initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
@@ -489,8 +479,6 @@ export const serveCaseToIrs = async (
       applicationContext,
       docketNumber,
     });
-
-    console.log('caseToBatch', caseToBatch);
 
     const caseEntity = new Case(caseToBatch, { authorizedUser });
 
