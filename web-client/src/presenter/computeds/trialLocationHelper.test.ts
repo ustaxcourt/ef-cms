@@ -25,46 +25,6 @@ describe('trialLocationHelper', () => {
     expect(result.location).toEqual('Baltimore, MD');
   });
 
-  it('should return totalPagesBlocked = 1 when blockedCases is fewer than 100', () => {
-    const mockBlockedCases = Array.from({ length: 5 }).map((_, i) => ({
-      docketNumber: `101-2${i}`,
-    }));
-
-    const { totalPagesBlocked } = runCompute(trialLocationHelper, {
-      state: {
-        blockedCases: mockBlockedCases,
-        trialLocationPage: {
-          blockedCasesPage: 0,
-          eligibleCases: [],
-          eligibleCasesPage: 0,
-          location: '',
-        },
-      },
-    });
-
-    expect(totalPagesBlocked).toEqual(1);
-  });
-
-  it('should return totalPagesBlocked = 2 when there are 101 blocked cases', () => {
-    const mockBlockedCases = Array.from({ length: 101 }).map((_, i) => ({
-      docketNumber: `Case-${i}`,
-    }));
-
-    const { totalPagesBlocked } = runCompute(trialLocationHelper, {
-      state: {
-        blockedCases: mockBlockedCases,
-        trialLocationPage: {
-          blockedCasesPage: 0,
-          eligibleCases: [],
-          eligibleCasesPage: 0,
-          location: '',
-        },
-      },
-    });
-
-    expect(totalPagesBlocked).toEqual(2);
-  });
-
   it('should return formattedEligibleCases with caseTitle and isDocketSuffixHighPriority', () => {
     const mockEligibleCases = [
       {
@@ -161,27 +121,6 @@ describe('trialLocationHelper', () => {
     expect(formattedBlockedCases[0].blockedReason).toEqual(
       'Grouped with blocked case',
     );
-  });
-
-  it('should return totalPagesEligible = 2 when there are more than 100 eligible cases', () => {
-    const mockEligibleCases = Array.from({ length: 101 }).map((_, i) => ({
-      docketNumber: `${i}-25`,
-      caseCaption: `Caption for ${i}-25`,
-    }));
-
-    const { totalPagesEligible } = runCompute(trialLocationHelper, {
-      state: {
-        blockedCases: [],
-        trialLocationPage: {
-          blockedCasesPage: 0,
-          eligibleCases: mockEligibleCases,
-          eligibleCasesPage: 0,
-          location: '',
-        },
-      },
-    });
-
-    expect(totalPagesEligible).toEqual(2);
   });
 
   it('should sort cases based on docket number and keep consolidated groups together', () => {

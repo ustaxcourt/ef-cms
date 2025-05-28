@@ -1,43 +1,42 @@
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
 import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 
 export const TrialLocationBlockedTable = connect(
   {
-    setTrialLocationPaginatorSequence:
-      sequences.setTrialLocationPaginatorSequence,
     trialLocationHelper: state.trialLocationHelper,
     trialLocationPage: state.trialLocationPage,
   },
   function TrialLocationBlockedTable({
-    setTrialLocationPaginatorSequence,
     trialLocationHelper,
     trialLocationPage,
   }) {
     const paginatorTop = useRef(null);
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(trialLocationHelper.formattedBlockedCases, 100);
 
     return (
       <>
-        <div className="grid-row margin-bottom-2 flex-align-center">
-          <div className="grid-col" ref={paginatorTop}>
-            <Paginator
-              currentPageIndex={trialLocationPage.blockedCasesPage}
-              totalPages={trialLocationHelper.totalPagesBlocked}
-              onPageChange={selectedPage => {
-                setTrialLocationPaginatorSequence({
-                  pageNumber: selectedPage,
-                  pageType: 'blockedCasesPage',
-                });
-                focusPaginatorTop(paginatorTop);
-              }}
-            />
-            <div className="grid-col-2"></div>
+        {totalPages > 1 && (
+          <div className="grid-row margin-bottom-2 flex-align-center">
+            <div className="grid-col" ref={paginatorTop}>
+              <Paginator
+                currentPageIndex={activePage}
+                totalPages={totalPages}
+                onPageChange={pageChange => {
+                  setActivePage(pageChange);
+                  focusPaginatorTop(paginatorTop);
+                }}
+              />
+              <div className="grid-col-2"></div>
+            </div>
           </div>
-        </div>
+        )}
         <div className="text-right">
           <span className="text-semibold">Count: </span>
           {trialLocationHelper.formattedBlockedCases.length}
@@ -62,14 +61,14 @@ export const TrialLocationBlockedTable = connect(
                   <th className="width-card">Reason</th>
                 </tr>
               </thead>
-              {trialLocationHelper.blockedCasesForDisplay.map(blockedCase => {
+              {pageRecords.map(blockedCase => {
                 return (
                   <tr key={blockedCase.docketNumber}>
                     <td>
                       <CaseIcons formattedCase={blockedCase} />
                     </td>
                     <td>
-                      <CaseLink formattedCase={blockedCase} />
+                      <CaseLink formattedCase={blockedCase} target="_blank" />
                     </td>
                     <td>{blockedCase.blockedDateEarliest}</td>
                     <td>{blockedCase.caseTitle}</td>
@@ -92,13 +91,10 @@ export const TrialLocationBlockedTable = connect(
         <div className="padding-1" />
 
         <Paginator
-          currentPageIndex={trialLocationPage.blockedCasesPage}
-          totalPages={trialLocationHelper.totalPagesBlocked}
-          onPageChange={selectedPage => {
-            setTrialLocationPaginatorSequence({
-              pageNumber: selectedPage,
-              pageType: 'blockedCasesPage',
-            });
+          currentPageIndex={activePage}
+          totalPages={totalPages}
+          onPageChange={pageChange => {
+            setActivePage(pageChange);
             focusPaginatorTop(paginatorTop);
           }}
         />
