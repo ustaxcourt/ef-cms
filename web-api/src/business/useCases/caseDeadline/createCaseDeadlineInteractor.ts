@@ -53,20 +53,6 @@ export const createCaseDeadline = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-// export const createCaseDeadlineInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { caseDeadline }: { caseDeadline: CaseDeadline },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${caseDeadline.docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       createCaseDeadline(applicationContext, { caseDeadline }, authorizedUser),
-//   });
-// };
-
 export const createCaseDeadlineInteractor = withLocking(
   createCaseDeadline,
   (_applicationContext, { caseDeadline }) => ({

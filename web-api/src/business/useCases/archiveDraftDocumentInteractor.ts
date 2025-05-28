@@ -54,27 +54,6 @@ export const archiveDraftDocument = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const archiveDraftDocumentInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketEntryId,
-//     docketNumber,
-//   }: { docketEntryId: string; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       archiveDraftDocument(
-//         applicationContext,
-//         { docketEntryId, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const archiveDraftDocumentInteractor = withLocking(
   archiveDraftDocument,
   (_applicationContext, { docketNumber }) => ({

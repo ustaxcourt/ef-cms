@@ -63,24 +63,6 @@ export const prioritizeCase = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const prioritizeCaseInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { docketNumber, reason }: { docketNumber: string; reason: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       prioritizeCase(
-//         applicationContext,
-//         { docketNumber, reason },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const prioritizeCaseInteractor = withLocking(
   prioritizeCase,
   (_applicationContext, { docketNumber }) => ({

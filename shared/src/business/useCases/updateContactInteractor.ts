@@ -246,24 +246,6 @@ export const updateContact = async (
   return caseEntity.toRawObject();
 };
 
-// export const updateContactInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { contactInfo, docketNumber }: { contactInfo: any; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       updateContact(
-//         applicationContext,
-//         { contactInfo, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const updateContactInteractor = withLocking(
   updateContact,
   (_applicationContext, { docketNumber }) => ({

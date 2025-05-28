@@ -196,34 +196,6 @@ export const fileCourtIssuedDocketEntry = async (
   return subjectCase.toRawObject();
 };
 
-// export const fileCourtIssuedDocketEntryInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketNumbers,
-//     documentMeta,
-//     subjectDocketNumber,
-//   }: {
-//     docketNumbers: string[];
-//     documentMeta: any;
-//     subjectDocketNumber: string;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockIds = [...new Set([subjectDocketNumber, ...docketNumbers])].map(
-//     docketNumber => hashLockId(`case|${docketNumber}`),
-//   );
-
-//   return multiMutexLockWrapper({
-//     lockIds,
-//     callback: () =>
-//       fileCourtIssuedDocketEntry(
-//         applicationContext,
-//         { docketNumbers, documentMeta, subjectDocketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const fileCourtIssuedDocketEntryInteractor = withLocking(
   fileCourtIssuedDocketEntry,
   (

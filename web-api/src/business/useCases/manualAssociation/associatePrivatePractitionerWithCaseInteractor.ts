@@ -53,34 +53,6 @@ export const associatePrivatePractitionerWithCase = async (
   });
 };
 
-// export const associatePrivatePractitionerWithCaseInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketNumber,
-//     representing,
-//     serviceIndicator,
-//     userId,
-//   }: {
-//     docketNumber: string;
-//     representing: string[];
-//     serviceIndicator: string;
-//     userId: string;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       associatePrivatePractitionerWithCase(
-//         applicationContext,
-//         { docketNumber, representing, serviceIndicator, userId },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const associatePrivatePractitionerWithCaseInteractor = withLocking(
   associatePrivatePractitionerWithCase,
   (_applicationContext: ServerApplicationContext, { docketNumber }) => ({

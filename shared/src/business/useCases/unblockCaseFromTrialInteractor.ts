@@ -55,24 +55,6 @@ export const unblockCaseFromTrial = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const unblockCaseFromTrialInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { docketNumber }: { docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       unblockCaseFromTrial(
-//         applicationContext,
-//         { docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const unblockCaseFromTrialInteractor = withLocking(
   unblockCaseFromTrial,
   (_applicationContext, { docketNumber }) => ({

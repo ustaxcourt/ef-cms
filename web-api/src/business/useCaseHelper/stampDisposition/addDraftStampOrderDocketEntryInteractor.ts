@@ -131,48 +131,6 @@ export const addDraftStampOrderDocketEntry = async (
   });
 };
 
-// export const addDraftStampOrderDocketEntryInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketNumber,
-//     formattedDraftDocumentTitle,
-//     originalDocketEntryId,
-//     parentMessageId,
-//     stampData,
-//     stampedDocketEntryId,
-//   }: {
-//     docketNumber: string;
-//     formattedDraftDocumentTitle: string;
-//     originalDocketEntryId: string;
-//     parentMessageId?: string;
-//     stampData: {
-//       disposition: string;
-//       nameForSigning: string;
-//     };
-//     stampedDocketEntryId: string;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       addDraftStampOrderDocketEntry(
-//         applicationContext,
-//         {
-//           docketNumber,
-//           formattedDraftDocumentTitle,
-//           originalDocketEntryId,
-//           parentMessageId,
-//           stampData,
-//           stampedDocketEntryId,
-//         },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const addDraftStampOrderDocketEntryInteractor = withLocking(
   addDraftStampOrderDocketEntry,
   (_applicationContext, { docketNumber }) => ({

@@ -141,7 +141,8 @@ export const asyncHandleLockError = async (
  * @param {error} onLockError the error object to throw if a lock is already in use
  * @returns {object} the item that was retrieved
  */
-export function withLocking<InteractorInput, InteractorOutput>(
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function withLocking<InteractorInput, InteractorOutput>(
   interactor: (
     applicationContext: any,
     options: InteractorInput,

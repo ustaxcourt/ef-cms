@@ -57,27 +57,6 @@ export const archiveCorrespondenceDocument = async (
   });
 };
 
-// export const archiveCorrespondenceDocumentInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     correspondenceId,
-//     docketNumber,
-//   }: { correspondenceId: string; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       archiveCorrespondenceDocument(
-//         applicationContext,
-//         { correspondenceId, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const archiveCorrespondenceDocumentInteractor = withLocking(
   archiveCorrespondenceDocument,
   (_applicationContext, { docketNumber }) => ({

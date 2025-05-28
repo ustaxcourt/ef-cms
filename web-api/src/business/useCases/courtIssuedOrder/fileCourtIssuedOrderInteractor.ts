@@ -150,27 +150,6 @@ export const fileCourtIssuedOrder = async (
   return caseEntity.toRawObject();
 };
 
-// export const fileCourtIssuedOrderInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     documentMetadata,
-//     primaryDocumentFileId,
-//   }: { documentMetadata: any; primaryDocumentFileId: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${documentMetadata.docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       fileCourtIssuedOrder(
-//         applicationContext,
-//         { documentMetadata, primaryDocumentFileId },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const fileCourtIssuedOrderInteractor = withLocking(
   fileCourtIssuedOrder,
   (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({

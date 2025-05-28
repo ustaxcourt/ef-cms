@@ -54,28 +54,6 @@ export const addPetitionerToCase = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const addPetitionerToCaseInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     caseCaption,
-//     contact,
-//     docketNumber,
-//   }: { caseCaption: string; contact: any; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       addPetitionerToCase(
-//         applicationContext,
-//         { caseCaption, contact, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const addPetitionerToCaseInteractor = withLocking(
   addPetitionerToCase,
   (_applicationContext, { docketNumber }) => ({

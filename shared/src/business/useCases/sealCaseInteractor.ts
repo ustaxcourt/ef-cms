@@ -52,20 +52,6 @@ export const sealCase = async (
     .toRawObject();
 };
 
-// export const sealCaseInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { docketNumber }: { docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       sealCase(applicationContext, { docketNumber }, authorizedUser),
-//   });
-// };
-
 export const sealCaseInteractor = withLocking(
   sealCase,
   (_applicationContext, { docketNumber }) => ({

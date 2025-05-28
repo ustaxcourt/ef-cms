@@ -57,27 +57,6 @@ export const removeCasePendingItem = async (
   return updatedCaseEntity.toRawObject();
 };
 
-// export const removeCasePendingItemInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketEntryId,
-//     docketNumber,
-//   }: { docketEntryId: string; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       removeCasePendingItem(
-//         applicationContext,
-//         { docketEntryId, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const removeCasePendingItemInteractor = withLocking(
   removeCasePendingItem,
   (_applicationContext, { docketNumber }) => ({

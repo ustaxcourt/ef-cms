@@ -149,37 +149,6 @@ export const updateCaseContext = async (
   }).toRawObject();
 };
 
-// export const updateCaseContextInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     caseCaption,
-//     caseStatus,
-//     docketNumber,
-//     judgeData,
-//   }: {
-//     judgeData?: {
-//       associatedJudge: string;
-//       associatedJudgeId: string;
-//     };
-//     caseCaption?: string;
-//     caseStatus?: string;
-//     docketNumber: string;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       updateCaseContext(
-//         applicationContext,
-//         { caseCaption, caseStatus, docketNumber, judgeData },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const updateCaseContextInteractor = withLocking(
   updateCaseContext,
   (_applicationContext, { docketNumber }) => ({

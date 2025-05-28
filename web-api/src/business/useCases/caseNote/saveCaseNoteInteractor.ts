@@ -52,24 +52,6 @@ export const saveCaseNote = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-// export const saveCaseNoteInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       saveCaseNote(
-//         applicationContext,
-//         { caseNote, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const saveCaseNoteInteractor = withLocking(
   saveCaseNote,
   (_applicationContext, { docketNumber }) => ({

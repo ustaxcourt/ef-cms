@@ -99,29 +99,6 @@ export const addConsolidatedCase = async (
   await settlePromises(updateCasePromises);
 };
 
-// export const addConsolidatedCaseInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketNumber,
-//     docketNumberToConsolidateWith,
-//   }: { docketNumber: string; docketNumberToConsolidateWith: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockIds = [docketNumber, docketNumberToConsolidateWith].map(
-//     docketNumber => hashLockId(`case|${docketNumber}`),
-//   );
-
-//   return multiMutexLockWrapper({
-//     lockIds,
-//     callback: () =>
-//       addConsolidatedCase(
-//         applicationContext,
-//         { docketNumber, docketNumberToConsolidateWith },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const determineEntitiesToLock = (
   _applicationContext,
   { docketNumber, docketNumberToConsolidateWith },

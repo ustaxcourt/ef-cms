@@ -44,20 +44,6 @@ export const deleteCaseNote = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-// export const deleteCaseNoteInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { docketNumber }: { docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       deleteCaseNote(applicationContext, { docketNumber }, authorizedUser),
-//   });
-// };
-
 export const deleteCaseNoteInteractor = withLocking(
   deleteCaseNote,
   (_applicationContext, { docketNumber }) => ({

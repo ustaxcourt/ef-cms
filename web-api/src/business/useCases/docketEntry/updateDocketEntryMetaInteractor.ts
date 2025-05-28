@@ -211,27 +211,6 @@ export const shouldGenerateCoversheetForDocketEntry = ({
   );
 };
 
-// export const updateDocketEntryMetaInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketEntryMeta,
-//     docketNumber,
-//   }: { docketEntryMeta: any; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       updateDocketEntryMeta(
-//         applicationContext,
-//         { docketEntryMeta, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const updateDocketEntryMetaInteractor = withLocking(
   updateDocketEntryMeta,
   (_applicationContext: ServerApplicationContext, { docketNumber }) => ({

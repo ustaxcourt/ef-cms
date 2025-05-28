@@ -89,28 +89,6 @@ export const removePetitionerAndUpdateCaption = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const removePetitionerAndUpdateCaptionInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     caseCaption,
-//     contactId,
-//     docketNumber,
-//   }: { caseCaption: string; contactId: string; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       removePetitionerAndUpdateCaption(
-//         applicationContext,
-//         { caseCaption, contactId, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const removePetitionerAndUpdateCaptionInteractor = withLocking(
   removePetitionerAndUpdateCaption,
   (_applicationContext, { docketNumber }) => ({

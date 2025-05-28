@@ -64,24 +64,6 @@ const submitCaseAssociationRequest = async (
   }
 };
 
-// export const submitCaseAssociationRequestInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { docketNumber, filers = [] }: { docketNumber: string; filers: string[] },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       submitCaseAssociationRequest(
-//         applicationContext,
-//         { docketNumber, filers },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const submitCaseAssociationRequestInteractor = withLocking(
   submitCaseAssociationRequest,
   (_applicationContext, { docketNumber }) => ({

@@ -57,27 +57,6 @@ export const deleteCaseDeadline = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-// export const deleteCaseDeadlineInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     caseDeadlineId,
-//     docketNumber,
-//   }: { caseDeadlineId: string; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       deleteCaseDeadline(
-//         applicationContext,
-//         { caseDeadlineId, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const deleteCaseDeadlineInteractor = withLocking(
   deleteCaseDeadline,
   (_applicationContext, { docketNumber }) => ({

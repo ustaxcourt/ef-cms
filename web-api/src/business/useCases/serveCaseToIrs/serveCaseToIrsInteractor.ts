@@ -667,27 +667,6 @@ export const serveCaseToIrs = async (
   }
 };
 
-// export const serveCaseToIrsInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     clientConnectionId,
-//     docketNumber,
-//   }: { clientConnectionId: string; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       serveCaseToIrs(
-//         applicationContext,
-//         { clientConnectionId, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const serveCaseToIrsInteractor = withLocking(
   serveCaseToIrs,
   (_applicationContext: ServerApplicationContext, { docketNumber }) => ({

@@ -95,28 +95,6 @@ const updateCounselOnCase = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const updateCounselOnCaseInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketNumber,
-//     userData,
-//     userId,
-//   }: { docketNumber: string; userData: any; userId: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       updateCounselOnCase(
-//         applicationContext,
-//         { docketNumber, userData, userId },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const updateCounselOnCaseInteractor = withLocking(
   updateCounselOnCase,
   (_applicationContext, { docketNumber }) => ({

@@ -174,27 +174,6 @@ export const saveCaseDetailInternalEdit = async (
   return new Case(updatedCase, { authorizedUser }).toRawObject();
 };
 
-// export const saveCaseDetailInternalEditInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     caseToUpdate,
-//     docketNumber,
-//   }: { caseToUpdate: RawCase; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       saveCaseDetailInternalEdit(
-//         applicationContext,
-//         { caseToUpdate, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const saveCaseDetailInternalEditInteractor = withLocking(
   saveCaseDetailInternalEdit,
   (_applicationContext, { docketNumber }) => ({

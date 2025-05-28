@@ -324,30 +324,6 @@ export const updatePetitionerInformation = async (
   };
 };
 
-// export const updatePetitionerInformationInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketNumber,
-//     updatedPetitionerData,
-//   }: {
-//     docketNumber: string;
-//     updatedPetitionerData: any;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       updatePetitionerInformation(
-//         applicationContext,
-//         { docketNumber, updatedPetitionerData },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const updatePetitionerInformationInteractor = withLocking(
   updatePetitionerInformation,
   (_applicationContext, { docketNumber }) => ({

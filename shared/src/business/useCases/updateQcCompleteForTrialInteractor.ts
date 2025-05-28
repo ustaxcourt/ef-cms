@@ -59,32 +59,6 @@ export const updateQcCompleteForTrial = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const updateQcCompleteForTrialInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketNumber,
-//     qcCompleteForTrial,
-//     trialSessionId,
-//   }: {
-//     docketNumber: string;
-//     qcCompleteForTrial: boolean;
-//     trialSessionId: string;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       updateQcCompleteForTrial(
-//         applicationContext,
-//         { docketNumber, qcCompleteForTrial, trialSessionId },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const updateQcCompleteForTrialInteractor = withLocking(
   updateQcCompleteForTrial,
   (_applicationContext, { docketNumber }) => ({

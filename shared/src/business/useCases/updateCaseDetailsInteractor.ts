@@ -142,24 +142,6 @@ export const updateCaseDetails = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const updateCaseDetailsInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       updateCaseDetails(
-//         applicationContext,
-//         { caseDetails, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const updateCaseDetailsInteractor = withLocking(
   updateCaseDetails,
   (_applicationContext, { docketNumber }) => ({

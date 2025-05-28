@@ -108,45 +108,6 @@ export const removeCaseFromTrial = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const removeCaseFromTrialInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     associatedJudge,
-//     associatedJudgeId,
-//     caseStatus,
-//     disposition,
-//     docketNumber,
-//     trialSessionId,
-//   }: {
-//     associatedJudge: string;
-//     associatedJudgeId: string;
-//     caseStatus: CaseStatus;
-//     disposition: string;
-//     docketNumber: string;
-//     trialSessionId: string;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       removeCaseFromTrial(
-//         applicationContext,
-//         {
-//           associatedJudge,
-//           associatedJudgeId,
-//           caseStatus,
-//           disposition,
-//           docketNumber,
-//           trialSessionId,
-//         },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const removeCaseFromTrialInteractor = withLocking(
   removeCaseFromTrial,
   (

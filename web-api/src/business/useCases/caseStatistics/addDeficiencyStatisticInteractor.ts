@@ -71,59 +71,6 @@ export const addDeficiencyStatistic = async (
   return validRawCase;
 };
 
-// export const addDeficiencyStatisticInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     determinationDeficiencyAmount,
-//     determinationTotalPenalties,
-//     docketNumber,
-//     irsDeficiencyAmount,
-//     irsTotalPenalties,
-//     lastDateOfPeriod,
-//     penalties,
-//     year,
-//     yearOrPeriod,
-//   }: {
-//     determinationDeficiencyAmount: number;
-//     determinationTotalPenalties: number;
-//     docketNumber: string;
-//     irsDeficiencyAmount: number;
-//     irsTotalPenalties: number;
-//     lastDateOfPeriod: string;
-//     penalties: {
-//       penaltyId?: string;
-//       name: string;
-//       penaltyAmount: number;
-//       statisticId?: string;
-//     }[];
-//     year: string;
-//     yearOrPeriod: string;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       addDeficiencyStatistic(
-//         applicationContext,
-//         {
-//           determinationDeficiencyAmount,
-//           determinationTotalPenalties,
-//           docketNumber,
-//           irsDeficiencyAmount,
-//           irsTotalPenalties,
-//           lastDateOfPeriod,
-//           penalties,
-//           year,
-//           yearOrPeriod,
-//         },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const addDeficiencyStatisticInteractor = withLocking(
   addDeficiencyStatistic,
   (_applicationContext, { docketNumber }) => ({

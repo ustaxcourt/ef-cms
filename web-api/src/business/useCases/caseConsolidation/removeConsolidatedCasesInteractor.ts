@@ -114,29 +114,6 @@ const removeConsolidatedCases = async (
   await settlePromises(updateCasePromises);
 };
 
-// export const removeConsolidatedCasesInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketNumber,
-//     docketNumbersToRemove,
-//   }: { docketNumber: string; docketNumbersToRemove: string[] },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockIds = [docketNumber, ...docketNumbersToRemove].map(docketNum =>
-//     hashLockId(`case|${docketNum}`),
-//   );
-
-//   return multiMutexLockWrapper({
-//     lockIds,
-//     callback: () =>
-//       removeConsolidatedCases(
-//         applicationContext,
-//         { docketNumber, docketNumbersToRemove },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 const determineEntitiesToLock = (
   _applicationContext,
   { docketNumber, docketNumbersToRemove = [] },

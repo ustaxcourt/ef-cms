@@ -54,7 +54,6 @@ export const deleteCounselFromCase = async (
     userId,
   });
 
-  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
     authorizedUser,
@@ -73,24 +72,6 @@ export const setupServiceIndicatorForUnrepresentedPetitioners = (
 
   return caseEntity;
 };
-
-// export const deleteCounselFromCaseInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { docketNumber, userId }: { docketNumber: string; userId: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       deleteCounselFromCase(
-//         applicationContext,
-//         { docketNumber, userId },
-//         authorizedUser,
-//       ),
-//   });
-// };
 
 export const deleteCounselFromCaseInteractor = withLocking(
   deleteCounselFromCase,

@@ -58,27 +58,6 @@ export const removePdfFromDocketEntry = async (
   }
 };
 
-// export const removePdfFromDocketEntryInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketEntryId,
-//     docketNumber,
-//   }: { docketEntryId: string; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       removePdfFromDocketEntry(
-//         applicationContext,
-//         { docketEntryId, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const removePdfFromDocketEntryInteractor = withLocking(
   removePdfFromDocketEntry,
   (_applicationContext, { docketNumber }) => ({

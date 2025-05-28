@@ -53,28 +53,6 @@ export const updateOtherStatistics = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const updateOtherStatisticsInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     damages,
-//     docketNumber,
-//     litigationCosts,
-//   }: { damages: number; docketNumber: string; litigationCosts: number },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       updateOtherStatistics(
-//         applicationContext,
-//         { damages, docketNumber, litigationCosts },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const updateOtherStatisticsInteractor = withLocking(
   updateOtherStatistics,
   (_applicationContext, { docketNumber }) => ({

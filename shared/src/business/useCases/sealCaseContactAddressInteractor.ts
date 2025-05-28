@@ -62,24 +62,6 @@ export const sealCaseContactAddress = async (
   return new Case(updatedCase, { authorizedUser }).toRawObject();
 };
 
-// export const sealCaseContactAddressInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { contactId, docketNumber }: { contactId: string; docketNumber: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       sealCaseContactAddress(
-//         applicationContext,
-//         { contactId, docketNumber },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const sealCaseContactAddressInteractor = withLocking(
   sealCaseContactAddress,
   (_applicationContext, { docketNumber }) => ({

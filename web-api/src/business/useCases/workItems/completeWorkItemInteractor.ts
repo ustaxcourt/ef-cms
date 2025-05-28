@@ -57,36 +57,6 @@ export const completeWorkItem = async (
   return completedWorkItem;
 };
 
-// export const completeWorkItemInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     completedMessage,
-//     workItemId,
-//   }: {
-//     completedMessage: string;
-//     workItemId: string;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const originalWorkItem = await getWorkItemById({ workItemId });
-
-//   if (!originalWorkItem) {
-//     throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
-//   }
-
-//   const lockId = hashLockId(`case|${originalWorkItem.docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       completeWorkItem(
-//         applicationContext,
-//         { completedMessage, workItemId },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const determineEntitiesToLock = async ({
   workItemId,
 }: {

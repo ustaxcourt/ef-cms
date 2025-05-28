@@ -129,27 +129,6 @@ export const updateCourtIssuedOrder = async (
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
-// export const updateCourtIssuedOrderInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     docketEntryIdToEdit,
-//     documentMetadata,
-//   }: { docketEntryIdToEdit: string; documentMetadata: any },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${documentMetadata.docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       updateCourtIssuedOrder(
-//         applicationContext,
-//         { docketEntryIdToEdit, documentMetadata },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const updateCourtIssuedOrderInteractor = withLocking(
   updateCourtIssuedOrder,
   (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({

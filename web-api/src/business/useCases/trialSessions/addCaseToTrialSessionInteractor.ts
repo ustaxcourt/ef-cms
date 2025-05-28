@@ -104,32 +104,6 @@ export const addCaseToTrialSession = async (
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
 
-// export const addCaseToTrialSessionInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   {
-//     calendarNotes,
-//     docketNumber,
-//     trialSessionId,
-//   }: {
-//     calendarNotes: string;
-//     docketNumber: string;
-//     trialSessionId: string;
-//   },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       addCaseToTrialSession(
-//         applicationContext,
-//         { calendarNotes, docketNumber, trialSessionId },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const addCaseToTrialSessionInteractor = withLocking(
   addCaseToTrialSession,
   (_applicationContext: ServerApplicationContext, { docketNumber }) => ({

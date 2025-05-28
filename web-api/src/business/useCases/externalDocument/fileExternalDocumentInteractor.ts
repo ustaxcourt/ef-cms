@@ -226,24 +226,6 @@ export const fileExternalDocument = async (
   );
 };
 
-// export const fileExternalDocumentInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { documentMetadata }: { documentMetadata: any },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${documentMetadata.docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       fileExternalDocument(
-//         applicationContext,
-//         { documentMetadata },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const fileExternalDocumentInteractor = withLocking(
   fileExternalDocument,
   (_applicationContext: ServerApplicationContext, { documentMetadata }) => ({
