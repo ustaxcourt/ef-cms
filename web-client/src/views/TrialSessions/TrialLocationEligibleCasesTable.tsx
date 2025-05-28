@@ -3,41 +3,40 @@ import { CaseIcons } from '@web-client/ustc-ui/Icon/CaseIcons';
 import { CaseLink } from '@web-client/ustc-ui/CaseLink/CaseLink';
 import { Paginator } from '@web-client/ustc-ui/Pagination/Paginator';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
-import { sequences, state } from '@web-client/presenter/app.cerebral';
+import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef } from 'react';
+import { useClientSidePaginator } from '@web-client/utilities/useClientSidePaginator';
 
 export const TrialLocationEligibleCasesTable = connect(
   {
-    setTrialLocationPaginatorSequence:
-      sequences.setTrialLocationPaginatorSequence,
     trialLocationHelper: state.trialLocationHelper,
     trialLocationPage: state.trialLocationPage,
   },
   function TrialLocationEligibleCasesTable({
-    setTrialLocationPaginatorSequence,
     trialLocationHelper,
     trialLocationPage,
   }) {
     const paginatorTop = useRef(null);
+    const { activePage, pageRecords, setActivePage, totalPages } =
+      useClientSidePaginator(trialLocationHelper.formattedEligibleCases, 100);
 
     return (
       <>
-        <div className="grid-row margin-bottom-2 flex-align-center">
-          <div className="grid-col" ref={paginatorTop}>
-            <Paginator
-              currentPageIndex={trialLocationPage.eligibleCasesPage}
-              totalPages={trialLocationHelper.totalPagesEligible}
-              onPageChange={selectedPage => {
-                setTrialLocationPaginatorSequence({
-                  pageNumber: selectedPage,
-                  pageType: 'eligibleCasesPage',
-                });
-                focusPaginatorTop(paginatorTop);
-              }}
-            />
-            <div className="grid-col-2"></div>
+        {totalPages > 1 && (
+          <div className="grid-row margin-bottom-2 flex-align-center">
+            <div className="grid-col" ref={paginatorTop}>
+              <Paginator
+                currentPageIndex={activePage}
+                totalPages={totalPages}
+                onPageChange={pageChange => {
+                  setActivePage(pageChange);
+                  focusPaginatorTop(paginatorTop);
+                }}
+              />
+              <div className="grid-col-2"></div>
+            </div>
           </div>
-        </div>
+        )}
         <div className="text-right">
           <span className="text-semibold">Count: </span>
           {trialLocationHelper.formattedEligibleCases.length}
@@ -65,7 +64,7 @@ export const TrialLocationEligibleCasesTable = connect(
                   <th className="width-card">Case Type</th>
                 </tr>
               </thead>
-              {trialLocationHelper.eligibleCasesForDisplay.map(eligibleCase => {
+              {pageRecords.map(eligibleCase => {
                 return (
                   <tbody key={eligibleCase.docketNumber}>
                     <tr>
@@ -100,19 +99,15 @@ export const TrialLocationEligibleCasesTable = connect(
             </table>
           </div>
         </div>
-        {trialLocationHelper.eligibleCasesForDisplay.length === 0 && (
+        {trialLocationHelper.formattedEligibleCases.length === 0 && (
           <p>There are no eligible cases.</p>
         )}
         <div className="padding-1" />
-
         <Paginator
-          currentPageIndex={trialLocationPage.eligibleCasesPage}
-          totalPages={trialLocationHelper.totalPagesEligible}
-          onPageChange={selectedPage => {
-            setTrialLocationPaginatorSequence({
-              pageNumber: selectedPage,
-              pageType: 'eligibleCasesPage',
-            });
+          currentPageIndex={activePage}
+          totalPages={totalPages}
+          onPageChange={pageChange => {
+            setActivePage(pageChange);
             focusPaginatorTop(paginatorTop);
           }}
         />
