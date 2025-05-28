@@ -22,7 +22,7 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { Case } from '@shared/business/entities/cases/Case';
 import {
   getCasesByDocketNumbers as getCasesByDocketNumbersMock,
-  SelectableCaseFields,
+  OmittableCaseFields,
 } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('consolidated cases', () => {
@@ -31,7 +31,7 @@ describe('consolidated cases', () => {
     getCasesByDocketNumbersMock as jest.MockedFunction<
       (args: {
         docketNumbers: string[];
-        includeFields?: SelectableCaseFields[];
+        excludeFields?: OmittableCaseFields[];
       }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
     >;
   const fileAndServeDocumentOnOneCase = jest.mocked(

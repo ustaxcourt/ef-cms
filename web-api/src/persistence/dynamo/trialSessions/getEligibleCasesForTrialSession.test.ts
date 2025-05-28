@@ -3,7 +3,7 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   getCasesByDocketNumbers as getCasesByDocketNumbersMock,
-  SelectableCaseFields,
+  OmittableCaseFields,
 } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getEligibleCasesForTrialSession } from './getEligibleCasesForTrialSession';
 import { query } from '../../dynamodbClientService';
@@ -22,7 +22,7 @@ describe('getEligibleCasesForTrialSession', () => {
     getCasesByDocketNumbersMock as jest.MockedFunction<
       (args: {
         docketNumbers: string[];
-        excludeFields?: SelectableCaseFields[];
+        excludeFields?: OmittableCaseFields[];
       }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
     >;
 

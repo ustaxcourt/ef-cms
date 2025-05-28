@@ -14,12 +14,9 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
-const getCaseMetadataByDocketNumber =
-  getCaseMetadataByDocketNumberMock as jest.Mock;
 const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
@@ -91,7 +88,6 @@ describe('addPaperFilingInteractor', () => {
     updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
-    getCaseMetadataByDocketNumber.mockResolvedValue(mockCase);
     getConsolidatedCases.mockResolvedValue([mockCase]);
   });
 
