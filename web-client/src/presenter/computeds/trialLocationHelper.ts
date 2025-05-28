@@ -20,19 +20,11 @@ export const trialLocationHelper = (
   get: Get,
 ): {
   location: string;
-  eligibleCasesForDisplay: (EligibleCase & { caseTitle: string })[];
   formattedBlockedCases: BlockedFormattedCase[];
   formattedEligibleCases: (EligibleCase & { caseTitle: string })[];
-  totalPagesEligible: number;
-  blockedCasesForDisplay: BlockedFormattedCase[];
-  totalPagesBlocked: number;
   isExportDisabled: boolean;
 } => {
-  const pageSize = 100;
-
-  const { blockedCasesPage, eligibleCases, eligibleCasesPage, location } = get(
-    state.trialLocationPage,
-  );
+  const { eligibleCases, location } = get(state.trialLocationPage);
 
   const blockedCases = get(state.blockedCases);
   const groupedCases = groupCases(blockedCases);
@@ -93,16 +85,6 @@ export const trialLocationHelper = (
     })
     .sort(compareTrialSessionEligibleCases(formattedEligibleCases));
 
-  const eligibleCasesForDisplay = sortedEligibleCases.slice(
-    eligibleCasesPage * pageSize,
-    eligibleCasesPage * pageSize + pageSize,
-  );
-
-  const blockedCasesForDisplay = formattedBlockedCases.slice(
-    blockedCasesPage * pageSize,
-    blockedCasesPage * pageSize + pageSize,
-  );
-
   const currentTab = get(state.trialLocationPage.currentTab);
 
   const isExportDisabled =
@@ -110,13 +92,9 @@ export const trialLocationHelper = (
     (currentTab === 'blockedCases' && formattedBlockedCases.length === 0);
 
   return {
-    blockedCasesForDisplay,
-    eligibleCasesForDisplay,
     formattedBlockedCases,
     formattedEligibleCases: sortedEligibleCases,
     location,
     isExportDisabled,
-    totalPagesBlocked: Math.ceil(formattedBlockedCases.length / pageSize),
-    totalPagesEligible: Math.ceil(sortedEligibleCases.length / pageSize),
   };
 };

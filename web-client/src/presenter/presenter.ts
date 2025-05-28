@@ -415,7 +415,6 @@ import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddress
 import { setSelectedBatchIndexSequence } from './sequences/setSelectedBatchIndexSequence';
 import { setSelectedDocumentsForDownloadSequence } from './sequences/setSelectedDocumentsForDownloadSequence';
 import { setSelectedMessagesSequence } from './sequences/setSelectedMessagesSequence';
-import { setTrialLocationPaginatorSequence } from '@web-client/presenter/sequences/setTrialLocationPaginatorSequence';
 import { setTrialSessionCalendarErrorSequence } from '@web-client/presenter/sequences/setTrialSessionCalendarErrorSequence';
 import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCalendarSequence';
 import { setTrialSessionsFiltersSequence } from '@web-client/presenter/sequences/setTrialSessionsFiltersSequence';
@@ -1287,7 +1286,6 @@ export const presenterSequences = {
     setSelectedBatchIndexSequence as unknown as Function,
   setSelectedDocumentsForDownloadSequence,
   setSelectedMessagesSequence,
-  setTrialLocationPaginatorSequence,
   setTrialSessionCalendarErrorSequence,
   setTrialSessionCalendarSequence,
   setTrialSessionsFiltersSequence,
