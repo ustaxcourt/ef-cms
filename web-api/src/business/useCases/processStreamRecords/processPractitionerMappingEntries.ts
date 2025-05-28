@@ -5,9 +5,7 @@ import type {
   IDynamoDBRecord,
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { getCaseDataFromDynamo } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
@@ -31,25 +29,9 @@ export const processPractitionerMappingEntries = async ({
         'case|'.length,
       );
 
-      // After case records have been moved into postgres, we need to get the case data associated with the practitioner from postgres.
-      // However, when we try to fetch case data here during the initial blue-green migration re-indexing step (to get case records
-      // into postgres in the first place), the case data might not yet have been moved over to postgres. Therefore, we fallback to the case data from Dynamo.
-      // TODO after 10502: Only rely on postgres by in-lining getCaseDataFromPostgres here.
-      let caseRecord: any;
-      try {
-        caseRecord = await getCaseDataFromPostgres({
-          docketNumber,
-        });
-      } catch (e) {
-        getLogger().warn(
-          `Failed to find case ${practitionerMappingData.pk.S} in postgres in processPractitionerMappingEntries: ${e}.
-          If this occurred in a test or as part of re-indexing during a blue-green migration, it is safe to ignore.`,
-        );
-        caseRecord = await getCaseDataFromDynamo({
-          applicationContext,
-          docketNumber,
-        });
-      }
+      const caseRecord = await getCaseDataFromPostgres({
+        docketNumber,
+      });
 
       caseRecords.push({
         dynamodb: {

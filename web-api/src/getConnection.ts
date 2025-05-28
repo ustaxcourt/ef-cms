@@ -49,7 +49,7 @@ async function generateRDSAuthToken() {
   const signer = new Signer({
     hostname: environment.rds.pool.host,
     port: 5432,
-    region: 'us-east-1', // 10502 TODO: After west is deleted use environment.region
+    region: environment.region,
     username: environment.rds.pool.user,
   });
 

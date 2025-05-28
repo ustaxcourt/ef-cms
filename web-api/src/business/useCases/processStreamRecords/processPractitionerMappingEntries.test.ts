@@ -1,14 +1,9 @@
-jest.mock(
-  '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo',
-);
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { processPractitionerMappingEntries } from '@web-api/business/useCases/processStreamRecords/processPractitionerMappingEntries';
-import { getCaseDataFromDynamo as getCaseDataFromDynamoMock } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-const getCaseDataFromDynamo = jest.mocked(getCaseDataFromDynamoMock);
 
 describe('processPractitionerMappingEntries', () => {
   const mockCaseRecord = {
@@ -70,7 +65,7 @@ describe('processPractitionerMappingEntries', () => {
         '|',
       )[1];
 
-    getCasesByDocketNumbers.mockResolvedValue(mockCaseRecord as any);
+    getCasesByDocketNumbers.mockResolvedValue([mockCaseRecord] as any[]);
 
     await processPractitionerMappingEntries({
       applicationContext,
@@ -89,7 +84,7 @@ describe('processPractitionerMappingEntries', () => {
   });
 
   it('should log an error and throw an exception when bulk index returns failed records', async () => {
-    getCasesByDocketNumbers.mockResolvedValue(mockCaseRecord as any);
+    getCasesByDocketNumbers.mockResolvedValue([mockCaseRecord] as any[]);
 
     applicationContext
       .getPersistenceGateway()
@@ -105,19 +100,5 @@ describe('processPractitionerMappingEntries', () => {
     ).rejects.toThrow('failed to index practitioner mapping records');
 
     expect(applicationContext.logger.error).toHaveBeenCalled();
-  });
-
-  it('should fallback to dynamo when case is not found in postgres during re-indexing', async () => {
-    getCasesByDocketNumbers.mockRejectedValue({});
-    getCaseDataFromDynamo.mockResolvedValue({});
-
-    await processPractitionerMappingEntries({
-      applicationContext,
-      practitionerMappingRecords: mockPractitionerMappingEntries,
-    });
-
-    expect(getCaseDataFromDynamo).toHaveBeenCalledTimes(
-      mockPractitionerMappingEntries.length,
-    );
   });
 });
