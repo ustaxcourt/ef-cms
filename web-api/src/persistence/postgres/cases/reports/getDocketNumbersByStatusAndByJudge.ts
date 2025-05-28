@@ -38,7 +38,7 @@ export const getDocketNumbersByStatusAndByJudge = async ({
       ])
       .where('c.status', 'in', params.statuses);
 
-    if (params.judges && params.judges.length) {
+    if (params.judges?.length) {
       query = query.where('c.associatedJudge', 'in', params.judges);
     }
 

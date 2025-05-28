@@ -58,7 +58,7 @@ export const caseTableDefinition = {
   procedureType: DEFAULT as string,
   qcCompleteForTrial: DEFAULT as
     | ColumnType<{ trialSessionId: string }, string, string>
-    | undefined,
+    | null,
   receivedAt: DEFAULT as Date,
   sealedDate: DEFAULT as Date | null,
   sortableDocketNumber: 0 as number,

@@ -61,6 +61,7 @@ export const getAllPendingMotionDocketEntriesForJudge = async ({
           r.filingDate.toISOString(),
         ),
         filingDate: r.filingDate.toISOString(),
+        judge: r.associatedJudge ?? undefined,
         pending: r.pending ?? false,
       };
     }),
