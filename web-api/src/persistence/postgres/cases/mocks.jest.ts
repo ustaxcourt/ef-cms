@@ -20,11 +20,6 @@ jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers', () =>
   mockFactory('getCasesByDocketNumbers'),
 );
 
-jest.mock(
-  '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber',
-  () => mockFactory('getCaseMetadataByDocketNumber'),
-);
-
 jest.mock('@web-api/persistence/postgres/cases/getConsolidatedCases', () =>
   mockFactory('getConsolidatedCases'),
 );

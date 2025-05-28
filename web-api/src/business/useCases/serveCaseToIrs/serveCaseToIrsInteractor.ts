@@ -17,13 +17,13 @@ import {
   PARTIES_CODES,
   PAYMENT_STATUS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -33,6 +33,7 @@ import { random, remove } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getWorkItemByDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketEntryId';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -100,7 +101,16 @@ const createPetitionWorkItems = async ({ caseEntity, user }) => {
   const petitionDocument = caseEntity.docketEntries.find(
     doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
-  const initializeCaseWorkItem = petitionDocument.workItem;
+  const initializeCaseWorkItem = await getWorkItemByDocketEntryId({
+    docketNumber: caseEntity.docketNumber,
+    docketEntryId: petitionDocument.docketEntryId,
+  });
+
+  if (!initializeCaseWorkItem) {
+    throw new NotFoundError(
+      `Could not find work item associated with the petition on case ${caseEntity.docketNumber}`,
+    );
+  }
 
   initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
   initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
@@ -479,6 +489,8 @@ export const serveCaseToIrs = async (
       applicationContext,
       docketNumber,
     });
+
+    console.log('caseToBatch', caseToBatch);
 
     const caseEntity = new Case(caseToBatch, { authorizedUser });
 
