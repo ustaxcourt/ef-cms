@@ -358,7 +358,6 @@ describe('getTransformedPendingItemDetails', () => {
       eventCode: 'OSC',
     });
     expect(result).toEqual({
-      description: 'Order to Show Cause',
       documentType: 'OSC',
       objection: '',
     });
@@ -371,7 +370,6 @@ describe('getTransformedPendingItemDetails', () => {
       objections: OBJECTIONS_OPTIONS_MAP.YES,
     });
     expect(result).toEqual({
-      description: 'Motion for Continuance',
       documentType: 'M006',
       objection:
         MOTION_OBJECTION_OPTIONS_INVERTED[MOTION_OBJECTION_OPTIONS.objection],
