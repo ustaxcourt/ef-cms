@@ -125,10 +125,6 @@ describe('deleteTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().deleteTrialSession,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
@@ -151,33 +147,6 @@ describe('deleteTrialSessionInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().deleteTrialSessionWorkingCopy,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should not call createCaseTrialSortMappingRecords if the case has no trial city', async () => {
-    mockTrialSession = {
-      ...MOCK_TRIAL_REGULAR,
-      startDate: '2100-12-01T00:00:00.000Z',
-    };
-
-    getCasesByDocketNumbers.mockResolvedValue([
-      {
-        ...MOCK_CASE,
-        preferredTrialCity: undefined,
-      },
-    ]);
-
-    await deleteTrialSessionInteractor(
-      applicationContext,
-      {
-        trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
     ).not.toHaveBeenCalled();
   });
 

@@ -111,4 +111,33 @@ describe('OutboxItem', () => {
     );
     expect(outboxItem.leadDocketNumber).toEqual('101-18');
   });
+
+  it('should use getUniqueId if no workItemId is provided', () => {
+    const mockUniqueId = 'mock-unique-id-123';
+    applicationContext.getUniqueId.mockReturnValueOnce(mockUniqueId);
+
+    const outboxItem = new OutboxItem(
+      {
+        ...validOutboxItem,
+        workItemId: undefined as unknown as string,
+      },
+      { applicationContext },
+    );
+
+    expect(applicationContext.getUniqueId).toHaveBeenCalled();
+    expect(outboxItem.workItemId).toBe(mockUniqueId);
+  });
+
+  it('should NOT set highPriority to true when `highPriority` is false and caseStatus is not "calendared"', () => {
+    const outboxItem = new OutboxItem(
+      {
+        ...validOutboxItem,
+        caseStatus: CASE_STATUS_TYPES.new,
+        highPriority: false,
+      },
+      { applicationContext },
+    );
+
+    expect(outboxItem.highPriority).toBe(false);
+  });
 });
