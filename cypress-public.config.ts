@@ -1,6 +1,5 @@
 import { defineConfig } from 'cypress';
-import { setAllowedTerminalIpAddresses } from './cypress/local-only/support/database';
-import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+import { toggleFeatureFlagFromPostgres } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import fs from 'fs';
 import path from 'path';
 
@@ -18,14 +17,17 @@ export default defineConfig({
           return null;
         },
         setAllowedTerminalIpAddresses(ipAddresses) {
-          return setAllowedTerminalIpAddresses(ipAddresses);
+          return toggleFeatureFlagFromPostgres({
+            flag: 'allowed-terminal-ips',
+            flagValue: ipAddresses,
+          });
         },
         table(message) {
           console.table(message);
           return null;
         },
-        toggleFeatureFlag(args) {
-          return toggleFeatureFlag(args);
+        toggleFeatureFlagFromPostgres(args) {
+          return toggleFeatureFlagFromPostgres(args);
         },
       });
     },

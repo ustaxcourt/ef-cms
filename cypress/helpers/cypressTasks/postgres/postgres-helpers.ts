@@ -1,5 +1,22 @@
 import { getDbReader, getDbWriter } from '@web-api/database';
 
+export const getFeatureFlagFromPostgresValue = async ({
+  flag,
+}: {
+  flag: string;
+}): Promise<boolean | null> => {
+  const RESULTS = await getDbReader(async reader =>
+    reader
+      .selectFrom('dwFeatureFlag')
+      .selectAll()
+      .where('name', '=', flag)
+      .execute(),
+  );
+
+  if (!RESULTS.length) return null;
+  return !!RESULTS[0].value.current;
+};
+
 export const getRawFeatureFlagFromPostgresValue = async ({
   flag,
 }: {
