@@ -39,7 +39,6 @@ PORT=1234
 NON_PUBLIC=app-
 BROWSER=edge
 RUN_SPECIFIC_TEST=""
-export NODE_ENV="production"
 
 # Get the options
 while getopts ":chloprst:" option; do
@@ -82,6 +81,7 @@ done
 
 if [ -n "${CI}" ]; then
   export CYPRESS_NO_COMMAND_LOG=1 #Disable logging of commands in CI to not leak secrets
+  export NODE_ENV="production"
   echo "Executing ${0}."
 else
   echo "Executing ${0}. For information about available options, run this script again with the -h option for help."
