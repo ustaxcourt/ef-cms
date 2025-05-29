@@ -65,7 +65,7 @@ const removeConsolidatedCases = async (
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
         authorizedUser,
       });
-      caseEntity.setLeadCase(newLeadCase.docketNumber);
+      caseEntity.setLeadCase(newLeadCase?.docketNumber);
 
       updateCasePromises.push(
         applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
