@@ -39,6 +39,7 @@ PORT=1234
 NON_PUBLIC=app-
 BROWSER=edge
 RUN_SPECIFIC_TEST=""
+export NODE_ENV="production"
 
 # Get the options
 while getopts ":chloprst:" option; do
