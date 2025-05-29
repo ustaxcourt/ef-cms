@@ -15,12 +15,7 @@ import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { createCaseDeadline } from '@web-api/business/useCases/caseDeadline/createCaseDeadlineInteractor';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
 
-const updateCase = jest.mocked(updateCaseMock);
-updateCase.mockImplementation(({ caseToUpdate }) =>
-  Promise.resolve(caseToUpdate),
-);
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('createCaseDeadlineInteractor - Consolidated Cases', () => {

@@ -15,12 +15,6 @@ import { deleteCaseDeadline as deleteDeadlineMock } from '@web-api/persistence/p
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getCasesInConsolidatedGroup as getCasesInConsolidatedGroupMock } from '@web-api/persistence/postgres/cases/getCasesInConsolidatedGroup';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-
-const updateCase = jest.mocked(updateCaseMock);
-updateCase.mockImplementation(({ caseToUpdate }) =>
-  Promise.resolve(caseToUpdate),
-);
 
 const getCaseDeadlinesByConsolidatedCaseDeadlineId =
   getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
