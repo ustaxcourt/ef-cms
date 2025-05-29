@@ -18,7 +18,6 @@ export const formatConsolidatedCaseCoversheetData = async ({
   useInitialData,
 }) => {
   let consolidatedCases = await getCasesByLeadDocketNumber({
-    applicationContext,
     leadDocketNumber: caseEntity.leadDocketNumber,
   });
 

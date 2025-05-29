@@ -6,14 +6,14 @@ import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { deleteCaseStatistic as deleteCaseStatisticMock } from '@web-api/persistence/postgres/cases/statistics/deleteCaseStatistic';
 import { deleteDeficiencyStatisticInteractor } from './deleteDeficiencyStatisticInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 
 describe('deleteDeficiencyStatisticInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const deleteCaseStatistic = deleteCaseStatisticMock as jest.Mock;
+  const upsertCases = jest.mocked(upsertCasesMock);
   const statisticId = 'f7a1cdb5-f534-4d12-a046-86ca3b46ddc4';
 
   const statistic = {
@@ -54,7 +54,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
-  it('should call deleteCaseStatistic with the removed case statistics and return the updated case', async () => {
+  it('should delete the statistic and return the updated case', async () => {
     const result = await deleteDeficiencyStatisticInteractor(
       applicationContext,
       {
@@ -66,10 +66,9 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     expect(result).toMatchObject({
       statistics: [],
     });
-    expect(deleteCaseStatistic.mock.calls[0][0].statisticId).toBe(statisticId);
   });
 
-  it('should call deleteCaseStatistic but return the original case when statisticId is not present on the case', async () => {
+  it('should not delete any statistics when no statisticId on the case matches the passed in statisticId', async () => {
     const result = await deleteDeficiencyStatisticInteractor(
       applicationContext,
       {
@@ -81,9 +80,6 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     expect(result).toMatchObject({
       statistics: [statistic],
     });
-    expect(deleteCaseStatistic.mock.calls[0][0].statisticId).toBe(
-      '8b864301-a0d9-43aa-8029-e1a0ed8ad4c9',
-    );
   });
 
   it('should throw an error and not update the case when attempting to delete the only statistic from a deficiency case with hasVerifiedIrsNotice true (at least one statistic is required)', async () => {
@@ -106,7 +102,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
         mockDocketClerkUser,
       ),
     ).rejects.toThrow('The Case entity was invalid');
-    expect(deleteCaseStatistic).not.toHaveBeenCalled();
+    expect(upsertCases).not.toHaveBeenCalled();
   });
 
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {

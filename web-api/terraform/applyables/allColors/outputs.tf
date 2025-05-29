@@ -50,10 +50,6 @@ output "rds_host_name" {
   value = module.rds.address
 }
 
-output "rds_host_name_west" {
-  value = module.rds.address_west
-}
-
 output "postgres_user" {
   value = module.rds.postgres_user
 }

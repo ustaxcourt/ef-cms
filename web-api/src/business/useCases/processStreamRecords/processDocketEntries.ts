@@ -3,6 +3,7 @@ import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 /**
@@ -17,14 +18,14 @@ export const processDocketEntries = async ({
   applicationContext: ServerApplicationContext;
   docketEntryRecords: any[];
 }) => {
+  if (!records.length) return;
+
+  applicationContext.logger.debug(
+    `going to index ${records.length} docketEntryRecords`,
+  );
+
   try {
-    if (!records.length) return;
-
-    applicationContext.logger.debug(
-      `going to index ${records.length} docketEntryRecords`,
-    );
-
-    const newDocketEntryRecords: IDynamoDBRecord[] = await Promise.all(
+    const newDocketEntryRecords: IDynamoDBRecord[] = await settlePromises(
       records.map(async record => {
         const fullDocketEntry = unmarshall(record.dynamodb.NewImage);
 
@@ -107,7 +108,7 @@ export const processDocketEntries = async ({
     await upsertDocketEntries(Object.values(pgDocketEntries));
   } catch (e) {
     getLogger().error(
-      `Postgres re-indexing failure: Failed to process docket entries: ${e}`,
+      `Postgres re-indexing failure: Failed to process docket entry record: ${e}`,
     );
   }
 };

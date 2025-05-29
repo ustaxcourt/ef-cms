@@ -6,11 +6,12 @@ import {
   MOTION_FILED_BY_OPTIONS,
   MOTION_STATUS_OPTIONS,
   MOTION_OBJECTION_OPTIONS,
-  ACTION_DOCUMENT_TYPE_OPTIONS,
   ACTION_FILED_BY_OPTIONS,
   ACTION_STATUS_OPTIONS,
   TRIAL_HEARING_OPTIONS,
   EXHIBIT_STATUS_OPTIONS,
+  INTERNAL_DOCUMENTS_ARRAY,
+  EXTERNAL_DOCUMENTS_ARRAY,
 } from '@shared/business/entities/EntityConstants';
 import {
   BriefDetailsType,
@@ -361,6 +362,15 @@ export const formatMotions = (
     );
 };
 
+const formatDocumentType = (eventCode: string): string => {
+  const documentType =
+    [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY].find(
+      doc => doc.eventCode === eventCode,
+    )?.documentType || '';
+
+  return documentType.replace(/\[.*?\]/g, '').trim();
+};
+
 export const formatActionsAndFilings = (
   actionsAndFilings: MinuteSheet['proceedings']['actionsAndFilings'],
 ) => {
@@ -370,9 +380,7 @@ export const formatActionsAndFilings = (
         content: [
           action.date,
           [
-            ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]
-              ? `${ACTION_DOCUMENT_TYPE_OPTIONS[action.documentType]}`
-              : '',
+            formatDocumentType(action.documentType),
             [
               action.oralMotion ? 'Oral Motion ' : '',
               action.note ? `<em>${action.note}</em>` : '',

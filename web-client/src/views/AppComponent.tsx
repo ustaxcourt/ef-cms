@@ -110,8 +110,8 @@ import React, { useEffect } from 'react';
 import classNames from 'classnames';
 import { TermBuilderView } from '@web-client/views/TermBuilderView';
 import { AsyncServiceUnavailableModal } from '@web-client/views/AsyncServiceUnavailableModal';
-import { RemovePetitionerEmailModal } from '@web-client/views/CaseDetail/RemovePetitionerEmailModal';
 import { OrderResponse } from './OrderResponse/OrderResponse';
+import { RemovePetitionerEmailModal } from '@web-client/views/CaseDetail/RemovePetitionerEmailModal';
 
 const pages = {
   AccessibilityStatement,

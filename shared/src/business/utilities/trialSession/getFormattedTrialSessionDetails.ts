@@ -2,12 +2,12 @@ import {
   CalendaredCaseItemType,
   TrialSessionState,
 } from '@web-client/presenter/state/trialSessionState';
-import { FORMATS } from '../DateHandler';
 import {
   HIGH_PRIORITY_SUFFIXES,
   PARTIES_CODES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
+import { FORMATS } from '../DateHandler';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,

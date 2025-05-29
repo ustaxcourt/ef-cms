@@ -3,7 +3,6 @@ import {
   createISODateAtStartOfDayEST,
   formatDateString,
 } from '../utilities/DateHandler';
-import { JoiValidationConstants } from './JoiValidationConstants';
 import { JoiValidationEntity } from './JoiValidationEntity';
 import {
   MAX_ORDER_RESPONSE_TEXT_CHARACTERS,
@@ -15,7 +14,7 @@ import joiImported, { Root } from 'joi';
 const joi: Root = joiImported.extend(joiDate);
 
 export class MotionOrderResponseForm extends JoiValidationEntity {
-  public motionOrderResponse?: string;
+  public motionOrderResponse?: boolean;
   public responseDate?: string;
   public additionalOrderText?: string;
   public dueDate?: string;
@@ -50,7 +49,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       }),
     issueOrderFor: joi
       .when('isOnLeadCase', {
-        is: joi.equal(true),
+        is: true,
         then: joi
           .required()
           .valid(
@@ -65,7 +64,7 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       .messages({ 'any.required': 'Select on which cases to file this order' }),
     dueDate: joi
       .when('motionOrderResponse', {
-        is: joi.exist().not(null),
+        is: true,
         then: joi
           .date()
           .iso()
@@ -77,21 +76,16 @@ export class MotionOrderResponseForm extends JoiValidationEntity {
       .description('When the response is due.')
       .messages({
         'any.ref': 'Enter a valid Response Date',
-        'any.required':
-          'Due Date is required when a Reply or Reply/SR is ordered',
+        'any.required': 'Due Date is required when a Reply is ordered',
         'date.format': 'Enter a valid date',
         'date.min':
           'Due date cannot be prior to response date. Enter a valid date.',
       }),
-    motionOrderResponse: JoiValidationConstants.STRING.valid(
-      ...Object.values(MOTION_ORDER_RESPONSE_OPTIONS.orderReplyOptions),
-    )
+    motionOrderResponse: joi
       .optional()
       .allow(null)
-      .description('The type of response.')
-      .messages({
-        '*': 'Order reply must be one of [Order Reply, Order Reply/SR]',
-      }),
+      .description('Whether a reply is ordered'),
+
     responseDate: joi
       .date()
       .iso()

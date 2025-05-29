@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { NotFoundError, ServiceUnavailableError } from '@web-api/errors/errors';
@@ -10,15 +13,14 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { unsealCaseInteractor } from './unsealCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('unsealCaseInteractor', () => {
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext
@@ -109,21 +111,6 @@ describe('unsealCaseInteractor', () => {
         mockDocketClerkUser,
       ),
     ).rejects.toThrow(NotFoundError);
-  });
-
-  it('should bubble up an error thrown by updateCase', async () => {
-    const mockError = new Error('Something went wrong');
-    updateCase.mockRejectedValueOnce(mockError);
-
-    await expect(
-      unsealCaseInteractor(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-        },
-        mockDocketClerkUser,
-      ),
-    ).rejects.toThrow('Something went wrong');
   });
 
   it('should bubble up an error thrown by getCaseByDocketNumber', async () => {

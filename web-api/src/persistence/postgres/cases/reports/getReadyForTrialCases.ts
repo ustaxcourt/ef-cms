@@ -5,7 +5,9 @@ import {
 import { calculateDateAtStartOfDayEST } from '@shared/business/utilities/DateHandler';
 import { getDbReader } from '@web-api/database';
 
-export const getReadyForTrialCases = async () => {
+export const getReadyForTrialCases = async (): Promise<
+  { docketNumber: string }[]
+> => {
   const results = await getDbReader(reader =>
     reader
       .selectFrom('dwDocketEntry as d')

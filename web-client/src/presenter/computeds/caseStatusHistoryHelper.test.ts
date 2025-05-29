@@ -6,6 +6,7 @@ import {
   getBusinessDateInFuture,
   FORMATS,
   createISODateString,
+  formatDateString,
 } from '@shared/business/utilities/DateHandler';
 
 const caseStatusHistoryHelper = withAppContextDecorator(
@@ -20,11 +21,10 @@ const oneMonthFromNow = getBusinessDateInFuture({
   startDate: createISODateString(),
 });
 
-const dateInSlashedFormat = getBusinessDateInFuture({
-  numberOfDays: 30,
-  outputFormat: FORMATS.MMDDYY,
-  startDate: createISODateString(),
-});
+const oneMonthFromNowInSlashedFormat = formatDateString(
+  oneMonthFromNow,
+  'MMDDYY',
+);
 
 describe('caseTypeDescriptionHelper', () => {
   it('should return a array of formatted case status history objects with a formattedDateChanged', () => {
@@ -46,7 +46,7 @@ describe('caseTypeDescriptionHelper', () => {
       {
         changedBy: 'Test Docketclerk',
         date: oneMonthFromNow,
-        formattedDateChanged: dateInSlashedFormat,
+        formattedDateChanged: oneMonthFromNowInSlashedFormat,
         updatedCaseStatus: CASE_STATUS_TYPES.new,
       },
     ]);

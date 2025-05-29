@@ -9,29 +9,27 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const setEditDeficiencyStatisticFormAction = ({
-  applicationContext,
   get,
   props,
   store,
 }: ActionProps) => {
-  const statistics = get(state.caseDetail.statistics);
+  const { docketNumber, statistics } = get(state.caseDetail);
   const { statisticId } = props;
+
+  if (!statistics || !statistics.length) {
+    throw new Error(
+      `Failed to edit statistic: Case ${docketNumber} does not have any statistics`,
+    );
+  }
 
   const statisticToEdit = statistics.find(
     statistic => statistic.statisticId === statisticId,
   );
 
-  if (statisticToEdit.lastDateOfPeriod) {
-    const deconstructedLastDateOfPeriod = applicationContext
-      .getUtilities()
-      .deconstructDate(statisticToEdit.lastDateOfPeriod);
-
-    if (deconstructedLastDateOfPeriod) {
-      statisticToEdit.lastDateOfPeriodMonth =
-        deconstructedLastDateOfPeriod.month;
-      statisticToEdit.lastDateOfPeriodDay = deconstructedLastDateOfPeriod.day;
-      statisticToEdit.lastDateOfPeriodYear = deconstructedLastDateOfPeriod.year;
-    }
+  if (!statisticToEdit) {
+    throw new Error(
+      `Failed to edit statistic: Case ${docketNumber} does not have any statistic with ID ${statisticId}`,
+    );
   }
 
   store.set(state.form, {

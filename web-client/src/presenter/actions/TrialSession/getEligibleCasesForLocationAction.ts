@@ -3,7 +3,6 @@ export const getEligibleCasesForLocationAction = async ({
   props,
 }: ActionProps) => {
   const { trialLocation } = props;
-  //TODO: consider renaming trialCity -> trialLocation on backend?
 
   const eligibleCases = await applicationContext
     .getUseCases()

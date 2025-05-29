@@ -2,6 +2,9 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   AUTOMATIC_BLOCKED_REASONS,
   SERVICE_INDICATOR_TYPES,
@@ -19,18 +22,17 @@ import { docketClerkUser } from '@shared/test/mockUsers';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const updateCase = jest.mocked(updateCaseMock);
-updateCase.mockImplementation(({ caseToUpdate }) =>
-  Promise.resolve(caseToUpdate),
-);
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('addPaperFilingInteractor', () => {
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
+    Promise.resolve(caseToUpdate),
+  );
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
@@ -58,7 +60,7 @@ describe('addPaperFilingInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
 
-    getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getCasesByDocketNumbers.mockResolvedValue([mockCase]);
   });
 
   it('should throw an error when the user is not authorized to add a paper filing', async () => {
@@ -119,7 +121,7 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
@@ -166,10 +168,12 @@ describe('addPaperFilingInteractor', () => {
 
   it('should return paper service url as part of the "serve_document_complete" message when the document is filed on a lead case and one of the member cases has a party with paper service', async () => {
     const mockPdfUrl = 'www.example.com';
-    getCaseByDocketNumber.mockResolvedValue(mockCase).mockResolvedValue({
-      ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-      leadDocketNumber: mockCase.docketNumber,
-    });
+    getCasesByDocketNumbers.mockResolvedValue([
+      {
+        ...(MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE as any),
+        leadDocketNumber: mockCase.docketNumber,
+      },
+    ]);
 
     applicationContext
       .getUseCaseHelpers()
@@ -231,7 +235,7 @@ describe('addPaperFilingInteractor', () => {
         leadDocketNumber: mockCase.leadDocketNumber,
       },
     ]);
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
     ).toHaveBeenCalled();
@@ -259,7 +263,7 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
     ).not.toHaveBeenCalled();
@@ -311,8 +315,10 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
@@ -345,8 +351,10 @@ describe('addPaperFilingInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
@@ -354,7 +362,7 @@ describe('addPaperFilingInteractor', () => {
   });
 
   it('does not send the service email if an error occurs while updating the case', async () => {
-    updateCase.mockRejectedValueOnce(new Error('bad!'));
+    updateCaseAndAssociations.mockRejectedValueOnce(new Error('bad!'));
 
     await expect(
       addPaperFilingInteractor(

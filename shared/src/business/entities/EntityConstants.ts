@@ -131,7 +131,7 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
-};
+} as const;
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
@@ -1136,13 +1136,27 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
 // it's a separate constant.
 export const SYSTEM_ROLE = 'System';
 
+export const FILING_TYPES_DICT = {
+  MYSELF: 'Myself',
+  MYSELF_AND_SPOUSE: 'Myself and my spouse',
+  BUSINESS: 'A business',
+  OTHER: 'Other',
+  PETITIONER: 'Individual petitioner',
+  PETITIONER_SPOUSE: 'Petitioner and spouse',
+};
+
 export const FILING_TYPES = {
-  [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
+  [ROLES.petitioner]: [
+    FILING_TYPES_DICT.MYSELF,
+    FILING_TYPES_DICT.MYSELF_AND_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
+  ],
   [ROLES.privatePractitioner]: [
-    'Individual petitioner',
-    'Petitioner and spouse',
-    'A business',
-    'Other',
+    FILING_TYPES_DICT.PETITIONER,
+    FILING_TYPES_DICT.PETITIONER_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
   ],
 } as const;
 
@@ -1839,34 +1853,6 @@ export const TROUBLESHOOTING_INFO = {
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
 
-export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
-export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
-
-export const MOTION_ORDER_RESPONSE_OPTIONS = {
-  orderReplyOptions: {
-    // More options may arise in future
-    REPLY: 'Order Reply',
-  },
-  issueOrderOptions: {
-    ALL_CASES: 'All cases in this group',
-    THIS_CASE_ONLY: 'Just this case',
-  },
-  orderType: 'motionOrderResponse',
-};
-
-export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
-
-export const TERM_GENERATOR_DEFAULT_VALUES = {
-  MAX_SESSIONS_PER_WEEK: 6,
-  MAX_SESSIONS_PER_LOCATION: 5,
-  REGULAR_CASE_MINIMUM_QUANTITY: 40,
-  REGULAR_CASE_MAX_QUANTITY: 100,
-  SMALL_CASE_MINIMUM_QUANTITY: 40,
-  SMALL_CASE_MAX_QUANTITY: 125,
-  HYBRID_CASE_MINIMUM_QUANTITY: 50,
-  HYBRID_CASE_MAX_QUANTITY: 100,
-} as const;
-
 export const MINUTE_SHEET_FORM_SECTION_MAP = {
   actionsAndFilingsSection: 'actionsAndFilingsSection',
   caseMetadataSection: 'caseMetadataSection',
@@ -1893,7 +1879,6 @@ export type TrialHearingOption = keyof typeof TRIAL_HEARING_OPTIONS;
 export const STATUS_REPORT_ORDERED_FOR_OPTIONS = {
   petitioner: 'Petitioner',
   respondent: 'Respondent',
-  petitionerAndRespondent: 'Petitioner and Respondent',
   joint: 'Joint',
   other: 'Other',
 } as const;
@@ -1961,7 +1946,6 @@ export const ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED = invert(
 export const ACTION_FILED_BY_OPTIONS = {
   petitioner: 'Petitioner',
   respondent: 'Respondent',
-  petitionerAndRespondent: 'Petitioner and Respondent',
   practitioner: 'Practitioner',
   joint: 'Joint',
   other: 'Other',
@@ -2018,6 +2002,7 @@ export const BRIEF_SUBTYPE = {
 export const PETITIONER_ROLE_OPTIONS = {
   counsel: 'Counsel',
   proSe: 'Pro Se',
+  proSeSe: 'Pro Se Se',
   intervenor: 'Intervenor',
   participant: 'Participant',
   translator: 'Translator',
@@ -2035,3 +2020,26 @@ export const RESPONDENT_ROLE_OPTIONS = {
 } as const;
 export type RespondentRoleOption = keyof typeof RESPONDENT_ROLE_OPTIONS;
 export const RESPONDENT_ROLE_OPTIONS_INVERTED = invert(RESPONDENT_ROLE_OPTIONS);
+export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
+export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
+
+export const MOTION_ORDER_RESPONSE_OPTIONS = {
+  issueOrderOptions: {
+    ALL_CASES: 'All cases in this group',
+    THIS_CASE_ONLY: 'Just this case',
+  },
+  orderType: 'motionOrderResponse',
+};
+
+export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
+
+export const TERM_GENERATOR_DEFAULT_VALUES = {
+  MAX_SESSIONS_PER_WEEK: 6,
+  MAX_SESSIONS_PER_LOCATION: 5,
+  REGULAR_CASE_MINIMUM_QUANTITY: 40,
+  REGULAR_CASE_MAX_QUANTITY: 100,
+  SMALL_CASE_MINIMUM_QUANTITY: 40,
+  SMALL_CASE_MAX_QUANTITY: 125,
+  HYBRID_CASE_MINIMUM_QUANTITY: 50,
+  HYBRID_CASE_MAX_QUANTITY: 100,
+} as const;

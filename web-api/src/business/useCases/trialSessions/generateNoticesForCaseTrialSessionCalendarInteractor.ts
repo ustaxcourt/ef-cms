@@ -171,19 +171,16 @@ const setNoticeForCase = async ({
     noticeOfTrialIssuedWithClinicLetter = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
-        applicationContext,
         firstPdf: noticeOfTrialIssued,
         secondPdf: clinicLetter,
       });
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: noticeOfTrialIssuedWithClinicLetter,
       key: newNoticeOfTrialIssuedDocketEntryId,
     });
   } else {
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: noticeOfTrialIssued,
       key: newNoticeOfTrialIssuedDocketEntryId,
     });
@@ -258,7 +255,6 @@ const setNoticeForCase = async ({
   const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: standingPretrialFile,
     key: newStandingPretrialDocketEntryId,
   });
@@ -325,7 +321,6 @@ const setNoticeForCase = async ({
     const pdfData = await newPdfDoc.save();
 
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
       document: pdfData,
       key: `${jobId}-${docketNumber}`,
       useTempBucket: true,

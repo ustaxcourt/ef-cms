@@ -13,6 +13,7 @@ import { unsetDocumentToEditAction } from '../actions/unsetDocumentToEditAction'
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setEditMotionOrderResponseFormAction } from '@web-client/presenter/actions/MotionOrderResponse/setEditMotionOrderResponseFormAction';
 import { motionOrderResponsePdfPreviewSequence } from '@web-client/presenter/sequences/MotionOrderResponse/motionOrderResponsePdfPreviewSequence';
+import { stopShowValidationAction } from '@web-client/presenter/actions/stopShowValidationAction';
 
 export const goToOrderResponseSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -22,6 +23,7 @@ export const goToOrderResponseSequence =
     setParentMessageIdAction,
     clearPdfPreviewUrlAction,
     clearFormAction,
+    stopShowValidationAction,
     isEditOrderResponseAction,
     {
       create: [

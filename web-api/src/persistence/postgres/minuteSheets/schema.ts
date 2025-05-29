@@ -3,7 +3,7 @@ import { Insertable, Selectable, Updateable } from 'kysely';
 
 const DEFAULT = {};
 
-const minuteSheetTableDefinition = {
+export const minuteSheetTableDefinition = {
   trialSessionId: DEFAULT as string,
   docketNumber: DEFAULT as string,
   content: DEFAULT as MinuteSheet,

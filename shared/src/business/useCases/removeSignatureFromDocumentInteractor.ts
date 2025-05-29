@@ -47,7 +47,6 @@ export const removeSignatureFromDocumentInteractor = async (
     });
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: originalPdfNoSignature,
     key: docketEntryId,
   });

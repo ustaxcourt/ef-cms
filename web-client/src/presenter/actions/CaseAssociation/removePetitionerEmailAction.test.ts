@@ -53,6 +53,11 @@ describe('removePetitionerEmailAction', () => {
       state: {
         caseDetail: {
           docketNumber: '101-20',
+          petitioners: [
+            {
+              email: 'test@example.com',
+            },
+          ],
         },
         modal: {
           petitionerEmailToRemove: 'test@example.com',

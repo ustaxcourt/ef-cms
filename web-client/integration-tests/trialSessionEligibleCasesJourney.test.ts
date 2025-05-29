@@ -284,15 +284,16 @@ describe('Trial Session Eligible Cases Journey', () => {
       ).toEqual(3);
       expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(true);
       expect(
-        cerebralTest.getState('trialSession.calendaredCases.0.docketNumber'),
-      ).toEqual(createdDocketNumbers[3]);
-      expect(
-        cerebralTest.getState('trialSession.calendaredCases.1.docketNumber'),
-      ).toEqual(createdDocketNumbers[4]);
-      // this could be either case 0 or 1 depending on which was marked eligible first
-      expect(
-        cerebralTest.getState('trialSession.calendaredCases.2.docketNumber'),
-      ).toEqual(createdDocketNumbers[0]);
+        cerebralTest
+          .getState('trialSession.calendaredCases')
+          .map(c => c.docketNumber),
+      ).toEqual(
+        expect.arrayContaining([
+          createdDocketNumbers[3],
+          createdDocketNumbers[4],
+          createdDocketNumbers[0],
+        ]),
+      );
     });
 
     it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session; Case #2 and #3 are not assigned`, async () => {
@@ -352,7 +353,6 @@ describe('Trial Session Eligible Cases Journey', () => {
     });
 
     it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
-      await wait(10000);
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: createdDocketNumbers[0],
       });

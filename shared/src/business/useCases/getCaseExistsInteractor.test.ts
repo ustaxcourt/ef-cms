@@ -1,14 +1,16 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { getCaseExistsInteractor } from './getCaseExistsInteractor';
 import { getCaseExists as getCaseExistsMock } from '@web-api/persistence/postgres/cases/getCaseExists';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('getCaseExistsInteractor', () => {
   const getCaseExists = jest.mocked(getCaseExistsMock);
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   it('should format the given docket number before querying persistence, removing leading zeroes and suffix', async () => {
     getCaseExists.mockResolvedValue(true);

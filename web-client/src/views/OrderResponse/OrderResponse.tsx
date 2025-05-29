@@ -32,7 +32,8 @@ export const OrderResponse = connect(
       sequences.submitMotionOrderResponseSequence,
     submitStampMotionSequence: sequences.submitStampMotionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
-    validateStampSequence: sequences.validateStampSequence,
+    validateMotionOrderResponseSequence:
+      sequences.validateMotionOrderResponseSequence,
     validationErrors: state.validationErrors,
   },
   function OrderResponse({
@@ -47,6 +48,7 @@ export const OrderResponse = connect(
     submitMotionOrderResponseSequence,
     updateFormValueSequence,
     validationErrors,
+    validateMotionOrderResponseSequence,
   }) {
     return (
       <>
@@ -103,6 +105,7 @@ export const OrderResponse = connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
+                                validateMotionOrderResponseSequence();
                               }}
                             />
                             <label
@@ -136,6 +139,7 @@ export const OrderResponse = connect(
                                   key: e.target.name,
                                   value: e.target.value,
                                 });
+                                validateMotionOrderResponseSequence();
                               }}
                             />
                             <label
@@ -162,6 +166,7 @@ export const OrderResponse = connect(
                       pristine={!form.responseDate}
                       formGroupClassNames="display-inline-block order-response-date-selector"
                       id="response-date-input-orderResponseResponseDate"
+                      data-testid="response-date-input-orderResponseResponseDate"
                       label="Response Date"
                       hintText="(Required)"
                       minDate={motionOrderResponseFormHelper.minDate}
@@ -172,6 +177,7 @@ export const OrderResponse = connect(
                           toFormat: constants.DATE_FORMATS.YYYYMMDD,
                           value: e.target.value,
                         });
+                        validateMotionOrderResponseSequence();
                       }}
                     />
                   </FormGroup>
@@ -185,6 +191,7 @@ export const OrderResponse = connect(
                         aria-label="order reply"
                         checked={form.motionOrderResponse || false}
                         className="usa-checkbox__input"
+                        data-testid="motion-order-reply"
                         id="motion-order-reply"
                         name="motionOrderResponse"
                         type="checkbox"
@@ -193,6 +200,13 @@ export const OrderResponse = connect(
                             key: e.target.name,
                             value: !form.motionOrderResponse,
                           });
+                          if (form.motionOrderResponse === false) {
+                            updateFormValueSequence({
+                              key: 'dueDate',
+                              value: '',
+                            });
+                          }
+                          validateMotionOrderResponseSequence();
                         }}
                       />
                       <label
@@ -212,8 +226,13 @@ export const OrderResponse = connect(
                       disabled={!form.motionOrderResponse}
                       formGroupClassNames="display-inline-block order-response-date-selector"
                       id="due-date-input-motionOrderResponseDueDate"
+                      data-testid="due-date-input-motionOrderResponseDueDate"
                       minDate={form.responseDate}
-                      hintText="Due date (Required):"
+                      hintText={
+                        form.motionOrderResponse
+                          ? 'Due date (Required):'
+                          : 'Due date:'
+                      }
                       placeHolderText="MM/DD/YYYY"
                       onChange={e => {
                         formatAndUpdateDateFromDatePickerSequence({
@@ -221,6 +240,7 @@ export const OrderResponse = connect(
                           toFormat: constants.DATE_FORMATS.YYYYMMDD,
                           value: e.target.value,
                         });
+                        validateMotionOrderResponseSequence();
                       }}
                     />
                   </FormGroup>
@@ -274,6 +294,7 @@ export const OrderResponse = connect(
                             key: e.target.name,
                             value: e.target.value,
                           });
+                          validateMotionOrderResponseSequence();
                         }}
                       ></textarea>
                       <CharactersRemainingHint

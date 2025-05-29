@@ -9,7 +9,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('hasConsentedToElectronicService', 'boolean')
     .addColumn('hasElectronicAccess', 'boolean')
     .addColumn('inCareOf', 'varchar')
-    .addColumn('isAddressSealed', 'boolean', col => col.defaultTo(false)) // maybe?
+    .addColumn('isAddressSealed', 'boolean', col => col.defaultTo(false))
     .addColumn('paperPetitionEmail', 'varchar')
     .addColumn('placeOfLegalResidence', 'varchar')
     .addColumn('sealedAndUnavailable', 'boolean')

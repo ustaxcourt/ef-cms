@@ -13,14 +13,17 @@ type TPetitioner = {
   city: string;
   contactId: string;
   contactType: string;
+  country?: string;
   countryType: string;
   entityName: string;
   isAddressSealed: boolean;
+  inCareOf?: string;
   name: string;
   paperPetitionEmail?: string;
   phone: string;
   postalCode: string;
   sealedAndUnavailable: boolean;
+  secondaryName?: string;
   serviceIndicator?: string;
   state: string;
   title?: string;
