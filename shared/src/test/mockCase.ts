@@ -415,7 +415,6 @@ export const MOCK_ELIGIBLE_CASE: RawEligibleCase = {
   isSealed: false,
   procedureType: PROCEDURE_TYPES_MAP.regular,
   docketNumberSuffix: 'W',
-  docketNumberWithSuffix: '321-21W',
   highPriority: true,
   irsPractitioners: [],
   privatePractitioners: [],
