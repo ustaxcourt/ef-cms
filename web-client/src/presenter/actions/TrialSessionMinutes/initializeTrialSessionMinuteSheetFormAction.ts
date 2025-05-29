@@ -5,7 +5,6 @@ import {
   initialMinuteSheetFormState,
 } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import {
-  ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED,
   ACTION_FILED_BY_OPTIONS,
   ACTION_FILED_BY_OPTIONS_INVERTED,
   CONTACT_TYPES,
@@ -348,7 +347,7 @@ export const getPendingItemsFromCase = ({
         date: formatDateString(pendingItem.createdAt, FORMATS.MMDDYYYY),
         documentType: transformedPendingItemDetails.documentType,
         filedBy: transformFiledBy(pendingItem),
-        note: transformedPendingItemDetails.description,
+        note: '',
         objection: transformedPendingItemDetails.objection,
         renderKey,
         status: '',
@@ -373,37 +372,9 @@ export const getPendingItemsFromCase = ({
 
 export const getTransformedPendingItemDetails = (
   pendingItem,
-): { documentType: string; description: string; objection: string } => {
-  const directMatch =
-    ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[pendingItem.documentType];
-  if (directMatch)
-    return { description: '', documentType: directMatch, objection: '' };
-
-  const getTransformedDocumentType = (
-    pendingItem: {
-      documuntType: string;
-      eventCode: string;
-      objections: string;
-    } & Record<string, unknown>,
-  ): string => {
-    const documentTypeMap = new Map([
-      [DocketEntry.isNotice, 'notice'],
-      [DocketEntry.isOrder, 'order'],
-      [DocketEntry.isMotion, 'motion'],
-    ]);
-
-    for (const [isType, typeName] of documentTypeMap) {
-      if (isType(pendingItem.eventCode)) {
-        return typeName;
-      }
-    }
-
-    return 'other';
-  };
-
+): { documentType: string; objection: string } => {
   const getMatchingObjection = (
     pendingItem: {
-      documuntType: string;
       eventCode: string;
       objections: string;
     } & Record<string, unknown>,
@@ -424,8 +395,7 @@ export const getTransformedPendingItemDetails = (
   };
 
   return {
-    description: pendingItem.documentType,
-    documentType: getTransformedDocumentType(pendingItem),
+    documentType: pendingItem.eventCode,
     objection: getMatchingObjection(pendingItem),
   };
 };

@@ -3,9 +3,6 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
-);
-jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import { AUTOMATIC_BLOCKED_REASONS } from '@shared/business/entities/EntityConstants';
@@ -20,7 +17,6 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removeCasePendingItemInteractor } from './removeCasePendingItemInteractor';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('removeCasePendingItemInteractor', () => {
@@ -31,9 +27,6 @@ describe('removeCasePendingItemInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
-  );
 
   beforeAll(() => {
     applicationContext
@@ -94,7 +87,7 @@ describe('removeCasePendingItemInteractor', () => {
     });
   });
 
-  it('should call updateCase with automaticBlocked=true and a reason and call deleteCaseTrialSortMappingRecords if there are deadlines remaining on the case', async () => {
+  it('should call updateCase with automaticBlocked=true and a reason if there are deadlines remaining on the case', async () => {
     // Simulate the presence of deadlines on the case.
     getCaseDeadlinesByDocketNumber.mockReturnValue([{ deadline: 'something' }]);
 
@@ -114,7 +107,6 @@ describe('removeCasePendingItemInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

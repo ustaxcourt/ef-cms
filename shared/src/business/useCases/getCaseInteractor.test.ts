@@ -23,6 +23,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
+import { UnauthorizedError } from '@web-api/errors/errors';
 
 describe('getCaseInteractor', () => {
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
@@ -294,6 +295,38 @@ describe('getCaseInteractor', () => {
     );
 
     expect(result.entityName).toEqual('Case');
+  });
+
+  it('should throw UnauthorizedError if user is not a valid AuthUser', async () => {
+    const invalidUser = {
+      email: 'someone@example.com',
+      name: 'Some Body',
+    };
+
+    await expect(
+      getCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-45',
+        },
+        invalidUser as any,
+      ),
+    ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('should bubble up an error if getCaseByDocketNumber throws one', async () => {
+    const mockError = new Error('DB error');
+    getCaseByDocketNumber.mockRejectedValueOnce(mockError);
+
+    await expect(
+      getCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '123-45',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('DB error');
   });
 
   describe('sealed contact information', () => {

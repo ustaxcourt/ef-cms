@@ -1,12 +1,11 @@
 import {
-  ACTION_DOCUMENT_TYPE_OPTIONS,
-  ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED,
   CONTACT_TYPES,
   MOTION_OBJECTION_OPTIONS,
   MOTION_OBJECTION_OPTIONS_INVERTED,
   OBJECTIONS_OPTIONS_MAP,
   PETITIONER_ROLE_OPTIONS,
   PETITIONER_ROLE_OPTIONS_INVERTED,
+  SESSION_TYPES,
   TrialSessionProceedingType,
   TrialSessionScope,
 } from '@shared/business/entities/EntityConstants';
@@ -29,25 +28,11 @@ import { presenter } from '@web-client/presenter/presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
 import { initialMinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { getFormattedTrialSessionDetails } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 
 jest.mock('@shared/business/utilities/getFormattedCaseDetail', () => ({
   formatCase: jest.fn(),
 }));
-
-jest.mock('@shared/business/entities/DocketEntry', () => ({
-  DocketEntry: {
-    isPending: jest.fn(),
-    isNotice: jest.fn(),
-    isOrder: jest.fn(),
-    isMotion: jest.fn(),
-  },
-}));
-
-const mockIsNotice = DocketEntry.isNotice as jest.Mock;
-const mockIsOrder = DocketEntry.isOrder as jest.Mock;
-const mockIsMotion = DocketEntry.isMotion as jest.Mock;
 
 jest.mock(
   '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails',
@@ -56,7 +41,6 @@ jest.mock(
   }),
 );
 
-/* eslint-disable max-lines */
 describe('initializeTrialSessionMinuteSheetFormAction', () => {
   it('should initialize the minute sheet form with all required sections', async () => {
     const mockJudge = {
@@ -122,7 +106,7 @@ describe('initializeMinuteSheet', () => {
     proceedingType: 'In Person' as TrialSessionProceedingType,
     sessionScope: 'Location-based' as TrialSessionScope,
     sessionStatus: 'Open',
-    sessionType: 'Regular',
+    sessionType: SESSION_TYPES.regular,
     startDate: '2019-11-25T15:00:00.000Z',
     startTime: '10:00',
     term: 'Fall',
@@ -369,134 +353,27 @@ describe('initializeMinuteSheet', () => {
 });
 
 describe('getTransformedPendingItemDetails', () => {
-  beforeEach(() => {
-    mockIsNotice.mockReturnValue(false);
-    mockIsOrder.mockReturnValue(false);
-    mockIsMotion.mockReturnValue(false);
-  });
-
-  it('should return the matching option when documentType directly matches an option value', () => {
-    mockIsOrder.mockReturnValue(true);
+  it('should not specify an objection type if the pending item has no objection data', () => {
     const result = getTransformedPendingItemDetails({
       documentType: 'Order to Show Cause',
       eventCode: 'OSC',
     });
     expect(result).toEqual({
-      description: '',
-      documentType:
-        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
-          ACTION_DOCUMENT_TYPE_OPTIONS.orderToShowCause
-        ],
+      documentType: 'OSC',
       objection: '',
     });
   });
 
-  it('should identify and return "notice" category and description for notice documents by eventCode', () => {
-    mockIsNotice.mockReturnValue(true);
+  it('should specify an objection type if the pending item has objection data', () => {
     const result = getTransformedPendingItemDetails({
-      documentType: '30-Day Notice of Trial',
-      eventCode: 'NOTT',
+      documentType: 'Motion for Continuance',
+      eventCode: 'M006',
+      objections: OBJECTIONS_OPTIONS_MAP.YES,
     });
     expect(result).toEqual({
-      description: '30-Day Notice of Trial',
-      documentType:
-        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
-          ACTION_DOCUMENT_TYPE_OPTIONS.notice
-        ],
-      objection: '',
-    });
-  });
-
-  it('should identify and return "order" category and description for order documents by eventCode', () => {
-    mockIsOrder.mockReturnValue(true);
-    const result = getTransformedPendingItemDetails({
-      documentType: 'Order that caption of case is amended',
-      eventCode: 'OCA',
-    });
-    expect(result).toEqual({
-      description: 'Order that caption of case is amended',
-      documentType:
-        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
-          ACTION_DOCUMENT_TYPE_OPTIONS.order
-        ],
-      objection: '',
-    });
-  });
-
-  it('should identify and return "motion" category and description for motion documents by eventCode', () => {
-    mockIsMotion.mockReturnValue(true);
-    const result = getTransformedPendingItemDetails({
-      documentType: 'Motion for a New Trial',
-      eventCode: 'M218',
-    });
-    expect(result).toEqual({
-      description: 'Motion for a New Trial',
-      documentType:
-        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
-          ACTION_DOCUMENT_TYPE_OPTIONS.motion
-        ],
-      objection: 'unknown',
-    });
-  });
-
-  it('should identify and return "motion" category and description for motion documents by eventCode, with unknown objection', () => {
-    mockIsMotion.mockReturnValue(true);
-    const result = getTransformedPendingItemDetails({
-      documentType: 'Motion for a New Trial',
-      eventCode: 'M218',
-      objections: 'unknown',
-    });
-    expect(result).toEqual({
-      description: 'Motion for a New Trial',
-      documentType:
-        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
-          ACTION_DOCUMENT_TYPE_OPTIONS.motion
-        ],
-      objection: 'unknown',
-    });
-  });
-
-  it('should identify and return "motion" category and description for motion documents by eventCode, with no objection', () => {
-    mockIsMotion.mockReturnValue(true);
-    const result = getTransformedPendingItemDetails({
-      documentType: 'Motion for a New Trial',
-      eventCode: 'M218',
-      objections: OBJECTIONS_OPTIONS_MAP.NO,
-    });
-    expect(result).toEqual({
-      description: 'Motion for a New Trial',
-      documentType:
-        ACTION_DOCUMENT_TYPE_OPTIONS_INVERTED[
-          ACTION_DOCUMENT_TYPE_OPTIONS.motion
-        ],
+      documentType: 'M006',
       objection:
-        MOTION_OBJECTION_OPTIONS_INVERTED[MOTION_OBJECTION_OPTIONS.noObjection],
-    });
-  });
-
-  it('should identify and return "motion" category and description for motion documents by eventCode, with objection', () => {
-    mockIsMotion.mockReturnValue(true);
-    const result = getTransformedPendingItemDetails({
-      documentType: 'Motion for a New Trial',
-      eventCode: 'M218',
-      objections: 'objection',
-    });
-    expect(result).toEqual({
-      description: 'Motion for a New Trial',
-      documentType: 'motion',
-      objection: 'unknown',
-    });
-  });
-
-  it('should return "other" category and description when no match is found', () => {
-    const result = getTransformedPendingItemDetails({
-      documentType: 'Something Else Entirely',
-      eventCode: 'XXX',
-    });
-    expect(result).toEqual({
-      description: 'Something Else Entirely',
-      documentType: 'other',
-      objection: '',
+        MOTION_OBJECTION_OPTIONS_INVERTED[MOTION_OBJECTION_OPTIONS.objection],
     });
   });
 });
@@ -682,7 +559,6 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
 
     beforeEach(() => {
       MOCK_DOCKET_ENTRY = MOCK_CASE.docketEntries[0];
-      mockIsOrder.mockReturnValue(false);
     });
 
     it('should return "petitioner" when filed by petitioner only', () => {
@@ -726,7 +602,6 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
     });
 
     it('should return "court" when the pending item is an order', () => {
-      mockIsOrder.mockReturnValue(true);
       const result = transformFiledBy({
         ...MOCK_DOCKET_ENTRY,
         eventCode: 'O',
@@ -769,18 +644,24 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
   });
 
   describe('getPendingItemsFromCase', () => {
+    beforeEach(() => {
+      (formatCase as jest.Mock).mockClear();
+    });
+
     it('should transform pending items into action filing entries', () => {
       (formatCase as jest.Mock).mockReturnValue({
         formattedDocketEntries: [
           {
             createdAt: '2018-11-21T05:00:00.000Z',
-            documentType: 'Motion',
+            documentType: 'Tax Court Report Pamphlet',
+            eventCode: 'TCRP',
+            isUnservable: true,
             filedBy: 'Petr. Bob',
             filers: ['pet1'],
+            pending: true,
           },
         ],
       });
-      (DocketEntry.isPending as jest.Mock).mockReturnValue(true);
 
       const result = getPendingItemsFromCase({
         caseDetail: MOCK_CASE,
@@ -798,9 +679,12 @@ describe('initializeTrialSessionMinuteSheetFormAction helper functions', () => {
     });
 
     it('should return only an empty row if there are no pending items', () => {
-      (DocketEntry.isPending as jest.Mock).mockReturnValue(false);
+      (formatCase as jest.Mock).mockReturnValue({
+        formattedDocketEntries: [],
+      });
+
       const result = getPendingItemsFromCase({
-        caseDetail: MOCK_CASE,
+        caseDetail: { ...MOCK_CASE, docketEntries: [] },
         user: {},
       });
 

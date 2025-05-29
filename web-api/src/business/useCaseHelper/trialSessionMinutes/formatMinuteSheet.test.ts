@@ -821,7 +821,7 @@ describe('formatMinuteSheet', () => {
         expect(result).toEqual([]);
       });
 
-      it('should format a single action correctly', () => {
+      it('should format a single action with an internal document type correctly', () => {
         const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
           [
             {
@@ -839,6 +839,28 @@ describe('formatMinuteSheet', () => {
           {
             content:
               '01/15/2023; Amended Certificate of Service - <em>test note</em>; Filed by Petitioner; FILED',
+          },
+        ]);
+      });
+
+      it('should format a single action with an external document type correctly', () => {
+        const actionsSection: MinuteSheet['proceedings']['actionsAndFilings'] =
+          [
+            {
+              date: '01/15/2023',
+              documentType: 'M031',
+              filedBy: 'petitioner',
+              status: 'filed',
+              note: 'test note',
+              isOnDocketRecord: true,
+              oralMotion: false,
+            },
+          ];
+        const result = formatActionsAndFilings(actionsSection);
+        expect(result).toEqual([
+          {
+            content:
+              '01/15/2023; Motion for Review By the Full Court - <em>test note</em>; Filed by Petitioner; FILED',
           },
         ]);
       });

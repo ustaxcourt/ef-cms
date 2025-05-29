@@ -6,7 +6,7 @@ jest.mock(
 );
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
+import { NotFoundError, ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
@@ -98,5 +98,34 @@ describe('unsealCaseInteractor', () => {
       applicationContext,
       identifiers: [`case|${MOCK_CASE.docketNumber}`],
     });
+  });
+
+  it('should throw a NotFoundError if the case cannot be found', async () => {
+    getCaseByDocketNumber.mockResolvedValueOnce(undefined);
+
+    await expect(
+      unsealCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: '999-99',
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
+  });
+
+  it('should bubble up an error thrown by getCaseByDocketNumber', async () => {
+    const mockError = new Error('DB is unreachable');
+    getCaseByDocketNumber.mockRejectedValueOnce(mockError);
+
+    await expect(
+      unsealCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        mockDocketClerkUser,
+      ),
+    ).rejects.toThrow('DB is unreachable');
   });
 });
