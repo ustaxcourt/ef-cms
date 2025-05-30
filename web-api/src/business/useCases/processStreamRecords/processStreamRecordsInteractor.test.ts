@@ -1,30 +1,18 @@
 jest.mock('./processStreamUtilities');
 jest.mock('./processDocketEntries');
-jest.mock('./processMessageEntries');
 jest.mock('./processPractitionerMappingEntries');
 jest.mock('./processRemoveEntries');
-jest.mock('./processWorkItemEntries');
 jest.mock('./processCaseEntries');
-jest.mock('./processCaseDeadlineEntries');
-jest.mock('./processCaseCorrespondenceEntries');
-jest.mock('./processCaseWorksheetEntries');
-jest.mock('./processUserCaseNoteEntries');
 jest.mock('./processOtherEntries');
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { partitionRecords } from './processStreamUtilities';
-import { processCaseCorrespondenceEntries } from '@web-api/business/useCases/processStreamRecords/processCaseCorrespondenceEntries';
-import { processCaseDeadlineEntries } from '@web-api/business/useCases/processStreamRecords/processCaseDeadlineEntries';
 import { processCaseEntries } from './processCaseEntries';
-import { processCaseWorksheetEntries } from '@web-api/business/useCases/processStreamRecords/processCaseWorksheetEntries';
 import { processDocketEntries } from './processDocketEntries';
-import { processMessageEntries } from './processMessageEntries';
 import { processOtherEntries } from './processOtherEntries';
 import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
 import { processRemoveEntries } from './processRemoveEntries';
 import { processStreamRecordsInteractor } from './processStreamRecordsInteractor';
-import { processUserCaseNoteEntries } from './processUserCaseNoteEntries';
-import { processWorkItemEntries } from './processWorkItemEntries';
 
 const logger = getLogger();
 const errorSpy = jest.spyOn(logger, 'error');
@@ -34,13 +22,7 @@ describe('processStreamRecordsInteractor', () => {
     (processRemoveEntries as jest.Mock).mockResolvedValue([]);
     (processCaseEntries as jest.Mock).mockResolvedValue([]);
     (processDocketEntries as jest.Mock).mockResolvedValue([]);
-    (processWorkItemEntries as jest.Mock).mockResolvedValue([]);
-    (processMessageEntries as jest.Mock).mockResolvedValue([]);
     (processPractitionerMappingEntries as jest.Mock).mockResolvedValue([]);
-    (processCaseDeadlineEntries as jest.Mock).mockResolvedValue([]);
-    (processCaseWorksheetEntries as jest.Mock).mockResolvedValue([]);
-    (processCaseCorrespondenceEntries as jest.Mock).mockResolvedValue([]);
-    (processUserCaseNoteEntries as jest.Mock).mockResolvedValue([]);
     (processOtherEntries as jest.Mock).mockResolvedValue([]);
 
     (partitionRecords as jest.Mock).mockReturnValue({
@@ -78,13 +60,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processRemoveEntries).toHaveBeenCalled(); // the one that throws an error
     expect(processCaseEntries).not.toHaveBeenCalled();
     expect(processDocketEntries).not.toHaveBeenCalled();
-    expect(processWorkItemEntries).not.toHaveBeenCalled();
-    expect(processMessageEntries).not.toHaveBeenCalled();
-    expect(processUserCaseNoteEntries).not.toHaveBeenCalled();
     expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
-    expect(processCaseDeadlineEntries).not.toHaveBeenCalled();
-    expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
-    expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
     expect(errorSpy).toHaveBeenCalledTimes(2);
   });
@@ -101,8 +77,6 @@ describe('processStreamRecordsInteractor', () => {
     expect(processRemoveEntries).toHaveBeenCalled();
     expect(processCaseEntries).toHaveBeenCalled(); // the one that throws an error
     expect(processDocketEntries).not.toHaveBeenCalled();
-    expect(processWorkItemEntries).not.toHaveBeenCalled();
-    expect(processMessageEntries).not.toHaveBeenCalled();
     expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
     expect(errorSpy).toHaveBeenCalledTimes(2);
@@ -120,56 +94,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processRemoveEntries).toHaveBeenCalled();
     expect(processCaseEntries).toHaveBeenCalled();
     expect(processDocketEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(processWorkItemEntries).not.toHaveBeenCalled();
-    expect(processMessageEntries).not.toHaveBeenCalled();
     expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
-    expect(processCaseDeadlineEntries).not.toHaveBeenCalled();
-    expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
-    expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
-    expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
-  });
-
-  it('should log an error, throw an exception, and halt further execution when processWorkItemEntries fails', async () => {
-    (processWorkItemEntries as jest.Mock).mockRejectedValueOnce(new Error());
-
-    await expect(
-      processStreamRecordsInteractor(applicationContext, {
-        recordsToProcess: [],
-      }),
-    ).rejects.toThrow();
-
-    expect(processRemoveEntries).toHaveBeenCalled();
-    expect(processCaseEntries).toHaveBeenCalled();
-    expect(processDocketEntries).toHaveBeenCalled();
-    expect(processWorkItemEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(processMessageEntries).not.toHaveBeenCalled();
-    expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
-    expect(processCaseDeadlineEntries).not.toHaveBeenCalled();
-    expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
-    expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
-    expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
-  });
-
-  it('should log an error, throw an exception, and halt further execution when processMessageEntries fails', async () => {
-    (processMessageEntries as jest.Mock).mockRejectedValueOnce(new Error());
-
-    await expect(
-      processStreamRecordsInteractor(applicationContext, {
-        recordsToProcess: [],
-      }),
-    ).rejects.toThrow();
-
-    expect(processRemoveEntries).toHaveBeenCalled();
-    expect(processCaseEntries).toHaveBeenCalled();
-    expect(processDocketEntries).toHaveBeenCalled();
-    expect(processWorkItemEntries).toHaveBeenCalled();
-    expect(processMessageEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
-    expect(processCaseDeadlineEntries).not.toHaveBeenCalled();
-    expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
-    expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
     expect(errorSpy).toHaveBeenCalledTimes(2);
   });
@@ -188,84 +113,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processRemoveEntries).toHaveBeenCalled();
     expect(processCaseEntries).toHaveBeenCalled();
     expect(processDocketEntries).toHaveBeenCalled();
-    expect(processWorkItemEntries).toHaveBeenCalled();
-    expect(processMessageEntries).toHaveBeenCalled();
     expect(processPractitionerMappingEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(processCaseDeadlineEntries).not.toHaveBeenCalled();
-    expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
-    expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
-    expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
-  });
-
-  it('should log an error, throw an exception, and halt further execution when processCaseDeadlineEntries fails', async () => {
-    (processCaseDeadlineEntries as jest.Mock).mockRejectedValueOnce(
-      new Error(),
-    );
-
-    await expect(
-      processStreamRecordsInteractor(applicationContext, {
-        recordsToProcess: [],
-      }),
-    ).rejects.toThrow();
-
-    expect(processRemoveEntries).toHaveBeenCalled();
-    expect(processCaseEntries).toHaveBeenCalled();
-    expect(processDocketEntries).toHaveBeenCalled();
-    expect(processWorkItemEntries).toHaveBeenCalled();
-    expect(processMessageEntries).toHaveBeenCalled();
-    expect(processPractitionerMappingEntries).toHaveBeenCalled();
-    expect(processCaseDeadlineEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(processCaseWorksheetEntries).not.toHaveBeenCalled();
-    expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
-    expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
-  });
-
-  it('should log an error, throw an exception, and halt further execution when processCaseWorksheetEntries fails', async () => {
-    (processCaseWorksheetEntries as jest.Mock).mockRejectedValueOnce(
-      new Error(),
-    );
-
-    await expect(
-      processStreamRecordsInteractor(applicationContext, {
-        recordsToProcess: [],
-      }),
-    ).rejects.toThrow();
-
-    expect(processRemoveEntries).toHaveBeenCalled();
-    expect(processCaseEntries).toHaveBeenCalled();
-    expect(processDocketEntries).toHaveBeenCalled();
-    expect(processWorkItemEntries).toHaveBeenCalled();
-    expect(processMessageEntries).toHaveBeenCalled();
-    expect(processPractitionerMappingEntries).toHaveBeenCalled();
-    expect(processCaseDeadlineEntries).toHaveBeenCalled();
-    expect(processCaseWorksheetEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(processCaseCorrespondenceEntries).not.toHaveBeenCalled();
-    expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
-  });
-
-  it('should log an error, throw an exception, and halt further execution when processCaseCorrespondenceEntries fails', async () => {
-    (processCaseCorrespondenceEntries as jest.Mock).mockRejectedValueOnce(
-      new Error(),
-    );
-
-    await expect(
-      processStreamRecordsInteractor(applicationContext, {
-        recordsToProcess: [],
-      }),
-    ).rejects.toThrow();
-
-    expect(processRemoveEntries).toHaveBeenCalled();
-    expect(processCaseEntries).toHaveBeenCalled();
-    expect(processDocketEntries).toHaveBeenCalled();
-    expect(processWorkItemEntries).toHaveBeenCalled();
-    expect(processMessageEntries).toHaveBeenCalled();
-    expect(processPractitionerMappingEntries).toHaveBeenCalled();
-    expect(processCaseDeadlineEntries).toHaveBeenCalled();
-    expect(processCaseWorksheetEntries).toHaveBeenCalled();
-    expect(processCaseCorrespondenceEntries).toHaveBeenCalled(); // the one that throws an error
     expect(processOtherEntries).not.toHaveBeenCalled();
     expect(errorSpy).toHaveBeenCalledTimes(2);
   });
@@ -282,12 +130,7 @@ describe('processStreamRecordsInteractor', () => {
     expect(processRemoveEntries).toHaveBeenCalled();
     expect(processCaseEntries).toHaveBeenCalled();
     expect(processDocketEntries).toHaveBeenCalled();
-    expect(processWorkItemEntries).toHaveBeenCalled();
-    expect(processMessageEntries).toHaveBeenCalled();
     expect(processPractitionerMappingEntries).toHaveBeenCalled();
-    expect(processCaseDeadlineEntries).toHaveBeenCalled();
-    expect(processCaseWorksheetEntries).toHaveBeenCalled();
-    expect(processCaseCorrespondenceEntries).toHaveBeenCalled();
     expect(processOtherEntries).toHaveBeenCalled(); // the one that throws an error
     expect(errorSpy).toHaveBeenCalledTimes(2);
   });

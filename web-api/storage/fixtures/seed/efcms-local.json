@@ -20459,46 +20459,6 @@
     "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5"
   },
   {
-    "sk": "docketNumberCounter-2011",
-    "id": 1,
-    "pk": "docketNumberCounter-2011"
-  },
-  {
-    "sk": "docketNumberCounter-2016",
-    "id": 1,
-    "pk": "docketNumberCounter-2016"
-  },
-  {
-    "sk": "docketNumberCounter-2019",
-    "id": 13,
-    "pk": "docketNumberCounter-2019"
-  },
-  {
-    "sk": "docketNumberCounter-2020",
-    "id": 29,
-    "pk": "docketNumberCounter-2020"
-  },
-  {
-    "sk": "docketNumberCounter-2021",
-    "id": 219,
-    "pk": "docketNumberCounter-2021"
-  },
-  {
-    "sk": "docketNumberCounter-2022",
-    "id": 2,
-    "pk": "docketNumberCounter-2022"
-  },
-  {
-    "sk": "docketNumberCounter-2023",
-    "id": 6,
-    "pk": "docketNumberCounter-2023"
-  },
-  {
-    "sk": "docketNumberCounter-2024",
-    "id": 1,
-    "pk": "docketNumberCounter-2024"
-  },
-  {
     "sk": "document-search-limiter",
     "id": 1,
     "pk": "document-search-limiter",
