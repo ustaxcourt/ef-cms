@@ -2,6 +2,7 @@ import { merge } from 'lodash';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertPractitionerRecords } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecords';
 import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
+import { getLogger } from '@web-api/utilities/logger/getLogger';
 
 export const processPractitionerMappingEntries = async ({
   practitionerMappingRecords,
@@ -9,33 +10,39 @@ export const processPractitionerMappingEntries = async ({
   practitionerMappingRecords: any[];
 }) => {
   if (!practitionerMappingRecords?.length) return;
-  await upsertPractitionerRecords(
-    practitionerMappingRecords.map(practitionerMappingRecord => {
-      const practitioner = unmarshall(
-        practitionerMappingRecord.dynamodb.NewImage,
-      );
+  try {
+    await upsertPractitionerRecords(
+      practitionerMappingRecords.map(practitionerMappingRecord => {
+        const practitioner = unmarshall(
+          practitionerMappingRecord.dynamodb.NewImage,
+        );
 
-      const { contact, ...rest } = practitioner;
-      const flatPractitioner = merge({}, rest, contact || {});
+        const { contact, ...rest } = practitioner;
+        const flatPractitioner = merge({}, rest, contact || {});
 
-      return flatPractitioner;
-    }),
-  );
+        return flatPractitioner;
+      }),
+    );
 
-  await upsertUserOnCaseRecords(
-    practitionerMappingRecords.map(practitionerMappingRecord => {
-      const userOnCaseRecord = unmarshall(
-        practitionerMappingRecord.dynamodb.NewImage,
-      );
+    await upsertUserOnCaseRecords(
+      practitionerMappingRecords.map(practitionerMappingRecord => {
+        const userOnCaseRecord = unmarshall(
+          practitionerMappingRecord.dynamodb.NewImage,
+        );
 
-      const docketNumber = userOnCaseRecord.pk.split('|')[1];
+        const docketNumber = userOnCaseRecord.pk.split('|')[1];
 
-      return {
-        docketNumber,
-        userId: userOnCaseRecord.userId,
-        entityName: userOnCaseRecord.entityName,
-        representing: userOnCaseRecord.representing,
-      };
-    }),
-  );
+        return {
+          docketNumber,
+          userId: userOnCaseRecord.userId,
+          entityName: userOnCaseRecord.entityName,
+          representing: userOnCaseRecord.representing,
+        };
+      }),
+    );
+  } catch (e) {
+    getLogger().error(
+      `Postgres re-indexing failure: Failed to process practitioner mapping record: ${e}`,
+    );
+  }
 };

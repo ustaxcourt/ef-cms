@@ -13,14 +13,20 @@ export const processUserOnCasePendingEntries = async ({
     `going to upsert ${userOnCasePendingRecords.length} userOnCasePending records`,
   );
 
-  await upsertUserOnCasePendingRecords(
-    userOnCasePendingRecords.map(userOnCasePendingRecord => {
-      const record = unmarshall(userOnCasePendingRecord.dynamodb.NewImage);
+  try {
+    await upsertUserOnCasePendingRecords(
+      userOnCasePendingRecords.map(userOnCasePendingRecord => {
+        const record = unmarshall(userOnCasePendingRecord.dynamodb.NewImage);
 
-      return {
-        userId: record.userId,
-        docketNumber: record.docketNumber,
-      };
-    }),
-  );
+        return {
+          userId: record.userId,
+          docketNumber: record.docketNumber,
+        };
+      }),
+    );
+  } catch (e) {
+    getLogger().error(
+      `Postgres re-indexing failure: Failed to process userOnCasePending record: ${e}`,
+    );
+  }
 };

@@ -13,13 +13,19 @@ export const processUserOnCaseEntries = async ({
     `going to upsert ${userOnCaseRecords.length} userOnCase records`,
   );
 
-  await userOnCaseRecords.forEach(async userOnCaseRecord => {
-    const record = unmarshall(userOnCaseRecord.dynamodb.NewImage);
+  try {
+    await userOnCaseRecords.forEach(async userOnCaseRecord => {
+      const record = unmarshall(userOnCaseRecord.dynamodb.NewImage);
 
-    await associateUserWithCase({
-      userId: record.userId,
-      docketNumber: record.docketNumber,
-      entityName: record.entityName,
+      await associateUserWithCase({
+        userId: record.userId,
+        docketNumber: record.docketNumber,
+        entityName: record.entityName,
+      });
     });
-  });
+  } catch (e) {
+    getLogger().error(
+      `Postgres re-indexing failure: Failed to process userOnCase record: ${e}`,
+    );
+  }
 };

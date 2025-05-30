@@ -29,13 +29,10 @@ export const associateUserWithCase = async ({
       docketNumber,
     };
 
-    if (entityName) {
-      values.entityName = entityName;
-    }
-
-    if (representing) {
-      values.representing = JSON.stringify(representing);
-    }
+    values.entityName = entityName || userOnCaseRecord.entityName;
+    values.representing = JSON.stringify(
+      representing || userOnCaseRecord.representing || [],
+    );
 
     await pgUpdateTable({
       table: 'dwUserOnCase',
@@ -52,7 +49,7 @@ export const associateUserWithCase = async ({
         userId,
         docketNumber,
         entityName,
-        representing: representing ? JSON.stringify(representing) : undefined,
+        representing: JSON.stringify(representing || []),
       },
       onConflictColumns: ['docketNumber', 'userId'],
     });

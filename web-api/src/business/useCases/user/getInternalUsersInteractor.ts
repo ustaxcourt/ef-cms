@@ -1,11 +1,12 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
-import { getInternalUsers } from '@web-api/persistence/postgres/users/getInternalUsers';
+import { User } from '@shared/business/entities/User';
+import { getAllUsersByRole } from '@web-api/persistence/postgres/users/getAllUsersByRole';
+import { INTERNAL_ROLES } from '@shared/business/entities/EntityConstants';
 
 export const getInternalUsersInteractor = async (
   authorizedUser: UnknownAuthUser,
@@ -14,7 +15,9 @@ export const getInternalUsersInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const rawUsers = await getInternalUsers();
+  const rawUsers = await getAllUsersByRole({
+    roles: Object.values(INTERNAL_ROLES) as string[],
+  });
 
   return User.validateRawCollection(rawUsers);
 };

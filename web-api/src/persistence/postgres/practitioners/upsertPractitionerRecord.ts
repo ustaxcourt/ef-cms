@@ -9,8 +9,6 @@ export const upsertPractitionerRecord = async ({
   practitioner: any;
   userId: string;
 }) => {
-  delete practitioner.password;
-
   if (practitioner.barNumber === '') {
     delete practitioner.barNumber;
   }

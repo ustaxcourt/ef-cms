@@ -1,7 +1,6 @@
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '@web-api/applicationContext';
 import { updateUser } from '../users/updateUser';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 
 export const updatePractitionerUser = async ({
@@ -9,17 +8,13 @@ export const updatePractitionerUser = async ({
 }: {
   user: RawPractitioner;
 }) => {
-  const logger = getLogger();
-  try {
+  const emailToUpdate = user.email || user.pendingEmail;
+
+  if (emailToUpdate) {
     await applicationContext.getUserGateway().updateUser(applicationContext, {
-      attributesToUpdate: {
-        role: user.role,
-      },
-      email: user.email ? user.email : user.pendingEmail,
+      attributesToUpdate: { role: user.role },
+      email: emailToUpdate,
     });
-  } catch (error) {
-    logger.error(error);
-    throw error;
   }
 
   await updatePractitioner({ practitionerToUpdate: user });

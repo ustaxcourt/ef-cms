@@ -24,7 +24,14 @@ export const getCaseByDocketNumber = async ({
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
   // These case items are no longer in dynamoDB
-  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case'];
+  const SK_FILTER_OUT = [
+    'work-item',
+    'correspondence',
+    'case',
+    'irsPractitioner',
+    'privatePractitioner',
+    'inactivePractitioner',
+  ];
 
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({
     docketNumber,

@@ -15,28 +15,34 @@ export const processUserEntries = async ({
 
   getLogger().debug(`going to index ${userRecords.length} user records`);
 
-  await upsertUsers(
-    userRecords.map(userRecord => {
+  try {
+    await upsertUsers(
+      userRecords.map(userRecord => {
+        const user = unmarshall(userRecord.dynamodb.NewImage) as RawUser;
+
+        const { contact, ...rest } = user;
+        const flatUser = merge({}, rest, contact || {});
+
+        return flatUser;
+      }),
+    );
+
+    userRecords.forEach(async userRecord => {
       const user = unmarshall(userRecord.dynamodb.NewImage) as RawUser;
 
       const { contact, ...rest } = user;
       const flatUser = merge({}, rest, contact || {});
 
-      return flatUser;
-    }),
-  );
-
-  userRecords.forEach(async userRecord => {
-    const user = unmarshall(userRecord.dynamodb.NewImage) as RawUser;
-
-    const { contact, ...rest } = user;
-    const flatUser = merge({}, rest, contact || {});
-
-    if (flatUser.entityName?.includes(Practitioner.ENTITY_NAME)) {
-      await upsertPractitionerRecord({
-        practitioner: flatUser,
-        userId: flatUser.userId,
-      });
-    }
-  });
+      if (flatUser.entityName?.includes(Practitioner.ENTITY_NAME)) {
+        await upsertPractitionerRecord({
+          practitioner: flatUser,
+          userId: flatUser.userId,
+        });
+      }
+    });
+  } catch (e) {
+    getLogger().error(
+      `Postgres re-indexing failure: Failed to process user record: ${e}`,
+    );
+  }
 };

@@ -13,6 +13,7 @@ import {
 import { contactInfo } from '@web-api/persistence/postgres/users/mapper';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { DW_PRACTITIONER_COLUMNS } from '@web-api/persistence/postgres/practitioners/schema';
+import { DW_USER_COLUMNS } from '@web-api/persistence/postgres/users/schema';
 
 export function pickPractitionerFields(user) {
   return {
@@ -99,22 +100,6 @@ function transformPractitionerData(practitioner) {
   });
 }
 
-export const PRACTITIONER_ONLY_FIELDS = [
-  'additionalPhone',
-  'admissionsDate',
-  'admissionsStatus',
-  'barNumber',
-  'birthYear',
-  'confirmEmail',
-  'practiceType',
-  'firmName',
-  'firstName',
-  'lastName',
-  'middleName',
-  'originalBarState',
-  'practitionerNotes',
-  'practitionerType',
-  'serviceIndicator',
-  'suffix',
-  'updatedEmail',
-] as typeof DW_PRACTITIONER_COLUMNS;
+export const PRACTITIONER_ONLY_FIELDS = DW_PRACTITIONER_COLUMNS.filter(x =>
+  (DW_USER_COLUMNS as string[]).includes(x),
+);
