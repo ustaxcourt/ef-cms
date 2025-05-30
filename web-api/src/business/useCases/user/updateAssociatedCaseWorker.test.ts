@@ -3,6 +3,9 @@ jest.mock('@shared/tools/helpers');
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -30,6 +33,8 @@ import {
   updatePetitionerCase,
   updatePractitionerCase,
 } from './updateAssociatedCaseWorker';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 const mockPractitioner = {
   ...validUser,
@@ -71,14 +76,17 @@ const mockCase = {
   status: CASE_STATUS_TYPES.generalDocket,
 };
 
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+jest
+  .mocked(updateCaseAndAssociationsMock)
+  .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+
 describe('updateAssociatedCaseWorker', () => {
   it('should log an error when the practitioner is not found on one of their associated cases by userId', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...mockCase,
-        privatePractitioners: [],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...mockCase,
+      privatePractitioners: [],
+    });
 
     await updateAssociatedCaseWorker(
       applicationContext,
@@ -140,9 +148,7 @@ describe('updateAssociatedCaseWorker', () => {
         ),
       ).rejects.toThrow(ServiceUnavailableError);
 
-      expect(
-        applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-      ).not.toHaveBeenCalled();
+      expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
@@ -199,21 +205,17 @@ describe('updateAssociatedCaseWorker', () => {
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          privatePractitioners: [mockPractitionerUser],
-        });
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+        privatePractitioners: [mockPractitionerUser],
+      });
     });
 
     it('should call generateAndServeDocketEntry with verified petitioner for servedParties', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          privatePractitioners: [],
-        });
+      getCaseByDocketNumber.mockResolvedValue({
+        ...mockCase,
+        privatePractitioners: [],
+      });
       await updateAssociatedCaseWorker(
         applicationContext,
         {
@@ -293,9 +295,7 @@ describe('updateAssociatedCaseWorker', () => {
     });
 
     it('should call generateAndServeDocketEntry if case is open', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(mockCase);
+      getCaseByDocketNumber.mockResolvedValue(mockCase);
 
       await expect(
         updateAssociatedCaseWorker(
@@ -318,13 +318,11 @@ describe('updateAssociatedCaseWorker', () => {
         howMuch: -3,
         units: 'months',
       });
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...mockCase,
-          closedDate,
-          status: CASE_STATUS_TYPES.closed,
-        });
+      getCaseByDocketNumber.mockResolvedValue({
+        ...mockCase,
+        closedDate,
+        status: CASE_STATUS_TYPES.closed,
+      });
 
       await expect(
         updateAssociatedCaseWorker(
@@ -348,13 +346,11 @@ describe('updateAssociatedCaseWorker', () => {
         units: 'months',
       });
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          closedDate,
-          status: CASE_STATUS_TYPES.closed,
-        });
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+        closedDate,
+        status: CASE_STATUS_TYPES.closed,
+      });
 
       await expect(
         updateAssociatedCaseWorker(
@@ -383,15 +379,11 @@ describe('updatePetitionerCases', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
 
   it('should call getCaseByDocketNumber for passed in docketNumber', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
 
     await updatePetitionerCase({
       applicationContext,
@@ -400,10 +392,7 @@ describe('updatePetitionerCases', () => {
       user: mockPetitionerUser2,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(getCaseByDocketNumber.mock.calls[0][0]).toMatchObject({
       docketNumber: mockCase.docketNumber,
     });
 
@@ -423,9 +412,7 @@ describe('updatePetitionerCases', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(caseMock);
+    getCaseByDocketNumber.mockResolvedValue(caseMock);
 
     await expect(
       updatePetitionerCase({
@@ -446,13 +433,11 @@ describe('updatePetitionerCases', () => {
   });
 
   it('should log an error if any case update is invalid and prevent updateCaseAndAssociations from being called', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketNumber: 'not a docket number',
-        invalidCase: 'yep',
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketNumber: 'not a docket number',
+      invalidCase: 'yep',
+    });
 
     await expect(
       updatePetitionerCase({
@@ -469,24 +454,22 @@ describe('updatePetitionerCases', () => {
   });
 
   it('should call updateCaseAndAssociations with updated email address for a contactSecondary', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: '41189629-abe1-46d7-b7a4-9d3834f919cb',
-          },
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser2.userId,
-            contactType: CONTACT_TYPES.secondary,
-            inCareOf: 'Barney',
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '41189629-abe1-46d7-b7a4-9d3834f919cb',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: mockPetitionerUser2.userId,
+          contactType: CONTACT_TYPES.secondary,
+          inCareOf: 'Barney',
+        },
+      ],
+    });
 
     await updatePetitionerCase({
       applicationContext,
@@ -503,31 +486,29 @@ describe('updatePetitionerCases', () => {
   });
 
   it('should update the petitioner service indicator when they are not represented', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: '41189629-abe1-46d7-b7a4-9d3834f919cb',
-          },
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser2.userId,
-            contactType: CONTACT_TYPES.secondary,
-            inCareOf: 'Barney',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-          },
-        ],
-        privatePractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            representing: [],
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: '41189629-abe1-46d7-b7a4-9d3834f919cb',
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: mockPetitionerUser2.userId,
+          contactType: CONTACT_TYPES.secondary,
+          inCareOf: 'Barney',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+      ],
+      privatePractitioners: [
+        {
+          ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+          representing: [],
+        },
+      ],
+    });
 
     await updatePetitionerCase({
       applicationContext,
@@ -547,28 +528,26 @@ describe('updatePetitionerCases', () => {
   });
 
   it('should update the petitioner service indicator when they are represented', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        partyType: PARTY_TYPES.petitionerDeceasedSpouse,
-        petitioners: [
-          ...MOCK_CASE.petitioners,
-          {
-            ...MOCK_CASE.petitioners[0],
-            contactId: mockPetitionerUser2.userId,
-            contactType: CONTACT_TYPES.secondary,
-            inCareOf: 'Barney',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
-          },
-        ],
-        privatePractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            representing: [mockPetitionerUser2.userId],
-          },
-        ],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      partyType: PARTY_TYPES.petitionerDeceasedSpouse,
+      petitioners: [
+        ...MOCK_CASE.petitioners,
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: mockPetitionerUser2.userId,
+          contactType: CONTACT_TYPES.secondary,
+          inCareOf: 'Barney',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+      ],
+      privatePractitioners: [
+        {
+          ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+          representing: [mockPetitionerUser2.userId],
+        },
+      ],
+    });
 
     await updatePetitionerCase({
       applicationContext,
@@ -601,12 +580,10 @@ describe('updatePractitionerCases', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        privatePractitioners: [mockPractitionerUser],
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      privatePractitioners: [mockPractitionerUser],
+    });
   });
 
   it('should set the service serviceIndicator to ELECTRONIC when confirming the email', async () => {

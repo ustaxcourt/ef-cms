@@ -1,4 +1,4 @@
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { casePublicSearch } from './casePublicSearch';
 jest.mock('./searchClient');
 import { CaseAdvancedSearchParamsRequestType } from '@web-api/business/useCases/caseAdvancedSearchInteractor';
@@ -8,17 +8,14 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { search as searchMock } from './searchClient';
 
-jest.mock(
-  './../../../../shared/src/business/utilities/aggregateCommonQueryParams',
-  () => {
-    return {
-      aggregateCommonQueryParams: () => ({
-        commonQuery: ['commonQueryMock'],
-        exactMatchesQuery: ['exactMatchesQuery'],
-      }),
-    };
-  },
-);
+jest.mock('@shared/business/utilities/aggregateCommonQueryParams', () => {
+  return {
+    aggregateCommonQueryParams: () => ({
+      commonQuery: ['commonQueryMock'],
+      exactMatchesQuery: ['exactMatchesQuery'],
+    }),
+  };
+});
 
 const MOCK_CASE_SEARCH_RESULT = {
   caseCaption: 'Test Case Caption',

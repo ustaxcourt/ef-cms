@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -6,20 +7,23 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfTrialIssuedInteractor } from './generateNoticeOfTrialIssuedInteractor';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
-const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
-getFeatureFlagValues.mockResolvedValue([
-  {
-    name: 'clerk-of-court-configuration',
-    value: {
-      current: {
-        name: 'bob',
-        title: 'clerk of court',
-      },
-    },
-  },
-]);
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('generateNoticeOfTrialIssuedInteractor', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+  getFeatureFlagValues.mockResolvedValue([
+    {
+      name: 'clerk-of-court-configuration',
+      value: {
+        current: {
+          name: 'bob',
+          title: 'clerk of court',
+        },
+      },
+    },
+  ]);
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
   const TEST_JUDGE = {
     judgeTitle: 'Judge',
     name: 'Test Judge',
@@ -46,24 +50,22 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         title: 'clerk of court',
       }));
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        if (docketNumber === '123-45') {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '123-45',
-            docketNumberWithSuffix: '123-45',
-          };
-        } else {
-          return {
-            caseCaption: 'Test Case Caption',
-            docketNumber: '234-56',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-            docketNumberWithSuffix: '234-56S',
-          };
-        }
-      });
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+      if (docketNumber === '123-45') {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45',
+        };
+      } else {
+        return {
+          caseCaption: 'Test Case Caption',
+          docketNumber: '234-56',
+          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          docketNumberWithSuffix: '234-56S',
+        };
+      }
+    });
 
     applicationContext
       .getUseCases()
@@ -85,9 +87,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
         .calls[0][0],
@@ -185,9 +185,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
     ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfTrialIssued.mock
         .calls[0][0],

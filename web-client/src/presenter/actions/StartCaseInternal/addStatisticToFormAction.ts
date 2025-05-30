@@ -1,3 +1,4 @@
+import { MAX_NUMBER_DEFICIENCY_STATISTICS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -14,7 +15,7 @@ export const addStatisticToFormAction = ({
 }: ActionProps) => {
   let statistics = get(state.form.statistics);
 
-  if (statistics && statistics.length < 12) {
+  if (statistics && statistics.length < MAX_NUMBER_DEFICIENCY_STATISTICS) {
     statistics.push({
       statisticId: applicationContext.getUniqueId(),
       yearOrPeriod: 'Year',

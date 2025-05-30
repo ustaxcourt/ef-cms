@@ -1,6 +1,8 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from './createCourtIssuedOrderPdfFromHtmlInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
@@ -20,16 +22,15 @@ getFeatureFlagValues.mockResolvedValue([
 ]);
 
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const mockPdfUrl = 'www.example.com';
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        caseCaption: 'Dr. Leo Marvin, Petitioner',
-        docketNumber: '123-45',
-        docketNumberWithSuffix: '123-45W',
-      });
+    getCaseByDocketNumber.mockReturnValue({
+      caseCaption: 'Dr. Leo Marvin, Petitioner',
+      docketNumber: '123-45',
+      docketNumberWithSuffix: '123-45W',
+    });
 
     applicationContext
       .getUseCaseHelpers()
@@ -43,7 +44,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       });
   });
 
-  it('throws an error if the user is not authorized', async () => {
+  it('should throw an error when the user is not authorized', async () => {
     await expect(
       createCourtIssuedOrderPdfFromHtmlInteractor(
         applicationContext,
@@ -61,12 +62,10 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       } as any,
       mockDocketClerkUser,
     );
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toHaveBeenCalled();
+    expect(getCaseByDocketNumber).toHaveBeenCalled();
   });
 
-  it('calls the pdf document generator function', async () => {
+  it('should call the pdf document generator function', async () => {
     await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {
@@ -86,7 +85,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     );
   });
 
-  it('returns the pdf url from the temp documents bucket', async () => {
+  it('should return the pdf url from the temp documents bucket', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {
@@ -101,7 +100,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     expect(result).toEqual(mockPdfUrl);
   });
 
-  it('calls the generate the order pdf with the defined addedDocketNumbers', async () => {
+  it('should call the generate the order pdf with the defined addedDocketNumbers', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {
@@ -120,7 +119,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     expect(result).toEqual(mockPdfUrl);
   });
 
-  it('calls the generate the order pdf with the defined name and title of the clerk for NOT event codes', async () => {
+  it('should call the generate the order pdf with the defined name and title of the clerk for NOT event codes', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
       {

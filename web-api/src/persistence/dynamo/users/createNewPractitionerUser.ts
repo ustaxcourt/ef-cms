@@ -1,6 +1,7 @@
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { put } from '../../dynamodbClientService';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const updateUserRecords = async ({
   applicationContext,
@@ -11,7 +12,7 @@ export const updateUserRecords = async ({
   updatedUser: RawPractitioner;
   userId: string;
 }): Promise<RawPractitioner> => {
-  await Promise.all([
+  await settlePromises([
     put({
       Item: {
         ...updatedUser,

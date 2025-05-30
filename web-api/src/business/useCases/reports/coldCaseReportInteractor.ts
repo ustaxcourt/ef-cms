@@ -2,9 +2,9 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type ColdCaseEntry = {
   createdAt: string;

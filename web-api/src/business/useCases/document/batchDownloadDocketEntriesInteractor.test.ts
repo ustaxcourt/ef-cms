@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   ATP_DOCKET_ENTRY,
   MOCK_DOCUMENTS,
@@ -6,12 +7,15 @@ import {
   STANDING_PRETRIAL_ORDER_ENTRY,
 } from '@shared/test/mockDocketEntry';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { batchDownloadDocketEntriesInteractor } from '@web-api/business/useCases/document/batchDownloadDocketEntriesInteractor';
 import {
   mockDocketClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('batchDownloadDocketEntriesInteractor', () => {
   const MOCK_URL = 'document_url_containing_id';
@@ -44,12 +48,10 @@ describe('batchDownloadDocketEntriesInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
       documentsSelectedForDownload: mockDocumentsSelectedForDownload,
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        docketEntries: mockDocketEntries,
-      });
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      docketEntries: mockDocketEntries,
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -89,9 +91,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
   it('throws an unknown error if an error is thrown without a message', async () => {
     requestParams.printableDocketRecordFileId = '1234567';
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockRejectedValueOnce(new Error());
+    getCaseByDocketNumber.mockRejectedValueOnce(new Error());
 
     await batchDownloadDocketEntriesInteractor(
       applicationContext,
@@ -117,9 +117,7 @@ describe('batchDownloadDocketEntriesInteractor', () => {
   });
 
   it('throws an NotFound error if a case does not exist', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(false);
+    getCaseByDocketNumber.mockResolvedValue(false);
 
     await batchDownloadDocketEntriesInteractor(
       applicationContext,

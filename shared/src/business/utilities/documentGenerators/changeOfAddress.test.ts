@@ -9,7 +9,7 @@ describe('changeOfAddress', () => {
       NCA: {
         h3: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
           ({ eventCode }) => eventCode === 'NCA',
-        ).title,
+        )?.title,
         isAddressAndPhoneChange: false,
         isAddressChange: true,
         isEmailChange: false,
@@ -18,7 +18,7 @@ describe('changeOfAddress', () => {
       NCAP: {
         h3: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
           ({ eventCode }) => eventCode === 'NCAP',
-        ).title,
+        )?.title,
         isAddressAndPhoneChange: true,
         isAddressChange: true,
         isEmailChange: false,
@@ -27,7 +27,7 @@ describe('changeOfAddress', () => {
       NCP: {
         h3: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
           ({ eventCode }) => eventCode === 'NCP',
-        ).title,
+        )?.title,
         isAddressAndPhoneChange: false,
         isAddressChange: false,
         isEmailChange: false,
@@ -36,7 +36,7 @@ describe('changeOfAddress', () => {
       NOCE: {
         h3: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.find(
           ({ eventCode }) => eventCode === 'NOCE',
-        ).title,
+        )?.title,
         isAddressAndPhoneChange: false,
         isAddressChange: false,
         isEmailChange: true,

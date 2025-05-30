@@ -1,11 +1,14 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { Case } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createCaseAndAssociations } from './createCaseAndAssociations';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { createCase as createCaseMock } from '@web-api/persistence/postgres/cases/createCase';
+
+const createCase = createCaseMock as jest.Mock;
 
 describe('createCaseAndAssociations', () => {
   const createCaseMock = jest.fn();
@@ -35,9 +38,7 @@ describe('createCaseAndAssociations', () => {
       .validate()
       .toRawObject();
 
-    applicationContext
-      .getPersistenceGateway()
-      .createCase.mockImplementation(createCaseMock);
+    createCase.mockImplementation(createCaseMock);
   });
 
   it('always sends valid entities to the createCase persistence method', async () => {
@@ -80,9 +81,9 @@ describe('createCaseAndAssociations', () => {
         caseToCreate,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().createCase.mock.calls[0][0],
-      ).toMatchObject({ applicationContext, caseToCreate });
+      expect(createCase.mock.calls[0][0]).toMatchObject({
+        caseToCreate,
+      });
 
       expect(
         applicationContext.getPersistenceGateway().updateDocketEntry,

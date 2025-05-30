@@ -1,8 +1,5 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
-import { COUNTRY_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
+jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -11,6 +8,10 @@ import {
   updateUserContactInformationInteractor,
 } from './updateUserContactInformationInteractor';
 import { sleep } from '@shared/tools/helpers';
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 
 const contactInfo = {
   address1: '234 Main St',

@@ -1,8 +1,10 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_TRIAL_INPERSON } from '../../../../../shared/src/test/mockTrial';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeToInPersonProceeding } from './generateNoticeOfChangeToInPersonProceeding';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
 getFeatureFlagValues.mockResolvedValue([
@@ -18,6 +20,7 @@ getFeatureFlagValues.mockResolvedValue([
 ]);
 
 describe('generateNoticeOfChangeToInPersonProceeding', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const mockTrialSessionInformation = {
     ...MOCK_TRIAL_INPERSON,
     chambersPhoneNumber: '203-456-9888',
@@ -35,9 +38,7 @@ describe('generateNoticeOfChangeToInPersonProceeding', () => {
       .getPersistenceGateway()
       .getUsersInSection.mockReturnValue([mockJudge]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     applicationContext
       .getPersistenceGateway()

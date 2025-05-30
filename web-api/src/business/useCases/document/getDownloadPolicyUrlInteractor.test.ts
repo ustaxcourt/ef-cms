@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 /* eslint-disable max-lines */
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_ENTRY_SEALED_TO_TYPES,
@@ -8,24 +9,24 @@ import {
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   UNAUTHORIZED_DOCUMENT_MESSAGE,
   getDownloadPolicyUrlInteractor,
 } from './getDownloadPolicyUrlInteractor';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   calculateISODate,
   createISODateString,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import {
   casePetitioner,
   irsPractitionerUser,
   privatePractitionerUser,
-} from '../../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import { cloneDeep } from 'lodash';
 import {
   mockAdminUser,
@@ -36,6 +37,7 @@ import {
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('getDownloadPolicyUrlInteractor', () => {
   let mockCase;
@@ -48,14 +50,13 @@ describe('getDownloadPolicyUrlInteractor', () => {
   const petitionDocketEntry = MOCK_CASE.docketEntries.find(
     d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
   );
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   beforeEach(() => {
     mockCase = cloneDeep(MOCK_CASE);
     mockCase.status = CASE_STATUS_TYPES.generalDocket;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    getCaseByDocketNumber.mockResolvedValue(mockCase);
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue('localhost');
@@ -377,9 +378,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
 
     it('should throw a not found error when the case the document belonds to is not found', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
+      getCaseByDocketNumber.mockResolvedValue({ docketEntries: [] });
 
       await expect(
         getDownloadPolicyUrlInteractor(
@@ -500,35 +499,33 @@ describe('getDownloadPolicyUrlInteractor', () => {
 
     it('should throw an error when the document requested is a brief that has not yet been served', async () => {
       const briefDocketEntryId = 'abb81f4d-1e47-423a-8caf-6d2fdc3d3859';
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              createdAt: '2009-11-21T20:49:28.192Z',
-              docketEntryId: briefDocketEntryId,
-              docketNumber: '101-18',
-              documentTitle: 'Simultaneous Opening Brief',
-              documentType: 'Simultaneous Opening Brief',
-              draftOrderState: {},
-              entityName: 'DocketEntry',
-              eventCode: 'SIOB',
-              filedBy: 'Test Petitioner',
-              filers: [],
-              filingDate: '2009-03-01T05:00:00.000Z',
-              index: 6,
-              isFileAttached: true,
-              isOnDocketRecord: true,
-              pending: false,
-              processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-              receivedAt: '2009-03-01T05:00:00.000Z',
-              servedAt: undefined,
-              stampData: {},
-              userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-          ],
-        });
+      getCaseByDocketNumber.mockResolvedValue({
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            createdAt: '2009-11-21T20:49:28.192Z',
+            docketEntryId: briefDocketEntryId,
+            docketNumber: '101-18',
+            documentTitle: 'Simultaneous Opening Brief',
+            documentType: 'Simultaneous Opening Brief',
+            draftOrderState: {},
+            entityName: 'DocketEntry',
+            eventCode: 'SIOB',
+            filedBy: 'Test Petitioner',
+            filers: [],
+            filingDate: '2009-03-01T05:00:00.000Z',
+            index: 6,
+            isFileAttached: true,
+            isOnDocketRecord: true,
+            pending: false,
+            processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+            receivedAt: '2009-03-01T05:00:00.000Z',
+            servedAt: undefined,
+            stampData: {},
+            userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+          },
+        ],
+      });
 
       await expect(
         getDownloadPolicyUrlInteractor(
@@ -928,9 +925,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     ];
 
     beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(leadMockCase);
+      getCaseByDocketNumber.mockResolvedValue(leadMockCase);
     });
 
     it('should return the policy url when the document requested is an available document', async () => {

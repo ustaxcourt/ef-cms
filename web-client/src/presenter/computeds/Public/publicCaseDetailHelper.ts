@@ -83,6 +83,8 @@ export const formatDocketEntryOnDocketRecord = (
     user: {
       role: ROLES.petitioner,
       userId: '',
+      email: '',
+      name: '',
     },
     visibilityChangeDate: visibilityPolicyDate,
   });
@@ -200,7 +202,7 @@ export const publicCaseDetailHelper = (
     ],
   );
 
-  const formattedDocketEntriesOnDocketRecord = docketEntries.map(entry => {
+  const formattedDocketEntriesOnDocketRecord = docketEntries?.map(entry => {
     return formatDocketEntryOnDocketRecord(applicationContext, {
       entry,
       isTerminalUser,

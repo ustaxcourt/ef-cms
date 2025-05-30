@@ -94,7 +94,6 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
       });
 
     const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
-      applicationContext,
       firstPdf: combinedPdf,
       secondPdf: amendedPetitionFormData,
     });
@@ -115,7 +114,6 @@ export const addDocketEntryForSystemGeneratedOrder = async ({
   };
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     contentType: 'application/json',
     document: Buffer.from(JSON.stringify(contentToStore)),
     key: documentContentsId,
