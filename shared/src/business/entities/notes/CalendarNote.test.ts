@@ -1,5 +1,5 @@
 import { CalendarNote } from './CalendarNote';
-import { getTextByCount } from '@shared/business/utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('CalendarNote', () => {
   describe('validation', () => {

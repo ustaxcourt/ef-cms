@@ -1,4 +1,4 @@
-import { NewCaseWorksheetKysely } from '@web-api/database-types';
+import { NewCaseWorksheetKysely } from '@web-api/persistence/postgres/caseWorksheets/schema';
 
 export const caseWorksheets: NewCaseWorksheetKysely[] = [
   {

@@ -1,14 +1,16 @@
-import { batchGet, query } from '../../dynamodbClientService';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { query } from '../../dynamodbClientService';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const getEligibleCasesForTrialSession = async ({
   applicationContext,
   limit,
   skPrefix,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   limit: number;
   skPrefix: string;
-}) => {
+}): Promise<Omit<RawCase, 'consolidatedCases'>[]> => {
   const mappings = await query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -23,45 +25,23 @@ export const getEligibleCasesForTrialSession = async ({
     applicationContext,
   });
 
-  const docketNumbers = [];
-  mappings.map(metadata => {
+  const docketNumbers = new Set<string>();
+
+  mappings.forEach(metadata => {
     const { docketNumber } = metadata;
-    if (docketNumbers.includes(docketNumber)) {
+
+    if (docketNumbers.has(docketNumber)) {
       applicationContext.logger.warn(
         `Encountered duplicate eligible-for-trial-case-catalog mapping for case ${docketNumber}.`,
       );
     } else {
-      docketNumbers.push(docketNumber);
+      docketNumbers.add(docketNumber);
     }
   });
 
-  const results = await batchGet({
-    applicationContext,
-    keys: docketNumbers.map(docketNumber => ({
-      pk: `case|${docketNumber}`,
-      sk: `case|${docketNumber}`,
-    })),
+  const aggregatedResults = await getCasesByDocketNumbers({
+    docketNumbers: [...docketNumbers],
   });
 
-  const aggregatedResults = await Promise.all(
-    results.map(async result => {
-      const caseItems = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: result.docketNumber,
-        });
-
-      return {
-        ...result,
-        ...caseItems,
-      };
-    }),
-  );
-
-  const afterMapping = docketNumbers.map(docketNumber => ({
-    ...aggregatedResults.find(r => docketNumber === r.docketNumber),
-  }));
-
-  return afterMapping;
+  return aggregatedResults;
 };

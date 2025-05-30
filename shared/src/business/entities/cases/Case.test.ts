@@ -1367,31 +1367,6 @@ describe('Case entity', () => {
     });
   });
 
-  describe('judgeUserId', () => {
-    it('sets the judgeUserId property when a value is passed in', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
-
-      const myCase = new Case(
-        { ...MOCK_CASE, judgeUserId: mockJudgeUserId },
-        { authorizedUser: mockDocketClerkUser },
-      );
-
-      expect(myCase).toMatchObject({
-        judgeUserId: mockJudgeUserId,
-      });
-      expect(myCase.getFormattedValidationErrors()).toEqual(null);
-    });
-
-    it('does not fail validation without a judgeUserId', () => {
-      const myCase = new Case(MOCK_CASE, {
-        authorizedUser: mockDocketClerkUser,
-      });
-
-      expect(myCase.judgeUserId).toBeUndefined();
-      expect(myCase.getFormattedValidationErrors()).toEqual(null);
-    });
-  });
-
   describe('blocked status validation for calendared cases', () => {
     const mockTrialSessionId = '9e29b116-58a0-40f5-afe6-e3a0ba4f226a';
 

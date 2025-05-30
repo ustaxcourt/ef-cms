@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -7,18 +10,25 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { IrsPractitioner } from '../../../../../shared/src/business/entities/IrsPractitioner';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
-import { PrivatePractitioner } from '../../../../../shared/src/business/entities/PrivatePractitioner';
+} from '@shared/business/entities/EntityConstants';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const updateCaseAndAssociations = jest
+  .mocked(updateCaseAndAssociationsMock)
+  .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
 describe('updateCounselOnCaseInteractor', () => {
   const mockPrivatePractitioners = [
@@ -89,48 +99,46 @@ describe('updateCounselOnCaseInteractor', () => {
           .concat(mockPetitioners)
           .find(user => user.userId === userId);
       });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
-        caseCaption: 'Caption',
-        caseType: CASE_TYPES_MAP.deficiency,
-        docketEntries: MOCK_CASE.docketEntries,
-        docketNumber,
-        filingType: 'Myself',
-        irsPractitioners: mockIrsPractitioners,
-        partyType: PARTY_TYPES.petitionerSpouse,
-        petitioners: [
-          {
-            address1: '123 Main St',
-            city: 'Somewhere',
-            contactId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
-            contactType: CONTACT_TYPES.primary,
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            email: 'fieri@example.com',
-            name: 'Roslindis Angelino',
-            phone: '1234567890',
-            postalCode: '12345',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-            state: 'CA',
-          },
-          {
-            address1: '123 Main St',
-            city: 'Somewhere',
-            contactId: '3d914ca2-7876-43a7-acfa-ccb645717e11',
-            contactType: CONTACT_TYPES.secondary,
-            countryType: COUNTRY_TYPES.DOMESTIC,
-            name: 'Roslindis Angelino',
-            phone: '1234567890',
-            postalCode: '12345',
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-            state: 'CA',
-          },
-        ],
-        preferredTrialCity: 'Fresno, California',
-        privatePractitioners: mockPrivatePractitioners,
-        procedureType: 'Regular',
-        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
-      }));
+    getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({
+      caseCaption: 'Caption',
+      caseType: CASE_TYPES_MAP.deficiency,
+      docketEntries: MOCK_CASE.docketEntries,
+      docketNumber,
+      filingType: 'Myself',
+      irsPractitioners: mockIrsPractitioners,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      petitioners: [
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactId: '9d914ca2-7876-43a7-acfa-ccb645717e11',
+          contactType: CONTACT_TYPES.primary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          email: 'fieri@example.com',
+          name: 'Roslindis Angelino',
+          phone: '1234567890',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          state: 'CA',
+        },
+        {
+          address1: '123 Main St',
+          city: 'Somewhere',
+          contactId: '3d914ca2-7876-43a7-acfa-ccb645717e11',
+          contactType: CONTACT_TYPES.secondary,
+          countryType: COUNTRY_TYPES.DOMESTIC,
+          name: 'Roslindis Angelino',
+          phone: '1234567890',
+          postalCode: '12345',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          state: 'CA',
+        },
+      ],
+      preferredTrialCity: 'Fresno, California',
+      privatePractitioners: mockPrivatePractitioners,
+      procedureType: 'Regular',
+      userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+    }));
   });
 
   it('returns an unauthorized error for a petitioner user', async () => {
@@ -219,9 +227,7 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('updates an irsPractitioner with the given userId on the associated case', async () => {
@@ -239,9 +245,7 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('updates only editable practitioner fields on the case', async () => {
@@ -260,9 +264,8 @@ describe('updateCounselOnCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedPractitioner = applicationContext
-      .getPersistenceGateway()
-      .updateCase.mock.calls[0][0].caseToUpdate.irsPractitioners.find(
+    const updatedPractitioner =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.irsPractitioners?.find(
         p => p.userId === '76c86b6b-6aad-4128-8fa2-53c5735cc0af',
       );
     expect(updatedPractitioner.email).toBeUndefined();
@@ -321,12 +324,10 @@ describe('updateCounselOnCaseInteractor', () => {
   });
 
   it('does not change the service indicator if contacts are neither represented nor not being represented', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => ({
-        ...MOCK_CASE,
-        privatePractitioners: [mockPrivatePractitioners[1]],
-      }));
+    getCaseByDocketNumber.mockResolvedValue({
+      ...MOCK_CASE,
+      privatePractitioners: [mockPrivatePractitioners[1]],
+    });
 
     const results = await updateCounselOnCaseInteractor(
       applicationContext,
