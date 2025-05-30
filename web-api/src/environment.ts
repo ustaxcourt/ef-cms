@@ -42,7 +42,7 @@ export const environment = {
       database: process.env.DATABASE_NAME || 'postgres',
       host:
         process.env.POSTGRES_HOST ||
-        (process.env.NODE_ENV !== 'test' // TODO Swap with stage/env instead of NODE_ENV
+        (process.env.NODE_ENV !== 'test'
           ? 'localhost'
           : getJestDBConnectionError()),
       idleTimeoutMillis: isRunningOnLambda ? 10000 : 1000,
