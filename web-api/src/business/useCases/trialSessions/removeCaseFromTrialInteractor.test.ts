@@ -129,16 +129,10 @@ describe('removeCaseFromTrialInteractor', () => {
     expect(getCaseByDocketNumber.mock.calls[0][0].docketNumber).toEqual(
       MOCK_CASE.docketNumber,
     );
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
-    ).toEqual(MOCK_CASE.docketNumber);
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
@@ -179,14 +173,12 @@ describe('removeCaseFromTrialInteractor', () => {
       MOCK_CASE.docketNumber,
     );
     expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
-    ).toEqual(MOCK_CASE.docketNumber);
-    expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
         .calls[0][0].caseEntity,
     ).toMatchObject({ docketNumber: '101-18' });
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
@@ -216,38 +208,6 @@ describe('removeCaseFromTrialInteractor', () => {
     expect(setPriorityOnAllWorkItems.mock.calls[0][0]).toMatchObject({
       highPriority: false,
     });
-  });
-
-  it('should not call createCaseTrialSortMappingRecords if case is missing trial city', async () => {
-    mockTrialSession.isCalendared = true;
-
-    getCaseByDocketNumber.mockReturnValue({
-      ...MOCK_CASE,
-      associatedJudge: 'someone',
-      associatedJudgeId: 'cb8b3a61-9c52-4b1f-b68b-f725656a9a0e',
-      preferredTrialCity: null,
-      trialDate: '2018-03-01T00:00:00.000Z',
-      trialLocation: 'Boise, Idaho',
-      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-    });
-
-    await removeCaseFromTrialInteractor(
-      applicationContext,
-      {
-        associatedJudge: '123',
-        associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
-        caseStatus: 'New',
-        disposition: 'because',
-        docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-      },
-      mockPetitionsClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
   });
 
   it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, and updateCase persistence methods with correct parameters for a non-calendared hearing', async () => {
@@ -297,14 +257,12 @@ describe('removeCaseFromTrialInteractor', () => {
       MOCK_CASE.docketNumber,
     );
     expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
-    expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).not.toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: MOCK_CASE.docketNumber,
       hearings: [],
     });

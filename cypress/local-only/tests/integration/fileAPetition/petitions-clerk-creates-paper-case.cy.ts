@@ -4,9 +4,7 @@ import {
   postPaperPetition,
 } from '../../../support/pages/create-paper-petition';
 
-import {
-  getCreateACaseButton,
-} from '../../../support/pages/document-qc';
+import { getCreateACaseButton } from '../../../support/pages/document-qc';
 
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 
