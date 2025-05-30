@@ -7,6 +7,7 @@ import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSe
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_SCOPE_TYPES } from '@shared/business/entities/EntityConstants';
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 
 export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
@@ -41,12 +42,10 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
     trialLocationAndProceedingType,
   };
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseDetail = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const { name, title } = await applicationContext
     .getPersistenceGateway()
@@ -65,7 +64,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
       data: {
         caseCaptionExtension,
         caseTitle,
-        docketNumberWithSuffix: caseDetail.docketNumberWithSuffix!,
+        docketNumberWithSuffix: caseDetail.docketNumber,
         nameOfClerk: name,
         titleOfClerk: title,
         trialInfo,

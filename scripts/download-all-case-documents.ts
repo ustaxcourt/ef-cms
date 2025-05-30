@@ -8,7 +8,7 @@ import {
   type ServerApplicationContext,
   createApplicationContext,
 } from '@web-api/applicationContext';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import fs from 'fs';
 
 const scriptConfig: ScriptConfig = {

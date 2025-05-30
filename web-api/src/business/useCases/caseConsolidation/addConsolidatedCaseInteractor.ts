@@ -1,12 +1,15 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * addConsolidatedCase
@@ -29,20 +32,19 @@ export const addConsolidatedCase = async (
     throw new UnauthorizedError('Unauthorized for case consolidation');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   if (!caseToUpdate) {
     throw new NotFoundError(`Case ${docketNumber} was not found.`);
   }
 
-  const caseToConsolidateWith = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: docketNumberToConsolidateWith,
-    });
+  const caseToConsolidateWith = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: docketNumberToConsolidateWith,
+  });
 
   if (!caseToConsolidateWith) {
     throw new NotFoundError(
@@ -50,29 +52,23 @@ export const addConsolidatedCase = async (
     );
   }
 
-  let allCasesToConsolidate: RawCase[] = [];
+  let allCasesToConsolidate: Omit<RawCase, 'consolidatedCases'>[] = [];
 
   if (
     caseToUpdate.leadDocketNumber &&
     caseToUpdate.leadDocketNumber !== caseToConsolidateWith.leadDocketNumber
   ) {
-    allCasesToConsolidate = await applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber({
-        applicationContext,
-        leadDocketNumber: caseToUpdate.leadDocketNumber,
-      });
+    allCasesToConsolidate = await getCasesByLeadDocketNumber({
+      leadDocketNumber: caseToUpdate.leadDocketNumber,
+    });
   } else {
     allCasesToConsolidate = [caseToUpdate];
   }
 
   if (caseToConsolidateWith.leadDocketNumber) {
-    const casesConsolidatedWithLeadCase = await applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber({
-        applicationContext,
-        leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
-      });
+    const casesConsolidatedWithLeadCase = await getCasesByLeadDocketNumber({
+      leadDocketNumber: caseToConsolidateWith.leadDocketNumber,
+    });
     allCasesToConsolidate.push(...casesConsolidatedWithLeadCase);
   } else {
     allCasesToConsolidate.push(caseToConsolidateWith);
@@ -100,7 +96,7 @@ export const addConsolidatedCase = async (
     );
   });
 
-  await Promise.all(updateCasePromises);
+  await settlePromises(updateCasePromises);
 };
 
 export const determineEntitiesToLock = (

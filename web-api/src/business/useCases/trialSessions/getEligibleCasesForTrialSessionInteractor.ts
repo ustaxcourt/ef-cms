@@ -43,7 +43,7 @@ export const getEligibleCasesForTrialSessionInteractor = async (
 
   // Some manually added cases are considered calendared even when the
   // trial session itself is not considered calendared (see issue #3254).
-  let calendaredCases: (RawCase & TCaseOrder)[] = [];
+  let calendaredCases: (Omit<RawCase, 'consolidatedCases'> & TCaseOrder)[] = [];
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
     calendaredCases = await applicationContext
       .getPersistenceGateway()

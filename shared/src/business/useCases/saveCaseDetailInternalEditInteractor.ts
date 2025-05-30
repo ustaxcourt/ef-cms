@@ -1,16 +1,17 @@
-import { CONTACT_TYPES } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
+import { CONTACT_TYPES } from '@shared/business/entities/EntityConstants';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnauthorizedError,
   UnprocessableEntityError,
 } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '../entities/WorkItem';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { isEmpty } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -40,12 +41,10 @@ export const saveCaseDetailInternalEdit = async (
     throw new UnprocessableEntityError();
   }
 
-  const caseRecord = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const originalCaseEntity = new Case(caseRecord, { authorizedUser });
 
@@ -98,9 +97,11 @@ export const saveCaseDetailInternalEdit = async (
     const primaryContactId = originalCaseEntity.getContactPrimary().contactId;
 
     caseEntityWithFormEdits.updatePetitioner({
-      ...caseToUpdate.contactPrimary,
-      contactId: primaryContactId,
-      contactType: CONTACT_TYPES.primary,
+      updatedPetitioner: {
+        ...caseToUpdate.contactPrimary,
+        contactId: primaryContactId,
+        contactType: CONTACT_TYPES.primary,
+      },
     });
   }
 
@@ -109,9 +110,11 @@ export const saveCaseDetailInternalEdit = async (
       caseEntityWithFormEdits.getContactSecondary()?.contactId;
 
     caseEntityWithFormEdits.updatePetitioner({
-      ...caseToUpdate.contactSecondary,
-      contactId: secondaryContactId,
-      contactType: CONTACT_TYPES.secondary,
+      updatedPetitioner: {
+        ...caseToUpdate.contactSecondary,
+        contactId: secondaryContactId,
+        contactType: CONTACT_TYPES.secondary,
+      },
     });
   } else if (originalCaseEntity.getContactSecondary()) {
     const originalSecondaryContactId =

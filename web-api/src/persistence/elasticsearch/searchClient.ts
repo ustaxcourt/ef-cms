@@ -1,6 +1,4 @@
 import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
-import { formatMessageResult } from './helpers/formatMessageResult';
-import { formatWorkItemResult } from './helpers/formatWorkItemResult';
 import { get } from 'lodash';
 import { getIndexNameFromAlias } from '../../../elasticsearch/elasticsearch-aliases';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
@@ -43,21 +41,9 @@ export const formatResults = <T>(body: Record<string, any>) => {
       hit['_index'] === getIndexNameFromAlias('efcms-docket-entry') &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
-    const isMessageResultWithParentCaseMapping =
-      hit['_index'] === getIndexNameFromAlias('efcms-message') &&
-      hit.inner_hits &&
-      hit.inner_hits['case-mappings'];
-    const isWorkItemResultWithParentCaseMapping =
-      hit['_index'] === getIndexNameFromAlias('efcms-work-item') &&
-      hit.inner_hits &&
-      hit.inner_hits['case-mappings'];
 
     if (isDocketEntryResultWithParentCaseMapping) {
       return formatDocketEntryResult({ caseMap, hit, sourceUnmarshalled });
-    } else if (isMessageResultWithParentCaseMapping) {
-      return formatMessageResult({ caseMap, hit, sourceUnmarshalled });
-    } else if (isWorkItemResultWithParentCaseMapping) {
-      return formatWorkItemResult({ caseMap, hit, sourceUnmarshalled });
     } else {
       return sourceUnmarshalled;
     }

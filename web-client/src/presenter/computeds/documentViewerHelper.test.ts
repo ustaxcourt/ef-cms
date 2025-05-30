@@ -3,7 +3,13 @@ import {
   INITIAL_DOCUMENT_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../applicationContext';
-import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
+import {
+  adcUser,
+  clerkOfCourtUser,
+  colvinsChambersUser,
+  docketClerkUser,
+  judgeUser,
+} from '../../../../shared/src/test/mockUsers';
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from '@web-client/presenter/test.cerebral';
@@ -258,6 +264,128 @@ describe('documentViewerHelper', () => {
       });
 
       expect(showUnservedPetitionWarning).toBe(false);
+    });
+  });
+
+  describe('Test showMotionOrderResponseButton', () => {
+    it('should show order response button when judge user has permission and document is in allowlist', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(judgeUser),
+          caseDetail: {
+            docketEntries: [{ ...baseDocketEntry, eventCode: 'M000' }],
+            leadDocketNumber: '123-45',
+            petitioners: [
+              {
+                name: 'Test Petitioner',
+                serviceIndicator: 'Electronic',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            ...baseDocketEntry,
+            eventCode: 'M000',
+          },
+        },
+      });
+
+      expect(result.showOrderResponseButton).toBe(true);
+    });
+
+    it('should show order response button when adc user has permission and document is in allowlist', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(adcUser),
+          caseDetail: {
+            docketEntries: [{ ...baseDocketEntry, eventCode: 'M000' }],
+            leadDocketNumber: '123-45',
+            petitioners: [
+              {
+                name: 'Test Petitioner',
+                serviceIndicator: 'Electronic',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            ...baseDocketEntry,
+            eventCode: 'M000',
+          },
+        },
+      });
+
+      expect(result.showOrderResponseButton).toBe(true);
+    });
+
+    it('should show order response button when chambers user has permission and document is in allowlist', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(colvinsChambersUser),
+          caseDetail: {
+            docketEntries: [{ ...baseDocketEntry, eventCode: 'M000' }],
+            leadDocketNumber: '123-45',
+            petitioners: [
+              {
+                name: 'Test Petitioner',
+                serviceIndicator: 'Electronic',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            ...baseDocketEntry,
+            eventCode: 'M000',
+          },
+        },
+      });
+
+      expect(result.showOrderResponseButton).toBe(true);
+    });
+
+    it('should not show order response button when user lacks permission', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(clerkOfCourtUser),
+          caseDetail: {
+            docketEntries: [{ ...baseDocketEntry, eventCode: 'M000' }],
+            leadDocketNumber: '123-45',
+            petitioners: [
+              {
+                name: 'Test Petitioner',
+                serviceIndicator: 'Electronic',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            ...baseDocketEntry,
+            eventCode: 'M000',
+          },
+        },
+      });
+
+      expect(result.showOrderResponseButton).toBe(false);
+    });
+
+    it('should not show order response button when document is not in allowlist', () => {
+      const result = runCompute(documentViewerHelper, {
+        state: {
+          ...getBaseState(judgeUser),
+          caseDetail: {
+            docketEntries: [{ ...baseDocketEntry, eventCode: 'NOT_ALLOWED' }],
+            leadDocketNumber: '123-45',
+            petitioners: [
+              {
+                name: 'Test Petitioner',
+                serviceIndicator: 'Electronic',
+              },
+            ],
+          },
+          viewerDocumentToDisplay: {
+            ...baseDocketEntry,
+            eventCode: 'NOT_ALLOWED',
+          },
+        },
+      });
+
+      expect(result.showOrderResponseButton).toBe(false);
     });
   });
 });
