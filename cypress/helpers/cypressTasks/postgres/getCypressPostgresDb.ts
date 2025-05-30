@@ -7,7 +7,7 @@ import { Pool, PoolConfig } from 'pg';
 
 let cachedToken = '';
 
-export async function getCypressPostgresDb() {
+export async function getCypressPostgresDb(): Promise<Kysely<Database>> {
   const token = await getToken();
   const connection = connect({
     ...POOL,

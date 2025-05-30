@@ -23,7 +23,7 @@ import { retry, setup } from '@cypress/puppeteer';
 import {
   getFeatureFlagFromPostgresValue,
   toggleFeatureFlagFromPostgres,
-} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 
 export default defineConfig({
   chromeWebSecurity: false,
