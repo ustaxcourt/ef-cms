@@ -14,7 +14,7 @@ import { applicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { deleteUserFromCase } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { disassociateUserFromCase } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 
 export const removePetitionerEmailInteractor = async (
   { docketNumber, email }: { docketNumber: string; email: string },
@@ -55,7 +55,7 @@ export const removePetitionerEmailInteractor = async (
 
   await settlePromises([
     upsertCases([caseToUpdate]),
-    deleteUserFromCase({
+    disassociateUserFromCase({
       docketNumber,
       userId: oldContactId,
     }),

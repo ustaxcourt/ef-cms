@@ -24,7 +24,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
-import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { disassociateUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('deleteCounselFromCaseInteractor', () => {

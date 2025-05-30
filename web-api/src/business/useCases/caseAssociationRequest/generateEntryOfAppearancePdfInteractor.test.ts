@@ -33,7 +33,7 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
   ];
 
   beforeAll(() => {
-    getPractitionerById.mockReturnValue(MOCK_PRACTITIONER);
+    getPractitionerById.mockResolvedValue(MOCK_PRACTITIONER);
     applicationContext
       .getDocumentGenerators()
       .entryOfAppearance.mockReturnValue(mockFile);

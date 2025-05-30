@@ -22,6 +22,7 @@ import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 import { getCasesForUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * updateUserContactInformationHelper
@@ -98,13 +99,14 @@ const updateUserContactInformationHelper = async (
     throw new Error(`Unrecognized entityType ${user.entityName}`);
   }
 
-  await updatePractitioner({
-    practitionerToUpdate: userEntity.validate().toRawObject(),
-  });
-
-  await updateUser({
-    userToUpdate: userEntity.validate().toRawObject(),
-  });
+  await settlePromises([
+    updatePractitioner({
+      practitionerToUpdate: userEntity.validate().toRawObject(),
+    }),
+    updateUser({
+      userToUpdate: userEntity.validate().toRawObject(),
+    }),
+  ]);
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

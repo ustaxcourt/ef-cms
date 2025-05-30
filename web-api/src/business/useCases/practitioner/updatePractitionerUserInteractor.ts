@@ -22,6 +22,7 @@ import { updatePractitionerUser as updatePractitionerUserFromPersistence } from 
 import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/practitioners/getPractitionerByBarNumber';
 import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -99,8 +100,10 @@ export const updatePractitionerUser = async (
         .toRawObject(),
     });
   } else {
-    await updatePractitioner({ practitionerToUpdate: validatedUserData });
-    await updateUser({ userToUpdate: validatedUserData });
+    await settlePromises([
+      updatePractitioner({ practitionerToUpdate: validatedUserData }),
+      updateUser({ userToUpdate: validatedUserData }),
+    ]);
   }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({

@@ -8,7 +8,7 @@ import {
   mockDocketClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removePetitionerEmailInteractor } from '@web-api/business/useCases/removePetitionerEmailInteractor';
-import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { disassociateUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';

@@ -11,7 +11,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { deleteUserFromCase } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { disassociateUserFromCase } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 
 export const deleteCounselFromCase = async (
   applicationContext: ServerApplicationContext,
@@ -47,7 +47,7 @@ export const deleteCounselFromCase = async (
 
   aggregatePartiesForService(caseEntity);
 
-  await deleteUserFromCase({
+  await disassociateUserFromCase({
     docketNumber,
     userId,
   });

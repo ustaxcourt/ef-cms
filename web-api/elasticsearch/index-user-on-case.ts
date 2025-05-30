@@ -12,7 +12,6 @@ import { getUserByIdWithPractitioner } from '@web-api/persistence/postgres/users
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/users/schema';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
-import { getCaseDataFromDynamo } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
 
 export const transformOpenSearchUserOnCase = (
   userOnCaseData: UserOnCaseKysely | UserOnCaseKysely[],
@@ -31,15 +30,12 @@ export const indexOpenSearchUserOnCase = async ({
 }: {
   message: OpenSearchSyncMessage;
 }): Promise<void> => {
-  // loop through ids from message [{userId, caseId}]
   const caseRecords: IDynamoDBRecord[] = [];
   for (const { userId, docketNumber } of isArray(message.payload)
     ? message.payload
     : [message.payload]) {
-    // fetch case + user + practitioner from pstgres
     const userRecord = await getUserByIdWithPractitioner({ userId });
 
-    // IF NOT PRACTITIONER Return early
     if (
       userRecord.role !== ROLES.irsPractitioner &&
       userRecord.role !== ROLES.privatePractitioner &&
@@ -47,23 +43,9 @@ export const indexOpenSearchUserOnCase = async ({
     )
       return;
 
-    // create a dynamodb record (marshalled)
-    let caseRecord: any;
-    try {
-      caseRecord = await getCaseDataFromPostgres({
-        docketNumber,
-      });
-    } catch (e) {
-      getLogger().warn(
-        `Failed to find case ${docketNumber} in postgres in indexOpenSearchUserOnCase: ${e}.
-            If this occurred in a test or as part of re-indexing during a blue-green migration, it is safe to ignore.`,
-      );
-      caseRecord = await getCaseDataFromDynamo({
-        applicationContext,
-        docketNumber,
-      });
-    }
-    // CaseDocketEntryMapping + Practitioner
+    const caseRecord = await getCaseDataFromPostgres({
+      docketNumber,
+    });
 
     caseRecords.push({
       dynamodb: {
@@ -100,7 +82,6 @@ export const indexOpenSearchUserOnCase = async ({
     });
   }
 
-  // write caseRecords to opensearch
   try {
     const { failedRecords } = await applicationContext
       .getPersistenceGateway()

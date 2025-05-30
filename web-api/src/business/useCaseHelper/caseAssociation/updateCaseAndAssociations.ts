@@ -19,7 +19,7 @@ import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import diff from 'diff-arrays-of-objects';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
-import { deleteUserFromCase } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { disassociateUserFromCase } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
@@ -228,7 +228,7 @@ const updateIrsPractitioners = ({
   const deletePractitionerFunctions = deletedIrsPractitioners.map(
     practitioner =>
       async function deleteIrsPractitioner_cb() {
-        return await deleteUserFromCase({
+        return await disassociateUserFromCase({
           docketNumber: caseToUpdate.docketNumber,
           userId: practitioner.userId,
         });
@@ -281,7 +281,7 @@ const updatePrivatePractitioners = ({
   const deletePractitionerFunctions = deletedPrivatePractitioners.map(
     practitioner =>
       async function deletePrivatePractitioner_cb() {
-        return await deleteUserFromCase({
+        return await disassociateUserFromCase({
           docketNumber: caseToUpdate.docketNumber,
           userId: practitioner.userId,
         });

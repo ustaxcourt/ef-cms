@@ -11,7 +11,7 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removeCounselFromRemovedPetitioner } from './removeCounselFromRemovedPetitioner';
-import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { disassociateUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 
 const deleteUserFromCase = deleteUserFromCaseMock as jest.Mock;
 

@@ -9,7 +9,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
-import { deleteUserFromCase } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { disassociateUserFromCase } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 
 /**
  * used to remove a petitioner from a case
@@ -70,7 +70,7 @@ export const removePetitionerAndUpdateCaption = async (
 
   caseEntity.removePetitioner(petitionerContactId);
 
-  await deleteUserFromCase({
+  await disassociateUserFromCase({
     docketNumber,
     userId: petitionerContactId,
   });

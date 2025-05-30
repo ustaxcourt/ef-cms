@@ -96,3 +96,19 @@ export async function deleteAllUserRecords({
     deleteUserOnCaseRecords,
   ]);
 }
+
+export async function getPractitionerEmailById({
+  userId,
+}: {
+  userId: string;
+}): Promise<string> {
+  const dbConnection = await getCypressPostgresDb();
+
+  const result = await dbConnection
+    .selectFrom('dwPractitioner')
+    .where('userId', '=', userId)
+    .select('email')
+    .executeTakeFirst();
+
+  return result?.email || '';
+}

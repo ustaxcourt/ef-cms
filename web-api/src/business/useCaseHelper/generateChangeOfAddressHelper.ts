@@ -16,6 +16,7 @@ import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/ser
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * generateChangeOfAddressHelper
@@ -139,8 +140,11 @@ export const generateChangeOfAddressHelper = async ({
       });
 
       const rawUserEntity = userEntity.validate().toRawObject();
-      await updatePractitioner({ practitionerToUpdate: rawUserEntity });
-      await updateUser({ userToUpdate: rawUserEntity });
+
+      await settlePromises([
+        updatePractitioner({ practitionerToUpdate: rawUserEntity }),
+        updateUser({ userToUpdate: rawUserEntity }),
+      ]);
     }
 
     const CONTACT_UPDATE_COMPLETE_ACTION:

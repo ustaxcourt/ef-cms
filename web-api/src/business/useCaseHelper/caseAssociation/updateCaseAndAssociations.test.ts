@@ -27,7 +27,7 @@ import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persist
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
-import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { disassociateUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 import { MOCK_MESSAGE } from '@shared/test/mockMessage';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 

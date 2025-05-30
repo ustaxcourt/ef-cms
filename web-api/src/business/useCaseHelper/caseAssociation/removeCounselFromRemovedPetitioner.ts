@@ -5,7 +5,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { deleteUserFromCase } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
+import { disassociateUserFromCase } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 /**
  * removeCounselFromRemovedPetitioner
  *
@@ -40,7 +40,7 @@ export const removeCounselFromRemovedPetitioner = async ({
     if (practitioner.representing.length === 0) {
       caseEntity.removePrivatePractitioner(practitioner);
 
-      await deleteUserFromCase({
+      await disassociateUserFromCase({
         docketNumber: caseEntity.docketNumber,
         userId: practitioner.userId,
       });

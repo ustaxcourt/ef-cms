@@ -1,5 +1,5 @@
 import { getUserByEmail } from './cognito/cognito-helpers';
-import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { getPractitionerEmailById } from './postgres/postgres-helpers';
 
 export async function waitForPractitionerEmailUpdate({
   attempts = 0,
@@ -12,8 +12,9 @@ export async function waitForPractitionerEmailUpdate({
 }): Promise<boolean> {
   const maxAttempts = 10;
   const { userId } = await getUserByEmail(practitionerEmail);
-  const practitioner = await getPractitionerById({ userId });
-  const practitionerCaseRecordEmail = practitioner.email;
+  const practitionerCaseRecordEmail = await getPractitionerEmailById({
+    userId,
+  });
 
   if (practitionerCaseRecordEmail === practitionerEmail) {
     return true;

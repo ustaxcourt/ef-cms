@@ -88,7 +88,6 @@ const createCaseMetadata = async (
     petitionFileId: string;
     petitionMetadata: any;
     privatePractitioners:
-      | User
       | Practitioner
       | PrivatePractitioner
       | IrsPractitioner[];
@@ -299,7 +298,6 @@ export const createCaseInteractor = async (
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
   let privatePractitioners:
-    | User
     | Practitioner
     | PrivatePractitioner
     | IrsPractitioner[] = [];
