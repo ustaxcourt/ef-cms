@@ -119,7 +119,7 @@ then
 fi
 
 # temporary-remove after both blue and green records have been destroyed
-DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
+DEPLOYING_COLOR=$(../../../../scripts/ssm/get-deploying-color.sh "${ENV}")
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 echo "Running latency record deletion script"
 npx ts-node --transpile-only ../../bin/delete-route53-latency-records.ts
