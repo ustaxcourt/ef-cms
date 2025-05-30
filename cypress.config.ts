@@ -21,9 +21,8 @@ import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/w
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 import {
-  getFeatureFlagFromPostgresValue,
   toggleFeatureFlagFromPostgres,
-} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 
 export default defineConfig({
   chromeWebSecurity: false,
@@ -50,9 +49,6 @@ export default defineConfig({
         },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
-        },
-        getFeatureFlagFromPostgresValue({ flag }) {
-          return getFeatureFlagFromPostgresValue({ flag });
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });

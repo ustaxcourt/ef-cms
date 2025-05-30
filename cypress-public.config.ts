@@ -1,5 +1,5 @@
 import { defineConfig } from 'cypress';
-import { toggleFeatureFlagFromPostgres } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+import { toggleFeatureFlagFromPostgres } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import fs from 'fs';
 import path from 'path';
 

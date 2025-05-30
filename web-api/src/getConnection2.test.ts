@@ -13,7 +13,7 @@ import { getConnection } from '@web-api/getConnection';
 import { environment } from '@web-api/environment';
 
 describe('getConnection', () => {
-  environment.nodeEnv = 'production';
+  environment.stage = 'prod';
   it('should re-establish db connection after failure', async () => {
     mockGetAuthToken.mockRejectedValueOnce(new Error('Failed!'));
     await expect(() => getConnection({ cb: () => {} })).rejects.toThrow();

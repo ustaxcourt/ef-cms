@@ -13,7 +13,7 @@ import { getConnection } from '@web-api/getConnection';
 import { environment } from '@web-api/environment';
 
 describe('getConnection', () => {
-  environment.nodeEnv = 'production';
+  environment.stage = 'prod';
   it('should not establish multiple connections at the same time', async () => {
     mockGetAuthToken.mockResolvedValue('12346789');
     await Promise.all([

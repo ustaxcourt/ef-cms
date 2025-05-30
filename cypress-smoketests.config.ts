@@ -21,15 +21,13 @@ import {
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import {
-  getFeatureFlagFromPostgresValue,
   getRawFeatureFlagFromPostgresValue,
   toggleFeatureFlagFromPostgres,
-} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+} from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 
-// eslint-disable-next-line import/no-default-export
 export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,
@@ -90,9 +88,6 @@ export default defineConfig({
         },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
-        },
-        getFeatureFlagFromPostgresValue({ flag }) {
-          return getFeatureFlagFromPostgresValue({ flag });
         },
         getIrsBearerToken({ password, userName }) {
           return getIrsBearerToken({
