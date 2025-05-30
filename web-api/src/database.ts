@@ -56,7 +56,7 @@ function clearToken(region: string) {
 }
 
 async function getToken(region: string, host: string) {
-  if (environment.nodeEnv !== 'production') {
+  if (environment.stage === 'local') {
     return environment.rds.pool.password;
   }
   const token = tokens[region];
@@ -102,7 +102,6 @@ async function getConnection<T>({
     });
 
     return await cb(dbInstances[dbKey]!);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (err) {
     clearToken(region);
     const token = await getToken(region, host);
