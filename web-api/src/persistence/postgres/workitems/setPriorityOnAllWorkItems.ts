@@ -1,17 +1,15 @@
-import { getDbWriter } from '@web-api/database';
+import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 
 export const setPriorityOnAllWorkItems = async ({
-  docketNumber,
+  docketNumbers,
   highPriority,
 }: {
-  docketNumber: string;
+  docketNumbers: string[];
   highPriority: boolean;
 }) => {
-  await getDbWriter(writer => {
-    const builder = writer
-      .updateTable('dwWorkItem')
-      .set('highPriority', highPriority);
-
-    return builder.where('docketNumber', '=', docketNumber).execute();
+  await pgUpdateTable({
+    table: 'dwWorkItem',
+    values: { highPriority },
+    where: cb => cb.where('docketNumber', 'in', docketNumbers),
   });
 };

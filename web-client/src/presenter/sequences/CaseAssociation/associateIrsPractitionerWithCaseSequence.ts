@@ -3,7 +3,6 @@ import { clearAlertsAction } from '../../actions/clearAlertsAction';
 import { clearFormAction } from '../../actions/clearFormAction';
 import { clearModalAction } from '../../actions/clearModalAction';
 import { clearModalStateAction } from '../../actions/clearModalStateAction';
-import { getCaseAction } from '../../actions/getCaseAction';
 import { getPendingEmailsOnCaseAction } from '../../actions/getPendingEmailsOnCaseAction';
 import { setAlertSuccessAction } from '../../actions/setAlertSuccessAction';
 import { setCaseAction } from '../../actions/setCaseAction';
@@ -32,7 +31,6 @@ export const associateIrsPractitionerWithCaseSequence =
             clearModalStateAction,
             clearFormAction,
             setCasePropFromStateAction,
-            getCaseAction,
             setCaseAction,
             getPendingEmailsOnCaseAction,
             setPendingEmailsOnCaseAction,

@@ -44,7 +44,7 @@ export const getDocketNumberInput = () => {
 };
 
 export const unselectOpinionTypesExceptBench = () => {
-  let opinionTypes = Object.keys(ADVANCED_SEARCH_OPINION_TYPES).filter(
+  const opinionTypes = Object.keys(ADVANCED_SEARCH_OPINION_TYPES).filter(
     type => type !== 'Bench',
   );
 
