@@ -274,7 +274,7 @@ jobs:
       - run:
           name: Run Postgres Migration
           command: |
-            NODE_ENV=production npm run migration:postgres
+            npm run migration:postgres
       - run:
           name: Restore Postgres User Permissions
           command: |
@@ -352,7 +352,7 @@ jobs:
       - run:
           name: migrate Feature flags from dynamo to postgres
           command: |
-            NODE_ENV=production npx ts-node --transpileOnly ./scripts/run-once-scripts/migrate-feature-flags-dynamo-to-postgres.ts
+            npx ts-node --transpileOnly ./scripts/run-once-scripts/migrate-feature-flags-dynamo-to-postgres.ts
 
 
   disable-reindex-cron:
@@ -394,7 +394,7 @@ jobs:
             ./scripts/env/env-for-circle.sh
       - run:
           name: 'Cypress Smoke Tests'
-          command: NODE_ENV=production find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
+          command: find cypress/deployed-and-local/integration -type f -name "*.cy.ts" | circleci tests run --split-by=timings --command 'paste -sd, - | xargs -I {} ./scripts/run-cypress.sh -s -t {}'
       - store_artifacts:
           path: /root/project/cypress/deployed-and-local/videos/
 

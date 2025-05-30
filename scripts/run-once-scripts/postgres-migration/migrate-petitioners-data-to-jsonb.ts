@@ -6,7 +6,6 @@ import {
 } from '../../helpers/parseArgsAndEnvVars';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
-import { environment } from '@web-api/environment';
 import { CompiledQuery } from 'kysely';
 // import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
@@ -22,9 +21,6 @@ const scriptConfig: ScriptConfig = {
 parseArgsAndEnvVars(scriptConfig);
 
 const pageSize = 50000; // An arbitrary but empirically well-performing number
-
-// We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
-environment.nodeEnv = 'production';
 
 const getPetitionersPerCase = async (offset: number) => {
   return getDbReader(db =>
