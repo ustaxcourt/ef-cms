@@ -1,17 +1,13 @@
-import { getDbWriter } from '@web-api/database';
+import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 
 export const setMessageAsRead = async ({
   messageId,
 }: {
   messageId: string;
 }): Promise<void> => {
-  await getDbWriter(writer =>
-    writer
-      .updateTable('dwMessage')
-      .set({
-        isRead: true,
-      })
-      .where('messageId', '=', messageId)
-      .execute(),
-  );
+  await pgUpdateTable({
+    table: 'dwMessage',
+    values: { isRead: true },
+    where: cb => cb.where('messageId', '=', messageId),
+  });
 };

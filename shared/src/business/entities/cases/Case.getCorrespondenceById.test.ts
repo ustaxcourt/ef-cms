@@ -22,7 +22,7 @@ describe('getCorrespondenceById', () => {
       correspondenceId: mockCorrespondence.correspondenceId,
     });
 
-    expect(result.correspondenceId).toEqual(
+    expect(result?.correspondenceId).toEqual(
       mockCorrespondence.correspondenceId,
     );
   });

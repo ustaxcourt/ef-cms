@@ -1,13 +1,16 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addDeficiencyStatisticInteractor } from './addDeficiencyStatisticInteractor';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('addDeficiencyStatisticInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+
   const mockStatistic = {
     determinationDeficiencyAmount: 123,
     determinationTotalPenalties: 456,
@@ -41,12 +44,10 @@ describe('addDeficiencyStatisticInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
+    getCaseByDocketNumber.mockReturnValue(Promise.resolve(MOCK_CASE));
   });
 
-  it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+  it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
     mockLock = MOCK_LOCK;
 
     await expect(
@@ -91,7 +92,7 @@ describe('addDeficiencyStatisticInteractor', () => {
     });
   });
 
-  it('should throw an error if the user is unauthorized to update case statistics', async () => {
+  it('should throw an error when the user is unauthorized to update case statistics', async () => {
     await expect(
       addDeficiencyStatisticInteractor(
         applicationContext,
