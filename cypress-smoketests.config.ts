@@ -21,7 +21,6 @@ import {
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import {
-  getFeatureFlagFromPostgresValue,
   getRawFeatureFlagFromPostgresValue,
   toggleFeatureFlagFromPostgres,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
@@ -89,9 +88,6 @@ export default defineConfig({
         },
         getEmailVerificationToken({ email }) {
           return getEmailVerificationToken({ email });
-        },
-        getFeatureFlagFromPostgresValue({ flag }) {
-          return getFeatureFlagFromPostgresValue({ flag });
         },
         getIrsBearerToken({ password, userName }) {
           return getIrsBearerToken({

@@ -1,25 +1,10 @@
 import { getCypressPostgresDb } from 'cypress/helpers/cypressTasks/postgres/getCypressPostgresDb';
 
-export const getFeatureFlagFromPostgresValue = async ({
-  flag,
-}: {
-  flag: string;
-}): Promise<boolean | null> => {
-  const POSTGRES_CLIENT = await getCypressPostgresDb();
-  const RESULTS = await POSTGRES_CLIENT.selectFrom('dwFeatureFlag')
-    .selectAll()
-    .where('name', '=', flag)
-    .execute();
-
-  if (!RESULTS.length) return null;
-  return !!RESULTS[0].value.current;
-};
-
 export const getRawFeatureFlagFromPostgresValue = async ({
   flag,
 }: {
   flag: string;
-}): Promise<boolean | null> => {
+}): Promise<boolean | number | string | null> => {
   const POSTGRES_CLIENT = await getCypressPostgresDb();
   const RESULTS = await POSTGRES_CLIENT.selectFrom('dwFeatureFlag')
     .selectAll()
