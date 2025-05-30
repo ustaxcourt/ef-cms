@@ -2,12 +2,10 @@ import {
   AuthFlowType,
   ChallengeNameType,
 } from '@aws-sdk/client-cognito-identity-provider';
-import { deleteUserRecord } from '@web-api/persistence/postgres/users/deleteUserRecord';
 import { TOTP } from 'totp-generator';
 import { getCognito } from './getCognitoCypress';
 import { getCypressEnv } from '../../env/cypressEnvironment';
-import { deleteUserFromCase } from '@web-api/persistence/postgres/users/cases/deleteUserFromCase';
-import { deletePractitionerRecord } from '@web-api/persistence/postgres/practitioners/deletePractitionerRecord';
+import { deleteAllUserRecords } from '../postgres/postgres-helpers';
 export const DEFAULT_FORGOT_PASSWORD_CODE = '385030';
 
 export const confirmUser = async ({ email }: { email: string }) => {
@@ -164,12 +162,7 @@ const deleteAccount = async (
     Username: user.email.toLowerCase(),
   };
   await getCognito().adminDeleteUser(params);
-
-  Promise.allSettled([
-    deleteUserRecord({ userId: user.userId }),
-    deleteUserFromCase({ userId: user.userId }),
-    deletePractitionerRecord({ userId: user.userId }),
-  ]);
+  await deleteAllUserRecords({ userId: user.userId });
 };
 
 const getAllCypressTestAccounts = async (

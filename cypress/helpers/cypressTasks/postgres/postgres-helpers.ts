@@ -1,7 +1,9 @@
 import { getUserByEmail } from '../cognito/cognito-helpers';
-import { deleteUserConfirmationCode } from '@web-api/persistence/postgres/users/deleteUserConfirmationCode';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
+import { getCypressPostgresDb } from './getCypressPostgresDb';
+import {
+  calculateDate,
+  formatNow,
+} from '@shared/business/utilities/DateHandler';
 
 export const getNewAccountVerificationCode = async ({
   email,
@@ -18,7 +20,14 @@ export const getNewAccountVerificationCode = async ({
       userId: undefined,
     };
 
-  const confirmationCode = await getUserConfirmationCode({ userId });
+  const dbConnection = await getCypressPostgresDb();
+  const { confirmationCode } =
+    (await dbConnection
+      .selectFrom('dwUserConfirmationCode')
+      .where('userId', '=', userId)
+      .where('expiresAt', '>', calculateDate({ dateString: formatNow() }))
+      .select(['confirmationCode'])
+      .executeTakeFirst()) ?? {};
 
   return {
     confirmationCode,
@@ -32,7 +41,11 @@ export const expireUserConfirmationCode = async (
   const { userId } = await getUserByEmail(email);
   if (!userId) return null;
 
-  await deleteUserConfirmationCode({ userId });
+  const dbConnection = await getCypressPostgresDb();
+  await dbConnection
+    .deleteFrom('dwUserConfirmationCode')
+    .where('userId', '=', userId)
+    .execute();
 
   return null;
 };
@@ -43,7 +56,43 @@ export const getEmailVerificationToken = async ({
   email: string;
 }): Promise<string> => {
   const { userId } = await getUserByEmail(email);
-  const user = await getUserById({ userId });
+  if (!userId) return '';
 
-  return user.pendingEmailVerificationToken || '';
+  const dbConnection = await getCypressPostgresDb();
+  const user = await dbConnection
+    .selectFrom('dwUser')
+    .where('userId', '=', userId)
+    .select(['pendingEmailVerificationToken'])
+    .executeTakeFirst();
+
+  return user?.pendingEmailVerificationToken || '';
 };
+
+export async function deleteAllUserRecords({
+  userId,
+}: {
+  userId: string;
+}): Promise<void> {
+  const dbConnection = await getCypressPostgresDb();
+
+  const deleteUserRecord = dbConnection
+    .deleteFrom('dwUser')
+    .where('userId', '=', userId)
+    .execute();
+
+  const deletePractitionerRecord = dbConnection
+    .deleteFrom('dwPractitioner')
+    .where('userId', '=', userId)
+    .execute();
+
+  const deleteUserOnCaseRecords = dbConnection
+    .deleteFrom('dwUserOnCase')
+    .where('userId', '=', userId)
+    .execute();
+
+  await Promise.allSettled([
+    deleteUserRecord,
+    deletePractitionerRecord,
+    deleteUserOnCaseRecords,
+  ]);
+}
