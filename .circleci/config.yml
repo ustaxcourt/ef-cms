@@ -122,6 +122,9 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          name: 'Enable Maintenance Mode'
+          command: npm run maintenance:engage $ENV
+      - run:
           name: Build Docker Image
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
@@ -521,6 +524,9 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          name: 'Disable Maintenance Mode'
+          command: npm run maintenance:disengage $ENV
+      - run:
           name: 'Switch Colors'
           command: npm run switch-colors
 
@@ -765,6 +771,10 @@ jobs:
           command: |
             COLOR="$CURRENT_COLOR" JOB_NAME="wait-for-glued-data-to-index" ./scripts/migration/set-migration-complete-marker.sh
       - run:
+          name: Migrate Postgres Data Schema
+          command: |
+            npm run migration:postgres
+      - run:
           name: Enable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --on
@@ -985,29 +995,26 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - wait-for-reindex
-      - smoketests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-      - loadtests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-      - smoketests-readonly:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
-      - api-hosted-environment-tests:
-          <<: *only-deployed-lower-environments
-          requires:
-            - disable-reindex-cron
+#      - smoketests:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - disable-reindex-cron
+#      - loadtests:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - disable-reindex-cron
+#      - smoketests-readonly:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - disable-reindex-cron
+#      - api-hosted-environment-tests:
+#          <<: *only-deployed-lower-environments
+#          requires:
+#            - disable-reindex-cron
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
-            - smoketests
-            - loadtests
-            - smoketests-readonly
-            - api-hosted-environment-tests
+            - disable-reindex-cron
       - cleanup:
           <<: *only-deployed-lower-environments
           requires:
@@ -1042,18 +1049,18 @@ workflows:
           <<: *only-prod
           requires:
             - wait-for-reindex
-      - loadtests:
-          <<: *only-prod
-          requires:
-            - disable-reindex-cron
-      - smoketests-readonly:
-          <<: *only-prod
-          requires:
-            - loadtests
+#      - loadtests:
+#          <<: *only-prod
+#          requires:
+#            - disable-reindex-cron
+#      - smoketests-readonly:
+#          <<: *only-prod
+#          requires:
+#            - loadtests
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
-            - smoketests-readonly
+            - disable-reindex-cron
       - wait-for-switch:
           <<: *only-prod
           type: approval

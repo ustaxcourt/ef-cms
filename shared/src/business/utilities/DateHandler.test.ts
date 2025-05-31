@@ -1,9 +1,12 @@
+/* eslint-disable max-lines */
 /* eslint-disable custom-rules-plugin/no-new-dates*/
 import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
   PATTERNS,
   USTC_TZ,
+  calculateDate,
+  calculateDateAtStartOfDayEST,
   calculateDifferenceInDays,
   calculateDifferenceInHours,
   calculateISODate,
@@ -833,5 +836,115 @@ describe('DateHandler', () => {
 
       expect(result).toEqual('2024-11-18');
     });
+  });
+
+  describe('calculateDateAtStartOfDayEST', () => {
+    const getActualAndExpectedDate = ({
+      dateString = undefined,
+      howMuch = 0,
+      units = 'days',
+    }: {
+      dateString?: string;
+      howMuch?: number;
+      units?: string;
+    }) => {
+      const actual = calculateDateAtStartOfDayEST({
+        dateString,
+        howMuch,
+        units,
+      }).toISOString();
+
+      const expected = calculateDate({
+        dateString: createISODateAtStartOfDayEST(
+          calculateDate({ dateString, howMuch, units }).toISOString(),
+        ),
+      }).toISOString();
+      return { actual, expected };
+    };
+
+    const scenarios = [
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 0,
+        testName: 'handles howMuch=0 (default units=days) with no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 0,
+        testName: 'handles howMuch=0 with units=hours',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-03-02T05:00:00.000Z',
+        howMuch: 0,
+        testName: 'handles howMuch=0 with explicit date',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 days), no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 hours), no dateString',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-05-08T04:00:00.000Z',
+        howMuch: 67,
+        testName: 'handles howMuch>0 (67 days) with explicit date',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 days), no dateString',
+        units: 'days',
+      },
+      {
+        dateString: undefined,
+        expectedISO: null,
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 hours), no dateString',
+        units: 'hours',
+      },
+      {
+        dateString: '2024-03-02',
+        expectedISO: '2024-01-18T05:00:00.000Z',
+        howMuch: -44,
+        testName: 'handles howMuch<0 (-44 days) with explicit date',
+        units: 'days',
+      },
+    ];
+
+    it.each(scenarios)(
+      '$testName (dateString=$dateString, howMuch=$howMuch, units=$units)',
+      ({ dateString, expectedISO, howMuch, units }) => {
+        const { actual, expected } = getActualAndExpectedDate({
+          dateString,
+          howMuch,
+          units,
+        });
+
+        if (expectedISO) {
+          // If there's an exact expectedISO, make sure the expected matches exactly
+          // eslint-disable-next-line jest/no-conditional-expect
+          expect(expected).toEqual(expectedISO);
+        }
+        // Regardless, actual should match the expected from our helper
+        expect(actual).toEqual(expected);
+      },
+    );
   });
 });

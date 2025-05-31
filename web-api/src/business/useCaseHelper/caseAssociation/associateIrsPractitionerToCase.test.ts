@@ -7,15 +7,17 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { associateIrsPractitionerToCase } from './associateIrsPractitionerToCase';
-import { irsPractitionerUser } from '../../../../../shared/src/test/mockUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { irsPractitionerUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('associateIrsPractitionerToCase', () => {
-  const caseRecord1 = {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
     docketEntries: MOCK_CASE.docketEntries,
@@ -42,9 +44,7 @@ describe('associateIrsPractitionerToCase', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(caseRecord1);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping when the user is already associated with the case', async () => {
@@ -55,7 +55,7 @@ describe('associateIrsPractitionerToCase', () => {
     await associateIrsPractitionerToCase({
       applicationContext,
       authorizedUser: mockDocketClerkUser,
-      docketNumber: caseRecord1.docketNumber,
+      docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user: irsPractitionerUser,
     });
@@ -76,7 +76,7 @@ describe('associateIrsPractitionerToCase', () => {
     await associateIrsPractitionerToCase({
       applicationContext,
       authorizedUser: mockDocketClerkUser,
-      docketNumber: caseRecord1.docketNumber,
+      docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user: irsPractitionerUser,
     });

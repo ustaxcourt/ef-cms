@@ -1,4 +1,4 @@
-jest.mock('@web-api/persistence/elasticsearch/getBlockedCases');
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
   SESSION_TERMS_DICT,
@@ -11,7 +11,10 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { getBlockedCases as getBlockedCasesMock } from '@web-api/persistence/elasticsearch/getBlockedCases';
+import { getBlockedCasesForTrialLocation as getBlockedCasesForTrialLocationMock } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+
+const getBlockedCasesForTrialLocation =
+  getBlockedCasesForTrialLocationMock as jest.Mock;
 import { MOCK_CASE } from '@shared/test/mockCase';
 
 describe('getTrialSessionPlanningReportDataInteractor', () => {
@@ -131,7 +134,6 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
   const SMALL_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [{}];
   const REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK = [{}, {}];
   const BLOCKED_CASES_MOCK = [MOCK_CASE, MOCK_CASE, MOCK_CASE];
-  const getBlockedCases = jest.mocked(getBlockedCasesMock);
 
   beforeEach(() => {
     applicationContext
@@ -146,7 +148,7 @@ describe('getTrialSessionPlanningReportDataInteractor', () => {
         return REGULAR_ELIGIBLE_CASES_FOR_TRIAL_CITY_MOCK;
       });
 
-    getBlockedCases.mockResolvedValue(BLOCKED_CASES_MOCK);
+    getBlockedCasesForTrialLocation.mockResolvedValue(BLOCKED_CASES_MOCK);
   });
 
   it('should throw error if the user is "Unauthorized"', async () => {

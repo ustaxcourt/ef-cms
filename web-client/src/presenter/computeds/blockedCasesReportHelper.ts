@@ -4,7 +4,7 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setConsolidationFlagsForDisplay';
 import { Case } from '@shared/business/entities/cases/Case';
 import { formatDateString } from '@shared/business/utilities/DateHandler';
-import { BlockedCasesResponse } from '@web-api/persistence/elasticsearch/getBlockedCases';
+import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 
 export const blockedCasesReportHelper = (
   get: Get,
@@ -113,7 +113,7 @@ export const blockedCasesReportHelper = (
 
 function getBlockedDateFromBlockedGroup(
   leadDocketNumber: string,
-  blockCaseGroups: Map<string, BlockedCasesResponse>,
+  blockCaseGroups: Map<string, BlockedCaseData[]>,
 ) {
   const cases = blockCaseGroups.get(leadDocketNumber);
   if (!cases || cases.length === 0) return undefined;
@@ -127,10 +127,8 @@ function getBlockedDateFromBlockedGroup(
     .sort()[0];
 }
 
-function groupCases(
-  cases: BlockedCasesResponse,
-): Map<string, BlockedCasesResponse> {
-  const leadDocketNumberMap: Map<string, BlockedCasesResponse> = new Map();
+function groupCases(cases: BlockedCaseData[]): Map<string, BlockedCaseData[]> {
+  const leadDocketNumberMap: Map<string, BlockedCaseData[]> = new Map();
 
   cases.forEach(c => {
     if (c.leadDocketNumber) {

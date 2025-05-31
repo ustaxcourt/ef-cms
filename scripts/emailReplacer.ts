@@ -2,7 +2,7 @@ import * as crypto from 'crypto';
 import * as fs from 'fs';
 import * as readline from 'readline';
 
-const DOMAIN_REPLACER = 'mig.ef-cms.ustaxcourt.gov';
+const DOMAIN_REPLACER = 'ef-cms.ustaxcourt.gov';
 const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 
 export function sanitizeEmail(email: string) {

@@ -22,7 +22,7 @@ describe('Run the suggested trial session calendar generator', () => {
   it('should run the suggested trial session calendar generator', () => {
     loginAsPetitionsClerk1();
     cy.visit('/trial-sessions');
-    cy.get('[data-testId="open-create-term-modal-button"]').click();
+    cy.get('[data-testid="open-create-term-modal-button"]').click();
     cy.get('[data-testid="term-name-field"]').type('Test Term Name');
     cy.get(
       '.usa-date-picker__wrapper > [data-testid="termStartDate-date-start-input"]',

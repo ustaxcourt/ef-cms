@@ -58,3 +58,7 @@ variable "enable_health_checks" {
   // e.g. "1" or "0"
   type = string
 }
+
+variable "route_53_regional_weight" {
+  type = number
+}
