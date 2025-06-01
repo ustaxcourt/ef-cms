@@ -156,7 +156,7 @@ docker run -p 3030:3030 -d appbaseio/mirage
 
 ### DynamoDB Access Patterns
 
-Architecting a system with dynamodb can be tricky.  One recommendation from AWS is to create an access pattern table to help you understand the business use cases and how you plan to query that data via your PK, SK, or any GSI.  Here is a table listing the current access patterns we have in our system:
+Architecting a system with dynamodb can be tricky.  One recommendation from AWS is to create an access pattern table to help you understand the business use cases and how you plan to query that data via your PK, SK, or any GSI.  Here is a table docs/dynamodb-access-patterns.csv
 
 
 | Access Scenario                                            | PK                                              | SK                                       | GS1PK                                       |
