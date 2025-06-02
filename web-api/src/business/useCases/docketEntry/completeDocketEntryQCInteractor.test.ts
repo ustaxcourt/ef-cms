@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
 );
@@ -13,7 +14,6 @@ import {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_ACTIVE_LOCK } from '@shared/test/mockLock';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
@@ -26,26 +26,23 @@ import {
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
+  const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
+  const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
+
   const deleteCaseTrialSortMappingRecords = jest.mocked(
     deleteCaseTrialSortMappingRecordsMock,
   );
-
-  const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
-  const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
-  let mockLock;
-
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLock = jest.mocked(tryGetLockMock);
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
     applicationContext
       .getPersistenceGateway()
       .getConfigurationItemValue.mockImplementation(() => ({
@@ -55,7 +52,6 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   beforeEach(() => {
-    mockLock = undefined;
     const workItem = {
       docketEntry: {
         docketEntryId: mockDocketEntryId,
@@ -619,8 +615,7 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('throws the expected error if the lock is already acquired by another process', async () => {
-    mockLock = MOCK_ACTIVE_LOCK;
-
+    tryGetLock.mockResolvedValueOnce(false);
     await expect(() =>
       completeDocketEntryQCInteractor(
         applicationContext,
