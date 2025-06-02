@@ -6,8 +6,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { asyncHandleLockError } from '@web-api/business/useCaseHelper/acquireLock';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 const setNoticesForCalendaredTrialSession = async (
   applicationContext: ServerApplicationContext,

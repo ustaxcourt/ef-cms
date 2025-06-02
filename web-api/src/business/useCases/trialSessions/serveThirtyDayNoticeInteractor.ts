@@ -22,10 +22,12 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
-import { asyncHandleLockError } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,

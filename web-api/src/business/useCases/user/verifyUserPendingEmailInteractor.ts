@@ -11,8 +11,10 @@ import {
   createISODateString,
 } from '@shared/business/utilities/DateHandler';
 import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/changePasswordInteractor';
-import { asyncHandleLockError } from '@web-api/business/useCaseHelper/acquireLock';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 

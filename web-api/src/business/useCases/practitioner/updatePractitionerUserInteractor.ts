@@ -3,7 +3,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit, union } from 'lodash';
 import { updateUserPendingEmail } from '@web-api/business/useCases/user/updateUserPendingEmailInteractor';
-import { asyncHandleLockError } from '@web-api/business/useCaseHelper/acquireLock';
 import {
   isAuthorized,
   ROLE_PERMISSIONS,

@@ -154,6 +154,20 @@ export function withLocking<InteractorInput, InteractorOutput>(
   };
 }
 
+export const asyncHandleLockError = async (
+  applicationContext: ServerApplicationContext,
+  { clientConnectionId }: { clientConnectionId?: string },
+  authorizedUser: UnknownAuthUser,
+) => {
+  if (!authorizedUser?.userId || !clientConnectionId) return;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: { action: 'async_service_unavailable_error' },
+    userId: authorizedUser?.userId,
+  });
+};
+
 export type TOnLockError =
   | Error
   | ((
