@@ -13,13 +13,17 @@ export const getUserByIdWithPractitioner = async ({
 }): Promise<
   RawUser | RawPractitioner | RawIrsPractitioner | RawPrivatePractitioner
 > => {
+  const practitionerOnlyFields = PRACTITIONER_ONLY_FIELDS.map(
+    field => `p.${field}` as const,
+  );
+
   const user = await getDbReader(reader =>
     reader
       .selectFrom('dwUser as u')
       .where('u.userId', '=', userId)
       .leftJoin('dwPractitioner as p', 'u.userId', 'p.userId')
       .selectAll('u')
-      .select(PRACTITIONER_ONLY_FIELDS)
+      .select(practitionerOnlyFields)
       .executeTakeFirst(),
   );
 
