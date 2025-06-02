@@ -6,9 +6,9 @@ import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { tryGetLock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 import { releaseLock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-
-const MUTEX_NUM_ATTEMPTS = 5;
-const RETRY_DELAY_MS = 100;
+import { sleep } from '@shared/tools/helpers';
+import { getScopedDbConnection } from '@web-api/getConnection';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * Converts a string into a consistent 32-bit integer to use as an advisory lock ID.
@@ -18,6 +18,7 @@ export const hashLockId = (input: string): number => {
   return hash.readInt32BE(0);
 };
 
+// nope!!!
 /**
  * Executes an asynchronous callback within a mutex lock to ensure exclusive access
  * to a critical section of code.
@@ -31,42 +32,53 @@ export const hashLockId = (input: string): number => {
  */
 export const acquireLock = async ({
   applicationContext,
-  identifierObjects,
+  identifiers,
   onLockError,
   options = {},
   authorizedUser,
+  retries = 0,
+  waitTime = 3000,
 }: {
   applicationContext: ServerApplicationContext;
-  identifierObjects: { lockId: string; hashedLockId }[];
+  identifiers: string[];
   onLockError?: TOnLockError;
   options?: any;
+  retries?: number;
+  waitTime?: number;
   authorizedUser: UnknownAuthUser;
-}): Promise<void> => {
+}): Promise<() => Promise<void>> => {
+  // using a scoped connection ensures that the pg_try_advisory_locks are created and released on the same db connection
+  const { db, destroy } = await getScopedDbConnection();
+
   let attempts = 0;
   let lockedItems: string[] = [];
 
+  const identifierObjects = identifiers.map(id => ({
+    lockId: id,
+    hashedLockId: hashLockId(id),
+  }));
+
   do {
-    if (attempts > MUTEX_NUM_ATTEMPTS) {
+    if (attempts > retries) {
       if (onLockError instanceof Error) {
         throw onLockError;
       } else if (typeof onLockError === 'function') {
         await onLockError(applicationContext, options, authorizedUser);
       }
+      await destroy();
       throw new ServiceUnavailableError( // this ain't great logging
         `One of the items you are trying to update is being updated by someone else: ${lockedItems.join(', ')}`,
       );
     }
 
     if (attempts > 0) {
-      await new Promise(resolve =>
-        setTimeout(resolve, RETRY_DELAY_MS * Math.pow(2, attempts - 1)),
-      );
+      await sleep(waitTime);
     }
 
-    const results = await Promise.all(
+    const results = await settlePromises(
       identifierObjects.map(async idObj => ({
         lockId: idObj.lockId,
-        isLocked: !(await tryGetLock(idObj.hashedLockId)),
+        isLocked: !(await tryGetLock(db, idObj.hashedLockId)),
       })),
     );
 
@@ -74,14 +86,13 @@ export const acquireLock = async ({
 
     attempts++;
   } while (lockedItems.length);
-};
 
-export const removeLock = async (
-  identifierObjects: { lockId: string; hashedLockId: number }[],
-): Promise<void> => {
-  for (const idObj of [...identifierObjects].reverse()) {
-    await releaseLock(idObj.hashedLockId);
-  }
+  return async () => {
+    await settlePromises(
+      identifierObjects.map(idObj => releaseLock(db, idObj.hashedLockId)),
+    );
+    await destroy();
+  };
 };
 
 export function withLocking<InteractorInput, InteractorOutput>(
@@ -112,17 +123,9 @@ export function withLocking<InteractorInput, InteractorOutput>(
       authorizedUser,
     );
 
-    // consider moving so that acquireLock can be called independently
-    const identifierObjects = identifiers.map(id => {
-      return {
-        lockId: id,
-        hashedLockId: hashLockId(id),
-      };
-    });
-
-    await acquireLock({
+    const releaseLockFn = await acquireLock({
       applicationContext,
-      identifierObjects,
+      identifiers,
       onLockError,
       options,
       authorizedUser,
@@ -138,7 +141,7 @@ export function withLocking<InteractorInput, InteractorOutput>(
     }
 
     try {
-      await removeLock(identifierObjects);
+      await releaseLockFn();
     } catch (e) {
       getLogger().error(`withLocking: failed to remove lock: ${e}`);
       throw e;
