@@ -55,6 +55,7 @@ import { clearDueDateSequence } from './sequences/clearDueDateSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
+import { clearMotionOrderResponseFormSequence } from './sequences/MotionOrderResponse/clearMotionOrderResponseFormSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
 import { clearOptionalCustomCaseReportFilterSequence } from './sequences/clearOptionalCustomCaseReportFilterSequence';
 import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalFieldsStampFormSequence';
@@ -138,6 +139,7 @@ import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryRepo
 import { getCustomCaseReportSequence } from './sequences/getCustomCaseReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
 import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
+import { goToOrderResponseSequence } from './sequences/gotoOrderResponseSequence';
 import { goToChangePasswordSequence } from '@web-client/presenter/sequences/Login/goToChangePasswordSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { goToForgotPasswordSequence } from '@web-client/presenter/sequences/Login/goToForgotPasswordSequence';
@@ -230,6 +232,7 @@ import { loadDefaultDocketViewerDocumentToDisplaySequence } from './sequences/Do
 import { loadDefaultDraftViewerDocumentToDisplaySequence } from './sequences/DocketEntry/loadDefaultDraftViewerDocumentToDisplaySequence';
 import { loadDefaultViewerCorrespondenceSequence } from './sequences/loadDefaultViewerCorrespondenceSequence';
 import { loadPdfForTabSequence } from './sequences/PDFPreviewTab/loadPdfForTabSequence';
+import { motionOrderResponsePdfPreviewSequence } from './sequences/MotionOrderResponse/motionOrderResponsePdfPreviewSequence';
 import { navigateBackSequence } from './sequences/navigateBackSequence';
 import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/navigateToCaseDetailFromPaperServiceSequence';
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
@@ -421,6 +424,7 @@ import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showPaperServiceProgressSequence } from './sequences/showPaperServiceProgressSequence';
 import { showThirtyDayNoticeModalSequence } from './sequences/showThirtyDayNoticeModalSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
+
 import { signOutSequence } from './sequences/signOutSequence';
 import { signOutUserInitiatedSequence } from './sequences/signOutUserInitiatedSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
@@ -464,6 +468,7 @@ import { submitJudgeActivityStatisticsReportSequence } from './sequences/JudgeAc
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
+import { submitMotionOrderResponseSequence } from './sequences/MotionOrderResponse/submitMotionOrderResponseSequence';
 import { submitPaperFilingSequence } from './sequences/submitPaperFilingSequence';
 import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromPaperSequence';
 import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
@@ -589,6 +594,7 @@ import { validateEditRespondentCounselSequence } from './sequences/CaseAssociati
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
 import { validateFilePetitionStep2Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep2Sequence';
 import { validateFilePetitionStep5Sequence } from '@web-client/presenter/sequences/validateFilePetitionStep5Sequence';
+import { validateMotionOrderResponseSequence } from './sequences/MotionOrderResponse/validateMotionOrderResponseSequence';
 import { validateNoteSequence } from './sequences/validateNoteSequence';
 import { validateOpinionSearchSequence } from './sequences/validateOpinionSearchSequence';
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
@@ -615,6 +621,8 @@ import { validateUserContactSequence } from './sequences/validateUserContactSequ
 import { navigateToTermBuilderPageSequence } from '@web-client/presenter/sequences/TrialSessions/navigateToTermBuilderPageSequence';
 import { gotoTrialSessionTermBuilderSequence } from '@web-client/presenter/sequences/gotoTrialSessionTermBuilderSequence';
 import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
+import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/sequences/showRemovePetitionerEmailModalSequence';
+import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -690,6 +698,7 @@ export const presenterSequences = {
     clearExistingDocumentSequence as unknown as Function,
   clearModalFormSequence: clearModalFormSequence as unknown as Function,
   clearModalSequence: clearModalSequence as unknown as Function,
+  clearMotionOrderResponseFormSequence,
   clearOpenClosedCasesCurrentPageSequence:
     clearOpenClosedCasesCurrentPageSequence as unknown as Function,
   clearOptionalCustomCaseReportFilterSequence,
@@ -821,6 +830,7 @@ export const presenterSequences = {
   goToChangePasswordSequence,
   goToCreatePetitionerAccountSequence,
   goToForgotPasswordSequence,
+  goToOrderResponseSequence,
   goToVerificationSentSequence:
     goToVerificationSentSequence as unknown as Function,
   gotoAccessibilityStatementSequence:
@@ -965,6 +975,7 @@ export const presenterSequences = {
   loadDefaultViewerCorrespondenceSequence:
     loadDefaultViewerCorrespondenceSequence as unknown as Function,
   loadPdfForTabSequence: loadPdfForTabSequence as unknown as Function,
+  motionOrderResponsePdfPreviewSequence,
   navigateBackSequence: navigateBackSequence as unknown as Function,
   navigateToCaseDetailFromPaperServiceSequence:
     navigateToCaseDetailFromPaperServiceSequence as unknown as Function,
@@ -1161,6 +1172,7 @@ export const presenterSequences = {
     removePetitionerAndUpdateCaptionSequence as unknown as Function,
   removePetitionerCounselFromCaseSequence:
     removePetitionerCounselFromCaseSequence as unknown as Function,
+  removePetitionerEmailSequence,
   removeRespondentCounselFromCaseSequence:
     removeRespondentCounselFromCaseSequence as unknown as Function,
   removeScannedPdfSequence: removeScannedPdfSequence as unknown as Function,
@@ -1277,6 +1289,7 @@ export const presenterSequences = {
     showMoreClosedCasesSequence as unknown as Function,
   showMoreOpenCasesSequence: showMoreOpenCasesSequence as unknown as Function,
   showMoreResultsSequence: showMoreResultsSequence as unknown as Function,
+  showRemovePetitionerEmailModalSequence,
   showPaperServiceProgressSequence:
     showPaperServiceProgressSequence as unknown as Function,
   showThirtyDayNoticeModalSequence:
@@ -1353,6 +1366,7 @@ export const presenterSequences = {
   submitJudgeActivityStatisticsReportSequence:
     submitJudgeActivityStatisticsReportSequence as unknown as Function,
   submitLoginSequence,
+  submitMotionOrderResponseSequence,
   submitOpinionAdvancedSearchSequence:
     submitOpinionAdvancedSearchSequence as unknown as Function,
   submitOrderAdvancedSearchSequence:
@@ -1564,6 +1578,8 @@ export const presenterSequences = {
     validateExternalDocumentInformationSequence as unknown as Function,
   validateFilePetitionStep2Sequence,
   validateFilePetitionStep5Sequence,
+  validateMotionOrderResponseSequence:
+    validateMotionOrderResponseSequence as unknown as Function,
   validateNoteSequence: validateNoteSequence as unknown as Function,
   validateOpinionSearchSequence:
     validateOpinionSearchSequence as unknown as Function,

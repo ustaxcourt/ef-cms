@@ -36,4 +36,16 @@ describe('caseStatusWithTrialInformation', () => {
       `${CASE_STATUS_TYPES.calendared} - 02/01/22 ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`,
     );
   });
+
+  it('should set formattedTrialDate to NA when trialDate is falsy', () => {
+    const caseStatusWithTrialInfo = caseStatusWithTrialInformation({
+      caseStatus: CASE_STATUS_TYPES.calendared,
+      trialDate: undefined,
+      trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+    });
+
+    expect(caseStatusWithTrialInfo).toEqual(
+      `${CASE_STATUS_TYPES.calendared} - NA ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`,
+    );
+  });
 });

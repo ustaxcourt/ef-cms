@@ -7,6 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
@@ -25,12 +26,10 @@ export const createCaseDeadline = async (
     throw new UnauthorizedError('Unauthorized for create case deadline');
   }
 
-  const caseDetail = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: caseDeadline.docketNumber,
-    });
+  const caseDetail = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber: caseDeadline.docketNumber,
+  });
 
   const currentCaseEntity = new Case(caseDetail, { authorizedUser });
   const newCaseDeadline = new CaseDeadline({
@@ -92,7 +91,7 @@ export async function getcreateCaseDeadlineLockInfo(
   ttl?: number;
 }> {
   const { docketNumber, leadDocketNumber, consolidatedCases } =
-    await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
+    await getCaseByDocketNumber({
       applicationContext,
       docketNumber: caseDeadline.docketNumber,
     });

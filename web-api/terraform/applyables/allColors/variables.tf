@@ -102,5 +102,4 @@ variable "restoring_aws_account_id" {
 
 variable "rum_sample_rate" {
   type = number
-
 }

@@ -274,7 +274,6 @@ import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { setMessageAsReadInteractor } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
-import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
@@ -361,6 +360,7 @@ import ImageBlobReduce from 'image-blob-reduce';
 import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
 import { getConsolidatedCaseDeadlinesInteractor } from '@shared/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
+import { removePetitionerEmailInteractor } from '@shared/proxies/removePetitionerEmailProxy';
 
 const reduce = ImageBlobReduce({
   pica: ImageBlobReduce.pica({ features: ['js'] }),
@@ -518,6 +518,7 @@ const allUseCases = {
   removeItemInteractor,
   removePdfFromDocketEntryInteractor,
   removePetitionerAndUpdateCaptionInteractor,
+  removePetitionerEmailInteractor,
   removeSignatureFromDocumentInteractor,
   renewIdTokenInteractor,
   replyToMessageInteractor,
@@ -788,7 +789,6 @@ const applicationContext = {
       prepareDateFromString,
       replaceBracketed,
       setConsolidationFlagsForDisplay,
-      setServiceIndicatorsForCase,
       setupPdfDocument,
       sleep,
       sortDocketEntries,

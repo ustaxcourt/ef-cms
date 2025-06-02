@@ -108,6 +108,7 @@ export const CaseInformationInternal = connect(
                     )}
                     {caseDetailHelper.showEditCaseDetailsButton && (
                       <Button
+                        data-testid="edit-case-details-button"
                         link
                         className="float-right margin-right-0 margin-top-1 padding-0"
                         href={`/case-detail/${formattedCaseDetail.docketNumber}/edit-details`}

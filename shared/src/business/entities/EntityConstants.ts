@@ -122,7 +122,7 @@ export const SERVICE_INDICATOR_TYPES = {
   SI_ELECTRONIC: 'Electronic',
   SI_NONE: 'None',
   SI_PAPER: 'Paper',
-};
+} as const;
 
 export const DOCUMENT_PROCESSING_STATUS_OPTIONS = {
   COMPLETE: 'complete',
@@ -635,6 +635,12 @@ export const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
 ])
   .filter((internalEvent: Record<string, any>) => !internalEvent.caseDecision)
   .map(x => x.eventCode);
+
+export const ORDER_RESPONSE_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter((doc: Record<string, any>) => doc.allowOrderResponse)
+    .map(x => x.eventCode),
+);
 
 export const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
@@ -1193,7 +1199,7 @@ export const ALL_STATE_OPTIONS = {
   Other: 'Other',
 };
 
-export type AbbrevatedStates =
+export type AbbreviatedStates =
   | keyof typeof US_STATES
   | keyof typeof US_STATES_OTHER;
 
@@ -1797,6 +1803,19 @@ export const TROUBLESHOOTING_INFO = {
   FILE_UPLOAD_TROUBLESHOOTING_LINK:
     'https://ustaxcourt.gov/dawson_faqs_case_management.html#FileUpload',
 };
+
+export const MAX_NUMBER_DEFICIENCY_STATISTICS = 12;
+export const MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES = 10;
+
+export const MOTION_ORDER_RESPONSE_OPTIONS = {
+  issueOrderOptions: {
+    ALL_CASES: 'All cases in this group',
+    THIS_CASE_ONLY: 'Just this case',
+  },
+  orderType: 'motionOrderResponse',
+};
+
+export const MAX_ORDER_RESPONSE_TEXT_CHARACTERS = 240;
 
 export const TERM_GENERATOR_DEFAULT_VALUES = {
   MAX_SESSIONS_PER_WEEK: 6,
