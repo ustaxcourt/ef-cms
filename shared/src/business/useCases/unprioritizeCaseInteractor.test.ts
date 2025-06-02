@@ -1,4 +1,4 @@
-jest.mock('@web-api/persistence/dynamo/locks/acquireLock');
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock',
 );
@@ -11,11 +11,13 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
@@ -24,18 +26,17 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
-);
-import { getLock as mockGetLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { createCaseTrialSortMappingRecords as createCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 
 describe('unprioritizeCaseInteractor', () => {
-  let mockLock;
-  const getLock = jest.mocked(mockGetLock);
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
   const updateCaseAutomaticBlock = jest.mocked(updateCaseAutomaticBlockMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   jest
@@ -53,15 +54,10 @@ describe('unprioritizeCaseInteractor', () => {
     updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
     );
-    getLock.mockImplementation(() => mockLock);
 
     updateCaseAutomaticBlock.mockImplementation(({ caseEntity }) =>
       Promise.resolve(caseEntity),
     );
-  });
-
-  beforeEach(() => {
-    mockLock = undefined;
   });
 
   it('should throw an unauthorized error if the user has no access to unprioritize the case', async () => {
@@ -145,10 +141,7 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockResolvedValueOnce(mockLock);
+    tryGetLock.mockResolvedValueOnce(false);
 
     await expect(
       unprioritizeCaseInteractor(
@@ -164,7 +157,6 @@ describe('unprioritizeCaseInteractor', () => {
   });
 
   it('should acquire and remove the lock on the case', async () => {
-    mockLock = undefined;
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     await unprioritizeCaseInteractor(
       applicationContext,
@@ -174,19 +166,12 @@ describe('unprioritizeCaseInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
 
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
   });
 });
