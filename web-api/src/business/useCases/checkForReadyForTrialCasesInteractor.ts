@@ -4,10 +4,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getReadyForTrialCases } from '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases';
 import { uniqBy } from 'lodash';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 export const checkForReadyForTrialCasesInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -57,7 +57,6 @@ export const checkForReadyForTrialCasesInteractor = async (
         onLockError: new ServiceUnavailableError(
           `${docketNumber} is currently being updated`,
         ),
-        ttl: 900,
       });
     } catch (err) {
       if (retry < maxRetries && err instanceof ServiceUnavailableError) {
@@ -77,6 +76,14 @@ export const checkForReadyForTrialCasesInteractor = async (
     const { docketNumber } = caseRecord;
     await acquireLockForCase({ docketNumber });
 
+    const removeLockFunction = await acquireLock({
+      applicationContext,
+      authorizedUser: undefined,
+      identifiers: [`case|${docketNumber}`],
+      retries: 20,
+      waitTime: 5000,
+    });
+
     if (caseRecord) {
       const caseEntity = new Case(caseRecord, {
         authorizedUser: undefined,
@@ -91,10 +98,8 @@ export const checkForReadyForTrialCasesInteractor = async (
         }
       }
     }
-    await applicationContext.getPersistenceGateway().removeLock({
-      applicationContext,
-      identifiers: [`case|${docketNumber}`],
-    });
+
+    await removeLockFunction();
   };
 
   const casesToUpdate = await getCasesByDocketNumbers({

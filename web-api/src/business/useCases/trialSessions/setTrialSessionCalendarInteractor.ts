@@ -8,10 +8,6 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import {
-  acquireLock,
-  removeLock,
-} from '@web-api/business/useCaseHelper/acquireLock';
 import { flatten, isEmpty, partition, uniq } from 'lodash';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -20,6 +16,7 @@ import {
   updateDeadlinesForCasesToCalendar,
   updateWorkItemsForCasesToCalendar,
 } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -30,6 +27,9 @@ export const setTrialSessionCalendarInteractor = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   let docketNumbersToLock: string[] = [];
+  let removeLockFunction: Function = () => {
+    console.log('No locks to release');
+  };
   try {
     if (
       !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)
@@ -110,11 +110,10 @@ export const setTrialSessionCalendarInteractor = async (
       ...manuallyAddedQcIncompleteCases,
     ].forEach(c => new Case(c, { authorizedUser }).validate());
 
-    await acquireLock({
+    removeLockFunction = await acquireLock({
       applicationContext,
       authorizedUser,
       identifiers: docketNumbersToLock.map(item => `case|${item}`),
-      ttl: 15 * 60, // Full lambda execution time
     });
 
     const manuallyAddedQcCompleteCaseEntities =
@@ -207,9 +206,6 @@ export const setTrialSessionCalendarInteractor = async (
       userId: authorizedUser?.userId || '',
     });
   } finally {
-    await removeLock({
-      applicationContext,
-      identifiers: docketNumbersToLock.map(item => `case|${item}`),
-    });
+    await removeLockFunction();
   }
 };
