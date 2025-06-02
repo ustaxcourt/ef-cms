@@ -8,7 +8,6 @@ import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persisten
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
 export async function getConsolidatedCaseDeadlinesInteractor(
-  applicationContext: IApplicationContext,
   {
     consolidatedCaseDeadlineId,
   }: {
@@ -28,7 +27,6 @@ export async function getConsolidatedCaseDeadlinesInteractor(
   for (let index = 0; index < DEADLINES.length; index++) {
     const { docketNumber } = DEADLINES[index];
     const CASE = await getCaseMetadataByDocketNumber({
-      applicationContext,
       docketNumber,
     });
     if (!CASE) continue;

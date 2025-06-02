@@ -2,7 +2,6 @@ jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
 );
 jest.mock('@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber');
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getConsolidatedCaseDeadlinesInteractor } from '@shared/business/useCases/getConsolidatedCaseDeadlinesInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
 import {
@@ -24,7 +23,6 @@ describe('getConsolidatedCaseDeadlinesInteractor', () => {
   it('should throw an "Unauthorized" error when the provided user does not have permissions', async () => {
     await expect(
       getConsolidatedCaseDeadlinesInteractor(
-        applicationContext,
         {
           consolidatedCaseDeadlineId: TEST_CONSOLIDATED_DEADLINE_ID,
         },
@@ -37,7 +35,6 @@ describe('getConsolidatedCaseDeadlinesInteractor', () => {
     getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([]);
 
     const results = await getConsolidatedCaseDeadlinesInteractor(
-      applicationContext,
       {
         consolidatedCaseDeadlineId: TEST_CONSOLIDATED_DEADLINE_ID,
       },
@@ -63,7 +60,6 @@ describe('getConsolidatedCaseDeadlinesInteractor', () => {
     });
 
     const results = await getConsolidatedCaseDeadlinesInteractor(
-      applicationContext,
       {
         consolidatedCaseDeadlineId: TEST_CONSOLIDATED_DEADLINE_ID,
       },
