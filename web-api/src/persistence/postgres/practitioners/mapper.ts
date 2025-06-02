@@ -100,6 +100,6 @@ function transformPractitionerData(practitioner) {
   });
 }
 
-export const PRACTITIONER_ONLY_FIELDS = DW_PRACTITIONER_COLUMNS.filter(x =>
-  (DW_USER_COLUMNS as string[]).includes(x),
+export const PRACTITIONER_ONLY_FIELDS = DW_PRACTITIONER_COLUMNS.filter(
+  x => !(DW_USER_COLUMNS as string[]).includes(x),
 );
