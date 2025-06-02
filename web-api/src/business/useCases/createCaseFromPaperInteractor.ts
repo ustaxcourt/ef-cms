@@ -269,16 +269,11 @@ const createCaseMetadata = async (
     caseToAdd.addDocketEntry(atpDocketEntryEntity);
   }
 
-  const createCaseAndAssociationsStart = Date.now();
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
     applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
-  console.log(
-    'docketNumber investigation 2 createCaseAndAssociations from paper',
-    Date.now() - createCaseAndAssociationsStart,
-  );
 
   return { caseToAdd, workItem: newWorkItem };
 };
@@ -312,7 +307,6 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const start = Date.now();
   await acquireLock({
     applicationContext,
     authorizedUser,
@@ -320,12 +314,10 @@ export const createCaseFromPaperInteractor = async (
     retries: 25,
     waitTime: 500,
   });
-  console.log(
-    'docketNumber investigation 2, acquiring lock',
-    Date.now() - start,
-  );
+
   let caseToAdd: Case;
   let workItem: WorkItem;
+
   try {
     ({ caseToAdd, workItem } = await createCaseMetadata(
       applicationContext,
@@ -346,10 +338,6 @@ export const createCaseFromPaperInteractor = async (
       applicationContext,
       identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
     });
-    console.log(
-      'docketNumber investigation 2, create case from paper',
-      Date.now() - start,
-    );
   }
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
