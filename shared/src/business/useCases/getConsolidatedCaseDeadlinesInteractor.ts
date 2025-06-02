@@ -5,7 +5,7 @@ import {
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
-import { getCaseMetadataByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseMetadataByDocketNumber';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
 export async function getConsolidatedCaseDeadlinesInteractor(
   applicationContext: IApplicationContext,
