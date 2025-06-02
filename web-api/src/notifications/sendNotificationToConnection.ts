@@ -8,8 +8,6 @@ export type Connection = {
   clientConnectionId: string;
   connectionId: string;
   endpoint: string;
-  pk: string;
-  sk: string;
   userId: string;
 };
 
