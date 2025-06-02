@@ -1,3 +1,4 @@
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { get } from '../requests';
 
 /**
@@ -11,7 +12,7 @@ import { get } from '../requests';
 export const getDocumentQCServedForSectionInteractor = (
   applicationContext,
   { section },
-) => {
+): Promise<WorkItemWithCaseInfo[]> => {
   return get({
     applicationContext,
     endpoint: `/sections/${section}/document-qc/served`,

@@ -118,14 +118,12 @@ export const getFormattedMessages = ({
         ...message,
         completedAtFormatted: formatDateIfToday(
           message.completedAt,
-          applicationContext,
           now,
           yesterday,
         ),
         consolidatedIconTooltipText,
         createdAtFormatted: formatDateIfToday(
           message.createdAt,
-          applicationContext,
           now,
           yesterday,
         ),
