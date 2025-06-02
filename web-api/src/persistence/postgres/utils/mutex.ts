@@ -1,5 +1,4 @@
 import crypto from 'crypto';
-import { TOnLockError } from '@web-api/business/useCaseHelper/acquireLock';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
@@ -88,6 +87,7 @@ export const acquireLock = async ({
   } while (lockedItems.length);
 
   return async () => {
+    // better logging on failure? Necessary if locks are connection-specific?
     await settlePromises(
       identifierObjects.map(idObj => releaseLock(db, idObj.hashedLockId)),
     );
@@ -153,3 +153,11 @@ export function withLocking<InteractorInput, InteractorOutput>(
     return results!;
   };
 }
+
+export type TOnLockError =
+  | Error
+  | ((
+      applicationContext: any,
+      originalRequest: any,
+      authorizedUser: UnknownAuthUser,
+    ) => void);
