@@ -2,6 +2,7 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils',
 );
@@ -9,7 +10,6 @@ jest.mock('@web-api/business/useCaseHelper/acquireLock');
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-import { acquireLock as acquireLockMock } from '@web-api/business/useCaseHelper/acquireLock';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   CASE_STATUS_TYPES,
@@ -23,17 +23,19 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { removeLock as removeLockMock } from '@web-api/business/useCaseHelper/acquireLock';
 import { updateWorkItemsForCasesToCalendar as updateWorkItemsForCasesToCalendarMock } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 
 describe('setTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const upsertCases = jest.mocked(upsertCasesMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const acquireLock = jest.mocked(acquireLockMock);
-  const removeLock = jest.mocked(removeLockMock);
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
   const updateWorkItemsForCasesToCalendar = jest.mocked(
     updateWorkItemsForCasesToCalendarMock,
   );
@@ -297,7 +299,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    acquireLock.mockRejectedValue(new Error('Could not get lock'));
+    tryGetLock.mockResolvedValueOnce(false);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -339,16 +341,12 @@ describe('setTrialSessionCalendarInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(acquireLock).toHaveBeenCalledWith({
-      applicationContext,
-      authorizedUser: mockPetitionsClerkUser,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      ttl: 900,
-    });
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
 
-    expect(removeLock).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
   });
 });

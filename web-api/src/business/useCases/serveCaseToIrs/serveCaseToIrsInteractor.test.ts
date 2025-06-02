@@ -121,8 +121,6 @@ describe('serveCaseToIrsInteractor', () => {
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
 
-    tryGetLock.mockResolvedValue(true);
-
     applicationContext
       .getUseCases()
       .addCoversheetInteractor.mockImplementation(
@@ -1535,7 +1533,7 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLock.mockResolvedValue(false);
+    tryGetLock.mockResolvedValueOnce(false);
 
     await expect(
       serveCaseToIrsInteractor(
