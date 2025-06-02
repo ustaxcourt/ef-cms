@@ -31,10 +31,6 @@ jest.mock('@web-api/persistence/postgres/users/getAllUsersByRole', () =>
   mockFactory('getAllUsersByRole'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/getInternalUsers', () =>
-  mockFactory('getInternalUsers'),
-);
-
 jest.mock('@web-api/persistence/postgres/users/getUserByEmail', () =>
   mockFactory('getUserByEmail'),
 );
@@ -59,10 +55,6 @@ jest.mock('@web-api/persistence/postgres/users/getUserConfirmationCode', () =>
 
 jest.mock('@web-api/persistence/postgres/users/getUsersById', () =>
   mockFactory('getUsersById'),
-);
-
-jest.mock('@web-api/persistence/postgres/users/getUsersInJudgeSection', () =>
-  mockFactory('getUsersInJudgeSection'),
 );
 
 jest.mock('@web-api/persistence/postgres/users/getUsersInSection', () =>
@@ -92,8 +84,9 @@ jest.mock(
   () => mockFactory('associateUserWithCasePending'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/cases/deleteUserFromCase', () =>
-  mockFactory('deleteUserFromCase'),
+jest.mock(
+  '@web-api/persistence/postgres/users/cases/disassociateUserFromCase',
+  () => mockFactory('disassociateUserFromCase'),
 );
 
 jest.mock('@web-api/persistence/postgres/users/cases/verifyCaseForUser', () =>

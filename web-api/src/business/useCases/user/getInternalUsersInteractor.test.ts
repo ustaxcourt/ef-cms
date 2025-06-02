@@ -4,14 +4,14 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getInternalUsers as getInternalUsersMock } from '@web-api/persistence/postgres/users/getInternalUsers';
+import { getAllUsersByRole as getAllUsersByRoleMock } from '@web-api/persistence/postgres/users/getAllUsersByRole';
 import { userEntity } from '@web-api/persistence/postgres/users/mapper';
 
-const getInternalUsers = getInternalUsersMock as jest.Mock;
+const getAllUsersByRole = getAllUsersByRoleMock as jest.Mock;
 
 describe('Get internal users', () => {
   beforeEach(() => {
-    getInternalUsers.mockReturnValue(
+    getAllUsersByRole.mockReturnValue(
       [
         {
           name: 'Saul Goodman',
