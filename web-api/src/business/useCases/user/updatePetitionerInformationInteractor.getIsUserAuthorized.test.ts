@@ -45,7 +45,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
   describe('getIsUserAuthorized', () => {
     it('should return false when the user is a privatePractitioner not associated with the case', () => {
       const isUserAuthorized = getIsUserAuthorized({
-        oldCase: mockCase,
+        petitionerCaseRaw: mockCase,
         updatedPetitionerData: {},
         user: {
           ...mockPrivatePractitionerUser,
@@ -58,7 +58,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
 
     it('should return false when the user is a petitioner attempting to modify another petitioner', () => {
       const isUserAuthorized = getIsUserAuthorized({
-        oldCase: mockCase,
+        petitionerCaseRaw: mockCase,
         updatedPetitionerData: {},
         user: {
           ...mockPetitionerUser,
@@ -71,7 +71,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
 
     it('should return true when the user is a petitioner its own contact information', () => {
       const isUserAuthorized = getIsUserAuthorized({
-        oldCase: mockCase,
+        petitionerCaseRaw: mockCase,
         updatedPetitionerData: { contactId: SECONDARY_CONTACT_ID },
         user: {
           ...mockPetitionerUser,
@@ -84,7 +84,7 @@ describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
 
     it('should return true when the user is representingCounsel', () => {
       const isUserAuthorized = getIsUserAuthorized({
-        oldCase: {
+        petitionerCaseRaw: {
           ...mockCase,
           petitioners: [mockPetitioners[0]],
           privatePractitioners: [

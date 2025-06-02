@@ -28,20 +28,3 @@ export const IS_PRACTITIONER: QueryContainer[] = [
     },
   },
 ];
-export const GET_PARENT_CASE = {
-  has_parent: {
-    inner_hits: {
-      _source: {
-        includes: [
-          'leadDocketNumber',
-          'docketNumber',
-          'trialDate',
-          'trialLocation',
-        ],
-      },
-      name: 'case-mappings',
-    },
-    parent_type: 'case',
-    query: { match_all: {} },
-  },
-};

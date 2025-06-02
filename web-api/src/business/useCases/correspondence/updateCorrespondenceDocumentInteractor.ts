@@ -1,12 +1,13 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
-import { Correspondence } from '../../../../../shared/src/business/entities/Correspondence';
+import { Case } from '@shared/business/entities/cases/Case';
+import { Correspondence } from '@shared/business/entities/Correspondence';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
 export const updateCorrespondenceDocumentInteractor = async (
@@ -20,12 +21,10 @@ export const updateCorrespondenceDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 

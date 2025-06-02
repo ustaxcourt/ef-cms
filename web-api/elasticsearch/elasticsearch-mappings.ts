@@ -1,17 +1,9 @@
-import {
-  efcmsCaseDeadlineIndex,
-  efcmsCaseDeadlineMappings,
-} from './efcms-case-deadline-mappings';
 import { efcmsCaseIndex, efcmsCaseMappings } from './efcms-case-mappings';
 import {
   efcmsDocketEntryIndex,
   efcmsDocketEntryMappings,
 } from './efcms-docket-entry-mappings';
 import { efcmsUserIndex, efcmsUserMappings } from './efcms-user-mappings';
-import {
-  efcmsWorkItemIndex,
-  efcmsWorkItemMappings,
-} from './efcms-work-item-mappings';
 
 /*
 
@@ -32,9 +24,7 @@ This setting will prevent analysis during indexing.
 */
 
 export const elasticsearchMappings = {
-  [efcmsCaseDeadlineIndex]: efcmsCaseDeadlineMappings,
   [efcmsCaseIndex]: efcmsCaseMappings,
   [efcmsDocketEntryIndex]: efcmsDocketEntryMappings,
   [efcmsUserIndex]: efcmsUserMappings,
-  [efcmsWorkItemIndex]: efcmsWorkItemMappings,
 };

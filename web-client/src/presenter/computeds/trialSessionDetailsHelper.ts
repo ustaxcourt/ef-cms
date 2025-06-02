@@ -29,7 +29,7 @@ export const trialSessionDetailsHelper = (
   const eligibleRegularCaseQcTotalCompleteCount = (eligibleCases || []).filter(
     eligibleCase =>
       eligibleCase.qcCompleteForTrial?.[trialSessionId] &&
-      (eligibleCase.docketNumberSuffix === null ||
+      (!eligibleCase.docketNumberSuffix ||
         (eligibleCase.docketNumberSuffix !== DOCKET_NUMBER_SUFFIXES.SMALL &&
           eligibleCase.docketNumberSuffix !==
             DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY)),
