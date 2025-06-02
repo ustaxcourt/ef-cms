@@ -1,10 +1,11 @@
-import { getDbWriter } from '@web-api/database';
-import { CompiledQuery } from 'kysely';
 import crypto from 'crypto';
 import { TOnLockError } from '@web-api/business/useCaseHelper/acquireLock';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { tryGetLock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { ServiceUnavailableError } from '@web-api/errors/errors';
 
 const MUTEX_NUM_ATTEMPTS = 5;
 const RETRY_DELAY_MS = 100;
@@ -51,14 +52,14 @@ export const acquireLock = async ({
       } else if (typeof onLockError === 'function') {
         await onLockError(applicationContext, options, authorizedUser);
       }
-      throw new Error( // this ain't great logging
+      throw new ServiceUnavailableError( // this ain't great logging
         `One of the items you are trying to update is being updated by someone else: ${lockedItems.join(', ')}`,
       );
     }
 
     if (attempts > 0) {
       await new Promise(resolve =>
-        setTimeout(resolve, RETRY_DELAY_MS * Math.pow(1.5, attempts - 1)),
+        setTimeout(resolve, RETRY_DELAY_MS * Math.pow(2, attempts - 1)),
       );
     }
 
@@ -149,29 +150,3 @@ export function withLocking<InteractorInput, InteractorOutput>(
     return results!;
   };
 }
-
-const tryGetLock = async (lockId: number) => {
-  const gotLockResult = await getDbWriter({
-    table: null,
-    cb: async writer => {
-      const result = await writer.executeQuery<{ pgTryAdvisoryLock: boolean }>(
-        CompiledQuery.raw(`select pg_try_advisory_lock(${lockId})`, []),
-      );
-      return result;
-    },
-  });
-  return gotLockResult.rows[0].pgTryAdvisoryLock;
-};
-
-const releaseLock = async (lockId: number) => {
-  const releasedLockResult = await getDbWriter({
-    table: null,
-    cb: async writer => {
-      const result = await writer.executeQuery<{ pgAdvisoryUnlock: boolean }>(
-        CompiledQuery.raw(`select pg_advisory_unlock(${lockId})`, []),
-      );
-      return result;
-    },
-  });
-  return releasedLockResult.rows[0].pgAdvisoryUnlock;
-};
