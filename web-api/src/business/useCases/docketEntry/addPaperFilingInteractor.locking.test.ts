@@ -27,7 +27,6 @@ const getCasesInConsolidatedGroup =
   getCasesInConsolidatedGroupMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-
 const tryGetLock = jest.mocked(tryGetLockMock);
 const releaseLock = jest.mocked(releaseLockMock);
 

@@ -47,6 +47,7 @@ describe('serveCaseToIrsInteractor', () => {
   const upsertCases = jest.mocked(upsertCasesMock);
   const tryGetLock = jest.mocked(tryGetLockMock);
   const releaseLock = jest.mocked(releaseLockMock);
+
   const clientConnectionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockParams = {
     clientConnectionId,

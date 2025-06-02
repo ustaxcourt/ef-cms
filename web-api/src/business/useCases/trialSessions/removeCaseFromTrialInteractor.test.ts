@@ -2,6 +2,7 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -10,7 +11,6 @@ import {
   CHIEF_JUDGE,
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
@@ -28,11 +28,13 @@ import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 
 describe('removeCaseFromTrialInteractor', () => {
   const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
 
-  let mockLock;
   let mockTrialSession: RawTrialSession;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -41,15 +43,10 @@ describe('removeCaseFromTrialInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
 
   beforeEach(() => {
-    mockLock = undefined;
     mockTrialSession = cloneDeep(MOCK_TRIAL_INPERSON);
     applicationContext
       .getPersistenceGateway()
@@ -137,7 +134,9 @@ describe('removeCaseFromTrialInteractor', () => {
         .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
@@ -185,7 +184,9 @@ describe('removeCaseFromTrialInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
         .calls[0][0].caseEntity,
     ).toMatchObject({ docketNumber: '101-18' });
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       associatedJudge: CHIEF_JUDGE,
       associatedJudgeId: undefined,
       docketNumber: MOCK_CASE.docketNumber,
@@ -303,7 +304,9 @@ describe('removeCaseFromTrialInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
     ).not.toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       docketNumber: MOCK_CASE.docketNumber,
       hearings: [],
     });
@@ -333,7 +336,7 @@ describe('removeCaseFromTrialInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLock.mockResolvedValueOnce(false);
 
     await expect(
       removeCaseFromTrialInteractor(
@@ -367,19 +370,12 @@ describe('removeCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
 
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
   });
 });
