@@ -37,7 +37,7 @@ export const TrialLocationEligibleCasesTable = connect(
             </div>
           </div>
         )}
-        <div className="text-right">
+        <div className="text-right" data-testId="eligible-cases-count">
           <span className="text-semibold">Count: </span>
           {trialLocationHelper.formattedEligibleCases.length}
         </div>
@@ -46,6 +46,7 @@ export const TrialLocationEligibleCasesTable = connect(
           <div className="minw-tablet-lg">
             <table
               aria-label={`${trialLocationPage.currentTab}`}
+              data-testid="trial-location-eligible-table"
               className="usa-table ustc-table trial-sessions"
               id={`${trialLocationPage.currentTab}`}
             >

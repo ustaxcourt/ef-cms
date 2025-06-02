@@ -37,7 +37,7 @@ export const TrialLocationBlockedTable = connect(
             </div>
           </div>
         )}
-        <div className="text-right">
+        <div className="text-right" data-testId="blocked-cases-count">
           <span className="text-semibold">Count: </span>
           {trialLocationHelper.formattedBlockedCases.length}
         </div>
@@ -45,6 +45,7 @@ export const TrialLocationBlockedTable = connect(
         <div className="overflow-x-auto">
           <div className="minw-tablet-lg">
             <table
+              data-testid="trial-location-blocked-table"
               className="usa-table ustc-table trial-sessions"
               aria-label={`${trialLocationPage.currentTab}`}
             >
@@ -63,23 +64,25 @@ export const TrialLocationBlockedTable = connect(
               </thead>
               {pageRecords.map(blockedCase => {
                 return (
-                  <tr key={blockedCase.docketNumber}>
-                    <td>
-                      <CaseIcons formattedCase={blockedCase} />
-                    </td>
-                    <td>
-                      <CaseLink formattedCase={blockedCase} target="_blank" />
-                    </td>
-                    <td>{blockedCase.blockedDateEarliest}</td>
-                    <td>{blockedCase.caseTitle}</td>
-                    <td>{blockedCase.status}</td>
-                    <td>
-                      {blockedCase.blockedReason}
-                      {blockedCase.blockedReason &&
-                        blockedCase.automaticBlockedReason && <br />}
-                      {blockedCase.automaticBlockedReason}
-                    </td>
-                  </tr>
+                  <tbody key={blockedCase.docketNumber}>
+                    <tr>
+                      <td>
+                        <CaseIcons formattedCase={blockedCase} />
+                      </td>
+                      <td>
+                        <CaseLink formattedCase={blockedCase} target="_blank" />
+                      </td>
+                      <td>{blockedCase.blockedDateEarliest}</td>
+                      <td>{blockedCase.caseTitle}</td>
+                      <td>{blockedCase.status}</td>
+                      <td>
+                        {blockedCase.blockedReason}
+                        {blockedCase.blockedReason &&
+                          blockedCase.automaticBlockedReason && <br />}
+                        {blockedCase.automaticBlockedReason}
+                      </td>
+                    </tr>
+                  </tbody>
                 );
               })}
             </table>
