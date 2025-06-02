@@ -252,11 +252,11 @@ pk: user|
 sk: case|
 
 process Practitioner on Case (Process Practitioner Mapping)
+"pk": "case|101-21",
 "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
-"pk": "case|101-21",
 
-"sk": "privatePractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
 "pk": "case|101-21",
+"sk": "privatePractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
 
 
 ---------------------------------------------------------------------
@@ -284,3 +284,13 @@ stream pieces
 
 `web-api/src/business/useCases/processStreamRecords/processStreamRecordsInteractor.ts`
 This interactor only deals with dynamodb records: its purpose is to populate postgres.
+
+
+## Failing Tests
+
+Cypress:
+- advancedSearch/practitioner-information
+- myAccount/respondent-modifies-contact-info
+-  advancedSearch/practitioner-search
+- trialSession/trial-session-paper-pdf
+- fileAPetitionUpdated/file-a-petition-generate-petition
