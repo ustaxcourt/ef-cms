@@ -73,7 +73,7 @@ import {
   getDocumentTypeForAddressChange,
 } from '@shared/business/utilities/generateChangeOfAddressTemplate';
 import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
-import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
+import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
@@ -442,10 +442,8 @@ export const createTestApplicationContext = () => {
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
-    createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     createLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
-    deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
@@ -510,7 +508,9 @@ export const createTestApplicationContext = () => {
   };
 
   const mockGetMessagingClient = {
-    send: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockReturnValue({
+      promise: () => {},
+    }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -616,7 +616,9 @@ export const createTestApplicationContext = () => {
     getUserGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
-      initialize: jest.fn().mockReturnValue({ promise: () => {} }),
+      initialize: jest.fn().mockReturnValue({
+        promise: () => {},
+      }),
     }),
     isFeatureEnabled: jest.fn(),
     logger: {

@@ -183,7 +183,6 @@ export const fileExternalDocument = async (
       caseEntity = await applicationContext
         .getUseCaseHelpers()
         .updateCaseAutomaticBlock({
-          applicationContext,
           caseEntity,
         });
 

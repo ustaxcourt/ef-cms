@@ -63,7 +63,7 @@ import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } from '@shared/business/utilities/generateChangeOfAddressTemplate';
-import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
+import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getConstants } from '@web-client/getConstants';
@@ -396,9 +396,7 @@ const createTestApplicationContext = () => {
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
-    createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
-    deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),

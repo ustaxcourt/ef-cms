@@ -73,13 +73,6 @@ export const addCaseToTrialSession = async (
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteCaseTrialSortMappingRecords({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
-
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({

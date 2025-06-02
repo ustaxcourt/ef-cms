@@ -74,19 +74,9 @@ export const removeCaseFromTrial = async (
       updatedCaseStatus: caseStatus,
     });
 
-    if (caseEntity.isReadyForTrial()) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: caseEntity.generateTrialSortTags(),
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
-
     await applicationContext
       .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+      .updateCaseAutomaticBlock({ caseEntity });
   } else {
     caseEntity.removeFromHearing(trialSessionId);
   }
