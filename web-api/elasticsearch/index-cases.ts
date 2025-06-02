@@ -27,7 +27,10 @@ export const indexOpenSearchCase = async ({
   const docketNumbers = isArray(message.payload)
     ? message.payload
     : [message.payload];
-  const cases = await getCasesByDocketNumbers({ docketNumbers });
+  const cases = await getCasesByDocketNumbers({
+    docketNumbers,
+    excludeFields: ['docketEntries', 'correspondence', 'hearings'],
+  });
   const caseRecords: IDynamoDBRecord[] = [];
   for (const caseRecord of cases) {
     // Recommend further optimization so we are not mocking a DynamoDB record after cases are in Postgres
