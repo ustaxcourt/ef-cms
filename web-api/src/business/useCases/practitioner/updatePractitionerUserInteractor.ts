@@ -12,7 +12,10 @@ import {
   Practitioner,
 } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
