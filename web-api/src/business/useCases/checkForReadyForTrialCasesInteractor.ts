@@ -4,7 +4,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getReadyForTrialCases } from '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases';
 import { uniqBy } from 'lodash';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
@@ -41,41 +40,12 @@ export const checkForReadyForTrialCasesInteractor = async (
     }
   };
 
-  const acquireLockForCase = async ({
-    docketNumber,
-    retry = 0,
-  }: {
-    docketNumber: string;
-    retry?: number;
-  }) => {
-    const maxRetries = 20;
-    try {
-      await acquireLock({
-        applicationContext,
-        authorizedUser: undefined,
-        identifiers: [`case|${docketNumber}`],
-        onLockError: new ServiceUnavailableError(
-          `${docketNumber} is currently being updated`,
-        ),
-      });
-    } catch (err) {
-      if (retry < maxRetries && err instanceof ServiceUnavailableError) {
-        await applicationContext.getUtilities().sleep(5000);
-        return acquireLockForCase({
-          docketNumber,
-          retry: retry + 1,
-        });
-      }
-      throw err;
-    }
-  };
-
   const checkReadyForTrial = async (
     caseRecord: Omit<RawCase, 'consolidatedCases'>,
   ) => {
     const { docketNumber } = caseRecord;
-    await acquireLockForCase({ docketNumber });
 
+    // Make sure this is still good
     const removeLockFunction = await acquireLock({
       applicationContext,
       authorizedUser: undefined,

@@ -4,7 +4,6 @@ jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
