@@ -18,6 +18,13 @@ export const getUsersInSection = async ({
           eb('u.role', '=', ROLES.legacyJudge),
         ]),
       );
+    } else if (section === ROLES.docketClerk) {
+      query = query.where(eb =>
+        eb.or([
+          eb('u.section', '=', ROLES.docketClerk),
+          eb('u.section', '=', ROLES.caseServicesSupervisor),
+        ]),
+      );
     } else {
       query = query.where('u.section', '=', section);
     }
