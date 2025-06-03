@@ -33,24 +33,6 @@ export const deleteDeficiencyStatistic = async (
   return validRawCase;
 };
 
-// export const deleteDeficiencyStatisticInteractor = async (
-//   applicationContext: ServerApplicationContext,
-//   { docketNumber, statisticId }: { docketNumber: string; statisticId: string },
-//   authorizedUser: UnknownAuthUser,
-// ) => {
-//   const lockId = hashLockId(`case|${docketNumber}`);
-
-//   return mutexLockWrapper({
-//     lockId,
-//     callback: () =>
-//       deleteDeficiencyStatistic(
-//         applicationContext,
-//         { docketNumber, statisticId },
-//         authorizedUser,
-//       ),
-//   });
-// };
-
 export const deleteDeficiencyStatisticInteractor = withLocking(
   deleteDeficiencyStatistic,
   (_applicationContext, { docketNumber }) => ({

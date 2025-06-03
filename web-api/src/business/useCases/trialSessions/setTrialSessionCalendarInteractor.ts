@@ -27,9 +27,8 @@ export const setTrialSessionCalendarInteractor = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   let docketNumbersToLock: string[] = [];
-  let removeLockFunction: Function = () => {
-    console.log('No locks to release');
-  };
+  let removeLockFunction: Function;
+
   try {
     if (
       !isAuthorized(authorizedUser, ROLE_PERMISSIONS.SET_TRIAL_SESSION_CALENDAR)

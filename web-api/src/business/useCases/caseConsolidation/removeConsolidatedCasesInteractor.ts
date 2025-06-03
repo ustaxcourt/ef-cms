@@ -126,7 +126,7 @@ const determineEntitiesToLock = (
     identifiers: docketNumbers,
   };
 };
-// 10505: same possible issue as addConsolidatedCaseInteractor
+
 export const removeConsolidatedCasesInteractor = withLocking(
   removeConsolidatedCases,
   determineEntitiesToLock,
