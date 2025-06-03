@@ -777,7 +777,7 @@ jobs:
       - run:
           name: Migrate Postgres Data Schema
           command: |
-            npm run migration:postgres
+            NODE_ENV=production npm run migration:postgres
       - run:
           name: Enable Dynamodb Streams
           command: |
@@ -804,7 +804,7 @@ jobs:
       - run:
           name: Migrate Postgres Data Schema
           command: |
-            npm run migration:postgres
+            NODE_ENV=production npm run migration:postgres
       - run:
           name: Enable Dynamodb Streams
           command: |
