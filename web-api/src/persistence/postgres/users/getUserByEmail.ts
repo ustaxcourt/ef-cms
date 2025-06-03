@@ -6,7 +6,7 @@ export const getUserByEmail = async ({
   email,
 }: {
   email: string;
-}): Promise<User> => {
+}): Promise<User | undefined> => {
   const formattedEmail = email.toLowerCase().trim();
   const user = await getDbReader(reader =>
     reader
@@ -15,6 +15,8 @@ export const getUserByEmail = async ({
       .selectAll('u')
       .executeTakeFirst(),
   );
+
+  if (!user) return undefined;
 
   return userEntity(user);
 };

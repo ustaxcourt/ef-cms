@@ -9,12 +9,14 @@ import {
   ensureFolderExists,
 } from './cypress/local-only/support/database';
 import {
-  expireUserConfirmationCode,
-  getEmailVerificationToken,
   getFeatureFlagValue,
-  getNewAccountVerificationCode,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
+import {
+  expireUserConfirmationCode,
+  getEmailVerificationToken,
+  getNewAccountVerificationCode,
+} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
 import { parsePdf } from './cypress/helpers/cypressTasks/pdf/parsePdf';
 import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';

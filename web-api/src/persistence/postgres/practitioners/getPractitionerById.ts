@@ -8,7 +8,9 @@ export const getPractitionerById = async ({
   userId,
 }: {
   userId: string;
-}): Promise<Practitioner | PrivatePractitioner | IrsPractitioner> => {
+}): Promise<
+  Practitioner | PrivatePractitioner | IrsPractitioner | undefined
+> => {
   const practitioner = await getDbReader(reader =>
     reader
       .selectFrom('dwPractitioner as p')
@@ -16,6 +18,8 @@ export const getPractitionerById = async ({
       .selectAll('p')
       .executeTakeFirst(),
   );
+
+  if (!practitioner) return undefined;
 
   return practitionerEntity(practitioner);
 };

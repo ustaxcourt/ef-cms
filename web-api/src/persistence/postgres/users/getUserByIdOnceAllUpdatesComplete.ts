@@ -10,7 +10,7 @@ export const getUserByIdOnceAllUpdatesComplete = async ({
 }): Promise<User> => {
   const user = await getUserById({ userId });
 
-  if (!user.isUpdatingInformation) return userEntity(user) as User;
+  if (!user?.isUpdatingInformation) return userEntity(user);
 
   await sleep(1500);
 
