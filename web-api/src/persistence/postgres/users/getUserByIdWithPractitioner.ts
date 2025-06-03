@@ -11,7 +11,11 @@ export const getUserByIdWithPractitioner = async ({
 }: {
   userId: string;
 }): Promise<
-  RawUser | RawPractitioner | RawIrsPractitioner | RawPrivatePractitioner
+  | RawUser
+  | RawPractitioner
+  | RawIrsPractitioner
+  | RawPrivatePractitioner
+  | undefined
 > => {
   const practitionerOnlyFields = PRACTITIONER_ONLY_FIELDS.map(
     field => `p.${field}` as const,
@@ -27,7 +31,7 @@ export const getUserByIdWithPractitioner = async ({
       .executeTakeFirst(),
   );
 
-  // 10495 TODO: what if undefined?? Need to figure out for all user/practitioner persistence functions
+  if (!user) return undefined;
 
   return rawUserWithPractitionerEntity(user);
 };
