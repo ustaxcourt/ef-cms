@@ -20,9 +20,10 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/web-client/htmlLoader.js`,
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(uuid|sinon|aws-sdk-client-mock)/)',
+  ],
   verbose: false,
 };
 
-// eslint-disable-next-line import/no-default-export
 export default config;
