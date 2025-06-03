@@ -45,7 +45,6 @@ export const checkForReadyForTrialCasesInteractor = async (
   ) => {
     const { docketNumber } = caseRecord;
 
-    // Make sure this is still good
     const removeLockFunction = await acquireLock({
       applicationContext,
       authorizedUser: undefined,
