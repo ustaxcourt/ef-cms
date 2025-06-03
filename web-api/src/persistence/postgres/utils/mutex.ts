@@ -80,7 +80,7 @@ export const acquireLock = async ({
     attempts++;
   } while (lockedItems.length);
 
-  return async () => {
+  const removeLockFunction = async () => {
     try {
       await settlePromises(
         identifierObjects.map(async idObj => {
@@ -96,6 +96,8 @@ export const acquireLock = async ({
       await destroy();
     }
   };
+
+  return removeLockFunction;
 };
 
 /**
