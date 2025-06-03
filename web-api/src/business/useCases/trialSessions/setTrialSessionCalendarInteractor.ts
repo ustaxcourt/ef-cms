@@ -27,7 +27,8 @@ export const setTrialSessionCalendarInteractor = async (
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
   let docketNumbersToLock: string[] = [];
-  let removeLockFunction: Function;
+  // default to no-op in case error is thrown before acquireLock is called
+  let removeLockFunction: () => Promise<void> = async () => {};
 
   try {
     if (

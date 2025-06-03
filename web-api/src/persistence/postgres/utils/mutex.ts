@@ -17,17 +17,11 @@ export const hashLockId = (input: string): number => {
   return hash.readInt32BE(0);
 };
 
-// nope!!!
 /**
- * Executes an asynchronous callback within a mutex lock to ensure exclusive access
- * to a critical section of code.
- *
- * This function acquires a mutex lock identified by `lockId` before invoking the
- * provided callback. It is designed to protect sensitive operations, such as assigning
- * the next available docket number when creating a case, from concurrent execution
- * across processes. Once the callback completes (whether it resolves successfully
- * or throws an error), the lock is released.
- *
+ * Attempts to acquire advisory locks for a set of identifiers, using retries if necessary.
+ * Locks are tied to a scoped DB connection and must be released by the returned function (or will be
+ * released when the scoped db connection is terminated).
+ * Returns a lock removal function to release locks and destroy scoped connection when no longer needed.
  */
 export const acquireLock = async ({
   applicationContext,
@@ -65,7 +59,7 @@ export const acquireLock = async ({
         await onLockError(applicationContext, options, authorizedUser);
       }
       await destroy();
-      throw new ServiceUnavailableError( // this ain't great logging
+      throw new ServiceUnavailableError(
         `One of the items you are trying to update is being updated by someone else: ${lockedItems.join(', ')}`,
       );
     }
@@ -87,14 +81,33 @@ export const acquireLock = async ({
   } while (lockedItems.length);
 
   return async () => {
-    // better logging on failure? Necessary if locks are connection-specific?
-    await settlePromises(
-      identifierObjects.map(idObj => releaseLock(db, idObj.hashedLockId)),
-    );
-    await destroy();
+    try {
+      await settlePromises(
+        identifierObjects.map(async idObj => {
+          const success = await releaseLock(db, idObj.hashedLockId);
+          if (!success) {
+            getLogger().info(
+              `Lock not released explicitly for ${idObj.lockId}, falling back to release by connection destroy`,
+            );
+          }
+        }),
+      );
+    } finally {
+      await destroy();
+    }
   };
 };
 
+/**
+ * Executes an asynchronous callback within a mutex lock to ensure exclusive access
+ * to a critical section of code.
+ *
+ * This function acquires a mutex lock identified by `lockId` before invoking the
+ * provided callback. It is designed to protect sensitive operations from concurrent execution
+ * across processes. Once the callback completes (whether it resolves successfully
+ * or throws an error), the lock is released.
+ *
+ */
 export function withLocking<InteractorInput, InteractorOutput>(
   interactor: (
     applicationContext: any,
