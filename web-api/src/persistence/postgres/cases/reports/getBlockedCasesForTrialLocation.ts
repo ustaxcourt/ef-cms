@@ -1,5 +1,6 @@
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { getDbReader } from '@web-api/database';
+import { Case } from '@shared/business/entities/cases/Case';
 
 const MAX_RESULTS = 5000;
 
@@ -64,5 +65,14 @@ export const getBlockedCasesForTrialLocation = async (
       .limit(MAX_RESULTS)
       .execute(),
   );
-  return results.map(result => fromKyselyCase(result));
+
+  return results.map(result => {
+    return {
+      ...fromKyselyCase(result),
+      docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
+        docketNumber: result.docketNumber,
+        docketNumberSuffix: result.docketNumberSuffix,
+      }),
+    };
+  });
 };
