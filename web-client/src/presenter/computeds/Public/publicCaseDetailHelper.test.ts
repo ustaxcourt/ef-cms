@@ -97,7 +97,6 @@ const stipDecisionDocument = formatDocketEntry(applicationContextPublic, {
     docketNumber: '103-23',
     docketNumberWithSuffix: '103-23L',
     entityName: 'WorkItem',
-    hideFromPendingMessages: true,
     highPriority: false,
     section: 'docket',
     sentBy: 'Test Docketclerk',

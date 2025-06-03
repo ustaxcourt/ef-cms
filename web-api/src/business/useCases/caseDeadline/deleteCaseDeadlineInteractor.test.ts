@@ -6,9 +6,6 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
-);
 import { AUTOMATIC_BLOCKED_REASONS } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
 import {
@@ -21,7 +18,6 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
@@ -32,9 +28,6 @@ describe('deleteCaseDeadlineInteractor', () => {
     getCaseDeadlinesByDocketNumberMock,
   );
   const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
-  );
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const tryGetLock = jest.mocked(tryGetLockMock);
@@ -127,7 +120,6 @@ describe('deleteCaseDeadlineInteractor', () => {
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
     });
-    expect(deleteCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
   it('should call persistence to delete a case deadline and leave the case automatically blocked when there are more deadlines', async () => {
@@ -155,6 +147,5 @@ describe('deleteCaseDeadlineInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 });

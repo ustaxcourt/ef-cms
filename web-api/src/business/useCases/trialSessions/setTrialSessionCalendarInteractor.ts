@@ -6,17 +6,17 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
+import {
+  HIGH_PRIORITY_SUFFIXES,
+  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
+} from '@shared/business/entities/EntityConstants';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { flatten, isEmpty, partition, uniq } from 'lodash';
+import { isEmpty, flatten, partition, uniq } from 'lodash';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import {
-  deleteTrialSortMappingRecordsForEligibleCases,
-  updateDeadlinesForCasesToCalendar,
-  updateWorkItemsForCasesToCalendar,
-} from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
+import { updateDeadlinesForCasesToCalendar } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -75,19 +75,33 @@ export const setTrialSessionCalendarInteractor = async (
     eligibleCasesLimit -= manuallyAddedQcCompleteCases.length;
 
     const eligibleCases = (
-      await applicationContext
-        .getPersistenceGateway()
-        .getEligibleCasesForTrialSession({
-          applicationContext,
-          limit: eligibleCasesLimit,
-          skPrefix: trialSessionEntity.generateSortKeyPrefix(),
-        })
+      await getEligibleCasesForTrialSession({
+        limit: eligibleCasesLimit,
+        sessionType: trialSessionEntity.getCaseProcedureForTrial(),
+        trialCity: trialSessionEntity.trialLocation!,
+      })
     )
       .filter(
         eligibleCase =>
           eligibleCase.qcCompleteForTrial &&
           eligibleCase.qcCompleteForTrial[trialSessionId] === true,
       )
+      .sort((a, b) => {
+        if (a.highPriority && !b.highPriority) return -1;
+        if (!a.highPriority && b.highPriority) return 1;
+
+        const aSuffixIsHighPriority =
+          a.docketNumberSuffix &&
+          HIGH_PRIORITY_SUFFIXES.includes(a.docketNumberSuffix);
+        const bSuffixIsHighPriority =
+          b.docketNumberSuffix &&
+          HIGH_PRIORITY_SUFFIXES.includes(b.docketNumberSuffix);
+
+        if (aSuffixIsHighPriority && !bSuffixIsHighPriority) return -1;
+        if (!aSuffixIsHighPriority && bSuffixIsHighPriority) return 1;
+
+        return 0;
+      })
       .splice(
         0,
         (trialSessionEntity?.maxCases || 0) -
@@ -152,10 +166,6 @@ export const setTrialSessionCalendarInteractor = async (
 
     const updatesToPersist: Promise<any>[] = [
       upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
-      deleteTrialSortMappingRecordsForEligibleCases({
-        applicationContext,
-        eligibleCases: eligibleCaseEntities,
-      }),
     ];
 
     if (!isEmpty(caseEntitiesToCalendar)) {
@@ -163,10 +173,6 @@ export const setTrialSessionCalendarInteractor = async (
         // We may need to update related work items and deadlines for newly calendared cases depending on the trial session judge.
         // TODO: These updates should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference these columns on dwCase.
         updateDeadlinesForCasesToCalendar({
-          casesToCalendar: caseEntitiesToCalendar,
-          trialSessionEntity,
-        }),
-        updateWorkItemsForCasesToCalendar({
           casesToCalendar: caseEntitiesToCalendar,
           trialSessionEntity,
         }),

@@ -7,8 +7,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { deleteCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
-import { createCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { applicationContext } from '@web-api/applicationContext';
@@ -40,22 +38,8 @@ export const unprioritizeCase = async (
   caseEntity.unsetAsHighPriority();
 
   caseEntity = await updateCaseAutomaticBlock({
-    applicationContext,
     caseEntity,
   });
-
-  if (caseEntity.isReadyForTrial()) {
-    await createCaseTrialSortMappingRecords({
-      applicationContext,
-      caseSortTags: caseEntity.generateTrialSortTags(),
-      docketNumber: caseEntity.docketNumber,
-    });
-  } else {
-    await deleteCaseTrialSortMappingRecords({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
-  }
 
   const updatedCase = await updateCaseAndAssociations({
     applicationContext,

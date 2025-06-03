@@ -9,7 +9,6 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
@@ -73,20 +72,6 @@ export const addCaseToTrialSession = async (
     .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
 
   caseEntity.setAsCalendared(trialSessionEntity);
-
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteCaseTrialSortMappingRecords({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
-
-  if (trialSessionEntity.isCalendared) {
-    await setPriorityOnAllWorkItems({
-      docketNumbers: [caseEntity.docketNumber],
-      highPriority: true,
-    });
-  }
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()

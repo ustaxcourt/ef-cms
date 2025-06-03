@@ -42,16 +42,6 @@ export const prioritizeCase = async (
 
   caseEntity.setAsHighPriority(reason);
 
-  if (caseEntity.preferredTrialCity && !caseEntity.blocked) {
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-        docketNumber: caseEntity.docketNumber,
-      });
-  }
-
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAndAssociations({

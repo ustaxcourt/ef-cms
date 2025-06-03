@@ -3,12 +3,6 @@ jest.mock(
   '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock',
 );
 jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
-);
-jest.mock(
-  '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords',
-);
-jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 jest.mock(
@@ -27,8 +21,6 @@ import {
 import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
-import { createCaseTrialSortMappingRecords as createCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
@@ -39,15 +31,6 @@ describe('unprioritizeCaseInteractor', () => {
   const releaseLock = jest.mocked(releaseLockMock);
   const updateCaseAutomaticBlock = jest.mocked(updateCaseAutomaticBlockMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  jest
-    .mocked(updateCaseAndAssociationsMock)
-    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  const createCaseTrialSortMappingRecords = jest.mocked(
-    createCaseTrialSortMappingRecordsMock,
-  );
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
-  );
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   beforeAll(() => {
@@ -86,7 +69,7 @@ describe('unprioritizeCaseInteractor', () => {
     expect(updateCaseAutomaticBlock).toHaveBeenCalled();
   });
 
-  it('should set the highPriority flag to false and remove the highPriorityReason and call createCaseTrialSortMappingRecords if the case status is ready for trial', async () => {
+  it('should set the highPriority flag to false and remove the highPriorityReason if the case status is ready for trial', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       highPriority: true,
@@ -106,14 +89,9 @@ describe('unprioritizeCaseInteractor', () => {
       highPriority: false,
       highPriorityReason: undefined,
     });
-    expect(deleteCaseTrialSortMappingRecords).not.toHaveBeenCalled();
-    expect(createCaseTrialSortMappingRecords).toHaveBeenCalled();
-    expect(
-      createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
-    ).toEqual(MOCK_CASE.docketNumber);
   });
 
-  it('should set the highPriority flag to false and remove the highPriorityReason and call deleteCaseTrialSortMappingRecords if the case status is NOT ready for trial', async () => {
+  it('should set the highPriority flag to false and remove the highPriorityReason if the case status is NOT ready for trial', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       highPriority: true,
@@ -133,11 +111,6 @@ describe('unprioritizeCaseInteractor', () => {
       highPriority: false,
       highPriorityReason: undefined,
     });
-    expect(createCaseTrialSortMappingRecords).not.toHaveBeenCalled();
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
-    expect(
-      deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
-    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

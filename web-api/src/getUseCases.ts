@@ -87,10 +87,7 @@ import { getCompletedMessagesForSectionInteractor } from './business/useCases/me
 import { getCompletedMessagesForUserInteractor } from './business/useCases/messages/getCompletedMessagesForUserInteractor';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { getDocumentContentsForDocketEntryInteractor } from './business/useCases/document/getDocumentContentsForDocketEntryInteractor';
-import { getDocumentQCInboxForSectionInteractor } from './business/useCases/workItems/getDocumentQCInboxForSectionInteractor';
 import { getDocumentQCInboxForUserInteractor } from './business/useCases/workItems/getDocumentQCInboxForUserInteractor';
-import { getDocumentQCServedForSectionInteractor } from './business/useCases/workItems/getDocumentQCServedForSectionInteractor';
-import { getDocumentQCServedForUserInteractor } from './business/useCases/workItems/getDocumentQCServedForUserInteractor';
 import { getDownloadPolicyUrlInteractor } from './business/useCases/document/getDownloadPolicyUrlInteractor';
 import { getEligibleCasesForTrialSessionInteractor } from './business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor';
 import { getHealthCheckInteractor } from './business/useCases/health/getHealthCheckInteractor';
@@ -133,7 +130,6 @@ import { getUserPendingEmailInteractor } from './business/useCases/user/getUserP
 import { getUserPendingEmailStatusInteractor } from './business/useCases/user/getUserPendingEmailStatusInteractor';
 import { getUsersInSectionInteractor } from './business/useCases/user/getUsersInSectionInteractor';
 import { getUsersPendingEmailInteractor } from './business/useCases/user/getUsersPendingEmailInteractor';
-import { getWorkItemInteractor } from './business/useCases/workItems/getWorkItemInteractor';
 import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
 import { logErrorInteractor } from '@web-api/business/useCases/logErrorInteractor';
 import { loginInteractor } from '@web-api/business/useCases/auth/loginInteractor';
@@ -157,7 +153,7 @@ import { renewIdTokenInteractor } from './business/useCases/auth/renewIdTokenInt
 import { replyToMessageInteractor } from './business/useCases/messages/replyToMessageInteractor';
 import { runTrialSessionPlanningReportInteractor } from './business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { saveCalendarNoteInteractor } from './business/useCases/trialSessions/saveCalendarNoteInteractor';
-import { saveCaseDetailInternalEditInteractor } from '../../shared/src/business/useCases/saveCaseDetailInternalEditInteractor';
+import { saveCaseDetailInternalEditInteractor } from './business/useCases/saveCaseDetailInternalEditInteractor';
 import { saveCaseNoteInteractor } from './business/useCases/caseNote/saveCaseNoteInteractor';
 import { saveSignedDocumentInteractor } from '../../shared/src/business/useCases/saveSignedDocumentInteractor';
 import { sealCaseContactAddressInteractor } from '../../shared/src/business/useCases/sealCaseContactAddressInteractor';
@@ -187,7 +183,6 @@ import { updateAssociatedCaseWorker } from './business/useCases/user/updateAssoc
 import { updateCaseContextInteractor } from '../../shared/src/business/useCases/updateCaseContextInteractor';
 import { updateCaseDeadlineInteractor } from './business/useCases/caseDeadline/updateCaseDeadlineInteractor';
 import { updateCaseDetailsInteractor } from '../../shared/src/business/useCases/updateCaseDetailsInteractor';
-import { updateCaseTrialSortTagsInteractor } from '../../shared/src/business/useCases/updateCaseTrialSortTagsInteractor';
 import { updateCaseWorksheetInteractor } from './business/useCases/caseWorksheet/updateCaseWorksheetInteractor';
 import { updateContactInteractor } from '../../shared/src/business/useCases/updateContactInteractor';
 import { updateCorrespondenceDocumentInteractor } from './business/useCases/correspondence/updateCorrespondenceDocumentInteractor';
@@ -300,10 +295,7 @@ const useCases = {
   getCompletedMessagesForUserInteractor,
   getCountOfCaseDocumentsFiledByJudgesInteractor,
   getDocumentContentsForDocketEntryInteractor,
-  getDocumentQCInboxForSectionInteractor,
   getDocumentQCInboxForUserInteractor,
-  getDocumentQCServedForSectionInteractor,
-  getDocumentQCServedForUserInteractor,
   getDownloadPolicyUrlInteractor,
   getEligibleCasesForTrialSessionInteractor,
   getHealthCheckInteractor,
@@ -346,7 +338,6 @@ const useCases = {
   getUserPendingEmailStatusInteractor,
   getUsersInSectionInteractor,
   getUsersPendingEmailInteractor,
-  getWorkItemInteractor,
   handleBounceNotificationInteractor,
   logErrorInteractor,
   loginInteractor,
@@ -400,7 +391,6 @@ const useCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,
-  updateCaseTrialSortTagsInteractor,
   updateCaseWorksheetInteractor,
   updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
