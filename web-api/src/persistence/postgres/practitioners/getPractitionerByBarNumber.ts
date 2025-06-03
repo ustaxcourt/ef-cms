@@ -6,7 +6,7 @@ export const getPractitionerByBarNumber = async ({
   barNumber,
 }: {
   barNumber: string;
-}): Promise<Practitioner> => {
+}): Promise<Practitioner | undefined> => {
   const formattedBarNumber = barNumber.toUpperCase();
 
   const user = await getDbReader(reader =>
@@ -16,6 +16,8 @@ export const getPractitionerByBarNumber = async ({
       .selectAll('p')
       .executeTakeFirst(),
   );
+
+  if (!user) return undefined;
 
   return practitionerEntity(user);
 };
