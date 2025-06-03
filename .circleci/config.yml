@@ -45,6 +45,10 @@ parameters:
     default: ''
     type: string
 
+  run_resume_glue_to_test:
+    default: false
+    type: boolean
+
 commands:
   npm-and-cypress-install:
     steps:
@@ -779,6 +783,33 @@ jobs:
           command: |
             ./scripts/migration/toggle-streams.sh --on
 
+  resume-indexing-glued-data:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Set Marker to Indicate Data is Finished Gluing
+          command: |
+            COLOR="$CURRENT_COLOR" JOB_NAME="wait-for-glued-data-to-index" ./scripts/migration/set-migration-complete-marker.sh
+      - run:
+          name: Migrate Postgres Data Schema
+          command: |
+            npm run migration:postgres
+      - run:
+          name: Enable Dynamodb Streams
+          command: |
+            ./scripts/migration/toggle-streams.sh --on
+
   cleanup-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -1168,3 +1199,18 @@ workflows:
     jobs:
       - sync-s3-buckets-with-timeout:
           <<: *only-deployed-lower-environments
+
+  resume-glue-to-test:
+    when: << pipeline.parameters.run_resume_glue_to_test >>
+    jobs:
+      - resume-indexing-glued-data:
+          <<: *only-test
+      - wait-for-glued-data-to-index:
+          <<: *only-test
+          type: approval
+          requires:
+            - resume-indexing-glued-data
+      - cleanup-glue-job:
+          <<: *only-test
+          requires:
+            - wait-for-glued-data-to-index
