@@ -90,6 +90,8 @@ resource "aws_route53_record" "api_route53_main_east_regional_record" {
     evaluate_target_health = false
   }
 
+  depends_on = [null_resource.force_replacement] # This can be removed once we switch from weighted routing to simple routing. AKA once we delete west
+
   lifecycle {
     create_before_destroy = false
   }
@@ -106,10 +108,19 @@ resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
     evaluate_target_health = false
   }
 
+  depends_on = [null_resource.force_replacement] # This can be removed once we switch from weighted routing to simple routing. AKA once we delete west
+
   lifecycle {
     create_before_destroy = false
   }
 }
+
+resource "null_resource" "force_replacement" { # This can be removed once we switch from weighted routing to simple routing. AKA once we delete west
+  triggers = {
+    force_recreate = "v2" 
+  }
+}
+
 
 module "api-east-waf" {
   environment = var.environment
