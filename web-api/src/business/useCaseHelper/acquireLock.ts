@@ -68,7 +68,7 @@ export const acquireLock = async ({
       } else if (typeof onLockError === 'function') {
         await onLockError(applicationContext, options, authorizedUser);
       }
-      getLogger().error(
+      getDawsonLogger().error(
         `Error: failed to acquire lock for ${lockedItems.join(', ')} when attempting to get lock for ${identifiers.join(', ')}`,
       );
       throw new ServiceUnavailableError(
@@ -185,13 +185,15 @@ export function withLocking<InteractorInput, InteractorOutput>(
     try {
       results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
-      getLogger().error(`withLocking: failed to execute interactor: ${err}`);
+      getDawsonLogger().error(
+        `withLocking: failed to execute interactor: ${err}`,
+      );
       caughtError = err;
     }
     try {
       await removeLock({ applicationContext, identifiers });
     } catch (e) {
-      getLogger().error(`withLocking: failed to remove lock: ${e}`);
+      getDawsonLogger().error(`withLocking: failed to remove lock: ${e}`);
       throw e;
     }
 
