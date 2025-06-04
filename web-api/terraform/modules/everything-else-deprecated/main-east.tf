@@ -56,7 +56,6 @@ resource "aws_route53_record" "route53_record_east" {
 resource "aws_acm_certificate_validation" "wildcard_dns_validation_east" {
   certificate_arn         = aws_acm_certificate.api_gateway_cert_east.arn
   validation_record_fqdns = [for record in aws_route53_record.route53_record_east : record.fqdn]
-  provider                = aws.us-east-1
 }
 
 
@@ -81,19 +80,14 @@ resource "aws_api_gateway_domain_name" "api_custom_main_east" {
 }
 
 resource "aws_route53_record" "api_route53_main_east_regional_record" {
-  name           = aws_api_gateway_domain_name.api_custom_main_east.domain_name
-  type           = "A"
-  zone_id        = data.aws_route53_zone.zone.id
-  set_identifier = "api_main_us_east_1"
+  name    = aws_api_gateway_domain_name.api_custom_main_east.domain_name
+  type    = "A"
+  zone_id = data.aws_route53_zone.zone.id
 
   alias {
     name                   = aws_api_gateway_domain_name.api_custom_main_east.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.api_custom_main_east.regional_zone_id
-    evaluate_target_health = true
-  }
-
-  weighted_routing_policy {
-    weight = var.route_53_regional_weight
+    evaluate_target_health = false
   }
 
   lifecycle {
@@ -102,19 +96,14 @@ resource "aws_route53_record" "api_route53_main_east_regional_record" {
 }
 
 resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
-  name           = aws_api_gateway_domain_name.public_api_custom_main_east.domain_name
-  type           = "A"
-  zone_id        = data.aws_route53_zone.zone.id
-  set_identifier = "public_api_main_us_east_1"
+  name    = aws_api_gateway_domain_name.public_api_custom_main_east.domain_name
+  type    = "A"
+  zone_id = data.aws_route53_zone.zone.id
 
   alias {
     name                   = aws_api_gateway_domain_name.public_api_custom_main_east.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.public_api_custom_main_east.regional_zone_id
-    evaluate_target_health = true
-  }
-
-  weighted_routing_policy {
-    weight = var.route_53_regional_weight
+    evaluate_target_health = false
   }
 
   lifecycle {
@@ -124,9 +113,6 @@ resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
 
 module "api-east-waf" {
   environment = var.environment
-  providers = {
-    aws = aws.us-east-1
-  }
-  source = "../waf/"
+  source      = "../waf/"
 }
 
