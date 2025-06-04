@@ -56,7 +56,7 @@ async function deleteJobQueue() {
       );
 
       // Wait a few seconds for state change to propagate
-      await new Promise(res => setTimeout(res, 5000));
+      await new Promise(res => setTimeout(res, 10000));
     }
 
     // Step 3: Delete the job queue
