@@ -5,7 +5,7 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 
@@ -53,7 +53,7 @@ export const associatePrivatePractitionerToCase = async ({
 
   if (isAssociated) {
     if (!isPrivatePractitionerOnCase) {
-      getLogger().error(
+      getDawsonLogger().error(
         `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
       );
     }

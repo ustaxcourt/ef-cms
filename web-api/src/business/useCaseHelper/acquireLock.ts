@@ -2,7 +2,7 @@ import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstan
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { sleep } from '@shared/tools/helpers';
 
 export const checkLock = async ({
@@ -24,11 +24,11 @@ export const checkLock = async ({
     .getLock({ applicationContext, identifier });
 
   if (!currentLock) {
-    getLogger().warn('Entity is NOT currently locked', { identifier });
+    getDawsonLogger().warn('Entity is NOT currently locked', { identifier });
     return false;
   }
 
-  getLogger().warn('Entity is currently locked', { currentLock });
+  getDawsonLogger().warn('Entity is currently locked', { currentLock });
 
   if (!isCaseLockingEnabled) {
     return false;
@@ -68,7 +68,7 @@ export const acquireLock = async ({
       } else if (typeof onLockError === 'function') {
         await onLockError(applicationContext, options, authorizedUser);
       }
-      getLogger().error(
+      getDawsonLogger().error(
         `Error: failed to acquire lock for ${lockedItems.join(', ')} when attempting to get lock for ${identifiers.join(', ')}`,
       );
       throw new ServiceUnavailableError(
@@ -185,13 +185,15 @@ export function withLocking<InteractorInput, InteractorOutput>(
     try {
       results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
-      getLogger().error(`withLocking: failed to execute interactor: ${err}`);
+      getDawsonLogger().error(
+        `withLocking: failed to execute interactor: ${err}`,
+      );
       caughtError = err;
     }
     try {
       await removeLock({ applicationContext, identifiers });
     } catch (e) {
-      getLogger().error(`withLocking: failed to remove lock: ${e}`);
+      getDawsonLogger().error(`withLocking: failed to remove lock: ${e}`);
       throw e;
     }
 

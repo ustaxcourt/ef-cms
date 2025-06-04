@@ -7,7 +7,7 @@ import { applicationContext } from '@web-api/applicationContext';
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { getLogger } from 'aws-xray-sdk';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { flattenDeep, isArray } from 'lodash';
@@ -30,7 +30,9 @@ export const indexOpenSearchCase = async ({
     const caseRecord = await getCaseMetadataWithCounsel({ docketNumber });
 
     if (!caseRecord) {
-      getLogger().error(`Could not index case ${docketNumber}: not found!`);
+      getDawsonLogger().error(
+        `Could not index case ${docketNumber}: not found!`,
+      );
       continue;
     }
 
@@ -87,7 +89,7 @@ export const indexOpenSearchCase = async ({
     });
 
     if (failedRecords.length > 0) {
-      getLogger().error(
+      getDawsonLogger().error(
         'the case or docket entry records that failed to index',
         {
           failedRecords,

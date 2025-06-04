@@ -2,7 +2,7 @@ import { merge } from 'lodash';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertPractitionerRecords } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecords';
 import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export const processPractitionerMappingEntries = async ({
   practitionerMappingRecords,
@@ -41,7 +41,7 @@ export const processPractitionerMappingEntries = async ({
       }),
     );
   } catch (e) {
-    getLogger().error(
+    getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process practitioner mapping record: ${e}`,
     );
   }

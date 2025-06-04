@@ -1,7 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -22,7 +22,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 
-const logger = getLogger();
+const logger = getDawsonLogger();
 const errorSpy = jest.spyOn(logger, 'error');
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
