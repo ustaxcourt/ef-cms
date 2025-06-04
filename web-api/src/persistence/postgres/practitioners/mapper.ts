@@ -95,8 +95,6 @@ function transformPractitionerData(practitioner) {
       practitioner.admissionsDate?.toISOString(),
       FORMATS.YYYYMMDD,
     ),
-    pendingEmailVerificationTokenTimestamp:
-      practitioner.pendingEmailVerificationTokenTimestamp?.toISOString(),
   });
 }
 

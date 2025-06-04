@@ -4,9 +4,11 @@ import { wait } from '../helpers';
 export const userVerifiesUpdatedEmailAddress = (cerebralTest, user: string) =>
   it(`${user} verifies updated email address`, async () => {
     const userFromState = cerebralTest.getState('user');
-    const userFromPersistence = await getUserById(userFromState.userId);
+    const userFromPersistence = await getUserById({
+      userId: userFromState.userId,
+    });
     const emailVerificationToken =
-      userFromPersistence.pendingEmailVerificationToken;
+      userFromPersistence!.pendingEmailVerificationToken;
 
     await cerebralTest.runSequence('navigateToPathSequence', {
       path: `/verify-email?token=${emailVerificationToken}`,

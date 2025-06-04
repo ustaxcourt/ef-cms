@@ -9,7 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getUserByIdWithPractitioner } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 
 /**
@@ -30,7 +30,9 @@ export const updateUserPendingEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const user: any = await getUserById({ userId: authorizedUser.userId });
+  const user: any = await getUserByIdWithPractitioner({
+    userId: authorizedUser.userId,
+  });
 
   await updateUserPendingEmail({ applicationContext, pendingEmail, user });
 

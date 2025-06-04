@@ -104,8 +104,6 @@ export function userEntity(user): User {
         user.admissionsDate?.toISOString(),
         FORMATS.YYYYMMDD,
       ),
-      pendingEmailVerificationTokenTimestamp:
-        user.pendingEmailVerificationTokenTimestamp?.toISOString(),
     }),
   );
 }

@@ -7,7 +7,6 @@ import { applicationContext } from '@web-api/applicationContext';
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getLogger } from 'aws-xray-sdk';
 import { flattenDeep, isArray } from 'lodash';
-import { pinkLog } from '@shared/tools/pinkLog';
 import { UserKysely } from '@web-api/persistence/postgres/users/schema';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { ROLES } from '@shared/business/entities/EntityConstants';
@@ -28,9 +27,7 @@ export const indexOpenSearchUser = async ({
   for (const userId of isArray(message.payload)
     ? message.payload
     : [message.payload]) {
-    pinkLog('userId', userId);
     const userRecord = await getUserByIdWithPractitioner({ userId });
-    pinkLog('userRecord', userRecord);
 
     if (!userRecord) {
       getLogger().error(`Could not index user ${userId}: not found!`);
@@ -59,11 +56,7 @@ export const indexOpenSearchUser = async ({
       { removeUndefinedValues: true },
     );
 
-    pinkLog('marshalledUser', marshalledUser);
-
     const userRecords: IDynamoDBRecord[] = [];
-
-    // put array of the dynamo records into object
 
     userRecords.push({
       dynamodb: {
@@ -98,8 +91,6 @@ export const indexOpenSearchUser = async ({
       },
       eventName: 'MODIFY',
     });
-
-    // put this object of dynamo into opensearch (indexing)
 
     const { failedRecords } = await bulkIndexRecords({
       applicationContext,
