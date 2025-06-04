@@ -1,29 +1,16 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { Statistic } from '../../../../../shared/src/business/entities/Statistic';
+import { Statistic } from '@shared/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
-/**
- * addDeficiencyStatistic
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update statistics
- * @param {number} providers.determinationDeficiencyAmount deficiency amount determined by the court
- * @param {number} providers.determinationTotalPenalties total penalties amount determined by the court
- * @param {number} providers.irsDeficiencyAmount deficiency amount from the IRS
- * @param {number} providers.irsTotalPenalties total penalties amount from the IRS
- * @param {string} providers.lastDateOfPeriod last date of the period for the statistic
- * @param {number} providers.year year for the statistic
- * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
- * @returns {object} the updated case
- */
 export const addDeficiencyStatistic = async (
   applicationContext: ServerApplicationContext,
   {
@@ -58,9 +45,10 @@ export const addDeficiencyStatistic = async (
     throw new UnauthorizedError('Unauthorized for editing statistics');
   }
 
-  const oldCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const oldCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const statisticEntity = new Statistic({
     determinationDeficiencyAmount,
@@ -76,15 +64,11 @@ export const addDeficiencyStatistic = async (
   const newCase = new Case(oldCase, { authorizedUser });
   newCase.addStatistic(statisticEntity);
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: newCase,
-    });
+  const validRawCase = newCase.validate().toRawObject();
 
-  return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
+  await upsertCases([validRawCase]);
+
+  return validRawCase;
 };
 
 export const addDeficiencyStatisticInteractor = withLocking(

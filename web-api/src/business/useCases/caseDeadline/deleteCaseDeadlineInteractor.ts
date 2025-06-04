@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
@@ -23,9 +24,10 @@ export const deleteCaseDeadline = async (
     throw new UnauthorizedError('Unauthorized for deleting case deadline');
   }
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({ applicationContext, docketNumber });
+  const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   let updatedCase = new Case(caseToUpdate, { authorizedUser });
 

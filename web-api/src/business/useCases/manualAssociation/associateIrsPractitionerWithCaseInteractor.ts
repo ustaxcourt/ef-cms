@@ -1,7 +1,7 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -25,7 +25,7 @@ export const associateIrsPractitionerWithCaseInteractor = async (
     userId,
   }: { docketNumber: string; serviceIndicator: string; userId: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<RawCase> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)
   ) {
