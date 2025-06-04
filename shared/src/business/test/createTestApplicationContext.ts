@@ -118,7 +118,7 @@ import { validatePenaltiesInteractor } from '@shared/business/useCases/validateP
 import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
 import path from 'path';
 import pug from 'pug';
-import sass from 'sass';
+import * as sass from 'sass';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
