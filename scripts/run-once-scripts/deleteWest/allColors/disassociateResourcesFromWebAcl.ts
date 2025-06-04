@@ -4,6 +4,7 @@ import {
   DisassociateWebACLCommand,
   ListWebACLsCommand,
 } from '@aws-sdk/client-wafv2';
+import { sleep } from '@shared/tools/helpers';
 import {
   parseArgsAndEnvVars,
   ScriptConfig,
@@ -79,6 +80,7 @@ export async function disassociateResourcesFromWebAcl() {
     for (const arn of ResourceArns ?? []) {
       console.log(`Disassociating ${arn}`);
       await client.send(new DisassociateWebACLCommand({ ResourceArn: arn }));
+      await sleep(3000);
       console.log(`Disassociated ${arn} (${type})`);
     }
   }
