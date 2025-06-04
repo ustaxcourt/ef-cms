@@ -173,11 +173,6 @@ export const createApplicationContext = (appContextUser = {}) => {
     getPug: () => {
       return pug;
     },
-    getScannerResourceUri: () => {
-      return (
-        process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
-      );
-    },
     getSearchClient,
     getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient,

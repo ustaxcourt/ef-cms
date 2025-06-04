@@ -100,11 +100,8 @@ import { updateUserRecords } from '@web-api/persistence/dynamo/users/createNewPr
 import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/uploadDocumentAndMakeSafeInteractor';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
-import path from 'path';
 import pug from 'pug';
 import sass from 'sass';
-
-const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
 const appContextProxy = (initial = {}, makeMock = true) => {
   const applicationContextHandler = {
@@ -541,7 +538,6 @@ const createTestApplicationContext = () => {
     getPug: jest.fn().mockReturnValue(pug),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
-    getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: emptyAppContextProxy,
     getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,

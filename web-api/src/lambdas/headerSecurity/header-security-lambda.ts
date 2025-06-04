@@ -29,9 +29,7 @@ export const handler = async (
   ];
   const applicationUrl = `https://${allowedDomainString}`;
   const subdomainsUrl = `https://*.${allowedDomainString}`;
-  const dynamsoftUrlStaging = 'https://dynamsoft-lib.stg.ef-cms.ustaxcourt.gov';
-  const dynamsoftUrlTest = 'https://dynamsoft-lib.test.ef-cms.ustaxcourt.gov';
-  const dynamsoftUrlProd = 'https://dynamsoft-lib.dawson.ustaxcourt.gov';
+  const unpkgUrl = 'https://unpkg.com'; // used to download dynamsoft for scanning
   const websocketUrl = `wss://*.${allowedDomainString}`;
   const localUrl = 'https://127.0.0.1:*';
   const localWebsocketUrl = 'ws://127.0.0.1:*';
@@ -42,14 +40,14 @@ export const handler = async (
   const rumEndpointUrl = 'https://dataplane.rum.us-east-1.amazonaws.com';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl} ${cognitoIdentityUrl} ${rumEndpointUrl}`,
+    `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${s3Url} ${unpkgUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl} ${cognitoIdentityUrl} ${rumEndpointUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
     `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
-    `script-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging} ${statuspageUrl} resource://pdf.js`,
+    `script-src 'self' 'unsafe-inline' ${unpkgUrl} ${statuspageUrl} resource://pdf.js`,
     `worker-src blob: ${subdomainsUrl}`,
-    `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging}`,
+    `style-src 'self' 'unsafe-inline'`,
     `img-src ${applicationUrl} ${subdomainsUrl} blob: data:`,
     `font-src ${applicationUrl} ${subdomainsUrl} data:`,
     `frame-src ${s3Url} ${subdomainsUrl} ${statuspageUrl} blob: data:`,

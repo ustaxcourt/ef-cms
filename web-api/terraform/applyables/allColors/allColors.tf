@@ -69,42 +69,6 @@ module "ui-public-www-redirect" {
   viewer_protocol_policy = var.viewer_protocol_policy
 }
 
-module "dynamsoft_us_east" {
-  source = "../../modules/dynamsoft"
-  count  = var.is_dynamsoft_enabled
-  providers = {
-    aws = aws.us-east-1
-  }
-
-  region                 = "us-east-1"
-  environment            = var.environment
-  dns_domain             = var.dns_domain
-  zone_name              = var.zone_name
-  ami                    = "ami-0a313d6098716f372"
-  availability_zones     = ["us-east-1a"]
-  dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
-  dynamsoft_url          = var.dynamsoft_url
-  dynamsoft_product_keys = var.dynamsoft_product_keys
-}
-
-module "dynamsoft_us_west" {
-  source = "../../modules/dynamsoft"
-  count  = var.is_dynamsoft_enabled
-  providers = {
-    aws = aws.us-west-1
-  }
-
-  region                 = "us-west-1"
-  environment            = var.environment
-  dns_domain             = var.dns_domain
-  zone_name              = var.zone_name
-  ami                    = "ami-06397100adf427136"
-  availability_zones     = ["us-west-1a"]
-  dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
-  dynamsoft_url          = var.dynamsoft_url
-  dynamsoft_product_keys = var.dynamsoft_product_keys
-}
-
 module "public-ui-healthcheck" {
   source     = "../../modules/ui-healthcheck"
   count      = var.enable_health_checks

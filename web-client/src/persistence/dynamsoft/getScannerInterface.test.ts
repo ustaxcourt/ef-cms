@@ -7,8 +7,6 @@ describe('getScannerInterface', () => {
   let onPostAllTransfersCb;
   let mockAcquireImage, mockCloseSource, mockOpenSource, mockRemoveAllImages;
 
-  applicationContext.getScannerResourceUri.mockReturnValue('abc');
-
   beforeEach(() => {
     mockSources = ['Test Source 1', 'Test Source 2'];
     mockScanCount = 1;
@@ -16,8 +14,6 @@ describe('getScannerInterface', () => {
     mockCloseSource = jest.fn();
     mockOpenSource = jest.fn();
     mockRemoveAllImages = jest.fn();
-
-    applicationContext.getScannerResourceUri.mockReturnValue('abc');
 
     DWObject = {
       AcquireImage: mockAcquireImage,
