@@ -33,7 +33,7 @@ export const getScannerInterface = () => {
         await import('dwt');
         const { Dynamsoft } = window;
         Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@latest/dist";
-        Dynamsoft.DWT.ProductKey = applicationContext.getConstants().DYNAMSOFT_KEY;
+        Dynamsoft.DWT.ProductKey = applicationContext.getConstants().DYNAMSOFT_PRODUCT_KEYS;
         Dynamsoft.DWT.ScanDirectly = true;
 
         Dynamsoft.DWT.CreateDWTObject(
