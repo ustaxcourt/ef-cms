@@ -6,7 +6,7 @@ import {
 import { createApplicationContext } from '../../src/applicationContext';
 import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
 import { createUserRecords } from '../../src/persistence/dynamo/users/createUserRecords';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
 
@@ -15,7 +15,7 @@ export const createUsers = async () => {
   const usersByEmail = {};
 
   const applicationContext = createApplicationContext();
-  getLogger().addUser({
+  getDawsonLogger().addUser({
     user: {
       email: 'system@ustc.gov',
       name: 'ustc automated system',
