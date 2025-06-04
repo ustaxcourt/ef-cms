@@ -64,7 +64,6 @@ import { getPractitionerDocumentByFileId } from './persistence/dynamo/practition
 import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
-import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getColdCases } from './persistence/elasticsearch/getColdCases';
 import { getStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/getStoredApplicationHealth';
@@ -118,6 +117,7 @@ import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from './persistence/s3/zipDocuments';
+import { getRequestResults } from '@web-api/persistence/postgres/polling/getRequestResults';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**
