@@ -1,4 +1,4 @@
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { RawUser } from '@shared/business/entities/User';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
@@ -13,7 +13,7 @@ export const processUserEntries = async ({
 }) => {
   if (!userRecords?.length) return;
 
-  getLogger().debug(`going to index ${userRecords.length} user records`);
+  getDawsonLogger().debug(`going to index ${userRecords.length} user records`);
 
   try {
     await upsertUsers(
@@ -41,7 +41,7 @@ export const processUserEntries = async ({
       }
     });
   } catch (e) {
-    getLogger().error(
+    getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process user record: ${e}`,
     );
   }

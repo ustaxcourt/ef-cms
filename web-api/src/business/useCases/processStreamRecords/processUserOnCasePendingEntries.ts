@@ -1,6 +1,6 @@
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertUserOnCasePendingRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCasePendingRecords';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export const processUserOnCasePendingEntries = async ({
   userOnCasePendingRecords,
@@ -9,7 +9,7 @@ export const processUserOnCasePendingEntries = async ({
 }) => {
   if (!userOnCasePendingRecords?.length) return;
 
-  getLogger().debug(
+  getDawsonLogger().debug(
     `going to upsert ${userOnCasePendingRecords.length} userOnCasePending records`,
   );
 
@@ -25,7 +25,7 @@ export const processUserOnCasePendingEntries = async ({
       }),
     );
   } catch (e) {
-    getLogger().error(
+    getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process userOnCasePending record: ${e}`,
     );
   }

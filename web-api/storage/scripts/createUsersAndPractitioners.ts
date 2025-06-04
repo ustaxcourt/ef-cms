@@ -4,7 +4,7 @@ import {
   ROLES,
 } from '../../../shared/src/business/entities/EntityConstants';
 import { createUserRecord } from '@web-api/persistence/postgres/users/createUserRecord';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
 import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
@@ -12,7 +12,7 @@ import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practiti
 export const createUsersAndPractitioners = async () => {
   const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
 
-  getLogger().addUser({
+  getDawsonLogger().addUser({
     user: {
       email: 'system@ustc.gov',
       name: 'ustc automated system',

@@ -3,7 +3,7 @@ import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
 import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const confirmSignUpInteractor = async (
@@ -14,7 +14,7 @@ export const confirmSignUpInteractor = async (
     userId,
   }: { confirmationCode: string; userId: string; email: string },
 ): Promise<void> => {
-  const logger = getLogger();
+  const logger = getDawsonLogger();
   const accountConfirmationCode = await getUserConfirmationCode({ userId });
 
   if (accountConfirmationCode !== confirmationCode) {

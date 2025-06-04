@@ -1,6 +1,6 @@
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export const processUserOnCaseEntries = async ({
   userOnCaseRecords,
@@ -9,7 +9,7 @@ export const processUserOnCaseEntries = async ({
 }) => {
   if (!userOnCaseRecords?.length) return;
 
-  getLogger().debug(
+  getDawsonLogger().debug(
     `going to upsert ${userOnCaseRecords.length} userOnCase records`,
   );
 
@@ -24,7 +24,7 @@ export const processUserOnCaseEntries = async ({
       });
     });
   } catch (e) {
-    getLogger().error(
+    getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process userOnCase record: ${e}`,
     );
   }
