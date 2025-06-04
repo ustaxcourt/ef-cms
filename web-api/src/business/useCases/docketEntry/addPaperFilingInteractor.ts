@@ -15,11 +15,11 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import {
   asyncHandleLockError,
   withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -75,7 +75,9 @@ export const addPaperFiling = async (
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
-  const consolidatedGroupCases = await getCasesByDocketNumbers({docketNumbers: consolidatedGroupDocketNumbers})
+  const consolidatedGroupCases = await getCasesByDocketNumbers({
+    docketNumbers: consolidatedGroupDocketNumbers,
+  });
 
   for (const rawCase of consolidatedGroupCases) {
     let caseEntity = new Case(rawCase, { authorizedUser });
@@ -107,31 +109,21 @@ export const addPaperFiling = async (
       docketEntryEntity.filedBy = filedByFromLeadCase;
     }
 
-    const workItem = new WorkItem(
-      {
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        associatedJudge: caseEntity.associatedJudge,
-        associatedJudgeId: caseEntity.associatedJudgeId,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        inProgress: isSavingForLater,
-        isRead: user.role !== ROLES.privatePractitioner,
-        section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
+    const workItem = new WorkItem({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      docketEntry: {
+        ...docketEntryEntity.toRawObject(),
+        createdAt: docketEntryEntity.createdAt,
       },
-      { caseEntity },
-    );
+      docketNumber: caseEntity.docketNumber,
+      inProgress: isSavingForLater,
+      isRead: user.role !== ROLES.privatePractitioner,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
 
     if (isReadyForService) {
       workItem.setAsCompleted({
@@ -163,7 +155,6 @@ export const addPaperFiling = async (
     caseEntity = await applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock({
-        applicationContext,
         caseEntity,
       });
 

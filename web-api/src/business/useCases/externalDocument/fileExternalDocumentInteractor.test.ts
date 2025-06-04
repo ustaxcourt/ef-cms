@@ -1,15 +1,12 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
-);
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import {
   AUTOMATIC_BLOCKED_REASONS,
-  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -19,7 +16,6 @@ import {
   SERVICE_INDICATOR_TYPES,
   SIMULTANEOUS_DOCUMENT_EVENT_CODES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
@@ -31,17 +27,16 @@ import {
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 
 describe('fileExternalDocumentInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
-  );
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
   );
 
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
@@ -51,18 +46,14 @@ describe('fileExternalDocumentInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
 
   let caseRecord;
-  let mockLock;
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
 
   beforeEach(() => {
-    mockLock = undefined;
+    tryGetLock.mockResolvedValue(true);
+
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,
@@ -431,58 +422,6 @@ describe('fileExternalDocumentInteractor', () => {
     expect(updatedCase!.docketEntries[3].servedAt).toBeUndefined();
   });
 
-  it('should create a high-priority work item if the case status is calendared', async () => {
-    caseRecord.status = CASE_STATUS_TYPES.calendared;
-    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
-    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bc';
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-      },
-      mockIrsPractitionerUser,
-    );
-
-    expect(upsertWorkItems).toHaveBeenCalled();
-    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
-      workItems: [
-        { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
-      ],
-    });
-  });
-
-  it('should create a not-high-priority work item if the case status is not calendared', async () => {
-    caseRecord.status = CASE_STATUS_TYPES.new;
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'test Petitioner',
-          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-      },
-      mockIrsPractitionerUser,
-    );
-
-    expect(upsertWorkItems).toHaveBeenCalled();
-    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
-      workItems: [{ highPriority: false }],
-    });
-  });
-
   it('should automatically block the case if the document filed is a tracked document', async () => {
     await fileExternalDocumentInteractor(
       applicationContext,
@@ -507,7 +446,6 @@ describe('fileExternalDocumentInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
@@ -538,7 +476,6 @@ describe('fileExternalDocumentInteractor', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should not sendServedPartiesEmails if docketEntryId is undefined', async () => {
@@ -566,7 +503,7 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLock.mockResolvedValue(false);
 
     await expect(
       fileExternalDocumentInteractor(
@@ -608,19 +545,12 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${caseRecord.docketNumber}`,
-      ttl: 30,
-    });
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${caseRecord.docketNumber}`),
+    );
 
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${caseRecord.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${caseRecord.docketNumber}`),
+    );
   });
 });

@@ -1,19 +1,14 @@
-import { CASE_STATUS_TYPES, CHIEF_JUDGE } from './EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { WORK_ITEM_VALIDATION_RULES } from './EntityValidationConstants';
 import { createISODateString } from '../utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { pick } from 'lodash';
+import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import joi from 'joi';
 
 export class WorkItem extends JoiValidationEntity {
   public assigneeId?: string;
   public assigneeName?: string;
-  public associatedJudge: string;
-  public associatedJudgeId?: string;
-  public caseIsInProgress?: boolean;
-  public caseStatus: string;
-  public caseTitle?: string;
   public completedAt?: string;
   public completedBy?: string;
   public completedByUserId?: string;
@@ -21,38 +16,20 @@ export class WorkItem extends JoiValidationEntity {
   public createdAt: string;
   public docketEntry: any;
   public docketNumber: string;
-  public docketNumberWithSuffix?: string;
-  public hideFromPendingMessages?: boolean;
-  public highPriority?: boolean;
   public inProgress?: boolean;
-  public isInitializeCase?: boolean;
   public isRead?: boolean;
-  public leadDocketNumber?: string;
   public section: string;
   public sentBy: string;
   public sentBySection?: string;
   public sentByUserId?: string;
-  public trialDate?: string;
-  public trialLocation?: string;
   public updatedAt: string;
   public workItemId: string;
 
-  constructor(rawWorkItem, { caseEntity }: { caseEntity?: Case } = {}) {
+  constructor(rawWorkItem) {
     super('WorkItem');
 
     this.assigneeId = rawWorkItem.assigneeId;
     this.assigneeName = rawWorkItem.assigneeName;
-    this.associatedJudge =
-      caseEntity && caseEntity.associatedJudge
-        ? caseEntity.associatedJudge
-        : rawWorkItem.associatedJudge || CHIEF_JUDGE;
-    this.associatedJudgeId =
-      caseEntity && caseEntity.associatedJudgeId
-        ? caseEntity.associatedJudgeId
-        : rawWorkItem.associatedJudgeId || undefined;
-    this.caseIsInProgress = rawWorkItem.caseIsInProgress;
-    this.caseStatus = caseEntity ? caseEntity.status : rawWorkItem.caseStatus;
-    this.caseTitle = rawWorkItem.caseTitle;
     this.completedAt = rawWorkItem.completedAt;
     this.completedBy = rawWorkItem.completedBy;
     this.completedByUserId = rawWorkItem.completedByUserId;
@@ -78,31 +55,47 @@ export class WorkItem extends JoiValidationEntity {
     ]);
 
     this.docketNumber = rawWorkItem.docketNumber;
-    this.leadDocketNumber = caseEntity
-      ? caseEntity.leadDocketNumber
-      : rawWorkItem.leadDocketNumber;
-    this.docketNumberWithSuffix = caseEntity
-      ? caseEntity.docketNumberWithSuffix
-      : `${rawWorkItem.docketNumber}${
-          rawWorkItem.docketNumberSuffix ? rawWorkItem.docketNumberSuffix : ''
-        }`;
-    this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
-    this.highPriority =
-      rawWorkItem.highPriority ||
-      caseEntity?.status === CASE_STATUS_TYPES.calendared;
     this.inProgress = rawWorkItem.inProgress;
-    this.isInitializeCase = rawWorkItem.isInitializeCase;
     this.isRead = rawWorkItem.isRead;
     this.section = rawWorkItem.section;
     this.sentBy = rawWorkItem.sentBy;
     this.sentBySection = rawWorkItem.sentBySection;
     this.sentByUserId = rawWorkItem.sentByUserId;
-    this.trialDate = caseEntity ? caseEntity.trialDate : rawWorkItem.trialDate;
-    this.trialLocation = caseEntity
-      ? caseEntity.trialLocation
-      : rawWorkItem.trialLocation;
     this.updatedAt = rawWorkItem.updatedAt || createISODateString();
     this.workItemId = rawWorkItem.workItemId || getUniqueId();
+  }
+
+  static VALIDATION_RULES = {
+    assigneeId: JoiValidationConstants.UUID.allow(null).optional(),
+    assigneeName: JoiValidationConstants.STRING.max(100).allow(null).optional(), // should be a Message entity at some point
+    completedAt: JoiValidationConstants.ISO_DATE.optional(),
+    completedBy: JoiValidationConstants.STRING.max(100).optional().allow(null),
+    completedByUserId: JoiValidationConstants.UUID.optional().allow(null),
+    completedMessage: JoiValidationConstants.STRING.max(100)
+      .optional()
+      .allow(null),
+    createdAt: JoiValidationConstants.ISO_DATE.optional(),
+    // TODO: validate DocketEntry in WorkItem
+    // docketEntry: joi.object().keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS).required(),
+    docketEntry: joi.object().required(),
+    docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+      'Unique case identifier in XXXXX-YY format.',
+    ),
+    entityName: JoiValidationConstants.STRING.valid('WorkItem').required(),
+    inProgress: joi.boolean().optional(),
+    isRead: joi.boolean().optional(),
+    section: JoiValidationConstants.STRING.required(),
+    sentBy: JoiValidationConstants.STRING.max(100)
+      .required()
+      .description('The name of the user that sent the WorkItem'),
+    sentBySection: JoiValidationConstants.STRING.optional(),
+    sentByUserId: JoiValidationConstants.UUID.optional(),
+    updatedAt: JoiValidationConstants.ISO_DATE.required(),
+    workItemId: JoiValidationConstants.UUID.required(),
+  };
+
+  static isHighPriority(aCase: { status?: string }): boolean {
+    return aCase?.status === CASE_STATUS_TYPES.calendared;
   }
 
   assignToUser({
@@ -132,10 +125,6 @@ export class WorkItem extends JoiValidationEntity {
     return this;
   }
 
-  setStatus(caseStatus: string): void {
-    this.caseStatus = caseStatus;
-  }
-
   setAsCompleted({
     message,
     user,
@@ -162,7 +151,7 @@ export class WorkItem extends JoiValidationEntity {
   }
 
   getValidationRules() {
-    return WORK_ITEM_VALIDATION_RULES;
+    return WorkItem.VALIDATION_RULES;
   }
 }
 
