@@ -33,25 +33,16 @@ export const fileAndServeDocumentOnOneCase = async ({
       {
         assigneeId: null,
         assigneeName: null,
-        associatedJudge: caseEntity.associatedJudge,
-        associatedJudgeId: caseEntity.associatedJudgeId,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
         docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
         },
         docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        hideFromPendingMessages: true,
         inProgress: true,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
       },
-      { caseEntity },
     );
   }
 
@@ -77,24 +68,23 @@ export const fileAndServeDocumentOnOneCase = async ({
   caseEntity.updateDocketEntry(docketEntryEntity);
 
   caseEntity = await updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity,
-      hasCaseDeadline: caseHasDeadline,
-    });
+    caseEntity,
+    hasCaseDeadline: caseHasDeadline,
+  });
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
-        applicationContext,
-        caseEntity,
-        eventCode: docketEntryEntity.eventCode,
-      });
+      applicationContext,
+      caseEntity,
+      eventCode: docketEntryEntity.eventCode,
+    });
   }
 
   const validRawCaseEntity = await updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser: user,
-      caseToUpdate: caseEntity,
-    });
+    applicationContext,
+    authorizedUser: user,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(validRawCaseEntity, {
     authorizedUser: user,

@@ -161,7 +161,7 @@ describe('Document title journey', () => {
     );
     cerebralTest.docketEntryId = exhibitDocketEntry.docketEntryId;
 
-    expect(exhibitOutboxWorkItem.docketEntry.descriptionDisplay).toEqual(
+    expect(exhibitOutboxWorkItem!.docketEntry.descriptionDisplay).toEqual(
       'Exhibit(s) Is this pool safe for diving? It deep ends.',
     );
   });

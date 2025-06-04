@@ -84,7 +84,7 @@ export const petitionsClerkServesPetitionFromDocumentView = cerebralTest => {
       state: cerebralTest.getState(),
     }).find(item => item.docketNumber === cerebralTest.docketNumber);
 
-    expect(formattedWorkItem.editLink).toContain(
+    expect(formattedWorkItem!.editLink).toContain(
       '/document-view?docketEntryId=',
     );
   });

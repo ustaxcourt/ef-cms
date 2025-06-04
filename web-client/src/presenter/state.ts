@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 import { Contact } from '@shared/business/useCases/generatePetitionPdfInteractor';
+import { EligibleCase } from '@shared/business/entities/cases/EligibleCase';
 import { FormattedCaseInventoryReportEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { FormattedPendingMotionWithWorksheet } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { GetCasesByStatusAndByJudgeResponse } from '@web-api/business/useCases/judgeActivityReport/getCaseWorksheetsByJudgeInteractor';
@@ -100,6 +101,7 @@ import { getOrdinalValuesForUploadIteration } from './computeds/selectDocumentTy
 import { headerHelper } from './computeds/headerHelper';
 import { initialBlockedCaseReportFilter } from '@web-client/presenter/state/blockedCasesReportState';
 import { initialCustomCaseReportState } from './customCaseReportState';
+import { initialMinuteSheetFormState } from '@web-client/presenter/state/TrialSessionMinutesForm/initialTrialSessionMinuteFormState';
 import { initialPendingReportsState } from '@web-client/presenter/state/pendingReportState';
 import { initialTrialSessionPageState } from '@web-client/presenter/state/trialSessionsPageState';
 import { initialTrialSessionState } from '@web-client/presenter/state/trialSessionState';
@@ -150,8 +152,10 @@ import { statisticsHelper } from './computeds/statisticsHelper';
 import { statusReportOrderHelper } from './computeds/statusReportOrderHelper';
 import { templateHelper } from './computeds/templateHelper';
 import { trialCitiesHelper } from './computeds/trialCitiesHelper';
+import { trialLocationHelper } from '@web-client/presenter/computeds/trialLocationHelper';
 import { trialSessionDetailsHelper } from './computeds/trialSessionDetailsHelper';
 import { trialSessionHeaderHelper } from './computeds/trialSessionHeaderHelper';
+import { trialSessionMinutesFormOptionsHelper } from './computeds/TrialSessionMinutes/trialSessionMinutesFormOptionsHelper';
 import { trialSessionPlanningReportViewHelper } from '@web-client/presenter/computeds/trialSessionPlanningReportViewHelper';
 import { trialSessionWorkingCopyHelper } from './computeds/trialSessionWorkingCopyHelper';
 import { trialSessionsHelper } from './computeds/trialSessionsHelper';
@@ -162,6 +166,7 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
@@ -541,12 +546,19 @@ export const computeds = {
   trialCitiesHelper: trialCitiesHelper as unknown as ReturnType<
     typeof trialCitiesHelper
   >,
+  trialLocationHelper: trialLocationHelper as unknown as ReturnType<
+    typeof trialLocationHelper
+  >,
   trialSessionDetailsHelper: trialSessionDetailsHelper as unknown as ReturnType<
     typeof trialSessionDetailsHelper
   >,
   trialSessionHeaderHelper: trialSessionHeaderHelper as unknown as ReturnType<
     typeof trialSessionHeaderHelper
   >,
+  trialSessionMinutesFormOptionsHelper:
+    trialSessionMinutesFormOptionsHelper as unknown as ReturnType<
+      typeof trialSessionMinutesFormOptionsHelper
+    >,
   trialSessionPlanningReportViewHelper:
     trialSessionPlanningReportViewHelper as unknown as ReturnType<
       typeof trialSessionPlanningReportViewHelper
@@ -730,6 +742,11 @@ export const baseState = {
   login: {} as any,
   logoutType: '',
   maintenanceMode: false,
+  messageBoxToDisplay: {
+    box: undefined,
+    queue: undefined,
+    section: undefined,
+  },
   messages: [] as RawMessage[],
   messagesInboxCount: 0,
   messagesPage: {
@@ -739,6 +756,8 @@ export const baseState = {
     selectedMessages: new Map() as Map<string, string>,
   },
   messagesSectionCount: 0,
+  minuteSheetForm: cloneDeep(initialMinuteSheetFormState),
+  minuteSheetFormSnapshot: '',
   modal: {
     contactSupportMessage: undefined, // the "contact support" message sans email address
     docketEntry: undefined,
@@ -845,7 +864,7 @@ export const baseState = {
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
-  selectedWorkItems: [],
+  selectedWorkItems: [] as { workItemId: string }[],
   sessionMetadata: {
     docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: [],
@@ -870,6 +889,14 @@ export const baseState = {
   },
   todaysDate: '',
   token: '',
+  trialLocationPage: {
+    blockedCases: [] as RawCase[],
+    blockedCasesPage: 0,
+    currentTab: 'eligibleCases',
+    eligibleCases: [] as EligibleCase[],
+    eligibleCasesPage: 0,
+    location: '',
+  },
   trialSession: cloneDeep(initialTrialSessionState),
   trialSessionDetailsTab: {} as { caseList: any[]; calendaredCaseList: any[] },
   trialSessionJudge: {
@@ -894,8 +921,8 @@ export const baseState = {
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
-  workQueue: [],
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueue: [] as WorkItemWithCaseInfo[],
+  workQueueToDisplay: { box: 'inbox', queue: 'my', section: '' },
   workitemAllCheckbox: false,
 };
 

@@ -9,7 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const createCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -37,7 +37,6 @@ export const createCaseDeadline = async (
   caseEntity = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity,
       hasCaseDeadline: true,
     });

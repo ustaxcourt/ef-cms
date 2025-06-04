@@ -12,7 +12,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateCaseDetails
@@ -107,27 +107,6 @@ export const updateCaseDetails = async (
       filingFeeWaivedEntry.setFiledBy(authorizedUser);
 
       newCaseEntity.addDocketEntry(filingFeeWaivedEntry);
-    }
-  }
-
-  if (newCaseEntity.getShouldHaveTrialSortMappingRecords()) {
-    const oldCaseEntity = new Case(oldCase, { authorizedUser });
-    const oldTrialSortTag = oldCaseEntity.getShouldHaveTrialSortMappingRecords()
-      ? oldCaseEntity.generateTrialSortTags()
-      : { nonHybrid: undefined };
-    const newTrialSortTag = newCaseEntity.generateTrialSortTags();
-
-    // The nonHybrid sort tag will be comprised of the trial city, procedure type, and case type
-    // so we can simply check if this tag changes to determine if new records should be created
-    // rather than looking at the changed fields directly
-    if (oldTrialSortTag.nonHybrid !== newTrialSortTag.nonHybrid) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: newCaseEntity.generateTrialSortTags(),
-          docketNumber: newCaseEntity.validate().toRawObject().docketNumber,
-        });
     }
   }
 
