@@ -1,4 +1,4 @@
-import { Kysely, sql } from 'kysely';
+import { Kysely } from 'kysely';
 
 const requestsTableUserRequestIndex = 'idx_requests_user_request';
 const requestsTableTTLIndex = 'idx_requests_ttl';
@@ -27,7 +27,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('chunk', 'text', col => col.notNull())
     .addColumn('index', 'integer', col => col.notNull())
     .addColumn('totalNumberOfChunks', 'integer', col => col.notNull())
-    .addColumn('ttl', 'bigint', col => col.defaultTo(sql`now()`).notNull())
+    .addColumn('ttl', 'bigint', col => col.notNull())
     .execute();
 
   // Add indexes for efficient queries
