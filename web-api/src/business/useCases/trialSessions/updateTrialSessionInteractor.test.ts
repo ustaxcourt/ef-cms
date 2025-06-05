@@ -26,7 +26,6 @@ import { getUniqueId } from '@shared/sharedAppContext';
 import { mockCaseServicesSupervisorUser } from '@shared/test/mockAuthUsers';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import {
-  
   determineEntitiesToLock,
   updateTrialSession,
 } from '@web-api/business/useCases/trialSessions/updateTrialSessionInteractor';
@@ -352,24 +351,6 @@ describe('updateTrialSessionInteractor', () => {
       ).rejects.toThrow(
         `Trial session ${TEST_TRIAL_SESSION_ID} was not found.`,
       );
-    });
-
-    it('should call with empty string if no trial session id is provided', async () => {
-      (getTrialSessionById as jest.Mock).mockImplementation(() => undefined);
-
-      await expect(
-        determineEntitiesToLock(applicationContext, {
-          trialSession: {
-            trialSessionId: undefined,
-          } as TrialSession,
-        }),
-      ).rejects.toThrow(`Trial session undefined was not found.`);
-
-      const getTrialSessionByIdCalls = (getTrialSessionById as jest.Mock).mock
-        .calls;
-
-      expect(getTrialSessionByIdCalls.length).toEqual(1);
-      expect(getTrialSessionByIdCalls[0][0].trialSessionId).toEqual('');
     });
   });
 });

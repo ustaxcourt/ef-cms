@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.94.1"
+      version = "~> 5.97.0"
     }
   }
 }
@@ -82,7 +82,6 @@ resource "terraform_data" "locals" {
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
     USER_POOL_IRS_ID                   = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_irs_id
     POSTGRES_HOST                      = data.terraform_remote_state.remote.outputs.rds_host_name
-    POSTGRES_READ_HOST                 = data.terraform_remote_state.remote.outputs.rds_host_name_west
     POSTGRES_USER                      = data.terraform_remote_state.remote.outputs.postgres_user
     DATABASE_NAME                      = data.terraform_remote_state.remote.outputs.database_name
   }
@@ -178,7 +177,9 @@ module "api-east-green" {
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 1
+  route_53_regional_weight = 100
 }
+
 module "api-west-green" {
   source              = "../../modules/api"
   lambda_role_arn     = module.lambda_role_green.role_arn
@@ -218,6 +219,7 @@ module "api-west-green" {
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 0
+  route_53_regional_weight = 0
 }
 
 module "worker-east-green" {
@@ -239,6 +241,40 @@ module "worker-east-green" {
 
 module "worker-west-green" {
   source              = "../../modules/worker"
+  lambda_role_arn     = module.lambda_role_green.role_arn
+  color               = "green"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
+  lambda_environment = merge(terraform_data.locals.output, {
+    CURRENT_COLOR          = "green"
+    DYNAMODB_TABLE_NAME    = var.green_table_name
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    REGION                 = "us-west-1"
+  })
+  providers = {
+    aws = aws.us-west-1
+  }
+  environment = var.environment
+}
+
+module "opensearch-sync-east-green" {
+  source              = "../../modules/opensearch-sync"
+  lambda_role_arn     = module.lambda_role_green.role_arn
+  color               = "green"
+  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
+  lambda_environment = merge(terraform_data.locals.output, {
+    CURRENT_COLOR          = "green"
+    DYNAMODB_TABLE_NAME    = var.green_table_name
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
+    REGION                 = "us-east-1"
+  })
+  providers = {
+    aws = aws.us-east-1
+  }
+  environment = var.environment
+}
+
+module "opensearch-sync-west-green" {
+  source              = "../../modules/opensearch-sync"
   lambda_role_arn     = module.lambda_role_green.role_arn
   color               = "green"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn

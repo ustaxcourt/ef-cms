@@ -2,6 +2,7 @@ import { addStatisticToFormAction } from './addStatisticToFormAction';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
+import { MAX_NUMBER_DEFICIENCY_STATISTICS } from '@shared/business/entities/EntityConstants';
 
 describe('addStatisticToFormAction', () => {
   const statisticId = '8c35ffbb-773a-4a29-9868-329ffae4e065';
@@ -31,9 +32,9 @@ describe('addStatisticToFormAction', () => {
     });
   });
 
-  it('should not add a statistic to the form.statistics array if its length is greater than 12', async () => {
-    const manyStatistics = [];
-    for (let i = 0; i < 12; i++) {
+  it('should not add a statistic to the form.statistics array if its length is greater than the maximum', async () => {
+    const manyStatistics: { yearOrPeriod: string }[] = [];
+    for (let i = 0; i < MAX_NUMBER_DEFICIENCY_STATISTICS; i++) {
       manyStatistics.push({ yearOrPeriod: 'Period' });
     }
     const result = await runAction(addStatisticToFormAction, {
@@ -43,7 +44,9 @@ describe('addStatisticToFormAction', () => {
       },
     });
 
-    expect(result.state.form.statistics.length).toEqual(12);
+    expect(result.state.form.statistics.length).toEqual(
+      MAX_NUMBER_DEFICIENCY_STATISTICS,
+    );
   });
 
   it('should default form.statistics to an array if it is not present on the form', async () => {

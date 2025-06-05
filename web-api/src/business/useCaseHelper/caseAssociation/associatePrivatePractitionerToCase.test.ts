@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -7,15 +8,21 @@ import {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerToCase } from './associatePrivatePractitionerToCase';
 import {
   getContactPrimary,
   getContactSecondary,
-} from '../../../../../shared/src/business/entities/cases/Case';
+} from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const logger = getDawsonLogger();
+const errorSpy = jest.spyOn(logger, 'error');
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
@@ -85,9 +92,7 @@ describe('associatePrivatePractitionerToCase', () => {
       userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should not add mapping if already there', async () => {
@@ -200,12 +205,10 @@ describe('associatePrivatePractitionerToCase', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockResolvedValueOnce(true);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
-        ...caseRecord,
-        privatePractitioners: [],
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseRecord,
+      privatePractitioners: [],
+    });
 
     await associatePrivatePractitionerToCase({
       applicationContext,
@@ -219,8 +222,7 @@ describe('associatePrivatePractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).not.toHaveBeenCalled();
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+    expect(errorSpy).toHaveBeenCalledWith(
       `BUG 9323: Private Practitioner with userId: ${MOCK_PRACTITIONER.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
     );
   });
@@ -230,12 +232,10 @@ describe('associatePrivatePractitionerToCase', () => {
       .getPersistenceGateway()
       .verifyCaseForUser.mockResolvedValueOnce(true);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValueOnce({
-        ...caseRecord,
-        privatePractitioners: [{ userId: MOCK_PRACTITIONER.userId }],
-      });
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...caseRecord,
+      privatePractitioners: [{ userId: MOCK_PRACTITIONER.userId }],
+    });
 
     await associatePrivatePractitionerToCase({
       applicationContext,

@@ -1,7 +1,7 @@
 import { CASE_STATUS_TYPES, PETITIONS_SECTION } from './EntityConstants';
 import { Message, RawMessage } from './Message';
 import { createISODateString } from '../utilities/DateHandler';
-import { getTextByCount } from '../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 jest.mock('../utilities/DateHandler', () => {
   const originalModule = jest.requireActual('../utilities/DateHandler');

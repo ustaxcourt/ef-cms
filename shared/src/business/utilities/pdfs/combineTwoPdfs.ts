@@ -1,9 +1,7 @@
-export const combineTwoPdfs = async ({
-  applicationContext,
-  firstPdf,
-  secondPdf,
-}) => {
-  const { PDFDocument } = await applicationContext.getPdfLib();
+import { getPdfLib } from '@shared/business/utilities/pdfs/getPdfLib';
+
+export const combineTwoPdfs = async ({ firstPdf, secondPdf }) => {
+  const { PDFDocument } = await getPdfLib();
 
   const fullDocument = await PDFDocument.create();
   const firstPdfPages = await PDFDocument.load(firstPdf);

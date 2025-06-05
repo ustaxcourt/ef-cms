@@ -4,7 +4,7 @@ import {
 } from 'aws-lambda';
 import { createPublicKey } from 'crypto';
 import { environment } from '@web-api/environment';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import axios from 'axios';
 import jwk from 'jsonwebtoken';
 
@@ -54,7 +54,7 @@ const throw401GatewayError = () => {
 
 export const createAuthorizer =
   getToken => async (event: APIGatewayRequestAuthorizerEvent, context) => {
-    const logger = getLogger();
+    const logger = getDawsonLogger();
     logger.clearContext();
     logger.addContext({
       environment: {
@@ -68,7 +68,6 @@ export const createAuthorizer =
     let token;
     try {
       token = getToken(event);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       logger.info('An error occured trying to get the token out of the event');
       throw401GatewayError();
@@ -84,7 +83,6 @@ export const createAuthorizer =
     try {
       const decodedToken = decodeToken(token);
       ({ iss, kid } = decodedToken);
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
     } catch (error) {
       logger.info(
         'The token provided in the header could not be decoded successfully',

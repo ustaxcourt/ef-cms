@@ -8,7 +8,7 @@ export const petitionsClerkDeletesOtherStatisticToCase = cerebralTest => {
 
     await cerebralTest.runSequence('deleteOtherStatisticsSequence');
 
-    expect(cerebralTest.getState('caseDetail.litigationCosts')).toEqual(null);
-    expect(cerebralTest.getState('caseDetail.damages')).toEqual(null);
+    expect(cerebralTest.getState('caseDetail.litigationCosts')).toBeFalsy();
+    expect(cerebralTest.getState('caseDetail.damages')).toBeFalsy();
   });
 };

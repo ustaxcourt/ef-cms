@@ -1,3 +1,4 @@
+import { MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -9,7 +10,7 @@ import { state } from '@web-client/presenter/app.cerebral';
  */
 export const addPenaltyInputAction = ({ get, store }: ActionProps) => {
   const { penalties, penaltyNameLabel, subkey: penaltyType } = get(state.modal);
-  if (penalties.length < 10) {
+  if (penalties.length < MAX_NUMBER_DEFICIENCY_STATISTIC_PENALTIES) {
     penalties.push({
       name: `Penalty ${penalties.length + 1} ${penaltyNameLabel}`,
       penaltyAmount: '',

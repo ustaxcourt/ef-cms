@@ -2,7 +2,7 @@ import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entitie
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { sleep } from '@shared/tools/helpers';
 
 export const checkLock = async ({
@@ -24,11 +24,11 @@ export const checkLock = async ({
     .getLock({ applicationContext, identifier });
 
   if (!currentLock) {
-    getLogger().warn('Entity is NOT currently locked', { identifier });
+    getDawsonLogger().warn('Entity is NOT currently locked', { identifier });
     return false;
   }
 
-  getLogger().warn('Entity is currently locked', { currentLock });
+  getDawsonLogger().warn('Entity is currently locked', { currentLock });
 
   if (!isCaseLockingEnabled) {
     return false;
@@ -60,7 +60,7 @@ export const acquireLock = async ({
     return;
   }
   let attempts = 0;
-  let hasLockedItems = true;
+  let lockedItems: string[] = [];
   do {
     if (attempts > retries) {
       if (onLockError instanceof Error) {
@@ -68,6 +68,9 @@ export const acquireLock = async ({
       } else if (typeof onLockError === 'function') {
         await onLockError(applicationContext, options, authorizedUser);
       }
+      getDawsonLogger().error(
+        `Error: failed to acquire lock for ${lockedItems.join(', ')} when attempting to get lock for ${identifiers.join(', ')}`,
+      );
       throw new ServiceUnavailableError(
         'One of the items you are trying to update is being updated by someone else',
       );
@@ -78,14 +81,22 @@ export const acquireLock = async ({
     }
 
     const results = await Promise.all(
-      identifiers.map(entityIdentifier =>
-        checkLock({ applicationContext, identifier: entityIdentifier }),
-      ),
+      identifiers.map(async entityIdentifier => {
+        return {
+          identifier: entityIdentifier,
+          isLocked: await checkLock({
+            applicationContext,
+            identifier: entityIdentifier,
+          }),
+        };
+      }),
     );
 
-    hasLockedItems = results.some(isLocked => isLocked);
+    lockedItems = results
+      .filter(result => result.isLocked)
+      .map(result => result.identifier);
     attempts++;
-  } while (hasLockedItems);
+  } while (lockedItems.length || attempts === 0);
 
   // Second, lock them up so the are unavailable
   await Promise.all(
@@ -115,14 +126,12 @@ export const asyncHandleLockError = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!authorizedUser?.userId || !clientConnectionId) return;
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: { action: 'async_service_unavailable_error' },
-      userId: authorizedUser?.userId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: { action: 'async_service_unavailable_error' },
+    userId: authorizedUser?.userId,
+  });
 };
 
 /**
@@ -176,10 +185,17 @@ export function withLocking<InteractorInput, InteractorOutput>(
     try {
       results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
+      getDawsonLogger().error(
+        `withLocking: failed to execute interactor: ${err}`,
+      );
       caughtError = err;
     }
-
-    await removeLock({ applicationContext, identifiers });
+    try {
+      await removeLock({ applicationContext, identifiers });
+    } catch (e) {
+      getDawsonLogger().error(`withLocking: failed to remove lock: ${e}`);
+      throw e;
+    }
 
     if (caughtError) {
       throw caughtError;
