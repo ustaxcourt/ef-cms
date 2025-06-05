@@ -1,6 +1,6 @@
 import { sleep } from '@shared/tools/helpers';
 import { environment } from '@web-api/environment';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { Browser } from 'puppeteer-core';
 
 let browser: Promise<Browser> | null = null;
@@ -37,7 +37,7 @@ const getChromiumBrowserAWS = async (): Promise<Browser> => {
       });
       return theBrowser;
     } catch (e) {
-      getLogger().error(
+      getDawsonLogger().error(
         `Unable to launch chromium browser on attempt: ${i}`,
         e,
       );

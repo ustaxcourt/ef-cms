@@ -6,7 +6,7 @@ import type {
 } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getCaseDataFromDynamo } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
 import { settlePromises } from '@web-api/utilities/settlePromises';
@@ -43,7 +43,7 @@ export const processPractitionerMappingEntries = async ({
             docketNumber,
           });
         } catch (e) {
-          getLogger().warn(
+          getDawsonLogger().warn(
             `Failed to find case ${practitionerMappingData.pk.S} in postgres in processPractitionerMappingEntries: ${e}.
           If this occurred in a test or as part of re-indexing during a blue-green migration, it is safe to ignore.`,
           );
@@ -109,7 +109,7 @@ export const processPractitionerMappingEntries = async ({
       throw new Error('failed to index practitioner mapping records');
     }
   } catch (e) {
-    getLogger().error(
+    getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process practitioner mapping record: ${e}`,
     );
   }
