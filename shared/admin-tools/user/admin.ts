@@ -12,9 +12,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getClientId, getUserPoolId, requireEnvVars } from '../util';
 import { createUserRecord } from '@web-api/persistence/postgres/users/createUserRecord';
 import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
-import { updateUser } from '@web-api/gateways/user/updateUser';
-import { createUser } from '@web-api/gateways/user/createUser';
-import { disableUser as disableUserGateway } from '@web-api/gateways/user/disableUser';
 import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
 
 const { USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
@@ -127,7 +124,7 @@ export async function createOrUpdateUser(
   });
 
   if (userExists) {
-    await updateUser(applicationContext, {
+    await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: {
         name: rawUser.name,
         role: rawUser.role,
@@ -136,7 +133,7 @@ export async function createOrUpdateUser(
       poolId: userPoolId,
     });
   } else {
-    await createUser(applicationContext, {
+    await applicationContext.getUserGateway().createUser(applicationContext, {
       email: rawUser.email!,
       name: rawUser.name,
       poolId: userPoolId,
@@ -148,7 +145,7 @@ export async function createOrUpdateUser(
   }
 
   if (user.role === ROLES.legacyJudge) {
-    await disableUserGateway(applicationContext, {
+    await applicationContext.getUserGateway().disableUser(applicationContext, {
       email: user.email!,
     });
   }
