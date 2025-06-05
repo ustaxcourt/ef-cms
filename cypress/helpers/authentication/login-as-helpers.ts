@@ -144,9 +144,13 @@ export function login({ email }: { email: string }) {
   cy.window().then(win =>
     win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
   );
-  cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
+  // This is used to intercept the dynamsoft javascript to prevent it from showing a modal 
+  // asking the user to download the dynamsoft software which causes the tests to break.
+  // Due to race conditions, it's easier to just prevent dynamsoft from ever loading in smoketests
+  // than it is to figure out how to always assume the modal will pop up (which sometimes it doesn't show)
+  cy.intercept('GET', 'https://**/dynamsoft.webtwain.viewer.js**', {
     body: `window.Dynamsoft = {DWT: {
-            GetWebTwain() {}
+            CreateDWTObject() {}
           }}`,
     statusCode: 200,
   });
