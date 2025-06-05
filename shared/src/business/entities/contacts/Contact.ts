@@ -27,7 +27,7 @@ export class Contact extends JoiValidationEntity {
   public isAddressSealed: boolean;
   public sealedAndUnavailable?: boolean;
   public paperPetitionEmail?: string;
-  public hasConsentedToEService?: boolean;
+  public hasConsentedToElectronicService?: boolean;
   public name: string;
   public phone: string;
   public postalCode: string;
@@ -36,7 +36,7 @@ export class Contact extends JoiValidationEntity {
   public state?: string;
   public title?: string;
   public additionalName?: string;
-  public hasEAccess?: boolean;
+  public hasElectronicAccess?: boolean;
   public placeOfLegalResidence?: string;
 
   constructor(rawContact, contactName: string) {
@@ -52,10 +52,11 @@ export class Contact extends JoiValidationEntity {
     this.countryType = rawContact.countryType;
     this.email = rawContact.email;
     this.inCareOf = rawContact.inCareOf;
-    this.isAddressSealed = rawContact.isAddressSealed || false;
-    this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
+    this.isAddressSealed = rawContact.isAddressSealed ?? false;
+    this.sealedAndUnavailable = rawContact.sealedAndUnavailable ?? false;
     this.paperPetitionEmail = rawContact.paperPetitionEmail;
-    this.hasConsentedToEService = rawContact.hasConsentedToEService;
+    this.hasConsentedToElectronicService =
+      rawContact.hasConsentedToElectronicService;
     this.name = rawContact.name;
     this.phone = formatPhoneNumber(rawContact.phone);
     this.postalCode = rawContact.postalCode;
@@ -64,7 +65,7 @@ export class Contact extends JoiValidationEntity {
     this.state = rawContact.state;
     this.title = rawContact.title;
     this.additionalName = rawContact.additionalName;
-    this.hasEAccess = rawContact.hasEAccess || undefined;
+    this.hasElectronicAccess = rawContact.hasElectronicAccess ?? undefined;
     this.placeOfLegalResidence = rawContact.placeOfLegalResidence || undefined;
   }
 
@@ -83,7 +84,7 @@ export class Contact extends JoiValidationEntity {
     contactType: JoiValidationConstants.STRING.valid(
       ...Object.values(CONTACT_TYPES),
     ).required(),
-    email: JoiValidationConstants.EMAIL.when('hasEAccess', {
+    email: JoiValidationConstants.EMAIL.when('hasElectronicAccess', {
       is: true,
       otherwise: joi.optional(),
       then: joi.required(),
@@ -92,13 +93,13 @@ export class Contact extends JoiValidationEntity {
       'string.email': 'Enter email address in format: yourname@example.com',
       'string.empty': 'Enter a valid email address',
     }),
-    hasConsentedToEService: joi
+    hasConsentedToElectronicService: joi
       .boolean()
       .optional()
       .description(
         'Flag that indicates if the petitioner checked the "I consent to electronic service" box on their petition form',
       ),
-    hasEAccess: joi
+    hasElectronicAccess: joi
       .boolean()
       .optional()
       .description(
