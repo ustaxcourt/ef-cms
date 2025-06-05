@@ -36,6 +36,10 @@ import {
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
 import {
+  DW_MINUTE_SHEET_COLUMNS,
+  MinuteSheetTable,
+} from '@web-api/persistence/postgres/minuteSheets/schema';
+import {
   DW_USER_COLUMNS,
   DW_USER_CONFIRMATION_CODE_COLUMNS,
   DW_USER_ON_CASE_COLUMNS,
@@ -66,6 +70,7 @@ interface DatabaseSchemaType {
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
+  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwPractitioner: DatabaseTableMetadata<PractitionerTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
@@ -115,6 +120,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMessage: {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
+  },
+  dwMinuteSheet: {
+    table: DEFAULT as MinuteSheetTable,
+    columns: DW_MINUTE_SHEET_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,
