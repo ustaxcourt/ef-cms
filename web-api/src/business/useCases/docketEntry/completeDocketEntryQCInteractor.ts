@@ -102,6 +102,8 @@ const completeDocketEntryQC = async (
     serviceDate: entryMetadata.serviceDate,
   };
 
+  console.log('fixTheThing editableFields', editableFields);
+
   const updatedDocketEntry = new DocketEntry(
     {
       ...currentDocketEntry,
@@ -332,6 +334,12 @@ const completeDocketEntryQC = async (
       paperServiceDocumentTitle = noticeUpdatedDocketEntry.documentTitle;
     }
   }
+
+  caseEntity.docketEntries.forEach(d => {
+    if (d.eventCode == 'EXH') {
+      console.log('Update case and assoociations docket entry', d);
+    }
+  });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,

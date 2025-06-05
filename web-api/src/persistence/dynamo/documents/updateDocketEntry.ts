@@ -1,7 +1,7 @@
 import { omit } from 'lodash';
 import { put } from '../../dynamodbClientService';
 
-export const updateDocketEntry = ({
+export const updateDocketEntry = async ({
   applicationContext,
   docketEntryId,
   docketNumber,
@@ -11,8 +11,13 @@ export const updateDocketEntry = ({
   docketEntryId: string;
   docketNumber: string;
   document: any;
-}) =>
-  put({
+}) => {
+  if (document.eventCode == 'EXH') {
+    console.log('updateDocketEntry docket entry', document);
+    console.trace();
+  }
+
+  await put({
     Item: {
       pk: `case|${docketNumber}`,
       sk: `docket-entry|${docketEntryId}`,
@@ -20,3 +25,4 @@ export const updateDocketEntry = ({
     },
     applicationContext,
   });
+};
