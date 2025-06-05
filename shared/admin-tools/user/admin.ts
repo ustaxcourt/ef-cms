@@ -11,7 +11,6 @@ import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getClientId, getUserPoolId, requireEnvVars } from '../util';
 import { createUserRecord } from '@web-api/persistence/postgres/users/createUserRecord';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
 
 const { USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
@@ -93,10 +92,12 @@ export async function createOrUpdateUser(
       ? process.env.USER_POOL_IRS_ID
       : applicationContext.environment.userPoolId;
 
-  const userExists = await getUserByEmail(applicationContext, {
-    email: user.email!,
-    poolId: userPoolId,
-  });
+  const userExists = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, {
+      email: user.email!,
+      poolId: userPoolId,
+    });
 
   const userId = userExists?.userId || applicationContext.getUniqueId();
 

@@ -1,12 +1,9 @@
 import { ROLES, Role } from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '@web-api/applicationContext';
-import { createUser } from '@web-api/gateways/user/createUser';
-import { updateUser } from '@web-api/gateways/user/updateUser';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { createUserRecord } from '../users/createUserRecord';
 import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 
 export const createOrUpdatePractitionerUser = async ({
   user,
@@ -29,12 +26,14 @@ export const createOrUpdatePractitionerUser = async ({
   const userEmail = user.email || user.pendingEmail;
 
   if (userEmail) {
-    const existingUser = await getUserByEmail(applicationContext, {
-      email: userEmail,
-    });
+    const existingUser = await applicationContext
+      .getUserGateway()
+      .getUserByEmail(applicationContext, {
+        email: userEmail,
+      });
 
     if (!existingUser) {
-      await createUser(applicationContext, {
+      await applicationContext.getUserGateway().createUser(applicationContext, {
         email: userEmail,
         name: user.name,
         role: user.role,
@@ -42,7 +41,7 @@ export const createOrUpdatePractitionerUser = async ({
         userId,
       });
     } else {
-      await updateUser(applicationContext, {
+      await applicationContext.getUserGateway().updateUser(applicationContext, {
         attributesToUpdate: {
           role: user.role,
         },

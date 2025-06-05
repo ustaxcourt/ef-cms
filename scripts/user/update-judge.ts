@@ -19,11 +19,9 @@ import {
 import { environment } from '@web-api/environment';
 import { getUserPoolId } from '../../shared/admin-tools/util';
 import { isEmpty } from 'lodash';
-import { getUserByEmail } from '@web-api/gateways/user/getUserByEmail';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateUser as updateUserFromPersistence } from '@web-api/persistence/postgres/users/updateUser';
 import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
-import { updateUser } from '@web-api/gateways/user/updateUser';
 
 /**
  * This script will update the judge user in a deployed environment.
@@ -115,7 +113,7 @@ const updateCognitoRecord = async ({
   }
   if (!isEmpty(cognitoAttributesToUpdate)) {
     console.log('Updating the user Cognito record ...');
-    await updateUser(applicationContext, {
+    await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: cognitoAttributesToUpdate,
       email: currentEmail,
       poolId: userPoolId,
@@ -255,10 +253,12 @@ const updatePostgresChambersRecords = async ({
   environment.userPoolId = userPoolId;
 
   console.log('Getting the Cognito record for the user ...');
-  const existingCognitoRecord = await getUserByEmail(applicationContext, {
-    email: currentEmail,
-    poolId: userPoolId,
-  });
+  const existingCognitoRecord = await applicationContext
+    .getUserGateway()
+    .getUserByEmail(applicationContext, {
+      email: currentEmail,
+      poolId: userPoolId,
+    });
 
   if (!existingCognitoRecord) {
     throw new Error(`Cannot find user with email ${currentEmail}`);

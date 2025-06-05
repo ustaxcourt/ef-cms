@@ -1,6 +1,5 @@
 import { Role } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { createUser } from '@web-api/gateways/user/createUser';
 
 export async function createUserLocal(
   applicationContext: ServerApplicationContext,
@@ -22,7 +21,7 @@ export async function createUserLocal(
     sendWelcomeEmail: boolean;
   },
 ): Promise<void> {
-  await createUser(applicationContext, {
+  await applicationContext.getUserGateway().createUser(applicationContext, {
     email,
     name,
     poolId,
