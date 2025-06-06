@@ -30,7 +30,7 @@ export const getScannerInterface = () => {
     if (!dynamsoftLoader) {
       // eslint-disable-next-line no-async-promise-executor
       dynamsoftLoader = new Promise(async resolve => {
-        await import('dwt');
+        await applicationContext.loadDWTLibrary();
         const { Dynamsoft } = window;
         Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@latest/dist";
         Dynamsoft.DWT.ProductKey = applicationContext.getConstants().DYNAMSOFT_PRODUCT_KEYS;

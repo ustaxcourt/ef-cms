@@ -59,7 +59,9 @@ describe('getScannerInterface', () => {
         EnumDWT_CapSupportedSizes: { TWSS_A4: 1 },
         EnumDWT_ImageType: { IT_PNG: 1 },
         EnumDWT_PixelType: { TWPT_RGB: 1 },
-        GetWebTwain: () => DWObject,
+        CreateDWTObject: (_, cb) => {
+          cb(DWObject)
+        },
       },
     };
 
@@ -270,7 +272,6 @@ describe('getScannerInterface', () => {
 
   it('should attempt to load the dynamsoft libraries', async () => {
     delete global.window.document;
-    let calls = 0;
     global.window.document = {
       addEventListener: () => null,
       createElement: () => ({
@@ -283,7 +284,6 @@ describe('getScannerInterface', () => {
         setAttribute: () => null,
       }),
       getElementsByTagName: () => {
-        calls++;
         return [
           {
             appendChild: script => {
@@ -304,6 +304,5 @@ describe('getScannerInterface', () => {
       applicationContext,
     });
     expect(script).toEqual('dynam-scanner-injection');
-    expect(calls).toEqual(2);
   });
 });
