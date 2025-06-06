@@ -3,15 +3,14 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
-	'@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock',
+  '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock',
 );
 jest.mock(
-	'@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 jest.mock(
-	'@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-jest.mock('@web-api/persistence/dynamo/locks/acquireLock');
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
