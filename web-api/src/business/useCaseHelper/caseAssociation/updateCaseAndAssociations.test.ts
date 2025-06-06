@@ -171,7 +171,7 @@ describe('updateCaseAndAssociations', () => {
     ).not.toHaveBeenCalled();
 
     // updateCaseWorkItems
-    expect(upsertWorkItems).not.toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalledWith({ workItems: [] });
 
     // updateUserCaseMappings
     expect(
@@ -179,7 +179,7 @@ describe('updateCaseAndAssociations', () => {
     ).not.toHaveBeenCalled();
 
     // updateCaseDeadlines
-    expect(upsertCaseDeadlines).not.toHaveBeenCalled();
+    expect(upsertCaseDeadlines).toHaveBeenCalledWith([]);
 
     // update the case itself, final persistence call
     expect(upsertCases).not.toHaveBeenCalled();

@@ -182,7 +182,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(upsertWorkItems).not.toHaveBeenCalled();
+    expect(upsertWorkItems).toHaveBeenCalledWith({ workItems: [] });
   });
 
   it('should fail if the primary or secondary contact is empty', async () => {
