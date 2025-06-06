@@ -131,6 +131,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 
+Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
+
 ### ws, 3rd party dependency of Cerebral
 
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
