@@ -7,7 +7,7 @@ import { applicationContext } from '@web-api/applicationContext';
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { getLogger } from 'aws-xray-sdk';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { flattenDeep, isArray } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
@@ -85,9 +85,12 @@ export const indexOpenSearchCase = async ({
   });
 
   if (failedRecords.length > 0) {
-    getLogger().error('the case or docket entry records that failed to index', {
-      failedRecords,
-    });
+    getDawsonLogger().error(
+      'the case or docket entry records that failed to index',
+      {
+        failedRecords,
+      },
+    );
     throw new Error('failed to index case entry or docket entry records');
   }
 };

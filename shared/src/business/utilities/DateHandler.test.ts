@@ -1,5 +1,6 @@
 /* eslint-disable max-lines */
 /* eslint-disable custom-rules-plugin/no-new-dates*/
+/* eslint-disable max-lines */
 import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
@@ -71,6 +72,26 @@ describe('DateHandler', () => {
       const inputTimeInEst = '14:00'; //2:00 pm
 
       const outputString = '2021-11-11T19:00:00.000Z';
+
+      const result = combineISOandEasternTime(inputISO, inputTimeInEst);
+      expect(result).toEqual(outputString);
+    });
+
+    it('should combine ISO datestamp and a string representing hours and minutes in Eastern time when the time is in the morning', () => {
+      const inputISO = '2021-11-11T05:00:00.000Z';
+      const inputTimeInEst = '09:00'; // 9:00 am
+
+      const outputString = '2021-11-11T14:00:00.000Z';
+
+      const result = combineISOandEasternTime(inputISO, inputTimeInEst);
+      expect(result).toEqual(outputString);
+    });
+
+    it('should combine ISO datestamp and a string representing hours and minutes in Eastern time when the input ISO is not midnight Eastern', () => {
+      const inputISO = '2021-11-11T15:30:00.000Z'; // 10:30am Eastern
+      const inputTimeInEst = '16:00'; // 4:00 pm
+
+      const outputString = '2021-11-11T21:00:00.000Z';
 
       const result = combineISOandEasternTime(inputISO, inputTimeInEst);
       expect(result).toEqual(outputString);

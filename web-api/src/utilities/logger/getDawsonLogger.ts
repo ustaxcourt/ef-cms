@@ -4,7 +4,7 @@ import type { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUse
 
 let loggerCache: LoggerType;
 
-export const getLogger = (): LoggerType => {
+export const getDawsonLogger = (): LoggerType => {
   if (!loggerCache) {
     const logger = createLogger();
     loggerCache = {

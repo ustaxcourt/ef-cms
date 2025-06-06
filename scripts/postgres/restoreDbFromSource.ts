@@ -12,6 +12,7 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { Signer } from '@aws-sdk/rds-signer';
 import { spawn } from 'child_process';
+import { sanitizeDumpFile } from 'scripts/emailReplacer';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -25,67 +26,77 @@ const scriptConfig: ScriptConfig = {
 };
 
 async function main() {
-  const { sourceEnv, targetAccountId, targetEnv } = parseArgsAndEnvVars(
-    scriptConfig,
-  ) as { sourceEnv: string; targetAccountId: string; targetEnv: string };
-  const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/restore_role_${targetEnv}`;
+  try {
+    const { sourceEnv, targetAccountId, targetEnv } = parseArgsAndEnvVars(
+      scriptConfig,
+    ) as { sourceEnv: string; targetAccountId: string; targetEnv: string };
+    const targetRoleArn = `arn:aws:iam::${targetAccountId}:role/restore_role_${targetEnv}`;
 
-  const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
-    await getTargetAccountCredentials({ targetRoleArn });
+    const { targetAccessKeyId, targetSecretAccessKey, targetSessionToken } =
+      await getTargetAccountCredentials({ targetRoleArn });
 
-  const sourceRdsClient = new RDSClient({ region: 'us-east-1' });
-  const targetRdsClient = new RDSClient({
-    credentials: {
-      accessKeyId: targetAccessKeyId,
-      accountId: targetAccountId,
-      secretAccessKey: targetSecretAccessKey,
-      sessionToken: targetSessionToken,
-    },
-    region: 'us-east-1',
-  });
+    const sourceRdsClient = new RDSClient({ region: 'us-east-1' });
+    const targetRdsClient = new RDSClient({
+      credentials: {
+        accessKeyId: targetAccessKeyId,
+        accountId: targetAccountId,
+        secretAccessKey: targetSecretAccessKey,
+        sessionToken: targetSessionToken,
+      },
+      region: 'us-east-1',
+    });
 
-  const {
-    dbName: sourceDbname,
-    host: sourceHost,
-    port: sourcePort,
-    username: sourceUsername,
-  } = await describeRDSInstance({
-    environment: sourceEnv,
-    rdsClient: sourceRdsClient,
-    useWriter: false,
-  });
+    const {
+      dbName: sourceDbname,
+      host: sourceHost,
+      port: sourcePort,
+      username: sourceUsername,
+    } = await describeRDSInstance({
+      environment: sourceEnv,
+      rdsClient: sourceRdsClient,
+      useWriter: false,
+    });
 
-  const {
-    dbName: targetDbname,
-    host: targetHost,
-    port: targetPort,
-    username: targetUsername,
-  } = await describeRDSInstance({
-    environment: targetEnv,
-    rdsClient: targetRdsClient,
-    useWriter: true,
-  });
+    const {
+      dbName: targetDbname,
+      host: targetHost,
+      port: targetPort,
+      username: targetUsername,
+    } = await describeRDSInstance({
+      environment: targetEnv,
+      rdsClient: targetRdsClient,
+      useWriter: true,
+    });
 
-  const backUpFileName = 'dawson.dump';
-  await createDbBackup({
-    backUpFileName,
-    dbName: sourceDbname,
-    host: sourceHost,
-    port: sourcePort,
-    username: sourceUsername,
-  });
+    const backUpFileName = 'dawson-dump.sql';
+    await createDbBackup({
+      backUpFileName,
+      dbName: sourceDbname,
+      host: sourceHost,
+      port: sourcePort,
+      username: sourceUsername,
+    });
 
-  await restoreFromBackup({
-    backUpFileName,
-    dbName: targetDbname,
-    host: targetHost,
-    port: targetPort,
-    targetAccessKeyId,
-    targetAccountId,
-    targetSecretAccessKey,
-    targetSessionToken,
-    username: targetUsername,
-  });
+    const sanitizedFileName = `sanitized-${backUpFileName}`;
+    await sanitizeDumpFile(backUpFileName, sanitizedFileName);
+
+    await restoreFromBackup({
+      backUpFileName: sanitizedFileName,
+      dbName: targetDbname,
+      host: targetHost,
+      port: targetPort,
+      targetAccessKeyId,
+      targetAccountId,
+      targetSecretAccessKey,
+      targetSessionToken,
+      username: targetUsername,
+    });
+
+    await removeBackupFiles({ backUpFileName, sanitizedFileName });
+  } catch (error) {
+    console.error('Fatal error running DB restoration:', error);
+    process.exit(1);
+  }
 }
 void main();
 
@@ -160,7 +171,6 @@ async function createDbBackup({
         `--port=${port}`,
         `--dbname=${dbName}`,
         `--file=${backUpFileName}`,
-        '--format=c',
         '--verbose',
       ],
       { env: { ...process.env, PGPASSWORD: sourcePassword }, stdio: 'pipe' },
@@ -223,8 +233,6 @@ async function restoreFromBackup({
   });
   const targetPassword = await targetSigner.getAuthToken();
 
-  // pg_restore --clean only drops tables that exist in the source dump, so we drop all target tables before calling pg_restore.
-  // We could drop the whole target db or the schema, but then we would have to deal with stricter permissions.
   await dropAllTargetTables({
     dbName,
     host,
@@ -233,19 +241,16 @@ async function restoreFromBackup({
     username,
   });
 
-  await new Promise(resolve => {
+  await new Promise((resolve, reject) => {
     const restoreDbResult = spawn(
-      'pg_restore',
+      'psql',
       [
         `--host=${host}`,
         `--username=${username}`,
         `--dbname=${dbName}`,
         `--port=${port}`,
-        '--format=c',
-        '--verbose',
-        '--no-privileges',
-        '--no-owner',
-        `${backUpFileName}`,
+        `--file=${backUpFileName}`,
+        '--echo-errors',
       ],
       {
         env: {
@@ -270,10 +275,11 @@ async function restoreFromBackup({
         console.log(
           `DB ${dbName} may have been restored with errors. Check output for errors. Exit code: ${code}`,
         );
+        reject(new Error(`DB restore failed with exit code: ${code}`));
       } else {
         console.log(`Successfully restored DB ${dbName}`);
+        resolve(undefined);
       }
-      resolve(undefined);
     });
   });
 }
@@ -318,7 +324,7 @@ async function dropAllTargetTables({
   dbName: string;
   targetPassword: string;
 }): Promise<void> {
-  await new Promise(resolve => {
+  await new Promise((resolve, reject) => {
     // For each table in the target db public schema, we will create a SQL DROP command and then execute it.
     const dropTableQuery = spawn(
       'psql',
@@ -362,9 +368,29 @@ async function dropAllTargetTables({
         console.log(
           `Attempted to drop all tables from DB ${dbName}. Check output for errors. Exit code: ${code}`,
         );
+        reject(new Error(`Failed to drop all tables from DB ${dbName}`));
       } else {
         console.log(`Successfully dropped all tables from DB ${dbName}.`);
+        resolve(undefined);
       }
+    });
+  });
+}
+
+function removeBackupFiles({
+  backUpFileName,
+  sanitizedFileName,
+}: {
+  backUpFileName: string;
+  sanitizedFileName: string;
+}) {
+  return new Promise(resolve => {
+    spawn('rm', ['-f', backUpFileName, sanitizedFileName], {
+      stdio: 'ignore',
+    }).on('close', () => {
+      console.log(
+        `Removed backup files ${backUpFileName} and ${sanitizedFileName}`,
+      );
       resolve(undefined);
     });
   });

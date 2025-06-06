@@ -4,7 +4,7 @@ jest.mock('./processPractitionerMappingEntries');
 jest.mock('./processRemoveEntries');
 jest.mock('./processOtherEntries');
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { partitionRecords } from './processStreamUtilities';
 import { processDocketEntries } from './processDocketEntries';
 import { processOtherEntries } from './processOtherEntries';
@@ -12,7 +12,7 @@ import { processPractitionerMappingEntries } from './processPractitionerMappingE
 import { processRemoveEntries } from './processRemoveEntries';
 import { processStreamRecordsInteractor } from './processStreamRecordsInteractor';
 
-const logger = getLogger();
+const logger = getDawsonLogger();
 const errorSpy = jest.spyOn(logger, 'error');
 
 describe('processStreamRecordsInteractor', () => {

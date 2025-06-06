@@ -6,7 +6,7 @@ import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstan
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserCase } from '@shared/business/entities/UserCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 /**
  * associatePrivatePractitionerToCase
@@ -55,7 +55,7 @@ export const associatePrivatePractitionerToCase = async ({
 
   if (isAssociated) {
     if (!isPrivatePractitionerOnCase) {
-      getLogger().error(
+      getDawsonLogger().error(
         `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
       );
     }
