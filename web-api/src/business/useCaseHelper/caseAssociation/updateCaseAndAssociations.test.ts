@@ -171,7 +171,7 @@ describe('updateCaseAndAssociations', () => {
     ).not.toHaveBeenCalled();
 
     // updateCaseWorkItems
-    expect(upsertWorkItems).toHaveBeenCalledWith({ workItems: [] });
+    expect(upsertWorkItems).not.toHaveBeenCalled();
 
     // updateUserCaseMappings
     expect(
@@ -179,7 +179,7 @@ describe('updateCaseAndAssociations', () => {
     ).not.toHaveBeenCalled();
 
     // updateCaseDeadlines
-    expect(upsertCaseDeadlines).toHaveBeenCalledWith([]);
+    expect(upsertCaseDeadlines).not.toHaveBeenCalled();
 
     // update the case itself, final persistence call
     expect(upsertCases).not.toHaveBeenCalled();
@@ -320,7 +320,7 @@ describe('updateCaseAndAssociations', () => {
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
-      expect(upsertWorkItems).not.toHaveBeenCalled();
+      expect(upsertWorkItems).toHaveBeenCalledWith({ workItems: [] });
     });
 
     it('the associated judge has been updated', async () => {
@@ -713,7 +713,7 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate: updatedCase,
       });
       expect(getCaseDeadlinesByDocketNumber).not.toHaveBeenCalled();
-      expect(upsertCaseDeadlines).not.toHaveBeenCalled();
+      expect(upsertCaseDeadlines).toHaveBeenCalledWith([]);
     });
 
     it('should fetch and persist case deadline data when associated judge has changed', async () => {
