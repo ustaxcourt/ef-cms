@@ -1,15 +1,16 @@
+jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getcreateCaseDeadlineLockInfo } from '@web-api/business/useCases/caseDeadline/createCaseDeadlineInteractor';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('createCaseDeadlineInteractor - getcreateCaseDeadlineLockInfo', () => {
+  const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+
   it('should return the case entity lock info when there is no consolidated group', async () => {
     const TEST_DOCKET_NUMBER = 'TEST_DOCKET_NUMBER';
 
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       docketNumber: TEST_DOCKET_NUMBER,
       leadDocketNumber: undefined,
       consolidatedCases: [
@@ -17,7 +18,7 @@ describe('createCaseDeadlineInteractor - getcreateCaseDeadlineLockInfo', () => {
         { docketNumber: '111-11' },
         { docketNumber: '222-22' },
       ],
-    });
+    } as RawCase);
 
     const lockInfo = await getcreateCaseDeadlineLockInfo(applicationContext, {
       caseDeadline: {
@@ -32,10 +33,7 @@ describe('createCaseDeadlineInteractor - getcreateCaseDeadlineLockInfo', () => {
   it('should return all the cases entity lock info when there is a consolidated group', async () => {
     const TEST_DOCKET_NUMBER = 'TEST_DOCKET_NUMBER';
 
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       docketNumber: TEST_DOCKET_NUMBER,
       leadDocketNumber: TEST_DOCKET_NUMBER,
       consolidatedCases: [
@@ -43,7 +41,7 @@ describe('createCaseDeadlineInteractor - getcreateCaseDeadlineLockInfo', () => {
         { docketNumber: '111-11' },
         { docketNumber: '222-22' },
       ],
-    });
+    } as RawCase);
 
     const lockInfo = await getcreateCaseDeadlineLockInfo(applicationContext, {
       caseDeadline: {

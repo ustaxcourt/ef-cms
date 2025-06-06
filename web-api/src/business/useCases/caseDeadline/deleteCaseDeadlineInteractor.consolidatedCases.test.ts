@@ -5,6 +5,10 @@ jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
 );
 jest.mock('@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline');
+jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
+jest.mock(
+  '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock',
+);
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { deleteCaseDeadline } from '@web-api/business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
@@ -12,15 +16,27 @@ import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConso
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { deleteCaseDeadline as deleteDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 
 const getCaseDeadlinesByConsolidatedCaseDeadlineId =
   getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
 
 const deleteDeadline = deleteDeadlineMock as jest.Mock;
 
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+const updateCaseAutomaticBlock = jest.mocked(updateCaseAutomaticBlockMock);
+
 describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
   const TEST_DEADLINE_ID = getUniqueId();
   const TEST_DOCKET_NUMBER = '101-25';
+
+  beforeEach(() => {
+    updateCaseAutomaticBlock.mockImplementation(
+      // eslint-disable-next-line @typescript-eslint/require-await
+      async params => params.caseEntity,
+    );
+  });
 
   it('should only delete one deadline when the case is not the lead case of the Consolidated Group', async () => {
     const CONSOLIDATED_CASE_DEADLINE_IDS = [
@@ -38,10 +54,7 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       }),
     );
 
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       docketNumber: TEST_DOCKET_NUMBER,
       leadDocketNumber: undefined,
@@ -79,10 +92,7 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       }),
     );
 
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       docketNumber: TEST_DOCKET_NUMBER,
       leadDocketNumber: TEST_DOCKET_NUMBER,
@@ -129,10 +139,7 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       }),
     );
 
-    (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       docketNumber: TEST_DOCKET_NUMBER,
       leadDocketNumber: TEST_DOCKET_NUMBER,

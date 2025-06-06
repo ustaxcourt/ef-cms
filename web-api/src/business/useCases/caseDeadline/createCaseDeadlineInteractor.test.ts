@@ -29,9 +29,9 @@ import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('createCaseDeadlineInteractor', () => {
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
-const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
@@ -93,7 +93,9 @@ const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
     expect(caseDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
     expect(caseDeadline.associatedJudgeId).toEqual(undefined); // judge is not set on the mock case, so judgeId is not set
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
@@ -118,7 +120,9 @@ const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
       'dabbad02-18d0-43ec-bafb-654e83405416',
     );
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
@@ -143,11 +147,7 @@ const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    const getCaseByDocketNumberCalls = (
-      applicationContext.getPersistenceGateway()
-        .getCaseByDocketNumber as jest.Mock
-    ).mock.calls;
-
+    const getCaseByDocketNumberCalls = getCaseByDocketNumber.mock.calls;
     expect(getCaseByDocketNumberCalls.length).toEqual(1);
   });
 
