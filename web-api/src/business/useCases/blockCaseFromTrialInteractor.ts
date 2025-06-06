@@ -32,7 +32,6 @@ export const blockCaseFromTrial = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -47,7 +46,6 @@ export const blockCaseFromTrial = async (
   });
 
   const updatedCase = await updateCaseAndAssociations({
-    applicationContext,
     authorizedUser,
     caseToUpdate: caseEntity,
   });

@@ -10,6 +10,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * addConsolidatedCase
@@ -21,7 +22,7 @@ import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getCon
  * @returns {object} the updated case data
  */
 export const addConsolidatedCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     docketNumberToConsolidateWith,
@@ -33,7 +34,6 @@ export const addConsolidatedCase = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -42,7 +42,6 @@ export const addConsolidatedCase = async (
   }
 
   const caseToConsolidateWith = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: docketNumberToConsolidateWith,
   });
 
@@ -88,8 +87,7 @@ export const addConsolidatedCase = async (
     caseEntity.setLeadCase(newLeadCase.docketNumber);
 
     updateCasePromises.push(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       }),

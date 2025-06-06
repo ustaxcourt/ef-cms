@@ -28,6 +28,7 @@ import {
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
@@ -216,8 +217,7 @@ export const serveThirtyDayNotice = async (
           authorizedUser,
         );
 
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       });

@@ -11,7 +11,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 export const deleteDeficiencyStatistic = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { docketNumber, statisticId }: { docketNumber: string; statisticId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -20,7 +20,6 @@ export const deleteDeficiencyStatistic = async (
   }
 
   const oldCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

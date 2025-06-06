@@ -25,6 +25,7 @@ import {
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -53,7 +54,6 @@ export const editPaperFiling = async (
   }
 
   const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
-    applicationContext,
     authorizedUser,
     docketEntryId: request.docketEntryId,
     docketNumber: request.documentMetadata.docketNumber,
@@ -132,8 +132,7 @@ const saveForLaterStrategy = async ({
     user,
   });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
@@ -470,12 +469,10 @@ const updateAndSaveWorkItem = async ({
 };
 
 const getDocketEntryToEdit = async ({
-  applicationContext,
   authorizedUser,
   docketEntryId,
   docketNumber,
 }: {
-  applicationContext: ServerApplicationContext;
   docketNumber: string;
   docketEntryId: string;
   authorizedUser: AuthUser;
@@ -484,7 +481,6 @@ const getDocketEntryToEdit = async ({
   docketEntryEntity: DocketEntry;
 }> => {
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

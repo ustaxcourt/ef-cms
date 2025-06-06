@@ -13,6 +13,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * updateCaseDetails
@@ -46,7 +47,6 @@ export const updateCaseDetails = async (
   };
 
   const oldCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -131,10 +131,7 @@ export const updateCaseDetails = async (
     }
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
+  const updatedCase = await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: newCaseEntity,
     });

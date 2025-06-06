@@ -8,6 +8,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * removePdfFromDocketEntry
@@ -27,7 +28,6 @@ export const removePdfFromDocketEntry = async (
   }
 
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -46,13 +46,10 @@ export const removePdfFromDocketEntry = async (
     docketEntry.isFileAttached = false;
     caseEntity.updateDocketEntry(docketEntry);
 
-    const updatedCase = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser,
-        caseToUpdate: caseEntity,
-      });
+    const updatedCase = await updateCaseAndAssociations({
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
 
     return new Case(updatedCase, { authorizedUser }).toRawObject();
   }

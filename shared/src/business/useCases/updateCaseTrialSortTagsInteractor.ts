@@ -21,7 +21,6 @@ export const updateCaseTrialSortTagsInteractor = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

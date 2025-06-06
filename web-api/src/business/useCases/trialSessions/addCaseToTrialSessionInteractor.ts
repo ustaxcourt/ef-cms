@@ -11,6 +11,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * addCaseToTrialSession
@@ -52,7 +53,6 @@ export const addCaseToTrialSession = async (
   }
 
   const caseDetails = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -88,13 +88,10 @@ export const addCaseToTrialSession = async (
     });
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,

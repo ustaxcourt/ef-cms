@@ -33,6 +33,7 @@ import { random, remove } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -476,7 +477,6 @@ export const serveCaseToIrs = async (
     }
 
     const caseToBatch = await getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
     });
 
@@ -636,8 +636,7 @@ export const serveCaseToIrs = async (
       userServingPetition: authorizedUser,
     });
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });

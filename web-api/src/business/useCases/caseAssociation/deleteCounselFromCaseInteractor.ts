@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const deleteCounselFromCase = async (
   applicationContext: ServerApplicationContext,
@@ -23,7 +24,6 @@ export const deleteCounselFromCase = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -54,8 +54,7 @@ export const deleteCounselFromCase = async (
     userId,
   });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity.validate().toRawObject(),
   });

@@ -8,6 +8,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * removeCasePendingItem
@@ -27,7 +28,6 @@ export const removeCasePendingItem = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -48,8 +48,7 @@ export const removeCasePendingItem = async (
       caseEntity: updatedCaseEntity,
     });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: updatedCaseEntity,
   });

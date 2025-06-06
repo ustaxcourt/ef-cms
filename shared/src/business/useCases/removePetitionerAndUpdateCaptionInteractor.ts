@@ -9,6 +9,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * used to remove a petitioner from a case
@@ -37,7 +38,6 @@ export const removePetitionerAndUpdateCaption = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -78,13 +78,10 @@ export const removePetitionerAndUpdateCaption = async (
 
   caseEntity.caseCaption = caseCaption;
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

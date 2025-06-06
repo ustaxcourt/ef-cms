@@ -46,7 +46,6 @@ export const serveCourtIssuedDocument = async (
   }
 
   const subjectCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectCaseDocketNumber,
   });
 

@@ -15,6 +15,7 @@ import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -29,7 +30,6 @@ export const updateDocketEntryMeta = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -180,13 +180,10 @@ export const updateDocketEntryMeta = async (
     caseEntity.updateDocketEntry(docketEntryEntity);
   }
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };

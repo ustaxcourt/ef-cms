@@ -8,6 +8,7 @@ import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const checkForReadyForTrialCasesInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -24,8 +25,7 @@ export const checkForReadyForTrialCasesInteractor = async (
   const updateForTrial = async entity => {
     // assuming we want these done serially; if first fails, promise is rejected and error thrown
     const caseEntity = entity.validate();
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser: undefined,
       caseToUpdate: caseEntity,
     });

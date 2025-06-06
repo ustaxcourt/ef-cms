@@ -11,6 +11,7 @@ import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postg
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const deleteCaseDeadline = async (
   applicationContext: ServerApplicationContext,
@@ -25,7 +26,6 @@ export const deleteCaseDeadline = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -47,13 +47,10 @@ export const deleteCaseDeadline = async (
     hasCaseDeadline: deadlinesBeforeDelete.length > 1,
   });
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: updatedCase,
-    });
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: updatedCase,
+  });
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 

@@ -23,6 +23,7 @@ import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messag
 import { orderBy, some } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -43,7 +44,6 @@ export const fileCourtIssuedOrder = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
@@ -115,8 +115,7 @@ export const fileCourtIssuedOrder = async (
 
   caseEntity.addDocketEntry(docketEntryEntity);
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

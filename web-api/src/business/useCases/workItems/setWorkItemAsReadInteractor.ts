@@ -37,7 +37,6 @@ export const setWorkItemAsReadInteractor = async (
   const { docketEntryId } = workItemRecord.docketEntry;
 
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

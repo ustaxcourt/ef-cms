@@ -23,6 +23,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * updateContact
@@ -58,7 +59,6 @@ export const updateContact = async (
   };
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -236,8 +236,7 @@ export const updateContact = async (
   const shouldUpdateCase = !isEmpty(contactDiff) || documentType;
 
   if (shouldUpdateCase) {
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });

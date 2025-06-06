@@ -49,7 +49,6 @@ export const serveExternallyFiledDocument = async (
   }
 
   const subjectCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectCaseDocketNumber,
   });
 

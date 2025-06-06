@@ -11,6 +11,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * removeConsolidatedCases
@@ -22,7 +23,7 @@ import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getCon
  * @returns {object} the updated case data
  */
 const removeConsolidatedCases = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     docketNumbersToRemove,
@@ -34,7 +35,6 @@ const removeConsolidatedCases = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -68,8 +68,7 @@ const removeConsolidatedCases = async (
       caseEntity.setLeadCase(newLeadCase.docketNumber);
 
       updateCasePromises.push(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
+        updateCaseAndAssociations({
           authorizedUser,
           caseToUpdate: caseEntity,
         }),
@@ -83,8 +82,7 @@ const removeConsolidatedCases = async (
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       }),
@@ -103,8 +101,7 @@ const removeConsolidatedCases = async (
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       }),

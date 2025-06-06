@@ -12,6 +12,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -61,7 +62,6 @@ export const removeCaseFromTrial = async (
   });
 
   const myCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -97,13 +97,10 @@ export const removeCaseFromTrial = async (
     caseEntity.removeFromHearing(trialSessionId);
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

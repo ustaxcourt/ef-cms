@@ -9,9 +9,10 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { deleteWorkItem } from '@web-api/persistence/postgres/workitems/deleteWorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const archiveDraftDocument = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,
@@ -23,7 +24,6 @@ export const archiveDraftDocument = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -43,13 +43,10 @@ export const archiveDraftDocument = async (
     });
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

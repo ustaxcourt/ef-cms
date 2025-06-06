@@ -20,6 +20,7 @@ import {
   withLocking,
 } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -75,7 +76,9 @@ export const addPaperFiling = async (
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
-  const consolidatedGroupCases = await getCasesByDocketNumbers({docketNumbers: consolidatedGroupDocketNumbers})
+  const consolidatedGroupCases = await getCasesByDocketNumbers({
+    docketNumbers: consolidatedGroupDocketNumbers,
+  });
 
   for (const rawCase of consolidatedGroupCases) {
     let caseEntity = new Case(rawCase, { authorizedUser });
@@ -169,8 +172,7 @@ export const addPaperFiling = async (
 
     caseEntities.push(caseEntity);
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity.validate().toRawObject(),
     });

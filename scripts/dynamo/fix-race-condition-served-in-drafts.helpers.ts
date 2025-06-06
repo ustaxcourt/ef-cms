@@ -60,9 +60,8 @@ export const fixRaceConditionServedInDrafts = async (
   },
 ) => {
   const subjectCase = await getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+    docketNumber,
+  });
   const caseEntity = new Case(subjectCase, { authorizedUser: undefined });
 
   const servedParties = aggregatePartiesForService(caseEntity);

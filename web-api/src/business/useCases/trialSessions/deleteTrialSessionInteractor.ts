@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * deleteTrialSession
@@ -79,8 +80,7 @@ export const deleteTrialSessionInteractor = async (
           });
       }
 
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       });

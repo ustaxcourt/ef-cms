@@ -11,6 +11,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const updateCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -28,7 +29,6 @@ export const updateCourtIssuedDocketEntry = async (
   const { docketEntryId, docketNumber } = documentMeta;
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -93,8 +93,7 @@ export const updateCourtIssuedDocketEntry = async (
     upsertWorkItems({
       workItems: [rawValidWorkItem],
     }),
-    applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     }),

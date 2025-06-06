@@ -20,6 +20,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -38,7 +39,6 @@ export const fileExternalDocument = async (
   const workItems: WorkItem[] = [];
 
   const currentCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -201,8 +201,7 @@ export const fileExternalDocument = async (
           caseEntity,
         });
 
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
         includeCorrespondenceAndWorkItems: false,

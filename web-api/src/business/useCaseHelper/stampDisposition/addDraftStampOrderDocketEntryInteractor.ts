@@ -18,6 +18,7 @@ import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messag
 import { orderBy } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * addDraftStampOrderDocketEntryInteractor
@@ -57,7 +58,6 @@ export const addDraftStampOrderDocketEntry = async (
   }
 
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
   const caseEntity = new Case(caseRecord, { authorizedUser });
@@ -124,8 +124,7 @@ export const addDraftStampOrderDocketEntry = async (
     });
   }
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

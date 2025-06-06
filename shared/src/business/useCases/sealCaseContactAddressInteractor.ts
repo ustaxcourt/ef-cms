@@ -11,6 +11,7 @@ import {
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * sealCaseContactAddress
@@ -21,7 +22,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case data
  */
 export const sealCaseContactAddress = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { contactId, docketNumber },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -32,7 +33,6 @@ export const sealCaseContactAddress = async (
   }
 
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -51,13 +51,10 @@ export const sealCaseContactAddress = async (
 
   caseEntity.updatePetitioner({ updatedPetitioner: contactToSeal });
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).toRawObject();
 };

@@ -56,7 +56,6 @@ export const fileAndServeCourtIssuedDocument = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const subjectCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectCaseDocketNumber,
   });
 

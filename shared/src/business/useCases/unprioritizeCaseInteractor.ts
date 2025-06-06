@@ -31,7 +31,6 @@ export const unprioritizeCase = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -58,7 +57,6 @@ export const unprioritizeCase = async (
   }
 
   const updatedCase = await updateCaseAndAssociations({
-    applicationContext,
     authorizedUser,
     caseToUpdate: caseEntity,
   });

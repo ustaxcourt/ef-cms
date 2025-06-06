@@ -35,7 +35,6 @@ export const sealDocketEntryInteractor = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
