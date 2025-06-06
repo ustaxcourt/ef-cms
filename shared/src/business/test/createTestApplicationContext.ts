@@ -117,7 +117,7 @@ import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCor
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
 import pug from 'pug';
-import sass from 'sass';
+import * as sass from 'sass';
 
 const appContextProxy = (initial = {}, makeMock = true) => {
   const applicationContextHandler = {

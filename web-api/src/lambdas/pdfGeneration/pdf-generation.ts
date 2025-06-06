@@ -8,7 +8,7 @@ import {
 import { environment } from '@web-api/environment';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
 import { saveDocumentFromLambda } from '@web-api/persistence/s3/saveDocumentFromLambda';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export type PdfGenerationResult = {
   tempId: string;
@@ -34,14 +34,14 @@ export const handler = async (event: GeneratePdfRequest) => {
 
       return { tempId };
     } catch (e) {
-      getLogger().error(`retrying to generate pdf attempt #${index}`, e);
+      getDawsonLogger().error(`retrying to generate pdf attempt #${index}`, e);
       await sleep(50);
     }
   }
 
   const failedEventKey = `failed_pdf_event_${getUniqueId()}.json`;
   const errorMessage = `Error generating pdf. Storing failed pdf event in ${environment.tempDocumentsBucketName} at ${failedEventKey}`;
-  getLogger().error(errorMessage);
+  getDawsonLogger().error(errorMessage);
   await getStorageClient().putObject({
     Body: JSON.stringify(event),
     Key: failedEventKey,
