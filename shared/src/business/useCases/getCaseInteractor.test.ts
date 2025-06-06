@@ -50,7 +50,6 @@ describe('getCaseInteractor', () => {
     );
 
     expect(getCaseByDocketNumber.mock.calls[0][0]).toEqual({
-      applicationContext,
       docketNumber: '123-19',
       user: {
         email: 'mockPetitionsClerk@example.com',

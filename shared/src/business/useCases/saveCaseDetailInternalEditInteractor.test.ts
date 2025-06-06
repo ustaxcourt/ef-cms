@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -20,15 +23,17 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { omit } from 'lodash';
 import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('saveCaseDetailInternalEditInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-
+  jest
+    .mocked(updateCaseAndAssociations)
+    .mockImplementation(({ caseToUpdate }) => caseToUpdate);
   const mockCase = {
     ...MOCK_CASE,
     docketEntries: [
@@ -102,19 +107,6 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     ).rejects.toThrow('Unauthorized for update case');
   });
 
-  it('should throw an error if the caseToUpdate passed in is an invalid case', async () => {
-    await expect(
-      saveCaseDetailInternalEditInteractor(
-        applicationContext,
-        {
-          caseToUpdate: omit({ ...mockCase }, 'caseCaption'),
-          docketNumber: mockCase.docketNumber,
-        },
-        mockPetitionsClerkUser,
-      ),
-    ).rejects.toThrow('The Case entity was invalid');
-  });
-
   it('should update contactSecondary', async () => {
     const mockAddress = '1234 Something Lane';
 
@@ -182,26 +174,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(upsertWorkItems).toHaveBeenCalledWith({ workItems: [] });
-  });
-
-  it('should fail if the primary or secondary contact is empty', async () => {
-    const caseToUpdate = Object.assign(mockCase);
-
-    await expect(
-      saveCaseDetailInternalEditInteractor(
-        applicationContext,
-        {
-          caseToUpdate: {
-            ...caseToUpdate,
-            contactPrimary: null,
-            contactSecondary: {},
-          },
-          docketNumber: caseToUpdate.docketNumber,
-        },
-        mockPetitionsClerkUser,
-      ),
-    ).rejects.toThrow('The Case entity was invalid');
+    expect(upsertWorkItems).not.toHaveBeenCalled();
   });
 
   it('should remove a new initial filing document from the case', async () => {

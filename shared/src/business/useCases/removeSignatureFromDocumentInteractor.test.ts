@@ -1,4 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { MOCK_CASE } from '../../test/mockCase';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
