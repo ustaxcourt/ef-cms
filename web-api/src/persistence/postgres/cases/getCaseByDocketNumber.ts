@@ -1,5 +1,4 @@
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
@@ -9,13 +8,11 @@ import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workit
 import { WorkItem } from '@shared/business/entities/WorkItem';
 
 export const getCaseByDocketNumber = async ({
-  applicationContext: _applicationContext,
   docketNumber,
   includeConsolidatedCases = true,
   user = undefined, // Only needed to check permissions on sealed addresses for consolidated cases
 }: {
   docketNumber: string;
-  applicationContext: ServerApplicationContext;
   includeConsolidatedCases?: boolean;
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {

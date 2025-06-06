@@ -5,7 +5,7 @@ import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Message } from '@shared/business/entities/Message';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -20,16 +20,18 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import diff from 'diff-arrays-of-objects';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
+import { removeCaseFromHearing } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
+import { removeIrsPractitionerOnCase, removePrivatePractitionerOnCase } from '@web-api/persistence/dynamo/cases/removePractitionerOnCase';
+import { updateIrsPractitionerOnCase, updatePrivatePractitionerOnCase } from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
 
 // Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
 // In the future, it would be good to avoid doing so by leveraging SQL more effectively.
 export const updateCaseAndAssociations = async ({
-  applicationContext,
   authorizedUser,
   caseToUpdate,
   includeCorrespondenceAndWorkItems = true,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
   includeCorrespondenceAndWorkItems?: boolean;
@@ -42,7 +44,6 @@ export const updateCaseAndAssociations = async ({
       });
 
   const oldCaseEntity = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: caseToUpdate.docketNumber,
   });
 
@@ -95,13 +96,13 @@ export const updateCaseAndAssociations = async ({
           caseToUpdate: validNewRawCaseEntity,
           oldCase: validRawOldCaseEntity,
         })
-      : Promise.resolve([]),
+      : [],
     includeCorrespondenceAndWorkItems
       ? getCorrespondencesToUpdate({
           caseToUpdate: validNewRawCaseEntity,
           oldCase: validRawOldCaseEntity,
         })
-      : Promise.resolve([]),
+      : [],
   ]);
 
   // Persist primary case data first to ensure no errors
@@ -110,7 +111,7 @@ export const updateCaseAndAssociations = async ({
   // Then persist all related case data
   await settlePromises([
     ...docketEntries.map(doc =>
-      applicationContext.getPersistenceGateway().updateDocketEntry({
+      updateDocketEntry({
         applicationContext,
         docketEntryId: doc.docketEntryId,
         docketNumber: caseToUpdate.docketNumber,
@@ -120,21 +121,21 @@ export const updateCaseAndAssociations = async ({
     ...messages.map(message => updateMessage(message)),
     upsertCaseCorrespondences(correspondences),
     ...deletedHearings.map(({ trialSessionId }) =>
-      applicationContext.getPersistenceGateway().removeCaseFromHearing({
+      removeCaseFromHearing({
         applicationContext,
         docketNumber: caseToUpdate.docketNumber,
         trialSessionId,
       }),
     ),
     ...irsPractitionersToDelete.map(practitioner =>
-      applicationContext.getPersistenceGateway().removeIrsPractitionerOnCase({
+      removeIrsPractitionerOnCase({
         applicationContext,
         docketNumber: caseToUpdate.docketNumber,
         userId: practitioner.userId,
       }),
     ),
     ...irsPractitionersToUpdate.map(practitioner =>
-      applicationContext.getPersistenceGateway().updateIrsPractitionerOnCase({
+      updateIrsPractitionerOnCase({
         applicationContext,
         docketNumber: caseToUpdate.docketNumber,
         leadDocketNumber: caseToUpdate.leadDocketNumber,
@@ -143,18 +144,14 @@ export const updateCaseAndAssociations = async ({
       }),
     ),
     ...privatePractitionersToDelete.map(practitioner =>
-      applicationContext
-        .getPersistenceGateway()
-        .removePrivatePractitionerOnCase({
+      removePrivatePractitionerOnCase({
           applicationContext,
           docketNumber: caseToUpdate.docketNumber,
           userId: practitioner.userId,
         }),
     ),
     ...privatePractitionersToUpdate.map(practitioner =>
-      applicationContext
-        .getPersistenceGateway()
-        .updatePrivatePractitionerOnCase({
+      updatePrivatePractitionerOnCase({
           applicationContext,
           docketNumber: caseToUpdate.docketNumber,
           leadDocketNumber: caseToUpdate.leadDocketNumber,
