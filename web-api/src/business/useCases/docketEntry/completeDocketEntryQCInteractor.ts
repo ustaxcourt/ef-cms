@@ -28,8 +28,8 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,

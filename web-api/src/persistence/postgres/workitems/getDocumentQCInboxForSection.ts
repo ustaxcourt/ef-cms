@@ -1,38 +1,43 @@
-import { WorkItem } from '@shared/business/entities/WorkItem';
+import {
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
-import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getDocumentQCInboxForSection = async ({
-  judgeUserName,
+  judgeId,
   section,
 }: {
-  judgeUserName?: string;
-  section: string;
-}): Promise<WorkItem[] | undefined> => {
+  judgeId?: string | null;
+  section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
+}): Promise<WorkItemWithCaseInfo[]> => {
   const workItems = await getDbReader(reader => {
     let builder = reader
       .selectFrom('dwWorkItem as w')
       .where('w.section', '=', section)
       .where('w.completedAt', 'is', null)
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .orderBy('w.highPriority', 'desc')
       .limit(5000);
 
-    if (judgeUserName) {
-      builder = builder.where('w.associatedJudge', '=', judgeUserName);
+    if (judgeId) {
+      builder = builder.where('c.associatedJudgeId', '=', judgeId);
+    } else if (judgeId === null) {
+      builder = builder.where('c.associatedJudgeId', 'is', null);
     }
 
     return builder
       .selectAll('w')
       .select([
-        'c.caption',
         'c.status',
+        'c.caption',
+        'c.leadDocketNumber',
         'c.trialDate',
         'c.trialLocation',
-        'c.leadDocketNumber',
       ])
       .execute();
   });
 
-  return workItems.map(workItem => workItemEntity(workItem));
+  return workItems.map(toWorkItemWithCaseInfo);
 };

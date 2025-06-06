@@ -9,9 +9,8 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -73,11 +72,6 @@ export const removeCaseFromTrial = async (
       associatedJudgeId,
       changedBy: authorizedUser?.name,
       updatedCaseStatus: caseStatus,
-    });
-
-    await setPriorityOnAllWorkItems({
-      docketNumbers: [caseEntity.docketNumber],
-      highPriority: false,
     });
 
     await applicationContext

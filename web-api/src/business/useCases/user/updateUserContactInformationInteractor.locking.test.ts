@@ -1,4 +1,6 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -10,8 +12,13 @@ import {
 import { sleep } from '@shared/tools/helpers';
 import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+
+const tryGetLock = jest.mocked(tryGetLockMock);
+const releaseLock = jest.mocked(releaseLockMock);
 
 const contactInfo = {
   address1: '234 Main St',
@@ -95,8 +102,6 @@ describe('determineEntitiesToLock', () => {
 });
 
 describe('updateUserContactInformationInteractor', () => {
-  let mockLock;
-
   const mockRequest = {
     contactInfo: {
       ...MOCK_PRACTITIONER.contact,
@@ -107,15 +112,7 @@ describe('updateUserContactInformationInteractor', () => {
     clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
   };
 
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
-
   beforeEach(() => {
-    mockLock = undefined; // unlocked
-
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...MOCK_PRACTITIONER,
       entityName: 'Practitioner',
@@ -139,11 +136,9 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   describe('locked', () => {
-    beforeEach(() => {
-      mockLock = MOCK_LOCK;
-    });
-
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
+      tryGetLock.mockResolvedValueOnce(false);
+
       await expect(
         updateUserContactInformationInteractor(
           applicationContext,
@@ -159,39 +154,20 @@ describe('updateUserContactInformationInteractor', () => {
   });
 
   describe('not locked', () => {
-    beforeEach(() => {
-      mockLock = undefined;
-    });
-
-    it('should acquire a lock that lasts for 15 minutes', async () => {
+    it('should acquire and remove a lock', async () => {
       await updateUserContactInformationInteractor(
         applicationContext,
         mockRequest,
         MOCK_PRACTITIONER as UnknownAuthUser,
       );
 
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: `case|${MOCK_CASE.docketNumber}`,
-        ttl: 900,
-      });
-    });
-
-    it('should remove the lock', async () => {
-      await updateUserContactInformationInteractor(
-        applicationContext,
-        mockRequest,
-        MOCK_PRACTITIONER as UnknownAuthUser,
+      expect(tryGetLock.mock.calls[0][1]).toEqual(
+        hashLockId(`case|${MOCK_CASE.docketNumber}`),
       );
 
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      });
+      expect(releaseLock.mock.calls[0][1]).toEqual(
+        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      );
     });
   });
 });

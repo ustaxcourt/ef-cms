@@ -124,9 +124,6 @@ describe('getDocumentQCServedForSectionInteractor', () => {
           docketNumber: '101-18',
         },
       ]);
-
-      expect(result[0].docketEntry.createdAt).toBeUndefined();
-      expect(result[1].docketEntry.createdAt).toBeUndefined();
       expect(result.length).toEqual(2);
     });
 
@@ -160,8 +157,6 @@ describe('getDocumentQCServedForSectionInteractor', () => {
           section: DOCKET_SECTION,
         },
       ]);
-
-      expect(result[0].docketEntry.createdAt).toBeUndefined();
     });
   });
 

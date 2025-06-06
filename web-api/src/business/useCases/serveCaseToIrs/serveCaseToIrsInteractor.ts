@@ -31,8 +31,8 @@ import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
 import { random, remove } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {

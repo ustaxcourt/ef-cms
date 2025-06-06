@@ -14,7 +14,7 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { isEmpty } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * saveCaseDetailInternalEdit
@@ -146,17 +146,12 @@ export const saveCaseDetailInternalEdit = async (
 
     const initializeCaseWorkItem = petitionDocketEntry.workItem;
 
-    const workItemEntity = new WorkItem(
-      {
-        ...initializeCaseWorkItem,
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        caseIsInProgress: true,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
-      },
-      { caseEntity },
-    );
+    const workItemEntity = new WorkItem({
+      ...initializeCaseWorkItem,
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      inProgress: true,
+    });
 
     await upsertWorkItems({
       workItems: [workItemEntity.validate().toRawObject()],

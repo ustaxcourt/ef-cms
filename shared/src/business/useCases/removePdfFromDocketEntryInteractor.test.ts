@@ -1,9 +1,13 @@
 import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -13,7 +17,6 @@ import {
   PAYMENT_STATUS,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
@@ -30,6 +33,8 @@ describe('removePdfFromDocketEntryInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
 
   const MOCK_CASE: RawCase = {
     caseCaption: 'Caption',
@@ -86,8 +91,6 @@ describe('removePdfFromDocketEntryInteractor', () => {
     status: CASE_STATUS_TYPES.new,
   };
 
-  let mockLock;
-
   beforeAll(() => {
     applicationContext.getPersistenceGateway().deleteDocumentFile = jest.fn();
 
@@ -97,14 +100,6 @@ describe('removePdfFromDocketEntryInteractor', () => {
     });
 
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
-
-  beforeEach(() => {
-    mockLock = undefined;
   });
 
   it('should throw an error if the user is unauthorized to update a case', async () => {
@@ -202,7 +197,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
     expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLock.mockResolvedValueOnce(false);
 
     await expect(
       removePdfFromDocketEntryInteractor(
@@ -228,19 +223,12 @@ describe('removePdfFromDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
 
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
   });
 });

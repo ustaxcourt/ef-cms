@@ -6,11 +6,6 @@ import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
-import {
-  createLock,
-  getLock,
-  removeLock,
-} from './persistence/dynamo/locks/acquireLock';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
@@ -47,7 +42,6 @@ import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getC
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/postgres/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
-import { getDocketEntryOnCase } from './persistence/dynamo/cases/getDocketEntryOnCase';
 import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/dynamo/docketEntryWorksheet/getDocketEntryWorksheetsByDocketEntryIds';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
@@ -64,7 +58,6 @@ import { getReconciliationReport } from './persistence/elasticsearch/getReconcil
 import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getColdCases } from './persistence/elasticsearch/getColdCases';
-import { getStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/getStoredApplicationHealth';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
 import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
@@ -94,7 +87,6 @@ import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda'
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
 import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
 import { deleteChangeOfAddressCaseRecord } from './persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
-import { setStoredApplicationHealth } from '@web-api/persistence/dynamo/deployTable/setStoredApplicationHealth';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
@@ -196,7 +188,6 @@ const gatewayMethods = {
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
   createChangeOfAddressJob,
-  createLock,
   decrementJobCounter,
   deleteChangeOfAddressCaseRecord,
   deleteDocketEntry,
@@ -223,7 +214,6 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
-  getDocketEntryOnCase,
   getDocketEntryWorksheetsByDocketEntryIds,
   getDocketNumbersByUser,
   getDocument,
@@ -233,7 +223,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialSession,
   getFeatureFlagValue,
   getInternalUsers,
-  getLock,
   getMaintenanceMode,
   getPractitionerByBarNumber,
   getPractitionerDocumentByFileId,
@@ -243,7 +232,6 @@ const gatewayMethods = {
   getRequestResults,
   getSesStatus,
   getColdCases,
-  getStoredApplicationHealth,
   getTableStatus,
   getTrialSessionById,
   getTrialSessionJobStatusForCase,
@@ -262,10 +250,8 @@ const gatewayMethods = {
   isFileExists,
   refreshConfirmationCodeExpiration,
   removeIrsPractitionerOnCase,
-  removeLock,
   removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
-  setStoredApplicationHealth,
   uploadDocument,
   verifyCaseForUser,
   verifyPendingCaseForUser,
