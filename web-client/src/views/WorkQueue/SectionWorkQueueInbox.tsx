@@ -181,7 +181,11 @@ SectionWorkQueueTable.Row = React.memo(
           )}
           <td className="message-queue-row max-width-25">
             <div className="message-document-title">
-              <a className="case-link" href={item.editLink}>
+              <a
+                className="case-link"
+                data-testid="work-item-document-link"
+                href={item.editLink}
+              >
                 {item.docketEntry.descriptionDisplay}
               </a>
             </div>
