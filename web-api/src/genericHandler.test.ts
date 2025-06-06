@@ -1,4 +1,4 @@
-jest.mock('@web-api/utilities/logger/getLogger', () => {
+jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   const mockLogger = {
     addContext: jest.fn(),
     addUser: jest.fn(),
@@ -9,7 +9,7 @@ jest.mock('@web-api/utilities/logger/getLogger', () => {
     info: jest.fn(),
     warn: jest.fn(),
   };
-  return { getLogger: () => mockLogger };
+  return { getDawsonLogger: () => mockLogger };
 });
 jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
 jest.mock('@web-api/business/getEntityByName');
@@ -19,7 +19,7 @@ import {
   genericHandler,
 } from './genericHandler';
 import { getEntityByName as getEntityByNameMock } from '@web-api/business/getEntityByName';
-import { getLogger as getLoggerMock } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger as getLoggerMock } from '@web-api/utilities/logger/getDawsonLogger';
 import { getMaintenanceMode as getMaintenanceModeMock } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
 import {
   mockAdcUser,
