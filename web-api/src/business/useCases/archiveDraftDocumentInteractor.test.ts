@@ -60,9 +60,7 @@ describe('archiveDraftDocumentInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
     expect(
       caseToUpdate.archivedDocketEntries.find(
         d => d.docketEntryId === 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859',

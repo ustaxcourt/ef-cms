@@ -3,6 +3,9 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -38,9 +41,11 @@ import {
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('serveCaseToIrsInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const upsertCases = jest.mocked(upsertCasesMock);
   const clientConnectionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockParams = {
@@ -952,8 +957,8 @@ describe('serveCaseToIrsInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.petitioners[0].contactId,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0]
+        .contactId,
     ).toBe(MOCK_CASE.petitioners[0].contactId);
   });
 
@@ -1071,9 +1076,7 @@ describe('serveCaseToIrsInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(
       updatedCase.docketEntries.find(p => p.eventCode === 'P').servedAt,
     ).toBeDefined();
@@ -1137,9 +1140,7 @@ describe('serveCaseToIrsInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      upsertCases.mock.calls[0][0][0].docketEntries,
-    ).toMatchObject([
+    expect(upsertCases.mock.calls[0][0][0].docketEntries).toMatchObject([
       {
         documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
         index: 1,

@@ -4,7 +4,6 @@ import {
   PARTY_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getContactPrimary } from '@shared/business/entities/cases/Case';
@@ -78,7 +77,6 @@ describe('getPublicCaseInteractor', () => {
     });
 
     expect(getCaseByDocketNumber.mock.calls[0][0]).toEqual({
-      applicationContext,
       docketNumber: '123-19',
     });
   });
