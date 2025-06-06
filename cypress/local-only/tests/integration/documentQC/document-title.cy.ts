@@ -52,65 +52,47 @@ describe('Document title updates correctly', () => {
       cy.get('[data-testid="add-to-coversheet-primary-document-form"]').click({
         force: true,
       });
-      // cy.get('[data-testid="save-and-finish-document-qc"]').click();
-      // viewMyOutbox();
-      // cy.contains(`Exhibit(s) ${additionalInfo}`).should('exist');
+      cy.get('[data-testid="save-and-finish-document-qc"]').click();
+      viewMyOutbox();
+      cy.contains(`Exhibit(s) ${additionalInfo}`).should('exist');
 
-      // loginAsPrivatePractitioner();
-      // cy.visit(`/case-detail/${docketNumber}`);
-      // cy.get('[data-testid="button-file-document"]').click();
-      // cy.get('[data-testid="ready-to-file"]').click();
-      // selectTypeaheadInput(
-      //   'complete-doc-document-type-search',
-      //   'Amendment [anything]',
-      // );
-      // cy.get('[data-testid="previous-document-search"]').select('Exhibit(s)');
-      // cy.get('[data-testid="ordinal-field-select-search"]').select('15');
+      loginAsPrivatePractitioner();
+      cy.visit(`/case-detail/${docketNumber}`);
+      cy.get('[data-testid="button-file-document"]').click();
+      cy.get('[data-testid="ready-to-file"]').click();
+      selectTypeaheadInput(
+        'complete-doc-document-type-search',
+        'Amendment [anything]',
+      );
+      cy.get('[data-testid="previous-document-search"]').select('Exhibit(s)');
+      cy.get('[data-testid="ordinal-field-select-search"]').select('15');
 
-      // cy.get('[data-testid="submit-document"]').click();
-      // attachFile({
-      //   filePath: '../../helpers/file/sample.pdf',
-      //   selector: '[data-testid="primary-document"]',
-      //   selectorToAwaitOnSuccess:
-      //     '[data-testid="upload-file-success-primary-document"]',
-      // });
-      // cy.get(
-      //   `[data-testid="filingParty-${primaryFilerName}, Petitioner"]`,
-      // ).click({ force: true });
-      // cy.get('[data-testid="file-document-submit-document"]').click();
-      // cy.get('[data-testid="redaction-acknowledgement-label"]').click();
-      // cy.get('[data-testid="file-document-review-submit-document"]').click();
-      // cy.get('[data-testid="loading-overlay"]').should('not.exist');
+      cy.get('[data-testid="submit-document"]').click();
+      attachFile({
+        filePath: '../../helpers/file/sample.pdf',
+        selector: '[data-testid="primary-document"]',
+        selectorToAwaitOnSuccess:
+          '[data-testid="upload-file-success-primary-document"]',
+      });
+      cy.get(
+        `[data-testid="filingParty-${primaryFilerName}, Petitioner"]`,
+      ).click({ force: true });
+      cy.get('[data-testid="file-document-submit-document"]').click();
+      cy.get('[data-testid="redaction-acknowledgement-label"]').click();
+      cy.get('[data-testid="file-document-review-submit-document"]').click();
+      cy.get('[data-testid="loading-overlay"]').should('not.exist');
 
-      // loginAsDocketClerk();
-      // cy.get('[data-testid="document-qc-nav-item"]').click();
-      // cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
+      loginAsDocketClerk();
+      cy.get('[data-testid="document-qc-nav-item"]').click();
+      cy.get('[data-testid="switch-to-section-document-qc-button"]').click();
 
-      // // Get the row for 115-25 that has the amendment and complete the qc, sending a message
-      // cy.contains('a', 'Amendment').last().click();
-      // cy.get('[data-testid="save-and-finish-document-qc"]').click();
-      // viewMyOutbox();
-      // cy.contains(`Fifteenth Amendment to Exhibit(s) ${additionalInfo}`).should(
-      //   'exist',
-      // );
+      // Get the row for 115-25 that has the amendment and complete the qc, sending a message
+      cy.contains('a', 'Amendment').last().click();
+      cy.get('[data-testid="save-and-finish-document-qc"]').click();
+      viewMyOutbox();
+      cy.contains(`Fifteenth Amendment to Exhibit(s) ${additionalInfo}`).should(
+        'exist',
+      );
     });
   });
 });
-
-// duplicates complete-docket-qc.cy.ts
-// function sendMessages(
-//   userId: string,
-//   subject: string,
-//   section: string,
-//   messageBody: string = 'Message',
-// ) {
-//   cy.get('[data-testid="case-detail-menu-button"]').click();
-//   cy.get('[data-testid="menu-button-add-new-message"]').click();
-//   cy.get('[data-testid="message-to-section"').select(section);
-//   cy.get('[data-testid="message-to-user-id"]').select(userId);
-//   cy.get('[data-testid="message-subject"]').type(subject);
-//   cy.get('[data-testid="message-body"]').type(messageBody);
-//   cy.get('[data-testid="modal-confirm"]').click();
-//   cy.get('[data-testid="loading-overlay"]').should('not.exist');
-//   cy.get('[data-testid="success-alert"]').should('exist');
-// }
