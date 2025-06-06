@@ -64,7 +64,9 @@ describe('Document title updates correctly', () => {
         'complete-doc-document-type-search',
         'Amendment [anything]',
       );
-      cy.get('[data-testid="previous-document-search"]').select('Exhibit(s)');
+      cy.get('[data-testid="previous-document-search"]').select(
+        `Exhibit(s) ${additionalInfo}`,
+      );
       cy.get('[data-testid="ordinal-field-select-search"]').select('15');
 
       cy.get('[data-testid="submit-document"]').click();
