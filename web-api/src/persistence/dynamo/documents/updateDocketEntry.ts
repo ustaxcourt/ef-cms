@@ -12,11 +12,6 @@ export const updateDocketEntry = async ({
   docketNumber: string;
   document: any;
 }) => {
-  if (document.eventCode == 'EXH') {
-    console.log('updateDocketEntry docket entry', document);
-    console.trace();
-  }
-
   await put({
     Item: {
       pk: `case|${docketNumber}`,
