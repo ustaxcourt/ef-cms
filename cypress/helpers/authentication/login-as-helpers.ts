@@ -1,4 +1,5 @@
 import { getCypressEnv } from '../env/cypressEnvironment';
+import { mockDynamsoftLibrary } from './dynamsoft';
 
 export function loginAsTestAdmissionsClerk() {
   login({ email: 'testAdmissionsClerk@example.com' });
@@ -144,4 +145,5 @@ export function login({ email }: { email: string }) {
   cy.window().then(win =>
     win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
   );
+  mockDynamsoftLibrary();
 }
