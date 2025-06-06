@@ -6,7 +6,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
-  type TCaseOrder,
+  TCaseOrder,
   TrialSession,
 } from '@shared/business/entities/trialSessions/TrialSession';
 import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/EntityConstants';
@@ -60,12 +60,12 @@ export const getEligibleCasesForTrialSessionInteractor = async (
   const eligibleCases = await applicationContext
     .getPersistenceGateway()
     .getEligibleCasesForTrialSession({
-      applicationContext,
       limit:
         trialSessionEntity.maxCases! +
         TRIAL_SESSION_ELIGIBLE_CASES_BUFFER -
         calendaredCases.length,
-      skPrefix: trialSessionEntity.generateSortKeyPrefix(),
+      sessionType: trialSessionEntity.getCaseProcedureForTrial(),
+      trialCity: trialSessionEntity.trialLocation!,
     });
 
   const eligibleCasesFiltered = calendaredCases
