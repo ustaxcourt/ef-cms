@@ -8,7 +8,7 @@ import {
   getUserFromAuthHeader,
   handle,
 } from './middleware/apiGatewayHelper';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { getMaintenanceMode } from '@web-api/persistence/postgres/featureFlag/getMaintenanceMode';
 import { getEntityByName } from '@web-api/business/getEntityByName';
 
@@ -80,12 +80,12 @@ export const genericHandler = (
   return handle(awsEvent, async () => {
     const user = getUserFromAuthHeader(awsEvent);
     const clientConnectionId = getConnectionIdFromEvent(awsEvent);
-    getLogger().addUser({ user });
+    getDawsonLogger().addUser({ user });
 
     delete awsEvent.logger;
 
     try {
-      getLogger().debug('Request:', {
+      getDawsonLogger().debug('Request:', {
         request: awsEvent,
         user,
       });
@@ -106,7 +106,7 @@ export const genericHandler = (
       });
 
       if (options.logResults !== false) {
-        getLogger().debug('Results:', {
+        getDawsonLogger().debug('Results:', {
           results: returnResults,
         });
       }
@@ -115,7 +115,7 @@ export const genericHandler = (
     } catch (e) {
       if (!e.skipLogging) {
         // we don't want email alerts to be sent out just because someone searched for a non-existing case
-        getLogger().error(e);
+        getDawsonLogger().error(e);
       }
       throw e;
     }

@@ -119,7 +119,7 @@ import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseF
 import { getAllFeatureFlagsFromPostgresInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor';
 import path from 'path';
 import pug from 'pug';
-import sass from 'sass';
+import * as sass from 'sass';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
