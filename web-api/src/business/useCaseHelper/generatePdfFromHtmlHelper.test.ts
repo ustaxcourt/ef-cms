@@ -6,9 +6,9 @@ const mockLogger = {
   warn: jest.fn(),
   error: jest.fn(),
 };
-jest.mock('@web-api/utilities/logger/getLogger', () => {
+jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   return {
-    getLogger: () => mockLogger,
+    getDawsonLogger: () => mockLogger,
   };
 });
 import { combineTwoPdfs as combineTwoPdfsMock } from '@shared/business/utilities/pdfs/combineTwoPdfs';
@@ -33,7 +33,6 @@ describe('generatePdfFromHtmlHelper', () => {
         pid: '123',
       };
     },
-    
   } as any;
   const setContentMock = jest.fn(contentHtml => (pageContent = contentHtml));
   const pdfMock = jest.fn(
