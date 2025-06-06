@@ -235,7 +235,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     const updatedCaseDocketEntries =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+      updateCaseAndAssociations.mock
         .calls[0][0].caseToUpdate.docketEntries;
     const noticeOfDocketChangeDocketEntry = updatedCaseDocketEntries.find(
       d =>

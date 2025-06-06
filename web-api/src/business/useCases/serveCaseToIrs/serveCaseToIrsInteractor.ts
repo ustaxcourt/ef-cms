@@ -34,6 +34,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -303,7 +304,7 @@ const generateNoticeOfReceipt = async ({
     pdfName: caseConfirmationPdfName,
   });
 
-  const notrDocketEntryId = applicationContext.getUniqueId();
+  const notrDocketEntryId = getUniqueId();
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),

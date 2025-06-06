@@ -204,9 +204,9 @@ describe('removeConsolidatedCasesInteractor', () => {
       },
       mockDocketClerkUser,
     );
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(docketNumbersToRemove.length);
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(
+      docketNumbersToRemove.length,
+    );
   });
 
   it('Should update ALL cases to remove consolidation if new consolidated cases length is 1', async () => {
@@ -229,14 +229,14 @@ describe('removeConsolidatedCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(allDocketNumbers.length);
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(
+      allDocketNumbers.length,
+    );
 
     allDocketNumbers.forEach((docketNumber, callIndex) => {
       expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-          .calls[callIndex][0].caseToUpdate.docketNumber,
+        updateCaseAndAssociations.mock.calls[callIndex][0].caseToUpdate
+          .docketNumber,
       ).toBe(docketNumber);
     });
   });

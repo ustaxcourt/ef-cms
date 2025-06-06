@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -11,6 +14,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerWithCaseInteractor } from './associatePrivatePractitionerWithCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -99,8 +103,6 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       mockUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 });

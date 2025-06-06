@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { MOCK_LOCK } from '@shared/test/mockLock';
@@ -20,10 +23,11 @@ import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messag
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   let mockLock;
   const mockSigningName = 'Roslindis Angelino';
   const mockStampedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
@@ -59,9 +63,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       mockJudgeUser,
     );
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
     expect(caseToUpdate.docketEntries.length).toEqual(
       MOCK_DOCUMENTS.length + 1,
@@ -95,9 +97,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       mockJudgeUser,
     );
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
     const draftDocketEntryEntity = caseToUpdate.docketEntries.find(
       doc =>

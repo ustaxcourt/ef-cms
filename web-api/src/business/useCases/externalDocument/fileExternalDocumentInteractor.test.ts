@@ -322,9 +322,6 @@ describe('fileExternalDocumentInteractor', () => {
     expect(upsertWorkItems).toHaveBeenCalledTimes(1);
     expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(2);
-    expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalledTimes(2);
     expect(updatedCase!.docketEntries[4].servedAt).toBeDefined();

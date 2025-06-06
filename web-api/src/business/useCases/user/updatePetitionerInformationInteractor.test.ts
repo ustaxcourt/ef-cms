@@ -684,9 +684,7 @@ describe('updatePetitionerInformationInteractor', () => {
         applicationContext.getUseCaseHelpers().addExistingUserToCase,
       ).toHaveBeenCalled();
 
-      expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-      ).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
       expect(
         applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
       ).toHaveBeenCalledTimes(1);
