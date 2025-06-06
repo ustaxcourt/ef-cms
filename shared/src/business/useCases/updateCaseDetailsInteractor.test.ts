@@ -457,13 +457,11 @@ describe('updateCaseDetailsInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.mailingDate,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.mailingDate,
     ).toEqual(MOCK_CASE.mailingDate); // does not change
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.partyType,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.partyType,
     ).toEqual(MOCK_CASE.partyType); // does not change
   });
 

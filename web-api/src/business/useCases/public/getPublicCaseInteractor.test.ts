@@ -73,7 +73,7 @@ describe('getPublicCaseInteractor', () => {
   it('should format the given docket number, removing leading zeroes and suffix', async () => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
 
-    await getPublicCaseInteractor(applicationContext, {
+    await getPublicCaseInteractor({
       docketNumber: '0000123-19S',
     });
 
@@ -87,7 +87,7 @@ describe('getPublicCaseInteractor', () => {
     getCaseByDocketNumber.mockResolvedValue({ archivedCorrespondences: [] });
 
     await expect(
-      getPublicCaseInteractor(applicationContext, {
+      getPublicCaseInteractor({
         docketNumber: '999',
       }),
     ).rejects.toThrow('Case 999 was not found.');
@@ -96,7 +96,7 @@ describe('getPublicCaseInteractor', () => {
   it('should search by docketNumber when docketNumber parameter is a valid docketNumber', async () => {
     const docketNumber = '123-45';
 
-    const result = await getPublicCaseInteractor(applicationContext, {
+    const result = await getPublicCaseInteractor({
       docketNumber,
     });
 
@@ -115,7 +115,7 @@ describe('getPublicCaseInteractor', () => {
   it('should return minimal information when the requested case has been sealed', async () => {
     const docketNumber = '102-20';
 
-    const result = await getPublicCaseInteractor(applicationContext, {
+    const result = await getPublicCaseInteractor({
       docketNumber,
     });
 
@@ -128,7 +128,7 @@ describe('getPublicCaseInteractor', () => {
   it('should return minimal information when the requested case has a sealed docket entry', async () => {
     const docketNumber = '120-20';
 
-    const result = await getPublicCaseInteractor(applicationContext, {
+    const result = await getPublicCaseInteractor({
       docketNumber,
     });
 
@@ -141,7 +141,7 @@ describe('getPublicCaseInteractor', () => {
   it('should return minimal information when the requested case contact address has been sealed', async () => {
     const docketNumber = '188-88';
 
-    const result = await getPublicCaseInteractor(applicationContext, {
+    const result = await getPublicCaseInteractor({
       docketNumber,
     });
 
@@ -155,7 +155,7 @@ describe('getPublicCaseInteractor', () => {
     const docketNumber = '190-92';
 
     await expect(
-      getPublicCaseInteractor(applicationContext, {
+      getPublicCaseInteractor({
         docketNumber,
       }),
     ).resolves.toMatchObject({

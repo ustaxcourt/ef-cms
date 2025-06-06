@@ -99,7 +99,6 @@ describe('fixRaceConditionServedInDrafts', () => {
   it('looks up the subject case for the specified docketNumber', async () => {
     await fixRaceConditionServedInDrafts(applicationContext, mockCall);
     expect(getCaseByDocketNumber).toHaveBeenCalledWith({
-      applicationContext,
       docketNumber: mockedItem.docketNumber,
     });
   });

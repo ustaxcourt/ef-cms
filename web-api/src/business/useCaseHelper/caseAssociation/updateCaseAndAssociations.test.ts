@@ -91,7 +91,6 @@ describe('updateCaseAndAssociations', () => {
     getCaseByDocketNumber.mockResolvedValue(oldCase);
 
     await updateCaseAndAssociations({
-      applicationContext,
       authorizedUser: undefined,
       caseToUpdate,
     });
@@ -104,7 +103,6 @@ describe('updateCaseAndAssociations', () => {
 
   it('always sends valid entities to the updateCase persistence method', async () => {
     await updateCaseAndAssociations({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       caseToUpdate: validMockCase,
     });
@@ -124,7 +122,6 @@ describe('updateCaseAndAssociations', () => {
 
     await expect(
       updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...validMockCase,
@@ -213,7 +210,6 @@ describe('updateCaseAndAssociations', () => {
     getCaseByDocketNumber.mockResolvedValue(oldCase);
 
     await updateCaseAndAssociations({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       caseToUpdate,
     });
@@ -247,7 +243,6 @@ describe('updateCaseAndAssociations', () => {
       getCaseByDocketNumber.mockResolvedValue(caseToUpdate);
 
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate,
       });
@@ -280,7 +275,6 @@ describe('updateCaseAndAssociations', () => {
       getCaseByDocketNumber.mockResolvedValue(oldCase);
 
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate,
       });
@@ -316,7 +310,6 @@ describe('updateCaseAndAssociations', () => {
     it('does not call saveWorkItem if nothing on the case changes that requires a work item to be updated', async () => {
       updatedCase.mailingDate = '2025-01-05T05:22:16.001Z';
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
@@ -327,7 +320,6 @@ describe('updateCaseAndAssociations', () => {
       updatedCase.associatedJudge = 'Judge Dredd';
       updatedCase.associatedJudgeId = '2f46a889-901c-4e8b-b2bb-c3994e2c75c1';
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
@@ -343,7 +335,6 @@ describe('updateCaseAndAssociations', () => {
     it('does not call updateCaseCorrespondence if all correspondences are unchanged', async () => {
       getCaseByDocketNumber.mockResolvedValue(validMockCase);
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: validMockCase,
       });
@@ -384,7 +375,6 @@ describe('updateCaseAndAssociations', () => {
       };
 
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate,
       });
@@ -416,7 +406,6 @@ describe('updateCaseAndAssociations', () => {
 
     it('does not call updateIrsPractitionerOnCase or removeIrsPractitionerOnCase if all IRS practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: mockCaseWithIrsPractitioners,
       });
@@ -436,7 +425,6 @@ describe('updateCaseAndAssociations', () => {
         userId: practitionerId,
       };
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsPractitioners,
@@ -462,7 +450,6 @@ describe('updateCaseAndAssociations', () => {
 
     it('removes an irsPractitioner from a case with existing irsPractitioners', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsPractitioners,
@@ -487,7 +474,6 @@ describe('updateCaseAndAssociations', () => {
 
     it('calls updateIrsPractitionerOnCase to update gsi1pk for unchanged irsPractitioners when the case is part of a consolidated group', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsPractitioners,
@@ -538,7 +524,6 @@ describe('updateCaseAndAssociations', () => {
 
     it('does not call updatePrivatePractitionerOnCase or removePrivatePractitionerOnCase if all private practitioners are unchanged', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: mockCaseWithIrsAndPrivatePractitioners,
       });
@@ -560,7 +545,6 @@ describe('updateCaseAndAssociations', () => {
         userId: practitionerId,
       };
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsAndPrivatePractitioners,
@@ -588,7 +572,6 @@ describe('updateCaseAndAssociations', () => {
 
     it('calls updatePrivatePractitionerOnCase to update gsi1pk for unchanged privatePractitioners when the case is part of a consolidated group', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsAndPrivatePractitioners,
@@ -617,7 +600,6 @@ describe('updateCaseAndAssociations', () => {
 
     it('removes an privatePractitioner from a case with existing privatePractitioners', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...mockCaseWithIrsAndPrivatePractitioners,
@@ -651,7 +633,6 @@ describe('updateCaseAndAssociations', () => {
     });
     it('completes without altering message records if no message updates are necessary', async () => {
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: validMockCase,
       });
@@ -665,7 +646,6 @@ describe('updateCaseAndAssociations', () => {
       ]);
       await expect(
         updateCaseAndAssociations({
-          applicationContext,
           authorizedUser: mockDocketClerkUser,
           caseToUpdate: {
             ...validMockCase,
@@ -682,7 +662,6 @@ describe('updateCaseAndAssociations', () => {
       getMessagesByDocketNumber.mockResolvedValue([MOCK_MESSAGE]);
 
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: {
           ...MOCK_CASE,
@@ -708,7 +687,6 @@ describe('updateCaseAndAssociations', () => {
         ...validMockCase,
       };
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });
@@ -723,7 +701,6 @@ describe('updateCaseAndAssociations', () => {
         associatedJudgeId: '5f38a63a-17c9-4c02-b376-8123b0f26d9a',
       };
       await updateCaseAndAssociations({
-        applicationContext,
         authorizedUser: mockDocketClerkUser,
         caseToUpdate: updatedCase,
       });

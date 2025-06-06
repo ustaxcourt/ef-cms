@@ -77,24 +77,23 @@ export const fileAndServeDocumentOnOneCase = async ({
   caseEntity.updateDocketEntry(docketEntryEntity);
 
   caseEntity = await updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity,
-      hasCaseDeadline: caseHasDeadline,
-    });
+    applicationContext,
+    caseEntity,
+    hasCaseDeadline: caseHasDeadline,
+  });
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
-        applicationContext,
-        caseEntity,
-        eventCode: docketEntryEntity.eventCode,
-      });
+      applicationContext,
+      caseEntity,
+      eventCode: docketEntryEntity.eventCode,
+    });
   }
 
   const validRawCaseEntity = await updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser: user,
-      caseToUpdate: caseEntity,
-    });
+    authorizedUser: user,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(validRawCaseEntity, {
     authorizedUser: user,
