@@ -4,7 +4,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/server';
 import { Browser, Page } from 'puppeteer-core';
 import { combineTwoPdfs } from '@shared/business/utilities/pdfs/combineTwoPdfs';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export type GeneratePdfRequest = {
   contentHtml: string;
@@ -108,7 +108,7 @@ export const generatePdfFromHtmlHelper = async (
       result = firstPage;
     }
   } catch (error) {
-    getLogger().error(error);
+    getDawsonLogger().error(error);
     throw error;
   } finally {
     await page?.close();
