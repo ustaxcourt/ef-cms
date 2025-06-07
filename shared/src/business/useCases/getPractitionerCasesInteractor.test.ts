@@ -84,4 +84,42 @@ describe('getPractitionerCasesInteractor', () => {
       { caseTitle: 'Test Petitioner', docketNumber: '201-07' },
     ]);
   });
+
+  it('returns empty arrays if `getCasesByDocketNumbers` returns empty array', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([]);
+
+    const { closedCases, openCases } = await getPractitionerCasesInteractor(
+      applicationContext,
+      {
+        userId: 'abc',
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(closedCases).toEqual([]);
+    expect(openCases).toEqual([]);
+  });
+
+  it('handles scenario where getDocketNumbersByUser returns an empty array', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDocketNumbersByUser.mockResolvedValueOnce([]);
+    getCasesByDocketNumbers.mockResolvedValueOnce(undefined);
+
+    const { closedCases, openCases } = await getPractitionerCasesInteractor(
+      applicationContext,
+      {
+        userId: 'someUserId',
+      },
+      mockDocketClerkUser,
+    );
+
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith(
+      expect.objectContaining({
+        docketNumbers: [],
+      }),
+    );
+    expect(closedCases).toEqual([]);
+    expect(openCases).toEqual([]);
+  });
 });

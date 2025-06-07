@@ -14,7 +14,7 @@ import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automa
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const deleteCaseDeadline = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     caseDeadlineId,
     docketNumber,
@@ -42,7 +42,6 @@ export const deleteCaseDeadline = async (
   });
 
   updatedCase = await updateCaseAutomaticBlock({
-    applicationContext,
     caseEntity: updatedCase,
     hasCaseDeadline: deadlinesBeforeDelete.length > 1,
   });

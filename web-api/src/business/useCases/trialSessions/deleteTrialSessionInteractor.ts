@@ -70,16 +70,6 @@ export const deleteTrialSessionInteractor = async (
 
       caseEntity.removeFromTrial({});
 
-      if (caseEntity.isReadyForTrial()) {
-        await applicationContext
-          .getPersistenceGateway()
-          .createCaseTrialSortMappingRecords({
-            applicationContext,
-            caseSortTags: caseEntity.generateTrialSortTags(),
-            docketNumber: caseEntity.docketNumber,
-          });
-      }
-
       await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,

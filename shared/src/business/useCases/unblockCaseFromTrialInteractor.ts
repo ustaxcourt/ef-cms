@@ -18,7 +18,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
  * @returns {object} the case data
  */
 export const unblockCaseFromTrial = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -33,16 +33,6 @@ export const unblockCaseFromTrial = async (
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   caseEntity.unsetAsBlocked();
-
-  if (caseEntity.isReadyForTrial()) {
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-        docketNumber: caseEntity.docketNumber,
-      });
-  }
 
   const updatedCase = await updateCaseAndAssociations({
     authorizedUser,

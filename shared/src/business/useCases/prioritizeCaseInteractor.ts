@@ -19,7 +19,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
  * @returns {object} the case data
  */
 export const prioritizeCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { docketNumber, reason }: { docketNumber: string; reason: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<RawCase> => {
@@ -41,16 +41,6 @@ export const prioritizeCase = async (
   }
 
   caseEntity.setAsHighPriority(reason);
-
-  if (caseEntity.preferredTrialCity && !caseEntity.blocked) {
-    await applicationContext
-      .getPersistenceGateway()
-      .createCaseTrialSortMappingRecords({
-        applicationContext,
-        caseSortTags: caseEntity.generateTrialSortTags(),
-        docketNumber: caseEntity.docketNumber,
-      });
-  }
 
   const updatedCase = await updateCaseAndAssociations({
     authorizedUser,

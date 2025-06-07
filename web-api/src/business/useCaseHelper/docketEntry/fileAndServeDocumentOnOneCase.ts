@@ -77,7 +77,6 @@ export const fileAndServeDocumentOnOneCase = async ({
   caseEntity.updateDocketEntry(docketEntryEntity);
 
   caseEntity = await updateCaseAutomaticBlock({
-    applicationContext,
     caseEntity,
     hasCaseDeadline: caseHasDeadline,
   });

@@ -74,13 +74,6 @@ export const addCaseToTrialSession = async (
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
-  await applicationContext
-    .getPersistenceGateway()
-    .deleteCaseTrialSortMappingRecords({
-      applicationContext,
-      docketNumber: caseEntity.docketNumber,
-    });
-
   if (trialSessionEntity.isCalendared) {
     await setPriorityOnAllWorkItems({
       docketNumbers: [caseEntity.docketNumber],

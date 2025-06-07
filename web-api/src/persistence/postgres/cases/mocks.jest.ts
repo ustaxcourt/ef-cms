@@ -37,6 +37,25 @@ jest.mock(
   () => mockFactory('getReadyForTrialCases'),
 );
 
+jest.mock(
+  '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity',
+  () => mockFactory('getEligibleCasesForTrialCity'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession',
+  () => mockFactory('getEligibleCasesForTrialSession'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/getEligibleCasesCount', () =>
+  mockFactory('getEligibleCasesCount'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/reports/getBlockedCasesCount',
+  () => mockFactory('getBlockedCasesCount'),
+);
+
 // Reports
 
 jest.mock('@web-api/persistence/postgres/cases/reports/fetchPendingItems', () =>

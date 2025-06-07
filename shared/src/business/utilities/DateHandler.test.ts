@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 /* eslint-disable custom-rules-plugin/no-new-dates*/
-/* eslint-disable max-lines */
 import { DateTime, Settings } from 'luxon';
 import {
   FORMATS,
@@ -17,6 +16,7 @@ import {
   createDateAtStartOfWeekEST,
   createEndOfDayISO,
   createISODateAtStartOfDayEST,
+  createISODateStringFromObject,
   createStartOfDayISO,
   dateStringsCompared,
   deconstructDate,
@@ -25,11 +25,16 @@ import {
   getBusinessDateInFuture,
   getDateFormat,
   getMonthDayYearInETObj,
+  getWeeksInRange,
   isDateWithinGivenInterval,
   isStringISOFormatted,
   isValidDateString,
+  isValidISODate,
+  isValidReconciliationDate,
   normalizeIsoDateRange,
+  prepareDateFromEST,
   prepareDateFromString,
+  roundDateDownToNearestHour,
   subtractISODates,
   validateDateAndCreateISO,
 } from './DateHandler';
@@ -967,5 +972,92 @@ describe('DateHandler', () => {
         expect(actual).toEqual(expected);
       },
     );
+  });
+
+  describe('prepareDateFromEST', () => {
+    it('converts a date/time string in Eastern Time to a UTC (GMT) ISO string', () => {
+      const easternTimeString = '01/01/25 10:00 am';
+      const inputFormat = 'MM/dd/yy hh:mm a';
+
+      const result = prepareDateFromEST(easternTimeString, inputFormat);
+      expect(result).toBe('2025-01-01T15:00:00.000Z');
+    });
+  });
+
+  describe('isValidISODate', () => {
+    it('returns true if provided a valid ISO date string', () => {
+      const validIso = '2025-01-01T00:00:00.000Z';
+      expect(isValidISODate(validIso)).toBe(true);
+    });
+
+    it('returns false if provided an invalid ISO date string', () => {
+      const invalidIso = '2025-13-40T99:99:99.999Z';
+      expect(isValidISODate(invalidIso)).toBe(false);
+    });
+  });
+
+  describe('isValidReconciliationDate', () => {
+    it('returns true if the date is valid ISO and <= today', () => {
+      const isoPastDate = '2000-01-01T00:00:00.000Z';
+      expect(isValidReconciliationDate(isoPastDate)).toBe(true);
+    });
+
+    it('returns false if the date is not a valid ISO date', () => {
+      expect(isValidReconciliationDate('some-random-string')).toBe(false);
+    });
+
+    it('returns false if the date is valid ISO but is in the future', () => {
+      const futureIso = '2999-01-01T00:00:00.000Z';
+      expect(isValidReconciliationDate(futureIso)).toBe(false);
+    });
+  });
+
+  describe('createISODateStringFromObject', () => {
+    it('creates an ISO date string (UTC) from an object { year, month, day } in EST', () => {
+      const dateObj = { year: 2023, month: 2, day: 1 };
+      const result = createISODateStringFromObject(dateObj);
+      expect(result).toBe('2023-02-01T05:00:00.000Z');
+    });
+  });
+
+  describe('getWeeksInRange', () => {
+    it('returns an array of ISO week-start dates for each Monday between startDate and endDate (inclusive)', () => {
+      const start = '2023-01-03T05:00:00.000Z';
+      const end = '2023-01-31T05:00:00.000Z';
+
+      const weeks = getWeeksInRange({ startDate: start, endDate: end });
+
+      expect(weeks).toEqual([
+        '2023-01-02',
+        '2023-01-09',
+        '2023-01-16',
+        '2023-01-23',
+        '2023-01-30',
+      ]);
+    });
+
+    it('returns an empty array if startDate > endDate', () => {
+      const start = '2023-02-01T05:00:00.000Z';
+      const end = '2023-01-01T05:00:00.000Z';
+
+      const weeks = getWeeksInRange({ startDate: start, endDate: end });
+      expect(weeks).toEqual([]);
+    });
+  });
+
+  describe('roundDateDownToNearestHour', () => {
+    it('rounds a date down to the nearest hour', () => {
+      const inputISO = '2025-03-01T09:35:17.555Z';
+
+      const resultDate = roundDateDownToNearestHour(inputISO);
+      expect(resultDate.toISOString()).toBe('2025-03-01T09:00:00.000Z');
+    });
+
+    it('keeps the same hour if the minutes are already zero', () => {
+      const inputISO = '2025-03-01T09:00:00.000Z';
+
+      const resultDate = roundDateDownToNearestHour(inputISO);
+      expect(resultDate.toISOString()).toBe(inputISO);
+    });
   });
 });
