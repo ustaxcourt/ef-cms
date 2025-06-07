@@ -5,6 +5,7 @@ import {
   SESSION_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
+  TrialSessionTypes,
 } from '@shared/business/entities/EntityConstants';
 
 export type CalendaredCaseItemType = (RawCase | RawCalendaredCase) & {
@@ -35,7 +36,7 @@ export const initialTrialSessionState: TrialSessionState = {
   proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
   sessionStatus: SESSION_STATUS_TYPES.open,
-  sessionType: '',
+  sessionType: '' as TrialSessionTypes,
   startDate: '',
   term: '',
   termYear: '',

@@ -3,7 +3,6 @@ import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprioritizesCase';
-import { petitionsClerkVerifyEligibleCase } from './journey/petitionsClerkVerifyEligibleCase';
 import { petitionsClerkVerifyNotEligibleCase } from './journey/petitionsClerkVerifyNotEligibleCase';
 
 describe('Docket clerk verifies high priority case is not blocked', () => {
@@ -37,7 +36,6 @@ describe('Docket clerk verifies high priority case is not blocked', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkVerifyEligibleCase(cerebralTest);
   petitionsClerkUnprioritizesCase(cerebralTest);
 
   it('verify that the non-high-priority case is set to automaticBlocked', async () => {

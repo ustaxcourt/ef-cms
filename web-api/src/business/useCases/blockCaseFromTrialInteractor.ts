@@ -11,7 +11,6 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
-import { deleteCaseTrialSortMappingRecords } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
@@ -39,12 +38,6 @@ export const blockCaseFromTrial = async (
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
   caseEntity.setAsBlocked(reason);
-
-  await deleteCaseTrialSortMappingRecords({
-    applicationContext,
-    docketNumber: caseEntity.docketNumber,
-    deleteConsolidatedCases: true,
-  });
 
   const updatedCase = await updateCaseAndAssociations({
     applicationContext,

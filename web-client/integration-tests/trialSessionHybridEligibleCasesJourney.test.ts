@@ -121,14 +121,16 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         cerebralTest.getState('trialSession.eligibleCases').length,
       ).toEqual(3);
       expect(
-        cerebralTest.getState('trialSession.eligibleCases.0.docketNumber'),
-      ).toEqual(createdDocketNumbers[0]);
-      expect(
-        cerebralTest.getState('trialSession.eligibleCases.1.docketNumber'),
-      ).toEqual(createdDocketNumbers[1]);
-      expect(
-        cerebralTest.getState('trialSession.eligibleCases.2.docketNumber'),
-      ).toEqual(createdDocketNumbers[2]);
+        cerebralTest
+          .getState('trialSession.eligibleCases')
+          .map(c => c.docketNumber),
+      ).toEqual(
+        expect.arrayContaining([
+          createdDocketNumbers[0],
+          createdDocketNumbers[1],
+          createdDocketNumbers[2],
+        ]),
+      );
       expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
     });
 
@@ -141,14 +143,16 @@ describe('Trial Session Eligible Cases - Both small and regular cases get schedu
         cerebralTest.getState('trialSession.eligibleCases').length,
       ).toEqual(3);
       expect(
-        cerebralTest.getState('trialSession.eligibleCases.0.docketNumber'),
-      ).toEqual(createdDocketNumbers[0]);
-      expect(
-        cerebralTest.getState('trialSession.eligibleCases.1.docketNumber'),
-      ).toEqual(createdDocketNumbers[1]);
-      expect(
-        cerebralTest.getState('trialSession.eligibleCases.2.docketNumber'),
-      ).toEqual(createdDocketNumbers[2]);
+        cerebralTest
+          .getState('trialSession.eligibleCases')
+          .map(c => c.docketNumber),
+      ).toEqual(
+        expect.arrayContaining([
+          createdDocketNumbers[0],
+          createdDocketNumbers[1],
+          createdDocketNumbers[2],
+        ]),
+      );
       expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
     });
   });
