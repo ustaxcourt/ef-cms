@@ -14,6 +14,7 @@ import {
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { MOCK_DOCUMENTS } from './mockDocketEntry';
 import { docketClerkUser, judgeUser } from './mockUsers';
+import { RawEligibleCase } from '@shared/business/entities/cases/EligibleCase';
 
 export const MOCK_CASE: RawCase = {
   archivedDocketEntries: [],
@@ -406,10 +407,13 @@ export const MOCK_CASE_WITH_TRIAL_SESSION = {
   trialTime: '10:00',
 };
 
-export const MOCK_ELIGIBLE_CASE = {
+export const MOCK_ELIGIBLE_CASE: RawEligibleCase = {
   caseCaption: 'Roslindis Angelino & Saturnino Nao, Petitioner',
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
+  docketNumberWithSuffix: '321-21W',
+  isSealed: false,
+  procedureType: PROCEDURE_TYPES_MAP.regular,
   docketNumberSuffix: 'W',
   highPriority: true,
   irsPractitioners: [],

@@ -1,6 +1,6 @@
 import { environment } from '@web-api/environment';
 import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { WithImplicitCoercion } from 'buffer';
 
 export const saveDocumentFromLambda = async ({
@@ -32,7 +32,7 @@ export const saveDocumentFromLambda = async ({
       break;
     } catch (err) {
       if (i >= maxRetries) {
-        getLogger().error(
+        getDawsonLogger().error(
           'An error occurred while attempting to save the document',
           { error: err },
         );
