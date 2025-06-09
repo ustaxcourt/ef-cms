@@ -58,13 +58,11 @@ import {
   getJudgeLastName,
 } from '@shared/business/utilities/getFormattedJudgeName';
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
-import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } from '@shared/business/utilities/generateChangeOfAddressTemplate';
 import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getConstants } from '@web-client/getConstants';
 import { getCropBox } from '@shared/business/utilities/getCropBox';
@@ -318,9 +316,6 @@ const createTestApplicationContext = () => {
   };
 
   const mockGetUseCases = appContextProxy({
-    generateNoticesForCaseTrialSessionCalendarInteractor: jest
-      .fn()
-      .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
     getAllFeatureFlagsInteractor: jest.fn().mockReturnValue({}),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
@@ -406,7 +401,6 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(getAllWebSocketConnections),
     getCalendaredCasesForTrialSession: jest.fn(),
-    getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCasesByFilters: jest.fn(),
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
