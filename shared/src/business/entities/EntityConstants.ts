@@ -95,7 +95,7 @@ export const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
-export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
+export const ALLOWLIST_FEATURE_FLAGS = {
   AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
     key: 'aws-batch-zipper-minimum-count',
   },
@@ -118,7 +118,7 @@ export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
   },
 };
 
-type PostgresFeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS_POSTGRES;
+type PostgresFeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
 export type PostgresFeatureFlagKeys =
   PostgresFeatureFlags[keyof PostgresFeatureFlags]['key'];
 

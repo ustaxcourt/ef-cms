@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -86,9 +86,7 @@ const generateChangeOfAddressForPractitioner = async ({
     .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
 
   const isChangeOfAddressLambdaEnabled =
-    featureFlags[
-      ALLOWLIST_FEATURE_FLAGS_POSTGRES.USE_CHANGE_OF_ADDRESS_LAMBDA.key
-    ];
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_CHANGE_OF_ADDRESS_LAMBDA.key];
 
   const jobId = applicationContext.getUniqueId();
 

@@ -209,7 +209,7 @@ export const internalPetitionPartiesHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
 ): any => {
-  const { ALLOWLIST_FEATURE_FLAGS_POSTGRES, PARTY_TYPES } =
+  const { ALLOWLIST_FEATURE_FLAGS, PARTY_TYPES } =
     applicationContext.getConstants();
   const user = get(state.user);
 
@@ -219,7 +219,7 @@ export const internalPetitionPartiesHelper = (
 
   const E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG = get(
     state.featureFlags[
-      ALLOWLIST_FEATURE_FLAGS_POSTGRES.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
+      ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key
     ],
   );
 

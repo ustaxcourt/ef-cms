@@ -1,6 +1,6 @@
 import {
   PARTY_TYPES,
-  ALLOWLIST_FEATURE_FLAGS_POSTGRES,
+  ALLOWLIST_FEATURE_FLAGS,
   ROLES,
   FILING_TYPES,
 } from '@shared/business/entities/EntityConstants';
@@ -411,8 +411,8 @@ describe('internalPetitionPartiesHelper', () => {
   describe('showPaperPetitionEmailFieldAndConsentBox', () => {
     const baseState = {
       featureFlags: {
-        [ALLOWLIST_FEATURE_FLAGS_POSTGRES.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG
-          .key]: true,
+        [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+          true,
       },
       form: {
         isPaper: undefined,
@@ -426,8 +426,8 @@ describe('internalPetitionPartiesHelper', () => {
         state: {
           ...baseState,
           featureFlags: {
-            [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-              .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: false,
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              false,
           },
           user: petitionsClerkUser,
         },
@@ -463,8 +463,8 @@ describe('internalPetitionPartiesHelper', () => {
         state: {
           ...baseState,
           featureFlags: {
-            [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-              .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: true,
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
           },
           form: {
             isPaper: false,
@@ -481,8 +481,8 @@ describe('internalPetitionPartiesHelper', () => {
         state: {
           ...baseState,
           featureFlags: {
-            [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-              .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: true,
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
           },
           form: {
             isPaper: false,
@@ -501,8 +501,8 @@ describe('internalPetitionPartiesHelper', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           featureFlags: {
-            [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-              .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: true,
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
           },
           form: {
             filingType: FILING_TYPES.petitioner[1],
@@ -518,8 +518,8 @@ describe('internalPetitionPartiesHelper', () => {
       const result = runCompute(internalPetitionPartiesHelper, {
         state: {
           featureFlags: {
-            [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-              .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: true,
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
           },
           form: {
             filingType: FILING_TYPES.privatePractitioner[1],

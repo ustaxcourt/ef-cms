@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -17,9 +17,7 @@ export const checkLock = async ({
     .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
 
   const isCaseLockingEnabled =
-    featureFlags[
-      ALLOWLIST_FEATURE_FLAGS_POSTGRES.ENTITY_LOCKING_FEATURE_FLAG.key
-    ];
+    featureFlags[ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key];
 
   const currentLock = await applicationContext
     .getPersistenceGateway()

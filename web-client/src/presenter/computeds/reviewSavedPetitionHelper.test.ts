@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '../../../../shared/src/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
   ordersAndNoticesInDraftsCodes,
@@ -378,8 +378,8 @@ describe('reviewSavedPetitionHelper', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           featureFlags: {
-            [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-              .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: true,
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
           },
           form: {
             contactPrimary: {
@@ -406,8 +406,8 @@ describe('reviewSavedPetitionHelper', () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           featureFlags: {
-            [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-              .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: true,
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              true,
           },
           form: {
             contactPrimary: {
@@ -450,8 +450,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         featureFlags: {
-          [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-            .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: true,
+          [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+            true,
         },
         form: {
           contactPrimary: {
@@ -474,8 +474,8 @@ describe('reviewSavedPetitionHelper', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         featureFlags: {
-          [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-            .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: false,
+          [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+            false,
         },
         form: {
           contactPrimary: {

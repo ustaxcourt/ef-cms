@@ -11,7 +11,7 @@ jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   };
 });
 jest.mock('@shared/tools/helpers');
-import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import {
@@ -39,7 +39,7 @@ describe('acquireLock', () => {
     applicationContext
       .getUseCases()
       .getAllFeatureFlagsFromPostgresInteractor.mockImplementation(() => ({
-        [ALLOWLIST_FEATURE_FLAGS_POSTGRES.ENTITY_LOCKING_FEATURE_FLAG.key]:
+        [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
           mockFeatureFlagValue,
       }));
     applicationContext
@@ -282,7 +282,7 @@ describe('withLocking', () => {
     applicationContext
       .getUseCases()
       .getAllFeatureFlagsFromPostgresInteractor.mockImplementation(() => ({
-        [ALLOWLIST_FEATURE_FLAGS_POSTGRES.ENTITY_LOCKING_FEATURE_FLAG.key]:
+        [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
           mockFeatureFlagValue,
       }));
   });
@@ -478,7 +478,7 @@ describe('checkLock', () => {
     applicationContext
       .getUseCases()
       .getAllFeatureFlagsFromPostgresInteractor.mockImplementation(() => ({
-        [ALLOWLIST_FEATURE_FLAGS_POSTGRES.ENTITY_LOCKING_FEATURE_FLAG.key]:
+        [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
           mockFeatureFlagValue,
       }));
 

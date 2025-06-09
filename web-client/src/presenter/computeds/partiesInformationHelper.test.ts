@@ -1,6 +1,6 @@
 import {
   CONTACT_TYPES,
-  ALLOWLIST_FEATURE_FLAGS_POSTGRES,
+  ALLOWLIST_FEATURE_FLAGS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
   UNIQUE_OTHER_FILER_TYPE,
@@ -39,8 +39,8 @@ describe('partiesInformationHelper', () => {
   const getBaseState = user => {
     return {
       featureFlags: {
-        [ALLOWLIST_FEATURE_FLAGS_POSTGRES.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG
-          .key]: true,
+        [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+          true,
       },
       permissions: getUserPermissions(user),
       screenMetadata: { pendingEmails: {} },
@@ -489,8 +489,8 @@ describe('partiesInformationHelper', () => {
             ],
           },
           featureFlags: {
-            [ALLOWLIST_FEATURE_FLAGS_POSTGRES
-              .E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]: false,
+            [ALLOWLIST_FEATURE_FLAGS.E_CONSENT_FIELDS_ENABLED_FEATURE_FLAG.key]:
+              false,
           },
         },
       });

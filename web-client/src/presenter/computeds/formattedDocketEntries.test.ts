@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 
 import {
-  ALLOWLIST_FEATURE_FLAGS_POSTGRES,
+  ALLOWLIST_FEATURE_FLAGS,
   DOCKET_RECORD_FILTER_OPTIONS,
   DOCKET_ENTRY_SEALED_TO_TYPES,
   ROLES,
@@ -52,8 +52,8 @@ describe('formattedDocketEntries', () => {
     return {
       documentsSelectedForDownload: [],
       featureFlags: {
-        [ALLOWLIST_FEATURE_FLAGS_POSTGRES.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE
-          .key]: '2023-05-01',
+        [ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key]:
+          '2023-05-01',
       },
       permissions: getUserPermissions(user),
       sessionMetadata: {
