@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.97.0"
+      version = "~> 5.99.1"
     }
   }
 }
@@ -176,7 +176,7 @@ module "api-east-blue" {
   prod_env_account_id  = var.prod_env_account_id
 
   # lambda to handle bounced service email notifications
-  create_bounce_handler = 1
+  create_bounce_handler    = 1
   route_53_regional_weight = 100
 }
 
@@ -218,7 +218,7 @@ module "api-west-blue" {
   prod_env_account_id  = var.prod_env_account_id
 
   # lambda to handle bounced service email notifications
-  create_bounce_handler = 0
+  create_bounce_handler    = 0
   route_53_regional_weight = 0
 }
 
