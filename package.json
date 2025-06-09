@@ -64,7 +64,7 @@
     "deep-freeze": "0.0.1",
     "diff-arrays-of-objects": "1.1.9",
     "dom-serializer": "2.0.0",
-    "dwt": "^19.1.0",
+    "dwt": "19.1.0",
     "english-ordinals": "3.4.0",
     "exceljs": "4.4.0",
     "export-to-csv": "1.4.0",
