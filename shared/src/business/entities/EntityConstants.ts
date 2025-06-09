@@ -95,8 +95,6 @@ export const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
-export const ALLOWLIST_FEATURE_FLAGS = {};
-
 export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
   AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
     key: 'aws-batch-zipper-minimum-count',

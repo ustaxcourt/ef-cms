@@ -72,7 +72,6 @@ import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } from '@shared/business/utilities/generateChangeOfAddressTemplate';
-import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
@@ -344,9 +343,6 @@ export const createTestApplicationContext = () => {
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
-    getAllFeatureFlagsInteractor: jest
-      .fn()
-      .mockImplementation(getAllFeatureFlagsInteractor),
     getAllFeatureFlagsFromPostgresInteractor: jest
       .fn()
       .mockImplementation(getAllFeatureFlagsFromPostgresInteractor),
