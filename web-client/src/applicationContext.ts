@@ -689,10 +689,6 @@ const applicationContext = {
       uploadPdfFromClient,
     };
   },
-  loadDWTLibrary: async () => {
-    // loading dwt will add a DWT object to the window
-    await import('dwt');
-  },
   getPublicSiteUrl,
   getReduceImageBlob: () => reduce,
   getScanner: () => {

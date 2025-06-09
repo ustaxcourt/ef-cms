@@ -511,7 +511,6 @@ const createTestApplicationContext = () => {
       stage: 'local',
     }),
     getFileReaderInstance: jest.fn(),
-    loadDWTLibrary: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
     getLogger: jest.fn().mockReturnValue({
