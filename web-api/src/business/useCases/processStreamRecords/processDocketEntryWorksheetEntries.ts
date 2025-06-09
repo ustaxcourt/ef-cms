@@ -1,6 +1,6 @@
-import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { upsertDocketEntryWorksheets } from '@web-api/persistence/postgres/docketEntryWorksheets/upsertDocketEntryWorksheets';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export const processDocketEntryWorksheetEntries = async ({
   docketEntryWorksheetRecords,
@@ -10,7 +10,7 @@ export const processDocketEntryWorksheetEntries = async ({
   try {
     if (!docketEntryWorksheetRecords.length) return;
 
-    getLogger().debug(
+    getDawsonLogger().debug(
       `going to upsert ${docketEntryWorksheetRecords.length} docket entry worksheet records`,
     );
 
@@ -20,7 +20,7 @@ export const processDocketEntryWorksheetEntries = async ({
 
     await upsertDocketEntryWorksheets({ docketEntryWorksheets });
   } catch (e) {
-    getLogger().error(
+    getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process docket entry worksheet record: ${e}`,
     );
   }
