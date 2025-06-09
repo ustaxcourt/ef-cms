@@ -151,7 +151,9 @@ export function withLocking<InteractorInput, InteractorOutput>(
     try {
       results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
-      getDawsonLogger().error(`withLocking: failed to execute interactor: ${err}`);
+      getDawsonLogger().error(
+        `withLocking: failed to execute interactor: ${err}`,
+      );
       caughtError = err;
     }
 
