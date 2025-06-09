@@ -115,7 +115,7 @@ import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/u
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
-import { getAllFeatureFlagsFromPostgresInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import path from 'path';
 import pug from 'pug';
 import * as sass from 'sass';
@@ -343,9 +343,9 @@ export const createTestApplicationContext = () => {
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
-    getAllFeatureFlagsFromPostgresInteractor: jest
+    getAllFeatureFlagsInteractor: jest
       .fn()
-      .mockImplementation(getAllFeatureFlagsFromPostgresInteractor),
+      .mockImplementation(getAllFeatureFlagsInteractor),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()

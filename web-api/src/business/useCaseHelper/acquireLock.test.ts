@@ -38,7 +38,7 @@ describe('acquireLock', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getAllFeatureFlagsFromPostgresInteractor.mockImplementation(() => ({
+      .getAllFeatureFlagsInteractor.mockImplementation(() => ({
         [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
           mockFeatureFlagValue,
       }));
@@ -281,7 +281,7 @@ describe('withLocking', () => {
       .getLock.mockImplementation(() => mockLock);
     applicationContext
       .getUseCases()
-      .getAllFeatureFlagsFromPostgresInteractor.mockImplementation(() => ({
+      .getAllFeatureFlagsInteractor.mockImplementation(() => ({
         [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
           mockFeatureFlagValue,
       }));
@@ -477,7 +477,7 @@ describe('checkLock', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .getAllFeatureFlagsFromPostgresInteractor.mockImplementation(() => ({
+      .getAllFeatureFlagsInteractor.mockImplementation(() => ({
         [ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key]:
           mockFeatureFlagValue,
       }));

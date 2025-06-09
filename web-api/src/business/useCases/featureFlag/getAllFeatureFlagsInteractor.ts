@@ -9,7 +9,7 @@ import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/
 type AllFeatureFlags = Partial<{ [K in PostgresFeatureFlagKeys]: any }>;
 const allFeatureFlags: AllFeatureFlags = {};
 
-export const getAllFeatureFlagsFromPostgresInteractor = async (
+export const getAllFeatureFlagsInteractor = async (
   applicationContext: ServerApplicationContext,
   hardReload: boolean = false,
 ): Promise<AllFeatureFlags> => {

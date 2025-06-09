@@ -83,7 +83,7 @@ const generateChangeOfAddressForPractitioner = async ({
 
   const featureFlags = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
+    .getAllFeatureFlagsFromgetAllFeatureFlagsInteractorPostgresInteractor(applicationContext);
 
   const isChangeOfAddressLambdaEnabled =
     featureFlags[ALLOWLIST_FEATURE_FLAGS.USE_CHANGE_OF_ADDRESS_LAMBDA.key];

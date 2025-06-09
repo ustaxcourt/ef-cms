@@ -14,7 +14,7 @@ export const checkLock = async ({
 }): Promise<boolean> => {
   const featureFlags = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
+    .getAllFeatureFlagsInteractor(applicationContext);
 
   const isCaseLockingEnabled =
     featureFlags[ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key];

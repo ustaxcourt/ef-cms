@@ -57,7 +57,7 @@ export const getDownloadPolicyUrlInteractor = async (
 
     const featureFlags = await applicationContext
       .getUseCases()
-      .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
+      .getAllFeatureFlagsInteractor(applicationContext);
 
     const documentVisibilityChangeDate =
       featureFlags[

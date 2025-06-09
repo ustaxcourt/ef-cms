@@ -1,10 +1,10 @@
 jest.mock('@web-api/persistence/postgres/featureFlag/getFeatureFlagValues');
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getAllFeatureFlagsFromPostgresInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
-describe('getAllFeatureFlagsFromPostgresInteractor', () => {
+describe('getAllFeatureFlagsInteractor', () => {
   const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
   beforeEach(() => {
     applicationContext.environment.stage = 'production';
@@ -25,10 +25,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
       },
     ]);
 
-    const RESULT = await getAllFeatureFlagsFromPostgresInteractor(
-      applicationContext,
-      true,
-    );
+    const RESULT = await getAllFeatureFlagsInteractor(applicationContext, true);
 
     expect(RESULT).toMatchObject({
       [FEATURE_FLAG_KEY]: 50,
@@ -44,10 +41,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
 
     getFeatureFlagValues.mockResolvedValueOnce([]);
 
-    const RESULT = await getAllFeatureFlagsFromPostgresInteractor(
-      applicationContext,
-      true,
-    );
+    const RESULT = await getAllFeatureFlagsInteractor(applicationContext, true);
 
     expect(RESULT).toMatchObject({
       [FEATURE_FLAG_KEY]: false,
@@ -68,7 +62,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
       },
     ]);
 
-    const RESULT1 = await getAllFeatureFlagsFromPostgresInteractor(
+    const RESULT1 = await getAllFeatureFlagsInteractor(
       applicationContext,
       true,
     );
@@ -77,8 +71,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
       [FEATURE_FLAG_KEY]: 50,
     });
 
-    const RESULT2 =
-      await getAllFeatureFlagsFromPostgresInteractor(applicationContext);
+    const RESULT2 = await getAllFeatureFlagsInteractor(applicationContext);
 
     expect(RESULT2).toMatchObject({
       [FEATURE_FLAG_KEY]: 50,

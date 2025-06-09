@@ -130,7 +130,7 @@ const batchDownloadDocketEntriesHelper = async (
 
   const featureFlags = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsFromPostgresInteractor(applicationContext, true);
+    .getAllFeatureFlagsInteractor(applicationContext, true);
 
   const awsBatchMinimumCount =
     featureFlags[ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key];
