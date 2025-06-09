@@ -21,7 +21,7 @@ import {
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import {
-  getRawFeatureFlagFromPostgresValue,
+  getRawFeatureFlagValue,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
@@ -98,8 +98,8 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
-        getRawFeatureFlagFromPostgresValue({ flag }) {
-          return getRawFeatureFlagFromPostgresValue({ flag });
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);

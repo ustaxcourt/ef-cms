@@ -4,7 +4,7 @@ import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
   describe('AWS Batch - Docket Entries Download', () => {
     before(() => {
-      cy.task('getRawFeatureFlagFromPostgresValue', {
+      cy.task('getRawFeatureFlagValue', {
         flag: 'aws-batch-zipper-minimum-count',
       }).as('ORIGINAL_FEATUE_FLAG_VALUE');
 
