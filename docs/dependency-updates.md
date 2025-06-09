@@ -18,6 +18,8 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
   - `./web-api/runtimes/puppeteer/package.json`
   - `./web-api/terraform/modules/batch/docker-image/package.json`
 
+You can use the scripts/npm/upgrade-npm-packages.ts for this process, however make sure all three package.json files are updated.
+
 #### 1.1 Run `npm outdated`
 
 This command informs us of minor and major version updates that we need to update manually. For major updates, there are often breaking API changes that require refactoring.

@@ -216,7 +216,7 @@ jobs:
 
   docker-image-zipper:
     docker:
-      - image: cimg/node:22.14.0
+      - image: cimg/node:22.16.0
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
