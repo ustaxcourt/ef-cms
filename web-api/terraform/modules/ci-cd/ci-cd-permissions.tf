@@ -230,8 +230,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
       ],
       "Resource": [
         "arn:aws:dynamodb::${data.aws_caller_identity.current.account_id}:global-table/efcms-*",
-        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-*",
-        "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/efcms-*"
+        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-*"
       ]
     },
     {
@@ -468,6 +467,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/switch_colors_cron_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/rds_expired_records_cleanup_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*"
       ]
     }
