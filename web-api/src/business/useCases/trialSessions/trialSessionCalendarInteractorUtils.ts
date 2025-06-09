@@ -1,27 +1,6 @@
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
-import { settlePromises } from '@web-api/utilities/settlePromises';
-
-export async function deleteTrialSortMappingRecordsForEligibleCases({
-  applicationContext,
-  eligibleCases,
-}: {
-  applicationContext: ServerApplicationContext;
-  eligibleCases: RawCase[];
-}) {
-  await settlePromises(
-    eligibleCases.map(c =>
-      applicationContext
-        .getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords({
-          applicationContext,
-          docketNumber: c.docketNumber,
-        }),
-    ),
-  );
-}
 
 // TODO: Remove this once associatedJudge stuff is no longer on deadlines.
 // Exported just to test.

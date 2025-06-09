@@ -410,7 +410,7 @@ export const updateCaseAndAssociations = async ({
   // Then persist related data
   // all validation has passed, so now execute all persistence callbacks from results
   const persistenceRequests = persistenceCallbacks.map(persistFn => {
-    persistFn();
+    return persistFn();
   });
   await settlePromises(persistenceRequests);
 

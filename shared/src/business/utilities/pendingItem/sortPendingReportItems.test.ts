@@ -194,7 +194,7 @@ describe('sortPendingReportItems', () => {
     ]);
   });
 
-  it('should sort using the default soting settings', () => {
+  it('should sort using the default sorting settings', () => {
     const SORT_FIELD = '';
     const SORT_ORDER = 'asc' as const;
     const PENDING_ITEMS: PendingItemFormatted[] = [
@@ -350,6 +350,172 @@ describe('sortPendingReportItems', () => {
       },
       {
         docketNumber: '101-22',
+      },
+    ]);
+  });
+
+  it('should sort docket numbers in descending order and break ties with receivedAt', () => {
+    const SORT_FIELD = 'docketNumber';
+    const SORT_ORDER = 'desc' as const;
+    const PENDING_ITEMS: PendingItemFormatted[] = [
+      {
+        docketNumber: '106-21',
+        receivedAt: '2020-12-01T04:00:00.000Z',
+      } as unknown as PendingItemFormatted,
+      {
+        docketNumber: '106-21',
+        receivedAt: '2020-11-10T04:00:00.000Z', // tie on docketNumber, earlier date
+      } as unknown as PendingItemFormatted,
+      {
+        docketNumber: '101-22',
+        receivedAt: '2021-01-01T04:00:00.000Z',
+      } as unknown as PendingItemFormatted,
+      {
+        docketNumber: '301-20',
+        receivedAt: '2020-05-10T04:00:00.000Z',
+      } as unknown as PendingItemFormatted,
+    ];
+
+    const results = sortPendingReportItems(
+      PENDING_ITEMS,
+      SORT_FIELD,
+      SORT_ORDER,
+    );
+
+    expect(results).toEqual([
+      {
+        docketNumber: '101-22',
+        receivedAt: '2021-01-01T04:00:00.000Z',
+      },
+      {
+        docketNumber: '106-21',
+        receivedAt: '2020-12-01T04:00:00.000Z',
+      },
+      {
+        docketNumber: '106-21',
+        receivedAt: '2020-11-10T04:00:00.000Z',
+      },
+      {
+        docketNumber: '301-20',
+        receivedAt: '2020-05-10T04:00:00.000Z',
+      },
+    ]);
+  });
+
+  it('should fall back to default receivedAt sorting if pendingItemSortOrder is undefined', () => {
+    const PENDING_ITEMS: PendingItemFormatted[] = [
+      {
+        receivedAt: '2021-06-10T12:00:00.000Z',
+        testProp: 2,
+      } as unknown as PendingItemFormatted,
+      {
+        receivedAt: '2020-01-01T00:00:00.000Z',
+        testProp: 1,
+      } as unknown as PendingItemFormatted,
+      {
+        receivedAt: '2022-03-04T08:00:00.000Z',
+        testProp: 3,
+      } as unknown as PendingItemFormatted,
+    ];
+
+    const results = sortPendingReportItems(
+      PENDING_ITEMS,
+      'testProp',
+      undefined,
+    );
+
+    expect(results).toEqual([
+      {
+        receivedAt: '2020-01-01T00:00:00.000Z',
+        testProp: 1,
+      },
+      {
+        receivedAt: '2021-06-10T12:00:00.000Z',
+        testProp: 2,
+      },
+      {
+        receivedAt: '2022-03-04T08:00:00.000Z',
+        testProp: 3,
+      },
+    ]);
+  });
+
+  it('should break ties using receivedAt when two items have the same numeric field value', () => {
+    const SORT_FIELD = 'testProp';
+    const SORT_ORDER = 'asc' as const;
+    const PENDING_ITEMS: PendingItemFormatted[] = [
+      {
+        receivedAt: '2022-02-10T00:00:00.000Z',
+        testProp: 7,
+      } as unknown as PendingItemFormatted,
+      {
+        receivedAt: '2022-02-01T00:00:00.000Z',
+        testProp: 7,
+      } as unknown as PendingItemFormatted,
+      {
+        receivedAt: '2020-01-01T00:00:00.000Z',
+        testProp: 1,
+      } as unknown as PendingItemFormatted,
+    ];
+
+    const results = sortPendingReportItems(
+      PENDING_ITEMS,
+      SORT_FIELD,
+      SORT_ORDER,
+    );
+
+    expect(results).toEqual([
+      {
+        receivedAt: '2020-01-01T00:00:00.000Z',
+        testProp: 1,
+      },
+      {
+        receivedAt: '2022-02-01T00:00:00.000Z',
+        testProp: 7,
+      },
+      {
+        receivedAt: '2022-02-10T00:00:00.000Z',
+        testProp: 7,
+      },
+    ]);
+  });
+
+  it('should handle non-string, non-number fields by sorting them like numbers or objects and then by receivedAt', () => {
+    const SORT_FIELD = 'isUrgent';
+    const SORT_ORDER = 'asc' as const;
+    const PENDING_ITEMS: PendingItemFormatted[] = [
+      {
+        isUrgent: false,
+        receivedAt: '2020-01-01T00:00:00.000Z',
+      } as unknown as PendingItemFormatted,
+      {
+        isUrgent: true,
+        receivedAt: '2020-06-10T00:00:00.000Z',
+      } as unknown as PendingItemFormatted,
+      {
+        isUrgent: true,
+        receivedAt: '2020-02-15T00:00:00.000Z',
+      } as unknown as PendingItemFormatted,
+    ];
+
+    const results = sortPendingReportItems(
+      PENDING_ITEMS,
+      SORT_FIELD,
+      SORT_ORDER,
+    );
+
+    expect(results).toEqual([
+      {
+        isUrgent: false,
+        receivedAt: '2020-01-01T00:00:00.000Z',
+      },
+      {
+        isUrgent: true,
+        receivedAt: '2020-02-15T00:00:00.000Z',
+      },
+      {
+        isUrgent: true,
+        receivedAt: '2020-06-10T00:00:00.000Z',
       },
     ]);
   });
