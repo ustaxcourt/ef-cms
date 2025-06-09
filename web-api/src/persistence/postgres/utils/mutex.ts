@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { tryGetLock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 import { releaseLock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -86,7 +86,7 @@ export const acquireLock = async ({
         identifierObjects.map(async idObj => {
           const success = await releaseLock(db, idObj.hashedLockId);
           if (!success) {
-            getLogger().info(
+            getDawsonLogger().info(
               `Lock not released explicitly for ${idObj.lockId}, falling back to release by connection destroy`,
             );
           }
@@ -151,14 +151,16 @@ export function withLocking<InteractorInput, InteractorOutput>(
     try {
       results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
-      getLogger().error(`withLocking: failed to execute interactor: ${err}`);
+      getDawsonLogger().error(
+        `withLocking: failed to execute interactor: ${err}`,
+      );
       caughtError = err;
     }
 
     try {
       await releaseLockFn();
     } catch (e) {
-      getLogger().error(`withLocking: failed to remove lock: ${e}`);
+      getDawsonLogger().error(`withLocking: failed to remove lock: ${e}`);
       throw e;
     }
     if (caughtError) {
