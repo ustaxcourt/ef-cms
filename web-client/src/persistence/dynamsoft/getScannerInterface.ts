@@ -1,3 +1,4 @@
+import { getConstants } from '@web-client/getConstants';
 import { loadDWTLibrary } from './loader';
 
 let DWObject = null;
@@ -28,15 +29,14 @@ export const getScannerInterface = () => {
     };
   };
 
-  const loadDynamsoft = ({ applicationContext }) => {
+  const loadDynamsoft = () => {
     if (!dynamsoftLoader) {
       // eslint-disable-next-line no-async-promise-executor
       dynamsoftLoader = new Promise(async resolve => {
         await loadDWTLibrary();
         const { Dynamsoft } = window;
         Dynamsoft.DWT.ResourcesPath = 'https://unpkg.com/dwt@latest/dist';
-        Dynamsoft.DWT.ProductKey =
-          applicationContext.getConstants().DYNAMSOFT_PRODUCT_KEYS;
+        Dynamsoft.DWT.ProductKey = getConstants().DYNAMSOFT_PRODUCT_KEYS;
         Dynamsoft.DWT.ScanDirectly = true;
 
         Dynamsoft.DWT.CreateDWTObject(
