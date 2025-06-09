@@ -95,7 +95,7 @@ export const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
-export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
+export const ALLOWLIST_FEATURE_FLAGS = {
   AWS_BATCH_ZIPPER_MINIMUM_COUNT: {
     key: 'aws-batch-zipper-minimum-count',
   },
@@ -118,9 +118,8 @@ export const ALLOWLIST_FEATURE_FLAGS_POSTGRES = {
   },
 };
 
-type PostgresFeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS_POSTGRES;
-export type PostgresFeatureFlagKeys =
-  PostgresFeatureFlags[keyof PostgresFeatureFlags]['key'];
+type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
+export type FeatureFlagKeys = FeatureFlags[keyof FeatureFlags]['key'];
 
 export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {

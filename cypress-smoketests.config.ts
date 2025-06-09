@@ -21,8 +21,8 @@ import {
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import {
-  getRawFeatureFlagFromPostgresValue,
-  toggleFeatureFlagFromPostgres,
+  getRawFeatureFlagValue,
+  toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
@@ -98,8 +98,8 @@ export default defineConfig({
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
         },
-        getRawFeatureFlagFromPostgresValue({ flag }) {
-          return getRawFeatureFlagFromPostgresValue({ flag });
+        getRawFeatureFlagValue({ flag }) {
+          return getRawFeatureFlagValue({ flag });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
@@ -113,8 +113,8 @@ export default defineConfig({
         }) {
           return readAllItemsInBucket({ bucketName, retries });
         },
-        toggleFeatureFlagFromPostgres(args) {
-          return toggleFeatureFlagFromPostgres(args);
+        toggleFeatureFlag(args) {
+          return toggleFeatureFlag(args);
         },
         unzipFile({ fileName }) {
           return unzipFile({ fileName });

@@ -1,4 +1,4 @@
-import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
@@ -57,12 +57,11 @@ export const getDownloadPolicyUrlInteractor = async (
 
     const featureFlags = await applicationContext
       .getUseCases()
-      .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
+      .getAllFeatureFlagsInteractor(applicationContext);
 
     const documentVisibilityChangeDate =
       featureFlags[
-        ALLOWLIST_FEATURE_FLAGS_POSTGRES.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE
-          .key
+        ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
       ];
 
     if (

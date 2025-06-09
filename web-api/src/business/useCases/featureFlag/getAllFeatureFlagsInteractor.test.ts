@@ -1,10 +1,10 @@
 jest.mock('@web-api/persistence/postgres/featureFlag/getFeatureFlagValues');
-import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { getAllFeatureFlagsFromPostgresInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
-describe('getAllFeatureFlagsFromPostgresInteractor', () => {
+describe('getAllFeatureFlagsInteractor', () => {
   const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
   beforeEach(() => {
     applicationContext.environment.stage = 'production';
@@ -16,7 +16,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
 
   it('should return the value of the feature flag', async () => {
     const FEATURE_FLAG_KEY =
-      ALLOWLIST_FEATURE_FLAGS_POSTGRES.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
+      ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
 
     getFeatureFlagValues.mockResolvedValueOnce([
       {
@@ -25,10 +25,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
       },
     ]);
 
-    const RESULT = await getAllFeatureFlagsFromPostgresInteractor(
-      applicationContext,
-      true,
-    );
+    const RESULT = await getAllFeatureFlagsInteractor(applicationContext, true);
 
     expect(RESULT).toMatchObject({
       [FEATURE_FLAG_KEY]: 50,
@@ -40,14 +37,11 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
 
   it('should return the default value if the feature flag is not set in postgres', async () => {
     const FEATURE_FLAG_KEY =
-      ALLOWLIST_FEATURE_FLAGS_POSTGRES.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
+      ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
 
     getFeatureFlagValues.mockResolvedValueOnce([]);
 
-    const RESULT = await getAllFeatureFlagsFromPostgresInteractor(
-      applicationContext,
-      true,
-    );
+    const RESULT = await getAllFeatureFlagsInteractor(applicationContext, true);
 
     expect(RESULT).toMatchObject({
       [FEATURE_FLAG_KEY]: false,
@@ -59,7 +53,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
 
   it('should not call persistence if feature flags already populated', async () => {
     const FEATURE_FLAG_KEY =
-      ALLOWLIST_FEATURE_FLAGS_POSTGRES.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
+      ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
 
     getFeatureFlagValues.mockResolvedValueOnce([
       {
@@ -68,7 +62,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
       },
     ]);
 
-    const RESULT1 = await getAllFeatureFlagsFromPostgresInteractor(
+    const RESULT1 = await getAllFeatureFlagsInteractor(
       applicationContext,
       true,
     );
@@ -77,8 +71,7 @@ describe('getAllFeatureFlagsFromPostgresInteractor', () => {
       [FEATURE_FLAG_KEY]: 50,
     });
 
-    const RESULT2 =
-      await getAllFeatureFlagsFromPostgresInteractor(applicationContext);
+    const RESULT2 = await getAllFeatureFlagsInteractor(applicationContext);
 
     expect(RESULT2).toMatchObject({
       [FEATURE_FLAG_KEY]: 50,

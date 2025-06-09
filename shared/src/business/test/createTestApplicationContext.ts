@@ -1,6 +1,6 @@
 import * as DateHandler from '@shared/business/utilities/DateHandler';
 import * as pdfLib from 'pdf-lib';
-import { ALLOWLIST_FEATURE_FLAGS_POSTGRES } from '@shared/business/entities/EntityConstants';
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import {
   Case,
   canAllowDocumentServiceForCase,
@@ -110,7 +110,7 @@ import { uploadDocumentAndMakeSafeInteractor } from '@shared/business/useCases/u
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { validatePenaltiesInteractor } from '@shared/business/useCases/validatePenaltiesInteractor';
 import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
-import { getAllFeatureFlagsFromPostgresInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import path from 'path';
 import pug from 'pug';
 import * as sass from 'sass';
@@ -334,9 +334,9 @@ export const createTestApplicationContext = () => {
     generateNoticesForCaseTrialSessionCalendarInteractor: jest
       .fn()
       .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
-    getAllFeatureFlagsFromPostgresInteractor: jest
+    getAllFeatureFlagsInteractor: jest
       .fn()
-      .mockImplementation(getAllFeatureFlagsFromPostgresInteractor),
+      .mockImplementation(getAllFeatureFlagsInteractor),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
@@ -466,7 +466,7 @@ export const createTestApplicationContext = () => {
     getElasticsearchReindexRecords: jest.fn(),
     getFeatureFlagValue: jest.fn().mockImplementation(({ featureFlag }) => {
       switch (featureFlag) {
-        case ALLOWLIST_FEATURE_FLAGS_POSTGRES.ENTITY_LOCKING_FEATURE_FLAG.key:
+        case ALLOWLIST_FEATURE_FLAGS.ENTITY_LOCKING_FEATURE_FLAG.key:
           return { current: true };
       }
     }),

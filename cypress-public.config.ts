@@ -1,5 +1,5 @@
 import { defineConfig } from 'cypress';
-import { toggleFeatureFlagFromPostgres } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
+import { toggleFeatureFlag } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import fs from 'fs';
 import path from 'path';
 
@@ -17,7 +17,7 @@ export default defineConfig({
           return null;
         },
         setAllowedTerminalIpAddresses(ipAddresses) {
-          return toggleFeatureFlagFromPostgres({
+          return toggleFeatureFlag({
             flag: 'allowed-terminal-ips',
             flagValue: ipAddresses,
           });
@@ -26,8 +26,8 @@ export default defineConfig({
           console.table(message);
           return null;
         },
-        toggleFeatureFlagFromPostgres(args) {
-          return toggleFeatureFlagFromPostgres(args);
+        toggleFeatureFlag(args) {
+          return toggleFeatureFlag(args);
         },
       });
     },

@@ -1,6 +1,6 @@
 import { getCypressPostgresDb } from 'cypress/helpers/cypressTasks/postgres/getCypressPostgresDb';
 
-export const getRawFeatureFlagFromPostgresValue = async ({
+export const getRawFeatureFlagValue = async ({
   flag,
 }: {
   flag: string;
@@ -15,7 +15,7 @@ export const getRawFeatureFlagFromPostgresValue = async ({
   return RESULTS[0].value.current;
 };
 
-export async function toggleFeatureFlagFromPostgres({
+export async function toggleFeatureFlag({
   flag,
   flagValue,
 }: {

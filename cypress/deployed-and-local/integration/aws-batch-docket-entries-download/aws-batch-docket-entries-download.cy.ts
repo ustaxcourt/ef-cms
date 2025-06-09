@@ -4,11 +4,11 @@ import { goToCase } from '../../../helpers/caseDetail/go-to-case';
 if (!Cypress.env('SMOKETESTS_LOCAL')) {
   describe('AWS Batch - Docket Entries Download', () => {
     before(() => {
-      cy.task('getRawFeatureFlagFromPostgresValue', {
+      cy.task('getRawFeatureFlagValue', {
         flag: 'aws-batch-zipper-minimum-count',
       }).as('ORIGINAL_FEATUE_FLAG_VALUE');
 
-      cy.task('toggleFeatureFlagFromPostgres', {
+      cy.task('toggleFeatureFlag', {
         flag: 'aws-batch-zipper-minimum-count',
         flagValue: 1,
       });
@@ -16,7 +16,7 @@ if (!Cypress.env('SMOKETESTS_LOCAL')) {
 
     after(() => {
       cy.get('@ORIGINAL_FEATUE_FLAG_VALUE').then(ORIGINAL_FEATUE_FLAG_VALUE => {
-        cy.task('toggleFeatureFlagFromPostgres', {
+        cy.task('toggleFeatureFlag', {
           flag: 'aws-batch-zipper-minimum-count',
           flagValue: ORIGINAL_FEATUE_FLAG_VALUE,
         });

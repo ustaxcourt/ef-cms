@@ -12,7 +12,7 @@ export const setSignatureNameForPdfSigningAction = async ({
   store,
 }: ActionProps) => {
   const user = get(state.user);
-  const { ALLOWLIST_FEATURE_FLAGS_POSTGRES, CHIEF_JUDGE } =
+  const { ALLOWLIST_FEATURE_FLAGS, CHIEF_JUDGE } =
     applicationContext.getConstants();
 
   let nameForPdfSigning = '';
@@ -32,7 +32,7 @@ export const setSignatureNameForPdfSigningAction = async ({
       .getAllFeatureFlagsInteractor(applicationContext);
 
     nameForPdfSigning =
-      featureFlags[ALLOWLIST_FEATURE_FLAGS_POSTGRES.CHIEF_JUDGE_NAME.key];
+      featureFlags[ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key];
 
     nameForSigningLine2 = CHIEF_JUDGE;
   }

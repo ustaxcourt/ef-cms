@@ -1,5 +1,5 @@
 jest.mock(
-  '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor',
+  '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor',
 );
 jest.mock('@web-api/persistence/s3/getDownloadPolicyUrl');
 jest.mock('@web-api/persistence/postgres/featureFlag/getMaintenanceMode');
@@ -9,7 +9,7 @@ import {
   Role,
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_PETITION } from '@shared/test/mockDocketEntry';
-import { getAllFeatureFlagsFromPostgresInteractor as getAllFeatureFlagsFromPostgresInteractorMock } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsFromPostgresInteractor';
+import { getAllFeatureFlagsInteractor as getAllFeatureFlagsInteractorMock } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocumentDownloadUrlLambda } from './getDocumentDownloadUrlLambda';
 import { getDownloadPolicyUrl as getDownloadPolicyUrlMock } from '@web-api/persistence/s3/getDownloadPolicyUrl';
@@ -28,8 +28,8 @@ describe('getDocumentDownloadUrlLambda', () => {
   let CI;
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const getMaintenanceMode = jest.mocked(getMaintenanceModeMock);
-  const getAllFeatureFlagsFromPostgresInteractor = jest.mocked(
-    getAllFeatureFlagsFromPostgresInteractorMock,
+  const getAllFeatureFlagsInteractor = jest.mocked(
+    getAllFeatureFlagsInteractorMock,
   );
   const getDownloadPolicyUrl = jest.mocked(getDownloadPolicyUrlMock);
 
@@ -40,7 +40,7 @@ describe('getDocumentDownloadUrlLambda', () => {
   });
 
   beforeEach(() => {
-    getAllFeatureFlagsFromPostgresInteractor.mockResolvedValue({});
+    getAllFeatureFlagsInteractor.mockResolvedValue({});
     getMaintenanceMode.mockResolvedValue({ current: false });
     getDownloadPolicyUrl.mockImplementation(({ key, useTempBucket }) => {
       return Promise.resolve({

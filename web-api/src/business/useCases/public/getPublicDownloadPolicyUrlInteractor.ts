@@ -1,5 +1,5 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS_POSTGRES,
+  ALLOWLIST_FEATURE_FLAGS,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { Case, isSealedCase } from '@shared/business/entities/cases/Case';
@@ -58,12 +58,11 @@ export const getPublicDownloadPolicyUrlInteractor = async (
 
   const featureFlags = await applicationContext
     .getUseCases()
-    .getAllFeatureFlagsFromPostgresInteractor(applicationContext);
+    .getAllFeatureFlagsInteractor(applicationContext);
 
   const documentVisibilityChangeDate =
     featureFlags[
-      ALLOWLIST_FEATURE_FLAGS_POSTGRES.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE
-        .key
+      ALLOWLIST_FEATURE_FLAGS.DOCUMENT_VISIBILITY_POLICY_CHANGE_DATE.key
     ];
 
   if (

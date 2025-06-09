@@ -1,19 +1,19 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
-  ALLOWLIST_FEATURE_FLAGS_POSTGRES,
-  PostgresFeatureFlagKeys,
+  ALLOWLIST_FEATURE_FLAGS,
+  FeatureFlagKeys,
 } from '@shared/business/entities/EntityConstants';
 import { isEmpty } from 'lodash';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
-type AllFeatureFlags = Partial<{ [K in PostgresFeatureFlagKeys]: any }>;
+type AllFeatureFlags = Partial<{ [K in FeatureFlagKeys]: any }>;
 const allFeatureFlags: AllFeatureFlags = {};
 
-export const getAllFeatureFlagsFromPostgresInteractor = async (
+export const getAllFeatureFlagsInteractor = async (
   applicationContext: ServerApplicationContext,
   hardReload: boolean = false,
 ): Promise<AllFeatureFlags> => {
-  const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS_POSTGRES).map(
+  const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
     flag => flag.key,
   );
 

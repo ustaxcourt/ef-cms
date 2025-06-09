@@ -7,7 +7,7 @@ import { runAction } from '@web-client/presenter/test.cerebral';
 import { setSignatureNameForPdfSigningAction } from './setSignatureNameForPdfSigningAction';
 
 describe('setSignatureNameForPdfSigningAction', () => {
-  const { ALLOWLIST_FEATURE_FLAGS_POSTGRES, CHIEF_JUDGE } =
+  const { ALLOWLIST_FEATURE_FLAGS, CHIEF_JUDGE } =
     applicationContext.getConstants();
 
   let judgeUser: RawUser;
@@ -21,8 +21,7 @@ describe('setSignatureNameForPdfSigningAction', () => {
     applicationContext
       .getUseCases()
       .getAllFeatureFlagsInteractor.mockReturnValue({
-        [ALLOWLIST_FEATURE_FLAGS_POSTGRES.CHIEF_JUDGE_NAME.key]:
-          'Oscar the Grouch',
+        [ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key]: 'Oscar the Grouch',
       });
 
     presenter.providers.applicationContext = applicationContext;
