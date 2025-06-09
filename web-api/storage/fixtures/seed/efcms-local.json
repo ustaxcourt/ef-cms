@@ -9042,6 +9042,28 @@
     "addToCoversheet": false
   },
   {
+    "role": "irsPractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "RT6789",
+    "entityName": "IrsPractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test IRS Practitioner",
+    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "section": "irsPractitioner",
+    "pk": "case|101-20",
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "irspractitioner@example.com"
+  },
+  {
     "stampData": {},
     "servedParties": [
       {
@@ -20923,46 +20945,6 @@
     "pk": "consolidated-cases-party-association"
   },
   {
-    "sk": "docketNumberCounter-2011",
-    "id": 1,
-    "pk": "docketNumberCounter-2011"
-  },
-  {
-    "sk": "docketNumberCounter-2016",
-    "id": 1,
-    "pk": "docketNumberCounter-2016"
-  },
-  {
-    "sk": "docketNumberCounter-2019",
-    "id": 13,
-    "pk": "docketNumberCounter-2019"
-  },
-  {
-    "sk": "docketNumberCounter-2020",
-    "id": 29,
-    "pk": "docketNumberCounter-2020"
-  },
-  {
-    "sk": "docketNumberCounter-2021",
-    "id": 219,
-    "pk": "docketNumberCounter-2021"
-  },
-  {
-    "sk": "docketNumberCounter-2022",
-    "id": 2,
-    "pk": "docketNumberCounter-2022"
-  },
-  {
-    "sk": "docketNumberCounter-2023",
-    "id": 6,
-    "pk": "docketNumberCounter-2023"
-  },
-  {
-    "sk": "docketNumberCounter-2024",
-    "id": 1,
-    "pk": "docketNumberCounter-2024"
-  },
-  {
     "sk": "document-search-limiter",
     "id": 1,
     "pk": "document-search-limiter",
@@ -20977,54 +20959,6 @@
     "sk": "e-consent-fields-enabled-feature-flag",
     "current": true,
     "pk": "e-consent-fields-enabled-feature-flag"
-  },
-  {
-    "sk": "AnchorageAlaska-H-B-20230311000000-105-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "105-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|105-67"
-  },
-  {
-    "sk": "AnchorageAlaska-H-B-20230325000000-103-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "103-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|103-67"
-  },
-  {
-    "sk": "AnchorageAlaska-H-B-20230401000000-102-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "102-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|102-67"
-  },
-  {
-    "sk": "AnchorageAlaska-R-B-20230311000000-105-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "105-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|105-67"
-  },
-  {
-    "sk": "AnchorageAlaska-R-B-20230325000000-103-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "103-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|103-67"
-  },
-  {
-    "sk": "AnchorageAlaska-R-B-20230401000000-102-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "102-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|102-67"
-  },
-  {
-    "sk": "WashingtonDistrictofColumbia-H-D-20210216115509-150-12",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "150-12",
-    "gsi1pk": "eligible-for-trial-case-catalog|150-12"
-  },
-  {
-    "sk": "WashingtonDistrictofColumbia-R-D-20210216115509-150-12",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "150-12",
-    "gsi1pk": "eligible-for-trial-case-catalog|150-12"
   },
   {
     "sk": "b2a1d128-784f-4dfb-a2a4-deb138b85542",

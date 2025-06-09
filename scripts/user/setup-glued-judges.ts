@@ -69,11 +69,7 @@ const createOrUpdateCognitoUser = async ({
 
     userExists = true;
   } catch (err) {
-    const { code }: any = err;
-    if (code !== 'UserNotFoundException') {
-      console.error(`ERROR checking for cognito user for ${name}:`, err);
-      return;
-    }
+    console.error(`ERROR checking for cognito user for ${name}:`, err);
   }
 
   if (!userExists) {

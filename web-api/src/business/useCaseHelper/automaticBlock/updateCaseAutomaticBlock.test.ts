@@ -1,10 +1,4 @@
 jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
-);
-jest.mock(
-  '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords',
-);
-jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
 );
 import {
@@ -19,17 +13,10 @@ import { cloneDeep } from 'lodash';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAutomaticBlock } from './updateCaseAutomaticBlock';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
-import { createCaseTrialSortMappingRecords as createCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 
 describe('updateCaseAutomaticBlock', () => {
   let mockCase;
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
-  );
-  const createCaseTrialSortMappingRecords = jest.mocked(
-    createCaseTrialSortMappingRecordsMock,
-  );
+
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
@@ -39,7 +26,7 @@ describe('updateCaseAutomaticBlock', () => {
     applicationContext.getUniqueId.mockReturnValue('unique-id-1');
   });
 
-  it('sets the case to automaticBlocked and calls deleteCaseTrialSortMappingRecords if it has pending documents', async () => {
+  it('sets the case to automaticBlocked if it has pending documents', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
     mockCase.docketEntries = [PENDING_DOCKET_ENTRY];
 
@@ -47,7 +34,6 @@ describe('updateCaseAutomaticBlock', () => {
       authorizedUser: mockDocketClerkUser,
     });
     const updatedCase = await updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity,
     });
 
@@ -56,19 +42,17 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
-  it('sets the case to automaticBlocked and calls deleteCaseTrialSortMappingRecords if it has deadlines', async () => {
+  it('sets the case to automaticBlocked and if it has deadlines', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
-      { deadline: 'something' } as any
+      { deadline: 'something' } as any,
     ]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
       authorizedUser: mockDocketClerkUser,
     });
     const updatedCase = await updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity,
     });
 
@@ -77,12 +61,11 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
-  it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords if it already has a trial date', async () => {
+  it('does not set the case to automaticBlocked if it already has a trial date', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
-      { deadline: 'something' } as any
+      { deadline: 'something' } as any,
     ]);
 
     const caseEntity = new Case(
@@ -96,15 +79,13 @@ describe('updateCaseAutomaticBlock', () => {
       },
     );
     const updatedCase = await updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity,
     });
 
     expect(updatedCase.automaticBlocked).toBeFalsy();
-    expect(deleteCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
-  it('does not set the case to automaticBlocked or call deleteCaseTrialSortMappingRecords when the case is marked as high priority', async () => {
+  it('does not set the case to automaticBlocked when the case is marked as high priority', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
       { deadline: 'something' } as any,
     ]);
@@ -119,22 +100,19 @@ describe('updateCaseAutomaticBlock', () => {
       },
     );
     const updatedCase = await updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity,
     });
 
     expect(updatedCase.automaticBlocked).toBeFalsy();
-    expect(deleteCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
-  it('sets the case to not automaticBlocked but does not call createCaseTrialSortMappingRecords if the case does not have deadlines or pending items and the case is not generalDocketReadyForTrial status', async () => {
+  it('sets the case to not automaticBlocked if the case does not have deadlines or pending items and the case is not generalDocketReadyForTrial status', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
 
     const caseEntity = new Case(MOCK_CASE_WITHOUT_PENDING, {
       authorizedUser: mockDocketClerkUser,
     });
     const updatedCase = await updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity,
     });
 
@@ -143,10 +121,9 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
     });
-    expect(createCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
-  it('sets the case to not automaticBlocked and calls createCaseTrialSortMappingRecords if the case does not have deadlines or pending items and the case is generalDocketReadyForTrial status', async () => {
+  it('sets the case to not automaticBlocked if the case does not have deadlines or pending items and the case is generalDocketReadyForTrial status', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
 
     const caseEntity = new Case(
@@ -159,7 +136,6 @@ describe('updateCaseAutomaticBlock', () => {
       },
     );
     const updatedCase = await updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity,
     });
 
@@ -168,29 +144,6 @@ describe('updateCaseAutomaticBlock', () => {
       automaticBlockedDate: undefined,
       automaticBlockedReason: undefined,
     });
-    expect(createCaseTrialSortMappingRecords).toHaveBeenCalled();
-  });
-
-  it('does not call createCaseTrialSortMappingRecords if the case has no trial city', async () => {
-    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
-
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE_WITHOUT_PENDING,
-        preferredTrialCity: null,
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      },
-      {
-        authorizedUser: mockDocketClerkUser,
-      },
-    );
-
-    await updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity,
-    });
-
-    expect(createCaseTrialSortMappingRecords).not.toHaveBeenCalled();
   });
 
   it('should not fetch deadlines from persistence when hasCaseDeadline is true', async () => {
@@ -206,7 +159,6 @@ describe('updateCaseAutomaticBlock', () => {
     );
 
     await updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity,
       hasCaseDeadline: true,
     });

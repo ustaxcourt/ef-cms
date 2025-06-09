@@ -48,6 +48,7 @@
     "./cypress-smoketests.config.ts",
     "./cypress-smoketests-readonly.config.ts",
     "./cypress-smoketests-readonly-public.config.ts",
-    "./cypress-public.config.ts"
+    "./cypress-public.config.ts",
+     "**/jest.config.ts"
   ]
 }
