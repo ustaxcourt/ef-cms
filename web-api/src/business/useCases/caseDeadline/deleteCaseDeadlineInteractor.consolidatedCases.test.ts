@@ -18,9 +18,11 @@ import { MOCK_CASE } from '@shared/test/mockCase';
 import { deleteCaseDeadline as deleteDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
-const getCaseDeadlinesByConsolidatedCaseDeadlineId =
-  getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
+const getCaseDeadlinesByConsolidatedCaseDeadlineId = jest.mocked(
+  getCaseDeadlinesByConsolidatedCaseDeadlineIdMock,
+);
 
 const deleteDeadline = deleteDeadlineMock as jest.Mock;
 
@@ -45,12 +47,12 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       getUniqueId(),
     ];
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue(
+    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue(
       CONSOLIDATED_CASE_DEADLINE_IDS.map((id, index) => {
         return {
           caseDeadlineId: id,
           docketNumber: `${102 + index}-25`,
-        };
+        } as RawCaseDeadline;
       }),
     );
 
@@ -83,12 +85,12 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       getUniqueId(),
     ];
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue(
+    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue(
       CONSOLIDATED_CASE_DEADLINE_IDS.map((id, index) => {
         return {
           caseDeadlineId: id,
           docketNumber: `${102 + index}-25`,
-        };
+        } as RawCaseDeadline;
       }),
     );
 
@@ -130,12 +132,12 @@ describe('deleteCaseDeadlineInteractor - Consolidated Cases', () => {
       getUniqueId(),
     ];
 
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockReturnValue(
+    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue(
       CONSOLIDATED_CASE_DEADLINE_IDS.map((id, index) => {
         return {
           caseDeadlineId: id,
           docketNumber: `${102 + index}-25`,
-        };
+        } as RawCaseDeadline;
       }),
     );
 
