@@ -257,16 +257,14 @@ describe('setTrialSessionCalendarInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockResolvedValueOnce([]);
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialSession.mockResolvedValueOnce([
-        {
-          ...MOCK_CASE,
-          qcCompleteForTrial: {
-            '6805d1ab-18d0-43ec-bafb-654e83405416': true,
-          },
+    getEligibleCasesForTrialSession.mockResolvedValueOnce([
+      {
+        ...MOCK_CASE,
+        qcCompleteForTrial: {
+          '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
-      ]);
+      },
+    ]);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
