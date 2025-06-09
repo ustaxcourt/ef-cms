@@ -17,7 +17,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * addDraftStampOrderDocketEntryInteractor

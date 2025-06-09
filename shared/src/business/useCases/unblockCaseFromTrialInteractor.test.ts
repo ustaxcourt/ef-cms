@@ -1,11 +1,14 @@
-import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
@@ -17,19 +20,14 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('unblockCaseFromTrialInteractor', () => {
-  let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
 
   beforeEach(() => {
-    mockLock = undefined;
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
@@ -48,14 +46,6 @@ describe('unblockCaseFromTrialInteractor', () => {
       blocked: false,
       blockedReason: undefined,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
-    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should throw an unauthorized error if the user has no access to unblock the case', async () => {
@@ -70,29 +60,8 @@ describe('unblockCaseFromTrialInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('should not create the trial sort mapping record if the case has no trial city', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...MOCK_CASE,
-      preferredTrialCity: null,
-      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    });
-
-    await unblockCaseFromTrialInteractor(
-      applicationContext,
-      {
-        docketNumber: '123-45',
-      },
-      mockPetitionsClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
-  });
-
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLock.mockResolvedValueOnce(false);
 
     await expect(
       unblockCaseFromTrialInteractor(
@@ -115,20 +84,12 @@ describe('unblockCaseFromTrialInteractor', () => {
       },
       mockPetitionsClerkUser,
     );
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
   });
 });

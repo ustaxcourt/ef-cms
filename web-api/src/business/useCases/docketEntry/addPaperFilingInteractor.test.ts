@@ -2,9 +2,7 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
-);
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -28,7 +26,6 @@ import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/pos
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('addPaperFilingInteractor', () => {
@@ -39,9 +36,6 @@ describe('addPaperFilingInteractor', () => {
   );
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
-  );
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
   );
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockClientConnectionId = '987654';
@@ -239,7 +233,7 @@ describe('addPaperFilingInteractor', () => {
 
     expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
       {
-        leadDocketNumber: mockCase.leadDocketNumber,
+        docketNumber: mockCase.docketNumber,
       },
     ]);
     expect(updateCaseAndAssociations).toHaveBeenCalled();
@@ -323,12 +317,13 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('sets the case as blocked with due dates if the document filed is a tracked document type and the case has due dates', async () => {
@@ -358,12 +353,13 @@ describe('addPaperFilingInteractor', () => {
     );
 
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('does not send the service email if an error occurs while updating the case', async () => {

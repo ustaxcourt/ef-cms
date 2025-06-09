@@ -1,9 +1,7 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
-);
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -12,7 +10,6 @@ import {
   CHIEF_JUDGE,
 } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
@@ -26,17 +23,18 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 
 describe('createCaseDeadlineInteractor', () => {
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
 
-const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
-  );
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
   );
   const mockCaseDeadline = {
     deadlineDate: '2019-03-01T21:42:29.073Z',
@@ -44,16 +42,8 @@ const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
     docketNumber: MOCK_CASE.docketNumber,
   };
   let mockCase;
-  let mockLock;
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
 
   beforeEach(() => {
-    mockLock = undefined;
-
     applicationContext.environment.stage = 'local';
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
@@ -78,7 +68,7 @@ const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('creates a case deadline, marks the case as automatically blocked, and calls deleteCaseTrialSortMappingRecords when there are no pending items', async () => {
+  it('creates a case deadline and marks the case as automatically blocked when there are no pending items', async () => {
     mockCase = MOCK_CASE_WITHOUT_PENDING;
 
     const caseDeadline = await createCaseDeadlineInteractor(
@@ -91,15 +81,16 @@ const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
     expect(caseDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
     expect(caseDeadline.associatedJudgeId).toEqual(undefined); // judge is not set on the mock case, so judgeId is not set
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.dueDate,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
-  it('creates a case deadline, marks the case as automatically blocked, and calls deleteCaseTrialSortMappingRecords when there are already pending items on the case', async () => {
+  it('creates a case deadline and marks the case as automatically blocked when there are already pending items on the case', async () => {
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
     mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
@@ -116,20 +107,21 @@ const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
       'dabbad02-18d0-43ec-bafb-654e83405416',
     );
     expect(updateCaseAndAssociations).toHaveBeenCalled();
-    expect(updateCaseAndAssociations.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    tryGetLock.mockResolvedValueOnce(false);
+
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
     mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
-
-    mockLock = MOCK_LOCK;
 
     await expect(
       createCaseDeadlineInteractor(
@@ -156,26 +148,15 @@ const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledTimes(1);
+    expect(tryGetLock).toHaveBeenCalledTimes(1);
+    expect(releaseLock).toHaveBeenCalledTimes(1);
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
 
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
   });
 });

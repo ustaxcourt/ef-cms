@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -75,9 +76,7 @@ describe('createCaseInteractor', () => {
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    (generateDocketNumber as jest.Mock).mockResolvedValue(
-      '00101-00',
-    );
+    (generateDocketNumber as jest.Mock).mockResolvedValue('00101-00');
 
     applicationContext
       .getPersistenceGateway()

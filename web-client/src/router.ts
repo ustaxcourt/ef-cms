@@ -1201,6 +1201,20 @@ const router = {
       ),
     );
 
+    registerRoute(
+      '/trial-location/*/*/*',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSIONS },
+        (trialLocation: string, term: string, year: string) => {
+          setPageTitle('Trial location');
+          return app.getSequence('gotoTrialLocationSequence')({
+            trialLocation: decodeURIComponent(trialLocation),
+            redirectUrl: `/trial-session-planning-report/${term}/${year}`,
+          });
+        },
+      ),
+    );
+
     registerRoute('/idle-logout', () => {
       setPageTitle('Idle Logout');
       return app.getSequence('gotoIdleLogoutSequence')();

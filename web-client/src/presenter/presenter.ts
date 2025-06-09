@@ -120,6 +120,7 @@ import { editUnsignedDraftDocumentSequence } from '@web-client/presenter/sequenc
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
 import { exportCsvCustomCaseReportSequence } from '@web-client/presenter/sequences/exportCsvCustomCaseReportSequence';
 import { exportPendingReportSequence } from '@web-client/presenter/sequences/exportPendingReportSequence';
+import { exportTrialLocationToCsvSequence } from '@web-client/presenter/sequences/exportTrialLocationToCsvSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
 import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
 import { filePetitionCompleteStep1Sequence } from './sequences/filePetitionCompleteStep1Sequence';
@@ -218,6 +219,7 @@ import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
 import { gotoStatusReportOrderSequence } from './sequences/StatusReportOrder/gotoStatusReportOrderSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
+import { gotoTrialLocationSequence } from '@web-client/presenter/sequences/gotoTrialLocationSequence';
 import { gotoTrialSessionDetailsSequence } from './sequences/gotoTrialSessionDetailsSequence';
 import { gotoTrialSessionPlanningReportViewSequence } from '@web-client/presenter/sequences/gotoTrialSessionPlanningReportViewSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
@@ -389,6 +391,7 @@ import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimar
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
+import { setCurrentTabSequence } from '@web-client/presenter/sequences/setCurrentTabSequence';
 import { setCustomCaseReportFiltersSequence } from './sequences/setCustomCaseReportFiltersSequence';
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
 import { setDocumentForUploadSequence } from './sequences/setDocumentForUploadSequence';
@@ -808,6 +811,7 @@ export const presenterSequences = {
     exportCsvCustomCaseReportSequence as unknown as Function,
   exportPendingReportSequence:
     exportPendingReportSequence as unknown as Function,
+  exportTrialLocationToCsvSequence,
   fetchUserNotificationsSequence:
     fetchUserNotificationsSequence as unknown as Function,
   fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
@@ -960,6 +964,7 @@ export const presenterSequences = {
     gotoStartCaseWizardSequence as unknown as Function,
   gotoStatusReportOrderSequence,
   gotoStyleGuideSequence: gotoStyleGuideSequence as unknown as Function,
+  gotoTrialLocationSequence,
   gotoTrialSessionDetailSequence: gotoTrialSessionDetailsSequence,
   gotoTrialSessionPlanningReportViewSequence,
   gotoTrialSessionTermBuilderSequence,
@@ -1226,7 +1231,7 @@ export const presenterSequences = {
   selectDocumentForScanSequence:
     selectDocumentForScanSequence as unknown as Function,
   selectScannerSequence: selectScannerSequence as unknown as Function,
-  selectWorkItemSequence: selectWorkItemSequence as unknown as Function,
+  selectWorkItemSequence,
   serveCaseToIrsSequence: serveCaseToIrsSequence as unknown as Function,
   serveCourtIssuedDocumentSequence:
     serveCourtIssuedDocumentSequence as unknown as Function,
@@ -1248,6 +1253,7 @@ export const presenterSequences = {
     setCaseTypeToDisplaySequence as unknown as Function,
   setCurrentPageIndexSequence:
     setCurrentPageIndexSequence as unknown as Function,
+  setCurrentTabSequence,
   setCustomCaseReportFiltersSequence,
   setDocumentForPreviewSequence:
     setDocumentForPreviewSequence as unknown as Function,

@@ -173,18 +173,10 @@ import { getConstants } from './getConstants';
 import { getCountOfCaseDocumentsFiledByJudgesInteractor } from '@shared/proxies/reports/getCountOfCaseDocumentsFiledByJudgesProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
-import {
-  getDocQcSectionForUser,
-  getWorkQueueFilters,
-} from '../../shared/src/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocument } from '@web-client/persistence/s3/getDocument';
 import { getDocumentContentsForDocketEntryInteractor } from '../../shared/src/proxies/documents/getDocumentContentsForDocketEntryProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
-import { getDocumentQCInboxForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForSectionProxy';
-import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCInboxForUserProxy';
-import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
-import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
@@ -235,7 +227,6 @@ import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/us
 import { getUserPermissions } from '../../shared/src/authorization/getUserPermissions';
 import { getUsersInSectionInteractor } from '../../shared/src/proxies/users/getUsersInSectionProxy';
 import { getUsersPendingEmailInteractor } from '../../shared/src/proxies/users/getUsersPendingEmailProxy';
-import { getWorkItemInteractor } from '../../shared/src/proxies/workitems/getWorkItemProxy';
 import { loadPDFForPreviewInteractor } from '../../shared/src/business/useCases/loadPDFForPreviewInteractor';
 import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/loadPDFForSigningInteractor';
 import { logErrorInteractor } from '../../shared/src/proxies/logErrorProxy';
@@ -292,7 +283,6 @@ import { unsealDocketEntryInteractor } from '../../shared/src/proxies/editDocket
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
-import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateCaseWorksheetInteractor } from '@shared/proxies/caseWorksheet/updateCaseWorksheetProxy';
 import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
@@ -460,10 +450,6 @@ const allUseCases = {
   getCountOfCaseDocumentsFiledByJudgesInteractor,
   getDocumentContentsForDocketEntryInteractor,
   getDocumentDownloadUrlInteractor,
-  getDocumentQCInboxForSectionInteractor,
-  getDocumentQCInboxForUserInteractor,
-  getDocumentQCServedForSectionInteractor,
-  getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
@@ -502,7 +488,6 @@ const allUseCases = {
   getUserPendingEmailStatusInteractor,
   getUsersInSectionInteractor,
   getUsersPendingEmailInteractor,
-  getWorkItemInteractor,
   loadPDFForPreviewInteractor,
   loadPDFForSigningInteractor,
   logErrorInteractor,
@@ -551,7 +536,6 @@ const allUseCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,
-  updateCaseTrialSortTagsInteractor,
   updateCaseWorksheetInteractor,
   updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
@@ -750,7 +734,6 @@ const applicationContext = {
       getCropBox,
       getDateFormat,
       getDescriptionDisplay,
-      getDocQcSectionForUser,
       getDocketEntriesByFilter,
       getDocumentTitleWithAdditionalInfo,
       getFilingsAndProceedings,
@@ -769,7 +752,6 @@ const applicationContext = {
       getSortableDocketNumber: Case.getSortableDocketNumber,
       getStampBoxCoordinates,
       getStandaloneRemoteDocumentTitle,
-      getWorkQueueFilters,
       hasPartyWithServiceType,
       isClosed,
       isCourtIssued: DocketEntry.isCourtIssued,

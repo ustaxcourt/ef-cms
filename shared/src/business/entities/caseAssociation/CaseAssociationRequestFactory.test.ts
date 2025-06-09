@@ -4,6 +4,11 @@ import {
   calculateISODate,
   createISODateString,
 } from '../../utilities/DateHandler';
+import { CaseAssociationRequestDocumentTypeA } from '@shared/business/entities/caseAssociation/CaseAssociationRequestDocumentTypeA';
+import { CaseAssociationRequestDocumentTypeB } from '@shared/business/entities/caseAssociation/CaseAssociationRequestDocumentTypeB';
+import { CaseAssociationRequestDocumentTypeD } from '@shared/business/entities/caseAssociation/CaseAssociationRequestDocumentTypeD';
+import { CaseAssociationRequestDocumentTypeC } from '@shared/business/entities/caseAssociation/CaseAssociationRequestDocumentTypeC';
+import { CaseAssociationRequestDocumentBase } from '@shared/business/entities/caseAssociation/CaseAssociationRequestDocumentBase';
 
 describe('CaseAssociationRequestFactory', () => {
   const mockPrimaryId = '149e24c2-5d66-4037-bf13-a7d440e5afc8';
@@ -357,6 +362,63 @@ describe('CaseAssociationRequestFactory', () => {
           'Substitution of Counsel for Respondent',
         );
       });
+    });
+  });
+  describe('Document types', () => {
+    it('should create a CaseAssociationRequestDocumentTypeA if documentType is "Notice of Intervention"', () => {
+      const result = CaseAssociationRequestFactory({
+        documentType: 'Notice of Intervention',
+      });
+      expect(result).toBeInstanceOf(CaseAssociationRequestDocumentTypeA);
+    });
+
+    it('should create a CaseAssociationRequestDocumentTypeA if documentType is "Notice of Election to Participate"', () => {
+      const result = CaseAssociationRequestFactory({
+        documentType: 'Notice of Election to Participate',
+      });
+      expect(result).toBeInstanceOf(CaseAssociationRequestDocumentTypeA);
+    });
+
+    it('should create a CaseAssociationRequestDocumentTypeA if documentType is "Notice of Election to Intervene"', () => {
+      const result = CaseAssociationRequestFactory({
+        documentType: 'Notice of Election to Intervene',
+      });
+      expect(result).toBeInstanceOf(CaseAssociationRequestDocumentTypeA);
+    });
+
+    it('should create a CaseAssociationRequestDocumentTypeB if documentType is "Substitution of Counsel"', () => {
+      const result = CaseAssociationRequestFactory({
+        documentType: 'Substitution of Counsel',
+      });
+      expect(result).toBeInstanceOf(CaseAssociationRequestDocumentTypeB);
+    });
+
+    it('should create a CaseAssociationRequestDocumentTypeC if documentType is "Motion to Substitute Parties and Change Caption"', () => {
+      const result = CaseAssociationRequestFactory({
+        documentType: 'Motion to Substitute Parties and Change Caption',
+      });
+      expect(result).toBeInstanceOf(CaseAssociationRequestDocumentTypeC);
+    });
+
+    it('should create a CaseAssociationRequestDocumentTypeD if documentType is "Entry of Appearance"', () => {
+      const result = CaseAssociationRequestFactory({
+        documentType: 'Entry of Appearance',
+      });
+      expect(result).toBeInstanceOf(CaseAssociationRequestDocumentTypeD);
+    });
+
+    it('should create a CaseAssociationRequestDocumentTypeD if documentType is "Limited Entry of Appearance"', () => {
+      const result = CaseAssociationRequestFactory({
+        documentType: 'Limited Entry of Appearance',
+      });
+      expect(result).toBeInstanceOf(CaseAssociationRequestDocumentTypeD);
+    });
+
+    it('should create a CaseAssociationRequestDocumentBase if documentType is anything else', () => {
+      const result = CaseAssociationRequestFactory({
+        documentType: 'Some Unknown Doc Type',
+      });
+      expect(result).toBeInstanceOf(CaseAssociationRequestDocumentBase);
     });
   });
 });

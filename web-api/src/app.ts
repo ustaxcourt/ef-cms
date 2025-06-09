@@ -93,6 +93,7 @@ import { getDocumentQCInboxForSectionLambda } from './lambdas/workitems/getDocum
 import { getDocumentQCInboxForUserLambda } from './lambdas/workitems/getDocumentQCInboxForUserLambda';
 import { getDocumentQCServedForSectionLambda } from './lambdas/workitems/getDocumentQCServedForSectionLambda';
 import { getDocumentQCServedForUserLambda } from './lambdas/workitems/getDocumentQCServedForUserLambda';
+import { getEligibleCasesForCityLambda } from '@web-api/lambdas/trialSessions/getEligibleCasesForCityLambda';
 import { getEligibleCasesForTrialSessionLambda } from './lambdas/trialSessions/getEligibleCasesForTrialSessionLambda';
 import { getGeneratePrintableTrialSessionCopyReportLambda } from './lambdas/trialSessions/getGeneratePrintableTrialSessionCopyReportLambda';
 import { getInboxMessagesForSectionLambda } from './lambdas/messages/getInboxMessagesForSectionLambda';
@@ -130,7 +131,6 @@ import { getUserPendingEmailLambda } from './lambdas/users/getUserPendingEmailLa
 import { getUserPendingEmailStatusLambda } from './lambdas/users/getUserPendingEmailStatusLambda';
 import { getUsersInSectionLambda } from './lambdas/users/getUsersInSectionLambda';
 import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmailLambda';
-import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { lambdaWrapper } from './lambdaWrapper';
 import { logErrorLambda } from '@web-api/lambdas/errors/logErrorLambda';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
@@ -177,7 +177,6 @@ import { unsealDocketEntryLambda } from './lambdas/documents/unsealDocketEntryLa
 import { updateCaseContextLambda } from './lambdas/cases/updateCaseContextLambda';
 import { updateCaseDeadlineLambda } from './lambdas/caseDeadline/updateCaseDeadlineLambda';
 import { updateCaseDetailsLambda } from './lambdas/cases/updateCaseDetailsLambda';
-import { updateCaseTrialSortTagsLambda } from './lambdas/cases/updateCaseTrialSortTagsLambda';
 import { updateCaseWorksheetLambda } from '@web-api/lambdas/caseWorksheet/updateCaseWorksheetLambda';
 import { updateContactLambda } from './lambdas/cases/updateContactLambda';
 import { updateCorrespondenceDocumentLambda } from './lambdas/correspondence/updateCorrespondenceDocumentLambda';
@@ -505,10 +504,6 @@ app.use(expressLogger);
  * case-meta
  */
 {
-  app.put(
-    '/case-meta/:docketNumber/update-case-trial-sort-tags',
-    lambdaWrapper(updateCaseTrialSortTagsLambda),
-  );
   app.post(
     '/case-meta/:docketNumber/block',
     lambdaWrapper(blockCaseFromTrialLambda),
@@ -664,6 +659,10 @@ app.use(expressLogger);
   );
   app.head('/cases/:docketNumber', lambdaWrapper(getCaseExistsLambda));
   app.get('/cases/:docketNumber', lambdaWrapper(getCaseLambda));
+  app.get(
+    '/cases/:trialCity/eligible-cases',
+    lambdaWrapper(getEligibleCasesForCityLambda),
+  );
   app.post('/cases', lambdaWrapper(createCaseLambda));
   app.post(
     '/cases/:docketNumber/case-worksheet',
@@ -1094,7 +1093,6 @@ app.delete(
     '/work-items/:workItemId/read',
     lambdaWrapper(setWorkItemAsReadLambda),
   );
-  app.get('/work-items/:workItemId', lambdaWrapper(getWorkItemLambda));
   app.put('/work-items', lambdaWrapper(assignWorkItemsLambda));
 }
 
