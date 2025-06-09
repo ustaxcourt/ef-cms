@@ -7,7 +7,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -105,7 +105,7 @@ export const determineEntitiesToLock = (
     item => `case|${item}`,
   ),
 });
-
+// 10505: this replicates the existing functionality, but may need to account for `allCasesToConsolidate`?
 export const addConsolidatedCaseInteractor = withLocking(
   addConsolidatedCase,
   determineEntitiesToLock,

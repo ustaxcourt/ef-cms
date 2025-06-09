@@ -7,34 +7,37 @@ import { Message } from '@shared/business/entities/Message';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { applicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
-import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { isEmpty } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import diff from 'diff-arrays-of-objects';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { removeCaseFromHearing } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
-import { removeIrsPractitionerOnCase, removePrivatePractitionerOnCase } from '@web-api/persistence/dynamo/cases/removePractitionerOnCase';
-import { updateIrsPractitionerOnCase, updatePrivatePractitionerOnCase } from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
+import {
+  removeIrsPractitionerOnCase,
+  removePrivatePractitionerOnCase,
+} from '@web-api/persistence/dynamo/cases/removePractitionerOnCase';
+import {
+  updateIrsPractitionerOnCase,
+  updatePrivatePractitionerOnCase,
+} from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
 
 // Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
 // In the future, it would be good to avoid doing so by leveraging SQL more effectively.
 export const updateCaseAndAssociations = async ({
   authorizedUser,
   caseToUpdate,
-  includeCorrespondenceAndWorkItems = true,
+  includeCorrespondence = true,
 }: {
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
-  includeCorrespondenceAndWorkItems?: boolean;
+  includeCorrespondence?: boolean;
 }): Promise<RawCase> => {
   // Validate the old (pre-update) and new (post-update) case entity
   const newCaseEntity: Case = caseToUpdate.validate
@@ -63,7 +66,6 @@ export const updateCaseAndAssociations = async ({
     deletedHearings,
     { irsPractitionersToDelete, irsPractitionersToUpdate },
     { privatePractitionersToDelete, privatePractitionersToUpdate },
-    workItems,
     correspondences,
   ] = await Promise.all([
     getCaseDeadlinesToUpdate({
@@ -91,13 +93,7 @@ export const updateCaseAndAssociations = async ({
       caseToUpdate: validNewRawCaseEntity,
       oldCase: validRawOldCaseEntity,
     }),
-    includeCorrespondenceAndWorkItems
-      ? getWorkItemsToUpdate({
-          caseToUpdate: validNewRawCaseEntity,
-          oldCase: validRawOldCaseEntity,
-        })
-      : [],
-    includeCorrespondenceAndWorkItems
+    includeCorrespondence
       ? getCorrespondencesToUpdate({
           caseToUpdate: validNewRawCaseEntity,
           oldCase: validRawOldCaseEntity,
@@ -145,22 +141,21 @@ export const updateCaseAndAssociations = async ({
     ),
     ...privatePractitionersToDelete.map(practitioner =>
       removePrivatePractitionerOnCase({
-          applicationContext,
-          docketNumber: caseToUpdate.docketNumber,
-          userId: practitioner.userId,
-        }),
+        applicationContext,
+        docketNumber: caseToUpdate.docketNumber,
+        userId: practitioner.userId,
+      }),
     ),
     ...privatePractitionersToUpdate.map(practitioner =>
       updatePrivatePractitionerOnCase({
-          applicationContext,
-          docketNumber: caseToUpdate.docketNumber,
-          leadDocketNumber: caseToUpdate.leadDocketNumber,
-          // @ts-ignore
-          practitioner,
-          userId: practitioner.userId,
-        }),
+        applicationContext,
+        docketNumber: caseToUpdate.docketNumber,
+        leadDocketNumber: caseToUpdate.leadDocketNumber,
+        // @ts-ignore
+        practitioner,
+        userId: practitioner.userId,
+      }),
     ),
-    upsertWorkItems({ workItems }),
     upsertCaseDeadlines(deadlines),
   ]);
 
@@ -355,38 +350,6 @@ const getPrivatePractitionersToDeleteAndUpdate = ({
     privatePractitionersToDelete: deletedPrivatePractitioners,
     privatePractitionersToUpdate: validPrivatePractitioners,
   };
-};
-
-const getWorkItemsToUpdate = async ({
-  caseToUpdate,
-  oldCase,
-}: {
-  caseToUpdate: RawCase;
-  oldCase: RawCase;
-}) => {
-  const workItemsRequireUpdate =
-    oldCase.associatedJudge !== caseToUpdate.associatedJudge;
-
-  if (!workItemsRequireUpdate) {
-    return [];
-  }
-
-  const workItems = await getWorkItemsByDocketNumber({
-    docketNumber: caseToUpdate.docketNumber,
-  });
-
-  if (!workItems) {
-    return [];
-  }
-
-  const updatedWorkItems = workItems.map(rawWorkItem => ({
-    ...rawWorkItem,
-    associatedJudge: caseToUpdate.associatedJudge,
-    associatedJudgeId: caseToUpdate.associatedJudgeId,
-  }));
-
-  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems);
-  return validWorkItems;
 };
 
 const getCaseDeadlinesToUpdate = async ({

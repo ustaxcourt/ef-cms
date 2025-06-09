@@ -1135,13 +1135,27 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
 // it's a separate constant.
 export const SYSTEM_ROLE = 'System';
 
+export const FILING_TYPES_DICT = {
+  MYSELF: 'Myself',
+  MYSELF_AND_SPOUSE: 'Myself and my spouse',
+  BUSINESS: 'A business',
+  OTHER: 'Other',
+  PETITIONER: 'Individual petitioner',
+  PETITIONER_SPOUSE: 'Petitioner and spouse',
+};
+
 export const FILING_TYPES = {
-  [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
+  [ROLES.petitioner]: [
+    FILING_TYPES_DICT.MYSELF,
+    FILING_TYPES_DICT.MYSELF_AND_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
+  ],
   [ROLES.privatePractitioner]: [
-    'Individual petitioner',
-    'Petitioner and spouse',
-    'A business',
-    'Other',
+    FILING_TYPES_DICT.PETITIONER,
+    FILING_TYPES_DICT.PETITIONER_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
   ],
 } as const;
 
@@ -1484,7 +1498,6 @@ export const CHAMBERS_SECTION = 'chambers';
 export const CLERK_OF_COURT_SECTION = 'clerkofcourt';
 export const DOCKET_SECTION = 'docket';
 export const FLOATER_SECTION = 'floater';
-export const IRS_SYSTEM_SECTION = 'irsSystem';
 export const PETITIONS_SECTION = 'petitions';
 export const REPORTERS_OFFICE_SECTION = 'reportersOffice';
 export const TRIAL_CLERKS_SECTION = 'trialClerks';

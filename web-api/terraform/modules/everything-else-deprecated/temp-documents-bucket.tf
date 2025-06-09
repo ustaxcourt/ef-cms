@@ -1,6 +1,5 @@
 resource "aws_s3_bucket" "temp_documents_us_east_1" {
-  provider = aws.us-east-1
-  bucket   = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
+  bucket = "${var.dns_domain}-temp-documents-${var.environment}-us-east-1"
 
   tags = {
     environment = var.environment
@@ -76,7 +75,7 @@ resource "aws_s3_bucket" "temp_documents_us_west_1" {
 
 resource "aws_s3_bucket_ownership_controls" "temp_documents_west_ownership_controls" {
   provider = aws.us-west-1
-  bucket = aws_s3_bucket.temp_documents_us_west_1.id
+  bucket   = aws_s3_bucket.temp_documents_us_west_1.id
   rule {
     object_ownership = "BucketOwnerEnforced"
   }

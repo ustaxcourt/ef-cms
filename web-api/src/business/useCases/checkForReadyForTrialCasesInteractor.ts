@@ -4,11 +4,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getReadyForTrialCases } from '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases';
 import { uniqBy } from 'lodash';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 export const checkForReadyForTrialCasesInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -31,41 +30,18 @@ export const checkForReadyForTrialCasesInteractor = async (
     });
   };
 
-  const acquireLockForCase = async ({
-    docketNumber,
-    retry = 0,
-  }: {
-    docketNumber: string;
-    retry?: number;
-  }) => {
-    const maxRetries = 20;
-    try {
-      await acquireLock({
-        applicationContext,
-        authorizedUser: undefined,
-        identifiers: [`case|${docketNumber}`],
-        onLockError: new ServiceUnavailableError(
-          `${docketNumber} is currently being updated`,
-        ),
-        ttl: 900,
-      });
-    } catch (err) {
-      if (retry < maxRetries && err instanceof ServiceUnavailableError) {
-        await applicationContext.getUtilities().sleep(5000);
-        return acquireLockForCase({
-          docketNumber,
-          retry: retry + 1,
-        });
-      }
-      throw err;
-    }
-  };
-
   const checkReadyForTrial = async (
     caseRecord: Omit<RawCase, 'consolidatedCases'>,
   ) => {
     const { docketNumber } = caseRecord;
-    await acquireLockForCase({ docketNumber });
+
+    const removeLockFunction = await acquireLock({
+      applicationContext,
+      authorizedUser: undefined,
+      identifiers: [`case|${docketNumber}`],
+      retries: 20,
+      waitTime: 5000,
+    });
 
     if (caseRecord) {
       const caseEntity = new Case(caseRecord, {
@@ -81,10 +57,8 @@ export const checkForReadyForTrialCasesInteractor = async (
         }
       }
     }
-    await applicationContext.getPersistenceGateway().removeLock({
-      applicationContext,
-      identifiers: [`case|${docketNumber}`],
-    });
+
+    await removeLockFunction();
   };
 
   const casesToUpdate = await getCasesByDocketNumbers({

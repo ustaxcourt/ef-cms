@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
@@ -8,7 +9,6 @@ jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
@@ -21,11 +21,16 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 jest
   .mocked(updateCaseAndAssociationsMock)
   .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+const tryGetLock = jest.mocked(tryGetLockMock);
+const releaseLock = jest.mocked(releaseLockMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -87,12 +92,8 @@ describe('editPaperFilingInteractor', () => {
     ],
   };
   let mockRequest;
-  let mockLock;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -119,7 +120,7 @@ describe('editPaperFilingInteractor', () => {
 
   describe('is locked', () => {
     beforeEach(() => {
-      mockLock = MOCK_LOCK; // locked
+      tryGetLock.mockResolvedValue(false);
     });
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
@@ -137,7 +138,7 @@ describe('editPaperFilingInteractor', () => {
 
   describe('is not locked', () => {
     beforeEach(() => {
-      mockLock = undefined; // unlocked
+      tryGetLock.mockResolvedValue(true);
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
@@ -147,20 +148,13 @@ describe('editPaperFilingInteractor', () => {
         mockDocketClerkUser,
       );
 
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: `case|${MOCK_CASE.docketNumber}`,
-        ttl: 900,
-      });
+      expect(tryGetLock.mock.calls[0][1]).toEqual(
+        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      );
 
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      });
+      expect(releaseLock.mock.calls[0][1]).toEqual(
+        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      );
     });
 
     it('should remove the lock', async () => {
@@ -169,12 +163,10 @@ describe('editPaperFilingInteractor', () => {
         mockRequest,
         mockDocketClerkUser,
       );
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      });
+
+      expect(releaseLock.mock.calls[0][1]).toEqual(
+        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      );
     });
   });
 });

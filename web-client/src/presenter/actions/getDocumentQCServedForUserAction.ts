@@ -1,3 +1,4 @@
+import { getDocumentQCServedForUserInteractor } from '@shared/proxies/workitems/getDocumentQCServedForUserProxy';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -10,11 +11,12 @@ export const getDocumentQCServedForUserAction = async ({
   get,
 }: ActionProps) => {
   const user = get(state.user);
-  const workItems = await applicationContext
-    .getUseCases()
-    .getDocumentQCServedForUserInteractor(applicationContext, {
+  const workItems = await getDocumentQCServedForUserInteractor(
+    applicationContext,
+    {
       userId: user.userId,
-    });
+    },
+  );
 
   return { workItems };
 };
