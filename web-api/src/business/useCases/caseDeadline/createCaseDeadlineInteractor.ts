@@ -43,7 +43,6 @@ export const createCaseDeadline = async (
   const updatedCaseEntity = await applicationContext
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({
-      applicationContext,
       caseEntity: currentCaseEntity,
       hasCaseDeadline: true,
     });
