@@ -131,7 +131,7 @@ IN Dawson, we use SQS for a variety of things.  Our migration process uses a SQS
 
 ## SNS
 
-SNS is a service which allows you to setup topics.  Topics are a way to broadcast a message and have many other subscribers receive that same message.  It is different from SQS in that it is a one to many relationship instead of one to one.
+SNS is a service, modeled after the Publish/Subscribe paradigm, which allows you to setup topics.  Topics are a way to broadcast a message and have many other subscribers receive that same message.  It is different from SQS in that it is a one to many relationship instead of one to one.
 
 In Dawson, we use SNS to notify lower environments when a case is sealed in production to prevent anyone, including our developers, from seeing that sealed case.
 
