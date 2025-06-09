@@ -2,6 +2,12 @@ import { SCAN_MODES } from '../../../../shared/src/business/entities/EntityConst
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getScannerInterface } from './getScannerInterface';
 
+jest.mock('./loader', () => ({
+  loadDWTLibrary: jest.fn().mockResolvedValue(undefined), // or a specific mock value
+}));
+
+// import { loadDWTLibrary } from './loader';
+
 describe('getScannerInterface', () => {
   let mockSources, mockScanCount, DWObject, Dynamsoft;
   let onPostAllTransfersCb;
@@ -60,7 +66,7 @@ describe('getScannerInterface', () => {
         EnumDWT_ImageType: { IT_PNG: 1 },
         EnumDWT_PixelType: { TWPT_RGB: 1 },
         CreateDWTObject: (_, cb) => {
-          cb(DWObject)
+          cb(DWObject);
         },
       },
     };

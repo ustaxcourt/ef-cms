@@ -1,3 +1,5 @@
+import { loadDWTLibrary } from './loader';
+
 let DWObject = null;
 let dynamsoftLoader = null;
 
@@ -30,27 +32,28 @@ export const getScannerInterface = () => {
     if (!dynamsoftLoader) {
       // eslint-disable-next-line no-async-promise-executor
       dynamsoftLoader = new Promise(async resolve => {
-        await applicationContext.loadDWTLibrary();
+        await loadDWTLibrary();
         const { Dynamsoft } = window;
-        Dynamsoft.DWT.ResourcesPath = "https://unpkg.com/dwt@latest/dist";
-        Dynamsoft.DWT.ProductKey = applicationContext.getConstants().DYNAMSOFT_PRODUCT_KEYS;
+        Dynamsoft.DWT.ResourcesPath = 'https://unpkg.com/dwt@latest/dist';
+        Dynamsoft.DWT.ProductKey =
+          applicationContext.getConstants().DYNAMSOFT_PRODUCT_KEYS;
         Dynamsoft.DWT.ScanDirectly = true;
 
         Dynamsoft.DWT.CreateDWTObject(
-          'dwtcontrolContainer'
-          , function (object) {
-              DWObject = object;
-              resolve('dynam-scanner-injection');
-          }, function (exp) {
-              console.error(exp)
-          });
+          'dwtcontrolContainer',
+          function (object) {
+            DWObject = object;
+            resolve('dynam-scanner-injection');
+          },
+          function (exp) {
+            console.error(exp);
+          },
+        );
       });
     }
 
     return dynamsoftLoader;
   };
-
-
 
   const getSourceStatus = () => {
     // 0	The Data Source is closed
@@ -59,7 +62,6 @@ export const getScannerInterface = () => {
     // 3	The Data Source is acquiring images
     return DWObject.DataSourceStatus;
   };
-
 
   const setSourceByIndex = index => {
     return DWObject.SelectSourceByIndex(index) > -1;
