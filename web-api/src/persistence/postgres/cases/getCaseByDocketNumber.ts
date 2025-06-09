@@ -9,8 +9,6 @@ import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
-import { getCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/getCaseStatistics';
-import { getCaseStatusHistory } from '@web-api/persistence/postgres/cases/getCaseStatusHistory';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
@@ -34,18 +32,10 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const [
-    caseStatusHistory,
-    caseCorrespondences,
-    statisticsWithPenalties,
-    workItems,
-    caseItemsRaw,
-  ] = await Promise.all([
-    getCaseStatusHistory({ docketNumber }),
+  const [caseCorrespondences, workItems, caseItemsRaw] = await Promise.all([
     getCaseCorrespondenceByDocketNumber({
       docketNumber,
     }),
-    getCaseStatistics({ docketNumber }),
     getWorkItemsByDocketNumber({
       docketNumber,
     }),
@@ -67,7 +57,7 @@ export const getCaseByDocketNumber = async ({
 
   let consolidatedCases: Omit<
     RawCase,
-    'consolidatedCases' | 'correspondence' | 'docketEntries'
+    'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
   >[] = [];
   if (includeConsolidatedCases) {
     consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
@@ -86,11 +76,8 @@ export const getCaseByDocketNumber = async ({
       ...caseItems,
       {
         ...dbCaseMetadata,
-        caseStatusHistory,
-        hearings: dbCaseMetadata.hearings || [],
         pk: `case|${dbCaseMetadata.docketNumber}`,
         sk: `case|${dbCaseMetadata.docketNumber}`,
-        statistics: Object.values(statisticsWithPenalties),
       },
       ...caseCorrespondences.map(correspondenceItem => ({
         ...correspondenceItem,

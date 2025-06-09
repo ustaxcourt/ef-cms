@@ -1,5 +1,5 @@
 import { SQSEvent } from 'aws-lambda';
-import { DatabaseSchema } from '@web-api/database-types';
+import { DatabaseSchema } from '@web-api/database-schema';
 
 export type OpenSearchSyncMessageType = keyof typeof DatabaseSchema;
 

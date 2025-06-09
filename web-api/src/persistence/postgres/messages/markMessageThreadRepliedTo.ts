@@ -1,3 +1,4 @@
+import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getMessageThreadByParentId } from './getMessageThreadByParentId';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 
@@ -11,7 +12,7 @@ export const markMessageThreadRepliedTo = async ({
   });
 
   if (messages.length) {
-    await Promise.all(
+    await settlePromises(
       messages.map(async message => {
         await pgUpdateTable({
           table: 'dwMessage',

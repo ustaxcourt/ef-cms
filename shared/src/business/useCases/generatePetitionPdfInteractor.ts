@@ -127,7 +127,6 @@ export const generatePetitionPdfInteractor = async (
   const fileId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: pdfFile,
     key: fileId,
   });

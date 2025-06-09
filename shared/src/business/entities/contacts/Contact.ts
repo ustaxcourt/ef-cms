@@ -52,8 +52,8 @@ export class Contact extends JoiValidationEntity {
     this.countryType = rawContact.countryType;
     this.email = rawContact.email;
     this.inCareOf = rawContact.inCareOf;
-    this.isAddressSealed = rawContact.isAddressSealed || false;
-    this.sealedAndUnavailable = rawContact.sealedAndUnavailable || false;
+    this.isAddressSealed = rawContact.isAddressSealed ?? false;
+    this.sealedAndUnavailable = rawContact.sealedAndUnavailable ?? false;
     this.paperPetitionEmail = rawContact.paperPetitionEmail;
     this.hasConsentedToElectronicService =
       rawContact.hasConsentedToElectronicService;
@@ -65,7 +65,7 @@ export class Contact extends JoiValidationEntity {
     this.state = rawContact.state;
     this.title = rawContact.title;
     this.additionalName = rawContact.additionalName;
-    this.hasElectronicAccess = rawContact.hasElectronicAccess || undefined;
+    this.hasElectronicAccess = rawContact.hasElectronicAccess ?? undefined;
     this.placeOfLegalResidence = rawContact.placeOfLegalResidence || undefined;
   }
 

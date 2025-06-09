@@ -9,7 +9,11 @@ export const getCasesInConsolidatedGroup = async ({
 }): Promise<
   Omit<
     RawCase,
-    'consolidatedCases' | 'correspondence' | 'docketEntries' | 'petitioners'
+    | 'consolidatedCases'
+    | 'correspondence'
+    | 'docketEntries'
+    | 'hearings'
+    | 'petitioners'
   >[]
 > => {
   const result = await getDbReader(reader =>

@@ -467,7 +467,7 @@ export const filterWorkItems = ({
       (workItem: WorkItemWithCaseInfo) => {
         if (assignmentFilterValue && assignmentFilterValue.userId) {
           if (assignmentFilterValue.userId === 'UA') {
-            return workItem.assigneeId === null;
+            return !workItem.assigneeId;
           }
           return (
             workItem.assigneeId === assignmentFilterValue.userId ||

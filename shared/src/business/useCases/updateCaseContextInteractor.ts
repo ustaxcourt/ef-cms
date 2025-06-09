@@ -13,6 +13,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 export const updateCaseContext = async (
   applicationContext: ServerApplicationContext,
@@ -96,15 +97,6 @@ export const updateCaseContext = async (
       });
 
       newCase.removeFromTrialWithAssociatedJudge(judgeData);
-    } else if (
-      oldCase.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
-    ) {
-      await applicationContext
-        .getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords({
-          applicationContext,
-          docketNumber: newCase.docketNumber,
-        });
     }
 
     if (
@@ -114,7 +106,7 @@ export const updateCaseContext = async (
       const caseDeadlines = await getCaseDeadlinesByDocketNumber({
         docketNumber,
       });
-      await Promise.all(
+      await settlePromises(
         caseDeadlines.map(async deadline => {
           return deleteCaseDeadline({
             caseDeadlineId: deadline.caseDeadlineId,
@@ -122,16 +114,6 @@ export const updateCaseContext = async (
         }),
       );
       newCase.updateAutomaticBlocked({ hasCaseDeadline: false });
-    }
-
-    if (newCase.isReadyForTrial() && !oldCase.trialSessionId) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: newCase.generateTrialSortTags(),
-          docketNumber: newCase.docketNumber,
-        });
     }
   }
 

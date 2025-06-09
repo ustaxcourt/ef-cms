@@ -58,14 +58,14 @@ describe('formattedWorkQueue', () => {
 
   const unassignedWorkItem = {
     ...baseWorkItem,
-    assigneeId: null,
+    assigneeId: undefined,
     assigneeName: null,
     workItemId: '068b42a8-bb65-4f40-946c-e0c3adf7e7d1',
   };
 
   const thirdWorkItem = {
     ...baseWorkItem,
-    assigneeId: null,
+    assigneeId: undefined,
     assigneeName: null,
     workItemId: '4bee162a-b6e5-4350-8c65-3d9c5887b5af',
   };

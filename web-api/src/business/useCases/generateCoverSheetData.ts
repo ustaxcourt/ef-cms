@@ -24,7 +24,7 @@ export const formatCaseTitle = ({
   useInitialData,
 }: {
   applicationContext: ServerApplicationContext;
-  caseEntity: Case | RawCase;
+  caseEntity: { initialCaption?: string; caseCaption: string };
   useInitialData?: boolean;
 }) => {
   const caseCaption = useInitialData

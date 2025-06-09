@@ -1,5 +1,4 @@
-import { formatNow } from '@shared/business/utilities/DateHandler';
-import { Kysely } from 'kysely';
+import { Kysely, sql } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
@@ -12,19 +11,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('blocked', 'boolean')
     .addColumn('blockedDate', 'timestamptz')
     .addColumn('blockedReason', 'varchar')
-    .addColumn('canAllowDocumentService', 'boolean')
-    .addColumn('canAllowPrintableDocketRecord', 'boolean')
-    .addColumn('canDojPractitionersRepresentParty', 'boolean')
     .addColumn('caseNote', 'varchar')
     .addColumn('caseType', 'varchar', col => col.defaultTo('').notNull())
     .addColumn('closedDate', 'timestamptz')
     .addColumn('createdAt', 'timestamptz')
     .addColumn('damages', 'numeric')
-    .addColumn('docketEntries', 'jsonb')
     .addColumn('filingType', 'varchar')
     .addColumn('hasPendingItems', 'boolean')
     .addColumn('hasVerifiedIrsNotice', 'boolean')
-    .addColumn('hearings', 'jsonb')
     .addColumn('highPriority', 'boolean')
     .addColumn('highPriorityReason', 'varchar')
     .addColumn('initialCaption', 'varchar')
@@ -32,7 +26,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('irsNoticeDate', 'timestamptz')
     .addColumn('isPaper', 'boolean')
     .addColumn('isSealed', 'boolean')
-    .addColumn('judgeUserId', 'varchar')
     .addColumn('litigationCosts', 'numeric')
     .addColumn('mailingDate', 'varchar')
     .addColumn('noticeOfAttachments', 'boolean')
@@ -53,7 +46,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('procedureType', 'varchar', col => col.defaultTo('').notNull())
     .addColumn('qcCompleteForTrial', 'jsonb')
     .addColumn('receivedAt', 'timestamptz', col =>
-      col.defaultTo(formatNow()).notNull(),
+      col.defaultTo(sql`now()`).notNull(),
     )
     .addColumn('sealedDate', 'timestamptz')
     .addColumn('sortableDocketNumber', 'numeric')
@@ -74,9 +67,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('blocked')
     .dropColumn('blockedDate')
     .dropColumn('blockedReason')
-    .dropColumn('canAllowDocumentService')
-    .dropColumn('canAllowPrintableDocketRecord')
-    .dropColumn('canDojPractitionersRepresentParty')
     .dropColumn('caseNote')
     .dropColumn('caseType')
     .dropColumn('closedDate')
@@ -85,7 +75,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('filingType')
     .dropColumn('hasPendingItems')
     .dropColumn('hasVerifiedIrsNotice')
-    .dropColumn('hearings')
     .dropColumn('highPriority')
     .dropColumn('highPriorityReason')
     .dropColumn('initialCaption')
@@ -93,7 +82,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .dropColumn('irsNoticeDate')
     .dropColumn('isPaper')
     .dropColumn('isSealed')
-    .dropColumn('judgeUserId')
     .dropColumn('litigationCosts')
     .dropColumn('mailingDate')
     .dropColumn('noticeOfAttachments')

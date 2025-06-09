@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   DOCKET_SECTION,
   ROLES,
@@ -19,7 +22,8 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -33,10 +37,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   let mockLock;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext
@@ -90,6 +94,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     };
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
+    getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -162,7 +167,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
   });
 
@@ -184,8 +189,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
-    const { caseToUpdate } = updateCase.mock.calls[0][0];
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
     const docketEntryInCaseToUpdate = caseToUpdate.docketEntries.find(
       d => d.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
     );
@@ -217,10 +222,13 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     );
 
     const lastDocumentIndex =
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries.length - 1;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries
+        .length - 1;
 
     const newlyFiledDocument =
-      updateCase.mock.calls[0][0].caseToUpdate.docketEntries[lastDocumentIndex];
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries[
+        lastDocumentIndex
+      ];
 
     expect(newlyFiledDocument).toMatchObject({
       isDraft: false,
@@ -278,10 +286,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
 
-    getCaseByDocketNumber.mockResolvedValueOnce(
+    getCasesByDocketNumbers.mockResolvedValueOnce([
       MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-    );
-    getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+      LEAD_CASE as any,
+    ]);
 
     await fileCourtIssuedDocketEntryInteractor(
       applicationContext,

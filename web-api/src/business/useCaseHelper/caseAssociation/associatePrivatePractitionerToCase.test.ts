@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -17,6 +18,9 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+
+const logger = getDawsonLogger();
+const errorSpy = jest.spyOn(logger, 'error');
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
@@ -218,8 +222,7 @@ describe('associatePrivatePractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).not.toHaveBeenCalled();
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+    expect(errorSpy).toHaveBeenCalledWith(
       `BUG 9323: Private Practitioner with userId: ${MOCK_PRACTITIONER.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
     );
   });

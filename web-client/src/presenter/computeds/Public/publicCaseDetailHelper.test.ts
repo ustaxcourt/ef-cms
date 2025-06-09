@@ -1543,6 +1543,22 @@ describe('formatDocketEntryOnDocketRecord', () => {
     expect(showNotServed).toBe(false);
   });
 
+  it("should format a docket entry's descriptionDisplay correctly when the docket entry is a certificate of service", () => {
+    const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
+      entry: {
+        ...baseDocketEntry,
+        certificateOfService: true,
+        certificateOfServiceDate: '2025-04-01T00:00:00.000-04:00',
+        documentTitle: 'Answer',
+      },
+      isTerminalUser: true,
+      rawCase: mockCase,
+      visibilityPolicyDate: '2010-05-16T00:00:00.000-04:00',
+    });
+
+    expect(result.descriptionDisplay).toBe('Answer (C/S 04/01/25)');
+  });
+
   it('should return formatted docket entry', () => {
     state.caseDetail.docketEntries = [
       {

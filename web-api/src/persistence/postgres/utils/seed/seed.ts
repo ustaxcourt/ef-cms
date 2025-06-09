@@ -1,5 +1,3 @@
-import { caseStatistics } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatistics';
-import { caseStatusUpdates } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/caseStatusUpdates';
 import { cases100_104 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases100_104';
 import { cases105_109 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases105_109';
 import { cases110_129 } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases110_129';
@@ -13,14 +11,10 @@ import { cases440_449 } from '@web-api/persistence/postgres/utils/seed/fixtures/
 import { cases450_plus } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/cases450_plus';
 import { caseDeadlines } from '@web-api/persistence/postgres/utils/seed/fixtures/caseDeadlines';
 import { caseWorksheets } from '@web-api/persistence/postgres/utils/seed/fixtures/caseWorksheets';
-import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspodence';
+import { correspondence } from '@web-api/persistence/postgres/utils/seed/fixtures/correspondence';
 import { messages } from './fixtures/messages';
-import { petitionerToCaseMappings } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/petitionerToCaseMappings';
-import { statisticPenalties } from '@web-api/persistence/postgres/utils/seed/fixtures/cases/statisticPenalties';
 import { workItems } from './fixtures/workItems';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getUniqueId } from '@shared/sharedAppContext';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -60,12 +54,6 @@ export const seed = async () => {
     table: null,
   });
 
-  await pgInsertInto({
-    table: 'dwPetitionerOnCase',
-    values: petitionerToCaseMappings,
-    onConflictColumns: ['contactId', 'docketNumber'],
-  });
-
   // Seed the cases
   const cases = [
     ...cases100_104,
@@ -90,30 +78,6 @@ export const seed = async () => {
     })),
   );
 
-  // Attach the case status updates to their respective cases
-  await pgInsertInto({
-    table: 'dwCaseStatusUpdate',
-    values: caseStatusUpdates.map(s => ({
-      ...s,
-      statusUpdateId: s.statusUpdateId ? s.statusUpdateId : getUniqueId(),
-      date: calculateDate({ dateString: s.date }),
-    })),
-    onConflictColumns: ['statusUpdateId'],
-  });
-
-  // Attach the case statistics to their respective cases
-  await pgInsertInto({
-    table: 'dwCaseStatistic',
-    values: caseStatistics,
-    onConflictColumns: ['statisticId'],
-  });
-
-  await pgInsertInto({
-    table: 'dwStatisticPenalty',
-    values: statisticPenalties,
-    onConflictColumns: ['penaltyId'],
-  });
-
   await Promise.all([
     insertMessages,
     insertCaseDeadline,
@@ -131,4 +95,5 @@ seed()
   .catch(err => {
     console.log('Could not seed postgres data.');
     console.log(err);
+    throw err;
   });

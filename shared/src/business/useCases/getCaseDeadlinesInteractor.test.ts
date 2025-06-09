@@ -1,7 +1,11 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_TYPES_MAP,
+  CHIEF_JUDGE,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -16,21 +20,18 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 
-const getCaseDeadlinesByDateRange = jest.mocked(
-  getCaseDeadlinesByDateRangeMock,
-);
-
-const getCasesMetadataByDocketNumbers =
-  getCasesMetadataByDocketNumbersMock as jest.Mock;
-const updateCase = jest.mocked(updateCaseMock);
-updateCase.mockImplementation(({ caseToUpdate }) =>
-  Promise.resolve(caseToUpdate),
-);
-
 describe('getCaseDeadlinesInteractor', () => {
+  const getCaseDeadlinesByDateRange = jest.mocked(
+    getCaseDeadlinesByDateRangeMock,
+  );
+  const getCasesMetadataByDocketNumbers =
+    getCasesMetadataByDocketNumbersMock as jest.Mock;
+  jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const mockDeadlines = [
     {
       associatedJudge: 'Judge Buch',
@@ -164,11 +165,12 @@ describe('getCaseDeadlinesInteractor', () => {
   });
 
   it('passes date and filtering params to getCaseDeadlinesByDateRange persistence call', async () => {
+    const judgeId = '123456';
     await getCaseDeadlinesInteractor(
       {
         endDate: END_DATE,
         from: 0,
-        judge: 'Buch',
+        judgeId,
         startDate: START_DATE,
       },
       mockPetitionsClerkUser,
@@ -177,7 +179,26 @@ describe('getCaseDeadlinesInteractor', () => {
     expect(getCaseDeadlinesByDateRange.mock.calls[0][0]).toMatchObject({
       endDate: END_DATE,
       from: 0,
-      judge: 'Buch',
+      judgeId,
+      startDate: START_DATE,
+    });
+  });
+
+  it('passes null for judgeId to getCaseDeadlinesByDateRange persistence call when chief judge is requested', async () => {
+    await getCaseDeadlinesInteractor(
+      {
+        endDate: END_DATE,
+        from: 0,
+        judgeId: CHIEF_JUDGE,
+        startDate: START_DATE,
+      },
+      mockPetitionsClerkUser,
+    );
+
+    expect(getCaseDeadlinesByDateRange.mock.calls[0][0]).toMatchObject({
+      endDate: END_DATE,
+      from: 0,
+      judgeId: null,
       startDate: START_DATE,
     });
   });

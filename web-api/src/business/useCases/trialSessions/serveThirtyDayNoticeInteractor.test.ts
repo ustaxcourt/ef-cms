@@ -17,10 +17,10 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { serveThirtyDayNoticeInteractor } from './serveThirtyDayNoticeInteractor';
 import { testPdfDoc } from '@shared/business/test/getFakeFile';
-import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 describe('serveThirtyDayNoticeInteractor', () => {
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
   let trialSession: RawTrialSession;
   const TEST_CLIENT_CONNECTION_ID = 'TEST_CLIENT_CONNECTION_ID';
@@ -47,8 +47,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
     applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById.mockResolvedValueOnce(trialSession);
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValueOnce(trialSession);
 
     await expect(
       serveThirtyDayNoticeInteractor(
@@ -64,8 +64,8 @@ describe('serveThirtyDayNoticeInteractor', () => {
 
   it('should throw an invalid request error when no trial session id is provided', async () => {
     applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById.mockResolvedValue(trialSession);
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue(trialSession);
 
     await expect(
       serveThirtyDayNoticeInteractor(
@@ -92,7 +92,7 @@ describe('serveThirtyDayNoticeInteractor', () => {
         .getPersistenceGateway()
         .getTrialSessionById.mockResolvedValue(trialSession);
 
-      getCaseByDocketNumber.mockResolvedValue(mockCase);
+      getCasesByDocketNumbers.mockResolvedValue([mockCase]);
 
       applicationContext
         .getUseCaseHelpers()
@@ -115,9 +115,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
       ];
       const caseWithProSePetitioner = cloneDeep(mockCase);
       caseWithProSePetitioner.privatePractitioners = [];
-      getCaseByDocketNumber
-        .mockResolvedValueOnce(caseWithRepresentedPetitioner)
-        .mockResolvedValueOnce(caseWithProSePetitioner);
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseWithRepresentedPetitioner,
+        caseWithProSePetitioner,
+      ]);
 
       await serveThirtyDayNoticeInteractor(
         applicationContext,
@@ -192,6 +193,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
         'paper_service_updated',
         'thirty_day_notice_paper_service_complete',
       ];
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        { ...mockCase, docketNumber: '101-31' },
+        { ...mockCase, docketNumber: '103-20' },
+      ]);
 
       await serveThirtyDayNoticeInteractor(
         applicationContext,
@@ -351,9 +356,10 @@ describe('serveThirtyDayNoticeInteractor', () => {
       caseWithProSePetitioner2.docketNumberWithSuffix = '732-34';
       caseWithProSePetitioner2.privatePractitioners = [];
 
-      getCaseByDocketNumber
-        .mockResolvedValueOnce(caseWithProSePetitioner)
-        .mockResolvedValueOnce(caseWithProSePetitioner2);
+      getCasesByDocketNumbers.mockResolvedValueOnce([
+        caseWithProSePetitioner,
+        caseWithProSePetitioner2,
+      ]);
 
       trialSession.caseOrder = [
         {
