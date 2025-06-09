@@ -1,12 +1,12 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   ALLOWLIST_FEATURE_FLAGS,
-  PostgresFeatureFlagKeys,
+  FeatureFlagKeys,
 } from '@shared/business/entities/EntityConstants';
 import { isEmpty } from 'lodash';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
-type AllFeatureFlags = Partial<{ [K in PostgresFeatureFlagKeys]: any }>;
+type AllFeatureFlags = Partial<{ [K in FeatureFlagKeys]: any }>;
 const allFeatureFlags: AllFeatureFlags = {};
 
 export const getAllFeatureFlagsInteractor = async (

@@ -118,9 +118,8 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   },
 };
 
-type PostgresFeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
-export type PostgresFeatureFlagKeys =
-  PostgresFeatureFlags[keyof PostgresFeatureFlags]['key'];
+type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
+export type FeatureFlagKeys = FeatureFlags[keyof FeatureFlags]['key'];
 
 export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {
