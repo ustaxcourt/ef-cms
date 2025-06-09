@@ -3,9 +3,6 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
-);
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
@@ -17,15 +14,11 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 
 describe('blockCaseFromTrialInteractor', () => {
   let mockLock;
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
-  );
 
   beforeAll(() => {
     applicationContext
@@ -55,10 +48,6 @@ describe('blockCaseFromTrialInteractor', () => {
       blocked: true,
       blockedReason: 'just because',
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
-    expect(
-      deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
-    ).toEqual(MOCK_CASE.docketNumber);
   });
 
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {

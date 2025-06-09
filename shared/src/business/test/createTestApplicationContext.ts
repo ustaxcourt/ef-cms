@@ -454,10 +454,8 @@ export const createTestApplicationContext = () => {
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
-    createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     createLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
-    deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
@@ -523,7 +521,9 @@ export const createTestApplicationContext = () => {
   };
 
   const mockGetMessagingClient = {
-    send: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockReturnValue({
+      promise: () => {},
+    }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -633,7 +633,9 @@ export const createTestApplicationContext = () => {
     getConfigurationGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
-      initialize: jest.fn().mockReturnValue({ promise: () => {} }),
+      initialize: jest.fn().mockReturnValue({
+        promise: () => {},
+      }),
     }),
     isFeatureEnabled: jest.fn(),
     logger: {
