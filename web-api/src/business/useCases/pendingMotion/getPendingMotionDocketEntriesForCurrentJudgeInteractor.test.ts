@@ -9,7 +9,6 @@ import {
 } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockJudgeUser,
   mockPetitionsClerkUser,
@@ -54,16 +53,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
     );
 
     getConsolidatedCasesCount.mockResolvedValue(1);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketEntryOnCase.mockResolvedValue({
-        docketEntryId: DOCKET_ENTRY_ID,
-        documentTitle: 'TEST_DOCUMENT_TITLE',
-        eventCode: 'M218',
-        filingDate: '2000-04-29T15:52:05.725Z',
-        pending: true,
-      });
 
     getDocketEntryWorksheetsByDocketEntryIds.mockResolvedValue(
       getDocketEntryWorksheetsByDocketEntryIdsResults,
@@ -179,15 +168,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
       primaryIssue: 'LEAD SOME PRIMARY ISSUE',
       statusOfMatter: 'LEAD SOME STATUS OF MATTER',
     });
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketEntryOnCase.mockResolvedValue({
-        docketEntryId: LEAD_DOCKET_ENTRY_ID,
-        documentTitle: 'TEST_DOCUMENT_TITLE',
-        eventCode: 'M218',
-        filingDate: '2000-04-29T15:52:05.725Z',
-        pending: true,
-      });
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
