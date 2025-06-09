@@ -22,7 +22,7 @@ import {
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import {
   getRawFeatureFlagFromPostgresValue,
-  toggleFeatureFlagFromPostgres,
+  toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
@@ -113,8 +113,8 @@ export default defineConfig({
         }) {
           return readAllItemsInBucket({ bucketName, retries });
         },
-        toggleFeatureFlagFromPostgres(args) {
-          return toggleFeatureFlagFromPostgres(args);
+        toggleFeatureFlag(args) {
+          return toggleFeatureFlag(args);
         },
         unzipFile({ fileName }) {
           return unzipFile({ fileName });

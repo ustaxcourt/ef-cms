@@ -21,7 +21,7 @@ import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/w
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 import {
-  toggleFeatureFlagFromPostgres,
+  toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/postgres/featureFlagsCypress';
 
 export default defineConfig({
@@ -63,8 +63,8 @@ export default defineConfig({
           console.table(message);
           return null;
         },
-        toggleFeatureFlagFromPostgres(args) {
-          return toggleFeatureFlagFromPostgres(args);
+        toggleFeatureFlag(args) {
+          return toggleFeatureFlag(args);
         },
         unzipFile({ fileName }) {
           return unzipFile({ fileName });

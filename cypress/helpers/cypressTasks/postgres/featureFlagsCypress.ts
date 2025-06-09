@@ -15,7 +15,7 @@ export const getRawFeatureFlagFromPostgresValue = async ({
   return RESULTS[0].value.current;
 };
 
-export async function toggleFeatureFlagFromPostgres({
+export async function toggleFeatureFlag({
   flag,
   flagValue,
 }: {
