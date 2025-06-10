@@ -1,4 +1,3 @@
-import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );

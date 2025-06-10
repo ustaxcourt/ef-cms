@@ -1,4 +1,3 @@
-import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';

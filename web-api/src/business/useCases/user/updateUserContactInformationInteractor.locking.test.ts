@@ -1,4 +1,3 @@
-import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';

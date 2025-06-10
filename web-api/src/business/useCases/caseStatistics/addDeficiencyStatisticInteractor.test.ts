@@ -1,4 +1,3 @@
-import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
