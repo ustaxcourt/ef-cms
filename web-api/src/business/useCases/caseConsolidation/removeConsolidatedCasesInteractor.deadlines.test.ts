@@ -10,6 +10,7 @@ jest.mock(
 jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
 jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers');
 jest.mock('@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber');
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
@@ -176,7 +177,6 @@ describe('removeConsolidatedCasesInteractor - Deadlines', () => {
     );
 
     const upsertCaseDeadlinesCalls = upsertCaseDeadlines.mock.calls;
-    console.log('upsertCaseDeadlinesCalls', upsertCaseDeadlinesCalls);
     expect(upsertCaseDeadlinesCalls.length).toEqual(2);
     expect(upsertCaseDeadlinesCalls[0][0]).toEqual([
       { caseDeadlineId: 2, consolidatedCaseDeadlineId: undefined },

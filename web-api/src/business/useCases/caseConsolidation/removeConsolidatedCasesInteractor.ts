@@ -19,15 +19,6 @@ import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
-/**
- * removeConsolidatedCases
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketNumber the docket number of the case to consolidate
- * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
- * @returns {object} the updated case data
- */
 const removeConsolidatedCases = async (
   applicationContext: ServerApplicationContext,
   {
