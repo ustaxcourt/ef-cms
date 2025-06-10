@@ -164,7 +164,6 @@ export const addPaperFiling = async (
     caseEntity = await applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock({
-        applicationContext,
         caseEntity,
       });
 

@@ -173,7 +173,7 @@ const completeDocketEntryQC = async (
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+    .updateCaseAutomaticBlock({ caseEntity });
 
   const workItemToUpdate = updatedDocketEntry.workItem as WorkItem;
 

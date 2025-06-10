@@ -2,7 +2,6 @@ import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHe
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
-import { createCaseTrialSortMappingRecords } from './persistence/dynamo/cases/createCaseTrialSortMappingRecords';
 import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
 import {
@@ -14,7 +13,6 @@ import { createPractitionerDocument } from './persistence/dynamo/practitioners/c
 import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
-import { deleteCaseTrialSortMappingRecords } from './persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
 import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
@@ -40,8 +38,7 @@ import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/d
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
-import { getEligibleCasesForTrialCity } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialCity';
-import { getEligibleCasesForTrialSession } from './persistence/dynamo/trialSessions/getEligibleCasesForTrialSession';
+import { getEligibleCasesForTrialCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
 import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
 import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
 import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
@@ -81,6 +78,7 @@ import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTri
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { zipDocuments } from './persistence/s3/zipDocuments';
+import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**
@@ -124,7 +122,6 @@ const gatewayMethods = {
     addCaseToHearing,
     bulkDeleteRecords,
     bulkIndexRecords,
-    createCaseTrialSortMappingRecords,
     createJobStatus,
     createPractitionerDocument,
     createTrialSession,
@@ -151,7 +148,6 @@ const gatewayMethods = {
   createChangeOfAddressJob,
   createLock,
   decrementJobCounter,
-  deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
   deleteDocketEntryWorksheetRecord,
   deleteDocumentFile,
