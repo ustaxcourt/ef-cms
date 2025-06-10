@@ -14,9 +14,8 @@ export const getRequestResults = async ({
   requestId: string;
   userId: string;
 }): Promise<ResponseChunk[]> => {
-
   // get results from the database
-  const results = await getDbReader(async (reader) => {
+  const results = await getDbReader(async reader => {
     // Retrieve chunks
     return await reader
       .selectFrom('dwResponseChunk')
@@ -26,6 +25,6 @@ export const getRequestResults = async ({
       .orderBy('index', 'asc')
       .execute();
   });
-  
+
   return results;
 };

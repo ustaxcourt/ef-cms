@@ -105,7 +105,7 @@ import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser'
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from './persistence/s3/zipDocuments';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
-import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
+import { getRequestResults } from '@web-api/persistence/postgres/polling/getRequestResults';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**
