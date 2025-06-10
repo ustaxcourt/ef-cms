@@ -12,6 +12,7 @@ import { getUserByIdWithPractitioner } from '@web-api/persistence/postgres/users
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/users/schema';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
+import { NotFoundError } from '@web-api/errors/errors';
 
 export const transformOpenSearchUserOnCase = (
   userOnCaseData: UserOnCaseKysely | UserOnCaseKysely[],
@@ -35,6 +36,10 @@ export const indexOpenSearchUserOnCase = async ({
     ? message.payload
     : [message.payload]) {
     const userRecord = await getUserByIdWithPractitioner({ userId });
+
+    if (!userRecord) {
+      throw new NotFoundError(`Could not find user ${userId}`);
+    }
 
     if (
       userRecord.role !== ROLES.irsPractitioner &&

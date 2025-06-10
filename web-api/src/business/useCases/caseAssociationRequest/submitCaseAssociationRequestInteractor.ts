@@ -4,7 +4,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
@@ -37,6 +37,10 @@ const submitCaseAssociationRequest = async (
   }
 
   const user = await getPractitionerById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   const isPrivatePractitioner =
     authorizedUser.role === ROLES.privatePractitioner;

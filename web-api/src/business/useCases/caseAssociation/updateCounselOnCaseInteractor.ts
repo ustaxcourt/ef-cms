@@ -8,7 +8,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
@@ -45,13 +45,17 @@ const updateCounselOnCase = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const practitionerToUpdate = await getPractitionerById({
+    userId,
+  });
+
+  if (!practitionerToUpdate) {
+    throw new NotFoundError(`Could not find user ${userId}`);
+  }
+
   const caseToUpdate = await getCaseByDocketNumber({
     applicationContext,
     docketNumber,
-  });
-
-  const practitionerToUpdate = await getPractitionerById({
-    userId,
   });
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });

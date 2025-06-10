@@ -6,7 +6,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 
@@ -40,6 +40,10 @@ export const addExistingUserToCase = async ({
   }
 
   const userToAdd = await getUserById({ userId: user.userId });
+
+  if (!userToAdd) {
+    throw new NotFoundError(`Could not find user ${user.userId}`);
+  }
 
   const contact = caseEntity.getPetitionerById(contactId);
 

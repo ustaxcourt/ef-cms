@@ -132,6 +132,9 @@ const updatePostgresRecords = async ({
 }) => {
   console.log('Getting existing Postgres record ...');
   const postgresUser = await getUserById({ userId });
+  if (!postgresUser) {
+    throw new Error(`Could not find user with id ${userId}`);
+  }
 
   // If the name is updated, then we will need to update the chambers section
   const oldChambersSection = postgresUser.section;

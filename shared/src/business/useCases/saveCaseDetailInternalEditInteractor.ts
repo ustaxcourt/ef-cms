@@ -147,8 +147,8 @@ export const saveCaseDetailInternalEdit = async (
     const workItemEntity = new WorkItem(
       {
         ...initializeCaseWorkItem,
-        assigneeId: user.userId,
-        assigneeName: user.name,
+        assigneeId: user?.userId,
+        assigneeName: user?.name,
         caseIsInProgress: true,
         trialDate: caseEntity.trialDate,
         trialLocation: caseEntity.trialLocation,
