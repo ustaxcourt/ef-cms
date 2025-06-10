@@ -4,6 +4,7 @@ import { changeOfAddress } from '../../shared/src/business/utilities/documentGen
 import { coverSheet } from '../../shared/src/business/utilities/documentGenerators/coverSheet';
 import { docketRecord } from '../../shared/src/business/utilities/documentGenerators/docketRecord';
 import { entryOfAppearance } from '@shared/business/utilities/documentGenerators/entryOfAppearance';
+import { minuteSheet } from '@shared/business/utilities/documentGenerators/minuteSheet';
 import { noticeOfChangeOfTrialJudge } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialJudge';
 import { noticeOfChangeOfTrialLocation } from '@shared/business/utilities/documentGenerators/noticeOfChangeOfTrialLocation';
 import { noticeOfChangeToInPersonProceeding } from '../../shared/src/business/utilities/documentGenerators/noticeOfChangeToInPersonProceeding';
@@ -31,6 +32,7 @@ export const getDocumentGenerators = () => ({
   coverSheet,
   docketRecord,
   entryOfAppearance,
+  minuteSheet,
   noticeOfChangeOfTrialJudge,
   noticeOfChangeOfTrialLocation,
   noticeOfChangeToInPersonProceeding,

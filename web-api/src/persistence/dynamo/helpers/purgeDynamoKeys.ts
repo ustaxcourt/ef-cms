@@ -1,5 +1,5 @@
 const dynamoKeys = ['pk', 'sk', 'gsi1pk', 'gsi2pk', 'ttl'];
-export function purgeDynamoKeys<T>(obj: T): T {
+export function purgeDynamoKeys<T, S>(obj: T): S {
   for (const property in obj) {
     if (dynamoKeys.includes(property)) {
       delete obj[property];
@@ -7,5 +7,5 @@ export function purgeDynamoKeys<T>(obj: T): T {
       obj[property] = purgeDynamoKeys(obj[property]);
     }
   }
-  return obj;
+  return obj as unknown as S;
 }

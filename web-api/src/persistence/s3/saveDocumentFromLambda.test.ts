@@ -11,9 +11,9 @@ jest.mock('@web-api/persistence/s3/getStorageClient', () => ({
     return { putObject: mockPutObject };
   },
 }));
-jest.mock('@web-api/utilities/logger/getLogger', () => {
+jest.mock('@web-api/utilities/logger/getDawsonLogger', () => {
   return {
-    getLogger: () => mockLogger,
+    getDawsonLogger: () => mockLogger,
   };
 });
 import { environment } from '@web-api/environment';

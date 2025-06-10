@@ -4,7 +4,7 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
@@ -107,7 +107,7 @@ export const processDocketEntries = async ({
 
     await upsertDocketEntries(Object.values(pgDocketEntries));
   } catch (e) {
-    getLogger().error(
+    getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process docket entry record: ${e}`,
     );
   }
