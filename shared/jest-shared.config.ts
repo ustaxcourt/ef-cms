@@ -45,6 +45,9 @@ const config: Config = {
   // After a jest runner uses X% of total system memory, recreate the runner.
   verbose: false,
   workerIdleMemoryLimit: '20%',
+  setupFilesAfterEnv: [
+    '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
+  ],
 };
 
 export default config;

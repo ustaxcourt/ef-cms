@@ -58,6 +58,9 @@ const config: Config = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
   verbose: false,
+  setupFilesAfterEnv: [
+    '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
+  ],
 };
 // eslint-disable-next-line import/no-default-export
 export default config;

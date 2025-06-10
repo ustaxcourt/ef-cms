@@ -69,6 +69,9 @@ const config: Config = {
   },
   transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
+  setupFilesAfterEnv: [
+    '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
+  ],
 };
 
 export default config;
