@@ -48,7 +48,7 @@ const config: Config = {
   transformIgnorePatterns: ['/node_modules/(?!uuid|export-to-csv)'],
   verbose: false,
   setupFilesAfterEnv: [
-    '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
+    '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],
 };
 

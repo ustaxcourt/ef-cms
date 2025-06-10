@@ -46,7 +46,7 @@ const config: Config = {
   verbose: false,
   workerIdleMemoryLimit: '20%',
   setupFilesAfterEnv: [
-    '<rootDir>/src/persistence/postgres/featureFlag/mocks.jest.ts',
+    '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
   ],
 };
 
