@@ -60,7 +60,7 @@ const checkUser = async ({
   user: RawUser;
 }): Promise<void> => {
   const documentClient =
-    applicationContext.getDocumentClient(applicationContext);
+    applicationContext.getDocumentClient();
   const { Items: userCases } = await documentClient.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',

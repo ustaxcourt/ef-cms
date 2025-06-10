@@ -155,7 +155,10 @@ function TrialSessionPlanningReportTable({
                       />
                     )}
                   </td>
-                  <td aria-label="hyperlink to trial location details">
+                  <td
+                    data-testid={`trial-location-link-${trialLocation.trialCityState}`}
+                    aria-label="hyperlink to trial location details"
+                  >
                     <a href={trialLocation.trialLocationUrl}>
                       {trialLocation.trialCityState}
                     </a>

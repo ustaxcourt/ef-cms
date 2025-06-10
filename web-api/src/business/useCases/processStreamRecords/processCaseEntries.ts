@@ -1,6 +1,6 @@
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export const processCaseEntries = async ({
   caseEntityRecords,
@@ -28,7 +28,7 @@ export const processCaseEntries = async ({
 
     await upsertCases(Object.values(casesToUpsert));
   } catch (e) {
-    getLogger().error(
+    getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process case record: ${e}`,
     );
   }

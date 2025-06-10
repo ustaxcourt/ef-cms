@@ -36,4 +36,22 @@ describe('Trial Sessions Planning Report View - Accessibility', () => {
     cy.get('[data-testid="cities-not-calendared-in-past-two-terms-table"]');
     checkA11y();
   });
+
+  describe('Trial Sessions Planning Report View - Accessibility', () => {
+    it('should be free of a11y issues', () => {
+      cy.get(
+        '[data-testid="trial-location-link-Birmingham, Alabama"] > a',
+      ).click();
+
+      checkA11y();
+
+      cy.get('[data-testid="back-to-planning-report-button"]').click();
+      cy.get(
+        '[data-testid="trial-location-link-Anchorage, Alaska"]  > a',
+      ).click();
+      cy.get('[data-testid="blocked-cases-tab"]').click();
+
+      checkA11y();
+    });
+  });
 });

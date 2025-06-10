@@ -2,29 +2,17 @@ import { Agent } from 'https';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import AWSXRay from 'aws-xray-sdk';
+import { environment } from '@web-api/environment';
 
-const dynamoCache: Record<string, DynamoDBClient> = {};
+let dynamoCache: DynamoDBClient | null = null;
 
-export const getDynamoClient = (
-  applicationContext: IApplicationContext,
-  {
-    useMainRegion = false,
-  }: {
-    useMainRegion: boolean;
-  },
-): DynamoDBClient => {
-  const type = useMainRegion ? 'master' : 'region';
-
-  if (!dynamoCache[type]) {
+export const getDynamoClient = (): DynamoDBClient => {
+  if (!dynamoCache) {
     const dynamoClient = new DynamoDBClient({
       endpoint:
-        applicationContext.environment.stage === 'local'
-          ? 'http://localhost:8000'
-          : undefined,
+        environment.stage === 'local' ? 'http://localhost:8000' : undefined,
       maxAttempts: 5,
-      region: useMainRegion
-        ? applicationContext.environment.masterRegion
-        : applicationContext.environment.region,
+      region: environment.region,
       requestHandler: new NodeHttpHandler({
         connectionTimeout: 3000,
         httpsAgent: new Agent({ keepAlive: true, maxSockets: 75 }),
@@ -32,9 +20,9 @@ export const getDynamoClient = (
       }),
     });
 
-    dynamoCache[type] = applicationContext.environment.isRunningOnLambda
+    dynamoCache = environment.isRunningOnLambda
       ? AWSXRay.captureAWSv3Client(dynamoClient)
       : dynamoClient;
   }
-  return dynamoCache[type];
+  return dynamoCache;
 };

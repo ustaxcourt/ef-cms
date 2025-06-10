@@ -43,9 +43,6 @@ describe('0000-validate-all-items', () => {
     {
       entityName: 'UserCaseNote',
     },
-    {
-      entityName: 'WorkItem',
-    },
   ];
 
   it.each(entities)(

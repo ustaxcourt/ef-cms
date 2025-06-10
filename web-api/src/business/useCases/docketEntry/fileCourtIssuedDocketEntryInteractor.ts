@@ -12,7 +12,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
@@ -115,30 +115,19 @@ export const fileCourtIssuedDocketEntry = async (
 
       docketEntryEntity.setFiledBy(user);
 
-      const workItem = new WorkItem(
-        {
-          assigneeId: null,
-          assigneeName: null,
-          associatedJudge: caseEntity.associatedJudge,
-          associatedJudgeId: caseEntity.associatedJudgeId,
-          caseStatus: caseEntity.status,
-          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseEntity.docketNumber,
-          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-          hideFromPendingMessages: true,
-          inProgress: true,
-          section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-          trialDate: caseEntity.trialDate,
-          trialLocation: caseEntity.trialLocation,
+      const workItem = new WorkItem({
+        assigneeId: null,
+        assigneeName: null,
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
         },
-        { caseEntity },
-      );
+        docketNumber: caseEntity.docketNumber,
+        inProgress: true,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
+      });
 
       if (isUnservable) {
         workItem.setAsCompleted({ message: 'completed', user });

@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 terraform {
@@ -9,14 +9,14 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.94.1"
+      version = "~> 5.97.0"
     }
   }
 }
 
 module "stale-cases-email-cron" {
   source                       = "../../modules/stale-cases-email-cron"
-  aws_region                   = var.aws_region
+  aws_region                   = "us-east-1"
   environment                  = var.environment
   disable_emails               = "false"
   elasticsearch_endpoint       = var.elasticsearch_endpoint

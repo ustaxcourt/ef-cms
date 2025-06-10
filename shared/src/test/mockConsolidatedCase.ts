@@ -456,7 +456,6 @@ export const MOCK_CONSOLIDATED_CASE: RawCase = {
         docketNumberWithSuffix: '102-67L',
         entityName: 'WorkItem',
         highPriority: true,
-        isInitializeCase: true,
         leadDocketNumber: '102-67',
         section: 'petitions',
         sentBy: 'Test Petitionsclerk',
