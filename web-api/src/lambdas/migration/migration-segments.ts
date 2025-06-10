@@ -11,7 +11,7 @@ import {
   createISODateString,
   dateStringsCompared,
 } from '@shared/business/utilities/DateHandler';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { migrationsToRun } from './migrationsToRun';
 import { migrateItems as validationMigration } from './migrations/0000-validate-all-items';
 import promiseRetry from 'promise-retry';
@@ -151,8 +151,8 @@ export const processItems = async (
 
 export const handler: Handler = async (event: SQSEvent, context: Context) => {
   const applicationContext = createApplicationContext();
-  getLogger().clearContext();
-  getLogger().addContext({
+  getDawsonLogger().clearContext();
+  getDawsonLogger().addContext({
     environment: {
       stage: process.env.STAGE || 'local',
     },
