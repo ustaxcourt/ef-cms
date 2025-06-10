@@ -1,4 +1,3 @@
-import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 /* eslint-disable max-lines */
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import {

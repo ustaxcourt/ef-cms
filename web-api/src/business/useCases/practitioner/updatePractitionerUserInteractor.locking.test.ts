@@ -1,4 +1,3 @@
-import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';

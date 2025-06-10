@@ -1,4 +1,3 @@
-import '@web-api/persistence/postgres/featureFlag/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
