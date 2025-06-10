@@ -1,11 +1,8 @@
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { TDynamoRecord } from '../dynamoTypes';
 import { getTableName } from '../../dynamodbClientService';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type TLockDynamoRecord = TDynamoRecord & { timestamp: string };
@@ -65,7 +62,9 @@ export async function removeLock({
           }),
         })
         .catch(e => {
-          getLogger().error(`Failed to remove lock for ${identifierToUnlock}`);
+          getDawsonLogger().error(
+            `Failed to remove lock for ${identifierToUnlock}`,
+          );
           throw e;
         }),
     ),
