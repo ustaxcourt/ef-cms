@@ -1,11 +1,17 @@
-import { DOCKET_NUMBER_SUFFIXES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import { DOCKET_NUMBER_SUFFIXES } from '@shared/business/entities/EntityConstants';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generatePrintablePendingReportInteractor } from './generatePrintablePendingReportInteractor';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { fetchPendingItems as fetchPendingItemsMock } from '@web-api/persistence/postgres/cases/reports/fetchPendingItems';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const fetchPendingItems = fetchPendingItemsMock as jest.Mock;
 
 describe('generatePrintablePendingReportInteractor', () => {
   const mockFoundDocuments = [
@@ -74,11 +80,9 @@ describe('generatePrintablePendingReportInteractor', () => {
   ];
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .fetchPendingItems.mockResolvedValue({
-        foundDocuments: mockFoundDocuments,
-      });
+    fetchPendingItems.mockResolvedValue({
+      foundDocuments: mockFoundDocuments,
+    });
 
     applicationContext
       .getPersistenceGateway()
@@ -86,9 +90,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
   });
 
   afterEach(() => {
@@ -114,9 +116,7 @@ describe('generatePrintablePendingReportInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().fetchPendingItems,
-    ).toHaveBeenCalled();
+    expect(fetchPendingItems).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().pendingReport,
     ).toHaveBeenCalled();

@@ -186,6 +186,7 @@ import { getDocumentQCInboxForUserInteractor } from '../../shared/src/proxies/wo
 import { getDocumentQCServedForSectionInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForSectionProxy';
 import { getDocumentQCServedForUserInteractor } from '../../shared/src/proxies/workitems/getDocumentQCServedForUserProxy';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getEligibleCasesForCityInteractor } from '@shared/proxies/trialSessions/getEligibleCasesForCityProxy';
 import { getEligibleCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getEligibleCasesForTrialSessionProxy';
 import { getFormattedPartiesNameAndTitle } from '../../shared/src/business/utilities/getFormattedPartiesNameAndTitle';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
@@ -274,7 +275,6 @@ import { setItem } from './persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { setMessageAsReadInteractor } from '../../shared/src/proxies/messages/setMessageAsReadProxy';
 import { setNoticesForCalendaredTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
-import { setServiceIndicatorsForCase } from '../../shared/src/business/utilities/setServiceIndicatorsForCase';
 import { setTrialSessionCalendarInteractor } from '../../shared/src/proxies/trialSessions/setTrialSessionCalendarProxy';
 import { setWorkItemAsReadInteractor } from '../../shared/src/proxies/workitems/setWorkItemAsReadProxy';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
@@ -293,7 +293,6 @@ import { unsealDocketEntryInteractor } from '../../shared/src/proxies/editDocket
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
-import { updateCaseTrialSortTagsInteractor } from '../../shared/src/proxies/updateCaseTrialSortTagsProxy';
 import { updateCaseWorksheetInteractor } from '@shared/proxies/caseWorksheet/updateCaseWorksheetProxy';
 import { updateContactInteractor } from '../../shared/src/proxies/updateContactProxy';
 import { updateCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/updateCorrespondenceDocumentProxy';
@@ -360,6 +359,7 @@ import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users
 import ImageBlobReduce from 'image-blob-reduce';
 import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
+import { removePetitionerEmailInteractor } from '@shared/proxies/removePetitionerEmailProxy';
 
 const reduce = ImageBlobReduce({
   pica: ImageBlobReduce.pica({ features: ['js'] }),
@@ -464,6 +464,7 @@ const allUseCases = {
   getDocumentQCInboxForUserInteractor,
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
+  getEligibleCasesForCityInteractor,
   getEligibleCasesForTrialSessionInteractor,
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
@@ -516,6 +517,7 @@ const allUseCases = {
   removeItemInteractor,
   removePdfFromDocketEntryInteractor,
   removePetitionerAndUpdateCaptionInteractor,
+  removePetitionerEmailInteractor,
   removeSignatureFromDocumentInteractor,
   renewIdTokenInteractor,
   replyToMessageInteractor,
@@ -550,7 +552,6 @@ const allUseCases = {
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,
-  updateCaseTrialSortTagsInteractor,
   updateCaseWorksheetInteractor,
   updateContactInteractor,
   updateCorrespondenceDocumentInteractor,
@@ -786,7 +787,6 @@ const applicationContext = {
       prepareDateFromString,
       replaceBracketed,
       setConsolidationFlagsForDisplay,
-      setServiceIndicatorsForCase,
       setupPdfDocument,
       sleep,
       sortDocketEntries,

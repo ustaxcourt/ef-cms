@@ -2,9 +2,9 @@ import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} from '../EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { Petitioner } from './Petitioner';
-import { getTextByCount } from '../../utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 
 describe('Petitioner', () => {
   const mockValidPetitioner = {
@@ -101,15 +101,13 @@ describe('Petitioner', () => {
       expect(entity.paperPetitionEmail).toEqual(mockEmail);
     });
 
-    it('should populate hasConsentedToEService when one is provided', () => {
-      const mockHasConsentedToEService = false;
-
+    it('should populate hasConsentedToElectronicService when one is provided', () => {
       const entity = new Petitioner({
         ...mockValidPetitioner,
-        hasConsentedToEService: mockHasConsentedToEService,
+        hasConsentedToElectronicService: false,
       });
 
-      expect(entity.hasConsentedToEService).toEqual(mockHasConsentedToEService);
+      expect(entity.hasConsentedToElectronicService).toBeFalsy();
     });
   });
 });

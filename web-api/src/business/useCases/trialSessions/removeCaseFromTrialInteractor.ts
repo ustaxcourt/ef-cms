@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { NotFoundError } from '../../../errors/errors';
+import { NotFoundError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -8,8 +8,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { CaseStatus } from '@shared/business/entities/EntityConstants';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -23,7 +25,7 @@ export const removeCaseFromTrial = async (
   }: {
     associatedJudge: string;
     associatedJudgeId: string;
-    caseStatus: string;
+    caseStatus: CaseStatus;
     disposition: string;
     docketNumber: string;
     trialSessionId: string;
@@ -58,12 +60,10 @@ export const removeCaseFromTrial = async (
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  const myCase = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  const myCase = await getCaseByDocketNumber({
+    applicationContext,
+    docketNumber,
+  });
 
   const caseEntity = new Case(myCase, { authorizedUser });
 
@@ -76,23 +76,13 @@ export const removeCaseFromTrial = async (
     });
 
     await setPriorityOnAllWorkItems({
-      docketNumber: caseEntity.docketNumber,
+      docketNumbers: [caseEntity.docketNumber],
       highPriority: false,
     });
 
-    if (caseEntity.isReadyForTrial()) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: caseEntity.generateTrialSortTags(),
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
-
     await applicationContext
       .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({ applicationContext, caseEntity });
+      .updateCaseAutomaticBlock({ caseEntity });
   } else {
     caseEntity.removeFromHearing(trialSessionId);
   }

@@ -45,9 +45,7 @@ import {
   compareStrings,
 } from '@shared/business/utilities/sortFunctions';
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
-import { createCase } from '@web-api/persistence/dynamo/cases/createCase';
 import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
-import { createDocketNumber } from '@web-api/persistence/dynamo/cases/docketNumberGenerator';
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
 import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
@@ -68,6 +66,7 @@ import { formatPendingItem } from '@shared/business/utilities/formatPendingItem'
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { generateChangeOfAddressHelper } from '@web-api/business/useCaseHelper/generateChangeOfAddressHelper';
+import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
@@ -75,7 +74,7 @@ import {
 } from '@shared/business/utilities/generateChangeOfAddressTemplate';
 import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
 import { getAllWebSocketConnections } from '@web-api/persistence/dynamo/notifications/getAllWebSocketConnections';
-import { getCaseByDocketNumber } from '@web-api/persistence/dynamo/cases/getCaseByDocketNumber';
+import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getConstants } from '@web-client/getConstants';
@@ -92,7 +91,7 @@ import { getFormattedPartiesNameAndTitle } from '@shared/business/utilities/getF
 import { getItem } from '@web-client/persistence/localStorage/getItem';
 import { getSealedDocketEntryTooltip } from '@shared/business/utilities/getSealedDocketEntryTooltip';
 import { getStampBoxCoordinates } from '@shared/business/utilities/getStampBoxCoordinates';
-import { getTextByCount } from '@shared/business/utilities/getTextByCount';
+import { getTextByCount } from '@shared/test/getTextByCount';
 import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getUserById as getUserByIdPersistence } from '@web-api/persistence/dynamo/users/getUserById';
 import { getUserIdForNote } from '@web-api/business/useCaseHelper/getUserIdForNote';
@@ -107,10 +106,8 @@ import { setConsolidationFlagsForDisplay } from '@shared/business/utilities/setC
 import { setItem } from '@web-client/persistence/localStorage/setItem';
 import { setNoticesForCalendaredTrialSessionInteractor } from '@shared/proxies/trialSessions/setNoticesForCalendaredTrialSessionProxy';
 import { setPdfFormFields } from '@web-api/business/useCaseHelper/pdf/setPdfFormFields';
-import { setServiceIndicatorsForCase } from '@shared/business/utilities/setServiceIndicatorsForCase';
 import { setupPdfDocument } from '@shared/business/utilities/setupPdfDocument';
 import { unsealDocketEntryInteractor } from '@web-api/business/useCases/docketEntry/unsealDocketEntryInteractor';
-import { updateCase } from '@web-api/persistence/dynamo/cases/updateCase';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
@@ -121,7 +118,7 @@ import { validatePenaltiesInteractor } from '@shared/business/useCases/validateP
 import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
 import path from 'path';
 import pug from 'pug';
-import sass from 'sass';
+import * as sass from 'sass';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -325,9 +322,6 @@ export const createTestApplicationContext = () => {
     setConsolidationFlagsForDisplay: jest
       .fn()
       .mockImplementation(setConsolidationFlagsForDisplay),
-    setServiceIndicatorsForCase: jest
-      .fn()
-      .mockImplementation(setServiceIndicatorsForCase),
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sleep: jest.fn(),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
@@ -456,11 +450,8 @@ export const createTestApplicationContext = () => {
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
-    createCase: jest.fn().mockImplementation(createCase),
-    createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     createLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
-    deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
@@ -511,7 +502,6 @@ export const createTestApplicationContext = () => {
     setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
     setTrialSessionProcessingStatus: jest.fn(),
-    updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
     uploadDocument: jest.fn(),
@@ -527,13 +517,15 @@ export const createTestApplicationContext = () => {
   };
 
   const mockGetMessagingClient = {
-    send: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockReturnValue({
+      promise: () => {},
+    }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
 
   const mockCreateDocketNumberGenerator = {
-    createDocketNumber: jest.fn().mockImplementation(createDocketNumber),
+    createDocketNumber: jest.fn().mockImplementation(generateDocketNumber),
   };
 
   const mockBroadcastGateway = {
@@ -636,7 +628,9 @@ export const createTestApplicationContext = () => {
     getUserGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
-      initialize: jest.fn().mockReturnValue({ promise: () => {} }),
+      initialize: jest.fn().mockReturnValue({
+        promise: () => {},
+      }),
     }),
     isFeatureEnabled: jest.fn(),
     logger: {

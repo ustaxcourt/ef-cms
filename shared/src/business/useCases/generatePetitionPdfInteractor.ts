@@ -37,7 +37,7 @@ export interface Contact {
 }
 
 export type ContactSecondary = Contact & {
-  hasConsentedToEService?: boolean;
+  hasConsentedToElectronicService?: boolean;
   phone?: string;
   paperPetitionEmail?: string;
 };
@@ -127,7 +127,6 @@ export const generatePetitionPdfInteractor = async (
   const fileId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
     document: pdfFile,
     key: fileId,
   });

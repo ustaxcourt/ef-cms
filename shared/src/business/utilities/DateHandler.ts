@@ -144,6 +144,22 @@ export const calculateDate = ({
     .toJSDate();
 };
 
+export const calculateDateAtStartOfDayEST = ({
+  dateString = undefined,
+  howMuch = 0,
+  units = 'days',
+}: {
+  dateString?: string;
+  howMuch?: number;
+  units?: string;
+}): Date => {
+  return prepareDateFromString(dateString)
+    .setZone(USTC_TZ)
+    .plus({ [units]: howMuch })
+    .startOf('day')
+    .toJSDate();
+};
+
 /**
  * @param {string?} dateString a date string to be sent to persistence
  * @param {string?} inputFormat optional parameter containing hints on how to parse dateString
@@ -683,26 +699,6 @@ export function normalizeIsoDateRange(
   //create IsoDateRange from day + time range
 }
 
-/**
- * Returns startDate plus n weeksToAdd
- * @param {string} startDate the date to add days to
- * @param {number} weeksToAdd number of days to add to startDate
- * @returns {string} a formatted MMDDYY string if date object is valid
- */
-export const addWeeksToDate = ({
-  startDate,
-  weeksToAdd,
-}: {
-  weeksToAdd: number;
-  startDate: IsoDateString;
-}): string => {
-  const parsedDate = DateTime.fromFormat(startDate, FORMATS.ISO);
-
-  const newDate = parsedDate.plus({ weeks: weeksToAdd });
-
-  return newDate.toFormat(FORMATS.ISO);
-};
-
 export const getWeeksInRange = ({
   endDate,
   startDate,
@@ -725,4 +721,12 @@ export const getWeeksInRange = ({
   }
 
   return weeks;
+};
+
+export const roundDateDownToNearestHour = (isoDateString: string) => {
+  const formattedDate = calculateDate({ dateString: isoDateString });
+  formattedDate.setMinutes(0);
+  formattedDate.setSeconds(0);
+  formattedDate.setMilliseconds(0);
+  return formattedDate;
 };
