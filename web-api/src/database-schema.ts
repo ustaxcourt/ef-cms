@@ -35,6 +35,7 @@ import {
   RequestTable,
   ResponseChunkTable,
   DW_REQUEST_COLUMNS,
+  DW_RESPONSE_CHUNK_COLUMNS,
 } from '@web-api/persistence/postgres/polling/schema';
 import {
   WorkItemTable,
@@ -107,7 +108,7 @@ export const DatabaseSchema: DatabaseSchemaType = {
   },
   dwResponseChunk: {
     table: DEFAULT as ResponseChunkTable,
-    columns: DW_REQUEST_COLUMNS,
+    columns: DW_RESPONSE_CHUNK_COLUMNS,
   },
   dwRequest: {
     table: DEFAULT as RequestTable,
