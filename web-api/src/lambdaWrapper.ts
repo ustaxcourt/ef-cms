@@ -82,7 +82,6 @@ export const lambdaWrapper = (
           await applicationContext
             .getNotificationGateway()
             .saveRequestResponse({
-              applicationContext,
               chunk: chunks[index],
               index,
               requestId: asyncsyncid,
