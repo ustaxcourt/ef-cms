@@ -6,8 +6,6 @@ jest.mock('./loader', () => ({
   loadDWTLibrary: jest.fn().mockResolvedValue(undefined), // or a specific mock value
 }));
 
-// import { loadDWTLibrary } from './loader';
-
 describe('getScannerInterface', () => {
   let mockSources, mockScanCount, DWObject, Dynamsoft;
   let onPostAllTransfersCb;
@@ -280,15 +278,16 @@ describe('getScannerInterface', () => {
     delete global.window.document;
     global.window.document = {
       addEventListener: () => null,
-      createElement: () => ({
-        cloneNode() {
-          return {
-            ...this,
-          };
-        },
-        onload: null,
-        setAttribute: () => null,
-      }),
+      createElement: () =>
+        ({
+          cloneNode() {
+            return {
+              ...this,
+            };
+          },
+          onload: null,
+          setAttribute: () => null,
+        }) as any,
       getElementsByTagName: () => {
         return [
           {
@@ -296,19 +295,15 @@ describe('getScannerInterface', () => {
               script.onload();
             },
           },
-        ];
+        ] as any;
       },
     };
     const scannerAPI = getScannerInterface();
-    let script = await scannerAPI.loadDynamsoft({
-      applicationContext,
-    });
+    let script = await scannerAPI.loadDynamsoft();
     expect(script).toEqual('dynam-scanner-injection');
 
     // try to load it again to verify it doesn't attempt to download the scripts again
-    script = await scannerAPI.loadDynamsoft({
-      applicationContext,
-    });
+    script = await scannerAPI.loadDynamsoft();
     expect(script).toEqual('dynam-scanner-injection');
   });
 });

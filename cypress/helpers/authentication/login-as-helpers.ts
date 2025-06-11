@@ -150,5 +150,6 @@ export function login({ email }: { email: string }) {
   cy.window().then(win =>
     win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
   );
+  cy.get('.ustc-account').should('exist');
   mockDynamsoftLibrary();
 }
