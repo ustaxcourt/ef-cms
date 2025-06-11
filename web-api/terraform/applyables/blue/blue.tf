@@ -70,7 +70,6 @@ resource "terraform_data" "locals" {
     MASTER_REGION                      = "us-east-1"
     NODE_ENV                           = "production"
     PROD_ENV_ACCOUNT_ID                = var.prod_env_account_id
-    SCANNER_RESOURCE_URI               = var.scanner_resource_uri
     SLACK_WEBHOOK_URL                  = var.slack_webhook_url
     STAGE                              = var.environment
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
