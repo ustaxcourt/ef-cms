@@ -11,18 +11,16 @@ export const tryGetLocks = async ({
   identifiers: string[];
 }): Promise<{ identifier: string; successfullyLocked: boolean }[]> => {
   const hashedIdentifiers = identifiers.map(id => hashLockId(id));
-  const placeholders = hashedIdentifiers.map((_, i) => `$${i + 1}`).join(', ');
-  const sql = `SELECT ${placeholders
-    .split(', ')
-    .map(ph => `pg_try_advisory_lock(${ph})`)
-    .join(', ')}`;
-  const rawQuery = CompiledQuery.raw(sql, hashedIdentifiers);
-  const result = await db.executeQuery(rawQuery);
-  const success: { identifier: string; successfullyLocked: boolean }[] =
-    result.rows.map((row: any, i) => ({
-      successfullyLocked: row.pg_try_advisory_lock,
-      identifier: identifiers[i],
-    }));
+  const idMap = new Map(hashedIdentifiers.map((h, i) => [h, identifiers[i]]));
 
-  return success;
+  const sql = hashedIdentifiers
+    .map(val => `SELECT ${val} as id, pg_try_advisory_lock(${val}) as locked`)
+    .join(' UNION ALL ');
+
+  const result = await db.executeQuery(CompiledQuery.raw(sql));
+
+  return result.rows.map((row: any) => ({
+    identifier: idMap.get(row.id)!,
+    successfullyLocked: row.locked,
+  }));
 };
