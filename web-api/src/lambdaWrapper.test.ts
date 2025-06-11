@@ -224,7 +224,6 @@ describe('lambdaWrapper', () => {
     expect(
       applicationContext.getNotificationGateway().saveRequestResponse,
     ).toHaveBeenCalledWith({
-      applicationContext,
       chunk: JSON.stringify({ a: 'LAMBDA_RESULTS', body: TEST_BODY }),
       index: 0,
       requestId: 'some-id',
