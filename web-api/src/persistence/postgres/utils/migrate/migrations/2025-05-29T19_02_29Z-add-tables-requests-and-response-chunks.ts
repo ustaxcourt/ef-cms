@@ -13,7 +13,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('id', 'serial', col => col.primaryKey())
     .addColumn('requestId', 'text', col => col.notNull())
     .addColumn('userId', 'text', col => col.notNull())
-    .addColumn('status', 'text', col => col.notNull().defaultTo('pending'))
     .addColumn('totalChunks', 'integer', col => col.notNull().defaultTo(0))
     .addColumn('ttl', 'bigint', col => col.notNull())
     .execute();

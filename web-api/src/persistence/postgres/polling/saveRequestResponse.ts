@@ -13,7 +13,6 @@ export const saveRequestResponse = async ({
   index,
   totalNumberOfChunks,
 }: {
-  applicationContext: IApplicationContext;
   requestId: string;
   userId: string;
   chunk: string;
