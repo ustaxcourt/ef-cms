@@ -1,9 +1,7 @@
 import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
 import { pgInsertInto } from '../utils/operation/pgInsertInto';
 
-/**
- * Saves a request response chunk to postgres
- */
+
 export const saveRequestResponse = async ({
   requestId,
   userId,

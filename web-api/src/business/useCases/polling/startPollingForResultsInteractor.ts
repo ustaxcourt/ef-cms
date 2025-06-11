@@ -19,7 +19,6 @@ export const startPollingForResultsInteractor = async (
   const records = await applicationContext
     .getPersistenceGateway()
     .getRequestResults({
-      applicationContext,
       requestId,
       userId: authorizedUser.userId,
     });
