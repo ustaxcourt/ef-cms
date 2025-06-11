@@ -2,12 +2,10 @@ import crypto from 'crypto';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
-import { tryGetLock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { tryGetLocks } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { sleep } from '@shared/tools/helpers';
-import { getScopedDbConnection } from '@web-api/getConnection';
-import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getScopedDbConnection } from '@web-api/getScopedConnection';
 
 /**
  * Converts a string into a consistent 32-bit integer to use as an advisory lock ID.
@@ -46,11 +44,6 @@ export const acquireLock = async ({
   let attempts = 0;
   let lockedItems: string[] = [];
 
-  const identifierObjects = identifiers.map(id => ({
-    lockId: id,
-    hashedLockId: hashLockId(id),
-  }));
-
   do {
     if (attempts > retries) {
       if (onLockError instanceof Error) {
@@ -68,33 +61,17 @@ export const acquireLock = async ({
       await sleep(waitTime);
     }
 
-    const results = await settlePromises(
-      identifierObjects.map(async idObj => ({
-        lockId: idObj.lockId,
-        isLocked: !(await tryGetLock(db, idObj.hashedLockId)),
-      })),
-    );
+    const results = await tryGetLocks({ db, identifiers });
 
-    lockedItems = results.filter(r => r.isLocked).map(r => r.lockId);
+    lockedItems = results
+      .filter(r => !r.successfullyLocked)
+      .map(r => r.identifier);
 
     attempts++;
   } while (lockedItems.length);
 
   const removeLockFunction = async () => {
-    try {
-      await settlePromises(
-        identifierObjects.map(async idObj => {
-          const success = await releaseLock(db, idObj.hashedLockId);
-          if (!success) {
-            getLogger().info(
-              `Lock not released explicitly for ${idObj.lockId}, falling back to release by connection destroy`,
-            );
-          }
-        }),
-      );
-    } finally {
-      await destroy();
-    }
+    await destroy(); // Destroying connnection releases all locks
   };
 
   return removeLockFunction;
