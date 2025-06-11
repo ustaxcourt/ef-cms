@@ -38,6 +38,10 @@ export const acquireLock = async ({
   waitTime?: number;
   authorizedUser: UnknownAuthUser;
 }): Promise<() => Promise<void>> => {
+  if (!identifiers.length) {
+    return async () => {}; // No-op since we never need to create the scoped connection
+  }
+
   // using a scoped connection ensures that the pg_try_advisory_locks are created and released on the same db connection
   const { db, destroy } = await getScopedDbConnection();
 
