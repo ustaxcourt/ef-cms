@@ -1,7 +1,7 @@
 import crypto from 'crypto';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { tryGetLocks } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { sleep } from '@shared/tools/helpers';
@@ -128,14 +128,16 @@ export function withLocking<InteractorInput, InteractorOutput>(
     try {
       results = await interactor(applicationContext, options, authorizedUser);
     } catch (err) {
-      getLogger().error(`withLocking: failed to execute interactor: ${err}`);
+      getDawsonLogger().error(
+        `withLocking: failed to execute interactor: ${err}`,
+      );
       caughtError = err;
     }
 
     try {
       await releaseLockFn();
     } catch (e) {
-      getLogger().error(`withLocking: failed to remove lock: ${e}`);
+      getDawsonLogger().error(`withLocking: failed to remove lock: ${e}`);
       throw e;
     }
     if (caughtError) {

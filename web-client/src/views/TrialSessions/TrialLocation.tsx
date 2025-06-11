@@ -44,6 +44,7 @@ export const TrialLocation = connect(
               link
               noMargin
               className="margin-right-0"
+              data-testid="back-to-planning-report-button"
               icon={['fa', 'arrow-alt-circle-left']}
               onClick={() => navigateBackSequence()}
             >

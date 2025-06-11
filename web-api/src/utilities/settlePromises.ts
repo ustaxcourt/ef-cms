@@ -1,4 +1,4 @@
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export async function settlePromises<T extends readonly unknown[]>(
   promises: readonly [...T],
@@ -9,7 +9,7 @@ export async function settlePromises<T extends readonly unknown[]>(
 
   results.forEach(result => {
     if (result.status === 'rejected') {
-      getLogger().error(result.reason);
+      getDawsonLogger().error(result.reason);
       errors.push(result.reason);
     }
   });
