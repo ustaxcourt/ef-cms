@@ -14,7 +14,7 @@ import {
 
 const scriptConfig: ScriptConfig = {
   description:
-    'practitioner-stats - Outputs practitioner stats over a given year',
+    'deleteBatchResources - Deletes AWS Batch resources in us-west-1',
   environment: {
     env: 'ENV',
     deployingColor: 'DEPLOYING_COLOR',
