@@ -6,16 +6,17 @@ import { startPollingForResultsInteractor } from '@web-api/business/useCases/pol
 describe('startPollingForResultsInteractor', () => {
   const TEST_REQUEST_ID = 'TEST_REQUEST_ID';
   const TEST_RESPONSE = 'TEST_RESPONSE';
+  const TEST_USER_ID = mockDocketClerkUser.userId;
+  const TEST_CHUNK = '{"message":"This is a test response"}';
   const MOCKED_RESULTS = [
     {
-      chunk: TEST_RESPONSE,
+      chunk: TEST_CHUNK,
       index: 0,
-      pk: 'test_pk',
-      sk: 'test_sk',
+      requestId: '18e0fb82-b908-49b5-810c-c26623fba8a8',
       totalNumberOfChunks: 1,
+      userId: TEST_USER_ID,
     },
   ];
-  const TEST_USER_ID = mockDocketClerkUser.userId;
 
   beforeEach(() => {
     applicationContext.getPersistenceGateway().getRequestResults = jest
@@ -40,7 +41,7 @@ describe('startPollingForResultsInteractor', () => {
     expect(getRequestResultsCalls[0][0].userId).toEqual(TEST_USER_ID);
 
     expect(results).toEqual({
-      response: TEST_RESPONSE,
+      response: TEST_CHUNK,
     });
   });
 
@@ -94,8 +95,7 @@ describe('startPollingForResultsInteractor', () => {
         {
           chunk: TEST_RESPONSE,
           index: 0,
-          pk: 'test_pk',
-          sk: 'test_sk',
+          requestId: TEST_REQUEST_ID,
           totalNumberOfChunks: 3,
         },
       ]);
