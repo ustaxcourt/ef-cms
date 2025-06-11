@@ -10,6 +10,17 @@ import {
 } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { writeFileSync } from 'fs';
 import { upsertDocketEntryWorksheets } from '@web-api/persistence/postgres/docketEntryWorksheets/upsertDocketEntryWorksheets';
+import { parseArgsAndEnvVars, ScriptConfig } from 'scripts/helpers/parseArgsAndEnvVars';
+
+const scriptConfig: ScriptConfig = {
+  description: 'Move docket entry workhseets from dynamo to postgres ',
+  environment: {
+    env: 'ENV',
+    sourceTable: 'SOURCE_TABLE',
+  },
+  requireActiveAwsSession: true,
+};
+parseArgsAndEnvVars(scriptConfig);
 
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const documentClient = DynamoDBDocument.from(dynamoDbClient, {
