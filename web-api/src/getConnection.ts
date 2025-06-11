@@ -100,23 +100,3 @@ function getPoolConfig(): PoolConfig {
   }
   return poolConfig;
 }
-
-export const getScopedDbConnection = async (): Promise<{
-  db: Kysely<Database>;
-  destroy: () => Promise<void>;
-}> => {
-  const poolConfig = getPoolConfig();
-  const token = await getToken();
-  const pool = new Pool({ ...poolConfig, password: token });
-
-  const db = new Kysely<Database>({
-    dialect: new PostgresDialect({ pool }),
-  });
-
-  return {
-    db,
-    destroy: async () => {
-      await db.destroy();
-    },
-  };
-};
