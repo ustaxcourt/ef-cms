@@ -12,33 +12,13 @@ export const startPollingForResultsInteractor = async (
   return await get({
     applicationContext,
     endpoint: `/results/fetch/${requestId}`,
-  })
-    .then(async (results: { response: any }) => {
-      const nowUnixTimeInSeconds = Math.floor(Date.now() / 1000);
-      if (expirationTimestamp < nowUnixTimeInSeconds) {
-        return resolver({ statusCode: 504 });
-      }
+  }).then(async (results: { response: any }) => {
+    const nowUnixTimeInSeconds = Math.floor(Date.now() / 1000);
+    if (expirationTimestamp < nowUnixTimeInSeconds) {
+      return resolver({ statusCode: 504 });
+    }
 
-      if (!results) {
-        return await startPollingForResultsInteractor(
-          applicationContext,
-          requestId,
-          expirationTimestamp,
-          resolver,
-          attemptNumber + 1,
-        );
-      }
-
-      const { response } = results;
-      const responseObj = JSON.parse(response);
-      if (resolver) resolver(responseObj);
-    })
-    .catch(async error => {
-      console.log(`Fetch operation failed!!!!!!!!`);
-      console.log(`Error polling for results: ${error.message}`);
-      if (attemptNumber >= 10) {
-        return resolver({ statusCode: 504, error: error.message });
-      }
+    if (!results) {
       return await startPollingForResultsInteractor(
         applicationContext,
         requestId,
@@ -46,5 +26,10 @@ export const startPollingForResultsInteractor = async (
         resolver,
         attemptNumber + 1,
       );
-    });
+    }
+
+    const { response } = results;
+    const responseObj = JSON.parse(response);
+    if (resolver) resolver(responseObj);
+  });
 };
