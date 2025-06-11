@@ -18,7 +18,7 @@ In order for Terraform to properly delete our WAF stuff in the west, we need to 
 
 const scriptConfig: ScriptConfig = {
   description:
-    'practitioner-stats - Outputs practitioner stats over a given year',
+    'disassociateResourcesFromWebAcl - Disassociates resources from WAF ACLs',
   environment: {
     env: 'ENV',
     deployingColor: 'DEPLOYING_COLOR',
