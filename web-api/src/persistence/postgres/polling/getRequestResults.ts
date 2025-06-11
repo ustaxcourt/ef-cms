@@ -16,7 +16,7 @@ export const getRequestResults = async ({
   const results = await getDbReader(async reader => {
     return await reader
       .selectFrom('dwResponseChunk')
-      .select(['chunk', 'index', 'requestId', 'totalNumberOfChunks'])
+      .select(['chunk', 'index', 'requestId', 'totalNumberOfChunks', 'userId'])
       .where('userId', '=', userId)
       .where('requestId', '=', requestId)
       .orderBy('index', 'asc')
