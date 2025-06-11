@@ -22,6 +22,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
   TrialSessionProceedingType,
   TrialSessionScope,
+  TrialSessionTypes,
   US_STATES,
   US_STATES_OTHER,
 } from '../EntityConstants';
@@ -96,7 +97,7 @@ export class TrialSession extends JoiValidationEntity {
   public proceedingType: TrialSessionProceedingType;
   public sessionScope: TrialSessionScope;
   public sessionStatus: string;
-  public sessionType: string;
+  public sessionType: TrialSessionTypes;
   public startDate: string;
   public startTime?: string;
   public state?: string;
@@ -411,19 +412,17 @@ export class TrialSession extends JoiValidationEntity {
     return this;
   }
 
-  generateSortKeyPrefix() {
-    const { sessionType, trialLocation } = this;
-    const caseProcedureSymbol =
-      {
-        Regular: 'R',
-        Small: 'S',
-      }[sessionType] || 'H';
-
-    const formattedTrialCity = trialLocation?.replace(/[\s.,]/g, '');
-
-    const skPrefix = [formattedTrialCity, caseProcedureSymbol].join('-');
-
-    return skPrefix;
+  getCaseProcedureForTrial() {
+    const { sessionType } = this;
+    if (
+      [SESSION_TYPES.regular, SESSION_TYPES.small].some(
+        type => type === sessionType,
+      )
+    ) {
+      return sessionType;
+    } else {
+      return SESSION_TYPES.hybrid;
+    }
   }
 
   setAsCalendared() {

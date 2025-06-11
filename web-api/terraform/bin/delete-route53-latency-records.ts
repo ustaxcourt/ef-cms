@@ -12,14 +12,14 @@ const route53Client = new Route53Client({
   region: 'us-east-1',
 });
 
-const { ZONE_NAME, DEPLOYING_COLOR, ENV } = process.env;
+const { DEPLOYING_COLOR, EFCMS_DOMAIN, ZONE_NAME } = process.env;
 
 const RECORD_NAMES = [
-  `api.${ENV}.${ZONE_NAME}.`,
-  `public-api.${ENV}.${ZONE_NAME}.`,
-  `api-${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}.`,
-  `public-api-${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}.`,
-  `ws-${DEPLOYING_COLOR}.${ENV}.${ZONE_NAME}.`,
+  `api.${EFCMS_DOMAIN}.`,
+  `public-api.${EFCMS_DOMAIN}.`,
+  `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}.`,
+  `public-api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}.`,
+  `ws-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}.`,
 ];
 
 const deleteLatencyRecords = async (): Promise<void> => {
