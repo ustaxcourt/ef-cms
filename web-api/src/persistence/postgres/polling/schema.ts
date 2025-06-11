@@ -5,7 +5,6 @@ const DEFAULT = {};
 // Request table definition
 export const requestTableDefinition = {
   requestId: DEFAULT as string,
-  status: DEFAULT as string,
   totalChunks: DEFAULT as number | null,
   userId: DEFAULT as string,
   ttl: DEFAULT as number,

@@ -10,7 +10,6 @@ export const getRequestResults = async ({
   requestId,
   userId,
 }: {
-  applicationContext: IApplicationContext;
   requestId: string;
   userId: string;
 }): Promise<ResponseChunk[]> => {
