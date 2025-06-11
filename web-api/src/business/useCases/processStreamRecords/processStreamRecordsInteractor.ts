@@ -8,7 +8,6 @@ import { processOtherEntries } from './processOtherEntries';
 import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
 import { processRemoveEntries } from './processRemoveEntries';
 import type { DynamoDBRecord } from 'aws-lambda';
-import { processDocketEntryWorksheetEntries } from '@web-api/business/useCases/processStreamRecords/processDocketEntryWorksheetEntries';
 
 export const processStreamRecordsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -18,7 +17,6 @@ export const processStreamRecordsInteractor = async (
     caseEntityRecords,
     completionMarkers,
     docketEntryRecords,
-    docketEntryWorksheetRecords,
     otherRecords,
     practitionerMappingRecords,
     removeRecords,
@@ -49,15 +47,6 @@ export const processStreamRecordsInteractor = async (
       docketEntryRecords,
     }).catch(err => {
       getDawsonLogger().error('failed to processDocketEntries', {
-        err,
-      });
-      throw err;
-    });
-
-    await processDocketEntryWorksheetEntries({
-      docketEntryWorksheetRecords,
-    }).catch(err => {
-      getDawsonLogger().error('failed to process DocketEntryWorksheet entries', {
         err,
       });
       throw err;
