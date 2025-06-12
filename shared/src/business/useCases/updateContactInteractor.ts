@@ -168,28 +168,18 @@ export const updateContact = async (
     );
 
     if (!isContactRepresented || partyWithPaperService) {
-      const workItem = new WorkItem(
-        {
-          assigneeId: null,
-          assigneeName: null,
-          associatedJudge: caseEntity.associatedJudge,
-          associatedJudgeId: caseEntity.associatedJudgeId,
-          caseStatus: caseEntity.status,
-          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-          docketEntry: {
-            ...changeOfAddressDocketEntry.toRawObject(),
-            createdAt: changeOfAddressDocketEntry.createdAt,
-          },
-          docketNumber: caseEntity.docketNumber,
-          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-          section: DOCKET_SECTION,
-          sentBy: authorizedUser.name,
-          sentByUserId: authorizedUser.userId,
-          trialDate: caseEntity.trialDate,
-          trialLocation: caseEntity.trialLocation,
+      const workItem = new WorkItem({
+        assigneeId: null,
+        assigneeName: null,
+        docketEntry: {
+          ...changeOfAddressDocketEntry.toRawObject(),
+          createdAt: changeOfAddressDocketEntry.createdAt,
         },
-        { caseEntity },
-      );
+        docketNumber: caseEntity.docketNumber,
+        section: DOCKET_SECTION,
+        sentBy: authorizedUser.name,
+        sentByUserId: authorizedUser.userId,
+      });
 
       changeOfAddressDocketEntry.setWorkItem(workItem);
 

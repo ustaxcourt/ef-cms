@@ -12,19 +12,15 @@ import { CASE_TYPES_MAP } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
-import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { getMessagesByDocketNumber as getMessagesByDocketNumberMock } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
-import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations } from './updateCaseAndAssociations';
 import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
 import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { MOCK_MESSAGE } from '@shared/test/mockMessage';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -38,9 +34,6 @@ describe('updateCaseAndAssociations', () => {
   const upsertCases = jest.mocked(upsertCasesMock);
   const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
   const updateMessage = updateMessageMock as jest.Mock;
-  const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
-  const getWorkItemsByDocketNumber =
-    getWorkItemsByDocketNumberMock as jest.Mock;
   const upsertCaseDeadlines = upsertCaseDeadlinesMock as jest.Mock;
   const getCaseDeadlinesByDocketNumber =
     getCaseDeadlinesByDocketNumberMock as jest.Mock;
@@ -171,9 +164,6 @@ describe('updateCaseAndAssociations', () => {
         .updatePrivatePractitionerOnCase,
     ).not.toHaveBeenCalled();
 
-    // updateCaseWorkItems
-    expect(upsertWorkItems).not.toHaveBeenCalled();
-
     // updateUserCaseMappings
     expect(
       applicationContext.getPersistenceGateway().updateUserCaseMapping,
@@ -291,48 +281,6 @@ describe('updateCaseAndAssociations', () => {
         upsertCases.mock.calls[0][0][0].archivedDocketEntries,
       ).toMatchObject(caseToUpdate.archivedDocketEntries);
       expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
-    });
-  });
-
-  describe('work items', () => {
-    let updatedCase: Case;
-    beforeAll(() => {
-      getWorkItemsByDocketNumber.mockReturnValue([
-        {
-          pk: 'abc|987',
-          sk: `workitem|${MOCK_WORK_ITEM.workItemId}`,
-          ...MOCK_WORK_ITEM,
-        },
-      ]);
-    });
-
-    beforeEach(() => {
-      updatedCase = cloneDeep(validMockCase);
-    });
-
-    it('does not call saveWorkItem if nothing on the case changes that requires a work item to be updated', async () => {
-      updatedCase.mailingDate = '2025-01-05T05:22:16.001Z';
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-      expect(upsertWorkItems).not.toHaveBeenCalled();
-    });
-
-    it('the associated judge has been updated', async () => {
-      updatedCase.associatedJudge = 'Judge Dredd';
-      updatedCase.associatedJudgeId = '2f46a889-901c-4e8b-b2bb-c3994e2c75c1';
-      await updateCaseAndAssociations({
-        applicationContext,
-        authorizedUser: mockDocketClerkUser,
-        caseToUpdate: updatedCase,
-      });
-      const { workItems } = upsertWorkItems.mock.calls[0][0];
-      expect(workItems[0].associatedJudge).toBe('Judge Dredd');
-      expect(workItems[0].associatedJudgeId).toBe(
-        '2f46a889-901c-4e8b-b2bb-c3994e2c75c1',
-      );
     });
   });
 

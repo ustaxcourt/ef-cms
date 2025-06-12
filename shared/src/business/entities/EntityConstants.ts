@@ -1483,7 +1483,6 @@ export const CHAMBERS_SECTION = 'chambers';
 export const CLERK_OF_COURT_SECTION = 'clerkofcourt';
 export const DOCKET_SECTION = 'docket';
 export const FLOATER_SECTION = 'floater';
-export const IRS_SYSTEM_SECTION = 'irsSystem';
 export const PETITIONS_SECTION = 'petitions';
 export const REPORTERS_OFFICE_SECTION = 'reportersOffice';
 export const TRIAL_CLERKS_SECTION = 'trialClerks';

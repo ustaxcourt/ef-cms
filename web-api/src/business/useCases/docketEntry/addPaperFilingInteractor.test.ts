@@ -233,7 +233,7 @@ describe('addPaperFilingInteractor', () => {
 
     expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
       {
-        leadDocketNumber: mockCase.leadDocketNumber,
+        docketNumber: mockCase.docketNumber,
       },
     ]);
     expect(updateCaseAndAssociations).toHaveBeenCalled();

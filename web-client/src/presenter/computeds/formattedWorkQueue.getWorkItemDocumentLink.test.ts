@@ -61,7 +61,6 @@ describe('getWorkItemDocumentLink', () => {
       getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -72,7 +71,6 @@ describe('getWorkItemDocumentLink', () => {
           eventCode: 'P',
           pending: false,
         },
-        isInitializeCase: true,
         section: PETITIONS_SECTION,
       },
       workQueueToDisplay: {
@@ -89,7 +87,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -100,7 +97,6 @@ describe('getWorkItemDocumentLink', () => {
           eventCode: 'OAJ',
           pending: false,
         },
-        isInitializeCase: false,
         section: PETITIONS_SECTION,
       },
       workQueueToDisplay: {
@@ -118,7 +114,6 @@ describe('getWorkItemDocumentLink', () => {
       getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -129,7 +124,6 @@ describe('getWorkItemDocumentLink', () => {
           eventCode: 'OAJ',
           pending: false,
         },
-        isInitializeCase: false,
         section: DOCKET_SECTION,
       },
       workQueueToDisplay: {
@@ -145,7 +139,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -160,7 +153,6 @@ describe('getWorkItemDocumentLink', () => {
           scenario: 'Standard',
         },
         inProgress: true,
-        isInitializeCase: false,
         section: DOCKET_SECTION,
       },
       workQueueToDisplay: {
@@ -178,7 +170,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -204,7 +195,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -221,7 +211,6 @@ describe('getWorkItemDocumentLink', () => {
           servedAt: '2019-03-01T21:40:46.415Z',
         },
         inProgress: false,
-        isInitializeCase: false,
         isRead: true,
         section: DOCKET_SECTION,
       },
@@ -240,7 +229,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -256,7 +244,6 @@ describe('getWorkItemDocumentLink', () => {
           scenario: 'Standard',
         },
         inProgress: true,
-        isInitializeCase: false,
         isRead: true,
         section: DOCKET_SECTION,
       },
@@ -276,7 +263,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -293,7 +279,6 @@ describe('getWorkItemDocumentLink', () => {
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
         },
-        isInitializeCase: false,
         section: DOCKET_SECTION,
       },
       workQueueToDisplay: {
@@ -310,7 +295,6 @@ describe('getWorkItemDocumentLink', () => {
       getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -324,7 +308,6 @@ describe('getWorkItemDocumentLink', () => {
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
         },
-        isInitializeCase: false,
         section: DOCKET_SECTION,
       },
       workQueueToDisplay: {
@@ -340,7 +323,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -352,7 +334,6 @@ describe('getWorkItemDocumentLink', () => {
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
         },
-        isInitializeCase: false,
         section: DOCKET_SECTION,
       },
       workQueueToDisplay: {
@@ -370,7 +351,6 @@ describe('getWorkItemDocumentLink', () => {
     const { permissions, user: authorizedUser } = getBaseState(docketClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -382,7 +362,6 @@ describe('getWorkItemDocumentLink', () => {
           relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
           scenario: 'Standard',
         },
-        isInitializeCase: false,
         section: DOCKET_SECTION,
       },
       workQueueToDisplay: {
@@ -398,12 +377,10 @@ describe('getWorkItemDocumentLink', () => {
       getBaseState(petitionsClerkUser);
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
-        caseIsInProgress: true,
         docketEntry: {
           ...baseDocketEntry,
           documentType: 'Petition',
@@ -413,7 +390,7 @@ describe('getWorkItemDocumentLink', () => {
           pending: false,
           servedAt: null,
         },
-        isInitializeCase: false,
+        inProgress: true,
         section: PETITIONS_SECTION,
       },
       workQueueToDisplay: {
@@ -431,22 +408,21 @@ describe('getWorkItemDocumentLink', () => {
     );
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
         ...baseWorkItem,
-        caseIsInProgress: true,
         docketEntry: {
           ...baseDocketEntry,
           documentType: 'Petition',
           eventCode: 'P',
+          inProgress: true,
           isFileAttached: true,
           isInProgress: true,
           pending: false,
           servedAt: null,
         },
-        isInitializeCase: false,
+        inProgress: true,
         section: PETITIONS_SECTION,
       },
       workQueueToDisplay: {
@@ -464,7 +440,6 @@ describe('getWorkItemDocumentLink', () => {
     );
 
     const result = getWorkItemDocumentLink({
-      applicationContext,
       authorizedUser,
       permissions,
       workItem: {
@@ -475,7 +450,6 @@ describe('getWorkItemDocumentLink', () => {
           eventCode: 'P',
           pending: false,
         },
-        isInitializeCase: true,
         section: PETITIONS_SECTION,
       },
       workQueueToDisplay: {
