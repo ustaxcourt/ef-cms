@@ -1,5 +1,4 @@
 import { getCypressPostgresDb } from 'cypress/helpers/cypressTasks/postgres/getCypressPostgresDb';
-import { isEmpty } from 'lodash';
 
 export async function waitForNoce({
   attempts = 0,
@@ -17,7 +16,7 @@ export async function waitForNoce({
     .select('docketEntryId')
     .executeTakeFirst();
 
-  if (!isEmpty(noceDocketEntry)) {
+  if (noceDocketEntry) {
     return true;
   }
 
