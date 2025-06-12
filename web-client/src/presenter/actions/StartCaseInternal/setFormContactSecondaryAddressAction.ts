@@ -15,13 +15,14 @@ export const setFormContactSecondaryAddressAction = ({
   const { contact } = props;
 
   store.set(state.form.contactSecondary, {
-    ...contact,
-    contactId: get(state.form.contactSecondary.contactId),
-    hasConsentedToElectronicService: get(
-      state.form.contactSecondary.hasConsentedToElectronicService,
-    ),
-    inCareOf: get(state.form.contactSecondary.inCareOf),
-    name: get(state.form.contactSecondary.name),
-    paperPetitionEmail: get(state.form.contactSecondary.paperPetitionEmail),
+    ...get(state.form.contactSecondary),
+    address1: contact.address1,
+    address2: contact.address2,
+    address3: contact.address3,
+    city: contact.city,
+    countryType: contact.countryType,
+    phone: contact.phone,
+    postalCode: contact.postalCode,
+    state: contact.state,
   });
 };
