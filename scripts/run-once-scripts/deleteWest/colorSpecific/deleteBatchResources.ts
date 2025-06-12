@@ -14,12 +14,12 @@ import {
 
 const scriptConfig: ScriptConfig = {
   description:
-    'practitioner-stats - Outputs practitioner stats over a given year',
+    'deleteBatchResources - Deletes AWS Batch resources in us-west-1',
   environment: {
     env: 'ENV',
     deployingColor: 'DEPLOYING_COLOR',
   },
-  requireActiveAwsSession: false,
+  requireActiveAwsSession: true,
 };
 const { env, deployingColor } = parseArgsAndEnvVars(scriptConfig) as {
   env: string;
@@ -56,7 +56,7 @@ async function deleteJobQueue() {
       );
 
       // Wait a few seconds for state change to propagate
-      await new Promise(res => setTimeout(res, 5000));
+      await new Promise(res => setTimeout(res, 10000));
     }
 
     // Step 3: Delete the job queue
