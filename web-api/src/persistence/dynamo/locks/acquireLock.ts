@@ -1,11 +1,8 @@
-import {
-  FORMATS,
-  formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
 import { TDynamoRecord } from '../dynamoTypes';
 import { getTableName } from '../../dynamodbClientService';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type TLockDynamoRecord = TDynamoRecord & { timestamp: string };
@@ -32,9 +29,7 @@ export async function createLock({
   };
 
   await applicationContext
-    .getDocumentClient(applicationContext, {
-      useMainRegion: true,
-    })
+    .getDocumentClient()
     .put({
       Item: item,
       TableName: getTableName({
@@ -56,9 +51,7 @@ export async function removeLock({
   await settlePromises(
     identifiers.map(identifierToUnlock =>
       applicationContext
-        .getDocumentClient(applicationContext, {
-          useMainRegion: true,
-        })
+        .getDocumentClient()
         .delete({
           Key: {
             pk: identifierToUnlock,
@@ -69,7 +62,9 @@ export async function removeLock({
           }),
         })
         .catch(e => {
-          getLogger().error(`Failed to remove lock for ${identifierToUnlock}`);
+          getDawsonLogger().error(
+            `Failed to remove lock for ${identifierToUnlock}`,
+          );
           throw e;
         }),
     ),
@@ -88,9 +83,7 @@ export async function getLock({
 }): Promise<undefined | TLockDynamoRecord> {
   const now = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const res = await applicationContext
-    .getDocumentClient(applicationContext, {
-      useMainRegion: true,
-    })
+    .getDocumentClient()
     .get({
       ConsistentRead: true,
       Key: {

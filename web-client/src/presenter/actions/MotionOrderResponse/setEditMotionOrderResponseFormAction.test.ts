@@ -26,7 +26,7 @@ describe('setEditMotionOrderResponseFormAction', () => {
     expect(result.state.form).toEqual(mockDraftOrderState);
     expect(result.state.docketEntryId).toEqual('123');
     expect(result.output.path).toEqual(
-      '/messages/123-45/message-detail/abc/xyz/motion-response-order-edit',
+      '/messages/123-45/message-detail/abc/xyz/motion-order-response-edit',
     );
   });
 

@@ -1,5 +1,5 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { partitionRecords } from './processStreamUtilities';
 import { processCaseEntries } from './processCaseEntries';
 import { processCompletionMarkers } from './processCompletionMarkers';
@@ -27,7 +27,7 @@ export const processStreamRecordsInteractor = async (
       applicationContext,
       removeRecords,
     }).catch(err => {
-      getLogger().error('failed to processRemoveEntries', {
+      getDawsonLogger().error('failed to processRemoveEntries', {
         err,
       });
       throw err;
@@ -36,7 +36,7 @@ export const processStreamRecordsInteractor = async (
     await processCaseEntries({
       caseEntityRecords,
     }).catch(err => {
-      getLogger().error('failed to processCaseEntries', {
+      getDawsonLogger().error('failed to processCaseEntries', {
         err,
       });
       throw err;
@@ -45,7 +45,7 @@ export const processStreamRecordsInteractor = async (
     await processDocketEntries({
       docketEntryRecords,
     }).catch(err => {
-      getLogger().error('failed to processDocketEntries', {
+      getDawsonLogger().error('failed to processDocketEntries', {
         err,
       });
       throw err;
@@ -55,9 +55,12 @@ export const processStreamRecordsInteractor = async (
       applicationContext,
       practitionerMappingRecords,
     }).catch(err => {
-      getLogger().error('failed to process practitioner mapping records', {
-        err,
-      });
+      getDawsonLogger().error(
+        'failed to process practitioner mapping records',
+        {
+          err,
+        },
+      );
       throw err;
     });
 
@@ -68,14 +71,14 @@ export const processStreamRecordsInteractor = async (
 
     await processOtherEntries({ applicationContext, otherRecords }).catch(
       err => {
-        getLogger().error('failed to processOtherEntries', {
+        getDawsonLogger().error('failed to processOtherEntries', {
           err,
         });
         throw err;
       },
     );
   } catch (err) {
-    getLogger().error(
+    getDawsonLogger().error(
       'processStreamRecordsInteractor failed to process the records',
       { err },
     );

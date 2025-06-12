@@ -1,7 +1,7 @@
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
@@ -16,7 +16,7 @@ export const processDocketEntries = async ({
   if (!records.length) return;
 
   try {
-    getLogger().debug(`going to index ${records.length} docketEntryRecords`);
+    getDawsonLogger().debug(`going to index ${records.length} docketEntryRecords`);
 
     const pgDocketEntries: Record<string, RawDocketEntry> = {};
 
@@ -38,8 +38,8 @@ export const processDocketEntries = async ({
     });
     await upsertDocketEntries(validatedEntries);
   } catch (e) {
-    getLogger().error(
-      `Postgres re-indexing failure: Failed to process docket entry records: ${e}`,
+    getDawsonLogger().error(
+      `Postgres re-indexing failure: Failed to process docket entry record: ${e}`,
     );
   }
 };
