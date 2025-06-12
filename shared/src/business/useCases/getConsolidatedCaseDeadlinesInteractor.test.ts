@@ -1,7 +1,7 @@
 jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
 );
-jest.mock('@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber');
+jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers');
 import { getConsolidatedCaseDeadlinesInteractor } from '@shared/business/useCases/getConsolidatedCaseDeadlinesInteractor';
 import { getUniqueId } from '@shared/sharedAppContext';
 import {
@@ -9,13 +9,12 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
-import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 const getCaseDeadlinesByConsolidatedCaseDeadlineId =
   getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
 
-const getCaseMetadataByDocketNumber =
-  getCaseMetadataByDocketNumberMock as jest.Mock;
+const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 
 describe('getConsolidatedCaseDeadlinesInteractor', () => {
   const TEST_CONSOLIDATED_DEADLINE_ID = getUniqueId();
@@ -45,19 +44,28 @@ describe('getConsolidatedCaseDeadlinesInteractor', () => {
   });
 
   it('should return all the items if there are new consolidated case deadlines', async () => {
-    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([
-      { docketNumber: '101-25' },
-      { docketNumber: '102-25' },
-      { docketNumber: '103-25' },
-      { docketNumber: '104-25' },
-      { docketNumber: '105-25' },
-      { docketNumber: '106-25' },
-    ]);
+    const TEST_DOCKET_NUMBER = [
+      '101-25',
+      '102-25',
+      '103-25',
+      '104-25',
+      '105-25',
+      '106-25',
+    ];
 
-    getCaseMetadataByDocketNumber.mockImplementation(({ docketNumber }) => {
-      if (docketNumber === '106-25') return undefined;
-      return { caseCaption: `${docketNumber} - TEST_CAPTION` };
-    });
+    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue(
+      TEST_DOCKET_NUMBER.map(dn => ({ docketNumber: dn })),
+    );
+
+    getCasesByDocketNumbers.mockResolvedValue(
+      TEST_DOCKET_NUMBER.filter(dn => dn !== '106-25').map(
+        dn =>
+          ({
+            docketNumber: dn,
+            caseCaption: `${dn} - TEST_CAPTION`,
+          }) as RawCase,
+      ),
+    );
 
     const results = await getConsolidatedCaseDeadlinesInteractor(
       {
