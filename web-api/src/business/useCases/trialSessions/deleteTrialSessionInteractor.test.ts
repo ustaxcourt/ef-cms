@@ -2,11 +2,11 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -17,24 +17,24 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 
 describe('deleteTrialSessionInteractor', () => {
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
   let mockTrialSession;
-  let mockLock;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => mockTrialSession);
   });
 
   beforeEach(() => {
-    mockLock = undefined;
     mockTrialSession = MOCK_TRIAL_REGULAR;
 
     applicationContext.environment.stage = 'local';
@@ -154,10 +154,8 @@ describe('deleteTrialSessionInteractor', () => {
       ...MOCK_TRIAL_REGULAR,
       startDate: '2100-12-01T00:00:00.000Z',
     };
-
     getCasesByDocketNumbers.mockResolvedValue([MOCK_CASE]);
-
-    mockLock = MOCK_LOCK;
+    tryGetLock.mockResolvedValueOnce(false);
 
     await expect(
       deleteTrialSessionInteractor(
@@ -187,23 +185,13 @@ describe('deleteTrialSessionInteractor', () => {
       },
       mockDocketClerkUser,
     );
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledTimes(mockTrialSession.caseOrder.length);
+    expect(tryGetLock).toHaveBeenCalledTimes(mockTrialSession.caseOrder.length);
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
   });
 });

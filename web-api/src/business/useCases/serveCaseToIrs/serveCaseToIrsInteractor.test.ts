@@ -4,6 +4,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -25,7 +26,6 @@ import {
   getBusinessDateInFuture,
 } from '@shared/business/utilities/DateHandler';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
@@ -39,10 +39,16 @@ import {
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 
 describe('serveCaseToIrsInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const upsertCases = jest.mocked(upsertCasesMock);
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
+
   const clientConnectionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockParams = {
     clientConnectionId,
@@ -89,13 +95,8 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     };
   };
-  let mockLock;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-
     applicationContext
       .getPersistenceGateway()
       .getConfigurationItemValue.mockResolvedValue({
@@ -105,7 +106,6 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   beforeEach(() => {
-    mockLock = undefined;
     mockCase = { ...MOCK_CASE };
     mockCase.docketEntries[0].workItem = { ...MOCK_WORK_ITEM };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
@@ -1138,9 +1138,7 @@ describe('serveCaseToIrsInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      upsertCases.mock.calls[0][0][0].docketEntries,
-    ).toMatchObject([
+    expect(upsertCases.mock.calls[0][0][0].docketEntries).toMatchObject([
       {
         documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
         index: 1,
@@ -1536,7 +1534,7 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLock.mockResolvedValueOnce(false);
 
     await expect(
       serveCaseToIrsInteractor(
@@ -1556,20 +1554,13 @@ describe('serveCaseToIrsInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
 
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
   });
 
   it('should generate a notice of receipt of petition with the name and title of the clerk of the court', async () => {

@@ -2,6 +2,7 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
@@ -29,6 +30,7 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
@@ -43,6 +45,7 @@ describe('editPaperFilingInteractor', () => {
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const tryGetLock = jest.mocked(tryGetLockMock);
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
   const mockServedDocketEntryId = '08ecbf7e-b316-46bb-9a66-b7474823d202';
   const mockWorkItemId = 'a956aa05-19cb-4fc3-ba10-d97c1c567c12';
@@ -63,6 +66,10 @@ describe('editPaperFilingInteractor', () => {
     updatedAt: applicationContext.getUtilities().createISODateString(),
     workItemId: mockWorkItemId,
   };
+
+  beforeAll(() => {
+    tryGetLock.mockResolvedValue(true);
+  });
 
   beforeEach(() => {
     caseRecord = {

@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -15,22 +18,16 @@ import {
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('blockCaseFromTrialInteractor', () => {
-  let mockLock;
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
+  const tryGetLock = jest.mocked(tryGetLockMock);
+  const releaseLock = jest.mocked(releaseLockMock);
 
   beforeEach(() => {
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     updateCaseAndAssociations.mockImplementation(
       ({ caseToUpdate }) => caseToUpdate,
     );
-    mockLock = undefined;
   });
 
   it('should update the case with the blocked flag set as true and attach a reason', async () => {
@@ -50,7 +47,7 @@ describe('blockCaseFromTrialInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLock.mockResolvedValueOnce(false);
 
     await expect(
       blockCaseFromTrialInteractor(
@@ -76,20 +73,13 @@ describe('blockCaseFromTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
+    expect(tryGetLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
 
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(releaseLock.mock.calls[0][1]).toEqual(
+      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    );
   });
 
   it('should throw an unauthorized error when the user has no access to block cases', async () => {

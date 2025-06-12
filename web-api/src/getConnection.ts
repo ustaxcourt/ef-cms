@@ -31,7 +31,7 @@ async function establishConnection(): Promise<Kysely<Database>> {
   try {
     poolConfig = getPoolConfig();
     let token: string | null = null;
-    token = await getToken();
+    token = await getToken({ resetExpiration: true });
     pool = new Pool({ ...poolConfig, password: token });
     return new Kysely<Database>({
       dialect: new PostgresDialect({
@@ -58,13 +58,15 @@ async function generateRDSAuthToken() {
   return token;
 }
 
-async function getToken() {
+async function getToken({ resetExpiration }: { resetExpiration: boolean }) {
   const token =
     environment.nodeEnv !== 'production'
       ? environment.rds.pool.password
       : await generateRDSAuthToken();
 
-  tokenExpirationTime = Date.now() + 13 * 60 * 1000; // rds auth token expires every 15min. So refresh every 13min
+  if (resetExpiration) {
+    tokenExpirationTime = Date.now() + 13 * 60 * 1000; // rds auth token expires every 15min. So refresh every 13min
+  }
   return token;
 }
 
@@ -72,7 +74,7 @@ let tokenPromise: Promise<string> | null;
 async function resetPoolPassword() {
   if (pool) {
     if (!tokenPromise) {
-      tokenPromise = getToken();
+      tokenPromise = getToken({ resetExpiration: true });
     }
     let token;
     try {
@@ -100,3 +102,23 @@ function getPoolConfig(): PoolConfig {
   }
   return poolConfig;
 }
+
+export const getScopedDbConnection = async (): Promise<{
+  db: Kysely<Database>;
+  destroy: () => Promise<void>;
+}> => {
+  const poolConfig = getPoolConfig();
+  const token = await getToken({ resetExpiration: false });
+  const pool = new Pool({ ...poolConfig, password: token });
+
+  const db = new Kysely<Database>({
+    dialect: new PostgresDialect({ pool }),
+  });
+
+  return {
+    db,
+    destroy: async () => {
+      await db.destroy();
+    },
+  };
+};

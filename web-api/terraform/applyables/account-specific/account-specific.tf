@@ -57,11 +57,6 @@ module "dawson-developer-permissions" {
   dawson_dev_trusted_role_arns = var.dawson_dev_trusted_role_arns
 }
 
-module "dynamsoft" {
-  source    = "../../modules/dynamsoft-permissions"
-  zone_name = var.zone_name
-}
-
 module "edge-lambda-permissions" {
   source = "../../modules/edge-lambda-permissions"
 }

@@ -36,9 +36,25 @@ import {
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
 import {
+  DocketEntryWorksheetTable,
+  DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
+} from '@web-api/persistence/postgres/docketEntryWorksheets/schema';
+import {
   DW_MINUTE_SHEET_COLUMNS,
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
+import {
+  ConnectionTable,
+  DW_CONNECTION_COLUMNS,
+} from '@web-api/persistence/postgres/connections/schema';
+import {
+  DW_NOTIFICATION_COLUMNS,
+  NotificationTable,
+} from '@web-api/persistence/postgres/notifications/schema';
+import {
+  ChangeOfAddressTable,
+  DW_CHANGE_OF_ADDRESS_COLUMNS,
+} from '@web-api/persistence/postgres/jobs/changeOfAddress/schema';
 
 const DEFAULT = {};
 
@@ -47,9 +63,13 @@ interface DatabaseSchemaType {
   dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
+  dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
+  dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
-  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
+  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
@@ -86,11 +106,23 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as CaseWorksheetTable,
     columns: DW_CASE_WORKSHEET_COLUMNS,
   },
+  dwChangeOfAddress: {
+    table: DEFAULT as ChangeOfAddressTable,
+    columns: DW_CHANGE_OF_ADDRESS_COLUMNS,
+  },
+  dwConnection: {
+    table: DEFAULT as ConnectionTable,
+    columns: DW_CONNECTION_COLUMNS,
+  },
   dwDocketEntry: {
     table: DEFAULT as DocketEntryTable,
     columns: DW_DOCKET_ENTRY_COLUMNS,
     transformOpenSearchMessage: transformOpenSearchDocketEntries,
     indexOpenSearchMessage: indexOpenSearchDocketEntries,
+  },
+  dwDocketEntryWorksheet: {
+    table: DEFAULT as DocketEntryWorksheetTable,
+    columns: DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
   },
   dwMessage: {
     table: DEFAULT as MessageTable,
@@ -99,6 +131,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMinuteSheet: {
     table: DEFAULT as MinuteSheetTable,
     columns: DW_MINUTE_SHEET_COLUMNS,
+  },
+  dwNotification: {
+    table: DEFAULT as NotificationTable,
+    columns: DW_NOTIFICATION_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,

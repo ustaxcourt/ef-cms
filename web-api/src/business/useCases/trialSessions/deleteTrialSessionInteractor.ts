@@ -7,9 +7,8 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * deleteTrialSession
@@ -56,7 +55,7 @@ export const deleteTrialSessionInteractor = async (
       ({ docketNumber }) => docketNumber,
     );
 
-    await acquireLock({
+    const removeLockFunction = await acquireLock({
       applicationContext,
       authorizedUser,
       identifiers: docketNumbers?.map(item => `case|${item}`),
@@ -76,14 +75,7 @@ export const deleteTrialSessionInteractor = async (
       });
     }
 
-    await settlePromises(
-      docketNumbers.map(docketNumber =>
-        applicationContext.getPersistenceGateway().removeLock({
-          applicationContext,
-          identifiers: [`case|${docketNumber}`],
-        }),
-      ),
-    );
+    await removeLockFunction();
   }
 
   await applicationContext.getPersistenceGateway().deleteTrialSession({
