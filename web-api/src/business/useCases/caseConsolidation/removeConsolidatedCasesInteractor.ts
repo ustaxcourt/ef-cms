@@ -147,33 +147,41 @@ async function updateConsolidatedCaseDeadlineReferenceId(
   });
 
   const DEADLINES_TO_UPDATE: RawCaseDeadline[] = [];
-  for (let index = 0; index < LEAD_DEADLINES.length; index++) {
-    const leadCaseDeadline = LEAD_DEADLINES[index];
-    const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
-    const CHILD_DEADLINES = await getCaseDeadlinesByConsolidatedCaseDeadlineId(
-      oldLeadCaseDeadlineId,
-      oldLeadDocketNumber,
-    );
-    if (!CHILD_DEADLINES.length) continue;
 
-    const NEW_LEAD_CASE_DEADLINE = CHILD_DEADLINES.find(
-      ({ docketNumber }) => docketNumber === newLeadDocketNumber,
-    );
+  const results = await Promise.allSettled(
+    LEAD_DEADLINES.map(async leadCaseDeadline => {
+      const { caseDeadlineId: oldLeadCaseDeadlineId } = leadCaseDeadline;
+      const CHILD_DEADLINES =
+        await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+          oldLeadCaseDeadlineId,
+          oldLeadDocketNumber,
+        );
 
-    const newLeadCaseDeadlineId =
-      NEW_LEAD_CASE_DEADLINE?.caseDeadlineId || undefined;
+      if (!CHILD_DEADLINES.length) return;
 
-    CHILD_DEADLINES.forEach((childCaseDeadline: RawCaseDeadline) => {
-      const updatedDeadline = {
+      const NEW_LEAD_CASE_DEADLINE = CHILD_DEADLINES.find(
+        ({ docketNumber }) => docketNumber === newLeadDocketNumber,
+      );
+
+      const newLeadCaseDeadlineId =
+        NEW_LEAD_CASE_DEADLINE?.caseDeadlineId || undefined;
+
+      const updatedDeadlines = CHILD_DEADLINES.map(childCaseDeadline => ({
         ...childCaseDeadline,
         consolidatedCaseDeadlineId:
           childCaseDeadline.docketNumber === newLeadDocketNumber
             ? undefined
             : newLeadCaseDeadlineId,
-      } as RawCaseDeadline;
+      }));
 
-      DEADLINES_TO_UPDATE.push(updatedDeadline);
-    });
+      DEADLINES_TO_UPDATE.push(...updatedDeadlines);
+    }),
+  );
+
+  // Optional: Log any rejected results for debugging
+  const rejected = results.filter(r => r.status === 'rejected');
+  if (rejected.length > 0) {
+    console.warn('Some deadline updates failed:', rejected);
   }
 
   await upsertCaseDeadlines(DEADLINES_TO_UPDATE);

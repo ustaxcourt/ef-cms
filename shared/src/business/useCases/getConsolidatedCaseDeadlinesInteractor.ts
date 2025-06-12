@@ -5,7 +5,7 @@ import {
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
-import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export async function getConsolidatedCaseDeadlinesInteractor(
   {
@@ -23,20 +23,14 @@ export async function getConsolidatedCaseDeadlinesInteractor(
     consolidatedCaseDeadlineId,
   );
 
-  const RESULTS: { docketNumber: string; caseCaption: string }[] = [];
-  for (let index = 0; index < DEADLINES.length; index++) {
-    const { docketNumber } = DEADLINES[index];
-    const CASE = await getCaseMetadataByDocketNumber({
-      docketNumber,
-    });
-    if (!CASE) continue;
+  if (!DEADLINES.length) return [];
 
-    const { caseCaption } = CASE;
-    RESULTS.push({
-      caseCaption,
-      docketNumber,
-    });
-  }
+  const ALL_CASES = await getCasesByDocketNumbers({
+    docketNumbers: DEADLINES.map(c => c.docketNumber),
+  });
 
-  return RESULTS;
+  return ALL_CASES.map(c => ({
+    caseCaption: c.caseCaption,
+    docketNumber: c.docketNumber,
+  }));
 }
