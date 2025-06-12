@@ -30,12 +30,7 @@ export function loginAsDojPractitioner(
 }
 
 export function loginAsPrivatePractitioner(
-  practitionerUser:
-    | 'privatePractitioner@example.com'
-    | 'privatePractitioner1@example.com'
-    | 'privatePractitioner2@example.com'
-    | 'privatePractitioner3@example.com'
-    | 'privatePractitioner4@example.com' = 'privatePractitioner1@example.com',
+  practitionerUser: string = 'privatePractitioner1@example.com',
 ) {
   login({ email: practitionerUser });
   cy.get('[data-testid="file-a-petition"]').should('exist');
@@ -43,10 +38,7 @@ export function loginAsPrivatePractitioner(
 }
 
 export function loginAsIrsPractitioner(
-  irsPractitionerUser:
-    | 'irsPractitioner@example.com'
-    | 'irsPractitioner1@example.com'
-    | 'irsPractitioner2@example.com' = 'irsPractitioner@example.com',
+  irsPractitionerUser: string = 'irsPractitioner@example.com',
 ) {
   login({ email: irsPractitionerUser });
   cy.get('[data-testid="search-for-a-case-card"]').should('exist');
@@ -138,7 +130,7 @@ export function loginAsTrialClerk() {
 }
 
 // Try to use the above account specific logins as they wait for specific content.
-export function login({ email }: { email: string }) {
+function login({ email }: { email: string }) {
   cy.clearAllCookies();
   cy.visit('/login');
   cy.get('[data-testid="email-input"]').type(email);
