@@ -176,7 +176,6 @@ describe('removeConsolidatedCasesInteractor - Deadlines', () => {
     );
 
     const upsertCaseDeadlinesCalls = upsertCaseDeadlines.mock.calls;
-    console.log('upsertCaseDeadlinesCalls', upsertCaseDeadlinesCalls);
     expect(upsertCaseDeadlinesCalls.length).toEqual(2);
     expect(upsertCaseDeadlinesCalls[0][0]).toEqual([
       { caseDeadlineId: 2, consolidatedCaseDeadlineId: undefined },
