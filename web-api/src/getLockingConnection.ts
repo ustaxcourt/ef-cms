@@ -6,7 +6,7 @@ import { environment } from './environment';
 import fs from 'fs';
 
 let poolConfig: PoolConfig;
-export const getScopedDbConnection = async (): Promise<{
+export const getLockingDbConnection = async (): Promise<{
   db: Kysely<Database>;
   destroy: () => Promise<void>;
 }> => {
