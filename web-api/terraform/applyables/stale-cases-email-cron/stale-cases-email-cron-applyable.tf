@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 terraform {
@@ -16,7 +16,7 @@ terraform {
 
 module "stale-cases-email-cron" {
   source                       = "../../modules/stale-cases-email-cron"
-  aws_region                   = var.aws_region
+  aws_region                   = "us-east-1"
   environment                  = var.environment
   disable_emails               = "false"
   elasticsearch_endpoint       = var.elasticsearch_endpoint
