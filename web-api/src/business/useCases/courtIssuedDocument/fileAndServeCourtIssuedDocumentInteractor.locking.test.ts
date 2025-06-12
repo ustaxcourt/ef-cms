@@ -21,17 +21,14 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getCasesByDocketNumber = jest.mocked(getCasesByDocketNumbersMock);
 jest
   .mocked(updateCaseAndAssociationsMock)
   .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -121,7 +118,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-    tryGetLock.mockResolvedValue(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
@@ -140,12 +139,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(tryGetLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE.docketNumber}`),
-    );
-
-    expect(releaseLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
     );
   });
 });

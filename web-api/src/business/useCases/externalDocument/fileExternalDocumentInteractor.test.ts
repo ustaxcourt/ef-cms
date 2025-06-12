@@ -30,9 +30,7 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('fileExternalDocumentInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -46,8 +44,7 @@ describe('fileExternalDocumentInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  const tryGetLock = jest.mocked(tryGetLockMock);
-  const releaseLock = jest.mocked(releaseLockMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   let caseRecord;
 
@@ -503,7 +500,9 @@ describe('fileExternalDocumentInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLock.mockResolvedValue(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       fileExternalDocumentInteractor(
@@ -528,7 +527,7 @@ describe('fileExternalDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await fileExternalDocumentInteractor(
       applicationContext,
       {
@@ -545,12 +544,10 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(tryGetLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${caseRecord.docketNumber}`),
-    );
-
-    expect(releaseLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${caseRecord.docketNumber}`),
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${caseRecord.docketNumber}`],
+      }),
     );
   });
 });

@@ -2,9 +2,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import {
   CONTACT_TYPES,
   PARTY_TYPES,
@@ -31,8 +29,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 describe('saveCaseDetailInternalEditInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const tryGetLock = jest.mocked(tryGetLockMock);
-  const releaseLock = jest.mocked(releaseLockMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   const mockCase = {
     ...MOCK_CASE,
@@ -378,7 +375,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLock.mockResolvedValueOnce(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       saveCaseDetailInternalEditInteractor(
@@ -400,7 +399,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
@@ -416,12 +415,10 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(tryGetLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE.docketNumber}`),
-    );
-
-    expect(releaseLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
     );
   });
 });

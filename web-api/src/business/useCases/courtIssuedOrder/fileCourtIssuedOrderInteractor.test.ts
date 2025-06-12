@@ -29,14 +29,11 @@ import {
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 /* eslint-disable max-lines */
 describe('fileCourtIssuedOrderInteractor', () => {
@@ -99,8 +96,6 @@ describe('fileCourtIssuedOrderInteractor', () => {
   };
 
   beforeEach(() => {
-    tryGetLock.mockResolvedValue(true);
-
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
       new User({
         name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -417,7 +412,9 @@ describe('fileCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLock.mockResolvedValue(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       fileCourtIssuedOrderInteractor(
@@ -441,7 +438,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await fileCourtIssuedOrderInteractor(
       applicationContext,
       {
@@ -459,12 +456,10 @@ describe('fileCourtIssuedOrderInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(tryGetLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${caseRecord.docketNumber}`),
-    );
-
-    expect(releaseLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${caseRecord.docketNumber}`),
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${caseRecord.docketNumber}`],
+      }),
     );
   });
 

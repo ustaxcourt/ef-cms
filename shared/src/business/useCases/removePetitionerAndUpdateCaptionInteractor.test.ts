@@ -5,9 +5,7 @@ import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -39,8 +37,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  const tryGetLock = jest.mocked(tryGetLockMock);
-  const releaseLock = jest.mocked(releaseLockMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
     petitionerToRemove = {
@@ -253,7 +250,9 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     ).toEqual([otherPetitioner.contactId]);
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLock.mockResolvedValueOnce(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       removePetitionerAndUpdateCaptionInteractor(
@@ -270,7 +269,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await removePetitionerAndUpdateCaptionInteractor(
       applicationContext,
       {
@@ -281,12 +280,10 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(tryGetLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE.docketNumber}`),
-    );
-
-    expect(releaseLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
     );
   });
 });
