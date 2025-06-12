@@ -1,13 +1,11 @@
 import crypto from 'crypto';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { tryGetLocks } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
-import { tryGetLock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { sleep } from '@shared/tools/helpers';
-import { getScopedDbConnection } from '@web-api/getConnection';
-import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getLockingDbConnection } from '@web-api/getLockingConnection';
 
 /**
  * Converts a string into a consistent 32-bit integer to use as an advisory lock ID.
@@ -40,16 +38,15 @@ export const acquireLock = async ({
   waitTime?: number;
   authorizedUser: UnknownAuthUser;
 }): Promise<() => Promise<void>> => {
+  if (!identifiers.length) {
+    return async () => {}; // No-op since we never need to create the scoped connection
+  }
+
   // using a scoped connection ensures that the pg_try_advisory_locks are created and released on the same db connection
-  const { db, destroy } = await getScopedDbConnection();
+  const { db, destroy } = await getLockingDbConnection();
 
   let attempts = 0;
   let lockedItems: string[] = [];
-
-  const identifierObjects = identifiers.map(id => ({
-    lockId: id,
-    hashedLockId: hashLockId(id),
-  }));
 
   do {
     if (attempts > retries) {
@@ -68,33 +65,17 @@ export const acquireLock = async ({
       await sleep(waitTime);
     }
 
-    const results = await settlePromises(
-      identifierObjects.map(async idObj => ({
-        lockId: idObj.lockId,
-        isLocked: !(await tryGetLock(db, idObj.hashedLockId)),
-      })),
-    );
+    const results = await tryGetLocks({ db, identifiers });
 
-    lockedItems = results.filter(r => r.isLocked).map(r => r.lockId);
+    lockedItems = results
+      .filter(r => !r.successfullyLocked)
+      .map(r => r.identifier);
 
     attempts++;
   } while (lockedItems.length);
 
   const removeLockFunction = async () => {
-    try {
-      await settlePromises(
-        identifierObjects.map(async idObj => {
-          const success = await releaseLock(db, idObj.hashedLockId);
-          if (!success) {
-            getDawsonLogger().info(
-              `Lock not released explicitly for ${idObj.lockId}, falling back to release by connection destroy`,
-            );
-          }
-        }),
-      );
-    } finally {
-      await destroy();
-    }
+    await destroy(); // Destroying connection releases all locks
   };
 
   return removeLockFunction;

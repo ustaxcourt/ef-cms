@@ -4,9 +4,7 @@ jest.mock(
 );
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
@@ -24,8 +22,7 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 
 const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -107,7 +104,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
   describe('locked', () => {
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-      tryGetLock.mockResolvedValueOnce(false);
+      tryGetLocks.mockResolvedValueOnce([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
       await expect(
         serveCourtIssuedDocumentInteractor(
           applicationContext,
@@ -128,12 +127,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         mockDocketClerkUser,
       );
 
-      expect(tryGetLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${MOCK_CASE.docketNumber}`],
+        }),
       );
     });
   });
