@@ -120,31 +120,17 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   });
 
   describe('not locked', () => {
-    beforeEach(() => {
-      tryGetLock.mockResolvedValue(true);
-    });
-
-    it('should acquire a lock that lasts for 15 minutes', async () => {
+    it('should acquire a lock on the case', async () => {
       await serveExternallyFiledDocumentInteractor(
         applicationContext,
         mockRequest,
         mockDocketClerkUser,
       );
 
-      expect(tryGetLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${mockCase.docketNumber}`),
-      );
-    });
-
-    it('should remove the lock', async () => {
-      await serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        mockRequest,
-        mockDocketClerkUser,
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${mockCase.docketNumber}`),
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${mockCase.docketNumber}`],
+        }),
       );
     });
   });

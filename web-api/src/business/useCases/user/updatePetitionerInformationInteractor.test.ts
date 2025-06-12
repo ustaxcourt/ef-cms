@@ -76,7 +76,6 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   beforeEach(() => {
-    tryGetLock.mockResolvedValue(true);
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
