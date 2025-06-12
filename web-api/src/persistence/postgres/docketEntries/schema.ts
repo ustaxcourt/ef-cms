@@ -41,6 +41,7 @@ export const docketEntryTableDefinition = {
   isFileAttached: DEFAULT as boolean | null,
   isLegacy: DEFAULT as boolean | null,
   isLegacySealed: DEFAULT as boolean | null,
+  isLegacyServed: DEFAULT as boolean | null,
   isOnDocketRecord: DEFAULT as boolean,
   isPaper: DEFAULT as boolean | null,
   isPendingService: DEFAULT as boolean | null,

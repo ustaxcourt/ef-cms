@@ -29,6 +29,7 @@ export const fetchPendingItems = async ({
       .where(eb =>
         eb.or([
           eb('d.servedAt', 'is not', null),
+          eb('d.isLegacyServed', 'is', true),
           eb('d.eventCode', 'in', UNSERVABLE_EVENT_CODES),
         ]),
       );
