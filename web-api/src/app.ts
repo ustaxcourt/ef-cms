@@ -139,6 +139,7 @@ import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSear
 import { prioritizeCaseLambda } from './lambdas/cases/prioritizeCaseLambda';
 import { privatePractitionerCaseAssociationLambda } from './lambdas/cases/privatePractitionerCaseAssociationLambda';
 import { privatePractitionerPendingCaseAssociationLambda } from './lambdas/cases/privatePractitionerPendingCaseAssociationLambda';
+import { regStatusLambda } from '@web-api/lambdas/automations/regStatusLambda';
 import { removeCaseFromTrialLambda } from './lambdas/trialSessions/removeCaseFromTrialLambda';
 import { removeCasePendingItemLambda } from './lambdas/cases/removeCasePendingItemLambda';
 import { removeConsolidatedCasesLambda } from './lambdas/cases/removeConsolidatedCasesLambda';
@@ -207,7 +208,6 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
-import { regStatusLambda } from '@web-api/lambdas/automations/regStatusLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 
 export const app = express();
@@ -1053,7 +1053,6 @@ app.delete(
   );
   app.get('/users-by-role', lambdaWrapper(getAllUsersByRoleLambda));
   app.get('/users', lambdaWrapper(getUserLambda));
-  app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: Only meant for admins and zendesk automations. Not meant for regular application use.
 }
 
 /**
@@ -1085,6 +1084,7 @@ app.delete(
 /**
  * ZenDesk Automations
  */
+app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: These are meant for admins and zendesk automations. Not meant for regular application use.
 app.get('users/userSummary', lambdaWrapper(regStatusLambda));
 
 /**
