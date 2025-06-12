@@ -26,7 +26,6 @@ resource "aws_s3_bucket_policy" "allow_access_for_email_smoketests" {
 
 resource "aws_s3_bucket" "smoketest_email_inbox" {
   count    = var.environment == "prod" ? 0 : 1
-  provider = aws.us-east-1
   bucket   = "${var.dns_domain}-email-inbox-${var.environment}-us-east-1"
 
   tags = {
