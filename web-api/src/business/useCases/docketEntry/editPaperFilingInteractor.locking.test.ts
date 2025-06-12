@@ -21,16 +21,13 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 jest
   .mocked(updateCaseAndAssociationsMock)
   .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -120,7 +117,9 @@ describe('editPaperFilingInteractor', () => {
 
   describe('is locked', () => {
     beforeEach(() => {
-      tryGetLock.mockResolvedValue(false);
+      tryGetLocks.mockResolvedValueOnce([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
     });
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
@@ -137,35 +136,17 @@ describe('editPaperFilingInteractor', () => {
   });
 
   describe('is not locked', () => {
-    beforeEach(() => {
-      tryGetLock.mockResolvedValue(true);
-    });
-
-    it('should acquire a lock that lasts for 15 minutes', async () => {
+    it('should acquire a lock on the case', async () => {
       await editPaperFilingInteractor(
         applicationContext,
         mockRequest,
         mockDocketClerkUser,
       );
 
-      expect(tryGetLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
-      );
-    });
-
-    it('should remove the lock', async () => {
-      await editPaperFilingInteractor(
-        applicationContext,
-        mockRequest,
-        mockDocketClerkUser,
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${MOCK_CASE.docketNumber}`],
+        }),
       );
     });
   });

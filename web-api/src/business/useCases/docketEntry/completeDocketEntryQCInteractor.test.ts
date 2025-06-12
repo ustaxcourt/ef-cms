@@ -22,7 +22,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -33,7 +33,7 @@ describe('completeDocketEntryQCInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  const tryGetLock = jest.mocked(tryGetLockMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeAll(() => {
     applicationContext
@@ -607,7 +607,9 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('throws the expected error if the lock is already acquired by another process', async () => {
-    tryGetLock.mockResolvedValueOnce(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
     await expect(() =>
       completeDocketEntryQCInteractor(
         applicationContext,

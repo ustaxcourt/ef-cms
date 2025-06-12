@@ -36,6 +36,10 @@ import {
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
 import {
+  DocketEntryWorksheetTable,
+  DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
+} from '@web-api/persistence/postgres/docketEntryWorksheets/schema';
+import {
   DW_MINUTE_SHEET_COLUMNS,
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
@@ -62,8 +66,9 @@ interface DatabaseSchemaType {
   dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
-  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
+  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
@@ -112,6 +117,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwDocketEntry: {
     table: DEFAULT as DocketEntryTable,
     columns: DW_DOCKET_ENTRY_COLUMNS,
+  },
+  dwDocketEntryWorksheet: {
+    table: DEFAULT as DocketEntryWorksheetTable,
+    columns: DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
   },
   dwMessage: {
     table: DEFAULT as MessageTable,

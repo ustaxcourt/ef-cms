@@ -6,9 +6,8 @@ export const deleteDocketEntryWorksheetLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, ({ applicationContext }) => {
+  genericHandler(event, () => {
     return deleteDocketEntryWorksheetInteractor(
-      applicationContext,
       event.pathParameters.docketEntryId,
       authorizedUser,
     );
