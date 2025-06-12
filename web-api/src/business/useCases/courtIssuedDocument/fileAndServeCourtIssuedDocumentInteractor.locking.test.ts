@@ -113,8 +113,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       },
       subjectCaseDocketNumber: MOCK_CASE.docketNumber,
     };
-
-    tryGetLock.mockResolvedValue(true);
   });
 
   it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {

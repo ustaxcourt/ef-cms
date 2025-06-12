@@ -112,7 +112,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   describe('is not locked', () => {
-    it('should acquire and remove locks', async () => {
+    it('should acquire locks on the cases', async () => {
       await setNoticesForCalendaredTrialSessionInteractor(
         applicationContext,
         mockRequest,
@@ -123,16 +123,11 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         aCase => `case|${aCase.docketNumber}`,
       );
 
-      expectedIdentifiers.forEach((docketNumber, index) => {
-        expect(tryGetLock.mock.calls[index][1]).toEqual(
-          hashLockId(docketNumber),
-        );
-      });
-      expectedIdentifiers.forEach((docketNumber, index) => {
-        expect(releaseLock.mock.calls[index][1]).toEqual(
-          hashLockId(docketNumber),
-        );
-      });
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: expectedIdentifiers,
+        }),
+      );
     });
   });
 });

@@ -49,8 +49,6 @@ describe('fileExternalDocumentInteractor', () => {
   let caseRecord;
 
   beforeEach(() => {
-    tryGetLock.mockResolvedValue(true);
-
     caseRecord = {
       caseCaption: 'Caption',
       caseType: CASE_TYPES_MAP.deficiency,

@@ -74,12 +74,10 @@ describe('deleteCaseDeadlineInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(tryGetLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`),
-    );
-
-    expect(releaseLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`),
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`],
+      }),
     );
   });
 

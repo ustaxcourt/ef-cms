@@ -45,8 +45,6 @@ describe('updateDocketEntryMetaInteractor', () => {
   };
 
   beforeEach(() => {
-    tryGetLock.mockResolvedValue(true);
-
     mockDocketEntries = [
       {
         ...baseDocketEntry,

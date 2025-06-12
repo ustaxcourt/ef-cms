@@ -111,10 +111,6 @@ describe('addPaperFilingInteractor', () => {
   });
 
   describe('not locked', () => {
-    beforeEach(() => {
-      tryGetLock.mockResolvedValue(true);
-    });
-
     it('should acquire a lock and remove a lock', async () => {
       await addPaperFilingInteractor(
         applicationContext,
@@ -122,12 +118,10 @@ describe('addPaperFilingInteractor', () => {
         docketClerkUser,
       );
 
-      expect(tryGetLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${mockCase.docketNumber}`),
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${mockCase.docketNumber}`),
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${mockCase.docketNumber}`],
+        }),
       );
     });
   });

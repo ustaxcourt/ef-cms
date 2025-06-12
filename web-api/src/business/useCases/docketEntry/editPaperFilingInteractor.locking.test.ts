@@ -136,11 +136,7 @@ describe('editPaperFilingInteractor', () => {
   });
 
   describe('is not locked', () => {
-    beforeEach(() => {
-      tryGetLock.mockResolvedValue(true);
-    });
-
-    it('should acquire a lock that lasts for 15 minutes', async () => {
+    it('should acquire a lock on the case', async () => {
       await editPaperFilingInteractor(
         applicationContext,
         mockRequest,
@@ -151,18 +147,6 @@ describe('editPaperFilingInteractor', () => {
         expect.objectContaining({
           identifiers: [`case|${MOCK_CASE.docketNumber}`],
         }),
-      );
-    });
-
-    it('should remove the lock', async () => {
-      await editPaperFilingInteractor(
-        applicationContext,
-        mockRequest,
-        mockDocketClerkUser,
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
       );
     });
   });

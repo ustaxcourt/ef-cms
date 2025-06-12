@@ -134,10 +134,13 @@ describe('updateAssociatedCaseWorker', () => {
 
   describe('locking', () => {
     afterEach(() => {
-      tryGetLock.mockResolvedValue(true);
+      tryGetLocks.mockResolvedValue([
+        { successfullyLocked: true, identifier: 'abc' },
+      ]);
     });
+
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-      tryGetLocks.mockResolvedValueOnce([
+      tryGetLocks.mockResolvedValue([
         { successfullyLocked: false, identifier: 'abc' },
       ]);
 
