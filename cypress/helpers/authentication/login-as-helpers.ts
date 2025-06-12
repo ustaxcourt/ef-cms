@@ -38,12 +38,10 @@ export function loginAsPrivatePractitioner(
 }
 
 export function loginAsIrsPractitioner(
-  irsPractitionerUser: string = 'irsPractitioner@example.com',
+  irsPractitionerUser:string = 'irsPractitioner@example.com',
 ) {
   login({ email: irsPractitionerUser });
-  cy.get('[data-testid="search-for-a-case-card"]').should('exist');
-  cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
-  cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
+  cy.get('[data-testid="advanced-search-link"]').should('exist');
 }
 
 export function loginAsIrsPractitioner1() {
