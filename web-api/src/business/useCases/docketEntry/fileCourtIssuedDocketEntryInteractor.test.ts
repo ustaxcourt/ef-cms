@@ -24,9 +24,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -43,8 +41,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  const tryGetLock = jest.mocked(tryGetLockMock);
-  const releaseLock = jest.mocked(releaseLockMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
     applicationContext
@@ -327,7 +324,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLock.mockResolvedValueOnce(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       fileCourtIssuedDocketEntryInteractor(
@@ -350,7 +349,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await fileCourtIssuedDocketEntryInteractor(
       applicationContext,
       {
@@ -367,12 +366,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(tryGetLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${caseRecord.docketNumber}`),
-    );
-
-    expect(releaseLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${caseRecord.docketNumber}`),
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${caseRecord.docketNumber}`],
+      }),
     );
   });
 
@@ -399,17 +396,12 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     );
     expectedIdentifiers.unshift(`case|${caseRecord.docketNumber}`);
 
-    expect(tryGetLock).toHaveBeenCalledTimes(3);
-    expect(releaseLock).toHaveBeenCalledTimes(3);
+    expect(tryGetLocks).toHaveBeenCalledTimes(1);
 
-    expectedIdentifiers.forEach((docketNumber, index) => {
-      expect(releaseLock.mock.calls[index][1]).toEqual(
-        hashLockId(docketNumber),
-      );
-    });
-
-    expectedIdentifiers.forEach((docketNumber, index) => {
-      expect(tryGetLock.mock.calls[index][1]).toEqual(hashLockId(docketNumber));
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: expectedIdentifiers,
+      }),
+    );
   });
 });

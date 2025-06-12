@@ -17,14 +17,11 @@ import { testPdfDoc } from '@shared/business/test/getFakeFile';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -104,7 +101,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
   describe('locked', () => {
     beforeEach(() => {
-      tryGetLock.mockResolvedValue(false);
+      tryGetLocks.mockResolvedValueOnce([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
     });
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {

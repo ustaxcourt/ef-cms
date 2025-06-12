@@ -11,12 +11,9 @@ import {
   updateUserContactInformationInteractor,
 } from './updateUserContactInformationInteractor';
 import { sleep } from '@shared/tools/helpers';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 const contactInfo = {
   address1: '234 Main St',
@@ -135,7 +132,9 @@ describe('updateUserContactInformationInteractor', () => {
 
   describe('locked', () => {
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-      tryGetLock.mockResolvedValueOnce(false);
+      tryGetLocks.mockResolvedValueOnce([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
 
       await expect(
         updateUserContactInformationInteractor(
@@ -159,12 +158,10 @@ describe('updateUserContactInformationInteractor', () => {
         MOCK_PRACTITIONER as UnknownAuthUser,
       );
 
-      expect(tryGetLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${MOCK_CASE.docketNumber}`],
+        }),
       );
     });
   });

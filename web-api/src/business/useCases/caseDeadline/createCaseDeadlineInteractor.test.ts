@@ -27,14 +27,11 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('createCaseDeadlineInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const tryGetLock = jest.mocked(tryGetLockMock);
-  const releaseLock = jest.mocked(releaseLockMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -126,7 +123,9 @@ describe('createCaseDeadlineInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLock.mockResolvedValueOnce(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
@@ -145,7 +144,7 @@ describe('createCaseDeadlineInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the cases', async () => {
+  it('should acquire a lock on the cases', async () => {
     mockCase = MOCK_CASE;
     mockCase.associatedJudge = 'Judge Buch';
     mockCase.associatedJudgeId = 'dabbad02-18d0-43ec-bafb-654e83405416';
@@ -157,15 +156,12 @@ describe('createCaseDeadlineInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(tryGetLock).toHaveBeenCalledTimes(1);
-    expect(releaseLock).toHaveBeenCalledTimes(1);
+    expect(tryGetLocks).toHaveBeenCalledTimes(1);
 
-    expect(tryGetLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE.docketNumber}`),
-    );
-
-    expect(releaseLock.mock.calls[0][1]).toEqual(
-      hashLockId(`case|${MOCK_CASE.docketNumber}`),
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
     );
   });
 });
