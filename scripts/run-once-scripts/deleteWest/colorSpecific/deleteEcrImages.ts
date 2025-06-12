@@ -12,12 +12,12 @@ import {
 
 const scriptConfig: ScriptConfig = {
   description:
-    'practitioner-stats - Outputs practitioner stats over a given year',
+    'deleteEcrImages - Deletes ECR images from us-west-1',
   environment: {
     env: 'ENV',
     deployingColor: 'DEPLOYING_COLOR',
   },
-  requireActiveAwsSession: false,
+  requireActiveAwsSession: true,
 };
 const { env, deployingColor } = parseArgsAndEnvVars(scriptConfig) as {
   env: string;
