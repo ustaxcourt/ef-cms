@@ -8,9 +8,9 @@ import {
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 import { getDocument } from '@web-api/persistence/s3/getDocument';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
 import { chunk } from 'lodash';
 import { efcmsDocketEntryIndex } from '../efcms-docket-entry-mappings';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 // Our indexing in OpenSearch is based on the pk/sk that existed in Dynamo.
 function getPk<T extends RawDocketEntry>(docketEntry: T): string {
@@ -119,7 +119,7 @@ const formatDocketEntryForIndexing = async (
 
       docketEntryToIndex.documentContents = documentContents;
     } catch (err) {
-      getLogger().error(
+      getDawsonLogger().error(
         `the s3 document of ${docketEntry.documentContentsId} was not found in s3`,
         { err },
       );
