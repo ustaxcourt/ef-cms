@@ -1,5 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock('@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord')
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob',
+);
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
