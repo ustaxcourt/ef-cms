@@ -1,11 +1,11 @@
 import crypto from 'crypto';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { tryGetLocks } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getLogger } from '@web-api/utilities/logger/getLogger';
-import { tryGetLocks } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { sleep } from '@shared/tools/helpers';
-import { getScopedDbConnection } from '@web-api/getScopedConnection';
+import { getLockingDbConnection } from '@web-api/getLockingConnection';
 
 /**
  * Converts a string into a consistent 32-bit integer to use as an advisory lock ID.
@@ -43,7 +43,7 @@ export const acquireLock = async ({
   }
 
   // using a scoped connection ensures that the pg_try_advisory_locks are created and released on the same db connection
-  const { db, destroy } = await getScopedDbConnection();
+  const { db, destroy } = await getLockingDbConnection();
 
   let attempts = 0;
   let lockedItems: string[] = [];
@@ -75,7 +75,7 @@ export const acquireLock = async ({
   } while (lockedItems.length);
 
   const removeLockFunction = async () => {
-    await destroy(); // Destroying connnection releases all locks
+    await destroy(); // Destroying connection releases all locks
   };
 
   return removeLockFunction;

@@ -15,10 +15,7 @@ export const tryGetLocks = async ({
 
   const idMap = new Map(hashedIdentifiers.map((h, i) => [h, identifiers[i]]));
 
-  const sql = `
-    SELECT id, pg_try_advisory_lock(id) AS locked
-    FROM UNNEST($1::int[]) AS t(id)
-  `;
+  const sql = `SELECT id, pg_try_advisory_lock(id) AS locked FROM UNNEST($1::int[]) AS t(id)`;
 
   const result = await db.executeQuery(
     CompiledQuery.raw(sql, [hashedIdentifiers]),
