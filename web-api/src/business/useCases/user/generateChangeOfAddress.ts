@@ -123,7 +123,6 @@ const generateChangeOfAddressForPractitioner = async ({
     });
     await settlePromises(cmds.map(cmd => sqs.send(cmd)));
   } else {
-    console.log('ELSE');
     await settlePromises(
       associatedUserCases.map(async caseInfo => {
         return await applicationContext
