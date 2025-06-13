@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 terraform {
@@ -16,7 +16,7 @@ terraform {
 
 module "migration" {
   source               = "../../modules/migration"
-  aws_region           = var.aws_region
+  aws_region           = "us-east-1"
   environment          = var.environment
   stream_arn           = var.stream_arn
   destination_table    = var.destination_table

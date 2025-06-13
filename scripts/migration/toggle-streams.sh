@@ -10,7 +10,7 @@ if [[ -n "$1" ]] && { [[ "$1" == "on" ]] || [[ "$1" == "ON" ]] || [[ "$1" == "-o
     TOGGLE="--enabled"
 fi
 
-REGIONS="us-west-1 us-east-1"
+REGIONS="us-east-1"
 COLORS="blue green"
 for region in $REGIONS; do
   for color in $COLORS; do
