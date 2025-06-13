@@ -3,7 +3,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associateIrsPractitionerToCase } from '@web-api/business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
@@ -34,6 +34,9 @@ export const associateIrsPractitionerWithCaseInteractor = async (
   }
 
   const irsPractitioner = await getPractitionerById({ userId });
+  if (!irsPractitioner) {
+    throw new NotFoundError(`Unable to find user with userId ${userId}`);
+  }
 
   return await associateIrsPractitionerToCase({
     applicationContext,

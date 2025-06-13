@@ -44,6 +44,12 @@ export const fileCourtIssuedDocketEntry = async (
   if (!hasPermission) {
     throw new UnauthorizedError('Unauthorized');
   }
+  const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
 
   const { docketEntryId } = documentMeta;
 
@@ -71,8 +77,6 @@ export const fileCourtIssuedDocketEntry = async (
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
-
-  const user = await getUserById({ userId: authorizedUser.userId });
 
   const isUnservable = DocketEntry.isUnservable(documentMeta);
 

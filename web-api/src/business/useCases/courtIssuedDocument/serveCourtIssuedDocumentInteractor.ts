@@ -72,6 +72,13 @@ export const serveCourtIssuedDocument = async (
     throw new Error('Docket entry is already being served');
   }
 
+  const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
+
   await applicationContext
     .getPersistenceGateway()
     .updateDocketEntryPendingServiceStatus({
@@ -102,8 +109,6 @@ export const serveCourtIssuedDocument = async (
   docketEntryToServe.numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
-
-  const user = await getUserById({ userId: authorizedUser.userId });
 
   let serviceResults;
   let caseEntities = [subjectCaseEntity];

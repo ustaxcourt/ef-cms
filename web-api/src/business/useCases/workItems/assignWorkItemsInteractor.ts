@@ -28,13 +28,22 @@ export const assignWorkItemsInteractor = async (
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
 
-  const user = await getUserById({
-    userId: authorizedUser.userId,
-  });
-
-  const userBeingAssigned = await getUserById({
-    userId: assigneeId,
-  });
+  const [user, userBeingAssigned] = await Promise.all([
+    getUserById({
+      userId: authorizedUser.userId,
+    }),
+    getUserById({
+      userId: assigneeId,
+    }),
+  ]);
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
+  if (!userBeingAssigned) {
+    throw new NotFoundError(`Unable to find user with userId ${assigneeId}`);
+  }
 
   let workItemEntity;
   if (!workItem && workItemId) {

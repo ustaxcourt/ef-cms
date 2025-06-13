@@ -12,7 +12,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   AuthUser,
   UnknownAuthUser,
@@ -289,6 +289,11 @@ export const createCaseInteractor = async (
   }
 
   const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
 
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 

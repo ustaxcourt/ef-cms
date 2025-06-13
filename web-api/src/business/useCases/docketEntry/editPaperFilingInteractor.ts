@@ -115,6 +115,11 @@ const saveForLaterStrategy = async ({
   authorizedUser: AuthUser;
 }) => {
   const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
 
   const updatedDocketEntryEntity = await updateDocketEntry({
     applicationContext,
@@ -261,6 +266,11 @@ const serveDocketEntry = async ({
 
   try {
     const user = await getUserById({ userId });
+    if (!user) {
+      throw new NotFoundError(
+        `Unable to find user with userId ${authorizedUser.userId}`,
+      );
+    }
 
     const updatedDocketEntry = await updateDocketEntry({
       applicationContext,

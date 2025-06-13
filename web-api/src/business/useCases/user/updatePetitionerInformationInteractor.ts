@@ -293,6 +293,9 @@ export const updatePetitionerInformation = async (
       updatedCaseContact.newEmail = updatedPetitionerData.updatedEmail;
 
       const userToUpdate = await getUserById({ userId: contactId });
+      if (!userToUpdate) {
+        throw new NotFoundError(`Unable to find user with userId ${contactId}`);
+      }
 
       await updateCaseEntityAndGenerateChange({
         applicationContext,

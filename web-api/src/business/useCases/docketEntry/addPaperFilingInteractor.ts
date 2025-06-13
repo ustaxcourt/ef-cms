@@ -10,7 +10,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
@@ -43,6 +43,13 @@ export const addPaperFiling = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
+
   if (!docketEntryId) {
     throw new Error('Did not receive a docketEntryId');
   }
@@ -68,8 +75,6 @@ export const addPaperFiling = async (
 
   const docketRecordEditState =
     documentMetadata.isFileAttached === false ? documentMetadata : {};
-
-  const user = await getUserById({ userId: authorizedUser.userId });
 
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;

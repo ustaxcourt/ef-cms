@@ -46,6 +46,19 @@ export const createMessageInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const [fromUser, toUser] = await Promise.all([
+    getUserById({ userId: authorizedUser.userId }),
+    getUserById({ userId: toUserId }),
+  ]);
+  if (!fromUser) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
+  if (!toUser) {
+    throw new NotFoundError(`Unable to find user with userId ${toUserId}`);
+  }
+
   const associatedCase = await getCaseByDocketNumber({
     applicationContext,
     docketNumber,
@@ -56,10 +69,6 @@ export const createMessageInteractor = async (
   }
 
   const { caseCaption, status } = associatedCase;
-
-  const fromUser = await getUserById({ userId: authorizedUser.userId });
-
-  const toUser = await getUserById({ userId: toUserId });
 
   const validatedRawMessage = new Message({
     attachments,

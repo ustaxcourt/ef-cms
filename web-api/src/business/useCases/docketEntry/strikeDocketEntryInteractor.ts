@@ -26,6 +26,13 @@ export const strikeDocketEntryInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
+
   const caseToUpdate = await getCaseByDocketNumber({
     applicationContext,
     docketNumber,
@@ -40,8 +47,6 @@ export const strikeDocketEntryInteractor = async (
   if (!docketEntryEntity) {
     throw new NotFoundError('Docket entry not found');
   }
-
-  const user = await getUserById({ userId: authorizedUser.userId });
 
   docketEntryEntity.strikeEntry({ name: user.name, userId: user.userId });
 

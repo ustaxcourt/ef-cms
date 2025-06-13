@@ -11,7 +11,11 @@ import {
   dateStringsCompared,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -42,6 +46,13 @@ const completeDocketEntryQC = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
+
   const {
     docketEntryId,
     docketNumber,
@@ -49,8 +60,6 @@ const completeDocketEntryQC = async (
     overridePaperServiceAddress,
     selectedSection,
   } = entryMetadata;
-
-  const user = await getUserById({ userId: authorizedUser.userId });
 
   const caseToUpdate = await getCaseByDocketNumber({
     applicationContext,

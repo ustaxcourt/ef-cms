@@ -48,6 +48,12 @@ export const serveExternallyFiledDocument = async (
   if (!hasPermission) {
     throw new UnauthorizedError('Unauthorized');
   }
+  const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
 
   const subjectCase = await getCaseByDocketNumber({
     applicationContext,
@@ -82,8 +88,6 @@ export const serveExternallyFiledDocument = async (
       docketNumber: subjectCaseDocketNumber,
       status: true,
     });
-
-  const user = await getUserById({ userId: authorizedUser.userId });
 
   let paperServiceResult;
   let caseEntities: Case[] = [];
@@ -185,7 +189,7 @@ export const serveExternallyFiledDocument = async (
       alertSuccess: { message: successMessage, overwritable: false },
       pdfUrl: paperServiceResult && paperServiceResult.pdfUrl,
     },
-    userId: user.userId,
+    userId: authorizedUser.userId,
   });
 };
 

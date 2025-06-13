@@ -25,6 +25,12 @@ export const updateCourtIssuedDocketEntry = async (
   if (!hasPermission) {
     throw new UnauthorizedError('Unauthorized');
   }
+  const user = await getUserById({ userId: authorizedUser.userId });
+  if (!user) {
+    throw new NotFoundError(
+      `Unable to find user with userId ${authorizedUser.userId}`,
+    );
+  }
 
   const { docketEntryId, docketNumber } = documentMeta;
 
@@ -42,8 +48,6 @@ export const updateCourtIssuedDocketEntry = async (
   if (!currentDocketEntry) {
     throw new NotFoundError('Document not found');
   }
-
-  const user = await getUserById({ userId: authorizedUser.userId });
 
   const editableFields = {
     attachments: documentMeta.attachments,

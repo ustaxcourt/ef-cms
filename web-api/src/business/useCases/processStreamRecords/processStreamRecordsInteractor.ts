@@ -76,7 +76,7 @@ export const processStreamRecordsInteractor = async (
     });
 
     await processUserEntries({ userRecords }).catch(err => {
-      getLogger().error('failed to process user records', {
+      getDawsonLogger().error('failed to process user records', {
         err,
       });
       throw err;
@@ -84,7 +84,7 @@ export const processStreamRecordsInteractor = async (
 
     await processUserOnCasePendingEntries({ userOnCasePendingRecords }).catch(
       err => {
-        getLogger().error('failed to processUserOnCasePendingEntries', {
+        getDawsonLogger().error('failed to processUserOnCasePendingEntries', {
           err,
         });
         throw err;
@@ -92,7 +92,7 @@ export const processStreamRecordsInteractor = async (
     );
 
     await processUserOnCaseEntries({ userOnCaseRecords }).catch(err => {
-      getLogger().error('failed to processUserOnCaseEntries', {
+      getDawsonLogger().error('failed to processUserOnCaseEntries', {
         err,
       });
       throw err;
