@@ -7,11 +7,14 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
-import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../test/mockUsers';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
+import {
+  MOCK_PRACTITIONER,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   getContactPrimary,
   getContactSecondary,
@@ -37,7 +40,6 @@ describe('saveCaseDetailInternalEditInteractor', () => {
         workItem: {
           docketEntry: MOCK_CASE.docketEntries[0],
           docketNumber: MOCK_CASE.docketNumber,
-          isInitializeCase: true,
           section: PETITIONS_SECTION,
           sentBy: 'petitioner',
           workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
@@ -159,7 +161,6 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       {
         assigneeId: mockPetitionsClerkUser.userId,
         assigneeName: petitionsClerkUser.name,
-        caseIsInProgress: true,
       },
     ]);
   });
