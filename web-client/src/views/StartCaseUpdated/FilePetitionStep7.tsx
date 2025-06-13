@@ -26,7 +26,7 @@ export const FilePetitionStep7 = connect(
         </div>
         <h3 className="margin-top-205">Pay $60 filing fee</h3>
         <div className="petitioner-flow-text">
-          {`Pay by credit/debit card, Amazon Pay, PayPal or ACH (bank account)
+          {`Pay by credit/debit card, PayPal or ACH (bank account)
           online. You’ll need ${isPetitioner ? 'your' : 'the'} docket number.`}
         </div>
         <div className="petitioner-flow-text margin-top-1">
