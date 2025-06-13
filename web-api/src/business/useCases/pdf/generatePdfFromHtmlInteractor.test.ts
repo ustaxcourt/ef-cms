@@ -20,6 +20,8 @@ describe('generatePdfFromHtmlInteractor', () => {
         Payload: Buffer.from(JSON.stringify({ tempId: documentKey })),
       };
     });
+    applicationContext.getUseCaseHelpers().generatePdfFromHtmlHelper =
+      jest.fn();
   });
 
   it('should generate a pdf by opening a chromium browser and creating a pdf, when running locally', async () => {
@@ -41,7 +43,7 @@ describe('generatePdfFromHtmlInteractor', () => {
     // this is to close the singleton browser and keep it from running indefinitely in the test
     const browser = await getChromiumBrowser();
     await browser.close();
-  });
+  }, 10000);
 
   it('should generate a pdf by invoking a lambda when in a deployed environment', async () => {
     applicationContext.environment.stage = 'prod';

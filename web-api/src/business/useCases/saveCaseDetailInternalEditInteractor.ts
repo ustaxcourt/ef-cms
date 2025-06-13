@@ -146,17 +146,12 @@ export const saveCaseDetailInternalEdit = async (
 
     const initializeCaseWorkItem = petitionDocketEntry.workItem;
 
-    const workItemEntity = new WorkItem(
-      {
-        ...initializeCaseWorkItem,
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        caseIsInProgress: true,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
-      },
-      { caseEntity },
-    );
+    const workItemEntity = new WorkItem({
+      ...initializeCaseWorkItem,
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      inProgress: true,
+    });
 
     await upsertWorkItems({
       workItems: [workItemEntity.validate().toRawObject()],

@@ -6,7 +6,6 @@ jest.mock(
 );
 import {
   AUTOMATIC_BLOCKED_REASONS,
-  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -422,58 +421,6 @@ describe('fileExternalDocumentInteractor', () => {
     ).not.toHaveBeenCalled();
     expect(updatedCase!.docketEntries[3].status).toBeUndefined();
     expect(updatedCase!.docketEntries[3].servedAt).toBeUndefined();
-  });
-
-  it('should create a high-priority work item if the case status is calendared', async () => {
-    caseRecord.status = CASE_STATUS_TYPES.calendared;
-    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
-    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bc';
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-      },
-      mockIrsPractitionerUser,
-    );
-
-    expect(upsertWorkItems).toHaveBeenCalled();
-    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
-      workItems: [
-        { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
-      ],
-    });
-  });
-
-  it('should create a not-high-priority work item if the case status is not calendared', async () => {
-    caseRecord.status = CASE_STATUS_TYPES.new;
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'test Petitioner',
-          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-      },
-      mockIrsPractitionerUser,
-    );
-
-    expect(upsertWorkItems).toHaveBeenCalled();
-    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
-      workItems: [{ highPriority: false }],
-    });
   });
 
   it('should automatically block the case if the document filed is a tracked document', async () => {
