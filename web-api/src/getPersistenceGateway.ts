@@ -4,7 +4,7 @@ import { associateUserWithCase } from './persistence/dynamo/cases/associateUserW
 import { associateUserWithCasePending } from './persistence/dynamo/cases/associateUserWithCasePending';
 import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
-import { createChangeOfAddressJob } from './persistence/dynamo/jobs/ChangeOfAddress/createChangeOfAddressJob';
+import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
 import {
   createLock,
@@ -27,14 +27,14 @@ import { deletePractitionerDocument } from './persistence/dynamo/practitioners/d
 import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
 import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
-import { deleteUserConnection } from './persistence/dynamo/notifications/deleteUserConnection';
+import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
 import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/getAccountConfirmationCode';
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
-import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
+import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
 import {
@@ -45,7 +45,7 @@ import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCase
 import { getClientId } from './persistence/cognito/getClientId';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
-import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
+import { getDispatchNotification } from './persistence/postgres/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
 import { getDocketEntryOnCase } from './persistence/dynamo/cases/getDocketEntryOnCase';
 import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/dynamo/docketEntryWorksheet/getDocketEntryWorksheetsByDocketEntryIds';
@@ -77,7 +77,7 @@ import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/dynamo/u
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
-import { getWebSocketConnectionsByUserId } from './persistence/dynamo/notifications/getWebSocketConnectionsByUserId';
+import { getWebSocketConnectionsByUserId } from '@web-api/persistence/postgres/connections/getWebSocketConnectionsByUserId';
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
@@ -88,10 +88,11 @@ import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/removePractitionerOnCase';
-import { saveDispatchNotification } from './persistence/dynamo/notifications/saveDispatchNotification';
+import { saveDispatchNotification } from '@web-api/persistence/postgres/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
-import { saveUserConnection } from './persistence/dynamo/notifications/saveUserConnection';
-import { setChangeOfAddressCaseAsDone } from './persistence/dynamo/jobs/ChangeOfAddress/setChangeOfAddressCaseAsDone';
+import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
+import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
+import { deleteChangeOfAddressCaseRecord } from './persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
@@ -195,6 +196,7 @@ const gatewayMethods = {
   createChangeOfAddressJob,
   createLock,
   decrementJobCounter,
+  deleteChangeOfAddressCaseRecord,
   deleteDocketEntry,
   deleteDocketEntryWorksheetRecord,
   deleteDocumentFile,

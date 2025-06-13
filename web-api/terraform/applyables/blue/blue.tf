@@ -195,3 +195,12 @@ module "ui-blue" {
     aws.us-west-1 = aws.us-west-1
   }
 }
+
+module "rds-expired-records-cleanup" {
+    source                 = "../../modules/rds-expired-records-cleanup"
+    current_color          = "blue"
+    environment            = var.environment
+    postgres_user          = data.terraform_remote_state.remote.outputs.postgres_user
+    postgres_database      = data.terraform_remote_state.remote.outputs.database_name
+    postgres_host          = data.terraform_remote_state.remote.outputs.rds_host_name
+}
