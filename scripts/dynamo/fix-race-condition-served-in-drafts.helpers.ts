@@ -6,6 +6,7 @@ import { DynamoDBClient, GetItemCommand } from '@aws-sdk/client-dynamodb';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 export const getDocumentFromDynamo = async ({
   docketEntryId,
@@ -60,9 +61,9 @@ export const fixRaceConditionServedInDrafts = async (
   },
 ) => {
   const subjectCase = await getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+    applicationContext,
+    docketNumber,
+  });
   const caseEntity = new Case(subjectCase, { authorizedUser: undefined });
 
   const servedParties = aggregatePartiesForService(caseEntity);
@@ -145,11 +146,6 @@ export const fixRaceConditionServedInDrafts = async (
   console.log(docketEntry);
 
   if (performUpdate) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId,
-      docketNumber,
-      document: docketEntry,
-    });
+    await upsertDocketEntries([docketEntry]);
   }
 };

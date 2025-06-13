@@ -22,6 +22,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const getIsUserAuthorized = ({
@@ -90,21 +91,18 @@ const updateCaseEntityAndGenerateChange = async ({
     .getDocumentTypeForAddressChange({ newData, oldData });
 
   if (userHasAnEmail && caseEntity.shouldGenerateNoticesForCase()) {
-    const { changeOfAddressDocketEntry } = await applicationContext
-      .getUseCaseHelpers()
-      .generateAndServeDocketEntry({
-        applicationContext,
-        authorizedUser,
-        caseEntity,
-        docketMeta: undefined,
-        documentType,
-        newData,
-        oldData,
-        privatePractitionersRepresentingContact,
-        servedParties,
-        user,
-      });
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+    await generateAndServeDocketEntry({
+      applicationContext,
+      authorizedUser,
+      caseEntity,
+      docketMeta: undefined,
+      documentType,
+      newData,
+      oldData,
+      privatePractitionersRepresentingContact,
+      servedParties,
+      user,
+    });
   }
 
   return caseEntity.validate();
@@ -237,20 +235,18 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.contactId,
       );
 
-    const { url } = await applicationContext
-      .getUseCaseHelpers()
-      .generateAndServeDocketEntry({
-        applicationContext,
-        authorizedUser,
-        caseEntity,
-        docketMeta: undefined,
-        documentType: documentTypeToGenerate,
-        newData: editableFields,
-        oldData: existingPetitionerInfo,
-        privatePractitionersRepresentingContact,
-        servedParties,
-        user: authorizedUser,
-      });
+    const { url } = await generateAndServeDocketEntry({
+      applicationContext,
+      authorizedUser,
+      caseEntity,
+      docketMeta: undefined,
+      documentType: documentTypeToGenerate,
+      newData: editableFields,
+      oldData: existingPetitionerInfo,
+      privatePractitionersRepresentingContact,
+      servedParties,
+      user: authorizedUser,
+    });
     serviceUrl = url;
   }
 

@@ -1,8 +1,8 @@
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import {
-  transformOpenSearchCase,
-  indexOpenSearchCase,
-} from '../elasticsearch/index-cases';
+import { indexOpenSearchCases } from '../elasticsearch/cases/indexOpenSearchCases';
+import { transformOpenSearchCases } from '../elasticsearch/cases/transformOpenSearchCases';
+import { transformOpenSearchDocketEntries } from '../elasticsearch/docketEntries/transformOpenSearchDocketEntries';
+import { indexOpenSearchDocketEntries } from '../elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 import {
   DW_USER_CASE_NOTE_COLUMNS,
   UserCaseNoteTable,
@@ -91,8 +91,8 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwCase: {
     table: DEFAULT as CaseTable,
     columns: DW_CASE_COLUMNS,
-    transformOpenSearchMessage: transformOpenSearchCase,
-    indexOpenSearchMessage: indexOpenSearchCase,
+    transformOpenSearchMessage: transformOpenSearchCases,
+    indexOpenSearchMessage: indexOpenSearchCases,
   },
   dwCaseCorrespondence: {
     table: DEFAULT as CaseCorrespondenceTable,
@@ -117,6 +117,8 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwDocketEntry: {
     table: DEFAULT as DocketEntryTable,
     columns: DW_DOCKET_ENTRY_COLUMNS,
+    transformOpenSearchMessage: transformOpenSearchDocketEntries,
+    indexOpenSearchMessage: indexOpenSearchDocketEntries,
   },
   dwDocketEntryWorksheet: {
     table: DEFAULT as DocketEntryWorksheetTable,

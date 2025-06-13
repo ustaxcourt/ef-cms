@@ -1,5 +1,5 @@
 jest.mock('@shared/proxies/trialSessions/getEligibleCasesForCityProxy');
-import { applicationContextForClient } from '@web-client/test/createClientTestApplicationContext';
+import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { getEligibleCasesForLocationAction } from './getEligibleCasesForLocationAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
@@ -9,13 +9,11 @@ describe('getEligibleCasesForLocationAction', () => {
   const getEligibleCasesForCityInteractor = jest.mocked(
     getEligibleCasesForCityInteractorMock,
   );
-  presenter.providers.applicationContext = applicationContextForClient;
-  getEligibleCasesForCityInteractor.mockImplementation(() => {
-    return Promise.resolve([
-      { caseId: '1', caseTitle: 'Case One', trialCity: 'Boise, Idaho' },
-      { caseId: '2', caseTitle: 'Case Two', trialCity: 'Boise, Idaho' },
-    ]);
-  });
+  presenter.providers.applicationContext = applicationContext;
+  getEligibleCasesForCityInteractor.mockResolvedValue([
+    { caseId: '1', caseTitle: 'Case One', trialCity: 'Boise, Idaho' },
+    { caseId: '2', caseTitle: 'Case Two', trialCity: 'Boise, Idaho' },
+  ]);
 
   it('should call getEligibleCasesForCityInteractor with the passed in trialLocation and return the result from the use case', async () => {
     const result = await runAction(getEligibleCasesForLocationAction, {

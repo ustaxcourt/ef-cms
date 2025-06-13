@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
@@ -19,9 +20,14 @@ import { fileAndServeCourtIssuedDocumentInteractor } from './fileAndServeCourtIs
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { v4 as uuidv4 } from 'uuid';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+
+const updateDocketEntryPendingServiceStatus = jest.mocked(
+  updateDocketEntryPendingServiceStatusMock,
+);
 
 describe('consolidated cases', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -180,10 +186,9 @@ describe('consolidated cases', () => {
     const initialCall = 1;
     const finallyBlockCalls = 3;
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(finallyBlockCalls + initialCall);
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(
+      finallyBlockCalls + initialCall,
+    );
   });
 
   it('should log the failure to call updateDocketEntryPendingServiceStatus in the finally block', async () => {
@@ -204,9 +209,8 @@ describe('consolidated cases', () => {
       },
     ]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus.mockResolvedValueOnce([])
+    updateDocketEntryPendingServiceStatus
+      .mockImplementationOnce(async () => {})
       .mockRejectedValueOnce(innerError);
 
     await fileAndServeCourtIssuedDocumentInteractor(

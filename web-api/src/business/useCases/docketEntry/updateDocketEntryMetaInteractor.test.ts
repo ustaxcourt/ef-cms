@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
@@ -19,11 +20,13 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('updateDocketEntryMetaInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
   const getCaseMetadataByDocketNumber =
     getCaseMetadataByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest
@@ -492,13 +495,14 @@ describe('updateDocketEntryMetaInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry.mock
-        .calls[0][0],
-    ).toMatchObject({
-      docketNumber: MOCK_CASE.docketNumber,
-      document: { filingDate: '2020-08-01T00:01:00.000Z' },
-    });
+    const updatedEntries = upsertDocketEntries.mock.calls[0][0];
+
+    expect(updatedEntries).toMatchObject([
+      expect.objectContaining({
+        docketNumber: MOCK_CASE.docketNumber,
+        filingDate: '2020-08-01T00:01:00.000Z',
+      }),
+    ]);
   });
 
   it('should add a new coversheet when filingDate field is changed', async () => {
