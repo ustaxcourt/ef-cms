@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 terraform {
@@ -16,7 +16,7 @@ terraform {
 
 module "switch-colors-cron" {
   source                    = "../../modules/switch-colors-cron"
-  aws_region                = var.aws_region
+  aws_region                = "us-east-1"
   environment               = var.environment
   circle_workflow_id        = var.circle_workflow_id
   circle_machine_user_token = var.circle_machine_user_token
