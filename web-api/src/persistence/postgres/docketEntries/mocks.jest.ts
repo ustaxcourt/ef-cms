@@ -18,3 +18,8 @@ jest.mock(
   '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus.ts',
   () => mockFactory('updateDocketEntryPendingServiceStatus'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId',
+  () => mockFactory('getDocketEntriesByDocketNumberAndDocketEntryId'),
+);

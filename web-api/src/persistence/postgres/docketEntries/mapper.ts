@@ -1,10 +1,13 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { DatabaseSchema } from '@web-api/database-schema';
+import { NewDocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 
 // eslint-disable-next-line complexity
-export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
+export function toKyselyNewDocketEntry(
+  docketEntry: RawDocketEntry,
+): NewDocketEntryKysely {
   return {
     action: docketEntry.action ?? null,
     additionalInfo: docketEntry.additionalInfo ?? null,
@@ -44,6 +47,7 @@ export function toKyselyNewDocketEntry(docketEntry: RawDocketEntry) {
     isFileAttached: docketEntry.isFileAttached ?? null,
     isLegacy: docketEntry.isLegacy ?? null,
     isLegacySealed: docketEntry.isLegacySealed ?? null,
+    isLegacyServed: docketEntry.isLegacyServed ?? false,
     isOnDocketRecord: docketEntry.isOnDocketRecord,
     isPaper: docketEntry.isPaper ?? null,
     isPendingService: docketEntry.isPendingService ?? null,

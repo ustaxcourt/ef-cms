@@ -20,7 +20,7 @@ export const pgDeleteFrom = async <T extends keyof Database>({
       const query = writer.deleteFrom(table);
       return await where(query).returningAll().execute();
     },
-    table: null,
+    table,
     action: OPENSEARCH_SYNC_ACTIONS.DELETE,
   });
 };
