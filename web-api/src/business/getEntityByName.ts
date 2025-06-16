@@ -11,7 +11,6 @@ import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions
 import { User } from '@shared/business/entities/User';
 import { UserCase } from '@shared/business/entities/UserCase';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 
 export const getEntityByName = (name: string) => {
   const entitiesByName = {
@@ -28,7 +27,6 @@ export const getEntityByName = (name: string) => {
     User,
     UserCase,
     UserCaseNote,
-    WorkItem,
   };
 
   return entitiesByName[name];

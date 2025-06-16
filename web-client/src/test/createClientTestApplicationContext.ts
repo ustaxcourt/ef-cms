@@ -58,21 +58,15 @@ import {
   getJudgeLastName,
 } from '@shared/business/utilities/getFormattedJudgeName';
 import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber';
-import { generateNoticesForCaseTrialSessionCalendarInteractor } from '@web-api/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor';
 import {
   getAddressPhoneDiff,
   getDocumentTypeForAddressChange,
 } from '@shared/business/utilities/generateChangeOfAddressTemplate';
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getConstants } from '@web-client/getConstants';
 import { getCropBox } from '@shared/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
-import {
-  getDocQcSectionForUser,
-  getWorkQueueFilters,
-} from '@shared/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile } from '@shared/business/test/getFakeFile';
@@ -232,9 +226,6 @@ const createTestApplicationContext = () => {
     getCropBox: jest.fn().mockImplementation(getCropBox),
     getDateFormat: jest.fn().mockImplementation(DateHandler.getDateFormat),
     getDescriptionDisplay: jest.fn().mockImplementation(getDescriptionDisplay),
-    getDocQcSectionForUser: jest
-      .fn()
-      .mockImplementation(getDocQcSectionForUser),
     getDocketEntriesByFilter: jest
       .fn()
       .mockImplementation(getDocketEntriesByFilter),
@@ -280,7 +271,6 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
-    getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isDateWithinGivenInterval: jest
       .fn()
       .mockImplementation(DateHandler.isDateWithinGivenInterval),
@@ -326,9 +316,6 @@ const createTestApplicationContext = () => {
   };
 
   const mockGetUseCases = appContextProxy({
-    generateNoticesForCaseTrialSessionCalendarInteractor: jest
-      .fn()
-      .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
     getAllFeatureFlagsInteractor: jest.fn().mockReturnValue({}),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
@@ -414,7 +401,6 @@ const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(getAllWebSocketConnections),
     getCalendaredCasesForTrialSession: jest.fn(),
-    getCaseByDocketNumber: jest.fn().mockImplementation(getCaseByDocketNumber),
     getCasesByFilters: jest.fn(),
     getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
@@ -442,7 +428,6 @@ const createTestApplicationContext = () => {
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
-    setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
     updateCaseHearing: jest.fn(),
     updateDocketEntry: jest.fn().mockImplementation(updateDocketEntry),
