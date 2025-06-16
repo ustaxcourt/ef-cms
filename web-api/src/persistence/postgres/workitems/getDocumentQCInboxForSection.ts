@@ -1,4 +1,5 @@
 import {
+  CaseStatus,
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '@shared/business/entities/EntityConstants';
@@ -8,9 +9,11 @@ import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/
 
 export const getDocumentQCInboxForSection = async ({
   judgeId,
+  caseStatus,
   section,
 }: {
   judgeId?: string | null;
+  caseStatus?: CaseStatus | null;
   section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
 }): Promise<WorkItemWithCaseInfo[]> => {
   const workItems = await getDbReader(reader => {
@@ -25,6 +28,10 @@ export const getDocumentQCInboxForSection = async ({
       builder = builder.where('c.associatedJudgeId', '=', judgeId);
     } else if (judgeId === null) {
       builder = builder.where('c.associatedJudgeId', 'is', null);
+    }
+
+    if (caseStatus) {
+      builder = builder.where('c.status', '=', caseStatus);
     }
 
     return builder

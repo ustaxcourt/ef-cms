@@ -1,5 +1,9 @@
-import { mockChambersUser } from '@shared/test/mockAuthUsers';
 import {
+  mockChambersUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
+import {
+  CASE_STATUS_TYPES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
@@ -18,6 +22,7 @@ describe('getQCInboxParameters', () => {
 
     expect(result.judgeId).toEqual(judgeId);
     expect(result.section).toEqual(DOCKET_SECTION);
+    expect(result.caseStatus).toBeUndefined();
   });
 
   it('should use selectedSection when provided', () => {
@@ -72,5 +77,15 @@ describe('getQCInboxParameters', () => {
 
     expect(result.judgeId).toEqual(judgeId);
     expect(result.section).toEqual(PETITIONS_SECTION);
+  });
+
+  it('should show only new case statuses when the section being displayed is PETITIONS_SECTION', () => {
+    const result = getQCInboxParameters({
+      section: PETITIONS_SECTION,
+      user: mockPetitionsClerkUser,
+    });
+
+    expect(result.section).toEqual(PETITIONS_SECTION);
+    expect(result.caseStatus).toEqual(CASE_STATUS_TYPES.new);
   });
 });

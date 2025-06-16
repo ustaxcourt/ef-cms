@@ -1,5 +1,7 @@
 import { AuthUser } from '../entities/authUser/AuthUser';
 import {
+  CASE_STATUS_TYPES,
+  CaseStatus,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
@@ -11,11 +13,12 @@ export const getQCInboxParameters = ({
   section,
   selectedSection,
 }: {
-  judgeId: string | undefined;
+  judgeId?: string;
   user: AuthUser;
   section: string;
   selectedSection?: string;
 }): {
+  caseStatus: CaseStatus | undefined;
   section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
   judgeId: string | null | undefined;
 } => {
@@ -28,7 +31,13 @@ export const getQCInboxParameters = ({
   const onlyTwoSections =
     sectionToShow !== PETITIONS_SECTION ? DOCKET_SECTION : PETITIONS_SECTION;
 
+  let caseStatus: CaseStatus | undefined;
+  if (sectionToShow === PETITIONS_SECTION) {
+    caseStatus = CASE_STATUS_TYPES.new;
+  }
+
   return {
+    caseStatus,
     section: onlyTwoSections,
     judgeId: judgeToSearchFor,
   };
