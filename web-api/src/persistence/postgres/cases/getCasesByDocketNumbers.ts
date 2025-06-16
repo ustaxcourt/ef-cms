@@ -1,9 +1,11 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { applicationContext } from '@web-api/applicationContext';
+import {
+  applicationContext,
+  ServerApplicationContext,
+} from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
-import { getDocketEntryOnCase } from '@web-api/persistence/dynamo/cases/getDocketEntryOnCase';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
@@ -199,11 +201,11 @@ async function getPractitioners(docketNumbers: string[]): Promise<
 
 async function getDocketEntries(
   docketNumbers: string[],
-  applicationContext,
+  applicationContext: ServerApplicationContext,
 ): Promise<{ docketNumber: string; docketEntries: RawDocketEntry[] }[]> {
   const docketEntryInfo = await Promise.all(
     docketNumbers.map(async docketNumber => {
-      const docketEntries = await getDocketEntryOnCase({
+      const docketEntries = await getDocketEntriesOnCase({
         applicationContext,
         docketNumber,
       });
@@ -211,6 +213,27 @@ async function getDocketEntries(
     }),
   );
   return docketEntryInfo;
+}
+
+async function getDocketEntriesOnCase({
+  applicationContext,
+  docketNumber,
+}: {
+  applicationContext: ServerApplicationContext;
+  docketNumber: string;
+}) {
+  return await queryFull<RawDocketEntry>({
+    ExpressionAttributeNames: {
+      '#pk': 'pk',
+      '#sk': 'sk',
+    },
+    ExpressionAttributeValues: {
+      ':pkValue': `case|${docketNumber}`,
+      ':skPrefix': 'docket-entry|',
+    },
+    KeyConditionExpression: '#pk = :pkValue AND begins_with(#sk, :skPrefix)',
+    applicationContext,
+  });
 }
 
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {

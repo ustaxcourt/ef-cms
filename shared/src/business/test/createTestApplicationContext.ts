@@ -80,10 +80,6 @@ import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTab
 import { getConstants } from '@web-client/getConstants';
 import { getCropBox } from '@shared/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
-import {
-  getDocQcSectionForUser,
-  getWorkQueueFilters,
-} from '@shared/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile, testPdfDoc } from './getFakeFile';
@@ -245,9 +241,6 @@ export const createTestApplicationContext = () => {
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
     getDescriptionDisplay: jest.fn().mockImplementation(getDescriptionDisplay),
-    getDocQcSectionForUser: jest
-      .fn()
-      .mockImplementation(getDocQcSectionForUser),
     getDocketEntriesByFilter: jest
       .fn()
       .mockImplementation(getDocketEntriesByFilter),
@@ -290,7 +283,6 @@ export const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
-    getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isDateWithinGivenInterval: jest
       .fn()
       .mockImplementation(DateHandler.isDateWithinGivenInterval),
@@ -493,7 +485,6 @@ export const createTestApplicationContext = () => {
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
-    setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
     setTrialSessionProcessingStatus: jest.fn(),
     updateCaseHearing: jest.fn(),
@@ -604,9 +595,6 @@ export const createTestApplicationContext = () => {
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
-    getPersistencePrivateKeys: jest
-      .fn()
-      .mockReturnValue(['pk', 'sk', 'gsi1pk']),
     getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(pug),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),

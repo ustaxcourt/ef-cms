@@ -9,10 +9,17 @@ import { getDocumentQCInboxForSection } from '@web-api/persistence/postgres/work
 import { getDocumentQCInboxForUser } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/getSectionInboxMessages';
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
-import { isEmpty } from 'lodash';
+import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
+import { getQCInboxParameters } from '../utilities/getQCInboxParameters';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
-const getJudgeUser = async (judgeUserId: string, role: string) => {
+const getJudgeUser = async ({
+  judgeUserId,
+  role,
+}: {
+  judgeUserId: string | undefined;
+  role: string;
+}) => {
   let judgeUser;
 
   if (judgeUserId) {
@@ -29,9 +36,14 @@ const getJudgeUser = async (judgeUserId: string, role: string) => {
 export const getNotificationsInteractor = async (
   applicationContext: ServerApplicationContext,
   {
-    caseServicesSupervisorData,
-    judgeUserId,
-  }: { judgeUserId: string; caseServicesSupervisorData: any },
+    judgeId,
+    section,
+    selectedSection,
+  }: {
+    judgeId?: string;
+    section: string;
+    selectedSection?: string;
+  },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   qcIndividualInProgressCount: number;
@@ -53,7 +65,7 @@ export const getNotificationsInteractor = async (
 
   const [currentUser, judgeUser] = await Promise.all([
     getUserById({ userId: authorizedUser.userId }),
-    getJudgeUser(judgeUserId, authorizedUser.role),
+    getJudgeUser({ judgeUserId: judgeId, role: authorizedUser.role }),
   ]);
 
   applicationContext.logger.info('getNotificationsInteractor getUser', {
@@ -61,24 +73,22 @@ export const getNotificationsInteractor = async (
     judgeUser,
   });
 
-  const { section, userId } = caseServicesSupervisorData || currentUser;
+  const qcInboxParameters = getQCInboxParameters({
+    judgeId,
+    user: authorizedUser,
+    section,
+    selectedSection,
+  });
 
-  let sectionToDisplay = applicationContext
-    .getUtilities()
-    .getDocQcSectionForUser(currentUser);
-
-  if (!isEmpty(caseServicesSupervisorData)) {
-    sectionToDisplay = caseServicesSupervisorData.section;
-  }
-
-  const filters = applicationContext
-    .getUtilities()
-    .getWorkQueueFilters({ section: sectionToDisplay, user: currentUser });
+  const filters = getWorkQueueFilters({
+    section: qcInboxParameters.section,
+    user: { ...authorizedUser, section: qcInboxParameters.section },
+  });
 
   applicationContext.logger.info(
     'getNotificationsInteractor about to start queries',
     {
-      sectionToDisplay,
+      sectionToDisplay: qcInboxParameters.section,
     },
   );
 
@@ -90,19 +100,16 @@ export const getNotificationsInteractor = async (
   ] = await Promise.all([
     getUserInboxMessages({
       applicationContext,
-      userId,
+      userId: authorizedUser.userId,
     }),
     getSectionInboxMessages({
       applicationContext,
-      section,
+      section: qcInboxParameters.section,
     }),
     getDocumentQCInboxForUser({
-      userId,
+      userId: authorizedUser.userId,
     }),
-    getDocumentQCInboxForSection({
-      judgeUserName: judgeUser ? judgeUser.name : null,
-      section: sectionToDisplay,
-    }),
+    getDocumentQCInboxForSection(qcInboxParameters),
   ]);
 
   applicationContext.logger.info(

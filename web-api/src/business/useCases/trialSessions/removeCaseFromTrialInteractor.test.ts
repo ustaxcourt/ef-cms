@@ -24,14 +24,11 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
-import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('removeCaseFromTrialInteractor', () => {
-  const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
-
   let mockLock;
   let mockTrialSession: RawTrialSession;
 
@@ -184,28 +181,6 @@ describe('removeCaseFromTrialInteractor', () => {
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       trialLocation: undefined,
       trialSessionId: undefined,
-    });
-  });
-
-  it('updates work items to be not high priority', async () => {
-    mockTrialSession.isCalendared = true;
-
-    await removeCaseFromTrialInteractor(
-      applicationContext,
-      {
-        associatedJudge: '123',
-        associatedJudgeId: '67f246a0-8803-4aef-bbd2-687ef57e3e3f',
-        caseStatus: 'New',
-        disposition: 'because',
-        docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId!,
-      },
-      mockPetitionsClerkUser,
-    );
-
-    expect(setPriorityOnAllWorkItems).toHaveBeenCalled();
-    expect(setPriorityOnAllWorkItems.mock.calls[0][0]).toMatchObject({
-      highPriority: false,
     });
   });
 
