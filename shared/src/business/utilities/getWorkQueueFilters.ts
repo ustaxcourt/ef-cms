@@ -1,4 +1,7 @@
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
 import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
@@ -43,10 +46,19 @@ export const getWorkQueueFilters = ({
       },
       inbox: (item: WorkItemWithCaseInfo) => {
         return (
-          item.assigneeId === user.userId &&
-          !item.completedAt &&
-          item.docketEntry.isFileAttached !== false &&
-          !item.inProgress
+          // DocketClerks
+          (item.assigneeId === user.userId &&
+            canViewDocketSection &&
+            !item.completedAt &&
+            item.docketEntry.isFileAttached !== false &&
+            !item.inProgress) ||
+          // PetitionsClerks
+          (item.assigneeId === user.userId &&
+            canViewPetitionsSection &&
+            !item.completedAt &&
+            item.docketEntry.isFileAttached !== false &&
+            !item.inProgress &&
+            item.caseStatus === CASE_STATUS_TYPES.new)
         );
       },
       outbox: (item: WorkItemWithCaseInfo) => {
@@ -72,10 +84,19 @@ export const getWorkQueueFilters = ({
       },
       inbox: (item: WorkItemWithCaseInfo) => {
         return (
-          !item.completedAt &&
-          item.section === sectionToDisplay &&
-          item.docketEntry.isFileAttached !== false &&
-          !item.inProgress
+          // DocketClerks
+          (canViewDocketSection &&
+            !item.completedAt &&
+            item.section === sectionToDisplay &&
+            item.docketEntry.isFileAttached !== false &&
+            !item.inProgress) ||
+          // PetitionsClerks
+          (canViewPetitionsSection &&
+            !item.completedAt &&
+            item.section === sectionToDisplay &&
+            item.docketEntry.isFileAttached !== false &&
+            !item.inProgress &&
+            item.caseStatus === CASE_STATUS_TYPES.new)
         );
       },
       outbox: (item: WorkItemWithCaseInfo) => {
