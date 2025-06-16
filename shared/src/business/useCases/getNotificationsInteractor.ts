@@ -72,7 +72,7 @@ export const getNotificationsInteractor = async (
     }),
     getSectionInboxMessages({
       applicationContext,
-      section: qcInboxParameters.section,
+      section: selectedSection ?? section,
     }),
     getDocumentQCInboxForUser({
       userId: authorizedUser.userId,
