@@ -131,7 +131,6 @@ import { getUserPendingEmailLambda } from './lambdas/users/getUserPendingEmailLa
 import { getUserPendingEmailStatusLambda } from './lambdas/users/getUserPendingEmailStatusLambda';
 import { getUsersInSectionLambda } from './lambdas/users/getUsersInSectionLambda';
 import { getUsersPendingEmailLambda } from './lambdas/users/getUsersPendingEmailLambda';
-import { getWorkItemLambda } from './lambdas/workitems/getWorkItemLambda';
 import { lambdaWrapper } from './lambdaWrapper';
 import { logErrorLambda } from '@web-api/lambdas/errors/logErrorLambda';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
@@ -1112,7 +1111,6 @@ app.delete(
     '/work-items/:workItemId/read',
     lambdaWrapper(setWorkItemAsReadLambda),
   );
-  app.get('/work-items/:workItemId', lambdaWrapper(getWorkItemLambda));
   app.put('/work-items', lambdaWrapper(assignWorkItemsLambda));
 }
 

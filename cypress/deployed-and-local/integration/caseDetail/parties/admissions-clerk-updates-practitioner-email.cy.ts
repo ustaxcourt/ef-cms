@@ -2,8 +2,8 @@ import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/c
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 import {
-  login,
   loginAsAdmissionsClerk,
+  loginAsPrivatePractitioner,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
@@ -173,8 +173,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           );
           logout();
 
-          login({ email: practitionerEmail });
-          cy.get('[data-testid="my-cases-link"]');
+          loginAsPrivatePractitioner(practitionerEmail);
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
             .click();
@@ -216,7 +215,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
           );
           logout();
 
-          login({ email: practitionerEmail });
+          loginAsPrivatePractitioner(practitionerEmail);
           cy.task('getEmailVerificationToken', {
             email: practitionerEmail,
           }).then(verificationToken => {
@@ -228,8 +227,7 @@ describe('Admissions Clerk Updates Practitioner Email', () => {
               'contain.text',
               'Your email address is verified. You can now log in to DAWSON.',
             );
-          login({ email: updatedPractitionerEmail });
-          cy.get('[data-testid="my-cases-link"]');
+          loginAsPrivatePractitioner(updatedPractitionerEmail);
           cy.task('waitForPractitionerEmailUpdate', {
             docketNumber,
             practitionerEmail: updatedPractitionerEmail,

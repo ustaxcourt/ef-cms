@@ -37,31 +37,20 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
 }): {
   workItem: WorkItem;
 } => {
-  const workItemEntity = new WorkItem(
-    {
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      associatedJudge: caseToAdd.associatedJudge,
-      associatedJudgeId: caseToAdd.associatedJudgeId,
-      caseIsInProgress: true,
-      caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
-      docketNumber: caseToAdd.docketNumber,
-      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
-      isInitializeCase: true,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-      trialDate: caseToAdd.trialDate,
-      trialLocation: caseToAdd.trialLocation,
+  const workItemEntity = new WorkItem({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    docketEntry: {
+      ...docketEntryEntity.toRawObject(),
+      createdAt: docketEntryEntity.createdAt,
     },
-    { caseEntity: caseToAdd },
-  );
+    docketNumber: caseToAdd.docketNumber,
+    inProgress: true,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
 
   docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);

@@ -1231,7 +1231,7 @@ export const presenterSequences = {
   selectDocumentForScanSequence:
     selectDocumentForScanSequence as unknown as Function,
   selectScannerSequence: selectScannerSequence as unknown as Function,
-  selectWorkItemSequence: selectWorkItemSequence as unknown as Function,
+  selectWorkItemSequence,
   serveCaseToIrsSequence: serveCaseToIrsSequence as unknown as Function,
   serveCourtIssuedDocumentSequence:
     serveCourtIssuedDocumentSequence as unknown as Function,
