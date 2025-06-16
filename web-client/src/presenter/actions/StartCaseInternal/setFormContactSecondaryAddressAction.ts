@@ -24,5 +24,6 @@ export const setFormContactSecondaryAddressAction = ({
     phone: contact.phone,
     postalCode: contact.postalCode,
     state: contact.state,
+    country: contact.country,
   });
 };
