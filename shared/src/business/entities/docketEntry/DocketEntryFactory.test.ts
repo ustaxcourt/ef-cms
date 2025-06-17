@@ -309,7 +309,6 @@ describe('DocketEntryFactory', () => {
             new DocketEntryFactory(rawEntity).getFormattedValidationErrors()!
               .secondaryDocument,
           ).toEqual({
-            category: 'Select a Category.',
             documentType: 'Select a document type',
           });
         });

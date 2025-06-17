@@ -13,7 +13,6 @@ describe('ExternalDocumentNonStandardD', () => {
       });
 
       expect(externalDocumentD.getFormattedValidationErrors()).toEqual({
-        category: 'Select a Category.',
         documentType: 'Select a document type',
         previousDocument: 'Select a document',
         serviceDate: 'Provide a service date',
