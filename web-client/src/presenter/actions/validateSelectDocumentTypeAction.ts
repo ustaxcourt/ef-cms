@@ -25,7 +25,7 @@ export const validateSelectDocumentTypeAction = ({
   if (!errors) {
     return path.success();
   } else {
-    errors.category = undefined;
+    delete errors.category;
     const errorDisplayOrder = [
       'documentTitle',
       'documentType',
