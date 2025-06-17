@@ -14,6 +14,7 @@ import { JoiValidationEntity } from '../JoiValidationEntity';
 import {
   SESSION_STATUS_GROUPS,
   SESSION_STATUS_TYPES,
+  SESSION_TERMS,
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
   TRIAL_LOCATION_MATCHER,
@@ -340,6 +341,12 @@ export class TrialSession extends JoiValidationEntity {
         otherwise: JoiValidationConstants.STRING.optional(),
         then: joi.required(),
       }).messages({ '*': 'You must select a swing session' }),
+      term: JoiValidationConstants.STRING.valid(...SESSION_TERMS)
+        .required()
+        .messages({ '*': 'Term session is not valid' }),
+      termYear: JoiValidationConstants.STRING.max(4)
+        .required()
+        .messages({ '*': 'Term year is required' }),
       trialClerk: joi
         .object({
           name: JoiValidationConstants.STRING.max(100).required(),

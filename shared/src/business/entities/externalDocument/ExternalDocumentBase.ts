@@ -14,6 +14,9 @@ export class ExternalDocumentBase extends JoiValidationEntity {
   }
 
   static VALIDATION_RULES = {
+    category: JoiValidationConstants.STRING.required().messages({
+      '*': 'Select a Category.',
+    }),
     documentTitle: JoiValidationConstants.DOCUMENT_TITLE.optional().messages({
       '*': 'Document title must be 3000 characters or fewer. Update this document title and try again.',
     }),
