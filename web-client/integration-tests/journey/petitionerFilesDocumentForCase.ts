@@ -113,7 +113,7 @@ export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       secondaryDocument: {
-        category: "Select a Category.",
+        category: 'Select a Category.',
         documentType: 'Select a document type',
       },
     });
