@@ -80,7 +80,7 @@ const upsertDocketEntriesInOpenSearch = async ({
         index: {
           _index: efcmsDocketEntryIndex,
           _id: `${getPk(docketEntry)}_${getSk(docketEntry)}`,
-          routing: `${getPk(docketEntry)}_case|${getSk(docketEntry)}|mapping`,
+          routing: `${getPk(docketEntry)}_${getPk(docketEntry)}|mapping`,
         },
       });
       docketEntryIndexData.push(doc);
