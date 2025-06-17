@@ -9,6 +9,7 @@ describe('ExternalDocumentNonStandardC', () => {
       });
 
       expect(externalDocumentC.getFormattedValidationErrors()).toEqual({
+        category: 'Select a Category.',
         documentType: 'Select a document type',
         freeText: 'Enter name',
         previousDocument: 'Select a document',

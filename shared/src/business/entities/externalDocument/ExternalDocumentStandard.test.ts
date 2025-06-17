@@ -9,6 +9,7 @@ describe('ExternalDocumentStandard', () => {
       });
 
       expect(externalDocumentStandard.getFormattedValidationErrors()).toEqual({
+        category: 'Select a Category.',
         documentType: 'Select a document type',
       });
     });

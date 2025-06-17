@@ -7,6 +7,7 @@ describe('validateExternalDocumentInteractor', () => {
     });
 
     expect(errors).toEqual({
+      category: 'Select a Category.',
       documentType: 'Select a document type',
     });
   });
