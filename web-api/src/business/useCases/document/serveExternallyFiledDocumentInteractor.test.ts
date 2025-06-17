@@ -600,7 +600,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         docketNumbers: [],
         subjectCaseDocketNumber: mockCase.docketNumber,
       },
-      mockDocketClerkUser,
+      docketClerkUser,
     );
 
     expect(

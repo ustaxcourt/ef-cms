@@ -133,8 +133,6 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should throw an error if document is not found', async () => {
-    getUserById.mockResolvedValue(undefined);
-
     await expect(
       updateCourtIssuedOrderInteractor(
         applicationContext,
