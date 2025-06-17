@@ -6,27 +6,16 @@ import { PrivatePractitioner } from '@shared/business/entities/PrivatePractition
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
-/**
- * createCaseDocketEntries
- *
- * @param {object} providers the providers object
- * @param {Array<object>} providers.docketEntries a list of docket entries
- * @param {object} providers.docketNumber the docket number
- * @returns {Array<Promise>} promises which resolve upon creation of all docket entries
- */
-const createCaseDocketEntries = ({
-  applicationContext,
+const createCaseDocketEntries = async ({
   authorizedUser,
   docketEntries,
-  docketNumber,
   petitioners,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketEntries: any;
-  docketNumber: string;
   petitioners: any;
 }) => {
   const validDocketEntries = DocketEntry.validateRawCollection(docketEntries, {
@@ -34,14 +23,7 @@ const createCaseDocketEntries = ({
     petitioners,
   });
 
-  return validDocketEntries.map(doc =>
-    applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: doc.docketEntryId,
-      docketNumber,
-      document: doc,
-    }),
-  );
+  await upsertDocketEntries(validDocketEntries);
 };
 
 const connectIrsPractitioners = ({ docketNumber, irsPractitioners }) => {
@@ -82,7 +64,6 @@ const connectPrivatePractitioners = ({
  * @returns {Promise} which resolves when case and associations have been created
  */
 export const createCaseAndAssociations = async ({
-  applicationContext,
   authorizedUser,
   caseToCreate,
 }: {
@@ -109,11 +90,9 @@ export const createCaseAndAssociations = async ({
     createCase({
       caseToCreate,
     }),
-    ...createCaseDocketEntries({
-      applicationContext,
+    createCaseDocketEntries({
       authorizedUser,
       docketEntries,
-      docketNumber,
       petitioners: caseToCreate.petitioners,
     }),
     ...connectIrsPractitioners({

@@ -92,7 +92,6 @@ const completeDocketEntryQC = async (
     filedBy: entryMetadata.filedBy,
     filers: entryMetadata.filers,
     freeText: entryMetadata.freeText,
-    freeText2: entryMetadata.freeText2,
     hasOtherFilingParty: entryMetadata.hasOtherFilingParty,
     isFileAttached: true,
     lodged: entryMetadata.lodged,

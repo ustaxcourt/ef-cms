@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -15,11 +16,13 @@ import { strikeDocketEntryInteractor } from './strikeDocketEntryInteractor';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getUserById = getUserByIdMock as jest.Mock;
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 describe('strikeDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
 
   beforeEach(() => {
     caseRecord = {
@@ -96,7 +99,7 @@ describe('strikeDocketEntryInteractor', () => {
     ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should call getCaseByDocketNumber, getUserById, and updateDocketEntry', async () => {
+  it('should call getCaseByDocketNumber, getUserById, and upsertDocketEntries', async () => {
     await strikeDocketEntryInteractor(
       applicationContext,
       {
@@ -108,13 +111,12 @@ describe('strikeDocketEntryInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(getUserById).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry.mock
-        .calls[0][0].document,
-    ).toMatchObject({ strickenAt: expect.anything() });
+    expect(upsertDocketEntries).toHaveBeenCalled();
+
+    const [[docketEntry]] = upsertDocketEntries.mock.calls[0];
+    expect(docketEntry).toMatchObject({
+      strickenAt: expect.anything(),
+    });
   });
 
   it('should throw an error when the document is not on the docket record', async () => {
@@ -132,8 +134,6 @@ describe('strikeDocketEntryInteractor', () => {
     ).rejects.toThrow(
       'Cannot strike a document that is not on the docket record.',
     );
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry,
-    ).not.toHaveBeenCalled();
+    expect(upsertDocketEntries).not.toHaveBeenCalled();
   });
 });

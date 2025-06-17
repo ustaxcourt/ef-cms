@@ -1,32 +1,13 @@
-import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { toKyselyNewDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
+import { withValidation } from '@web-api/persistence/postgres/utils/withValidation';
 
-export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
+const upsertDocketEntriesWithoutValidation = async (
+  docketEntries: RawDocketEntry[],
+) => {
   if (docketEntries.length === 0) return;
 
-  const docketEntriesToUpsert = docketEntries.map(docketEntry => ({
-    createdAt: calculateDate({ dateString: docketEntry.createdAt }),
-    docketEntryId: docketEntry.docketEntryId,
-    docketNumber: docketEntry.docketNumber,
-    documentTitle: docketEntry.documentTitle,
-    documentType: docketEntry.documentType,
-    eventCode: docketEntry.eventCode,
-    filingDate: calculateDate({ dateString: docketEntry.filingDate }),
-    isLegacyServed:
-      docketEntry.isLegacyServed === undefined
-        ? false
-        : docketEntry.isLegacyServed,
-    isSealed: docketEntry.isSealed === undefined ? false : docketEntry.isSealed,
-    judge: docketEntry.judge ?? null,
-    numberOfPages: docketEntry.numberOfPages,
-    pending: docketEntry.pending === undefined ? false : docketEntry.pending,
-    receivedAt: calculateDate({ dateString: docketEntry.receivedAt }),
-    sealedTo: docketEntry.sealedTo,
-    servedAt: docketEntry.servedAt
-      ? calculateDate({ dateString: docketEntry.servedAt })
-      : null,
-    signedJudgeName: docketEntry.signedJudgeName ?? null,
-  }));
+  const docketEntriesToUpsert = docketEntries.map(toKyselyNewDocketEntry);
 
   await pgInsertInto({
     table: 'dwDocketEntry',
@@ -34,3 +15,7 @@ export const upsertDocketEntries = async (docketEntries: RawDocketEntry[]) => {
     onConflictColumns: ['docketNumber', 'docketEntryId'],
   });
 };
+
+export const upsertDocketEntries = withValidation(
+  upsertDocketEntriesWithoutValidation,
+);

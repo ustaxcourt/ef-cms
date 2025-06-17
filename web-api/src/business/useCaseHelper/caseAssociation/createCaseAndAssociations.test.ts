@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -8,10 +9,12 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { createCaseAndAssociations } from './createCaseAndAssociations';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { createCase as createCaseMock } from '@web-api/persistence/postgres/cases/createCase';
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 
 const createCase = createCaseMock as jest.Mock;
 const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
+const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
 
 describe('createCaseAndAssociations', () => {
   const createCaseMock = jest.fn();
@@ -71,8 +74,7 @@ describe('createCaseAndAssociations', () => {
       ).rejects.toThrow('entity was invalid');
     });
 
-    it('calls updateDocketEntry for each docket entry which has been added or changed', async () => {
-      const firstDocketEntry = MOCK_DOCUMENTS[0];
+    it('calls upsertDocketEntries for each docket entry which has been added or changed', async () => {
       const caseToCreate = {
         ...validMockCase,
         docketEntries: MOCK_DOCUMENTS,
@@ -88,19 +90,14 @@ describe('createCaseAndAssociations', () => {
         caseToCreate,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().updateDocketEntry,
-      ).toHaveBeenCalledTimes(MOCK_DOCUMENTS.length);
-
-      expect(
-        applicationContext.getPersistenceGateway().updateDocketEntry.mock
-          .calls[0][0],
-      ).toMatchObject({
-        applicationContext: expect.anything(),
-        docketEntryId: firstDocketEntry.docketEntryId,
-        docketNumber: caseToCreate.docketNumber,
-        document: firstDocketEntry,
-      });
+      expect(upsertDocketEntries).toHaveBeenCalledWith(
+        MOCK_DOCUMENTS.map(d => ({
+          ...d,
+          isDraft: !!d.isDraft,
+          isStricken: !!d.isStricken,
+          addToCoversheet: !!d.addToCoversheet,
+        })),
+      );
     });
   });
 

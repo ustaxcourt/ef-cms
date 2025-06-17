@@ -11,6 +11,7 @@ import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getPractitionersByDocketNumber } from '@web-api/persistence/postgres/practitioners/getPractitionersByDocketNumber';
+import { getDocketEntriesByDocketNumber } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -31,6 +32,7 @@ export const getCaseByDocketNumber = async ({
     'irsPractitioner',
     'privatePractitioner',
     'inactivePractitioner',
+    'docket-entry',
   ];
 
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({
@@ -40,26 +42,32 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const [caseCorrespondences, workItems, practitioners, caseItemsRaw] =
-    await Promise.all([
-      getCaseCorrespondenceByDocketNumber({
-        docketNumber,
-      }),
-      getWorkItemsByDocketNumber({
-        docketNumber,
-      }),
-      getPractitionersByDocketNumber({ docketNumber }),
-      queryFull({
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': `case|${docketNumber}`,
-        },
-        KeyConditionExpression: '#pk = :pk',
-        applicationContext,
-      }),
-    ]);
+  const [
+    caseCorrespondences,
+    workItems,
+    docketEntries,
+    practitioners,
+    caseItemsRaw,
+  ] = await Promise.all([
+    getCaseCorrespondenceByDocketNumber({
+      docketNumber,
+    }),
+    getWorkItemsByDocketNumber({
+      docketNumber,
+    }),
+    getDocketEntriesByDocketNumber({ docketNumber }),
+    getPractitionersByDocketNumber({ docketNumber }),
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }),
+  ]);
 
   const caseItems = caseItemsRaw.filter(
     item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
@@ -107,6 +115,11 @@ export const getCaseByDocketNumber = async ({
         ...privatePractitionerItem,
         pk: `case|${docketNumber}`,
         sk: `privatePractitioner|${privatePractitionerItem.userId}`,
+      })),
+      ...docketEntries.map(docketEntry => ({
+        ...docketEntry,
+        pk: `case|${docketNumber}`,
+        sk: `docket-entry|${docketEntry.docketEntryId}`,
       })),
     ]),
     consolidatedCases: consolidatedCases.map(

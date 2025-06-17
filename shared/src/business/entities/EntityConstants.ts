@@ -561,7 +561,6 @@ export const SCENARIOS = [
   'Nonstandard G',
   'Nonstandard H',
   'Nonstandard I',
-  'Nonstandard J',
   'Type A',
   'Type B',
   'Type C',

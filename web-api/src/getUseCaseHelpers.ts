@@ -17,7 +17,6 @@ import { createTrialSessionAndWorkingCopy } from './business/useCaseHelper/trial
 import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
 import { createUserForContact } from './business/useCaseHelper/caseAssociation/createUserForContact';
 import { formatConsolidatedCaseCoversheetData } from '@web-api/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
-import { generateAndServeDocketEntry } from './business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from './business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
 import { generateChangeOfAddressHelper } from './business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateNoticeOfChangeToInPersonProceeding } from './business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
@@ -66,7 +65,6 @@ const useCaseHelpers = {
   createUserConfirmation,
   createUserForContact,
   formatConsolidatedCaseCoversheetData,
-  generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
   generateChangeOfAddressHelper,
   generateNoticeOfChangeToInPersonProceeding,

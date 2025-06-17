@@ -3,6 +3,9 @@ import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
+);
 import {
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
   DOCKET_SECTION,
@@ -20,6 +23,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 
 let MOCK_DATE;
 
@@ -41,6 +45,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     fileAndServeDocumentOnOneCaseMock,
   );
   const getUserById = getUserByIdMock as jest.Mock;
+  const updateDocketEntryPendingServiceStatus = jest.mocked(
+    updateDocketEntryPendingServiceStatusMock,
+  );
   let caseRecord: RawCase;
   let mockWorkItem;
   let mockDocketEntryWithWorkItem;
@@ -595,21 +602,13 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(updateDocketEntryPendingServiceStatus.mock.calls[0][0]).toEqual({
       docketEntryId: docketEntry.docketEntryId,
       docketNumber: caseRecord.docketNumber,
       status: true,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(updateDocketEntryPendingServiceStatus.mock.calls[1][0]).toEqual({
       docketEntryId: docketEntry.docketEntryId,
       docketNumber: caseRecord.docketNumber,
       status: false,

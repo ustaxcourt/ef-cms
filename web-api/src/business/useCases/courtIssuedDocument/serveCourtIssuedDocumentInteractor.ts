@@ -15,6 +15,7 @@ import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConsta
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { settlePromises } from '@web-api/utilities/settlePromises';
@@ -79,14 +80,11 @@ export const serveCourtIssuedDocument = async (
     );
   }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocketEntryPendingServiceStatus({
-      applicationContext,
-      docketEntryId: docketEntryToServe.docketEntryId,
-      docketNumber: subjectCaseEntity.docketNumber,
-      status: true,
-    });
+  await updateDocketEntryPendingServiceStatus({
+    docketEntryId: docketEntryToServe.docketEntryId,
+    docketNumber: subjectCaseEntity.docketNumber,
+    status: true,
+  });
 
   const stampedPdf = await applicationContext
     .getUseCaseHelpers()
@@ -152,14 +150,11 @@ export const serveCourtIssuedDocument = async (
   } finally {
     for (const caseEntity of caseEntities) {
       try {
-        await applicationContext
-          .getPersistenceGateway()
-          .updateDocketEntryPendingServiceStatus({
-            applicationContext,
-            docketEntryId,
-            docketNumber: caseEntity.docketNumber,
-            status: false,
-          });
+        await updateDocketEntryPendingServiceStatus({
+          docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          status: false,
+        });
       } catch (e) {
         applicationContext.logger.error(
           `Encountered an exception trying to reset isPendingService on Docket Number ${caseEntity.docketNumber}.`,

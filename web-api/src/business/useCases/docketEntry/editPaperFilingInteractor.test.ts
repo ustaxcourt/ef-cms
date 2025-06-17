@@ -2,6 +2,7 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
@@ -26,6 +27,7 @@ import {
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
@@ -33,6 +35,9 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateDocketEntryPendingServiceStatus = jest.mocked(
+    updateDocketEntryPendingServiceStatusMock,
+  );
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
@@ -266,10 +271,7 @@ describe('editPaperFilingInteractor', () => {
           mockDocketClerkUser,
         );
 
-        expect(
-          applicationContext.getPersistenceGateway()
-            .updateDocketEntryPendingServiceStatus,
-        ).not.toHaveBeenCalled();
+        expect(updateDocketEntryPendingServiceStatus).not.toHaveBeenCalled();
       });
 
       it('should not generate a paper service url', async () => {
@@ -376,11 +378,9 @@ describe('editPaperFilingInteractor', () => {
           );
 
           const firstStatusCall =
-            applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus.mock.calls[0][0].status;
+            updateDocketEntryPendingServiceStatus.mock.calls[0][0].status;
           const secondStatusCall =
-            applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus.mock.calls[1][0].status;
+            updateDocketEntryPendingServiceStatus.mock.calls[1][0].status;
           expect(firstStatusCall).toEqual(true);
           expect(secondStatusCall).toEqual(false);
         });
@@ -453,11 +453,9 @@ describe('editPaperFilingInteractor', () => {
           ).rejects.toThrow('whoops, that is an error!');
 
           const firstStatusCall =
-            applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus.mock.calls[0][0];
+            updateDocketEntryPendingServiceStatus.mock.calls[0][0];
           const secondStatusCall =
-            applicationContext.getPersistenceGateway()
-              .updateDocketEntryPendingServiceStatus.mock.calls[1][0];
+            updateDocketEntryPendingServiceStatus.mock.calls[1][0];
           expect(firstStatusCall).toMatchObject({
             docketEntryId: mockDocketEntryId,
             docketNumber: caseRecord.docketNumber,
