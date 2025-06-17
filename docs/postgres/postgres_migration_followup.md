@@ -13,6 +13,8 @@ While we made some sweeping changes to the codebase in the migration from Dynamo
 
 - Consider robust connection pooling as needed. RDS Proxy, for instance.
 
+- There are probably some instances in which we are querying our DB like, e.g., Promise.all([getSomethingFromDb(), getSomethingFromDb(), getSomethingFromDb()]). This is a pattern that works better for Dynamo. In Postgres, we can now probably do a single Postgres query to get all the things at once.
+
 - In general, there are probably places where the app can now better leverage relationships.
   - Since the app was originally in DynamoDB, many of the relationships that come for free in a relational database had to be manually maintained in code ("if you update some record X in Dynamo, make sure there is code to also update some corresponding record Y").
   - The above also entailed a lot of redundant saves/loads ("you changed a field, and who knows what that might affect, so now resave all the data again").
