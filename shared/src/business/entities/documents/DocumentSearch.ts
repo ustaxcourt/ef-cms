@@ -124,7 +124,7 @@ export class DocumentSearch extends JoiValidationEntity {
         .alternatives()
         .conditional('dateRange', {
           is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          otherwise: joi.optional(),
+          otherwise: joi.forbidden(),
           then: JoiValidationConstants.ISO_DATE.format(
             DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
           )
