@@ -1,4 +1,3 @@
-import { CHIEF_JUDGE, ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -11,27 +10,6 @@ import { getSectionInboxMessages } from '@web-api/persistence/postgres/messages/
 import { getUserInboxMessages } from '@web-api/persistence/postgres/messages/getUserInboxMessages';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
 import { getQCInboxParameters } from '../utilities/getQCInboxParameters';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-
-const getJudgeUser = async ({
-  judgeUserId,
-  role,
-}: {
-  judgeUserId: string | undefined;
-  role: string;
-}) => {
-  let judgeUser;
-
-  if (judgeUserId) {
-    judgeUser = await getUserById({ userId: judgeUserId });
-  } else if (role === ROLES.adc) {
-    judgeUser = {
-      name: CHIEF_JUDGE,
-    };
-  }
-
-  return judgeUser;
-};
 
 export const getNotificationsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -62,16 +40,6 @@ export const getNotificationsInteractor = async (
   if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError('Invalid User getting notifications');
   }
-
-  const [currentUser, judgeUser] = await Promise.all([
-    getUserById({ userId: authorizedUser.userId }),
-    getJudgeUser({ judgeUserId: judgeId, role: authorizedUser.role }),
-  ]);
-
-  applicationContext.logger.info('getNotificationsInteractor getUser', {
-    currentUser,
-    judgeUser,
-  });
 
   const qcInboxParameters = getQCInboxParameters({
     judgeId,
@@ -104,7 +72,7 @@ export const getNotificationsInteractor = async (
     }),
     getSectionInboxMessages({
       applicationContext,
-      section: qcInboxParameters.section,
+      section: selectedSection || section,
     }),
     getDocumentQCInboxForUser({
       userId: authorizedUser.userId,

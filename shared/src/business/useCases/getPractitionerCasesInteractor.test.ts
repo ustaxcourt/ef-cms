@@ -114,9 +114,7 @@ describe('getPractitionerCasesInteractor', () => {
   });
 
   it('handles scenario where getDocketNumbersByUser returns an empty array', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockResolvedValueOnce([]);
+    getDocketNumbersByUser.mockResolvedValueOnce([]);
     getCasesMetadataByDocketNumbers.mockResolvedValueOnce(undefined);
 
     const { closedCases, openCases } = await getPractitionerCasesInteractor(

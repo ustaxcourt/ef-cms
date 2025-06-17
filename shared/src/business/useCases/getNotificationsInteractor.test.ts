@@ -1,14 +1,13 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
-import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import {
-  ADC_SECTION,
+  CASE_STATUS_TYPES,
   CHAMBERS_SECTION,
   CHIEF_JUDGE,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} from '@shared/business/entities/EntityConstants';
+} from '../entities/EntityConstants';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionMock } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
 import { getDocumentQCInboxForUser as getDocumentQCInboxForUserMock } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
@@ -20,19 +19,16 @@ import {
   mockDocketClerkUser,
   mockJudgeUser,
 } from '@shared/test/mockAuthUsers';
-import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getUserInboxMessages = getUserInboxMessagesMock as jest.Mock;
 const getSectionInboxMessages = getSectionInboxMessagesMock as jest.Mock;
 const getDocumentQCInboxForUser = getDocumentQCInboxForUserMock as jest.Mock;
 const getDocumentQCInboxForSection =
   getDocumentQCInboxForSectionMock as jest.Mock;
-const getUserById = getUserByIdMock as jest.Mock;
 
 const workItems = [
   {
     associatedJudge: 'Judge Barker',
-    caseIsInProgress: false,
     docketEntry: {
       isFileAttached: true,
     },
@@ -41,7 +37,6 @@ const workItems = [
   },
   {
     associatedJudge: 'Judge Carey',
-    caseIsInProgress: false,
     docketEntry: {
       isFileAttached: true,
     },
@@ -50,7 +45,6 @@ const workItems = [
   },
   {
     associatedJudge: CHIEF_JUDGE,
-    caseIsInProgress: false,
     docketEntry: {
       isFileAttached: true,
     },
@@ -59,7 +53,6 @@ const workItems = [
   },
   {
     associatedJudge: 'Judge Barker',
-    caseIsInProgress: false,
     docketEntry: {
       isFileAttached: true,
     },
@@ -68,7 +61,6 @@ const workItems = [
   },
   {
     associatedJudge: 'Judge Barker',
-    caseIsInProgress: true,
     docketEntry: {
       isFileAttached: false,
     },
@@ -78,7 +70,6 @@ const workItems = [
   },
   {
     associatedJudge: 'Judge Barker',
-    caseIsInProgress: false,
     docketEntry: {
       isFileAttached: false,
     },
@@ -127,7 +118,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns an unread count for my messages', async () => {
-    getUserById.mockResolvedValue({
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -135,7 +126,6 @@ describe('getNotificationsInteractor', () => {
     getDocumentQCInboxForUser.mockReturnValue([
       {
         assigneeId: mockDocketClerkUser.userId,
-        caseIsInProgress: false,
         docketEntry: { isFileAttached: true },
         isRead: true,
         section: DOCKET_SECTION,
@@ -164,7 +154,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns the total user inbox count', async () => {
-    getUserById.mockResolvedValue({
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -183,7 +173,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns the total section messages count', async () => {
-    getUserById.mockResolvedValue({
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -199,7 +189,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('returns an accurate unread count for legacy items marked complete', async () => {
-    getUserById.mockResolvedValue({
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -214,8 +204,8 @@ describe('getNotificationsInteractor', () => {
     expect(result.qcUnreadCount).toEqual(1);
   });
 
-  it('returns the qcIndividualInProgressCount for qc individual items with caseIsInProgress true, isFileAttached true and a judgeUserId supplied', async () => {
-    getUserById.mockResolvedValue({
+  it('returns the qcIndividualInProgressCount for qc individual items with isFileAttached true and a judgeId supplied', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -224,7 +214,6 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Judge Barker',
-        caseIsInProgress: true,
         docketEntry: {
           isFileAttached: true,
         },
@@ -235,7 +224,6 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Some Judge',
-        caseIsInProgress: true,
         docketEntry: {
           isFileAttached: true,
         },
@@ -246,7 +234,6 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Some Judge',
-        caseIsInProgress: false,
         docketEntry: {
           isFileAttached: true,
         },
@@ -268,8 +255,8 @@ describe('getNotificationsInteractor', () => {
     expect(result.qcIndividualInProgressCount).toEqual(1);
   });
 
-  it('returns the qcIndividualInboxCount for qc individual items with caseIsInProgress false, isFileAttached true and a judgeUserId supplied', async () => {
-    getUserById.mockResolvedValue({
+  it('returns the qcIndividualInboxCount for qc individual items with isFileAttached true and a judgeId supplied', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -278,7 +265,6 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Judge Barker',
-        caseIsInProgress: false,
         docketEntry: {
           isFileAttached: true,
         },
@@ -289,7 +275,6 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Some Judge',
-        caseIsInProgress: false,
         docketEntry: {
           isFileAttached: false,
         },
@@ -300,7 +285,6 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Some Judge',
-        caseIsInProgress: true,
         docketEntry: {
           isFileAttached: true,
         },
@@ -322,8 +306,8 @@ describe('getNotificationsInteractor', () => {
     expect(result.qcIndividualInboxCount).toEqual(1);
   });
 
-  it('returns the qcSectionInProgressCount for qc section items with caseIsInProgress true, isFileAttached true and a judgeUserId supplied', async () => {
-    getUserById.mockResolvedValue({
+  it('returns the qcSectionInProgressCount for qc section items with isFileAttached true and a judgeId supplied', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -331,7 +315,6 @@ describe('getNotificationsInteractor', () => {
     getDocumentQCInboxForSection.mockReturnValue([
       {
         associatedJudge: 'Judge Barker',
-        caseIsInProgress: false,
         docketEntry: {
           isFileAttached: true,
         },
@@ -341,7 +324,6 @@ describe('getNotificationsInteractor', () => {
       },
       {
         associatedJudge: 'Judge Barker',
-        caseIsInProgress: true,
         docketEntry: {
           isFileAttached: true,
         },
@@ -351,7 +333,6 @@ describe('getNotificationsInteractor', () => {
       },
       {
         associatedJudge: 'Some Judge',
-        caseIsInProgress: false,
         docketEntry: {
           isFileAttached: true,
         },
@@ -362,7 +343,6 @@ describe('getNotificationsInteractor', () => {
       {
         assigneeId: mockDocketClerkUser.userId,
         associatedJudge: 'Some Judge',
-        caseIsInProgress: true,
         docketEntry: {
           isFileAttached: true,
         },
@@ -372,7 +352,6 @@ describe('getNotificationsInteractor', () => {
       },
       {
         associatedJudge: 'Some Judge',
-        caseIsInProgress: true,
         docketEntry: {
           isFileAttached: true,
         },
@@ -394,8 +373,8 @@ describe('getNotificationsInteractor', () => {
     expect(result.qcSectionInProgressCount).toEqual(2);
   });
 
-  it('returns the qcSectionInboxCount for qc section items with caseIsInProgress true, isFileAttached true and a judgeUserId supplied', async () => {
-    getUserById.mockResolvedValue({
+  it('returns the qcSectionInboxCount for qc section items with isFileAttached true and a judgeId supplied', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -403,7 +382,6 @@ describe('getNotificationsInteractor', () => {
     getDocumentQCInboxForSection.mockReturnValue([
       {
         associatedJudge: 'Judge Barker',
-        caseIsInProgress: false,
         docketEntry: {
           isFileAttached: true,
         },
@@ -413,7 +391,6 @@ describe('getNotificationsInteractor', () => {
       },
       {
         associatedJudge: 'Judge Barker',
-        caseIsInProgress: true,
         docketEntry: {
           isFileAttached: true,
         },
@@ -461,8 +438,8 @@ describe('getNotificationsInteractor', () => {
     });
   });
 
-  it('should fetch the qc section items for the provided judgeUserId', async () => {
-    getUserById.mockResolvedValue({
+  it('should fetch the qc section items for the provided judgeId', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       name: 'Some Judge',
       role: ROLES.judge,
       section: CHAMBERS_SECTION,
@@ -483,8 +460,8 @@ describe('getNotificationsInteractor', () => {
     });
   });
 
-  it('should fetch the qc section items without a judgeName when a judgeUserId is not provided', async () => {
-    getUserById.mockResolvedValue({
+  it('should fetch the qc section items without a judgeId when a judgeId is not provided', async () => {
+    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
       userId: mockDocketClerkUser.userId,
@@ -501,34 +478,16 @@ describe('getNotificationsInteractor', () => {
     });
   });
 
-  it('should fetch the qc section items with judgeName of CHIEF_JUDGE when a judgeUserId is not provided and the user role is adc', async () => {
-    getUserById.mockResolvedValue({
-      role: ROLES.adc,
-      section: ADC_SECTION,
-      userId: mockAdcUser.userId,
-    });
-
-    await getNotificationsInteractor(
-      applicationContext,
-      {} as any,
-      mockAdcUser,
-    );
-
-    expect(getDocumentQCInboxForSection.mock.calls[0][0]).toMatchObject({
-      judgeUserName: CHIEF_JUDGE,
-    });
-  });
-
-  it('should fetch messages for the filtered document QC inbox for the selected section when caseServicesSupervisorData is not empty', async () => {
+  it('should fetch messages for the filtered document QC inbox for the selected section when a selected section is specified', async () => {
     const filteredWorkItem = {
       associatedJudge: 'Judge Barker',
-      caseIsInProgress: false,
       docketEntry: {
         isFileAttached: true,
       },
       inProgress: false,
       isRead: true,
       section: PETITIONS_SECTION,
+      caseStatus: CASE_STATUS_TYPES.new,
     };
     const SELECTED_SECTION = PETITIONS_SECTION;
 
