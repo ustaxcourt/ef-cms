@@ -3,6 +3,8 @@ While we made some sweeping changes to the codebase in the migration from Dynamo
 - Certain OpenSearch queries, like the one for the Cold Case Report, can probably be moved from OpenSearch into Postgres. For example, we spent a day or two trying to make the Cold Case Report fast enough in Postgres--there is no reason in principle it cannot be done with efficient indexing, precomputed views, or the like--but we dropped it for more important tasks.
   - Queries that rely on all but the most trivial text matching are best to keep in OpenSearch.
 
+- We do not need to marshall/unmarshall data before indexing it. That was done because we were using Dynamo. N.B.: If we do update to no longer marshall/unmarshall, we will need to change our OpenSearch queries too.
+
 - Get transactions to work properly. The tricky bits to consider:
   - Unless you do a [two-phase transaction](https://www.postgresql.org/docs/current/two-phase.html), transactions are one-per-connection. This can make running tasks in a `Promise.all()` difficult: if each task needs a transaction, then each task also probably needs its own connection. This would entail handling our connections differently, since they are currently one connection per Lambda execution environment.
   - We need to index Case, Docket Entry, and Practitioner data with Postgres-to-OpenSearch latency in the low seconds range. We explored various paths before settling on an in-code solution: `database.ts::getDbWriter` checks if the table needs indexing and, if so, gets the results of the executed query, transforms them, and passes the data through an SQS queue to index. With transactions, this would have to be modified: we would only want to send the message on commit, not on execution, of the query.
