@@ -207,11 +207,11 @@ describe('getWorkQueueFilters', () => {
           // my in progress
           ...aWorkItem,
           assigneeId: '123',
-          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {
             isFileAttached: false,
           },
+          inProgress: true,
           section: PETITIONS_SECTION,
           workItemId: '1',
         },
@@ -219,9 +219,9 @@ describe('getWorkQueueFilters', () => {
           // my in progress
           ...aWorkItem,
           assigneeId: '123',
-          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {},
+          inProgress: true,
           section: PETITIONS_SECTION,
           workItemId: '2',
         },
@@ -229,14 +229,14 @@ describe('getWorkQueueFilters', () => {
           // my inbox
           ...aWorkItem,
           assigneeId: '123',
+          caseStatus: CASE_STATUS_TYPES.new,
+          completedAt: undefined,
           docketEntry: {
             isFileAttached: true,
           },
           inProgress: false,
           section: PETITIONS_SECTION,
           workItemId: '3',
-          caseStatus: CASE_STATUS_TYPES.new,
-          completedAt: undefined,
         },
         {
           // my outbox
@@ -255,11 +255,11 @@ describe('getWorkQueueFilters', () => {
           // section in progress
           ...aWorkItem,
           assigneeId: '234',
-          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {
             isFileAttached: false,
           },
+          inProgress: true,
           section: PETITIONS_SECTION,
           workItemId: '5',
         },
@@ -267,9 +267,9 @@ describe('getWorkQueueFilters', () => {
           // section in progress
           ...aWorkItem,
           assigneeId: '234',
-          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {},
+          inProgress: true,
           section: PETITIONS_SECTION,
           workItemId: '6',
         },
@@ -277,13 +277,13 @@ describe('getWorkQueueFilters', () => {
           // section inbox
           ...aWorkItem,
           assigneeId: '234',
+          caseStatus: CASE_STATUS_TYPES.new,
           docketEntry: {
             isFileAttached: true,
           },
           inProgress: false,
           section: PETITIONS_SECTION,
           workItemId: '7',
-          caseStatus: CASE_STATUS_TYPES.new,
         },
         {
           // section outbox
@@ -382,8 +382,8 @@ describe('getWorkQueueFilters', () => {
           ...aWorkItem,
           // my in progress
           assigneeId: '123',
-          inProgress: true,
           caseStatus: CASE_STATUS_TYPES.new,
+          inProgress: true,
           docketEntry: {},
           section: CASE_SERVICES_SUPERVISOR_SECTION,
           workItemId: '2',
@@ -463,6 +463,7 @@ describe('getWorkQueueFilters', () => {
             ...aWorkItem,
             // section inbox
             assigneeId: '234',
+            caseStatus: CASE_STATUS_TYPES.new,
             docketEntry: {
               isFileAttached: true,
             },
