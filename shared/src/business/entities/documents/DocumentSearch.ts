@@ -30,7 +30,7 @@ export class DocumentSearch extends JoiValidationEntity {
     this.dateRange = rawProps.dateRange;
     this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
 
-    if (rawProps.startDate) {
+    if (rawProps.startDate && rawProps.dateRange === DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES) {
       const [month, day, year] = rawProps.startDate.split('/'); // 11/31/2019
       if (month && day && year) {
         this.startDate = createStartOfDayISO({
@@ -41,7 +41,7 @@ export class DocumentSearch extends JoiValidationEntity {
       }
     }
 
-    if (rawProps.endDate) {
+    if (rawProps.endDate && rawProps.dateRange === DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES) {
       const [month, day, year] = rawProps.endDate.split('/');
       if (month && day && year) {
         this.endDate = createEndOfDayISO({
@@ -124,7 +124,7 @@ export class DocumentSearch extends JoiValidationEntity {
         .alternatives()
         .conditional('dateRange', {
           is: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-          otherwise: joi.forbidden(),
+          otherwise: joi.optional(),
           then: JoiValidationConstants.ISO_DATE.format(
             DocumentSearch.JOI_VALID_DATE_SEARCH_FORMATS,
           )
