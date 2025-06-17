@@ -16,7 +16,8 @@ export const validateTrialSessionAction = ({
   if (!errors) {
     return path.success();
   } else {
-    errors.startDate = errors.startDate || errors.term;
+    errors.term = undefined;
+    errors.termYear = undefined;
     const errorDisplayOrder = [
       'startDate',
       'startTime',
