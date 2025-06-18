@@ -34,7 +34,7 @@ export const ExternalConsolidatedCaseGroupFilingCard = connect(
               >
                 This case is part of a consolidated group.
               </legend>
-              <span className="usa-hint">
+              <span className="usa-hint" style={{display: 'block'}}>
                 Select the group or this case to file in.
               </span>
               <input
