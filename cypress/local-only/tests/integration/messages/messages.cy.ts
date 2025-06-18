@@ -17,10 +17,15 @@ import {
 } from '../../../support/pages/dashboard';
 import { goToCase } from '../../../../helpers/caseDetail/go-to-case';
 import {
-  login,
   loginAsAdc,
+  loginAsAdmissionsClerk,
+  loginAsColvin,
+  loginAsColvinChambers,
   loginAsDocketClerk,
+  loginAsGeneral,
   loginAsPetitionsClerk,
+  loginAsReportersOffice,
+  loginAsTrialClerk,
 } from '../../../../helpers/authentication/login-as-helpers';
 
 describe('Messages', () => {
@@ -418,18 +423,18 @@ describe('Messages', () => {
   describe('Message Filters', () => {
     describe('Display', () => {
       [
-        'adc@example.com',
-        'judgecolvin@example.com',
-        'docketclerk@example.com',
-        'admissionsclerk@example.com',
-        'colvinschambers@example.com',
-        'trialclerk@example.com',
-        'reportersoffice@example.com',
-        'petitionsclerk@example.com',
-        'general@example.com',
-      ].forEach(account => {
-        it(`should display the filters for Court User "${account}"`, () => {
-          login({ email: account });
+        loginAsAdc,
+        loginAsColvin,
+        loginAsDocketClerk,
+        loginAsAdmissionsClerk,
+        loginAsColvinChambers,
+        loginAsTrialClerk,
+        loginAsReportersOffice,
+        loginAsPetitionsClerk,
+        loginAsGeneral
+      ].forEach(loginFunction => {
+        it(`should "${loginFunction.name}" and display the filters for Court User `, () => {
+          loginFunction();
           cy.visit('/messages/my/inbox');
           cy.get('[data-testid="table-filters-component"]').should(
             'be.visible',

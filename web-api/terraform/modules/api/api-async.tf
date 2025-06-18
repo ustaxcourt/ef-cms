@@ -9,6 +9,12 @@ module "api_async_lambda" {
   memory_size    = "7000"
 }
 
+// Do not auto retry requests: https://docs.aws.amazon.com/lambda/latest/dg/invocation-async-error-handling.html
+resource "aws_lambda_function_event_invoke_config" "disable_auto_retries" {
+  function_name          = module.api_async_lambda.function_name
+  maximum_retry_attempts = 0
+}
+
 resource "aws_api_gateway_resource" "api_async_base_resource" {
   rest_api_id = aws_api_gateway_rest_api.gateway_for_api.id
   parent_id   = aws_api_gateway_rest_api.gateway_for_api.root_resource_id
@@ -334,7 +340,7 @@ resource "terraform_data" "api_async_lambda_last_modified" {
 }
 
 resource "aws_lambda_permission" "apigw_async_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.api_async_lambda.function_name
   principal     = "apigateway.amazonaws.com"

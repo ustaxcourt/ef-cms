@@ -89,7 +89,9 @@ import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StatusReportOrder } from './StatusReportOrder';
 import { StyleGuide } from './StyleGuide/StyleGuide';
+import { TrialLocation } from '@web-client/views/TrialSessions/TrialLocation';
 import { TrialSessionDetails } from './TrialSessionDetails/TrialSessionDetails';
+import { TrialSessionMinutesPage } from '@web-client/views/TrialSessionMinutes/TrialSessionMinutesPage';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReportView } from '@web-client/views/TrialSessions/TrialSessionPlanningReportView';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
@@ -109,6 +111,7 @@ import classNames from 'classnames';
 import { TermBuilderView } from '@web-client/views/TermBuilderView';
 import { AsyncServiceUnavailableModal } from '@web-client/views/AsyncServiceUnavailableModal';
 import { OrderResponse } from './OrderResponse/OrderResponse';
+import { RemovePetitionerEmailModal } from '@web-client/views/CaseDetail/RemovePetitionerEmailModal';
 
 const pages = {
   AccessibilityStatement,
@@ -193,7 +196,9 @@ const pages = {
   StartCaseInternal,
   StatusReportOrder,
   StyleGuide,
+  TrialLocation,
   TrialSessionDetails,
+  TrialSessionMinutesPage,
   TrialSessionPlanningReportView,
   TrialSessionWorkingCopy,
   TermBuilderView,
@@ -311,6 +316,9 @@ export const AppComponent = connect(
         {showModal === 'GenericErrorModal' && <GenericErrorModal />}
         {showModal === 'FileUploadErrorModal' && <FileUploadErrorModal />}
         {showModal === 'VerifyNewEmailModal' && <VerifyNewEmailModal />}
+        {showModal === 'RemovePetitionerEmailModal' && (
+          <RemovePetitionerEmailModal />
+        )}
       </>
     );
   },

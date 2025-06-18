@@ -106,7 +106,7 @@ resource "terraform_data" "websockets_connect_lambda_last_modified" {
 }
 
 resource "aws_lambda_permission" "apigw_connect_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.websockets_connect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
@@ -125,7 +125,7 @@ resource "terraform_data" "websockets_disconnect_lambda_last_modified" {
 }
 
 resource "aws_lambda_permission" "apigw_disconnect_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.websockets_disconnect_lambda.function_name
   principal     = "apigateway.amazonaws.com"
@@ -143,7 +143,7 @@ resource "terraform_data" "websockets_default_lambda_last_modified" {
 }
 
 resource "aws_lambda_permission" "apigw_default_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.websockets_default_lambda.function_name
   principal     = "apigateway.amazonaws.com"
@@ -240,16 +240,15 @@ resource "aws_route53_record" "websocket_regional_record" {
   name           = aws_apigatewayv2_domain_name.websockets_domain.domain_name
   type           = "A"
   zone_id        = var.zone_id
-  set_identifier = "ws_${var.region}_${var.current_color}"
 
   alias {
     name                   = aws_apigatewayv2_domain_name.websockets_domain.domain_name_configuration.0.target_domain_name
     zone_id                = aws_apigatewayv2_domain_name.websockets_domain.domain_name_configuration.0.hosted_zone_id
-    evaluate_target_health = true
+    evaluate_target_health = false
   }
 
-  latency_routing_policy {
-    region = var.region
+  lifecycle {
+    create_before_destroy = false
   }
 }
 

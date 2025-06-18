@@ -19,7 +19,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.94.1"
+      version = "~> 5.99.1"
     }
   }
 }
@@ -36,7 +36,6 @@ module "ef-cms_apis" {
   cognito_suffix        = var.cognito_suffix
   dns_domain            = var.dns_domain
   email_dmarc_policy    = var.email_dmarc_policy
-  enable_health_checks  = var.enable_health_checks
   environment           = var.environment
   es_instance_count     = var.es_instance_count
   es_instance_type      = var.es_instance_type
@@ -46,6 +45,10 @@ module "ef-cms_apis" {
   should_es_alpha_exist = var.should_es_alpha_exist
   should_es_beta_exist  = var.should_es_beta_exist
   zone_name             = var.zone_name
+  providers = {
+    aws           = aws.us-east-1
+    aws.us-west-1 = aws.us-west-1
+  }
 }
 
 module "ui-public-certificate" {
@@ -81,24 +84,6 @@ module "dynamsoft_us_east" {
   zone_name              = var.zone_name
   ami                    = "ami-0a313d6098716f372"
   availability_zones     = ["us-east-1a"]
-  dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
-  dynamsoft_url          = var.dynamsoft_url
-  dynamsoft_product_keys = var.dynamsoft_product_keys
-}
-
-module "dynamsoft_us_west" {
-  source = "../../modules/dynamsoft"
-  count  = var.is_dynamsoft_enabled
-  providers = {
-    aws = aws.us-west-1
-  }
-
-  region                 = "us-west-1"
-  environment            = var.environment
-  dns_domain             = var.dns_domain
-  zone_name              = var.zone_name
-  ami                    = "ami-06397100adf427136"
-  availability_zones     = ["us-west-1a"]
   dynamsoft_s3_zip_path  = var.dynamsoft_s3_zip_path
   dynamsoft_url          = var.dynamsoft_url
   dynamsoft_product_keys = var.dynamsoft_product_keys

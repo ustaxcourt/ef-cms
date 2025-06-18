@@ -2,11 +2,10 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
-  '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords',
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import {
   AUTOMATIC_BLOCKED_REASONS,
-  CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -28,27 +27,22 @@ import {
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
-import { deleteCaseTrialSortMappingRecords as deleteCaseTrialSortMappingRecordsMock } from '@web-api/persistence/dynamo/cases/deleteCaseTrialSortMappingRecords';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('fileExternalDocumentInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
-  );
-  const deleteCaseTrialSortMappingRecords = jest.mocked(
-    deleteCaseTrialSortMappingRecordsMock,
   );
 
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const mockDocketEntryId = applicationContext.getUniqueId();
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   let caseRecord;
   let mockLock;
@@ -180,7 +174,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).not.toHaveBeenCalled();
-    expect(updateCase).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
@@ -204,7 +198,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
@@ -315,10 +309,10 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(getCaseByDocketNumber).toHaveBeenCalledTimes(3); // Once at beginning and once per updateCaseAndAssociations
+    expect(getCaseByDocketNumber).toHaveBeenCalledTimes(1);
     expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
     expect(upsertWorkItems).toHaveBeenCalledTimes(1);
-    expect(updateCase).toHaveBeenCalledTimes(2);
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).toHaveBeenCalledTimes(2);
@@ -372,7 +366,7 @@ describe('fileExternalDocumentInteractor', () => {
       },
       mockIrsPractitionerUser,
     );
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(updatedCase!.docketEntries).toMatchObject([
       {}, // first 4 docs were already on the case
       {},
@@ -421,64 +415,12 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
     expect(updatedCase!.docketEntries[3].status).toBeUndefined();
     expect(updatedCase!.docketEntries[3].servedAt).toBeUndefined();
-  });
-
-  it('should create a high-priority work item if the case status is calendared', async () => {
-    caseRecord.status = CASE_STATUS_TYPES.calendared;
-    caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
-    caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bc';
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'Test Petitioner',
-          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-      },
-      mockIrsPractitionerUser,
-    );
-
-    expect(upsertWorkItems).toHaveBeenCalled();
-    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
-      workItems: [
-        { highPriority: true, trialDate: '2019-03-01T21:40:46.415Z' },
-      ],
-    });
-  });
-
-  it('should create a not-high-priority work item if the case status is not calendared', async () => {
-    caseRecord.status = CASE_STATUS_TYPES.new;
-
-    await fileExternalDocumentInteractor(
-      applicationContext,
-      {
-        documentMetadata: {
-          docketNumber: caseRecord.docketNumber,
-          documentTitle: 'Simultaneous Memoranda of Law',
-          documentType: 'Simultaneous Memoranda of Law',
-          eventCode: 'A',
-          filedBy: 'test Petitioner',
-          primaryDocumentId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        },
-      },
-      mockIrsPractitionerUser,
-    );
-
-    expect(upsertWorkItems).toHaveBeenCalled();
-    expect(upsertWorkItems.mock.calls[0][0]).toMatchObject({
-      workItems: [{ highPriority: false }],
-    });
   });
 
   it('should automatically block the case if the document filed is a tracked document', async () => {
@@ -498,12 +440,13 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pending,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
@@ -527,12 +470,13 @@ describe('fileExternalDocumentInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(updateCase.mock.calls[0][0].caseToUpdate).toMatchObject({
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
+    ).toMatchObject({
       automaticBlocked: true,
       automaticBlockedDate: expect.anything(),
       automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
     });
-    expect(deleteCaseTrialSortMappingRecords).toHaveBeenCalled();
   });
 
   it('should not sendServedPartiesEmails if docketEntryId is undefined', async () => {

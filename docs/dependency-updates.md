@@ -18,6 +18,8 @@ At the moment, the only task we rotate is updating dependencies. As an open-sour
   - `./web-api/runtimes/puppeteer/package.json`
   - `./web-api/terraform/modules/batch/docker-image/package.json`
 
+You can use the scripts/npm/upgrade-npm-packages.ts for this process, however make sure all three package.json files are updated.
+
 #### 1.1 Run `npm outdated`
 
 This command informs us of minor and major version updates that we need to update manually. For major updates, there are often breaking API changes that require refactoring.
@@ -111,7 +113,7 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 ### cerebral and @cerebral/react
 
-- New versions of cerebral (5.2.1 to 5.2.2) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
+- New versions of cerebral (5.2.1 to 5.2.4) and @cerebral/react (4.2.1 to 4.2.2) were released on February 27, 2025. These upgrades are the first since spring 2020. The new versions do not work with the import syntax used in `web-client/src/presenter/test.cerebral.ts` for `runAction` and `runCompute`, so keep these pinned to 5.2.1 and "github:ustaxcourt/cerebral-react#main" respectively for the time being.
 
 ### @fortawesome
 
@@ -131,6 +133,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - As of 15 April 2025, there is a high-security vulnerability for tar-fs < 3.0.7, which our current version of puppeteer relies on. As far as I can tell, this should not affect our use case since we are downloading from a trusted source (chromium). Hopefully the update to tar-fs will make its way into the next version of puppeteer we update to.
 
+Peer-dependency tar-fs has high security vulnerability but this shouldn't affect us as far as we are aware of.
+
 ### ws, 3rd party dependency of Cerebral
 
 - When running npm audit, you'll see a high severity issue with ws, 'affected by a DoS when handling a request with many HTTP headers - https://github.com/advisories/GHSA-3h5v-q93c-6h6q'. This doesn't affect us as the vulnerability is on the server side and we're not using this package on the server. We tried to override this to 5.2.4 and 8.18.0 and weren't able to make this work as import paths have changed. In the mean time, we recommend skipping this issue. We could always fork the cerebral repo in the future if needed.
@@ -142,6 +146,9 @@ Below is a list of dependencies that are locked down due to known issues with se
 ### pdfjs-dist
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
+
+### babel-jest
+Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4
 
 ## Incrementing the Node Cache Key Version
 

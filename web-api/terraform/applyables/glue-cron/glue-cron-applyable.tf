@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 terraform {
@@ -9,7 +9,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.94.1"
+      version = "~> 5.99.1"
     }
   }
 }
@@ -17,7 +17,7 @@ terraform {
 module "glue-cron" {
   source                    = "../../modules/glue-cron"
   environment               = var.environment
-  aws_region                = var.aws_region
+  aws_region                = "us-east-1"
   circle_workflow_id        = var.circle_workflow_id
   circle_machine_user_token = var.circle_machine_user_token
 }

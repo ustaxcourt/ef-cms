@@ -1,29 +1,29 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { environment } from '@web-api/environment';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { WithImplicitCoercion } from 'buffer';
 
 export const saveDocumentFromLambda = async ({
-  applicationContext,
   contentType: ContentType = 'application/pdf',
   document: body,
   key,
   useTempBucket = false,
 }: {
-  applicationContext: ServerApplicationContext;
   contentType?: string;
   document: WithImplicitCoercion<ArrayBuffer | SharedArrayBuffer>;
   key: string;
   useTempBucket?: boolean;
 }): Promise<void> => {
-  let Bucket = applicationContext.environment.documentsBucketName;
+  let Bucket = environment.documentsBucketName;
   if (useTempBucket) {
-    Bucket = applicationContext.environment.tempDocumentsBucketName;
+    Bucket = environment.tempDocumentsBucketName;
   }
 
   const maxRetries = 1;
 
   for (let i = 0; i <= maxRetries; i++) {
     try {
-      await applicationContext.getStorageClient().putObject({
+      await getStorageClient().putObject({
         Body: Buffer.from(body),
         Bucket,
         ContentType,
@@ -32,7 +32,7 @@ export const saveDocumentFromLambda = async ({
       break;
     } catch (err) {
       if (i >= maxRetries) {
-        applicationContext.logger.error(
+        getDawsonLogger().error(
           'An error occurred while attempting to save the document',
           { error: err },
         );

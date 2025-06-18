@@ -119,9 +119,9 @@
     "entityName": "DocketEntry",
     "docketEntryId": "06115c26-ecd8-425a-b58b-4d25649f1d96",
     "sk": "docket-entry|06115c26-ecd8-425a-b58b-4d25649f1d96",
-    "pk": "case|100-22",
+    "pk": "case|103-22",
     "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
-    "docketNumber": "100-22",
+    "docketNumber": "103-22",
     "addToCoversheet": false
   },
   {
@@ -164,11 +164,11 @@
     "freeText": "abcdef",
     "servedPartiesCode": "B",
     "signedAt": "2022-02-01T17:21:07.439Z",
-    "editState": "{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"richText\":\"<p>Testing</p>\",\"serviceStamp\":\"Served\",\"draftOrderState\":{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"serviceStamp\":\"Served\"},\"documentContentsId\":\"97248a8b-d393-446a-9907-d7743b5cc56c\"}",
-    "pk": "case|100-22",
+    "editState": "{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"103-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"richText\":\"<p>Testing</p>\",\"serviceStamp\":\"Served\",\"draftOrderState\":{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"103-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"serviceStamp\":\"Served\"},\"documentContentsId\":\"97248a8b-d393-446a-9907-d7743b5cc56c\"}",
+    "pk": "case|103-22",
     "servedAt": "2022-02-01T17:21:07.581Z",
     "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "100-22"
+    "docketNumber": "103-22"
   },
   {
     "isStricken": false,
@@ -194,8 +194,8 @@
     "eventCode": "P",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "pk": "case|100-22",
-    "docketNumber": "100-22"
+    "pk": "case|103-22",
+    "docketNumber": "103-22"
   },
   {
     "isStricken": false,
@@ -221,8 +221,8 @@
     "eventCode": "STIN",
     "processingStatus": "complete",
     "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "pk": "case|100-22",
-    "docketNumber": "100-22"
+    "pk": "case|103-22",
+    "docketNumber": "103-22"
   },
   {
     "date": null,
@@ -9040,6 +9040,28 @@
     "documentTitle": "Order",
     "docketNumber": "105-23",
     "addToCoversheet": false
+  },
+  {
+    "role": "irsPractitioner",
+    "serviceIndicator": "Electronic",
+    "barNumber": "RT6789",
+    "entityName": "IrsPractitioner",
+    "contact": {
+      "address3": "Under the stairs",
+      "address2": "Apartment 4",
+      "city": "Chicago",
+      "phone": "+1 (555) 555-5555",
+      "address1": "234 Main St",
+      "postalCode": "61234",
+      "state": "IL",
+      "countryType": "domestic"
+    },
+    "name": "Test IRS Practitioner",
+    "sk": "irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416",
+    "section": "irsPractitioner",
+    "pk": "case|101-20",
+    "userId": "5805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "irspractitioner@example.com"
   },
   {
     "stampData": {},
@@ -20923,54 +20945,6 @@
     "pk": "consolidated-cases-party-association"
   },
   {
-    "sk": "docket-entry-worksheet|15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
-    "judgeUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "pk": "docket-entry|15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
-    "entityName": "DocketEntryWorksheet",
-    "gsi1pk": "judge-case-worksheet|dabbad00-18d0-43ec-bafb-654e83405416",
-    "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5"
-  },
-  {
-    "sk": "docketNumberCounter-2011",
-    "id": 1,
-    "pk": "docketNumberCounter-2011"
-  },
-  {
-    "sk": "docketNumberCounter-2016",
-    "id": 1,
-    "pk": "docketNumberCounter-2016"
-  },
-  {
-    "sk": "docketNumberCounter-2019",
-    "id": 13,
-    "pk": "docketNumberCounter-2019"
-  },
-  {
-    "sk": "docketNumberCounter-2020",
-    "id": 29,
-    "pk": "docketNumberCounter-2020"
-  },
-  {
-    "sk": "docketNumberCounter-2021",
-    "id": 219,
-    "pk": "docketNumberCounter-2021"
-  },
-  {
-    "sk": "docketNumberCounter-2022",
-    "id": 2,
-    "pk": "docketNumberCounter-2022"
-  },
-  {
-    "sk": "docketNumberCounter-2023",
-    "id": 6,
-    "pk": "docketNumberCounter-2023"
-  },
-  {
-    "sk": "docketNumberCounter-2024",
-    "id": 1,
-    "pk": "docketNumberCounter-2024"
-  },
-  {
     "sk": "document-search-limiter",
     "id": 1,
     "pk": "document-search-limiter",
@@ -20985,54 +20959,6 @@
     "sk": "e-consent-fields-enabled-feature-flag",
     "current": true,
     "pk": "e-consent-fields-enabled-feature-flag"
-  },
-  {
-    "sk": "AnchorageAlaska-H-B-20230311000000-105-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "105-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|105-67"
-  },
-  {
-    "sk": "AnchorageAlaska-H-B-20230325000000-103-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "103-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|103-67"
-  },
-  {
-    "sk": "AnchorageAlaska-H-B-20230401000000-102-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "102-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|102-67"
-  },
-  {
-    "sk": "AnchorageAlaska-R-B-20230311000000-105-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "105-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|105-67"
-  },
-  {
-    "sk": "AnchorageAlaska-R-B-20230325000000-103-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "103-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|103-67"
-  },
-  {
-    "sk": "AnchorageAlaska-R-B-20230401000000-102-67",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "102-67",
-    "gsi1pk": "eligible-for-trial-case-catalog|102-67"
-  },
-  {
-    "sk": "WashingtonDistrictofColumbia-H-D-20210216115509-150-12",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "150-12",
-    "gsi1pk": "eligible-for-trial-case-catalog|150-12"
-  },
-  {
-    "sk": "WashingtonDistrictofColumbia-R-D-20210216115509-150-12",
-    "pk": "eligible-for-trial-case-catalog",
-    "docketNumber": "150-12",
-    "gsi1pk": "eligible-for-trial-case-catalog|150-12"
   },
   {
     "sk": "b2a1d128-784f-4dfb-a2a4-deb138b85542",
@@ -21332,7 +21258,6 @@
     },
     "section": "adc",
     "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
-    "isInitializeCase": false,
     "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
@@ -21360,7 +21285,6 @@
     "caseTitle": "Denise Gould",
     "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
@@ -21388,7 +21312,6 @@
     "caseTitle": "Samson Workman",
     "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
-    "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
@@ -21398,78 +21321,6 @@
     "docketNumber": "103-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:33:24.183Z"
-  },
-  {
-    "completedAt": "2019-08-16T17:30:10.526Z",
-    "docketNumberSuffix": "L",
-    "caseStatus": "General Docket - At Issue (Ready for Trial)",
-    "completedMessage": "Served on IRS",
-    "caseIsInProgress": false,
-    "document": {
-      "eventCode": "P",
-      "createdAt": "2019-08-16T17:29:10.132Z",
-      "processingStatus": "pending",
-      "numberOfPages": 1,
-      "documentType": "Petition",
-      "filingDate": "2019-08-16T17:29:10.132Z",
-      "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-      "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
-      "receivedAt": "2019-08-16T17:29:10.132Z",
-      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-    },
-    "gsi1pk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
-    "section": "irsSystem",
-    "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
-    "isInitializeCase": true,
-    "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
-    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "createdAt": "2019-08-16T17:29:10.133Z",
-    "assigneeName": "IRS Holding Queue",
-    "sk": "2019-08-16T17:29:10.133Z",
-    "pk": "section-outbox|petitions",
-    "docketNumber": "107-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedBy": "Test Petitionsclerk",
-    "updatedAt": "2019-08-16T17:29:10.133Z"
-  },
-  {
-    "completedAt": "2019-08-16T19:22:13.925Z",
-    "docketNumberSuffix": null,
-    "caseStatus": "Calendared",
-    "completedMessage": "Served on IRS",
-    "caseIsInProgress": false,
-    "document": {
-      "eventCode": "P",
-      "createdAt": "2019-08-16T19:21:46.146Z",
-      "processingStatus": "pending",
-      "numberOfPages": 1,
-      "documentType": "Petition",
-      "filingDate": "2019-08-16T19:21:46.146Z",
-      "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
-      "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
-      "receivedAt": "2019-08-16T19:21:46.146Z",
-      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-    },
-    "gsi1pk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
-    "section": "irsSystem",
-    "trialDate": "2019-11-27T05:00:00.000Z",
-    "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
-    "isInitializeCase": true,
-    "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
-    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "trialLocation": "Houston, Texas",
-    "createdAt": "2019-08-16T19:21:46.147Z",
-    "assigneeName": "IRS Holding Queue",
-    "sk": "2019-08-16T19:21:46.147Z",
-    "pk": "section-outbox|petitions",
-    "docketNumber": "108-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedBy": "Test Petitionsclerk",
-    "updatedAt": "2019-08-16T19:21:46.147Z"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -21498,7 +21349,6 @@
     "caseTitle": "Luksa Lucia",
     "section": "petitions",
     "workItemId": "2020d554-30c7-450a-ac01-738c1996c783",
-    "isInitializeCase": true,
     "assigneeId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk1",
     "completedByUserId": "4805d1ab-18d0-43ec-bafb-654e83405416",
@@ -22747,7 +22597,6 @@
     },
     "section": "adc",
     "workItemId": "5059e127-1796-45aa-96bc-351cd5705c66",
-    "isInitializeCase": false,
     "assigneeId": "6805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
@@ -22758,41 +22607,6 @@
     "docketNumber": "106-19",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-07-12T17:11:47.010Z"
-  },
-  {
-    "completedAt": "2019-08-16T17:30:10.526Z",
-    "docketNumberSuffix": "L",
-    "caseStatus": "General Docket - At Issue (Ready for Trial)",
-    "completedMessage": "Served on IRS",
-    "caseIsInProgress": false,
-    "document": {
-      "eventCode": "P",
-      "createdAt": "2019-08-16T17:29:10.132Z",
-      "processingStatus": "pending",
-      "numberOfPages": 1,
-      "documentType": "Petition",
-      "filingDate": "2019-08-16T17:29:10.132Z",
-      "filedBy": "Tatum Craig, Wayne Obrien, Partnership Representative",
-      "documentId": "5bd2f4eb-e08a-41e4-8d18-13b9ffd4514c",
-      "receivedAt": "2019-08-16T17:29:10.132Z",
-      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-    },
-    "gsi1pk": "work-item|63d7c79e-1313-4969-9bf5-9170af46997c",
-    "section": "irsSystem",
-    "workItemId": "63d7c79e-1313-4969-9bf5-9170af46997c",
-    "isInitializeCase": true,
-    "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
-    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "createdAt": "2019-08-16T17:29:10.133Z",
-    "assigneeName": "IRS Holding Queue",
-    "sk": "2019-08-16T17:29:10.133Z",
-    "pk": "user-outbox-3805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "107-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedBy": "Test Petitionsclerk",
-    "updatedAt": "2019-08-16T17:29:10.133Z"
   },
   {
     "completedAt": "2019-07-12T17:11:27.244Z",
@@ -22854,7 +22668,6 @@
     "caseTitle": "Denise Gould",
     "section": "colvinsChambers",
     "workItemId": "368e5d9a-6a9d-4e27-bd88-8521741f0639",
-    "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Docketclerk",
     "sentBySection": "docket",
@@ -22925,7 +22738,6 @@
         "sentBySection": "docket",
         "createdAt": "2020-04-14T03:01:49.855Z",
         "assigneeName": "Test Docketclerk1",
-        "hideFromPendingMessages": true,
         "docketNumber": "104-20",
         "sentByUserId": "2805d1ab-18d0-43ec-bafb-654e83405416",
         "updatedAt": "2020-04-14T03:01:49.855Z"
@@ -22959,7 +22771,6 @@
     "sentBySection": "docket",
     "createdAt": "2020-04-14T03:01:49.855Z",
     "assigneeName": "Test Docketclerk1",
-    "hideFromPendingMessages": true,
     "sk": "2020-04-14T03:01:49.855Z",
     "pk": "user-outbox|2805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "104-20",
@@ -22984,7 +22795,6 @@
     "caseTitle": "Samson Workman",
     "section": "colvinsChambers",
     "workItemId": "8686ddef-c74d-4d26-8748-6b22914c7687",
-    "isInitializeCase": false,
     "assigneeId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "sentBy": "Test Petitionsclerk",
     "sentBySection": "petitions",
@@ -22994,43 +22804,6 @@
     "docketNumber": "103-19",
     "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "updatedAt": "2019-08-08T14:33:24.183Z"
-  },
-  {
-    "completedAt": "2019-08-16T19:22:13.925Z",
-    "docketNumberSuffix": null,
-    "caseStatus": "Calendared",
-    "completedMessage": "Served on IRS",
-    "caseIsInProgress": false,
-    "document": {
-      "eventCode": "P",
-      "createdAt": "2019-08-16T19:21:46.146Z",
-      "processingStatus": "pending",
-      "numberOfPages": 1,
-      "documentType": "Petition",
-      "filingDate": "2019-08-16T19:21:46.146Z",
-      "filedBy": "Garrett Carpenter, Leslie Bullock, Trustee",
-      "documentId": "3c777b95-f7fa-4826-9a69-9e2c0ab7fa9c",
-      "receivedAt": "2019-08-16T19:21:46.146Z",
-      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-    },
-    "gsi1pk": "work-item|ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
-    "section": "irsSystem",
-    "trialDate": "2019-11-27T05:00:00.000Z",
-    "workItemId": "ba1c4ce7-6def-4eb8-9ac7-be844ba3a380",
-    "isInitializeCase": true,
-    "assigneeId": "63784910-c1af-4476-8988-a02f92da8e09",
-    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "sentBy": "Test Petitionsclerk",
-    "sentBySection": "petitions",
-    "trialLocation": "Houston, Texas",
-    "createdAt": "2019-08-16T19:21:46.147Z",
-    "assigneeName": "IRS Holding Queue",
-    "sk": "2019-08-16T19:21:46.147Z",
-    "pk": "user-outbox|3805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "108-19",
-    "sentByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedBy": "Test Petitionsclerk",
-    "updatedAt": "2019-08-16T19:21:46.147Z"
   },
   {
     "role": "irsSuperuser",
@@ -23620,10 +23393,10 @@
     "email": "irspractitioner4@example.com"
   },
   {
-    "sk": "case|100-22",
+    "sk": "case|103-22",
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "100-22",
-    "gsi1pk": "user-case|100-22"
+    "docketNumber": "103-22",
+    "gsi1pk": "user-case|103-22"
   },
   {
     "sk": "case|101-19",

@@ -1,9 +1,11 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
-  CASE_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
 } from '../entities/EntityConstants';
@@ -21,16 +23,15 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCase as updateCaseMock } from '@web-api/persistence/postgres/cases/updateCase';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('updateCaseDetailsInteractor', () => {
   let mockCase, generalDocketReadyForTrialCase;
   let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCase = jest.mocked(updateCaseMock);
-  updateCase.mockImplementation(({ caseToUpdate }) =>
-    Promise.resolve(caseToUpdate),
-  );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
   beforeAll(() => {
     applicationContext
@@ -126,7 +127,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.petitionPaymentWaivedDate).toBe(null);
     expect(result.petitionPaymentMethod).toBe(null);
     expect(result.petitionPaymentDate).toBe(null);
@@ -148,7 +149,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.petitionPaymentWaivedDate).toBe(null);
     expect(result.petitionPaymentDate).toEqual('2019-11-30T09:10:11.000Z');
     expect(result.petitionPaymentMethod).toEqual('check');
@@ -169,7 +170,7 @@ describe('updateCaseDetailsInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(result.petitionPaymentDate).toBe(null);
     expect(result.petitionPaymentMethod).toBe(null);
     expect(result.petitionPaymentStatus).toEqual(PAYMENT_STATUS.WAIVED);
@@ -254,183 +255,6 @@ describe('updateCaseDetailsInteractor', () => {
     expect(result).toMatchObject({
       docketEntries: MOCK_CASE.docketEntries,
     });
-  });
-
-  it('should call createCaseTrialSortMappingRecords when the updated case is ready for trial and preferred trial city has been changed', async () => {
-    getCaseByDocketNumber.mockResolvedValue(generalDocketReadyForTrialCase);
-
-    const result = await updateCaseDetailsInteractor(
-      applicationContext,
-      {
-        caseDetails: {
-          ...generalDocketReadyForTrialCase,
-          preferredTrialCity: 'Cheyenne, Wyoming',
-        },
-        docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
-    expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
-  });
-
-  it('should call createCaseTrialSortMappingRecords when the updated case is high priority and preferred trial city has been changed', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...generalDocketReadyForTrialCase,
-      highPriority: true,
-      highPriorityReason: 'roll out',
-    });
-
-    const result = await updateCaseDetailsInteractor(
-      applicationContext,
-      {
-        caseDetails: {
-          ...generalDocketReadyForTrialCase,
-          preferredTrialCity: 'Cheyenne, Wyoming',
-          status: CASE_STATUS_TYPES.rule155,
-        },
-        docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-    expect(updateCase).toHaveBeenCalled();
-    expect(result.preferredTrialCity).toBe('Cheyenne, Wyoming');
-  });
-
-  it('should call createCaseTrialSortMappingRecords when the updated case is high priority, automaticBlocked, and preferred trial city has been changed', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...generalDocketReadyForTrialCase,
-      automaticBlocked: true,
-      automaticBlockedDate: '2019-11-30T09:10:11.000Z',
-      automaticBlockedReason: 'Pending Item',
-      highPriority: true,
-      highPriorityReason: 'roll out',
-    });
-
-    await updateCaseDetailsInteractor(
-      applicationContext,
-      {
-        caseDetails: {
-          ...generalDocketReadyForTrialCase,
-          highPriority: true,
-          preferredTrialCity: 'Cheyenne, Wyoming',
-          status: CASE_STATUS_TYPES.rule155,
-        },
-        docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-  });
-
-  it('should call createCaseTrialSortMappingRecords when the case type has been changed', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...generalDocketReadyForTrialCase,
-      caseType: CASE_TYPES_MAP.cdp,
-    });
-
-    await updateCaseDetailsInteractor(
-      applicationContext,
-      {
-        caseDetails: {
-          ...generalDocketReadyForTrialCase,
-          caseType: CASE_TYPES_MAP.deficiency,
-        },
-        docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-  });
-
-  it('should call createCaseTrialSortMappingRecords when the case procedure type has been changed', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...generalDocketReadyForTrialCase,
-      procedureType: 'Regular',
-    });
-
-    await updateCaseDetailsInteractor(
-      applicationContext,
-      {
-        caseDetails: {
-          ...generalDocketReadyForTrialCase,
-          procedureType: 'Small',
-        },
-        docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-  });
-
-  it('should call createCaseTrialSortMappingRecords when the case procedure type is changed and old case did not need trial sort mapping records because no trial location was selected', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...generalDocketReadyForTrialCase,
-      preferredTrialCity: undefined,
-      procedureType: 'Regular',
-    });
-
-    await updateCaseDetailsInteractor(
-      applicationContext,
-      {
-        caseDetails: {
-          ...generalDocketReadyForTrialCase,
-          procedureType: 'Small',
-        },
-        docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).toHaveBeenCalled();
-  });
-
-  it('should NOT call createCaseTrialSortMappingRecords when there are no changes that would alter the trial sort tags', async () => {
-    getCaseByDocketNumber.mockResolvedValue({
-      ...generalDocketReadyForTrialCase,
-      procedureType: 'Regular',
-    });
-
-    await updateCaseDetailsInteractor(
-      applicationContext,
-      {
-        caseDetails: {
-          ...generalDocketReadyForTrialCase,
-        },
-        docketNumber: generalDocketReadyForTrialCase.docketNumber,
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .createCaseTrialSortMappingRecords,
-    ).not.toHaveBeenCalled();
   });
 
   it('does not allow fields that do not exist on the editableFields list to be updated on the case', async () => {

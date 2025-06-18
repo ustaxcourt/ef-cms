@@ -7,9 +7,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { Statistic } from '@shared/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistics';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 export const addDeficiencyStatistic = async (
   applicationContext: ServerApplicationContext,
@@ -66,10 +66,7 @@ export const addDeficiencyStatistic = async (
 
   const validRawCase = newCase.validate().toRawObject();
 
-  await createCaseStatistics({
-    docketNumber: newCase.docketNumber,
-    statistics: [statisticEntity],
-  });
+  await upsertCases([validRawCase]);
 
   return validRawCase;
 };

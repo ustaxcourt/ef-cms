@@ -1,11 +1,10 @@
-import { Case, CaseStatusChange } from '@shared/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   CreatedCaseType,
   INITIAL_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { PaperPetition } from '@shared/business/entities/cases/PaperPetition';
-import { Petitioner } from '@shared/business/entities/contacts/Petitioner';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -18,8 +17,6 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
-import { createPetitionersOnCase } from '@web-api/persistence/postgres/cases/parties/createPetitionersOnCase';
-import { createCaseStatistics } from '@web-api/persistence/postgres/cases/statistics/createCaseStatistics';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
@@ -28,8 +25,6 @@ import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
-import { upsertCaseStatusUpdates } from '@web-api/persistence/postgres/cases/upsertCaseStatusUpdates';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -42,31 +37,20 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
 }): {
   workItem: WorkItem;
 } => {
-  const workItemEntity = new WorkItem(
-    {
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      associatedJudge: caseToAdd.associatedJudge,
-      associatedJudgeId: caseToAdd.associatedJudgeId,
-      caseIsInProgress: true,
-      caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
-      docketNumber: caseToAdd.docketNumber,
-      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
-      isInitializeCase: true,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-      trialDate: caseToAdd.trialDate,
-      trialLocation: caseToAdd.trialLocation,
+  const workItemEntity = new WorkItem({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    docketEntry: {
+      ...docketEntryEntity.toRawObject(),
+      createdAt: docketEntryEntity.createdAt,
     },
-    { caseEntity: caseToAdd },
-  );
+    docketNumber: caseToAdd.docketNumber,
+    inProgress: true,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
 
   docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);
@@ -327,12 +311,13 @@ export const createCaseFromPaperInteractor = async (
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    retries: 10,
+    retries: 25,
     waitTime: 500,
   });
 
   let caseToAdd: Case;
   let workItem: WorkItem;
+
   try {
     ({ caseToAdd, workItem } = await createCaseMetadata(
       applicationContext,
@@ -356,25 +341,9 @@ export const createCaseFromPaperInteractor = async (
   }
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 
-  const caseAssociationUpdates = [
-    createPetitionersOnCase({
-      docketNumber: caseToAdd.docketNumber,
-      petitioners: caseToAdd.petitioners.map(p => new Petitioner(p)),
-    }),
-    upsertCaseStatusUpdates({
-      docketNumber: caseToAdd.docketNumber,
-      statusUpdates: caseToAdd.caseStatusHistory as CaseStatusChange[],
-    }),
-    upsertWorkItems({
-      workItems: [workItem.validate().toRawObject()],
-    }),
-    createCaseStatistics({
-      docketNumber: caseToAdd.docketNumber,
-      statistics: caseToAdd.statistics || [],
-    }),
-  ];
-
-  await settlePromises(caseAssociationUpdates);
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
 
   return {
     caseDetail: new Case(caseToAdd, { authorizedUser }).toRawObject(),

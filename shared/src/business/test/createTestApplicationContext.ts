@@ -80,10 +80,6 @@ import { getConfigurationItemValue } from '@web-api/persistence/dynamo/deployTab
 import { getConstants } from '@web-client/getConstants';
 import { getCropBox } from '@shared/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
-import {
-  getDocQcSectionForUser,
-  getWorkQueueFilters,
-} from '@shared/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFakeFile, testPdfDoc } from './getFakeFile';
@@ -118,7 +114,7 @@ import { validatePenaltiesInteractor } from '@shared/business/useCases/validateP
 import { verifyCaseForUser } from '@web-api/persistence/dynamo/cases/verifyCaseForUser';
 import path from 'path';
 import pug from 'pug';
-import sass from 'sass';
+import * as sass from 'sass';
 
 const scannerResourcePath = path.join(__dirname, '../../../shared/test-assets');
 
@@ -248,9 +244,6 @@ export const createTestApplicationContext = () => {
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
     getCropBox: jest.fn().mockImplementation(getCropBox),
     getDescriptionDisplay: jest.fn().mockImplementation(getDescriptionDisplay),
-    getDocQcSectionForUser: jest
-      .fn()
-      .mockImplementation(getDocQcSectionForUser),
     getDocketEntriesByFilter: jest
       .fn()
       .mockImplementation(getDocketEntriesByFilter),
@@ -293,7 +286,6 @@ export const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(getStampBoxCoordinates),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
-    getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isDateWithinGivenInterval: jest
       .fn()
       .mockImplementation(DateHandler.isDateWithinGivenInterval),
@@ -450,10 +442,8 @@ export const createTestApplicationContext = () => {
     addCaseToHearing: jest.fn(),
     bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
-    createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     createLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
-    deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteDocumentFile: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
@@ -501,7 +491,6 @@ export const createTestApplicationContext = () => {
     saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
-    setPriorityOnAllWorkItems: jest.fn(),
     setTrialSessionJobStatusForCase: jest.fn(),
     setTrialSessionProcessingStatus: jest.fn(),
     updateCaseHearing: jest.fn(),
@@ -519,7 +508,9 @@ export const createTestApplicationContext = () => {
   };
 
   const mockGetMessagingClient = {
-    send: jest.fn().mockReturnValue({ promise: () => {} }),
+    send: jest.fn().mockReturnValue({
+      promise: () => {},
+    }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -611,9 +602,6 @@ export const createTestApplicationContext = () => {
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockResolvedValue(pdfLib),
     getPersistenceGateway: mockGetPersistenceGateway,
-    getPersistencePrivateKeys: jest
-      .fn()
-      .mockReturnValue(['pk', 'sk', 'gsi1pk']),
     getPublicSiteUrl,
     getPug: jest.fn().mockReturnValue(pug),
     getReduceImageBlob: jest.fn().mockReturnValue(mockGetReduceImageBlobValue),
@@ -628,7 +616,9 @@ export const createTestApplicationContext = () => {
     getUserGateway: appContextProxy({}),
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
-      initialize: jest.fn().mockReturnValue({ promise: () => {} }),
+      initialize: jest.fn().mockReturnValue({
+        promise: () => {},
+      }),
     }),
     isFeatureEnabled: jest.fn(),
     logger: {

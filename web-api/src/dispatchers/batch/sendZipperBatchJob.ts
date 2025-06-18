@@ -22,7 +22,7 @@ export const sendZipperBatchJob = async (
 
   const { currentColor, efcmsDomain, region, stage } =
     applicationContext.environment;
-  const awsRegion = region as 'us-east-1' | 'us-west-1';
+  const awsRegion = region as 'us-east-1';
   const params: SubmitJobCommandInput = {
     containerOverrides: {
       environment: [

@@ -1,57 +1,52 @@
-import { createApplicationContext } from '../../applicationContext';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
+import { getUniqueId } from '@shared/sharedAppContext';
+import { sleep } from '@shared/tools/helpers';
+import {
+  generatePdfFromHtmlHelper,
+  GeneratePdfRequest,
+} from '@web-api/business/useCaseHelper/generatePdfFromHtmlHelper';
+import { environment } from '@web-api/environment';
+import { getStorageClient } from '@web-api/persistence/s3/getStorageClient';
+import { saveDocumentFromLambda } from '@web-api/persistence/s3/saveDocumentFromLambda';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export type PdfGenerationResult = {
   tempId: string;
 };
 
-export const handler = async event => {
-  const applicationContext = createApplicationContext({});
+export const handler = async (event: GeneratePdfRequest) => {
+  for (let index = 0; index < 3; index++) {
+    try {
+      const browser = await getChromiumBrowser();
 
-  const browser = await applicationContext.getChromiumBrowser();
+      const results = await generatePdfFromHtmlHelper(event, browser);
 
-  const results = await applicationContext
-    .getUseCaseHelpers()
-    .generatePdfFromHtmlHelper(applicationContext, event, browser);
+      const pages = await browser.pages();
+      await Promise.all(pages.map(p => p.close()));
 
-  await browser.close();
+      const tempId = getUniqueId();
 
-  const tempId = applicationContext.getUniqueId();
+      await saveDocumentFromLambda({
+        document: results,
+        key: tempId,
+        useTempBucket: true,
+      });
 
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: results,
-    key: tempId,
-    useTempBucket: true,
+      return { tempId };
+    } catch (e) {
+      getDawsonLogger().error(`retrying to generate pdf attempt #${index}`, e);
+      await sleep(50);
+    }
+  }
+
+  const failedEventKey = `failed_pdf_event_${getUniqueId()}.json`;
+  const errorMessage = `Error generating pdf. Storing failed pdf event in ${environment.tempDocumentsBucketName} at ${failedEventKey}`;
+  getDawsonLogger().error(errorMessage);
+  await getStorageClient().putObject({
+    Body: JSON.stringify(event),
+    Key: failedEventKey,
+    Bucket: environment.tempDocumentsBucketName,
+    ContentType: 'application/json',
   });
-
-  return { tempId };
-};
-
-export const changeOfAddressHandler = async event => {
-  const { Records } = event;
-  const { body } = Records[0];
-  const eventBody = JSON.parse(body);
-
-  const applicationContext = createApplicationContext();
-  getLogger().addUser({ user: eventBody.requestUser });
-
-  applicationContext.logger.info(
-    `processing job "change-of-address-job|${eventBody.jobId}", task for case ${eventBody.docketNumber}`,
-  );
-
-  await applicationContext.getUseCaseHelpers().generateChangeOfAddressHelper({
-    applicationContext,
-    authorizedUser: eventBody.requestUser,
-    bypassDocketEntry: eventBody.bypassDocketEntry,
-    contactInfo: eventBody.contactInfo,
-    docketNumber: eventBody.docketNumber,
-    firmName: eventBody.firmName,
-    jobId: eventBody.jobId,
-    requestUserId: eventBody.requestUserId,
-    updatedEmail: eventBody.updatedEmail,
-    updatedName: eventBody.updatedName,
-    user: eventBody.user,
-    websocketMessagePrefix: eventBody.websocketMessagePrefix,
-  });
+  throw new Error(errorMessage);
 };
