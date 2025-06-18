@@ -20,7 +20,6 @@ import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSession
 import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteDocketEntry } from './persistence/dynamo/documents/deleteDocketEntry';
-import { deleteDocketEntryWorksheetRecord } from '@web-api/persistence/dynamo/pendingMotion/deleteDocketEntryWorksheetRecord';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
 import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
@@ -47,7 +46,6 @@ import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getC
 import { getDeployTableStatus } from './persistence/dynamo/getDeployTableStatus';
 import { getDispatchNotification } from './persistence/dynamo/notifications/getDispatchNotification';
 import { getDocketEntriesServedWithinTimeframe } from './persistence/elasticsearch/getDocketEntriesServedWithinTimeframe';
-import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/dynamo/docketEntryWorksheet/getDocketEntryWorksheetsByDocketEntryIds';
 import { getDocument } from './persistence/s3/getDocument';
 import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFromSQSMessage';
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
@@ -97,7 +95,6 @@ import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCase
 import { updateDocketEntry } from './persistence/dynamo/documents/updateDocketEntry';
 import { updateDocketEntryPendingServiceStatus } from './persistence/dynamo/documents/updateDocketEntryPendingServiceStatus';
 import { updateDocketEntryProcessingStatus } from './persistence/dynamo/documents/updateDocketEntryProcessingStatus';
-import { updateDocketEntryWorksheet } from '@web-api/persistence/dynamo/pendingMotion/updateDocketEntryWorksheet';
 import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
@@ -179,7 +176,6 @@ const gatewayMethods = {
     updateDocketEntry,
     updateDocketEntryPendingServiceStatus,
     updateDocketEntryProcessingStatus,
-    updateDocketEntryWorksheet,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
     updatePractitionerUser,
@@ -195,7 +191,6 @@ const gatewayMethods = {
   createLock,
   decrementJobCounter,
   deleteDocketEntry,
-  deleteDocketEntryWorksheetRecord,
   deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
@@ -218,7 +213,6 @@ const gatewayMethods = {
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
-  getDocketEntryWorksheetsByDocketEntryIds,
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
