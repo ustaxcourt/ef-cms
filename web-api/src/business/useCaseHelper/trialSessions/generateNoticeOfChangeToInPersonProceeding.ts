@@ -8,13 +8,27 @@ import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber'
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { NoticeOfChangeToInPersonTrialInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding';
 
 export const generateNoticeOfChangeToInPersonProceeding = async (
   applicationContext: ServerApplicationContext,
   {
     docketNumber,
     trialSessionInformation,
-  }: { docketNumber: string; trialSessionInformation: any },
+  }: {
+    docketNumber: string;
+    trialSessionInformation: Omit<
+      NoticeOfChangeToInPersonTrialInfo,
+      | 'formattedJudge'
+      | 'formattedStartDate'
+      | 'formattedStartTime'
+      | 'joinPhoneNumber'
+    > & {
+      startDate: string;
+      startTime: string;
+      judgeName: string;
+    };
+  },
 ): Promise<Uint8Array> => {
   const formattedStartDate = formatDateString(
     trialSessionInformation.startDate,
@@ -32,7 +46,7 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
     judgeUserName: trialSessionInformation.judgeName,
   });
 
-  const trialInfo = {
+  const trialInfo: NoticeOfChangeToInPersonTrialInfo = {
     ...trialSessionInformation,
     chambersPhoneNumber: formatPhoneNumber(
       trialSessionInformation.chambersPhoneNumber,
@@ -40,7 +54,6 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
     formattedJudge: judgeWithTitle,
     formattedStartDate,
     formattedStartTime,
-    joinPhoneNumber: formatPhoneNumber(trialSessionInformation.joinPhoneNumber),
   };
 
   const caseDetail = await getCaseByDocketNumber({
