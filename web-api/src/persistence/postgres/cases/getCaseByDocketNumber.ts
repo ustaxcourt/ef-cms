@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
+import { getDocketEntriesByDocketNumber } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -23,7 +24,7 @@ export const getCaseByDocketNumber = async ({
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
   // These case items are no longer in dynamoDB
-  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case'];
+  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case', 'docket-entry'];
 
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({
     docketNumber,
@@ -32,24 +33,26 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const [caseCorrespondences, workItems, caseItemsRaw] = await Promise.all([
-    getCaseCorrespondenceByDocketNumber({
-      docketNumber,
-    }),
-    getWorkItemsByDocketNumber({
-      docketNumber,
-    }),
-    queryFull({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${docketNumber}`,
-      },
-      KeyConditionExpression: '#pk = :pk',
-      applicationContext,
-    }),
-  ]);
+  const [caseCorrespondences, workItems, docketEntries, caseItemsRaw] =
+    await Promise.all([
+      getCaseCorrespondenceByDocketNumber({
+        docketNumber,
+      }),
+      getWorkItemsByDocketNumber({
+        docketNumber,
+      }),
+      getDocketEntriesByDocketNumber({ docketNumber }),
+      queryFull({
+        ExpressionAttributeNames: {
+          '#pk': 'pk',
+        },
+        ExpressionAttributeValues: {
+          ':pk': `case|${docketNumber}`,
+        },
+        KeyConditionExpression: '#pk = :pk',
+        applicationContext,
+      }),
+    ]);
 
   const caseItems = caseItemsRaw.filter(
     item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
@@ -88,6 +91,11 @@ export const getCaseByDocketNumber = async ({
         ...workItem,
         pk: `case|${docketNumber}`,
         sk: `work-item|${workItem.workItemId}`,
+      })),
+      ...docketEntries.map(docketEntry => ({
+        ...docketEntry,
+        pk: `case|${docketNumber}`,
+        sk: `docket-entry|${docketEntry.docketEntryId}`,
       })),
     ]),
     consolidatedCases: consolidatedCases.map(
