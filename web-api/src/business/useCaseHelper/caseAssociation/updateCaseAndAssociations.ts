@@ -15,6 +15,7 @@ import { isEmpty, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import diff from 'diff-arrays-of-objects';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
@@ -27,12 +28,10 @@ import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
  * @returns {Array<function>} the persistence functions required to complete this action
  */
 const updateCaseDocketEntries = ({
-  applicationContext,
   authorizedUser,
   caseToUpdate,
   oldCase,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
   oldCase: any;
@@ -63,17 +62,7 @@ const updateCaseDocketEntries = ({
     { authorizedUser, petitioners: caseToUpdate.petitioners },
   );
 
-  return validDocketEntries.map(
-    doc =>
-      function updateCaseDocketEntries_cb() {
-        return applicationContext.getPersistenceGateway().updateDocketEntry({
-          applicationContext,
-          docketEntryId: doc.docketEntryId,
-          docketNumber: caseToUpdate.docketNumber,
-          document: doc,
-        });
-      },
-  );
+  return [() => upsertDocketEntries(validDocketEntries)];
 };
 
 const updateCaseMessages = async ({

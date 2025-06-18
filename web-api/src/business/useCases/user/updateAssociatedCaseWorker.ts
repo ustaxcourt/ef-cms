@@ -8,18 +8,19 @@ import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 export const updateAssociatedCaseWorker = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, user }: { docketNumber: string; user: RawUser },
   authorizedUser: AuthUser,
 ): Promise<void> => {
-  await applicationContext.getUseCaseHelpers().acquireLock({
+  const removeLockFunction = await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [`case|${docketNumber}`],
     retries: 10,
-    ttl: 900,
     waitTime: 5000,
   });
 
@@ -44,10 +45,7 @@ export const updateAssociatedCaseWorker = async (
     });
   }
 
-  await applicationContext.getPersistenceGateway().removeLock({
-    applicationContext,
-    identifiers: [`case|${docketNumber}`],
-  });
+  await removeLockFunction();
 };
 
 export const updatePetitionerCase = async ({
@@ -182,21 +180,18 @@ const updateCaseEntityAndGenerateChange = async ({
   );
 
   if (caseEntity.shouldGenerateNoticesForCase()) {
-    const { changeOfAddressDocketEntry } = await applicationContext
-      .getUseCaseHelpers()
-      .generateAndServeDocketEntry({
-        applicationContext,
-        authorizedUser,
-        caseEntity,
-        docketMeta: undefined,
-        documentType,
-        newData,
-        oldData,
-        privatePractitionersRepresentingContact,
-        servedParties,
-        user,
-      });
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+    await generateAndServeDocketEntry({
+      applicationContext,
+      authorizedUser,
+      caseEntity,
+      docketMeta: undefined,
+      documentType,
+      newData,
+      oldData,
+      privatePractitionersRepresentingContact,
+      servedParties,
+      user,
+    });
   }
 
   return caseEntity.validate();

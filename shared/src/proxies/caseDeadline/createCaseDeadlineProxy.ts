@@ -1,4 +1,4 @@
-import { post } from '../requests';
+import { asyncSyncHandler, post } from '../requests';
 
 /**
  * createCaseDeadlineInteractorProxy
@@ -12,9 +12,14 @@ export const createCaseDeadlineInteractor = (
   applicationContext,
   { caseDeadline },
 ) => {
-  return post({
+  return asyncSyncHandler(
     applicationContext,
-    body: { caseDeadline },
-    endpoint: `/case-deadlines/${caseDeadline.docketNumber}`,
-  });
+    async asyncSyncId =>
+      await post({
+        applicationContext,
+        asyncSyncId,
+        body: { caseDeadline },
+        endpoint: `/async/case-deadlines/${caseDeadline.docketNumber}`,
+      }),
+  );
 };
