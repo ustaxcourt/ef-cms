@@ -156,7 +156,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"maintenance-mode"},"sk":{"S":"maintenance-mode"},"current":{"BOOL": false}}'
     ```
 
-17. Delete the destination DynamoDB tables from us-east-1 and us-west-1. 
+17. Delete the destination DynamoDB tables from us-east-1. 
 
 18. Delete the destination ElasticSearch cluster from us-east-1.
 

@@ -20,7 +20,6 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import {
   updateDeadlinesForCasesToCalendar,
-  updateWorkItemsForCasesToCalendar,
 } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 
@@ -177,10 +176,6 @@ export const setTrialSessionCalendarInteractor = async (
         // We may need to update related work items and deadlines for newly calendared cases depending on the trial session judge.
         // TODO: These updates should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference these columns on dwCase.
         updateDeadlinesForCasesToCalendar({
-          casesToCalendar: caseEntitiesToCalendar,
-          trialSessionEntity,
-        }),
-        updateWorkItemsForCasesToCalendar({
           casesToCalendar: caseEntitiesToCalendar,
           trialSessionEntity,
         }),

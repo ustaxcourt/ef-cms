@@ -110,31 +110,21 @@ export const addPaperFiling = async (
       docketEntryEntity.filedBy = filedByFromLeadCase;
     }
 
-    const workItem = new WorkItem(
-      {
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        associatedJudge: caseEntity.associatedJudge,
-        associatedJudgeId: caseEntity.associatedJudgeId,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        inProgress: isSavingForLater,
-        isRead: user.role !== ROLES.privatePractitioner,
-        section: user.section,
-        sentBy: user.name,
-        sentBySection: user.section,
-        sentByUserId: user.userId,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
+    const workItem = new WorkItem({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      docketEntry: {
+        ...docketEntryEntity.toRawObject(),
+        createdAt: docketEntryEntity.createdAt,
       },
-      { caseEntity },
-    );
+      docketNumber: caseEntity.docketNumber,
+      inProgress: isSavingForLater,
+      isRead: user.role !== ROLES.privatePractitioner,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
 
     if (isReadyForService) {
       workItem.setAsCompleted({

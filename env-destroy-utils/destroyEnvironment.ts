@@ -16,12 +16,6 @@ const environmentEast = {
   region: 'us-east-1',
 };
 
-const environmentWest = {
-  apiVersion: 'latest',
-  name: environmentName,
-  region: 'us-west-1',
-};
-
 const pathToTerraformTemplates = process.cwd() + '/web-api/terraform/template';
 
 const directoriesRequiringIndexFiles = source => {
@@ -44,21 +38,18 @@ const addMissingIndexFiles = () => {
 
   try {
     await deleteCustomDomains({ environment: environmentEast });
-    await deleteCustomDomains({ environment: environmentWest });
   } catch (e) {
     console.error('Error while deleting custom domains: ', e);
   }
 
   try {
     await clearS3Buckets({ environment: environmentEast });
-    await clearS3Buckets({ environment: environmentWest });
   } catch (e) {
     console.error('Error while clearing s3 bucket: ', e);
   }
 
   try {
     await deleteCloudWatchLogs({ environment: environmentEast });
-    await deleteCloudWatchLogs({ environment: environmentWest });
   } catch (e) {
     console.error('Error while deleting cloudwatch logs: ', e);
   }

@@ -1,8 +1,8 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
-import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { ConsolidatedCaseIcon } from '@web-client/ustc-ui/Icon/ConsolidatedCaseIcon';
 
 export const IndividualWorkQueueOutbox = connect(
   {
@@ -39,23 +39,15 @@ export const IndividualWorkQueueOutbox = connect(
             <tbody key={item.workItemId}>
               <tr data-testid={`work-item-outbox-row-${item.docketNumber}`}>
                 <td className="consolidated-case-column">
-                  {item.inConsolidatedGroup && (
-                    <span
-                      className="fa-layers fa-fw"
-                      title={item.consolidatedIconTooltipText}
-                    >
-                      <Icon
-                        aria-label={item.consolidatedIconTooltipText}
-                        className="fa-icon-blue"
-                        icon="copy"
-                      />
-                      {item.inLeadCase && (
-                        <span className="fa-inverse lead-case-icon-text">
-                          L
-                        </span>
-                      )}
-                    </span>
-                  )}
+                  <ConsolidatedCaseIcon
+                    consolidatedIconTooltipText={
+                      item.consolidatedIconTooltipText
+                    }
+                    inConsolidatedGroup={item.inConsolidatedGroup}
+                    showLeadCaseIcon={
+                      item.leadDocketNumber === item.docketNumber
+                    }
+                  />
                 </td>
                 <td
                   className="message-queue-row small"
@@ -86,11 +78,6 @@ export const IndividualWorkQueueOutbox = connect(
                 {!workQueueHelper.hideCaseStatusColumn && (
                   <td className="message-queue-row">
                     {item.formattedCaseStatus}
-                  </td>
-                )}
-                {workQueueHelper.showAssignedToColumn && (
-                  <td className="to message-queue-row">
-                    {item.currentMessage.to}
                   </td>
                 )}
                 <td className="message-queue-row">

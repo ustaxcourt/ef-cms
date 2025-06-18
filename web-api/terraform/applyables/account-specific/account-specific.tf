@@ -18,7 +18,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.97.0"
+      version = "~> 5.99.1"
     }
     opensearch = {
       source  = "opensearch-project/opensearch"
@@ -29,16 +29,6 @@ terraform {
 
 module "health-alarms-east" {
   source = "../../modules/health-alarms"
-  providers = {
-    aws = aws.us-east-1
-  }
-}
-
-module "health-alarms-west" {
-  source = "../../modules/health-alarms"
-  providers = {
-    aws = aws.us-west-1
-  }
 }
 
 module "api-gateway-global-logging-permissions" {
@@ -60,10 +50,6 @@ module "kibana" {
   log_group_environments           = var.log_group_environments
   number_of_days_to_keep_info_logs = var.number_of_days_to_keep_info_logs
   log_snapshot_bucket_name         = var.log_snapshot_bucket_name
-  providers = {
-    aws           = aws.us-east-1
-    aws.us-west-1 = aws.us-west-1
-  }
 }
 
 module "dawson-developer-permissions" {

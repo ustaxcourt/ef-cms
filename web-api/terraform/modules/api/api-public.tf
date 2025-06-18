@@ -99,7 +99,7 @@ resource "terraform_data" "api_public_lambda_last_modified" {
 }
 
 resource "aws_lambda_permission" "apigw_public_lambda" {
-  statement_id  = "AllowExecutionFromAPIGateway"
+  statement_id  = "AllowExecutionFromAPIGateway_${var.environment}_${var.current_color}"
   action        = "lambda:InvokeFunction"
   function_name = module.api_public_lambda.function_name
   principal     = "apigateway.amazonaws.com"
@@ -250,17 +250,11 @@ resource "aws_route53_record" "api_public_route53_regional_record" {
   name            = aws_api_gateway_domain_name.api_public_custom.domain_name
   type            = "A"
   zone_id         = var.zone_id
-  set_identifier  = "api_public_${var.region}_${var.current_color}"
-  health_check_id = var.health_check_id
 
   alias {
     name                   = aws_api_gateway_domain_name.api_public_custom.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.api_public_custom.regional_zone_id
-    evaluate_target_health = true
-  }
-
-  weighted_routing_policy {
-    weight = var.route_53_regional_weight
+    evaluate_target_health = false
   }
 
   lifecycle {

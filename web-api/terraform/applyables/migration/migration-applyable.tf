@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 terraform {
@@ -9,14 +9,14 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.97.0"
+      version = "~> 5.99.1"
     }
   }
 }
 
 module "migration" {
   source               = "../../modules/migration"
-  aws_region           = var.aws_region
+  aws_region           = "us-east-1"
   environment          = var.environment
   stream_arn           = var.stream_arn
   destination_table    = var.destination_table
