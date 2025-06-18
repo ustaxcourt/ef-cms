@@ -435,7 +435,6 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
       ],
       "Resource": [
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/batch_instance_profile_*",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:instance-profile/dynamsoft_role-*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_cloudwatch_global",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/api_gateway_invocation_role_*",
@@ -445,7 +444,6 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/batch_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/clamav_s3_download_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dawson_dev",
-        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/dynamsoft_s3_download_role",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/efcms_remote_user_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_s3_snapshot_access_role",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/es_kibana_role",
@@ -467,6 +465,7 @@ resource "aws_iam_policy" "ci_cd_iam_policy" {
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/strip_basepath_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/switch_colors_cron_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/wait_for_workflow_lambda_role_*",
+        "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/rds_expired_records_cleanup_lambda_role_*",
         "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*"
       ]
     }

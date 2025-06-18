@@ -100,12 +100,6 @@ else
   fi
 fi
 
-if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
-  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2018.5/Resources"
-else
-  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2018.5/Resources"
-fi
-
 DEPLOYMENT_TIMESTAMP=$(date "+%s")
 
 export TF_VAR_all_colors_tfstate_bucket=$BUCKET
@@ -125,7 +119,6 @@ export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_default_account_pass=$DEFAULT_ACCOUNT_PASS
 export TF_VAR_disable_emails=$DISABLE_EMAILS
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
-export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_green_table_name=$GREEN_TABLE_NAME

@@ -1,7 +1,9 @@
 jest.mock('@shared/tools/helpers');
+jest.mock('@web-api/business/useCaseHelper/service/createChangeItems');
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -16,8 +18,6 @@ import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '@shared/test/mockCase';
-import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { MOCK_PRACTITIONER, validUser } from '@shared/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -33,7 +33,9 @@ import {
   updatePractitionerCase,
 } from './updateAssociatedCaseWorker';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 const mockPractitioner = {
   ...validUser,
@@ -79,8 +81,12 @@ const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 jest
   .mocked(updateCaseAndAssociationsMock)
   .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('updateAssociatedCaseWorker', () => {
+  const generateAndServeDocketEntry = jest.mocked(
+    generateAndServeDocketEntryMock,
+  );
   it('should log an error when the practitioner is not found on one of their associated cases by userId', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...mockCase,
@@ -131,10 +137,16 @@ describe('updateAssociatedCaseWorker', () => {
   });
 
   describe('locking', () => {
+    afterEach(() => {
+      tryGetLocks.mockResolvedValue([
+        { successfullyLocked: true, identifier: 'abc' },
+      ]);
+    });
+
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getLock.mockImplementation(() => MOCK_LOCK);
+      tryGetLocks.mockResolvedValue([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
 
       await expect(
         updateAssociatedCaseWorker(
@@ -150,10 +162,7 @@ describe('updateAssociatedCaseWorker', () => {
       expect(getCaseByDocketNumber).not.toHaveBeenCalled();
     });
 
-    it('should acquire a lock that lasts for 15 minutes', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getLock.mockImplementation(() => undefined);
+    it('should acquire and remove a lock', async () => {
       await updateAssociatedCaseWorker(
         applicationContext,
         {
@@ -163,31 +172,11 @@ describe('updateAssociatedCaseWorker', () => {
         mockPrivatePractitionerUser,
       );
 
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: `case|${MOCK_CASE.docketNumber}`,
-        ttl: 900,
-      });
-    });
-
-    it('should remove the lock', async () => {
-      await updateAssociatedCaseWorker(
-        applicationContext,
-        {
-          docketNumber: MOCK_CASE.docketNumber,
-          user: MOCK_PRACTITIONER,
-        },
-        mockPrivatePractitionerUser,
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${MOCK_CASE.docketNumber}`],
+        }),
       );
-
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      });
     });
   });
 
@@ -223,9 +212,7 @@ describe('updateAssociatedCaseWorker', () => {
         },
         mockPetitionerUser,
       );
-      const { servedParties } =
-        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry.mock
-          .calls[0][0];
+      const { servedParties } = generateAndServeDocketEntry.mock.calls[0][0];
       expect(servedParties.electronic).toEqual([
         { email: 'user@example.com', name: 'Test Petitioner' },
       ]);
@@ -280,15 +267,6 @@ describe('updateAssociatedCaseWorker', () => {
   describe('generating a docket entry for petitioners', () => {
     beforeEach(() => {
       applicationContext
-        .getUseCaseHelpers()
-        .generateAndServeDocketEntry.mockReturnValue({
-          changeOfAddressDocketEntry: {
-            ...MOCK_DOCUMENTS[0],
-            entityName: 'DocketEntry',
-          },
-        });
-
-      applicationContext
         .getPersistenceGateway()
         .getUserById.mockReturnValue(mockPetitioner);
     });
@@ -307,9 +285,7 @@ describe('updateAssociatedCaseWorker', () => {
         ),
       ).resolves.toBeUndefined(); // has no return value
 
-      expect(
-        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-      ).toHaveBeenCalled();
+      expect(generateAndServeDocketEntry).toHaveBeenCalled();
     });
 
     it('should call generateAndServeDocketEntry if case was closed recently', async () => {
@@ -334,9 +310,7 @@ describe('updateAssociatedCaseWorker', () => {
         ),
       ).resolves.toBeUndefined(); // has no return value
 
-      expect(
-        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-      ).toHaveBeenCalled();
+      expect(generateAndServeDocketEntry).toHaveBeenCalled();
     });
 
     it('should not call generateAndServeDocketEntry if case has been closed longer than six months', async () => {
@@ -362,9 +336,7 @@ describe('updateAssociatedCaseWorker', () => {
         ),
       ).resolves.toBeUndefined(); // has no return value
 
-      expect(
-        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-      ).not.toHaveBeenCalled();
+      expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
     });
   });
 });

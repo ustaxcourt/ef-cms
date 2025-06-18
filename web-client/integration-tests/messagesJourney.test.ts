@@ -154,8 +154,6 @@ describe('messages journey', () => {
       isFileAttached: true,
       isOnDocketRecord: false,
       isStricken: false,
-      partyPrimary: true,
-      partySecondary: false,
       pending: false,
       privatePractitioners: [],
       processingStatus: 'pending',

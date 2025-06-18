@@ -13,7 +13,6 @@ export const onDisconnectInteractor = async (
   { connectionId }: { connectionId: string },
 ) => {
   await applicationContext.getPersistenceGateway().deleteUserConnection({
-    applicationContext,
     connectionId,
   });
 };
