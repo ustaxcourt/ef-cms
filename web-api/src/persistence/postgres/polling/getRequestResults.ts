@@ -1,8 +1,5 @@
 import { getDbReader } from '@web-api/database';
-export type ResponseChunk = {
-  responseString: string;
-  requestId: string;
-};
+import { ResponseString } from './schema';
 
 export const getRequestResults = async ({
   requestId,
@@ -10,21 +7,17 @@ export const getRequestResults = async ({
 }: {
   requestId: string;
   userId: string;
-}): Promise<ResponseChunk[]> => {
-  const results = await getDbReader(async reader => {
+}): Promise<ResponseString | undefined> => {
+  const result = await getDbReader(async reader => {
     return await reader
       .selectFrom('dwResponseString')
       .select(['requestId', 'responseString', 'userId'])
       .where('userId', '=', userId)
       .where('requestId', '=', requestId)
-      .execute();
+      .executeTakeFirst();
   });
-  console.log('Results from getRequestResults!!!!!!:', results);
-  console.log(
-    `getRequestResults: requestId=${requestId}, userId=${userId}, results.length=${results.length}`,
-  );
 
-  console.log(`getRequestResults: results=${JSON.stringify(results)}`);
+  if (!result) return undefined;
 
-  return results;
+  return result;
 };

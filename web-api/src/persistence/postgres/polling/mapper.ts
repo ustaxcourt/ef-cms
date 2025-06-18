@@ -1,5 +1,5 @@
 import { FORMATS, formatNow } from '@shared/business/utilities/DateHandler';
-import { NewRequestKysely, NewResponseChunkKysely } from './schema';
+import { NewResponseStringKysely } from './schema';
 
 const SIXTEEN_MINUTES = 16 * 60;
 
@@ -9,38 +9,18 @@ const getTtl = (ttl?: number): number => {
   );
 };
 
-export const toKyselyNewRequest = (rawRequest: {
+export const toKyselyNewResponseString = (d: {
   requestId: string;
-  userId: string;
-  totalChunks?: number;
+  responseString: string;
   ttl?: number;
-}): NewRequestKysely => {
-  const ttl = getTtl(rawRequest.ttl);
+  userId: string;
+}): NewResponseStringKysely => {
+  const ttl = getTtl(d.ttl);
 
   return {
-    requestId: rawRequest.requestId,
-    userId: rawRequest.userId,
-    totalChunks: rawRequest.totalChunks ?? 0,
+    requestId: d.requestId,
+    responseString: d.responseString,
     ttl,
-  };
-};
-
-export const toKyselyNewResponseChunk = (rawChunk: {
-  requestId: string;
-  userId: string;
-  chunk: string;
-  index: number;
-  totalNumberOfChunks: number;
-  ttl?: number;
-}): NewResponseChunkKysely => {
-  const ttl = getTtl(rawChunk.ttl);
-
-  return {
-    requestId: rawChunk.requestId,
-    userId: rawChunk.userId,
-    chunk: rawChunk.chunk,
-    index: rawChunk.index,
-    totalNumberOfChunks: rawChunk.totalNumberOfChunks,
-    ttl,
+    userId: d.userId,
   };
 };

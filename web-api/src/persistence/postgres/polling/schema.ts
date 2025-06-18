@@ -2,23 +2,23 @@ import { Selectable, Insertable, Updateable } from 'kysely';
 
 const DEFAULT = {};
 
-export const responseChunkTableDefinition = {
+export const responseStringTableDefinition = {
   responseString: DEFAULT as string,
   requestId: DEFAULT as string,
   ttl: DEFAULT as number,
   userId: DEFAULT as string,
 };
 
-export type ResponseStringTable = typeof responseChunkTableDefinition;
-export const DW_RESPONSE_CHUNK_COLUMNS = Object.keys(
-  responseChunkTableDefinition,
+export type ResponseStringTable = typeof responseStringTableDefinition;
+export const DW_RESPONSE_STRING_COLUMNS = Object.keys(
+  responseStringTableDefinition,
 ) as Array<keyof ResponseStringTable>;
 
-export type ResponseChunkKysely = Selectable<ResponseStringTable>;
-export type NewResponseChunkKysely = Insertable<ResponseStringTable>;
-export type UpdateaResponseChunkKysely = Updateable<ResponseStringTable>;
+export type ResponseStringKysely = Selectable<ResponseStringTable>;
+export type NewResponseStringKysely = Insertable<ResponseStringTable>;
+export type UpdateResponseStringKysely = Updateable<ResponseStringTable>;
 
-export type ResponseChunk = {
+export type ResponseString = {
   responseString: string;
   requestId: string;
 };
