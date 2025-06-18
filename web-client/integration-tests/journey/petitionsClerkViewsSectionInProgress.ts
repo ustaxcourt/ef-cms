@@ -22,6 +22,6 @@ export const petitionsClerkViewsSectionInProgress = cerebralTest => {
       state: cerebralTest.getState(),
     }).find(item => item.docketNumber === cerebralTest.docketNumber);
 
-    expect(formattedWorkItem.editLink).toContain('/review');
+    expect(formattedWorkItem!.editLink).toContain('/review');
   });
 };

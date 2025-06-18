@@ -22,12 +22,9 @@ export AWS_PAGER="" # Don’t show `less` on AWS CLI responses
 echo "Retrieving log groups…"
 
 EAST_GROUPS=$(aws logs describe-log-groups --region="us-east-1" --log-group-name-prefix="/aws/" --query="logGroups[].logGroupName" --output=text)
-WEST_GROUPS=$(aws logs describe-log-groups --region="us-west-1" --log-group-name-prefix="/aws/" --query="logGroups[].logGroupName" --output=text)
 
 EAST_GROUPS_TO_CREATE=()
 EAST_EXISTING_GROUPS=()
-WEST_GROUPS_TO_CREATE=()
-WEST_EXISTING_GROUPS=()
 process_group () {
   local GROUP=$1
 
@@ -35,12 +32,6 @@ process_group () {
     EAST_EXISTING_GROUPS+=("$GROUP")
   else
     EAST_GROUPS_TO_CREATE+=("$GROUP")
-  fi
-
-  if [[ $WEST_GROUPS =~ (^|[[:space:]])$GROUP($|[[:space:]]) ]]; then
-    WEST_EXISTING_GROUPS+=("$GROUP")
-  else
-    WEST_GROUPS_TO_CREATE+=("$GROUP")
   fi
 }
 
@@ -66,10 +57,10 @@ for ENV in "${ENVIRONMENTS[@]}"; do
 done
 
 echo
-echo "${#EAST_EXISTING_GROUPS[@]} (us-east-1) and ${#WEST_EXISTING_GROUPS[@]} (us-west-1) groups already exist."
+echo "${#EAST_EXISTING_GROUPS[@]} (us-east-1) group already exist."
 echo
 
-TOTAL_TO_ADD=$((${#EAST_GROUPS_TO_CREATE[@]} + ${#WEST_GROUPS_TO_CREATE[@]}))
+TOTAL_TO_ADD=$(${#EAST_GROUPS_TO_CREATE[@]})
 
 if [[ "$TOTAL_TO_ADD" == "0" ]]; then
   echo "No other log groups to create. Exiting!"
@@ -81,10 +72,6 @@ for GROUP in "${EAST_GROUPS_TO_CREATE[@]}"; do
   echo "  - $GROUP (us-east-1)"
 done
 
-for GROUP in "${WEST_GROUPS_TO_CREATE[@]}"; do
-  echo "  - $GROUP (us-west-1)"
-done
-
 echo
 read -p "Create these log groups? (y/N) " -r
 [[ ! $REPLY =~ ^[Yy]$ ]] && echo "Exiting." && exit 1
@@ -94,8 +81,4 @@ set -x
 
 for GROUP in "${EAST_GROUPS_TO_CREATE[@]}"; do
   aws logs create-log-group --log-group-name="$GROUP" --region="us-east-1"
-done
-
-for GROUP in "${WEST_GROUPS_TO_CREATE[@]}"; do
-  aws logs create-log-group --log-group-name="$GROUP" --region="us-west-1"
 done

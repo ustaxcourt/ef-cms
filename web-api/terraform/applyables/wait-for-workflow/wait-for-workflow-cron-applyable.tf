@@ -1,5 +1,5 @@
 provider "aws" {
-  region = var.aws_region
+  region = "us-east-1"
 }
 
 terraform {
@@ -9,14 +9,14 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.97.0"
+      version = "~> 5.99.1"
     }
   }
 }
 
 module "wait-for-workflow-cron" {
   source                    = "../../modules/wait-for-workflow-cron"
-  aws_region                = var.aws_region
+  aws_region                = "us-east-1"
   environment               = var.environment
   circle_workflow_id        = var.circle_workflow_id
   circle_machine_user_token = var.circle_machine_user_token
