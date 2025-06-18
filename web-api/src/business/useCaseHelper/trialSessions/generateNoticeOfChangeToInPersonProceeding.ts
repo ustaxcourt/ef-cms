@@ -10,6 +10,15 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
 import { NoticeOfChangeToInPersonTrialInfo } from '@shared/business/utilities/pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding';
 
+export type GenerateNoticeOfChangeToInPersonTrialInfo = Omit<
+  NoticeOfChangeToInPersonTrialInfo,
+  'formattedJudge' | 'formattedStartDate' | 'formattedStartTime'
+> & {
+  startDate: string;
+  startTime: string;
+  judgeName: string;
+};
+
 export const generateNoticeOfChangeToInPersonProceeding = async (
   applicationContext: ServerApplicationContext,
   {
@@ -17,17 +26,7 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
     trialSessionInformation,
   }: {
     docketNumber: string;
-    trialSessionInformation: Omit<
-      NoticeOfChangeToInPersonTrialInfo,
-      | 'formattedJudge'
-      | 'formattedStartDate'
-      | 'formattedStartTime'
-      | 'joinPhoneNumber'
-    > & {
-      startDate: string;
-      startTime: string;
-      judgeName: string;
-    };
+    trialSessionInformation: GenerateNoticeOfChangeToInPersonTrialInfo;
   },
 ): Promise<Uint8Array> => {
   const formattedStartDate = formatDateString(

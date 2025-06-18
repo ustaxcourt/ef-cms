@@ -10,10 +10,10 @@ export type NoticeOfChangeToInPersonTrialInfo = {
   city: string;
   state: string;
   zip: string;
-  formattedJudge: string;
   chambersPhoneNumber: string;
   trialLocation: string;
 
+  formattedJudge: string;
   formattedStartDate: string;
   formattedStartTime: string;
 };
