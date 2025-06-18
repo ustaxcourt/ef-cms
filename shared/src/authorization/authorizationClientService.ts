@@ -49,6 +49,7 @@ export const ROLE_PERMISSIONS = {
   GET_USER_PENDING_EMAIL: 'GET_USER_PENDING_EMAIL',
   GET_USER_PENDING_EMAIL_STATUS: 'GET_USER_PENDING_EMAIL_STATUS',
   GET_USERS_IN_SECTION: 'GET_USERS_IN_SECTION',
+  GET_REG_STATUS: 'GET_REG_STATUS',
   JUDGE_ACTIVITY_REPORT: 'JUDGE_ACTIVITY_REPORT',
   JUDGES_NOTES: 'JUDGES_NOTES',
   MANAGE_MINUTE_SHEET: 'MANAGE_MINUTE_SHEET',
@@ -301,6 +302,8 @@ const trialClerkPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET,
 ];
 
+const zendeskPermissions: RolePermission[] = [ROLE_PERMISSIONS.GET_REG_STATUS];
+
 export const AUTHORIZATION_MAP = {
   adc: adcPermissions,
   admin: adminPermissions,
@@ -336,6 +339,7 @@ export const AUTHORIZATION_MAP = {
     ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES,
   ],
   trialclerk: trialClerkPermissions,
+  zendesk: zendeskPermissions,
 };
 
 export const isAuthorized = (
