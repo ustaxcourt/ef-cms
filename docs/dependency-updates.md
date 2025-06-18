@@ -107,6 +107,8 @@ regex search the entire project for `"~> \d+.\d+.\d+"` and make sure it's to the
 
 - Run [PDF tests](./testing.md) locally.
 
+- Run npm i
+
 - Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 ## Do Not Upgrade
