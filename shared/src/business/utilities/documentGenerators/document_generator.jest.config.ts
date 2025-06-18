@@ -13,7 +13,7 @@ const config: Config = {
     uuid: require.resolve('uuid'),
   },
   testMatch: [
-    '**/shared/src/business/utilities/documentGenerators/noticeOfChangeToInPersonProceeding.test.ts',
+    '**/shared/src/business/utilities/documentGenerators/(*.)+(spec|test).[jt]s',
   ],
   testTimeout: 30000,
   transform: {
