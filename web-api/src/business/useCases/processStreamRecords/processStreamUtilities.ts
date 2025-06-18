@@ -76,17 +76,11 @@ export const partitionRecords = (
       record.dynamodb.NewImage.entityName.S === 'CaseWorksheet',
   );
 
-  const [caseCorrespondenceRecords, nonCaseCorrespondenceRecords] = partition(
+  const [caseCorrespondenceRecords, otherRecords] = partition(
     nonCaseWorksheetRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
       record.dynamodb.NewImage.entityName.S == 'Correspondence',
-  );
-
-  const [docketEntryWorksheetRecords, otherRecords] = partition(
-    nonCaseCorrespondenceRecords,
-    record =>
-      record.dynamodb?.NewImage?.sk.S?.startsWith('docket-entry-worksheet|'),
   );
 
   return {
@@ -96,7 +90,6 @@ export const partitionRecords = (
     caseWorksheetRecords,
     completionMarkers,
     docketEntryRecords,
-    docketEntryWorksheetRecords,
     messageRecords,
     otherRecords,
     practitionerMappingRecords,
