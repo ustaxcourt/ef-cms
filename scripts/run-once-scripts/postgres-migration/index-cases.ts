@@ -19,7 +19,7 @@ const scriptConfig: ScriptConfig = {
 };
 parseArgsAndEnvVars(scriptConfig);
 
-const casePageSize = 2000; // Arbitrary, but seemed reasonably performant
+const pageSize = 2000; // Arbitrary, but seemed reasonably performant
 
 const getCasesToIndex = async (offset: number) => {
   return await getDbReader(reader =>
@@ -27,7 +27,7 @@ const getCasesToIndex = async (offset: number) => {
       .selectFrom('dwCase')
       .select(['docketNumber'])
       .orderBy('docketNumber')
-      .limit(casePageSize)
+      .limit(pageSize)
       .offset(offset)
       .execute(),
   );
@@ -47,8 +47,8 @@ async function main() {
     };
     await indexOpenSearchCase({ message });
     totalItems += casesToIndex.length;
-    console.log(`Total cases upserted so far: ${totalItems}`);
-    offset += casePageSize;
+    console.log(`Total cases index so far: ${totalItems}`);
+    offset += pageSize;
     casesToIndex = await getCasesToIndex(offset);
   }
   console.log('Done indexing cases');
