@@ -33,7 +33,7 @@ import {
 } from '@web-api/persistence/postgres/messages/schema';
 import {
   ResponseStringTable,
-  DW_RESPONSE_CHUNK_COLUMNS,
+  DW_RESPONSE_STRING_COLUMNS,
 } from '@web-api/persistence/postgres/polling/schema';
 import {
   WorkItemTable,
@@ -119,6 +119,7 @@ export const DatabaseSchema: DatabaseSchemaType = {
   },
   dwResponseString: {
     table: DEFAULT as ResponseStringTable,
+    columns: DW_RESPONSE_STRING_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,
