@@ -5,27 +5,21 @@ import { pgInsertInto } from '../utils/operation/pgInsertInto';
 export const saveRequestResponse = async ({
   requestId,
   userId,
-  chunk,
-  index,
-  totalNumberOfChunks,
+  responseString,
 }: {
   requestId: string;
   userId: string;
-  chunk: string;
-  index: number;
-  totalNumberOfChunks: number;
+  responseString: string;
 }) => {
   const nowUnix = Number(formatNow(FORMATS.UNIX_TIMESTAMP_SECONDS));
   const ttl = nowUnix + 16 * 60;
   await pgInsertInto({
-    table: 'dwResponseChunk',
+    table: 'dwResponseString',
     values: [
       {
         requestId,
         userId,
-        chunk,
-        index,
-        totalNumberOfChunks,
+        responseString,
         ttl,
       },
     ],

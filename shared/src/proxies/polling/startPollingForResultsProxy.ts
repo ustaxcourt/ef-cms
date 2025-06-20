@@ -13,6 +13,7 @@ export const startPollingForResultsInteractor = async (
     applicationContext,
     endpoint: `/results/fetch/${requestId}`,
   }).then(async (results: { response: any }) => {
+    console.log(`We are hitting the old Proxy implementation!!!`);
     const nowUnixTimeInSeconds = Math.floor(Date.now() / 1000);
     if (expirationTimestamp < nowUnixTimeInSeconds) {
       return resolver({ statusCode: 504 });

@@ -32,9 +32,7 @@ import {
   DW_MESSAGE_COLUMNS,
 } from '@web-api/persistence/postgres/messages/schema';
 import {
-  RequestTable,
-  ResponseChunkTable,
-  DW_REQUEST_COLUMNS,
+  ResponseStringTable,
   DW_RESPONSE_CHUNK_COLUMNS,
 } from '@web-api/persistence/postgres/polling/schema';
 import {
@@ -60,8 +58,9 @@ interface DatabaseSchemaType {
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
-  dwResponseChunk: DatabaseTableMetadata<ResponseChunkTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwNotification: DatabaseTableMetadata<NotificationTable>;
+  dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
@@ -114,13 +113,12 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as MinuteSheetTable,
     columns: DW_MINUTE_SHEET_COLUMNS,
   },
-  dwResponseChunk: {
-    table: DEFAULT as ResponseChunkTable,
-    columns: DW_RESPONSE_CHUNK_COLUMNS,
+  dwNotification: {
+    table: DEFAULT as NotificationTable,
+    columns: DW_NOTIFICATION_COLUMNS,
   },
-  dwRequest: {
-    table: DEFAULT as RequestTable,
-    columns: DW_REQUEST_COLUMNS,
+  dwResponseString: {
+    table: DEFAULT as ResponseStringTable,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,

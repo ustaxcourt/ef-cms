@@ -2,18 +2,15 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { startPollingForResultsInteractor } from '@web-api/business/useCases/polling/startPollingForResultsInteractor';
-
 describe('startPollingForResultsInteractor', () => {
   const TEST_REQUEST_ID = 'TEST_REQUEST_ID';
   const TEST_RESPONSE = 'TEST_RESPONSE';
   const TEST_USER_ID = mockDocketClerkUser.userId;
-  const TEST_CHUNK = '{"message":"This is a test response"}';
+  const TEST_RESPONSE_CHUNK = '{"message":"This is a test response"}';
   const MOCKED_RESULTS = [
     {
-      chunk: TEST_CHUNK,
-      index: 0,
+      stringResponse: TEST_RESPONSE_CHUNK,
       requestId: '18e0fb82-b908-49b5-810c-c26623fba8a8',
-      totalNumberOfChunks: 1,
       userId: TEST_USER_ID,
     },
   ];
@@ -26,12 +23,12 @@ describe('startPollingForResultsInteractor', () => {
 
   it('should load poll response', async () => {
     const results = await startPollingForResultsInteractor(
-      applicationContext,
       {
         requestId: TEST_REQUEST_ID,
       },
       mockDocketClerkUser,
     );
+    console.log('Results from startPollingForResultsInteractor in test:', results);
 
     const getRequestResultsCalls =
       applicationContext.getPersistenceGateway().getRequestResults.mock.calls;
@@ -41,7 +38,7 @@ describe('startPollingForResultsInteractor', () => {
     expect(getRequestResultsCalls[0][0].userId).toEqual(TEST_USER_ID);
 
     expect(results).toEqual({
-      response: TEST_CHUNK,
+      response: TEST_RESPONSE_CHUNK,
     });
   });
 
@@ -51,7 +48,6 @@ describe('startPollingForResultsInteractor', () => {
       .mockResolvedValue([]);
 
     const results = await startPollingForResultsInteractor(
-      applicationContext,
       {
         requestId: TEST_REQUEST_ID,
       },
@@ -75,7 +71,6 @@ describe('startPollingForResultsInteractor', () => {
 
     await expect(
       startPollingForResultsInteractor(
-        applicationContext,
         {
           requestId: TEST_REQUEST_ID,
         },
@@ -101,7 +96,6 @@ describe('startPollingForResultsInteractor', () => {
       ]);
 
     const results = await startPollingForResultsInteractor(
-      applicationContext,
       {
         requestId: TEST_REQUEST_ID,
       },
