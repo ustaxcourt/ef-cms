@@ -36,6 +36,10 @@ import {
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
 import {
+  DocketEntryWorksheetTable,
+  DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
+} from '@web-api/persistence/postgres/docketEntryWorksheets/schema';
+import {
   DW_MINUTE_SHEET_COLUMNS,
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
@@ -70,15 +74,16 @@ interface DatabaseSchemaType {
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
-  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
+  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwPractitioner: DatabaseTableMetadata<PractitionerTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
-  dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
   dwUser: DatabaseTableMetadata<UserTable>;
   dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
   dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
+  dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -118,6 +123,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
     columns: DW_DOCKET_ENTRY_COLUMNS,
     transformOpenSearchMessage: transformOpenSearchDocketEntries,
     indexOpenSearchMessage: indexOpenSearchDocketEntries,
+  },
+  dwDocketEntryWorksheet: {
+    table: DEFAULT as DocketEntryWorksheetTable,
+    columns: DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
   },
   dwMessage: {
     table: DEFAULT as MessageTable,
