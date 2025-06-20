@@ -18,12 +18,12 @@ export const upsertPractitionerRecord = async ({
     values: toKyselyNewPractitioner({
       ...practitioner,
       userId,
-      practitionerId: practitioner.practitionerId || getUniqueId(),
+      practitionerId: practitioner.userId || getUniqueId(),
     }),
     onConflictColumns: ['userId'],
   });
 
   if (!practitionerData) return undefined;
 
-  return practitionerEntity(practitionerData);
+  return practitionerEntity(practitionerData[0]);
 };

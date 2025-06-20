@@ -53,13 +53,17 @@ export const createOrUpdatePractitionerUser = async ({
     }
   }
 
+  // Note: we create practitioner records first, so that createUserRecord
+  // has all the data it needs to index into OpenSearch properly
+  const practitioner = await upsertPractitionerRecord({
+    practitioner: user,
+    userId,
+  });
+
   await createUserRecord({
     user,
     userId,
   });
 
-  return await upsertPractitionerRecord({
-    practitioner: user,
-    userId,
-  });
+  return practitioner;
 };

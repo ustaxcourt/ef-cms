@@ -8,7 +8,7 @@ export const upsertPractitionerRecords = async practitioners => {
     values: practitioners.map(practitioner => {
       return {
         ...pickPractitionerFields(practitioner),
-        practitionerId: getUniqueId(),
+        practitionerId: practitioner.userId || getUniqueId(),
       };
     }),
     onConflictColumns: ['userId'],

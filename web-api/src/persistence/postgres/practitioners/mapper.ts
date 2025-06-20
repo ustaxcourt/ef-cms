@@ -1,8 +1,11 @@
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { Practitioner } from '@shared/business/entities/Practitioner';
-import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { RawUser } from '@shared/business/entities/User';
 import {
+  Practitioner,
+  RawPractitioner,
+} from '@shared/business/entities/Practitioner';
+import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import {
+  calculateDate,
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
@@ -15,63 +18,67 @@ import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/tr
 import { DW_PRACTITIONER_COLUMNS } from '@web-api/persistence/postgres/practitioners/schema';
 import { DW_USER_COLUMNS } from '@web-api/persistence/postgres/users/schema';
 
-export function pickPractitionerFields(user) {
+// eslint-disable-next-line complexity
+export function pickPractitionerFields(
+  user: RawPractitioner,
+): NewPractitionerKysely {
   return {
-    additionalPhone: user.additionalPhone,
-    admissionsDate: user.admissionsDate,
+    additionalPhone: user.additionalPhone || null,
+    address1: user.contact?.address1 || null,
+    address2: user.contact?.address2 || null,
+    address3: user.contact?.address3 || null,
+    admissionsDate: calculateDate({ dateString: user.admissionsDate }),
     admissionsStatus: user.admissionsStatus,
     barNumber: user.barNumber, // 10495: Note that this field was previously all upper-case
-    birthYear: user.birthYear,
-    confirmEmail: user.confirmEmail,
-    firmName: user.firmName,
+    birthYear: Number(user.birthYear),
+    city: user.contact?.city || null,
+    confirmEmail: user.confirmEmail || null,
+    country: user.contact?.country || null,
+    countryType: user.contact?.countryType || null,
+    email: user.email || null, // 10495: Note that this field was previously trimmed and all lower-case
+    firmName: user.firmName || null,
     firstName: user.firstName,
     lastName: user.lastName,
-    middleName: user.middleName,
-    originalBarState: user.originalBarState,
-    practitionerId: user.practitionerId,
-    practiceType: user.practiceType,
-    practitionerNotes: user.practitionerNotes,
-    practitionerType: user.practitionerType,
-    serviceIndicator: user.serviceIndicator,
-    suffix: user.suffix,
-    updatedEmail: user.updatedEmail,
-    userId: user.userId,
-    address1: user.address1,
-    address2: user.address2,
-    address3: user.address3,
-    city: user.city,
-    country: user.country,
-    countryType: user.countryType,
-    email: user.email, // 10495: Note that this field was previously trimmed and all lower-case
-    isUpdatingInformation: user.isUpdatingInformation,
+    middleName: user.middleName || null,
     name: user.name, // 10495: Note that this field was previously all upper-case
-    phone: user.phone,
-    postalCode: user.postalCode,
+    originalBarState: user.originalBarState,
+    phone: user.contact?.phone || null,
+    postalCode: user.contact?.postalCode || null,
+    practiceType: user.practiceType,
+    practitionerId: user.userId,
+    practitionerNotes: user.practitionerNotes || null,
+    practitionerType: user.practitionerType,
     role: user.role,
-    section: user.section,
-    state: user.state,
+    section: user.section || null,
+    serviceIndicator: user.serviceIndicator,
+    state: user.contact?.state || null,
+    suffix: user.suffix || null,
+    updatedEmail: user.updatedEmail || null,
+    userId: user.userId,
   };
 }
 
 export function toKyselyUpdatePractitioner(
-  user: RawUser,
+  user: RawPractitioner,
 ): UpdatePractitionerKysely {
   return pickPractitionerFields(user);
 }
 
 export function toKyselyUpdatePractitioners(
-  users: RawUser[],
+  users: RawPractitioner[],
 ): UpdatePractitionerKysely[] {
   return users.map(pickPractitionerFields);
 }
 
 export function toKyselyNewPractitioners(
-  users: RawUser[],
+  users: RawPractitioner[],
 ): NewPractitionerKysely[] {
   return users.map(pickPractitionerFields);
 }
 
-export function toKyselyNewPractitioner(user: RawUser): NewPractitionerKysely {
+export function toKyselyNewPractitioner(
+  user: RawPractitioner,
+): NewPractitionerKysely {
   return pickPractitionerFields(user);
 }
 
