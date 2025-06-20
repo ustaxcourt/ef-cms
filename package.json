@@ -237,7 +237,7 @@
     "test:client:unit:file": "jest --config web-client/jest-unit.config.ts --testMatch '**/web-client/src/**/?(*.)+(spec|test).[jt]s?(x)' --coverage=false",
     "test:client:unit:ci": "jest --config web-client/jest-unit.config.ts --coverageDirectory=./coverage/${NODE_INDEX} ${TESTFILES}",
     "test:scripts": "jest --config scripts/jest-scripts.config.ts",
-    "test:file": "CI=false NO_SCANNER=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --config web-client/jest-integration.config.ts -- ",
+    "test:file": "NODE_ENV=integration CI=false NO_SCANNER=true AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER FILE_UPLOAD_MODAL_TIMEOUT=1 jest --config web-client/jest-integration.config.ts -- ",
     "test:document-generation": "npm run build:assets && jest --config shared/src/business/utilities/documentGenerators/document_generator.jest.config.ts",
     "test:shared": "npm run build:assets && jest --config shared/jest-shared.config.ts",
     "test:shared:ci": "npm run build:assets && jest --config shared/jest-shared.config.ts --coverageDirectory=./coverage/${NODE_INDEX} ${TESTFILES}",
