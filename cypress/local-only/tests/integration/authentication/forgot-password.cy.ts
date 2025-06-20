@@ -1,4 +1,3 @@
-import { DEFAULT_FORGOT_PASSWORD_CODE } from '../../../../helpers/cypressTasks/cognito/cognito-helpers';
 import { createAPetitioner } from '../../../../helpers/accountCreation/create-a-petitioner';
 import { createAndServePaperPetition } from '../../../../helpers/fileAPetition/create-and-serve-paper-petition';
 import { faker } from '@faker-js/faker';
@@ -8,6 +7,8 @@ import { v4 } from 'uuid';
 import { verifyPasswordRequirements } from '../../../../helpers/authentication/verify-password-requirements';
 import { verifyPetitionerAccount } from '../../../../helpers/authentication/verify-petitioner-account';
 import { loginAsAdmissionsClerk } from 'cypress/helpers/authentication/login-as-helpers';
+
+const DEFAULT_FORGOT_PASSWORD_CODE = '385030';
 
 describe('Forgot Password', () => {
   after(() => {
