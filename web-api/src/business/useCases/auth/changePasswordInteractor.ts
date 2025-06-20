@@ -16,6 +16,7 @@ import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteract
 import jwt from 'jsonwebtoken';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
+import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 
 export const changePasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -125,34 +126,39 @@ export const updateUserPendingEmailRecord = async ({
   user: RawUser;
   setIsUpdatingInformation?: boolean;
 }): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
-  let userEntity;
+  let rawUser;
 
   if (
     user.role === ROLES.privatePractitioner ||
     user.role === ROLES.irsPractitioner ||
     user.role === ROLES.inactivePractitioner
   ) {
-    userEntity = new Practitioner({
+    rawUser = new Practitioner({
       ...user,
       email: user.pendingEmail,
       pendingEmail: undefined,
       pendingEmailVerificationToken: undefined,
       pendingEmailVerificationTokenTimestamp: undefined,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-    });
+      isUpdatingInformation: setIsUpdatingInformation ? true : undefined,
+    })
+      .validate()
+      .toRawObject();
+
+    await updatePractitioner({ practitionerToUpdate: rawUser });
   } else {
-    userEntity = new User({
+    rawUser = new User({
       ...user,
       email: user.pendingEmail,
       pendingEmail: undefined,
       pendingEmailVerificationToken: undefined,
       pendingEmailVerificationTokenTimestamp: undefined,
-    });
+      isUpdatingInformation: setIsUpdatingInformation ? true : undefined,
+    })
+      .validate()
+      .toRawObject();
   }
 
-  if (setIsUpdatingInformation) userEntity.isUpdatingInformation = true;
-
-  const rawUser = userEntity.validate().toRawObject();
   await updateUser({ userToUpdate: rawUser });
 
   return { updatedUser: rawUser };
