@@ -2,6 +2,7 @@ import { RawUser, User } from '@shared/business/entities/User';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { NewUserKysely, UpdateUserKysely } from './schema';
 import {
+  calculateDate,
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
@@ -18,14 +19,14 @@ import {
   RawIrsPractitioner,
 } from '@shared/business/entities/IrsPractitioner';
 
-function pickUserFields(user) {
+function pickUserFields(user: RawUser): NewUserKysely {
   return {
-    address1: user.address1,
-    address2: user.address2,
-    address3: user.address3,
-    city: user.city,
-    country: user.country,
-    countryType: user.countryType,
+    address1: user.contact?.address1,
+    address2: user.contact?.address2,
+    address3: user.contact?.address3,
+    city: user.contact?.city,
+    country: user.contact?.country,
+    countryType: user.contact?.countryType,
     email: user.email, // 10495: Note that this field was previously trimmed and all lower-case
     entityName: user.entityName,
     isSeniorJudge: user.isSeniorJudge,
@@ -34,15 +35,19 @@ function pickUserFields(user) {
     judgePhoneNumber: user.judgePhoneNumber,
     judgeTitle: user.judgeTitle,
     name: user.name, // 10495: Note that this field was previously all upper-case
-    pendingEmail: user.pendingEmail,
-    pendingEmailVerificationToken: user.pendingEmailVerificationToken,
+    pendingEmail: user.pendingEmail ?? null,
+    pendingEmailVerificationToken: user.pendingEmailVerificationToken ?? null,
     pendingEmailVerificationTokenTimestamp:
-      user.pendingEmailVerificationTokenTimestamp,
-    phone: user.phone,
-    postalCode: user.postalCode,
+      user.pendingEmailVerificationTokenTimestamp
+        ? calculateDate({
+            dateString: user.pendingEmailVerificationTokenTimestamp,
+          })
+        : null,
+    phone: user.contact?.phone,
+    postalCode: user.contact?.postalCode,
     role: user.role,
     section: user.section,
-    state: user.state,
+    state: user.contact?.state,
     token: user.token,
     userId: user.userId,
   };
