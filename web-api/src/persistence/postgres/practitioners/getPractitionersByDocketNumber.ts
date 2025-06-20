@@ -1,8 +1,6 @@
 import { getDbReader } from '@web-api/database';
 import { irsPractitionerEntity, privatePractitionerEntity } from './mapper';
-import {
-  PRACTICE_TYPE,
-} from '@shared/business/entities/EntityConstants';
+import { PRACTICE_TYPE } from '@shared/business/entities/EntityConstants';
 
 export const getPractitionersByDocketNumber = async ({
   docketNumber,
@@ -12,7 +10,7 @@ export const getPractitionersByDocketNumber = async ({
   const practitioners = await getDbReader(reader =>
     reader
       .selectFrom('dwUserOnCase as oc')
-      .leftJoin('dwPractitioner as p', 'oc.userId', 'p.userId')
+      .innerJoin('dwPractitioner as p', 'oc.userId', 'p.userId')
       .where('oc.docketNumber', '=', docketNumber)
       .selectAll('p')
       .select(['oc.entityName', 'oc.representing'])
