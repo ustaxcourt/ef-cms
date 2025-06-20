@@ -32,6 +32,10 @@ import {
   DW_MESSAGE_COLUMNS,
 } from '@web-api/persistence/postgres/messages/schema';
 import {
+  ResponseStringTable,
+  DW_RESPONSE_STRING_COLUMNS,
+} from '@web-api/persistence/postgres/polling/schema';
+import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
@@ -70,6 +74,7 @@ interface DatabaseSchemaType {
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwNotification: DatabaseTableMetadata<NotificationTable>;
+  dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
@@ -135,6 +140,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwNotification: {
     table: DEFAULT as NotificationTable,
     columns: DW_NOTIFICATION_COLUMNS,
+  },
+  dwResponseString: {
+    table: DEFAULT as ResponseStringTable,
+    columns: DW_RESPONSE_STRING_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,
