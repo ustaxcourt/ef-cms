@@ -27,12 +27,12 @@ export const getCaseByDocketNumber = async ({
   // These case items are no longer in dynamoDB
   const SK_FILTER_OUT = [
     'work-item',
+    'docket-entry',
     'correspondence',
     'case',
     'irsPractitioner',
     'privatePractitioner',
     'inactivePractitioner',
-    'docket-entry',
   ];
 
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({
@@ -45,8 +45,8 @@ export const getCaseByDocketNumber = async ({
   const [
     caseCorrespondences,
     workItems,
-    docketEntries,
     practitioners,
+    docketEntries,
     caseItemsRaw,
   ] = await Promise.all([
     getCaseCorrespondenceByDocketNumber({
@@ -55,8 +55,8 @@ export const getCaseByDocketNumber = async ({
     getWorkItemsByDocketNumber({
       docketNumber,
     }),
-    getDocketEntriesByDocketNumber({ docketNumber }),
     getPractitionersByDocketNumber({ docketNumber }),
+    getDocketEntriesByDocketNumber({ docketNumber }),
     queryFull({
       ExpressionAttributeNames: {
         '#pk': 'pk',

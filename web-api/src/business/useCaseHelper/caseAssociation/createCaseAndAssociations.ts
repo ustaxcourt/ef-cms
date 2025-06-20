@@ -51,6 +51,7 @@ const connectPrivatePractitioners = ({
       await associateUserWithCase({
         docketNumber,
         userId: practitioner.userId,
+        representing: practitioner.representing,
       }),
   );
 };

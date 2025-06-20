@@ -1,7 +1,8 @@
 import { getDbReader } from '@web-api/database';
 import { irsPractitionerEntity, privatePractitionerEntity } from './mapper';
-import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import {
+  PRACTICE_TYPE,
+} from '@shared/business/entities/EntityConstants';
 
 export const getPractitionersByDocketNumber = async ({
   docketNumber,
@@ -20,10 +21,10 @@ export const getPractitionersByDocketNumber = async ({
 
   return {
     irsPractitioners: practitioners
-      .filter(p => p.entityName === IrsPractitioner.ENTITY_NAME)
+      .filter(p => p.practiceType !== PRACTICE_TYPE.Private)
       .map(p => irsPractitionerEntity(p)),
     privatePractitioners: practitioners
-      .filter(p => p.entityName === PrivatePractitioner.ENTITY_NAME)
+      .filter(p => p.practiceType === PRACTICE_TYPE.Private)
       .map(p => privatePractitionerEntity(p)),
   };
 };
