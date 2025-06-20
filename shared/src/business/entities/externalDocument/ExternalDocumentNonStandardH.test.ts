@@ -9,8 +9,10 @@ describe('ExternalDocumentNonStandardH', () => {
       });
 
       expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
+        category: 'Select a Category.',
         documentType: 'Select a document type',
         secondaryDocument: {
+          category: 'Select a Category.',
           documentType: 'Select a document type',
         },
       });
@@ -46,6 +48,7 @@ describe('ExternalDocumentNonStandardH', () => {
       expect(() => externalDocumentH.validate()).toThrow();
       expect(externalDocumentH.getFormattedValidationErrors()).toEqual({
         secondaryDocument: {
+          category: 'Select a Category.',
           documentType: 'Select a document type',
           previousDocument: 'Select a document',
         },

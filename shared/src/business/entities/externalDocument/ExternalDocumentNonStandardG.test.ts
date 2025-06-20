@@ -9,6 +9,7 @@ describe('ExternalDocumentNonStandardG', () => {
       });
 
       expect(externalDocumentG.getFormattedValidationErrors()).toEqual({
+        category: 'Select a Category.',
         documentType: 'Select a document type',
         ordinalValue: 'Select an iteration',
       });
