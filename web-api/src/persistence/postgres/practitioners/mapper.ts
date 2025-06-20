@@ -4,7 +4,6 @@ import {
   RawPractitioner,
 } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { RawUser } from '@shared/business/entities/User';
 import {
   calculateDate,
   formatDateString,
@@ -12,7 +11,6 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import {
   NewPractitionerKysely,
-  PractitionerKysely,
   UpdatePractitionerKysely,
 } from '@web-api/persistence/postgres/practitioners/schema';
 import { contactInfo } from '@web-api/persistence/postgres/users/mapper';
@@ -23,7 +21,7 @@ import { DW_USER_COLUMNS } from '@web-api/persistence/postgres/users/schema';
 // eslint-disable-next-line complexity
 export function pickPractitionerFields(
   user: RawPractitioner,
-): PractitionerKysely {
+): NewPractitionerKysely {
   return {
     additionalPhone: user.additionalPhone || null,
     address1: user.contact?.address1 || null,
@@ -47,7 +45,7 @@ export function pickPractitionerFields(
     phone: user.contact?.phone || null,
     postalCode: user.contact?.postalCode || null,
     practiceType: user.practiceType,
-    practitionerId: user.practitionerId,
+    practitionerId: user.userId,
     practitionerNotes: user.practitionerNotes || null,
     practitionerType: user.practitionerType,
     role: user.role,
@@ -61,24 +59,26 @@ export function pickPractitionerFields(
 }
 
 export function toKyselyUpdatePractitioner(
-  user: RawUser,
+  user: RawPractitioner,
 ): UpdatePractitionerKysely {
   return pickPractitionerFields(user);
 }
 
 export function toKyselyUpdatePractitioners(
-  users: RawUser[],
+  users: RawPractitioner[],
 ): UpdatePractitionerKysely[] {
   return users.map(pickPractitionerFields);
 }
 
 export function toKyselyNewPractitioners(
-  users: RawUser[],
+  users: RawPractitioner[],
 ): NewPractitionerKysely[] {
   return users.map(pickPractitionerFields);
 }
 
-export function toKyselyNewPractitioner(user: RawUser): NewPractitionerKysely {
+export function toKyselyNewPractitioner(
+  user: RawPractitioner,
+): NewPractitionerKysely {
   return pickPractitionerFields(user);
 }
 
