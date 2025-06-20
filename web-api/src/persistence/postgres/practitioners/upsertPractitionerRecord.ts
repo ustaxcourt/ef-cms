@@ -25,5 +25,5 @@ export const upsertPractitionerRecord = async ({
 
   if (!practitionerData) return undefined;
 
-  return practitionerEntity(practitionerData);
+  return practitionerEntity(practitionerData[0]);
 };
