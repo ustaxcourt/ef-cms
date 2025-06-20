@@ -13,7 +13,7 @@ export const getUserConfirmationCode = async ({
     reader
       .selectFrom('dwUserConfirmationCode')
       .where('userId', '=', userId)
-      .where('expiresAt', '<=', calculateDate({ dateString: formatNow() }))
+      .where('expiresAt', '>', calculateDate({ dateString: formatNow() }))
       .select(['confirmationCode'])
       .executeTakeFirst(),
   );
