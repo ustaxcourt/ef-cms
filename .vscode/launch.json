@@ -3,6 +3,15 @@
   "configurations": [
     {
       "type": "node",
+      "request": "attach",
+      "name": "Attach to Running Node Process",
+      "port": 9230,
+      "restart": false,
+      "protocol": "inspector",
+      "timeout": 10000
+    },
+    {
+      "type": "node",
       "request": "launch",
       "name": "Jest: unit test current file",
       "program": "${workspaceFolder}/node_modules/.bin/jest",

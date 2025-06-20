@@ -72,7 +72,12 @@ echo "Starting cognito-local"
 CODE="385030" npx cognito-local &
 COGNITO_PID=$!
 
-npm run dev:api-local
+if [[ -z "$USTC_DEBUG" ]]; then
+  npm run dev:api-local
+else
+  npm run dev:api-local-debug
+fi
+
 
 if [[ -z "$CI" ]]; then
   echo "Stopping dynamodb, elasticsearch, and s3rver"
