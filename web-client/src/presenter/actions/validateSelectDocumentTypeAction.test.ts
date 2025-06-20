@@ -18,9 +18,9 @@ describe('validateSelectDocumentTypeAction', () => {
   it('should return the error path if document is invalid', () => {
     applicationContext
       .getUseCases()
-      .validateExternalDocumentInteractor.mockReturnValue(
-        'something went wrong',
-      );
+      .validateExternalDocumentInteractor.mockReturnValue({
+        some: "error"
+      });
     runAction(validateSelectDocumentTypeAction, {
       modules: {
         presenter,
@@ -28,6 +28,39 @@ describe('validateSelectDocumentTypeAction', () => {
       state: { form: { contact: {} } },
     });
     expect(errorMock).toHaveBeenCalled();
+  });
+
+    it('should not return the category validation error', () => {
+    applicationContext
+      .getUseCases()
+      .validateExternalDocumentInteractor.mockReturnValue({
+        category: "Select a category.",
+        documentType: "Select a document type"
+      });
+    runAction(validateSelectDocumentTypeAction, {
+      modules: {
+        presenter,
+      },
+      state: { form: { contact: {} } },
+    });
+    expect(presenter.providers.path.error).toHaveBeenCalledWith({
+      alertError: {
+        title: 'Errors were found. Please correct your form and resubmit.',
+      },
+      errorDisplayOrder: [
+        'documentTitle',
+        'documentType',
+        'freeText',
+        'previousDocument',
+        'serviceDate',
+        'trialLocation',
+        'ordinalValue',
+        'otherIteration',
+      ],
+      errors: {
+        documentType: "Select a document type"
+      }
+    });
   });
 
   it('should return the success path if document is valid', () => {
