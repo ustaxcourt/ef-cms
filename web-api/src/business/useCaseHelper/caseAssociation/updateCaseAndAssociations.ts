@@ -281,6 +281,7 @@ const updatePrivatePractitioners = ({
         return await associateUserWithCase({
           docketNumber: caseToUpdate.docketNumber,
           userId: practitioner.userId,
+          representing: practitioner.representing,
         });
       },
   );
