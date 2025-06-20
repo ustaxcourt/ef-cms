@@ -44,8 +44,10 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/htmlLoader.js`, //this is to ignore imported html files
+    '^.+\\.[tj]sx?$': 'ts-jest',
+    '^.+\\.mjs$': 'ts-jest',
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid|export-to-csv)'],
+  transformIgnorePatterns: ['/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)'],
   verbose: false,
 };
 

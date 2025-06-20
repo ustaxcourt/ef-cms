@@ -275,7 +275,7 @@
     "@faker-js/faker": "9.8.0",
     "@types/aws-lambda": "8.10.150",
     "@types/jest": "30.0.0",
-    "@types/lodash": "4.17.17",
+    "@types/lodash": "4.17.18",
     "@types/luxon": "3.6.2",
     "@types/node": "24.0.3",
     "@types/promise-retry": "1.1.6",
