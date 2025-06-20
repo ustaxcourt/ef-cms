@@ -21,7 +21,7 @@ import { getUserPoolId } from '../../shared/admin-tools/util';
 import { isEmpty } from 'lodash';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateUser as updateUserFromPersistence } from '@web-api/persistence/postgres/users/updateUser';
-import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
 
 /**
  * This script will update the judge user in a deployed environment.
@@ -204,8 +204,8 @@ const updatePostgresChambersRecords = async ({
   console.log(
     `Updating members of ${oldChambersSection} to be members of ${updatedChambersSection} ...`,
   );
-  const chambersUsers: User[] = await getUsersInSection({
-    section: oldChambersSection,
+  const chambersUsers: User[] = await getUsersInSections({
+    sections: [oldChambersSection],
   });
 
   for (const chambersUser of chambersUsers) {

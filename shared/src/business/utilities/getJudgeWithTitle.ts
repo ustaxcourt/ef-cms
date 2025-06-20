@@ -1,10 +1,11 @@
-import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
 
 export const getJudgeWithTitle = async ({
   judgeUserName,
   useFullName = false,
 }) => {
-  const judges = await getUsersInSection({ section: 'judge' });
+  const judges = await getUsersInSections({ sections: [ROLES.judge] });
 
   const foundJudge = judges.find(_judge => _judge.name === judgeUserName);
 

@@ -1,6 +1,6 @@
 import '@web-api/persistence/postgres/users/mocks.jest';
 import { getJudgeWithTitle } from './getJudgeWithTitle';
-import { getUsersInSection as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
 
 const getUsersInSection = getUsersInSectionMock as jest.Mock;
 

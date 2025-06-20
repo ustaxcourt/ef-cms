@@ -1,36 +1,20 @@
 import { User } from '@shared/business/entities/User';
 import { getDbReader } from '@web-api/database';
 import { userEntity } from '@web-api/persistence/postgres/users/mapper';
-import {
-  CASE_SERVICES_SUPERVISOR_SECTION,
-  DOCKET_SECTION,
-  ROLES,
-} from '@shared/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
-export const getUsersInSection = async ({
-  section,
+export const getUsersInSections = async ({
+  sections,
 }: {
-  section: string;
+  sections: string[];
 }): Promise<User[]> => {
   const users = await getDbReader(async reader => {
     let query = reader.selectFrom('dwUser as u');
 
-    if (section === ROLES.judge) {
-      query = query.where(eb =>
-        eb.or([
-          eb('u.role', '=', ROLES.judge),
-          eb('u.role', '=', ROLES.legacyJudge),
-        ]),
-      );
-    } else if (section === DOCKET_SECTION) {
-      query = query.where(eb =>
-        eb.or([
-          eb('u.section', '=', DOCKET_SECTION),
-          eb('u.section', '=', CASE_SERVICES_SUPERVISOR_SECTION),
-        ]),
-      );
+    if (sections.includes(ROLES.judge)) {
+      query = query.where('u.role', 'in', [ROLES.judge, ROLES.legacyJudge]);
     } else {
-      query = query.where('u.section', '=', section);
+      query = query.where('u.section', 'in', sections);
     }
 
     return query.selectAll('u').execute();

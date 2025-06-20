@@ -13,7 +13,7 @@ import {
   parseArgsAndEnvVars,
 } from '../../helpers/parseArgsAndEnvVars';
 import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
-import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 
@@ -35,8 +35,8 @@ const getPhoneNumberForJudgeUser = (judgeUser: RawUser): string | undefined => {
 
 (async () => {
   // Get all the existing judge user records
-  const judgeUsers: RawUser[] = await getUsersInSection({
-    section: ROLES.judge,
+  const judgeUsers: RawUser[] = await getUsersInSections({
+    sections: [ROLES.judge],
   });
 
   let totalUpdated = 0;

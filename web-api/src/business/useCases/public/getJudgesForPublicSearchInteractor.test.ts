@@ -1,7 +1,7 @@
 import '@web-api/persistence/postgres/users/mocks.jest';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getJudgesForPublicSearchInteractor } from './getJudgesForPublicSearchInteractor';
-import { getUsersInSection as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
 
 const getUsersInSection = getUsersInSectionMock as jest.Mock;
 

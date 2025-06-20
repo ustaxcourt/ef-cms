@@ -5,7 +5,12 @@ import {
 import { RawUser, User } from '@shared/business/entities/User';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
+import {
+  CASE_SERVICES_SUPERVISOR_SECTION,
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 
 export const getUsersInSectionInteractor = async (
   { section }: { section: string },
@@ -23,8 +28,13 @@ export const getUsersInSectionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const users = await getUsersInSection({
-    section,
+  const sectionsToSearch = [section];
+  if (section === DOCKET_SECTION || section === PETITIONS_SECTION) {
+    sectionsToSearch.push(CASE_SERVICES_SUPERVISOR_SECTION);
+  }
+
+  const users = await getUsersInSections({
+    sections: sectionsToSearch,
   });
 
   return User.validateRawCollection(users);

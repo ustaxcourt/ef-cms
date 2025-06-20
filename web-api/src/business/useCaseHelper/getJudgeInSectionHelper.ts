@@ -1,4 +1,4 @@
-import { getUsersInSection } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { RawUser, User } from '../../../../shared/src/business/entities/User';
 
@@ -13,9 +13,11 @@ import { RawUser, User } from '../../../../shared/src/business/entities/User';
 
 export const getJudgeInSectionHelper = async ({
   section,
+}: {
+  section: string;
 }): Promise<RawUser> => {
-  const rawUsers = await getUsersInSection({
-    section,
+  const rawUsers = await getUsersInSections({
+    sections: [section],
   });
 
   const sectionUsers = User.validateRawCollection(rawUsers);
