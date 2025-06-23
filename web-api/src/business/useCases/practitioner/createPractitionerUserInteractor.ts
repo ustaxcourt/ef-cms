@@ -2,12 +2,15 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '@shared/business/entities/Practitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createPractitionerUser } from '@shared/business/utilities/createPractitionerUser';
 import { createOrUpdatePractitionerUser } from '@web-api/persistence/postgres/practitioners/createOrUpdatePractitionerUser';
+import { createBarNumber } from '@web-api/persistence/postgres/practitioners/createBarNumber';
 
 export const createPractitionerUserInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -23,9 +26,21 @@ export const createPractitionerUserInteractor = async (
   user.pendingEmail = user.email;
   user.email = undefined;
 
-  const practitioner = await createPractitionerUser(applicationContext, {
-    user,
-  });
+  const barNumber =
+    user.barNumber ||
+    (await createBarNumber({
+      initials:
+        user.lastName.charAt(0).toUpperCase() +
+        user.firstName.charAt(0).toUpperCase(),
+    }));
+
+  const practitioner = new Practitioner({
+    ...user,
+    barNumber,
+    userId: applicationContext.getUniqueId(),
+  })
+    .validate()
+    .toRawObject();
 
   const createdUser = await createOrUpdatePractitionerUser({
     user: practitioner,
