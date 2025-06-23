@@ -29,7 +29,7 @@ import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../../../../shared/src/business/utilities/getClinicLetterKey';
-import { random, remove } from 'lodash';
+import { random } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
@@ -73,15 +73,14 @@ export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
 };
 
 const addDocketEntries = ({ caseEntity }) => {
-  const initialDocumentTypesListRequiringDocketEntry = Object.values(
+  let initialDocumentTypesListRequiringDocketEntry = Object.values(
     INITIAL_DOCUMENT_TYPES_MAP,
   );
 
-  remove(
-    initialDocumentTypesListRequiringDocketEntry,
+  initialDocumentTypesListRequiringDocketEntry = initialDocumentTypesListRequiringDocketEntry.filter(
     doc =>
-      doc === INITIAL_DOCUMENT_TYPES.petition.documentType ||
-      doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
+      doc !== INITIAL_DOCUMENT_TYPES.petition.documentType &&
+      doc !== INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
 
   for (const documentType of initialDocumentTypesListRequiringDocketEntry) {
