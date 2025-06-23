@@ -5,7 +5,7 @@ import {
 import { RawUser, User } from '@shared/business/entities/User';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
 import {
   CASE_SERVICES_SUPERVISOR_SECTION,
   DOCKET_SECTION,

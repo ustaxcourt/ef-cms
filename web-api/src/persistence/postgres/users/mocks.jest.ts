@@ -57,8 +57,8 @@ jest.mock('@web-api/persistence/postgres/users/getUsersById', () =>
   mockFactory('getUsersById'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/getUsersInSection', () =>
-  mockFactory('getUsersInSection'),
+jest.mock('@web-api/persistence/postgres/users/getUsersInSections', () =>
+  mockFactory('getUsersInSections'),
 );
 
 jest.mock(

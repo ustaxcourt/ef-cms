@@ -21,7 +21,7 @@ import { getUserPoolId } from '../../shared/admin-tools/util';
 import { isEmpty } from 'lodash';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateUser as updateUserFromPersistence } from '@web-api/persistence/postgres/users/updateUser';
-import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
 
 /**
  * This script will update the judge user in a deployed environment.

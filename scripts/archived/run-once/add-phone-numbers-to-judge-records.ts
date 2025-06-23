@@ -13,7 +13,7 @@ import {
   parseArgsAndEnvVars,
 } from '../../helpers/parseArgsAndEnvVars';
 import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';
-import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 

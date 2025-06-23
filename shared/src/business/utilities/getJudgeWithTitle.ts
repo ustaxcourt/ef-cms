@@ -1,5 +1,5 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
 
 export const getJudgeWithTitle = async ({
   judgeUserName,

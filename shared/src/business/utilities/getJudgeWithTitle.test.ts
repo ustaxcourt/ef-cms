@@ -1,8 +1,8 @@
 import '@web-api/persistence/postgres/users/mocks.jest';
 import { getJudgeWithTitle } from './getJudgeWithTitle';
-import { getUsersInSections as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 
-const getUsersInSection = getUsersInSectionMock as jest.Mock;
+const getUsersInSections = getUsersInSectionsMock as jest.Mock;
 
 describe('getJudgeWithTitle', () => {
   const mockJudgeUserName = 'Judy';
@@ -13,14 +13,14 @@ describe('getJudgeWithTitle', () => {
   };
 
   beforeAll(() => {
-    getUsersInSection.mockReturnValue([mockJudge]);
+    getUsersInSections.mockResolvedValue([mockJudge]);
   });
 
   it('retrieves a list of judges from persistence', async () => {
     await getJudgeWithTitle({
       judgeUserName: mockJudgeUserName,
     });
-    expect(getUsersInSection).toHaveBeenCalled();
+    expect(getUsersInSections).toHaveBeenCalled();
   });
 
   it('returns the found judge name with title', async () => {

@@ -1,4 +1,4 @@
-import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { RawUser, User } from '../../../../shared/src/business/entities/User';
 

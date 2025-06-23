@@ -8,7 +8,7 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeToRemoteProceedingInteractor } from './generateNoticeOfChangeToRemoteProceedingInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getUsersInSections as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { User } from '@shared/business/entities/User';
 
 const getUsersInSection = getUsersInSectionMock as jest.Mock;

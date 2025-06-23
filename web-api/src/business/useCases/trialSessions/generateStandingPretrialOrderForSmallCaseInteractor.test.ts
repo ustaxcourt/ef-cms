@@ -7,7 +7,7 @@ import {
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateStandingPretrialOrderForSmallCaseInteractor } from './generateStandingPretrialOrderForSmallCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getUsersInSections as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 
 describe('generateStandingPretrialOrderForSmallCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;

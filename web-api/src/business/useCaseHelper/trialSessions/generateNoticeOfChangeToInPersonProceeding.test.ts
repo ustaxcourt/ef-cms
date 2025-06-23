@@ -5,7 +5,7 @@ import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { generateNoticeOfChangeToInPersonProceeding } from './generateNoticeOfChangeToInPersonProceeding';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getUsersInSections as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSection';
+import { getUsersInSections as getUsersInSectionMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 
 const getUsersInSection = getUsersInSectionMock as jest.Mock;
 
