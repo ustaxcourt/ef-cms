@@ -12,6 +12,12 @@ export const getJudgeForUserHelper = async (
 
   const userEntity = new User(rawUser);
 
+  if (!userEntity.section) {
+    throw new InvalidRequest(
+      `User ${user.userId} does not have a specified section`,
+    );
+  }
+
   if (userEntity.isJudgeUser()) return userEntity;
 
   if (userEntity.isChambersUser()) {

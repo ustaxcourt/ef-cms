@@ -1,5 +1,9 @@
 import '@web-api/persistence/postgres/users/mocks.jest';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  CHAMBERS_SECTION,
+  DOCKET_SECTION,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getJudgeForUserHelper } from './getJudgeForUserHelper';
 import {
@@ -7,83 +11,79 @@ import {
   mockDocketClerkUser,
   mockJudgeUser,
 } from '@shared/test/mockAuthUsers';
-import { validUser } from '@shared/test/mockUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getUserById = getUserByIdMock as jest.Mock;
 
 describe('getJudgeForUserHelper', () => {
-  const judgeUser = {
-    ...validUser,
-    contact: { phone: validUser.contact?.phone },
+  const judgeUserWithSection = {
+    ...mockJudgeUser,
     role: ROLES.judge,
-    section: 'judgeChambers',
+    section: CHAMBERS_SECTION,
   };
 
-  const chambersUser = {
-    ...validUser,
+  const chambersUserWithSection = {
+    ...mockChambersUser,
     role: ROLES.chambers,
-    section: 'judgeChambers',
+    section: 'judgeChambers', // Use a section that includes 'Chambers'
   };
 
-  const docketClerkUser = {
-    ...validUser,
+  const docketClerkUserWithSection = {
+    ...mockDocketClerkUser,
     role: ROLES.docketClerk,
-    section: 'docket',
+    section: DOCKET_SECTION,
   };
-
-  let mockFoundUser;
-
-  beforeAll(() => {
-    getUserById.mockImplementation(() => mockFoundUser);
-  });
 
   describe('Judge User', () => {
-    beforeAll(() => {
-      mockFoundUser = mockJudgeUser;
+    beforeEach(() => {
+      getUserById.mockResolvedValue(judgeUserWithSection);
     });
 
     it('retrieves the specified user from the database by its userId', async () => {
-      await getJudgeForUserHelper(applicationContext, { user: mockJudgeUser });
+      await getJudgeForUserHelper(applicationContext, {
+        user: judgeUserWithSection,
+      });
 
       expect(getUserById).toHaveBeenCalledWith({
-        userId: mockFoundUser.userId,
+        userId: judgeUserWithSection.userId,
       });
     });
 
     it('returns the retrieved judge from the database', async () => {
       const result = await getJudgeForUserHelper(applicationContext, {
-        user: mockJudgeUser,
+        user: judgeUserWithSection,
       });
-      expect(result).toMatchObject(mockJudgeUser);
+
+      expect(result).toMatchObject(judgeUserWithSection);
     });
   });
 
   describe('Chambers User', () => {
-    beforeAll(() => {
-      mockFoundUser = chambersUser;
+    beforeEach(() => {
+      getUserById.mockResolvedValue(chambersUserWithSection);
       applicationContext
         .getUseCaseHelpers()
-        .getJudgeInSectionHelper.mockReturnValue(judgeUser);
+        .getJudgeInSectionHelper.mockReturnValue(judgeUserWithSection);
     });
 
-    it('calls getJudgeInSectionHelper with the retrieved user`s section if they are a chambers user', async () => {
+    it('calls getJudgeInSectionHelper with the chambers user section', async () => {
       await getJudgeForUserHelper(applicationContext, {
-        user: mockChambersUser,
+        user: chambersUserWithSection,
       });
 
       expect(
         applicationContext.getUseCaseHelpers().getJudgeInSectionHelper,
       ).toHaveBeenCalledWith({
-        section: chambersUser.section,
+        section: chambersUserWithSection.section,
       });
     });
 
-    it('returns the user that getJudgeInSectionHelper found', async () => {
+    it('returns the judge found by getJudgeInSectionHelper', async () => {
       const result = await getJudgeForUserHelper(applicationContext, {
-        user: mockJudgeUser,
+        user: chambersUserWithSection,
       });
-      expect(result).toMatchObject(judgeUser);
+
+      expect(result).toMatchObject(judgeUserWithSection);
     });
 
     it('throws an error if it could not find a judge user with getJudgeInSectionHelper', async () => {
@@ -93,23 +93,39 @@ describe('getJudgeForUserHelper', () => {
 
       await expect(
         getJudgeForUserHelper(applicationContext, {
-          user: mockDocketClerkUser,
+          user: chambersUserWithSection,
         }),
       ).rejects.toThrow(
-        `Could not find Judge for Chambers Section ${chambersUser.section}`,
+        `Could not find Judge for Chambers Section ${chambersUserWithSection.section}`,
       );
     });
   });
 
   describe('Docket Clerk', () => {
-    it('throws an error if the user is netiher judge nor chambers', async () => {
-      mockFoundUser = docketClerkUser;
+    it('throws an error for non-judge/non-chambers users', async () => {
+      getUserById.mockResolvedValueOnce(docketClerkUserWithSection);
+
       await expect(
         getJudgeForUserHelper(applicationContext, {
-          user: mockDocketClerkUser,
+          user: docketClerkUserWithSection,
         }),
       ).rejects.toThrow(
         'Could not get Judge User ID for non Judge or Chambers User',
+      );
+    });
+
+    it('throws an error if the user does not have a section', async () => {
+      getUserById.mockResolvedValueOnce({
+        ...docketClerkUserWithSection,
+        section: undefined,
+      });
+
+      await expect(
+        getJudgeForUserHelper(applicationContext, {
+          user: { ...docketClerkUserWithSection },
+        }),
+      ).rejects.toThrow(
+        `User ${docketClerkUserWithSection.userId} does not have a specified section`,
       );
     });
   });
