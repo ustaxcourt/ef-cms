@@ -28,6 +28,9 @@ export const computeTermAndUpdateState = (
 
     store.set(state.form.term, term);
     store.set(state.form.termYear, date.year);
+  } else {
+    store.set(state.form.term, undefined);
+    store.set(state.form.termYear, undefined);
   }
 };
 

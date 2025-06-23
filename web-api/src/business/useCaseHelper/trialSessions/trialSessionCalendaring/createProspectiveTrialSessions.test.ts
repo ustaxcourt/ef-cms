@@ -1,8 +1,9 @@
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import {
   EligibleCase,
   getDataForCalendaring,
 } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/getDataForCalendaring';
-import { MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING } from '../../../../../../shared/src/test/mockCase';
+import { MOCK_CASE_READY_FOR_TRIAL_SESSION_SCHEDULING } from '@shared/test/mockCase';
 import {
   PROCEDURE_TYPES_MAP,
   SESSION_TYPES,

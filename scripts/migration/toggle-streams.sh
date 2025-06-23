@@ -11,7 +11,7 @@ if [[ -n "$1" ]] && { [[ "$1" == "on" ]] || [[ "$1" == "ON" ]] || [[ "$1" == "-o
 fi
 
 REGIONS="us-east-1"
-[[ "$TOGGLE" == "--enabled" ]] && [[ -n "$CURRENT_COLOR" ]] && COLORS="$CURRENT_COLOR" || COLORS="blue green"
+COLORS="blue green"
 for region in $REGIONS; do
   for color in $COLORS; do
     STREAM_ID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:${region}:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${color}" --region "$region" | jq -r ".EventSourceMappings[0].UUID")
