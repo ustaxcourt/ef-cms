@@ -63,7 +63,7 @@ export const userOnCaseTableDefinition = {
   userId: DEFAULT as string,
   docketNumber: DEFAULT as string,
   representing: DEFAULT as ColumnType<string[], string, string> | undefined,
-  entityName: DEFAULT as string | undefined,
+  entityName: DEFAULT as string,
 };
 
 export type UserOnCaseTable = typeof userOnCaseTableDefinition;

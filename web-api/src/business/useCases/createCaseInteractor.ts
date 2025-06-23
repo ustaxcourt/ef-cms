@@ -357,6 +357,7 @@ export const createCaseInteractor = async (
     associateUserWithCase({
       docketNumber: caseToAdd.docketNumber,
       userId: user.userId,
+      entityName: user.entityName,
     }),
   ];
 

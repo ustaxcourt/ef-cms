@@ -51,6 +51,7 @@ export const createUserForContact = async ({
   await associateUserWithCase({
     docketNumber: rawCase.docketNumber,
     userId: userRaw.userId,
+    entityName: userRaw.entityName,
   });
 
   return caseEntity;
