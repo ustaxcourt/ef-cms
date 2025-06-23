@@ -12,7 +12,7 @@ export const associateUserWithCase = async ({
   docketNumber: string;
   userId: string;
   representing?;
-  entityName?;
+  entityName: string;
 }) => {
   const userOnCaseRecord = await getDbReader(reader =>
     reader

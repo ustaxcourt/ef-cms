@@ -35,6 +35,7 @@ const connectIrsPractitioners = ({ docketNumber, irsPractitioners }) => {
       await associateUserWithCase({
         docketNumber,
         userId: practitioner.userId,
+        entityName: practitioner.entityName,
       }),
   );
 };
@@ -52,6 +53,7 @@ const connectPrivatePractitioners = ({
         docketNumber,
         userId: practitioner.userId,
         representing: practitioner.representing,
+        entityName: practitioner.entityName,
       }),
   );
 };
