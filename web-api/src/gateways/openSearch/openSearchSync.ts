@@ -1,6 +1,6 @@
-import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
-import { applicationContext } from '@web-api/applicationContext';
+import { SendMessageCommand } from '@aws-sdk/client-sqs';
 import { environment } from '@web-api/environment';
+import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient';
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 export const openSearchSync = async ({
@@ -8,7 +8,7 @@ export const openSearchSync = async ({
 }: {
   message: OpenSearchSyncMessage;
 }): Promise<void> => {
-  const sqs: SQSClient = applicationContext.getMessagingClient();
+  const sqs = getMessagingClient();
 
   const cmd = new SendMessageCommand({
     MessageBody: JSON.stringify(message),

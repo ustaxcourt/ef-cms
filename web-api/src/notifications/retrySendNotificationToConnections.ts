@@ -36,7 +36,6 @@ export const retrySendNotificationToConnections = async ({
               await applicationContext
                 .getPersistenceGateway()
                 .deleteUserConnection({
-                  applicationContext,
                   connectionId: connection.connectionId,
                 });
             } catch (error) {

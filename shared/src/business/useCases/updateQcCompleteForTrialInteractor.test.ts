@@ -1,10 +1,11 @@
-import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { MOCK_CASE } from '../../test/mockCase';
-import { MOCK_LOCK } from '../../test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
@@ -15,22 +16,14 @@ import { updateQcCompleteForTrialInteractor } from './updateQcCompleteForTrialIn
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
-
 describe('updateQcCompleteForTrialInteractor', () => {
-  let mockLock;
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
-
   beforeEach(() => {
-    mockLock = undefined;
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
   });
 
@@ -64,7 +57,9 @@ describe('updateQcCompleteForTrialInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       updateQcCompleteForTrialInteractor(
@@ -81,7 +76,7 @@ describe('updateQcCompleteForTrialInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await updateQcCompleteForTrialInteractor(
       applicationContext,
       {
@@ -92,19 +87,10 @@ describe('updateQcCompleteForTrialInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 });

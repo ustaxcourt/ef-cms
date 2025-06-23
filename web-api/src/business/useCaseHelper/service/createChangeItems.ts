@@ -11,6 +11,7 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { addCoverToPdf } from '../../useCases/addCoverToPdf';
 import { getCaseCaptionMeta } from '../../../../../shared/src/business/utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { Case } from '@shared/business/entities/cases/Case';
 
 /**
  * This function isolates task of generating the Docket Entry
@@ -182,7 +183,7 @@ export const generateAndServeDocketEntry = async ({
   servedParties: any;
   user: any;
   authorizedUser: AuthUser;
-}) => {
+}): Promise<{ caseEntity: Case; url: string }> => {
   const partyWithPaperService = caseEntity.hasPartyWithServiceType(
     SERVICE_INDICATOR_TYPES.SI_PAPER,
   );
@@ -230,5 +231,5 @@ export const generateAndServeDocketEntry = async ({
     servedParties,
   });
 
-  return { caseEntity, changeOfAddressDocketEntry, url };
+  return { caseEntity, url };
 };

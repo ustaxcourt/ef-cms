@@ -37,6 +37,7 @@ async function migrateToLatest() {
       await writer.destroy();
     },
     table: null,
+    action: null,
   });
 }
 

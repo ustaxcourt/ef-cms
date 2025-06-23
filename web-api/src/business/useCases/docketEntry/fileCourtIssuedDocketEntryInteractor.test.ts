@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -12,7 +13,6 @@ import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
@@ -24,6 +24,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -34,22 +35,15 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     section: DOCKET_SECTION,
     userId: mockUserId,
   };
-  let mockLock;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
-    mockLock = undefined;
     applicationContext
       .getPersistenceGateway()
       .getUserById.mockReturnValue(docketClerkUser);
@@ -330,7 +324,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       fileCourtIssuedDocketEntryInteractor(
@@ -353,7 +349,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await fileCourtIssuedDocketEntryInteractor(
       applicationContext,
       {
@@ -370,20 +366,11 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${caseRecord.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${caseRecord.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${caseRecord.docketNumber}`],
+      }),
+    );
   });
 
   it('should acquire and remove the lock for every case', async () => {
@@ -408,27 +395,13 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       docketNumber => `case|${docketNumber}`,
     );
     expectedIdentifiers.unshift(`case|${caseRecord.docketNumber}`);
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledTimes(3);
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: expectedIdentifiers,
-    });
 
-    [caseRecord.docketNumber, '888-88', '999-99'].forEach(docketNumber => {
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: `case|${docketNumber}`,
-        ttl: 30,
-      });
-    });
+    expect(tryGetLocks).toHaveBeenCalledTimes(1);
+
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: expectedIdentifiers,
+      }),
+    );
   });
 });
