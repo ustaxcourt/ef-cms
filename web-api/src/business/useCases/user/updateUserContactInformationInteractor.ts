@@ -99,6 +99,13 @@ const updateUserContactInformationHelper = async (
     throw new Error(`Unrecognized entityType ${user.entityName}`);
   }
 
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: { action: 'user_contact_initial_update_complete' },
+    userId: user.userId,
+    clientConnectionId,
+  });
+
   await settlePromises([
     updatePractitioner({
       practitionerToUpdate: userEntity.validate().toRawObject(),
@@ -108,13 +115,10 @@ const updateUserContactInformationHelper = async (
     }),
   ]);
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: { action: 'user_contact_initial_update_complete' },
-    userId: user.userId,
-    clientConnectionId,
-  });
-
+  // 10495 TODO: We should pass the old data (that is, the `user` variable set
+  // at the top of this use case) to generateChangeOfAddress, instead of relying
+  // on generateChangeOfAddress to fetch the old data, which doesn't exist on
+  // disk anymore.
   const results = await generateChangeOfAddress({
     applicationContext,
     authorizedUser,
@@ -125,11 +129,6 @@ const updateUserContactInformationHelper = async (
   });
 
   if (isArray(results) && !results.length) {
-    userEntity.setIsUpdatingInformation(false);
-    await updateUser({
-      userToUpdate: userEntity.validate().toRawObject(),
-    });
-
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
@@ -140,6 +139,11 @@ const updateUserContactInformationHelper = async (
       clientConnectionId,
     });
   }
+
+  userEntity.setIsUpdatingInformation(false);
+  await updateUser({
+    userToUpdate: userEntity.validate().toRawObject(),
+  });
 };
 
 /**
