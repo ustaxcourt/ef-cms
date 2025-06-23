@@ -76,7 +76,7 @@ export const WorkingCopyFilterHeader = connect(
 );
 
 const statusFilterComponent = (trialStatusFilters, filters, trialStatusCounts) => {
-  const filterCheckboxes = [];
+  const filterCheckboxes: React.ReactElement[] = [];
 
   for (let i = 0; i < trialStatusFilters.length; i += 2) {
     const filterColumn = (
@@ -101,7 +101,7 @@ const statusFilterComponent = (trialStatusFilters, filters, trialStatusCounts) =
   return filterCheckboxes;
 };
 
-const FilterCheckbox = connect(
+const FilterCheckbox: React.FC<any> = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
