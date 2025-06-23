@@ -10,13 +10,23 @@ export const WorkingCopyFilterHeader = connect(
     filters: state.trialSessionWorkingCopy.filters,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
     trialStatusFilters: state.trialSessionWorkingCopyHelper.trialStatusFilters,
+    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
   },
   function WorkingCopyFilterHeader({
     autoSaveTrialSessionWorkingCopySequence,
     filters = {},
     trialSessionWorkingCopyHelper,
     trialStatusFilters,
+    trialSessionWorkingCopy,
   }) {
+    const trialStatusCounts = Object.values(trialSessionWorkingCopy.caseMetadata).reduce((counters, c) => {
+      if(c.trialStatus === undefined || c.trialStatus === '') {
+        counters["statusUnassigned"] = (counters["statusUnassigned"] || 0) + 1;
+      } else {
+        counters[c.trialStatus] = (counters[c.trialStatus] || 0) + 1;
+      }
+      return counters;
+    }, {});
     return (
       <div className="working-copy-filters">
         <div className="working-copy-filters--header header-with-blue-background">
@@ -57,7 +67,7 @@ export const WorkingCopyFilterHeader = connect(
                 </label>
               </div>
             </div>
-            {statusFilterComponent(trialStatusFilters, filters)}
+            {statusFilterComponent(trialStatusFilters, filters, trialStatusCounts)}
           </div>
         </div>
       </div>
@@ -65,8 +75,8 @@ export const WorkingCopyFilterHeader = connect(
   },
 );
 
-const statusFilterComponent = (trialStatusFilters, filters) => {
-  const filterCheckboxes = [];
+const statusFilterComponent = (trialStatusFilters, filters, trialStatusCounts) => {
+  const filterCheckboxes: React.ReactElement[] = [];
 
   for (let i = 0; i < trialStatusFilters.length; i += 2) {
     const filterColumn = (
@@ -75,11 +85,13 @@ const statusFilterComponent = (trialStatusFilters, filters) => {
           filters={filters}
           i={i}
           trialStatusFilters={trialStatusFilters}
+          trialStatusCounts={trialStatusCounts}
         />
         <FilterCheckbox
           filters={filters}
           i={i + 1}
           trialStatusFilters={trialStatusFilters}
+          trialStatusCounts={trialStatusCounts}
         />
       </div>
     );
@@ -89,7 +101,7 @@ const statusFilterComponent = (trialStatusFilters, filters) => {
   return filterCheckboxes;
 };
 
-const FilterCheckbox = connect(
+const FilterCheckbox: React.FC<any> = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
@@ -99,6 +111,7 @@ const FilterCheckbox = connect(
     filters,
     i,
     trialStatusFilters,
+    trialStatusCounts,
   }) {
     if (trialStatusFilters[i]) {
       return (
@@ -122,6 +135,11 @@ const FilterCheckbox = connect(
           >
             {trialStatusFilters[i].label}
           </label>
+          {trialStatusFilters[i].key in trialStatusCounts && (
+            <span>
+              ({trialStatusCounts[trialStatusFilters[i].key]})
+            </span>
+          )}
         </div>
       );
     }
