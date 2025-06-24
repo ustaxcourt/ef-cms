@@ -39,6 +39,7 @@ import {
 } from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 
 describe('updateCaseAndAssociations', () => {
   let validMockCase;
@@ -274,6 +275,34 @@ describe('updateCaseAndAssociations', () => {
         upsertCases.mock.calls[0][0][0].archivedDocketEntries,
       ).toMatchObject(caseToUpdate.archivedDocketEntries);
       expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not compare work item differences when comparing docket entries', async () => {
+      const oldCase = {
+        ...validMockCase,
+        archivedDocketEntries: MOCK_DOCUMENTS,
+        docketEntries: MOCK_DOCUMENTS.map(d => ({
+          ...d,
+          workItem: MOCK_WORK_ITEM,
+        })),
+      };
+      const caseToUpdate = {
+        ...oldCase,
+        archivedDocketEntries: MOCK_DOCUMENTS,
+        docketEntries: MOCK_DOCUMENTS.map(d => ({
+          ...d,
+          workItem: undefined,
+        })),
+      };
+
+      getCaseByDocketNumber.mockResolvedValue(caseToUpdate);
+
+      await updateCaseAndAssociations({
+        authorizedUser: mockDocketClerkUser,
+        caseToUpdate,
+      });
+
+      expect(upsertDocketEntries).toHaveBeenCalledWith([]);
     });
   });
 

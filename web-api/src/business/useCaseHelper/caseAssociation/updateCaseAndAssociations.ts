@@ -164,6 +164,7 @@ const getDocketEntriesToUpdate = ({
   caseToUpdate: RawCase;
   oldCase: RawCase;
 }) => {
+  // We are not comparing work item changes as we do not save the work item on the docket entry in persistence
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries.map(d => omit(d, 'workItem')),
     caseToUpdate.docketEntries.map(d => omit(d, 'workItem')),
