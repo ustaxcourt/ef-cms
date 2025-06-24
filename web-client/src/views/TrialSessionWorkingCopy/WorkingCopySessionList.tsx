@@ -4,7 +4,7 @@ import { WorkingCopyFilterHeader } from './WorkingCopyFilterHeader';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React from 'react';
 
 export const WorkingCopySessionList = connect(
   {
@@ -12,24 +12,13 @@ export const WorkingCopySessionList = connect(
     toggleWorkingCopySortSequence: sequences.toggleWorkingCopySortSequence,
     trialSessionWorkingCopy: state.trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
-    autoSaveTrialSessionWorkingCopySequence: sequences.autoSaveTrialSessionWorkingCopySequence
   },
   function WorkingCopySessionList({
     constants,
     toggleWorkingCopySortSequence,
     trialSessionWorkingCopy,
     trialSessionWorkingCopyHelper,
-    autoSaveTrialSessionWorkingCopySequence
   }) {
-    useEffect(() => {
-      for(const formattedCase of trialSessionWorkingCopyHelper.formattedCases)
-        if(trialSessionWorkingCopy.caseMetadata[formattedCase.docketNumber] === undefined) {
-          autoSaveTrialSessionWorkingCopySequence({
-          key: `caseMetadata.${formattedCase.docketNumber}.trialStatus`,
-          value: "",
-        });
-      }
-    }, [])
     return (
       <div className="margin-top-4">
         <WorkingCopyFilterHeader />

@@ -10,7 +10,6 @@ export const WorkingCopyFilterHeader = connect(
     filters: state.trialSessionWorkingCopy.filters,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
     trialStatusFilters: state.trialSessionWorkingCopyHelper.trialStatusFilters,
-    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
   },
   function WorkingCopyFilterHeader({
     autoSaveTrialSessionWorkingCopySequence,
