@@ -6,8 +6,11 @@ import {
 } from '../../helpers/parseArgsAndEnvVars';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
-import { indexOpenSearchCase } from 'web-api/elasticsearch/index-cases';
-import { OpenSearchSyncMessageType } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
+import { indexOpenSearchCases } from 'web-api/elasticsearch/cases/indexOpenSearchCases';
+import {
+  OPENSEARCH_SYNC_ACTIONS,
+  OpenSearchSyncMessageType,
+} from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 const scriptConfig: ScriptConfig = {
   description: 'add-cases-to-opensearch - Reupsert cases',
@@ -44,8 +47,9 @@ async function main() {
       payload: casesToIndex.map(d => d.docketNumber),
       type: 'dwCase' as OpenSearchSyncMessageType,
       timestamp: Date.now().toString(),
+      action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
     };
-    await indexOpenSearchCase({ message });
+    await indexOpenSearchCases({ message });
     totalItems += casesToIndex.length;
     console.log(`Total cases index so far: ${totalItems}`);
     offset += pageSize;
