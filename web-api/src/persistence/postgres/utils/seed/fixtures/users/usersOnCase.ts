@@ -49,198 +49,198 @@ export const usersOnCase: NewUserOnCaseKysely[] = [
     entityName: 'IrsPractitioner',
     serviceIndicatorOnCase: 'Electronic',
   },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '100-22',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '101-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '101-22',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '101-23',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '102-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '102-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '102-22',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '103-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '103-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '104-17',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '104-18',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '104-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '104-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '105-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '106-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '107-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '108-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '111-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '112-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '113-19',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '117-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '120-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '122-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '123-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '125-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '126-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '127-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '128-20',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '301-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '302-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '303-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '304-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '305-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '306-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '307-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '308-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '309-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '310-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '311-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '312-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '314-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '315-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '316-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '317-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '318-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '319-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-  //   docketNumber: '320-21',
-  // },
-  // {
-  //   userId: '7805d1ab-18d0-43ec-bafb-654e83405417',
-  //   docketNumber: '106-23',
-  // },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '100-22',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '101-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '101-22',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '101-23',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '102-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '102-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '102-22',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '103-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '103-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '104-17',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '104-18',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '104-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '104-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '105-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '106-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '107-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '108-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '111-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '112-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '113-19',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '117-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '120-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '122-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '123-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '125-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '126-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '127-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '128-20',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '301-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '302-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '303-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '304-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '305-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '306-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '307-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '308-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '309-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '310-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '311-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '312-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '314-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '315-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '316-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '317-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '318-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '319-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    docketNumber: '320-21',
+  },
+  {
+    userId: '7805d1ab-18d0-43ec-bafb-654e83405417',
+    docketNumber: '106-23',
+  },
   {
     userId: '9805d1ab-18d0-43ec-bafb-654e83405416',
     docketNumber: '102-67',

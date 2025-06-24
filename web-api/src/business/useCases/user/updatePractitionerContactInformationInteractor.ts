@@ -119,6 +119,7 @@ const updatePractitionerContactInformationHelper = async (
     contactInfo,
     firmName,
     user: userEntity.validate().toRawObject(),
+    oldUser: user.toRawObject(),
     websocketMessagePrefix: 'user',
   });
 

@@ -13,6 +13,8 @@ export const getPrivatePractitionersOnCase = async ({
       .leftJoin('dwPractitioner as p', 'uoc.userId', 'p.userId')
       .where('uoc.docketNumber', '=', docketNumber)
       .where('uoc.entityName', '=', PrivatePractitioner.ENTITY_NAME)
+      // 10495 TODO: does this function also need to get representing and service
+      // indicator off of dwUserOnCase?
       .selectAll('p')
       .execute(),
   );

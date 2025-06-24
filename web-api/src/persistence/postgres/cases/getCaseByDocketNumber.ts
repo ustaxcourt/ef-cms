@@ -10,7 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
-import { getPractitionersByDocketNumber } from '@web-api/persistence/postgres/practitioners/getPractitionersByDocketNumber';
+import { getPractitionersByDocketNumber } from '@web-api/persistence/postgres/practitioners/getPractitionersForCase';
 import { getDocketEntriesByDocketNumber } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
@@ -55,6 +55,9 @@ export const getCaseByDocketNumber = async ({
     getWorkItemsByDocketNumber({
       docketNumber,
     }),
+    // 10495 TODO: replace getPractitionersByDocketNumber with a new persistence
+    // function that joins the practitioner data with case-specific user-on-case
+    // data.
     getPractitionersByDocketNumber({ docketNumber }),
     getDocketEntriesByDocketNumber({ docketNumber }),
     queryFull({

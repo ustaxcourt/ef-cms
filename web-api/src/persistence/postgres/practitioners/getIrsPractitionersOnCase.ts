@@ -14,6 +14,8 @@ export const getIrsPractitionersOnCase = async ({
       .where('uoc.docketNumber', '=', docketNumber)
       .where('uoc.entityName', '=', IrsPractitioner.ENTITY_NAME)
       .selectAll('p')
+      // 10495 TODO: does this function also need to get representing and service
+      // indicator off of dwUserOnCase?
       .execute(),
   );
 

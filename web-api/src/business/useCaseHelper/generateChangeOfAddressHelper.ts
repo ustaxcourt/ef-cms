@@ -17,6 +17,8 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 
 /**
  * generateChangeOfAddressHelper
@@ -33,6 +35,7 @@ export const generateChangeOfAddressHelper = async ({
   contactInfo,
   docketNumber,
   firmName,
+  oldUser,
   jobId,
   requestUserId,
   updatedEmail,
@@ -46,6 +49,7 @@ export const generateChangeOfAddressHelper = async ({
   bypassDocketEntry: boolean;
   contactInfo: TUserContact;
   firmName: string;
+  oldUser: RawPractitioner | RawPrivatePractitioner | RawIrsPractitioner;
   updatedEmail?: string;
   updatedName?: string;
   jobId: string;
@@ -65,9 +69,7 @@ export const generateChangeOfAddressHelper = async ({
     });
 
     const practitionerName = updatedName || user.name;
-    const practitionerObject = (caseEntity.privatePractitioners || [])
-      .concat(caseEntity.irsPractitioners)
-      .find(practitioner => practitioner.userId === user.userId);
+    const practitionerObject = oldUser;
 
     if (!practitionerObject) {
       throw new Error(
