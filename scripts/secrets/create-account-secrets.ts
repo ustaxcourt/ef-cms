@@ -30,6 +30,7 @@ const scriptConfig: ScriptConfig = {
     externalTrustedRoleArn: {
       description:
         'ARN of an external role that is allowed to assume the dawson_dev role in this account',
+      long: 'external-trusted-role-arn',
       type: 'string',
     },
     logExpirationDays: {
@@ -103,11 +104,13 @@ const {
 
   const accountSecrets = {
     COGNITO_SUFFIX: `${repoSlug}_${env}`,
-    DAWSON_DEV_TRUSTED_ROLE_ARNS: dawsonDevTrustedRoleArns,
+    // eslint-disable-next-line no-useless-escape
+    DAWSON_DEV_TRUSTED_ROLE_ARNS: `[\\\"${dawsonDevTrustedRoleArns.join('\\\",\\\"')}\\\"]`,
     ES_LOGS_EBS_VOLUME_SIZE_GB: opensearchLogsVolumeSize,
     ES_LOGS_INSTANCE_COUNT: opensearchLogsInstanceCount,
     ES_LOGS_INSTANCE_TYPE: opensearchLogsInstanceType,
-    LOG_GROUP_ENVIRONMENTS: [env],
+    // eslint-disable-next-line no-useless-escape
+    LOG_GROUP_ENVIRONMENTS: `[\\\"${env}\\\"]`,
     LOG_SNAPSHOT_BUCKET_NAME: `${repoSlug}-${env}-log-snapshots`,
     NUM_DAYS_TO_KEEP_LOGS: logExpirationDays,
   };

@@ -21,6 +21,7 @@ const scriptConfig: ScriptConfig = {
   },
   parameters: {
     adminUserEmail: {
+      default: 'ustcadmin@example.com',
       long: 'admin-user-email',
       type: 'string',
     },
@@ -33,7 +34,6 @@ const scriptConfig: ScriptConfig = {
     dynamsoftProductKeys: {
       default: 'noop',
       long: 'dynamsoft-product-keys',
-      multiple: true,
       type: 'string',
     },
     emailDmarcPolicy: {
