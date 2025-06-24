@@ -11,7 +11,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { isEmpty } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import diff from 'diff-arrays-of-objects';
@@ -36,9 +36,10 @@ const updateCaseDocketEntries = ({
   caseToUpdate: any;
   oldCase: any;
 }) => {
+  // We are not comparing work item changes as we do not save the work item on the docket entry in persistence
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
-    oldCase.docketEntries,
-    caseToUpdate.docketEntries,
+    oldCase.docketEntries.map(d => omit(d, 'workItem')),
+    caseToUpdate.docketEntries.map(d => omit(d, 'workItem')),
     'docketEntryId',
   );
 
@@ -46,8 +47,8 @@ const updateCaseDocketEntries = ({
     added: addedArchivedDocketEntries,
     updated: updatedArchivedDocketEntries,
   } = diff(
-    oldCase.archivedDocketEntries,
-    caseToUpdate.archivedDocketEntries,
+    oldCase.archivedDocketEntries.map(d => omit(d, 'workItem')),
+    caseToUpdate.archivedDocketEntries.map(d => omit(d, 'workItem')),
     'docketEntryId',
   );
 
@@ -392,10 +393,9 @@ export const updateCaseAndAssociations = async ({
   // wait for all validation tasks to complete and for callbacks to be generated
   const persistenceCallbacks = (await Promise.all(validationRequests)).flat();
 
-  
   // Persist primary case data first to ensure no errors
   await upsertCases([validNewRawCaseEntity]);
-  
+
   // Then persist related data
   // all validation has passed, so now execute all persistence callbacks from results
   const persistenceRequests = persistenceCallbacks.map(persistFn => {
