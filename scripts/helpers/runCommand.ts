@@ -26,7 +26,7 @@ export const runCommand = async (
         const command = `${cmd} ${options.join(' ')}`;
         reject(new Error(`Unable to run ${command}`));
       } else {
-        resolve(output);
+        resolve(trim(output));
       }
     });
   });
