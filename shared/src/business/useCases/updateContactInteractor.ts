@@ -22,8 +22,8 @@ import { cloneDeep, isEmpty } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateContact

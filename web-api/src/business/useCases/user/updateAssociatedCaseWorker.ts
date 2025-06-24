@@ -10,18 +10,18 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 export const updateAssociatedCaseWorker = async (
   applicationContext: ServerApplicationContext,
   { docketNumber, user }: { docketNumber: string; user: RawUser },
   authorizedUser: AuthUser,
 ): Promise<void> => {
-  await applicationContext.getUseCaseHelpers().acquireLock({
+  const removeLockFunction = await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [`case|${docketNumber}`],
     retries: 10,
-    ttl: 900,
     waitTime: 5000,
   });
 
@@ -46,10 +46,7 @@ export const updateAssociatedCaseWorker = async (
     });
   }
 
-  await applicationContext.getPersistenceGateway().removeLock({
-    applicationContext,
-    identifiers: [`case|${docketNumber}`],
-  });
+  await removeLockFunction();
 };
 
 export const updatePetitionerCase = async ({

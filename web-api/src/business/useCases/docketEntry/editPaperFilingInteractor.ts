@@ -18,15 +18,15 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep, uniq } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;

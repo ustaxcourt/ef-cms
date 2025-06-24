@@ -5,20 +5,18 @@ jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import {
   CONTACT_TYPES,
   PARTY_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
-import {
-  MOCK_PRACTITIONER,
-  petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_PRACTITIONER, petitionsClerkUser } from '@shared/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   getContactPrimary,
   getContactSecondary,
@@ -38,6 +36,8 @@ describe('saveCaseDetailInternalEditInteractor', () => {
   jest
     .mocked(updateCaseAndAssociations)
     .mockImplementation(({ caseToUpdate }) => caseToUpdate);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
+
   const mockCase = {
     ...MOCK_CASE,
     docketEntries: [
@@ -68,15 +68,8 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       },
     ],
   };
-  let mockLock;
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
 
   beforeEach(() => {
-    mockLock = undefined;
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...petitionsClerkUser,
       userId: mockPetitionsClerkUser.userId,
@@ -357,7 +350,9 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     expect(result.receivedAt).toEqual(currentCaseDetail.receivedAt);
   });
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       saveCaseDetailInternalEditInteractor(
@@ -379,7 +374,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await saveCaseDetailInternalEditInteractor(
       applicationContext,
       {
@@ -395,19 +390,10 @@ describe('saveCaseDetailInternalEditInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 });

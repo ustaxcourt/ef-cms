@@ -14,9 +14,9 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
