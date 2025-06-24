@@ -25,7 +25,7 @@ export const trialSessionWorkingCopyHelper = (
   formattedCases: TrialSessionWorkingCopyCase[];
   showPrintButton: boolean;
   trialStatusFilters: { key: string; label: string }[];
-  trialStatusCounts: any
+  trialStatusCounts: { [trialStatus: string]: number }
 } => {
   const trialSession = get(state.trialSession);
   const {
