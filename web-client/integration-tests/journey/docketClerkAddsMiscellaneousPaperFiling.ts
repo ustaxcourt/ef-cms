@@ -95,6 +95,6 @@ export const docketClerkAddsMiscellaneousPaperFiling = cerebralTest => {
       workItem => workItem.docketNumber === cerebralTest.docketNumber,
     );
 
-    expect(miscellaneousWorkItem.editLink).toContain('/complete');
+    expect(miscellaneousWorkItem!.editLink).toContain('/complete');
   });
 };
