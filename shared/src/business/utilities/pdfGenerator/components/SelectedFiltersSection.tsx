@@ -13,7 +13,7 @@ export const SelectedFiltersSection = ({ count, selectedFilters, trialStatusCoun
           <div key={index} className="filter">
             {selectedFilters[index]?.label || ''}
             {selectedFilters[index]?.key in trialStatusCounts && (
-              <span>({trialStatusCounts[selectedFilters[index].key]})</span>
+              <strong>({trialStatusCounts[selectedFilters[index].key]})</strong>
             )}
           </div>
         ))}
@@ -23,7 +23,7 @@ export const SelectedFiltersSection = ({ count, selectedFilters, trialStatusCoun
           <div key={index} className="filter">
             {selectedFilters[index]?.label || ''}
             {selectedFilters[index]?.key in trialStatusCounts && (
-              <span>({trialStatusCounts[selectedFilters[index].key]})</span>
+              <strong>({trialStatusCounts[selectedFilters[index].key]})</strong>
             )}
           </div>
         ))}
