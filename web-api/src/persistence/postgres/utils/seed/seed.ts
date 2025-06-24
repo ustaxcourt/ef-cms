@@ -48,6 +48,12 @@ export const seed = async () => {
     onConflictColumns: ['docketNumber'],
   });
 
+  const insertUsers = pgInsertInto({
+    table: 'dwUser',
+    values: users,
+    onConflictColumns: ['userId'],
+  });
+
   const insertWorkItem = getDbWriter({
     cb: writer =>
       writer

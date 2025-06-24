@@ -43,6 +43,12 @@ import {
   DW_MINUTE_SHEET_COLUMNS,
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
+import {
+  DW_USER_COLUMNS,
+  DW_USER_ON_CASE_COLUMNS,
+  UserOnCaseTable,
+  UserTable,
+} from '@web-api/persistence/postgres/users/schema';
 
 const DEFAULT = {};
 
@@ -56,7 +62,9 @@ interface DatabaseSchemaType {
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
+  dwUser: DatabaseTableMetadata<UserTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
+  dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -116,6 +124,14 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwWorkItem: {
     table: DEFAULT as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
+  },
+  dwUser: {
+    table: DEFAULT as UserTable,
+    columns: DW_USER_COLUMNS,
+  },
+  dwUserOnCase: {
+    table: DEFAULT as UserOnCaseTable,
+    columns: DW_USER_ON_CASE_COLUMNS,
   },
 };
 
