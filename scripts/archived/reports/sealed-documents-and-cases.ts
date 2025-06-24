@@ -33,7 +33,7 @@ const loadCaseFromInitialBlackstoneMigrationDb = async ({
   docketNumber: string;
 }): Promise<RawCase> => {
   const result = await applicationContext
-    .getDocumentClient(applicationContext)
+    .getDocumentClient()
     .get({
       Key: {
         pk: `case|${docketNumber}`,

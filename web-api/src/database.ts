@@ -2,7 +2,7 @@ import { Kysely } from 'kysely';
 import { Database, DatabaseSchema } from './database-schema';
 import { openSearchGateway } from '@web-api/gateways/openSearch/openSearchGateway';
 import { formatNow } from '@shared/business/utilities/DateHandler';
-import { getLogger } from '@web-api/utilities/logger/getLogger';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import {
   OpenSearchSyncMessage,
   OpenSearchSyncMessageType,
@@ -48,7 +48,7 @@ export async function getDbWriter<T>({
 
       await openSearchGateway().queueSync({ message });
     } catch (err) {
-      getLogger().error(
+      getDawsonLogger().error(
         'Error queuing message for opensearch from postgres',
         err,
       );

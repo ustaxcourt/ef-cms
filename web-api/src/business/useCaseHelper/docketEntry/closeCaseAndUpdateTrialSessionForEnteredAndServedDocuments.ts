@@ -35,13 +35,6 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
     );
     caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
-      });
-
     if (caseEntity.trialSessionId) {
       const trialSession = await applicationContext
         .getPersistenceGateway()

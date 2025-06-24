@@ -47,6 +47,10 @@ import {
   ChangeOfAddressTable,
   DW_CHANGE_OF_ADDRESS_COLUMNS,
 } from '@web-api/persistence/postgres/jobs/changeOfAddress/schema';
+import {
+  DW_MINUTE_SHEET_COLUMNS,
+  MinuteSheetTable,
+} from '@web-api/persistence/postgres/minuteSheets/schema';
 
 const DEFAULT = {};
 
@@ -58,6 +62,7 @@ interface DatabaseSchemaType {
   dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
+  dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
@@ -115,6 +120,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwNotification: {
     table: DEFAULT as NotificationTable,
     columns: DW_NOTIFICATION_COLUMNS,
+  },
+  dwMinuteSheet: {
+    table: DEFAULT as MinuteSheetTable,
+    columns: DW_MINUTE_SHEET_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,
