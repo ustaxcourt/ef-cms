@@ -1,0 +1,20 @@
+10495 Chris Notes
+
+- We often need user and practitioner data but sometimes only update/fetch one or the other
+- We have disassociateUserFromCase, but index-user-on-case does not seems to have any mechanism to deal with such users? deleteUserRecord has the same issue.
+- by separating user records across tables, we introduce the potential for data integrity issues (user table updated but not practitioners table, for instance)
+- There are a ton of persistence functions. This is dangerous when they are not clearly differentiated.
+- In associateUserWithCase and updatePractitioner, we do an update, but any undefined fields will not be updated. Is this a problem? (E.g., representing might be undefined?)
+  -We have getUsersById and getUserById. We have upsertPractitionerRecord and upsertPractitionerRecords.
+- nomenclature-wise: We have record, user, userRecord; we have associateUserWithCase but also upsertUserOnCaseRecords
+  - I recommend userToCaseMapping: this makes it clear the things in the table are just mappings so that developers don't have to keep reminding themselves
+  - I recommend we stick with plurals and remove singulars when both exist, e.g., upsertXs, associateUsersWithCase, etc.
+- We have "createNewPractitionerUser" and "createUserRecord."
+- I think I would love a single getUsers function that can take in docket number, email, id, role, section, maybe type, etc.
+- I think I would like to update the 10502 followup and merge it into this branch.
+
+General issue:
+Regardless of how things were in Dynamo, I look at the persistence functions now and do not know what to call when. Example: I want to update a practitioner. Do I need to call updateUser? updatePractitionerUser? upsertPractitionerRecord? Some combination? Is the userOnCaseTable impacted? If I don't know what to call when, neither will Gunnison.
+
+Word of Caution:
+"Getting this into postgres is the most important thing" is only half-true: our implementation must also be intuitive enough. Jim at least understands the Dynamo implementation currently, and Gunnison devs will have experience with SQL. When we are gone, no one will understand our implementation unless it is able to be reasoned about.
