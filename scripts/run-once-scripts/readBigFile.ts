@@ -1,22 +1,31 @@
 import { createReadStream } from 'fs';
 import readline from 'readline';
 
-const uniqueKeysMap: Map<string, number> = new Map();
-
+let scanCount = 0;
 const rl = readline.createInterface({
-  input: createReadStream('allTestDocketEntries.txt'),
+  input: createReadStream(
+    '/Users/zacharyrogers/Documents/allTestDynamoRecords.txt',
+  ),
   crlfDelay: Infinity,
 });
 
 rl.on('line', line => {
   const obj = JSON.parse(line);
-  Object.keys(obj).forEach(key => {
-    const currentCount = uniqueKeysMap.get(key) || 0;
-    uniqueKeysMap.set(key, currentCount + 1);
-  });
+  if (
+    obj.pk.startsWith('user|') &&
+    obj.sk.startsWith('user|') &&
+    typeof obj.birthYear == 'string'
+  ) {
+    console.log('obj', obj);
+  }
+
+  if (scanCount % 100000 === 0) {
+    console.log('scanCount: ', scanCount);
+  }
+
+  scanCount++;
 });
 
 rl.on('close', () => {
   console.log('Done!');
-  console.log(uniqueKeysMap);
 });

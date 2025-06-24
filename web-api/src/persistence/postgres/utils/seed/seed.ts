@@ -22,6 +22,7 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { users } from '@web-api/persistence/postgres/utils/seed/fixtures/users';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -103,13 +104,14 @@ export const seed = async () => {
   const insertDocketEntries = upsertDocketEntries(validatedDocketEntrySeeds);
 
   await Promise.all([
-    insertMessages,
     insertCaseDeadline,
-    insertCorrespondence,
-    insertCaseWorksheet,
-    insertWorkItem,
     insertCases,
+    insertCaseWorksheet,
+    insertCorrespondence,
     insertDocketEntries,
+    insertMessages,
+    insertUsers,
+    insertWorkItem,
   ]);
 };
 
