@@ -21,6 +21,8 @@ export const processUserOnCaseEntries = async ({
         userId: record.userId,
         docketNumber: record.docketNumber,
         entityName: record.entityName,
+        representing: record.representing ?? [],
+        serviceIndicatorOnCase: record.serviceIndicator ?? undefined,
       });
     });
   } catch (e) {
