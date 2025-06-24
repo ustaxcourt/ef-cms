@@ -12,7 +12,7 @@ export const practitionerUpdatesAddress = cerebralTest => {
     });
 
     await cerebralTest.runSequence(
-      'submitUpdateUserContactInformationSequence',
+      'submitUpdatePractitionerContactInformationSequence',
     );
     expect(cerebralTest.getState('validationErrors')).toEqual({
       contact: { address1: expect.anything() },
@@ -32,7 +32,7 @@ export const practitionerUpdatesAddress = cerebralTest => {
     });
 
     await cerebralTest.runSequence(
-      'submitUpdateUserContactInformationSequence',
+      'submitUpdatePractitionerContactInformationSequence',
     );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});

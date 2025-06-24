@@ -194,7 +194,7 @@ import { updateQcCompleteForTrialLambda } from './lambdas/cases/updateQcComplete
 import { updateTrialSessionLambda } from './lambdas/trialSessions/updateTrialSessionLambda';
 import { updateTrialSessionWorkingCopyLambda } from './lambdas/trialSessions/updateTrialSessionWorkingCopyLambda';
 import { updateUserCaseNoteLambda } from './lambdas/caseNote/updateUserCaseNoteLambda';
-import { updateUserContactInformationLambda } from './lambdas/users/updateUserContactInformationLambda';
+import { updatePractitionerContactInformationLambda } from './lambdas/users/updatePractitionerContactInformationLambda';
 import { updateUserPendingEmailLambda } from './lambdas/users/updateUserPendingEmailLambda';
 import { getCaseLambda as v1GetCaseLambda } from './lambdas/v1/getCaseLambda';
 import { getDocumentDownloadUrlLambda as v1GetDocumentDownloadUrlLambda } from './lambdas/v1/getDocumentDownloadUrlLambda';
@@ -1025,7 +1025,9 @@ app.delete(
   );
   app.put(
     '/async/users/:userId/contact-info',
-    lambdaWrapper(updateUserContactInformationLambda, { isAsync: true }),
+    lambdaWrapper(updatePractitionerContactInformationLambda, {
+      isAsync: true,
+    }),
   );
   app.get(
     '/users/:userId/pending-email',

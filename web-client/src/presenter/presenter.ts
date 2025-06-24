@@ -488,7 +488,7 @@ import { submitUpdateAddDocketNumbersToOrderSequence } from './sequences/submitU
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
 import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePractitionerUserSequence';
-import { submitUpdateUserContactInformationSequence } from './sequences/submitUpdateUserContactInformationSequence';
+import { submitUpdatePractitionerContactInformationSequence } from './sequences/submitUpdatePractitionerContactInformationSequence';
 import { thirtyDayNoticePaperServiceCompleteSequence } from './sequences/thirtyDayNoticePaperServiceCompleteSequence';
 import { toggleAllWorkItemCheckboxChangeSequence } from './sequences/toggleAllWorkItemCheckboxChangeSequence';
 import { toggleBetaBarSequence } from './sequences/toggleBetaBarSequence';
@@ -1408,8 +1408,8 @@ export const presenterSequences = {
     submitUpdatePetitionerInformationFromModalSequence as unknown as Function,
   submitUpdatePractitionerUserSequence:
     submitUpdatePractitionerUserSequence as unknown as Function,
-  submitUpdateUserContactInformationSequence:
-    submitUpdateUserContactInformationSequence as unknown as Function,
+  submitUpdatePractitionerContactInformationSequence:
+    submitUpdatePractitionerContactInformationSequence as unknown as Function,
   thirtyDayNoticePaperServiceCompleteSequence:
     thirtyDayNoticePaperServiceCompleteSequence as unknown as Function,
   toggleAllWorkItemCheckboxChangeSequence:

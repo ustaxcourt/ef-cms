@@ -299,7 +299,7 @@ import { updateQcCompleteForTrialInteractor } from '../../shared/src/proxies/upd
 import { updateTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionProxy';
 import { updateTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/updateTrialSessionWorkingCopyProxy';
 import { updateUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/updateUserCaseNoteProxy';
-import { updateUserContactInformationInteractor } from '../../shared/src/proxies/users/updateUserContactInformationProxy';
+import { updatePractitionerContactInformationInteractor } from '../../shared/src/proxies/users/updatePractitionerContactInformationProxy';
 import { updateUserPendingEmailInteractor } from '../../shared/src/proxies/users/updateUserPendingEmailProxy';
 import { uploadCorrespondenceDocumentInteractor } from '../../shared/src/business/useCases/correspondence/uploadCorrespondenceDocumentInteractor';
 import { uploadDocumentAndMakeSafeInteractor } from '../../shared/src/business/useCases/uploadDocumentAndMakeSafeInteractor';
@@ -552,7 +552,7 @@ const allUseCases = {
   updateTrialSessionInteractor,
   updateTrialSessionWorkingCopyInteractor,
   updateUserCaseNoteInteractor,
-  updateUserContactInformationInteractor,
+  updatePractitionerContactInformationInteractor,
   updateUserPendingEmailInteractor,
   uploadCorrespondenceDocumentInteractor,
   uploadDocumentAndMakeSafeInteractor,

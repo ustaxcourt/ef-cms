@@ -12,15 +12,15 @@ export const UserContactEdit = connect(
   {
     form: state.form,
     navigateBackSequence: sequences.navigateBackSequence,
-    submitUpdateUserContactInformationSequence:
-      sequences.submitUpdateUserContactInformationSequence,
+    submitUpdatePractitionerContactInformationSequence:
+      sequences.submitUpdatePractitionerContactInformationSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     userContactEditHelper: state.userContactEditHelper,
   },
   function UserContactEdit({
     form,
     navigateBackSequence,
-    submitUpdateUserContactInformationSequence,
+    submitUpdatePractitionerContactInformationSequence,
     updateFormValueSequence,
     userContactEditHelper,
   }) {
@@ -79,7 +79,7 @@ export const UserContactEdit = connect(
             <Button
               data-testid="save-edit-contact"
               onClick={() => {
-                submitUpdateUserContactInformationSequence();
+                submitUpdatePractitionerContactInformationSequence();
               }}
             >
               Save

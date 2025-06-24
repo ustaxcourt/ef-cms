@@ -10,7 +10,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { irsPractitionerUser } from '@shared/test/mockUsers';
-import { updateUserContactInformation } from './updateUserContactInformationInteractor';
+import { updatePractitionerContactInformation } from './updatePractitionerContactInformationInteractor';
 jest.mock('./generateChangeOfAddress');
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
@@ -26,7 +26,7 @@ const updatePractitioner = updatePractitionerMock as jest.Mock;
 const getPractitionerById = getPractitionerByIdMock as jest.Mock;
 const updateUser = updateUserMock as jest.Mock;
 
-describe('updateUserContactInformation', () => {
+describe('updatePractitionerContactInformation', () => {
   let mockUser;
   const clientConnectionId = '384048';
 
@@ -67,7 +67,7 @@ describe('updateUserContactInformation', () => {
     mockUser = mockPetitionsClerkUser;
 
     await expect(
-      updateUserContactInformation(
+      updatePractitionerContactInformation(
         applicationContext,
         {
           contactInfo,
@@ -80,7 +80,7 @@ describe('updateUserContactInformation', () => {
 
   it('should throw unauthorized error when the user attempts to modify contact information for a different user', async () => {
     await expect(
-      updateUserContactInformation(
+      updatePractitionerContactInformation(
         applicationContext,
         {
           contactInfo,
@@ -92,7 +92,7 @@ describe('updateUserContactInformation', () => {
   });
 
   it('should return without updating user or cases when the contact information has not changed', async () => {
-    await updateUserContactInformation(
+    await updatePractitionerContactInformation(
       applicationContext,
       {
         contactInfo: mockUser.contact,
@@ -137,7 +137,7 @@ describe('updateUserContactInformation', () => {
       practitionerType: PRACTITIONER_TYPE_OPTIONS[0],
       role: ROLES.irsPractitioner,
     };
-    await updateUserContactInformation(
+    await updatePractitionerContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -172,7 +172,7 @@ describe('updateUserContactInformation', () => {
       role: ROLES.irsPractitioner,
     };
 
-    await updateUserContactInformation(
+    await updatePractitionerContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -193,7 +193,7 @@ describe('updateUserContactInformation', () => {
     });
 
     await expect(
-      updateUserContactInformation(
+      updatePractitionerContactInformation(
         applicationContext,
         {
           contactInfo,
@@ -219,7 +219,7 @@ describe('updateUserContactInformation', () => {
   });
 
   it('should generate a change of address document', async () => {
-    await updateUserContactInformation(
+    await updatePractitionerContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -234,7 +234,7 @@ describe('updateUserContactInformation', () => {
   it('should clean up DB and send websocket message if "generateChangeOfAddress" returns empty array', async () => {
     (generateChangeOfAddress as jest.Mock).mockReturnValue([]);
 
-    await updateUserContactInformation(
+    await updatePractitionerContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -263,7 +263,7 @@ describe('updateUserContactInformation', () => {
   it('should not clean up DB and send websocket message if "generateChangeOfAddress" returns undefined', async () => {
     (generateChangeOfAddress as jest.Mock).mockReturnValue(undefined);
 
-    await updateUserContactInformation(
+    await updatePractitionerContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -284,7 +284,7 @@ describe('updateUserContactInformation', () => {
   });
 
   it('should update the firmName if user is a practitioner and firmName is passed in', async () => {
-    await updateUserContactInformation(
+    await updatePractitionerContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -305,7 +305,7 @@ describe('updateUserContactInformation', () => {
       contact: contactInfo,
     }));
 
-    await updateUserContactInformation(
+    await updatePractitionerContactInformation(
       applicationContext,
       {
         contactInfo,
@@ -325,7 +325,7 @@ describe('updateUserContactInformation', () => {
     });
 
     await expect(
-      updateUserContactInformation(
+      updatePractitionerContactInformation(
         applicationContext,
         {
           contactInfo,

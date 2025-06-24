@@ -9,8 +9,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
-  updateUserContactInformationInteractor,
-} from './updateUserContactInformationInteractor';
+  updatePractitionerContactInformationInteractor,
+} from './updatePractitionerContactInformationInteractor';
 import { sleep } from '@shared/tools/helpers';
 import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
@@ -89,7 +89,7 @@ describe('determineEntitiesToLock', () => {
   });
 });
 
-describe('updateUserContactInformationInteractor', () => {
+describe('updatePractitionerContactInformationInteractor', () => {
   let mockLock;
 
   const mockRequest = {
@@ -136,7 +136,7 @@ describe('updateUserContactInformationInteractor', () => {
 
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
-        updateUserContactInformationInteractor(
+        updatePractitionerContactInformationInteractor(
           applicationContext,
           mockRequest,
           MOCK_PRACTITIONER as UnknownAuthUser,
@@ -155,7 +155,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
 
     it('should acquire a lock that lasts for 15 minutes', async () => {
-      await updateUserContactInformationInteractor(
+      await updatePractitionerContactInformationInteractor(
         applicationContext,
         mockRequest,
         MOCK_PRACTITIONER as UnknownAuthUser,
@@ -171,7 +171,7 @@ describe('updateUserContactInformationInteractor', () => {
     });
 
     it('should remove the lock', async () => {
-      await updateUserContactInformationInteractor(
+      await updatePractitionerContactInformationInteractor(
         applicationContext,
         mockRequest,
         MOCK_PRACTITIONER as UnknownAuthUser,

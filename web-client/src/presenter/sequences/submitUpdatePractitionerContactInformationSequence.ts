@@ -4,10 +4,10 @@ import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErr
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { updateUserContactInformationAction } from '../actions/updateUserContactInformationAction';
+import { updatePractitionerContactInformationAction } from '../actions/updatePractitionerContactInformationAction';
 import { validateUserContactAction } from '../actions/validateUserContactAction';
 
-export const submitUpdateUserContactInformationSequence = [
+export const submitUpdatePractitionerContactInformationSequence = [
   clearAlertsAction,
   startShowValidationAction,
   validateUserContactAction,
@@ -17,6 +17,9 @@ export const submitUpdateUserContactInformationSequence = [
       setScrollToErrorNotificationAction,
       setValidationAlertErrorsAction,
     ],
-    success: [setWaitingForResponseAction, updateUserContactInformationAction],
+    success: [
+      setWaitingForResponseAction,
+      updatePractitionerContactInformationAction,
+    ],
   },
 ];

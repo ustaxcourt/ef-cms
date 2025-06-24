@@ -196,7 +196,7 @@ import { updateQcCompleteForTrialInteractor } from '../../shared/src/business/us
 import { updateTrialSessionInteractor } from './business/useCases/trialSessions/updateTrialSessionInteractor';
 import { updateTrialSessionWorkingCopyInteractor } from './business/useCases/trialSessions/updateTrialSessionWorkingCopyInteractor';
 import { updateUserCaseNoteInteractor } from './business/useCases/caseNote/updateUserCaseNoteInteractor';
-import { updateUserContactInformationInteractor } from './business/useCases/user/updateUserContactInformationInteractor';
+import { updatePractitionerContactInformationInteractor } from './business/useCases/user/updatePractitionerContactInformationInteractor';
 import { updateUserPendingEmailInteractor } from './business/useCases/user/updateUserPendingEmailInteractor';
 import { validatePdfInteractor } from './business/useCases/pdf/validatePdfInteractor';
 import { verifyPendingCaseForUserInteractor } from './business/useCases/caseAssociationRequest/verifyPendingCaseForUserInteractor';
@@ -401,7 +401,7 @@ const useCases = {
   updateTrialSessionInteractor,
   updateTrialSessionWorkingCopyInteractor,
   updateUserCaseNoteInteractor,
-  updateUserContactInformationInteractor,
+  updatePractitionerContactInformationInteractor,
   updateUserPendingEmailInteractor,
   validatePdfInteractor,
   verifyPendingCaseForUserInteractor,

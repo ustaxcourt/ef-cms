@@ -1,12 +1,12 @@
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
- * updates user contact information (for practitioners)
+ * updates practitioner contact information
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Function} providers.get the cerebral get function
  */
-export const updateUserContactInformationAction = async ({
+export const updatePractitionerContactInformationAction = async ({
   applicationContext,
   get,
   store,
@@ -19,7 +19,7 @@ export const updateUserContactInformationAction = async ({
 
   await applicationContext
     .getUseCases()
-    .updateUserContactInformationInteractor(applicationContext, {
+    .updatePractitionerContactInformationInteractor(applicationContext, {
       contactInfo: formUser.contact,
       firmName: formUser.firmName,
       userId: currentUser.userId,

@@ -4,7 +4,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';
 import {
@@ -25,7 +25,7 @@ import { getCasesForUser } from '@web-api/persistence/postgres/users/cases/getCa
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
- * updateUserContactInformationHelper
+ * updatePractitionerContactInformationHelper
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
@@ -33,7 +33,7 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
  * @param {string} providers.firmName firmName to update if a privatePractitioner is updating their info
  * @returns {Promise} an object is successful
  */
-const updateUserContactInformationHelper = async (
+const updatePractitionerContactInformationHelper = async (
   applicationContext: ServerApplicationContext,
   {
     contactInfo,
@@ -48,25 +48,16 @@ const updateUserContactInformationHelper = async (
   },
   authorizedUser: AuthUser,
 ) => {
-  const user = (await getPractitionerById({ userId })) as Practitioner;
+  const user = await getPractitionerById({ userId });
 
-  const isPractitioner = u => {
-    return (
-      u.entityName === PrivatePractitioner.ENTITY_NAME ||
-      u.entityName === IrsPractitioner.ENTITY_NAME ||
-      u.entityName === Practitioner.ENTITY_NAME
-    );
-  };
+  if (!user) {
+    throw new NotFoundError(`User not found with userId: ${userId}`);
+  }
 
-  const isPractitionerUnchanged = u =>
-    isPractitioner(u) &&
-    isEqual(user.contact, contactInfo) &&
-    isEqual(user.firmName, firmName);
+  const isPractitionerUnchanged = user =>
+    isEqual(user.contact, contactInfo) && isEqual(user.firmName, firmName);
 
-  const isUserUnchanged = u =>
-    !isPractitioner(u) && isEqual(user.contact, contactInfo);
-
-  if (isPractitionerUnchanged(user) || isUserUnchanged(user)) {
+  if (isPractitionerUnchanged(user)) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: { action: 'user_contact_initial_update_complete' },
@@ -75,7 +66,10 @@ const updateUserContactInformationHelper = async (
     });
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
-      message: { action: 'user_contact_full_update_complete', user },
+      message: {
+        action: 'user_contact_full_update_complete',
+        user: user.toRawObject(),
+      },
       userId: user.userId,
       clientConnectionId,
     });
@@ -99,13 +93,6 @@ const updateUserContactInformationHelper = async (
     throw new Error(`Unrecognized entityType ${user.entityName}`);
   }
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: { action: 'user_contact_initial_update_complete' },
-    userId: user.userId,
-    clientConnectionId,
-  });
-
   await settlePromises([
     updatePractitioner({
       practitionerToUpdate: userEntity.validate().toRawObject(),
@@ -114,6 +101,13 @@ const updateUserContactInformationHelper = async (
       userToUpdate: userEntity.validate().toRawObject(),
     }),
   ]);
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: { action: 'user_contact_initial_update_complete' },
+    userId: user.userId,
+    clientConnectionId,
+  });
 
   // 10495 TODO: We should pass the old data (that is, the `user` variable set
   // at the top of this use case) to generateChangeOfAddress, instead of relying
@@ -147,13 +141,13 @@ const updateUserContactInformationHelper = async (
 };
 
 /**
- * updateUserContactInformationInteractor
+ * updatePractitionerContactInformationInteractor
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  */
-export const updateUserContactInformation = async (
+export const updatePractitionerContactInformation = async (
   applicationContext: ServerApplicationContext,
   {
     contactInfo,
@@ -176,7 +170,7 @@ export const updateUserContactInformation = async (
   }
 
   try {
-    await updateUserContactInformationHelper(
+    await updatePractitionerContactInformationHelper(
       applicationContext,
       { contactInfo, firmName, userId, clientConnectionId },
       authorizedUser,
@@ -210,8 +204,8 @@ export const determineEntitiesToLock = async (
   };
 };
 
-export const updateUserContactInformationInteractor = withLocking(
-  updateUserContactInformation,
+export const updatePractitionerContactInformationInteractor = withLocking(
+  updatePractitionerContactInformation,
   determineEntitiesToLock,
   asyncHandleLockError,
 );

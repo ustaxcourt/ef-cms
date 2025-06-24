@@ -1,15 +1,15 @@
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from '@web-client/presenter/test.cerebral';
-import { updateUserContactInformationAction } from './updateUserContactInformationAction';
+import { updatePractitionerContactInformationAction } from './updatePractitionerContactInformationAction';
 
-describe('updateUserContactInformationAction', () => {
+describe('updatePractitionerContactInformationAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
 
   it('should set userContactEditProgress.inProgress to true', async () => {
-    const result = await runAction(updateUserContactInformationAction, {
+    const result = await runAction(updatePractitionerContactInformationAction, {
       modules: {
         presenter,
       },
@@ -26,7 +26,7 @@ describe('updateUserContactInformationAction', () => {
 
   it('should call the use case to update the user contact', async () => {
     const userId = 'a805d1ab-18d0-43ec-bafb-654e83405416';
-    await runAction(updateUserContactInformationAction, {
+    await runAction(updatePractitionerContactInformationAction, {
       modules: {
         presenter,
       },
@@ -39,11 +39,12 @@ describe('updateUserContactInformationAction', () => {
       },
     });
     expect(
-      applicationContext.getUseCases().updateUserContactInformationInteractor,
+      applicationContext.getUseCases()
+        .updatePractitionerContactInformationInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().updateUserContactInformationInteractor
-        .mock.calls[0][1],
+      applicationContext.getUseCases()
+        .updatePractitionerContactInformationInteractor.mock.calls[0][1],
     ).toMatchObject({
       contactInfo: {
         address1: '999 Jump St',

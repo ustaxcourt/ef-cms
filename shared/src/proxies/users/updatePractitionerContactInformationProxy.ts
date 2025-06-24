@@ -1,7 +1,7 @@
 import { put } from '../requests';
 
 /**
- * updateUserContactInformationInteractor
+ * updatePractitionerContactInformationInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -10,7 +10,7 @@ import { put } from '../requests';
  * @param {string} providers.userId the userId to update the contact info
  * @returns {Promise<*>} the promise of the api call
  */
-export const updateUserContactInformationInteractor = (
+export const updatePractitionerContactInformationInteractor = (
   applicationContext,
   {
     contactInfo,
