@@ -19,15 +19,14 @@ export const WorkingCopyFilterHeader = connect(
     trialStatusFilters,
     trialSessionWorkingCopy,
   }) {
-    const trialStatusCounts = trialSessionWorkingCopyHelper.formattedCases.reduce((counters, c) => {
-      const meta = trialSessionWorkingCopy.caseMetadata[c.docketNumber];
-      if(meta && meta.trialStatus) {
-        counters[meta.trialStatus] = (counters[meta.trialStatus] || 0) + 1;
-      } else {
+    const trialStatusCounts = Object.values(trialSessionWorkingCopy.caseMetadata).reduce((counters, c) => {
+      if(c.trialStatus === undefined || c.trialStatus === '') {
         counters["statusUnassigned"] = (counters["statusUnassigned"] || 0) + 1;
+      } else {
+        counters[c.trialStatus] = (counters[c.trialStatus] || 0) + 1;
       }
       return counters;
-    }, {})
+    }, {});
     return (
       <div className="working-copy-filters">
         <div className="working-copy-filters--header header-with-blue-background">
