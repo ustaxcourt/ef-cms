@@ -73,7 +73,9 @@ export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
 };
 
 const addDocketEntries = ({ caseEntity }) => {
-  const initialDocumentTypesListRequiringDocketEntry =Object.values(INITIAL_DOCUMENT_TYPES_MAP).filter(
+  const initialDocumentTypesListRequiringDocketEntry = Object.values(
+    INITIAL_DOCUMENT_TYPES_MAP,
+  ).filter(
     doc =>
       doc !== INITIAL_DOCUMENT_TYPES.petition.documentType &&
       doc !== INITIAL_DOCUMENT_TYPES.stin.documentType,
