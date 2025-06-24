@@ -1,21 +1,11 @@
-import { AddressLabel } from '@shared/business/utilities/pdfGenerator/components/AddressLabel';
+import {
+  AddressLabel,
+  AddressLabelParams,
+} from '@shared/business/utilities/pdfGenerator/components/AddressLabel';
 import React from 'react';
 
-type AddressLabelCoverSheetParams = {
-  additionalName: string;
-  address1: string;
-  address2: string;
-  address3: string;
-  city: string;
-  country: string;
-  countryType: string;
+export type AddressLabelCoverSheetParams = AddressLabelParams & {
   docketNumberWithSuffix: string;
-  inCareOf: string;
-  name: string;
-  postalCode: string;
-  secondaryName: string;
-  state: string;
-  title: string;
 };
 
 export const AddressLabelCoverSheet = ({
