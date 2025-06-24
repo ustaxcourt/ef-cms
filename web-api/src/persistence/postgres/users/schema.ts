@@ -63,6 +63,7 @@ export const userOnCaseTableDefinition = {
   userId: DEFAULT as string,
   docketNumber: DEFAULT as string,
   representing: DEFAULT as ColumnType<string[], string, string> | undefined,
+  serviceIndicatorOnCase: DEFAULT as string,
   entityName: DEFAULT as string,
 };
 
