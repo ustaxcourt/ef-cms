@@ -7,6 +7,7 @@ jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 jest.mock('@shared/sharedAppContext');
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,

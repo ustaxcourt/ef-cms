@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import {
   CASE_TYPES_MAP,

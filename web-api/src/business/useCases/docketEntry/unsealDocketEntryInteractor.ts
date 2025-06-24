@@ -1,12 +1,12 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+} from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 /**
  * unseals a given docket entry on a case
@@ -18,7 +18,6 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
  * @returns {object} the updated docket entry after it has been unsealed
  */
 export const unsealDocketEntryInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,
@@ -50,12 +49,7 @@ export const unsealDocketEntryInteractor = async (
 
   docketEntryEntity.unsealEntry();
 
-  await applicationContext.getPersistenceGateway().updateDocketEntry({
-    applicationContext,
-    docketEntryId,
-    docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
-  });
+  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
 
   return docketEntryEntity.toRawObject();
 };

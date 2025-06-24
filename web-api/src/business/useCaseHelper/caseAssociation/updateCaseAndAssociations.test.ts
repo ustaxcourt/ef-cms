@@ -2,10 +2,10 @@ import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
 jest.mock('@web-api/persistence/postgres/messages/updateMessage');
-jest.mock('@web-api/persistence/dynamo/documents/updateDocketEntry');
 jest.mock('@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing');
 jest.mock('@web-api/persistence/dynamo/cases/removePractitionerOnCase');
 jest.mock('@web-api/persistence/dynamo/cases/updatePractitionerOnCase');
@@ -28,7 +28,6 @@ import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persist
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { MOCK_MESSAGE } from '@shared/test/mockMessage';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
-import { updateDocketEntry as updateDocketEntryMock } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { removeCaseFromHearing as removeCaseFromHearingMock } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
 import {
   removeIrsPractitionerOnCase as removeIrsPractitionerOnCaseMock,
@@ -39,10 +38,12 @@ import {
   updatePrivatePractitionerOnCase as updatePrivatePractitionerOnCaseMock,
 } from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 describe('updateCaseAndAssociations', () => {
   let validMockCase;
 
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const upsertCases = jest.mocked(upsertCasesMock);
   const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
@@ -51,7 +52,6 @@ describe('updateCaseAndAssociations', () => {
   const getCaseDeadlinesByDocketNumber =
     getCaseDeadlinesByDocketNumberMock as jest.Mock;
   const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
-  const updateDocketEntry = jest.mocked(updateDocketEntryMock);
   const removeCaseFromHearing = jest.mocked(removeCaseFromHearingMock);
   const updateIrsPractitionerOnCase = jest.mocked(
     updateIrsPractitionerOnCaseMock,
@@ -155,7 +155,7 @@ describe('updateCaseAndAssociations', () => {
     ).rejects.toThrow('query problem');
 
     // updateCaseDocketEntries
-    expect(updateDocketEntry).not.toHaveBeenCalled();
+    expect(upsertDocketEntries).not.toHaveBeenCalled();
 
     // updateCaseMessages
     expect(updateMessage).not.toHaveBeenCalled();
@@ -218,7 +218,7 @@ describe('updateCaseAndAssociations', () => {
   });
 
   describe('docket entries', () => {
-    it('does not call updateDocketEntry if all docket entries are unchanged', async () => {
+    it('does not call upsertDocketEntries if all docket entries are unchanged', async () => {
       const oldCase = {
         ...validMockCase,
         archivedDocketEntries: MOCK_DOCUMENTS,
@@ -237,11 +237,11 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate,
       });
 
-      expect(updateDocketEntry).not.toHaveBeenCalled();
+      expect(upsertDocketEntries).toHaveBeenCalledWith([]);
       expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
     });
 
-    it('calls updateDocketEntry for each docket entry which has been added or changed', async () => {
+    it('calls upsertDocketEntries for each docket entry which has been added or changed', async () => {
       const oldCase = {
         ...MOCK_CASE,
         archivedDocketEntries: [MOCK_DOCUMENTS[0]],
@@ -273,7 +273,7 @@ describe('updateCaseAndAssociations', () => {
       expect(
         upsertCases.mock.calls[0][0][0].archivedDocketEntries,
       ).toMatchObject(caseToUpdate.archivedDocketEntries);
-      expect(updateDocketEntry).toHaveBeenCalledTimes(4);
+      expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
     });
   });
 

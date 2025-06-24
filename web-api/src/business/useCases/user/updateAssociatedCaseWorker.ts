@@ -9,6 +9,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 
 export const updateAssociatedCaseWorker = async (
   applicationContext: ServerApplicationContext,
@@ -179,21 +180,18 @@ const updateCaseEntityAndGenerateChange = async ({
   );
 
   if (caseEntity.shouldGenerateNoticesForCase()) {
-    const { changeOfAddressDocketEntry } = await applicationContext
-      .getUseCaseHelpers()
-      .generateAndServeDocketEntry({
-        applicationContext,
-        authorizedUser,
-        caseEntity,
-        docketMeta: undefined,
-        documentType,
-        newData,
-        oldData,
-        privatePractitionersRepresentingContact,
-        servedParties,
-        user,
-      });
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+    await generateAndServeDocketEntry({
+      applicationContext,
+      authorizedUser,
+      caseEntity,
+      docketMeta: undefined,
+      documentType,
+      newData,
+      oldData,
+      privatePractitionersRepresentingContact,
+      servedParties,
+      user,
+    });
   }
 
   return caseEntity.validate();

@@ -32,7 +32,6 @@ export const processStreamRecordsInteractor = async (
     });
 
     await processDocketEntries({
-      applicationContext,
       docketEntryRecords,
     }).catch(err => {
       getDawsonLogger().error('failed to processDocketEntries', {

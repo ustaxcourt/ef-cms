@@ -15,9 +15,9 @@ import { isEmpty, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import diff from 'diff-arrays-of-objects';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { updateDocketEntry } from '@web-api/persistence/dynamo/documents/updateDocketEntry';
 import { removeCaseFromHearing } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
 import {
   removeIrsPractitionerOnCase,
@@ -106,14 +106,7 @@ export const updateCaseAndAssociations = async ({
 
   // Then persist all related case data
   await settlePromises([
-    ...docketEntries.map(doc =>
-      updateDocketEntry({
-        applicationContext,
-        docketEntryId: doc.docketEntryId,
-        docketNumber: caseToUpdate.docketNumber,
-        document: doc,
-      }),
-    ),
+    upsertDocketEntries(docketEntries),
     ...messages.map(message => updateMessage(message)),
     upsertCaseCorrespondences(correspondences),
     ...deletedHearings.map(({ trialSessionId }) =>

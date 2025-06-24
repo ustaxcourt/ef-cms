@@ -8,18 +8,10 @@ import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyn
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
-import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { flattenDeep, isArray } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
-export const transformOpenSearchCase = (
-  caseData: CaseKysely | CaseKysely[],
-) => {
-  const cases = isArray(caseData) ? caseData : [caseData];
-  return cases.map(c => c.docketNumber);
-};
-
-export const indexOpenSearchCase = async ({
+export const indexOpenSearchCases = async ({
   message,
 }: {
   message: OpenSearchSyncMessage;
