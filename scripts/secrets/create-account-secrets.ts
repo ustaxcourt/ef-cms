@@ -104,9 +104,9 @@ const {
   const accountSecrets = {
     COGNITO_SUFFIX: `${repoSlug}_${env}`,
     DAWSON_DEV_TRUSTED_ROLE_ARNS: dawsonDevTrustedRoleArns,
+    ES_LOGS_EBS_VOLUME_SIZE_GB: opensearchLogsVolumeSize,
     ES_LOGS_INSTANCE_COUNT: opensearchLogsInstanceCount,
     ES_LOGS_INSTANCE_TYPE: opensearchLogsInstanceType,
-    ES_LOGS_EBS_VOLUME_SIZE_GB: opensearchLogsVolumeSize,
     LOG_GROUP_ENVIRONMENTS: [env],
     LOG_SNAPSHOT_BUCKET_NAME: `${repoSlug}-${env}-log-snapshots`,
     NUM_DAYS_TO_KEEP_LOGS: logExpirationDays,
