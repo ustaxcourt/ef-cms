@@ -27,7 +27,7 @@ export const getLowerEnvSsoRoleId = async (): Promise<string> => {
       'sts',
       'get-caller-identity',
       '--query',
-      'Account',
+      'Arn',
       '--output',
       'text',
     ]),
