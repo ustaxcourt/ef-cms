@@ -1,9 +1,20 @@
-import { ChangeOfAddress } from '@shared/business/utilities/pdfGenerator/documentTemplates/ChangeOfAddress';
+import {
+  ChangeOfAddress,
+  ChangeOfAddressParams,
+} from '@shared/business/utilities/pdfGenerator/documentTemplates/ChangeOfAddress';
 import { generateHTMLTemplateForPDF } from '../generateHTMLTemplateForPDF/generateHTMLTemplateForPDF';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
-export const computeChangeOptions = ({ documentType }) => {
+export const computeChangeOptions = ({
+  documentType,
+}: {
+  documentType: {
+    title: string;
+    eventCode: string;
+  };
+}) => {
   const options = {
     h3: documentType.title,
     isAddressAndPhoneChange: documentType.eventCode === 'NCAP',
@@ -14,7 +25,23 @@ export const computeChangeOptions = ({ documentType }) => {
   return options;
 };
 
-export const changeOfAddress = async ({ applicationContext, content }) => {
+export const changeOfAddress = async ({
+  applicationContext,
+  content,
+}: {
+  applicationContext: ServerApplicationContext;
+  content: Omit<ChangeOfAddressParams, 'options'> & {
+    caseCaptionExtension: string;
+    caseTitle: string;
+    docketNumberWithSuffix: string;
+    docketNumber: string;
+    documentTitle: string;
+    documentType: {
+      title: string;
+      eventCode: string;
+    };
+  };
+}) => {
   const {
     caseCaptionExtension,
     caseTitle,
