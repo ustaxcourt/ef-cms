@@ -13,7 +13,7 @@ export const associateUserWithCase = async ({
   docketNumber: string;
   userId: string;
   representing?: string[];
-  entityName: string;
+  entityName?: string;
   serviceIndicatorOnCase?: string;
 }) => {
   const userOnCaseRecord = await getDbReader(reader =>

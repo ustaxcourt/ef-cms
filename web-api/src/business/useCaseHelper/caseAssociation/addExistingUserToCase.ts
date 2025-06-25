@@ -73,7 +73,6 @@ export const addExistingUserToCase = async ({
   await associateUserWithCase({
     docketNumber: rawCase.docketNumber,
     userId: userToAdd.userId,
-    entityName: userToAdd.entityName,
   });
 
   return userToAdd.userId;

@@ -78,7 +78,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('representing', 'jsonb')
-    .addColumn('entityName', 'varchar', col => col.notNull())
+    .addColumn('entityName', 'varchar')
     .addColumn('serviceIndicatorOnCase', 'varchar')
     .addPrimaryKeyConstraint('pkUserOnCase', ['docketNumber', 'userId'])
     .execute();

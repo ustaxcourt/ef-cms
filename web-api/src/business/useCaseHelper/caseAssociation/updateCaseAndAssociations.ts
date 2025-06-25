@@ -228,7 +228,6 @@ const updateIrsPractitioners = ({
         return await associateUserWithCase({
           docketNumber: caseToUpdate.docketNumber,
           userId: practitioner.userId,
-          entityName: practitioner.entityName,
         });
       },
   );
