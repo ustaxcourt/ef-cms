@@ -8,6 +8,7 @@ import type { ServerApplicationContext } from '@web-api/applicationContext';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 export const processPractitionerMappingEntries = async ({
   applicationContext,
@@ -18,75 +19,81 @@ export const processPractitionerMappingEntries = async ({
 }) => {
   if (!practitionerMappingRecords.length) return;
 
-  const indexCaseEntryForPractitionerMapping =
-    async practitionerMappingRecord => {
-      const practitionerMappingData =
-        practitionerMappingRecord.dynamodb.NewImage ||
-        practitionerMappingRecord.dynamodb.OldImage;
-      const caseRecords: IDynamoDBRecord[] = [];
+  try {
+    const indexCaseEntryForPractitionerMapping =
+      async practitionerMappingRecord => {
+        const practitionerMappingData =
+          practitionerMappingRecord.dynamodb.NewImage ||
+          practitionerMappingRecord.dynamodb.OldImage;
+        const caseRecords: IDynamoDBRecord[] = [];
 
-      const docketNumber = practitionerMappingData.pk.S.substring(
-        'case|'.length,
-      );
+        const docketNumber = practitionerMappingData.pk.S.substring(
+          'case|'.length,
+        );
 
-      const caseRecord = await getCaseDataFromPostgres({
-        docketNumber,
-      });
+        const caseRecord = await getCaseDataFromPostgres({
+          docketNumber,
+        });
 
-      caseRecords.push({
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: practitionerMappingData.pk.S,
+        caseRecords.push({
+          dynamodb: {
+            Keys: {
+              pk: {
+                S: practitionerMappingData.pk.S,
+              },
+              sk: {
+                S: practitionerMappingData.pk.S,
+              },
             },
-            sk: {
-              S: practitionerMappingData.pk.S,
-            },
+            NewImage: {
+              ...caseRecord,
+              case_relations: { name: 'case' },
+              entityName: { S: 'CaseDocketEntryMapping' },
+            }, // Create a mapping record on the docket-entry index for parent-child relationships
           },
-          NewImage: {
-            ...caseRecord,
-            case_relations: { name: 'case' },
-            entityName: { S: 'CaseDocketEntryMapping' },
-          }, // Create a mapping record on the docket-entry index for parent-child relationships
-        },
-        eventName: 'MODIFY',
-      });
+          eventName: 'MODIFY',
+        });
 
-      caseRecords.push({
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: practitionerMappingData.pk.S,
+        caseRecords.push({
+          dynamodb: {
+            Keys: {
+              pk: {
+                S: practitionerMappingData.pk.S,
+              },
+              sk: {
+                S: practitionerMappingData.sk.S,
+              },
             },
-            sk: {
-              S: practitionerMappingData.sk.S,
-            },
+            NewImage: caseRecord as { [key: string]: AttributeValueWithName },
           },
-          NewImage: caseRecord as { [key: string]: AttributeValueWithName },
-        },
-        eventName: 'MODIFY',
-      });
+          eventName: 'MODIFY',
+        });
 
-      return caseRecords;
-    };
+        return caseRecords;
+      };
 
-  const indexRecords = await settlePromises(
-    practitionerMappingRecords.map(indexCaseEntryForPractitionerMapping),
-  );
-
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkIndexRecords({
-      applicationContext,
-      records: flattenDeep(indexRecords),
-    });
-
-  if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the practitioner mapping record that failed to index',
-      { failedRecords },
+    const indexRecords = await settlePromises(
+      practitionerMappingRecords.map(indexCaseEntryForPractitionerMapping),
     );
-    throw new Error('failed to index practitioner mapping records');
+
+    const { failedRecords } = await applicationContext
+      .getPersistenceGateway()
+      .bulkIndexRecords({
+        applicationContext,
+        records: flattenDeep(indexRecords),
+      });
+
+    if (failedRecords.length > 0) {
+      applicationContext.logger.error(
+        'the practitioner mapping record that failed to index',
+        { failedRecords },
+      );
+      throw new Error('failed to index practitioner mapping records');
+    }
+  } catch (e) {
+    getDawsonLogger().error(
+      `Postgres re-indexing failure: Failed to process practitioner mapping record: ${e}`,
+    );
   }
 };
 
