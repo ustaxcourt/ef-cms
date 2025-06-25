@@ -9,6 +9,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export type MessageType = {
   attachments: {
@@ -56,13 +57,9 @@ export const createMessageInteractor = async (
 
   const { caseCaption, status } = associatedCase;
 
-  const fromUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const fromUser = await getUserById({ userId: authorizedUser.userId });
 
-  const toUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: toUserId });
+  const toUser = await getUserById({ userId: toUserId });
 
   const validatedRawMessage = new Message({
     attachments,

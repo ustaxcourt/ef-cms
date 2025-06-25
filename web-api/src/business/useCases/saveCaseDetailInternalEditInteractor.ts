@@ -15,6 +15,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { isEmpty } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * saveCaseDetailInternalEdit
@@ -33,9 +34,7 @@ export const saveCaseDetailInternalEdit = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   if (!caseToUpdate || docketNumber !== caseToUpdate.docketNumber) {
     throw new UnprocessableEntityError();

@@ -265,7 +265,7 @@ const updateDynamoChambersRecords = async ({
   }
 };
 
-// eslint-disable-next-line @typescript-eslint/no-floating-promises, complexity
+// eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const applicationContext = createApplicationContext();
 

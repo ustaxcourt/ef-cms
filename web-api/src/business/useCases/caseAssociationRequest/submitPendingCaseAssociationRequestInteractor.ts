@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * submitPendingCaseAssociationRequestInteractor
@@ -25,9 +26,7 @@ export const submitPendingCaseAssociationRequestInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const isAssociated = await applicationContext
     .getPersistenceGateway()

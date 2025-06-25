@@ -1,7 +1,7 @@
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { getUserById } from './getUserById';
 import { updateUserRecords } from './updateUserRecords';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const updatePractitionerUser = async ({
   applicationContext,
@@ -13,7 +13,6 @@ export const updatePractitionerUser = async ({
   const { userId } = user;
 
   const oldUser = await getUserById({
-    applicationContext,
     userId,
   });
 

@@ -23,6 +23,7 @@ import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messag
 import { orderBy, some } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -38,9 +39,7 @@ export const fileCourtIssuedOrder = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const caseToUpdate = await getCaseByDocketNumber({
     applicationContext,

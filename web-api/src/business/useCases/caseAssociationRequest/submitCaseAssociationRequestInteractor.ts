@@ -7,6 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -34,9 +35,7 @@ const submitCaseAssociationRequest = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const isPrivatePractitioner =
     authorizedUser.role === ROLES.privatePractitioner;

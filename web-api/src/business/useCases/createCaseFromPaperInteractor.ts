@@ -25,6 +25,7 @@ import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -303,9 +304,7 @@ export const createCaseFromPaperInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   await acquireLock({
     applicationContext,

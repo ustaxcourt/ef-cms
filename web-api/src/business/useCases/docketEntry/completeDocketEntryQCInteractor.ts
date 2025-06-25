@@ -29,6 +29,7 @@ import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/ge
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
@@ -49,9 +50,7 @@ const completeDocketEntryQC = async (
     selectedSection,
   } = entryMetadata;
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const caseToUpdate = await getCaseByDocketNumber({
     applicationContext,

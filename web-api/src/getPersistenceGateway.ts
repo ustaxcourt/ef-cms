@@ -68,7 +68,6 @@ import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/g
 import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSessions';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
-import { getUserById } from './persistence/dynamo/users/getUserById';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/dynamo/users/getUserByIdOnceAllUpdatesComplete';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
@@ -231,7 +230,6 @@ const gatewayMethods = {
   getTrialSessions,
   getUploadPolicy,
   getUserByEmail,
-  getUserById,
   getUserByIdOnceAllUpdatesComplete,
   getUsersById,
   getUsersBySearchKey,

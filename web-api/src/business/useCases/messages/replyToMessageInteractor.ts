@@ -10,6 +10,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessageAsReply } from '@web-api/persistence/postgres/messages/createMessageAsReply';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const replyToMessage = async (
   applicationContext: ServerApplicationContext,
@@ -39,13 +40,9 @@ export const replyToMessage = async (
 
   const { caseCaption, docketNumberWithSuffix, status } = associatedCase;
 
-  const fromUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const fromUser = await getUserById({ userId: authorizedUser.userId });
 
-  const toUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: toUserId });
+  const toUser = await getUserById({ userId: toUserId });
 
   const validatedRawMessage = new Message({
     attachments,

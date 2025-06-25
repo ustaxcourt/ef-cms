@@ -13,6 +13,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -356,8 +357,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     return;
   }
 
-  const user = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
+  const user = await getUserById({
     userId,
   });
 

@@ -14,6 +14,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const updateCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -26,9 +27,7 @@ export const updateCourtIssuedOrder = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const caseToUpdate = await getCaseByDocketNumber({
     applicationContext,

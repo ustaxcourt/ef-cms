@@ -10,6 +10,7 @@ import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messag
 import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 import { orderBy } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const completeMessageInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -22,9 +23,7 @@ export const completeMessageInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const completedMessageIds: string[] = [];
 
@@ -52,7 +51,6 @@ export const completeMessageInteractor = async (
 
       completedMessageIds.push(validatedRawMessage.messageId);
     }
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
   } catch (error) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,

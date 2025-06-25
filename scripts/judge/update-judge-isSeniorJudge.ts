@@ -11,6 +11,7 @@ import {
 } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -89,9 +90,7 @@ let judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[];
   for (const judge of judgesToUpdateIds) {
     const { userId } = judge;
 
-    const userToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId });
+    const userToUpdate = await getUserById({ userId });
     const userEntity = new User(userToUpdate);
     userEntity.isSeniorJudge = judge.isSeniorJudge;
 

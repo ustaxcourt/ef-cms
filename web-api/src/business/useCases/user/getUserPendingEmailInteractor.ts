@@ -6,6 +6,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * getUserPendingEmailInteractor
@@ -16,7 +17,7 @@ import { User } from '../../../../../shared/src/business/entities/User';
  * @returns {Promise} the user's pending email
  */
 export const getUserPendingEmailInteractor = async (
-  applicationContext: ServerApplicationContext,
+  _: ServerApplicationContext,
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -24,8 +25,7 @@ export const getUserPendingEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized to get user pending email');
   }
 
-  const userRaw = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
+  const userRaw = await getUserById({
     userId,
   });
 

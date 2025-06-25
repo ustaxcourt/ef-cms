@@ -7,6 +7,7 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { User } from '@shared/business/entities/User';
 import { createApplicationContext } from '@web-api/applicationContext';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 const scriptConfig: ScriptConfig = {
   description: "update-judge-titles - Sets Judges' judgeTitle attribute",
@@ -35,9 +36,7 @@ const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
   for (const judge of judgesToUpdateIds) {
     const { userId } = judge;
 
-    const userToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId });
+    const userToUpdate = await getUserById({ userId });
     const userEntity = new User(userToUpdate);
     userEntity.judgeTitle = JUDGE_TITLES.find(jt => jt === judge.judgeTitle);
 

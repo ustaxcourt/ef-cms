@@ -19,6 +19,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -29,9 +30,7 @@ export const fileExternalDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const { docketNumber } = documentMetadata;
   const workItems: WorkItem[] = [];

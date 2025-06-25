@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const deleteCounselFromCase = async (
   applicationContext: ServerApplicationContext,
@@ -27,12 +28,9 @@ export const deleteCounselFromCase = async (
     docketNumber,
   });
 
-  const userToDelete = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({
-      applicationContext,
-      userId,
-    });
+  const userToDelete = await getUserById({
+    userId,
+  });
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 

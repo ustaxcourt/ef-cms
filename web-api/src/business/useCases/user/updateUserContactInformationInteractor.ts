@@ -17,6 +17,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * updateUserContactInformationHelper
@@ -42,9 +43,7 @@ const updateUserContactInformationHelper = async (
   },
   authorizedUser: AuthUser,
 ) => {
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId });
+  const user = await getUserById({ userId });
 
   const isPractitioner = u => {
     return (
@@ -63,22 +62,18 @@ const updateUserContactInformationHelper = async (
     !isPractitioner(u) && isEqual(user.contact, contactInfo);
 
   if (isPractitionerUnchanged(user) || isUserUnchanged(user)) {
-    await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        message: { action: 'user_contact_initial_update_complete' },
-        userId: user.userId,
-        clientConnectionId,
-      });
-    await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        message: { action: 'user_contact_full_update_complete', user },
-        userId: user.userId,
-        clientConnectionId,
-      });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: { action: 'user_contact_initial_update_complete' },
+      userId: user.userId,
+      clientConnectionId,
+    });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: { action: 'user_contact_full_update_complete', user },
+      userId: user.userId,
+      clientConnectionId,
+    });
     return;
   }
 
@@ -99,21 +94,17 @@ const updateUserContactInformationHelper = async (
     throw new Error(`Unrecognized entityType ${user.entityName}`);
   }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateUser({
-      applicationContext,
-      user: userEntity.validate().toRawObject(),
-    });
+  await applicationContext.getPersistenceGateway().updateUser({
+    applicationContext,
+    user: userEntity.validate().toRawObject(),
+  });
 
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      message: { action: 'user_contact_initial_update_complete' },
-      userId: user.userId,
-      clientConnectionId
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: { action: 'user_contact_initial_update_complete' },
+    userId: user.userId,
+    clientConnectionId,
+  });
 
   const results = await generateChangeOfAddress({
     applicationContext,
@@ -126,24 +117,20 @@ const updateUserContactInformationHelper = async (
 
   if (isArray(results) && !results.length) {
     userEntity.setIsUpdatingInformation(false);
-    await applicationContext
-      .getPersistenceGateway()
-      .updateUser({
-        applicationContext,
-        user: userEntity.validate().toRawObject(),
-      });
+    await applicationContext.getPersistenceGateway().updateUser({
+      applicationContext,
+      user: userEntity.validate().toRawObject(),
+    });
 
-    await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        message: {
-          action: 'user_contact_full_update_complete',
-          user: userEntity.validate().toRawObject(),
-        },
-        userId: user.userId,
-        clientConnectionId,
-      });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_full_update_complete',
+        user: userEntity.validate().toRawObject(),
+      },
+      userId: user.userId,
+      clientConnectionId,
+    });
   }
 };
 
@@ -184,17 +171,15 @@ export const updateUserContactInformation = async (
     );
   } catch (error) {
     applicationContext.logger.error(error);
-    await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        message: {
-          action: 'user_contact_update_error',
-          error: (error as Error).toString(),
-        },
-        userId: authorizedUser.userId,
-        clientConnectionId,
-      });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'user_contact_update_error',
+        error: (error as Error).toString(),
+      },
+      userId: authorizedUser.userId,
+      clientConnectionId,
+    });
     throw error;
   }
 };

@@ -26,6 +26,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
@@ -35,20 +36,18 @@ const addPetitionDocketEntryToCase = ({
   docketEntryEntity,
   user,
 }) => {
-  const workItemEntity = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
-      docketNumber: caseToAdd.docketNumber,
-      section: PETITIONS_SECTION,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-    }
-  );
+  const workItemEntity = new WorkItem({
+    assigneeId: null,
+    assigneeName: null,
+    docketEntry: {
+      ...docketEntryEntity.toRawObject(),
+      createdAt: docketEntryEntity.createdAt,
+    },
+    docketNumber: caseToAdd.docketNumber,
+    section: PETITIONS_SECTION,
+    sentBy: user.name,
+    sentByUserId: user.userId,
+  });
 
   docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);
@@ -271,20 +270,15 @@ export const createCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
   let privatePractitioners: UserRecord[] = [];
   if (user.role === ROLES.privatePractitioner) {
-    const practitionerUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({
-        applicationContext,
-        userId: user.userId,
-      });
+    const practitionerUser = await getUserById({
+      userId: user.userId,
+    });
 
     practitionerUser.representing = [
       petitionEntity.getContactPrimary().contactId,

@@ -14,6 +14,7 @@ import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 import jwt from 'jsonwebtoken';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const changePasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -54,9 +55,7 @@ export const changePasswordInteractor = async (
       const decoded = jwt.decode(result.idToken);
       const userId = decoded['custom:userId'];
 
-      const userFromPersistence = await applicationContext
-        .getPersistenceGateway()
-        .getUserById({ applicationContext, userId });
+      const userFromPersistence = await getUserById({ userId });
 
       if (
         userFromPersistence &&

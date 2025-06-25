@@ -1,4 +1,5 @@
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const getUserByIdOnceAllUpdatesComplete = async ({
   applicationContext,
@@ -7,9 +8,7 @@ export const getUserByIdOnceAllUpdatesComplete = async ({
   applicationContext: IApplicationContext;
   userId: string;
 }): Promise<UserRecord> => {
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId });
+  const user = await getUserById({ userId });
 
   if (!user.isUpdatingInformation) return user;
 

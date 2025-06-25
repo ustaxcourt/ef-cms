@@ -11,6 +11,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const updateCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -42,9 +43,7 @@ export const updateCourtIssuedDocketEntry = async (
     throw new NotFoundError('Document not found');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
 
   const editableFields = {
     attachments: documentMeta.attachments,

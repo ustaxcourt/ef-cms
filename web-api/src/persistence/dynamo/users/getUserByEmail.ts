@@ -1,4 +1,4 @@
-import { getUserById } from './getUserById';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { query } from '../../dynamodbClientService';
 
 /**
@@ -29,6 +29,6 @@ export const getUserByEmail = async ({
 
   if (results && results.length) {
     const { userId } = results[0];
-    return await getUserById({ applicationContext, userId });
+    return await getUserById({ userId });
   }
 };
