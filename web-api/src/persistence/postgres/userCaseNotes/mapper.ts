@@ -13,7 +13,11 @@ export function toKyselyNewUserCaseNote({
 }: {
   userCaseNote: RawUserCaseNote;
 }): NewUserCaseNoteKysely {
-  return userCaseNote;
+  return {
+    docketNumber: userCaseNote.docketNumber,
+    notes: userCaseNote.notes,
+    userId: userCaseNote.userId,
+  };
 }
 
 export function fromKyselyUserCaseNote(
