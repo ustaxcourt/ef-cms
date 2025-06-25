@@ -12,7 +12,6 @@ import {
   removeLock,
 } from './persistence/dynamo/locks/acquireLock';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
-import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
 import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
@@ -44,9 +43,7 @@ import { getDocumentIdFromSQSMessage } from './persistence/sqs/getDocumentIdFrom
 import { getDownloadPolicyUrl } from './persistence/s3/getDownloadPolicyUrl';
 import { getEligibleCasesForTrialCity } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialCity';
 import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeatureFlagValue';
-import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
 import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
-import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPractitionerByBarNumber';
 import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
 import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
@@ -146,7 +143,6 @@ const gatewayMethods = {
     bulkIndexRecords,
     createJobStatus,
     createNewPetitionerUser,
-    createNewPractitionerUser,
     createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
@@ -201,10 +197,8 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFeatureFlagValue,
-  getInternalUsers,
   getLock,
   getMaintenanceMode,
-  getPractitionerByBarNumber,
   getPractitionerDocumentByFileId,
   getPractitionerDocuments,
   getPractitionersByName,
