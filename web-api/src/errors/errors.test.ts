@@ -5,7 +5,6 @@ import {
   UnauthorizedError,
   UnidentifiedUserError,
   UnprocessableEntityError,
-  UnsanitizedEntityError,
 } from './errors';
 
 describe('NotFoundError', () => {
@@ -91,22 +90,6 @@ describe('InvalidEntityError', () => {
       'The TestEntity entity was invalid. entity is invalid or invalid for operation',
     );
     expect(error.details!.foo).toBe(true);
-  });
-});
-
-describe('UnsanitizedEntityError', () => {
-  let error;
-
-  beforeEach(() => {
-    error = new UnsanitizedEntityError();
-  });
-
-  it('should set a status code of 500', () => {
-    expect(error.statusCode).toEqual(500);
-  });
-
-  it('should set the message', () => {
-    expect(error.message).toEqual('Unsanitized entity');
   });
 });
 
