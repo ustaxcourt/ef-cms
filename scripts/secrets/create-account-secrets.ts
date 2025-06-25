@@ -96,6 +96,11 @@ const {
   update: boolean;
 };
 
+if (env === 'prod') {
+  console.log('Do not use in prod');
+  process.exit(1);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const repoName = await getRepoName();
@@ -111,7 +116,7 @@ const {
   }
 
   const accountSecrets = {
-    COGNITO_SUFFIX: `${repoSlug}_${env}`,
+    COGNITO_SUFFIX: `${repoSlug}-${env}`,
     // eslint-disable-next-line no-useless-escape
     DAWSON_DEV_TRUSTED_ROLE_ARNS: `[\\\"${dawsonDevTrustedRoleArns.join('\\\",\\\"')}\\\"]`,
     EFCMS_DOMAIN: `${env}.${repoName}.${baseDomain}`,

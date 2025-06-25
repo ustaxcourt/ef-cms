@@ -179,6 +179,11 @@ const {
   update: boolean;
 };
 
+if (env === 'prod') {
+  console.log('Do not use in prod');
+  process.exit(1);
+}
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const repoName = await getRepoName();
@@ -195,7 +200,7 @@ const {
   );
 
   const envSecrets = {
-    COGNITO_SUFFIX: `${repoSlug}_${env}`,
+    COGNITO_SUFFIX: `${repoSlug}-${env}`,
     DATABASE_NAME: `${env}_dawson`,
     DEFAULT_ACCOUNT_PASS: defaultAccountPass,
     DISABLE_EMAILS: !enableEmail ? 'true' : 'false',
