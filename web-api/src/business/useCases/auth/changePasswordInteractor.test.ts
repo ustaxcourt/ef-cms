@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   ChallengeNameType,
@@ -20,11 +21,14 @@ import {
   updateUserPendingEmailRecord,
 } from './changePasswordInteractor';
 import jwt from 'jsonwebtoken';
-import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { getUserByIdWithPractitioner as getUserByIdWithPractitionerMock } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
 import { updateUser as updateUserMock } from '@web-api/persistence/postgres/users/updateUser';
+import { updatePractitioner as updatePractitionerMock } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 
-const getUserById = getUserByIdMock as jest.Mock;
+const getUserByIdWithPractitioner =
+  getUserByIdWithPractitionerMock as jest.Mock;
 const updateUser = updateUserMock as jest.Mock;
+const updatePractitioner = updatePractitionerMock as jest.Mock;
 
 describe('changePasswordInteractor', () => {
   const mockUserId = '8c2af03d-d736-4561-afe3-c78b67b7cc59';
@@ -82,7 +86,11 @@ describe('changePasswordInteractor', () => {
           mockRespondToAuthChallengeResponse,
         );
 
-      getUserById.mockImplementation(() => mockUserWithPendingEmail);
+      getUserByIdWithPractitioner.mockImplementation(
+        () => mockUserWithPendingEmail,
+      );
+
+      updatePractitioner.mockResolvedValue(() => {});
     });
 
     it('should throw an error when the user is NOT in NEW_PASSWORD_REQUIRED state', async () => {
@@ -363,7 +371,7 @@ describe('updateUserPendingEmailRecord', () => {
     const updateUserCalls = updateUser.mock.calls;
     expect(updateUserCalls.length).toEqual(1);
     expect(updateUserCalls[0][0].userToUpdate).toMatchObject({
-      isUpdatingInformation: false,
+      isUpdatingInformation: undefined,
     });
   });
 });
