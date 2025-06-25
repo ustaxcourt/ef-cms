@@ -1,3 +1,6 @@
+import { getConstants } from '@web-client/getConstants';
+import { loadDWTLibrary } from './loader';
+
 let DWObject = null;
 let dynamsoftLoader = null;
 
@@ -26,56 +29,26 @@ export const getScannerInterface = () => {
     };
   };
 
-  const loadDynamsoft = ({ applicationContext }) => {
+  const loadDynamsoft = () => {
     if (!dynamsoftLoader) {
-      dynamsoftLoader = new Promise(resolve => {
-        const dynamScriptClass = 'dynam-scanner-injection';
+      // eslint-disable-next-line no-async-promise-executor
+      dynamsoftLoader = new Promise(async resolve => {
+        await loadDWTLibrary();
+        const { Dynamsoft } = window;
+        Dynamsoft.DWT.ResourcesPath = 'https://unpkg.com/dwt@latest/dist';
+        Dynamsoft.DWT.ProductKey = getConstants().DYNAMSOFT_PRODUCT_KEYS;
+        Dynamsoft.DWT.ScanDirectly = true;
 
-        // Create a script element to inject into the header
-        const initiateScript = window.document.createElement('script');
-        initiateScript.type = 'text/javascript';
-        initiateScript.async = true;
-        initiateScript.setAttribute('class', dynamScriptClass);
-
-        // Reduce duplicating the above code
-        const configScript = initiateScript.cloneNode();
-
-        let leftToLoad = 2;
-
-        const handleScriptOnLoad = () => {
-          leftToLoad--;
-          if (leftToLoad <= 0) {
-            const interval = setInterval(() => {
-              const { Dynamsoft } = window;
-              Dynamsoft.DWT.ScanDirectly = true;
-              DWObject = Dynamsoft.DWT.GetWebTwain('dwtcontrolContainer');
-              if (!DWObject) return;
-
-              clearInterval(interval);
-              resolve(dynamScriptClass);
-            }, 100);
-          }
-        };
-
-        // Set some state when the scripts are loaded
-        initiateScript.onload = handleScriptOnLoad;
-        configScript.onload = handleScriptOnLoad;
-
-        // Handle script load errors?
-
-        // Get the scanner resources URI based on applicationContext
-        const scannerResourceUri = applicationContext.getScannerResourceUri();
-
-        initiateScript.src = `${scannerResourceUri}/dynamsoft.webtwain.initiate.js`;
-        configScript.src = `${scannerResourceUri}/dynamsoft.webtwain.config.js`;
-
-        // Inject scripts into <head />
-        window.document
-          .getElementsByTagName('head')[0]
-          .appendChild(initiateScript);
-        window.document
-          .getElementsByTagName('head')[0]
-          .appendChild(configScript);
+        Dynamsoft.DWT.CreateDWTObject(
+          'dwtcontrolContainer',
+          function (object) {
+            DWObject = object;
+            resolve('dynam-scanner-injection');
+          },
+          function (exp) {
+            console.error(exp);
+          },
+        );
       });
     }
 
