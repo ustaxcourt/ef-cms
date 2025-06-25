@@ -14,9 +14,9 @@ import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 import jwt from 'jsonwebtoken';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
+import { getUserByIdWithPractitioner } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
 
 export const changePasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -57,7 +57,7 @@ export const changePasswordInteractor = async (
       const decoded = jwt.decode(result.idToken);
       const userId = decoded['custom:userId'];
 
-      const userFromPersistence = await getUserById({ userId });
+      const userFromPersistence = await getUserByIdWithPractitioner({ userId });
 
       if (
         userFromPersistence &&
