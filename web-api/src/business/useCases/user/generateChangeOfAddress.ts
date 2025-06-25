@@ -109,6 +109,7 @@ const generateChangeOfAddressForPractitioner = async ({
           docketNumber: caseInfo.docketNumber,
           firmName,
           jobId,
+          oldUser,
           requestUser: {
             ...authorizedUser,
             token: undefined,
@@ -134,7 +135,6 @@ const generateChangeOfAddressForPractitioner = async ({
             bypassDocketEntry,
             contactInfo,
             docketNumber: caseInfo.docketNumber,
-            firmName,
             jobId,
             oldUser,
             requestUserId,

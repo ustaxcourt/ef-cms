@@ -22,7 +22,7 @@ export const processUserOnCaseEntries = async ({
         docketNumber: record.docketNumber,
         entityName: record.entityName,
         representing: record.representing ?? [],
-        serviceIndicatorOnCase: record.serviceIndicator ?? undefined,
+        serviceIndicator: record.serviceIndicator ?? undefined,
       });
     });
   } catch (e) {

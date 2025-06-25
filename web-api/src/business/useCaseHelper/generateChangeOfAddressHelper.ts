@@ -34,7 +34,6 @@ export const generateChangeOfAddressHelper = async ({
   bypassDocketEntry,
   contactInfo,
   docketNumber,
-  firmName,
   oldUser,
   jobId,
   requestUserId,
@@ -48,7 +47,6 @@ export const generateChangeOfAddressHelper = async ({
   docketNumber: string;
   bypassDocketEntry: boolean;
   contactInfo: TUserContact;
-  firmName: string;
   oldUser: RawPractitioner | RawPrivatePractitioner | RawIrsPractitioner;
   updatedEmail?: string;
   updatedName?: string;
@@ -74,7 +72,7 @@ export const generateChangeOfAddressHelper = async ({
 
     // This updates the practitioner's service indicator for the case by reference!
     if (updatedEmail) {
-      practitionerObject.serviceIndicatorOnCase =
+      practitionerObject.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
     }
 

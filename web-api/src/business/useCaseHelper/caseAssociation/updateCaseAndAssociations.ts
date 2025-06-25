@@ -228,6 +228,7 @@ const updateIrsPractitioners = ({
         return await associateUserWithCase({
           docketNumber: caseToUpdate.docketNumber,
           userId: practitioner.userId,
+          serviceIndicator: practitioner.serviceIndicator,
         });
       },
   );
@@ -283,7 +284,7 @@ const updatePrivatePractitioners = ({
           userId: practitioner.userId,
           representing: practitioner.representing,
           entityName: practitioner.entityName,
-          serviceIndicatorOnCase: practitioner.serviceIndicator,
+          serviceIndicator: practitioner.serviceIndicator,
         });
       },
   );

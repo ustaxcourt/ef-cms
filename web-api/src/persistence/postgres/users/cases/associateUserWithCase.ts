@@ -8,13 +8,13 @@ export const associateUserWithCase = async ({
   userId,
   representing = undefined,
   entityName,
-  serviceIndicatorOnCase,
+  serviceIndicator,
 }: {
   docketNumber: string;
   userId: string;
   representing?: string[];
   entityName?: string;
-  serviceIndicatorOnCase?: string;
+  serviceIndicator?: string;
 }) => {
   const userOnCaseRecord = await getDbReader(reader =>
     reader
@@ -35,10 +35,8 @@ export const associateUserWithCase = async ({
     values.representing = JSON.stringify(
       representing || userOnCaseRecord.representing || [],
     );
-    values.serviceIndicatorOnCase =
-      serviceIndicatorOnCase ||
-      userOnCaseRecord.serviceIndicatorOnCase ||
-      undefined;
+    values.serviceIndicator =
+      serviceIndicator || userOnCaseRecord.serviceIndicator || undefined;
 
     await pgUpdateTable({
       table: 'dwUserOnCase',
@@ -55,7 +53,7 @@ export const associateUserWithCase = async ({
         userId,
         docketNumber,
         entityName,
-        serviceIndicatorOnCase,
+        serviceIndicator,
         representing: JSON.stringify(representing || []),
       },
       onConflictColumns: ['docketNumber', 'userId'],

@@ -61,7 +61,7 @@ function pickUserOnCase(record) {
       ? JSON.stringify(record.representing)
       : undefined,
     entityName: record.entityName,
-    serviceIndicatorOnCase: record.serviceIndicatorOnCase,
+    serviceIndicator: record.serviceIndicator,
   };
 }
 
