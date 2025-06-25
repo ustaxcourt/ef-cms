@@ -3,11 +3,11 @@ import { trim } from 'lodash';
 
 export const runCommand = async (
   cmd: string,
-  options: string[],
+  params?: string[],
 ): Promise<string> => {
   return new Promise((resolve, reject) => {
     let output: string;
-    const result = spawn(cmd, options, {
+    const result = spawn(cmd, params, {
       env: { ...process.env },
       stdio: 'pipe',
     });
@@ -22,9 +22,8 @@ export const runCommand = async (
       console.error(trim(data.toString('utf-8')));
     });
     result.on('close', code => {
-      if (code || !output) {
-        const command = `${cmd} ${options.join(' ')}`;
-        reject(new Error(`Unable to run ${command}`));
+      if (code) {
+        reject(new Error(`Unable to run ${cmd} ${params?.join(' ') ?? ''}`));
       } else {
         resolve(trim(output));
       }
