@@ -10,23 +10,13 @@ export const WorkingCopyFilterHeader = connect(
     filters: state.trialSessionWorkingCopy.filters,
     trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
     trialStatusFilters: state.trialSessionWorkingCopyHelper.trialStatusFilters,
-    trialSessionWorkingCopy: state.trialSessionWorkingCopy,
   },
   function WorkingCopyFilterHeader({
     autoSaveTrialSessionWorkingCopySequence,
     filters = {},
     trialSessionWorkingCopyHelper,
     trialStatusFilters,
-    trialSessionWorkingCopy,
   }) {
-    const trialStatusCounts = Object.values(trialSessionWorkingCopy.caseMetadata).reduce((counters, c) => {
-      if(c.trialStatus === undefined || c.trialStatus === '') {
-        counters["statusUnassigned"] = (counters["statusUnassigned"] || 0) + 1;
-      } else {
-        counters[c.trialStatus] = (counters[c.trialStatus] || 0) + 1;
-      }
-      return counters;
-    }, {});
     return (
       <div className="working-copy-filters">
         <div className="working-copy-filters--header header-with-blue-background">
@@ -67,7 +57,7 @@ export const WorkingCopyFilterHeader = connect(
                 </label>
               </div>
             </div>
-            {statusFilterComponent(trialStatusFilters, filters, trialStatusCounts)}
+            {statusFilterComponent(trialStatusFilters, filters, trialSessionWorkingCopyHelper.trialStatusCounts)}
           </div>
         </div>
       </div>
@@ -136,9 +126,7 @@ const FilterCheckbox: React.FC<any> = connect(
             {trialStatusFilters[i].label}
           </label>
           {trialStatusFilters[i].key in trialStatusCounts && (
-            <strong>
-              ({trialStatusCounts[trialStatusFilters[i].key]})
-            </strong>
+            <span className="text-bold"> ({trialStatusCounts[trialStatusFilters[i].key]})</span>
           )}
         </div>
       );
