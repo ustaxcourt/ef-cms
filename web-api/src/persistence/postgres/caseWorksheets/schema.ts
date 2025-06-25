@@ -1,4 +1,4 @@
-import { Selectable, Insertable, Updateable } from 'kysely';
+import { Selectable, Insertable } from 'kysely';
 
 const DEFAULT = {};
 
@@ -18,4 +18,3 @@ export const DW_CASE_WORKSHEET_COLUMNS = Object.keys(
 
 export type CaseWorksheetKysely = Selectable<CaseWorksheetTable>;
 export type NewCaseWorksheetKysely = Insertable<CaseWorksheetTable>;
-export type UpdateCaseWorksheetKysely = Updateable<CaseWorksheetTable>;
