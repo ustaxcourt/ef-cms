@@ -1,6 +1,6 @@
 import { getDbReader } from '@web-api/database';
 import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
-import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
+import { fromKyselyWorkItemAndCase } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getDocumentQCServedForUser = async ({
   afterDate,
@@ -26,5 +26,5 @@ export const getDocumentQCServedForUser = async ({
       .execute();
   });
 
-  return workItems.map(toWorkItemWithCaseInfo);
+  return workItems.map(fromKyselyWorkItemAndCase);
 };

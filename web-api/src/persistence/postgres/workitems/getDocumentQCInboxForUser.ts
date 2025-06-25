@@ -1,6 +1,6 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { getDbReader } from '@web-api/database';
-import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
+import { fromKyselyWorkItemAndCase } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getDocumentQCInboxForUser = async ({
   userId,
@@ -25,7 +25,7 @@ export const getDocumentQCInboxForUser = async ({
       .execute();
   });
 
-  return workItems.map(toWorkItemWithCaseInfo);
+  return workItems.map(fromKyselyWorkItemAndCase);
 };
 
 export type WorkItemWithCaseInfo = RawWorkItem & {

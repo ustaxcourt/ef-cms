@@ -1,30 +1,13 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
-import { NewWorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
-
-function pickFields(workItem) {
-  return {
-    assigneeId: workItem.assigneeId,
-    assigneeName: workItem.assigneeName,
-    completedAt: workItem.completedAt,
-    completedBy: workItem.completedBy,
-    completedByUserId: workItem.completedByUserId,
-    completedMessage: workItem.completedMessage,
-    createdAt: workItem.createdAt,
-    docketEntry: JSON.stringify(workItem.docketEntry),
-    docketNumber: workItem.docketNumber,
-    inProgress: workItem.inProgress,
-    isRead: workItem.isRead,
-    section: workItem.section,
-    sentBy: workItem.sentBy,
-    sentBySection: workItem.sentBySection,
-    sentByUserId: workItem.sentByUserId,
-    updatedAt: workItem.updatedAt,
-    workItemId: workItem.workItemId,
-  };
-}
+import {
+  NewWorkItemKysely,
+  WorkItemKysely,
+  WorkItemWithAssociatedCaseDataKysely,
+} from '@web-api/persistence/postgres/workitems/schema';
 
 function getWorkItemSection({
   section,
@@ -47,15 +30,32 @@ function getWorkItemSection({
 
 export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
   return {
-    ...pickFields(workItem),
+    assigneeId: workItem.assigneeId,
+    assigneeName: workItem.assigneeName,
+    completedAt: workItem.completedAt
+      ? calculateDate({ dateString: workItem.completedAt })
+      : null,
+    completedBy: workItem.completedBy,
+    completedByUserId: workItem.completedByUserId,
+    completedMessage: workItem.completedMessage,
+    createdAt: calculateDate({ dateString: workItem.createdAt }),
+    docketEntry: JSON.stringify(workItem.docketEntry),
+    docketNumber: workItem.docketNumber,
+    inProgress: workItem.inProgress,
+    isRead: workItem.isRead,
     section: getWorkItemSection({
       section: workItem.section,
       documentTitle: workItem.docketEntry?.documentTitle,
     }),
+    sentBy: workItem.sentBy,
+    sentBySection: workItem.sentBySection,
+    sentByUserId: workItem.sentByUserId,
+    updatedAt: calculateDate({ dateString: workItem.updatedAt }),
+    workItemId: workItem.workItemId,
   };
 }
 
-export function workItemEntity(workItem) {
+export function fromKyselyWorkItem(workItem: WorkItemKysely) {
   return new WorkItem({
     ...transformNullToUndefined({
       ...workItem,
@@ -67,7 +67,10 @@ export function workItemEntity(workItem) {
   });
 }
 
-export function toWorkItemWithCaseInfo(dbWorkItem): WorkItemWithCaseInfo {
+// Sometimes we need to augment WorkItem data with data from the associated case
+export function fromKyselyWorkItemAndCase(
+  dbWorkItem: WorkItemWithAssociatedCaseDataKysely,
+): WorkItemWithCaseInfo {
   const workItemWithCaseInfo: WorkItemWithCaseInfo = {
     ...new WorkItem({
       ...dbWorkItem,

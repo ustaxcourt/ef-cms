@@ -24,3 +24,5 @@ While we made some sweeping changes to the codebase in the migration from Dynamo
 
 - Add table metadata to all tables
   - created_at, modified_at, created_at_user, modified_at_user (and maybe others pending discussion)
+
+- Our semantics around `null`, `undefined`, empty string, `false` are a total mess. You should try to clean this up. Some columns are TRUE/FALSE/NULL and probably could be just TRUE/FALSE, etc. More importantly: we have to be careful of the distinction between `null` (a type in both Postgres and TypeScript) vs. `undefined` (a type only in TypeScript). THIS DISTINCTION IS VERY IMPORTANT. Suppose in your database you have a row with `id: 1, x: 'something', y; false`. If you run `updateTable('dwTable').where('id', '=', 1).set({x: undefined, y: true}).execute()`, the database will be updated to the state `id: 1, x: 'something', y: false`; in other words, `undefined` will NOT overwrite existing data. (Note that this only applies to updates. Upserts will not ignore `undefined`.) `null`, however, WILL overwrite the existing data (or throw an error if the column is not nullable).
