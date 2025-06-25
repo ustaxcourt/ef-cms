@@ -1,4 +1,5 @@
 import { getDbReader } from '@web-api/database';
+import { Database } from '@web-api/database-schema';
 import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 import type { Handler } from 'aws-lambda';
 
@@ -17,8 +18,7 @@ export const handler: Handler = async (_event, context) => {
       TABLES_WITH_TTLS.map(async tableMetaData => {
         const { name: tableName } = tableMetaData;
         await pgDeleteFrom({
-          // fix the type
-          table: tableName as any,
+          table: tableName as keyof Database,
           where: (cb: any) =>
             cb.where(TIME_TO_LIVE_COLUMN, '<', Math.floor(Date.now() / 1000)),
         });
