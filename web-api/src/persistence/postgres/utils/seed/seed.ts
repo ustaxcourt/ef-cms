@@ -23,6 +23,7 @@ import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtu
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { users } from '@web-api/persistence/postgres/utils/seed/fixtures/users';
+import { usersOnCases } from '@web-api/persistence/postgres/utils/seed/fixtures/usersOnCases';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -53,6 +54,11 @@ export const seed = async () => {
     table: 'dwUser',
     values: users,
     onConflictColumns: ['userId'],
+  });
+  const insertUserOnCase = pgInsertInto({
+    table: 'dwUserOnCase',
+    values: usersOnCases,
+    onConflictColumns: ['userId', 'docketNumber'],
   });
 
   const insertWorkItem = getDbWriter({
@@ -111,6 +117,7 @@ export const seed = async () => {
     insertDocketEntries,
     insertMessages,
     insertUsers,
+    insertUserOnCase,
     insertWorkItem,
   ]);
 };

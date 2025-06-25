@@ -4,7 +4,7 @@ import localSeeds from '../../../../../../../web-api/storage/fixtures/seed/efcms
 function main() {
   const users = [] as any[];
 
-  localSeeds.forEach(seed => {
+  localSeeds.forEach((seed: any) => {
     if (
       // seed.pk.startsWith('user|') &&
       // seed.sk.startsWith('user|') //||
@@ -14,15 +14,20 @@ function main() {
       (seed.sk.startsWith('inactivePractitioner|') &&
         seed.pk.startsWith('case|'))
     ) {
-      delete seed.sk;
-      seed.dockerNumber = seed.pk.replace('case|', '');
-      delete seed.pk;
+      // delete seed.sk;
+      // seed.dockerNumber = seed.pk.replace('case|', '');
+      // delete seed.pk;
 
-      users.push(seed);
+      users.push({
+        userId: seed.userId,
+        docketNumber: seed.pk.replace('case|', ''),
+        representing: seed.representing,
+        serviceIndicator: seed.serviceIndicator,
+      });
     }
   });
 
-  writeFileSync('OnlyUsers.json', JSON.stringify(users, null, 2));
+  writeFileSync('UserOnCase.json', JSON.stringify(users, null, 2));
 }
 
 main();
