@@ -798,7 +798,6 @@ label.ustc-upload {
 
 .service-party {
   display: flex;
-  flex-wrap: wrap;
   align-items: baseline;
   margin-bottom: 1rem !important;
   gap: 1rem;
@@ -813,4 +812,15 @@ label.ustc-upload {
 
 .service-party-indicator {
   margin-left: auto;
+}
+
+@media only screen and (width <= 600px) {
+  .service-party {
+    flex-flow: column wrap;
+    align-items: flex-start;
+  }
+
+  .service-party-name {
+    flex: 1;
+  }
 }
