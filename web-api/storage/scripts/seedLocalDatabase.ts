@@ -5,7 +5,7 @@ import {
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { chunk } from 'lodash';
 import { createApplicationContext } from '@web-api/applicationContext';
-import { createUsers } from './createUsers';
+// import { createUsers } from './createUsers';
 import { seedEntries } from '../fixtures/seed';
 import { migrateItems as validationMigration } from '../../src/lambdas/migration/migrations/0000-validate-all-items';
 
@@ -53,6 +53,6 @@ export const putEntries = async entries => {
 };
 
 export const seedLocalDatabase = async (entriesOverride: any) => {
-  await createUsers(); // TODO: we should probably remove this at some point
+  // await createUsers(); // TODO: we should probably remove this at some point
   await putEntries(entriesOverride ?? seedEntries);
 };

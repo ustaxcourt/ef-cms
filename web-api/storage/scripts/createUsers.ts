@@ -5,10 +5,10 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 import { createApplicationContext } from '../../src/applicationContext';
 import { createPetitionerUserRecords } from '../../../web-api/src/persistence/dynamo/users/createPetitionerUserRecords';
-import { createUserRecords } from '../../src/persistence/dynamo/users/createUserRecords';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
+import { createUser } from '@web-api/persistence/postgres/users/createUser';
 
 export const createUsers = async () => {
   const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
@@ -44,13 +44,10 @@ export const createUsers = async () => {
           .validate()
           .toRawObject();
 
-        const userCreated = await applicationContext
-          .getPersistenceGateway()
-          .createUserRecords({
-            applicationContext,
-            user: practitionerUser,
-            userId,
-          });
+        const userCreated = await createUser({
+          user: practitionerUser,
+          userId,
+        });
 
         if (usersByEmail[userCreated.email]) {
           throw new Error('User already exists');
@@ -74,8 +71,7 @@ export const createUsers = async () => {
         return;
       }
 
-      const userCreated = await createUserRecords({
-        applicationContext,
+      const userCreated = await createUser({
         user: omit(userRecord, EXCLUDE_PROPS),
         userId,
       });

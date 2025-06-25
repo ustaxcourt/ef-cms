@@ -4,7 +4,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
-export const createUserRecords = async ({
+const createUserRecords = async ({
   applicationContext,
   newUser,
   userId,

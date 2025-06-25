@@ -17,7 +17,6 @@ import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/creat
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
 import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
-import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
@@ -153,7 +152,6 @@ const gatewayMethods = {
     createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
-    createUserRecords,
     editPractitionerDocument,
     incrementCounter,
     persistUser,

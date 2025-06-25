@@ -10,6 +10,7 @@ import { ROLES } from '@shared/business/entities/EntityConstants';
 import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getClientId, getUserPoolId, requireEnvVars } from '../util';
+import { createUser } from '@web-api/persistence/postgres/users/createUser';
 
 const { USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 
@@ -115,8 +116,7 @@ export async function createOrUpdateUser(
     rawUser = new User({ ...user, userId }).validate().toRawObject();
   }
 
-  await applicationContext.getPersistenceGateway().createUserRecords({
-    applicationContext,
+  await createUser({
     user: rawUser,
     userId: rawUser.userId,
   });

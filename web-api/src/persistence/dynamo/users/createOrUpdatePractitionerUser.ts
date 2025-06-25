@@ -4,6 +4,7 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { createUser } from '@web-api/persistence/postgres/users/createUser';
 
 export const createOrUpdatePractitionerUser = async ({
   applicationContext,
@@ -55,8 +56,7 @@ export const createOrUpdatePractitionerUser = async ({
     }
   }
 
-  return await applicationContext.getPersistenceGateway().createUserRecords({
-    applicationContext,
+  return await createUser({
     user,
     userId,
   });
