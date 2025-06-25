@@ -604,6 +604,10 @@ export const baseState = {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
+  [STATE_KEYS.CONSOLIDATED_CASE_DEADLINES]: [] as {
+    docketNumber: string;
+    caseCaption: string;
+  }[],
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
@@ -858,6 +862,9 @@ export const baseState = {
     scanMode: undefined,
     scannerSourceName: undefined,
     selectedBatchIndex: 0,
+    dynamScriptClass: null,
+    initiateScriptLoaded: false,
+    configScriptLoaded: false,
   },
   screenMetadata: {} as any,
   searchResults: {} as any,

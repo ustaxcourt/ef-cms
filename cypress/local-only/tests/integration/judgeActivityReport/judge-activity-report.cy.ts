@@ -184,20 +184,22 @@ describe('Verify the activity report', () => {
     it('should display lead case of a consolidated group', () => {
       createAndServeConsolidatedGroup({
         caseStatus: CASE_STATUS_TYPES.submitted,
-        judge: 'Colvin',
-      }).then(({ leadDocketNumber, memberDocketNumber }) => {
-        retry(() => {
-          loginAsColvin();
-          navigateToJudgeActivityReport('submitted-and-cav');
-          return assertExists(`[data-testid="${leadDocketNumber}"]`).then(
-            isLeadVisible => {
-              assertDoesNotExist(`[data-testid="${memberDocketNumber}"]`).then(
-                isChildHidden => isLeadVisible && isChildHidden,
-              );
-            },
-          );
-        });
-      });
+        leadCaseJudge: 'Colvin',
+      }).then(
+        ({ leadDocketNumber, memberDocketNumbers: [memberDocketNumber] }) => {
+          retry(() => {
+            loginAsColvin();
+            navigateToJudgeActivityReport('submitted-and-cav');
+            return assertExists(`[data-testid="${leadDocketNumber}"]`).then(
+              isLeadVisible => {
+                assertDoesNotExist(
+                  `[data-testid="${memberDocketNumber}"]`,
+                ).then(isChildHidden => isLeadVisible && isChildHidden);
+              },
+            );
+          });
+        },
+      );
     });
   });
 
