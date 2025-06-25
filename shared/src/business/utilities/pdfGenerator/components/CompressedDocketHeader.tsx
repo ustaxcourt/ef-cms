@@ -3,10 +3,10 @@ import React from 'react';
 type CompressedDocketHeaderParams = {
   caseCaptionExtension: string;
   caseTitle: string;
-  consolidatedCasesDocketNumbers: string[];
+  consolidatedCasesDocketNumbers?: string[];
   docketNumberWithSuffix: string;
   documentTitle?: string;
-  fileAcrossConsolidatedGroup: boolean;
+  fileAcrossConsolidatedGroup?: boolean;
 };
 
 export const CompressedDocketHeader = ({
