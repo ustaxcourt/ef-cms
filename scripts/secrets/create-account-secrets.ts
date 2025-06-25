@@ -23,6 +23,12 @@ const scriptConfig: ScriptConfig = {
     awsProfile: 'AWS_PROFILE',
   },
   parameters: {
+    baseDomain: {
+      description: 'Base domain without subdomain',
+      long: 'domain',
+      required: true,
+      type: 'string',
+    },
     env: {
       required: true,
       type: 'string',
@@ -69,6 +75,7 @@ const scriptConfig: ScriptConfig = {
   requireActiveAwsSession: false,
 };
 const {
+  baseDomain,
   env,
   externalTrustedRoleArn,
   logExpirationDays,
@@ -78,6 +85,7 @@ const {
   region,
   update,
 } = parseArgsAndEnvVars(scriptConfig) as {
+  baseDomain: string;
   env: string;
   externalTrustedRoleArn: string;
   logExpirationDays: number;
@@ -106,6 +114,7 @@ const {
     COGNITO_SUFFIX: `${repoSlug}_${env}`,
     // eslint-disable-next-line no-useless-escape
     DAWSON_DEV_TRUSTED_ROLE_ARNS: `[\\\"${dawsonDevTrustedRoleArns.join('\\\",\\\"')}\\\"]`,
+    EFCMS_DOMAIN: `${env}.${repoName}.${baseDomain}`,
     ES_LOGS_EBS_VOLUME_SIZE_GB: opensearchLogsVolumeSize,
     ES_LOGS_INSTANCE_COUNT: opensearchLogsInstanceCount,
     ES_LOGS_INSTANCE_TYPE: opensearchLogsInstanceType,

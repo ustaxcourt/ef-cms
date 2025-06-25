@@ -141,7 +141,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = var.zone_name
+      value = var.dns_domain
     }
   }
 
@@ -159,7 +159,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = var.zone_name
+      value = var.dns_domain
     }
   }
 
@@ -273,7 +273,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 }
 
 data "aws_route53_zone" "public_zone" {
-  name = "${var.zone_name}."
+  name = "${var.dns_domain}."
 }
 
 resource "aws_route53_record" "public_www" {

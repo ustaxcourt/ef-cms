@@ -6,7 +6,7 @@ pushd ../../../../
 . ./scripts/load-environment-from-secrets.sh
 popd
 
-[ -z "${ZONE_NAME}" ] && echo "You must set ZONE_NAME as an environment variable" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must set EFCMS_DOMAIN as an environment variable" && exit 1
 [ -z "${ES_LOGS_INSTANCE_COUNT}" ] && echo "You must set ES_LOGS_INSTANCE_COUNT as an environment variable" && exit 1
 [ -z "${ES_LOGS_INSTANCE_TYPE}" ] && echo "You must set ES_LOGS_INSTANCE_TYPE as an environment variable" && exit 1
 [ -z "${ES_LOGS_EBS_VOLUME_SIZE_GB}" ] && echo "You must set ES_LOGS_EBS_VOLUME_SIZE_GB as an environment variable" && exit 1
@@ -16,7 +16,7 @@ popd
 
 export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
-export TF_VAR_zone_name="${ZONE_NAME}"
+export TF_VAR_dns_domain="${EFCMS_DOMAIN}"
 export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
 export TF_VAR_es_logs_instance_type="${ES_LOGS_INSTANCE_TYPE}"
 export TF_VAR_es_logs_ebs_volume_size_gb="${ES_LOGS_EBS_VOLUME_SIZE_GB}"
@@ -34,7 +34,7 @@ export TF_VAR_lower_env_account_id="$LOWER_ENV_ACCOUNT_ID"
 npm run build:assets
 
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${ZONE_NAME}.terraform.deploys" \
+ -backend-config=bucket="${EFCMS_DOMAIN}.terraform.deploys" \
  -backend-config=key="permissions-account.tfstate" \
  -backend-config=dynamodb_table="efcms-terraform-lock" \
  -backend-config=region="us-east-1"
