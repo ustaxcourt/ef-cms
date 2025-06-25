@@ -25,8 +25,8 @@ jest.mock(
 );
 
 jest.mock(
-  '@web-api/persistence/postgres/practitioners/getPractitionersByDocketNumber',
-  () => mockFactory('getPractitionersByDocketNumber'),
+  '@web-api/persistence/postgres/practitioners/getPractitionersForCase',
+  () => mockFactory('getPractitionersForCase'),
 );
 
 jest.mock(
