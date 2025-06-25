@@ -13,7 +13,7 @@ export const getPractitionersForCase = async ({
       .innerJoin('dwPractitioner as p', 'oc.userId', 'p.userId')
       .where('oc.docketNumber', '=', docketNumber)
       .selectAll('p')
-      .select(['oc.entityName', 'oc.representing'])
+      .select(['oc.entityName', 'oc.representing', 'oc.serviceIndicatorOnCase'])
       .execute(),
   );
 

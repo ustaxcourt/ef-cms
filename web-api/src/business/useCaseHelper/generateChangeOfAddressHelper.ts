@@ -59,7 +59,6 @@ export const generateChangeOfAddressHelper = async ({
 }) => {
   try {
     const newData = contactInfo;
-
     const userCase = await getCaseByDocketNumber({
       applicationContext,
       docketNumber,
@@ -67,27 +66,16 @@ export const generateChangeOfAddressHelper = async ({
     const caseEntity = new Case(userCase, {
       authorizedUser,
     });
-
+    const practitionerObject = caseEntity
+      .privatePractitioners!.concat(caseEntity.irsPractitioners)
+      .find(practitioner => practitioner.userId === user.userId);
     const practitionerName = updatedName || user.name;
-    const practitionerObject = oldUser;
+    const oldAddressData = clone(oldUser.contact);
 
-    if (!practitionerObject) {
-      throw new Error(
-        `Could not find user: ${user.userId} barNumber: ${user.barNumber} on ${docketNumber}`,
-      );
-    }
-
-    const oldData = clone(practitionerObject.contact);
-
-    // This updates the case by reference!
-    practitionerObject.contact = contactInfo;
-    practitionerObject.firmName = firmName;
-    practitionerObject.name = practitionerName;
-
-    if (!oldData.email && updatedEmail) {
-      practitionerObject.serviceIndicator =
+    // This updates the practitioner's service indicator for the case by reference!
+    if (updatedEmail) {
+      practitionerObject.serviceIndicatorOnCase =
         SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-      practitionerObject.email = updatedEmail;
     }
 
     if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {
@@ -96,7 +84,7 @@ export const generateChangeOfAddressHelper = async ({
         authorizedUser,
         caseEntity,
         newData,
-        oldData,
+        oldData: oldAddressData,
         practitionerName,
         user,
       });

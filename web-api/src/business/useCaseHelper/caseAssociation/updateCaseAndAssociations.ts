@@ -284,6 +284,7 @@ const updatePrivatePractitioners = ({
           userId: practitioner.userId,
           representing: practitioner.representing,
           entityName: practitioner.entityName,
+          serviceIndicatorOnCase: practitioner.serviceIndicator,
         });
       },
   );
