@@ -30,11 +30,12 @@ export const changeOfAddress = async ({
   content,
 }: {
   applicationContext: ServerApplicationContext;
-  content: ChangeOfAddressParams & {
+  content: Omit<ChangeOfAddressParams, 'options'> & {
     caseCaptionExtension: string;
     caseTitle: string;
     docketNumberWithSuffix: string;
     docketNumber: string;
+    documentTitle: string;
     documentType: {
       title: string;
       eventCode: string;
