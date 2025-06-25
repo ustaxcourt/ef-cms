@@ -258,7 +258,12 @@ describe('Batch Download Documents', () => {
       loginAsDocketClerk();
       goToCase(docketNumber);
       cy.get('[data-testid="tab-drafts"] > .button-text').click();
-      cy.get('[data-testid="docket-entry-description-1"]').click();
+      cy.get('button.attachment-viewer-button')
+        .filter((_, el) => {
+          return Cypress.$(el).find('*').text().includes('Order');
+        })
+        .first()
+        .click();
       cy.get('#apply-signature').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
       cy.get('[data-testid="save-signature-button"]').click();

@@ -13,9 +13,7 @@ export const scannerStartupAction = async ({
   store,
 }: ActionProps) => {
   const scanner = await applicationContext.getScanner();
-  const dynamScriptClass = await scanner.loadDynamsoft({
-    applicationContext,
-  });
+  const dynamScriptClass = await scanner.loadDynamsoft();
   store.set(state.scanner.dynamScriptClass, dynamScriptClass);
   store.set(state.scanner.initiateScriptLoaded, true);
   store.set(state.scanner.configScriptLoaded, true);
