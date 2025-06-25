@@ -13,7 +13,6 @@ describe('getHealthCheckAction', () => {
       allChecksHealthy: 'pass',
       cognito: false,
       dynamo: { efcms: true, efcmsDeploy: false },
-      dynamsoft: false,
       elasticsearch: true,
       emailService: true,
       s3: {
