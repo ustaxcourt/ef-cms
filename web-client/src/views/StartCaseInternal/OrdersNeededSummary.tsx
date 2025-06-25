@@ -34,7 +34,7 @@ export const OrdersNeededSummary = connect(
                   <div className="tablet:grid-col-10">
                     {reviewSavedPetitionHelper.showOrdersAndNoticesNeededHeader && (
                       <p
-                        className="heading-4 padding-top-0"
+                        className="padding-top-0 order-alert-headers"
                         id="orders-notices-needed-header"
                       >
                         <b>Orders/Notices Needed</b>
@@ -55,9 +55,9 @@ export const OrdersNeededSummary = connect(
                     {reviewSavedPetitionHelper.showOrdersAndNoticesInDraftHeader && (
                       <p
                         className={classNames(
-                          'heading-4',
                           reviewSavedPetitionHelper.ordersAndNoticesNeeded
                             .length && 'padding-top-2',
+                          'order-alert-headers',
                         )}
                         id="orders-notices-auto-created-in-draft"
                       >
