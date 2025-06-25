@@ -236,7 +236,7 @@ export const CourtIssuedDocketEntry = connect(
                             <div className="service-party-name">
                               {party.displayName}
                             </div>
-                            <div>
+                            <div className="service-party-indicator">
                               <b>Service: </b>
                               {party.serviceIndicator}
                             </div>
