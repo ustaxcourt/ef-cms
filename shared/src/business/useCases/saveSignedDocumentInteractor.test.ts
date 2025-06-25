@@ -16,7 +16,7 @@ import { applicationContext } from '../test/createTestApplicationContext';
 import { getMessageThreadByParentId as getMessageThreadByParentIdMock } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
-import { updateMessage as updateMessageMock } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertMessages as upsertMessagesMock } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
 describe('saveSignedDocumentInteractor', () => {
@@ -198,7 +198,7 @@ describe('saveSignedDocumentInteractor', () => {
   });
 
   it('should add the signed document to the latest message in the message thread if parentMessageId is included and the original document is a Proposed Stipulated Decision', async () => {
-    const updateMessage = updateMessageMock as jest.Mock;
+    const upsertMessages = upsertMessagesMock as jest.Mock;
     await saveSignedDocumentInteractor(
       applicationContext,
       {
@@ -211,14 +211,16 @@ describe('saveSignedDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateMessage).toHaveBeenCalled();
-    expect(updateMessage.mock.calls[0][0].message).toMatchObject({
-      attachments: [
-        {
-          documentId: mockSignedDocketEntryId,
-          documentTitle: 'Stipulated Decision',
-        },
-      ],
-    });
+    expect(upsertMessages).toHaveBeenCalled();
+    expect(upsertMessages.mock.calls[0][0]).toMatchObject([
+      {
+        attachments: [
+          {
+            documentId: mockSignedDocketEntryId,
+            documentTitle: 'Stipulated Decision',
+          },
+        ],
+      },
+    ]);
   });
 });
