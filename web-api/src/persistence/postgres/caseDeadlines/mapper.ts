@@ -2,29 +2,26 @@ import {
   CaseDeadline,
   RawCaseDeadline,
 } from '@shared/business/entities/CaseDeadline';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { NewCaseDeadlineKysely } from '@web-api/persistence/postgres/caseDeadlines/schema';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
-function pickFields(deadline): NewCaseDeadlineKysely {
+export function toKyselyNewCaseDeadline(
+  deadline: RawCaseDeadline,
+): NewCaseDeadlineKysely {
   return {
     associatedJudge: deadline.associatedJudge,
     associatedJudgeId: deadline.associatedJudgeId,
     caseDeadlineId: deadline.caseDeadlineId,
-    createdAt: deadline.createdAt,
-    deadlineDate: deadline.deadlineDate,
+    createdAt: calculateDate({ dateString: deadline.createdAt }),
+    deadlineDate: calculateDate({ dateString: deadline.deadlineDate }),
     description: deadline.description,
     docketNumber: deadline.docketNumber,
     sortableDocketNumber: deadline.sortableDocketNumber,
   };
 }
 
-export function toKyselyNewCaseDeadline(
-  deadline: RawCaseDeadline,
-): NewCaseDeadlineKysely {
-  return pickFields(deadline);
-}
-
-export function caseDeadlineEntity(caseDeadline) {
+export function fromCaseDeadlineKysely(caseDeadline) {
   return new CaseDeadline(
     transformNullToUndefined({
       ...caseDeadline,

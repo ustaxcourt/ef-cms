@@ -1,10 +1,10 @@
-import { Selectable, Insertable, Updateable } from 'kysely';
+import { Selectable, Insertable } from 'kysely';
 
 const DEFAULT = {};
 
 export const caseDeadlineTableDefinition = {
   associatedJudge: DEFAULT as string,
-  associatedJudgeId: DEFAULT as string | undefined | null,
+  associatedJudgeId: DEFAULT as string | null,
   caseDeadlineId: DEFAULT as string,
   createdAt: DEFAULT as Date,
   deadlineDate: DEFAULT as Date,
@@ -21,4 +21,3 @@ export const DW_CASE_DEADLINE_COLUMNS = Object.keys(
 
 export type CaseDeadlineKysely = Selectable<CaseDeadlineTable>;
 export type NewCaseDeadlineKysely = Insertable<CaseDeadlineTable>;
-export type UpdateCaseDeadlineKysely = Updateable<CaseDeadlineTable>;
