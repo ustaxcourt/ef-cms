@@ -13,7 +13,6 @@ import {
 } from './persistence/dynamo/locks/acquireLock';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
-import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
 import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
@@ -148,7 +147,6 @@ const gatewayMethods = {
     createJobStatus,
     createNewPetitionerUser,
     createNewPractitionerUser,
-    createOrUpdatePractitionerUser,
     createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,

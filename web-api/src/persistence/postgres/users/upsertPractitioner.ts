@@ -4,9 +4,10 @@ import {
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getUserGateway } from '@web-api/getUserGateway';
 import { createUser } from '@web-api/persistence/postgres/users/createUser';
 
-export const createOrUpdatePractitionerUser = async ({
+export const upsertPractitioner = async ({
   applicationContext,
   user,
 }: {
@@ -36,7 +37,7 @@ export const createOrUpdatePractitionerUser = async ({
       });
 
     if (!existingUser) {
-      await applicationContext.getUserGateway().createUser(applicationContext, {
+      await getUserGateway().createUser(applicationContext, {
         email: userEmail,
         name: user.name,
         role: user.role,
@@ -44,7 +45,7 @@ export const createOrUpdatePractitionerUser = async ({
         userId,
       });
     } else {
-      await applicationContext.getUserGateway().updateUser(applicationContext, {
+      await getUserGateway().updateUser(applicationContext, {
         attributesToUpdate: {
           role: user.role,
         },

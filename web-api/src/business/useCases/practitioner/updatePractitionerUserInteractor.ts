@@ -17,6 +17,8 @@ import {
 } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { upsertPractitioner } from '@web-api/persistence/postgres/users/upsertPractitioner';
+import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -43,9 +45,7 @@ export const updatePractitionerUser = async (
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
-  const oldUser = await applicationContext
-    .getPersistenceGateway()
-    .getPractitionerByBarNumber({ applicationContext, barNumber });
+  const oldUser = await getPractitionerByBarNumber({ barNumber });
 
   if (!oldUser) {
     throw new NotFoundError('Could not find user');
@@ -81,17 +81,15 @@ export const updatePractitionerUser = async (
       .getPersistenceGateway()
       .updatePractitionerUser({ applicationContext, user: validatedUserData });
   } else if (!oldUser.email && user.updatedEmail) {
-    updatedUser = await applicationContext
-      .getPersistenceGateway()
-      .createNewPractitionerUser({
-        applicationContext,
-        user: new Practitioner({
-          ...validatedUserData,
-          pendingEmail: user.updatedEmail,
-        })
-          .validate()
-          .toRawObject(),
-      });
+    updatedUser = await upsertPractitioner({
+      applicationContext,
+      user: new Practitioner({
+        ...validatedUserData,
+        pendingEmail: user.updatedEmail,
+      })
+        .validate()
+        .toRawObject(),
+    });
   } else {
     await applicationContext.getPersistenceGateway().updateUserRecords({
       applicationContext,

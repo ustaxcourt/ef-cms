@@ -11,6 +11,7 @@ import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
 import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
 import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { getDocketEntriesByDocketNumber } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumber';
+import { getPractitionersForCase } from '@web-api/persistence/postgres/users/getPractitionersForCase';
 
 export const getCaseByDocketNumber = async ({
   applicationContext,
@@ -24,7 +25,15 @@ export const getCaseByDocketNumber = async ({
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
   // These case items are no longer in dynamoDB
-  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case', 'docket-entry'];
+  const SK_FILTER_OUT = [
+    'work-item',
+    'correspondence',
+    'case',
+    'docket-entry',
+    'irsPractitioner',
+    'privatePractitioner',
+    'inactivePractitioner',
+  ];
 
   const dbCaseMetadata = await getCaseMetadataByDocketNumber({
     docketNumber,
@@ -33,26 +42,32 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const [caseCorrespondences, workItems, docketEntries, caseItemsRaw] =
-    await Promise.all([
-      getCaseCorrespondenceByDocketNumber({
-        docketNumber,
-      }),
-      getWorkItemsByDocketNumber({
-        docketNumber,
-      }),
-      getDocketEntriesByDocketNumber({ docketNumber }),
-      queryFull({
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': `case|${docketNumber}`,
-        },
-        KeyConditionExpression: '#pk = :pk',
-        applicationContext,
-      }),
-    ]);
+  const [
+    caseCorrespondences,
+    workItems,
+    docketEntries,
+    practitioners,
+    caseItemsRaw,
+  ] = await Promise.all([
+    getCaseCorrespondenceByDocketNumber({
+      docketNumber,
+    }),
+    getWorkItemsByDocketNumber({
+      docketNumber,
+    }),
+    getDocketEntriesByDocketNumber({ docketNumber }),
+    getPractitionersForCase({ docketNumber }),
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }),
+  ]);
 
   const caseItems = caseItemsRaw.filter(
     item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
@@ -96,6 +111,16 @@ export const getCaseByDocketNumber = async ({
         ...docketEntry,
         pk: `case|${docketNumber}`,
         sk: `docket-entry|${docketEntry.docketEntryId}`,
+      })),
+      ...practitioners.irsPractitioners.map(irsPractitionerItem => ({
+        ...irsPractitionerItem,
+        pk: `case|${docketNumber}`,
+        sk: `irsPractitioner|${irsPractitionerItem.userId}`,
+      })),
+      ...practitioners.privatePractitioners.map(privatePractitionerItem => ({
+        ...privatePractitionerItem,
+        pk: `case|${docketNumber}`,
+        sk: `privatePractitioner|${privatePractitionerItem.userId}`,
       })),
     ]),
     consolidatedCases: consolidatedCases.map(
