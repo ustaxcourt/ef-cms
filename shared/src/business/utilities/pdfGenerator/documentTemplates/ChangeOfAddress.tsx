@@ -57,20 +57,16 @@ type ChangeOfAddressOptions = {
 };
 
 type ChangeOfAddressContactInfo = {
-  caseCaptionExtension: string;
-  caseTitle: string;
-  docketNumberWithSuffix: string;
-  h3: string;
-  email: string;
-  phone: string;
+  email?: string;
+  phone?: string;
   inCareOf?: string;
   address1: string;
-  address2: string;
-  address3: string;
+  address2?: string;
+  address3?: string;
   city?: string;
   state: string;
   postalCode: string;
-  countryType: string;
+  countryType?: string;
   country?: string;
 };
 

@@ -35,7 +35,6 @@ export const changeOfAddress = async ({
     caseTitle: string;
     docketNumberWithSuffix: string;
     docketNumber: string;
-    documentTitle: string;
     documentType: {
       title: string;
       eventCode: string;
