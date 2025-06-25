@@ -21,9 +21,9 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy, some } from 'lodash';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -141,9 +141,7 @@ export const fileCourtIssuedOrder = async (
       });
     }
 
-    await updateMessage({
-      message: messageEntity.validate().toRawObject(),
-    });
+    await upsertMessages([messageEntity.validate().toRawObject()]);
   }
 
   return caseEntity.toRawObject();

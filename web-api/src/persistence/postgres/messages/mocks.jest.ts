@@ -59,10 +59,6 @@ jest.mock('@web-api/persistence/postgres/messages/setMessageAsRead', () =>
   mockFactory('setMessageAsRead'),
 );
 
-jest.mock('@web-api/persistence/postgres/messages/updateMessage', () =>
-  mockFactory('updateMessage'),
-);
-
 jest.mock('@web-api/persistence/postgres/messages/upsertMessages', () =>
   mockFactory('upsertMessages'),
 );

@@ -22,7 +22,7 @@ import { addDraftStampOrderDocketEntryInteractor } from './addDraftStampOrderDoc
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
@@ -134,8 +134,8 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       mockJudgeUser,
     );
 
-    expect(updateMessage).toHaveBeenCalled();
-    expect((updateMessage as jest.Mock).mock.calls[0][0].message).toMatchObject(
+    expect(upsertMessages).toHaveBeenCalled();
+    expect((upsertMessages as jest.Mock).mock.calls[0][0]).toMatchObject([
       {
         attachments: [
           {
@@ -143,7 +143,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
           },
         ],
       },
-    );
+    ]);
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {

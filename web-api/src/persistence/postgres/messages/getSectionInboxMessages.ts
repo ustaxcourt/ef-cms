@@ -1,6 +1,6 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
 import { getDbReader } from '@web-api/database';
-import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
+import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getSectionInboxMessages = async ({
   section,
@@ -28,5 +28,5 @@ export const getSectionInboxMessages = async ({
       .execute(),
   );
 
-  return messages.map(message => messageResultEntity(message));
+  return messages.map(message => fromKyselyMessage(message));
 };

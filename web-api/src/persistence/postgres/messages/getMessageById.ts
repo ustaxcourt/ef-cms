@@ -1,6 +1,6 @@
 import { Message } from '@shared/business/entities/Message';
 import { getDbReader } from '@web-api/database';
-import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
+import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getMessageById = async ({
   messageId,
@@ -24,5 +24,5 @@ export const getMessageById = async ({
       .executeTakeFirst(),
   );
 
-  return messageResultEntity(message);
+  return fromKyselyMessage(message);
 };

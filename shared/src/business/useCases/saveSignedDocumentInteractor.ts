@@ -14,8 +14,8 @@ import {
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy } from 'lodash';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,
@@ -140,9 +140,7 @@ export const saveSignedDocumentInteractor = async (
         documentTitle: signedDocketEntryEntity.documentTitle,
       });
 
-      await updateMessage({
-        message: messageEntity.validate().toRawObject(),
-      });
+      await upsertMessages([messageEntity.validate().toRawObject()]);
     }
   } else {
     const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
