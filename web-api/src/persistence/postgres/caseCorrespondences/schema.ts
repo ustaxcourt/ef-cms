@@ -1,13 +1,13 @@
 import { CaseTable } from '@web-api/persistence/postgres/cases/schema';
-import { Selectable, Insertable, Updateable } from 'kysely';
+import { Selectable, Insertable } from 'kysely';
 
 const DEFAULT = {};
 
 export const caseCorrespondenceTableDefinition = {
-  archived: DEFAULT as boolean | undefined,
+  archived: DEFAULT as boolean | null,
   correspondenceId: DEFAULT as string,
   documentTitle: DEFAULT as string,
-  filedBy: DEFAULT as string | undefined,
+  filedBy: DEFAULT as string | null,
   filingDate: DEFAULT as Date,
   userId: DEFAULT as string,
   docketNumber: DEFAULT as string,
@@ -21,5 +21,3 @@ export const DW_CASE_CORRESPONDENCE_COLUMNS = Object.keys(
 
 export type CaseCorrespondenceKysely = Selectable<CaseCorrespondenceTable>;
 export type NewCaseCorrespondenceKysely = Insertable<CaseCorrespondenceTable>;
-export type UpdateCaseCorrespondenceKysely =
-  Updateable<CaseCorrespondenceTable>;

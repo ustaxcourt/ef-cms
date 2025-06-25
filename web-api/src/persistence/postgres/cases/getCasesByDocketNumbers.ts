@@ -7,7 +7,7 @@ import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamo
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
-import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
+import { fromKyselyCaseCorrespondence } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
@@ -209,10 +209,10 @@ function convertDbCaseToRawCase(
   const appCase = {
     ...fromKyselyCase(dbCase),
     correspondence: dbCase.correspondence.map(cc =>
-      caseCorrespondenceEntity(cc),
+      fromKyselyCaseCorrespondence(cc),
     ),
     archivedCorrespondences: dbCase.archivedCorrespondences?.map(cc =>
-      caseCorrespondenceEntity(cc),
+      fromKyselyCaseCorrespondence(cc),
     ),
     docketEntries: dbCase.docketEntries.map(d => fromKyselyDocketEntry(d)),
     archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
