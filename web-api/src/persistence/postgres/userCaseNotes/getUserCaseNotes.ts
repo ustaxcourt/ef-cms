@@ -1,8 +1,7 @@
-import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { getDbReader } from '@web-api/database';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import { fromKyselyUserCaseNote } from '@web-api/persistence/postgres/userCaseNotes/mapper';
 
-export const getUserCaseNoteForCases = async ({
+export const getUserCaseNotes = async ({
   docketNumbers,
   userId,
 }: {
@@ -18,7 +17,7 @@ export const getUserCaseNoteForCases = async ({
       .execute(),
   );
 
-  return userCaseNotes.map(
-    userCaseNote => new UserCaseNote(transformNullToUndefined(userCaseNote)),
+  return userCaseNotes.map(userCaseNote =>
+    fromKyselyUserCaseNote(userCaseNote),
   );
 };

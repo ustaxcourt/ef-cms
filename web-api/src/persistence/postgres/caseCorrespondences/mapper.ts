@@ -3,10 +3,15 @@ import {
   RawCorrespondence,
 } from '@shared/business/entities/Correspondence';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
+import {
+  CaseCorrespondenceKysely,
+  NewCaseCorrespondenceKysely,
+} from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
-export function toKyselyCaseCorrespondence(correspondence: RawCorrespondence) {
+export function toKyselyNewCaseCorrespondence(
+  correspondence: RawCorrespondence,
+): NewCaseCorrespondenceKysely {
   return {
     archived: correspondence.archived,
     correspondenceId: correspondence.correspondenceId,

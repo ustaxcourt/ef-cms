@@ -5,7 +5,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserCaseNoteForCasesInteractor } from './getUserCaseNoteForCasesInteractor';
-import { getUserCaseNoteForCases as getUserCaseNoteForCasesMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNoteForCases';
+import { getUserCaseNotes as getUserCaseNoteForCasesMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNotes';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 
