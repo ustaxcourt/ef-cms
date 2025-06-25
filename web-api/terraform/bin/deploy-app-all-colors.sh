@@ -114,24 +114,6 @@ then
   export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
 fi
 
-# temporary--remove after both blue and green records have been destroyed
-DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
-[ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
-echo "Running latency record deletion script"
-npx ts-node --transpile-only ../../bin/delete-route53-latency-records.ts
-
-# temporary--remove after west has been deleted
-WEST_LAMBDA_BUCKET="${EFCMS_DOMAIN}.efcms.${ENV}.us-west-1.lambdas"
-if aws s3api head-bucket --bucket "$WEST_LAMBDA_BUCKET" 2>/dev/null; then
-  echo "West lambdas Bucket exists. Emptying..."
-  aws s3 rb "s3://$WEST_LAMBDA_BUCKET" --force
-else
-  echo "West lambda Bucket does not exist or access denied."
-fi
-
-# temporary--remove after west has been deleted
-npx ts-node --transpile-only ../../../../scripts/run-once-scripts/deleteWest/allColors/deleteWestAllColors.ts
-
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 
 if [ -z "${OUTPUT_ONLY}" ]; then 
