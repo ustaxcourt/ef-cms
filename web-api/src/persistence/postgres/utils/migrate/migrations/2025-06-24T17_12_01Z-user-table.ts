@@ -5,7 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('dwUser')
     .addColumn('userId', 'varchar', col => col.primaryKey())
     .addColumn('pendingEmailVerificationToken', 'varchar')
-    .addColumn('pendingEmailVerificationTokenTimestamp', 'varchar')
+    .addColumn('pendingEmailVerificationTokenTimestamp', 'timestamptz')
     .addColumn('email', 'varchar')
     .addColumn('name', 'varchar')
     .addColumn('pendingEmail', 'varchar')

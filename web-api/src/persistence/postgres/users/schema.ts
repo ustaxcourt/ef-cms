@@ -5,7 +5,7 @@ const DEFAULT = {};
 const userTableDefinition = {
   userId: DEFAULT as string,
   pendingEmailVerificationToken: DEFAULT as string | null,
-  pendingEmailVerificationTokenTimestamp: DEFAULT as string | null,
+  pendingEmailVerificationTokenTimestamp: DEFAULT as Date | null,
   email: DEFAULT as string | null,
   name: DEFAULT as string | null,
   pendingEmail: DEFAULT as string | null,
