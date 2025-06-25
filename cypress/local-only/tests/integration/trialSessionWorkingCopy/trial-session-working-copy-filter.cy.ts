@@ -5,7 +5,7 @@ describe('trials session working copies filtering', () => {
 	it('logins as judge colvin', () => {
 		loginAsColvin();
 	});
-	it('should test the initial load where all docket numbers are statusUnassigned', () => {
+	it('should have all docket numbers set to statusUnassigned on initial load', () => {
 		cy.get('[data-testid="trial-session-link"]').click();
 		cy.get('[data-testid="trial-location-link-959c4338-0fac-42eb-b0eb-d53b8d0195cc"]').click();
 		cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned').find('span').invoke('text').then((text) => {
@@ -33,5 +33,6 @@ describe('trials session working copies filtering', () => {
 		cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned').find('span').invoke('text').then((text) => {
 			expect(text).to.equal(' (3)');
 		});
+		cy.get('[data-testid="trial-session-working-copy-filter-basisReached').find('span').should('not.exist');
 	});
 })
