@@ -18,6 +18,7 @@ import {
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { getCasesForUser } from '@web-api/persistence/postgres/users/getCasesForUser';
 
 /**
  * updateUserContactInformationHelper
@@ -192,9 +193,7 @@ export const determineEntitiesToLock = async (
     .getPersistenceGateway()
     .getUserByIdOnceAllUpdatesComplete({ applicationContext, userId });
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getCasesForUser({ applicationContext, userId });
+  const cases = await getCasesForUser({ userId });
 
   return {
     identifiers: cases?.map(item => `case|${item.docketNumber}`),

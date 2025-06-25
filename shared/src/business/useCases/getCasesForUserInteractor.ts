@@ -15,6 +15,7 @@ import { compareISODateStrings } from '../utilities/sortFunctions';
 import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
 import { partition, uniqBy } from 'lodash';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
 
 interface UserCaseDTO {
   caseCaption: string;
@@ -46,12 +47,7 @@ export const getCasesForUserInteractor = async (
 
   const { userId } = authorizedUser;
 
-  const docketNumbers = (
-    await applicationContext.getPersistenceGateway().getCasesForUser({
-      applicationContext,
-      userId,
-    })
-  ).map(c => c.docketNumber);
+  const docketNumbers = await getDocketNumbersByUser({ userId });
 
   const allUserCases: TAssociatedCase[] = (
     (await getCasesMetadataByDocketNumbers({

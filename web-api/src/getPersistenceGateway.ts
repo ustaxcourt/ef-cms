@@ -35,10 +35,6 @@ import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getA
 import { getAllWebSocketConnections } from './persistence/dynamo/notifications/getAllWebSocketConnections';
 import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
-import {
-  getCasesForUser,
-  getDocketNumbersByUser,
-} from './persistence/dynamo/users/getCasesForUser';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getClientId } from './persistence/cognito/getClientId';
 import { getConfigurationItemValue } from './persistence/dynamo/deployTable/getConfigurationItemValue';
@@ -198,13 +194,11 @@ const gatewayMethods = {
   getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
   getCalendaredCasesForTrialSession,
   getCasesByEmailTotal,
-  getCasesForUser,
   getClientId,
   getConfigurationItemValue,
   getDeployTableStatus,
   getDispatchNotification,
   getDocketEntriesServedWithinTimeframe,
-  getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
   getDownloadPolicyUrl,

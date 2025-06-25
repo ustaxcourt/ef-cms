@@ -4,18 +4,16 @@ import { RawPractitioner } from '../../../../../shared/src/business/entities/Pra
 import { RawUser } from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
 
 export const queueUpdateAssociatedCasesWorker = async (
   applicationContext: ServerApplicationContext,
   { user }: { user: RawUser | RawPractitioner },
   authorizedUser: AuthUser,
 ): Promise<void> => {
-  const docketNumbersAssociatedWithUser = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId: user.userId,
-    });
+  const docketNumbersAssociatedWithUser = await getDocketNumbersByUser({
+    userId: user.userId,
+  });
 
   await settlePromises(
     docketNumbersAssociatedWithUser.map(docketNumber =>
