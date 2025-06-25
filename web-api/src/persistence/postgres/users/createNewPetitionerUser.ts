@@ -4,6 +4,7 @@ import { applicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserGateway } from '@web-api/getUserGateway';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
+import { toKyselyNewUser } from './mapper';
 
 // export const createUserRecords = async ({
 //   applicationContext,
@@ -43,10 +44,13 @@ export const createNewPetitionerUser = async ({
     userId: user.userId,
   });
 
+  console.log('we are here');
   const postgresCreatePromise = pgInsertInto({
     table: 'dwUser',
-    values: [user],
+    values: [toKyselyNewUser(user)],
   });
+
+  throw new Error('gg');
 
   // const createUserRecordsPromise = createUserRecords({
   //   applicationContext,

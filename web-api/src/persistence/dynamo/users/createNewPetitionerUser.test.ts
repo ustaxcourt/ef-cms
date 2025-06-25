@@ -1,3 +1,8 @@
+jest.mock('@web-api/persistence/postgres/utils/operation/pgInsertInto', () => ({
+  pgInsertInto: jest.fn(),
+}));
+
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createNewPetitionerUser } from './createNewPetitionerUser';
@@ -28,13 +33,8 @@ describe('createNewPetitionerUser', () => {
         userId: mockUser.userId,
       },
     );
-    expect(
-      applicationContext.getDocumentClient().put.mock.calls[0][0].Item,
-    ).toMatchObject({
-      ...mockUser,
-      pk: `user|${mockUser.userId}`,
-      sk: `user|${mockUser.userId}`,
-      userId: mockUser.userId,
+    expect(pgInsertInto).toHaveBeenCalledWith({
+      values: 'a',
     });
   });
 });
