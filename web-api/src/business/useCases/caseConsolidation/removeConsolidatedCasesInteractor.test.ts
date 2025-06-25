@@ -3,7 +3,13 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
+);
+jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock(
+  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
 );
 import { MOCK_CASE } from '@shared/test/mockCase';
 
@@ -13,11 +19,12 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { removeConsolidatedCasesInteractor } from './removeConsolidatedCasesInteractor';
+import { removeConsolidatedCasesInteractor } from '@web-api/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('removeConsolidatedCasesInteractor', () => {
@@ -30,8 +37,12 @@ describe('removeConsolidatedCasesInteractor', () => {
 
   // In this file, getCasesByDocketNumbers should be the cases that are to be removed
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const getCaseDeadlinesByDocketNumber = jest.mocked(
+    getCaseDeadlinesByDocketNumberMock,
+  );
 
   beforeEach(() => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
     mockCases = {
       '101-19': {
         ...MOCK_CASE,

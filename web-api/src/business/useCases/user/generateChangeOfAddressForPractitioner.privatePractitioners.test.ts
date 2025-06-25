@@ -8,6 +8,12 @@ jest.mock('../addCoversheetInteractor', () => ({
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+);
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob',
+);
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
@@ -88,7 +94,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .setChangeOfAddressCaseAsDone.mockReturnValue({ remaining: 0 });
+      .setChangeOfAddressCaseAsDone.mockReturnValue([{ remaining: 0 }]);
   });
 
   it('should run a change of address when address1 changes for a private practitioner', async () => {

@@ -199,19 +199,24 @@ export const put = async ({
 export const remove = async ({
   applicationContext,
   endpoint,
+  asyncSyncId = undefined,
   options = {},
   params = {},
 }: {
   applicationContext: any;
   endpoint: string;
   options?: any;
+  asyncSyncId?: string;
   params?: any;
 }) => {
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
     .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: getDefaultHeaders(getCurrentUserToken()),
+      headers: {
+        ...getDefaultHeaders(getCurrentUserToken()),
+        Asyncsyncid: asyncSyncId,
+      },
       params,
       ...options,
     })
