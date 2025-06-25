@@ -21,7 +21,7 @@ export function toKyselyNewDocketEntryWorksheet({
   };
 }
 
-export function docketEntryWorksheetEntity(
+export function fromKyselyDocketEntryWorksheet(
   docketEntryWorksheet: DocketEntryWorksheetKysely,
 ) {
   return new DocketEntryWorksheet({
