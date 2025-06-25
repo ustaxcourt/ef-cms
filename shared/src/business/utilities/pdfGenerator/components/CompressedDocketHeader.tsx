@@ -1,5 +1,14 @@
 import React from 'react';
 
+type CompressedDocketHeaderParams = {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  consolidatedCasesDocketNumbers: string[];
+  docketNumberWithSuffix: string;
+  documentTitle?: string;
+  fileAcrossConsolidatedGroup: boolean;
+};
+
 export const CompressedDocketHeader = ({
   caseCaptionExtension,
   caseTitle,
@@ -7,7 +16,7 @@ export const CompressedDocketHeader = ({
   docketNumberWithSuffix,
   documentTitle,
   fileAcrossConsolidatedGroup = false,
-}) => {
+}: CompressedDocketHeaderParams) => {
   return (
     <div id="compressed-header">
       <div className="case-information">
