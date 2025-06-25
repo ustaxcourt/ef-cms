@@ -46,10 +46,8 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
   ../bin/deploy-app.sh prod
   ```
 
-- Configure the Dynamsoft TWAIN library, which is used to enable scanning from EF-CMS:
-  - Upload the library `.tar.gz` to a folder called Dynamsoft in the S3 bucket named `${EFCMS_DOMAIN}-software`. Note its ARN for CircleCI setup later.
-  - Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile` config, tag it as `latest`, and push it to the repo in ECR.
-    - Both Flexion and USTC AWS accounts have container registries, so the image needs to be published to both registries.
+- Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile` config, tag it as `latest`, and push it to the repo in ECR.
+  - Both Flexion and USTC AWS accounts have container registries, so the image needs to be published to both registries.
 
 ### 4. Configure CircleCI to test and release code to this environment.
 
@@ -65,7 +63,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `AWS_ACCESS_KEY_ID` | AWS access key for the AWS CircleCI user |
   | `AWS_SECRET_ACCESS_KEY` | AWS secret access key for the AWS CircleCI user |
   | `DYNAMSOFT_PRODUCT_KEYS`* | Dynamsoft Web TWAIN product key used |
-  | `DYNAMSOFT_S3_ZIP_PATH`* | Dynamsoft Web TWAIN full S3 path ZIP configured above, e.g. `s3://bucketname/Dynamsoft/dynamic-web-twain-sdk-18.5.tar.gz` |
   | `EFCMS_DOMAIN`* | Domain name chosen above |
   | `COGNITO_SUFFIX`* | Suffix of your choice for the Cognito URL |
   | `USTC_ADMIN_USER` | Username of your choice used by the Cognito admin user |
