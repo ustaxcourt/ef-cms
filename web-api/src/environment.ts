@@ -19,9 +19,6 @@ function getJestDBConnectionError(): string {
 }
 
 export const environment = {
-  appEndpoint: process.env.EFCMS_DOMAIN
-    ? `app.${process.env.EFCMS_DOMAIN}`
-    : 'localhost:1234',
   bouncedEmailRecipient:
     process.env.BOUNCED_EMAIL_RECIPIENT || emailFromAddress,
   cognitoClientId: process.env.COGNITO_CLIENT_ID || 'bvjrggnd3co403c0aahscinne',
