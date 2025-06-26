@@ -7,6 +7,7 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 
 export const getCaseInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -19,11 +20,17 @@ export const getCaseInteractor = async (
     );
   }
 
-  const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
-    docketNumber: Case.formatDocketNumber(docketNumber),
-    user: authorizedUser,
-  });
+  const [caseRecord, workItems] = await Promise.all([
+    getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: Case.formatDocketNumber(docketNumber),
+      user: authorizedUser,
+    }),
+    getWorkItemsByDocketNumber({
+      docketNumber: Case.formatDocketNumber(docketNumber),
+    }),
+  ]);
+
   const isValidCase = Boolean(caseRecord?.docketNumber);
 
   if (!isValidCase) {
@@ -32,5 +39,16 @@ export const getCaseInteractor = async (
     throw error;
   }
 
-  return CaseFactory.getCase({ rawCase: caseRecord, user: authorizedUser });
+  const theCase = CaseFactory.getCase({
+    rawCase: caseRecord,
+    user: authorizedUser,
+  });
+  for (const docketEntry of theCase.docketEntries) {
+    for (const workItem of workItems) {
+      if (docketEntry.docketEntryId === workItem.docketEntryId) {
+        docketEntry.attachWorkItemInfoForUI(workItem);
+      }
+    }
+  }
+  return theCase;
 };

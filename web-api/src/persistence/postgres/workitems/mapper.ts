@@ -14,6 +14,7 @@ function pickFields(workItem) {
     completedMessage: workItem.completedMessage,
     createdAt: workItem.createdAt,
     docketEntry: JSON.stringify(workItem.docketEntry),
+    docketEntryId: workItem.docketEntryId,
     docketNumber: workItem.docketNumber,
     inProgress: workItem.inProgress,
     isRead: workItem.isRead,

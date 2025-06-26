@@ -11,7 +11,11 @@ import {
   dateStringsCompared,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -19,7 +23,6 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
@@ -29,6 +32,7 @@ import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/ge
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
@@ -44,7 +48,6 @@ const completeDocketEntryQC = async (
   const {
     docketEntryId,
     docketNumber,
-    leadDocketNumber,
     overridePaperServiceAddress,
     selectedSection,
   } = entryMetadata;
@@ -53,10 +56,22 @@ const completeDocketEntryQC = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
-    docketNumber,
-  });
+  const [caseToUpdate, workItem] = await Promise.all([
+    getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    }),
+    getWorkItemByDocketNumberAndDocketEntryId({
+      docketNumber,
+      docketEntryId,
+    }),
+  ]);
+
+  if (!workItem) {
+    throw new NotFoundError(
+      `Could not find work item associated with ${docketNumber} document ${docketEntryId}`,
+    );
+  }
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
   const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
@@ -67,7 +82,7 @@ const completeDocketEntryQC = async (
     docketEntryId,
   });
 
-  if (currentDocketEntry.workItem.isCompleted()) {
+  if (workItem.isCompleted()) {
     throw new InvalidRequest('The work item was already completed');
   }
 
@@ -109,12 +124,6 @@ const completeDocketEntryQC = async (
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      workItem: {
-        ...currentDocketEntry.workItem,
-        leadDocketNumber,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
-      },
     },
     { authorizedUser, petitioners: caseToUpdate.petitioners },
   ).validate();
@@ -176,16 +185,7 @@ const completeDocketEntryQC = async (
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({ caseEntity });
 
-  const workItemToUpdate = updatedDocketEntry.workItem as WorkItem;
-
-  Object.assign(workItemToUpdate, {
-    docketEntry: {
-      ...updatedDocketEntry.toRawObject(),
-      createdAt: updatedDocketEntry.createdAt,
-    },
-  });
-
-  workItemToUpdate.setAsCompleted({
+  workItem.setAsCompleted({
     message: 'completed',
     user,
   });
@@ -197,7 +197,7 @@ const completeDocketEntryQC = async (
   const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  workItemToUpdate.assignToUser({
+  workItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
     section: sectionToAssignTo,
@@ -207,7 +207,7 @@ const completeDocketEntryQC = async (
   });
 
   await upsertWorkItems({
-    workItems: [workItemToUpdate.validate().toRawObject()],
+    workItems: [workItem.validate().toRawObject()],
   });
 
   const servedParties = aggregatePartiesForService(caseEntity);

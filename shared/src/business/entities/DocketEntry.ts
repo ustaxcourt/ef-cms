@@ -47,6 +47,7 @@ import {
 import { getUniqueId } from '@shared/sharedAppContext';
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 import { generateFiledBy } from './docketEntry/generateFiledBy';
+import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 
 type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
 
@@ -187,6 +188,10 @@ export class DocketEntry extends JoiValidationEntity {
   public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
+
+  // These are optional fields set for the UI
+  public qcComplete?: boolean;
+  public qcViewed?: boolean;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -339,6 +344,9 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenBy = rawDocketEntry.strickenBy;
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
+
+    this.qcViewed = rawDocketEntry.qcViewed;
+    this.qcComplete = rawDocketEntry.qcComplete;
   }
 
   /**
@@ -463,6 +471,11 @@ export class DocketEntry extends JoiValidationEntity {
 
   isCourtIssued(): boolean {
     return DocketEntry.isCourtIssued({ eventCode: this.eventCode });
+  }
+
+  attachWorkItemInfoForUI(workItem: WorkItem | RawWorkItem): void {
+    this.qcComplete = !!workItem.completedAt;
+    this.qcViewed = !!workItem.isRead;
   }
 
   static TRANSCRIPT_AGE_DAYS_MIN = 90;

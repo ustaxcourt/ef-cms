@@ -15,6 +15,7 @@ export class WorkItem extends JoiValidationEntity {
   public completedMessage?: string;
   public createdAt: string;
   public docketEntry: any;
+  public docketEntryId: string;
   public docketNumber: string;
   public inProgress?: boolean;
   public isRead?: boolean;
@@ -35,6 +36,7 @@ export class WorkItem extends JoiValidationEntity {
     this.completedByUserId = rawWorkItem.completedByUserId;
     this.completedMessage = rawWorkItem.completedMessage;
     this.createdAt = rawWorkItem.createdAt || createISODateString();
+    this.docketEntryId = rawWorkItem.docketEntryId;
     this.docketEntry = pick(rawWorkItem.docketEntry, [
       'additionalInfo',
       'createdAt',
@@ -75,9 +77,8 @@ export class WorkItem extends JoiValidationEntity {
       .optional()
       .allow(null),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    // TODO: validate DocketEntry in WorkItem
-    // docketEntry: joi.object().keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS).required(),
-    docketEntry: joi.object().required(),
+    docketEntryId: joi.string().required(),
+    docketEntry: joi.object().optional(),
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
       'Unique case identifier in XXXXX-YY format.',
     ),
