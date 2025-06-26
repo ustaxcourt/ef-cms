@@ -2480,13 +2480,39 @@ button.change-scanner-button {
 }
 
 .term-builder-form {
-	p {
-		max-width: 100%;
-	}
+  p {
+    max-width: 100%;
+  }
 
-	input {
-		max-width: 2.5rem;
-		margin-right: 5px !important;
-		margin-left: 5px !important;
-	}
+  input {
+    max-width: 2.5rem;
+    margin-right: 5px !important;
+    margin-left: 5px !important;
+  }
+}
+
+.service-party {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  gap: 1rem;
+ 
+  .service-party-name {
+    overflow-wrap: anywhere;
+    white-space: normal;
+    word-break: normal;
+  }
+
+  .service-party-indicator {
+    margin-left: auto;
+  }
+
+  @media (max-width: $medium-screen) {
+    flex-flow: column wrap;
+    align-items: flex-start;
+
+    .service-party-indicator {
+      margin-left: 0;
+    }
+  }
 }

@@ -795,32 +795,3 @@ label.ustc-upload {
   font-size: 18px;
   line-height: 1.5;
 }
-
-.service-party {
-  display: flex;
-  align-items: baseline;
-  margin-bottom: 1rem !important;
-  gap: 1rem;
-}
-
-.service-party-name {
-  flex: 3 1 clamp(150px, 60%, 400px);
-  overflow-wrap: anywhere;
-  white-space: normal;
-  word-break: normal;
-}
-
-.service-party-indicator {
-  margin-left: auto;
-}
-
-@media only screen and (width <= 600px) {
-  .service-party {
-    flex-flow: column wrap;
-    align-items: flex-start;
-  }
-
-  .service-party-name {
-    flex: 1;
-  }
-}
