@@ -135,9 +135,9 @@ This runbook describes the process of creating a new DAWSON lower environment in
             1. Environment variable name: `AWS_ACCESS_KEY_ID`
             1. Value: Enter the value from the output you copied earlier
             1. Click "Add environment variable"
-      1. Add an `AWS_SECRET_ACCESS_KEY_ID` environment variable:
+      1. Add an `AWS_SECRET_ACCESS_KEY` environment variable:
          1. Click "Add environment variable"
-            1. Environment variable name: `AWS_SECRET_ACCESS_KEY_ID`
+            1. Environment variable name: `AWS_SECRET_ACCESS_KEY`
             1. Value: Enter the value from the output you copied earlier
             1. Click "Add environment variable"
 1. Merge `origin/staging` into the branch that corresponds to this lower environment:
