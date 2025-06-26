@@ -21,7 +21,7 @@ export const getPractitionersForCase = async ({
 
   return {
     irsPractitioners: practitioners
-      .filter(p => p.role !== ROLES.irsPractitioner)
+      .filter(p => p.role === ROLES.irsPractitioner)
       .map(p => irsPractitionerEntity(p)),
     privatePractitioners: practitioners
       .filter(p => p.role === ROLES.privatePractitioner)
