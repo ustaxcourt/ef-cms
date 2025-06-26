@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 # 1. set ENV
 case $CIRCLE_BRANCH in
