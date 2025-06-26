@@ -10,7 +10,7 @@ import { flattenDeep, isArray } from 'lodash';
 import { UserKysely } from '@web-api/persistence/postgres/users/schema';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { getUserByIdWithPractitioner } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const transformOpenSearchUser = (
   userData: UserKysely | UserKysely[],
@@ -27,7 +27,7 @@ export const indexOpenSearchUser = async ({
   for (const userId of isArray(message.payload)
     ? message.payload
     : [message.payload]) {
-    const userRecord = await getUserByIdWithPractitioner({ userId });
+    const userRecord = await getUserById({ userId });
 
     if (!userRecord) {
       getLogger().error(`Could not index user ${userId}: not found!`);

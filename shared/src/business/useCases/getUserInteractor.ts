@@ -7,7 +7,7 @@ import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { getUserByIdWithPractitioner } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export type GetUserResponse =
   | RawUser
@@ -22,7 +22,7 @@ export const getUserInteractor = async (
     throw new UnauthorizedError('Not authorized to get user');
   }
 
-  const user = await getUserByIdWithPractitioner({
+  const user = await getUserById({
     userId: authorizedUser.userId,
   });
 

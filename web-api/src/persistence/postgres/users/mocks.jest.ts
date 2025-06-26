@@ -44,11 +44,6 @@ jest.mock(
   () => mockFactory('getUserByIdOnceAllUpdatesComplete'),
 );
 
-jest.mock(
-  '@web-api/persistence/postgres/users/getUserByIdWithPractitioner',
-  () => mockFactory('getUserByIdWithPractitioner'),
-);
-
 jest.mock('@web-api/persistence/postgres/users/getUserConfirmationCode', () =>
   mockFactory('getUserConfirmationCode'),
 );
