@@ -182,8 +182,6 @@ export const updateContact = async (
         sentByUserId: authorizedUser.userId,
       });
 
-      changeOfAddressDocketEntry.setWorkItem(workItem);
-
       await upsertWorkItems({
         workItems: [workItem.validate().toRawObject()],
       });

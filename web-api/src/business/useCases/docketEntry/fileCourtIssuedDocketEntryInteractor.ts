@@ -133,8 +133,6 @@ export const fileCourtIssuedDocketEntry = async (
         workItem.setAsCompleted({ message: 'completed', user });
       }
 
-      docketEntryEntity.setWorkItem(workItem);
-
       const isDocketEntryAlreadyOnCase = !!caseEntity.getDocketEntryById({
         docketEntryId,
       });

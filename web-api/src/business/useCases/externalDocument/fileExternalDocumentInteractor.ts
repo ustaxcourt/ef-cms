@@ -159,7 +159,6 @@ export const fileExternalDocument = async (
             sentByUserId: user.userId,
           }).validate();
 
-          docketEntryEntity.setWorkItem(workItem);
           workItems.push(workItem);
           caseEntity.addDocketEntry(docketEntryEntity);
 

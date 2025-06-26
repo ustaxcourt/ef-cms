@@ -136,8 +136,6 @@ export const addPaperFiling = async (
       workItem,
     });
 
-    docketEntryEntity.setWorkItem(workItem);
-
     if (isFileAttached) {
       docketEntryEntity.numberOfPages = await applicationContext
         .getUseCaseHelpers()

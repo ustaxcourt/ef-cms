@@ -34,9 +34,11 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { AuthUser, UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { User } from './User';
-import { WorkItem } from './WorkItem';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
@@ -185,7 +187,6 @@ export class DocketEntry extends JoiValidationEntity {
   public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
-  public workItem?: any;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -338,17 +339,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenBy = rawDocketEntry.strickenBy;
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
-    this.workItem = rawDocketEntry.workItem
-      ? new WorkItem(rawDocketEntry.workItem)
-      : undefined;
-  }
-
-  /**
-   *
-   * @param {WorkItem} workItem the work item to add to the document
-   */
-  setWorkItem(workItem) {
-    this.workItem = workItem;
   }
 
   /**

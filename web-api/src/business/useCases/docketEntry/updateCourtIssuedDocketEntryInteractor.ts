@@ -11,6 +11,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 export const updateCourtIssuedDocketEntry = async (
   applicationContext: ServerApplicationContext,
@@ -27,10 +28,22 @@ export const updateCourtIssuedDocketEntry = async (
 
   const { docketEntryId, docketNumber } = documentMeta;
 
-  const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
-    docketNumber,
-  });
+  const [caseToUpdate, workItem] = await Promise.all([
+    getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    }),
+    getWorkItemByDocketNumberAndDocketEntryId({
+      docketNumber,
+      docketEntryId,
+    }),
+  ]);
+
+  if (!workItem) {
+    throw new NotFoundError(
+      `Could not find work item associated with ${docketNumber} document ${docketEntryId}`,
+    );
+  }
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
@@ -75,8 +88,6 @@ export const updateCourtIssuedDocketEntry = async (
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  const { workItem } = docketEntryEntity;
-
   Object.assign(workItem, {
     docketEntry: {
       ...docketEntryEntity.toRawObject(),
@@ -84,8 +95,6 @@ export const updateCourtIssuedDocketEntry = async (
       createdAt: docketEntryEntity.createdAt,
     },
   });
-
-  docketEntryEntity.setWorkItem(workItem);
 
   const rawValidWorkItem = workItem.validate().toRawObject();
 
