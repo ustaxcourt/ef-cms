@@ -38,11 +38,10 @@ export const lambdaWrapper = (
     const isTerminalUser =
       get(currentInvokeEvent, 'requestContext.authorizer.isTerminalUser') ===
       'true';
-
-    const host = req.get('host') || req.headers.host;
-    let processedHost = host;
-    if (host.startsWith('app-')) {
-      processedHost = host.replace(/^app-(green|blue)/, 'app');
+ 
+    let processedHost = req.headers.host;
+    if (processedHost.startsWith('app-')) {
+      processedHost = processedHost.replace(/^app-(green|blue)/, 'app');
     }
 
     const event = {
