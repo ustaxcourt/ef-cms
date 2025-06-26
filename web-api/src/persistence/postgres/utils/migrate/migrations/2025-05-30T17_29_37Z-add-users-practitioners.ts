@@ -47,7 +47,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('practitionerId', 'varchar', col => col.primaryKey())
     .addColumn('userId', 'varchar', col => col.unique())
     .addColumn('additionalPhone', 'varchar')
-    .addColumn('admissionsDate', 'timestamptz')
+    .addColumn('admissionsDate', 'timestamptz', col => col.notNull())
     .addColumn('admissionsStatus', 'varchar')
     .addColumn('barNumber', 'varchar', col => col.notNull())
     .addColumn('birthYear', 'int2')

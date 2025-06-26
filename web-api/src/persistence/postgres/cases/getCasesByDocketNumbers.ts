@@ -1,5 +1,4 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
@@ -9,11 +8,12 @@ import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorr
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getIrsPractitionersOnCase';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getPrivatePractitionersOnCase';
 import { difference, isEmpty, sortBy } from 'lodash';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { PractitionerKysely } from '@web-api/persistence/postgres/practitioners/schema';
+import { fromKyselyPractitioner } from '@web-api/persistence/postgres/practitioners/mapper';
 
 export async function getCasesByDocketNumbers({
   docketNumbers,
@@ -90,11 +90,23 @@ async function getAllCaseData({
   });
   practitionerInfo.forEach(info => {
     const caseInfo = caseMap.get(info.docketNumber)!;
-    caseMap.set(info.docketNumber, {
-      ...caseInfo,
-      irsPractitioners: info.irsPractitioners,
-      privatePractitioners: info.privatePractitioners,
-    });
+
+    if (info.role === ROLES.irsPractitioner) {
+      const irsPractitioners = caseInfo.irsPractitioners ?? [];
+
+      caseMap.set(info.docketNumber, {
+        ...caseInfo,
+        irsPractitioners: [...irsPractitioners, info],
+      });
+    }
+    if (info.role === ROLES.privatePractitioner) {
+      const privatePractitioners = caseInfo.privatePractitioners ?? [];
+
+      caseMap.set(info.docketNumber, {
+        ...caseInfo,
+        privatePractitioners: [...privatePractitioners, info],
+      });
+    }
   });
   caseCorrespondences.forEach(correspondence => {
     const caseInfo = caseMap.get(correspondence.docketNumber!)!;
@@ -167,6 +179,12 @@ function convertDbCaseToRawCase(
     archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
       fromKyselyDocketEntry(aD),
     ),
+    irsPractitioners: dbCase.irsPractitioners.map(i =>
+      fromKyselyPractitioner(i),
+    ),
+    privatePractitioners: dbCase.privatePractitioners.map(i =>
+      fromKyselyPractitioner(i),
+    ),
   };
 
   return purgeDynamoKeys(appCase);
@@ -183,30 +201,16 @@ async function getCasesMetadata(docketNumbers: string[]) {
   return caseInfo;
 }
 
-async function getPractitioners(docketNumbers: string[]): Promise<
-  {
-    docketNumber: string;
-    irsPractitioners: any[];
-    privatePractitioners: any[];
-  }[]
-> {
-  const practitionerInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const privatePractitioners = await getPrivatePractitionersOnCase({
-        docketNumber,
-      });
-
-      const irsPractitioners = await getIrsPractitionersOnCase({
-        docketNumber,
-      });
-
-      return {
-        docketNumber,
-        irsPractitioners,
-        privatePractitioners,
-      };
-    }),
-  );
+async function getPractitioners(docketNumbers: string[]) {
+  const practitionerInfo = await getDbReader(reader => {
+    return reader
+      .selectFrom('dwUserOnCase as uoc')
+      .innerJoin('dwPractitioner as p', 'uoc.userId', 'p.userId')
+      .where('uoc.docketNumber', 'in', docketNumbers)
+      .selectAll('uoc')
+      .selectAll('p')
+      .execute();
+  });
 
   return practitionerInfo;
 }
@@ -263,8 +267,8 @@ type EnrichedCaseRow = CaseKysely & {
   docketNumberWithSuffix: string;
   docketEntries: DocketEntryKysely[];
   archivedDocketEntries: DocketEntryKysely[];
-  irsPractitioners: RawPractitioner[];
-  privatePractitioners: RawPractitioner[];
+  irsPractitioners: PractitionerKysely[];
+  privatePractitioners: PractitionerKysely[];
   correspondence: CaseCorrespondenceKysely[];
   archivedCorrespondences: CaseCorrespondenceKysely[];
   hearings: any[];

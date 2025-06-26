@@ -82,18 +82,18 @@ export function toKyselyNewPractitioner(
 }
 
 export function practitionerEntity(practitioner): Practitioner {
-  return new Practitioner(transformPractitionerData(practitioner));
+  return new Practitioner(fromKyselyPractitioner(practitioner));
 }
 
 export function irsPractitionerEntity(practitioner): IrsPractitioner {
-  return new IrsPractitioner(transformPractitionerData(practitioner));
+  return new IrsPractitioner(fromKyselyPractitioner(practitioner));
 }
 
 export function privatePractitionerEntity(practitioner): PrivatePractitioner {
-  return new PrivatePractitioner(transformPractitionerData(practitioner));
+  return new PrivatePractitioner(fromKyselyPractitioner(practitioner));
 }
 
-function transformPractitionerData(practitioner) {
+export function fromKyselyPractitioner(practitioner): RawPractitioner {
   return transformNullToUndefined({
     ...practitioner,
     contact: contactInfo(practitioner),
