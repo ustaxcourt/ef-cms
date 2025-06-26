@@ -66,6 +66,13 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
   - [ ] practitioner.admissions_data
   - [ ] many other practitioner fields
 
+## Todo part 3
+- [ ] Update updateUser/upsertUsers to always check for practitioner role and persist practitioner data if applicable
+      - Make a single function(or close to one) function for updating user. Consolidate
+- [ ] Consider doing the same when fetching user data
+- [ ] resolve issue regarding joining userOnCase with practitioner since practitioners may be petitioners on a case
+- [ ] getCasesByDocketNumbers we need to think about efficiency
+
 ## Odd dynamo functions that need to be reimplemented with postgres
 
 - [x] associateUserWithCase - association table
