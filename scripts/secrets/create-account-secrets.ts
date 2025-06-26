@@ -58,7 +58,7 @@ const scriptConfig: ScriptConfig = {
     },
     opensearchLogsVolumeSize: {
       default: '10',
-      long: 'opensearch-volume-size',
+      long: 'opensearch-logs-volume-size',
       transform: 'number',
       type: 'string',
     },
