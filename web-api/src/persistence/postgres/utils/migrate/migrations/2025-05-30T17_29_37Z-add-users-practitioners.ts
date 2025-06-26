@@ -70,6 +70,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('confirmationCode', 'varchar', col => col.notNull())
     .addColumn('expiresAt', 'timestamptz', col => col.notNull())
+    .addColumn('ttl', 'bigint', col => col.notNull())
     .execute();
 
   await db.schema
