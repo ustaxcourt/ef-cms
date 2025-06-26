@@ -22,7 +22,9 @@ describe('lambdaWrapper', () => {
     req = {
       apiGateway: {},
       body: 'blank',
-      headers: {},
+      headers: {
+        host: 'app.dawson.ustaxcourt.gov'
+      },
       locals: {},
       setTimeout: jest.fn(),
     };
@@ -65,6 +67,7 @@ describe('lambdaWrapper', () => {
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
       'X-Terminal-User': false,
+      host: 'app.dawson.ustaxcourt.gov'
     });
     expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
     expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
@@ -169,6 +172,7 @@ describe('lambdaWrapper', () => {
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
       'X-Terminal-User': true,
+      host: 'app.dawson.ustaxcourt.gov'
     });
     expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
     expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
@@ -279,4 +283,27 @@ describe('lambdaWrapper', () => {
         .calls[1][0].chunk,
     ).toHaveLength(JSON.stringify(response).length - CHUNK_SIZE);
   });
+  it('removes the color from the host header', async () => {
+    req.headers.host = 'app-green.dawson.ustaxcourt.gov';
+    await lambdaWrapper(() => {
+      return {
+        body: 'hello world',
+        headers: {
+          'Content-Type': 'text/html',
+        },
+      };
+    })(req, res);
+    expect(res.set).toHaveBeenCalledWith({
+      'Access-Control-Expose-Headers': 'X-Terminal-User',
+      'Cache-Control':
+        'max-age=0, private, no-cache, no-store, must-revalidate',
+      'Content-Type': 'application/json',
+      Pragma: 'no-cache',
+      Vary: 'Authorization',
+      'X-Content-Type-Options': 'nosniff',
+      'X-Terminal-User': false,
+      host: 'app.dawson.ustaxcourt.gov'
+    });
+    expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
+  })
 });
