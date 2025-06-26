@@ -230,7 +230,8 @@ resource "aws_iam_policy" "ci_cd_policy" {
       ],
       "Resource": [
         "arn:aws:dynamodb::${data.aws_caller_identity.current.account_id}:global-table/efcms-*",
-        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-*"
+        "arn:aws:dynamodb:us-east-1:${data.aws_caller_identity.current.account_id}:table/efcms-*",
+        "arn:aws:dynamodb:us-west-1:${data.aws_caller_identity.current.account_id}:table/efcms-*"
       ]
     },
     {
