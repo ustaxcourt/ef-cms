@@ -1,7 +1,7 @@
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { getDbReader } from '@web-api/database';
+import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
 
-// TODO: This can be improved if we don't store docketEntry on workItem rows :/
 export async function getWorkItemByDocketNumberAndDocketEntryId({
   docketNumber,
   docketEntryId,
@@ -9,9 +9,35 @@ export async function getWorkItemByDocketNumberAndDocketEntryId({
   docketNumber: string;
   docketEntryId: string;
 }): Promise<WorkItem | undefined> {
-  const workItemsOnCase = await getWorkItemsByDocketNumber({ docketNumber });
-  const workItem = workItemsOnCase.find(
-    w => w.docketEntry.docketEntryId === docketEntryId,
+  const result = await getDbReader(reader =>
+    reader
+      .selectFrom('dwWorkItem')
+      .where('docketNumber', '=', docketNumber)
+      .where('docketEntryId', '=', docketEntryId)
+      .select([
+        'assigneeId',
+        'assigneeName',
+        'completedAt',
+        'completedBy',
+        'completedByUserId',
+        'createdAt',
+        'docketEntryId',
+        'docketNumber',
+        'inProgress',
+        'isRead',
+        'section',
+        'sentBy',
+        'sentBySection',
+        'sentByUserId',
+        'updatedAt',
+        'workItemId',
+      ])
+      .executeTakeFirst(),
   );
-  return workItem;
+
+  if (!result) {
+    return undefined;
+  }
+
+  return workItemEntity(result);
 }

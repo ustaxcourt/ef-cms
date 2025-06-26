@@ -46,13 +46,6 @@ export const aggregateCaseItems = (caseAndCaseItems): RawCase => {
 
   caseAndCaseItems.forEach(item => {
     if (isDocketEntryItem(item)) {
-      // Docket Entries
-      const workItem = caseAndCaseItems.find(
-        caseItem =>
-          isWorkItemItem(caseItem) &&
-          caseItem.docketEntry.docketEntryId === item.docketEntryId,
-      );
-      item.workItem = workItem;
       docketEntries.push(item);
     } else if (isArchivedDocketEntryItem(item)) {
       // Archived Docket Entries
