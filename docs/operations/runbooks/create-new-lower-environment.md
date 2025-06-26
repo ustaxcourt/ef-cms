@@ -128,11 +128,16 @@ This runbook describes the process of creating a new DAWSON lower environment in
             1. Environment variable name: `AWS_SECRET_ACCESS_KEY_ID`
             1. Value: Enter the value from the output you copied earlier
             1. Click "Add environment variable"
-1. Merge `origin/staging` to the branch that corresponds to this lower environment:
+1. Merge `origin/staging` into the branch that corresponds to this lower environment:
    ```bash
    git checkout experimental9
    git pull
    git merge origin/staging
    git push
+   ```
+1. Deploy the latest docker image to this account's ECR:
+   ```bash
+   export DESTINATION_TAG=$(grep docker-image: .circleci/config.yml | awk -F':' '{print $3}')
+   ./docker-to-ecr.sh
    ```
 1. Trigger a deployment in the new environment, accepting the default settings
