@@ -102,7 +102,9 @@ export const trialSessionWorkingCopyHelper = (
       key: 'statusUnassigned',
       label: 'Unassigned',
     });
-  const trialStatusCounts = trialSession.calendaredCases.reduce((counters, c) => {
+  const trialStatusCounts = trialSession.calendaredCases
+    .filter(isOpenCaseInATrial)
+    .reduce((counters, c) => {
     if(caseMetadata[c.docketNumber] === undefined || caseMetadata[c.docketNumber].trialStatus === "" 
       || caseMetadata[c.docketNumber].trialStatus === undefined) {
       counters["statusUnassigned"] = (counters["statusUnassigned"] || 0) + 1;
