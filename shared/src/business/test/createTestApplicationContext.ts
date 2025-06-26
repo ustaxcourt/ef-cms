@@ -48,7 +48,6 @@ import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPa
 import { createCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/createCaseAndAssociations';
 import { createMockDocumentClient } from './createMockDocumentClient';
 import { deleteRecord } from '@web-api/persistence/elasticsearch/deleteRecord';
-import { documentUrlTranslator } from '@web-api/utilities/documentUrlTranslator';
 import { filterEmptyStrings } from '@shared/business/utilities/filterEmptyStrings';
 import { formatAttachments } from '@shared/business/utilities/formatAttachments';
 import {
@@ -213,7 +212,6 @@ export const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(DateHandler.dateStringsCompared),
     deconstructDate: jest.fn().mockImplementation(DateHandler.deconstructDate),
-    documentUrlTranslator: jest.fn().mockImplementation(documentUrlTranslator),
     filterEmptyStrings: jest.fn().mockImplementation(filterEmptyStrings),
     formatAttachments: jest.fn().mockImplementation(formatAttachments),
     formatCase: jest.fn().mockImplementation(formatCase),

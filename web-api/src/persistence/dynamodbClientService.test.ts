@@ -101,7 +101,6 @@ describe('dynamodbClientService', function () {
   describe('getTableName', () => {
     let currentEnvironment;
     const testEnvironment = {
-      appEndpoint: '',
       dynamoDbTableName: 'some-table',
       stage: 'local',
       tempDocumentsBucketName: 'some-temp-bucket',
@@ -137,7 +136,6 @@ describe('dynamodbClientService', function () {
   describe('getDeployTableName', () => {
     let currentEnvironment;
     const testEnvironment = {
-      appEndpoint: '',
       dynamoDbTableName: 'some-table',
       stage: 'local',
       tempDocumentsBucketName: 'some-temp-bucket',
