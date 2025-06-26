@@ -96,14 +96,14 @@ This runbook describes the process of creating a new DAWSON lower environment in
         --env "$ENV" \
         --generate-secure-default-account-password \
         --irs-superuser-email "<IRS SUPERUSER EMAIL>" \
-        --opensearch-instance-count 3 \
-        --opensearch-instance-type "r7g.large.search" \
-        --opensearch-volume-size 350 \
+        --opensearch-instance-count <PROD-LIKE INSTANCE COUNT> \
+        --opensearch-instance-type "<PROD-LIKE INSTANCE TYPE>" \
+        --opensearch-volume-size <PROD-LIKE VOLUME SIZE> \
         --prod-account-id "<PROD ACCOUNT ID>" \
         --prod-documents-bucket "<PROD DOCUMENTS BUCKET NAME>" \
-        --rds-max-capacity 32 \
-        --rds-min-capacity 1 \
-        --rum-sample-rate 1
+        --rds-max-capacity <PROD-LIKE MAX CAPACITY> \
+        --rds-min-capacity <PROD-LIKE MIN CAPACITY> \
+        --rum-sample-rate <RUM SAMPLE RATE>
       ```
 1. Create Cloudwatch log groups:
    ```bash
