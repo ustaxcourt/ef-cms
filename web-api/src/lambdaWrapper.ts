@@ -39,8 +39,15 @@ export const lambdaWrapper = (
       get(currentInvokeEvent, 'requestContext.authorizer.isTerminalUser') ===
       'true';
 
+    const host = req.get('host') || req.headers.host;
+    let processedHost = host;
+    if (host.startsWith('app-')) {
+      processedHost = host.replace(/^app-(green|blue)/, 'app');
+    }
+
     const event = {
       headers: req.headers,
+      host: processedHost,
       isTerminalUser,
       path: req.path,
       pathParameters: req.params,
