@@ -9,11 +9,10 @@ import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorr
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getIrsPractitionersOnCase';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getPrivatePractitionersOnCase';
 import { difference, isEmpty, sortBy } from 'lodash';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
+import { PRACTITIONER_ONLY_FIELDS } from '@web-api/persistence/postgres/practitioners/mapper';
 
 export async function getCasesByDocketNumbers({
   docketNumbers,
@@ -183,30 +182,22 @@ async function getCasesMetadata(docketNumbers: string[]) {
   return caseInfo;
 }
 
-async function getPractitioners(docketNumbers: string[]): Promise<
-  {
-    docketNumber: string;
-    irsPractitioners: any[];
-    privatePractitioners: any[];
-  }[]
-> {
-  const practitionerInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const privatePractitioners = await getPrivatePractitionersOnCase({
-        docketNumber,
-      });
-
-      const irsPractitioners = await getIrsPractitionersOnCase({
-        docketNumber,
-      });
-
-      return {
-        docketNumber,
-        irsPractitioners,
-        privatePractitioners,
-      };
-    }),
+async function getPractitioners(docketNumbers: string[]) {
+  const practitionerOnlyFields = PRACTITIONER_ONLY_FIELDS.map(
+    field => `p.${field}` as const,
   );
+
+  const practitionerInfo = await getDbReader(reader => {
+    return reader
+      .selectFrom('dwUserOnCase as uoc')
+      .leftJoin('dwPractitioner as p', 'uoc.userId', 'p.userId')
+      .leftJoin('dwUser as u', 'uoc.userId', 'u.userId')
+      .where('uoc.docketNumber', 'in', docketNumbers)
+      .selectAll('uoc')
+      .selectAll('u')
+      .select(practitionerOnlyFields)
+      .execute();
+  });
 
   return practitionerInfo;
 }
