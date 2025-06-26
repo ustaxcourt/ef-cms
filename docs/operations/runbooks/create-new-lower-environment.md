@@ -101,7 +101,7 @@ This runbook describes the process of creating a new DAWSON lower environment in
    ```bash
    npm run deploy:account-specific
    ```
-1. Set up a CircleCI context:
+1. Set up a CircleCI context for this environment:
    1. Export the AWS account id in your terminal session:
       ```bash
       export AWS_ACCOUNT_ID="<AWS ACCOUNT ID>"
