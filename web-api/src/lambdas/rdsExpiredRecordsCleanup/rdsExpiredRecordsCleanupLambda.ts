@@ -25,5 +25,6 @@ export const handler: Handler = async (_event, context) => {
       }),
     );
   });
+
   context.succeed('Completed Cleanup!');
 };
