@@ -15,9 +15,17 @@ This runbook describes the process of creating a new DAWSON lower environment in
   - Production documents bucket name (string)
   - ARN of the external flexion developer role (string)
   - Additional secrets for environments with prod-like data:
-    - Number of days to keep logs in Kibana
-    - Number of nodes in the Opensearch cluster for Kibana
-    - 
+    - Days to keep logs in Kibana (number)
+    - Nodes in the Opensearch cluster for Kibana (number)
+    - Opensearch instance type for Kibana (string)
+    - Opensearch volume size for Kibana (number)
+    - IRS superuser email address for prod-like email (email address)
+    - Nodes in the efcms-search-[env]* Opensearch cluster (number)
+    - Opensearch instance type for the main efcms-search-[env]* Opensearch cluster (string)
+    - Volume size for prod-like Opensearch instances (number)
+    - Maximum capacity for prod-like RDS clusters (string) [eg. "0.9"]
+    - Minimum capacity for prod-like RDS clusters (string) [eg. "0.1"]
+    - RUM sample rate for requests (string) [eg. "0.99"]
 
 ## Steps
 1. Create a block in your `~/.aws/config` file for the new account:
@@ -37,6 +45,10 @@ This runbook describes the process of creating a new DAWSON lower environment in
    ```bash
    export ENV="exp9"
    ```
+1. Export an `AWS_PROFILE` variable matching the exact name of the profile you added earlier:
+   ```bash
+   export AWS_PROFILE="ustc-exp9"
+   ```
 1. Establish an AWS SSO session:
    ```bash
    aws sso login
@@ -55,10 +67,10 @@ This runbook describes the process of creating a new DAWSON lower environment in
         --domain "ustaxcourt.gov" \
         --env "$ENV" \
         --external-trusted-role-arn "<Flexion-Developer ARN>" \
-        --log-expiration-days 90 \
-        --opensearch-logs-instance-count 2 \
-        --opensearch-logs-instance-type "m5.large.search" \
-        --opensearch-logs-volume-size 200
+        --log-expiration-days <LOWER ENV LOG EXIRATION DAYS> \
+        --opensearch-logs-instance-count <LOWER ENV LOG INSTANCE COUNT> \
+        --opensearch-logs-instance-type "<LOWER ENV LOG INSTANCE TYPE>" \
+        --opensearch-logs-volume-size <LOWER ENV LOG VOLUME SIZE GB>
       ```
 1. Create the `[env]_deploy` secrets for this environment, populating the values appropriately:
    1. Lower environment:
