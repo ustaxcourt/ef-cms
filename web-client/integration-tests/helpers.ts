@@ -40,9 +40,6 @@ import axios, { AxiosError } from 'axios';
 import jwt from 'jsonwebtoken';
 import qs from 'qs';
 import riotRoute from 'riot-route';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
-import { NotFoundError } from '@web-api/errors/errors';
 
 const applicationContext = clientApplicationContext as any;
 
@@ -196,18 +193,6 @@ export const setChiefJudgeNameFlagValue = newJudgeName => {
     },
     applicationContext,
   });
-};
-
-export const setJudgeTitle = async (judgeUserId, newJudgeTitle) => {
-  const judge = await getUserById({ userId: judgeUserId });
-  if (!judge) {
-    throw new NotFoundError(
-      `Unable to find user with userId ${judgeUserId}`,
-    );
-  }
-  judge.judgeTitle = newJudgeTitle;
-
-  return await updateUser({ userToUpdate: judge });
 };
 
 export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {

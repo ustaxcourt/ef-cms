@@ -35,8 +35,8 @@ export const processPractitionerMappingEntries = async ({
         return {
           docketNumber,
           userId: userOnCaseRecord.userId,
-          entityName: userOnCaseRecord.entityName,
           representing: userOnCaseRecord.representing,
+          serviceIndicator: userOnCaseRecord.serviceIndicator,
         };
       }),
     );

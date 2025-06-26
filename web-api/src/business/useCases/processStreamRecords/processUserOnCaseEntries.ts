@@ -20,7 +20,6 @@ export const processUserOnCaseEntries = async ({
       await associateUserWithCase({
         userId: record.userId,
         docketNumber: record.docketNumber,
-        entityName: record.entityName,
         representing: record.representing ?? [],
         serviceIndicator: record.serviceIndicator ?? undefined,
       });

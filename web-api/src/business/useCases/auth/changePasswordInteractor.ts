@@ -15,7 +15,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 import jwt from 'jsonwebtoken';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
-import { updatePractitioner } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const changePasswordInteractor = async (
@@ -144,8 +143,6 @@ export const updateUserPendingEmailRecord = async ({
     })
       .validate()
       .toRawObject();
-
-    await updatePractitioner({ practitionerToUpdate: rawUser });
   } else {
     rawUser = new User({
       ...user,

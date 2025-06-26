@@ -1,7 +1,7 @@
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { RawUser } from '@shared/business/entities/User';
-import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { upsertUserRecords } from '@web-api/persistence/postgres/users/upsertUserRecords';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
 import { merge } from 'lodash';
@@ -16,7 +16,7 @@ export const processUserEntries = async ({
   getDawsonLogger().debug(`going to index ${userRecords.length} user records`);
 
   try {
-    await upsertUsers(
+    await upsertUserRecords(
       userRecords.map(userRecord => {
         const user = unmarshall(userRecord.dynamodb.NewImage) as RawUser;
 

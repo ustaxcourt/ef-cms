@@ -5,9 +5,9 @@ import {
   mockAdminUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { getUsersById as getUsersByIdMock } from '@web-api/persistence/postgres/users/getUsersById';
+import { getUserRecordsById as getUserRecordsByIdMock } from '@web-api/persistence/postgres/users/getUserRecordsById';
 
-const getUsersById = getUsersByIdMock as jest.Mock;
+const getUsersById = getUserRecordsByIdMock as jest.Mock;
 
 describe('getUsersPendingEmailInteractor', () => {
   const PENDING_EMAIL = 'pending@example.com';

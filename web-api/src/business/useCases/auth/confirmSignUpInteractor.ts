@@ -4,7 +4,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
 import { getUserConfirmationCode } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
-import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { upsertUserRecords } from '@web-api/persistence/postgres/users/upsertUserRecords';
 
 export const confirmSignUpInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -62,7 +62,7 @@ const createPetitionerUser = async (
     userId,
   });
 
-  await upsertUsers([userEntity.validate().toRawObject()]);
+  await upsertUserRecords([userEntity.validate().toRawObject()]);
 
   return userEntity.validate().toRawObject();
 };

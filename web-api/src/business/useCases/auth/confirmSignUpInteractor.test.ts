@@ -1,10 +1,10 @@
 import '@web-api/persistence/postgres/users/mocks.jest';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { confirmSignUpInteractor } from './confirmSignUpInteractor';
-import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
+import { upsertUserRecords as upsertUserRecordsMock } from '@web-api/persistence/postgres/users/upsertUserRecords';
 import { getUserConfirmationCode as getUserConfirmationCodeMock } from '@web-api/persistence/postgres/users/getUserConfirmationCode';
 
-const upsertUsers = upsertUsersMock as jest.Mock;
+const upsertUsers = upsertUserRecordsMock as jest.Mock;
 const getUserConfirmationCode = getUserConfirmationCodeMock as jest.Mock;
 
 describe('confirmSignUpInteractor', () => {

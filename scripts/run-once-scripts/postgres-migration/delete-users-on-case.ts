@@ -10,6 +10,7 @@ import { getDbReader } from '@web-api/database';
 import { camelCase, isEmpty } from 'lodash';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
 import { environment } from '@web-api/environment';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -33,8 +34,9 @@ environment.nodeEnv = 'production';
 const getUsersOnCaseToDelete = async (offset: number) => {
   return await getDbReader(reader =>
     reader
-      .selectFrom('dwUserOnCase')
-      .select(['userId', 'docketNumber', 'entityName'])
+      .selectFrom('dwUserOnCase as uoc')
+      .leftJoin('dwUser as u', 'u.userId', 'uoc.userId')
+      .select(['u.userId', 'uoc.docketNumber', 'u.role'])
       .orderBy('userId')
       .limit(userOnCasePageSize)
       .offset(offset)
@@ -49,7 +51,15 @@ async function main() {
   let usersOnCaseToDelete = await getUsersOnCaseToDelete(offset);
 
   while (!isEmpty(usersOnCaseToDelete)) {
-    const dynamoItemsToDelete: any[] = [];
+    const dynamoItemsToDelete: {
+      DeleteRequest: {
+        Key: {
+          pk: string;
+          sk?: string;
+        };
+      };
+    }[] = [];
+
     usersOnCaseToDelete.forEach(uc => {
       dynamoItemsToDelete.push({
         DeleteRequest: {
@@ -60,14 +70,23 @@ async function main() {
         },
       });
 
-      dynamoItemsToDelete.push({
-        DeleteRequest: {
-          Key: {
-            pk: `case|${uc.docketNumber}`,
-            sk: `${camelCase(uc.entityName)}|${uc.userId}`,
+      if (
+        uc.role &&
+        [
+          ROLES.privatePractitioner,
+          ROLES.irsPractitioner,
+          ROLES.inactivePractitioner,
+        ].includes(uc.role as any)
+      ) {
+        dynamoItemsToDelete.push({
+          DeleteRequest: {
+            Key: {
+              pk: `case|${uc.docketNumber}`,
+              sk: `${camelCase(uc.role)}|${uc.userId}`,
+            },
           },
-        },
-      });
+        });
+      }
     });
 
     totalItemsDeleted += await batchDeleteDynamoItems(
