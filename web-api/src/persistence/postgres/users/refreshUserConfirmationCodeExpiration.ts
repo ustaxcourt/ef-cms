@@ -11,14 +11,17 @@ export const refreshUserConfirmationCodeExpiration = async ({
   userId: string;
   confirmationCode: string;
 }): Promise<void> => {
+  const expiresAt = calculateDate({
+    dateString: formatNow(),
+    howMuch: 1,
+    units: 'days',
+  });
+
   await pgUpdateTable({
     table: 'dwUserConfirmationCode',
     values: {
-      expiresAt: calculateDate({
-        dateString: formatNow(),
-        howMuch: 1,
-        units: 'days',
-      }),
+      expiresAt,
+      ttl: Math.floor(expiresAt.getTime() / 1000),
     },
     where: cb =>
       cb

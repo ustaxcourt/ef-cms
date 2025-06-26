@@ -10,17 +10,19 @@ export const generateUserConfirmationCode = async ({
 }: {
   userId: string;
 }): Promise<{ confirmationCode: string }> => {
+  const expiresAt = calculateDate({
+    dateString: formatNow(),
+    howMuch: 1,
+    units: 'days',
+  });
   const confirmationCode = await pgInsertInto({
     table: 'dwUserConfirmationCode',
     values: {
       id: getUniqueId(),
       userId,
       confirmationCode: getUniqueId(),
-      expiresAt: calculateDate({
-        dateString: formatNow(),
-        howMuch: 1,
-        units: 'days',
-      }),
+      expiresAt,
+      ttl: Math.floor(expiresAt.getTime() / 1000),
     },
   })[0];
 

@@ -44,6 +44,7 @@ export const userConfirmationCodeTableDefinition = {
   userId: DEFAULT as string,
   confirmationCode: DEFAULT as string,
   expiresAt: DEFAULT as Date,
+  ttl: DEFAULT as number,
 };
 
 export type UserConfirmationCodeTable =
