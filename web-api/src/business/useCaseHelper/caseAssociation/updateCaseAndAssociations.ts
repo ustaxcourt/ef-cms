@@ -283,7 +283,6 @@ const updatePrivatePractitioners = ({
           docketNumber: caseToUpdate.docketNumber,
           userId: practitioner.userId,
           representing: practitioner.representing,
-          entityName: practitioner.entityName,
           serviceIndicator: practitioner.serviceIndicator,
         });
       },
