@@ -122,6 +122,7 @@ export const fileCourtIssuedDocketEntry = async (
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
         },
+        docketEntryId: docketEntryEntity.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         inProgress: true,
         section: DOCKET_SECTION,

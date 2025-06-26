@@ -44,6 +44,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
       ...docketEntryEntity.toRawObject(),
       createdAt: docketEntryEntity.createdAt,
     },
+    docketEntryId: docketEntryEntity.docketEntryId,
     docketNumber: caseToAdd.docketNumber,
     inProgress: true,
     section: user.section,

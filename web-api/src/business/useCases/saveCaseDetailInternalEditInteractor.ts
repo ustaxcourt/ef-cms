@@ -146,6 +146,7 @@ export const saveCaseDetailInternalEdit = async (
 
     const initializeCaseWorkItem = petitionDocketEntry.workItem;
 
+    // 10684 TODO: Fix this
     const workItemEntity = new WorkItem({
       ...initializeCaseWorkItem,
       assigneeId: user.userId,

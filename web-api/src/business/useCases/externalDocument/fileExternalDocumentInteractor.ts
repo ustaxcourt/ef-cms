@@ -153,6 +153,7 @@ export const fileExternalDocument = async (
               ...docketEntryEntity.toRawObject(),
               createdAt: docketEntryEntity.createdAt,
             },
+            docketEntryId: docketEntryEntity.docketEntryId,
             docketNumber: caseToUpdate.docketNumber,
             section: DOCKET_SECTION,
             sentBy: user.name,

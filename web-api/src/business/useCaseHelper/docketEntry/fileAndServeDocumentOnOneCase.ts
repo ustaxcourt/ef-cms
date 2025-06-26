@@ -29,21 +29,20 @@ export const fileAndServeDocumentOnOneCase = async ({
   const isSubjectCase = subjectCaseDocketNumber === caseEntity.docketNumber;
 
   if (!docketEntryEntity.workItem || !isSubjectCase) {
-    docketEntryEntity.workItem = new WorkItem(
-      {
-        assigneeId: null,
-        assigneeName: null,
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        inProgress: true,
-        section: DOCKET_SECTION,
-        sentBy: user.name,
-        sentByUserId: user.userId,
+    docketEntryEntity.workItem = new WorkItem({
+      assigneeId: null,
+      assigneeName: null,
+      docketEntry: {
+        ...docketEntryEntity.toRawObject(),
+        createdAt: docketEntryEntity.createdAt,
       },
-    );
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber: caseEntity.docketNumber,
+      inProgress: true,
+      section: DOCKET_SECTION,
+      sentBy: user.name,
+      sentByUserId: user.userId,
+    });
   }
 
   if (

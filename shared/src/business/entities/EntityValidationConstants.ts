@@ -443,7 +443,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     otherwise: joi.optional(),
     then: joi.required(),
   }),
-  workItem: joi.object().optional(),
 };
 
 export const DATE_RANGE_VALIDATION_RULE_KEYS = {

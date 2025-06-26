@@ -176,6 +176,7 @@ export const updateContact = async (
           ...changeOfAddressDocketEntry.toRawObject(),
           createdAt: changeOfAddressDocketEntry.createdAt,
         },
+        docketEntryId: changeOfAddressDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         section: DOCKET_SECTION,
         sentBy: authorizedUser.name,

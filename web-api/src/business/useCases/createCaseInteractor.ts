@@ -43,6 +43,7 @@ const addPetitionDocketEntryToCase = ({
         ...docketEntryEntity.toRawObject(),
         createdAt: docketEntryEntity.createdAt,
       },
+      docketEntryId: docketEntryEntity.docketEntryId,
       docketNumber: caseToAdd.docketNumber,
       section: PETITIONS_SECTION,
       sentBy: user.name,

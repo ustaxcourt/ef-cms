@@ -138,20 +138,19 @@ const createWorkItemForChange = async ({
   changeOfAddressDocketEntry,
   user,
 }) => {
-  const workItem = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      docketEntry: {
-        ...changeOfAddressDocketEntry.toRawObject(),
-        createdAt: changeOfAddressDocketEntry.createdAt,
-      },
-      docketNumber: caseEntity.docketNumber,
-      section: DOCKET_SECTION,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-    }
-  );
+  const workItem = new WorkItem({
+    assigneeId: null,
+    assigneeName: null,
+    docketEntry: {
+      ...changeOfAddressDocketEntry.toRawObject(),
+      createdAt: changeOfAddressDocketEntry.createdAt,
+    },
+    docketEntryId: changeOfAddressDocketEntry.docketEntryId,
+    docketNumber: caseEntity.docketNumber,
+    section: DOCKET_SECTION,
+    sentBy: user.name,
+    sentByUserId: user.userId,
+  });
 
   changeOfAddressDocketEntry.setWorkItem(workItem);
 

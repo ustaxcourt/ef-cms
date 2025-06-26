@@ -75,7 +75,9 @@ export const addPaperFiling = async (
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
-  const consolidatedGroupCases = await getCasesByDocketNumbers({docketNumbers: consolidatedGroupDocketNumbers})
+  const consolidatedGroupCases = await getCasesByDocketNumbers({
+    docketNumbers: consolidatedGroupDocketNumbers,
+  });
 
   for (const rawCase of consolidatedGroupCases) {
     let caseEntity = new Case(rawCase, { authorizedUser });
@@ -115,6 +117,7 @@ export const addPaperFiling = async (
         createdAt: docketEntryEntity.createdAt,
       },
       docketNumber: caseEntity.docketNumber,
+      docketEntryId: docketEntryEntity.docketEntryId,
       inProgress: isSavingForLater,
       isRead: user.role !== ROLES.privatePractitioner,
       section: user.section,
