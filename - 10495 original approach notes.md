@@ -6,3 +6,4 @@ functions below, we do not do this:
 - getPractitionersForCase
 - getIrsPractitionerOnCase
 - getPrivatePractitionerOnCase
+TODO: resolve issue regarding joining userOnCase with practitioner since practitioners may be petitioners on a case

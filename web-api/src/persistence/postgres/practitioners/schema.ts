@@ -30,7 +30,6 @@ export const practitionerTableDefinition = {
   practitionerType: DEFAULT as string,
   role: DEFAULT as string,
   section: DEFAULT as string | null,
-  serviceIndicator: DEFAULT as string,
   state: DEFAULT as string | null, // forced optional
   suffix: DEFAULT as string | null,
   updatedEmail: DEFAULT as string | null,

@@ -50,7 +50,6 @@ export function pickPractitionerFields(
     practitionerType: user.practitionerType,
     role: user.role,
     section: user.section || null,
-    serviceIndicator: user.serviceIndicator,
     state: user.contact?.state || null,
     suffix: user.suffix || null,
     updatedEmail: user.updatedEmail || null,

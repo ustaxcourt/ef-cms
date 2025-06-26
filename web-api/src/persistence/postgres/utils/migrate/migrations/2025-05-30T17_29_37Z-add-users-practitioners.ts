@@ -60,7 +60,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('practiceType', 'varchar')
     .addColumn('practitionerNotes', 'text')
     .addColumn('practitionerType', 'varchar')
-    .addColumn('serviceIndicator', 'varchar', col => col.notNull())
     .addColumn('suffix', 'varchar')
     .addColumn('updatedEmail', 'varchar')
     .execute();
