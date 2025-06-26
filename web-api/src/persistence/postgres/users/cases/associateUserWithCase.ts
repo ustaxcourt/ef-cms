@@ -7,13 +7,11 @@ export const associateUserWithCase = async ({
   docketNumber,
   userId,
   representing = undefined,
-  entityName,
   serviceIndicator,
 }: {
   docketNumber: string;
   userId: string;
   representing?: string[];
-  entityName?: string;
   serviceIndicator?: string;
 }) => {
   const userOnCaseRecord = await getDbReader(reader =>
@@ -31,7 +29,6 @@ export const associateUserWithCase = async ({
       docketNumber,
     };
 
-    values.entityName = entityName || userOnCaseRecord.entityName;
     values.representing = JSON.stringify(
       representing || userOnCaseRecord.representing || [],
     );
@@ -52,7 +49,6 @@ export const associateUserWithCase = async ({
       values: {
         userId,
         docketNumber,
-        entityName,
         serviceIndicator,
         representing: JSON.stringify(representing || []),
       },

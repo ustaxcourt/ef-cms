@@ -77,7 +77,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('representing', 'jsonb')
-    .addColumn('entityName', 'varchar')
     .addColumn('serviceIndicator', 'varchar')
     .addPrimaryKeyConstraint('pkUserOnCase', ['docketNumber', 'userId'])
     .execute();
@@ -143,14 +142,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
+    .createIndex('idx_user_on_case_docketNumber')
+    .on('dwUserOnCase')
+    .column('docketNumber')
+    .execute();
+  await db.schema
     .createIndex('idx_user_on_case_userId_docketNumber')
     .on('dwUserOnCase')
     .columns(['userId', 'docketNumber'])
-    .execute();
-  await db.schema
-    .createIndex('idx_user_on_case_docketNumber_entityName')
-    .on('dwUserOnCase')
-    .columns(['docketNumber', 'entityName'])
     .execute();
 }
 

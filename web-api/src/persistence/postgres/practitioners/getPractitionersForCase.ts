@@ -1,6 +1,6 @@
 import { getDbReader } from '@web-api/database';
 import { irsPractitionerEntity, privatePractitionerEntity } from './mapper';
-import { PRACTICE_TYPE } from '@shared/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
 export const getPractitionersForCase = async ({
   docketNumber,
@@ -9,20 +9,22 @@ export const getPractitionersForCase = async ({
 }): Promise<{ irsPractitioners: any[]; privatePractitioners: any[] }> => {
   const practitioners = await getDbReader(reader =>
     reader
-      .selectFrom('dwUserOnCase as oc')
-      .innerJoin('dwPractitioner as p', 'oc.userId', 'p.userId')
-      .where('oc.docketNumber', '=', docketNumber)
+      .selectFrom('dwUserOnCase as uoc')
+      .innerJoin('dwPractitioner as p', 'uoc.userId', 'p.userId')
+      .innerJoin('dwUser as u', 'u.userId', 'uoc.userId')
+      .where('uoc.docketNumber', '=', docketNumber)
+      .where('u.role', 'in', [ROLES.irsPractitioner, ROLES.privatePractitioner])
       .selectAll('p')
-      .select(['oc.entityName', 'oc.representing', 'oc.serviceIndicator'])
+      .select(['uoc.representing', 'uoc.serviceIndicator'])
       .execute(),
   );
 
   return {
     irsPractitioners: practitioners
-      .filter(p => p.practiceType !== PRACTICE_TYPE.Private)
+      .filter(p => p.role !== ROLES.irsPractitioner)
       .map(p => irsPractitionerEntity(p)),
     privatePractitioners: practitioners
-      .filter(p => p.practiceType === PRACTICE_TYPE.Private)
+      .filter(p => p.role === ROLES.privatePractitioner)
       .map(p => privatePractitionerEntity(p)),
   };
 };
