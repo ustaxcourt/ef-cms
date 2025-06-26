@@ -64,7 +64,6 @@ export const associatePrivatePractitionerToCase = async ({
     docketNumber,
     userId: user.userId,
     representing,
-    entityName: PrivatePractitioner.ENTITY_NAME,
   });
 
   const { petitioners } = caseEntity;

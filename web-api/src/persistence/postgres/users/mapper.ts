@@ -1,6 +1,6 @@
 import { RawUser, User } from '@shared/business/entities/User';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { NewUserKysely, UpdateUserKysely } from './schema';
+import { NewUserKysely, NewUserOnCaseKysely, UpdateUserKysely } from './schema';
 import {
   calculateDate,
   formatDateString,
@@ -53,19 +53,30 @@ function pickUserFields(user: RawUser): NewUserKysely {
   };
 }
 
-function pickUserOnCase(record) {
+function pickUserOnCase(record: {
+  userId: string;
+  docketNumber: string;
+  representing?: string[];
+  serviceIndicator?: string;
+}): NewUserOnCaseKysely {
   return {
     userId: record.userId,
     docketNumber: record.docketNumber,
     representing: record.representing
       ? JSON.stringify(record.representing)
       : undefined,
-    entityName: record.entityName,
     serviceIndicator: record.serviceIndicator,
   };
 }
 
-export function toKyselyNewUserOnCaseRecords(records) {
+export function toKyselyNewUserOnCaseRecords(
+  records: {
+    userId: string;
+    docketNumber: string;
+    representing?: string[];
+    serviceIndicator?: string;
+  }[],
+) {
   return records.map(pickUserOnCase);
 }
 

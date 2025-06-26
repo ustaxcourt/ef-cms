@@ -1,5 +1,4 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
@@ -9,11 +8,17 @@ import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorr
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
-import { getIrsPractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getIrsPractitionersOnCase';
-import { getPrivatePractitionersOnCase } from '@web-api/persistence/postgres/practitioners/getPrivatePractitionersOnCase';
 import { difference, isEmpty, sortBy } from 'lodash';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
+import {
+  irsPractitionerEntity,
+  PRACTITIONER_ONLY_FIELDS,
+  privatePractitionerEntity,
+} from '@web-api/persistence/postgres/practitioners/mapper';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 
 export async function getCasesByDocketNumbers({
   docketNumbers,
@@ -90,11 +95,29 @@ async function getAllCaseData({
   });
   practitionerInfo.forEach(info => {
     const caseInfo = caseMap.get(info.docketNumber)!;
-    caseMap.set(info.docketNumber, {
-      ...caseInfo,
-      irsPractitioners: info.irsPractitioners,
-      privatePractitioners: info.privatePractitioners,
-    });
+
+    if (info.role === ROLES.irsPractitioner) {
+      const irsPractitioners = caseInfo.irsPractitioners ?? [];
+
+      caseMap.set(info.docketNumber, {
+        ...caseInfo,
+        irsPractitioners: [
+          ...irsPractitioners,
+          irsPractitionerEntity(info).toRawObject(),
+        ],
+      });
+    }
+    if (info.role === ROLES.privatePractitioner) {
+      const privatePractitioners = caseInfo.privatePractitioners ?? [];
+
+      caseMap.set(info.docketNumber, {
+        ...caseInfo,
+        privatePractitioners: [
+          ...privatePractitioners,
+          privatePractitionerEntity(info).toRawObject(),
+        ],
+      });
+    }
   });
   caseCorrespondences.forEach(correspondence => {
     const caseInfo = caseMap.get(correspondence.docketNumber!)!;
@@ -183,30 +206,23 @@ async function getCasesMetadata(docketNumbers: string[]) {
   return caseInfo;
 }
 
-async function getPractitioners(docketNumbers: string[]): Promise<
-  {
-    docketNumber: string;
-    irsPractitioners: any[];
-    privatePractitioners: any[];
-  }[]
-> {
-  const practitionerInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const privatePractitioners = await getPrivatePractitionersOnCase({
-        docketNumber,
-      });
-
-      const irsPractitioners = await getIrsPractitionersOnCase({
-        docketNumber,
-      });
-
-      return {
-        docketNumber,
-        irsPractitioners,
-        privatePractitioners,
-      };
-    }),
+async function getPractitioners(docketNumbers: string[]) {
+  const practitionerOnlyFields = PRACTITIONER_ONLY_FIELDS.map(
+    field => `p.${field}` as const,
   );
+
+  const practitionerInfo = await getDbReader(reader => {
+    return reader
+      .selectFrom('dwUserOnCase as uoc')
+      .leftJoin('dwPractitioner as p', 'uoc.userId', 'p.userId')
+      .leftJoin('dwUser as u', 'uoc.userId', 'u.userId')
+      .where('uoc.docketNumber', 'in', docketNumbers)
+      .where('u.role', 'in', [ROLES.privatePractitioner, ROLES.irsPractitioner])
+      .selectAll('uoc')
+      .selectAll('u')
+      .select(practitionerOnlyFields)
+      .execute();
+  });
 
   return practitionerInfo;
 }
@@ -263,8 +279,8 @@ type EnrichedCaseRow = CaseKysely & {
   docketNumberWithSuffix: string;
   docketEntries: DocketEntryKysely[];
   archivedDocketEntries: DocketEntryKysely[];
-  irsPractitioners: RawPractitioner[];
-  privatePractitioners: RawPractitioner[];
+  irsPractitioners: RawIrsPractitioner[];
+  privatePractitioners: RawPrivatePractitioner[];
   correspondence: CaseCorrespondenceKysely[];
   archivedCorrespondences: CaseCorrespondenceKysely[];
   hearings: any[];

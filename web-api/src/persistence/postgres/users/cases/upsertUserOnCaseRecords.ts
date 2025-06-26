@@ -5,8 +5,8 @@ export const upsertUserOnCaseRecords = async (
   userOnCaseRecords: Array<{
     userId: string;
     docketNumber: string;
-    representing: string[];
-    entityName: string;
+    representing?: string[];
+    serviceIndicator?: string;
   }>,
 ) => {
   await pgInsertInto({

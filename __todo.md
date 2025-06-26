@@ -67,7 +67,10 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
   - [ ] many other practitioner fields
 
 ## Todo part 3
-- [ ] resolve issue regarding joining userOnCase with practitioner since practitioners may be petitioners on a case
+- [x] Update updateUser/upsertUsers to always check for practitioner role and persist practitioner data if applicable
+      - Make a single function(or close to one) function for updating user. Consolidate
+- [x] Consider doing the same when fetching user data
+- [x] resolve issue regarding joining userOnCase with practitioner since practitioners may be petitioners on a case
 - [ ] getCasesByDocketNumbers we need to think about efficiency
 - [ ] Consider removing contact info from practitioner table. If it's always the same between the two tables, why risk creating conflicts by duplicating it?
 

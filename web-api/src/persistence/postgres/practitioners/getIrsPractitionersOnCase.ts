@@ -1,4 +1,4 @@
-import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
 import { irsPractitionerEntity } from '@web-api/persistence/postgres/practitioners/mapper';
 
@@ -10,11 +10,12 @@ export const getIrsPractitionersOnCase = async ({
   const irsPractitionersOnCase = await getDbReader(reader =>
     reader
       .selectFrom('dwUserOnCase as uoc')
-      .leftJoin('dwPractitioner as p', 'uoc.userId', 'p.userId')
+      .innerJoin('dwPractitioner as p', 'uoc.userId', 'p.userId')
+      .innerJoin('dwUser as u', 'u.userId', 'uoc.userId')
       .where('uoc.docketNumber', '=', docketNumber)
-      .where('uoc.entityName', '=', IrsPractitioner.ENTITY_NAME)
+      .where('u.role', '=', ROLES.irsPractitioner)
       .selectAll('p')
-      .select(['uoc.entityName', 'uoc.representing', 'uoc.serviceIndicator'])
+      .select(['uoc.representing', 'uoc.serviceIndicator'])
       .execute(),
   );
 
