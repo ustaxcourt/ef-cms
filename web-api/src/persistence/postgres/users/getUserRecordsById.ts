@@ -2,7 +2,9 @@ import { User } from '@shared/business/entities/User';
 import { getDbReader } from '@web-api/database';
 import { userEntity } from '@web-api/persistence/postgres/users/mapper';
 
-export const getUsersById = async ({
+// Note: This function does not fetch practitioner records, therefore should not
+// be relied on to return full practitioner information
+export const getUserRecordsById = async ({
   userIds,
 }: {
   userIds: string[];

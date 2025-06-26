@@ -5,7 +5,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
-import { getUsersById } from '@web-api/persistence/postgres/users/getUsersById';
+import { getUserRecordsById } from '@web-api/persistence/postgres/users/getUserRecordsById';
 
 export const getUsersPendingEmailInteractor = async (
   { userIds }: { userIds: string[] },
@@ -20,7 +20,7 @@ export const getUsersPendingEmailInteractor = async (
     throw new UnauthorizedError("Unauthorized to get users' pending emails");
   }
 
-  const usersRaw = await getUsersById({ userIds });
+  const usersRaw = await getUserRecordsById({ userIds });
 
   if (!usersRaw || !usersRaw.length) return;
 
