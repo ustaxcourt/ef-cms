@@ -105,7 +105,7 @@ const FilterCheckbox: React.FC<any> = connect(
   }) {
     if (trialStatusFilters[i]) {
       return (
-        <div className="usa-checkbox">
+        <div className="usa-checkbox" data-testid={`trial-session-working-copy-filter-${trialStatusFilters[i].key}`}>
           <input
             checked={!!filters[trialStatusFilters[i].key]}
             className="usa-checkbox__input"
