@@ -536,7 +536,6 @@ export const createTestApplicationContext = () => {
       .mockImplementation(() => new Uint8Array([])),
     docketNumberGenerator: mockCreateDocketNumberGenerator,
     environment: {
-      appEndpoint: 'localhost:1234',
       cognitoClientId: 'bvjrggnd3co403c0aahscinne',
       dynamoDbTableName: 'efcms-local',
       stage: 'local',
