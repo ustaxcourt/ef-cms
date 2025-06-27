@@ -7,12 +7,13 @@ import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
 import { JudgeSelect } from './AdvancedDocumentSearch/JudgeSelect';
 import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
+import { applicationContext } from '@web-client/applicationContext';
 
 export const OrderSearchForm = connect(
   {
@@ -98,12 +99,34 @@ export const OrderSearchForm = connect(
 
                 {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
-                    <SearchDateRangePickerComponent
-                      formType="orderSearch"
-                      updateSequence={
-                        updateAdvancedOrderSearchFormValueSequence
-                      }
-                      validateSequence={validateOrderSearchSequence}
+                    <DateRangePickerComponent
+                      endDateErrorText={validationErrors.termEndDate}
+                      endLabel="Term end date"
+                      endName="termEndDate"
+                      endPickerCls={'grid-col-6'}
+                      endValue={advancedSearchForm.orderSearch.termEndDate}
+                      formGroupCls="margin-bottom-0"
+                      maxDate={applicationContext
+                        .getUtilities()
+                        .createISODateString()}
+                      rangePickerCls={'grid-row grid-gap'}
+                      startDateErrorText={validationErrors.termStartDate}
+                      startLabel="Term start date"
+                      startName="termStartDate"
+                      startPickerCls={'grid-col-6'}
+                      startValue={advancedSearchForm.orderSearch.termStartDate}
+                      onChangeEnd={e => {
+                        updateAdvancedOrderSearchFormValueSequence({
+                          key: 'termEndDate',
+                          value: e.target.value,
+                        });
+                      }}
+                      onChangeStart={e => {
+                        updateAdvancedOrderSearchFormValueSequence({
+                          key: 'termStartDate',
+                          value: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 )}
@@ -186,12 +209,38 @@ export const OrderSearchForm = connect(
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
                       {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
-                          <SearchDateRangePickerComponent
-                            formType="orderSearch"
-                            updateSequence={
-                              updateAdvancedOrderSearchFormValueSequence
+                          <DateRangePickerComponent
+                            endDateErrorText={validationErrors.termEndDate}
+                            endLabel="Term end date"
+                            endName="termEndDate"
+                            endPickerCls={'grid-col-6'}
+                            endValue={
+                              advancedSearchForm.orderSearch.termEndDate
                             }
-                            validateSequence={validateOrderSearchSequence}
+                            formGroupCls="margin-bottom-0"
+                            maxDate={applicationContext
+                              .getUtilities()
+                              .createISODateString()}
+                            rangePickerCls={'grid-row grid-gap'}
+                            startDateErrorText={validationErrors.termStartDate}
+                            startLabel="Term start date"
+                            startName="termStartDate"
+                            startPickerCls={'grid-col-6'}
+                            startValue={
+                              advancedSearchForm.orderSearch.termStartDate
+                            }
+                            onChangeEnd={e => {
+                              updateAdvancedOrderSearchFormValueSequence({
+                                key: 'termEndDate',
+                                value: e.target.value,
+                              });
+                            }}
+                            onChangeStart={e => {
+                              updateAdvancedOrderSearchFormValueSequence({
+                                key: 'termStartDate',
+                                value: e.target.value,
+                              });
+                            }}
                           />
                         </div>
                       )}
