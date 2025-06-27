@@ -60,7 +60,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   };
 };
 
-const createCaseMetadata = async (
+const createPaperCaseMetadata = async (
   applicationContext: ServerApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
@@ -322,7 +322,7 @@ export const createCaseFromPaperInteractor = async (
   let workItem: WorkItem;
 
   try {
-    ({ caseToAdd, workItem } = await createCaseMetadata(
+    ({ caseToAdd, workItem } = await createPaperCaseMetadata(
       applicationContext,
       {
         applicationForWaiverOfFilingFeeFileId,

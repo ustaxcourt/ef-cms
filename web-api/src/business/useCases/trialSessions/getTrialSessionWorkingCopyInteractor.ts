@@ -36,7 +36,7 @@ export const getTrialSessionWorkingCopyInteractor = async (
   const judgeUser = await applicationContext
     .getUseCaseHelpers()
     .getJudgeInSectionHelper({
-      section: userEntity.section,
+      section: userEntity.section!,
     });
 
   const chambersUserId =

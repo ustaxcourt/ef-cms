@@ -25,14 +25,8 @@ import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import {
-  Practitioner,
-  RawPractitioner,
-} from '@shared/business/entities/Practitioner';
-import {
-  IrsPractitioner,
-  RawIrsPractitioner,
-} from '@shared/business/entities/IrsPractitioner';
+import { Practitioner } from '@shared/business/entities/Practitioner';
+import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
@@ -87,7 +81,7 @@ const createCaseMetadata = async (
       | PrivatePractitioner
       | IrsPractitioner[];
     stinFileId: string;
-    user: RawUser | RawPractitioner | RawPractitioner | RawIrsPractitioner;
+    user: RawUser;
   },
   authorizedUser: AuthUser,
 ) => {

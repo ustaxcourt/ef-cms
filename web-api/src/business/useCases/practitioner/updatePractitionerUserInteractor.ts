@@ -145,7 +145,7 @@ export const updatePractitionerUser = async (
       updatedName: validatedUserData.name,
       user: oldUser,
       websocketMessagePrefix: 'admin',
-    });
+    } as any);
   } else {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,

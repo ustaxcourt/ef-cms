@@ -200,11 +200,11 @@ export class Practitioner extends User {
   }
 
   toRawObject() {
-    const result = super.toRawObject() as any;
+    const result = super.toRawObject();
 
     // We don't want to persist these values as they are only used for validation
-    result.confirmEmail = undefined;
-    result.updatedEmail = undefined;
+    (result as any).confirmEmail = undefined;
+    (result as any).updatedEmail = undefined;
 
     return result;
   }

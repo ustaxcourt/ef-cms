@@ -14,7 +14,10 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
-import { Practitioner } from '@shared/business/entities/Practitioner';
+import {
+  Practitioner,
+  RawPractitioner,
+} from '@shared/business/entities/Practitioner';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
@@ -44,36 +47,36 @@ const updatePractitionerContactInformationHelper = async (
   },
   authorizedUser: AuthUser,
 ) => {
-  const user = await getPractitionerById({ userId });
+  const practitioner = await getPractitionerById({ userId });
 
-  if (!user) {
+  if (!practitioner) {
     throw new NotFoundError(`User not found with userId: ${userId}`);
   }
 
   const isPractitionerUnchanged = user =>
     isEqual(user.contact, contactInfo) && isEqual(user.firmName, firmName);
 
-  if (isPractitionerUnchanged(user)) {
+  if (isPractitionerUnchanged(practitioner)) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: { action: 'user_contact_initial_update_complete' },
-      userId: user.userId,
+      userId: practitioner.userId,
       clientConnectionId,
     });
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'user_contact_full_update_complete',
-        user: user.toRawObject(),
+        user: practitioner.toRawObject() as RawPractitioner,
       },
-      userId: user.userId,
+      userId: practitioner.userId,
       clientConnectionId,
     });
     return;
   }
 
   const userEntity = new Practitioner({
-    ...user,
+    ...practitioner,
     contact: { ...contactInfo },
     isUpdatingInformation: true,
   });
@@ -87,7 +90,7 @@ const updatePractitionerContactInformationHelper = async (
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: { action: 'user_contact_initial_update_complete' },
-    userId: user.userId,
+    userId: practitioner.userId,
     clientConnectionId,
   });
 
@@ -101,7 +104,7 @@ const updatePractitionerContactInformationHelper = async (
     contactInfo,
     firmName,
     user: userEntity.validate().toRawObject(),
-    oldUser: user.toRawObject(),
+    oldUser: practitioner.toRawObject(),
     websocketMessagePrefix: 'user',
   });
 
@@ -112,7 +115,7 @@ const updatePractitionerContactInformationHelper = async (
         action: 'user_contact_full_update_complete',
         user: userEntity.validate().toRawObject(),
       },
-      userId: user.userId,
+      userId: practitioner.userId,
       clientConnectionId,
     });
   }

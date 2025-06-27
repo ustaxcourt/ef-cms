@@ -8,6 +8,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 /**
  * associatePrivatePractitionerWithCaseInteractor
@@ -42,13 +43,17 @@ export const associatePrivatePractitionerWithCase = async (
 
   const privatePractitioner = await getPractitionerById({ userId });
 
+  if (!privatePractitioner) {
+    throw new Error(`user not found with userId of ${userId}`);
+  }
+
   return await associatePrivatePractitionerToCase({
     applicationContext,
     authorizedUser,
     docketNumber,
     representing,
     serviceIndicator,
-    user: privatePractitioner.toRawObject(),
+    user: privatePractitioner.toRawObject() as RawPractitioner,
   });
 };
 

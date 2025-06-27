@@ -145,7 +145,7 @@ const updatePostgresRecords = async ({
 
   await updatePostgresJudgeUserRecord({
     chambersSection: updatedChambersSection || oldChambersSection!,
-    postgresUser: postgresUser.toRawObject(),
+    postgresUser,
     updates,
   });
 
