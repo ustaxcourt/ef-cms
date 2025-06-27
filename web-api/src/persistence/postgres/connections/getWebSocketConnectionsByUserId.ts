@@ -1,9 +1,9 @@
 import { getDbReader } from '@web-api/database';
-import { Connection } from '@web-api/notifications/sendNotificationToConnection';
+import { ConnectionKysely } from '@web-api/persistence/postgres/connections/schema';
 
 export const getWebSocketConnectionsByUserId = async (
   userId: string,
-): Promise<Connection[]> =>
+): Promise<ConnectionKysely[]> =>
   await getDbReader(reader =>
     reader
       .selectFrom('dwConnection')

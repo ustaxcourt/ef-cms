@@ -18,7 +18,7 @@ jest.mock('../addCoversheetInteractor', () => ({
   }),
 }));
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 
 describe('generateChangeOfAddress', () => {
   const { docketNumber } = MOCK_CASE;
@@ -75,7 +75,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .setChangeOfAddressCaseAsDone.mockReturnValue([{ remaining: 0 }]);
+      .setChangeOfAddressCaseAsDone.mockResolvedValue([{ remaining: 0 }]);
 
     applicationContext
       .getUtilities()
