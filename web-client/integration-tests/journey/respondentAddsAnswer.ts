@@ -9,7 +9,6 @@ export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category: 'Select a Category.',
       documentType: 'Select a document type',
     });
 
@@ -51,8 +50,6 @@ export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('form.documentType')).toEqual('Answer');
-
-    expect(cerebralTest.getState('form.partyPrimary')).toBeUndefined();
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

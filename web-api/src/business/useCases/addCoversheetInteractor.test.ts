@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import {
   CONTACT_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -13,7 +14,11 @@ import { addCoversheetInteractor } from './addCoversheetInteractor';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import {
+  getCasesByDocketNumbers as getCasesByDocketNumbersMock,
+  OmittableCaseFields,
+} from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 jest.mock('./addCoverToPdf', () => ({
   __esModule: true,
@@ -23,7 +28,14 @@ jest.mock('./addCoverToPdf', () => ({
 }));
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+const getCasesByDocketNumbers =
+  getCasesByDocketNumbersMock as jest.MockedFunction<
+    (args: {
+      docketNumbers: string[];
+      excludeFields?: OmittableCaseFields[];
+    }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
+  >;
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
 
 describe('addCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
@@ -131,9 +143,7 @@ describe('addCoversheetInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry,
-    ).toHaveBeenCalled();
+    expect(upsertDocketEntries).toHaveBeenCalled();
   });
 
   it('adds a cover page to a pdf document with optional data', async () => {
@@ -223,10 +233,16 @@ describe('addCoversheetInteractor', () => {
       {
         ...testingCaseData,
         docketNumber: '102-20',
+        docketEntries: [
+          { ...MOCK_CASE.docketEntries[0], docketNumber: '102-20' },
+        ],
       },
       {
         ...testingCaseData,
         docketNumber: '103-20',
+        docketEntries: [
+          { ...MOCK_CASE.docketEntries[0], docketNumber: '103-20' },
+        ],
       },
     ]);
 
@@ -239,29 +255,12 @@ describe('addCoversheetInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry,
-    ).toHaveBeenCalledTimes(2);
-
-    const calls = applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntry.mock.calls.map(call => ({
-        docketNumber: call[0].docketNumber,
-        numberOfPages: call[0].document.numberOfPages,
-      }));
-
-    const firstCase = calls.find(call => call.docketNumber === '102-20');
-    const secondCase = calls.find(call => call.docketNumber === '103-20');
-
-    expect(firstCase).toMatchObject({
-      docketNumber: '102-20',
-      numberOfPages: 5,
-    });
-
-    expect(secondCase).toMatchObject({
-      docketNumber: '103-20',
-      numberOfPages: 5,
-    });
+    expect(upsertDocketEntries).toHaveBeenCalledWith(
+      expect.arrayContaining([
+        expect.objectContaining({ docketNumber: '102-20' }),
+        expect.objectContaining({ docketNumber: '103-20' }),
+      ]),
+    );
   });
 
   it('works as expected when feature flag is off and consolidated cases returns null', async () => {
@@ -280,16 +279,12 @@ describe('addCoversheetInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry,
-    ).toHaveBeenCalledTimes(1);
+    expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
 
-    const calls = applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntry.mock.calls.map(call => ({
-        docketNumber: call[0].docketNumber,
-        numberOfPages: call[0].document.numberOfPages,
-      }));
+    const calls = upsertDocketEntries.mock.calls.map(call => ({
+      docketNumber: call[0][0].docketNumber,
+      numberOfPages: call[0][0].numberOfPages,
+    }));
 
     const firstCase = calls.find(
       call => call.docketNumber === MOCK_CASE.docketNumber,
@@ -323,6 +318,7 @@ describe('addCoversheetInteractor', () => {
             documentType: 'Simultaneous Answering Brief',
             eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
             processingStatus: mockProcessingStatus,
+            docketNumber: '102-20',
           },
         ],
         docketNumber: mockConsolidatedCaseNonSubjectCase,
@@ -345,21 +341,14 @@ describe('addCoversheetInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const calls = applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntry.mock.calls.map(call => ({
-        docketNumber: call[0].docketNumber,
-        processingStatus: call[0].document.processingStatus,
-      }));
-
-    const firstCase = calls.find(
-      call => call.docketNumber === mockConsolidatedCaseNonSubjectCase,
+    expect(upsertDocketEntries.mock.calls[0][0]).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: mockConsolidatedCaseNonSubjectCase,
+          processingStatus: mockProcessingStatus,
+        }),
+      ]),
     );
-
-    expect(firstCase).toMatchObject({
-      docketNumber: mockConsolidatedCaseNonSubjectCase,
-      processingStatus: mockProcessingStatus,
-    });
   });
 
   it('should not update the processing status of a non-subject case, simultaneous document title docket entry entity on a consolidated case', async () => {
@@ -384,6 +373,7 @@ describe('addCoversheetInteractor', () => {
             documentTitle: 'Super Duper Simultaneous but not really',
             documentType: 'Answer',
             processingStatus: mockProcessingStatus,
+            docketNumber: '102-20',
           },
         ],
         docketNumber: mockConsolidatedCaseNonSubjectCase,
@@ -406,20 +396,13 @@ describe('addCoversheetInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const calls = applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntry.mock.calls.map(call => ({
-        docketNumber: call[0].docketNumber,
-        processingStatus: call[0].document.processingStatus,
-      }));
-
-    const firstCase = calls.find(
-      call => call.docketNumber === mockConsolidatedCaseNonSubjectCase,
+    expect(upsertDocketEntries.mock.calls[0][0]).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: mockConsolidatedCaseNonSubjectCase,
+          processingStatus: mockProcessingStatus,
+        }),
+      ]),
     );
-
-    expect(firstCase).toMatchObject({
-      docketNumber: mockConsolidatedCaseNonSubjectCase,
-      processingStatus: mockProcessingStatus,
-    });
   });
 });

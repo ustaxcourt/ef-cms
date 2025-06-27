@@ -8,8 +8,8 @@ import { getPublicCaseInteractor } from '@web-api/business/useCases/public/getPu
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getPublicCaseLambda = event =>
-  genericHandler(event, ({ applicationContext }) =>
-    getPublicCaseInteractor(applicationContext, {
+  genericHandler(event, () =>
+    getPublicCaseInteractor({
       docketNumber: event.pathParameters.docketNumber,
     }),
   );

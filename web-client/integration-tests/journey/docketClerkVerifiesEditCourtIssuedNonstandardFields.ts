@@ -7,7 +7,7 @@ export const docketClerkVerifiesEditCourtIssuedNonstandardFields =
 
       expect(cerebralTest.getState('form.freeText')).toEqual('be free');
       expect(cerebralTest.getState('form.date')).toEqual(
-        '2050-04-04T00:00:00.000-04:00',
+        '2050-04-04T04:00:00.000Z',
       );
     });
   };

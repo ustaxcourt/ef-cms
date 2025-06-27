@@ -25,6 +25,7 @@ export const trialSessionWorkingCopyHelper = (
   formattedCases: TrialSessionWorkingCopyCase[];
   showPrintButton: boolean;
   trialStatusFilters: { key: string; label: string }[];
+  trialStatusCounts: { [trialStatus: string]: number }
 } => {
   const trialSession = get(state.trialSession);
   const {
@@ -101,12 +102,21 @@ export const trialSessionWorkingCopyHelper = (
       key: 'statusUnassigned',
       label: 'Unassigned',
     });
-
+  const trialStatusCounts = trialSession.calendaredCases.reduce((counters, c) => {
+    if(caseMetadata[c.docketNumber] === undefined || caseMetadata[c.docketNumber].trialStatus === "" 
+      || caseMetadata[c.docketNumber].trialStatus === undefined) {
+      counters["statusUnassigned"] = (counters["statusUnassigned"] || 0) + 1;
+    } else {
+      counters[caseMetadata[c.docketNumber].trialStatus] = (counters[caseMetadata[c.docketNumber].trialStatus] || 0) + 1;
+    }
+    return counters
+  }, {});
   return {
     casesShownCount: formattedCases.length,
     formattedCases: topLevelCases,
     showPrintButton: formattedCases.length > 0,
     trialStatusFilters,
+    trialStatusCounts,
   };
 };
 
