@@ -250,9 +250,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedDocketEntry = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+    const updatedDocketEntry = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         d => d.docketEntryId === docketEntryToUpdate.docketEntryId,
       );
 
@@ -303,18 +301,14 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const docketEntryOnNonLead = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+    const docketEntryOnNonLead = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'TE',
       );
     expect(docketEntryOnNonLead).toMatchObject({
       docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
       freeText: 'free text testing',
     });
-    const docketEntryOnLead = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[1][0].caseToUpdate.docketEntries.find(
+    const docketEntryOnLead = updateCaseAndAssociations.mock.calls[1][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'TE',
       );
     expect(docketEntryOnLead).toMatchObject({

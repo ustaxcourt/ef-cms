@@ -26,7 +26,7 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 
 describe('updateCaseContextInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  jest
+  const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
@@ -200,9 +200,7 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
   });
@@ -214,11 +212,9 @@ describe('updateCaseContextInteractor', () => {
       trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    applicationContext.getUseCaseHelpers().updateCaseAndAssociations = jest
-      .fn()
-      .mockImplementation(({ caseToUpdate }) => {
-        return caseToUpdate;
-      });
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) => {
+      return caseToUpdate;
+    });
 
     const result = await updateCaseContextInteractor(
       applicationContext,
@@ -230,9 +226,7 @@ describe('updateCaseContextInteractor', () => {
     );
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should only update the associated judge without changing the status if only the associated judge is passed in', async () => {

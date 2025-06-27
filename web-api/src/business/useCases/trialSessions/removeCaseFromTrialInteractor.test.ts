@@ -25,16 +25,16 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('removeCaseFromTrialInteractor', () => {
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+
   let mockTrialSession: RawTrialSession;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const getCaseMetadataByDocketNumber =
-    getCaseMetadataByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -55,7 +55,7 @@ describe('removeCaseFromTrialInteractor', () => {
       trialSessionId: '9047d1ab-18d0-43ec-bafb-654e83405416',
     };
     getCaseByDocketNumber.mockResolvedValue(mockCase);
-    getCaseMetadataByDocketNumber.mockResolvedValue(mockCase);
+    getCasesByDocketNumbers.mockResolvedValue([mockCase]);
   });
 
   it('should throw an error when the user is unauthorized to remove a case from a trial session', async () => {

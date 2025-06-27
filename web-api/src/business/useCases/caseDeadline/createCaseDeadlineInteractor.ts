@@ -9,6 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const createCaseDeadline = async (
@@ -27,7 +28,6 @@ export const createCaseDeadline = async (
   }
 
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: caseDeadline.docketNumber,
   });
 
@@ -47,13 +47,10 @@ export const createCaseDeadline = async (
       hasCaseDeadline: true,
     });
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: updatedCaseEntity,
-    });
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: updatedCaseEntity,
+  });
 
   const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
   if (!handlingConsolidatedCases && docketNumber === leadDocketNumber) {
@@ -83,7 +80,7 @@ export const createCaseDeadline = async (
 };
 
 export async function getcreateCaseDeadlineLockInfo(
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },
 ): Promise<{
   identifiers: string[];
@@ -91,7 +88,6 @@ export async function getcreateCaseDeadlineLockInfo(
 }> {
   const { docketNumber, leadDocketNumber, consolidatedCases } =
     await getCaseByDocketNumber({
-      applicationContext,
       docketNumber: caseDeadline.docketNumber,
     });
 

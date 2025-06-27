@@ -7,9 +7,9 @@ jest.mock('@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines');
 jest.mock(
   '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId',
 );
-jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
-jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers');
-jest.mock('@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber');
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -20,7 +20,8 @@ import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persist
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
+import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 let mockCases;
 let mockLock;
@@ -34,8 +35,9 @@ const getCaseDeadlinesByConsolidatedCaseDeadlineId =
   getCaseDeadlinesByConsolidatedCaseDeadlineIdMock as jest.Mock;
 
 const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-const getCasesByLeadDocketNumber = jest.mocked(getCasesByLeadDocketNumberMock);
+const getConsolidatedCases = jest.mocked(getConsolidatedCasesMock);
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
 describe('removeConsolidatedCasesInteractor - Deadlines', () => {
   beforeAll(() => {
@@ -45,6 +47,9 @@ describe('removeConsolidatedCasesInteractor - Deadlines', () => {
   });
 
   beforeEach(() => {
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
     mockLock = undefined;
     mockCases = {
       '101-19': {
@@ -91,7 +96,7 @@ describe('removeConsolidatedCasesInteractor - Deadlines', () => {
         ) as any,
     );
 
-    getCasesByLeadDocketNumber.mockImplementation(
+    getConsolidatedCases.mockImplementation(
       // eslint-disable-next-line @typescript-eslint/require-await
       async ({ leadDocketNumber }) => {
         return Object.keys(mockCases)
