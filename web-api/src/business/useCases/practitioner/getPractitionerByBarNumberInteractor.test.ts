@@ -53,7 +53,12 @@ describe('getPractitionerByBarNumberInteractor', () => {
     const result = await getPractitionerByBarNumberInteractor(
       mockApplicationContext,
       { barNumber },
-      { userId: 'abc123' },
+      {
+        userId: 'abc123',
+        role: 'adc',
+        email: '',
+        name: ''
+      },
     );
 
     expect(result).toMatchObject(basePractitioner);
@@ -66,7 +71,12 @@ describe('getPractitionerByBarNumberInteractor', () => {
       getPractitionerByBarNumberInteractor(
         mockApplicationContext,
         { barNumber },
-        { userId: 'not-allowed' },
+        {
+          userId: 'not-allowed',
+          role: 'judge',
+          email: '',
+          name: ''
+        },
       ),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -102,7 +112,12 @@ describe('getPractitionerByBarNumberInteractor', () => {
     const result = await getPractitionerByBarNumberInteractor(
       mockApplicationContext,
       { barNumber },
-      { userId: 'user' },
+      {
+        userId: 'user',
+        role: 'adc',
+        email: '',
+        name: ''
+      },
     );
 
     expect(result).toBeNull();
