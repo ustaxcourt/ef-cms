@@ -36,23 +36,44 @@ export const getPractitionerByBarNumberInteractor = async (
 
   if (foundPractitioner) {
     practitioner = new Practitioner(foundPractitioner).validate().toRawObject();
+    console.log("get interactor : practitioner : ",practitioner);
   }
 
+  // return isLoggedInUser
+  //   ? practitioner
+  //   : practitioner
+  //     ? [
+  //         {
+  //           admissionsDate: practitioner.admissionsDate,
+  //           admissionsStatus: practitioner.admissionsStatus,
+  //           barNumber: practitioner.barNumber,
+  //           contact: {
+  //             state: practitioner.originalBarState,
+  //           },
+  //           name: practitioner.name,
+  //           practiceType: practitioner.practiceType,
+  //           practitionerType: practitioner.practitionerType,
+  //           originalBarState: practitioner.originalBarState
+  //         },
+  //       ]
+  //     : [];
+
   return isLoggedInUser
-    ? practitioner
-    : practitioner
-      ? [
-          {
-            admissionsDate: practitioner.admissionsDate,
-            admissionsStatus: practitioner.admissionsStatus,
-            barNumber: practitioner.barNumber,
-            contact: {
-              state: practitioner.originalBarState,
-            },
-            name: practitioner.name,
-            practiceType: practitioner.practiceType,
-            practitionerType: practitioner.practitionerType,
+  ? practitioner || null // explicitly return null, not undefined, if no practitioner
+  : practitioner
+    ? [
+        {
+          admissionsDate: practitioner.admissionsDate,
+          admissionsStatus: practitioner.admissionsStatus,
+          barNumber: practitioner.barNumber,
+          contact: {
+            state: practitioner.originalBarState,
           },
-        ]
-      : [];
+          name: practitioner.name,
+          practiceType: practitioner.practiceType,
+          practitionerType: practitioner.practitionerType,
+          originalBarState: practitioner.originalBarState,
+        },
+      ]
+    : []; // return empty array for public user if no practitioner found
 };
