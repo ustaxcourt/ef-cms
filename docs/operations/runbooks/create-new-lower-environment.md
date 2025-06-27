@@ -158,6 +158,13 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
    export DESTINATION_TABLE="efcms-${ENV}-alpha"
    npm run deploy:allColors "$ENV"
    ```
+1. TODO: Troubleshooting - add descriptive instructions to overcome the following
+   1. ACM cert validation timeout: After the `NS` record is generated for `[env].[repo].[domain]`, copy it to the AWS account that owns the `[domain]` hosted zone
+   1. Cognito pool creation error: After SES identity is created, run `web-api/verify-ses-email.sh`
+   1. Some S3 buckets need to have "Block all public access" disabled:
+      1. S3 -> [bucket] -> Permissions -> Block public access -> Edit -> Uncheck "Block all public access"
+   1. API Gateway Stage: CloudWatch Logs role ARN must be set in account settings to enable logging:
+      1. API Gateway -> Settings -> Logging -> Edit -> CloudWatch log role ARN: `arn:aws:iam::<ACCOUNT ID>:role/api_gateway_cloudwatch_global`
 1. Run a color-specific terraform deployment for green:
    ```bash
    npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
@@ -296,6 +303,20 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
         --expression-attribute-names '{"#current":"current"}' \
         --expression-attribute-values '{":current":{"BOOL":true}}'
       ```
+1. Create a configuration file for this environment:
+   1. Copy the example configuration:
+      ```bash
+      cp scripts/env/environments/example.env "scripts/env/environments/ustc-${ENV}.env"
+      ```
+   1. Open the configuration file in your text editor of choice and replace the following variables with the appropriate values:
+      1. `ENV`
+      1. `AWS_PROFILE`
+      1. `AWS_ACCOUNT_ID`
+   1. Save the file
+1. Become a `dawson_developer`:
+   ```bash
+   . scripts/env/set-env.zsh "ustc-${ENV}"
+   ```
 1. Merge `origin/staging` into the branch that corresponds to this lower environment:
    ```bash
    git checkout experimental9
@@ -308,4 +329,11 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
    export DESTINATION_TAG=$(grep docker-image: .circleci/config.yml | awk -F':' '{print $3}')
    ./docker-to-ecr.sh
    ```
-1. Trigger a deployment in the new environment, accepting the default settings
+1. Create the `[env]_dawson` postgres user:
+   ```bash
+   cd ./scripts/postgres && ./create-rds-users.sh && cd../..
+   ```
+1. Trigger a deployment in the new environment, with the following settings:
+   1. `run_build_and_deploy`: `false`
+   1. `run_build_and_deploy_empty`: `true`
+1. After the "empty" deployment completes, trigger another deployment, this time accepting the default settings
