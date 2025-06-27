@@ -9,16 +9,23 @@ jest.mock('../../../../../shared/src/authorization/authorizationClientService', 
 }));
 
 import {
-  isAuthorized
+  isAuthorized,
+  ROLE_PERMISSIONS,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 
 // Mock Practitioner entity
 jest.mock('../../../../../shared/src/business/entities/Practitioner', () => {
   return {
-    Practitioner: jest.fn().mockImplementation(raw => ({
-      validate: jest.fn().mockReturnThis(),
-      toRawObject: jest.fn().mockReturnValue(raw),
-    })),
+    Practitioner: function (raw) {
+      return {
+        validate: function () {
+          return this;
+        },
+        toRawObject: function () {
+          return raw;
+        },
+      };
+    },
   };
 });
 
@@ -40,15 +47,24 @@ describe('getPractitionerByBarNumberInteractor', () => {
     jest.clearAllMocks();
 
     mockApplicationContext = {
-      getPersistenceGateway: jest.fn().mockReturnValue({
+      getPersistenceGateway: () => ({
         getPractitionerByBarNumber: jest.fn(),
       }),
     };
   });
 
   it('returns full practitioner for authorized logged-in user', async () => {
-    isAuthorized.mockReturnValue(true);
-    mockApplicationContext.getPersistenceGateway().getPractitionerByBarNumber.mockResolvedValue(basePractitioner);
+    (isAuthorized as unknown as jest.Mock).mockImplementation((user, permission) => {
+      return (
+        user.userId === 'abc123' &&
+        permission === ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS
+      );
+    });
+
+    const getPractitionerByBarNumber = jest.fn().mockImplementation(() => basePractitioner);
+    mockApplicationContext.getPersistenceGateway = () => ({
+      getPractitionerByBarNumber,
+    });
 
     const result = await getPractitionerByBarNumberInteractor(
       mockApplicationContext,
@@ -57,7 +73,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         userId: 'abc123',
         role: 'adc',
         email: '',
-        name: ''
+        name: '',
       },
     );
 
@@ -65,7 +81,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
   });
 
   it('throws UnauthorizedError if user is logged in but not authorized', async () => {
-    isAuthorized.mockReturnValue(false);
+    (isAuthorized as unknown as jest.Mock).mockImplementation(() => false);
 
     await expect(() =>
       getPractitionerByBarNumberInteractor(
@@ -75,20 +91,29 @@ describe('getPractitionerByBarNumberInteractor', () => {
           userId: 'not-allowed',
           role: 'judge',
           email: '',
-          name: ''
+          name: '',
         },
       ),
     ).rejects.toThrow(UnauthorizedError);
   });
 
   it('returns limited public data when no user is logged in', async () => {
-    isAuthorized.mockReturnValue(false); // irrelevant for public user
-    mockApplicationContext.getPersistenceGateway().getPractitionerByBarNumber.mockResolvedValue(basePractitioner);
+    (isAuthorized as unknown as jest.Mock).mockImplementation(() => false);
+
+    const getPractitionerByBarNumber = jest.fn().mockImplementation(() => basePractitioner);
+    mockApplicationContext.getPersistenceGateway = () => ({
+      getPractitionerByBarNumber,
+    });
 
     const result = await getPractitionerByBarNumberInteractor(
       mockApplicationContext,
       { barNumber },
-      {}, // no userId
+      {
+        role: 'adc',
+        userId: '',
+        email: '',
+        name: ''
+      }, // not logged in
     );
 
     expect(result).toEqual([
@@ -106,8 +131,12 @@ describe('getPractitionerByBarNumberInteractor', () => {
   });
 
   it('returns null when logged-in user and practitioner not found', async () => {
-    isAuthorized.mockReturnValue(true);
-    mockApplicationContext.getPersistenceGateway().getPractitionerByBarNumber.mockResolvedValue(null);
+    (isAuthorized as unknown as jest.Mock).mockImplementation(() => true);
+
+    const getPractitionerByBarNumber = jest.fn().mockImplementation(() => null);
+    mockApplicationContext.getPersistenceGateway = () => ({
+      getPractitionerByBarNumber,
+    });
 
     const result = await getPractitionerByBarNumberInteractor(
       mockApplicationContext,
@@ -116,7 +145,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         userId: 'user',
         role: 'adc',
         email: '',
-        name: ''
+        name: '',
       },
     );
 
@@ -124,13 +153,22 @@ describe('getPractitionerByBarNumberInteractor', () => {
   });
 
   it('returns empty array when public user and practitioner not found', async () => {
-    isAuthorized.mockReturnValue(false);
-    mockApplicationContext.getPersistenceGateway().getPractitionerByBarNumber.mockResolvedValue(null);
+    (isAuthorized as unknown as jest.Mock).mockImplementation(() => false);
+
+    const getPractitionerByBarNumber = jest.fn().mockImplementation(() => null);
+    mockApplicationContext.getPersistenceGateway = () => ({
+      getPractitionerByBarNumber,
+    });
 
     const result = await getPractitionerByBarNumberInteractor(
       mockApplicationContext,
       { barNumber },
-      {}, // no userId
+      {
+        role: 'adc',
+        userId: '',
+        email: '',
+        name: ''
+      }, // not logged in
     );
 
     expect(result).toEqual([]);
