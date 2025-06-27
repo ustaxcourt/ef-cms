@@ -31,7 +31,10 @@ export function toKyselyNewDocketEntry(
     documentIdBeforeSignature: docketEntry.documentIdBeforeSignature ?? null,
     documentTitle: docketEntry.documentTitle,
     documentType: docketEntry.documentType ?? null,
-    draftOrderState: JSON.stringify(docketEntry.draftOrderState) ?? null,
+    draftOrderState:
+      docketEntry.draftOrderState !== null
+        ? JSON.stringify(docketEntry.draftOrderState)
+        : null,
     editState: docketEntry.editState ?? null,
     eventCode: docketEntry.eventCode,
     filedBy: docketEntry.filedBy ?? null,
