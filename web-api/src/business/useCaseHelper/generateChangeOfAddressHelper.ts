@@ -68,10 +68,12 @@ export const generateChangeOfAddressHelper = async ({
     const practitionerName = updatedName || user.name;
     const oldAddressData = clone(oldUser.contact);
 
-    // This updates the practitioner's service indicator for the case by reference!
+    // This updates the practitioner's email and service indicator for the case
+    // by reference!
     if (updatedEmail) {
       practitionerObject.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
+      practitionerObject.email = updatedEmail;
     }
 
     if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {

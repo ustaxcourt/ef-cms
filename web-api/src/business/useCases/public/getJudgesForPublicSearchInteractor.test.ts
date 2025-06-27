@@ -32,7 +32,7 @@ describe('getJudgesForPublicSearchInteractor', () => {
 
     const results = await getJudgesForPublicSearchInteractor();
 
-    expect(getUsersInSection).toHaveBeenCalledWith({ section: ROLES.judge });
+    expect(getUsersInSection).toHaveBeenCalledWith({ sections: [ROLES.judge] });
     expect(results).toEqual([
       {
         entityName: 'PublicUser',

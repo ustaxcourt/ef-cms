@@ -2,7 +2,6 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
@@ -16,7 +15,6 @@ import {
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { Practitioner } from '@shared/business/entities/Practitioner';
-import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
@@ -74,22 +72,13 @@ const updatePractitionerContactInformationHelper = async (
     return;
   }
 
-  let userEntity;
-  if (
-    user.entityName === PrivatePractitioner.ENTITY_NAME ||
-    user.entityName === IrsPractitioner.ENTITY_NAME ||
-    user.entityName === Practitioner.ENTITY_NAME
-  ) {
-    userEntity = new Practitioner({
-      ...user,
-      contact: { ...contactInfo },
-      isUpdatingInformation: true,
-    });
+  const userEntity = new Practitioner({
+    ...user,
+    contact: { ...contactInfo },
+    isUpdatingInformation: true,
+  });
 
-    userEntity.firmName = firmName;
-  } else {
-    throw new Error(`Unrecognized entityType ${user.entityName}`);
-  }
+  userEntity.firmName = firmName;
 
   await updateUser({
     userToUpdate: userEntity.validate().toRawObject(),

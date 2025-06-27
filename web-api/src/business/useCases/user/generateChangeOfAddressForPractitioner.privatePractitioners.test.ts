@@ -100,6 +100,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -129,6 +130,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -156,6 +158,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -183,6 +186,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -203,6 +207,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -224,6 +229,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -253,6 +259,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -282,6 +289,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -315,6 +323,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -355,6 +364,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
       },
       updatedEmail: UPDATED_EMAIL,
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,

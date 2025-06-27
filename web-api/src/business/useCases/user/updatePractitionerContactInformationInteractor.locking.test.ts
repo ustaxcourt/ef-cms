@@ -15,6 +15,7 @@ import { sleep } from '@shared/tools/helpers';
 import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { Practitioner } from '@shared/business/entities/Practitioner';
 
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 
@@ -111,10 +112,12 @@ describe('updatePractitionerContactInformationInteractor', () => {
   beforeEach(() => {
     mockLock = undefined; // unlocked
 
-    getPractitionerById.mockReturnValue({
-      ...MOCK_PRACTITIONER,
-      entityName: 'Practitioner',
-    });
+    getPractitionerById.mockReturnValue(
+      new Practitioner({
+        ...MOCK_PRACTITIONER,
+        entityName: 'Practitioner',
+      }),
+    );
 
     getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
 

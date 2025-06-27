@@ -8,11 +8,10 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { updateUserPendingEmailInteractor } from './updateUserPendingEmailInteractor';
 import { validUser } from '@shared/test/mockUsers';
-import { getUserByIdWithPractitioner as getUserByIdWithPractitionerMock } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { updateUser as updateUserMock } from '@web-api/persistence/postgres/users/updateUser';
 
-const getUserByIdWithPractitioner =
-  getUserByIdWithPractitionerMock as jest.Mock;
+const getUserById = getUserByIdMock as jest.Mock;
 const updateUser = updateUserMock as jest.Mock;
 
 describe('updateUserPendingEmailInteractor', () => {
@@ -36,7 +35,7 @@ describe('updateUserPendingEmailInteractor', () => {
       practitionerType: 'Attorney',
     };
 
-    getUserByIdWithPractitioner.mockResolvedValue(mockUser);
+    getUserById.mockResolvedValue(mockUser);
     updateUser.mockResolvedValue(mockUser);
     applicationContext
       .getPersistenceGateway()
@@ -80,7 +79,7 @@ describe('updateUserPendingEmailInteractor', () => {
       mockPrivatePractitionerUser,
     );
 
-    expect(getUserByIdWithPractitioner.mock.calls[0][0]).toMatchObject({
+    expect(getUserById.mock.calls[0][0]).toMatchObject({
       userId: mockUser.userId,
     });
   });
@@ -94,14 +93,14 @@ describe('updateUserPendingEmailInteractor', () => {
       mockPrivatePractitionerUser,
     );
 
-    expect(getUserByIdWithPractitioner.mock.calls[0][0].userId).toEqual(
+    expect(getUserById.mock.calls[0][0].userId).toEqual(
       mockPrivatePractitionerUser.userId,
     );
   });
 
   it('should return the updated User entity when currentUser.role is petitioner', async () => {
     const mockUserPetitioner = { ...validUser, ...mockPetitionerUser };
-    getUserByIdWithPractitioner.mockResolvedValueOnce(mockUserPetitioner);
+    getUserById.mockResolvedValueOnce(mockUserPetitioner);
     updateUser.mockResolvedValueOnce(mockUserPetitioner);
 
     const results = await updateUserPendingEmailInteractor(
