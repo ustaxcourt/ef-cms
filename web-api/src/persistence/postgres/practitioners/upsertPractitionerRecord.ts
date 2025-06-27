@@ -23,7 +23,5 @@ export const upsertPractitionerRecord = async ({
     onConflictColumns: ['userId'],
   });
 
-  if (!practitionerData) return undefined;
-
   return practitionerEntity(practitionerData[0]);
 };

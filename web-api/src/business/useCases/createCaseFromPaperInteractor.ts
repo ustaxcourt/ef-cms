@@ -9,7 +9,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { RawUser, User } from '@shared/business/entities/User';
+import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
@@ -79,7 +79,7 @@ const createCaseMetadata = async (
     petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    user: User;
+    user: RawUser;
   },
   authorizedUser: AuthUser,
 ) => {
