@@ -39,7 +39,7 @@ export const getPractitionerByBarNumberInteractor = async (
   }
 
   return isLoggedInUser
-    ? practitioner || null // explicitly return null, not undefined, if no practitioner
+    ? practitioner
     : practitioner
       ? [
           {
