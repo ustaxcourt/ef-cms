@@ -6,17 +6,21 @@ export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
       cerebralTest.getState('caseDetail.privatePractitioners').length,
     ).toEqual(2);
 
-    const barNumber = cerebralTest.getState(
-      'caseDetail.privatePractitioners.1.barNumber',
+    const privatePractitioners = cerebralTest.getState(
+      'caseDetail.privatePractitioners',
     );
+
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const contactSecondary = contactSecondaryFromState(cerebralTest);
+
+    const { barNumber } = privatePractitioners.find(p => {
+      return p.representing.includes(contactSecondary.contactId);
+    });
 
     await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
       barNumber,
       docketNumber: cerebralTest.docketNumber,
     });
-
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-    const contactSecondary = contactSecondaryFromState(cerebralTest);
 
     expect(
       cerebralTest.getState(`form.representingMap.${contactPrimary.contactId}`),
@@ -59,8 +63,15 @@ export const petitionsClerkEditsPractitionerOnCase = cerebralTest => {
       cerebralTest.getState('caseDetail.privatePractitioners.length'),
     ).toEqual(2);
 
-    expect(
-      cerebralTest.getState('caseDetail.privatePractitioners.1.representing'),
-    ).toEqual([contactSecondary.contactId, contactPrimary.contactId]);
+    const practitionerRepresenting = cerebralTest
+      .getState('caseDetail.privatePractitioners')
+      .find(p => {
+        return p.barNumber === barNumber;
+      }).representing;
+
+    expect(practitionerRepresenting).toEqual([
+      contactSecondary.contactId,
+      contactPrimary.contactId,
+    ]);
   });
 };
