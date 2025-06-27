@@ -21,7 +21,6 @@ export const generateUserConfirmationCode = async ({
       id: getUniqueId(),
       userId,
       confirmationCode: getUniqueId(),
-      expiresAt,
       ttl: Math.floor(expiresAt.getTime() / 1000),
     },
   })[0];

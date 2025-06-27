@@ -20,7 +20,6 @@ export const refreshUserConfirmationCodeExpiration = async ({
   await pgUpdateTable({
     table: 'dwUserConfirmationCode',
     values: {
-      expiresAt,
       ttl: Math.floor(expiresAt.getTime() / 1000),
     },
     where: cb =>

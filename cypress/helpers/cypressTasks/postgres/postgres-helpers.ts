@@ -1,9 +1,5 @@
 import { getUserByEmail } from '../cognito/cognito-helpers';
 import { getCypressPostgresDb } from './getCypressPostgresDb';
-import {
-  calculateDate,
-  formatNow,
-} from '@shared/business/utilities/DateHandler';
 
 export const getNewAccountVerificationCode = async ({
   email,
@@ -25,7 +21,7 @@ export const getNewAccountVerificationCode = async ({
     (await dbConnection
       .selectFrom('dwUserConfirmationCode')
       .where('userId', '=', userId)
-      .where('expiresAt', '>', calculateDate({ dateString: formatNow() }))
+      .where('ttl', '>', Math.floor(Date.now() / 1000))
       .select(['confirmationCode'])
       .executeTakeFirst()) ?? {};
 
