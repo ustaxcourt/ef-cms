@@ -8,6 +8,11 @@ import {
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
 
+export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
+  'We noticed you are on an older or unsupported browser. For security reasons, this request could not be completed. \
+  You can try updating the browser or using a different browser or machine. If you need help uploading \
+  this document, contact DAWSON support.';
+
 export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
   'The file is encrypted or password protected. Remove encryption or password protection and try again.';
 export const PDF_CORRUPTED_ERROR_MESSAGE =
@@ -21,6 +26,47 @@ export const validatePdf = ({
 }: {
   file: File;
 }): Promise<FileValidationResponse> => {
+  const isBrowserSupported = (): boolean => {
+    const ua = navigator.userAgent;
+
+    const chromeMatch = ua.match(/Chrome\/(\d+)/);
+    if (chromeMatch && parseInt(chromeMatch[1], 10) < 80) {
+      return false;
+    }
+
+    const firefoxMatch = ua.match(/Firefox\/(\d+)/);
+    if (firefoxMatch && parseInt(firefoxMatch[1], 10) < 70) {
+      return false;
+    }
+
+    const safariMatch = ua.match(/Safari\/(\d+)/) && !ua.includes('Chrome');
+    if (
+      safariMatch &&
+      parseInt(ua.match(/Version\/(\d+)/)?.[1] ?? '0', 10) < 16
+    ) {
+      return false;
+    }
+
+    // NOTE: Should we still support Internet Explorer?
+    if (ua.includes('Trident/') || ua.includes('MSIE ')) {
+      return false;
+    }
+
+    // Default to supported for other browsers
+    return true;
+  };
+
+  if (!isBrowserSupported()) {
+    return Promise.resolve({
+      errorInformation: {
+        errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+        errorMessageToLog: `${UNSUPPORTED_BROWSER_ERROR_MESSAGE} (User agent: ${navigator.userAgent})`,
+        errorType: ErrorTypes.UNSUPPORTED_BROWSER,
+      },
+      isValid: false,
+    });
+  }
+
   return new Promise(resolve => {
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
