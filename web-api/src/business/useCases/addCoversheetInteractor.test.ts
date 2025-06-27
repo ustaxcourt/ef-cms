@@ -14,8 +14,11 @@ import { addCoversheetInteractor } from './addCoversheetInteractor';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import {
+  getCasesByDocketNumbers as getCasesByDocketNumbersMock,
+  OmittableCaseFields,
+} from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 jest.mock('./addCoverToPdf', () => ({
   __esModule: true,
@@ -25,8 +28,14 @@ jest.mock('./addCoverToPdf', () => ({
 }));
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
-const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+const getCasesByDocketNumbers =
+  getCasesByDocketNumbersMock as jest.MockedFunction<
+    (args: {
+      docketNumbers: string[];
+      excludeFields?: OmittableCaseFields[];
+    }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
+  >;
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
 
 describe('addCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;

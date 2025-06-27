@@ -19,16 +19,15 @@ import { getContactPrimary } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCaseMetadataByDocketNumber as getCaseMetadataByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('updateDocketEntryMetaInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
-  const getCaseMetadataByDocketNumber =
-    getCaseMetadataByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -137,7 +136,6 @@ describe('updateDocketEntryMetaInteractor', () => {
       ...MOCK_CASE,
       docketEntries: mockDocketEntries,
     });
-    getCaseMetadataByDocketNumber.mockResolvedValue(MOCK_CASE);
 
     applicationContext
       .getUseCases()
@@ -209,7 +207,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should throw a Not Found error if the case does not exist', async () => {
-    getCaseByDocketNumber.mockResolvedValue(undefined);
+    getCaseByDocketNumber.mockResolvedValueOnce(undefined);
     await expect(
       updateDocketEntryMetaInteractor(
         applicationContext,
@@ -600,6 +598,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document pending status and the automatic blocked status of the case when setting pending to true', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([MOCK_CASE]);
     const result = await updateDocketEntryMetaInteractor(
       applicationContext,
       {

@@ -515,9 +515,7 @@ describe('addPaperFilingInteractor', () => {
         mockDocketClerkUser,
       );
 
-      expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-      ).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
       expect(upsertWorkItems).toHaveBeenCalledTimes(1);
     });
 

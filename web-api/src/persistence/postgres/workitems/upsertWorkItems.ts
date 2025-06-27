@@ -7,6 +7,10 @@ export const upsertWorkItems = async ({
 }: {
   workItems: RawWorkItem[];
 }): Promise<RawWorkItem[]> => {
+  if (!workItems?.length) {
+    return [];
+  }
+
   const createdWorkItems = await pgInsertInto({
     table: 'dwWorkItem',
     values: workItems.map(w => toKyselyNewWorkItem(w)),

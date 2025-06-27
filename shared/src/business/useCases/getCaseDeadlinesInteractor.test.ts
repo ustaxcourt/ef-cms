@@ -19,7 +19,7 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 
@@ -27,8 +27,7 @@ describe('getCaseDeadlinesInteractor', () => {
   const getCaseDeadlinesByDateRange = jest.mocked(
     getCaseDeadlinesByDateRangeMock,
   );
-  const getCasesMetadataByDocketNumbers =
-    getCasesMetadataByDocketNumbersMock as jest.Mock;
+  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
   jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -114,7 +113,7 @@ describe('getCaseDeadlinesInteractor', () => {
       foundDeadlines: mockDeadlines as CaseDeadline[],
       totalCount: 2,
     });
-    getCasesMetadataByDocketNumbers.mockResolvedValue(mockCases);
+    getCasesByDocketNumbers.mockResolvedValue(mockCases);
   });
 
   it('throws an error when the user is not valid or authorized', async () => {

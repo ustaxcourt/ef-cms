@@ -21,7 +21,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { removeConsolidatedCasesInteractor } from '@web-api/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
+import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
@@ -32,9 +32,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const getCasesByLeadDocketNumber = jest.mocked(
-    getCasesByLeadDocketNumberMock,
-  );
+  const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   // In this file, getCasesByDocketNumbers should be the cases that are to be removed
@@ -81,12 +79,10 @@ describe('removeConsolidatedCasesInteractor', () => {
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
       return mockCases[docketNumber];
     });
-    getCasesByLeadDocketNumber.mockImplementation(({ leadDocketNumber }) => {
-      return Promise.resolve(
-        Object.keys(mockCases)
-          .map(key => mockCases[key])
-          .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber),
-      );
+    getConsolidatedCases.mockImplementation(({ leadDocketNumber }) => {
+      return Object.keys(mockCases)
+        .map(key => mockCases[key])
+        .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
     });
     updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
@@ -216,9 +212,9 @@ describe('removeConsolidatedCasesInteractor', () => {
       },
       mockDocketClerkUser,
     );
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(docketNumbersToRemove.length);
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(
+      docketNumbersToRemove.length,
+    );
   });
 
   it('Should update ALL cases to remove consolidation if new consolidated cases length is 1', async () => {
@@ -241,14 +237,14 @@ describe('removeConsolidatedCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(allDocketNumbers.length);
+    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(
+      allDocketNumbers.length,
+    );
 
     allDocketNumbers.forEach((docketNumber, callIndex) => {
       expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-          .calls[callIndex][0].caseToUpdate.docketNumber,
+        updateCaseAndAssociations.mock.calls[callIndex][0].caseToUpdate
+          .docketNumber,
       ).toBe(docketNumber);
     });
   });

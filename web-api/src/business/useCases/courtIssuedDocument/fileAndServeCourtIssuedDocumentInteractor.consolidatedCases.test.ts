@@ -23,7 +23,10 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { Case } from '@shared/business/entities/cases/Case';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import {
+  getCasesByDocketNumbers as getCasesByDocketNumbersMock,
+  OmittableCaseFields,
+} from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 const updateDocketEntryPendingServiceStatus = jest.mocked(
   updateDocketEntryPendingServiceStatusMock,
@@ -31,7 +34,13 @@ const updateDocketEntryPendingServiceStatus = jest.mocked(
 
 describe('consolidated cases', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const getCasesByDocketNumbers =
+    getCasesByDocketNumbersMock as jest.MockedFunction<
+      (args: {
+        docketNumbers: string[];
+        excludeFields?: OmittableCaseFields[];
+      }) => Promise<Omit<RawCase, 'consolidatedCases'>[]>
+    >;
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );

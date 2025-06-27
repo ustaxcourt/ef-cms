@@ -14,6 +14,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
 
 /**
@@ -55,7 +56,6 @@ export const generateChangeOfAddressHelper = async ({
     const newData = contactInfo;
 
     const userCase = await getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
     });
     const caseEntity = new Case(userCase, {
@@ -98,8 +98,7 @@ export const generateChangeOfAddressHelper = async ({
       });
     }
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });

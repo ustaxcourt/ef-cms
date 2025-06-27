@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
@@ -21,12 +24,13 @@ import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messag
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const tryGetLocks = jest.mocked(tryGetLocksMock);
-
 describe('addDraftStampOrderDocketEntryInteractor', () => {
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const mockSigningName = 'Roslindis Angelino';
   const mockStampedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
@@ -53,9 +57,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       mockJudgeUser,
     );
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
     expect(caseToUpdate.docketEntries.length).toEqual(
       MOCK_DOCUMENTS.length + 1,
@@ -89,9 +91,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       mockJudgeUser,
     );
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
     const draftDocketEntryEntity = caseToUpdate.docketEntries.find(
       doc =>

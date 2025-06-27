@@ -223,9 +223,8 @@ describe('editPaperFilingInteractor', () => {
           mockDocketClerkUser,
         );
 
-        const updatedDocketEntry = applicationContext
-          .getUseCaseHelpers()
-          .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        const updatedDocketEntry =
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
             doc => doc.docketEntryId === mockDocketEntryId,
           );
         expect(getCaseByDocketNumber).toHaveBeenCalled();

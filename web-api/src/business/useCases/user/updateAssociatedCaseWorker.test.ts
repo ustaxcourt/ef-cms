@@ -78,7 +78,7 @@ const mockCase = {
 };
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-jest
+const updateCaseAndAssociations = jest
   .mocked(updateCaseAndAssociationsMock)
   .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 const tryGetLocks = jest.mocked(tryGetLocksMock);
@@ -105,9 +105,7 @@ describe('updateAssociatedCaseWorker', () => {
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
     );
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
@@ -131,9 +129,7 @@ describe('updateAssociatedCaseWorker', () => {
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
     );
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   describe('locking', () => {
@@ -228,24 +224,19 @@ describe('updateAssociatedCaseWorker', () => {
         mockPrivatePractitionerUser,
       );
 
-      expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-      ).toHaveBeenCalled();
+      expect(updateCaseAndAssociations).toHaveBeenCalled();
 
       expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-          .calls[0][0].caseToUpdate,
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
       ).toMatchObject({
         privatePractitioners: [{ email: 'test@example.com' }],
       });
     });
 
     it('should not send any user notifications if the call to updateCase fails', async () => {
-      applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAndAssociations.mockRejectedValueOnce(
-          new Error('updateCaseAndAssociations failure'),
-        );
+      updateCaseAndAssociations.mockRejectedValueOnce(
+        new Error('updateCaseAndAssociations failure'),
+      );
 
       await expect(
         updateAssociatedCaseWorker(
@@ -367,9 +358,7 @@ describe('updatePetitionerCases', () => {
       docketNumber: mockCase.docketNumber,
     });
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should log an error if the petitioner is not found on a case returned by getCasesForUser', async () => {
@@ -398,9 +387,7 @@ describe('updatePetitionerCases', () => {
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
       `Could not find user|${mockPetitionerUser2.userId} on ${caseMock.docketNumber}`,
     );
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should log an error if any case update is invalid and prevent updateCaseAndAssociations from being called', async () => {
@@ -419,9 +406,7 @@ describe('updatePetitionerCases', () => {
       }),
     ).rejects.toThrow('entity was invalid');
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should call updateCaseAndAssociations with updated email address for a contactSecondary', async () => {
@@ -449,9 +434,7 @@ describe('updatePetitionerCases', () => {
       user: mockPetitionerUser2,
     });
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
     expect(caseToUpdate.petitioners[1].email).toBe(UPDATED_EMAIL);
     expect(caseToUpdate.docketNumber).toBe(MOCK_CASE.docketNumber);
   });
@@ -488,9 +471,7 @@ describe('updatePetitionerCases', () => {
       user: mockPetitionerUser2,
     });
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
     expect(caseToUpdate.petitioners[1].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -527,9 +508,7 @@ describe('updatePetitionerCases', () => {
       user: mockPetitionerUser2,
     });
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
     expect(caseToUpdate.petitioners[1].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -566,8 +545,8 @@ describe('updatePractitionerCases', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.privatePractitioners[0].serviceIndicator,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+        .privatePractitioners[0].serviceIndicator,
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
   });
 });

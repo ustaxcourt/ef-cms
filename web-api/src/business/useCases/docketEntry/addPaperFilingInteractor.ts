@@ -20,6 +20,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -160,8 +161,7 @@ export const addPaperFiling = async (
 
     caseEntities.push(caseEntity);
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity.validate().toRawObject(),
     });

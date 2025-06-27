@@ -8,6 +8,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
@@ -60,7 +61,6 @@ export const updatePetitionerCase = async ({
   authorizedUser: AuthUser;
 }): Promise<void> => {
   const rawCaseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -73,8 +73,7 @@ export const updatePetitionerCase = async ({
 
   if (!caseToUpdate) return;
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate,
   });
@@ -92,7 +91,6 @@ export const updatePractitionerCase = async ({
   authorizedUser: AuthUser;
 }): Promise<void> => {
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -120,8 +118,7 @@ export const updatePractitionerCase = async ({
     authorizedUser,
   }).validate();
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: validatedCaseToUpdate,
   });

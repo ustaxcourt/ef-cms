@@ -15,8 +15,8 @@ import { isEmpty, flatten, partition, uniq } from 'lodash';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { updateDeadlinesForCasesToCalendar } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
-import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -170,7 +170,7 @@ export const setTrialSessionCalendarInteractor = async (
 
     if (!isEmpty(caseEntitiesToCalendar)) {
       updatesToPersist.push(
-        // We may need to update related work items and deadlines for newly calendared cases depending on the trial session judge.
+        // We may need to update related deadlines for newly calendared cases depending on the trial session judge.
         // TODO: These updates should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference these columns on dwCase.
         updateDeadlinesForCasesToCalendar({
           casesToCalendar: caseEntitiesToCalendar,

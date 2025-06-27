@@ -27,7 +27,6 @@ export const strikeDocketEntryInteractor = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

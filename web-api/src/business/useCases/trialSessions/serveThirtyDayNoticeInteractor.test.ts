@@ -1,4 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
@@ -41,10 +44,6 @@ describe('serveThirtyDayNoticeInteractor', () => {
       }));
 
     applicationContext.getUtilities().formatNow.mockReturnValue('02/23/2023');
-
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockResolvedValue(null);
   });
 
   it('should throw an unauthorized error when the user is not authorized to serve 30 day notices', async () => {
