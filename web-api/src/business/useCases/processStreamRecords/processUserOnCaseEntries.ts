@@ -16,9 +16,10 @@ export const processUserOnCaseEntries = async ({
   try {
     await userOnCaseRecords.forEach(async userOnCaseRecord => {
       const record = unmarshall(userOnCaseRecord.dynamodb.NewImage);
+      const userId = record.pk.split('user|')[1];
 
       await associateUserWithCase({
-        userId: record.userId,
+        userId,
         docketNumber: record.docketNumber,
         representing: record.representing ?? [],
         serviceIndicator: record.serviceIndicator ?? undefined,
