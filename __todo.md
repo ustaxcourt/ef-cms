@@ -45,7 +45,7 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
 - [x] Update Mocks to include all functions (solo)
 - [x] Index all where clauses (good for solo work)
 - [x] Confirm Confirmation Codes Working as Expected
-- [ ] getCasesByEmailTotal, figure out what to do with this, will it all be in opensearch or postgres
+- [x] getCasesByEmailTotal, figure out what to do with this, will it all be in opensearch or postgres
 - [ ] Fix representing for associateUserWithCase
 - [ ] Implement TTL on Confirmation Codes
 - [ ] Update api tests (Andy will tackle first half)
@@ -71,7 +71,7 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
       - Make a single function(or close to one) function for updating user. Consolidate
 - [x] Consider doing the same when fetching user data
 - [x] resolve issue regarding joining userOnCase with practitioner since practitioners may be petitioners on a case
-- [ ] getCasesByDocketNumbers we need to think about efficiency
+- [x] getCasesByDocketNumbers we need to think about efficiency
 - [ ] Consider removing contact info from practitioner table. If it's always the same between the two tables, why risk creating conflicts by duplicating it?
 
 ## Odd dynamo functions that need to be reimplemented with postgres
