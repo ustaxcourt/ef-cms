@@ -20,9 +20,6 @@ source ./scripts/helpers/dynamodb-table-exists.sh
 # shellcheck disable=SC1091
 source ./scripts/helpers/opensearch-domain-exists.sh
 
-DEPLOY_TABLE_EXISTS=$(check_dynamo_table_exists "efcms-deploy-${ENV}" us-east-1)
-[[ "$DEPLOY_TABLE_EXISTS" -eq 0 ]] && echo "Deploy table not found" && exit 0
-
 ./scripts/migration/is-migration-needed.ts
 SKIP_MIGRATION="$?"
 

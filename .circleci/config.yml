@@ -148,10 +148,6 @@ jobs:
               npm run deploy:green $ENV
             fi
       - run:
-          name: Setup Env (Again)
-          command: |
-            ./scripts/env/env-for-circle.sh
-      - run:
           name: Setup Elasticsearch Index Settings
           command: |
             ./web-api/setup-elasticsearch-index.sh $ENV

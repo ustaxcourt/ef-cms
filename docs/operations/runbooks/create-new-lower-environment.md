@@ -4,6 +4,10 @@
 
 This runbook describes the process of creating a new DAWSON lower environment in an otherwise empty AWS account.
 
+## ⚠️ Caution ⚠️
+
+Proceed with the expectation that this runbook is out of date. Carefully inspect every command and script herein, cross-referencing operational environments, before running. Update this document as necessary.
+
 ## Preqrequisites
 - New AWS account
   - DAWSON AWS accounts should be named in the following convention: `dawson-workloads-[env]`
@@ -140,6 +144,158 @@ This runbook describes the process of creating a new DAWSON lower environment in
             1. Environment variable name: `AWS_SECRET_ACCESS_KEY`
             1. Value: Enter the value from the output you copied earlier
             1. Click "Add environment variable"
+1. Become the CircleCI user
+   ```bash
+   unset AWS_PROFILE
+   export AWS_ACCESS_KEY_ID=<CIRCLECI AWS_ACCESS_KEY_ID>
+   export AWS_SECRET_ACCESS_KEY=<CIRCLECI AWS_SECRET_ACCESS_KEY>
+   ```
+1. Run an `allColors` terraform deployment:
+   ```bash
+   export CURRENT_COLOR=blue
+   export DEPLOYING_COLOR=green
+   export SOURCE_TABLE="efcms-${ENV}-alpha"
+   export DESTINATION_TABLE="efcms-${ENV}-alpha"
+   npm run deploy:allColors "$ENV"
+   ```
+1. Run a color-specific terraform deployment for green:
+   ```bash
+   npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
+   ```
+1. Run a color-specific terraform deployment for blue:
+   ```bash
+   export CURRENT_COLOR=green
+   export DEPLOYING_COLOR=blue
+   npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
+   ```
+1. Write configuration to the deploy table:
+   1. `current-color`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"current-color"}, "sk":{"S":"current-color"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"S":"blue"}}'
+      ```
+   1. `destination-table-version`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"destination-table-version"}, "sk":{"S":"destination-table-version"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"S":"alpha"}}'
+      ```
+   1. `migrate`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"migrate"}, "sk":{"S":"migrate"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"BOOL":false}}'
+      ```
+   1. `migration-queue-empty`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"migration-queue-empty"}, "sk":{"S":"migration-queue-empty"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"BOOL":true}}'
+      ```
+   1. `source-table-version`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"source-table-version"}, "sk":{"S":"source-table-version"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"S":"alpha"}}'
+      ```
+1. Write feature flags to the deploy table:
+   1. `aws-batch-zipper-minimum-count`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"aws-batch-zipper-minimum-count"}, "sk":{"S":"aws-batch-zipper-minimum-count"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"N":"50"}}'
+      ```
+   1. `chief-judge-name`, replacing `<CHIEF JUDGE NAME>` with the current Chief Judge:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"chief-judge-name"}, "sk":{"S":"chief-judge-name"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"S":"<CHIEF JUDGE NAME>"}}'
+      ```
+   1. `clerk-of-court-configuration`, replacing `<CLERK OF COURT NAME>` with the current Clerk of the Court:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"clerk-of-court-configuration"}, "sk":{"S":"clerk-of-court-configuration"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"M":{"name":{"S":"<CLERK OF COURT NAME>"},"title": {"S":"Clerk of the Court"}}}}'
+      ```
+   1. `document-visibility-policy-change-date`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"document-visibility-policy-change-date"}, "sk":{"S":"document-visibility-policy-change-date"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"S":"2023-08-01"}}'
+      ```
+   1. `e-consent-fields-enabled-feature-flag`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"e-consent-fields-enabled-feature-flag"}, "sk":{"S":"e-consent-fields-enabled-feature-flag"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"BOOL":true}}'
+      ```
+   1. `entity-locking-feature-flag`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"entity-locking-feature-flag"}, "sk":{"S":"entity-locking-feature-flag"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"BOOL":true}}'
+      ```
+   1. `maintenance-mode`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"maintenance-mode"}, "sk":{"S":"maintenance-mode"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"BOOL":false}}'
+      ```
+   1. `section-outbox-number-of-days`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"section-outbox-number-of-days"}, "sk":{"S":"section-outbox-number-of-days"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"N":"5"}}'
+      ```
+   1. `use-change-of-address-lambda`:
+      ```bash
+      aws dynamodb update-item \
+        --region us-east-1 --table-name "efcms-deploy-${ENV}" \
+        --key '{"pk":{"S":"use-change-of-address-lambda"}, "sk":{"S":"use-change-of-address-lambda"}}' \
+        --update-expression "SET #current = :current" \
+        --expression-attribute-names '{"#current":"current"}' \
+        --expression-attribute-values '{":current":{"BOOL":true}}'
+      ```
 1. Merge `origin/staging` into the branch that corresponds to this lower environment:
    ```bash
    git checkout experimental9

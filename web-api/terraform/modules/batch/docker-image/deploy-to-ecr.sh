@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 TARGET_REGION=$1
 export DOCKER_DEFAULT_PLATFORM=linux/amd64

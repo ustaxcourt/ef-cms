@@ -274,7 +274,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
           "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:db:*",
           "arn:aws:rds:us-west-1:${data.aws_caller_identity.current.account_id}:subgrp:*"
        ]
-    },  
+    },
     {
       "Sid": "KMS",
       "Effect": "Allow",
@@ -284,22 +284,34 @@ resource "aws_iam_policy" "ci_cd_policy" {
        "Resource": [
           "*"
        ]
-    }, 
+    },
     {
       "Sid": "IAM",
       "Effect": "Allow",
       "Action": [
+          "iam:GetRole",
           "iam:GetUser",
           "iam:CreateUser",
           "iam:CreatePolicy",
-          "iam:AttachUserPolicy"
+          "iam:AttachUserPolicy",
+          "iam:ListAttachedUserPolicies"
 
         ],
        "Resource": [
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:user/*",
           "arn:aws:iam::${data.aws_caller_identity.current.account_id}:policy/*"
         ]
-    }, 
+    },
+    {
+      "Sid": "CreateServiceLinkedRole",
+      "Effect": "Allow",
+      "Action": [
+          "iam:CreateServiceLinkedRole"
+        ],
+       "Resource": [
+          "*"
+        ]
+    },
     {
       "Action": [
         "ecs:CreateCluster",
