@@ -27,15 +27,31 @@ export const validatePdf = ({
   file: File;
 }): Promise<FileValidationResponse> => {
   const isBrowserSupported = (): boolean => {
+    // ---------------------------------------------------------------------
+    // Minimum Browser Versions Required for PDF Upload Support (ES2022)
+    // Feature in question: Private class methods (e.g., #getExtremumOnCurve)
+    // Affected users will experience a hard syntax error in unsupported browsers
+    //
+    // ✅ Safe versions:
+    //   Safari      16.4+   (March 2023)
+    //   Chrome      84+     (July 2020)
+    //   Edge        84+     (July 2020 - Chromium-based only)
+    //   Firefox     90+     (July 2021)
+    //   Opera       70+     (July 2020)
+    //   Samsung     14.0+   (2022)
+    //
+    // ❌ Block or warn if below these versions
+    // ---------------------------------------------------------------------
+
     const ua = navigator.userAgent;
 
     const chromeMatch = ua.match(/Chrome\/(\d+)/);
-    if (chromeMatch && parseInt(chromeMatch[1], 10) < 80) {
+    if (chromeMatch && parseInt(chromeMatch[1], 10) < 84) {
       return false;
     }
 
     const firefoxMatch = ua.match(/Firefox\/(\d+)/);
-    if (firefoxMatch && parseInt(firefoxMatch[1], 10) < 70) {
+    if (firefoxMatch && parseInt(firefoxMatch[1], 10) < 90) {
       return false;
     }
 
