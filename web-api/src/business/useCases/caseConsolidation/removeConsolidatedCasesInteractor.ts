@@ -47,7 +47,6 @@ const removeConsolidatedCases = async (
   const allConsolidatedCases = await getConsolidatedCases({
     leadDocketNumber,
   });
-  console.log('allConsolidatedCases', allConsolidatedCases);
 
   const newConsolidatedCases = allConsolidatedCases.filter(
     consolidatedCase =>
@@ -58,10 +57,8 @@ const removeConsolidatedCases = async (
     docketNumbersToRemove.includes(leadDocketNumber) &&
     newConsolidatedCases.length > 1
   ) {
-    console.log('HERE!');
     const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
     for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
-      console.log('newConsolidatedCaseToUpdate', newConsolidatedCaseToUpdate);
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
         authorizedUser,
       });
@@ -102,8 +99,6 @@ const removeConsolidatedCases = async (
   const casesToRemove = await getCasesByDocketNumbers({
     docketNumbers: docketNumbersToRemove,
   });
-
-  console.log('casesToRemove', casesToRemove);
 
   for (const caseToRemove of casesToRemove) {
     const caseEntity = new Case(caseToRemove, { authorizedUser });
