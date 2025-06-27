@@ -103,13 +103,16 @@ export const lambdaWrapper = (
 
     res.status(parseInt(response.statusCode));
 
-    let processedHost = req.headers.host;
-    if (processedHost.startsWith('app-')) {
-      processedHost = processedHost.replace(/^app-(green|blue)/, 'app');
-    }
+    const host = req.headers.host || '';
+    if (host.startsWith('app-green') || host.startsWith('app-blue')) {
+    const cleanHost = host.replace(/^app-(green|blue)/, 'app');
+    const protocol = req.secure ? 'https' : 'http';
+    const redirectUrl = `${protocol}://${cleanHost}`;
+    
+    return res.redirect(301, redirectUrl);
+}
 
     res.set({
-      host: processedHost,
       ...response.headers,
       'X-Terminal-User': isTerminalUser,
       ...headerOverride,

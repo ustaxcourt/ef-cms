@@ -27,6 +27,7 @@ describe('lambdaWrapper', () => {
       },
       locals: {},
       setTimeout: jest.fn(),
+      secure: true,
     };
     res = {
       headers: {},
@@ -67,7 +68,6 @@ describe('lambdaWrapper', () => {
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
       'X-Terminal-User': false,
-      host: 'app.dawson.ustaxcourt.gov'
     });
     expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
     expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
@@ -172,7 +172,6 @@ describe('lambdaWrapper', () => {
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
       'X-Terminal-User': true,
-      host: 'app.dawson.ustaxcourt.gov'
     });
     expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
     expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
@@ -293,17 +292,6 @@ describe('lambdaWrapper', () => {
         },
       };
     })(req, res);
-    expect(res.set).toHaveBeenCalledWith({
-      'Access-Control-Expose-Headers': 'X-Terminal-User',
-      'Cache-Control':
-        'max-age=0, private, no-cache, no-store, must-revalidate',
-      'Content-Type': 'application/json',
-      Pragma: 'no-cache',
-      Vary: 'Authorization',
-      'X-Content-Type-Options': 'nosniff',
-      'X-Terminal-User': false,
-      host: 'app.dawson.ustaxcourt.gov'
-    });
-    expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
+    expect(res.redirect).toHaveBeenCalledWith(301, 'https://app.dawson.ustaxcourt.gov');
   })
 });
