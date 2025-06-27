@@ -31,10 +31,6 @@ jest.mock('@web-api/persistence/postgres/users/getAllUsersByRole', () =>
   mockFactory('getAllUsersByRole'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/getUserByEmail', () =>
-  mockFactory('getUserByEmail'),
-);
-
 jest.mock('@web-api/persistence/postgres/users/getUserById', () =>
   mockFactory('getUserById'),
 );

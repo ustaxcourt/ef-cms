@@ -13,22 +13,19 @@ import {
   ROLES,
   Role,
   SERVICE_INDICATOR_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   changePasswordInteractor,
   updateUserPendingEmailRecord,
 } from './changePasswordInteractor';
 import jwt from 'jsonwebtoken';
-import { getUserByIdWithPractitioner as getUserByIdWithPractitionerMock } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { updateUser as updateUserMock } from '@web-api/persistence/postgres/users/updateUser';
-import { updatePractitioner as updatePractitionerMock } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 
-const getUserByIdWithPractitioner =
-  getUserByIdWithPractitionerMock as jest.Mock;
+const getUserById = getUserByIdMock as jest.Mock;
 const updateUser = updateUserMock as jest.Mock;
-const updatePractitioner = updatePractitionerMock as jest.Mock;
 
 describe('changePasswordInteractor', () => {
   const mockUserId = '8c2af03d-d736-4561-afe3-c78b67b7cc59';
@@ -86,11 +83,7 @@ describe('changePasswordInteractor', () => {
           mockRespondToAuthChallengeResponse,
         );
 
-      getUserByIdWithPractitioner.mockImplementation(
-        () => mockUserWithPendingEmail,
-      );
-
-      updatePractitioner.mockResolvedValue(() => {});
+      getUserById.mockImplementation(() => mockUserWithPendingEmail);
     });
 
     it('should throw an error when the user is NOT in NEW_PASSWORD_REQUIRED state', async () => {

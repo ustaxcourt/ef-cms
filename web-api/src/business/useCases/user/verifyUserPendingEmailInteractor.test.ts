@@ -25,13 +25,11 @@ import { validUser } from '@shared/test/mockUsers';
 import { updateUser as updateUserMock } from '@web-api/persistence/postgres/users/updateUser';
 import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
-import { updatePractitioner as updatePractitionerMock } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 
 const updateUser = updateUserMock as jest.Mock;
 const getDocketNumbersByUser = getDocketNumbersByUserMock as jest.Mock;
 const getUserByIdOnceAllUpdatesComplete =
   getUserByIdOnceAllUpdatesCompleteMock as jest.Mock;
-const updatePractitioner = updatePractitionerMock as jest.Mock;
 
 describe('Verify User Pending Email', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
@@ -58,8 +56,6 @@ describe('Verify User Pending Email', () => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByEmailTotal.mockReturnValue(TOTAL_CASE_COUNT);
-
-    updatePractitioner.mockResolvedValue(() => {});
   });
 
   describe('userTokenHasExpired', () => {

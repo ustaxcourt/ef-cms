@@ -7,7 +7,7 @@ import {
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { irsPractitionerUser } from '@shared/test/mockUsers';
 import { updatePractitionerContactInformation } from './updatePractitionerContactInformationInteractor';
@@ -17,12 +17,10 @@ import { Practitioner } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
-import { updatePractitioner as updatePractitionerMock } from '@web-api/persistence/postgres/practitioners/updatePractitioner';
 import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { updateUser as updateUserMock } from '@web-api/persistence/postgres/users/updateUser';
 
 const getCasesForUser = getCasesForUserMock as jest.Mock;
-const updatePractitioner = updatePractitionerMock as jest.Mock;
 const getPractitionerById = getPractitionerByIdMock as jest.Mock;
 const updateUser = updateUserMock as jest.Mock;
 
@@ -59,8 +57,7 @@ describe('updatePractitionerContactInformation', () => {
     };
 
     getCasesForUser.mockReturnValue(undefined);
-    getPractitionerById.mockResolvedValue(mockUser);
-    updatePractitioner.mockResolvedValue({});
+    getPractitionerById.mockResolvedValue(new Practitioner(mockUser));
   });
 
   it('should throw unauthorized error when user does not have permission to update contact information', async () => {
@@ -89,6 +86,21 @@ describe('updatePractitionerContactInformation', () => {
         mockUser,
       ),
     ).rejects.toThrow(UnauthorizedError);
+  });
+
+  it('should throw not found error when there is no practitioner with the userId passed in', async () => {
+    getPractitionerById.mockResolvedValueOnce(undefined);
+
+    await expect(
+      updatePractitionerContactInformation(
+        applicationContext,
+        {
+          contactInfo,
+          userId: mockUser.userId,
+        } as any,
+        mockUser,
+      ),
+    ).rejects.toThrow(NotFoundError);
   });
 
   it('should return without updating user or cases when the contact information has not changed', async () => {
@@ -186,38 +198,6 @@ describe('updatePractitionerContactInformation', () => {
     });
   });
 
-  it('should notify and not update the user when the user being updated is not a privatePractitioner, irsPractitioner, or petitioner', async () => {
-    getPractitionerById.mockResolvedValue({
-      ...mockUser,
-      entityName: 'notapractitioner',
-    });
-
-    await expect(
-      updatePractitionerContactInformation(
-        applicationContext,
-        {
-          contactInfo,
-          userId: mockUser.userId,
-        } as any,
-        mockUser,
-      ),
-    ).rejects.toThrow();
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message.action,
-    ).toEqual('user_contact_update_error');
-    expect(
-      JSON.stringify(
-        applicationContext.getNotificationGateway().sendNotificationToUser.mock
-          .calls[0][0].message.error,
-      ),
-    ).toContain('Error: Unrecognized entityType notapractitioner');
-  });
-
   it('should generate a change of address document', async () => {
     await updatePractitionerContactInformation(
       applicationContext,
@@ -260,7 +240,7 @@ describe('updatePractitionerContactInformation', () => {
     });
   });
 
-  it('should not clean up DB and send websocket message if "generateChangeOfAddress" returns undefined', async () => {
+  it('should not send websocket message if "generateChangeOfAddress" returns undefined', async () => {
     (generateChangeOfAddress as jest.Mock).mockReturnValue(undefined);
 
     await updatePractitionerContactInformation(
@@ -271,8 +251,6 @@ describe('updatePractitionerContactInformation', () => {
       } as any,
       mockUser,
     );
-
-    expect(updateUser.mock.calls.length).toEqual(1);
 
     const notificatsionCalls =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -300,10 +278,12 @@ describe('updatePractitionerContactInformation', () => {
   });
 
   it('should return early if the firmName and contact info was not changed', async () => {
-    getPractitionerById.mockImplementation(() => ({
-      ...mockUser,
-      contact: contactInfo,
-    }));
+    getPractitionerById.mockResolvedValue(
+      new Practitioner({
+        ...mockUser,
+        contact: contactInfo,
+      }),
+    );
 
     await updatePractitionerContactInformation(
       applicationContext,

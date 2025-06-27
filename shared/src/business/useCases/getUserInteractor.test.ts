@@ -13,14 +13,13 @@ import {
   mockPetitionsClerkUser,
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getUserByIdWithPractitioner as getUserByIdWithPractitionerMock } from '@web-api/persistence/postgres/users/getUserByIdWithPractitioner';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
-const getUserByIdWithPractitioner =
-  getUserByIdWithPractitionerMock as jest.Mock;
+const getUserById = getUserByIdMock as jest.Mock;
 
 describe('getUserInteractor', () => {
   it('should call the persistence method to get the user', async () => {
-    getUserByIdWithPractitioner.mockReturnValue({
+    getUserById.mockReturnValue({
       ...mockPetitionsClerkUser,
       entityName: 'User',
       section: PETITIONS_SECTION,
@@ -38,7 +37,7 @@ describe('getUserInteractor', () => {
   });
 
   it('should throw an error if the user is not found', async () => {
-    getUserByIdWithPractitioner.mockReturnValue(null);
+    getUserById.mockReturnValue(null);
 
     await expect(getUserInteractor(mockPetitionsClerkUser)).rejects.toThrow(
       `User id "${mockPetitionsClerkUser.userId}" not found in persistence.`,
@@ -54,7 +53,7 @@ describe('getUserInteractor', () => {
       role: ROLES.judge,
       userId: mockJudgeUser.userId,
     };
-    getUserByIdWithPractitioner.mockReturnValue({
+    getUserById.mockReturnValue({
       ...mockJudge,
       entityName: 'User',
       section: 'judge',
@@ -73,7 +72,7 @@ describe('getUserInteractor', () => {
   });
 
   it('should return a PrivatePractitioner entity when the entity returned from persistence is a PrivatePractitioner', async () => {
-    getUserByIdWithPractitioner.mockReturnValue({
+    getUserById.mockReturnValue({
       ...mockPrivatePractitionerUser,
       barNumber: 'PT1234',
       entityName: PrivatePractitioner.ENTITY_NAME,
@@ -93,7 +92,7 @@ describe('getUserInteractor', () => {
   });
 
   it('should return an IrsPractitioner entity when the entity returned from persistence is a IrsPractitioner', async () => {
-    getUserByIdWithPractitioner.mockReturnValue({
+    getUserById.mockReturnValue({
       ...mockIrsPractitionerUser,
       barNumber: 'PT5678',
       entityName: IrsPractitioner.ENTITY_NAME,
@@ -124,7 +123,7 @@ describe('getUserInteractor', () => {
       role: ROLES.irsPractitioner,
       userId: mockIrsPractitionerUser.userId,
     };
-    getUserByIdWithPractitioner.mockReturnValue({
+    getUserById.mockReturnValue({
       ...mockPractitioner,
       barNumber: 'PT9012',
     });
