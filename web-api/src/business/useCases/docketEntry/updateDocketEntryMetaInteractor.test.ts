@@ -207,7 +207,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should throw a Not Found error if the case does not exist', async () => {
-    getCaseByDocketNumber.mockResolvedValue(undefined);
+    getCaseByDocketNumber.mockResolvedValueOnce(undefined);
     await expect(
       updateDocketEntryMetaInteractor(
         applicationContext,
@@ -598,7 +598,7 @@ describe('updateDocketEntryMetaInteractor', () => {
   });
 
   it('should update the document pending status and the automatic blocked status of the case when setting pending to true', async () => {
-    getCasesByDocketNumbers.mockResolvedValue([MOCK_CASE]);
+    getCasesByDocketNumbers.mockResolvedValueOnce([MOCK_CASE]);
     const result = await updateDocketEntryMetaInteractor(
       applicationContext,
       {
