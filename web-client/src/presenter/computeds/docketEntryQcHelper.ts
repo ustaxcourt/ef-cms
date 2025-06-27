@@ -17,9 +17,11 @@ export const docketEntryQcHelper = (
   let showPaperServiceWarning = false;
 
   if (CONTACT_CHANGE_DOCUMENT_TYPES.includes(currentDocument.documentType)) {
-    const qcWorkItem = currentDocument.workItem;
+    const hasWorkItemInfo = currentDocument.qcViewed !== undefined;
     const qcWorkItemsUntouched =
-      qcWorkItem && !qcWorkItem.isRead && !qcWorkItem.completedAt;
+      hasWorkItemInfo &&
+      !currentDocument.qcViewed &&
+      !currentDocument.qcComplete;
 
     if (qcWorkItemsUntouched) {
       showPaperServiceWarning = true;

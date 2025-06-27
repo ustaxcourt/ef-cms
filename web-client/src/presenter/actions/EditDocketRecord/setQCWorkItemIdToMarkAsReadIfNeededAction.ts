@@ -15,18 +15,17 @@ export const setQCWorkItemIdToMarkAsReadIfNeededAction = ({
   const caseDetail = get(state.caseDetail);
   const { docketEntryId } = props;
 
-  const initialDocument = caseDetail.docketEntries.find(
+  const docketEntry = caseDetail.docketEntries.find(
     entry => entry.docketEntryId === docketEntryId,
   );
 
-  const unreadQCWorkItem =
-    initialDocument?.workItem && !initialDocument.workItem.isRead
-      ? initialDocument.workItem
-      : undefined;
+  const hasWorkItemInfo = docketEntry?.qcViewed !== undefined;
+
+  const workItemIsUnread = hasWorkItemInfo && !docketEntry.qcViewed;
 
   let workItemIdToMarkAsRead;
-  if (unreadQCWorkItem) {
-    workItemIdToMarkAsRead = unreadQCWorkItem.workItemId;
+  if (workItemIsUnread) {
+    workItemIdToMarkAsRead = docketEntry.workItemId;
   }
 
   return { workItemIdToMarkAsRead };

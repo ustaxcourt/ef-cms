@@ -192,6 +192,7 @@ export class DocketEntry extends JoiValidationEntity {
   // These are optional fields set for the UI
   public qcComplete?: boolean;
   public qcViewed?: boolean;
+  public workItemId?: string;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -347,6 +348,7 @@ export class DocketEntry extends JoiValidationEntity {
 
     this.qcViewed = rawDocketEntry.qcViewed;
     this.qcComplete = rawDocketEntry.qcComplete;
+    this.workItemId = rawDocketEntry.workItemId;
   }
 
   /**
@@ -476,6 +478,7 @@ export class DocketEntry extends JoiValidationEntity {
   attachWorkItemInfoForUI(workItem: WorkItem | RawWorkItem): void {
     this.qcComplete = !!workItem.completedAt;
     this.qcViewed = !!workItem.isRead;
+    this.workItemId = workItem.workItemId;
   }
 
   static TRANSCRIPT_AGE_DAYS_MIN = 90;
