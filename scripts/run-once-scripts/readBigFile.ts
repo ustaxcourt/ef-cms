@@ -1,22 +1,52 @@
+import { marshall } from '@aws-sdk/util-dynamodb';
+import { applicationContext } from '@web-api/applicationContext';
+import { processStreamRecordsInteractor } from '@web-api/business/useCases/processStreamRecords/processStreamRecordsInteractor';
+import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
+import { DynamoDBRecord } from 'aws-lambda';
 import { createReadStream } from 'fs';
 import readline from 'readline';
 
-const uniqueKeysMap: Map<string, number> = new Map();
-
-const rl = readline.createInterface({
-  input: createReadStream('allTestDocketEntries.txt'),
-  crlfDelay: Infinity,
-});
-
-rl.on('line', line => {
-  const obj = JSON.parse(line);
-  Object.keys(obj).forEach(key => {
-    const currentCount = uniqueKeysMap.get(key) || 0;
-    uniqueKeysMap.set(key, currentCount + 1);
+async function processFile() {
+  const rl = readline.createInterface({
+    input: createReadStream('/Users/zacharyrogers/Documents/allTestDynamoRecords.txt'),
+    crlfDelay: Infinity,
   });
-});
 
-rl.on('close', () => {
+  let scanCount = 0;
+  let records: DynamoDBRecord[] = [];
+
+  for await (const line of rl) {
+    const obj: TDynamoRecord = JSON.parse(line);
+    const marshalled = marshall(obj);
+    const record: DynamoDBRecord = {
+      dynamodb: { NewImage: marshalled as any },
+      eventName: 'INSERT',
+    };
+    records.push(record);
+
+    scanCount++;
+    if (scanCount % 10000 === 0) {
+      console.log('scan count: ', scanCount);
+    }
+
+    if (records.length >= 100) {
+      await processStreamRecordsInteractor(applicationContext, {
+        recordsToProcess: records,
+      });
+      records = [];
+    }
+  }
+
+  // process any remaining records
+  if (records.length > 0) {
+    await processStreamRecordsInteractor(applicationContext, {
+      recordsToProcess: records,
+    });
+  }
+
   console.log('Done!');
-  console.log(uniqueKeysMap);
+}
+
+processFile().catch((err) => {
+  console.error('Failed:', err);
 });

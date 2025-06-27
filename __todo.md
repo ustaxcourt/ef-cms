@@ -56,6 +56,7 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
 - [ ] Test Deletion Script on Deployed Environment
 - [ ] Update ERD for new tables
 - [ ] Do a full migration on local computer
+- [ ] Need to consider that during the first migration we will not have the users in postgres so Opensearch sync will need to check both dynamo and postgres. aka indexOpenSearchUserOnCase -> getUserById will not work.
 
 ## Odd dynamo functions that need to be reimplemented with postgres
 
