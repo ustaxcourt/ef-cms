@@ -15,7 +15,7 @@ Usage: node generateCategories.js [internal/external] spreadsheet.csv > output.j
 
 const type = process.argv[2];
 
-const files = [];
+const files: string[] = [];
 process.argv.forEach((val, index) => {
   if (index > 2) {
     files.push(val);
@@ -110,7 +110,7 @@ const presortCategory = (sortedCategory, categoryName) => {
   let resortedEntries = [];
 
   resortedEntries = firstEntries.map(title => {
-    const [foundObj] = remove(sortedCategory, m => {
+    const [foundObj] = remove(sortedCategory, (m: any) => {
       return m.documentTitle.toLowerCase() === title.toLowerCase();
     });
     return foundObj;
@@ -131,7 +131,7 @@ const main = () => {
   }
   const data = fs.readFileSync(files[0], 'utf8');
 
-  const output = [];
+  const output: any[] = [];
   const result = {};
   const sortedResult = {};
 
