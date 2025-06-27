@@ -52,8 +52,7 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
 - [x] resolve issue regarding joining userOnCase with practitioner since practitioners may be petitioners on a case
 - [x] getCasesByDocketNumbers we need to think about efficiency
 - [ ] Do a performance pass
-- [ ] Fix representing for associateUserWithCase (Ask Kaitlyn)
-- [ ] Implement TTL on Confirmation Codes
+- [x] Implement TTL on Confirmation Codes
 - [ ] Test Deletion Script on Deployed Environment
 - [ ] Update ERD for new tables
 - [ ] Do a full migration on local computer
