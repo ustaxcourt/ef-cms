@@ -1,11 +1,68 @@
-import { loginAsColvin } from "cypress/helpers/authentication/login-as-helpers"
-
+import { loginAsColvin, loginAsDocketClerk1, loginAsPetitionsClerk1 } from "cypress/helpers/authentication/login-as-helpers"
+import { createTrialSession } from "cypress/helpers/trialSession/create-trial-session";
+import { CASE_STATUS_TYPES, SESSION_TYPES } from "@shared/business/entities/EntityConstants";
+import { createAndServePaperPetition } from "cypress/helpers/fileAPetition/create-and-serve-paper-petition";
+import { goToCase } from "cypress/helpers/caseDetail/go-to-case";
+import { updateCaseStatus } from "cypress/helpers/caseDetail/caseInformation/update-case-status";
 
 describe('trials session working copies filtering', () => {
+	let newTrialSessionId: string;
+	before(() => {
+		const trialLocation = 'Richmond, Virginia';
+		const sessionType = SESSION_TYPES.small;
+		const judge = 'Colvin';
+		const startDate = '02/02/2233';
+		const endDate = '02/03/2233';
+		const proceedingType = 'In Person';
+		loginAsPetitionsClerk1();
+		createTrialSession({
+      endDate,
+      judge,
+      proceedingType,
+      sessionType,
+      startDate,
+      trialLocation,
+    }).then(({ trialSessionId }) => {
+			newTrialSessionId = trialSessionId;
+			// create 3 cases
+			for(let i = 0; i < 3; i++) {
+				createAndServePaperPetition({
+					procedureType: sessionType,
+					trialLocation
+				}).then(({ docketNumber }) => {
+					loginAsDocketClerk1();
+					goToCase(docketNumber);
+					updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+
+					// go to the trialSession and check the QC Complete checkbox
+					loginAsPetitionsClerk1();
+					cy.get('[data-testid="trial-session-link"]').click();
+					cy.get('[data-testid="new-trial-sessions-tab"]').click();
+					cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+					cy.get(`label[for="qc-complete-${docketNumber}"]`).click();
+					
+					// schedule the trial
+					goToCase(docketNumber);
+					cy.get('[data-testid="tab-case-information"]').click();
+					cy.get('[data-testid="add-to-trial-session-btn"]').click();
+					cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+					cy.get('[data-testid="modal-button-confirm"]').click();
+				})
+			}
+			// Calendar the trial session
+			loginAsPetitionsClerk1();
+			cy.get('[data-testid="inbox-tab-content"]').should('exist');
+			cy.get('[data-testid="trial-session-link"]').click();
+			cy.get('[data-testid="new-trial-sessions-tab"]').click();
+			cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+			cy.get('[data-testid="set-calendar-button"]').click();
+			cy.get('[data-testid="modal-button-confirm"]').click();
+		});
+	})
 	beforeEach(() => {
 		loginAsColvin();
 		cy.get('[data-testid="trial-session-link"]').click();
-		cy.get('[data-testid="trial-location-link-959c4338-0fac-42eb-b0eb-d53b8d0195cc"]').click();
+		cy.get(`[data-testid="trial-location-link-${newTrialSessionId}"]`).click();
 
 		// Reset all filters
 		cy.get('[data-testid^="trial-session-working-copy-filter-"]').each(($filterDiv) => {
@@ -34,7 +91,7 @@ describe('trials session working copies filtering', () => {
 		});
 	});
 	it('should change counts if a trial status is changed', () => {
-		cy.get('[data-testid="trialSessionWorkingCopy-108-19"]').select('basisReached');
+		cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select('basisReached');
 		cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned').find('span').invoke('text').then((text) => {
 			expect(text).to.equal('(2)');
 		});
@@ -43,10 +100,12 @@ describe('trials session working copies filtering', () => {
 		});
 	});
 	it('should add back to statusUnassigned if trial status is changed back to unassigned', () => {
-		cy.get('[data-testid="trialSessionWorkingCopy-108-19"]').select('statusUnassigned');
+		cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select('basisReached');
+		cy.get('[data-testid^="trialSessionWorkingCopy-"]:first').select('statusUnassigned');
 		cy.get('[data-testid="trial-session-working-copy-filter-statusUnassigned').find('span').invoke('text').then((text) => {
 			expect(text).to.equal('(3)');
 		});
 		cy.get('[data-testid="trial-session-working-copy-filter-basisReached').find('span').should('not.exist');
 	});
+	
 })
