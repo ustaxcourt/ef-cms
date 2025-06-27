@@ -124,10 +124,10 @@ const FilterCheckbox: React.FC<any> = connect(
             htmlFor={`filters.${trialStatusFilters[i].key}`}
           >
             {trialStatusFilters[i].label}
+            {trialStatusFilters[i].key in trialStatusCounts && (
+              <span className="text-bold margin-left-05">({trialStatusCounts[trialStatusFilters[i].key]})</span>
+            )}
           </label>
-          {trialStatusFilters[i].key in trialStatusCounts && (
-            <span className="text-bold"> ({trialStatusCounts[trialStatusFilters[i].key]})</span>
-          )}
         </div>
       );
     }
