@@ -82,6 +82,43 @@ describe('validateTrialSessionAction', () => {
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 
+  it('should not return the term and termYear validation errors', async () => {
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue({
+        startDate: 'Enter a valid start date',
+        term: 'Term session is not valid',
+        termYear: 'Term year is required'
+      });
+    await runAction(validateTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { ...MOCK_TRIAL, term: 'Summer' },
+      },
+    });
+    expect(presenter.providers.path.error).toHaveBeenCalledWith({
+      alertError: {
+        title: 'Errors were found. Please correct your form and resubmit.',
+      },
+      errorDisplayOrder: [
+        'startDate',
+        'startTime',
+        'estimatedEndDate',
+        'swingSessionId',
+        'sessionType',
+        'maxCases',
+        'trialLocation',
+        'postalCode',
+        'alternateTrialClerkName',
+      ],
+      errors: {
+        startDate: 'Enter a valid start date'
+      }
+    });
+  })
+
   it('should consider the form valid with valid data', async () => {
     applicationContext
       .getUseCases()

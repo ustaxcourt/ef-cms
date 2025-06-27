@@ -16,6 +16,21 @@ describe('CaseDeadline', () => {
     expect(caseDeadline.sortableDocketNumber).toEqual(2019000123);
   });
 
+  it('should create a valid Deadline', () => {
+    const caseDeadline = new CaseDeadline({
+      associatedJudge: 'Judge Buch',
+      associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+      deadlineDate: '2019-03-01T21:42:29.073Z',
+      description: 'One small step',
+      consolidatedCaseDeadlineId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+      docketNumber: DOCKET_NUMBER,
+      sortableDocketNumber: undefined,
+    });
+
+    const errors = caseDeadline.getFormattedValidationErrors();
+    expect(errors).toEqual(null);
+  });
+
   describe('validation', () => {
     it('should be invalid when required fields that are not defaulted in the constructor are not provided', () => {
       const caseDeadline = new CaseDeadline({});
@@ -75,6 +90,22 @@ describe('CaseDeadline', () => {
       expect(caseDeadline.getFormattedValidationErrors()).toEqual({
         description:
           'The description is too long. Please enter a valid description.',
+      });
+    });
+
+    it('should be invalid and return a helpful message when the user provides a consolidated deadline id that is not a GUID', () => {
+      const caseDeadline = new CaseDeadline({
+        associatedJudge: 'Judge Buch',
+        associatedJudgeId: 'dabbad02-18d0-43ec-bafb-654e83405416',
+        deadlineDate: '2019-03-01T21:42:29.073Z',
+        description: `some description`,
+        consolidatedCaseDeadlineId: 'NOT A GUID',
+        docketNumber: DOCKET_NUMBER,
+      });
+
+      expect(caseDeadline.getFormattedValidationErrors()).toEqual({
+        consolidatedCaseDeadlineId:
+          '"consolidatedCaseDeadlineId" must be a valid GUID',
       });
     });
   });

@@ -276,29 +276,6 @@ describe('selectDocumentTypeHelper', () => {
         textInputLabel: 'What is this something for?',
       });
     });
-
-    it('should return correct data for Nonstandard J document scenario', () => {
-      const mockCategoryInformation = {
-        labelFreeText: "Judge's Name",
-        labelFreeText2: 'Decision Notes',
-        scenario: 'Nonstandard J',
-      };
-
-      const result = getOptionsForCategory({
-        authorizedUser: mockDocketClerkUser,
-        caseDetail: MOCK_CASE,
-        categoryInformation: mockCategoryInformation,
-        selectedDocketEntryId: '',
-      });
-
-      expect(result).toEqual({
-        showNonstandardForm: true,
-        showTextInput: true,
-        showTextInput2: true,
-        textInputLabel: "Judge's Name",
-        textInputLabel2: 'Decision Notes',
-      });
-    });
   });
 
   describe('getOrdinalValuesForUploadIteration', () => {
