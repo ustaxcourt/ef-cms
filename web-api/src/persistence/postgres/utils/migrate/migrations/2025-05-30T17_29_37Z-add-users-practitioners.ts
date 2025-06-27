@@ -69,7 +69,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('id', 'varchar', col => col.primaryKey())
     .addColumn('userId', 'varchar', col => col.notNull())
     .addColumn('confirmationCode', 'varchar', col => col.notNull())
-    .addColumn('expiresAt', 'timestamptz', col => col.notNull())
     .addColumn('ttl', 'bigint', col => col.notNull())
     .execute();
 
@@ -139,7 +138,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   await db.schema
     .createIndex('idx_user_confirmation_code_expiresAt')
     .on('dwUserConfirmationCode')
-    .column('expiresAt')
+    .column('ttl')
     .execute();
 
   await db.schema
