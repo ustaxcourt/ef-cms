@@ -46,5 +46,9 @@ export const createPractitionerUserInteractor = async (
     user: practitioner,
   });
 
+  if (!createdUser) {
+    throw new Error('could not create the practitioner user');
+  }
+
   return { barNumber: createdUser.barNumber };
 };

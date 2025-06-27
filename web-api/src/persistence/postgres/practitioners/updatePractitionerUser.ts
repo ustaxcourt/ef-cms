@@ -16,7 +16,9 @@ export const updatePractitionerUser = async ({
     });
   }
 
-  return await updateUser({
+  await updateUser({
     userToUpdate: user,
   });
+
+  return user;
 };

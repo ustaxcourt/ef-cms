@@ -27,7 +27,7 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { User } from '@shared/business/entities/User';
+import { RawUser } from '@shared/business/entities/User';
 import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { settlePromises } from '@web-api/utilities/settlePromises';
@@ -81,7 +81,7 @@ const createCaseMetadata = async (
       | PrivatePractitioner
       | IrsPractitioner[];
     stinFileId: string;
-    user: User | Practitioner | PrivatePractitioner | IrsPractitioner;
+    user: RawUser;
   },
   authorizedUser: AuthUser,
 ) => {
