@@ -9,14 +9,20 @@ const getEmptyStateText = (isOpen: boolean) => {
 export function PractitionerCaseList({
   cases,
   caseType,
+  totalCount,
 }: {
   cases: any;
   caseType: 'open' | 'closed';
+  totalCount: number;
 }) {
   const showStatus = caseType === 'open';
   const tableId = `practitioner-${caseType}-cases-list`;
   return (
     <>
+      <div className="text-semibold margin-bottom-auto margin-top-auto float-right">
+        Count: <span className="text-normal">{totalCount}</span>
+      </div>
+
       <div
         className="margin-top-1"
         data-testid={`${tableId}-container`}
