@@ -15,6 +15,7 @@ export const DocketRecordMobileHeader = ({
   filterOptions,
   gotoPrintableDocketRecordSequence,
   sortTableSequence,
+  totalCount,
 }: {
   docketNumber: string;
   filterOptions: Record<string, string>;
@@ -30,6 +31,7 @@ export const DocketRecordMobileHeader = ({
     sortOrder: 'asc' | 'desc';
     stateKey?: string;
   }) => void;
+  totalCount: number;
 }) => {
   const { sortField, sortOrder } = docketRecordTableSortData;
   const CURRENTLY_SELECTED_KEY = Object.entries(SORTING_CONVERSION_DICTIONARY)
@@ -105,6 +107,10 @@ export const DocketRecordMobileHeader = ({
         >
           Printable Docket Record
         </Button>
+        <div className="padding-top-1 margin-top-auto margin-bottom-auto margin-left-auto">
+          <span className="text-semibold">Count: </span>
+          <span>{totalCount}</span>
+        </div>
       </div>
     </div>
   );
