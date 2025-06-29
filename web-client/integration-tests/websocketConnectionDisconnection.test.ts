@@ -27,7 +27,7 @@ describe('websocket connections are cleaned up when disconnecting', () => {
     );
     expect(connectionsAfterSignOut).toEqual([]);
     const connection = connectionsBeforeSignOut[0];
-    const connectionInDynamo = await getConnection(connection.connectionId);
-    expect(connectionInDynamo).toBeUndefined();
+    const connectionInPostgres = await getConnection(connection.connectionId);
+    expect(connectionInPostgres.length).toEqual(0);
   });
 });
