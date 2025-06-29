@@ -682,11 +682,6 @@ const applicationContext = {
       return getScannerInterface();
     }
   },
-  getScannerResourceUri: () => {
-    return (
-      process.env.SCANNER_RESOURCE_URI || 'http://localhost:10000/Resources'
-    );
-  },
   getTrialSessionsForJudgeInteractor,
   getUniqueId,
   getUseCases: () => allUseCases,
