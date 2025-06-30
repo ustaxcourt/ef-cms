@@ -26,41 +26,58 @@ This function exists to check for support for es2022 as modern versions of pdfjs
 We are using the legacy version of pdfjs-dist so this should not be an issue, but wanted to keep this function around
 in case we decide to switch to a modern version of pdfs-dist. 
 */
-// function clientSupportsES2022(): boolean {
-//   try {
-//     // Check Object.hasOwn (introduced in ES2022)
-//     // @ts-ignore
-//     if (typeof Object.hasOwn !== 'function') {
-//       return false;
-//     }
+export function clientSupportsES2022(): boolean {
+  // Check for ES2022 features that are commonly used in pdfjs-dist
+  try {
 
-//     // Check structuredClone exists
-//     if (typeof structuredClone !== 'function') {
-//       return false;
-//     }
+    // Hard-block Safari <16.4 due to partial ES2022 support
+    const ua = navigator.userAgent;
+    const safariMatch = ua.match(/Version\/(\d+)\.(\d+)/);
+    if (
+      /Safari/.test(ua) &&
+      !/Chrome|Chromium/.test(ua) &&
+      safariMatch &&
+      (parseInt(safariMatch[1], 10) < 16 ||
+        (parseInt(safariMatch[1], 10) === 16 && parseInt(safariMatch[2], 10) < 4))
+    ) {
+      return false;
+    }
+    // Basic ES2022 feature checks
+    // @ts-ignore
+    if (typeof Object.hasOwn !== 'function') return false;
+    if (typeof structuredClone !== 'function') return false;
+    if (!Array.prototype.at) return false;
 
-//     // Check Array.prototype.at
-//     if (!Array.prototype.at) {
-//       return false;
-//     }
+    // This is safe: we're using new Function only to test ES2022 syntax support
+    // Safari 15.6 (on macOS Catalina and Big Sur) presents a unique issue:
+    //   - It *partially* supports ES2022 features like private class fields (`#field`)
+    //   - It does *not* fully support private class methods or certain expressions involving them
+    //   - Critically, it does not fail until *parse time*, meaning these features cannot be caught with simple runtime checks
+    // This stricter `new Function(...)` syntax check ensures:
+    //   - The browser can fully parse and execute private fields + private methods
+    //   - Any unsupported browser (e.g., Safari <=15.6) fails early with a SyntaxError
+    //   - Prevents hard crashes when loading modern libraries like pdfjs-dist@5.x that use ES2022 syntax
+    //
+    // eslint-disable-next-line @typescript-eslint/no-implied-eval
+    new Function(`
+      class AggressiveTest {
+        #field = 1;
+        #double(x) { return x * 2; }
+        #process() {
+          const result = this.#double(this.#field);
+          if (result !== 2) throw new Error("bad math");
+        }
+        run() {
+          const fn = () => this.#process();
+          return fn();
+        }
+      }
+      new AggressiveTest().run();
+    `)();
 
-//     // Check private fields
-//     class TestPrivateFields {
-//       #privateField: boolean;
-//       constructor() {
-//         this.#privateField = true;
-//       }
-//       hasPrivateField() {
-//         return this.#privateField;
-//       }
-//     }
-//     const instance = new TestPrivateFields();
-//     if (!instance.hasPrivateField()) {
-//       return false;
-//     }
-
-//     return true;
-//   } catch (e) {
-//     return false; // Any failure indicates lack of support
-//   }
-// }
+    return true;
+  } catch (e) {
+    console.warn('ES2022 support check failed:', e);
+    return false; // Any failure indicates lack of support
+  }
+}
