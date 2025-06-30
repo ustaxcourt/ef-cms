@@ -100,30 +100,31 @@ export const OrderSearchForm = connect(
                 {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
                     <DateRangePickerComponent
-                      endDateErrorText={validationErrors.termEndDate}
-                      endLabel="Term end date"
-                      endName="termEndDate"
+                      endDateErrorText={validationErrors.endDate}
+                      endLabel="End date"
+                      endName="orderEndDate"
                       endPickerCls={'grid-col-6'}
-                      endValue={advancedSearchForm.orderSearch.termEndDate}
+                      endValue={advancedSearchForm.orderSearch.endDate}
                       formGroupCls="margin-bottom-0"
                       maxDate={applicationContext
                         .getUtilities()
                         .createISODateString()}
                       rangePickerCls={'grid-row grid-gap'}
-                      startDateErrorText={validationErrors.termStartDate}
-                      startLabel="Term start date"
-                      startName="termStartDate"
+                      showDateHint={true}
+                      startDateErrorText={validationErrors.startDate}
+                      startLabel="Start date"
+                      startName="orderSearchStartDate"
                       startPickerCls={'grid-col-6'}
-                      startValue={advancedSearchForm.orderSearch.termStartDate}
+                      startValue={advancedSearchForm.orderSearch.startDate}
                       onChangeEnd={e => {
                         updateAdvancedOrderSearchFormValueSequence({
-                          key: 'termEndDate',
+                          key: 'endDate',
                           value: e.target.value,
                         });
                       }}
                       onChangeStart={e => {
                         updateAdvancedOrderSearchFormValueSequence({
-                          key: 'termStartDate',
+                          key: 'startDate',
                           value: e.target.value,
                         });
                       }}
@@ -210,34 +211,32 @@ export const OrderSearchForm = connect(
                       {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
                           <DateRangePickerComponent
-                            endDateErrorText={validationErrors.termEndDate}
-                            endLabel="Term end date"
-                            endName="termEndDate"
+                            endDateErrorText={validationErrors.endDate}
+                            endLabel="End date"
+                            endName="orderEndDate"
                             endPickerCls={'grid-col-6'}
-                            endValue={
-                              advancedSearchForm.orderSearch.termEndDate
-                            }
+                            endValue={advancedSearchForm.orderSearch.endDate}
                             formGroupCls="margin-bottom-0"
                             maxDate={applicationContext
                               .getUtilities()
                               .createISODateString()}
                             rangePickerCls={'grid-row grid-gap'}
-                            startDateErrorText={validationErrors.termStartDate}
-                            startLabel="Term start date"
-                            startName="termStartDate"
+                            startDateErrorText={validationErrors.startDate}
+                            startLabel="Start date"
+                            startName="orderSearchStartDate"
                             startPickerCls={'grid-col-6'}
                             startValue={
-                              advancedSearchForm.orderSearch.termStartDate
+                              advancedSearchForm.orderSearch.startDate
                             }
                             onChangeEnd={e => {
                               updateAdvancedOrderSearchFormValueSequence({
-                                key: 'termEndDate',
+                                key: 'endDate',
                                 value: e.target.value,
                               });
                             }}
                             onChangeStart={e => {
                               updateAdvancedOrderSearchFormValueSequence({
-                                key: 'termStartDate',
+                                key: 'startDate',
                                 value: e.target.value,
                               });
                             }}

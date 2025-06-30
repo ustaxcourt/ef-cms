@@ -112,32 +112,31 @@ export const OpinionSearchForm = connect(
                 {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
                     <DateRangePickerComponent
-                      endDateErrorText={validationErrors.termEndDate}
-                      endLabel="Term end date"
-                      endName="termEndDate"
+                      endDateErrorText={validationErrors.endDate}
+                      endLabel="End date"
+                      endName="opinionSearchEndDate"
                       endPickerCls={'grid-col-6'}
-                      endValue={advancedSearchForm.opinionSearch.termEndDate}
+                      endValue={advancedSearchForm.opinionSearch.endDate}
                       formGroupCls="margin-bottom-0"
                       maxDate={applicationContext
                         .getUtilities()
                         .createISODateString()}
                       rangePickerCls={'grid-row grid-gap'}
-                      startDateErrorText={validationErrors.termStartDate}
-                      startLabel="Term start date"
-                      startName="termStartDate"
+                      showDateHint={true}
+                      startDateErrorText={validationErrors.startDate}
+                      startLabel="Start date"
+                      startName="opinionSearchStartDate"
                       startPickerCls={'grid-col-6'}
-                      startValue={
-                        advancedSearchForm.opinionSearch.termStartDate
-                      }
+                      startValue={advancedSearchForm.opinionSearch.startDate}
                       onChangeEnd={e => {
                         updateAdvancedOpinionSearchFormValueSequence({
-                          key: 'termEndDate',
+                          key: 'endDate',
                           value: e.target.value,
                         });
                       }}
                       onChangeStart={e => {
                         updateAdvancedOpinionSearchFormValueSequence({
-                          key: 'termStartDate',
+                          key: 'startDate',
                           value: e.target.value,
                         });
                       }}
@@ -261,34 +260,32 @@ export const OpinionSearchForm = connect(
                       {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
                           <DateRangePickerComponent
-                            endDateErrorText={validationErrors.termEndDate}
-                            endLabel="Term end date"
-                            endName="termEndDate"
+                            endDateErrorText={validationErrors.endDate}
+                            endLabel="End date"
+                            endName="opinionSearchEndDate"
                             endPickerCls={'grid-col-6'}
-                            endValue={
-                              advancedSearchForm.opinionSearch.termEndDate
-                            }
+                            endValue={advancedSearchForm.opinionSearch.endDate}
                             formGroupCls="margin-bottom-0"
                             maxDate={applicationContext
                               .getUtilities()
                               .createISODateString()}
                             rangePickerCls={'grid-row grid-gap'}
-                            startDateErrorText={validationErrors.termStartDate}
-                            startLabel="Term start date"
-                            startName="termStartDate"
+                            startDateErrorText={validationErrors.startDate}
+                            startLabel="Start date"
+                            startName="opinionSearchStartDate"
                             startPickerCls={'grid-col-6'}
                             startValue={
-                              advancedSearchForm.opinionSearch.termStartDate
+                              advancedSearchForm.opinionSearch.startDate
                             }
                             onChangeEnd={e => {
                               updateAdvancedOpinionSearchFormValueSequence({
-                                key: 'termEndDate',
+                                key: 'endDate',
                                 value: e.target.value,
                               });
                             }}
                             onChangeStart={e => {
                               updateAdvancedOpinionSearchFormValueSequence({
-                                key: 'termStartDate',
+                                key: 'startDate',
                                 value: e.target.value,
                               });
                             }}
