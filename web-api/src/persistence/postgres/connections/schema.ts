@@ -1,4 +1,4 @@
-import { Selectable, Insertable, Updateable } from 'kysely';
+import { Selectable } from 'kysely';
 
 const DEFAULT = {};
 
@@ -17,5 +17,3 @@ export const DW_CONNECTION_COLUMNS = Object.keys(
 ) as Array<keyof ConnectionTable>;
 
 export type ConnectionKysely = Selectable<ConnectionTable>;
-export type NewConnectionKysely = Insertable<ConnectionTable>;
-export type UpdateConnectionKysely = Updateable<ConnectionTable>;

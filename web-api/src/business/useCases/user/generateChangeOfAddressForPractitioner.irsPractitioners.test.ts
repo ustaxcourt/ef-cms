@@ -8,7 +8,9 @@ jest.mock('../addCoversheetInteractor', () => ({
     pdfData: '',
   }),
 }));
-jest.mock('@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord')
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+);
 jest.mock(
   '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob',
 );
@@ -80,7 +82,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .setChangeOfAddressCaseAsDone.mockReturnValue([{ remaining: 0 }]);
+      .setChangeOfAddressCaseAsDone.mockResolvedValue([{ remaining: 0 }]);
 
     applicationContext
       .getUtilities()
