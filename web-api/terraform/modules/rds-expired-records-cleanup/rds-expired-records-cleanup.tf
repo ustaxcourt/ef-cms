@@ -63,7 +63,7 @@ module "rds_expired_records_cleanup_lambda" {
 
 resource "aws_cloudwatch_event_rule" "rds_expired_records_cleanup_cron_rule_daily" {
   name                = "rds_expired_records_cleanup_cron_${var.environment}_${var.current_color}"
-  schedule_expression = "cron(*/5 * * * *)"
+  schedule_expression = "cron(0/5 * * * ? *)"
   state               = "ENABLED"
 }
 
