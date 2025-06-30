@@ -1,39 +1,36 @@
 import { GoneException } from '@aws-sdk/client-apigatewaymanagementapi';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { retrySendNotificationToConnections } from './retrySendNotificationToConnections';
+import { ConnectionKysely } from '@web-api/persistence/postgres/connections/schema';
 
-const mockConnections = [
+const mockConnections: ConnectionKysely[] = [
   {
     clientConnectionId: 'aaaa',
     connectionId: '1111',
     endpoint: 'endpoint-01',
-    pk: 'connections-01',
-    sk: 'sk-01',
     userId: 'f911636b-2d69-4dd2-a01a-2622878d070c',
+    ttl: Number.MAX_SAFE_INTEGER,
   },
   {
     clientConnectionId: 'bbbb',
     connectionId: '2222',
     endpoint: 'endpoint-02',
-    pk: 'connections-02',
-    sk: 'sk-02',
     userId: '324cd0c7-1d82-4916-a0fa-965255f7e087',
+    ttl: Number.MAX_SAFE_INTEGER,
   },
   {
     clientConnectionId: 'cccc',
     connectionId: '3333',
     endpoint: 'endpoint-03',
-    pk: 'connections-03',
-    sk: 'sk-03',
     userId: '029c5833-9a79-4a3e-91ae-7eb9c7dd0f84',
+    ttl: Number.MAX_SAFE_INTEGER,
   },
   {
     clientConnectionId: 'dddd',
     connectionId: '4444',
     endpoint: 'endpoint-04',
-    pk: 'connections-04',
-    sk: 'sk-04',
     userId: '1dca6ea7-66e8-473b-9790-c2cb1b822464',
+    ttl: Number.MAX_SAFE_INTEGER,
   },
 ];
 

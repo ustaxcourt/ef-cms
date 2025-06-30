@@ -2,10 +2,11 @@ import { applicationContext } from '../../../shared/src/business/test/createTest
 import { sendNotificationToConnection } from './sendNotificationToConnection';
 
 const mockConnection = {
+  clientConnectionId: 'SOME_CLIENT_CONNECTION_ID',
   connectionId: '1',
   endpoint: 'endpoint-01',
-  pk: 'connections-01',
-  sk: 'sk-01',
+  userId: 'SOME_USER_ID',
+  ttl: Number.MAX_SAFE_INTEGER,
 };
 
 const mockMessage = 'hello, computer';
@@ -19,7 +20,7 @@ beforeEach(() => {
 
   applicationContext
     .getPersistenceGateway()
-    .getWebSocketConnectionsByUserId.mockReturnValue(mockConnection);
+    .getWebSocketConnectionsByUserId.mockResolvedValue(mockConnection);
 });
 
 it('should send notification to connection', async () => {
