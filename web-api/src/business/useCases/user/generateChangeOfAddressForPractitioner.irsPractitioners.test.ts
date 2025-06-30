@@ -21,6 +21,12 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
+jest.mock('../addCoversheetInteractor', () => ({
+  addCoverToPdf: jest.fn().mockReturnValue({
+    pdfData: '',
+  }),
+}));
+
 describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
@@ -76,7 +82,7 @@ describe('generateChangeOfAddress', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .setChangeOfAddressCaseAsDone.mockReturnValue({ remaining: 0 });
+      .setChangeOfAddressCaseAsDone.mockResolvedValue([{ remaining: 0 }]);
 
     applicationContext
       .getUtilities()
