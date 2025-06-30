@@ -50,7 +50,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('admissionsDate', 'timestamptz', col => col.notNull())
     .addColumn('admissionsStatus', 'varchar')
     .addColumn('barNumber', 'varchar', col => col.notNull())
-    .addColumn('birthYear', 'int2')
+    .addColumn('birthYear', 'int2', col => col.notNull())
     .addColumn('confirmEmail', 'varchar')
     .addColumn('firmName', 'varchar')
     .addColumn('firstName', 'varchar')
