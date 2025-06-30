@@ -136,9 +136,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .column('userId')
     .execute();
   await db.schema
-    .createIndex('idx_user_confirmation_code_expiresAt')
+    .createIndex('idx_user_confirmation_code_ttl')
     .on('dwUserConfirmationCode')
     .column('ttl')
+    .execute();
+  await db.schema
+    .createIndex('idx_user_confirmation_code_confirmationCode')
+    .on('dwUserConfirmationCode')
+    .column('confirmationCode')
     .execute();
 
   await db.schema
