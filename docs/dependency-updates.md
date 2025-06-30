@@ -151,6 +151,13 @@ Peer-dependency tar-fs has high security vulnerability but this shouldn't affect
 Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
 On June 26 2025, newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
 
+### jest-environment-jsdom
+This dependency was causing problems with specific unit tests that were using Object.defineProperty. 
+We should tackle this issue either in a dedicated ticket or in a future dependency update but for now (6/30/25) we left it.
+
+### @types/node
+The major version of this package should match our major version of node. At the moment that we are using node v22.16.0 so we should use a package that starts with 22.
+
 ## Incrementing the Node Cache Key Version
 
 It's rare to need modify cache key. One reason you may want to do so is if a package fails to install properly, and CircleCI, unaware of the failed installation, stores the corrupted cache. In this case, we will need to increment the cache key version so that CircleCI is forced to reinstall the node dependencies and save them using the new key. To update the cache key, locate `vX-npm` and `vX-cypress` (where X represents the current cache key version) in the config.yml file, and then increment the identified version.
