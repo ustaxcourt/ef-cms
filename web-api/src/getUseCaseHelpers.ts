@@ -1,4 +1,3 @@
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from './business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '@web-api/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addDraftWatermarkToDocument } from '@shared/business/useCases/courtIssuedDocument/addDraftWatermarkToDocument';
@@ -17,7 +16,6 @@ import { createTrialSessionAndWorkingCopy } from './business/useCaseHelper/trial
 import { createUserConfirmation } from '@web-api/business/useCaseHelper/auth/createUserConfirmation';
 import { createUserForContact } from './business/useCaseHelper/caseAssociation/createUserForContact';
 import { formatConsolidatedCaseCoversheetData } from '@web-api/business/useCaseHelper/consolidatedCases/formatConsolidatedCaseCoversheetData';
-import { generateAndServeDocketEntry } from './business/useCaseHelper/service/createChangeItems';
 import { generateCaseInventoryReportPdf } from './business/useCaseHelper/caseInventoryReport/generateCaseInventoryReportPdf';
 import { generateChangeOfAddressHelper } from './business/useCaseHelper/generateChangeOfAddressHelper';
 import { generateNoticeOfChangeToInPersonProceeding } from './business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding';
@@ -47,7 +45,6 @@ import { updateCaseAutomaticBlock } from './business/useCaseHelper/automaticBloc
 import { updateInitialFilingDocuments } from './business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
 
 const useCaseHelpers = {
-  acquireLock,
   addDocketEntryForSystemGeneratedOrder,
   addDraftStampOrderDocketEntryInteractor,
   addDraftWatermarkToDocument,
@@ -66,7 +63,6 @@ const useCaseHelpers = {
   createUserConfirmation,
   createUserForContact,
   formatConsolidatedCaseCoversheetData,
-  generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
   generateChangeOfAddressHelper,
   generateNoticeOfChangeToInPersonProceeding,

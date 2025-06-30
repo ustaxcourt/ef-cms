@@ -2,14 +2,12 @@ import {
   CONTACT_TYPES,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
-import {
-  Case,
-  getContactPrimary,
-} from '../../../../../shared/src/business/entities/cases/Case';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../../../../shared/src/test/mockDocketEntry';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+} from '@shared/business/entities/EntityConstants';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import { Case, getContactPrimary } from '@shared/business/entities/cases/Case';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateInitialFilingDocuments } from './updateInitialFilingDocuments';
 

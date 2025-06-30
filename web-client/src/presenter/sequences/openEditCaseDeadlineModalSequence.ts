@@ -4,6 +4,8 @@ import { setCaseDeadlineFormAction } from '../actions/CaseDeadline/setCaseDeadli
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setTodaysDateAction } from '../actions/setTodaysDateAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
+import { getConsolidatedCaseDeadlineAction } from '@web-client/presenter/actions/CaseDeadline/getConsolidatedCaseDeadlineAction';
+import { setConsolidatedCaseDeadlineAction } from '@web-client/presenter/actions/CaseDeadline/setConsolidatedCaseDeadlineAction';
 
 export const openEditCaseDeadlineModalSequence = [
   stopShowValidationAction,
@@ -11,5 +13,7 @@ export const openEditCaseDeadlineModalSequence = [
   clearFormAction,
   setCaseDeadlineFormAction,
   setTodaysDateAction,
+  getConsolidatedCaseDeadlineAction,
+  setConsolidatedCaseDeadlineAction,
   setShowModalFactoryAction('EditCaseDeadlineModalDialog'),
 ];

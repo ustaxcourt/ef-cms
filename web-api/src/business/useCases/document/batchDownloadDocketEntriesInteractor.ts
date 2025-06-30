@@ -74,7 +74,6 @@ const batchDownloadDocketEntriesHelper = async (
   }
 
   const caseToBatch = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
