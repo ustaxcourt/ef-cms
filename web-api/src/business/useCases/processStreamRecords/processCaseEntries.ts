@@ -29,7 +29,8 @@ export const processCaseEntries = async ({
     await upsertCases(Object.values(casesToUpsert));
   } catch (e) {
     getDawsonLogger().error(
-      `Postgres re-indexing failure: Failed to process case record: ${e}`,
+      `Postgres re-indexing failure: Failed to process case record: `,
+      e,
     );
   }
 };

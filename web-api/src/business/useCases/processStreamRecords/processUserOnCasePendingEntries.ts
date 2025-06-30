@@ -26,7 +26,8 @@ export const processUserOnCasePendingEntries = async ({
     );
   } catch (e) {
     getDawsonLogger().error(
-      `Postgres re-indexing failure: Failed to process userOnCasePending record: ${e}`,
+      `Postgres re-indexing failure: Failed to process userOnCasePending record:`,
+      e,
     );
   }
 };

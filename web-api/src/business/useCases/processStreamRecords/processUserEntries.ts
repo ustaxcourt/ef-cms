@@ -42,7 +42,8 @@ export const processUserEntries = async ({
     });
   } catch (e) {
     getDawsonLogger().error(
-      `Postgres re-indexing failure: Failed to process user record: ${e}`,
+      `Postgres re-indexing failure: Failed to process user record: `,
+      e,
     );
   }
 };
