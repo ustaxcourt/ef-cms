@@ -13,7 +13,6 @@ import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
-import { applicationContext } from '@web-client/applicationContext';
 
 export const OrderSearchForm = connect(
   {
@@ -106,11 +105,8 @@ export const OrderSearchForm = connect(
                       endPickerCls={'grid-col-6'}
                       endValue={advancedSearchForm.orderSearch.endDate}
                       formGroupCls="margin-bottom-0"
-                      maxDate={applicationContext
-                        .getUtilities()
-                        .createISODateString()}
+                      maxDate={advancedDocumentSearchHelper.maxDate}
                       rangePickerCls={'grid-row grid-gap'}
-                      showDateHint={true}
                       startDateErrorText={validationErrors.startDate}
                       startLabel="Start date"
                       startName="startDate"
@@ -217,11 +213,8 @@ export const OrderSearchForm = connect(
                             endPickerCls={'grid-col-6'}
                             endValue={advancedSearchForm.orderSearch.endDate}
                             formGroupCls="margin-bottom-0"
-                            maxDate={applicationContext
-                              .getUtilities()
-                              .createISODateString()}
+                            maxDate={advancedDocumentSearchHelper.maxDate}
                             rangePickerCls={'grid-row grid-gap'}
-                            showDateHint={true}
                             startDateErrorText={validationErrors.startDate}
                             startLabel="Start date"
                             startName="startDate"
