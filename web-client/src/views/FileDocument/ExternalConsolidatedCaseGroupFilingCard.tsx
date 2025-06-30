@@ -52,7 +52,7 @@ export const ExternalConsolidatedCaseGroupFilingCard = connect(
                 }}
               />
               <label
-                className="usa-radio__label"
+                className="usa-radio__label display-block"
                 htmlFor="consolidated-group-all"
               >
                 All in the consolidated group
