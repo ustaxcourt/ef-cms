@@ -21,6 +21,10 @@ parameters:
     default: false
     type: boolean
 
+  run_glue_to_dev:
+    default: false
+    type: boolean
+
   run_glue_to_lower_env:
     default: false
     type: boolean
@@ -166,7 +170,7 @@ jobs:
               echo "skipping…"
               exit 0
             fi
-            if [ "${CIRCLE_BRANCH}" == "test" ]; then
+            if [ "${CIRCLE_BRANCH}" == "test" ] || [ "${CIRCLE_BRANCH}" == "develop" ]; then
               SOURCE_DOMAIN=$(./scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
               ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
                 --domain-name "${SOURCE_DOMAIN}" \
@@ -939,6 +943,12 @@ only-test: &only-test
       only:
         - test
 
+only-dev: &only-dev
+  filters:
+    branches:
+      only:
+        - develop
+
 only-deployed-lower-environments: &only-deployed-lower-environments
   filters:
     branches:
@@ -1138,6 +1148,49 @@ workflows:
             - index-glued-data
       - cleanup-glue-job:
           <<: *only-test
+          requires:
+            - wait-for-glued-data-to-index
+
+  glue-to-dev:
+    when: << pipeline.parameters.run_glue_to_dev >>
+    jobs:
+      - delete-existing-data:
+          <<: *only-dev
+      - redeploy-environment:
+          <<: *only-dev
+          requires:
+            - delete-existing-data
+      - wait-for-deployment-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - redeploy-environment
+      - initiate-glue-job:
+          <<: *only-dev
+          requires:
+            - wait-for-deployment-workflow
+      - wait-for-glue-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-glue-job
+      - wait-for-s3-sync-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-glue-job
+      - index-glued-data:
+          <<: *only-dev
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - wait-for-glued-data-to-index:
+          <<: *only-dev
+          type: approval
+          requires:
+            - index-glued-data
+      - cleanup-glue-job:
+          <<: *only-dev
           requires:
             - wait-for-glued-data-to-index
 
