@@ -6,7 +6,10 @@ import {
   validatePdfHeader,
   validatePermissions,
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
-import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
+import {
+  getPdfJs,
+  clientSupportsES2022,
+} from '@shared/business/utilities/pdfs/getPdfJs';
 
 export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
   'We noticed you are on an older or unsupported browser. For security reasons, this request could not be completed. \
@@ -26,53 +29,10 @@ export const validatePdf = ({
 }: {
   file: File;
 }): Promise<FileValidationResponse> => {
-  const isBrowserSupported = (): boolean => {
-    // ---------------------------------------------------------------------
-    // Minimum Browser Versions Required for PDF Upload Support (ES2022)
-    // Feature in question: Private class methods (e.g., #getExtremumOnCurve)
-    // Affected users will experience a hard syntax error in unsupported browsers
-    //
-    // ✅ Safe versions:
-    //   Safari      16.4+   (March 2023)
-    //   Chrome      84+     (July 2020)
-    //   Edge        84+     (July 2020 - Chromium-based only)
-    //   Firefox     90+     (July 2021)
-    //   Opera       70+     (July 2020)
-    //   Samsung     14.0+   (2022)
-    //
-    // ❌ Block or warn if below these versions
-    // ---------------------------------------------------------------------
-
-    const ua = navigator.userAgent;
-
-    const chromeMatch = ua.match(/Chrome\/(\d+)/);
-    if (chromeMatch && parseInt(chromeMatch[1], 10) < 84) {
-      return false;
-    }
-
-    const firefoxMatch = ua.match(/Firefox\/(\d+)/);
-    if (firefoxMatch && parseInt(firefoxMatch[1], 10) < 90) {
-      return false;
-    }
-
-    const safariMatch = ua.match(/Safari\/(\d+)/) && !ua.includes('Chrome');
-    if (
-      safariMatch &&
-      parseInt(ua.match(/Version\/(\d+)/)?.[1] ?? '0', 10) < 16
-    ) {
-      return false;
-    }
-
-    // NOTE: Should we still support Internet Explorer?
-    if (ua.includes('Trident/') || ua.includes('MSIE ')) {
-      return false;
-    }
-
-    // Default to supported for other browsers
-    return true;
-  };
-
-  if (!isBrowserSupported()) {
+  if (!clientSupportsES2022()) {
+    console.warn(
+      'Client does not support ES2022 features. This may cause issues with PDF validation.',
+    );
     return Promise.resolve({
       errorInformation: {
         errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
@@ -91,14 +51,29 @@ export const validatePdf = ({
       const { result } = fileReader;
 
       if (!result || typeof result === 'string') {
-        resolve({
-          errorInformation: {
-            errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-            errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} (Failed to read file as ArrayBuffer.)`,
-            errorType: ErrorTypes.UNKNOWN,
-          },
-          isValid: false,
-        });
+        if (!clientSupportsES2022()) {
+          console.warn(
+            'Client does not support ES2022 features. This may cause issues with PDF validation.',
+          );
+          resolve({
+            errorInformation: {
+              errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+              errorMessageToLog: `${UNSUPPORTED_BROWSER_ERROR_MESSAGE} (User agent: ${navigator.userAgent})`,
+              errorType: ErrorTypes.UNSUPPORTED_BROWSER,
+            },
+            isValid: false,
+          });
+        } else {
+          resolve({
+            errorInformation: {
+              errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
+              errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} (Failed to read file as ArrayBuffer.)`,
+              errorType: ErrorTypes.UNKNOWN,
+            },
+            isValid: false,
+          });
+        }
+
         return;
       }
 
