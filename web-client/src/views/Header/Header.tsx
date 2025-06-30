@@ -10,32 +10,32 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
-// import closeImg from '../../../../node_modules/@uswds/uswds/dist/img/usa-icons/close.svg';
+import closeImg from '../../../../node_modules/@uswds/uswds/dist/img/usa-icons/close.svg';
 const seal = require('../../images/ustc_seal.svg') as string;
 
-// const BetaBar = toggleBetaBarSequence => {
-//   return (
-//     <div className="beta">
-//       <div className="grid-container">
-//         <div className="grid-row">
-//           <div className="grid-col-10">
-//             This is a testing site for the U.S. Tax Court and not intended for
-//             public use. To learn more about starting a case, visit the{' '}
-//             <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>.
-//           </div>
-//           <div className="grid-col-2">
-//             <button
-//               className="button-icon float-right"
-//               onClick={() => toggleBetaBarSequence()}
-//             >
-//               <img alt="close" src={closeImg} />
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
+const BetaBar = toggleBetaBarSequence => {
+  return (
+    <div className="beta">
+      <div className="grid-container">
+        <div className="grid-row">
+          <div className="grid-col-10">
+            This is a testing site for the U.S. Tax Court and not intended for
+            public use. To learn more about starting a case, visit the{' '}
+            <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>.
+          </div>
+          <div className="grid-col-2">
+            <button
+              className="button-icon float-right"
+              onClick={() => toggleBetaBarSequence()}
+            >
+              <img alt="close" src={closeImg} />
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 // eslint-disable-next-line complexity
 const NavigationItems = (
@@ -222,8 +222,8 @@ export const Header = connect(
     resetHeaderAccordionsSequence: sequences.resetHeaderAccordionsSequence,
     showMobileMenu: state.header.showMobileMenu,
     signOutUserInitiatedSequence: sequences.signOutUserInitiatedSequence,
-    // templateHelper: state.templateHelper,
-    // toggleBetaBarSequence: sequences.toggleBetaBarSequence,
+    templateHelper: state.templateHelper,
+    toggleBetaBarSequence: sequences.toggleBetaBarSequence,
     toggleMobileMenuSequence: sequences.toggleMobileMenuSequence,
   },
   function Header({
@@ -232,8 +232,8 @@ export const Header = connect(
     resetHeaderAccordionsSequence,
     showMobileMenu,
     signOutUserInitiatedSequence,
-    // templateHelper,
-    // toggleBetaBarSequence,
+    templateHelper,
+    toggleBetaBarSequence,
     toggleMobileMenuSequence,
   }) {
     const headerRef = useRef(null);
@@ -267,7 +267,7 @@ export const Header = connect(
     return (
       <>
         <div ref={headerRef}>
-          {/* {templateHelper.showBetaBar && BetaBar(toggleBetaBarSequence)} */}
+          {templateHelper.showBetaBar && BetaBar(toggleBetaBarSequence)}
           <div className="grid-container no-mobile-padding">
             <header
               className="usa-header usa-header--basic ustc-header"
