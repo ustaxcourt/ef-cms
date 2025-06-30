@@ -7,7 +7,7 @@ import { createUserRecord } from '@web-api/persistence/postgres/users/createUser
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { omit } from 'lodash';
 import users from '../fixtures/seed/users.json';
-import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
+import { upsertPractitionerRecords } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecords';
 
 export const createUsersAndPractitioners = async () => {
   const EXCLUDE_PROPS = ['pk', 'sk', 'userId'];
@@ -34,10 +34,12 @@ export const createUsersAndPractitioners = async () => {
           .validate()
           .toRawObject();
 
-        await upsertPractitionerRecord({
-          practitioner,
-          userId,
-        });
+        await upsertPractitionerRecords([
+          {
+            practitioner,
+            userId,
+          },
+        ]);
       }
 
       await createUserRecord({

@@ -3,8 +3,7 @@ import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { RawUser } from '@shared/business/entities/User';
 import { upsertUserRecords } from '@web-api/persistence/postgres/users/upsertUserRecords';
 import { Practitioner } from '@shared/business/entities/Practitioner';
-import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
-import { merge } from 'lodash';
+import { upsertPractitionerRecords } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecords';
 
 export const processUserEntries = async ({
   userRecords,
@@ -16,30 +15,22 @@ export const processUserEntries = async ({
   getDawsonLogger().debug(`going to index ${userRecords.length} user records`);
 
   try {
-    await upsertUserRecords(
-      userRecords.map(userRecord => {
-        const user = unmarshall(userRecord.dynamodb.NewImage) as RawUser;
+    const usersForPostgres = userRecords.map(userRecord => {
+      const user = unmarshall(userRecord.dynamodb.NewImage) as RawUser;
+      return user;
+    });
+    await upsertUserRecords(usersForPostgres);
 
-        const { contact, ...rest } = user;
-        const flatUser = merge({}, rest, contact || {});
-
-        return flatUser;
-      }),
+    const practitioners = usersForPostgres.filter(
+      user => user.entityName === Practitioner.ENTITY_NAME,
     );
 
-    userRecords.forEach(async userRecord => {
-      const user = unmarshall(userRecord.dynamodb.NewImage) as RawUser;
-
-      const { contact, ...rest } = user;
-      const flatUser = merge({}, rest, contact || {});
-
-      if (flatUser.entityName?.includes(Practitioner.ENTITY_NAME)) {
-        await upsertPractitionerRecord({
-          practitioner: flatUser,
-          userId: flatUser.userId,
-        });
-      }
-    });
+    await upsertPractitionerRecords(
+      practitioners.map(p => ({
+        practitioner: p,
+        userId: p.userId,
+      })),
+    );
   } catch (e) {
     getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process user record: `,

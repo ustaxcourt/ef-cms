@@ -85,9 +85,8 @@ export const partitionRecords = (
   const [userRecords, nonUserRecords] = partition(
     nonCaseCorrespondenceRecords,
     record =>
-      record.dynamodb?.NewImage?.entityName &&
-      (record.dynamodb.NewImage.entityName.S === 'User' ||
-        record.dynamodb.NewImage.entityName.S === 'Practitioner'),
+      record.dynamodb?.NewImage?.pk.S?.startsWith('user|') &&
+      record.dynamodb?.NewImage?.sk.S?.startsWith('user|'),
   );
 
   const [userOnCasePendingRecords, nonUserOnCasePendingRecords] = partition(
@@ -101,7 +100,7 @@ export const partitionRecords = (
     nonUserOnCasePendingRecords,
     record =>
       record.dynamodb?.NewImage?.pk.S?.startsWith('user|') &&
-      record.dynamodb?.NewImage?.sk.S?.startsWith('case|')
+      record.dynamodb?.NewImage?.sk.S?.startsWith('case|'),
   );
 
   return {

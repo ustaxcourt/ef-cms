@@ -11,7 +11,7 @@ import { RawUser, User } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getClientId, getUserPoolId, requireEnvVars } from '../util';
 import { createUserRecord } from '@web-api/persistence/postgres/users/createUserRecord';
-import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
+import { upsertPractitionerRecords } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecords';
 
 const { USTC_ADMIN_PASS, USTC_ADMIN_USER } = process.env;
 
@@ -114,7 +114,7 @@ export async function createOrUpdateUser(
       .validate()
       .toRawObject();
 
-    await upsertPractitionerRecord({ practitioner: rawUser, userId });
+    await upsertPractitionerRecords([{ practitioner: rawUser, userId }]);
   } else {
     rawUser = new User({ ...user, userId }).validate().toRawObject();
   }

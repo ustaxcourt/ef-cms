@@ -3,7 +3,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '@web-api/applicationContext';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { createUserRecord } from '../users/createUserRecord';
-import { upsertPractitionerRecord } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecord';
+import { upsertPractitionerRecords } from '@web-api/persistence/postgres/practitioners/upsertPractitionerRecords';
 
 export const createOrUpdatePractitionerUser = async ({
   user,
@@ -55,15 +55,17 @@ export const createOrUpdatePractitionerUser = async ({
 
   // Note: we create practitioner records first, so that createUserRecord
   // has all the data it needs to index into OpenSearch properly
-  const practitioner = await upsertPractitionerRecord({
-    practitioner: user,
-    userId,
-  });
+  const practitioner = await upsertPractitionerRecords([
+    {
+      practitioner: user,
+      userId,
+    },
+  ]);
 
   await createUserRecord({
     user,
     userId,
   });
 
-  return practitioner;
+  return practitioner[0];
 };
