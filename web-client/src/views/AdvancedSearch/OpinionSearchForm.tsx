@@ -114,7 +114,7 @@ export const OpinionSearchForm = connect(
                     <DateRangePickerComponent
                       endDateErrorText={validationErrors.endDate}
                       endLabel="End date"
-                      endName="opinionSearchEndDate"
+                      endName="endDate"
                       endPickerCls={'grid-col-6'}
                       endValue={advancedSearchForm.opinionSearch.endDate}
                       formGroupCls="margin-bottom-0"
@@ -125,7 +125,7 @@ export const OpinionSearchForm = connect(
                       showDateHint={true}
                       startDateErrorText={validationErrors.startDate}
                       startLabel="Start date"
-                      startName="opinionSearchStartDate"
+                      startName="startDate"
                       startPickerCls={'grid-col-6'}
                       startValue={advancedSearchForm.opinionSearch.startDate}
                       onChangeEnd={e => {
@@ -262,7 +262,7 @@ export const OpinionSearchForm = connect(
                           <DateRangePickerComponent
                             endDateErrorText={validationErrors.endDate}
                             endLabel="End date"
-                            endName="opinionSearchEndDate"
+                            endName="endDate"
                             endPickerCls={'grid-col-6'}
                             endValue={advancedSearchForm.opinionSearch.endDate}
                             formGroupCls="margin-bottom-0"
@@ -272,7 +272,7 @@ export const OpinionSearchForm = connect(
                             rangePickerCls={'grid-row grid-gap'}
                             startDateErrorText={validationErrors.startDate}
                             startLabel="Start date"
-                            startName="opinionSearchStartDate"
+                            startName="startDate"
                             startPickerCls={'grid-col-6'}
                             startValue={
                               advancedSearchForm.opinionSearch.startDate

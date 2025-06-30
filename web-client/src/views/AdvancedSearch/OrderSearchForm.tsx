@@ -102,7 +102,7 @@ export const OrderSearchForm = connect(
                     <DateRangePickerComponent
                       endDateErrorText={validationErrors.endDate}
                       endLabel="End date"
-                      endName="orderEndDate"
+                      endName="endDate"
                       endPickerCls={'grid-col-6'}
                       endValue={advancedSearchForm.orderSearch.endDate}
                       formGroupCls="margin-bottom-0"
@@ -113,7 +113,7 @@ export const OrderSearchForm = connect(
                       showDateHint={true}
                       startDateErrorText={validationErrors.startDate}
                       startLabel="Start date"
-                      startName="orderSearchStartDate"
+                      startName="startDate"
                       startPickerCls={'grid-col-6'}
                       startValue={advancedSearchForm.orderSearch.startDate}
                       onChangeEnd={e => {
@@ -213,7 +213,7 @@ export const OrderSearchForm = connect(
                           <DateRangePickerComponent
                             endDateErrorText={validationErrors.endDate}
                             endLabel="End date"
-                            endName="orderEndDate"
+                            endName="endDate"
                             endPickerCls={'grid-col-6'}
                             endValue={advancedSearchForm.orderSearch.endDate}
                             formGroupCls="margin-bottom-0"
@@ -223,7 +223,7 @@ export const OrderSearchForm = connect(
                             rangePickerCls={'grid-row grid-gap'}
                             startDateErrorText={validationErrors.startDate}
                             startLabel="Start date"
-                            startName="orderSearchStartDate"
+                            startName="startDate"
                             startPickerCls={'grid-col-6'}
                             startValue={
                               advancedSearchForm.orderSearch.startDate
