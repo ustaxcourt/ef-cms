@@ -125,7 +125,7 @@ export const efcmsCaseMappings: Record<string, Object> = {
           type: 'keyword',
         },
       },
-      type: 'integer',
+      type: 'long',
     },
     'status.S': {
       type: 'keyword',
