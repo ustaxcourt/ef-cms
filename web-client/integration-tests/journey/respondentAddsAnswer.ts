@@ -9,7 +9,6 @@ export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category: 'Select a Category.',
       documentType: 'Select a document type',
     });
 
