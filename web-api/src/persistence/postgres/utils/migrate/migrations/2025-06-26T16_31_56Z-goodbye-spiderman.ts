@@ -6,6 +6,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .alterTable('dwWorkItem')
     .addColumn('docketEntryId', 'varchar', col => col.notNull().defaultTo(''))
     .execute();
+  await db.schema
+    .alterTable('dwWorkItem')
+    .alterColumn('docketEntry', col => col.dropNotNull())
+    .execute();
   // Move over all data so that docketEntryId is populated
   await db
     .updateTable('dwWorkItem')

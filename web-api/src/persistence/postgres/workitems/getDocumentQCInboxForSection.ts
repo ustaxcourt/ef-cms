@@ -5,6 +5,7 @@ import {
 import { getDbReader } from '@web-api/database';
 import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
+import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 export const getDocumentQCInboxForSection = async ({
   judgeId,
@@ -13,13 +14,17 @@ export const getDocumentQCInboxForSection = async ({
   judgeId?: string | null;
   section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
 }): Promise<WorkItemWithCaseInfo[]> => {
-  const workItemsDb = await getDbReader(reader => {
+  const workItems = await getDbReader(reader => {
     let builder = reader
       .selectFrom('dwWorkItem as w')
       .where('w.section', '=', section)
       .where('w.completedAt', 'is', null)
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .leftJoin('dwDocketEntry as d', 'd.docketEntryId', 'w.docketEntryId')
+      .innerJoin('dwDocketEntry as d', join =>
+        join
+          .onRef('d.docketEntryId', '=', 'w.docketEntryId')
+          .onRef('d.docketNumber', '=', 'w.docketNumber'),
+      )
       .limit(5000);
 
     if (judgeId) {
@@ -30,33 +35,24 @@ export const getDocumentQCInboxForSection = async ({
 
     return builder
       .selectAll('w')
-      .select([
+      .select(eb => [
+        jsonObjectFrom(
+          eb
+            .selectFrom('dwDocketEntry as docketEntry')
+            .selectAll()
+            .whereRef('d.docketEntryId', '=', 'w.docketEntryId')
+            .limit(1),
+        )
+          .$notNull()
+          .as('docketEntry'),
         'c.status',
         'c.caption',
         'c.leadDocketNumber',
         'c.trialDate',
         'c.trialLocation',
-        'd.receivedAt as docketEntryReceivedAt',
-        'd.createdAt as docketEntryCreatedAt',
-        'd.eventCode as docketEntryEventCode',
-        'd.documentTitle as docketEntryDocumentTitle',
-        'd.documentType as docketEntryDocumentType',
-        // 'd.additionalInfo as docketEntryAdditionalInfo', // add after merging 10494
       ])
       .execute();
   });
-
-  const workItems = workItemsDb.map(w => ({
-    ...w,
-    docketEntry: {
-      receivedAt: w.docketEntryReceivedAt,
-      createdAt: w.docketEntryCreatedAt,
-      eventCode: w.docketEntryEventCode,
-      documentTitle: w.docketEntryDocumentTitle,
-      documentType: w.docketEntryDocumentType,
-      // additionalInfo: w.docketEntryAdditionalInfo,
-    },
-  }));
 
   return workItems.map(toWorkItemWithCaseInfo);
 };

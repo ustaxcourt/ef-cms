@@ -112,10 +112,6 @@ export const addPaperFiling = async (
     const workItem = new WorkItem({
       assigneeId: user.userId,
       assigneeName: user.name,
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
       docketNumber: caseEntity.docketNumber,
       docketEntryId: docketEntryEntity.docketEntryId,
       inProgress: isSavingForLater,

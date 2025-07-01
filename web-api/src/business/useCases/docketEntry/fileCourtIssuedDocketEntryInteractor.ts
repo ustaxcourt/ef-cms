@@ -118,10 +118,6 @@ export const fileCourtIssuedDocketEntry = async (
       const workItem = new WorkItem({
         assigneeId: null,
         assigneeName: null,
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
         docketEntryId: docketEntryEntity.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         inProgress: true,

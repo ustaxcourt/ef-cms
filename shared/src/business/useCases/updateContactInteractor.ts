@@ -171,10 +171,6 @@ export const updateContact = async (
       const workItem = new WorkItem({
         assigneeId: null,
         assigneeName: null,
-        docketEntry: {
-          ...changeOfAddressDocketEntry.toRawObject(),
-          createdAt: changeOfAddressDocketEntry.createdAt,
-        },
         docketEntryId: changeOfAddressDocketEntry.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         section: DOCKET_SECTION,

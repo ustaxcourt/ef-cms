@@ -1,6 +1,7 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { getDbReader } from '@web-api/database';
 import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
+import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 export const getDocumentQCInboxForUser = async ({
   userId,
@@ -13,14 +14,28 @@ export const getDocumentQCInboxForUser = async ({
       .where('w.assigneeId', '=', userId)
       .where('w.completedAt', 'is', null)
       .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .select([
+      .innerJoin('dwDocketEntry as d', join =>
+        join
+          .onRef('d.docketEntryId', '=', 'w.docketEntryId')
+          .onRef('d.docketNumber', '=', 'w.docketNumber'),
+      )
+      .selectAll('w')
+      .select(eb => [
+        jsonObjectFrom(
+          eb
+            .selectFrom('dwDocketEntry as docketEntry')
+            .selectAll()
+            .whereRef('d.docketEntryId', '=', 'w.docketEntryId')
+            .limit(1),
+        )
+          .$notNull()
+          .as('docketEntry'),
         'c.status',
         'c.caption',
         'c.leadDocketNumber',
         'c.trialDate',
         'c.trialLocation',
       ])
-      .selectAll('w')
       .limit(5000)
       .execute();
   });
@@ -34,12 +49,5 @@ export type WorkItemWithCaseInfo = Omit<RawWorkItem, 'docketEntry'> & {
   leadDocketNumber?: string;
   trialDate?: string;
   trialLocation?: string;
-  docketEntry: {
-    receivedAt?: string;
-    createdAt?: string;
-    eventCode?: string;
-    documentTitle?: string;
-    documentType?: string;
-    additionalInfo?: string;
-  };
+  docketEntry: RawDocketEntry;
 };

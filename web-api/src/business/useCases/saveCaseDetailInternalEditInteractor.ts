@@ -160,6 +160,7 @@ export const saveCaseDetailInternalEdit = async (
     if (petitionWorkItem) {
       const workItemEntity = new WorkItem({
         ...petitionWorkItem,
+        docketEntryId: petitionDocketEntry.docketEntryId,
         assigneeId: user.userId,
         assigneeName: user.name,
         inProgress: true,

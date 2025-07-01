@@ -16,8 +16,10 @@ export const docketEntryQcHelper = (
 
   let showPaperServiceWarning = false;
 
-  if (CONTACT_CHANGE_DOCUMENT_TYPES.includes(currentDocument.documentType)) {
-    const hasWorkItemInfo = currentDocument.qcViewed !== undefined;
+  if (
+    CONTACT_CHANGE_DOCUMENT_TYPES.includes(currentDocument?.documentType || '')
+  ) {
+    const hasWorkItemInfo = currentDocument?.qcViewed !== undefined;
     const qcWorkItemsUntouched =
       hasWorkItemInfo &&
       !currentDocument.qcViewed &&
