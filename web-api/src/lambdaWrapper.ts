@@ -103,15 +103,6 @@ export const lambdaWrapper = (
 
     res.status(parseInt(response.statusCode));
 
-    const host = req.headers.host || '';
-    if (host.startsWith('app-green') || host.startsWith('app-blue')) {
-    const cleanHost = host.replace(/^app-(green|blue)/, 'app');
-    const protocol = req.secure ? 'https' : 'http';
-    const redirectUrl = `${protocol}://${cleanHost}`;
-    
-    return res.redirect(301, redirectUrl);
-}
-
     res.set({
       ...response.headers,
       'X-Terminal-User': isTerminalUser,

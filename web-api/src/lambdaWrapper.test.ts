@@ -22,12 +22,9 @@ describe('lambdaWrapper', () => {
     req = {
       apiGateway: {},
       body: 'blank',
-      headers: {
-        host: 'app.dawson.ustaxcourt.gov'
-      },
+      headers: {},
       locals: {},
       setTimeout: jest.fn(),
-      secure: true,
     };
     res = {
       headers: {},
@@ -282,16 +279,4 @@ describe('lambdaWrapper', () => {
         .calls[1][0].chunk,
     ).toHaveLength(JSON.stringify(response).length - CHUNK_SIZE);
   });
-  it('removes the color from the host header', async () => {
-    req.headers.host = 'app-green.dawson.ustaxcourt.gov';
-    await lambdaWrapper(() => {
-      return {
-        body: 'hello world',
-        headers: {
-          'Content-Type': 'text/html',
-        },
-      };
-    })(req, res);
-    expect(res.redirect).toHaveBeenCalledWith(301, 'https://app.dawson.ustaxcourt.gov');
-  })
 });
