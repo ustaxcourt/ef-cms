@@ -1,23 +1,21 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+jest.mock(
+  '@web-api/persistence/postgres/docketEntryWorksheets/getDocketEntryWorksheetsByDocketEntryIds.ts',
+);
 import {
   FormattedPendingMotionWithWorksheet,
   getPendingMotionDocketEntriesForCurrentJudgeInteractor,
 } from '@web-api/business/useCases/pendingMotion/getPendingMotionDocketEntriesForCurrentJudgeInteractor';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockJudgeUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { getConsolidatedCasesCount as getConsolidatedCasesCountMock } from '@web-api/persistence/postgres/cases/getConsolidatedCasesCount';
 import { getAllPendingMotionDocketEntriesForJudge as getAllPendingMotionDocketEntriesForJudgeMock } from '@web-api/persistence/postgres/docketEntries/reports/getAllPendingMotionDocketEntriesForJudge';
-
-const getConsolidatedCasesCount = getConsolidatedCasesCountMock as jest.Mock;
-
-const getAllPendingMotionDocketEntriesForJudge =
-  getAllPendingMotionDocketEntriesForJudgeMock as jest.Mock;
+import { getDocketEntryWorksheetsByDocketEntryIds as getDocketEntryWorksheetsByDocketEntryIdsMock } from '@web-api/persistence/postgres/docketEntryWorksheets/getDocketEntryWorksheetsByDocketEntryIds';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -32,6 +30,9 @@ jest.mock('@shared/business/utilities/DateHandler', () => {
 });
 
 describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
+  const getConsolidatedCasesCount = getConsolidatedCasesCountMock as jest.Mock;
+  const getAllPendingMotionDocketEntriesForJudge =
+    getAllPendingMotionDocketEntriesForJudgeMock as jest.Mock;
   const DOCKET_NUMBER = '101-22';
   const LEAD_DOCKET_NUMBER = '109-22';
   const DOCKET_ENTRY_ID = '1234-5678-9123-4567-8912';
@@ -42,6 +43,9 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
   };
   const getDocketEntryWorksheetsByDocketEntryIdsResults: RawDocketEntryWorksheet[] =
     [];
+  const getDocketEntryWorksheetsByDocketEntryIds = jest.mocked(
+    getDocketEntryWorksheetsByDocketEntryIdsMock,
+  );
 
   beforeEach(() => {
     getAllPendingMotionDocketEntriesForJudge.mockResolvedValue(
@@ -50,11 +54,9 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
     getConsolidatedCasesCount.mockResolvedValue(1);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketEntryWorksheetsByDocketEntryIds.mockReturnValue(
-        getDocketEntryWorksheetsByDocketEntryIdsResults,
-      );
+    getDocketEntryWorksheetsByDocketEntryIds.mockResolvedValue(
+      getDocketEntryWorksheetsByDocketEntryIdsResults,
+    );
 
     getAllPendingMotionDocketEntriesForJudgeResults.results = [];
   });
@@ -62,7 +64,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
   it('should throw an error when the user does not have access to the case worksheet feature', async () => {
     await expect(
       getPendingMotionDocketEntriesForCurrentJudgeInteractor(
-        applicationContext,
         {
           judgeIds: ['judgeId'],
         },
@@ -95,7 +96,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
-        applicationContext,
         {
           judgeIds: ['judgeId'],
         },
@@ -171,7 +171,6 @@ describe('getPendingMotionDocketEntriesForCurrentJudgeInteractor', () => {
 
     const results =
       await getPendingMotionDocketEntriesForCurrentJudgeInteractor(
-        applicationContext,
         {
           judgeIds: ['judgeId'],
         },

@@ -20945,14 +20945,6 @@
     "pk": "consolidated-cases-party-association"
   },
   {
-    "sk": "docket-entry-worksheet|15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
-    "judgeUserId": "dabbad00-18d0-43ec-bafb-654e83405416",
-    "pk": "docket-entry|15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5",
-    "entityName": "DocketEntryWorksheet",
-    "gsi1pk": "judge-case-worksheet|dabbad00-18d0-43ec-bafb-654e83405416",
-    "docketEntryId": "15b5ee1c-2cf7-4ca3-afb2-e82b39a92ac5"
-  },
-  {
     "sk": "document-search-limiter",
     "id": 1,
     "pk": "document-search-limiter",
@@ -21214,7 +21206,6 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "completedMessage": "completed",
-    "caseIsInProgress": false,
     "gsi1pk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
@@ -21256,7 +21247,6 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
-    "caseIsInProgress": false,
     "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -21281,7 +21271,6 @@
     "docketNumberSuffix": null,
     "assigneename": "Colvin",
     "caseStatus": "New",
-    "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -21307,7 +21296,6 @@
     "docketNumberSuffix": "S",
     "assigneename": "Colvin",
     "caseStatus": "New",
-    "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",
@@ -22595,7 +22583,6 @@
   {
     "docketNumberSuffix": null,
     "caseStatus": "New",
-    "caseIsInProgress": false,
     "gsi1pk": "work-item|5059e127-1796-45aa-96bc-351cd5705c66",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -22621,7 +22608,6 @@
     "docketNumberSuffix": null,
     "caseStatus": "New",
     "completedMessage": "completed",
-    "caseIsInProgress": false,
     "gsi1pk": "work-item|2b8ef08e-50be-4f9b-8a96-57baa5112f02",
     "document": {
       "isPaper": true,
@@ -22664,7 +22650,6 @@
     "docketNumberSuffix": null,
     "assigneename": "Colvin",
     "caseStatus": "New",
-    "caseIsInProgress": false,
     "gsi1pk": "work-item|368e5d9a-6a9d-4e27-bd88-8521741f0639",
     "document": {
       "createdAt": "2019-07-12T17:11:26.955Z",
@@ -22790,7 +22775,6 @@
     "docketNumberSuffix": "S",
     "assigneename": "Colvin",
     "caseStatus": "New",
-    "caseIsInProgress": false,
     "gsi1pk": "work-item|8686ddef-c74d-4d26-8748-6b22914c7687",
     "document": {
       "createdAt": "2019-03-01T22:54:05.993Z",

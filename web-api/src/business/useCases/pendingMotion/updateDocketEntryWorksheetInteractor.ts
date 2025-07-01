@@ -5,13 +5,12 @@ import {
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+} from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { upsertDocketEntryWorksheets } from '@web-api/persistence/postgres/docketEntryWorksheets/upsertDocketEntryWorksheets';
 
 export const updateDocketEntryWorksheetInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     worksheet,
   }: {
@@ -23,20 +22,14 @@ export const updateDocketEntryWorksheetInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const judgeUser = await applicationContext
-    .getUseCaseHelpers()
-    .getJudgeForUserHelper(applicationContext, { user: authorizedUser });
-
   const docketEntryWorksheetEntity = new DocketEntryWorksheet(
     worksheet,
   ).validate();
 
   const rawDocketEntryWorksheet = docketEntryWorksheetEntity.toRawObject();
 
-  await applicationContext.getPersistenceGateway().updateDocketEntryWorksheet({
-    applicationContext,
-    docketEntryWorksheet: rawDocketEntryWorksheet,
-    judgeUserId: judgeUser.userId,
+  await upsertDocketEntryWorksheets({
+    docketEntryWorksheets: [rawDocketEntryWorksheet],
   });
 
   return rawDocketEntryWorksheet;

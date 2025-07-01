@@ -18,7 +18,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.99.1"
+       version = "~> 5.100.0"
     }
     opensearch = {
       source  = "opensearch-project/opensearch"
@@ -55,11 +55,6 @@ module "kibana" {
 module "dawson-developer-permissions" {
   source                       = "../../modules/dawson-developer-permissions"
   dawson_dev_trusted_role_arns = var.dawson_dev_trusted_role_arns
-}
-
-module "dynamsoft" {
-  source    = "../../modules/dynamsoft-permissions"
-  zone_name = var.zone_name
 }
 
 module "edge-lambda-permissions" {
