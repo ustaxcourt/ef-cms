@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-      version = "~> 5.94.1"
+       version = "~> 5.100.0"
     }
   }
 }
@@ -30,12 +30,6 @@ data "aws_caller_identity" "current" {}
 data "aws_sns_topic" "system_health_alarms_east" {
   // account-level resource
   name = "system_health_alarms"
-}
-
-data "aws_sns_topic" "system_health_alarms_west" {
-  // account-level resource
-  name     = "system_health_alarms"
-  provider = aws.us-west-1
 }
 
 data "terraform_remote_state" "remote" {
@@ -76,7 +70,6 @@ resource "terraform_data" "locals" {
     MASTER_REGION                      = "us-east-1"
     NODE_ENV                           = "production"
     PROD_ENV_ACCOUNT_ID                = var.prod_env_account_id
-    SCANNER_RESOURCE_URI               = var.scanner_resource_uri
     SLACK_WEBHOOK_URL                  = var.slack_webhook_url
     STAGE                              = var.environment
     USER_POOL_ID                       = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_id
@@ -105,16 +98,6 @@ module "ecr-green-east" {
   }
 }
 
-module "ecr-green-west" {
-  source      = "../../modules/elastic-container-registry"
-  environment = var.environment
-  region      = "us-west-1"
-  color       = "green"
-  providers = {
-    aws = aws.us-west-1
-  }
-}
-
 module "zip_batch_east" {
   source        = "../../modules/batch"
   environment   = var.environment
@@ -127,27 +110,14 @@ module "zip_batch_east" {
   }
 }
 
-module "zip_batch_west" {
-  source        = "../../modules/batch"
-  environment   = var.environment
-  dns_domain    = var.dns_domain
-  region        = "us-west-1"
-  current_color = "green"
-
-  providers = {
-    aws = aws.us-west-1
-  }
-}
-
-
 module "api-east-green" {
-  lambda_role_arn     = module.lambda_role_green.role_arn
   source              = "../../modules/api"
   alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_east.arn
   environment         = var.environment
   pool_arn            = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
   dns_domain          = var.dns_domain
   zone_id             = data.aws_route53_zone.zone.id
+  lambda_role_arn     = module.lambda_role_green.role_arn
   lambda_environment = merge(terraform_data.locals.output, {
     CURRENT_COLOR          = "green"
     DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
@@ -161,15 +131,12 @@ module "api-east-green" {
     aws           = aws.us-east-1
     aws.us-east-1 = aws.us-east-1
   }
-  current_color            = "green"
-  lambda_bucket_id         = data.terraform_remote_state.remote.outputs.api_lambdas_bucket_east_id
-  create_check_case_cron   = 1
-  create_health_check_cron = 1
-  create_streams           = 1
-  stream_arn               = data.aws_dynamodb_table.green_dynamo_table.stream_arn
-  web_acl_arn              = data.terraform_remote_state.remote.outputs.east_web_acl_arn
-  enable_health_checks     = var.enable_health_checks
-  health_check_id          = data.terraform_remote_state.remote.outputs.aws_route53_health_check_failover_east_id
+  current_color          = "green"
+  lambda_bucket_id       = data.terraform_remote_state.remote.outputs.api_lambdas_bucket_east_id
+  create_check_case_cron = 1
+  create_streams         = 1
+  stream_arn             = data.aws_dynamodb_table.green_dynamo_table.stream_arn
+  web_acl_arn            = data.terraform_remote_state.remote.outputs.east_web_acl_arn
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   create_seal_in_lower = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
@@ -177,49 +144,6 @@ module "api-east-green" {
 
   # lambda to handle bounced service email notifications
   create_bounce_handler = 1
-  route_53_regional_weight = 100
-}
-
-module "api-west-green" {
-  source              = "../../modules/api"
-  lambda_role_arn     = module.lambda_role_green.role_arn
-  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
-  environment         = var.environment
-  dns_domain          = var.dns_domain
-  zone_id             = data.aws_route53_zone.zone.id
-  lambda_environment = merge(terraform_data.locals.output, {
-    CURRENT_COLOR          = "green"
-    DEPLOYMENT_TIMESTAMP   = var.deployment_timestamp
-    DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
-    REGION                 = "us-west-1"
-    DISABLE_HTTP_TRAFFIC   = "true"
-  })
-  region = "us-west-1"
-  providers = {
-    aws           = aws.us-west-1
-    aws.us-east-1 = aws.us-east-1
-  }
-  current_color            = "green"
-  lambda_bucket_id         = data.terraform_remote_state.remote.outputs.api_lambdas_bucket_west_id
-  create_check_case_cron   = 0
-  create_health_check_cron = 1
-  create_streams           = 0
-  pool_arn                 = data.terraform_remote_state.remote.outputs.aws_cognito_user_pool_arn
-  stream_arn               = ""
-  web_acl_arn              = data.terraform_remote_state.remote.outputs.west_web_acl_arn
-  create_triggers          = 0
-  enable_health_checks     = var.enable_health_checks
-  health_check_id          = data.terraform_remote_state.remote.outputs.aws_route53_health_check_failover_west_id
-
-
-  # lambda to seal cases in lower environment (only deployed to lower environments)
-  create_seal_in_lower = 0
-  prod_env_account_id  = var.prod_env_account_id
-
-  # lambda to handle bounced service email notifications
-  create_bounce_handler = 0
-  route_53_regional_weight = 0
 }
 
 module "worker-east-green" {
@@ -235,23 +159,6 @@ module "worker-east-green" {
   })
   providers = {
     aws = aws.us-east-1
-  }
-  environment = var.environment
-}
-
-module "worker-west-green" {
-  source              = "../../modules/worker"
-  lambda_role_arn     = module.lambda_role_green.role_arn
-  color               = "green"
-  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
-  lambda_environment = merge(terraform_data.locals.output, {
-    CURRENT_COLOR          = "green"
-    DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
-    REGION                 = "us-west-1"
-  })
-  providers = {
-    aws = aws.us-west-1
   }
   environment = var.environment
 }
@@ -273,23 +180,6 @@ module "opensearch-sync-east-green" {
   environment = var.environment
 }
 
-module "opensearch-sync-west-green" {
-  source              = "../../modules/opensearch-sync"
-  lambda_role_arn     = module.lambda_role_green.role_arn
-  color               = "green"
-  alert_sns_topic_arn = data.aws_sns_topic.system_health_alarms_west.arn
-  lambda_environment = merge(terraform_data.locals.output, {
-    CURRENT_COLOR          = "green"
-    DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_beta : data.terraform_remote_state.remote.outputs.elasticsearch_endpoint_alpha
-    REGION                 = "us-west-1"
-  })
-  providers = {
-    aws = aws.us-west-1
-  }
-  environment = var.environment
-}
-
 module "ui-green" {
   source                 = "../../modules/ui"
   current_color          = "green"
@@ -302,4 +192,14 @@ module "ui-green" {
     aws           = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
   }
+}
+
+
+module "rds-expired-records-cleanup" {
+    source                 = "../../modules/rds-expired-records-cleanup"
+    current_color          = "green"
+    environment            = var.environment
+    postgres_user          = data.terraform_remote_state.remote.outputs.postgres_user
+    postgres_database      = data.terraform_remote_state.remote.outputs.database_name
+    postgres_host          = data.terraform_remote_state.remote.outputs.rds_host_name
 }

@@ -19,7 +19,6 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
-import { setPriorityOnAllWorkItems as setPriorityOnAllWorkItemsMock } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
@@ -29,7 +28,6 @@ describe('addCaseToTrialSessionInteractor', () => {
   jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  const setPriorityOnAllWorkItems = setPriorityOnAllWorkItemsMock as jest.Mock;
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   let mockTrialSession;
@@ -152,48 +150,6 @@ describe('addCaseToTrialSessionInteractor', () => {
     expect(caseWithCalendarNotes.calendarNotes).toBe('Test');
   });
 
-  it('sets work items to high priority if the trial session is calendared', async () => {
-    mockTrialSession = {
-      ...MOCK_TRIAL_REMOTE,
-      caseOrder: [{ docketNumber: '123-45' }],
-      isCalendared: true,
-    };
-
-    await addCaseToTrialSessionInteractor(
-      applicationContext,
-      {
-        calendarNotes: 'testing',
-        docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-      },
-      mockPetitionsClerkUser,
-    );
-
-    expect(setPriorityOnAllWorkItems.mock.calls[0][0]).toMatchObject({
-      highPriority: true,
-    });
-  });
-
-  it('does not set work items to high priority if the trial session is not calendared', async () => {
-    mockTrialSession = {
-      ...MOCK_TRIAL_REMOTE,
-      caseOrder: [{ docketNumber: '123-45' }],
-      isCalendared: false,
-    };
-
-    await addCaseToTrialSessionInteractor(
-      applicationContext,
-      {
-        calendarNotes: 'testing',
-        docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId!,
-      },
-      mockPetitionsClerkUser,
-    );
-
-    expect(setPriorityOnAllWorkItems).not.toHaveBeenCalled();
-  });
-
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
@@ -211,9 +167,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       ),
     ).rejects.toThrow(ServiceUnavailableError);
 
-    expect(
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toHaveBeenCalled();
+    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
   it('should acquire a lock on the case', async () => {

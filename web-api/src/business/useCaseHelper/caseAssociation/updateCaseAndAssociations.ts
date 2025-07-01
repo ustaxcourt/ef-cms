@@ -7,16 +7,13 @@ import { Message } from '@shared/business/entities/Message';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
-import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { isEmpty } from 'lodash';
+import { isEmpty, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import diff from 'diff-arrays-of-objects';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -40,9 +37,10 @@ const updateCaseDocketEntries = ({
   caseToUpdate: any;
   oldCase: any;
 }) => {
+  // We are not comparing work item changes as we do not save the work item on the docket entry in persistence
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
-    oldCase.docketEntries,
-    caseToUpdate.docketEntries,
+    oldCase.docketEntries.map(d => omit(d, 'workItem')),
+    caseToUpdate.docketEntries.map(d => omit(d, 'workItem')),
     'docketEntryId',
   );
 
@@ -50,8 +48,8 @@ const updateCaseDocketEntries = ({
     added: addedArchivedDocketEntries,
     updated: updatedArchivedDocketEntries,
   } = diff(
-    oldCase.archivedDocketEntries,
-    caseToUpdate.archivedDocketEntries,
+    oldCase.archivedDocketEntries.map(d => omit(d, 'workItem')),
+    caseToUpdate.archivedDocketEntries.map(d => omit(d, 'workItem')),
     'docketEntryId',
   );
 
@@ -322,41 +320,6 @@ const updatePrivatePractitioners = ({
   return [...deletePractitionerFunctions, ...updatePractitionerFunctions];
 };
 
-/**
- * Identifies work item entries which have been updated and issues persistence calls
- * @param {object} args the arguments for updating the case
- * @param {object} args.applicationContext the application context
- * @param {object} args.caseToUpdate the case with its updated document data
- * @param {object} args.oldCase the case as it is currently stored in persistence, prior to these changes
- * @returns {Array<function>} the persistence functions required to complete this action
- */
-const updateCaseWorkItems = async ({ caseToUpdate, oldCase }) => {
-  const workItemsRequireUpdate =
-    oldCase.associatedJudge !== caseToUpdate.associatedJudge;
-
-  if (!workItemsRequireUpdate) {
-    return [];
-  }
-
-  const workItems = await getWorkItemsByDocketNumber({
-    docketNumber: caseToUpdate.docketNumber,
-  });
-
-  if (!workItems) {
-    return [];
-  }
-
-  const updatedWorkItems = workItems.map(rawWorkItem => ({
-    ...rawWorkItem,
-    associatedJudge: caseToUpdate.associatedJudge,
-    associatedJudgeId: caseToUpdate.associatedJudgeId,
-  }));
-
-  const validWorkItems = WorkItem.validateRawCollection(updatedWorkItems);
-
-  return [() => upsertWorkItems({ workItems: validWorkItems })];
-};
-
 const updateCaseDeadlines = async ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext, // cannot remove till remaining RELATED_CASE_OPERATIONS functions no longer use applicationContext
@@ -390,12 +353,12 @@ export const updateCaseAndAssociations = async ({
   applicationContext,
   authorizedUser,
   caseToUpdate,
-  includeCorrespondenceAndWorkItems = true,
+  includeCorrespondence = true,
 }: {
   applicationContext: ServerApplicationContext;
   authorizedUser: UnknownAuthUser;
   caseToUpdate: any;
-  includeCorrespondenceAndWorkItems?: boolean;
+  includeCorrespondence?: boolean;
 }): Promise<RawCase> => {
   const newCaseEntity: Case = caseToUpdate.validate
     ? caseToUpdate
@@ -416,7 +379,7 @@ export const updateCaseAndAssociations = async ({
     .validate()
     .toRawObject();
 
-  let RELATED_CASE_OPERATIONS = [
+  const RELATED_CASE_OPERATIONS = [
     updateCaseDeadlines,
     updateCaseDocketEntries,
     updateCaseMessages,
@@ -425,11 +388,8 @@ export const updateCaseAndAssociations = async ({
     updatePrivatePractitioners,
   ];
 
-  if (includeCorrespondenceAndWorkItems) {
-    RELATED_CASE_OPERATIONS = RELATED_CASE_OPERATIONS.concat([
-      updateCaseWorkItems,
-      updateCorrespondence,
-    ]);
+  if (includeCorrespondence) {
+    RELATED_CASE_OPERATIONS.push(updateCorrespondence);
   }
 
   const validationRequests = RELATED_CASE_OPERATIONS.map(fn =>
@@ -444,14 +404,13 @@ export const updateCaseAndAssociations = async ({
   // wait for all validation tasks to complete and for callbacks to be generated
   const persistenceCallbacks = (await Promise.all(validationRequests)).flat();
 
-  
   // Persist primary case data first to ensure no errors
   await upsertCases([validNewRawCaseEntity]);
-  
+
   // Then persist related data
   // all validation has passed, so now execute all persistence callbacks from results
   const persistenceRequests = persistenceCallbacks.map(persistFn => {
-    persistFn();
+    return persistFn();
   });
   await settlePromises(persistenceRequests);
 

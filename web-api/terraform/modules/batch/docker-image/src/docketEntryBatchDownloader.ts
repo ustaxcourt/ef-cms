@@ -35,7 +35,7 @@ const {
   ZIP_FILE_NAME,
 } = process.env as {
   [key: string]: string;
-  AWS_REGION: 'us-east-1' | 'us-west-1';
+  AWS_REGION: 'us-east-1';
 };
 
 const S3_REGION = 'us-east-1';

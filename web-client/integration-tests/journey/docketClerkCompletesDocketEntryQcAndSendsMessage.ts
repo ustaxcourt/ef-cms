@@ -20,12 +20,12 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage =
         workItem => workItem.docketNumber === cerebralTest.docketNumber,
       );
       cerebralTest.proposedStipDecisionDocketEntryId =
-        proposedStipulatedDecision.docketEntry.docketEntryId;
+        proposedStipulatedDecision!.docketEntry.docketEntryId;
 
-      expect(proposedStipulatedDecision.isRead).toBeFalsy();
+      expect(proposedStipulatedDecision!.isRead).toBeFalsy();
 
       await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
-        docketEntryId: proposedStipulatedDecision.docketEntry.docketEntryId,
+        docketEntryId: proposedStipulatedDecision!.docketEntry.docketEntryId,
         docketNumber: cerebralTest.docketNumber,
       });
 
@@ -44,7 +44,7 @@ export const docketClerkCompletesDocketEntryQcAndSendsMessage =
         workItem => workItem.docketNumber === cerebralTest.docketNumber,
       );
 
-      expect(readWorkItem.isRead).toEqual(true);
+      expect(readWorkItem!.isRead).toEqual(true);
 
       await cerebralTest.runSequence('openCompleteAndSendMessageModalSequence');
       expect(cerebralTest.getState('validationErrors')).toEqual({});

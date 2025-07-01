@@ -4,9 +4,21 @@ import { externalUserCreatesElectronicCase } from '../../../../../helpers/fileAP
 import { externalUserSearchesDocketNumber } from '../../../../../helpers/advancedSearch/external-user-searches-docket-number';
 import { goToCase } from '../../../../../helpers/caseDetail/go-to-case';
 import {
-  login,
+  loginAsAdc,
+  loginAsAdmissionsClerk,
+  loginAsCaseServicesSupervisor,
+  loginAsClerkOfCourt,
+  loginAsColvin,
+  loginAsColvinChambers,
   loginAsDocketClerk,
+  loginAsFloater,
+  loginAsGeneral,
+  loginAsIrsPractitioner,
   loginAsPetitioner,
+  loginAsPetitionsClerk,
+  loginAsPrivatePractitioner,
+  loginAsReportersOffice,
+  loginAsTrialClerk,
 } from '../../../../../helpers/authentication/login-as-helpers';
 import { petitionsClerkQcsAndServesElectronicCase } from '../../../../../helpers/documentQC/petitions-clerk-qcs-and-serves-electronic-case';
 
@@ -70,20 +82,20 @@ describe('Batch Download Documents', () => {
     createAndServePaperPetition().then(({ docketNumber, documentsCreated }) => {
       // check for all internal roles
       [
-        'adc@example.com',
-        'admissionsclerk@example.com',
-        'caseservicessupervisor@example.com',
-        'clerkofcourt@example.com',
-        'colvinschambers@example.com',
-        'docketclerk@example.com',
-        'floater@example.com',
-        'general@example.com',
-        'judgecolvin@example.com',
-        'petitionsclerk@example.com',
-        'reportersoffice@example.com',
-        'trialclerk@example.com',
-      ].forEach(email => {
-        login({ email });
+        loginAsAdc,
+        loginAsAdmissionsClerk,
+        loginAsCaseServicesSupervisor,
+        loginAsClerkOfCourt,
+        loginAsColvinChambers,
+        loginAsDocketClerk,
+        loginAsFloater,
+        loginAsGeneral,
+        loginAsColvin,
+        loginAsPetitionsClerk,
+        loginAsReportersOffice,
+        loginAsTrialClerk,
+      ].forEach(loginFunction => {
+        loginFunction();
         goToCase(docketNumber);
         confirmCountOfDocumentsToDownload(documentsCreated.length);
         includePrintableDocketRecord();
@@ -92,11 +104,11 @@ describe('Batch Download Documents', () => {
 
       // check for external roles
       [
-        'privatePractitioner@example.com',
-        'petitioner@example.com',
-        'irspractitioner@example.com',
-      ].forEach(email => {
-        login({ email });
+        loginAsPrivatePractitioner,
+        loginAsPetitioner,
+        loginAsIrsPractitioner,
+      ].forEach(loginFunction => {
+        loginFunction();
         cy.get('[data-testid="download-docket-records-button"]').should(
           'not.exist',
         );
@@ -246,7 +258,12 @@ describe('Batch Download Documents', () => {
       loginAsDocketClerk();
       goToCase(docketNumber);
       cy.get('[data-testid="tab-drafts"] > .button-text').click();
-      cy.get('[data-testid="docket-entry-description-1"]').click();
+      cy.get('button.attachment-viewer-button')
+        .filter((_, el) => {
+          return Cypress.$(el).find('*').text().includes('Order');
+        })
+        .first()
+        .click();
       cy.get('#apply-signature').click();
       cy.get('[data-testid="sign-pdf-canvas"]').click();
       cy.get('[data-testid="save-signature-button"]').click();

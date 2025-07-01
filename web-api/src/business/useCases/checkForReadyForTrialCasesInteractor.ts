@@ -28,16 +28,6 @@ export const checkForReadyForTrialCasesInteractor = async (
       authorizedUser: undefined,
       caseToUpdate: caseEntity,
     });
-
-    if (caseEntity.isReadyForTrial()) {
-      await applicationContext
-        .getPersistenceGateway()
-        .createCaseTrialSortMappingRecords({
-          applicationContext,
-          caseSortTags: caseEntity.generateTrialSortTags(),
-          docketNumber: caseEntity.docketNumber,
-        });
-    }
   };
 
   const checkReadyForTrial = async (

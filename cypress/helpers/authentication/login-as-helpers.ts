@@ -1,4 +1,5 @@
 import { getCypressEnv } from '../env/cypressEnvironment';
+import { mockDynamsoftLibrary } from './dynamsoft';
 
 export function loginAsTestAdmissionsClerk() {
   login({ email: 'testAdmissionsClerk@example.com' });
@@ -30,12 +31,7 @@ export function loginAsDojPractitioner(
 }
 
 export function loginAsPrivatePractitioner(
-  practitionerUser:
-    | 'privatePractitioner@example.com'
-    | 'privatePractitioner1@example.com'
-    | 'privatePractitioner2@example.com'
-    | 'privatePractitioner3@example.com'
-    | 'privatePractitioner4@example.com' = 'privatePractitioner1@example.com',
+  practitionerUser: string = 'privatePractitioner1@example.com',
 ) {
   login({ email: practitionerUser });
   cy.get('[data-testid="file-a-petition"]').should('exist');
@@ -43,15 +39,10 @@ export function loginAsPrivatePractitioner(
 }
 
 export function loginAsIrsPractitioner(
-  irsPractitionerUser:
-    | 'irsPractitioner@example.com'
-    | 'irsPractitioner1@example.com'
-    | 'irsPractitioner2@example.com' = 'irsPractitioner@example.com',
+  irsPractitionerUser:string = 'irsPractitioner@example.com',
 ) {
   login({ email: irsPractitionerUser });
-  cy.get('[data-testid="search-for-a-case-card"]').should('exist');
-  cy.get('[data-testid="open-cases-count"]').contains('Open Cases');
-  cy.get('[data-testid="closed-cases-count"]').contains('Closed Cases');
+  cy.get('[data-testid="advanced-search-link"]').should('exist');
 }
 
 export function loginAsIrsPractitioner1() {
@@ -132,8 +123,13 @@ export function loginAsIrsSuperUser() {
   cy.get('[data-testid="advanced-search-link"]').should('exist');
 }
 
+export function loginAsTrialClerk() {
+  login({ email: 'trialClerk1@example.com' });
+  cy.get('[data-testid="trial-session-link"]').should('exist');
+}
+
 // Try to use the above account specific logins as they wait for specific content.
-export function login({ email }: { email: string }) {
+function login({ email }: { email: string }) {
   cy.clearAllCookies();
   cy.visit('/login');
   cy.get('[data-testid="email-input"]').type(email);
@@ -144,10 +140,6 @@ export function login({ email }: { email: string }) {
   cy.window().then(win =>
     win.localStorage.setItem('__cypressOrderInSameTab', 'true'),
   );
-  cy.intercept('GET', 'https://**/dynamsoft.webtwain.initiate.js', {
-    body: `window.Dynamsoft = {DWT: {
-            GetWebTwain() {}
-          }}`,
-    statusCode: 200,
-  });
+  cy.get('.ustc-account').should('exist');
+  mockDynamsoftLibrary();
 }

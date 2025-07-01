@@ -5,6 +5,7 @@ import type { Config } from 'jest';
 const config: Config = {
   clearMocks: true,
   collectCoverage: true,
+  // type files ignored
   collectCoverageFrom: [
     'src/**/*.{js,ts}',
     '!src/sharedAppContext.ts',
@@ -19,6 +20,9 @@ const config: Config = {
     '!src/business/utilities/generateHTMLTemplateForPDF/generateHTMLTemplateForPDF.ts',
     '!src/business/utilities/htmlGenerator/**',
     '!src/business/entities/caseAssociation/CaseAssociationRequestDocument.ts',
+    '!src/business/entities/trialSessions/SpecialTrialSessions.ts',
+    '!src/business/utilities/trialSessionPlanningReport/trialSessionPlanningReportDataTypes.ts',
+    '!src/business/entities/trialSessionMinutes/MinuteSheet.ts',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
@@ -37,7 +41,7 @@ const config: Config = {
   transform: {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
+  transformIgnorePatterns: ['/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)'],
   // After a jest runner uses X% of total system memory, recreate the runner.
   verbose: false,
   workerIdleMemoryLimit: '20%',

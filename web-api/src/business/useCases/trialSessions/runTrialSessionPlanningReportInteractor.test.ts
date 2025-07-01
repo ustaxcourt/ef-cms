@@ -57,10 +57,6 @@ describe('run trial session planning report', () => {
   });
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getEligibleCasesForTrialCity.mockReturnValue([]);
-
     await expect(
       runTrialSessionPlanningReportInteractor(
         applicationContext,

@@ -27,22 +27,7 @@ output "aws_cognito_user_pool_client_id" {
 output "api_lambdas_bucket_east_id" {
   value = aws_s3_bucket.api_lambdas_bucket_east.id
 }
-output "api_lambdas_bucket_west_id" {
-  value = aws_s3_bucket.api_lambdas_bucket_west.id
-}
-
-output "west_web_acl_arn" {
-  value = module.api-west-waf.web_acl_arn
-}
 
 output "east_web_acl_arn" {
   value = module.api-east-waf.web_acl_arn
-}
-
-output "aws_route53_health_check_failover_west_id" {
-  value = length(aws_route53_health_check.failover_health_check_west) > 0 ? aws_route53_health_check.failover_health_check_west[0].id : ""
-}
-
-output "aws_route53_health_check_failover_east_id" {
-  value = length(aws_route53_health_check.failover_health_check_east) > 0 ? aws_route53_health_check.failover_health_check_east[0].id : ""
 }
