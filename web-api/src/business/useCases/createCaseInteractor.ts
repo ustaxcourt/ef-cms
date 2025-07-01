@@ -45,7 +45,6 @@ const addPetitionDocketEntryToCase = ({
     sentByUserId: user.userId,
   });
 
-  docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);
 
   return workItemEntity;
