@@ -7,6 +7,7 @@ export const getWorkItemById = async ({
 }: {
   workItemId: string;
 }): Promise<WorkItem | undefined> => {
+  console.log('getWorkItemById');
   const workItem = await getDbReader(reader =>
     reader
       .selectFrom('dwWorkItem as w')

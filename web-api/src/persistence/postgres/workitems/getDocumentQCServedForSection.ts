@@ -28,13 +28,12 @@ export const getDocumentQCServedForSection = async ({
       .select(eb => [
         jsonObjectFrom(
           eb
-            .selectFrom('dwDocketEntry as docketEntry')
+            .selectFrom('dwDocketEntry as de')
             .selectAll()
-            .whereRef('d.docketEntryId', '=', 'w.docketEntryId')
+            .whereRef('de.docketEntryId', '=', 'w.docketEntryId')
+            .whereRef('de.docketNumber', '=', 'w.docketNumber')
             .limit(1),
-        )
-          .$notNull()
-          .as('docketEntry'),
+        ).as('docketEntry'),
         'c.status',
         'c.caption',
         'c.leadDocketNumber',
