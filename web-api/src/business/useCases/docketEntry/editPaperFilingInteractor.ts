@@ -25,6 +25,7 @@ import {
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -453,14 +454,23 @@ const updateAndSaveWorkItem = async ({
   docketEntry: DocketEntry;
   user: RawUser;
 }): Promise<void> => {
-  const { workItem } = docketEntry;
-  workItem.docketEntry = docketEntry.toRawObject();
+  const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
+    docketNumber: docketEntry.docketNumber,
+    docketEntryId: docketEntry.docketEntryId,
+  });
+
+  if (!workItem) {
+    throw new NotFoundError(
+      `Could not find work item associated with case ${docketEntry.docketNumber} docket entry ${docketEntry.docketEntryId}`,
+    );
+  }
+
   workItem.inProgress = true;
 
   workItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: user.section,
+    section: user.section!,
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,

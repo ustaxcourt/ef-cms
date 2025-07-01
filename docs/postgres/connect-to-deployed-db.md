@@ -29,7 +29,7 @@ Note: run all commands from the root of the `ef-cms` directory.
       ```bash
       scripts/postgres/generate-token.sh
       ```
-   - To generate a token for the writeable endpoint:
+   - To generate a token for the writeable endpoint:set-env.zs
       ```bash
       scripts/postgres/generate-token.sh --rw
       ```

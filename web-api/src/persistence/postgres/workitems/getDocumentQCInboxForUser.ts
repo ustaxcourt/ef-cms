@@ -28,10 +28,18 @@ export const getDocumentQCInboxForUser = async ({
   return workItems.map(toWorkItemWithCaseInfo);
 };
 
-export type WorkItemWithCaseInfo = RawWorkItem & {
+export type WorkItemWithCaseInfo = Omit<RawWorkItem, 'docketEntry'> & {
   caseTitle?: string;
   caseStatus?: string;
   leadDocketNumber?: string;
   trialDate?: string;
   trialLocation?: string;
+  docketEntry: {
+    receivedAt?: string;
+    createdAt?: string;
+    eventCode?: string;
+    documentTitle?: string;
+    documentType?: string;
+    additionalInfo?: string;
+  };
 };

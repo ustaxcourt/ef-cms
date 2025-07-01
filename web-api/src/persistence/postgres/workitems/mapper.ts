@@ -81,6 +81,7 @@ export function toWorkItemWithCaseInfo(dbWorkItem): WorkItemWithCaseInfo {
     leadDocketNumber: dbWorkItem?.leadDocketNumber || undefined,
     trialDate: dbWorkItem?.trialDate?.toISOString(),
     trialLocation: dbWorkItem?.trialLocation || undefined,
+    docketEntry: dbWorkItem.docketEntry,
   };
   return transformNullToUndefined(workItemWithCaseInfo);
 }

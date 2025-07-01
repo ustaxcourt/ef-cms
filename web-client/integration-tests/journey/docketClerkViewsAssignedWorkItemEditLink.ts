@@ -26,8 +26,7 @@ export const docketClerkViewsAssignedWorkItemEditLink = cerebralTest => {
     });
 
     const inboxWorkItem = workQueueFormatted.find(
-      workItem =>
-        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
+      workItem => workItem.docketEntryId === cerebralTest.docketEntryId,
     );
 
     expect(inboxWorkItem!.editLink).toContain('/edit');

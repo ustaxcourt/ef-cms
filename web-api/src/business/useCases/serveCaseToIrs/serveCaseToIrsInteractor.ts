@@ -23,7 +23,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { aggregatePartiesForService } from '../../../../../shared/src/business/utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -33,6 +33,7 @@ import { random } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -93,24 +94,39 @@ const addDocketEntries = ({ caseEntity }) => {
   }
 };
 
-const createPetitionWorkItems = async ({ caseEntity, user }) => {
-  const petitionDocument = caseEntity.docketEntries.find(
-    doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-  );
-  const initializeCaseWorkItem = petitionDocument.workItem;
+const createPetitionWorkItems = async ({
+  caseEntity,
+  user,
+}: {
+  caseEntity: Case;
+  user: AuthUser;
+}) => {
+  const petitionDocument = caseEntity.getPetitionDocketEntry();
 
-  initializeCaseWorkItem.docketEntry.servedAt = petitionDocument.servedAt;
-  initializeCaseWorkItem.caseTitle = Case.getCaseTitle(caseEntity.caseCaption);
-  initializeCaseWorkItem.docketNumberWithSuffix =
-    caseEntity.docketNumberWithSuffix;
+  if (!petitionDocument) {
+    throw new NotFoundError(
+      `Could not find the petitioner associated with case ${caseEntity.docketNumber}`,
+    );
+  }
 
-  initializeCaseWorkItem.setAsCompleted({
+  const initialCaseWorkItem = await getWorkItemByDocketNumberAndDocketEntryId({
+    docketNumber: caseEntity.docketNumber,
+    docketEntryId: petitionDocument?.docketEntryId,
+  });
+
+  if (!initialCaseWorkItem) {
+    throw new NotFoundError(
+      `Could not find the work item associated with the petition on ${caseEntity.docketNumber}`,
+    );
+  }
+
+  initialCaseWorkItem.setAsCompleted({
     message: 'Served to IRS',
     user,
   });
 
   await upsertWorkItems({
-    workItems: [initializeCaseWorkItem.validate().toRawObject()],
+    workItems: [initialCaseWorkItem.validate().toRawObject()],
   });
 };
 
@@ -520,9 +536,7 @@ export const serveCaseToIrs = async (
       );
     }
 
-    const petitionDocument = caseEntity.docketEntries.find(
-      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-    );
+    const petitionDocument = caseEntity.getPetitionDocketEntry();
 
     const formattedFiledDate = formatDateString(
       petitionDocument.filingDate,

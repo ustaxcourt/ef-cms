@@ -9,8 +9,7 @@ export const checkWorkitemOnCalendaredCase = (
   return it('should have a trial date and trial location on workItem associated with a calendared case', () => {
     const workQueue = cerebralTest.getState('workQueue');
     const calendaredWorkItem = workQueue.find(
-      workItem =>
-        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
+      workItem => workItem.docketEntryId === cerebralTest.docketEntryId,
     );
 
     const expectedTrialDate = formatDateString(
