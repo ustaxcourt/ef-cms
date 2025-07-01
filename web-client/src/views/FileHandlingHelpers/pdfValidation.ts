@@ -42,7 +42,6 @@ export const validatePdf = ({
       isValid: false,
     });
   }
-
   return new Promise(resolve => {
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
@@ -51,28 +50,15 @@ export const validatePdf = ({
       const { result } = fileReader;
 
       if (!result || typeof result === 'string') {
-        if (!clientSupportsES2022()) {
-          console.warn(
-            'Client does not support ES2022 features. This may cause issues with PDF validation.',
-          );
-          resolve({
-            errorInformation: {
-              errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
-              errorMessageToLog: `${UNSUPPORTED_BROWSER_ERROR_MESSAGE} (User agent: ${navigator.userAgent})`,
-              errorType: ErrorTypes.UNSUPPORTED_BROWSER,
-            },
-            isValid: false,
-          });
-        } else {
-          resolve({
-            errorInformation: {
-              errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
-              errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} (Failed to read file as ArrayBuffer.)`,
-              errorType: ErrorTypes.UNKNOWN,
-            },
-            isValid: false,
-          });
-        }
+
+        resolve({
+          errorInformation: {
+            errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
+            errorMessageToLog: `${GENERIC_FILE_ERROR_MESSAGE} (Failed to read file as ArrayBuffer.)`,
+            errorType: ErrorTypes.UNKNOWN,
+          },
+          isValid: false,
+        });
 
         return;
       }
