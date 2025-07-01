@@ -19,7 +19,7 @@ describe('validateSelectDocumentTypeAction', () => {
     applicationContext
       .getUseCases()
       .validateExternalDocumentInteractor.mockReturnValue({
-        some: "error"
+        some: 'error',
       });
     runAction(validateSelectDocumentTypeAction, {
       modules: {
@@ -34,8 +34,8 @@ describe('validateSelectDocumentTypeAction', () => {
     applicationContext
       .getUseCases()
       .validateExternalDocumentInteractor.mockReturnValue({
-        category: "Select a category.",
-        documentType: "Select a document type"
+        category: 'Select a category.',
+        documentType: 'Select a document type',
       });
     runAction(validateSelectDocumentTypeAction, {
       modules: {
@@ -51,6 +51,7 @@ describe('validateSelectDocumentTypeAction', () => {
         'documentTitle',
         'documentType',
         'freeText',
+        'freeText2',
         'previousDocument',
         'serviceDate',
         'trialLocation',
@@ -58,8 +59,8 @@ describe('validateSelectDocumentTypeAction', () => {
         'otherIteration',
       ],
       errors: {
-        documentType: "Select a document type"
-      }
+        documentType: 'Select a document type',
+      },
     });
   });
 
