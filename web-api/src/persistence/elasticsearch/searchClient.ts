@@ -3,16 +3,16 @@ import { get } from 'lodash';
 import { getIndexNameFromAlias } from '../../../elasticsearch/elasticsearch-aliases';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
-import { type ServerApplicationContext } from '@web-api/applicationContext';
-import {
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import type {
+  Common,
+  Core_Search,
+} from '@opensearch-project/opensearch/api/_types';
+import type {
   Count_Request,
   Search_Request,
 } from '@opensearch-project/opensearch/api';
-import {
-  type Common,
-  type Core_Search,
-} from '@opensearch-project/opensearch/api/_types';
-import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 const CHUNK_SIZE = MAX_ELASTICSEARCH_PAGINATION;
 export type SearchClientResultsType = {

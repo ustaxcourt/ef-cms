@@ -1,6 +1,6 @@
 import { RawUser } from '@shared/business/entities/User';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { searchAll } from '@web-api/persistence/elasticsearch/searchClient';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const getAllUsersByRole = async (
   applicationContext: ServerApplicationContext,
