@@ -20,6 +20,7 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useEffect, useRef } from 'react';
 import classNames from 'classnames';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 
 export interface MessageFilterData {
   isSelected: any;
@@ -106,10 +107,11 @@ export const MessageTable = connect<
     // For cases when messages can be completed in the given view
     const getCompleteAllButton = () => {
       return (
-        <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+        <div className="desktop:grid-col-auto tablet:grid-col-12 tablet:margin-top-1 text-right desktop:margin-left-auto">
           <Button
+            noMargin={true}
             link
-            className="action-button"
+            className="action-button tablet:margin-right-0"
             data-testid="message-batch-mark-as-complete"
             disabled={!messagesIndividualInboxHelper.isCompletionButtonEnabled}
             icon="check-circle"
@@ -144,7 +146,6 @@ export const MessageTable = connect<
             </div>
           </div>
         )}
-
         <div className="grid-row grid-gap">
           {messageFilters.length > 0 && (
             <div
@@ -161,8 +162,23 @@ export const MessageTable = connect<
             </div>
           )}
           {selectable && getCompleteAllButton()}
+          <NonMobile>
+            <div className="text-semibold desktop:grid-col-auto tablet:padding-bottom-1 margin-top-auto margin-bottom-auto text-right tablet:grid-col-12">
+              Count:{' '}
+              <span className="text-normal">
+                {messagesIndividualInboxHelper.messagesDisplayedCount}
+              </span>
+            </div>
+          </NonMobile>
+          <Mobile>
+            <div className="text-semibold text-right grid-col-12 margin-bottom-3">
+              Count:{' '}
+              <span className="text-normal">
+                {messagesIndividualInboxHelper.messagesDisplayedCount}
+              </span>
+            </div>
+          </Mobile>
         </div>
-
         <div className="overflow-x-auto overflow-y-hidden" id={id}>
           <table className="usa-table ustc-table subsection">
             <thead>
