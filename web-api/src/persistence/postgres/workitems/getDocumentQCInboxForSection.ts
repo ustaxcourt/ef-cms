@@ -3,9 +3,11 @@ import {
   PETITIONS_SECTION,
 } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import {
+  workItemQCQueryBase,
+  WorkItemWithCaseInfo,
+} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
-import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 export const getDocumentQCInboxForSection = async ({
   judgeId,
@@ -15,16 +17,9 @@ export const getDocumentQCInboxForSection = async ({
   section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
 }): Promise<WorkItemWithCaseInfo[]> => {
   const workItems = await getDbReader(reader => {
-    let builder = reader
-      .selectFrom('dwWorkItem as w')
+    let builder = workItemQCQueryBase(reader)
       .where('w.section', '=', section)
       .where('w.completedAt', 'is', null)
-      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .innerJoin('dwDocketEntry as d', join =>
-        join
-          .onRef('d.docketEntryId', '=', 'w.docketEntryId')
-          .onRef('d.docketNumber', '=', 'w.docketNumber'),
-      )
       .limit(5000);
 
     if (judgeId) {
@@ -33,25 +28,10 @@ export const getDocumentQCInboxForSection = async ({
       builder = builder.where('c.associatedJudgeId', 'is', null);
     }
 
-    return builder
-      .selectAll('w')
-      .select(eb => [
-        jsonObjectFrom(
-          eb
-            .selectFrom('dwDocketEntry as de')
-            .selectAll()
-            .whereRef('de.docketEntryId', '=', 'w.docketEntryId')
-            .whereRef('de.docketNumber', '=', 'w.docketNumber')
-            .limit(1),
-        ).as('docketEntry'),
-        'c.status',
-        'c.caption',
-        'c.leadDocketNumber',
-        'c.trialDate',
-        'c.trialLocation',
-      ])
-      .execute();
+    return builder.execute();
   });
+
+  console.log('workItems', workItems);
 
   return workItems.map(toWorkItemWithCaseInfo);
 };

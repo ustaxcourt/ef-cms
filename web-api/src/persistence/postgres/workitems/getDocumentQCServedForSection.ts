@@ -3,9 +3,11 @@ import {
   PETITIONS_SECTION,
 } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import {
+  workItemQCQueryBase,
+  WorkItemWithCaseInfo,
+} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
-import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 export const getDocumentQCServedForSection = async ({
   afterDate,
@@ -15,33 +17,9 @@ export const getDocumentQCServedForSection = async ({
   afterDate: Date;
 }): Promise<WorkItemWithCaseInfo[]> => {
   const workItems = await getDbReader(reader => {
-    return reader
-      .selectFrom('dwWorkItem as w')
-      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .innerJoin('dwDocketEntry as d', join =>
-        join
-          .onRef('d.docketEntryId', '=', 'w.docketEntryId')
-          .onRef('d.docketNumber', '=', 'w.docketNumber'),
-      )
+    return workItemQCQueryBase(reader)
       .where('w.section', '=', section)
       .where('w.completedAt', '>=', afterDate)
-      .select(eb => [
-        jsonObjectFrom(
-          eb
-            .selectFrom('dwDocketEntry as de')
-            .selectAll()
-            .whereRef('de.docketEntryId', '=', 'w.docketEntryId')
-            .whereRef('de.docketNumber', '=', 'w.docketNumber')
-            .limit(1),
-        ).as('docketEntry'),
-        'c.status',
-        'c.caption',
-        'c.leadDocketNumber',
-        'c.trialDate',
-        'c.trialLocation',
-      ])
-      .selectAll('w')
-      .select('w.docketNumber')
       .execute();
   });
 
