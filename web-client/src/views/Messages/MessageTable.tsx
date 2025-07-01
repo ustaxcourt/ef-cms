@@ -163,7 +163,9 @@ export const MessageTable = connect<
           )}
           {selectable && getCompleteAllButton()}
           <NonMobile>
-            <div className="text-semibold desktop:grid-col-auto tablet:padding-bottom-1 margin-top-auto margin-bottom-auto text-right tablet:grid-col-12">
+            <div
+              className={`text-semibold desktop:grid-col-auto tablet:padding-bottom-1 text-right tablet:grid-col-12 ${selectable ? '' : 'margin-left-auto'} ${messageFilters.length ? ' margin-top-auto margin-bottom-auto' : 'margin-bottom-2'}`}
+            >
               Count:{' '}
               <span className="text-normal">
                 {messagesIndividualInboxHelper.messagesDisplayedCount}
