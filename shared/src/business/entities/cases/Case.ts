@@ -136,7 +136,7 @@ export class Case extends JoiValidationEntity {
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: any[];
+  public docketEntries: RawDocketEntry[];
   public isSealed?: boolean;
   public hearings: any[];
   public privatePractitioners?: any[];
@@ -2232,7 +2232,7 @@ export const getPractitionersRepresenting = function (
   );
 };
 
-export const getPetitionDocketEntry = function (rawCase) {
+export const getPetitionDocketEntry = function (rawCase: RawCase) {
   return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,

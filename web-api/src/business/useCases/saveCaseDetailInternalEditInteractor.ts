@@ -6,6 +6,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
+  NotFoundError,
   UnauthorizedError,
   UnprocessableEntityError,
 } from '@web-api/errors/errors';
@@ -15,6 +16,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { isEmpty } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 /**
  * saveCaseDetailInternalEdit
@@ -144,19 +146,29 @@ export const saveCaseDetailInternalEdit = async (
   } else {
     const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
 
-    const initializeCaseWorkItem = petitionDocketEntry.workItem;
+    if (!petitionDocketEntry) {
+      throw new NotFoundError(
+        `Could not find petition docket entry on case ${petitionDocketEntry}`,
+      );
+    }
 
-    // 10684 TODO: Fix this
-    const workItemEntity = new WorkItem({
-      ...initializeCaseWorkItem,
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      inProgress: true,
+    const petitionWorkItem = await getWorkItemByDocketNumberAndDocketEntryId({
+      docketNumber,
+      docketEntryId: petitionDocketEntry?.docketEntryId,
     });
 
-    await upsertWorkItems({
-      workItems: [workItemEntity.validate().toRawObject()],
-    });
+    if (petitionWorkItem) {
+      const workItemEntity = new WorkItem({
+        ...petitionWorkItem,
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        inProgress: true,
+      });
+
+      await upsertWorkItems({
+        workItems: [workItemEntity.validate().toRawObject()],
+      });
+    }
   }
 
   const updatedCase = await applicationContext
