@@ -19,7 +19,6 @@ export const processUserEntries = async ({
       const user = unmarshall(userRecord.dynamodb.NewImage) as RawUser;
       return user;
     });
-    await upsertUserRecords(usersForPostgres);
 
     const practitioners = usersForPostgres.filter(
       user => user.entityName === Practitioner.ENTITY_NAME,
@@ -31,6 +30,9 @@ export const processUserEntries = async ({
         userId: p.userId,
       })),
     );
+
+    // this must come AFTER practitioners to prevent a ES index race condition
+    await upsertUserRecords(usersForPostgres);
   } catch (e) {
     getDawsonLogger().error(
       `Postgres re-indexing failure: Failed to process user record: `,
