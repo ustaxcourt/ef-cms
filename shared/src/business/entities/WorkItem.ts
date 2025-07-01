@@ -14,7 +14,7 @@ export class WorkItem extends JoiValidationEntity {
   public completedByUserId?: string;
   public completedMessage?: string;
   public createdAt: string;
-  public docketEntry: any;
+  public docketEntry?: any;
   public docketEntryId: string;
   public docketNumber: string;
   public inProgress?: boolean;
