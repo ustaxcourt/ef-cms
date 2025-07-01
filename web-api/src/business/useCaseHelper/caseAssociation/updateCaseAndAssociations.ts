@@ -15,11 +15,11 @@ import { isEmpty, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 import diff from 'diff-arrays-of-objects';
-import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 import { disassociateUserFromCase } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -222,18 +222,16 @@ const updateIrsPractitioners = ({
       },
   );
 
-  const updatePractitionerFunctions = validIrsPractitioners.map(
-    practitioner =>
-      async function updateIrsPractitioners_cb() {
-        return await associateUserWithCase({
-          docketNumber: caseToUpdate.docketNumber,
-          userId: practitioner.userId,
-          serviceIndicator: practitioner.serviceIndicator,
-        });
-      },
-  );
+  const irsPractitionersToUpdate = validIrsPractitioners.map(irs => ({
+    docketNumber: caseToUpdate.docketNumber,
+    userId: irs.userId,
+    serviceIndicator: irs.serviceIndicator,
+  }));
 
-  return [...deletePractitionerFunctions, ...updatePractitionerFunctions];
+  return [
+    ...deletePractitionerFunctions,
+    () => upsertUserOnCaseRecords(irsPractitionersToUpdate),
+  ];
 };
 
 const updatePrivatePractitioners = ({
@@ -276,19 +274,19 @@ const updatePrivatePractitioners = ({
       },
   );
 
-  const updatePractitionerFunctions = validPrivatePractitioners.map(
-    practitioner =>
-      async function updatePrivatePractitioner_cb() {
-        return await associateUserWithCase({
-          docketNumber: caseToUpdate.docketNumber,
-          userId: practitioner.userId,
-          representing: practitioner.representing,
-          serviceIndicator: practitioner.serviceIndicator,
-        });
-      },
+  const privatePractitionersToUpdate = validPrivatePractitioners.map(
+    privateP => ({
+      docketNumber: caseToUpdate.docketNumber,
+      userId: privateP.userId,
+      representing: privateP.representing,
+      serviceIndicator: privateP.serviceIndicator,
+    }),
   );
 
-  return [...deletePractitionerFunctions, ...updatePractitionerFunctions];
+  return [
+    ...deletePractitionerFunctions,
+    () => upsertUserOnCaseRecords(privatePractitionersToUpdate),
+  ];
 };
 
 const updateCaseDeadlines = async ({

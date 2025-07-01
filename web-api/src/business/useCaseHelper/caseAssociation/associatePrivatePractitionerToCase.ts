@@ -7,7 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
-import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
 
 /**
  * associatePrivatePractitionerToCase
@@ -60,11 +60,14 @@ export const associatePrivatePractitionerToCase = async ({
     return caseEntity.toRawObject();
   }
 
-  await associateUserWithCase({
-    docketNumber,
-    userId: user.userId,
-    representing,
-  });
+  await upsertUserOnCaseRecords([
+    {
+      docketNumber,
+      userId: user.userId,
+      representing,
+      serviceIndicator,
+    },
+  ]);
 
   const { petitioners } = caseEntity;
 

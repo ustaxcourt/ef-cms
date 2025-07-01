@@ -9,7 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
 import { createNewPetitionerUser } from '@web-api/persistence/postgres/users/createNewPetitionerUser';
-import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
+import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
 
 export const createUserForContact = async ({
   authorizedUser,
@@ -48,10 +48,13 @@ export const createUserForContact = async ({
 
   const rawCase = caseEntity.toRawObject();
 
-  await associateUserWithCase({
-    docketNumber: rawCase.docketNumber,
-    userId: userRaw.userId,
-  });
+  await upsertUserOnCaseRecords([
+    {
+      docketNumber: rawCase.docketNumber,
+      userId: userRaw.userId,
+      serviceIndicator: contact.serviceIndicator,
+    },
+  ]);
 
   return caseEntity;
 };

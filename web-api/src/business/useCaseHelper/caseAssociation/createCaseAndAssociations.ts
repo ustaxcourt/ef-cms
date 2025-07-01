@@ -5,9 +5,9 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
-import { associateUserWithCase } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
 
 const createCaseDocketEntries = async ({
   authorizedUser,
@@ -26,33 +26,33 @@ const createCaseDocketEntries = async ({
   await upsertDocketEntries(validDocketEntries);
 };
 
-const connectIrsPractitioners = ({ docketNumber, irsPractitioners }) => {
+const connectIrsPractitioners = async ({ docketNumber, irsPractitioners }) => {
   const validIrsPractitioners =
     IrsPractitioner.validateRawCollection(irsPractitioners);
 
-  return validIrsPractitioners.map(
-    async practitioner =>
-      await associateUserWithCase({
-        docketNumber,
-        userId: practitioner.userId,
-      }),
+  await upsertUserOnCaseRecords(
+    validIrsPractitioners.map(irs => ({
+      docketNumber,
+      userId: irs.userId,
+      serviceIndicator: irs.serviceIndicator,
+    })),
   );
 };
 
-const connectPrivatePractitioners = ({
+const connectPrivatePractitioners = async ({
   docketNumber,
   privatePractitioners,
 }) => {
   const validPrivatePractitioners =
     PrivatePractitioner.validateRawCollection(privatePractitioners);
 
-  return validPrivatePractitioners.map(
-    async practitioner =>
-      await associateUserWithCase({
-        docketNumber,
-        userId: practitioner.userId,
-        representing: practitioner.representing,
-      }),
+  await upsertUserOnCaseRecords(
+    validPrivatePractitioners.map(privatePractitioner => ({
+      docketNumber,
+      userId: privatePractitioner.userId,
+      serviceIndicator: privatePractitioner.serviceIndicator,
+      representing: privatePractitioner.representing,
+    })),
   );
 };
 
@@ -96,11 +96,11 @@ export const createCaseAndAssociations = async ({
       docketEntries,
       petitioners: caseToCreate.petitioners,
     }),
-    ...connectIrsPractitioners({
+    connectIrsPractitioners({
       docketNumber,
       irsPractitioners,
     }),
-    ...connectPrivatePractitioners({
+    connectPrivatePractitioners({
       docketNumber,
       privatePractitioners,
     }),
