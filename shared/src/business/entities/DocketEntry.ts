@@ -85,7 +85,7 @@ export class DocketEntry extends JoiValidationEntity {
   public additionalInfo2?: string;
   public addToCoversheet?: boolean;
   public archived?: boolean;
-  public attachments?: string;
+  public attachments?: boolean;
   public caseType?: string;
   public taxYear?: string;
   public noticeIssuedDate?: string;
@@ -99,13 +99,12 @@ export class DocketEntry extends JoiValidationEntity {
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
   public documentTitle: string;
-  public documentType: string;
-  public eventCode: string;
+  public documentType?: string;
+  public eventCode: string; // technically optional as draft docketEntry does not require it
   public filedBy?: string;
   public filedByRole?: string;
   public filingDate: string;
   public freeText?: string;
-  public freeText2?: string;
   public hasOtherFilingParty?: boolean;
   public hasSupportingDocuments?: boolean;
   public index?: number;
@@ -136,7 +135,7 @@ export class DocketEntry extends JoiValidationEntity {
   public scenario?: string;
   public secondaryDocument?: {
     secondaryDocumentInfo: string;
-  };
+  } & any;
   public servedAt?: string;
   public servedPartiesCode?: string;
   public serviceDate?: string;
@@ -145,7 +144,10 @@ export class DocketEntry extends JoiValidationEntity {
   public trialLocation?: string;
   public supportingDocument?: string;
   public userId?: string;
-  public privatePractitioners?: any[];
+  public privatePractitioners?: {
+    name: string;
+    partyPrivatePractitioner?: boolean;
+  }[];
   public servedParties?: any[];
   public signedAt?: string;
   public draftOrderState?: {
@@ -170,14 +172,13 @@ export class DocketEntry extends JoiValidationEntity {
     statusReportIndex?: string;
     strickenFromTrialSessions?: boolean;
   };
-  public stampData!: object;
+  public stampData!: Record<string, any>;
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
   public judge?: string;
-  public judgeUserId?: string;
   public pending?: boolean;
   public previousDocument?: {
-    docketEntryId: string;
+    docketEntryId?: string;
     documentTitle: string;
     documentType: string;
   };
@@ -239,7 +240,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.filedByRole = rawDocketEntry.filedByRole;
     this.filingDate = rawDocketEntry.filingDate || createISODateString();
     this.freeText = rawDocketEntry.freeText;
-    this.freeText2 = rawDocketEntry.freeText2;
     this.hasOtherFilingParty = rawDocketEntry.hasOtherFilingParty;
     this.hasSupportingDocuments = rawDocketEntry.hasSupportingDocuments;
     this.index = rawDocketEntry.index;
@@ -324,7 +324,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.stampData = rawDocketEntry.stampData || {};
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
-    this.judgeUserId = rawDocketEntry.judgeUserId;
     this.pending =
       rawDocketEntry.pending === undefined
         ? DocketEntry.isPendingOnCreation(rawDocketEntry)

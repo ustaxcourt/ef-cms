@@ -174,7 +174,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     'any.required': 'Provide an answer',
     'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
   }),
-  freeText2: JoiValidationConstants.STRING.max(1000).optional(),
   hasOtherFilingParty: joi
     .boolean()
     .optional()
