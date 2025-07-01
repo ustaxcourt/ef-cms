@@ -88,53 +88,38 @@ export const EditDocketEntryMetaFormDocument = connect(
           >
             Document type
           </label>
-
-          {form.eventCode === 'NOTR' ? (
-            <span
-              className="usa-input usa-input--readonly"
-              style={{
-                display: 'block',
-                padding: '0.5em',
-                background: '#f3f3f3',
-                border: '1px solid #ccc',
-              }}
-            >
-              {form.documentTitle}
-            </span>
-          ) : (
-            <SelectSearch
-              aria-describedby="document-type-label"
-              data-testid="edit-docket-entry-meta-document-type-search"
-              id="document-type"
-              isClearable={true}
-              name="eventCode"
-              options={internalTypesHelper.internalDocumentTypesForSelectSorted}
-              value={
-                form.eventCode === 'NOTR'
-                  ? { label: form.documentType, value: form.eventCode }
-                  : reactSelectValue({
-                      documentTypes:
-                        internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
-                      selectedEventCode: form.eventCode,
-                    })
-              }
-              isDisabled={form.eventCode === 'NOTR'}
-              onChange={inputValue => {
-                const value = inputValue?.value || '';
-                updateDocketEntryMetaDocumentFormValueSequence({
-                  key: 'eventCode',
-                  value,
-                });
-                validateDocumentSequence();
-              }}
-              onInputChange={inputText => {
-                validateDocumentSequence({
-                  key: 'searchText',
-                  value: inputText,
-                });
-              }}
-            />
-          )}
+          <SelectSearch
+            aria-describedby="document-type-label"
+            data-testid="edit-docket-entry-meta-document-type-search"
+            id="document-type"
+            isClearable={true}
+            name="eventCode"
+            options={internalTypesHelper.internalDocumentTypesForSelectSorted}
+            value={
+              form.eventCode === 'NOTR'
+                ? [{ label: form.documentTitle, value: form.eventCode }]
+                : reactSelectValue({
+                    documentTypes:
+                      internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
+                    selectedEventCode: form.eventCode,
+                  })
+            }
+            isDisabled={form.eventCode === 'NOTR'}
+            onChange={inputValue => {
+              const value = inputValue?.value || '';
+              updateDocketEntryMetaDocumentFormValueSequence({
+                key: 'eventCode',
+                value,
+              });
+              validateDocumentSequence();
+            }}
+            onInputChange={inputText => {
+              validateDocumentSequence({
+                key: 'searchText',
+                value: inputText,
+              });
+            }}
+          />
         </FormGroup>
         {editDocketEntryMetaHelper.primary.showSecondaryDocumentForm && (
           <FormGroup
