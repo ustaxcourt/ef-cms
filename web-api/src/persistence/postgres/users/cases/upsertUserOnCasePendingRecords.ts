@@ -1,4 +1,5 @@
-import { pgInsertInto } from '../../utils/operation/pgInsertInto';
+import { getDbWriter } from '@web-api/database';
+import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 export const upsertUserOnCasePendingRecords = async (
   userOnCaseRecords: Array<{
@@ -6,9 +7,16 @@ export const upsertUserOnCasePendingRecords = async (
     docketNumber: string;
   }>,
 ) => {
-  await pgInsertInto({
-    table: 'dwUserOnCasePending',
-    values: userOnCaseRecords,
-    onConflictColumns: ['docketNumber', 'userId'],
+  return await getDbWriter({
+    cb: async writer => {
+      return writer
+        .insertInto('dwUserOnCasePending')
+        .values(userOnCaseRecords)
+        .onConflict(oc => oc.columns(['userId', 'docketNumber']).doNothing())
+        .returningAll()
+        .execute();
+    },
+    table: 'dwUserOnCase',
+    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 };
