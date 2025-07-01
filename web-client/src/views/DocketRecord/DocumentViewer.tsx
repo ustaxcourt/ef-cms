@@ -138,9 +138,8 @@ export const DocumentViewer = connect(
             </div>
           </div>
 
-          <div className="grid-col-8">
-            <DocumentViewerDocument />
-          </div>
+          {formattedDocketEntries.formattedDocketEntriesOnDocketRecord.length >
+            0 && <DocumentViewerDocument />}
         </div>
       </>
     );
