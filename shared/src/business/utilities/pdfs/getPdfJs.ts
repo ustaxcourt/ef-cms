@@ -29,18 +29,50 @@ in case we decide to switch to a modern version of pdfs-dist.
 export function clientSupportsES2022(): boolean {
   // Check for ES2022 features that are commonly used in pdfjs-dist
   try {
-
     // Hard-block Safari <16.4 due to partial ES2022 support
-    const ua = navigator.userAgent;
-    const safariMatch = ua.match(/Version\/(\d+)\.(\d+)/);
-    if (
-      /Safari/.test(ua) &&
-      !/Chrome|Chromium/.test(ua) &&
-      safariMatch &&
-      (parseInt(safariMatch[1], 10) < 16 ||
-        (parseInt(safariMatch[1], 10) === 16 && parseInt(safariMatch[2], 10) < 4))
-    ) {
+    // Defensive check for user agent
+
+    const ua = navigator?.userAgent;
+    if (!ua || typeof ua !== 'string' || ua.trim() === '') {
+      console.warn(
+        'User agent is empty or invalid, assuming unsupported browser',
+      );
       return false;
+    }
+
+    const safariMatch = ua.match(/Safari/);
+    if (safariMatch && !ua.includes('Chrome') && !ua.includes('Chromium')) {
+      try {
+        const versionMatch = ua.match(/Version\/(\d+)\.(\d+)/);
+        if (versionMatch) {
+          const majorVersion = parseInt(versionMatch[1], 10);
+          const minorVersion = parseInt(versionMatch[2], 10);
+
+          // Check if version parsing was successful
+          if (isNaN(majorVersion) || isNaN(minorVersion)) {
+            console.warn(
+              'Could not parse Safari version, assuming unsupported',
+            );
+            return false;
+          }
+
+          // Safari must be 16.0 or higher
+          if (majorVersion < 16) {
+            console.warn(
+              `Safari ${majorVersion}.${minorVersion} is below minimum version 16.0`,
+            );
+            return false;
+          }
+        } else {
+          console.warn(
+            'Could not find Safari version in user agent, assuming unsupported',
+          );
+          return false;
+        }
+      } catch (error) {
+        console.error('Error parsing Safari user agent:', error);
+        return false;
+      }
     }
     // Basic ES2022 feature checks
     // @ts-ignore

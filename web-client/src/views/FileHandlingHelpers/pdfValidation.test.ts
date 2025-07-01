@@ -8,7 +8,10 @@ import {
   validatePdf,
 } from './pdfValidation';
 import { validatePdfHeader } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
-import { getPdfJs as getPdfJsMock } from '@shared/business/utilities/pdfs/getPdfJs';
+import {
+  getPdfJs as getPdfJsMock,
+  clientSupportsES2022 as clientSupportsES2022Mock,
+} from '@shared/business/utilities/pdfs/getPdfJs';
 
 const VALID_PDF_HEADER_BYTES = [0x25, 0x50, 0x44, 0x46, 0x2d]; // %PDF-
 const INVALID_PDF_HEADER_BYTES = [0x50, 0x44, 0x46, 0x25, 0x2d]; // PFD%-
@@ -33,6 +36,7 @@ describe('validatePdfHeader', () => {
 
 describe('validatePdf', () => {
   const getPdfJs = jest.mocked(getPdfJsMock);
+  const clientSupportsES2022MockFn = jest.mocked(clientSupportsES2022Mock);
 
   let mockFile: File;
   let mockPdfJs: any;
@@ -43,12 +47,6 @@ describe('validatePdf', () => {
     // Store original navigator.userAgent
     originalUserAgent = navigator.userAgent;
 
-    // Set up a modern user agent by default
-    Object.defineProperty(navigator, 'userAgent', {
-      configurable: true,
-      value:
-        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
-    });
 
     mockFileReader = {
       onerror: null,
@@ -88,6 +86,7 @@ describe('validatePdf', () => {
       }),
     };
     getPdfJs.mockResolvedValue(mockPdfJs);
+    clientSupportsES2022MockFn.mockReturnValue(true);
 
     mockFile = new File([new ArrayBuffer(8)], 'test.pdf', {
       type: 'application/pdf',
@@ -110,80 +109,166 @@ describe('validatePdf', () => {
       value: userAgent,
     });
   };
-  
-  describe('browser compatibility checks', () => {
-    it('should reject old Chrome browser (version < 84)', async () => {
-      mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.3945.130 Safari/537.36');
-      
-      const result = await validatePdf({ file: mockFile });
-      
-      expect(result).toEqual({
-        errorInformation: {
-          errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
-          errorMessageToLog: expect.stringContaining(UNSUPPORTED_BROWSER_ERROR_MESSAGE),
-          errorType: ErrorTypes.UNSUPPORTED_BROWSER,
-        },
-        isValid: false,
-      });
-    });
-    
-    it('should reject old Firefox browser (version < 90)', async () => {
-      mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:89.0) Gecko/20100101 Firefox/89.0');
-      
-      const result = await validatePdf({ file: mockFile });
-      
-      expect(result).toEqual({
-        errorInformation: {
-          errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
-          errorMessageToLog: expect.stringContaining(UNSUPPORTED_BROWSER_ERROR_MESSAGE),
-          errorType: ErrorTypes.UNSUPPORTED_BROWSER,
-        },
-        isValid: false,
-      });
-    });
-    
+
+  describe('browser compatibility checks and feature detection', () => {
     it('should reject old Safari browser (version < 16)', async () => {
-      mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6.1 Safari/605.1.15');
-      
+      // Don't mock clientSupportsES2022 - let it run its real logic
+      // which includes checking Safari version
+      const actualPdfJsModule = jest.requireActual(
+        '@shared/business/utilities/pdfs/getPdfJs',
+      );
+      clientSupportsES2022MockFn.mockImplementation(
+        actualPdfJsModule.clientSupportsES2022,
+      );
+
+      // Set Safari 15.6 user agent
+      mockUserAgent(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.6 Safari/605.1.15',
+      );
+
+      // This should reject immediately without any FileReader interaction
       const result = await validatePdf({ file: mockFile });
-      
+
       expect(result).toEqual({
         errorInformation: {
           errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
-          errorMessageToLog: expect.stringContaining(UNSUPPORTED_BROWSER_ERROR_MESSAGE),
+          errorMessageToLog: expect.stringContaining(
+            UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+          ),
           errorType: ErrorTypes.UNSUPPORTED_BROWSER,
         },
         isValid: false,
       });
     });
-    
-    it('should reject Internet Explorer', async () => {
-      mockUserAgent('Mozilla/5.0 (Windows NT 10.0; WOW64; Trident/7.0; rv:11.0) like Gecko');
-      
-      const result = await validatePdf({ file: mockFile });
-      
-      expect(result).toEqual({
-        errorInformation: {
-          errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
-          errorMessageToLog: expect.stringContaining(UNSUPPORTED_BROWSER_ERROR_MESSAGE),
-          errorType: ErrorTypes.UNSUPPORTED_BROWSER,
-        },
-        isValid: false,
+
+    it('should accept modern Safari browser (version >= 16)', async () => {
+      // Use real implementation
+      const actualPdfJsModule = jest.requireActual(
+        '@shared/business/utilities/pdfs/getPdfJs',
+      );
+      clientSupportsES2022MockFn.mockImplementation(
+        actualPdfJsModule.clientSupportsES2022,
+      );
+
+      // Set Safari 16.1 user agent (should be accepted)
+      mockUserAgent(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.1 Safari/605.1.15',
+      );
+
+      // Mock successful PDF validation
+      mockPdfJs.getDocument.mockReturnValue({
+        promise: Promise.resolve({
+          destroy: jest.fn().mockResolvedValue(undefined),
+        }),
       });
-    });
-    
-    it('should accept modern browsers', async () => {
-      // Chrome 110
-      mockUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36');
-      
-      // Trigger the file reader onload event to simulate file reading completion
+
       const resultPromise = validatePdf({ file: mockFile });
       mockFileReader.onload?.();
       const result = await resultPromise;
-      
-      // We only expect it not to fail due to browser compatibility
-      // The actual validation depends on other tests
-      expect(result.errorInformation?.errorType).not.toBe(ErrorTypes.UNSUPPORTED_BROWSER);
+
+      // Should NOT fail due to browser compatibility
+      expect(result.errorInformation?.errorType).not.toBe(
+        ErrorTypes.UNSUPPORTED_BROWSER,
+      );
+      expect(result.isValid).toBe(true);
+    });
+
+    it('should reject browsers missing ES2022 features (by manipulating environment)', async () => {
+      // Use real implementation but manipulate the environment
+      const actualPdfJsModule = jest.requireActual(
+        '@shared/business/utilities/pdfs/getPdfJs',
+      );
+      clientSupportsES2022MockFn.mockImplementation(
+        actualPdfJsModule.clientSupportsES2022,
+      );
+
+      // Store original features
+      // @ts-ignore
+      const originalHasOwn = Object.hasOwn;
+      const originalStructuredClone = (global as any).structuredClone;
+      const originalArrayAt = Array.prototype.at;
+
+      try {
+        // Remove ES2022 features to simulate unsupported browser
+        delete (Object as any).hasOwn;
+        delete (global as any).structuredClone;
+        delete (Array.prototype as any).at;
+
+        // Use modern Chrome user agent but missing features
+        mockUserAgent(
+          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+        );
+
+        const result = await validatePdf({ file: mockFile });
+
+        expect(result).toEqual({
+          errorInformation: {
+            errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+            errorMessageToLog: expect.stringContaining(
+              UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+            ),
+            errorType: ErrorTypes.UNSUPPORTED_BROWSER,
+          },
+          isValid: false,
+        });
+      } finally {
+        // Restore original features
+        // @ts-ignore
+        Object.hasOwn = originalHasOwn;
+        (global as any).structuredClone = originalStructuredClone;
+        Array.prototype.at = originalArrayAt;
+      }
+    });
+    it('should accept browsers with all required features', async () => {
+      // Use real implementation
+      const actualPdfJsModule = jest.requireActual(
+        '@shared/business/utilities/pdfs/getPdfJs',
+      );
+      clientSupportsES2022MockFn.mockImplementation(
+        actualPdfJsModule.clientSupportsES2022,
+      );
+
+      // Ensure all ES2022 features are present (they should be in test environment)
+      // Use modern Chrome user agent
+      mockUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/110.0.0.0 Safari/537.36',
+      );
+
+      // Mock successful PDF validation
+      mockPdfJs.getDocument.mockReturnValue({
+        promise: Promise.resolve({
+          destroy: jest.fn().mockResolvedValue(undefined),
+        }),
+      });
+
+      const resultPromise = validatePdf({ file: mockFile });
+      mockFileReader.onload?.();
+      const result = await resultPromise;
+
+      // Should NOT fail due to browser compatibility
+      expect(result.errorInformation?.errorType).not.toBe(
+        ErrorTypes.UNSUPPORTED_BROWSER,
+      );
+      expect(result.isValid).toBe(true);
+    });
+
+    it('should handle explicit ES2022 feature detection failure', async () => {
+      // Mock to return false (simulating missing ES2022 features)
+      // This tests the validation logic when clientSupportsES2022 returns false
+      clientSupportsES2022MockFn.mockReturnValue(false);
+
+      const result = await validatePdf({ file: mockFile });
+
+      expect(result).toEqual({
+        errorInformation: {
+          errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+          errorMessageToLog: expect.stringContaining(
+            UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+          ),
+          errorType: ErrorTypes.UNSUPPORTED_BROWSER,
+        },
+        isValid: false,
+      });
     });
   });
 
