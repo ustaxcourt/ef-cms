@@ -22,8 +22,9 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy, some } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -47,7 +48,6 @@ export const fileCourtIssuedOrder = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
@@ -119,8 +119,7 @@ export const fileCourtIssuedOrder = async (
 
   caseEntity.addDocketEntry(docketEntryEntity);
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

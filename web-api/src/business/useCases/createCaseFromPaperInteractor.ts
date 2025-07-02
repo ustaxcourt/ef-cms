@@ -22,8 +22,7 @@ import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
@@ -310,7 +309,7 @@ export const createCaseFromPaperInteractor = async (
     );
   }
 
-  await acquireLock({
+  const removeLockFunction = await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
@@ -337,10 +336,7 @@ export const createCaseFromPaperInteractor = async (
       authorizedUser,
     ));
   } finally {
-    await removeLock({
-      applicationContext,
-      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    });
+    await removeLockFunction();
   }
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 

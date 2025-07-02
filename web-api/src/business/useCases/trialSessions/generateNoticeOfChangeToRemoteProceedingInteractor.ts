@@ -58,7 +58,6 @@ export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
     });
 
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

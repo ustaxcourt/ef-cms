@@ -1,7 +1,6 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { partitionRecords } from './processStreamUtilities';
-import { processCaseEntries } from './processCaseEntries';
 import { processCompletionMarkers } from './processCompletionMarkers';
 import { processDocketEntries } from './processDocketEntries';
 import { processOtherEntries } from './processOtherEntries';
@@ -17,7 +16,6 @@ export const processStreamRecordsInteractor = async (
   { recordsToProcess }: { recordsToProcess: DynamoDBRecord[] },
 ): Promise<void> => {
   const {
-    caseEntityRecords,
     completionMarkers,
     docketEntryRecords,
     otherRecords,
@@ -34,15 +32,6 @@ export const processStreamRecordsInteractor = async (
       removeRecords,
     }).catch(err => {
       getDawsonLogger().error('failed to processRemoveEntries', {
-        err,
-      });
-      throw err;
-    });
-
-    await processCaseEntries({
-      caseEntityRecords,
-    }).catch(err => {
-      getDawsonLogger().error('failed to processCaseEntries', {
         err,
       });
       throw err;

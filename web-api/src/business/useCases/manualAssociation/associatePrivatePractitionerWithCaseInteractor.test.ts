@@ -3,6 +3,10 @@ import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -17,6 +21,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { getPractitionerById as getPractitionerByIdMock } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -104,8 +109,6 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       mockUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 });

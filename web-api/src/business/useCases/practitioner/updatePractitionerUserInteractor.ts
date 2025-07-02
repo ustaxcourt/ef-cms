@@ -4,10 +4,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit, union } from 'lodash';
 import { updateUserPendingEmail } from '@web-api/business/useCases/user/updateUserPendingEmailInteractor';
 import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
@@ -21,6 +17,10 @@ import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { updatePractitionerUser as updatePractitionerUserFromPersistence } from '@web-api/persistence/postgres/practitioners/updatePractitionerUser';
 import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/practitioners/getPractitionerByBarNumber';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,

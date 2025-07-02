@@ -3,15 +3,14 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * associatePrivatePractitionerToCase
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {string} providers.docketNumber the docket number of the case
  * @param {Array} params.representing the contact ids the private practitioner is representing
  * @param {object} providers.user the user object for the logged in user
@@ -19,14 +18,12 @@ import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/ver
  * @returns {Promise<*>} the updated case entity
  */
 export const associatePrivatePractitionerToCase = async ({
-  applicationContext,
   authorizedUser,
   docketNumber,
   representing = [],
   serviceIndicator,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketNumber: string;
   serviceIndicator?: string;
@@ -39,7 +36,6 @@ export const associatePrivatePractitionerToCase = async ({
   });
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
   const caseEntity = new Case(caseToUpdate, {
@@ -75,8 +71,7 @@ export const associatePrivatePractitionerToCase = async ({
     }),
   );
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

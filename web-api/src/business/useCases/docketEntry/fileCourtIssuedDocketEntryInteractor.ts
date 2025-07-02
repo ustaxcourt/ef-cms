@@ -12,10 +12,11 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  *
@@ -54,7 +55,6 @@ export const fileCourtIssuedDocketEntry = async (
   const { docketEntryId } = documentMeta;
 
   const subjectCaseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectDocketNumber,
   });
 
@@ -158,8 +158,7 @@ export const fileCourtIssuedDocketEntry = async (
       });
 
       const saveItems: Promise<any>[] = [
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
+        updateCaseAndAssociations({
           authorizedUser,
           caseToUpdate: caseEntity,
         }),
@@ -178,7 +177,6 @@ export const fileCourtIssuedDocketEntry = async (
   );
 
   const rawSubjectCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectDocketNumber,
   });
 

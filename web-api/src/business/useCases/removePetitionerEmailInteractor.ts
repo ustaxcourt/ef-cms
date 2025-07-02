@@ -10,7 +10,6 @@ import {
 } from '@shared/business/entities/contacts/Petitioner';
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { applicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -24,7 +23,6 @@ export const removePetitionerEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
   const rawCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
     includeConsolidatedCases: false,
   });

@@ -1,6 +1,3 @@
-jest.mock(
-  '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo',
-);
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/practitioners/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';

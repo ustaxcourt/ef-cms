@@ -36,7 +36,6 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   }
 
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

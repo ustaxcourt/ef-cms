@@ -6,9 +6,9 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -50,7 +50,6 @@ const submitCaseAssociationRequest = async (
     return await applicationContext
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
-        applicationContext,
         authorizedUser,
         docketNumber,
         representing: filers,
@@ -60,7 +59,6 @@ const submitCaseAssociationRequest = async (
     return await applicationContext
       .getUseCaseHelpers()
       .associateIrsPractitionerToCase({
-        applicationContext,
         authorizedUser,
         docketNumber,
         user: user.toRawObject() as RawPractitioner,

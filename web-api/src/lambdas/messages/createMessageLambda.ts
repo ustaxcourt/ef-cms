@@ -3,9 +3,8 @@ import { createMessageInteractor } from '@web-api/business/useCases/messages/cre
 import { genericHandler } from '../../genericHandler';
 
 export const createMessageLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await createMessageInteractor(
-      applicationContext,
       {
         ...JSON.parse(event.body),
       },

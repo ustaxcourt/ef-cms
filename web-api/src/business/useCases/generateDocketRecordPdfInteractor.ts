@@ -37,7 +37,6 @@ export const generateDocketRecordPdfInteractor = async (
   });
 
   const caseSource = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

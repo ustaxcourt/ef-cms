@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
@@ -222,9 +223,8 @@ describe('editPaperFilingInteractor', () => {
           mockDocketClerkUser,
         );
 
-        const updatedDocketEntry = applicationContext
-          .getUseCaseHelpers()
-          .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        const updatedDocketEntry =
+          updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
             doc => doc.docketEntryId === mockDocketEntryId,
           );
         expect(getCaseByDocketNumber).toHaveBeenCalled();

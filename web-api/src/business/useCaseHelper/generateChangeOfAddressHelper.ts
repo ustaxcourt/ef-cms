@@ -18,6 +18,7 @@ import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * generateChangeOfAddressHelper
@@ -57,7 +58,6 @@ export const generateChangeOfAddressHelper = async ({
   try {
     const newData = contactInfo;
     const userCase = await getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
     });
     const caseEntity = new Case(userCase, {
@@ -89,8 +89,7 @@ export const generateChangeOfAddressHelper = async ({
       });
     }
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });

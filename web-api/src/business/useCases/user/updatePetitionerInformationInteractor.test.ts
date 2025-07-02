@@ -5,6 +5,7 @@ import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 jest.mock('@web-api/business/useCaseHelper/service/createChangeItems');
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -21,7 +22,6 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UserCase } from '@shared/business/entities/UserCase';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
@@ -40,6 +40,7 @@ import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/us
 jest.mock('@web-api/business/useCases/addCoverToPdf');
 import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
@@ -51,6 +52,7 @@ describe('updatePetitionerInformationInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
   const PRIMARY_CONTACT_ID = MOCK_CASE.petitioners[0].contactId;
   const mockUrl = 'madeUpurl.com';
 
@@ -67,7 +69,6 @@ describe('updatePetitionerInformationInteractor', () => {
       name: 'Test Secondary Petitioner',
     },
   ];
-  let mockLock;
 
   beforeAll(() => {
     (addCoverToPdf as jest.Mock).mockResolvedValue({});
@@ -79,14 +80,9 @@ describe('updatePetitionerInformationInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .createUserForContact.mockImplementation(() => new UserCase(mockCase));
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
   });
 
   beforeEach(() => {
-    mockLock = undefined;
-
     mockCase = {
       ...MOCK_CASE,
       petitioners: mockPetitioners,
@@ -633,9 +629,7 @@ describe('updatePetitionerInformationInteractor', () => {
         applicationContext.getUseCaseHelpers().addExistingUserToCase,
       ).toHaveBeenCalled();
 
-      expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-      ).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
       expect(generateAndServeDocketEntry).toHaveBeenCalledTimes(1);
     });
 
@@ -708,7 +702,9 @@ describe('updatePetitionerInformationInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       updatePetitionerInformationInteractor(
@@ -727,7 +723,7 @@ describe('updatePetitionerInformationInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await updatePetitionerInformationInteractor(
       applicationContext,
       {
@@ -740,19 +736,10 @@ describe('updatePetitionerInformationInteractor', () => {
       mockAdmissionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 });

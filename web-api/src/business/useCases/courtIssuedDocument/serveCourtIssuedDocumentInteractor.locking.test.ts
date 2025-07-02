@@ -5,8 +5,10 @@ jest.mock('@web-api/business/useCases/addCoverToPdf');
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { addCoverToPdf } from '@web-api/business/useCases/addCoverToPdf';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -25,6 +27,7 @@ import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/us
 const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const getUserById = getUserByIdMock as jest.Mock;
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -71,7 +74,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       { docketEntryId: mockDocketEntryId, isOnDocketRecord: false },
     ],
   };
-  let mockLock;
+
   const mockRequest = {
     clientConnectionId: mockClientConnectionId,
     docketEntryId: mockDocketEntryId,
@@ -80,16 +83,12 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   };
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
     (addCoverToPdf as jest.Mock).mockResolvedValue({
       pdfData: testPdfDoc,
     });
   });
 
   beforeEach(() => {
-    mockLock = undefined; // unlocked
     fileAndServeDocumentOnOneCase.mockImplementation(
       ({ caseEntity }) => caseEntity,
     );
@@ -107,11 +106,10 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   describe('locked', () => {
-    beforeEach(() => {
-      mockLock = MOCK_LOCK;
-    });
-
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
+      tryGetLocks.mockResolvedValueOnce([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
       await expect(
         serveCourtIssuedDocumentInteractor(
           applicationContext,
@@ -125,39 +123,18 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   });
 
   describe('not locked', () => {
-    beforeEach(() => {
-      mockLock = undefined;
-    });
-
-    it('should acquire a lock that lasts for 15 minutes', async () => {
+    it('should acquire and release a lock', async () => {
       await serveCourtIssuedDocumentInteractor(
         applicationContext,
         mockRequest,
         mockDocketClerkUser,
       );
 
-      expect(
-        applicationContext.getPersistenceGateway().createLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifier: `case|${mockCase.docketNumber}`,
-        ttl: 900,
-      });
-    });
-
-    it('should remove the lock', async () => {
-      await serveCourtIssuedDocumentInteractor(
-        applicationContext,
-        mockRequest,
-        mockDocketClerkUser,
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${MOCK_CASE.docketNumber}`],
+        }),
       );
-
-      expect(
-        applicationContext.getPersistenceGateway().removeLock,
-      ).toHaveBeenCalledWith({
-        applicationContext,
-        identifiers: [`case|${mockCase.docketNumber}`],
-      });
     });
   });
 });

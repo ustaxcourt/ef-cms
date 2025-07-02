@@ -8,7 +8,6 @@ import {
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createMessageInteractor } from './createMessageInteractor';
 import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -26,7 +25,6 @@ describe('createMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     await expect(
       createMessageInteractor(
-        applicationContext,
         {
           attachments: [],
           docketNumber: '101-20',
@@ -79,7 +77,6 @@ describe('createMessageInteractor', () => {
     });
 
     await createMessageInteractor(
-      applicationContext,
       {
         ...messageData,
         attachments: mockAttachments,

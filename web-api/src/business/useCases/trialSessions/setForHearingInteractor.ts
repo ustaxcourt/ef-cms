@@ -35,7 +35,6 @@ export const setForHearingInteractor = async (
   }
 
   const caseDetails = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -67,7 +66,6 @@ export const setForHearingInteractor = async (
 
   // retrieve the case again since we've added the mapped hearing record :)
   const updatedCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

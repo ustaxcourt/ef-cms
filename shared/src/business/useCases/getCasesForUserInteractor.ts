@@ -11,10 +11,10 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { compareISODateStrings } from '../utilities/sortFunctions';
-import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
-import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { partition, uniqBy } from 'lodash';
 import { getCasesForUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 interface UserCaseDTO {
   caseCaption: string;
@@ -50,9 +50,16 @@ export const getCasesForUserInteractor = async (
   );
 
   const allUserCases: TAssociatedCase[] = (
-    (await getCasesMetadataByDocketNumbers({
+    await getCasesByDocketNumbers({
       docketNumbers,
-    })) as unknown as RawCase[]
+      excludeFields: [
+        'docketEntries',
+        'hearings',
+        'correspondence',
+        'privatePractitioners',
+        'irsPractitioners',
+      ],
+    })
   ).map(c => {
     return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
   });
@@ -210,8 +217,9 @@ async function getAllConsolidatedCases(
   return (
     await Promise.all(
       uniqueLeadDocketNumbers.map(aCase =>
-        getCasesMetadataWithCounselByLeadDocketNumber({
+        getConsolidatedCases({
           leadDocketNumber: aCase.leadDocketNumber!,
+          excludeFields: ['correspondence', 'docketEntries', 'hearings'],
         }),
       ),
     )

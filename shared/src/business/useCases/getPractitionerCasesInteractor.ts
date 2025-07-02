@@ -8,9 +8,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
-import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { partition } from 'lodash';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const getPractitionerCasesInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -25,7 +25,16 @@ export const getPractitionerCasesInteractor = async (
 
   const docketNumbers = await getDocketNumbersByUser({ userId });
 
-  const cases = await getCasesMetadataByDocketNumbers({ docketNumbers });
+  const cases = await getCasesByDocketNumbers({
+    docketNumbers,
+    excludeFields: [
+      'docketEntries',
+      'hearings',
+      'correspondence',
+      'privatePractitioners',
+      'irsPractitioners',
+    ],
+  });
 
   const caseDetails: PractitionerCaseDetail[] = cases
     ? cases.map(c => {

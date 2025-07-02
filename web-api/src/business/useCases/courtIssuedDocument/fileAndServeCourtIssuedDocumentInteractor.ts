@@ -5,10 +5,6 @@ import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
@@ -23,6 +19,10 @@ import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/post
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const fileAndServeCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -61,7 +61,6 @@ export const fileAndServeCourtIssuedDocument = async (
   }
 
   const subjectCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectCaseDocketNumber,
   });
 
@@ -72,6 +71,7 @@ export const fileAndServeCourtIssuedDocument = async (
   });
 
   let error: Error | undefined;
+
   if (!docketEntryToServe) {
     error = new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   } else if (docketEntryToServe.servedAt) {

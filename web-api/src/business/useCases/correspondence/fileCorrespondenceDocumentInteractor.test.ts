@@ -11,7 +11,6 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { fileCorrespondenceDocumentInteractor } from './fileCorrespondenceDocumentInteractor';
@@ -83,7 +82,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   it('should throw an Unauthorized error when the user role does not have theCASE_CORRESPONDENCE permission', async () => {
     await expect(
       fileCorrespondenceDocumentInteractor(
-        applicationContext,
         {
           documentMetadata: {
             docketNumber: mockCase.docketNumber,
@@ -100,7 +98,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
 
     await expect(
       fileCorrespondenceDocumentInteractor(
-        applicationContext,
         {
           documentMetadata: { docketNumber: mockCase.docketNumber } as any,
           primaryDocumentFileId: mockCorrespondenceId,
@@ -115,7 +112,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await fileCorrespondenceDocumentInteractor(
-      applicationContext,
       {
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
@@ -142,7 +138,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await fileCorrespondenceDocumentInteractor(
-      applicationContext,
       {
         documentMetadata: {
           docketNumber: mockCase.docketNumber,

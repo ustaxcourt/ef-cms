@@ -11,9 +11,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateCounselOnCase
@@ -26,7 +26,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
  * @returns {Promise} the promise of the update case call
  */
 const updateCounselOnCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     userData,
@@ -54,7 +54,6 @@ const updateCounselOnCase = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -88,7 +87,6 @@ const updateCounselOnCase = async (
   }
 
   const updatedCase = await updateCaseAndAssociations({
-    applicationContext,
     authorizedUser,
     caseToUpdate: caseEntity,
   });

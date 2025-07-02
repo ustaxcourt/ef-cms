@@ -15,11 +15,12 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import {
   asyncHandleLockError,
   withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+} from '@web-api/persistence/postgres/utils/mutex';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const addPaperFiling = async (
@@ -164,8 +165,7 @@ export const addPaperFiling = async (
 
     caseEntities.push(caseEntity);
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity.validate().toRawObject(),
     });

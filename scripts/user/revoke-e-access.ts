@@ -5,7 +5,6 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -39,10 +38,7 @@ const { docketNumber, userId } = parseArgsAndEnvVars(scriptConfig) as {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-
   const rawCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
   if (!rawCase.docketNumber) {

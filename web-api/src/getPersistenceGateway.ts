@@ -4,11 +4,6 @@ import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
-import {
-  createLock,
-  getLock,
-  removeLock,
-} from './persistence/dynamo/locks/acquireLock';
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
 import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
@@ -132,7 +127,6 @@ const gatewayMethods = {
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
   createChangeOfAddressJob,
-  createLock,
   decrementJobCounter,
   deleteDocumentFile,
   deleteMessage,
@@ -157,7 +151,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialCity,
   getEligibleCasesForTrialSession,
   getFeatureFlagValue,
-  getLock,
   getMaintenanceMode,
   getPractitionerDocumentByFileId,
   getPractitionerDocuments,
@@ -176,7 +169,6 @@ const gatewayMethods = {
   getWebSocketConnectionsByUserId,
   isEmailAvailable,
   isFileExists,
-  removeLock,
   setChangeOfAddressCaseAsDone,
   uploadDocument,
   zipDocuments,

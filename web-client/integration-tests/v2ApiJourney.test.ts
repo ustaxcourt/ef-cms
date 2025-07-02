@@ -250,7 +250,7 @@ describe('View and manage the deadlines of a case', () => {
       const response = await executeReconciliationReport(
         `${dateArg}?start=${saTimeBefore}`,
       );
-      let { totalDocketEntries } = response;
+      const { totalDocketEntries } = response;
       expect(totalDocketEntries).toBeGreaterThan(0);
 
       //some docket entries should be filtered out if we choose a later time
@@ -265,7 +265,7 @@ describe('View and manage the deadlines of a case', () => {
       const response = await executeReconciliationReport(
         `${dateArg}?end=${saTimeAfter}`,
       );
-      let { totalDocketEntries } = response;
+      const { totalDocketEntries } = response;
       //some docket entries should be filtered out if we move up the timeEnd value
       const response2 = await executeReconciliationReport(
         `${dateArg}?end=${saTimeBefore}`,

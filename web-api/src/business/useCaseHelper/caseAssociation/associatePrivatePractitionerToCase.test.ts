@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import {
@@ -20,17 +23,17 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
-const logger = getDawsonLogger();
-const errorSpy = jest.spyOn(logger, 'error');
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
 const verifyCaseForUser = verifyCaseForUserMock as jest.Mock;
 
 describe('associatePrivatePractitionerToCase', () => {
+  const logger = getDawsonLogger();
+  const errorSpy = jest.spyOn(logger, 'error');
+
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   let caseRecord;
 
   beforeEach(() => {
@@ -105,7 +108,6 @@ describe('associatePrivatePractitionerToCase', () => {
     verifyCaseForUser.mockReturnValue(true);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
@@ -113,16 +115,13 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     expect(associateUserWithCase).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should add mapping for a practitioner', async () => {
     verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
@@ -130,16 +129,13 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     expect(associateUserWithCase).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should set petitioners to receive no service if the practitioner is representing them', async () => {
     verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [
@@ -150,13 +146,9 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(associateUserWithCase).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     updatedCase.petitioners.forEach(petitioner => {
       expect(petitioner.serviceIndicator).toEqual(
         SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -168,20 +160,15 @@ describe('associatePrivatePractitionerToCase', () => {
     verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[1].contactId],
       user: MOCK_PRACTITIONER,
     });
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(associateUserWithCase).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(getContactSecondary(updatedCase)).toMatchObject({
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
     });
@@ -199,7 +186,6 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [],
@@ -222,7 +208,6 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],

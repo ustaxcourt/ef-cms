@@ -40,7 +40,6 @@ export const generateStandingPretrialOrderInteractor = async (
   }
 
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

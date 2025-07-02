@@ -30,5 +30,6 @@ export const processPractitionerMappingEntries = async ({
       `Postgres re-indexing failure: Failed to process practitioner mapping record:`,
       e,
     );
+    throw new Error('failed to index practitioner mapping records');
   }
 };

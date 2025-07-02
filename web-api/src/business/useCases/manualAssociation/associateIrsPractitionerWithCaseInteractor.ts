@@ -2,7 +2,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associateIrsPractitionerToCase } from '@web-api/business/useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
@@ -19,7 +18,6 @@ import { getPractitionerById } from '@web-api/persistence/postgres/practitioners
  * @returns {*} the result
  */
 export const associateIrsPractitionerWithCaseInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     docketNumber,
     serviceIndicator,
@@ -39,7 +37,6 @@ export const associateIrsPractitionerWithCaseInteractor = async (
   }
 
   return await associateIrsPractitionerToCase({
-    applicationContext,
     authorizedUser,
     docketNumber,
     serviceIndicator,

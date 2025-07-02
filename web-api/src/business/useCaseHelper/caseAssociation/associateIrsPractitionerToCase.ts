@@ -2,18 +2,16 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const associateIrsPractitionerToCase = async ({
-  applicationContext,
   authorizedUser,
   docketNumber,
   serviceIndicator,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketNumber: string;
   serviceIndicator?: string;
@@ -25,7 +23,6 @@ export const associateIrsPractitionerToCase = async ({
       userId: user.userId,
     }),
     getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
     }),
   ]);
@@ -42,11 +39,8 @@ export const associateIrsPractitionerToCase = async ({
     new IrsPractitioner({ ...user, serviceIndicator }),
   );
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  return await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 };

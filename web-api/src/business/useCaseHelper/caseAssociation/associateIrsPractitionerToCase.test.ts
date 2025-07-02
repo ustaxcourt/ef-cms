@@ -1,6 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -16,7 +19,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { irsPractitionerUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
-
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { associateUserWithCase as associateUserWithCaseMock } from '@web-api/persistence/postgres/users/cases/associateUserWithCase';
 
 const associateUserWithCase = associateUserWithCaseMock as jest.Mock;
@@ -24,6 +27,7 @@ const verifyCaseForUser = verifyCaseForUserMock as jest.Mock;
 
 describe('associateIrsPractitionerToCase', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
@@ -66,9 +70,7 @@ describe('associateIrsPractitionerToCase', () => {
     });
 
     expect(associateUserWithCase).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should add mapping for an irsPractitioner', async () => {
@@ -83,12 +85,9 @@ describe('associateIrsPractitionerToCase', () => {
     });
 
     expect(associateUserWithCase).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
     ).toMatchObject({
       irsPractitioners: [
         {

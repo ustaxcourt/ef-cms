@@ -1,51 +1,97 @@
+//Chris branch
 import { Case } from '@shared/business/entities/cases/Case';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
-import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
+import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
-import { difference, isEmpty, sortBy } from 'lodash';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
-import { ROLES } from '@shared/business/entities/EntityConstants';
-import { PractitionerKysely } from '@web-api/persistence/postgres/practitioners/schema';
 import { fromKyselyPractitioner } from '@web-api/persistence/postgres/practitioners/mapper';
+import { PractitionerKysely } from '@web-api/persistence/postgres/practitioners/schema';
+import { difference, isEmpty, sortBy } from 'lodash';
 
-export async function getCasesByDocketNumbers({
+export const ALL_OMITTABLE_CASE_FIELDS = [
+  'docketEntries',
+  'privatePractitioners',
+  'irsPractitioners',
+  'correspondence',
+  'hearings',
+] as const;
+
+export type OmittableCaseFields = (typeof ALL_OMITTABLE_CASE_FIELDS)[number];
+
+/**
+ * Returns subsets of case data based on excludeFields. If excludeFields is not passed in,
+ * it fetches all case-related data except consolidated cases.
+ * @param {string[]} docketNumbers
+ * @param {OmittableCaseFields[]} excludeFields - OmittableCaseFields[]
+ */
+export async function getCasesByDocketNumbers<
+  T extends OmittableCaseFields[] = [],
+>({
   docketNumbers,
+  excludeFields,
 }: {
   docketNumbers: string[];
-}): Promise<Omit<RawCase, 'consolidatedCases'>[]> {
+  excludeFields?: T;
+}): Promise<Omit<RawCase, 'consolidatedCases' | T[number]>[]> {
   if (isEmpty(docketNumbers)) {
     return [];
   }
-  const casesData = await getAllCaseData({ docketNumbers });
+  const casesData = await getAllCaseData({ docketNumbers, excludeFields });
   const casesDataSorted = sortCaseFields({ cases: casesData, docketNumbers });
   const rawCases = casesDataSorted.map(c => convertDbCaseToRawCase(c));
-  return rawCases;
+
+  return rawCases as Omit<RawCase, 'consolidatedCases' | T[number]>[];
 }
 
-async function getAllCaseData({
+async function getAllCaseData<T extends OmittableCaseFields[]>({
   docketNumbers,
+  excludeFields,
 }: {
   docketNumbers: string[];
+  excludeFields?: T;
 }): Promise<EnrichedCaseRow[]> {
   const [
     cases,
-    practitionerInfo,
+    privatePractitioners,
+    irsPractitioners,
     docketEntriesFromDb,
     caseCorrespondences,
     hearings,
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
-    getPractitioners(docketNumbers),
-    getDocketEntries(docketNumbers),
-    getCaseCorrespondenceByDocketNumber(docketNumbers),
-    getHearings(docketNumbers),
+    (async () => {
+      if (!excludeFields?.includes('privatePractitioners')) {
+        return getPrivatePractitioners({ docketNumbers });
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('irsPractitioners')) {
+        return getIrsPractitioners({ docketNumbers });
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('docketEntries')) {
+        return getDocketEntries(docketNumbers);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('correspondence')) {
+        return getCaseCorrespondenceByDocketNumber(docketNumbers);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('hearings')) {
+        return getHearings(docketNumbers);
+      } else return [];
+    })(),
   ]);
 
   const notFoundCases = difference(
@@ -88,25 +134,23 @@ async function getAllCaseData({
       caseMap.set(docketEntryInfo.docketNumber, { ...caseInfo, docketEntries });
     }
   });
-  practitionerInfo.forEach(info => {
-    const caseInfo = caseMap.get(info.docketNumber)!;
-
-    if (info.role === ROLES.irsPractitioner) {
-      const irsPractitioners = caseInfo.irsPractitioners ?? [];
-
-      caseMap.set(info.docketNumber, {
-        ...caseInfo,
-        irsPractitioners: [...irsPractitioners, info],
-      });
-    }
-    if (info.role === ROLES.privatePractitioner) {
-      const privatePractitioners = caseInfo.privatePractitioners ?? [];
-
-      caseMap.set(info.docketNumber, {
-        ...caseInfo,
-        privatePractitioners: [...privatePractitioners, info],
-      });
-    }
+  privatePractitioners.forEach(privatePractitioner => {
+    const caseInfo = caseMap.get(privatePractitioner.docketNumber)!;
+    const existingPrivatePractitioners = caseInfo.privatePractitioners ?? [];
+    existingPrivatePractitioners.push(privatePractitioner);
+    caseMap.set(privatePractitioner.docketNumber, {
+      ...caseInfo,
+      privatePractitioners: existingPrivatePractitioners,
+    });
+  });
+  irsPractitioners.forEach(irsPractitioner => {
+    const caseInfo = caseMap.get(irsPractitioner.docketNumber)!;
+    const existingIrsPractitioners = caseInfo.irsPractitioners ?? [];
+    existingIrsPractitioners.push(irsPractitioner);
+    caseMap.set(irsPractitioner.docketNumber, {
+      ...caseInfo,
+      irsPractitioners: existingIrsPractitioners,
+    });
   });
   caseCorrespondences.forEach(correspondence => {
     const caseInfo = caseMap.get(correspondence.docketNumber!)!;
@@ -201,12 +245,36 @@ async function getCasesMetadata(docketNumbers: string[]) {
   return caseInfo;
 }
 
-async function getPractitioners(docketNumbers: string[]) {
+async function getPrivatePractitioners({
+  docketNumbers,
+}: {
+  docketNumbers: string[];
+}) {
   const practitionerInfo = await getDbReader(reader => {
     return reader
       .selectFrom('dwUserOnCase as uoc')
       .innerJoin('dwPractitioner as p', 'uoc.userId', 'p.userId')
       .where('uoc.docketNumber', 'in', docketNumbers)
+      .where('p.role', '=', ROLES.privatePractitioner)
+      .selectAll('uoc')
+      .selectAll('p')
+      .execute();
+  });
+
+  return practitionerInfo;
+}
+
+async function getIrsPractitioners({
+  docketNumbers,
+}: {
+  docketNumbers: string[];
+}) {
+  const practitionerInfo = await getDbReader(reader => {
+    return reader
+      .selectFrom('dwUserOnCase as uoc')
+      .innerJoin('dwPractitioner as p', 'uoc.userId', 'p.userId')
+      .where('uoc.docketNumber', 'in', docketNumbers)
+      .where('p.role', '=', ROLES.irsPractitioner)
       .selectAll('uoc')
       .selectAll('p')
       .execute();

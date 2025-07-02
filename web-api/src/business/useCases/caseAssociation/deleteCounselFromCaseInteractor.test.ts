@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -11,7 +12,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
@@ -26,6 +26,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { disassociateUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/postgres/users/cases/disassociateUserFromCase';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('deleteCounselFromCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -34,6 +35,7 @@ describe('deleteCounselFromCaseInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   const mockPrivatePractitioners = [
     {
@@ -84,16 +86,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     },
   ];
 
-  let mockLock;
-
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
-
   beforeEach(() => {
-    mockLock = undefined;
     getUserById.mockImplementation(({ userId }) => {
       const allUsers = [
         ...mockPrivatePractitioners,
@@ -125,7 +118,9 @@ describe('deleteCounselFromCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError when the case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       deleteCounselFromCaseInteractor(
@@ -141,7 +136,7 @@ describe('deleteCounselFromCaseInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await deleteCounselFromCaseInteractor(
       applicationContext,
       {
@@ -151,19 +146,11 @@ describe('deleteCounselFromCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 
   it('should remove the private practitioner with the given user id from the case', async () => {
@@ -228,9 +215,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitioners[0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
@@ -262,9 +247,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitioners[0].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
@@ -308,11 +291,9 @@ describe('deleteCounselFromCaseInteractor', () => {
       ],
     };
     getCaseByDocketNumber.mockResolvedValue(caseToReturn);
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockImplementation(
-        ({ caseToUpdate }) => caseToUpdate,
-      );
+    updateCaseAndAssociations.mockImplementation(
+      ({ caseToUpdate }) => caseToUpdate,
+    );
 
     await deleteCounselFromCaseInteractor(
       applicationContext,
@@ -323,9 +304,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitioners[1].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_PAPER,
     );
@@ -366,11 +345,9 @@ describe('deleteCounselFromCaseInteractor', () => {
       ],
     };
     getCaseByDocketNumber.mockResolvedValue(caseToReturn);
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockImplementation(
-        ({ caseToUpdate }) => caseToUpdate,
-      );
+    updateCaseAndAssociations.mockImplementation(
+      ({ caseToUpdate }) => caseToUpdate,
+    );
 
     await deleteCounselFromCaseInteractor(
       applicationContext,
@@ -381,9 +358,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(updatedCase.petitioners[1].serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );

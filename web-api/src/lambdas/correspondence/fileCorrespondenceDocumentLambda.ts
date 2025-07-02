@@ -12,9 +12,8 @@ export const fileCorrespondenceDocumentLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await fileCorrespondenceDocumentInteractor(
-      applicationContext,
       {
         ...JSON.parse(event.body),
       },

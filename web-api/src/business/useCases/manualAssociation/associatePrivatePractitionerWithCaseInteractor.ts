@@ -6,9 +6,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * associatePrivatePractitionerWithCaseInteractor
@@ -21,7 +21,7 @@ import { RawPractitioner } from '@shared/business/entities/Practitioner';
  * @returns {*} the result
  */
 export const associatePrivatePractitionerWithCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     representing,
@@ -48,7 +48,6 @@ export const associatePrivatePractitionerWithCase = async (
   }
 
   return await associatePrivatePractitionerToCase({
-    applicationContext,
     authorizedUser,
     docketNumber,
     representing,
