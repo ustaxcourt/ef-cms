@@ -17,6 +17,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
 
 /**
  * generateChangeOfAddressHelper
@@ -116,9 +117,7 @@ export const generateChangeOfAddressHelper = async ({
   const isDoneProcessing = updatedJob.remaining === 0;
 
   if (isDoneProcessing) {
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteChangeOfAddressCaseRecord(jobId);
+    await deleteChangeOfAddressCaseRecord(jobId);
 
     applicationContext.logger.info(
       `"change-of-address-job|${jobId}" job finished`,

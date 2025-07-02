@@ -255,7 +255,7 @@ const updatePetitioners = ({
 
   const petitionersToUpdate = currentPetitioners.map(petitioner => ({
     docketNumber: caseToUpdate.docketNumber,
-    userId: petitioner.userId,
+    userId: petitioner.contactId,
     representing: petitioner.representing,
     serviceIndicator: petitioner.serviceIndicator,
   }));
