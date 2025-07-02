@@ -1,5 +1,5 @@
-import { CompressedDocketHeader } from '../components/CompressedDocketHeader.tsx';
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import { CompressedDocketHeader } from '@shared/business/utilities/pdfGenerator/components/CompressedDocketHeader';
+import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
 import React from 'react';
 import classNames from 'classnames';
 
