@@ -1,176 +1,215 @@
-import { getPractitionerByBarNumberInteractor } from './getPractitionerByBarNumberInteractor';
-import { UnauthorizedError } from '@web-api/errors/errors';
-
-jest.mock('../../../../../shared/src/authorization/authorizationClientService', () => ({
-  isAuthorized: jest.fn(),
-  ROLE_PERMISSIONS: {
-    MANAGE_PRACTITIONER_USERS: 'MANAGE_PRACTITIONER_USERS',
-  },
-}));
-
 import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-
-// Mock Practitioner entity
-jest.mock('../../../../../shared/src/business/entities/Practitioner', () => {
-  return {
-    Practitioner: function (raw) {
-      return {
-        validate: function () {
-          return this;
-        },
-        toRawObject: function () {
-          return raw;
-        },
-      };
-    },
-  };
-});
+  ROLES,
+  SERVICE_INDICATOR_TYPES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { getPractitionerByBarNumberInteractor } from './getPractitionerByBarNumberInteractor';
+import {
+  mockPetitionerUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 
 describe('getPractitionerByBarNumberInteractor', () => {
-  const barNumber = 'AB1234';
-  const basePractitioner = {
-    barNumber,
-    admissionsDate: '2020-01-01',
-    admissionsStatus: 'Active',
-    originalBarState: 'MD',
-    name: 'Test Practitioner',
-    practiceType: 'PracticeType',
-    practitionerType: 'Attorney',
-  };
-
-  let mockApplicationContext: any;
-
-  beforeEach(() => {
-    jest.clearAllMocks();
-
-    mockApplicationContext = {
-      getPersistenceGateway: () => ({
-        getPractitionerByBarNumber: jest.fn(),
-      }),
-    };
-  });
-
-  it('returns full practitioner for authorized logged-in user', async () => {
-    (isAuthorized as unknown as jest.Mock).mockImplementation((user, permission) => {
-      return (
-        user.userId === 'abc123' &&
-        permission === ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS
-      );
+  describe('Logged in User', () => {
+    it('throws an unauthorized error if the request user does not have the MANAGE_PRACTITIONER_USERS permissions', async () => {
+      await expect(
+        getPractitionerByBarNumberInteractor(
+          applicationContext,
+          {
+            barNumber: 'BN0000',
+          },
+          mockPetitionerUser,
+        ),
+      ).rejects.toThrow('Unauthorized for getting attorney user');
     });
 
-    const getPractitionerByBarNumber = jest.fn().mockImplementation(() => basePractitioner);
-    mockApplicationContext.getPersistenceGateway = () => ({
-      getPractitionerByBarNumber,
-    });
+    it('calls the persistence method to get a private practitioner with the given bar number', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getPractitionerByBarNumber.mockReturnValue({
+          admissionsDate: '2019-03-01',
+          admissionsStatus: 'Active',
+          barNumber: 'PP1234',
+          birthYear: '1983',
+          firmName: 'GW Law Offices',
+          firstName: 'Private',
+          lastName: 'Practitioner',
 
-    const result = await getPractitionerByBarNumberInteractor(
-      mockApplicationContext,
-      { barNumber },
-      {
-        userId: 'abc123',
-        role: 'adc',
-        email: '',
-        name: '',
-      },
-    );
+          name: 'Private Practitioner',
+          originalBarState: 'IL',
+          practiceType: 'Private',
+          practitionerType: 'Attorney',
+          role: ROLES.privatePractitioner,
+          section: ROLES.privatePractitioner,
 
-    expect(result).toMatchObject(basePractitioner);
-  });
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
 
-  it('throws UnauthorizedError if user is logged in but not authorized', async () => {
-    (isAuthorized as unknown as jest.Mock).mockImplementation(() => false);
-
-    await expect(() =>
-      getPractitionerByBarNumberInteractor(
-        mockApplicationContext,
-        { barNumber },
+      const practitioner = await getPractitionerByBarNumberInteractor(
+        applicationContext,
         {
-          userId: 'not-allowed',
-          role: 'judge',
-          email: '',
-          name: '',
+          barNumber: 'PP1234',
         },
-      ),
-    ).rejects.toThrow(UnauthorizedError);
-  });
+        mockPetitionsClerkUser,
+      );
 
-  it('returns limited public data when no user is logged in', async () => {
-    (isAuthorized as unknown as jest.Mock).mockImplementation(() => false);
-
-    const getPractitionerByBarNumber = jest.fn().mockImplementation(() => basePractitioner);
-    mockApplicationContext.getPersistenceGateway = () => ({
-      getPractitionerByBarNumber,
-    });
-
-    const result = await getPractitionerByBarNumberInteractor(
-      mockApplicationContext,
-      { barNumber },
-      {
-        role: 'adc',
-        userId: '',
-        email: '',
-        name: ''
-      }, // not logged in
-    );
-
-    expect(result).toEqual([
-      {
-        admissionsDate: '2020-01-01',
+      expect(practitioner).toEqual({
+        additionalPhone: undefined,
+        admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
-        barNumber: 'AB1234',
-        contact: { state: 'MD' },
-        name: 'Test Practitioner',
-        originalBarState: 'MD',
-        practiceType: 'PracticeType',
+        barNumber: 'PP1234',
+        birthYear: '1983',
+        email: undefined,
+        entityName: 'Practitioner',
+        // we return all practitioner search results as a Practitioner user.
+        firmName: 'GW Law Offices',
+
+        firstName: 'Private',
+        isUpdatingInformation: undefined,
+        lastName: 'Practitioner',
+        middleName: undefined,
+        name: 'Private Practitioner',
+        originalBarState: 'IL',
+        practiceType: 'Private',
         practitionerType: 'Attorney',
-      },
-    ]);
-  });
-
-  it('returns null when logged-in user and practitioner not found', async () => {
-    (isAuthorized as unknown as jest.Mock).mockImplementation(() => true);
-
-    const getPractitionerByBarNumber = jest.fn().mockImplementation(() => null);
-    mockApplicationContext.getPersistenceGateway = () => ({
-      getPractitionerByBarNumber,
+        role: ROLES.privatePractitioner,
+        section: ROLES.privatePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        suffix: undefined,
+        token: undefined,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      });
     });
 
-    const result = await getPractitionerByBarNumberInteractor(
-      mockApplicationContext,
-      { barNumber },
-      {
-        userId: 'user',
-        role: 'adc',
-        email: '',
-        name: '',
-      },
-    );
+    it('calls the persistence method to get an IRS practitioner with the given bar number', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getPractitionerByBarNumber.mockReturnValue({
+          admissionsDate: '2019-03-01',
+          admissionsStatus: 'Active',
+          barNumber: 'PI5678',
+          birthYear: '1983',
+          firmName: 'GW Law Offices',
+          firstName: 'IRS',
+          lastName: 'Practitioner',
+          name: 'IRS Practitioner',
+          originalBarState: 'IL',
+          practiceType: 'Private',
+          practitionerType: 'Attorney',
+          role: ROLES.irsPractitioner,
+          section: ROLES.privatePractitioner,
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
 
-    expect(result).toBeNull();
-  });
+      const practitioner = await getPractitionerByBarNumberInteractor(
+        applicationContext,
+        {
+          barNumber: 'PI5678',
+        },
+        mockPetitionsClerkUser,
+      );
 
-  it('returns empty array when public user and practitioner not found', async () => {
-    (isAuthorized as unknown as jest.Mock).mockImplementation(() => false);
-
-    const getPractitionerByBarNumber = jest.fn().mockImplementation(() => null);
-    mockApplicationContext.getPersistenceGateway = () => ({
-      getPractitionerByBarNumber,
+      expect(practitioner).toEqual({
+        additionalPhone: undefined,
+        admissionsDate: '2019-03-01',
+        admissionsStatus: 'Active',
+        barNumber: 'PI5678',
+        birthYear: '1983',
+        email: undefined,
+        entityName: 'Practitioner',
+        firmName: 'GW Law Offices',
+        firstName: 'IRS',
+        isUpdatingInformation: undefined,
+        lastName: 'Practitioner',
+        middleName: undefined,
+        name: 'IRS Practitioner',
+        originalBarState: 'IL',
+        practiceType: 'Private',
+        practitionerType: 'Attorney',
+        role: ROLES.privatePractitioner,
+        section: 'irsPractitioner',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        suffix: undefined,
+        token: undefined,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      });
     });
 
-    const result = await getPractitionerByBarNumberInteractor(
-      mockApplicationContext,
-      { barNumber },
-      {
-        role: 'adc',
-        userId: '',
-        email: '',
-        name: ''
-      }, // not logged in
-    );
+    it('throws a not found error if no practitioner is found with the given bar number', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getPractitionerByBarNumber.mockReturnValue(undefined);
 
-    expect(result).toEqual([]);
+      const practitioner = await getPractitionerByBarNumberInteractor(
+        applicationContext,
+        {
+          barNumber: 'BN0000',
+        },
+        mockPetitionsClerkUser,
+      );
+
+      expect(practitioner).toBeUndefined();
+    });
+  });
+
+  describe('Public User', () => {
+    beforeEach(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getPractitionerByBarNumber.mockReturnValue({
+          admissionsDate: '2019-03-01',
+          admissionsStatus: 'Active',
+          barNumber: 'PP1234',
+          birthYear: '1983',
+          firmName: 'GW Law Offices',
+          firstName: 'Private',
+          lastName: 'Practitioner',
+          name: 'Private Practitioner',
+          originalBarState: 'IL',
+          practiceType: 'Private',
+          practitionerType: 'Attorney',
+          role: ROLES.privatePractitioner,
+          section: ROLES.privatePractitioner,
+
+          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        });
+    });
+
+    it('should not throw an error when a public user access interactor', async () => {
+      const results = await getPractitionerByBarNumberInteractor(
+        applicationContext,
+        {
+          barNumber: 'BN0000',
+        },
+        undefined,
+      );
+
+      expect(results).toBeDefined();
+    });
+
+    it('should return an array with Practitioner result', async () => {
+      const results = await getPractitionerByBarNumberInteractor(
+        applicationContext,
+        {
+          barNumber: 'BN0000',
+        },
+        undefined,
+      );
+
+      expect(results).toEqual([
+        {
+          admissionsDate: '2019-03-01',
+          admissionsStatus: 'Active',
+          barNumber: 'PP1234',
+          contact: {
+            state: 'IL',
+          },
+          name: 'Private Practitioner',
+          originalBarState: 'IL',
+          practiceType: 'Private',
+          practitionerType: 'Attorney',
+        },
+      ]);
+    });
   });
 });
