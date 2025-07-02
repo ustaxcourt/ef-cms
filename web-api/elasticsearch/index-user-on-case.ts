@@ -10,10 +10,10 @@ import { flattenDeep, isArray } from 'lodash';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UserOnCaseKysely } from '@web-api/persistence/postgres/users/schema';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { getCaseMetadataWithCounsel } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
 import { NotFoundError } from '@web-api/errors/errors';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getUserByIdDynamo } from '@web-api/persistence/dynamo/getUserByIdDynamo';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const transformOpenSearchUserOnCase = (
   userOnCaseData: UserOnCaseKysely | UserOnCaseKysely[],
@@ -124,13 +124,16 @@ const getCaseDataFromPostgres = async ({
 }: {
   docketNumber: string;
 }) => {
-  const caseMetadataWithCounsel = await getCaseMetadataWithCounsel({
-    docketNumber,
+  const caseMetadataWithCounsels = await getCasesByDocketNumbers({
+    docketNumbers: [docketNumber],
+    excludeFields: ['docketEntries', 'hearings', 'correspondence'],
   });
 
-  if (!caseMetadataWithCounsel) {
+  if (!caseMetadataWithCounsels.length) {
     throw Error(`Unable to index ${docketNumber} case data not found`);
   }
+
+  const caseMetadataWithCounsel = caseMetadataWithCounsels[0];
 
   const marshalledCase = marshall(
     transformNullToUndefined({

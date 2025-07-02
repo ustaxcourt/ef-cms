@@ -303,7 +303,7 @@ const getIrsPractitionersToDeleteAndUpdate = ({
   );
 
   return {
-    irsPractitionersToDelete: deletedIrsPractitioners(irs => ({
+    irsPractitionersToDelete: deletedIrsPractitioners.map(irs => ({
       ...irs,
       docketNumber: caseToUpdate.docketNumber,
     })),
