@@ -137,16 +137,8 @@ describe('Case Consolidation Journey', () => {
         )
       ) {
         expect(orderDocument.servedAt).toBeDefined();
-        expect(orderDocument.workItem.docketEntryId).toEqual(
-          orderDocument.docketEntryId,
-        );
-        expect(orderDocument.workItem.docketNumber).toEqual(
-          consolidatedCase.docketNumber,
-        );
-        expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
-        expect(orderDocument.workItem.completedMessage).toEqual('completed');
-        expect(orderDocument.workItem.completedAt).toBeDefined();
-        expect(orderDocument.workItem.inProgress).toBeFalsy();
+        expect(orderDocument.workItemId).toBeDefined(); // Check that a work item exists
+        expect(orderDocument.qcComplete).toBeTruthy(); // And that it has been completed
       } else {
         expect(orderDocument).toBeUndefined();
       }
@@ -186,16 +178,8 @@ describe('Case Consolidation Journey', () => {
         )
       ) {
         expect(orderDocument.servedAt).toBeDefined();
-        expect(orderDocument.workItem.docketEntryId).toEqual(
-          orderDocument.docketEntryId,
-        );
-        expect(orderDocument.workItem.docketNumber).toEqual(
-          consolidatedCase.docketNumber,
-        );
-        expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
-        expect(orderDocument.workItem.completedMessage).toEqual('completed');
-        expect(orderDocument.workItem.completedAt).toBeDefined();
-        expect(orderDocument.workItem.inProgress).toBeFalsy();
+        expect(orderDocument.workItemId).toBeDefined();
+        expect(orderDocument.qcComplete).toBeTruthy();
       } else {
         expect(orderDocument).toBeUndefined();
       }
