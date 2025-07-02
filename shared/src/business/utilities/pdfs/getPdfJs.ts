@@ -1,3 +1,5 @@
+import { UNSUPPORTED_BROWSER_ERROR_MESSAGE } from '@web-client/views/FileHandlingHelpers/pdfValidation';
+
 /*
   ____          _____                __       _ 
  |  _ \        / ____|              / _|     | |
@@ -15,10 +17,25 @@ The most difficult part of upgrading is correctly bundling the worker files. You
 This means copying a file from node_modules into the bundle.
 Both web-api/terraform/modules/lambda/esbuildLambda.mjs and ./esbuildHelper.mjs need to point at the worker in node_modules for this package to work.
 */
-export async function getPdfJs(): Promise<typeof pdfJs> {
-  const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
-  pdfJs.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
-  return pdfJs;
+type PDFJSModule = typeof import('pdfjs-dist/legacy/build/pdf.mjs');
+export async function getPdfJs(): Promise<PDFJSModule> {
+  try {
+    const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+    pdfJs.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
+    return pdfJs;
+  } catch (error) {
+    if (!clientSupportsES2022()) { // If we end up here the browser cannot even import pdfjs-dist
+      console.error(
+        'Client does not support ES2022 features required by pdfjs-dist. Please update your browser.',
+      );
+      const unsupportedBrowserError = new Error(
+        UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+      );
+      unsupportedBrowserError.name = 'UnsupportedBrowserException';
+      throw unsupportedBrowserError;
+    }
+    throw error;
+  }
 }
 
 /*
