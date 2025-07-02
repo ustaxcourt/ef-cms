@@ -55,17 +55,15 @@ export const addCoversheetInteractor = async (
     key: docketEntryId,
   });
 
-  const docketEntry = caseEntity.getDocketEntryById({
+  const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (!docketEntry) {
+  if (!docketEntryEntity) {
     throw new NotFoundError(
       `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
     );
   }
-
-  const docketEntryEntity = new DocketEntry(docketEntry, { authorizedUser });
 
   const {
     consolidatedCases, // if feature flag is off, this will always be null

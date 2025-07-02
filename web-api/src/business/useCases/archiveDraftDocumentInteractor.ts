@@ -10,7 +10,6 @@ import { deleteWorkItem } from '@web-api/persistence/postgres/workitems/deleteWo
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const archiveDraftDocument = async (
   applicationContext: ServerApplicationContext,
@@ -41,9 +40,7 @@ export const archiveDraftDocument = async (
     );
   }
 
-  caseEntity.archiveDocketEntry(
-    new DocketEntry(docketEntryToArchive, { authorizedUser }),
-  );
+  caseEntity.archiveDocketEntry(docketEntryToArchive);
 
   const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
     docketNumber,

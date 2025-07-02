@@ -8,7 +8,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const strikeDocketEntryInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -46,11 +45,9 @@ export const strikeDocketEntryInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const docketEntryEntity = new DocketEntry(docketEntry, { authorizedUser });
+  docketEntry.strikeEntry({ name: user.name, userId: user.userId });
 
-  docketEntryEntity.strikeEntry({ name: user.name, userId: user.userId });
-
-  const validatedDocketEntry = docketEntryEntity.validate().toRawObject();
+  const validatedDocketEntry = docketEntry.validate().toRawObject();
 
   caseEntity.updateDocketEntry(validatedDocketEntry);
 

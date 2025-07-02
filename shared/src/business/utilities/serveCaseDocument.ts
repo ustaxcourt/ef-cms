@@ -1,19 +1,16 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { INITIAL_DOCUMENT_TYPES, ROLES } from '../entities/EntityConstants';
-import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const serveCaseDocument = async ({
   applicationContext,
   caseEntity,
   initialDocumentTypeKey,
-  authorizedUser,
 }: {
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   initialDocumentTypeKey: string;
-  authorizedUser: AuthUser;
 }) => {
   const documentType = INITIAL_DOCUMENT_TYPES[initialDocumentTypeKey];
 
@@ -30,7 +27,6 @@ export const serveCaseDocument = async ({
         docketEntry,
         caseEntity,
         applicationContext,
-        authorizedUser,
       });
     }
   } else {
@@ -42,7 +38,6 @@ export const serveCaseDocument = async ({
       docketEntry,
       caseEntity,
       applicationContext,
-      authorizedUser,
     });
   }
 };
@@ -51,43 +46,39 @@ async function serveDocument({
   docketEntry,
   caseEntity,
   applicationContext,
-  authorizedUser,
 }: {
-  docketEntry?: RawDocketEntry;
+  docketEntry?: DocketEntry;
   caseEntity: Case;
   applicationContext: ServerApplicationContext;
-  authorizedUser: AuthUser;
 }) {
   if (
     docketEntry &&
     !DocketEntry.isUnservable(docketEntry) &&
     docketEntry.isFileAttached
   ) {
-    const docketEntryEntity = new DocketEntry(docketEntry, { authorizedUser });
-    docketEntryEntity.setAsServed([
+    docketEntry.setAsServed([
       {
         name: 'IRS',
         role: ROLES.irsSuperuser,
       },
     ]);
-    caseEntity.updateDocketEntry(docketEntryEntity);
+    caseEntity.updateDocketEntry(docketEntry);
 
     if (
-      docketEntryEntity.documentType ===
-      INITIAL_DOCUMENT_TYPES.petition.documentType
+      docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType
     ) {
       await applicationContext
         .getUseCaseHelpers()
         .sendIrsSuperuserPetitionEmail({
           applicationContext,
           caseEntity,
-          docketEntryId: docketEntryEntity.docketEntryId,
+          docketEntryId: docketEntry.docketEntryId,
         });
     } else {
       await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
         applicationContext,
         caseEntity,
-        docketEntryId: docketEntryEntity.docketEntryId,
+        docketEntryId: docketEntry.docketEntryId,
         servedParties: {
           // IRS superuser is served every document by default, so we don't need to explicitly include them as a party here
           electronic: [],

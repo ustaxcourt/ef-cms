@@ -491,9 +491,9 @@ const getDocketEntryToEdit = async ({
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  const docketEntry = caseEntity.getDocketEntryById({ docketEntryId });
+  const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
-  if (!docketEntry) {
+  if (!docketEntryEntity) {
     throw new NotFoundError(
       `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
     );
@@ -501,7 +501,7 @@ const getDocketEntryToEdit = async ({
 
   return {
     caseEntity,
-    docketEntryEntity: new DocketEntry(docketEntry, { authorizedUser }),
+    docketEntryEntity,
   };
 };
 

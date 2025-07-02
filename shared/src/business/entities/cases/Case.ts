@@ -136,7 +136,7 @@ export class Case extends JoiValidationEntity {
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: RawDocketEntry[];
+  public docketEntries: DocketEntry[];
   public isSealed?: boolean;
   public hearings: any[];
   public privatePractitioners?: any[];
@@ -831,12 +831,13 @@ export class Case extends JoiValidationEntity {
   }) {
     if (Array.isArray(rawCase.docketEntries)) {
       this.docketEntries = rawCase.docketEntries
-        .map(docketEntry =>
-          new DocketEntry(docketEntry, {
-            authorizedUser,
-            filtered,
-            petitioners: this.petitioners,
-          }),
+        .map(
+          docketEntry =>
+            new DocketEntry(docketEntry, {
+              authorizedUser,
+              filtered,
+              petitioners: this.petitioners,
+            }),
         )
         .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
@@ -989,14 +990,16 @@ export class Case extends JoiValidationEntity {
     });
   }
 
-  toRawObject(processPendingItems = true) {
+  //@ts-ignore
+  toRawObject(processPendingItems = true): RawCase {
     const result = this.toRawObjectFromJoi();
 
     if (processPendingItems) {
       (result as any).hasPendingItems = this.doesHavePendingItems();
     }
 
-    return result;
+    // @ts-ignore
+    return result as RawCase;
   }
 
   doesHavePendingItems() {
@@ -1393,7 +1396,7 @@ export class Case extends JoiValidationEntity {
   }
 
   getPetitionDocketEntry() {
-    return getPetitionDocketEntry(this);
+    return getPetitionDocketEntry(this) as DocketEntry; // We know it is a DocketEntry not RawDocketEntry because this is the Case entity
   }
 
   getIrsSendDate() {
@@ -2435,7 +2438,9 @@ export const getOtherFilers = function (rawCase) {
 };
 
 declare global {
-  type RawCase = ExcludeMethods<Case>;
+  type RawCase = Omit<ExcludeMethods<Case>, 'docketEntries'> & {
+    docketEntries: RawDocketEntry[];
+  };
 }
 
 const generateCaptionFromContacts = ({
