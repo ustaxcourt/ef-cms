@@ -1,6 +1,7 @@
 import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
 import {
   AuthUser,
+  isAuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { Case } from '@shared/business/entities/cases/Case';
@@ -34,7 +35,6 @@ export const batchDownloadDocketEntriesInteractor = async (
       authorizedUser,
     );
   } catch (error: any) {
-    const { userId } = authorizedUser;
     const { clientConnectionId, docketNumber } = downloadDocketEntryRequestInfo;
 
     const erMsg = error.message || 'unknown error';
@@ -42,15 +42,18 @@ export const batchDownloadDocketEntriesInteractor = async (
       `Error batch-downloading documents from case: ${docketNumber} - ${erMsg}`,
       { error },
     );
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      clientConnectionId,
-      message: {
-        action: 'batch_download_error',
-        error,
-      },
-      userId,
-    });
+    if (isAuthUser(authorizedUser)) {
+      const { userId } = authorizedUser;
+      await applicationContext.getNotificationGateway().sendNotificationToUser({
+        applicationContext,
+        clientConnectionId,
+        message: {
+          action: 'batch_download_error',
+          error,
+        },
+        userId,
+      });
+    }
   }
 };
 
@@ -98,6 +101,12 @@ const batchDownloadDocketEntriesHelper = async (
     const docInfo = caseEntity.getDocketEntryById({
       docketEntryId,
     });
+
+    if (!docInfo) {
+      throw new NotFoundError(
+        `Could not find docket entry with id ${docketEntryId} on case ${caseEntity.docketNumber}`,
+      );
+    }
 
     const { documentTitle, filingDate, index } = docInfo;
     const filename = generateValidDocketEntryFilename({

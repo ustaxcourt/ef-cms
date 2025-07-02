@@ -39,6 +39,12 @@ export const prepareMotionOrderResponseAction = ({
     entry => entry.docketEntryId === motionDocketEntryId,
   );
 
+  if (!motion) {
+    throw new Error(
+      `Could not find docket entry with id ${motionDocketEntryId}`,
+    );
+  }
+
   const { movant, nonMovant } = determineMovantAndNonMovant({
     caseDetail,
     motion,

@@ -4,6 +4,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
+import { NotFoundError } from '@web-api/errors/errors';
 
 const getDocumentInfo = ({
   applicationContext,
@@ -97,6 +98,13 @@ export const generatePrintableFilingReceiptInteractor = async (
   const primaryDocumentRecord = caseEntity.docketEntries.find(
     doc => doc.docketEntryId === documentsFiled.primaryDocumentId,
   );
+
+  if (!primaryDocumentRecord) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${documentsFiled.primaryDocumentId} on case ${docketNumber}`,
+    );
+  }
+
   primaryDocument.filedBy = primaryDocumentRecord.filedBy;
   primaryDocument.filingDate = primaryDocumentRecord.filingDate;
 

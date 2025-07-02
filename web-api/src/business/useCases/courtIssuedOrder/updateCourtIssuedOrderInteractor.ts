@@ -66,6 +66,12 @@ export const updateCourtIssuedOrder = async (
       richText: documentMetadata.draftOrderState.richText,
     };
 
+    if (!documentContentsId) {
+      throw new NotFoundError(
+        `Could not find documentContentsId associated with docket entry ${currentDocument.docketEntryId} on case ${docketNumber}`,
+      );
+    }
+
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       document: Buffer.from(JSON.stringify(contentToStore)),
       key: documentContentsId,

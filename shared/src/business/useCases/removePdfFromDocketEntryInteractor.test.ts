@@ -23,6 +23,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 describe('removePdfFromDocketEntryInteractor', () => {
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
@@ -50,7 +51,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
         filedByRole: ROLES.petitioner,
         isFileAttached: true,
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
-      },
+      } as DocketEntry,
       {
         docketEntryId: '1905d1ab-18d0-43ec-bafb-654e83405491',
         docketNumber: '56789-18',
@@ -60,7 +61,7 @@ describe('removePdfFromDocketEntryInteractor', () => {
         filedByRole: ROLES.petitioner,
         isFileAttached: false,
         userId: '50c62fa0-dd90-4244-b7c7-9cb2302d7688',
-      },
+      } as DocketEntry,
     ],
     docketNumber: '56789-18',
     docketNumberWithSuffix: '56789-18',

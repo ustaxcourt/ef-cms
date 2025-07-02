@@ -813,7 +813,7 @@ export class Case extends JoiValidationEntity {
           new DocketEntry(docketEntry, {
             authorizedUser,
             petitioners: this.petitioners,
-          }),
+          }).toRawObject(),
       );
     } else {
       this.archivedDocketEntries = [];
@@ -831,13 +831,12 @@ export class Case extends JoiValidationEntity {
   }) {
     if (Array.isArray(rawCase.docketEntries)) {
       this.docketEntries = rawCase.docketEntries
-        .map(
-          docketEntry =>
-            new DocketEntry(docketEntry, {
-              authorizedUser,
-              filtered,
-              petitioners: this.petitioners,
-            }),
+        .map(docketEntry =>
+          new DocketEntry(docketEntry, {
+            authorizedUser,
+            filtered,
+            petitioners: this.petitioners,
+          }).toRawObject(),
         )
         .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
@@ -1119,7 +1118,7 @@ export class Case extends JoiValidationEntity {
    *
    * @param {object} docketEntryEntity the docket entry to add to the case
    */
-  addDocketEntry(docketEntryEntity) {
+  addDocketEntry(docketEntryEntity: DocketEntry) {
     docketEntryEntity.docketNumber = this.docketNumber;
 
     if (docketEntryEntity.isOnDocketRecord) {
@@ -1141,7 +1140,10 @@ export class Case extends JoiValidationEntity {
       docketEntryEntity.index = 0;
     }
 
-    this.docketEntries = [...this.docketEntries, docketEntryEntity];
+    this.docketEntries = [
+      ...this.docketEntries,
+      docketEntryEntity.toRawObject(),
+    ];
   }
 
   /**
@@ -2232,7 +2234,9 @@ export const getPractitionersRepresenting = function (
   );
 };
 
-export const getPetitionDocketEntry = function (rawCase: RawCase) {
+export const getPetitionDocketEntry = function (
+  rawCase: RawCase | RawPublicCase,
+) {
   return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,

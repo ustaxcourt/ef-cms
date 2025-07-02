@@ -8,6 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 /**
  * unseals a given docket entry on a case
@@ -42,17 +43,21 @@ export const unsealDocketEntryInteractor = async (
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({
+  const docketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (!docketEntryEntity) {
+  if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
 
+  const docketEntryEntity = new DocketEntry(docketEntry, { authorizedUser });
+
   docketEntryEntity.unsealEntry();
 
-  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
+  const validatedDocketEntry = docketEntryEntity.validate().toRawObject();
 
-  return docketEntryEntity.toRawObject();
+  await upsertDocketEntries([validatedDocketEntry]);
+
+  return validatedDocketEntry;
 };

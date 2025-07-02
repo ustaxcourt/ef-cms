@@ -8,6 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const strikeDocketEntryInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -33,11 +34,11 @@ export const strikeDocketEntryInteractor = async (
 
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({
+  const docketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (!docketEntryEntity) {
+  if (!docketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
 
@@ -45,11 +46,15 @@ export const strikeDocketEntryInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  const docketEntryEntity = new DocketEntry(docketEntry, { authorizedUser });
+
   docketEntryEntity.strikeEntry({ name: user.name, userId: user.userId });
 
-  caseEntity.updateDocketEntry(docketEntryEntity);
+  const validatedDocketEntry = docketEntryEntity.validate().toRawObject();
 
-  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
+  caseEntity.updateDocketEntry(validatedDocketEntry);
+
+  await upsertDocketEntries([validatedDocketEntry]);
 
   return caseEntity.toRawObject();
 };

@@ -26,6 +26,12 @@ export const saveCaseDetailInternalEditAction = async ({
             document.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
         );
 
+        if (!oldPetitionDocument) {
+          throw new Error(
+            `Unable to find existing petition document on case ${caseToUpdate.docketNumber}`,
+          );
+        }
+
         await applicationContext
           .getUseCases()
           .uploadDocumentAndMakeSafeInteractor(applicationContext, {

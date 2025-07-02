@@ -143,6 +143,12 @@ export const serveExternallyFiledDocument = async (
     const updatedSubjectDocketEntry =
       updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
 
+    if (!updatedSubjectDocketEntry) {
+      throw new NotFoundError(
+        `Could not find docket entry with id ${docketEntryId} on case ${updatedSubjectCaseEntity?.docketNumber}`,
+      );
+    }
+
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {

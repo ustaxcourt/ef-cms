@@ -5,6 +5,8 @@ import {
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { NotFoundError } from '@web-api/errors/errors';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 /**
  * Removes a signature from a document
@@ -36,13 +38,24 @@ export const removeSignatureFromDocumentInteractor = async (
     docketEntryId,
   });
 
-  docketEntryToUnsign.unsignDocument();
+  if (!docketEntryToUnsign) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
+
+  const docketEntryToUnsignEntity = new DocketEntry(docketEntryToUnsign, {
+    authorizedUser,
+  });
+
+  docketEntryToUnsignEntity.unsignDocument();
 
   const originalPdfNoSignature = await applicationContext
     .getPersistenceGateway()
     .getDocument({
       applicationContext,
-      key: docketEntryToUnsign.documentIdBeforeSignature,
+      // @ts-ignore
+      key: docketEntryToUnsignEntity.documentIdBeforeSignature,
       useTempBucket: false,
     });
 

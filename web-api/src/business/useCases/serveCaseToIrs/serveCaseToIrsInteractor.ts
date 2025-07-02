@@ -538,6 +538,12 @@ export const serveCaseToIrs = async (
 
     const petitionDocument = caseEntity.getPetitionDocketEntry();
 
+    if (!petitionDocument) {
+      throw new Error(
+        `Could not find petitioner document on case ${caseEntity.docketNumber}`,
+      );
+    }
+
     const formattedFiledDate = formatDateString(
       petitionDocument.filingDate,
       FORMATS.MONTH_DAY_YEAR,

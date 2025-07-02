@@ -23,9 +23,12 @@ export const isDocketEntryMultiDocketableAction = ({
   let { eventCode } = get(state.form);
 
   if (!eventCode) {
-    ({ eventCode } = caseDetail.docketEntries.find(
+    const docketEntry = caseDetail.docketEntries.find(
       doc => doc.docketEntryId === docketEntryId,
-    ));
+    );
+    if (docketEntry) {
+      ({ eventCode } = docketEntry);
+    }
   }
 
   if (

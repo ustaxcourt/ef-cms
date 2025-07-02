@@ -65,7 +65,7 @@ const resendServiceEmail = async (
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
   if (
-    docketEntryEntity.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode
+    docketEntryEntity!.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode
   ) {
     await sendIrsSuperuserPetitionEmail({
       applicationContext,

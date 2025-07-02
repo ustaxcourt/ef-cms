@@ -169,7 +169,7 @@ export const addPaperFiling = async (
       docketEntryId,
     });
     const electronicParties =
-      currentDocketEntry.eventCode === 'ATP' ? [] : undefined;
+      currentDocketEntry?.eventCode === 'ATP' ? [] : undefined;
 
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()

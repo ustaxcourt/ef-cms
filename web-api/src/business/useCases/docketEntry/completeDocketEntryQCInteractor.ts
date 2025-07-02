@@ -74,13 +74,17 @@ const completeDocketEntryQC = async (
   }
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
-  const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
-    record => record.docketEntryId === docketEntryId,
-  );
-
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
   });
+
+  if (!currentDocketEntry) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
+
+  const { index: docketRecordIndexUpdated } = currentDocketEntry;
 
   if (workItem.isCompleted()) {
     throw new InvalidRequest('The work item was already completed');
@@ -264,6 +268,7 @@ const completeDocketEntryQC = async (
     const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       authorizedUser,
+      // @ts-ignore
       docketChangeInfo,
     });
 
@@ -273,6 +278,7 @@ const completeDocketEntryQC = async (
         docketEntryId: noticeDocketEntryId,
         documentTitle: replaceBracketed(
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
+          // @ts-ignore
           docketChangeInfo.docketEntryIndex,
         ),
         isFileAttached: true,

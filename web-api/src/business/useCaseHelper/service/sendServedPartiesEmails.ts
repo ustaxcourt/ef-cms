@@ -28,9 +28,9 @@ export const sendServedPartiesEmails = async ({
   const { caseCaption, docketNumber, docketNumberWithSuffix } = caseEntity;
   const partiesToServe = cloneDeep(servedParties);
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
+  const docketEntry = caseEntity.getDocketEntryById({ docketEntryId });
 
-  if (docketEntryEntity.index === undefined) {
+  if (docketEntry?.index === undefined) {
     throw new Error('Cannot serve a docket entry without an index.');
   }
 
@@ -41,7 +41,7 @@ export const sendServedPartiesEmails = async ({
     filedBy,
     index: docketEntryNumber,
     servedAt,
-  } = docketEntryEntity;
+  } = docketEntry;
 
   const currentDate = applicationContext
     .getUtilities()

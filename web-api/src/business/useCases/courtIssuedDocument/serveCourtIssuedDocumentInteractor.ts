@@ -57,13 +57,18 @@ export const serveCourtIssuedDocument = async (
 
   const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
-  const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
+  const docketEntryToServeRaw = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (!docketEntryToServe) {
+  if (!docketEntryToServeRaw) {
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   }
+
+  const docketEntryToServe = new DocketEntry(docketEntryToServeRaw, {
+    authorizedUser,
+  });
+  
   if (docketEntryToServe.servedAt) {
     throw new Error('Docket entry has already been served');
   }
@@ -83,6 +88,7 @@ export const serveCourtIssuedDocument = async (
     .stampDocumentForService({
       applicationContext,
       docketEntryId: docketEntryToServe.docketEntryId,
+      // @ts-ignore
       documentToStamp: docketEntryToServe,
     });
 

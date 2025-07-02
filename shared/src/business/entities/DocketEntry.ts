@@ -717,6 +717,12 @@ export class DocketEntry extends JoiValidationEntity {
 
     const petitionDocketEntry = getPetitionDocketEntry(rawCase);
 
+    if (!petitionDocketEntry) {
+      throw new Error(
+        `Could not find petition on case ${rawCase.docketNumber}`,
+      );
+    }
+
     //Only allow STIN download if:
     //  - role Petition Clerk & entry not served, or
     //  - role Case Services Supervisor & entry not served, or

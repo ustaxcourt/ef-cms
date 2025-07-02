@@ -40,7 +40,7 @@ export const updateDocketEntryMeta = async (
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  const originalDocketEntry: RawDocketEntry = caseEntity.getDocketEntryById({
+  const originalDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
   });
 

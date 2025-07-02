@@ -94,13 +94,13 @@ export const saveSignedDocumentInteractor = async (
   }
 
   const caseEntity = new Case(caseRecord, { authorizedUser });
-  const originalDocketEntryEntity = caseEntity.docketEntries.find(
-    docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
+  const originalDocketEntry = caseEntity.getDocketEntryById(
+    originalDocketEntryId,
   );
 
   let signedDocketEntryEntity;
   if (
-    originalDocketEntryEntity.documentType === 'Proposed Stipulated Decision'
+    originalDocketEntry?.documentType === 'Proposed Stipulated Decision'
   ) {
     signedDocketEntryEntity = new DocketEntry(
       {
@@ -112,7 +112,7 @@ export const saveSignedDocumentInteractor = async (
         documentType:
           SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
         eventCode: SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
-        filedBy: originalDocketEntryEntity.filedBy,
+        filedBy: originalDocketEntry.filedBy,
         isDraft: true,
         isFileAttached: true,
         isPaper: false,
@@ -158,7 +158,7 @@ export const saveSignedDocumentInteractor = async (
 
     signedDocketEntryEntity = new DocketEntry(
       {
-        ...originalDocketEntryEntity,
+        ...originalDocketEntry,
         createdAt: applicationContext.getUtilities().createISODateString(),
         documentIdBeforeSignature,
         isFileAttached: true,

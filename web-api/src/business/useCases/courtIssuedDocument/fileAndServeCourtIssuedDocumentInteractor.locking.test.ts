@@ -83,7 +83,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         signedByUserId: docketClerkUser.userId,
         signedJudgeName: 'Judge Dredd',
         userId: docketClerkUser.userId,
-      },
+      } as RawDocketEntry,
     ],
   };
   let mockRequest;

@@ -35,10 +35,15 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
     const subjectDocketEntry = docketEntries.find(
       d => d.docketEntryId === docketEntryId,
     );
-    isSimultaneousDocType =
-      SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-        subjectDocketEntry?.eventCode,
-      ) || subjectDocketEntry?.documentTitle.includes('Simultaneous');
+    const { eventCode, documentTitle } = subjectDocketEntry ?? {};
+
+    const hasSimultaneousEventCode =
+      eventCode && SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(eventCode);
+
+    const hasSimultaneousTitle =
+      documentTitle?.includes('Simultaneous') ?? false;
+
+    isSimultaneousDocType = hasSimultaneousEventCode || hasSimultaneousTitle;
   }
 
   if (

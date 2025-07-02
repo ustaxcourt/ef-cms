@@ -70,7 +70,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
 
     const motionDocumentType = MOCK_CASE.docketEntries.find(
       e => e.docketEntryId === mockOriginalDocketEntryId,
-    ).documentType;
+    )?.documentType;
 
     const draftDocketEntryEntity = caseToUpdate.docketEntries.find(
       doc =>

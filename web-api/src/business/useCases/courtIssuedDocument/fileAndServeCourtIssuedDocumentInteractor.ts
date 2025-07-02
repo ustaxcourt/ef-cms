@@ -63,19 +63,11 @@ export const fileAndServeCourtIssuedDocument = async (
 
   const subjectCaseEntity = new Case(subjectCase, { authorizedUser });
 
-  const docketEntryToServe = subjectCaseEntity.getDocketEntryById({
+  const docketEntryToServeRaw = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  let error: Error | undefined;
-  if (!docketEntryToServe) {
-    error = new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
-  } else if (docketEntryToServe.servedAt) {
-    error = new Error('Docket entry has already been served');
-  } else if (docketEntryToServe.isPendingService) {
-    error = new Error('Docket entry is already being served');
-  }
-  if (error) {
+  const throwError = async error => {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
@@ -84,6 +76,22 @@ export const fileAndServeCourtIssuedDocument = async (
     });
 
     throw error;
+  };
+
+  if (!docketEntryToServeRaw) {
+    await throwError(
+      new NotFoundError(`Docket entry ${docketEntryId} was not found.`),
+    );
+  }
+
+  const docketEntryToServe = new DocketEntry(docketEntryToServeRaw, {
+    authorizedUser,
+  });
+
+  if (docketEntryToServe.servedAt) {
+    await throwError(new Error('Docket entry has already been served'));
+  } else if (docketEntryToServe.isPendingService) {
+    await throwError(new Error('Docket entry is already being served'));
   }
 
   const stampedPdf = await applicationContext
@@ -112,9 +120,7 @@ export const fileAndServeCourtIssuedDocument = async (
   let serviceResults;
   let documentContentsId;
   try {
-    const shouldScrapePDFContents =
-      !docketEntryToServe.documentContents &&
-      DocketEntry.isSearchable(form.eventCode);
+    const shouldScrapePDFContents = DocketEntry.isSearchable(form.eventCode);
 
     if (shouldScrapePDFContents) {
       let documentContents: string = await applicationContext

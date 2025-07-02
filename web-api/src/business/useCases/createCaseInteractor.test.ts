@@ -130,7 +130,7 @@ describe('createCaseInteractor', () => {
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
     );
     expect(petitionDocketEntry).toBeDefined();
-    expect(petitionDocketEntry.redactionAcknowledgement).toEqual(true);
+    expect(petitionDocketEntry!.redactionAcknowledgement).toEqual(true);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
         .calls[0][0].caseToCreate,
@@ -240,7 +240,7 @@ describe('createCaseInteractor', () => {
 
     const stinDocketEntry = result.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
-    );
+    )!;
     expect(stinDocketEntry.index).toEqual(0);
   });
 
@@ -301,7 +301,7 @@ describe('createCaseInteractor', () => {
     );
 
     expect(petitionDocketEntry).toBeDefined();
-    expect(petitionDocketEntry.redactionAcknowledgement).toEqual(true);
+    expect(petitionDocketEntry!.redactionAcknowledgement).toEqual(true);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
@@ -353,7 +353,7 @@ describe('createCaseInteractor', () => {
     );
 
     expect(atpDocketEntry).toBeDefined();
-    expect(atpDocketEntry.redactionAcknowledgement).toEqual(true);
+    expect(atpDocketEntry!.redactionAcknowledgement).toEqual(true);
   });
 
   it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {

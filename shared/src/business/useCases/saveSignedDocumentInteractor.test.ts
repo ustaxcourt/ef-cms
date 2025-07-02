@@ -137,21 +137,19 @@ describe('saveSignedDocumentInteractor', () => {
         e.documentType ===
         SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.documentType,
     );
-    expect(signedDocument.docketNumber).toEqual(caseEntity.docketNumber);
+    expect(signedDocument?.docketNumber).toEqual(caseEntity.docketNumber);
 
-    const signedDocketEntryEntity = caseEntity.docketEntries.find(
+    const signedDocketEntry = caseEntity.docketEntries.find(
       doc =>
         doc.documentType === 'Stipulated Decision' &&
         doc.docketEntryId === mockSignedDocketEntryId,
     );
 
-    expect(signedDocketEntryEntity.isPaper).toEqual(false);
-    expect(signedDocketEntryEntity.docketEntryId).toEqual(
-      mockSignedDocketEntryId,
-    );
-    expect(signedDocketEntryEntity.isDraft).toEqual(true);
-    expect(signedDocketEntryEntity.signedJudgeName).toEqual(mockSigningName);
-    expect(signedDocketEntryEntity.documentType).toEqual('Stipulated Decision');
+    expect(signedDocketEntry?.isPaper).toEqual(false);
+    expect(signedDocketEntry?.docketEntryId).toEqual(mockSignedDocketEntryId);
+    expect(signedDocketEntry?.isDraft).toEqual(true);
+    expect(signedDocketEntry?.signedJudgeName).toEqual(mockSigningName);
+    expect(signedDocketEntry?.documentType).toEqual('Stipulated Decision');
   });
 
   it("should set the document's processing status to complete", async () => {
@@ -169,7 +167,7 @@ describe('saveSignedDocumentInteractor', () => {
     const signedDocument = caseEntity.docketEntries.find(
       doc => doc.docketEntryId === mockOriginalDocketEntryId,
     );
-    expect(signedDocument.processingStatus).toBe(
+    expect(signedDocument?.processingStatus).toBe(
       DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
     );
   });
@@ -189,7 +187,7 @@ describe('saveSignedDocumentInteractor', () => {
     const signedDocument = caseEntity.docketEntries.find(
       doc => doc.docketEntryId === mockOriginalDocketEntryId,
     );
-    expect(signedDocument.documentIdBeforeSignature).toBe(
+    expect(signedDocument?.documentIdBeforeSignature).toBe(
       mockDocumentIdBeforeSignature,
     );
   });

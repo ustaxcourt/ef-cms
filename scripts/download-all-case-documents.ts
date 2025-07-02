@@ -1,5 +1,6 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
@@ -95,7 +96,10 @@ const generateFilename = ({
   });
   let numSealed = 0;
   let numError = 0;
-  for (const docketEntry of caseEntity.docketEntries) {
+  for (const docketEntryRaw of caseEntity.docketEntries) {
+    const docketEntry = new DocketEntry(docketEntryRaw, {
+      authorizedUser: undefined,
+    });
     if (!docketEntry.isFileAttached || !docketEntry.index) {
       console.log('did not download docket entry', docketEntry);
       continue;
@@ -104,6 +108,7 @@ const generateFilename = ({
       docketEntry.isSealed ||
       docketEntry.isLegacySealed ||
       docketEntry.documentTitle.indexOf('(SEALED)') > -1 ||
+      // @ts-ignore
       docketEntry.additionalInfo2?.indexOf('(SEALED)') > -1;
     if (sealed) {
       numSealed++;
@@ -111,6 +116,7 @@ const generateFilename = ({
     try {
       const filename = generateFilename({
         caseCaption: caseEntity.caseCaption,
+        // @ts-ignore
         docketEntry,
       });
       await downloadPdf({
