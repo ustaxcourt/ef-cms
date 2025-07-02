@@ -8,6 +8,7 @@ import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
+import { Contact } from '@shared/business/entities/contacts/Contact';
 
 const createCaseDocketEntries = async ({
   authorizedUser,
@@ -56,6 +57,22 @@ const connectPrivatePractitioners = async ({
   );
 };
 
+const connectPetitioners = async ({
+  docketNumber,
+  petitioners,
+}: {
+  docketNumber: string;
+  petitioners: Contact[];
+}) => {
+  await upsertUserOnCaseRecords(
+    petitioners.map(petitioner => ({
+      docketNumber,
+      userId: petitioner.contactId,
+      serviceIndicator: petitioner.serviceIndicator,
+    })),
+  );
+};
+
 /**
  * createCaseAndAssociations
  *
@@ -85,6 +102,7 @@ export const createCaseAndAssociations = async ({
     docketNumber,
     irsPractitioners,
     privatePractitioners,
+    petitioners,
   } = validRawCaseEntity;
 
   const requests = [
@@ -103,6 +121,10 @@ export const createCaseAndAssociations = async ({
     connectPrivatePractitioners({
       docketNumber,
       privatePractitioners,
+    }),
+    connectPetitioners({
+      docketNumber,
+      petitioners,
     }),
   ];
 

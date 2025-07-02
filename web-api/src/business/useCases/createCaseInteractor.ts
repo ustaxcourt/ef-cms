@@ -29,8 +29,6 @@ import { Practitioner } from '@shared/business/entities/Practitioner';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
-import { settlePromises } from '@web-api/utilities/settlePromises';
-import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
@@ -347,25 +345,9 @@ export const createCaseInteractor = async (
     });
   }
 
-  const caseAssociationUpdates = [
-    upsertWorkItems({
-      workItems: [workItem.validate().toRawObject()],
-    }),
-    upsertUserOnCaseRecords([
-      {
-        docketNumber: caseToAdd.docketNumber,
-        userId: user.userId,
-        serviceIndicator: privatePractitioners.length
-          ? privatePractitioners[0].serviceIndicator
-          : undefined,
-        representing: privatePractitioners.length
-          ? privatePractitioners[0].representing
-          : undefined,
-      },
-    ]),
-  ];
-
-  await settlePromises(caseAssociationUpdates);
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

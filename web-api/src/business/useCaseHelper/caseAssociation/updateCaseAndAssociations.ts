@@ -195,7 +195,6 @@ const updateIrsPractitioners = ({
   const {
     added: addedIrsPractitioners,
     removed: deletedIrsPractitioners,
-    same: unchangedIrsPractitioners,
     updated: updatedIrsPractitioners,
   } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
@@ -203,10 +202,6 @@ const updateIrsPractitioners = ({
     ...addedIrsPractitioners,
     ...updatedIrsPractitioners,
   ];
-
-  if (caseToUpdate.leadDocketNumber && unchangedIrsPractitioners.length) {
-    currentIrsPractitioners.push(...unchangedIrsPractitioners);
-  }
 
   const validIrsPractitioners = IrsPractitioner.validateRawCollection(
     currentIrsPractitioners,
@@ -234,6 +229,43 @@ const updateIrsPractitioners = ({
   ];
 };
 
+const updatePetitioners = ({
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  applicationContext,
+  caseToUpdate,
+  oldCase,
+}) => {
+  const {
+    added: addedPetitioners,
+    removed: deletedPetitioners,
+    updated: updatedPetitioners,
+  } = diff(oldCase.petitioners, caseToUpdate.petitioners, 'contactId');
+
+  const currentPetitioners = [...addedPetitioners, ...updatedPetitioners];
+
+  const deletePetitionersFunctions = deletedPetitioners.map(
+    petitioner =>
+      async function deletePetitioner_cb() {
+        return await disassociateUserFromCase({
+          docketNumber: caseToUpdate.docketNumber,
+          userId: petitioner.userId,
+        });
+      },
+  );
+
+  const petitionersToUpdate = currentPetitioners.map(petitioner => ({
+    docketNumber: caseToUpdate.docketNumber,
+    userId: petitioner.userId,
+    representing: petitioner.representing,
+    serviceIndicator: petitioner.serviceIndicator,
+  }));
+
+  return [
+    ...deletePetitionersFunctions,
+    () => upsertUserOnCaseRecords(petitionersToUpdate),
+  ];
+};
+
 const updatePrivatePractitioners = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   applicationContext,
@@ -243,7 +275,6 @@ const updatePrivatePractitioners = ({
   const {
     added: addedPrivatePractitioners,
     removed: deletedPrivatePractitioners,
-    same: unchangedPrivatePractitioners,
     updated: updatedPrivatePractitioners,
   } = diff(
     oldCase.privatePractitioners,
@@ -255,10 +286,6 @@ const updatePrivatePractitioners = ({
     ...addedPrivatePractitioners,
     ...updatedPrivatePractitioners,
   ];
-
-  if (caseToUpdate.leadDocketNumber && unchangedPrivatePractitioners.length) {
-    currentPrivatePractitioners.push(...unchangedPrivatePractitioners);
-  }
 
   const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
     currentPrivatePractitioners,
@@ -355,6 +382,7 @@ export const updateCaseAndAssociations = async ({
     updateHearings,
     updateIrsPractitioners,
     updatePrivatePractitioners,
+    updatePetitioners,
   ];
 
   if (includeCorrespondence) {

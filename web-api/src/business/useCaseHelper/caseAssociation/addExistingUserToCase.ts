@@ -8,7 +8,6 @@ import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstan
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
 
 export const addExistingUserToCase = async ({
   applicationContext,
@@ -67,15 +66,6 @@ export const addExistingUserToCase = async ({
   } else {
     throw new Error(`no contact found with that user name of ${name}`);
   }
-
-  const rawCase = caseEntity.toRawObject();
-
-  await upsertUserOnCaseRecords([
-    {
-      docketNumber: rawCase.docketNumber,
-      userId: userToAdd.userId,
-    },
-  ]);
 
   return userToAdd.userId;
 };

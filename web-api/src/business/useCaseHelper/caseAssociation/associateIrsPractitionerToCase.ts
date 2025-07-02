@@ -4,7 +4,6 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { upsertUserOnCaseRecords } from '@web-api/persistence/postgres/users/cases/upsertUserOnCaseRecords';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/users/cases/verifyCaseForUser';
 
 export const associateIrsPractitionerToCase = async ({
@@ -38,14 +37,6 @@ export const associateIrsPractitionerToCase = async ({
   if (isAssociated) {
     return caseEntity.toRawObject();
   }
-
-  await upsertUserOnCaseRecords([
-    {
-      docketNumber,
-      userId: user.userId,
-      serviceIndicator,
-    },
-  ]);
 
   caseEntity.attachIrsPractitioner(
     new IrsPractitioner({ ...user, serviceIndicator }),
