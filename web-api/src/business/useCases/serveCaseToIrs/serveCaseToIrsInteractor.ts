@@ -506,6 +506,7 @@ export const serveCaseToIrs = async (
         applicationContext,
         caseEntity,
         initialDocumentTypeKey,
+        authorizedUser
       });
     }
 

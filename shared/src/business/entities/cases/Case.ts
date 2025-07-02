@@ -813,7 +813,7 @@ export class Case extends JoiValidationEntity {
           new DocketEntry(docketEntry, {
             authorizedUser,
             petitioners: this.petitioners,
-          }).toRawObject(),
+          }),
       );
     } else {
       this.archivedDocketEntries = [];
@@ -836,7 +836,7 @@ export class Case extends JoiValidationEntity {
             authorizedUser,
             filtered,
             petitioners: this.petitioners,
-          }).toRawObject(),
+          }),
         )
         .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
@@ -1715,6 +1715,7 @@ export class Case extends JoiValidationEntity {
     const nextIndex =
       this.docketEntries
         .filter(d => d.isOnDocketRecord && d.index !== undefined)
+        // @ts-ignore
         .sort((a, b) => a.index - b.index).length + 1;
     return nextIndex;
   }
