@@ -18,8 +18,6 @@ export const getDocumentQCInboxForUser = async ({
       .execute();
   });
 
-  console.log('workItems', workItems);
-
   return workItems.map(toWorkItemWithCaseInfo);
 };
 

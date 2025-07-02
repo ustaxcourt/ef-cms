@@ -19,7 +19,5 @@ export const getDocumentQCInboxForSectionAction = async ({
     selectedSection,
   });
 
-  console.log('workItems', workItems);
-
   return { workItems };
 };

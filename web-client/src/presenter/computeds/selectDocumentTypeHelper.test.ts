@@ -24,7 +24,7 @@ describe('selectDocumentTypeHelper', () => {
   describe('getOptionsForCategory', () => {
     const mockSelectedDocketEntryId = MOCK_CASE.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
-    ).docketEntryId;
+    )!.docketEntryId;
 
     // Only served documents are valid to select
     const mockServedDocuments = MOCK_DOCUMENTS.map(d => {

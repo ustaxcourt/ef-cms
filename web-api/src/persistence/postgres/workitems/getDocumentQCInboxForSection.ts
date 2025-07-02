@@ -31,7 +31,5 @@ export const getDocumentQCInboxForSection = async ({
     return builder.execute();
   });
 
-  console.log('workItems', workItems);
-
   return workItems.map(toWorkItemWithCaseInfo);
 };

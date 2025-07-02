@@ -27,7 +27,8 @@ describe('formatWorkItem', () => {
       createdAt: '2018-12-27T18:05:54.164Z',
       docketEntryId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
       documentType: 'Answer',
-    },
+    } as RawDocketEntry,
+    docketEntryId: '8eef49b4-9d40-4773-84ab-49e1e59e49cd',
     docketNumber: '101-18',
     section: DOCKET_SECTION,
     sentBy: 'respondent',
@@ -345,7 +346,7 @@ describe('formatWorkItem', () => {
       ...baseWorkItem,
       docketEntry: {
         ...baseWorkItem.docketEntry,
-        documentTitle: undefined,
+        documentTitle: '',
         documentType: 'Document Type',
       },
     };

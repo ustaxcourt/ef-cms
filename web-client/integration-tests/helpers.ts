@@ -989,9 +989,13 @@ export const getPetitionDocumentForCase = caseDetail => {
   return caseDetail.docketEntries.find(doc => doc.documentType === 'Petition');
 };
 
-export const getPetitionWorkItemForCase = caseDetail => {
+export const getPetitionWorkItemInfoForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
-  return petitionDocument.workItem;
+  return {
+    workItemId: petitionDocument.workItemId,
+    qcViewed: petitionDocument.qcViewed,
+    qcComplete: petitionDocument.qcComplete,
+  };
 };
 
 export const embedWithLegalIpsumText = (phrase = '') => {
