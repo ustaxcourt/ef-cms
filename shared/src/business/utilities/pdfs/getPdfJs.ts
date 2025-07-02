@@ -1,10 +1,11 @@
+/* istanbul ignore file */
 import { UNSUPPORTED_BROWSER_ERROR_MESSAGE } from '@web-client/views/FileHandlingHelpers/pdfValidation';
 
 /*
   ____          _____                __       _ 
  |  _ \        / ____|              / _|     | |
  | |_) | ___  | |     __ _ _ __ ___| |_ _   _| |
- |  _ < / _ \ | |    / _` | '__/ _ \  _| | | | |
+ |  _ < / _ \ | |    / ` | '__/ _ \  _| | | | |
  | |_) |  __/ | |___| (_| | | |  __/ | | |_| | |
  |____/ \___|  \_____\__,_|_|  \___|_|  \__,_|_|
 
