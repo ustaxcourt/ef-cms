@@ -67,7 +67,7 @@ describe('docketEntryQcHelper', () => {
             {
               docketEntryId: 'abc',
               documentType: 'Notice of Change of Address',
-              workItem: { isRead: false },
+              qcViewed: false,
             },
           ],
         },

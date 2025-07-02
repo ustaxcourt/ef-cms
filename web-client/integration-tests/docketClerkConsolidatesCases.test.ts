@@ -137,7 +137,7 @@ describe('Case Consolidation Journey', () => {
         )
       ) {
         expect(orderDocument.servedAt).toBeDefined();
-        expect(orderDocument.workItem.docketEntry.docketEntryId).toEqual(
+        expect(orderDocument.workItem.docketEntryId).toEqual(
           orderDocument.docketEntryId,
         );
         expect(orderDocument.workItem.docketNumber).toEqual(
@@ -186,7 +186,7 @@ describe('Case Consolidation Journey', () => {
         )
       ) {
         expect(orderDocument.servedAt).toBeDefined();
-        expect(orderDocument.workItem.docketEntry.docketEntryId).toEqual(
+        expect(orderDocument.workItem.docketEntryId).toEqual(
           orderDocument.docketEntryId,
         );
         expect(orderDocument.workItem.docketNumber).toEqual(

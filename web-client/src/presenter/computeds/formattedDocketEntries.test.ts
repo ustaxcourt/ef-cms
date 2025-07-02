@@ -6,7 +6,7 @@ import {
   DOCKET_RECORD_FILTER_OPTIONS,
   ROLES,
   STATE_KEYS,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import {
@@ -14,7 +14,7 @@ import {
   docketClerkUser,
   petitionerUser,
   petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import {
   formattedDocketEntries as formattedDocketEntriesComputed,
   setupIconsToDisplay,
@@ -912,10 +912,8 @@ describe('formattedDocketEntries', () => {
             docketEntries: [
               {
                 ...mockDocketEntry,
-                workItem: {
-                  completedAt: undefined,
-                  isRead: false,
-                },
+                qcViewed: false,
+                qcComplete: false,
               },
             ],
           },

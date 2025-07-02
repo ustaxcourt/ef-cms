@@ -15,7 +15,7 @@ describe('WorkItem', () => {
         assigneeName: 'bob',
         caseStatus: CASE_STATUS_TYPES.new,
         caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
+        docketEntryId: '9b4cd447-6278-461b-b62b-d9e357eea62c',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         section: DOCKET_SECTION,
@@ -34,7 +34,7 @@ describe('WorkItem', () => {
         assigneeName: 'bob',
         caseStatus: CASE_STATUS_TYPES.new,
         caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
+        docketEntryId: '9b4cd447-6278-461b-b62b-d9e357eea62c',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         section: DOCKET_SECTION,
@@ -44,13 +44,13 @@ describe('WorkItem', () => {
       expect(workItem.isValid()).toBeTruthy();
     });
 
-    it('Update a valid workitem with a isRead', () => {
+    it('Update a valid workitem with an isRead', () => {
       const workItem = new WorkItem({
         assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
         assigneeName: 'bob',
         caseStatus: CASE_STATUS_TYPES.new,
         caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
+        docketEntryId: '9b4cd447-6278-461b-b62b-d9e357eea62c',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         isRead: true,
@@ -67,7 +67,7 @@ describe('WorkItem', () => {
         assigneeName: 'bob',
         caseStatus: CASE_STATUS_TYPES.calendared,
         caseTitle: 'Johnny Joe Jacobson',
-        docketEntry: {},
+        docketEntryId: '9b4cd447-6278-461b-b62b-d9e357eea62c',
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
         isRead: true,

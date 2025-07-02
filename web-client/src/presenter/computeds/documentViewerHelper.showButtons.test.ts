@@ -1,12 +1,12 @@
 import {
   CASE_STATUS_TYPES,
   INITIAL_DOCUMENT_TYPES,
-} from '../../../../shared/src/business/entities/EntityConstants';
+} from '@shared/business/entities/EntityConstants';
 import {
   adcUser,
   docketClerkUser,
   petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import { applicationContext } from '../../applicationContext';
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -49,7 +49,7 @@ describe('documentViewerHelper', () => {
           documentType: 'Proposed Stipulated Decision',
           eventCode: 'PSDE',
           servedAt: '2019-08-25T05:00:00.000Z',
-          workItem: {},
+          qcViewed: false,
         },
         expectation: true,
       },
@@ -60,20 +60,20 @@ describe('documentViewerHelper', () => {
           documentType: 'Proposed Stipulated Decision',
           eventCode: 'PSDE',
           servedAt: '2019-08-25T05:00:00.000Z',
-          workItem: {},
+          qcViewed: false,
         },
         expectation: false,
         user: adcUser,
       },
       {
         description:
-          'should be undefined if the user has EDIT_DOCKET_ENTRY permissions and the docket entry does not have an incomplete work item',
+          'should be false if the user has EDIT_DOCKET_ENTRY permissions and the docket entry does not have an incomplete work item',
         docketEntryOverrides: {
           documentType: 'Proposed Stipulated Decision',
           eventCode: 'PSDE',
           servedAt: '2019-08-25T05:00:00.000Z',
         },
-        expectation: undefined,
+        expectation: false,
       },
       {
         description:
@@ -83,7 +83,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'PSDE',
           isFileAttached: false,
           servedAt: '2019-08-25T05:00:00.000Z',
-          workItem: {},
+          qcViewed: false,
         },
         expectation: false,
       },
