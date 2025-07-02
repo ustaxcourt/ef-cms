@@ -93,7 +93,7 @@ export const PractitionerLoginServiceEmailForm = connect<
                 id="confirm-email"
                 name="confirmEmail"
                 type="text"
-                value={form.confirmEmail ?? ''}
+                value={form.confirmEmail || ''}
                 onBlur={() => validateSequence()}
                 onChange={e =>
                   updateFormValueSequence({
