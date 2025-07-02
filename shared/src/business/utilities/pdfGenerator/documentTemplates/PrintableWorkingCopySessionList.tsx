@@ -19,20 +19,12 @@ export const PrintableWorkingCopySessionList = ({
   showCaseNotes,
   sort,
   userHeading,
+  trialStatusCounts,
 }) => {
   const trialSessionDateRange =
     formattedTrialSession.formattedEstimatedEndDateFull
       ? `${formattedTrialSession.formattedStartDateFull} - ${formattedTrialSession.formattedEstimatedEndDateFull}`
       : `${formattedTrialSession.formattedStartDateFull}`;
-
-  const trialStatusCounts = formattedCases.reduce((counters, c) => {
-    if(c.trialStatus === undefined) {
-      counters["statusUnassigned"] = (counters["statusUnassigned"] || 0) + 1;
-    } else {
-      counters[c.trialStatus] = (counters[c.trialStatus] || 0) + 1;
-    }
-    return counters;
-  }, {});
   return (
     <div className="printable-working-copy-list">
       <PrimaryHeader />

@@ -22,7 +22,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     state.trialSessionWorkingCopy,
   );
 
-  const { trialStatusFilters } = get(state.trialSessionWorkingCopyHelper);
+  const { trialStatusFilters, trialStatusCounts } = get(state.trialSessionWorkingCopyHelper);
 
   const selectedFilters = trialStatusFilters.filter(filter => {
     return filters[filter.key];
@@ -99,6 +99,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       sort,
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
       userHeading,
+      trialStatusCounts
     });
 
   return { pdfUrl };
