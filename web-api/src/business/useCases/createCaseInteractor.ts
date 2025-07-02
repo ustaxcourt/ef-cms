@@ -355,10 +355,10 @@ export const createCaseInteractor = async (
       {
         docketNumber: caseToAdd.docketNumber,
         userId: user.userId,
-        serviceIndicator: privatePractitioners
+        serviceIndicator: privatePractitioners.length
           ? privatePractitioners[0].serviceIndicator
           : undefined,
-        representing: privatePractitioners
+        representing: privatePractitioners.length
           ? privatePractitioners[0].representing
           : undefined,
       },
