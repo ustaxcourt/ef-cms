@@ -6,9 +6,7 @@ export const docketClerkEditsServiceIndicatorForPractitioner = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    const barNumber = cerebralTest.getState(
-      'caseDetail.privatePractitioners.0.barNumber',
-    );
+    const barNumber = 'PT5432'
 
     await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
       barNumber,

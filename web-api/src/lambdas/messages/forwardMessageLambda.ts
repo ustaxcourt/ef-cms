@@ -9,9 +9,8 @@ import { genericHandler } from '../../genericHandler';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const forwardMessageLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await forwardMessageInteractor(
-      applicationContext,
       {
         parentMessageId: event.pathParameters.parentMessageId,
         ...JSON.parse(event.body),
