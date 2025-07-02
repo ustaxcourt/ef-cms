@@ -6,7 +6,15 @@ import {
   validatePdfHeader,
   validatePermissions,
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
-import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
+
+import {
+  getPdfJs,
+} from '@shared/business/utilities/pdfs/getPdfJs';
+
+export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
+  'We noticed you are on an older or unsupported browser. For security reasons, this request could not be completed. \
+  You can try updating the browser or using a different browser or machine. If you need help uploading \
+  this document, contact DAWSON support.';
 
 export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
   'We noticed you are on an older or unsupported browser. For security reasons, this request could not be completed. \
