@@ -50,6 +50,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'PSDE',
           servedAt: '2019-08-25T05:00:00.000Z',
           qcViewed: false,
+          workItemId: 'someId'
         },
         expectation: true,
       },
@@ -61,6 +62,7 @@ describe('documentViewerHelper', () => {
           eventCode: 'PSDE',
           servedAt: '2019-08-25T05:00:00.000Z',
           qcViewed: false,
+          workItemId: 'someId'
         },
         expectation: false,
         user: adcUser,
@@ -84,6 +86,7 @@ describe('documentViewerHelper', () => {
           isFileAttached: false,
           servedAt: '2019-08-25T05:00:00.000Z',
           qcViewed: false,
+          workItemId: 'someId'
         },
         expectation: false,
       },

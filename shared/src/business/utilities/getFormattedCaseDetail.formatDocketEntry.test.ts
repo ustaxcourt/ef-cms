@@ -201,6 +201,7 @@ describe('formatDocketEntry', () => {
         isLegacySealed: true,
         isOnDocketRecord: true,
         servedAt: '2019-03-01T21:40:46.415Z',
+        workItemId: '6d96bdfd-dc10-40db-b640-ef10c2591b6a',
         qcViewed: false,
         qcComplete: false,
       });
@@ -213,6 +214,7 @@ describe('formatDocketEntry', () => {
         isLegacySealed: true,
         isOnDocketRecord: true,
         servedAt: '2019-03-01T21:40:46.415Z',
+        workItemId: '6d96bdfd-dc10-40db-b640-ef10c2591b6a',
         qcViewed: false,
         qcComplete: false,
       });

@@ -914,6 +914,7 @@ describe('formattedDocketEntries', () => {
                 ...mockDocketEntry,
                 qcViewed: false,
                 qcComplete: false,
+                workItemId: 'someId',
               },
             ],
           },

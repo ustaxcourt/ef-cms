@@ -187,13 +187,7 @@ describe('generateChangeOfAddress', () => {
       user: mockPrivatePractitioner,
     } as any);
 
-    const noticeDocketEntry = getDocketEntryForNotice(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
-    );
-
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(noticeDocketEntry.workItem).toBeDefined();
   });
 
   it("should NOT create a work item for an associated practitioner's notice of change of address when there is no paper service for the case", async () => {
