@@ -23,7 +23,7 @@ export class PublicCase extends JoiValidationEntity {
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix: string;
   public hasIrsPractitioner: boolean;
-  public docketEntries: any[];
+  public docketEntries: RawDocketEntry[];
   public isPaper?: boolean;
   public partyType: string;
   public receivedAt: string;

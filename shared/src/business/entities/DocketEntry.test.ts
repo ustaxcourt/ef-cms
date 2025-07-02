@@ -6,7 +6,6 @@ import {
 } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
 import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '../test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
@@ -483,7 +482,6 @@ describe('DocketEntry entity', () => {
         strickenBy: 'Talon',
         strickenByUserId: '3c620b4a-e12b-47b7-835c-1d873401f732',
         userId: 'a9ea9ac7-ebd4-43d6-9d40-d21a3cfd71f7',
-        workItem: MOCK_WORK_ITEM,
       };
 
       const docketEntryEntity = new DocketEntry(docketEntry, {
@@ -520,9 +518,6 @@ describe('DocketEntry entity', () => {
         docketEntry.strickenByUserId,
       );
       expect(docketEntryEntity.userId).toEqual(docketEntry.userId);
-      expect(docketEntryEntity.workItem).toEqual(
-        new WorkItem(docketEntry.workItem),
-      );
     });
 
     it('should not show fields for internal users', () => {
@@ -573,7 +568,6 @@ describe('DocketEntry entity', () => {
       expect(docketEntryEntity.strickenBy).toBeFalsy();
       expect(docketEntryEntity.strickenByUserId).toBeFalsy();
       expect(docketEntryEntity.userId).toBeFalsy();
-      expect(docketEntryEntity.workItem).toBeFalsy();
     });
   });
 

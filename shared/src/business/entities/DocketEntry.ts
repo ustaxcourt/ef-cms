@@ -474,10 +474,13 @@ export class DocketEntry extends JoiValidationEntity {
     return DocketEntry.isCourtIssued({ eventCode: this.eventCode });
   }
 
-  attachWorkItemInfoForUI(workItem: WorkItem | RawWorkItem): void {
-    this.qcComplete = !!workItem.completedAt;
-    this.qcViewed = !!workItem.isRead;
-    this.workItemId = workItem.workItemId;
+  static attachWorkItemInfoForUI(
+    docketEntry: RawDocketEntry,
+    workItem: WorkItem | RawWorkItem,
+  ): void {
+    docketEntry.qcComplete = !!workItem.completedAt;
+    docketEntry.qcViewed = !!workItem.isRead;
+    docketEntry.workItemId = workItem.workItemId;
   }
 
   static TRANSCRIPT_AGE_DAYS_MIN = 90;

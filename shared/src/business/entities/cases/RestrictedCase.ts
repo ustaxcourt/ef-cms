@@ -8,7 +8,7 @@ export class RestrictedCase extends JoiValidationEntity {
   public isPaper?: boolean;
   public isSealed?: string;
   public leadDocketNumber?: boolean;
-  public docketEntries: {}[];
+  public docketEntries: RawDocketEntry[];
 
   constructor(rawCase: any) {
     super('RestrictedCase');

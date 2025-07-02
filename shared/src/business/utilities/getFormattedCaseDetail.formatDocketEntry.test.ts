@@ -201,10 +201,8 @@ describe('formatDocketEntry', () => {
         isLegacySealed: true,
         isOnDocketRecord: true,
         servedAt: '2019-03-01T21:40:46.415Z',
-        workItem: {
-          completedAt: undefined,
-          isRead: false,
-        },
+        qcViewed: false,
+        qcComplete: false,
       });
       expect(result.qcNeeded).toBeTruthy();
     });
@@ -215,10 +213,8 @@ describe('formatDocketEntry', () => {
         isLegacySealed: true,
         isOnDocketRecord: true,
         servedAt: '2019-03-01T21:40:46.415Z',
-        workItem: {
-          completedAt: undefined,
-          isRead: false,
-        },
+        qcViewed: false,
+        qcComplete: false,
       });
 
       expect(result.qcNeeded).toBeFalsy();

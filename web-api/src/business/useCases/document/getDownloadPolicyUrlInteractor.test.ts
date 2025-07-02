@@ -42,13 +42,13 @@ describe('getDownloadPolicyUrlInteractor', () => {
   let mockCase;
   const baseDocketEntry = MOCK_CASE.docketEntries.find(
     d => d.docketEntryId === 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
-  );
+  )!;
   const stinDocketEntry = MOCK_CASE.docketEntries.find(
     d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
-  );
+  )!;
   const petitionDocketEntry = MOCK_CASE.docketEntries.find(
     d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
-  );
+  )!;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
   beforeEach(() => {
