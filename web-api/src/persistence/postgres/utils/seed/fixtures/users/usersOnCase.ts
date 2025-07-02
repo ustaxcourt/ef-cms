@@ -43,7 +43,7 @@ export const usersOnCase: NewUserOnCaseKysely[] = [
   },
   {
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-    docketNumber: '100-22',
+    docketNumber: '103-22',
   },
   {
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
