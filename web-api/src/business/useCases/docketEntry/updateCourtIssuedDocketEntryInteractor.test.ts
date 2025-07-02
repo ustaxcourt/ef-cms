@@ -4,8 +4,6 @@ jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import {
-  CASE_STATUS_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   OBJECTIONS_OPTIONS_MAP,
   ROLES,
@@ -20,21 +18,29 @@ import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocke
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
   let mockLock;
 
+  const docketEntryId = 'c54ba5a9-b37b-479d-9201-067ec6e335ba';
+  const associatedWorkItemId = 'd54ba5a9-b37b-479d-9201-067ec6e335ba';
+
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
 
   beforeAll(() => {
     caseRecord = {
       ...MOCK_CASE,
       docketEntries: [
         {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
+          docketEntryId,
           docketNumber: '45678-18',
           documentType: 'Order',
           eventCode: 'O',
@@ -43,18 +49,6 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
           signedByUserId: mockUserId,
           signedJudgeName: 'Dredd',
           userId: mockUserId,
-          workItem: {
-            assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
-            assigneeName: 'bob',
-            caseStatus: CASE_STATUS_TYPES.new,
-            caseTitle: 'Johnny Joe Jacobson',
-            docketEntry: {},
-            docketNumber: '101-18',
-            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-            messages: [],
-            section: DOCKET_SECTION,
-            sentBy: 'bob',
-          },
         },
       ],
     };
@@ -73,6 +67,18 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
 
   beforeEach(() => {
     mockLock = undefined;
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem({
+        assigneeId: '8b4cd447-6278-461b-b62b-d9e357eea62c',
+        assigneeName: 'bob',
+        docketEntry: {},
+        docketNumber: '101-18',
+        section: DOCKET_SECTION,
+        sentBy: 'bob',
+        workItemId: associatedWorkItemId,
+        docketEntryId,
+      }),
+    );
   });
 
   it('should throw an error if not authorized', async () => {
@@ -112,7 +118,7 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
     ).rejects.toThrow('Document not found');
   });
 
-  it('should call updateCase and saveWorkItem', async () => {
+  it('should call update case and save work item', async () => {
     await updateCourtIssuedDocketEntryInteractor(
       applicationContext,
       {

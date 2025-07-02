@@ -3,7 +3,6 @@ import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
 import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
-import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -33,26 +32,22 @@ export const getCaseByDocketNumber = async ({
     throw new NotFoundError(`Case ${docketNumber} not found`);
   }
 
-  const [caseCorrespondences, workItems, docketEntries, caseItemsRaw] =
-    await Promise.all([
-      getCaseCorrespondenceByDocketNumber({
-        docketNumber,
-      }),
-      getWorkItemsByDocketNumber({
-        docketNumber,
-      }),
-      getDocketEntriesByDocketNumber({ docketNumber }),
-      queryFull({
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': `case|${docketNumber}`,
-        },
-        KeyConditionExpression: '#pk = :pk',
-        applicationContext,
-      }),
-    ]);
+  const [caseCorrespondences, docketEntries, caseItemsRaw] = await Promise.all([
+    getCaseCorrespondenceByDocketNumber({
+      docketNumber,
+    }),
+    getDocketEntriesByDocketNumber({ docketNumber }),
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }),
+  ]);
 
   const caseItems = caseItemsRaw.filter(
     item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
@@ -86,11 +81,6 @@ export const getCaseByDocketNumber = async ({
         ...correspondenceItem,
         pk: `case|${docketNumber}`,
         sk: `correspondence|${correspondenceItem.correspondenceId}`,
-      })),
-      ...workItems.map(workItem => ({
-        ...workItem,
-        pk: `case|${docketNumber}`,
-        sk: `work-item|${workItem.workItemId}`,
       })),
       ...docketEntries.map(docketEntry => ({
         ...docketEntry,

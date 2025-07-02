@@ -85,7 +85,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -97,14 +97,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       mockDocketClerkUser,
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Primary Petitioner',
-    );
   });
 
   it('should NOT create a work item for the NCA when the petitioner is represented and their service preference is NOT paper', async () => {
@@ -117,7 +110,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -129,13 +122,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       mockDocketClerkUser,
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
     expect(upsertWorkItems).not.toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeUndefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Primary Petitioner',
-    );
   });
 
   it('should create a work item for the NCA when the petitioner is represented and their service preference is paper', async () => {
@@ -148,7 +135,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -161,14 +148,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       mockDocketClerkUser,
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Primary Petitioner',
-    );
   });
 
   it('should create a work item for the NCA when the petitioner is represented and a private practitioner on the case requests paper service', async () => {
@@ -183,7 +163,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       ],
     };
 
-    const result = await updatePetitionerInformationInteractor(
+    await updatePetitionerInformationInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
@@ -195,13 +175,6 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
       mockDocketClerkUser,
     );
 
-    const noticeOfChangeDocketEntryWithWorkItem =
-      result.updatedCase.docketEntries.find(d => d.eventCode === 'NCA');
-
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(noticeOfChangeDocketEntryWithWorkItem.workItem).toBeDefined();
-    expect(noticeOfChangeDocketEntryWithWorkItem.additionalInfo).toBe(
-      'for Test Secondary Petitioner',
-    );
   });
 });

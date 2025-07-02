@@ -8,12 +8,9 @@ import {
   PETITIONS_SECTION,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../shared/src/test/mockLock';
-import {
-  MOCK_PRACTITIONER,
-  petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
+import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
+import { MOCK_PRACTITIONER, petitionsClerkUser } from '@shared/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -28,23 +25,21 @@ import { omit } from 'lodash';
 import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 describe('saveCaseDetailInternalEditInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
 
   const mockCase = {
     ...MOCK_CASE,
     docketEntries: [
       {
         ...MOCK_CASE.docketEntries[0],
-        workItem: {
-          docketEntry: MOCK_CASE.docketEntries[0],
-          docketNumber: MOCK_CASE.docketNumber,
-          section: PETITIONS_SECTION,
-          sentBy: 'petitioner',
-          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
-        },
       },
     ],
   };
@@ -78,6 +73,15 @@ describe('saveCaseDetailInternalEditInteractor', () => {
     });
 
     getCaseByDocketNumber.mockResolvedValue(mockCase);
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem({
+        docketEntryId: MOCK_CASE.docketEntries[0].docketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+        section: PETITIONS_SECTION,
+        sentBy: 'petitioner',
+        workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
+      }),
+    );
   });
 
   it('should throw an error if caseToUpdate is not passed in', async () => {
@@ -219,7 +223,7 @@ describe('saveCaseDetailInternalEditInteractor', () => {
 
     getCaseByDocketNumber.mockResolvedValue({
       ...mockCase,
-      docketEntries: [...mockCase.docketEntries, mockRQT],
+      docketEntries: [...mockCase.docketEntries, mockRQT as RawDocketEntry],
       isPaper: true,
     });
 

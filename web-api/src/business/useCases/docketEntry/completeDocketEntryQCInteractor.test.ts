@@ -23,6 +23,8 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -35,6 +37,9 @@ describe('completeDocketEntryQCInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
 
   beforeAll(() => {
     applicationContext
@@ -51,12 +56,7 @@ describe('completeDocketEntryQCInteractor', () => {
   beforeEach(() => {
     mockLock = undefined;
     const workItem = {
-      docketEntry: {
-        docketEntryId: mockDocketEntryId,
-        docketNumber: MOCK_CASE.docketNumber,
-        documentType: 'Answer',
-        eventCode: 'A',
-      },
+      docketEntryId: mockDocketEntryId,
       docketNumber: '45678-18',
       section: DOCKET_SECTION,
       sentBy: 'Test User',
@@ -64,6 +64,10 @@ describe('completeDocketEntryQCInteractor', () => {
       updatedAt: applicationContext.getUtilities().createISODateString(),
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
+
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem(workItem),
+    );
 
     caseRecord = {
       ...MOCK_CASE,
@@ -82,7 +86,6 @@ describe('completeDocketEntryQCInteractor', () => {
           receivedAt: '2019-08-25T05:00:00.000Z',
           servedAt: '2019-08-25T05:00:00.000Z',
           servedParties: [{ name: 'Bernard Lowe' }],
-          workItem,
         },
       ],
     };

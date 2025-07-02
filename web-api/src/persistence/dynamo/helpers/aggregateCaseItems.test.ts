@@ -8,7 +8,6 @@ import {
   isHearingItem,
   isIrsPractitionerItem,
   isPrivatePractitionerItem,
-  isWorkItemItem,
 } from './aggregateCaseItems';
 
 describe('aggregateCaseItems', () => {
@@ -103,7 +102,7 @@ describe('aggregateCaseItems', () => {
       archivedCorrespondences: [archivedCorrespondenceRecord],
       archivedDocketEntries: [archivedDocketEntryRecord],
       correspondence: [correspondenceRecord],
-      docketEntries: [{ ...docketEntryRecord, workItem: workItemRecord }],
+      docketEntries: [{ ...docketEntryRecord }],
       hearings: [hearingRecord],
       irsPractitioners: [irsPractitionerRecord],
       privatePractitioners: [privatePractitionerRecord],
@@ -220,23 +219,6 @@ describe('aggregateCaseItems', () => {
       expect(isDocketEntryItem(correspondenceRecord)).toEqual(false);
       expect(isDocketEntryItem(archivedCorrespondenceRecord)).toEqual(false);
       expect(isDocketEntryItem(workItemRecord)).toEqual(false);
-    });
-  });
-
-  describe('isWorkItemItem', () => {
-    it('returns true if the item is a workitem item', () => {
-      expect(isWorkItemItem(workItemRecord)).toEqual(true);
-    });
-
-    it('returns false if the item is NOT a workitem item', () => {
-      expect(isWorkItemItem(docketEntryRecord)).toEqual(false);
-      expect(isWorkItemItem(caseRecord)).toEqual(false);
-      expect(isWorkItemItem(hearingRecord)).toEqual(false);
-      expect(isWorkItemItem(judgeRecord)).toEqual(false);
-      expect(isWorkItemItem(privatePractitionerRecord)).toEqual(false);
-      expect(isWorkItemItem(irsPractitionerRecord)).toEqual(false);
-      expect(isWorkItemItem(correspondenceRecord)).toEqual(false);
-      expect(isWorkItemItem(archivedCorrespondenceRecord)).toEqual(false);
     });
   });
 

@@ -483,6 +483,10 @@ export class DocketEntry extends JoiValidationEntity {
     docketEntry.workItemId = workItem.workItemId;
   }
 
+  static hasWorkItemInfo(docketEntry: RawDocketEntry) {
+    return !!docketEntry.workItemId;
+  }
+
   static TRANSCRIPT_AGE_DAYS_MIN = 90;
 
   static isCourtIssued({ eventCode }: { eventCode: string }): boolean {

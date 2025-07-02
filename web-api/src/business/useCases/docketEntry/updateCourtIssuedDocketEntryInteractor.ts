@@ -88,14 +88,6 @@ export const updateCourtIssuedDocketEntry = async (
 
   caseEntity.updateDocketEntry(docketEntryEntity);
 
-  Object.assign(workItem, {
-    docketEntry: {
-      ...docketEntryEntity.toRawObject(),
-
-      createdAt: docketEntryEntity.createdAt,
-    },
-  });
-
   const rawValidWorkItem = workItem.validate().toRawObject();
 
   const saveItems = [

@@ -1,3 +1,4 @@
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -19,9 +20,9 @@ export const setQCWorkItemIdToMarkAsReadIfNeededAction = ({
     entry => entry.docketEntryId === docketEntryId,
   );
 
-  const hasWorkItemInfo = docketEntry?.qcViewed !== undefined;
+  const hasWorkItemInfo = docketEntry && DocketEntry.hasWorkItemInfo(docketEntry);
 
-  const workItemIsUnread = hasWorkItemInfo && !docketEntry.qcViewed;
+  const workItemIsUnread = hasWorkItemInfo && !docketEntry?.qcViewed;
 
   let workItemIdToMarkAsRead;
   if (workItemIsUnread) {

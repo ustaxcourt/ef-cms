@@ -32,6 +32,7 @@ import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-a
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments as closeCaseAndUpdateTrialSessionForEnteredAndServedDocumentsMock } from '@web-api/business/useCaseHelper/docketEntry/closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 
 describe('fileAndServeDocumentOnOneCase', () => {
   let mockCaseEntity;
@@ -44,6 +45,10 @@ describe('fileAndServeDocumentOnOneCase', () => {
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const upsertWorkItems = jest.mocked(upsertWorkItemsMock);
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
+
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const differentDocketNumber = '3875-32';
   const docketEntriesWithCaseClosingEventCodes =
@@ -94,13 +99,6 @@ describe('fileAndServeDocumentOnOneCase', () => {
       Promise.resolve(caseEntity),
     );
 
-    mockWorkItem = {
-      docketNumber: differentDocketNumber,
-      section: DOCKET_SECTION,
-      sentBy: docketClerkUser.name,
-      sentByUserId: docketClerkUser.userId,
-      workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
-    };
     mockDocketEntry = new DocketEntry(
       {
         docketEntryId: mockDocketEntryId,
@@ -113,9 +111,19 @@ describe('fileAndServeDocumentOnOneCase', () => {
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: judgeUser.userId,
         signedJudgeName: judgeUser.name,
-        workItem: mockWorkItem,
       },
       { authorizedUser: undefined },
+    );
+    mockWorkItem = {
+      docketNumber: differentDocketNumber,
+      docketEntryId: mockDocketEntry.docketEntryId,
+      section: DOCKET_SECTION,
+      sentBy: docketClerkUser.name,
+      sentByUserId: docketClerkUser.userId,
+      workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
+    };
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem(mockWorkItem),
     );
   });
 
@@ -187,21 +195,10 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    const expectedDocketEntry =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        doc => doc.docketEntryId === mockDocketEntryId,
-      );
-    expect(expectedDocketEntry.workItem).toBeDefined();
+    expect(upsertWorkItems).toHaveBeenCalled();
   });
 
   it('should create a new work item for the docketEntry when the docketNumber on the originalSubjectDocketEntry does not match the docketNumber of the case to file the docketEntry on', async () => {
-    mockWorkItem = {
-      docketNumber: differentDocketNumber,
-      section: DOCKET_SECTION,
-      sentBy: docketClerkUser.name,
-      sentByUserId: docketClerkUser.userId,
-      workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
-    };
     mockDocketEntry = new DocketEntry(
       {
         docketEntryId: mockDocketEntryId,
@@ -214,10 +211,17 @@ describe('fileAndServeDocumentOnOneCase', () => {
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: judgeUser.userId,
         signedJudgeName: judgeUser.name,
-        workItem: mockWorkItem,
       },
       { authorizedUser: undefined },
     );
+    mockWorkItem = {
+      docketNumber: differentDocketNumber,
+      docketEntryId: mockDocketEntry.docketEntryId,
+      section: DOCKET_SECTION,
+      sentBy: docketClerkUser.name,
+      sentByUserId: docketClerkUser.userId,
+      workItemId: 'b4c7337f-9ca0-45d9-9396-75e003f81e32',
+    };
 
     await fileAndServeDocumentOnOneCase({
       caseEntity: mockCaseEntity,
@@ -226,11 +230,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       user: docketClerkUser,
     });
 
-    const expectedDocketEntry =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        doc => doc.docketEntryId === mockDocketEntryId,
-      );
-    expect(expectedDocketEntry.workItem).toMatchObject({
+    expect(upsertWorkItems.mock.calls[0][0].workItems[0]).toMatchObject({
       docketNumber: mockCaseEntity.docketNumber,
       section: DOCKET_SECTION,
     });
@@ -309,7 +309,7 @@ describe('fileAndServeDocumentOnOneCase', () => {
       result.docketEntries.find(
         docketEntry =>
           docketEntry.docketEntryId === mockDocketEntry.docketEntryId,
-      ).index,
+      )?.index,
     ).toBeDefined();
   });
 

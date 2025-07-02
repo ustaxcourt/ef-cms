@@ -89,7 +89,7 @@ export const formatDocketEntry = (applicationContext, docketEntry) => {
     ({ eventCode }) => eventCode,
   ).includes(formattedEntry.eventCode);
 
-  const hasWorkItemInfo = formattedEntry.qcViewed !== undefined;
+  const hasWorkItemInfo = DocketEntry.hasWorkItemInfo(formattedEntry);
 
   formattedEntry.qcWorkItemsCompleted =
     !hasWorkItemInfo || !!formattedEntry.qcComplete;

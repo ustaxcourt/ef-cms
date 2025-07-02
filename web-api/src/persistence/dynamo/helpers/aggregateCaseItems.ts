@@ -20,8 +20,6 @@ export const isCorrespondenceItem = item =>
 export const isDocketEntryItem = item =>
   item.sk.startsWith('docket-entry|') && !item.archived;
 
-export const isWorkItemItem = item => item.sk.startsWith('work-item|');
-
 export const isHearingItem = item => item.sk.startsWith('hearing|');
 
 export const isIrsPractitionerItem = (
