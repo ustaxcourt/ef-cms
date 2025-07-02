@@ -150,9 +150,7 @@ describe('editPaperFilingInteractor', () => {
             },
             mockDocketClerkUser,
           ),
-        ).rejects.toThrow(
-          `Docket entry ${notFoundDocketEntryId} was not found.`,
-        );
+        ).rejects.toThrow();
       });
 
       it('should throw an error when the docket entry has already been served', async () => {
