@@ -164,5 +164,22 @@ describe('Document Search entity', () => {
 
       expect(validationErrors!.startDate).toEqual('Enter a valid start date');
     });
+
+
+     it('should return undefined for start and end date when date range is set to all dates', () => {
+      const documentSearch = new DocumentSearch({
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+        endDate: '10/10/2030',
+        startDate: '10/10/2009',
+      });
+
+      const validationErrors = documentSearch.getFormattedValidationErrors();
+
+      expect(validationErrors).toEqual(null);
+      expect(documentSearch.startDate).toEqual(undefined);
+      expect(documentSearch.endDate).toEqual(undefined);
+    });
+
+    
   });
 });
