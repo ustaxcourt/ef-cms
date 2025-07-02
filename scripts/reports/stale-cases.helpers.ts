@@ -30,6 +30,7 @@ type StaleCase = {
   deRcvdAt: string;
   docketNumber: string;
   judge: string;
+  preferredTrialCity: string;
   status: CaseStatus;
 };
 
@@ -132,6 +133,7 @@ const isCaseStale = async ({
       deRcvdAt: deRcvdAt!.split('T')[0],
       docketNumber: aCase.docketNumber,
       judge,
+      preferredTrialCity: aCase.preferredTrialCity || '',
       status: aCase.status,
     });
     console.log(
@@ -170,6 +172,7 @@ export const generateStaleCasesReport = async ({
     { header: 'Status', key: 'status' },
     { header: 'Last Filed', key: 'deRcvdAt' },
     { header: 'Age in Days', key: 'deAge' },
+    { header: 'Preferred Trial City', key: 'preferredTrialCity' },
   ];
   const rows = staleCases
     .sort((a, b) => b.deAge - a.deAge)
