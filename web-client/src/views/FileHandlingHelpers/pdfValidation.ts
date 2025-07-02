@@ -8,7 +8,6 @@ import {
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 import {
   getPdfJs,
-  clientSupportsES2022,
 } from '@shared/business/utilities/pdfs/getPdfJs';
 
 export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
@@ -29,19 +28,6 @@ export const validatePdf = ({
 }: {
   file: File;
 }): Promise<FileValidationResponse> => {
-  if (!clientSupportsES2022()) {
-    console.warn(
-      'Client does not support ES2022 features. This may cause issues with PDF validation.',
-    );
-    return Promise.resolve({
-      errorInformation: {
-        errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
-        errorMessageToLog: `${UNSUPPORTED_BROWSER_ERROR_MESSAGE} (User agent: ${navigator.userAgent})`,
-        errorType: ErrorTypes.UNSUPPORTED_BROWSER,
-      },
-      isValid: false,
-    });
-  }
   return new Promise(resolve => {
     const fileReader = new FileReader();
     fileReader.readAsArrayBuffer(file);
@@ -50,7 +36,6 @@ export const validatePdf = ({
       const { result } = fileReader;
 
       if (!result || typeof result === 'string') {
-
         resolve({
           errorInformation: {
             errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
@@ -73,8 +58,6 @@ export const validatePdf = ({
           corruptPdfError.name = 'CorruptPDFHeaderException';
           throw corruptPdfError;
         }
-
-        // Attempt to load the PDF to check for any errors
         const pdfjs = await getPdfJs();
         const document = await pdfjs.getDocument({
           data: fileAsArrayBuffer,
@@ -115,6 +98,16 @@ export const validatePdf = ({
               },
               isValid: false,
             });
+          } else if (['UnsupportedBrowserException'].includes(err.name)) {
+            resolve({
+              errorInformation: {
+                errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+                errorMessageToLog: `${UNSUPPORTED_BROWSER_ERROR_MESSAGE} (User agent: ${navigator.userAgent})`,
+                errorType: ErrorTypes.UNSUPPORTED_BROWSER,
+              },
+              isValid: false,
+            });
+            return;
           }
         }
         resolve({
