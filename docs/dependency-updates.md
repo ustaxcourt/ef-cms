@@ -147,8 +147,16 @@ Peer-dependency tar-fs has high security vulnerability but this shouldn't affect
 
 - As of [this release](https://github.com/mozilla/pdf.js/releases/tag/v5.1.91), and I think [this PR](https://github.com/mozilla/pdf.js/pull/19689), pdfjs seems to expect certain browser-side API functionality when loaded. This causes issues with our Cypress tests. The best way to fix this is worth investigating further. Perhaps we could polyfill, or even consider creating an issue in the pdfjs repo.
 
-### babel-jest
-Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4
+### babel-jest, babel-core, jest
+Tried to update to 30.0.0-beta.3 from 29.7.0 on Friday, June 06, 2025, we weren't able to update it because it conflicts with ts-jest 29.3.4.
+On June 26 2025, newer versions of babel-core and jest core also started to cause issues with ts-jest. Once ts-jest is updated these issues should all clear up.
+
+### jest-environment-jsdom
+This dependency was causing problems with specific unit tests that were using Object.defineProperty. 
+We should tackle this issue either in a dedicated ticket or in a future dependency update but for now (6/30/25) we left it.
+
+### @types/node
+The major version of this package should match our major version of node. At the moment that we are using node v22.16.0 so we should use a package that starts with 22.
 
 ## Incrementing the Node Cache Key Version
 
