@@ -1276,7 +1276,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} params.docketEntryId the id of the docketEntry to retrieve
    * @returns {object} the retrieved docketEntry
    */
-  getDocketEntryById({ docketEntryId }) {
+  getDocketEntryById({ docketEntryId }: {docketEntryId: string}) {
     return this.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );
