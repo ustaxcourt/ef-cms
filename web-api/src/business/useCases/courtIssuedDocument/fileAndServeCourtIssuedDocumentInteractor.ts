@@ -79,7 +79,7 @@ export const fileAndServeCourtIssuedDocument = async (
   };
 
   if (!docketEntryToServe) {
-    await throwError(
+    return await throwError(
       new NotFoundError(`Docket entry ${docketEntryId} was not found.`),
     );
   }

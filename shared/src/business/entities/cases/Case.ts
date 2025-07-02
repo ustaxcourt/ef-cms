@@ -1143,10 +1143,7 @@ export class Case extends JoiValidationEntity {
       docketEntryEntity.index = 0;
     }
 
-    this.docketEntries = [
-      ...this.docketEntries,
-      docketEntryEntity.toRawObject(),
-    ];
+    this.docketEntries = [...this.docketEntries, docketEntryEntity];
   }
 
   /**
