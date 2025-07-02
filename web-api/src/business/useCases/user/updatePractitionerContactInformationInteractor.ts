@@ -7,10 +7,6 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';
 import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
@@ -22,6 +18,10 @@ import { updateUser } from '@web-api/persistence/postgres/users/updateUser';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getPractitionerById } from '@web-api/persistence/postgres/practitioners/getPractitionerById';
 import { getCasesForUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updatePractitionerContactInformationHelper
