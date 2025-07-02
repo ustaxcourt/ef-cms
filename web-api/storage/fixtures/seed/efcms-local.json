@@ -23271,7 +23271,7 @@
     "name": "Test IRS Practitioner",
     "middleName": "DOJ",
     "pk": "user|867e7564-1d7f-44fb-b463-5e56479bc9e4",
-    "originalBarStateFullName": "Maryland",
+    "originalBarState": "MD",
     "email": "dojpractitioner1@example.com"
   },
   {
