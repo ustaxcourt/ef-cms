@@ -57,7 +57,7 @@ export const PractitionerLoginServiceEmailForm = connect<
           <div>
             <FormGroup
               errorText={
-                validationErrors.updatedEmail ?? validationErrors.email
+                validationErrors.updatedEmail || validationErrors.email
               }
             >
               <label className="usa-label" htmlFor="updatedEmail">
