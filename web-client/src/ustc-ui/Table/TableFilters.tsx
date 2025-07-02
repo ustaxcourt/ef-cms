@@ -1,7 +1,13 @@
 import React, { useRef } from 'react';
 import classNames from 'classnames';
+import { MessageFilterData } from '@web-client/views/Messages/MessageTable';
 
-export const TableFilters = ({ filters, onSelect }) => {
+type TableFiltersParams = {
+  filters: MessageFilterData[];
+  onSelect: Function;
+};
+
+export const TableFilters = ({ filters, onSelect }: TableFiltersParams) => {
   return (
     <div
       className="grid-row margin-bottom-4"

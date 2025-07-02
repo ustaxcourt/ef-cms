@@ -27,6 +27,7 @@ export interface MessageFilterData {
   key: string;
   label: string;
   options: any[];
+  useInlineSelect?: boolean;
 }
 
 type MessageListProps = {
