@@ -163,7 +163,7 @@ export const SearchDateRangePickerComponent = connect(
             />
           </div>
         </FormGroup>
-        <div className="desktop:text-center tablet:padding-top-6 width-full tablet:width-auto desktop:margin-bottom-2 padding-right-2 tiny-to">
+        <div className="desktop:text-center tablet:padding-top-6 width-full tablet:width-auto desktop:margin-bottom-2 padding-right-2 tiny-to desktop:padding-left-3">
           to
         </div>
         <FormGroup
