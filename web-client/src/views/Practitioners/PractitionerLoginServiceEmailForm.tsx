@@ -71,7 +71,7 @@ export const PractitionerLoginServiceEmailForm = connect<
                 id={emailFormName}
                 name={emailFormName}
                 type="text"
-                value={form[emailFormName] ?? ''}
+                value={form[emailFormName] || ''}
                 onBlur={() => validateSequence()}
                 onChange={e =>
                   updateFormValueSequence({
