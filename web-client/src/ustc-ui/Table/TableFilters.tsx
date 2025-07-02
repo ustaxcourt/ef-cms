@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import classNames from 'classnames';
 import { MessageFilterData } from '@web-client/views/Messages/MessageTable';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 
 type TableFiltersParams = {
   filters: MessageFilterData[];
@@ -22,29 +23,54 @@ export const TableFilters = ({ filters, onSelect }: TableFiltersParams) => {
           Filter by
         </label>
       </div>
-      <div>
-        {filters.map(
-          ({ isSelected, key, label, options, useInlineSelect = true }) =>
-            FilterMarkup({
-              isSelected,
-              key,
-              label,
-              options,
-              useInlineSelect,
-              onSelect,
-              classNameValues: [
-                'usa-select',
-                'width-180',
-                'select-left',
-                'margin-left-1pt5rem',
-                {
-                  'inline-select': useInlineSelect,
-                  'filter-selected': isSelected,
-                },
-              ],
-            }),
-        )}
-      </div>
+      <NonMobile>
+        <div>
+          {filters.map(
+            ({ isSelected, key, label, options, useInlineSelect = true }) =>
+              FilterMarkup({
+                isSelected,
+                key,
+                label,
+                options,
+                useInlineSelect,
+                onSelect,
+                classNameValues: [
+                  'usa-select',
+                  'width-180',
+                  'select-left',
+                  'margin-left-1pt5rem',
+                  {
+                    'inline-select': useInlineSelect,
+                    'filter-selected': isSelected,
+                  },
+                ],
+              }),
+          )}
+        </div>
+      </NonMobile>
+      <Mobile>
+        <div className="grid-col-12">
+          {filters.map(
+            ({ isSelected, key, label, options, useInlineSelect = true }) =>
+              FilterMarkup({
+                isSelected,
+                key,
+                label,
+                options,
+                useInlineSelect,
+                onSelect,
+                classNameValues: [
+                  'usa-select',
+                  'margin-top-2',
+                  {
+                    'display-inline': useInlineSelect,
+                    'filter-selected-mobile': isSelected,
+                  },
+                ],
+              }),
+          )}
+        </div>
+      </Mobile>
     </div>
   );
 };
