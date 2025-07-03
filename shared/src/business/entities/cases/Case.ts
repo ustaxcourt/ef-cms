@@ -50,7 +50,7 @@ import {
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence, RawCorrespondence } from '../Correspondence';
-import { DocketEntry } from '../DocketEntry';
+import { DocketEntry, UIDocketEntry } from '../DocketEntry';
 import {
   PATTERNS,
   calculateDifferenceInDays,
@@ -1276,7 +1276,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} params.docketEntryId the id of the docketEntry to retrieve
    * @returns {object} the retrieved docketEntry
    */
-  getDocketEntryById({ docketEntryId }: {docketEntryId: string}) {
+  getDocketEntryById({ docketEntryId }: { docketEntryId: string }) {
     return this.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );
@@ -2508,4 +2508,9 @@ export type CaseStatusChange = {
   changedBy: string;
   date: string;
   updatedCaseStatus: string;
+};
+
+// A type to represent case data for the client-side
+export type UICase = Omit<Partial<RawCase>, 'docketEntries'> & {
+  docketEntries: UIDocketEntry[];
 };

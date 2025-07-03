@@ -47,7 +47,6 @@ import {
 import { getUniqueId } from '@shared/sharedAppContext';
 import { EXTERNAL_FILING_EVENTS } from '@shared/business/entities/docketEntry/externalFilingEvents';
 import { generateFiledBy } from './docketEntry/generateFiledBy';
-import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 
 type PractitionerRole = 'irsPractitioner' | 'privatePractitioner';
 
@@ -474,16 +473,7 @@ export class DocketEntry extends JoiValidationEntity {
     return DocketEntry.isCourtIssued({ eventCode: this.eventCode });
   }
 
-  static attachWorkItemInfoForUI(
-    docketEntry: RawDocketEntry,
-    workItem: WorkItem | RawWorkItem,
-  ): void {
-    docketEntry.qcComplete = !!workItem.completedAt;
-    docketEntry.qcViewed = !!workItem.isRead;
-    docketEntry.workItemId = workItem.workItemId;
-  }
-
-  static hasWorkItemInfo(docketEntry: RawDocketEntry) {
+  static hasWorkItemInfo(docketEntry: UIDocketEntry) {
     return !!docketEntry.workItemId;
   }
 
@@ -905,3 +895,9 @@ export const getServedPartiesCode = (servedParties?: any[]) => {
 declare global {
   type RawDocketEntry = ExcludeMethods<DocketEntry>;
 }
+
+export type UIDocketEntry = DocketEntry & {
+  workItem?: string;
+  qcComplete?: boolean;
+  qcViewed?: boolean;
+};

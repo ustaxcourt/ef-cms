@@ -24,7 +24,7 @@ export class PublicCase extends JoiValidationEntity {
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix: string;
   public hasIrsPractitioner: boolean;
-  public docketEntries: (RawDocketEntry | DocketEntry)[];
+  public docketEntries: DocketEntry[];
   public isPaper?: boolean;
   public partyType: string;
   public receivedAt: string;
@@ -176,8 +176,16 @@ export class PublicCase extends JoiValidationEntity {
   getValidationRules() {
     return PublicCase.VALIDATION_RULES;
   }
+
+  //@ts-ignore
+  toRawObject(): RawPublicCase {
+    // @ts-ignore
+    return this.toRawObject() as RawPublicCase;
+  }
 }
 
 declare global {
-  type RawPublicCase = ExcludeMethods<PublicCase>;
+  type RawPublicCase = Omit<ExcludeMethods<PublicCase>, 'docketEntries'> & {
+    docketEntries: RawDocketEntry[];
+  };
 }

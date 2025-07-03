@@ -1,4 +1,4 @@
-import { Case } from '@shared/business/entities/cases/Case';
+import { Case, UICase } from '@shared/business/entities/cases/Case';
 import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -8,13 +8,13 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { UIDocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const getCaseInteractor = async (
   applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<UICase> => {
   if (!isAuthUser(authorizedUser)) {
     throw new UnauthorizedError(
       `Invalid User attempting to view docket Number: ${docketNumber}`,
@@ -44,12 +44,25 @@ export const getCaseInteractor = async (
     rawCase: caseRecord,
     user: authorizedUser,
   });
-  for (const docketEntry of theCase.docketEntries) {
-    for (const workItem of workItems) {
-      if (docketEntry.docketEntryId === workItem.docketEntryId) {
-        DocketEntry.attachWorkItemInfoForUI(docketEntry, workItem);
-      }
-    }
-  }
-  return theCase;
+
+  // The UI needs some work item info associated with the docket entry, so we attach that here
+  const workItemByDocketEntryId = new Map<string, (typeof workItems)[0]>(
+    workItems.map(wi => [wi.docketEntryId, wi]),
+  );
+  const docketEntriesWithUIInfo: UIDocketEntry[] = theCase.docketEntries.map(
+    docketEntry => {
+      const workItem = workItemByDocketEntryId.get(docketEntry.docketEntryId);
+
+      return {
+        ...docketEntry,
+        qcComplete: !!workItem?.completedAt,
+        qcViewed: !!workItem?.isRead,
+        workItemId: workItem?.workItemId,
+      } as UIDocketEntry;
+    },
+  );
+  return {
+    ...theCase.toRawObject(),
+    docketEntries: docketEntriesWithUIInfo,
+  } as UICase;
 };
