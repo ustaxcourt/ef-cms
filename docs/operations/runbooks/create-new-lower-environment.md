@@ -209,7 +209,7 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
       1. Copy the value of this hosted zone's `NS` record to your clipboard
       1. Log into the AWS console for the account that owns the `ustaxcourt.gov` hosted zone and navigate to the Route 53 dashboard
       1. Click on "Hosted zones" and select the `ustaxcourt.gov` hosted zone
-      1. Create a copy of this environment's `NS` record:
+      1. Create a new `NS` record:
          1. Click "Create record"
          1. Record name: `<env>.ef-cms`
          1. Record type: `NS`
@@ -217,7 +217,7 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
          1. Click "Create record" to create the `NS` record
       1. Log into the AWS console for the account that owns the `ef-cms.ustaxcourt.gov` hosted zone and navigate to the Route 53 dashboard
       1. Click on "Hosted zones" and select the `ef-cms.ustaxcourt.gov` hosted zone
-      1. Create a copy of this environment's `NS` record:
+      1. Create a new `NS` record:
          1. Click "Create record"
          1. Record name: `<env>`
          1. Record type: `NS`
@@ -416,7 +416,7 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
    ```bash
    cd ./scripts/postgres && ./create-rds-users.sh && cd ../..
    ```
-1. Trigger a deployment in the new environment, with the following settings:
+1. In [CircleCI](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms), trigger a deployment in the new environment, with the following settings:
    1. `run_build_and_deploy`: `false`
    1. `run_build_and_deploy_empty`: `true`
-1. After the "empty" deployment completes, trigger another deployment, this time accepting the default settings
+1. After the "empty" deployment completes, trigger another deployment, this time accepting the default settings. Note: smoketests will fail until the account is promoted out of the SES sandbox.
