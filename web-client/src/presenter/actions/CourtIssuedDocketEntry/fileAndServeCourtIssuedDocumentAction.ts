@@ -17,9 +17,8 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  const { dueDate, orderType } = caseDetail.docketEntries.find((docketEntry) => {
-    return docketEntry.docketEntryId == docketEntryId;
-  })?.draftOrderState || {};
+  const { dueDate, orderType } = caseDetail.docketEntries
+    .find((docketEntry) => docketEntry.docketEntryId == docketEntryId)?.draftOrderState || {};
 
   const clientConnectionId = get(state.clientConnectionId);
 

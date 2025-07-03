@@ -121,7 +121,7 @@ export const calculateISODate = ({
   howMuch?: number;
   units?: string;
 }): string => {
-  if (!howMuch) return prepareDateFromString(dateString).plus(1).toISO()!;
+  if (!howMuch) return dateString!;
 
   return prepareDateFromString(dateString)
     .plus({ [units]: howMuch })

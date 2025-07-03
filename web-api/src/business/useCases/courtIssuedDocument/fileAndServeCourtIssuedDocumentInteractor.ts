@@ -1,7 +1,7 @@
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { calculateISODate, createISODateString } from '@shared/business/utilities/DateHandler';
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import {
@@ -157,7 +157,7 @@ export const fileAndServeCourtIssuedDocument = async (
           {
             ...omit(docketEntryToServe, 'filedBy'),
             attachments: form.attachments,
-            date: form.date || calculateISODate({dateString: form.dueDate}),
+            date: form.date || createISODateString(form.dueDate),
             docketNumber: caseEntity.docketNumber,
             documentContentsId,
             documentTitle: form.generatedDocumentTitle,
