@@ -1,3 +1,5 @@
+import { UIDocketEntry } from '@shared/business/entities/DocketEntry';
+
 export const MOCK_CONSOLIDATED_CASE: RawCase = {
   archivedCorrespondences: [],
   archivedDocketEntries: [],
@@ -429,7 +431,7 @@ export const MOCK_CONSOLIDATED_CASE: RawCase = {
       qcComplete: true,
       qcViewed: true,
       workItemId: 'a181ca02-fa09-44d6-a25b-1ea6e9015f89',
-    },
+    } as UIDocketEntry,
     {
       addToCoversheet: false,
       createdAt: '2023-04-03T15:52:59.427Z',
@@ -527,7 +529,7 @@ export const MOCK_CONSOLIDATED_CASE: RawCase = {
       stampData: {},
       userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
       workItemId: 'abc6cb32-97b7-4ddc-871b-eb41aaa45114',
-    },
+    } as UIDocketEntry,
     {
       addToCoversheet: false,
       createdAt: '2023-08-15T16:47:51.688Z',
