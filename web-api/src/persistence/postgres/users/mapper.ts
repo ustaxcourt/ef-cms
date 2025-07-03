@@ -70,6 +70,7 @@ function pickUserFields(
   };
 }
 
+// TODO: 10495 potentially rewrite to have less validation errors
 export function rawUser(
   user,
 ): RawPrivatePractitioner | RawIrsPractitioner | RawPractitioner | RawUser {
