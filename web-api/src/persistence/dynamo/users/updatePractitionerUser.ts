@@ -1,7 +1,6 @@
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { updateUserRecords } from './updateUserRecords';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const updatePractitionerUser = async ({
   applicationContext,
@@ -10,12 +9,6 @@ export const updatePractitionerUser = async ({
   applicationContext: ServerApplicationContext;
   user: RawUser;
 }) => {
-  const { userId } = user;
-
-  const oldUser = await getUserById({
-    userId,
-  });
-
   try {
     await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: {
@@ -28,12 +21,7 @@ export const updatePractitionerUser = async ({
     throw error;
   }
 
-  const updatedUser = await updateUserRecords({
-    applicationContext,
-    oldUser,
-    updatedUser: user,
-    userId,
-  });
+  await upsertUsers([user]);
 
-  return updatedUser;
+  return user;
 };

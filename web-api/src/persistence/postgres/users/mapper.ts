@@ -52,7 +52,7 @@ function pickUserFields(
     additionalPhone: rawPractitioner.additionalPhone ?? null,
     admissionsDate: rawPractitioner.admissionsDate ?? null,
     admissionsStatus: rawPractitioner.admissionsStatus ?? null,
-    barNumber: rawPractitioner.barNumber ?? null,
+    barNumber: rawPractitioner.barNumber || null,
     birthYear: rawPractitioner.birthYear
       ? parseInt(rawPractitioner.birthYear)
       : null,

@@ -5,7 +5,7 @@ import {
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getUserGateway } from '@web-api/getUserGateway';
-import { createUser } from '@web-api/persistence/postgres/users/createUser';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const upsertPractitioner = async ({
   applicationContext,
@@ -57,8 +57,9 @@ export const upsertPractitioner = async ({
     }
   }
 
-  return await createUser({
-    user,
-    userId,
-  });
+  const createdUser = { ...user, userId };
+
+  await upsertUsers([createdUser]);
+
+  return createdUser;
 };

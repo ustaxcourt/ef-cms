@@ -19,6 +19,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -91,12 +92,7 @@ export const updatePractitionerUser = async (
         .toRawObject(),
     });
   } else {
-    await applicationContext.getPersistenceGateway().updateUserRecords({
-      applicationContext,
-      oldUser: new Practitioner(oldUser).validate().toRawObject(),
-      updatedUser: validatedUserData,
-      userId: oldUser.userId,
-    });
+    await upsertUsers([validatedUserData]);
   }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
