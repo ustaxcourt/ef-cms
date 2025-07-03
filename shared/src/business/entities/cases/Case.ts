@@ -2511,6 +2511,6 @@ export type CaseStatusChange = {
 };
 
 // A type to represent case data for the client-side
-export type UICase = Omit<Partial<RawCase>, 'docketEntries'> & {
+export type UICase = Omit<RawCase, 'docketEntries'> & {
   docketEntries: UIDocketEntry[];
 };
