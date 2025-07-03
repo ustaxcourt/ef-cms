@@ -19,6 +19,8 @@ export const SectionWorkQueueInProgress = connect(
     users: state.users,
     workQueueHelper: state.workQueueHelper,
     workitemAllCheckbox: state.workitemAllCheckbox,
+    showDocketClerkFilter: state.workQueueHelper.showDocketClerkFilter, 
+    showSendToBar: state.workQueueHelper.showSendToBar,
   },
   function SectionWorkQueueInProgress({
     formattedWorkQueue,
@@ -27,9 +29,20 @@ export const SectionWorkQueueInProgress = connect(
     users,
     workitemAllCheckbox,
     workQueueHelper,
+    showDocketClerkFilter,
+    showSendToBar
   }) {
     return (
       <React.Fragment>
+        {!showDocketClerkFilter && !showSendToBar && ( 
+          <>
+            <div className="text-right">
+              <span className="text-semibold">Count: </span>
+              {formattedWorkQueue.length}
+            </div>
+            <div className="padding-1"></div>
+          </>
+      )}
         <WorkQueueAssignments users={users} />
         <table
           aria-describedby="tab-work-queue"

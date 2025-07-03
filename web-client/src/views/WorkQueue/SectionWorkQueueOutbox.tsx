@@ -10,14 +10,25 @@ export const SectionWorkQueueOutbox = connect(
     formattedWorkQueue: state.formattedWorkQueue,
     users: state.users,
     workQueueHelper: state.workQueueHelper,
+    showDocketClerkFilter: state.workQueueHelper.showDocketClerkFilter, 
   },
   function SectionWorkQueueOutbox({
     formattedWorkQueue,
     users,
     workQueueHelper,
+    showDocketClerkFilter,
   }) {
     return (
       <React.Fragment>
+        {!showDocketClerkFilter && ( 
+          <>
+            <div className="text-right">
+              <span className="text-semibold">Count: </span>
+              {formattedWorkQueue.length}
+            </div>
+            <div className="padding-1"></div>
+          </>
+      )}
         <WorkQueueAssignments users={users} />
         <table
           aria-describedby="tab-work-queue"

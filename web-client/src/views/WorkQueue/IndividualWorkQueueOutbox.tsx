@@ -12,6 +12,11 @@ export const IndividualWorkQueueOutbox = connect(
   function IndividualWorkQueueOutbox({ formattedWorkQueue, workQueueHelper }) {
     return (
       <React.Fragment>
+        <div className="text-right">
+          <span className="text-semibold">Count: </span>
+          {formattedWorkQueue.length}
+        </div>
+        <div className="padding-1"></div>
         <table
           aria-describedby="tab-my-queue"
           className="usa-table ustc-table subsection"

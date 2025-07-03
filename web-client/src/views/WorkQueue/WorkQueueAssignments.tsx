@@ -104,13 +104,14 @@ export const WorkQueueAssignments = connect<
               )}
             </div>
             <div className="push-right margin-top-4">
-              <b>Count:</b> {formattedWorkQueue.length}
+              <b className='text-semibold'>Count:</b> {formattedWorkQueue.length}
             </div>
           </>
         ) : (
           <>
             {workQueueHelper.showSendToBar && (
-              <div className="action-section">
+              <>
+              <div className="action-section grid-row inline-block margin-bottom-1">
                 <span className="assign-work-item-count">
                   <Icon aria-label="selected work items count" icon="check" />
                   {selectedWorkItemsLength}
@@ -138,7 +139,12 @@ export const WorkQueueAssignments = connect<
                   ))}
                 </select>
               </div>
+                <div className="push-right margin-top-4">
+                  <b className='text-semibold'>Count:</b> {formattedWorkQueue.length}
+                </div>
+              </>
             )}
+
           </>
         )}
       </React.Fragment>
