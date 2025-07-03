@@ -51,7 +51,6 @@ export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
     ...pickFields(workItem),
     section: getWorkItemSection({
       section: workItem.section,
-      documentTitle: workItem.docketEntry?.documentTitle,
     }),
   };
 }

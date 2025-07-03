@@ -47,7 +47,7 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('should throw an error when the work item is invalid', async () => {
-    getWorkItemById.mockReturnValue(
+    getWorkItemById.mockResolvedValue(
       new WorkItem({
         ...mockWorkItem,
         docketNumber: undefined,
