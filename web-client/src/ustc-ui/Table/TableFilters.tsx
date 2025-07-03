@@ -11,7 +11,7 @@ type TableFiltersParams = {
 export const TableFilters = ({ filters, onSelect }: TableFiltersParams) => {
   return (
     <div
-      className="grid-row margin-bottom-4"
+      className="grid-row desktop:margin-bottom-4 mobile:margin-bottom-2"
       data-testid="table-filters-component"
     >
       <div className="padding-top-05">
