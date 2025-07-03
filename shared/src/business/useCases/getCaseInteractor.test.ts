@@ -596,7 +596,6 @@ describe('getCaseInteractor', () => {
 
       getWorkItemsByDocketNumber.mockResolvedValueOnce(workItems as WorkItem[]);
       const result = (await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: MOCK_CASE.docketNumber,
         },
