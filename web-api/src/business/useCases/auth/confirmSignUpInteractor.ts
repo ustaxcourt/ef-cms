@@ -2,6 +2,7 @@ import { InvalidRequest, NotFoundError } from '@web-api/errors/errors';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const confirmSignUpInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -60,10 +61,7 @@ const createPetitionerUser = async (
     userId,
   });
 
-  await applicationContext.getPersistenceGateway().persistUser({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
-  });
+  await upsertUsers([userEntity.validate().toRawObject()]);
 
   return userEntity.validate().toRawObject();
 };

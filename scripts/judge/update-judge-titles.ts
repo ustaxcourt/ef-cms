@@ -6,8 +6,8 @@ import {
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { User } from '@shared/business/entities/User';
-import { createApplicationContext } from '@web-api/applicationContext';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 const scriptConfig: ScriptConfig = {
   description: "update-judge-titles - Sets Judges' judgeTitle attribute",
@@ -31,8 +31,6 @@ const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const applicationContext = createApplicationContext({});
-
   for (const judge of judgesToUpdateIds) {
     const { userId } = judge;
 
@@ -40,9 +38,6 @@ const judgesToUpdateIds: { userId: string; judgeTitle: string }[] = [
     const userEntity = new User(userToUpdate);
     userEntity.judgeTitle = JUDGE_TITLES.find(jt => jt === judge.judgeTitle);
 
-    await applicationContext.getPersistenceGateway().updateUser({
-      applicationContext,
-      user: userEntity.validate().toRawObject(),
-    });
+    await upsertUsers([userEntity.validate().toRawObject()]);
   }
 })();

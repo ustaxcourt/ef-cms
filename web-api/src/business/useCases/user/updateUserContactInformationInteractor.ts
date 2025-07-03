@@ -19,6 +19,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 /**
  * updateUserContactInformationHelper
@@ -95,10 +96,7 @@ const updateUserContactInformationHelper = async (
     throw new Error(`Unrecognized entityType ${user.entityName}`);
   }
 
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
-  });
+  await upsertUsers([userEntity.validate().toRawObject()]);
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
@@ -118,10 +116,7 @@ const updateUserContactInformationHelper = async (
 
   if (isArray(results) && !results.length) {
     userEntity.setIsUpdatingInformation(false);
-    await applicationContext.getPersistenceGateway().updateUser({
-      applicationContext,
-      user: userEntity.validate().toRawObject(),
-    });
+    await upsertUsers([userEntity.validate().toRawObject()]);
 
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,

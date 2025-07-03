@@ -60,10 +60,10 @@ export const verifyUserPendingEmail = async (
     throw new Error('Email is not available');
   }
 
-  const { updatedUser } = await updateUserPendingEmailRecord(
-    applicationContext,
-    { setIsUpdatingInformation: true, user },
-  );
+  const { updatedUser } = await updateUserPendingEmailRecord({
+    setIsUpdatingInformation: true,
+    user,
+  });
 
   await applicationContext.getUserGateway().updateUser(applicationContext, {
     attributesToUpdate: { email: updatedUser.email },

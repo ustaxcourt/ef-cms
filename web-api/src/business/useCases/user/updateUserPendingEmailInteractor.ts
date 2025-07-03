@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 /**
  * updateUserPendingEmailInteractor
@@ -40,10 +41,7 @@ export const updateUserPendingEmailInteractor = async (
     updatedUserRaw = new Practitioner(user).validate().toRawObject();
   }
 
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: updatedUserRaw,
-  });
+  await upsertUsers([updatedUserRaw]);
 
   await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
     applicationContext,

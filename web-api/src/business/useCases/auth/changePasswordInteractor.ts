@@ -15,6 +15,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { authErrorHandling } from '@web-api/business/useCases/auth/loginInteractor';
 import jwt from 'jsonwebtoken';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const changePasswordInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -62,12 +63,9 @@ export const changePasswordInteractor = async (
         userFromPersistence.pendingEmail &&
         userFromPersistence.pendingEmail.toLowerCase() === email.toLowerCase()
       ) {
-        const { updatedUser } = await updateUserPendingEmailRecord(
-          applicationContext,
-          {
-            user: userFromPersistence,
-          },
-        );
+        const { updatedUser } = await updateUserPendingEmailRecord({
+          user: userFromPersistence,
+        });
 
         await applicationContext
           .getWorkerGateway()
@@ -120,13 +118,13 @@ export const changePasswordInteractor = async (
   }
 };
 
-export const updateUserPendingEmailRecord = async (
-  applicationContext: ServerApplicationContext,
-  {
-    setIsUpdatingInformation = false,
-    user,
-  }: { user: RawUser; setIsUpdatingInformation?: boolean },
-): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
+export const updateUserPendingEmailRecord = async ({
+  setIsUpdatingInformation = false,
+  user,
+}: {
+  user: RawUser;
+  setIsUpdatingInformation?: boolean;
+}): Promise<{ updatedUser: RawPractitioner | RawUser }> => {
   let userEntity;
 
   if (
@@ -155,10 +153,7 @@ export const updateUserPendingEmailRecord = async (
   if (setIsUpdatingInformation) userEntity.isUpdatingInformation = true;
 
   const rawUser = userEntity.validate().toRawObject();
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: rawUser,
-  });
+  await upsertUsers([rawUser]);
 
   return { updatedUser: rawUser };
 };

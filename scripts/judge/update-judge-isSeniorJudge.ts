@@ -12,6 +12,7 @@ import {
 import { User } from '@shared/business/entities/User';
 import { search } from '@web-api/persistence/elasticsearch/searchClient';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -94,9 +95,6 @@ let judgesToUpdateIds: { userId: string; isSeniorJudge: boolean }[];
     const userEntity = new User(userToUpdate);
     userEntity.isSeniorJudge = judge.isSeniorJudge;
 
-    await applicationContext.getPersistenceGateway().updateUser({
-      applicationContext,
-      user: userEntity.validate().toRawObject(),
-    });
+    await upsertUsers([userEntity.validate().toRawObject()]);
   }
 })();

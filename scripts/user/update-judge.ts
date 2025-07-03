@@ -25,6 +25,7 @@ import {
 } from '../../shared/admin-tools/util';
 import { isEmpty } from 'lodash';
 import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 /**
  * This script will update the judge user in a deployed environment.
@@ -149,7 +150,6 @@ const updateDynamoRecords = async ({
       : '';
 
   await updateDynamoJudgeUserRecord({
-    applicationContext,
     chambersSection: updatedChambersSection || oldChambersSection!,
     dynamoUser,
     updates,
@@ -167,14 +167,12 @@ const updateDynamoRecords = async ({
 };
 
 const updateDynamoJudgeUserRecord = async ({
-  applicationContext,
   chambersSection,
   dynamoUser,
   updates,
 }: {
   updates: Record<string, string>;
   dynamoUser: UserRecord;
-  applicationContext: any;
   chambersSection: string;
 }) => {
   console.log('Updating the judge user Dynamo record ...');
@@ -195,10 +193,7 @@ const updateDynamoJudgeUserRecord = async ({
   const rawUser = new User(dynamoUser).validate().toRawObject();
 
   console.log('Updating the Dynamo record ...');
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: rawUser,
-  });
+  await upsertUsers([rawUser]);
 };
 
 const createUserChambersSectionRecord = async ({
@@ -247,10 +242,7 @@ const updateDynamoChambersRecords = async ({
     const rawChambersUser = new User(chambersUser).validate().toRawObject();
 
     // Update the user record, create the section record, and remove the old section record
-    await applicationContext.getPersistenceGateway().updateUser({
-      applicationContext,
-      user: rawChambersUser,
-    });
+    await upsertUsers([rawChambersUser]);
     await createUserChambersSectionRecord({
       applicationContext,
       chambersSection: updatedChambersSection,

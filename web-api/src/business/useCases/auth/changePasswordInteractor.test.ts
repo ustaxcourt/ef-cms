@@ -338,7 +338,7 @@ describe('updateUserPendingEmailRecord', () => {
   });
 
   it('should set isUpdatingInformation to true if flag is enabled', async () => {
-    await updateUserPendingEmailRecord(applicationContext, {
+    await updateUserPendingEmailRecord({
       setIsUpdatingInformation: true,
       user: {
         ...petitionerUser,
@@ -355,7 +355,7 @@ describe('updateUserPendingEmailRecord', () => {
   });
 
   it('should not update isUpdatingInformation property when flag is disabled', async () => {
-    await updateUserPendingEmailRecord(applicationContext, {
+    await updateUserPendingEmailRecord({
       setIsUpdatingInformation: false,
       user: {
         ...petitionerUser,

@@ -54,12 +54,10 @@ import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/g
 import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSessions';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
-import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
 import { getWebSocketConnectionsByUserId } from '@web-api/persistence/postgres/connections/getWebSocketConnectionsByUserId';
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
-import { persistUser } from './persistence/dynamo/users/persistUser';
 import { refreshConfirmationCodeExpiration } from '@web-api/persistence/dynamo/users/refreshConfirmationCodeExpiration';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
 import {
@@ -81,7 +79,6 @@ import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMa
 import { updatePractitionerUser } from './business/useCaseHelper/users/updatePractitionerUser';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
-import { updateUser } from './persistence/dynamo/users/updateUser';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
@@ -139,7 +136,6 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     editPractitionerDocument,
     incrementCounter,
-    persistUser,
     removeCaseFromHearing,
     saveDispatchNotification,
     saveDocumentFromLambda,
@@ -153,7 +149,6 @@ const gatewayMethods = {
     updatePrivatePractitionerOnCase,
     updateTrialSession,
     updateTrialSessionWorkingCopy,
-    updateUser,
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
@@ -202,7 +197,6 @@ const gatewayMethods = {
   getTrialSessions,
   getUploadPolicy,
   getUserByIdOnceAllUpdatesComplete,
-  getUsersInSection,
   getWebSocketConnectionsByUserId,
   isEmailAvailable,
   isFileExists,

@@ -5,12 +5,11 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserFactory } from '@shared/business/entities/factories/UserFactory';
 import { getCasesByEmailTotal } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 async function disableIsUserUpdatingFlag({
-  applicationContext,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
   user: RawUser | RawPractitioner;
 }): Promise<void> {
   const userFactory = new UserFactory(user);
@@ -19,10 +18,7 @@ async function disableIsUserUpdatingFlag({
   user.isUpdatingInformation = false;
   const userEntity = new UserClass(user);
 
-  await applicationContext.getPersistenceGateway().updateUser({
-    applicationContext,
-    user: userEntity.validate().toRawObject(),
-  });
+  await upsertUsers([userEntity.validate().toRawObject()]);
 }
 
 export const queueEmailUpdateAssociatedCasesWorker = async (
@@ -35,7 +31,7 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
   });
 
   if (!docketNumbersByUser.length) {
-    await disableIsUserUpdatingFlag({ applicationContext, user });
+    await disableIsUserUpdatingFlag({ user });
     return;
   }
 
@@ -56,7 +52,7 @@ export const queueEmailUpdateAssociatedCasesWorker = async (
       console.error(`ERROR CHECKING COUNT OF UPDATED CASES -> ${error}`),
     )
     .finally(async () => {
-      await disableIsUserUpdatingFlag({ applicationContext, user });
+      await disableIsUserUpdatingFlag({ user });
     });
 };
 

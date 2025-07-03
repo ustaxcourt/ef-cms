@@ -16,6 +16,7 @@ import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/ser
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 /**
  * generateChangeOfAddressHelper
@@ -137,10 +138,7 @@ export const generateChangeOfAddressHelper = async ({
         isUpdatingInformation: false,
       });
 
-      await applicationContext.getPersistenceGateway().updateUser({
-        applicationContext,
-        user: userEntity.validate().toRawObject(),
-      });
+      await upsertUsers([userEntity.validate().toRawObject()]);
     }
 
     const CONTACT_UPDATE_COMPLETE_ACTION:
