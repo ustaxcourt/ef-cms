@@ -54,8 +54,6 @@ import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/g
 import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSessions';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
-import { getUsersById } from './persistence/dynamo/users/getUsersById';
-import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
 import { getWebSocketConnectionsByUserId } from '@web-api/persistence/postgres/connections/getWebSocketConnectionsByUserId';
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
@@ -204,8 +202,6 @@ const gatewayMethods = {
   getTrialSessions,
   getUploadPolicy,
   getUserByIdOnceAllUpdatesComplete,
-  getUsersById,
-  getUsersBySearchKey,
   getUsersInSection,
   getWebSocketConnectionsByUserId,
   isEmailAvailable,

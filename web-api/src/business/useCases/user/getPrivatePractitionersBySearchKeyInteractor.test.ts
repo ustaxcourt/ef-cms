@@ -21,7 +21,6 @@ describe('getPrivatePractitionersBySearchKeyInteractor', () => {
 
     try {
       await getPrivatePractitionersBySearchKeyInteractor(
-        applicationContext,
         {
           searchKey: 'something',
         },
@@ -47,7 +46,6 @@ describe('getPrivatePractitionersBySearchKeyInteractor', () => {
       ]);
 
     const result = await getPrivatePractitionersBySearchKeyInteractor(
-      applicationContext,
       {
         searchKey: 'Test Practitioner',
       },

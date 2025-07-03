@@ -12,11 +12,10 @@ export const getIrsPractitionersBySearchKeyLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const { searchKey } = event.queryStringParameters;
 
     return await getIrsPractitionersBySearchKeyInteractor(
-      applicationContext,
       {
         searchKey,
       },

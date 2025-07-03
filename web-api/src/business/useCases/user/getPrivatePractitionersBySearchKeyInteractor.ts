@@ -3,9 +3,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getPractitionersBySearchKey } from '@web-api/persistence/postgres/users/getPractitionersBySearchKey';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
 /**
  * getPrivatePractitionersBySearchKeyInteractor
@@ -16,7 +17,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
  * @returns {*} the result
  */
 export const getPrivatePractitionersBySearchKeyInteractor = async (
-  applicationContext: ServerApplicationContext,
   { searchKey }: { searchKey: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -26,13 +26,10 @@ export const getPrivatePractitionersBySearchKeyInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const users = await applicationContext
-    .getPersistenceGateway()
-    .getUsersBySearchKey({
-      applicationContext,
-      searchKey,
-      type: 'privatePractitioner',
-    });
+  const users = await getPractitionersBySearchKey({
+    searchKey,
+    role: ROLES.privatePractitioner,
+  });
 
   return PrivatePractitioner.validateRawCollection(users);
 };

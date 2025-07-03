@@ -19,7 +19,7 @@ const userTableDefinition = {
   isSeniorJudge: DEFAULT as boolean | null,
   judgePhoneNumber: DEFAULT as string | null,
   additionalPhone: DEFAULT as string | null,
-  admissionsDate: DEFAULT as string | null,
+  admissionsDate: DEFAULT as Date | null,
   admissionsStatus: DEFAULT as string | null,
   barNumber: DEFAULT as string | null,
   birthYear: DEFAULT as number | null,

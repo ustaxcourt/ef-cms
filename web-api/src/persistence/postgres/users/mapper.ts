@@ -17,7 +17,10 @@ import {
   formatDateString,
   FORMATS,
 } from '@shared/business/utilities/DateHandler';
-import { NewUserKysely } from '@web-api/persistence/postgres/users/schema';
+import {
+  NewUserKysely,
+  UserKysely,
+} from '@web-api/persistence/postgres/users/schema';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 function pickUserFields(
@@ -50,7 +53,11 @@ function pickUserFields(
     token: user.token,
     // this is questionable
     additionalPhone: rawPractitioner.additionalPhone ?? null,
-    admissionsDate: rawPractitioner.admissionsDate ?? null,
+    admissionsDate: rawPractitioner.admissionsDate
+      ? calculateDate({
+          dateString: rawPractitioner.admissionsDate,
+        })
+      : null,
     admissionsStatus: rawPractitioner.admissionsStatus ?? null,
     barNumber: rawPractitioner.barNumber || null,
     birthYear: rawPractitioner.birthYear
@@ -68,6 +75,18 @@ function pickUserFields(
     suffix: rawPractitioner.suffix ?? null,
     updatedEmail: rawPractitioner.updatedEmail ?? null,
   };
+}
+
+export function fromKyselyPractitioner(
+  practitioner: UserKysely,
+): RawPractitioner {
+  return transformNullToUndefined({
+    ...practitioner,
+    admissionsDate: formatDateString(
+      practitioner.admissionsDate?.toISOString(),
+      FORMATS.YYYYMMDD,
+    ),
+  });
 }
 
 // TODO: 10495 potentially rewrite to have less validation errors
