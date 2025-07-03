@@ -99,6 +99,10 @@ export const fileCourtIssuedOrder = async (
   const docketEntryEntity = new DocketEntry(
     {
       ...documentMetadata,
+      draftOrderState: {
+        dueDate: documentMetadata.dueDate,
+        orderType: documentMetadata.orderType,
+      },
       docketEntryId: primaryDocumentFileId,
       documentType: documentMetadata.documentType,
       filedBy: user.name,
