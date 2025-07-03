@@ -58,6 +58,7 @@ does not belong in the persistence layer. -- Waiting on Jim Lerza to confirm bus
 - [ ] Do a full migration on local computer
 - [ ] Need to consider that during the first migration we will not have the users in postgres so Opensearch sync will need to check both dynamo and postgres. aka indexOpenSearchUserOnCase -> getUserById will not work.
 - [ ] modify disassociateUserFromCase to accept an array
+- [ ] double check when a user is removed from a case, we also remove it from elasticsearch
 
 ## Odd dynamo functions that need to be reimplemented with postgres
 
