@@ -24,6 +24,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 }
 
+// Note: adding back the notNull to docketEntry would cause things to break. This will have to be done manually.
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropIndex('idxWorkItemDocketEntryId').execute();
   await db.schema

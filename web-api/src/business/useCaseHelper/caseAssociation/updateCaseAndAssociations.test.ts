@@ -39,7 +39,6 @@ import {
 } from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 
 describe('updateCaseAndAssociations', () => {
   let validMockCase;
@@ -283,7 +282,9 @@ describe('updateCaseAndAssociations', () => {
         archivedDocketEntries: MOCK_DOCUMENTS,
         docketEntries: MOCK_DOCUMENTS.map(d => ({
           ...d,
-          workItem: MOCK_WORK_ITEM,
+          workItemId: 'someId',
+          qcComplete: false,
+          qcViewed: false,
         })),
       };
       const caseToUpdate = {
@@ -291,7 +292,9 @@ describe('updateCaseAndAssociations', () => {
         archivedDocketEntries: MOCK_DOCUMENTS,
         docketEntries: MOCK_DOCUMENTS.map(d => ({
           ...d,
-          workItem: undefined,
+          workItemId: 'someOtherId',
+          qcComplete: true,
+          qcViewed: true,
         })),
       };
 
