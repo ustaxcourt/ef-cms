@@ -168,7 +168,6 @@ import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
-import { UICase } from '@shared/business/entities/cases/Case';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -651,7 +650,7 @@ export const baseState = {
     judgeIdFilter: string;
   },
   caseDeadlines: [] as RawCaseDeadline[],
-  caseDetail: {} as UICase,
+  caseDetail: {} as RawCase,
   caseInventoryReportData: {
     foundCasesForCurrentPage: [] as FormattedCaseInventoryReportEntry[],
     foundCasesTotalCount: 0,
