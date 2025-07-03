@@ -180,7 +180,7 @@ export class PublicCase extends JoiValidationEntity {
   //@ts-ignore
   toRawObject(): RawPublicCase {
     // @ts-ignore
-    return this.toRawObject() as RawPublicCase;
+    return super.toRawObject() as RawPublicCase;
   }
 }
 
