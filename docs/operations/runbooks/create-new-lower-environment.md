@@ -6,7 +6,7 @@ This runbook describes the process of creating a new DAWSON lower environment in
 
 ## ⚠️ Caution ⚠️
 
-Proceed with the expectation that this runbook is out of date. Carefully inspect every command and script herein, cross-referencing operational environments, before running. Update this document as necessary.
+Proceed with the expectation that this runbook is out of date. Carefully inspect every command and script herein, cross-referencing operational environments, before running. Assume all AWS console and CircleCI navigation directions are out of date. Update this document as necessary.
 
 ## Preqrequisites
 - New AWS account
@@ -419,4 +419,4 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
 1. In [CircleCI](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms), trigger a deployment in the new environment, with the following settings:
    1. `run_build_and_deploy`: `false`
    1. `run_build_and_deploy_empty`: `true`
-1. After the "empty" deployment completes, trigger another deployment, this time accepting the default settings. Note: smoketests will fail until the account is promoted out of the SES sandbox.
+1. After the "empty" deployment completes, trigger another deployment, this time accepting the default settings. Note: outgoing email will fail until the account is promoted out of the SES sandbox.
