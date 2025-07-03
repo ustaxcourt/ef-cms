@@ -48,7 +48,8 @@ export const getPractitionerByBarNumberInteractor = async (
             name: practitioner.name,
             practiceType: practitioner.practiceType,
             practitionerType: practitioner.practitionerType,
+            originalBarState: practitioner.originalBarState,
           },
         ]
-      : [];
+      : []; // return empty array for public user if no practitioner found
 };
