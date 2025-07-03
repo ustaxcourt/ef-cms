@@ -25,9 +25,8 @@ export const WorkingCopyFilterHeader = connect(
               <h3>Show Cases by Trial Status</h3>
             </div>
             <div className="grid-col-6 text-right">
-              <span>
-                Total Shown: {trialSessionWorkingCopyHelper.casesShownCount}
-              </span>
+              <span>Total Shown: </span>{' '}
+              {trialSessionWorkingCopyHelper.casesShownCount}
             </div>
           </div>
         </div>
