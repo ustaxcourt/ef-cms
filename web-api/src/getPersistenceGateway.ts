@@ -6,11 +6,6 @@ import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
-import {
-  createLock,
-  getLock,
-  removeLock,
-} from './persistence/dynamo/locks/acquireLock';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
@@ -27,7 +22,6 @@ import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTri
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
-import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
@@ -58,7 +52,6 @@ import { getPractitionerDocumentByFileId } from './persistence/dynamo/practition
 import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
-import { getRequestResults } from '@web-api/persistence/dynamo/polling/getRequestResults';
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getColdCases } from './persistence/elasticsearch/getColdCases';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
@@ -107,6 +100,7 @@ import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser'
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from './persistence/s3/zipDocuments';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
+import { getRequestResults } from '@web-api/persistence/postgres/polling/getRequestResults';
 
 const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
   /**
@@ -182,9 +176,7 @@ const gatewayMethods = {
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
   createChangeOfAddressJob,
-  createLock,
   decrementJobCounter,
-  deleteChangeOfAddressCaseRecord,
   deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
@@ -215,7 +207,6 @@ const gatewayMethods = {
   getEligibleCasesForTrialSession,
   getFeatureFlagValue,
   getInternalUsers,
-  getLock,
   getMaintenanceMode,
   getPractitionerByBarNumber,
   getPractitionerDocumentByFileId,
@@ -243,7 +234,6 @@ const gatewayMethods = {
   isFileExists,
   refreshConfirmationCodeExpiration,
   removeIrsPractitionerOnCase,
-  removeLock,
   removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
   uploadDocument,

@@ -22,7 +22,6 @@ export const getPublicDownloadPolicyUrlInteractor = async (
   authorizdeUser: UnknownAuthUser,
 ): Promise<{ url: string }> => {
   const caseToCheck: any = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

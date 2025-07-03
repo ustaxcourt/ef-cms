@@ -23,9 +23,8 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
@@ -302,7 +301,7 @@ export const createCaseInteractor = async (
     privatePractitioners = [practitionerUser];
   }
 
-  await acquireLock({
+  const removeLockFunction = await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
@@ -329,10 +328,7 @@ export const createCaseInteractor = async (
       authorizedUser,
     ));
   } finally {
-    await removeLock({
-      applicationContext,
-      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    });
+    await removeLockFunction();
   }
 
   const userCaseEntity = new UserCase(caseToAdd);

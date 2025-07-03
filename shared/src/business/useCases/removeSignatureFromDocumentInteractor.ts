@@ -6,6 +6,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { NotFoundError } from '@web-api/errors/errors';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * Removes a signature from a document
@@ -27,7 +28,6 @@ export const removeSignatureFromDocumentInteractor = async (
     );
   }
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
   const caseEntity = new Case(caseRecord, {
@@ -60,8 +60,7 @@ export const removeSignatureFromDocumentInteractor = async (
     key: docketEntryId,
   });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

@@ -605,6 +605,10 @@ export const baseState = {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
+  [STATE_KEYS.CONSOLIDATED_CASE_DEADLINES]: [] as {
+    docketNumber: string;
+    caseCaption: string;
+  }[],
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',

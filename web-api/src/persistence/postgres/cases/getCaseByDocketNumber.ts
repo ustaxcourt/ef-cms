@@ -1,67 +1,35 @@
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
-import { NotFoundError } from '@web-api/errors/errors';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
-import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
-import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
-import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
-import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
-import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
-import { getDocketEntriesByDocketNumber } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumber';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const getCaseByDocketNumber = async ({
-  applicationContext,
   docketNumber,
   includeConsolidatedCases = true,
   user = undefined, // Only needed to check permissions on sealed addresses for consolidated cases
 }: {
   docketNumber: string;
-  applicationContext: ServerApplicationContext;
   includeConsolidatedCases?: boolean;
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
-  // These case items are no longer in dynamoDB
-  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case', 'docket-entry'];
-
-  const dbCaseMetadata = await getCaseMetadataByDocketNumber({
-    docketNumber,
+  const caseData = await getCasesByDocketNumbers({
+    docketNumbers: [docketNumber],
   });
-  if (!dbCaseMetadata) {
-    throw new NotFoundError(`Case ${docketNumber} not found`);
-  }
 
-  const [caseCorrespondences, docketEntries, caseItemsRaw] = await Promise.all([
-    getCaseCorrespondenceByDocketNumber({
-      docketNumber,
-    }),
-    getDocketEntriesByDocketNumber({ docketNumber }),
-    queryFull({
-      ExpressionAttributeNames: {
-        '#pk': 'pk',
-      },
-      ExpressionAttributeValues: {
-        ':pk': `case|${docketNumber}`,
-      },
-      KeyConditionExpression: '#pk = :pk',
-      applicationContext,
-    }),
-  ]);
-
-  const caseItems = caseItemsRaw.filter(
-    item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
-  );
+  const theCase = caseData[0];
 
   let consolidatedCases: Omit<
     RawCase,
     'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
   >[] = [];
   if (includeConsolidatedCases) {
-    consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
-      applicationContext,
-      leadDocketNumber: dbCaseMetadata.leadDocketNumber!,
+    consolidatedCases = await getConsolidatedCases({
+      leadDocketNumber: theCase.leadDocketNumber!,
+      excludeFields: ['correspondence', 'docketEntries', 'hearings'],
     });
+    // This formatting should not be done here; we are mixing the data persistence layer with the interactor layer.
+    // It was done here to quickly fix a high-severity bug.
     if (user) {
       consolidatedCases = consolidatedCases.map(c =>
         formatSealedAddresses(c, user),
@@ -69,27 +37,10 @@ export const getCaseByDocketNumber = async ({
     }
   }
 
-  return purgeDynamoKeys({
-    ...aggregateCaseItems([
-      ...caseItems,
-      {
-        ...dbCaseMetadata,
-        pk: `case|${dbCaseMetadata.docketNumber}`,
-        sk: `case|${dbCaseMetadata.docketNumber}`,
-      },
-      ...caseCorrespondences.map(correspondenceItem => ({
-        ...correspondenceItem,
-        pk: `case|${docketNumber}`,
-        sk: `correspondence|${correspondenceItem.correspondenceId}`,
-      })),
-      ...docketEntries.map(docketEntry => ({
-        ...docketEntry,
-        pk: `case|${docketNumber}`,
-        sk: `docket-entry|${docketEntry.docketEntryId}`,
-      })),
-    ]),
+  return {
+    ...theCase,
     consolidatedCases: consolidatedCases.map(
       c => new ConsolidatedCaseSummary(c),
     ),
-  });
+  };
 };

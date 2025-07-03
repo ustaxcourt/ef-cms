@@ -5,6 +5,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UserCase } from '@shared/business/entities/UserCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const associateIrsPractitionerToCase = async ({
   applicationContext,
@@ -26,7 +27,6 @@ export const associateIrsPractitionerToCase = async ({
       userId: user.userId,
     }),
     getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
     }),
   ]);
@@ -52,11 +52,8 @@ export const associateIrsPractitionerToCase = async ({
     new IrsPractitioner({ ...user, serviceIndicator }),
   );
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  return await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 };

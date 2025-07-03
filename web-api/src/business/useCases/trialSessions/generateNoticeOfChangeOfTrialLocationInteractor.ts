@@ -16,7 +16,6 @@ export const generateNoticeOfChangeOfTrialLocationInteractor = async (
   },
 ): Promise<Uint8Array> => {
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

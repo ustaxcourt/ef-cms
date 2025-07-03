@@ -3,7 +3,12 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock('@shared/sharedAppContext');
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -23,7 +28,6 @@ import {
   getBusinessDateInFuture,
 } from '@shared/business/utilities/DateHandler';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
@@ -36,16 +40,25 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 
 describe('serveCaseToIrsInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const upsertCases = jest.mocked(upsertCasesMock);
   const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
     getWorkItemByDocketNumberAndDocketEntryIdMock,
   );
+  const updateCaseAndAssociations = jest
+    .mocked(updateCaseAndAssociationsMock)
+    .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const getUniqueId = jest
+    .mocked(getUniqueIdMock)
+    .mockImplementation(() => '7805d1ab-18d0-43ec-bafb-654e83405416');
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
+
   const clientConnectionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const mockParams = {
     clientConnectionId,
@@ -74,13 +87,8 @@ describe('serveCaseToIrsInteractor', () => {
       }),
     };
   };
-  let mockLock;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-
     applicationContext
       .getPersistenceGateway()
       .getConfigurationItemValue.mockResolvedValue({
@@ -90,7 +98,6 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   beforeEach(() => {
-    mockLock = undefined;
     mockCase = { ...MOCK_CASE };
     applicationContext.getPersistenceGateway().updateWorkItem = jest.fn();
 
@@ -940,8 +947,8 @@ describe('serveCaseToIrsInteractor', () => {
     );
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.petitioners[0].contactId,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.petitioners[0]
+        .contactId,
     ).toBe(MOCK_CASE.petitioners[0].contactId);
   });
 
@@ -1059,9 +1066,7 @@ describe('serveCaseToIrsInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    const updatedCase =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate;
+    const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
     expect(
       updatedCase.docketEntries.find(p => p.eventCode === 'P').servedAt,
     ).toBeDefined();
@@ -1115,9 +1120,8 @@ describe('serveCaseToIrsInteractor', () => {
 
     getCaseByDocketNumber
       .mockResolvedValueOnce(mockCaseWithoutServedDocketEntries)
-      .mockReturnValueOnce(mockCase)
-      .mockReturnValueOnce(mockCaseWithServedDocketEntries)
-      .mockReturnValueOnce(mockCaseWithServedDocketEntries);
+      .mockResolvedValueOnce(mockCase)
+      .mockResolvedValueOnce(mockCaseWithServedDocketEntries);
 
     await serveCaseToIrsInteractor(
       applicationContext,
@@ -1125,7 +1129,9 @@ describe('serveCaseToIrsInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(upsertCases.mock.calls[0][0][0].docketEntries).toMatchObject([
+    expect(
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries,
+    ).toMatchObject([
       {
         documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
         index: 1,
@@ -1160,15 +1166,17 @@ describe('serveCaseToIrsInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
     const MOCK_NOTR_ID = 'ea10afeb-f189-4657-a862-c607a091beaa';
-    applicationContext.getUniqueId.mockReturnValue(MOCK_NOTR_ID);
+    getUniqueId.mockReturnValue(MOCK_NOTR_ID);
+
     await serveCaseToIrsInteractor(
       applicationContext,
       mockParams,
       mockPetitionsClerkUser,
     );
+
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
-        .calls[0][0].docketEntryId,
+        .calls[1][0].docketEntryId,
     ).toEqual(MOCK_NOTR_ID);
   });
 
@@ -1521,7 +1529,9 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       serveCaseToIrsInteractor(
@@ -1534,27 +1544,18 @@ describe('serveCaseToIrsInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     await serveCaseToIrsInteractor(
       applicationContext,
       mockParams,
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 
   it('should generate a notice of receipt of petition with the name and title of the clerk of the court', async () => {
