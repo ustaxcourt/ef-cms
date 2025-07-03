@@ -414,7 +414,7 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
    ```
 1. Create the `[env]_dawson` postgres user:
    ```bash
-   cd ./scripts/postgres && ./create-rds-users.sh && cd../..
+   cd ./scripts/postgres && ./create-rds-users.sh && cd ../..
    ```
 1. Trigger a deployment in the new environment, with the following settings:
    1. `run_build_and_deploy`: `false`
