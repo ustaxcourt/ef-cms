@@ -21,6 +21,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       state: {
         caseDetail: {
           docketNumber: thisDocketNumber,
+          docketEntries: [],
         },
         clientConnectionId,
         docketEntryId: 'abc',
