@@ -1,4 +1,3 @@
-import { UIDocketEntry } from '@shared/business/entities/DocketEntry';
 import {
   INITIAL_DOCUMENT_TYPES,
   ROLES,
@@ -103,7 +102,7 @@ export const MOCK_ANSWER: RawDocketEntry = {
   workItemId: 'a358c6b2-076b-4850-a415-e77f4329e9d8',
   qcComplete: true,
   qcViewed: true,
-} as UIDocketEntry;
+};
 
 export const MOCK_PETITION: RawDocketEntry = {
   createdAt: '2018-11-21T20:49:28.192Z',
