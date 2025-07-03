@@ -825,9 +825,6 @@ const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
     documentTitle: 'Order',
     deadlineDescription: 'AP & Fee Due',
   },
-  statusReportOrder: {
-    eventCode: 'SRO',
-  }
 };
 
 export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
