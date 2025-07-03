@@ -9,6 +9,7 @@ import {
 } from './helpers';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 describe('verify old sent work items do not show up in the outbox', () => {
   const cerebralTest = setupTest();
@@ -60,6 +61,21 @@ describe('verify old sent work items do not show up in the outbox', () => {
     workItemIdN = applicationContext.getUniqueId();
     workItemIdNPlus1 = applicationContext.getUniqueId();
 
+    const docketEntry: RawDocketEntry = {
+      docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
+      docketNumber: caseDetail.docketNumber,
+      createdAt: '2019-06-25T15:14:11.924Z',
+      documentType: 'Petition',
+      eventCode: 'O',
+      documentTitle: 'Test',
+      filingDate: '2018-06-26T16:31:17.643Z',
+      isOnDocketRecord: true,
+      filers: [],
+      processingStatus: '',
+      receivedAt: '2018-06-25T16:31:17.643Z',
+      stampData: {},
+    };
+
     workItemNPlus1Days = {
       assigneeId: mockUser.userId,
       assigneeName: 'Test petitionsclerk1',
@@ -69,11 +85,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
       completedBy: 'Test Petitionsclerk',
       completedByUserId: mockUser.userId,
       createdAt: CREATED_N_PLUS_1_DAYS_AGO,
-      docketEntry: {
-        createdAt: '2019-06-25T15:14:11.924Z',
-        docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
-        documentType: 'Petition',
-      },
+      docketEntryId: docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
       docketNumberSuffix: null,
       section: 'petitions',
@@ -98,6 +110,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
       workItemId: `${workItemIdNMinus1}`,
     };
 
+    await upsertDocketEntries([docketEntry]);
     await upsertWorkItems({
       workItems: [workItemNPlus1Days, workItemNDays, workItemNMinus1Days],
     });
