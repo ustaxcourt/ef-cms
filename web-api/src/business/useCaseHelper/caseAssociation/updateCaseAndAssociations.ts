@@ -36,12 +36,10 @@ const updateCaseDocketEntries = ({
   caseToUpdate: any;
   oldCase: any;
 }) => {
-  // 10684 TODO: ensure that the qcRead and qcComplete fields do not trigger this diff!
-  // It should not happen--we should not be storing them server-side--but double-check.
-  // We are not comparing work item changes as we do not save the work item on the docket entry in persistence
+  const fieldsToIgnore = ['workItemId', 'qcViewed', 'qcComplete']; // These are bits of work-item data irrelevant to docket entry persistence
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
-    oldCase.docketEntries.map(d => omit(d, 'workItem')),
-    caseToUpdate.docketEntries.map(d => omit(d, 'workItem')),
+    oldCase.docketEntries.map(d => omit(d, fieldsToIgnore)),
+    caseToUpdate.docketEntries.map(d => omit(d, fieldsToIgnore)),
     'docketEntryId',
   );
 
@@ -49,8 +47,8 @@ const updateCaseDocketEntries = ({
     added: addedArchivedDocketEntries,
     updated: updatedArchivedDocketEntries,
   } = diff(
-    oldCase.archivedDocketEntries.map(d => omit(d, 'workItem')),
-    caseToUpdate.archivedDocketEntries.map(d => omit(d, 'workItem')),
+    oldCase.archivedDocketEntries.map(d => omit(d, fieldsToIgnore)),
+    caseToUpdate.archivedDocketEntries.map(d => omit(d, fieldsToIgnore)),
     'docketEntryId',
   );
 

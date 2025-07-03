@@ -25,7 +25,6 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { MOCK_MESSAGE } from '@shared/test/mockMessage';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 
 describe('updateCaseAndAssociations', () => {
   let validMockCase;
@@ -290,7 +289,9 @@ describe('updateCaseAndAssociations', () => {
         archivedDocketEntries: MOCK_DOCUMENTS,
         docketEntries: MOCK_DOCUMENTS.map(d => ({
           ...d,
-          workItem: MOCK_WORK_ITEM,
+          workItemId: 'someId',
+          qcComplete: false,
+          qcViewed: false,
         })),
       };
       const caseToUpdate = {
@@ -298,7 +299,9 @@ describe('updateCaseAndAssociations', () => {
         archivedDocketEntries: MOCK_DOCUMENTS,
         docketEntries: MOCK_DOCUMENTS.map(d => ({
           ...d,
-          workItem: undefined,
+          workItemId: 'someOtherId',
+          qcComplete: true,
+          qcViewed: true,
         })),
       };
 
