@@ -6,7 +6,6 @@ describe('setHealthCheckAction', () => {
     const mockHealth = {
       cognito: false,
       dynamo: { efcms: true, efcmsDeploy: false },
-      dynamsoft: false,
       elasticsearch: true,
       emailService: true,
       s3: {
