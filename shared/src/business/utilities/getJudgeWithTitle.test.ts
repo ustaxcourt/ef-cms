@@ -17,7 +17,6 @@ describe('getJudgeWithTitle', () => {
 
   it('retrieves a list of judges from persistence', async () => {
     await getJudgeWithTitle({
-      applicationContext,
       judgeUserName: mockJudgeUserName,
     });
     expect(
@@ -27,7 +26,6 @@ describe('getJudgeWithTitle', () => {
 
   it('returns the found judge name with title', async () => {
     const result = await getJudgeWithTitle({
-      applicationContext,
       judgeUserName: mockJudgeUserName,
     });
 
@@ -36,7 +34,6 @@ describe('getJudgeWithTitle', () => {
 
   it('should return the found judge full name with title when useFullName is true', async () => {
     const result = await getJudgeWithTitle({
-      applicationContext,
       judgeUserName: mockJudgeUserName,
       useFullName: true,
     });
@@ -47,7 +44,6 @@ describe('getJudgeWithTitle', () => {
   it('throws an error when the specified judge is not found in persistence', async () => {
     await expect(
       getJudgeWithTitle({
-        applicationContext,
         judgeUserName: 'Shrek',
       }),
     ).rejects.toThrow('Judge Shrek was not found');

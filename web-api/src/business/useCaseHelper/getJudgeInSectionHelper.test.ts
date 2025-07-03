@@ -26,7 +26,7 @@ describe('getJudgeInSectionHelper', () => {
         },
       ]);
 
-    const result = await getJudgeInSectionHelper(applicationContext, {
+    const result = await getJudgeInSectionHelper({
       section: 'judgesChambers2',
     });
 
@@ -47,7 +47,7 @@ describe('getJudgeInSectionHelper', () => {
           userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
         },
       ]);
-    const result = await getJudgeInSectionHelper(applicationContext, {
+    const result = await getJudgeInSectionHelper({
       section: 'colvinChambers',
     });
 

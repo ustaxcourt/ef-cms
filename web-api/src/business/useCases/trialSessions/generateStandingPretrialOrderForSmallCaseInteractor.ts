@@ -47,7 +47,6 @@ export const generateStandingPretrialOrderForSmallCaseInteractor = async (
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
   const formattedJudgeName = await getJudgeWithTitle({
-    applicationContext,
     judgeUserName: trialSession.judge?.name,
   });
 

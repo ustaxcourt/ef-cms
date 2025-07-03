@@ -27,7 +27,7 @@ export const getUserIdForNote = async (
   if (userEntity.isChambersUser()) {
     const judgeUser = await applicationContext
       .getUseCaseHelpers()
-      .getJudgeInSectionHelper(applicationContext, {
+      .getJudgeInSectionHelper({
         section: userEntity.section,
       });
     if (judgeUser) {
