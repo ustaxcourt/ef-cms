@@ -189,7 +189,7 @@ export class DocketEntry extends JoiValidationEntity {
   public strickenBy?: string;
   public strickenByUserId?: string;
 
-  // These are optional fields set for the UI
+  // These are optional fields set solely for the UI in certain cases.
   public qcComplete?: boolean;
   public qcViewed?: boolean;
   public workItemId?: string;
@@ -473,7 +473,7 @@ export class DocketEntry extends JoiValidationEntity {
     return DocketEntry.isCourtIssued({ eventCode: this.eventCode });
   }
 
-  static hasWorkItemInfo(docketEntry: UIDocketEntry) {
+  static hasWorkItemInfo(docketEntry: RawDocketEntry) {
     return !!docketEntry.workItemId;
   }
 
@@ -895,9 +895,3 @@ export const getServedPartiesCode = (servedParties?: any[]) => {
 declare global {
   type RawDocketEntry = ExcludeMethods<DocketEntry>;
 }
-
-export type UIDocketEntry = RawDocketEntry & {
-  workItemId?: string;
-  qcComplete?: boolean;
-  qcViewed?: boolean;
-};

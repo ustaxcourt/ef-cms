@@ -50,7 +50,7 @@ import {
 } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
 import { ContactFactory } from '../contacts/ContactFactory';
 import { Correspondence, RawCorrespondence } from '../Correspondence';
-import { DocketEntry, UIDocketEntry } from '../DocketEntry';
+import { DocketEntry } from '../DocketEntry';
 import {
   PATTERNS,
   calculateDifferenceInDays,
@@ -2511,9 +2511,4 @@ export type CaseStatusChange = {
   changedBy: string;
   date: string;
   updatedCaseStatus: string;
-};
-
-// A type to represent case data for the client-side
-export type UICase = Omit<RawCase, 'docketEntries'> & {
-  docketEntries: UIDocketEntry[];
 };
