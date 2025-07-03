@@ -887,7 +887,7 @@ declare global {
   type RawDocketEntry = ExcludeMethods<DocketEntry>;
 }
 
-export type UIDocketEntry = DocketEntry & {
+export type UIDocketEntry = RawDocketEntry & {
   workItemId?: string;
   qcComplete?: boolean;
   qcViewed?: boolean;
