@@ -100,6 +100,7 @@ export const fileCourtIssuedOrder = async (
     {
       ...documentMetadata,
       draftOrderState: {
+        ...documentMetadata.draftOrderState,
         dueDate: documentMetadata.dueDate,
         orderType: documentMetadata.orderType,
       },
