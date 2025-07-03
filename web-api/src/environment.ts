@@ -45,7 +45,7 @@ export const environment = {
         (process.env.NODE_ENV !== 'test'
           ? 'localhost'
           : getJestDBConnectionError()),
-      idleTimeoutMillis: isRunningOnLambda ? 10000 : 1000,
+      idleTimeoutMillis: isRunningOnLambda ? null : 1000, // null idleTimeoutMillis means the db connection is never closed.
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,

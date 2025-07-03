@@ -6,8 +6,8 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * submitCaseAssociationRequestInteractor

@@ -4,7 +4,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
@@ -20,7 +19,6 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
  * @returns {Promise} the promise of the setWorkItemAsRead call
  */
 export const setWorkItemAsReadInteractor = async (
-  applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -38,7 +36,6 @@ export const setWorkItemAsReadInteractor = async (
   const { docketEntryId } = workItemRecord.docketEntry;
 
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

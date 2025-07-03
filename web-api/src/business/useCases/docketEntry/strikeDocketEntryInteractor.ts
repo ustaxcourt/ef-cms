@@ -4,14 +4,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const strikeDocketEntryInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketNumber,
@@ -28,7 +26,6 @@ export const strikeDocketEntryInteractor = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

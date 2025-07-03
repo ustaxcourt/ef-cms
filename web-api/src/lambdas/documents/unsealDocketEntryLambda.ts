@@ -12,13 +12,12 @@ export const unsealDocketEntryLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const {
       pathParameters: { docketEntryId, docketNumber },
     } = event;
 
     return await unsealDocketEntryInteractor(
-      applicationContext,
       {
         docketEntryId,
         docketNumber,

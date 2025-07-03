@@ -89,15 +89,12 @@ const getLEAsFiledInYear = async ({
 };
 
 const getCaseEntity = async ({
-  applicationContext,
   docketNumber,
 }: {
-  applicationContext: ServerApplicationContext;
   docketNumber: string;
 }): Promise<RawCase> => {
   if (!(docketNumber in caseCache)) {
     caseCache[docketNumber] = await getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
       includeConsolidatedCases: false,
     });
@@ -140,8 +137,7 @@ const getNocFiledAfterLeaInCase = ({
   const docketNumbers = [...new Set(leas.map(de => de.docketNumber))];
   const queue = new PQueue({ concurrency });
   const funcs = docketNumbers.map(
-    (docketNumber: string) => async () =>
-      await getCaseEntity({ applicationContext, docketNumber }),
+    (docketNumber: string) => async () => await getCaseEntity({ docketNumber }),
   );
   await queue.addAll(funcs);
 

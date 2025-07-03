@@ -7,7 +7,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * saveCaseNote
@@ -19,7 +20,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {object} the updated case note returned from persistence
  */
 export const saveCaseNote = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { caseNote, docketNumber }: { caseNote: string; docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -28,7 +29,6 @@ export const saveCaseNote = async (
   }
 
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -41,13 +41,10 @@ export const saveCaseNote = async (
     .validate()
     .toRawObject();
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate,
-    });
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate,
+  });
 
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };

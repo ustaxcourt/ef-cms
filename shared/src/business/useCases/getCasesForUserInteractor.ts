@@ -5,17 +5,16 @@ import {
   userIsDirectlyAssociated,
 } from '@shared/business/entities/cases/Case';
 import { PaymentStatusTypes } from '@shared/business/entities/EntityConstants';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import {
   UnknownAuthUser,
   isAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { compareISODateStrings } from '../utilities/sortFunctions';
-import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
-import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { partition, uniqBy } from 'lodash';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 interface UserCaseDTO {
   caseCaption: string;
@@ -35,7 +34,6 @@ export type TAssociatedCase = {
 } & UserCaseDTO;
 
 export const getCasesForUserInteractor = async (
-  applicationContext: ServerApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<{
   openCaseList: TAssociatedCase[];
@@ -50,15 +48,21 @@ export const getCasesForUserInteractor = async (
   const docketNumbers = await getDocketNumbersByUser({ userId });
 
   const allUserCases: TAssociatedCase[] = (
-    (await getCasesMetadataByDocketNumbers({
+    await getCasesByDocketNumbers({
       docketNumbers,
-    })) as unknown as RawCase[]
+      excludeFields: [
+        'docketEntries',
+        'hearings',
+        'correspondence',
+        'privatePractitioners',
+        'irsPractitioners',
+      ],
+    })
   ).map(c => {
     return { ...convertCaseToUserCaseDTO(c), isRequestingUserAssociated: true };
   });
 
   const nestedCases = await fetchConsolidatedGroupsAndNest({
-    applicationContext,
     cases: allUserCases,
     userId,
   });
@@ -102,19 +106,13 @@ export const getCasesForUserInteractor = async (
  * ]
  */
 async function fetchConsolidatedGroupsAndNest({
-  applicationContext,
   cases,
   userId,
 }: {
-  applicationContext: ServerApplicationContext;
   cases: TAssociatedCase[];
   userId: string;
 }): Promise<TAssociatedCase[]> {
-  const consolidatedGroups = await getAllConsolidatedCases(
-    applicationContext,
-    cases,
-    userId,
-  );
+  const consolidatedGroups = await getAllConsolidatedCases(cases, userId);
 
   // Combine open cases and consolidated cases and remove duplicates
   const allCasesAndConsolidatedCases = uniqBy(
@@ -199,7 +197,6 @@ function convertCaseToUserCaseDTO(rawCase: UserCaseDTO): UserCaseDTO {
 }
 
 async function getAllConsolidatedCases(
-  applicationContext: ServerApplicationContext,
   cases: TAssociatedCase[],
   userId: string,
 ): Promise<
@@ -218,9 +215,9 @@ async function getAllConsolidatedCases(
   return (
     await Promise.all(
       uniqueLeadDocketNumbers.map(aCase =>
-        getCasesMetadataWithCounselByLeadDocketNumber({
-          applicationContext,
+        getConsolidatedCases({
           leadDocketNumber: aCase.leadDocketNumber!,
+          excludeFields: ['correspondence', 'docketEntries', 'hearings'],
         }),
       ),
     )

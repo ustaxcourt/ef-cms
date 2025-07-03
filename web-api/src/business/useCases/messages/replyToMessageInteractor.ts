@@ -6,14 +6,12 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ReplyMessageType } from '@web-api/business/useCases/messages/createMessageInteractor';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessageAsReply } from '@web-api/persistence/postgres/messages/createMessageAsReply';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const replyToMessage = async (
-  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,
@@ -30,7 +28,6 @@ export const replyToMessage = async (
   }
 
   const associatedCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -72,7 +69,6 @@ export const replyToMessage = async (
 };
 
 export const replyToMessageInteractor = (
-  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,
@@ -85,7 +81,6 @@ export const replyToMessageInteractor = (
   authorizedUser: UnknownAuthUser,
 ): Promise<RawMessage> => {
   return replyToMessage(
-    applicationContext,
     {
       attachments,
       docketNumber,

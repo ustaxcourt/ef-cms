@@ -5,7 +5,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -31,7 +30,6 @@ export type ReplyMessageType = MessageType & {
 };
 
 export const createMessageInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,
@@ -47,7 +45,6 @@ export const createMessageInteractor = async (
   }
 
   const associatedCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

@@ -14,7 +14,7 @@ import { updateUserPendingEmailRecord } from '@web-api/business/useCases/auth/ch
 import {
   asyncHandleLockError,
   withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
+} from '@web-api/persistence/postgres/utils/mutex';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;

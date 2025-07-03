@@ -8,10 +8,6 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';
 import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
@@ -19,6 +15,10 @@ import { Practitioner } from '@shared/business/entities/Practitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getCasesForUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * updateUserContactInformationHelper

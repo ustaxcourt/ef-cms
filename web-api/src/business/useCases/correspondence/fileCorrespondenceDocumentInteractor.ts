@@ -5,14 +5,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const fileCorrespondenceDocumentInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     documentMetadata,
     primaryDocumentFileId,
@@ -28,7 +26,6 @@ export const fileCorrespondenceDocumentInteractor = async (
   const user = await getUserById({ userId: authorizedUser.userId });
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
