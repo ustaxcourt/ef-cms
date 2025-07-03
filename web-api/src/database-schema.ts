@@ -36,6 +36,18 @@ import {
   DW_WORK_ITEM_COLUMNS,
 } from '@web-api/persistence/postgres/workitems/schema';
 import {
+  ConnectionTable,
+  DW_CONNECTION_COLUMNS,
+} from '@web-api/persistence/postgres/connections/schema';
+import {
+  DW_NOTIFICATION_COLUMNS,
+  NotificationTable,
+} from '@web-api/persistence/postgres/notifications/schema';
+import {
+  ChangeOfAddressTable,
+  DW_CHANGE_OF_ADDRESS_COLUMNS,
+} from '@web-api/persistence/postgres/jobs/changeOfAddress/schema';
+import {
   DocketEntryWorksheetTable,
   DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
 } from '@web-api/persistence/postgres/docketEntryWorksheets/schema';
@@ -57,9 +69,12 @@ interface DatabaseSchemaType {
   dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
+  dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
+  dwConnection: DatabaseTableMetadata<ConnectionTable>;
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
+  dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwUser: DatabaseTableMetadata<UserTable>;
@@ -99,6 +114,14 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as CaseWorksheetTable,
     columns: DW_CASE_WORKSHEET_COLUMNS,
   },
+  dwChangeOfAddress: {
+    table: DEFAULT as ChangeOfAddressTable,
+    columns: DW_CHANGE_OF_ADDRESS_COLUMNS,
+  },
+  dwConnection: {
+    table: DEFAULT as ConnectionTable,
+    columns: DW_CONNECTION_COLUMNS,
+  },
   dwDocketEntry: {
     table: DEFAULT as DocketEntryTable,
     columns: DW_DOCKET_ENTRY_COLUMNS,
@@ -112,6 +135,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMessage: {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
+  },
+  dwNotification: {
+    table: DEFAULT as NotificationTable,
+    columns: DW_NOTIFICATION_COLUMNS,
   },
   dwMinuteSheet: {
     table: DEFAULT as MinuteSheetTable,

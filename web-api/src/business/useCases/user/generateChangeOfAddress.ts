@@ -89,7 +89,6 @@ const generateChangeOfAddressForPractitioner = async ({
   const jobId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().createChangeOfAddressJob({
-    applicationContext,
     docketNumbers: associatedUserCases.map(caseInfo => caseInfo.docketNumber),
     jobId,
   });
