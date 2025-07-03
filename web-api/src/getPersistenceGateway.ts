@@ -78,7 +78,7 @@ import {
   updatePrivatePractitionerOnCase,
 } from './persistence/dynamo/cases/updatePractitionerOnCase';
 import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
-import { updatePractitionerUser } from './persistence/dynamo/users/updatePractitionerUser';
+import { updatePractitionerUser } from './business/useCaseHelper/users/updatePractitionerUser';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { updateUser } from './persistence/dynamo/users/updateUser';

@@ -13,27 +13,7 @@ const rl = readline.createInterface({
 rl.on('line', line => {
   const obj = JSON.parse(line);
 
-  // if (
-  //   (obj.sk.startsWith('irsPractitioner|') && obj.pk.startsWith('case|')) ||
-  //   (obj.sk.startsWith('privatePractitioner|') && obj.pk.startsWith('case|')) ||
-  //   (obj.sk.startsWith('inactivePractitioner|') && obj.pk.startsWith('case|'))
-  // ) {
-  //   const userUserEntry = prodUsers[obj.userId];
-  //   if (
-  //     userUserEntry?.contact?.city !== obj?.contact?.city &&
-  //     !userUserEntry?.email?.includes('irsPractitioner') &&
-  //     !userUserEntry?.firmName
-  //       ?.toLowerCase()
-  //       .includes('united states tax court') &&
-  //     userUserEntry?.role != 'irsPractitioner'
-  //   ) {
-  //     // console.log('userUserEntry.contact', userUserEntry);
-  //     console.log('userUserEntry!: ', userUserEntry);
-  //     console.log('caseUserEntry!: ', obj);
-  //   }
-  // }
-
-  if (obj.additionalPhone) {
+  if (obj.pk.startsWith('irsPractitioner|') && obj.sk.startsWith('user')) {
     console.log(obj);
   }
 
