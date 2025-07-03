@@ -25,6 +25,9 @@ import {
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { RawPetitioner } from '@shared/business/entities/contacts/Petitioner';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getWorkItemsByDocketNumber as getWorkItemsByDocketNumberMock } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { WorkItem } from '@shared/business/entities/WorkItem';
+import { docketClerk1User } from '@shared/test/mockUsers';
 
 describe('getCaseInteractor', () => {
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
@@ -32,6 +35,9 @@ describe('getCaseInteractor', () => {
   const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
   const irsSuperuserId = '5a5c771d-ab63-4d78-a298-1de657dde621';
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getWorkItemsByDocketNumber = jest.mocked(
+    getWorkItemsByDocketNumberMock,
+  );
 
   let testCase;
   let mockCaseContactPrimary;
@@ -552,6 +558,82 @@ describe('getCaseInteractor', () => {
 
       const DECORATED_CASE = decorateForCaseStatus(TEST_MOCK_CASE);
       expect(DECORATED_CASE.canDojPractitionersRepresentParty).toEqual(true);
+    });
+  });
+
+  describe('docket entry work item info', () => {
+    it('should attach work item info needed by the UI to the docket entries', async () => {
+      const docketEntries = [
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          docketEntryId: '0d9119cb-c6f9-4fc0-8986-def8373b93ca',
+        },
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          docketEntryId: '83c4b4eb-6b31-4bf6-a178-79544c50d12b',
+        },
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          docketEntryId: '93421496-c7c4-4c7e-9baa-32c0a7e26879',
+        },
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          docketEntryId: '8193d2af-6b67-4d14-96bc-0200d7e9f62e',
+        },
+      ];
+
+      getCaseByDocketNumber.mockResolvedValueOnce({
+        ...MOCK_CASE,
+        docketEntries,
+      });
+
+      const workItems = [
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          docketEntryId: docketEntries[0].docketEntryId,
+          workItemId: '1d9119cb-c6f9-4fc0-8986-def8373b93ca',
+        },
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          docketEntryId: docketEntries[1].docketEntryId,
+          workItemId: '2d9119cb-c6f9-4fc0-8986-def8373b93ca',
+          isRead: false,
+        },
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          docketEntryId: docketEntries[2].docketEntryId,
+          workItemId: '3d9119cb-c6f9-4fc0-8986-def8373b93ca',
+          isRead: true,
+        },
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+          docketEntryId: docketEntries[3].docketEntryId,
+          workItemId: '3d9119cb-c6f9-4fc0-8986-def8373b93ca',
+          isRead: true,
+          completedAt: '2019-09-19T16:42:00.000Z',
+        },
+      ];
+
+      getWorkItemsByDocketNumber.mockResolvedValueOnce(workItems as WorkItem[]);
+      const result = (await getCaseInteractor(
+        applicationContext,
+        {
+          docketNumber: MOCK_CASE.docketNumber,
+        },
+        {
+          email: docketClerk1User.email!,
+          name: docketClerk1User.name,
+          role: ROLES.docketClerk,
+          userId: docketClerk1User.userId,
+        },
+      )) as RawCase;
+      for (let i = 0; i < docketEntries.length; i++) {
+        expect(result.docketEntries[i]).toMatchObject({
+          workItemId: workItems[i].workItemId,
+          qcViewed: !!workItems[i].isRead,
+          qcComplete: !!workItems[i].completedAt,
+        });
+      }
     });
   });
 });
