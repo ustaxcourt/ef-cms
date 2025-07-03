@@ -1,9 +1,9 @@
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
-import { caseServicesSupervisorUser } from '../../../../../shared/src/test/mockUsers';
+import { caseServicesSupervisorUser } from '@shared/test/mockUsers';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';

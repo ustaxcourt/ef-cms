@@ -1,5 +1,5 @@
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import { getDocumentQCInboxForSectionInteractor } from './getDocumentQCInboxForSectionInteractor';
 import { getDocumentQCInboxForSection as getDocumentQCInboxForSectionMock } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForSection';
 import { getTestJudgesChambers } from '@shared/test/mockJudgesChambers';

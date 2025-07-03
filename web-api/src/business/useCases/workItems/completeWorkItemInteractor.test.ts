@@ -5,9 +5,9 @@ import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
 } from '@shared/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { MOCK_CASE } from '@shared/test/mockCase';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { completeWorkItemInteractor } from './completeWorkItemInteractor';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import {

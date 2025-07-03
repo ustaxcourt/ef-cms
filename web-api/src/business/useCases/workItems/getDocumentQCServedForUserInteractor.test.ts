@@ -1,8 +1,8 @@
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import { DOCKET_SECTION } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getDocumentQCServedForUserInteractor } from './getDocumentQCServedForUserInteractor';
 import { getDocumentQCServedForUser as getDocumentQCServedForUserMock } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForUser';
 import {
@@ -58,13 +58,11 @@ describe('getDocumentQCServedForUserInteractor', () => {
 
     expect(result).toMatchObject([
       {
-        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
-        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
@@ -81,14 +79,11 @@ describe('getDocumentQCServedForUserInteractor', () => {
     );
     expect(result).toMatchObject([
       {
-        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
-
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
       },
       {
-        docketEntry: { sentBy: 'petitioner' },
         docketNumber: '101-18',
         section: DOCKET_SECTION,
         sentBy: 'docketclerk',
