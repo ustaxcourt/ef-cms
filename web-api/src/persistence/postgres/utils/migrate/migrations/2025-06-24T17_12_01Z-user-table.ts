@@ -37,6 +37,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('entityName', 'varchar')
     .execute();
 
+  // TODO: 10495: add indexs on columns
+
   await db.schema
     .createTable('dwUserOnCase')
     .addColumn('userId', 'varchar')

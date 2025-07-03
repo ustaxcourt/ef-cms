@@ -16,7 +16,6 @@ describe('getUsersPendingEmailInteractor', () => {
   it('should throw an error when not authorized', async () => {
     await expect(
       getUsersPendingEmailInteractor(
-        applicationContext,
         {
           userIds: USER_IDS,
         },
@@ -42,7 +41,6 @@ describe('getUsersPendingEmailInteractor', () => {
     ]);
 
     const result = await getUsersPendingEmailInteractor(
-      applicationContext,
       {
         userIds: USER_IDS,
       },
@@ -70,7 +68,6 @@ describe('getUsersPendingEmailInteractor', () => {
     ]);
 
     const result = await getUsersPendingEmailInteractor(
-      applicationContext,
       {
         userIds: USER_IDS,
       },
@@ -89,7 +86,6 @@ describe('getUsersPendingEmailInteractor', () => {
       .getUsersById.mockResolvedValue([]);
 
     const result = await getUsersPendingEmailInteractor(
-      applicationContext,
       {
         userIds: USER_IDS,
       },

@@ -191,7 +191,7 @@ export const determineEntitiesToLock = async (
 ) => {
   await applicationContext
     .getPersistenceGateway()
-    .getUserByIdOnceAllUpdatesComplete({ applicationContext, userId });
+    .getUserByIdOnceAllUpdatesComplete({ userId });
 
   const cases = await getCasesForUser({ userId });
 

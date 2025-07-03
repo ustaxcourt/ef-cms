@@ -31,7 +31,6 @@ export const verifyUserPendingEmail = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserByIdOnceAllUpdatesComplete({
-      applicationContext,
       userId: authorizedUser.userId,
     });
 

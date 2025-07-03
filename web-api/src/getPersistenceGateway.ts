@@ -53,8 +53,7 @@ import { getTrialSessionProcessingStatus } from './persistence/dynamo/trialSessi
 import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
 import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSessions';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
-import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
-import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/dynamo/users/getUserByIdOnceAllUpdatesComplete';
+import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getUsersById } from './persistence/dynamo/users/getUsersById';
 import { getUsersBySearchKey } from './persistence/dynamo/users/getUsersBySearchKey';
 import { getUsersInSection } from './persistence/dynamo/users/getUsersInSection';
@@ -85,7 +84,6 @@ import { updatePractitionerUser } from './persistence/dynamo/users/updatePractit
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { updateUser } from './persistence/dynamo/users/updateUser';
-import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
@@ -158,7 +156,6 @@ const gatewayMethods = {
     updateTrialSession,
     updateTrialSessionWorkingCopy,
     updateUser,
-    updateUserRecords,
   }),
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
@@ -206,7 +203,6 @@ const gatewayMethods = {
   getTrialSessionWorkingCopy,
   getTrialSessions,
   getUploadPolicy,
-  getUserByEmail,
   getUserByIdOnceAllUpdatesComplete,
   getUsersById,
   getUsersBySearchKey,
