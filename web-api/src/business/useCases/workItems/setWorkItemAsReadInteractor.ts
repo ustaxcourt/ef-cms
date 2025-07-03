@@ -4,11 +4,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 /**
  * setWorkItemAsReadInteractor
@@ -19,7 +19,6 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
  * @returns {Promise} the promise of the setWorkItemAsRead call
  */
 export const setWorkItemAsReadInteractor = async (
-  applicationContext: ServerApplicationContext,
   { workItemId }: { workItemId: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -37,7 +36,6 @@ export const setWorkItemAsReadInteractor = async (
   const { docketEntryId } = workItemRecord.docketEntry;
 
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -55,12 +53,7 @@ export const setWorkItemAsReadInteractor = async (
 
   docketEntryEntity.workItem.markAsRead();
 
-  await applicationContext.getPersistenceGateway().updateDocketEntry({
-    applicationContext,
-    docketEntryId,
-    docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
-  });
+  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
 
   return upsertWorkItems({
     workItems: [docketEntryEntity.workItem.validate().toRawObject()],

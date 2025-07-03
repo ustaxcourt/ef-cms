@@ -46,7 +46,6 @@ export const createMessageInteractor = async (
   }
 
   const associatedCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

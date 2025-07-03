@@ -111,7 +111,6 @@ describe('generateTrialSessionMinutesPdfInteractor', () => {
 
     expect(result).toBe('https://example.com/pdf');
     expect(mockGetCaseByDocketNumber).toHaveBeenCalledWith({
-      applicationContext,
       docketNumber: mockParams.docketNumber,
     });
     expect(mockGetTrialSessionById).toHaveBeenCalledWith({

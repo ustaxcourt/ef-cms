@@ -2,12 +2,12 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import { AUTOMATIC_BLOCKED_REASONS } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   ServiceUnavailableError,
   UnauthorizedError,
@@ -19,39 +19,35 @@ import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persisten
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('deleteCaseDeadlineInteractor', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
   const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
-  let user;
-  let mockDeadlines;
-  let mockLock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
+
+  let user;
+  let mockDeadlines;
 
   updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
     Promise.resolve(caseToUpdate),
   );
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-
     applicationContext.environment.stage = 'local';
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE_WITHOUT_PENDING);
 
     getCaseDeadlinesByDocketNumber.mockImplementation(() => mockDeadlines);
   });
 
-  beforeEach(() => {
-    mockLock = undefined;
-  });
-
   it('should throw a ServiceUnavailableError when the Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       deleteCaseDeadlineInteractor(
@@ -63,11 +59,9 @@ describe('deleteCaseDeadlineInteractor', () => {
         mockPetitionsClerkUser,
       ),
     ).rejects.toThrow(ServiceUnavailableError);
-
-    expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValueOnce([]);
     await deleteCaseDeadlineInteractor(
       applicationContext,
@@ -78,20 +72,11 @@ describe('deleteCaseDeadlineInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`,
-      ttl: 30,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE_WITHOUT_PENDING.docketNumber}`],
+      }),
+    );
   });
 
   it('should throw an error when the user is not valid or authorized', async () => {

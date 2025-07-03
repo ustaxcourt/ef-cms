@@ -3,15 +3,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import {
-  applicationContext,
-  ServerApplicationContext,
-} from '@web-api/applicationContext';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * used for setting a case as blocked
@@ -31,7 +28,6 @@ export const blockCaseFromTrial = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -40,7 +36,6 @@ export const blockCaseFromTrial = async (
   caseEntity.setAsBlocked(reason);
 
   const updatedCase = await updateCaseAndAssociations({
-    applicationContext,
     authorizedUser,
     caseToUpdate: caseEntity,
   });
