@@ -117,6 +117,46 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
    ```bash
    npm run deploy:account-specific
    ```
+1. Set up the OpenSearch mappings for CloudWatch logs in Kibana:
+   1. Create a user in the `log_viewers` user pool:
+      1. Determine the user pool id:
+         ```bash
+         export LOG_VIEWER_POOL_ID=$(aws cognito-idp list-user-pools \
+           --query "UserPools[?Name == 'log_viewers'].Id | [0]" \
+           --max-results 1 --region us-east-1 --output text)
+         ```
+      1. Create a user, replacing `<USERNAME>` with your chosen username and `<COURT EMAIL ADDRESS>` with your Court email address:
+         ```bash
+         aws cognito-idp admin-create-user \
+           --user-pool-id "$LOG_VIEWER_POOL_ID" \
+           --username "<USERNAME>" \
+           --region us-east-1 \
+           --user-attributes 'Name="email",Value="<COURT EMAIL ADDRESS>"' \
+           --temporary-password "Testing1234$"
+         ```
+   1. Log into Kibana (renamed OpenSearch Dashboards) with the new user:
+      1. Determine the Kibana URL and launch it in your default browser:
+         ```bash
+         export LOG_CLUSTER_DOMAIN=$(aws opensearch describe-domain \
+           --domain-name info \
+           --query "DomainStatus.Endpoint" \
+           --output text)
+         open "https://${LOG_CLUSTER_DOMAIN}/_dashboards"
+         ```
+      1. Log in with the user you just created, using the temporary password
+      1. Set a new permanent password and save your credentials
+   1. Create a mapping template for indices beginning with `cwl`:
+      1. In Kibana, navigate to the "Dev Tools" (near the bottom of the main menu)
+      1. Replace the query on the left with the following:
+         ```
+         PUT _template/cwl
+         ```
+      1. In your terminal, copy the contents of `./aws/lambdas/LogsToElasticSearch_info/index-template.json` to your clipboard:
+         ```bash
+         pbcopy < ./aws/lambdas/LogsToElasticSearch_info/index-template.json
+         ```
+      1. Back in the browser, paste the contents you just copied, starting on a newline under `PUT _template/cwl`
+      1. Click the play button to submit the query
 1. Set up a CircleCI context for this environment:
    1. Export the AWS account id in your terminal session:
       ```bash
@@ -146,36 +186,79 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
             1. Click "Add environment variable"
 1. Become the CircleCI user
    ```bash
-   unset AWS_PROFILE
+   unset AWS_PROFILE AWS_ROLE_ARN AWS_SESSION_EXPIRATION AWS_SESSION_INFO AWS_SESSION_TOKEN
    export AWS_ACCESS_KEY_ID=<CIRCLECI AWS_ACCESS_KEY_ID>
    export AWS_SECRET_ACCESS_KEY=<CIRCLECI AWS_SECRET_ACCESS_KEY>
    ```
-1. Run an `allColors` terraform deployment:
-   ```bash
-   export CURRENT_COLOR=blue
-   export DEPLOYING_COLOR=green
-   export SOURCE_TABLE="efcms-${ENV}-alpha"
-   export DESTINATION_TABLE="efcms-${ENV}-alpha"
-   npm run deploy:allColors "$ENV"
-   ```
-1. TODO: Troubleshooting - add descriptive instructions to overcome the following
-   1. ACM cert validation timeout: After the `NS` record is generated for `[env].[repo].[domain]`, copy it to the AWS account that owns the `[domain]` hosted zone
-   1. Cognito pool creation error: After SES identity is created, run `web-api/verify-ses-email.sh`
-   1. Some S3 buckets need to have "Block all public access" disabled:
-      1. S3 -> [bucket] -> Permissions -> Block public access -> Edit -> Uncheck "Block all public access"
-   1. API Gateway Stage: CloudWatch Logs role ARN must be set in account settings to enable logging:
-      1. API Gateway -> Settings -> Logging -> Edit -> CloudWatch log role ARN: `arn:aws:iam::<ACCOUNT ID>:role/api_gateway_cloudwatch_global`
+1. Run an `allColors` terraform deployment, resolving errors when necessary:
+   1. Set up some environment variables emulating a blue -> green deployment:
+      ```bash
+      export CURRENT_COLOR=blue
+      export DEPLOYING_COLOR=green
+      export SOURCE_TABLE="efcms-${ENV}-alpha"
+      export DESTINATION_TABLE="efcms-${ENV}-alpha"
+      ```
+   1. Run an `allColors` terraform deployment:
+      ```bash
+      npm run deploy:allColors "$ENV"
+      ```
+   1. The ACM (SSL) certificates will fail to validate. To resolve, you will need to copy the `NS` record for this hosted zone into all of the hosted zones that precede it:
+      1. Log into this new account in the AWS console and navigate to the Route 53 dashboard
+      1. Click on "Hosted zones" and select this environment's hosted zone
+      1. Click on the "Type" filter and select "NS"
+      1. Copy the value of this hosted zone's `NS` record to your clipboard
+      1. Log into the AWS console for the account that owns the `ustaxcourt.gov` hosted zone and navigate to the Route 53 dashboard
+      1. Click on "Hosted zones" and select the `ustaxcourt.gov` hosted zone
+      1. Create a copy of this environment's `NS` record:
+         1. Click "Create record"
+         1. Record name: `<env>.ef-cms`
+         1. Record type: `NS`
+         1. Paste the value you copied earlier
+         1. Click "Create record" to create the `NS` record
+      1. Log into the AWS console for the account that owns the `ef-cms.ustaxcourt.gov` hosted zone and navigate to the Route 53 dashboard
+      1. Click on "Hosted zones" and select the `ef-cms.ustaxcourt.gov` hosted zone
+      1. Create a copy of this environment's `NS` record:
+         1. Click "Create record"
+         1. Record name: `<env>`
+         1. Record type: `NS`
+         1. Paste the value you copied earlier
+         1. Click "Create record" to create the `NS` record
+   1. The Cognito pool will fail to create. To resolve, run a script to verify the `noreply@<env>.ef-cms.ustaxcourt.gov` email address:
+      ```bash
+      EFCMS_DOMAIN="${ENV}.ef-cms.ustaxcourt.gov" REGION=us-east-1 web-api/verify-ses-email.sh
+      ```
+   1. The SES `email_forwarding_rule_set` is not active. To activate:
+      1. Log in to this new account in the AWS console and navigate to the SES dashboard
+      1. Click on "Email receiving"
+      1. Click the checkbox next to the `email_forwarding_rule_set` and click "Set as active"
+   1. Run an `allColors` terraform deployment again now that the errors have been resolved:
+      ```bash
+      npm run deploy:allColors "$ENV"
+      ```
 1. Run a color-specific terraform deployment for green:
-   ```bash
-   npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
-   ```
+   1. Run a color-specific terraform deployment:
+      ```bash
+      npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
+      ```
+   1. The first run will fail, but you can run it again without modifying anything and it will succeed the second time:
+      ```bash
+      npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
+      ```
 1. Run a color-specific terraform deployment for blue:
-   ```bash
-   export CURRENT_COLOR=green
-   export DEPLOYING_COLOR=blue
-   npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
-   ```
-1. Write configuration to the deploy table:
+   1. Set up some environment variables emulating a green -> blue deployment:
+      ```bash
+      export CURRENT_COLOR=green
+      export DEPLOYING_COLOR=blue
+      ```
+   1. Run a color-specific terraform deployment:
+      ```bash
+      npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
+      ```
+   1. The first run will fail, but you can run it again without modifying anything and it will succeed the second time:
+      ```bash
+      npm run "deploy:${DEPLOYING_COLOR}" "$ENV"
+      ```
+1. Write configuration values to the deploy table:
    1. `current-color`:
       ```bash
       aws dynamodb update-item \
