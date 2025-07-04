@@ -85,7 +85,7 @@ function DocketClerkFilterMarkup({
 }: DocketClerkFilterMarkupParams): React.JSX.Element {
   function Markup(isMobile: boolean) {
     const DROPDOWN_STYLE = isMobile
-      ? 'margin-left-0 margin-top-2 height-6 width-full'
+      ? 'margin-left-0 margin-top-2 force-full-width'
       : 'margin-left-1pt5rem inline-select usa-select';
 
     return (
@@ -101,7 +101,6 @@ function DocketClerkFilterMarkup({
             Filter by
           </label>
           <BindedSelect
-            excludeUsaSelect
             aria-label="assignment"
             bind="screenMetadata.assignmentFilterValue.userId"
             className={`select-left ${DROPDOWN_STYLE}`}
@@ -123,7 +122,7 @@ function DocketClerkFilterMarkup({
           {currentBoxView !== 'outbox' && (
             <select
               aria-label="select an assignee"
-              className={`select-left ${DROPDOWN_STYLE}`}
+              className={`usa-select select-left ${DROPDOWN_STYLE}`}
               data-testid="dropdown-select-assignee"
               disabled={!showSendToBar}
               id="options"
