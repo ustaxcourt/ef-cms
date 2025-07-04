@@ -49,42 +49,14 @@ export const WorkQueueAssignments = connect<
           })
         ) : (
           <>
-            {workQueueHelper.showSendToBar && (
-              <>
-                <div className="action-section grid-row inline-block margin-bottom-1">
-                  <span className="assign-work-item-count">
-                    <Icon aria-label="selected work items count" icon="check" />
-                    {selectedWorkItemsLength}
-                  </span>
-                  <select
-                    aria-label="select an assignee"
-                    className="usa-select"
-                    data-testid="dropdown-select-assignee"
-                    id="options"
-                    name="options"
-                    onChange={evt => {
-                      selectAssigneeSequence({
-                        assigneeId: evt.target.value,
-                        assigneeName:
-                          evt.target.options[evt.target.selectedIndex].text,
-                      });
-                      assignSelectedWorkItemsSequence();
-                    }}
-                  >
-                    <option value="">Assign to...</option>
-                    {users.map(user => (
-                      <option key={user.userId} value={user.userId}>
-                        {user.name}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <div className="push-right margin-top-4">
-                  <b className="text-semibold">Count:</b>{' '}
-                  {formattedWorkQueue.length}
-                </div>
-              </>
-            )}
+            {workQueueHelper.showSendToBar &&
+              AssignToBarMarkup({
+                selectedWorkItemsLength,
+                selectAssigneeSequence,
+                assignSelectedWorkItemsSequence,
+                users,
+                formattedWorkQueueLength: formattedWorkQueue.length,
+              })}
           </>
         )}
       </React.Fragment>
@@ -179,6 +151,57 @@ function DocketClerkFilterMarkup({
             {selectedWorkItemsLength}
           </span>
         )}
+      </div>
+      <div className="push-right margin-top-4">
+        <b className="text-semibold">Count:</b> {formattedWorkQueueLength}
+      </div>
+    </>
+  );
+}
+
+type AssignToBarMarkupParams = {
+  selectedWorkItemsLength: number;
+  selectAssigneeSequence: Function;
+  assignSelectedWorkItemsSequence: Function;
+  users: RawUser[];
+  formattedWorkQueueLength: number;
+};
+
+function AssignToBarMarkup({
+  selectedWorkItemsLength,
+  selectAssigneeSequence,
+  assignSelectedWorkItemsSequence,
+  users,
+  formattedWorkQueueLength,
+}: AssignToBarMarkupParams) {
+  return (
+    <>
+      <div className="action-section grid-row inline-block margin-bottom-1">
+        <span className="assign-work-item-count">
+          <Icon aria-label="selected work items count" icon="check" />
+          {selectedWorkItemsLength}
+        </span>
+        <select
+          aria-label="select an assignee"
+          className="usa-select"
+          data-testid="dropdown-select-assignee"
+          id="options"
+          name="options"
+          onChange={evt => {
+            selectAssigneeSequence({
+              assigneeId: evt.target.value,
+              assigneeName: evt.target.options[evt.target.selectedIndex].text,
+            });
+            assignSelectedWorkItemsSequence();
+          }}
+        >
+          <option value="">Assign to...</option>
+          {users.map(user => (
+            <option key={user.userId} value={user.userId}>
+              {user.name}
+            </option>
+          ))}
+        </select>
       </div>
       <div className="push-right margin-top-4">
         <b className="text-semibold">Count:</b> {formattedWorkQueueLength}
