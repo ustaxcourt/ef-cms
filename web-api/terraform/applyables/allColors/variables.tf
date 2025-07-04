@@ -10,10 +10,6 @@ variable "dns_domain" {
   type = string
 }
 
-variable "zone_name" {
-  type = string
-}
-
 variable "cognito_suffix" {
   type = string
 }
