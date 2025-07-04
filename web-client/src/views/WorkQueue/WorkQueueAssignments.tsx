@@ -5,6 +5,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 
 type WorkQueueAssignmentsProps = {
   users: RawUser[];
@@ -82,76 +83,94 @@ function DocketClerkFilterMarkup({
   selectedWorkItemsLength,
   formattedWorkQueueLength,
 }: DocketClerkFilterMarkupParams): React.JSX.Element {
-  return (
-    <>
-      <div className="action-section grid-row inline-block margin-bottom-1">
-        <label
-          className="dropdown-label-serif padding-top-05"
-          htmlFor="inline-select"
-          id="trial-sessions-filter-label"
+  function Markup(isMobile: boolean) {
+    const DROPDOWN_STYLE = isMobile
+      ? 'margin-left-0 margin-top-2 height-6 width-full'
+      : 'margin-left-1pt5rem inline-select usa-select';
+
+    return (
+      <>
+        <div
+          className={`action-section grid-row margin-bottom-1${isMobile ? '' : ' inline-block'}`}
         >
-          Filter by
-        </label>
-        <BindedSelect
-          aria-label="assignment"
-          bind="screenMetadata.assignmentFilterValue.userId"
-          className="select-left inline-select margin-left-1pt5rem"
-          data-testid="dropdown-filter-assignee"
-          id="assignmentFilter"
-          name="assignment"
-          onChange={() => {
-            clearSelectedWorkItemsSequence();
-          }}
-        >
-          <option value="">-Assignment-</option>
-          <option value="UA">Unassigned</option>
-          {users.map(user => (
-            <option key={user.name} value={user.userId}>
-              {user.name}
-            </option>
-          ))}
-        </BindedSelect>
-        {currentBoxView !== 'outbox' && (
-          <select
-            aria-label="select an assignee"
-            className="usa-select select-left inline-select margin-left-1pt5rem"
-            data-testid="dropdown-select-assignee"
-            disabled={!showSendToBar}
-            id="options"
-            name="options"
-            onChange={evt => {
-              selectAssigneeSequence({
-                assigneeId: evt.target.value,
-                assigneeName: evt.target.options[evt.target.selectedIndex].text,
-              });
-              assignSelectedWorkItemsSequence();
-              //reset input manually
-              evt.target.value = '';
+          <label
+            className="dropdown-label-serif padding-top-05 mobile:grid-col-12"
+            htmlFor="inline-select"
+            id="trial-sessions-filter-label"
+          >
+            Filter by
+          </label>
+          <BindedSelect
+            excludeUsaSelect
+            aria-label="assignment"
+            bind="screenMetadata.assignmentFilterValue.userId"
+            className={`select-left ${DROPDOWN_STYLE}`}
+            data-testid="dropdown-filter-assignee"
+            id="assignmentFilter"
+            name="assignment"
+            onChange={() => {
+              clearSelectedWorkItemsSequence();
             }}
           >
-            <option key="assignTo" value="">
-              Assign to...
-            </option>
+            <option value="">-Assignment-</option>
+            <option value="UA">Unassigned</option>
             {users.map(user => (
-              <option key={user.userId} value={user.userId}>
+              <option key={user.name} value={user.userId}>
                 {user.name}
               </option>
             ))}
-          </select>
-        )}
-        {showSendToBar && (
-          <span
-            className="assign-work-item-count-docket"
-            data-testid="assign-work-item-count-docket"
-          >
-            <Icon aria-label="selected work items count" icon="check" />
-            {selectedWorkItemsLength}
-          </span>
-        )}
-      </div>
-      <div className="push-right margin-top-4">
-        <b className="text-semibold">Count:</b> {formattedWorkQueueLength}
-      </div>
+          </BindedSelect>
+          {currentBoxView !== 'outbox' && (
+            <select
+              aria-label="select an assignee"
+              className={`select-left ${DROPDOWN_STYLE}`}
+              data-testid="dropdown-select-assignee"
+              disabled={!showSendToBar}
+              id="options"
+              name="options"
+              onChange={evt => {
+                selectAssigneeSequence({
+                  assigneeId: evt.target.value,
+                  assigneeName:
+                    evt.target.options[evt.target.selectedIndex].text,
+                });
+                assignSelectedWorkItemsSequence();
+                //reset input manually
+                evt.target.value = '';
+              }}
+            >
+              <option key="assignTo" value="">
+                Assign to...
+              </option>
+              {users.map(user => (
+                <option key={user.userId} value={user.userId}>
+                  {user.name}
+                </option>
+              ))}
+            </select>
+          )}
+          {showSendToBar && (
+            <span
+              className="assign-work-item-count-docket"
+              data-testid="assign-work-item-count-docket"
+            >
+              <Icon aria-label="selected work items count" icon="check" />
+              {selectedWorkItemsLength}
+            </span>
+          )}
+        </div>
+        <div
+          className={`push-right ${isMobile ? 'margin-bottom-3 grid-col-12 text-align-right' : 'margin-top-4'}`}
+        >
+          <b className="text-semibold">Count:</b> {formattedWorkQueueLength}
+        </div>
+      </>
+    );
+  }
+  return (
+    <>
+      <Mobile>{Markup(true)}</Mobile>
+      <NonMobile>{Markup(false)}</NonMobile>
     </>
   );
 }

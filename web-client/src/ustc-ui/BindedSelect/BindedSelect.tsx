@@ -16,8 +16,15 @@ export const BindedSelect = connect(
     value: state[props.bind],
   },
   function BindedSelect(componentProps) {
-    const { bind, children, className, onChange, simpleSetter, value } =
-      componentProps;
+    const {
+      bind,
+      children,
+      className,
+      onChange,
+      simpleSetter,
+      value,
+      excludeUsaSelect,
+    } = componentProps;
     let activeOption, setSelect;
 
     if (bind) {
@@ -38,7 +45,7 @@ export const BindedSelect = connect(
     ];
     const selectProps = {
       ...componentProps,
-      className: classNames('usa-select', className),
+      className: classNames(excludeUsaSelect ? '' : 'usa-select', className),
       onChange: e => setSelect(e.target.value),
       value: activeOption || '',
     };
