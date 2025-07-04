@@ -33,34 +33,31 @@ export const WorkQueueAssignments = connect<
     users,
     workQueueHelper,
   }) {
-    const { currentBoxView, showSendToBar } = workQueueHelper;
-    return (
-      <React.Fragment>
-        {workQueueHelper.showDocketClerkFilter ? (
-          DocketClerkFilterMarkup({
-            clearSelectedWorkItemsSequence,
-            users,
-            currentBoxView,
-            selectAssigneeSequence,
-            showSendToBar,
-            assignSelectedWorkItemsSequence,
-            selectedWorkItemsLength,
-            formattedWorkQueueLength: formattedWorkQueue.length,
-          })
-        ) : (
-          <>
-            {workQueueHelper.showSendToBar &&
-              AssignToBarMarkup({
-                selectedWorkItemsLength,
-                selectAssigneeSequence,
-                assignSelectedWorkItemsSequence,
-                users,
-                formattedWorkQueueLength: formattedWorkQueue.length,
-              })}
-          </>
-        )}
-      </React.Fragment>
-    );
+    const { currentBoxView, showSendToBar, showDocketClerkFilter } =
+      workQueueHelper;
+
+    if (showDocketClerkFilter)
+      return DocketClerkFilterMarkup({
+        clearSelectedWorkItemsSequence,
+        users,
+        currentBoxView,
+        selectAssigneeSequence,
+        showSendToBar,
+        assignSelectedWorkItemsSequence,
+        selectedWorkItemsLength,
+        formattedWorkQueueLength: formattedWorkQueue.length,
+      });
+
+    if (showSendToBar)
+      return AssignToBarMarkup({
+        selectedWorkItemsLength,
+        selectAssigneeSequence,
+        assignSelectedWorkItemsSequence,
+        users,
+        formattedWorkQueueLength: formattedWorkQueue.length,
+      });
+
+    return;
   },
 );
 
@@ -84,7 +81,7 @@ function DocketClerkFilterMarkup({
   assignSelectedWorkItemsSequence,
   selectedWorkItemsLength,
   formattedWorkQueueLength,
-}: DocketClerkFilterMarkupParams) {
+}: DocketClerkFilterMarkupParams): React.JSX.Element {
   return (
     <>
       <div className="action-section grid-row inline-block margin-bottom-1">
