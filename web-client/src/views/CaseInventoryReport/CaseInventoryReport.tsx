@@ -45,7 +45,7 @@ export const CaseInventoryReport = connect(
             </Button>
           </div>
 
-          <div className="padding-top-3 padding-bottom-1 margin-bottom-2">
+          <div className="padding-top-3 padding-bottom-1 margin-bottom-1">
             <label
               className="dropdown-label-serif margin-right-3"
               htmlFor="inline-select"
@@ -99,6 +99,13 @@ export const CaseInventoryReport = connect(
                 );
               })}
             </select>
+            {/* <div className="grid-col-12 text-align-right">
+              <span className="text-semibold">Count:</span>{' '}
+              {foundCasesTotalCount}
+            </div> */}
+            <div className="push-right margin-top-3">
+              <b className="text-semibold">Count:</b> {foundCasesTotalCount}
+            </div>
           </div>
 
           {caseInventoryReportHelper.showResultsTable && (
@@ -121,12 +128,7 @@ export const CaseInventoryReport = connect(
                 )}
               </div>
 
-              <div className="grid-row grid-gap margin-top-1">
-                <div className="grid-col-12 text-align-right">
-                  <span className="text-semibold">Count:</span>{' '}
-                  {foundCasesTotalCount}
-                </div>
-              </div>
+              <div className="grid-row grid-gap margin-top-1"></div>
               <div className="grid-row grid-gap margin-top-1">
                 <div className="grid-col-12">
                   <table
