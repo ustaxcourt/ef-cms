@@ -940,6 +940,7 @@ only-test: &only-test
         - test
 
 only-deployed-lower-environments: &only-deployed-lower-environments
+  context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
