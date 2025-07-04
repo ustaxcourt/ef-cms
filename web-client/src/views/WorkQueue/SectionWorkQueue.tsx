@@ -42,7 +42,7 @@ export const SectionWorkQueue = connect(
           tabName="inbox"
           title={`Inbox (${workQueueHelper.sectionInboxCount})`}
         >
-          <div id="section-inbox-tab-content">
+          <div id="section-inbox-tab-content ">
             <SectionWorkQueueInbox />
           </div>
         </Tab>

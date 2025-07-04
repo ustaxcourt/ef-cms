@@ -210,14 +210,19 @@ function SectionWorkQueueTableRow({
 export const SectionWorkQueueInbox = connect(
   {
     formattedWorkQueueLength: state.formattedWorkQueue.length,
-    showDocketClerkFilter: state.workQueueHelper.showDocketClerkFilter, 
+    showDocketClerkFilter: state.workQueueHelper.showDocketClerkFilter,
     showSendToBar: state.workQueueHelper.showSendToBar,
     users: state.users,
   },
-  function SectionWorkQueueInbox({ formattedWorkQueueLength, users, showDocketClerkFilter, showSendToBar }) {
+  function SectionWorkQueueInbox({
+    formattedWorkQueueLength,
+    users,
+    showDocketClerkFilter,
+    showSendToBar,
+  }) {
     return (
-      <React.Fragment> 
-        {!showDocketClerkFilter && !showSendToBar && ( 
+      <React.Fragment>
+        {!showDocketClerkFilter && !showSendToBar && (
           <>
             <div className="text-right">
               <span className="text-semibold">Count: </span>
@@ -225,9 +230,11 @@ export const SectionWorkQueueInbox = connect(
             </div>
             <div className="padding-1"></div>
           </>
-      )}
+        )}
         <WorkQueueAssignments users={users} />
-        <SectionWorkQueueTable />
+        <div className="overflow-x-auto overflow-y-hidden">
+          <SectionWorkQueueTable />
+        </div>
         {formattedWorkQueueLength === 0 && <p>There are no documents.</p>}
       </React.Fragment>
     );
