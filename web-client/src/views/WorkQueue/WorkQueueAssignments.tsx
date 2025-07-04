@@ -94,7 +94,7 @@ function DocketClerkFilterMarkup({
           className={`action-section grid-row margin-bottom-1${isMobile ? '' : ' inline-block'}`}
         >
           <label
-            className="dropdown-label-serif padding-top-05 mobile:grid-col-12"
+            className={`dropdown-label-serif padding-top-05 mobile:grid-col-12 ${isMobile ? 'margin-bottom-1' : ''}`}
             htmlFor="inline-select"
             id="trial-sessions-filter-label"
           >
