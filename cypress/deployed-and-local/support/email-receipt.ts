@@ -21,19 +21,19 @@ export const deleteAllItemsInEmailBucket = async ({
       new ListObjectsV2Command({ Bucket: bucketName }),
     );
     if (objectsList.Contents && objectsList.Contents.length > 0) {
-      retries--;
-
       const deleteObjectsParams = {
         Bucket: bucketName,
         Delete: {
           Objects: objectsList.Contents.map(obj => ({ Key: obj.Key })),
         },
       };
-
       await s3.send(new DeleteObjectsCommand(deleteObjectsParams));
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      return deleteAllItemsInEmailBucket({ bucketName, retries });
+      retries--;
+      if (retries > 0) {
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        return deleteAllItemsInEmailBucket({ bucketName, retries });
+      }
     }
   } catch (error) {
     console.error('Error deleting objects', error);
