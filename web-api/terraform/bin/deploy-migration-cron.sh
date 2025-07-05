@@ -4,14 +4,14 @@
 ENVIRONMENT=$1
 
 [ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
-[ -z "${ZONE_NAME}" ] && echo "You must set ZONE_NAME as an environment variable" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must set EFCMS_DOMAIN as an environment variable" && exit 1
 [ -z "${CIRCLE_MACHINE_USER_TOKEN}" ] && echo "You must set CIRCLE_MACHINE_USER_TOKEN as an environment variable" && exit 1
 [ -z "${CIRCLE_WORKFLOW_ID}" ] && echo "You must set CIRCLE_WORKFLOW_ID as an environment variable" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must set MIGRATE_FLAG as an environment variable" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
-echo "  - ZONE_NAME=${ZONE_NAME}"
+echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
@@ -23,7 +23,7 @@ export TF_VAR_migrate_flag=$MIGRATE_FLAG
 npm run build:assets
 
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${ZONE_NAME}.terraform.deploys" \
+ -backend-config=bucket="${EFCMS_DOMAIN}.terraform.deploys" \
  -backend-config=key="migration-cron-${ENVIRONMENT}.tfstate" \
  -backend-config=dynamodb_table="efcms-terraform-lock" \
  -backend-config=region="us-east-1"
