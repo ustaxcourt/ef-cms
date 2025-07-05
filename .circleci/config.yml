@@ -9,15 +9,19 @@ parameters:
     default: true
     type: boolean
 
-  run_build_and_deploy_with_context:
+  run_build_and_deploy_to_prod:
     default: true
     type: boolean
 
-  run_build_and_deploy_empty:
+  run_build_and_deploy_minimal:
     default: false
     type: boolean
 
   run_glue_to_test:
+    default: false
+    type: boolean
+
+  run_s3_to_test:
     default: false
     type: boolean
 
@@ -113,7 +117,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
     environment:
-      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_empty >>
+      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_minimal >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -651,7 +655,7 @@ jobs:
               --header "content-type: application/json" \
               --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
                 \"run_build_and_deploy\":false, \
-                \"run_build_and_deploy_empty\":true}}" | jq -r '.id')
+                \"run_build_and_deploy_minimal\":true}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda
@@ -709,7 +713,7 @@ jobs:
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
               --data "{\"branch\":\"prod\", \"parameters\":{ \
-                \"run_build_and_deploy_with_context\":false, \
+                \"run_build_and_deploy_to_prod\":false, \
                 \"run_glue_to_lower_env\":true, \
                 \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
@@ -838,6 +842,44 @@ jobs:
           command: |
             ./scripts/circleci/sync-s3-buckets-with-timeout.sh 175m
 
+  initiate-s3-sync:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            VCS=<< pipeline.project.type >>
+            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+            if [[ -z "$PROD_DOCUMENTS_BUCKET_NAME" ]]; then
+              echo "Error: expected PROD_DOCUMENTS_BUCKET_NAME environment variable"
+              exit 1
+            fi
+            echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
+            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+      - run:
+          name: Kick off the sync-s3-to-lower-env workflow
+          command: |
+            curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_sync_s3_to_lower_env\":true, \
+                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
+                \"source_bucket\":\"${SOURCE_BUCKET}\", \
+                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+
   ######################## GLUE JOB: Jobs that run in prod ########################
 
   start-glue-job:
@@ -934,6 +976,7 @@ only-prod: &only-prod
         - prod
 
 only-test: &only-test
+  context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
@@ -1018,8 +1061,8 @@ workflows:
           requires:
             - switch-colors
 
-  build-and-deploy-with-context:
-    when: << pipeline.parameters.run_build_and_deploy_with_context >>
+  build-and-deploy-to-prod:
+    when: << pipeline.parameters.run_build_and_deploy_to_prod >>
     jobs:
       - deploy:
           <<: *only-prod
@@ -1082,8 +1125,8 @@ workflows:
           requires:
             - backup-source-dynamo-table
 
-  build-and-deploy-empty:
-    when: << pipeline.parameters.run_build_and_deploy_empty >>
+  build-and-deploy-minimal:
+    when: << pipeline.parameters.run_build_and_deploy_minimal >>
     jobs:
       - deploy:
           <<: *only-deployed-lower-environments
@@ -1161,6 +1204,17 @@ workflows:
           requires:
             - restore-postgres
             - wait-for-glue-job
+
+  s3-to-test:
+    when: << pipeline.parameters.run_s3_to_test >>
+    jobs:
+      - initiate-s3-sync:
+          <<: *only-test
+      - wait-for-s3-sync-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - initiate-s3-sync
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>
