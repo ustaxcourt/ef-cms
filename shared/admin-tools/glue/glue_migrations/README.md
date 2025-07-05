@@ -4,7 +4,7 @@ This directory contains Terraform to install an AWSL Glue job to migrate a Dynam
 
 ## To Use
 
-Initialize the Terraform backend with the bash script `./bin/deploy-init.sh`. Set the environmental variable `ZONE_NAME` to the appropriate value such as `ef-cms.ustaxcourt.gov` that corresponds to the S3 bucket holding the project's state files. Run the script from this directory passing the environment as an argument:
+Set the appropriate environmental variables, then initialize the Terraform backend with the bash script `./bin/deploy-init.sh`. Run the script from this directory passing the environment as an argument:
 
 `./bin/deploy-init.sh mig`
 

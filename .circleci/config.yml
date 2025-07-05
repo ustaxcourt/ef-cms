@@ -950,6 +950,7 @@ only-dev: &only-dev
         - develop
 
 only-deployed-lower-environments: &only-deployed-lower-environments
+  context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
