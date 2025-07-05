@@ -986,6 +986,7 @@ only-test: &only-test
         - test
 
 only-dev: &only-dev
+  context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
