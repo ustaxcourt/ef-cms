@@ -10,7 +10,8 @@ import { spawn } from 'child_process';
 import { CompiledQuery } from 'kysely';
 
 const scriptConfig: ScriptConfig = {
-  description: 'add-cases-to-opensearch - Reupsert cases',
+  description:
+    'index-docket-entries: a script to re-index docket entries from Postgres to OpenSearch',
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',

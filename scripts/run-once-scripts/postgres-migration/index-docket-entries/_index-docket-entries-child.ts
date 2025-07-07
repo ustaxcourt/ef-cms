@@ -14,7 +14,8 @@ import { indexOpenSearchDocketEntries } from 'web-api/elasticsearch/docketEntrie
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 
 const scriptConfig: ScriptConfig = {
-  description: 'add-cases-to-opensearch - Reupsert cases',
+  description:
+    '_index-docket-entries-child: a subprocess script for indexing a chunk of docket entry data that should only be kicked off by index-docket-entries',
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',
