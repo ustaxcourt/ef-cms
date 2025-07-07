@@ -6,6 +6,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
 
 /**
  * submitPendingCaseAssociationRequestInteractor
@@ -28,13 +29,10 @@ export const submitPendingCaseAssociationRequestInteractor = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
-  const isAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: user.userId,
-    });
+  const isAssociated = await verifyCaseForUser({
+    docketNumber,
+    userId: user.userId,
+  });
 
   const isAssociationPending = await applicationContext
     .getPersistenceGateway()

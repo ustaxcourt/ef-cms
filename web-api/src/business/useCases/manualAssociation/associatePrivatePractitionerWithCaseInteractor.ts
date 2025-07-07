@@ -20,7 +20,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
  * @returns {*} the result
  */
 export const associatePrivatePractitionerWithCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     representing,
@@ -43,7 +43,6 @@ export const associatePrivatePractitionerWithCase = async (
   const user = await getUserById({ userId });
 
   return await associatePrivatePractitionerToCase({
-    applicationContext,
     authorizedUser,
     docketNumber,
     representing,

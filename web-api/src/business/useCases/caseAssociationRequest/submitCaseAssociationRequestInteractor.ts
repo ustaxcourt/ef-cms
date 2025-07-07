@@ -45,7 +45,6 @@ const submitCaseAssociationRequest = async (
     return await applicationContext
       .getUseCaseHelpers()
       .associatePrivatePractitionerToCase({
-        applicationContext,
         authorizedUser,
         docketNumber,
         representing: filers,
@@ -55,7 +54,6 @@ const submitCaseAssociationRequest = async (
     return await applicationContext
       .getUseCaseHelpers()
       .associateIrsPractitionerToCase({
-        applicationContext,
         authorizedUser,
         docketNumber,
         user,

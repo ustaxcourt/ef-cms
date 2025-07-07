@@ -17,7 +17,6 @@ import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
 import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
-import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
@@ -59,10 +58,6 @@ import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
 import { refreshConfirmationCodeExpiration } from '@web-api/persistence/dynamo/users/refreshConfirmationCodeExpiration';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
-import {
-  removeIrsPractitionerOnCase,
-  removePrivatePractitionerOnCase,
-} from './persistence/dynamo/cases/removePractitionerOnCase';
 import { saveDispatchNotification } from '@web-api/persistence/postgres/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
@@ -70,16 +65,11 @@ import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/change
 import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
 import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
-import {
-  updateIrsPractitionerOnCase,
-  updatePrivatePractitionerOnCase,
-} from './persistence/dynamo/cases/updatePractitionerOnCase';
 import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
 import { updatePractitionerUser } from './business/useCaseHelper/users/updatePractitionerUser';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
-import { verifyCaseForUser } from './persistence/dynamo/cases/verifyCaseForUser';
 import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from './persistence/s3/zipDocuments';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
@@ -141,10 +131,8 @@ const gatewayMethods = {
     setTrialSessionJobStatusForCase,
     setTrialSessionProcessingStatus,
     updateCaseHearing,
-    updateIrsPractitionerOnCase,
     updateMaintenanceMode,
     updatePractitionerUser,
-    updatePrivatePractitionerOnCase,
     updateTrialSession,
     updateTrialSessionWorkingCopy,
   }),
@@ -159,7 +147,6 @@ const gatewayMethods = {
   deleteTrialSession,
   deleteTrialSessionWorkingCopy,
   deleteUserConnection,
-  deleteUserFromCase,
   fetchEventCodesCountForJudges,
   generateAccountConfirmationCode,
   getAccountConfirmationCode,
@@ -199,11 +186,8 @@ const gatewayMethods = {
   isEmailAvailable,
   isFileExists,
   refreshConfirmationCodeExpiration,
-  removeIrsPractitionerOnCase,
-  removePrivatePractitionerOnCase,
   setChangeOfAddressCaseAsDone,
   uploadDocument,
-  verifyCaseForUser,
   verifyPendingCaseForUser,
   zipDocuments,
 };

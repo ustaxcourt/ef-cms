@@ -106,7 +106,6 @@ describe('associatePrivatePractitionerToCase', () => {
       .verifyCaseForUser.mockReturnValue(true);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
@@ -125,7 +124,6 @@ describe('associatePrivatePractitionerToCase', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
@@ -144,7 +142,6 @@ describe('associatePrivatePractitionerToCase', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [
@@ -173,7 +170,6 @@ describe('associatePrivatePractitionerToCase', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[1].contactId],
@@ -204,7 +200,6 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [],
@@ -231,7 +226,6 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     await associatePrivatePractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
