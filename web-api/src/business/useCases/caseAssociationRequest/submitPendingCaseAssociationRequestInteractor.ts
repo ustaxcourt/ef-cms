@@ -2,11 +2,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { associateUserWithCasePending } from '@web-api/persistence/postgres/cases/pendingCases/associateUserWithCasePending';
+import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 
 /**
  * submitPendingCaseAssociationRequestInteractor
@@ -17,7 +18,6 @@ import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCas
  * @returns {Promise<*>} the promise of the pending case association request
  */
 export const submitPendingCaseAssociationRequestInteractor = async (
-  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -34,21 +34,15 @@ export const submitPendingCaseAssociationRequestInteractor = async (
     userId: user.userId,
   });
 
-  const isAssociationPending = await applicationContext
-    .getPersistenceGateway()
-    .verifyPendingCaseForUser({
-      applicationContext,
+  const isAssociationPending = await verifyPendingCaseForUser({
       docketNumber,
       userId: user.userId,
     });
 
   if (!isAssociated && !isAssociationPending) {
-    await applicationContext
-      .getPersistenceGateway()
-      .associateUserWithCasePending({
-        applicationContext,
-        docketNumber,
-        userId: user.userId,
-      });
+    await associateUserWithCasePending({
+      docketNumber,
+      userId: user.userId,
+    });
   }
 };

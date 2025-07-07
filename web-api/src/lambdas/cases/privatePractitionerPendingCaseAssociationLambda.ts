@@ -1,5 +1,6 @@
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { genericHandler } from '../../genericHandler';
+import { submitPendingCaseAssociationRequestInteractor } from '@web-api/business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor';
 
 /**
  * lambda which is used for creating a pending association of a user to a case
@@ -11,14 +12,11 @@ export const privatePractitionerPendingCaseAssociationLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
-      .getUseCases()
-      .submitPendingCaseAssociationRequestInteractor(
-        applicationContext,
-        {
-          ...event.pathParameters,
-        },
-        authorizedUser,
-      );
+  genericHandler(event, async () => {
+    return await submitPendingCaseAssociationRequestInteractor(
+      {
+        ...event.pathParameters,
+      },
+      authorizedUser,
+    );
   });

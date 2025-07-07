@@ -67,6 +67,10 @@ import {
   DW_USER_CONFIRMATION_CODE_COLUMNS,
   UserConfirmationCodeTable,
 } from '@web-api/persistence/postgres/users/confirmationCodes/schema';
+import {
+  DW_USER_ON_CASE_PENDING_COLUMNS,
+  UserOnCasePendingTable,
+} from '@web-api/persistence/postgres/cases/pendingCases/schema';
 
 const DEFAULT = {};
 
@@ -86,6 +90,7 @@ interface DatabaseSchemaType {
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
+  dwUserOnCasePending: DatabaseTableMetadata<UserOnCasePendingTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
 
@@ -170,6 +175,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUserOnCase: {
     table: DEFAULT as UserOnCaseTable,
     columns: DW_USER_ON_CASE_COLUMNS,
+  },
+  dwUserOnCasePending: {
+    table: DEFAULT as UserOnCasePendingTable,
+    columns: DW_USER_ON_CASE_PENDING_COLUMNS,
   },
 };
 

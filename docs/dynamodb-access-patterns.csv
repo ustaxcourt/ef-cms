@@ -11,6 +11,5 @@ copy the trial session and attach it to the user,trial-session-working-copy|${TR
 a trial session record,trial-session|${TRIAL_SESSION_ID},trial-session|${TRIAL_SESSION_ID},trial-session-catalog
 lookup a user by their email,user-email|${EMAIL},user|${USER_ID},
 associate user with a case,user|${USER_ID},case|${CASE_ID},user-case|${CASE_ID}
-associate user with pending case,user|${USER_ID},pending-case|${CASE_ID},
 save web socket connection associated with the user,user|${USER_ID},connection|${SOCKET_ID},connection
 create a user,user|${USER_ID},user|${USER_ID},

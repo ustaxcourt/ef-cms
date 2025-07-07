@@ -1,6 +1,5 @@
 import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
-import { associateUserWithCasePending } from './persistence/dynamo/cases/associateUserWithCasePending';
 import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
@@ -67,7 +66,6 @@ import { updatePractitionerUser } from './business/useCaseHelper/users/updatePra
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
-import { verifyPendingCaseForUser } from './persistence/dynamo/cases/verifyPendingCaseForUser';
 import { zipDocuments } from './persistence/s3/zipDocuments';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 
@@ -111,7 +109,6 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
 const gatewayMethods = {
   ...isValidatedDecorator({
     addCaseToHearing,
-    associateUserWithCasePending,
     bulkDeleteRecords,
     bulkIndexRecords,
     createJobStatus,
@@ -182,7 +179,6 @@ const gatewayMethods = {
   isFileExists,
   setChangeOfAddressCaseAsDone,
   uploadDocument,
-  verifyPendingCaseForUser,
   zipDocuments,
 };
 

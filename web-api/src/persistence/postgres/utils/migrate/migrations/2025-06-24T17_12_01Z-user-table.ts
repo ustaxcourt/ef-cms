@@ -40,6 +40,13 @@ export async function up(db: Kysely<any>): Promise<void> {
   // TODO: 10495: add indexs on columns
 
   await db.schema
+    .createTable('dwUserOnCasePending')
+    .addColumn('userId', 'varchar', col => col.notNull())
+    .addColumn('docketNumber', 'varchar', col => col.notNull())
+    .addPrimaryKeyConstraint('pkUserOnCasePending', ['docketNumber', 'userId'])
+    .execute();
+
+  await db.schema
     .createTable('dwUserOnCase')
     .addColumn('userId', 'varchar')
     .addColumn('docketNumber', 'varchar')
@@ -61,4 +68,5 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('dwUser').execute();
   await db.schema.dropTable('dwUserOnCase').execute();
   await db.schema.dropTable('dwUserConfirmationCode').execute();
+  await db.schema.dropTable('dwUserOnCasePending').execute();
 }
