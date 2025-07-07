@@ -493,7 +493,7 @@ export const CustomCaseReport = connect(
               }}
             />
           </div>
-          <div className="text-right margin-bottom-2">
+          <div className="text-right margin-bottom-105">
             <Button
               link
               aria-label="export pending report"
@@ -510,7 +510,10 @@ export const CustomCaseReport = connect(
             >
               Export
             </Button>
-            <span className="text-bold" data-testid="custom-case-result-count">
+            <span
+              className="text-semibold"
+              data-testid="custom-case-result-count"
+            >
               Count: &nbsp;
             </span>
             <span data-testid="custom-case-report-count">
