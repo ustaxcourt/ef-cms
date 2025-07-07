@@ -704,15 +704,12 @@ jobs:
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: Disable Wait for Workflow Cron
+          name: 'DELETEME: Waste 2 hours'
           command: |
-            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
+            for i in {1..119}; do
+              echo "Minute ${i}"
+              sleep 60
+            done
       - run:
           name: Disable Dynamodb Streams
           command: |
@@ -1272,24 +1269,22 @@ workflows:
       - index-cases:
           <<: *only-dev
           requires:
-            - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
+            - index-glued-data
       - index-docket-entries:
           <<: *only-dev
           requires:
-            - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
+            - index-glued-data
       - wait-for-glued-data-to-index:
           <<: *only-dev
           type: approval
           requires:
             - index-glued-data
-            - index-cases
-            - index-docket-entries
       - cleanup-glue-job:
           <<: *only-dev
           requires:
             - wait-for-glued-data-to-index
+            - index-cases
+            - index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
