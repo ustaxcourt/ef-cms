@@ -57,10 +57,9 @@ import {
 } from '@web-api/persistence/postgres/minuteSheets/schema';
 import {
   DW_USER_COLUMNS,
-  DW_USER_ON_CASE_COLUMNS,
-  UserOnCaseTable,
   UserTable,
 } from '@web-api/persistence/postgres/users/schema';
+import { DW_USER_ON_CASE_COLUMNS, UserOnCaseTable } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 const DEFAULT = {};
 

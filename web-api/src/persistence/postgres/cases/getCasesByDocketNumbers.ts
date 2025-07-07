@@ -12,8 +12,9 @@ import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
-import { UserKysely, UserOnCaseKysely } from '../users/schema';
+import { UserKysely } from '../users/schema';
 import { rawUser } from '../users/mapper';
+import { UserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',

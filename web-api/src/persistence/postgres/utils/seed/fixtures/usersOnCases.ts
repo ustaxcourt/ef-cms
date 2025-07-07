@@ -1,4 +1,4 @@
-import { NewUserOnCaseKysely } from '@web-api/persistence/postgres/users/schema';
+import { NewUserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 export const usersOnCases: NewUserOnCaseKysely[] = [
   {
