@@ -9,7 +9,32 @@ describe('submitCourtIssuedDocketEntryAction', () => {
   const docketNumbers = ['123-20'];
 
   it('should call the interactor for filing and serving court-issued documents and pass the current clientConnectionId', async () => {
-    const thisDocketNumber = '123-20';
+    const mockDocketEntryId = 'abc';
+    const mockCaseDetail = {
+      docketNumber: '123-20',
+      docketEntries: [
+        {
+          docketEntryId: 'abc',
+          draftOrderState: {
+            dueDate: '01-01-2001',
+            orderType: 'statusReport',
+          }
+        },
+        {
+          docketEntryId: 'def',
+        }
+      ],
+    }
+    const mockForm = {
+      attachments: false,
+      date: '2019-01-01T00:00:00.000Z',
+      documentTitle: '[Anything]',
+      documentType: 'Order',
+      eventCode: 'O',
+      freeText: 'Testing',
+      generatedDocumentTitle: 'Order F',
+      scenario: 'Type A',
+    };
 
     await runAction(fileAndServeCourtIssuedDocumentAction, {
       modules: {
@@ -19,22 +44,10 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         docketNumbers,
       },
       state: {
-        caseDetail: {
-          docketNumber: thisDocketNumber,
-          docketEntries: [],
-        },
+        caseDetail: mockCaseDetail,
         clientConnectionId,
-        docketEntryId: 'abc',
-        form: {
-          attachments: false,
-          date: '2019-01-01T00:00:00.000Z',
-          documentTitle: '[Anything]',
-          documentType: 'Order',
-          eventCode: 'O',
-          freeText: 'Testing',
-          generatedDocumentTitle: 'Order F',
-          scenario: 'Type A',
-        },
+        docketEntryId: mockDocketEntryId,
+        form: mockForm,
       },
     });
 
@@ -46,6 +59,23 @@ describe('submitCourtIssuedDocketEntryAction', () => {
     expect(
       applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
         .mock.calls[0][1],
-    ).toMatchObject({ clientConnectionId, docketNumbers: [thisDocketNumber] });
+    ).toEqual({
+      clientConnectionId,
+      docketEntryId: 'abc',
+      docketNumbers: ['123-20'],
+      form: {
+        attachments: false,
+        date: '2019-01-01T00:00:00.000Z',
+        documentTitle: '[Anything]',
+        documentType: 'Order',
+        dueDate: '01-01-2001',
+        eventCode: 'O',
+        freeText: 'Testing',
+        generatedDocumentTitle: 'Order F',
+        orderType: 'statusReport',
+        scenario: 'Type A',
+      },
+      subjectCaseDocketNumber: '123-20',
+    });
   });
 });
