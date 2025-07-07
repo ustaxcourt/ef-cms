@@ -2,22 +2,26 @@ version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.8.0
 
-efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.43
+efcms-docker-image: &efcms-docker-image $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:4.3.44
 
 parameters:
   run_build_and_deploy:
     default: true
     type: boolean
 
-  run_build_and_deploy_with_context:
+  run_build_and_deploy_to_prod:
     default: true
     type: boolean
 
-  run_build_and_deploy_empty:
+  run_build_and_deploy_minimal:
     default: false
     type: boolean
 
   run_glue_to_test:
+    default: false
+    type: boolean
+
+  run_s3_to_test:
     default: false
     type: boolean
 
@@ -27,6 +31,10 @@ parameters:
 
   lower_env:
     default: test
+    type: string
+
+  lower_env_account_id:
+    default: ''
     type: string
 
   run_sync_s3_to_lower_env:
@@ -113,7 +121,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
     environment:
-      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_empty >>
+      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_minimal >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -651,7 +659,7 @@ jobs:
               --header "content-type: application/json" \
               --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
                 \"run_build_and_deploy\":false, \
-                \"run_build_and_deploy_empty\":true}}" | jq -r '.id')
+                \"run_build_and_deploy_minimal\":true}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda
@@ -688,16 +696,6 @@ jobs:
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
       - run:
-          name: Disable Wait for Workflow Cron
-          command: |
-            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
-      - run:
           name: Disable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --off
@@ -709,9 +707,10 @@ jobs:
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
               --data "{\"branch\":\"prod\", \"parameters\":{ \
-                \"run_build_and_deploy_with_context\":false, \
+                \"run_build_and_deploy_to_prod\":false, \
                 \"run_glue_to_lower_env\":true, \
-                \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
+                \"lower_env\":\"${ENV}\", \
+                \"lower_env_account_id\":\"${LOWER_ENV_ACCOUNT_ID}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda
@@ -773,6 +772,44 @@ jobs:
           command: |
             ./scripts/migration/toggle-streams.sh --on
 
+  index-cases:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Index Cases
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/index-cases.ts
+
+  index-docket-entries:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Index Docket Entries
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/index-docket-entries.ts
+
   cleanup-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -791,13 +828,15 @@ jobs:
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
       - run:
-          name: Kick off a deployment
+          name: Kick off a minimal deployment
           command: |
             CIRCLE_PIPELINE_ID=$(curl --request POST \
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}")
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_build_and_deploy_minimal\":true}}" | jq -r '.id')
 
   sync-s3-buckets-with-timeout:
     docker:
@@ -838,6 +877,44 @@ jobs:
           command: |
             ./scripts/circleci/sync-s3-buckets-with-timeout.sh 175m
 
+  initiate-s3-sync:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            VCS=<< pipeline.project.type >>
+            CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
+            echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
+            if [[ -z "$PROD_DOCUMENTS_BUCKET_NAME" ]]; then
+              echo "Error: expected PROD_DOCUMENTS_BUCKET_NAME environment variable"
+              exit 1
+            fi
+            echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
+            echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
+      - run:
+          name: Kick off the sync-s3-to-lower-env workflow
+          command: |
+            curl --request POST \
+              --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
+              --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
+              --header "content-type: application/json" \
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_sync_s3_to_lower_env\":true, \
+                \"referrer\":\"${CIRCLE_WORKFLOW_ID}\", \
+                \"source_bucket\":\"${SOURCE_BUCKET}\", \
+                \"destination_bucket\":\"${DESTINATION_BUCKET}\"}}"
+
   ######################## GLUE JOB: Jobs that run in prod ########################
 
   start-glue-job:
@@ -849,6 +926,7 @@ jobs:
     resource_class: medium+
     environment:
       LOWER_ENV: << pipeline.parameters.lower_env >>
+      LOWER_ENV_ACCOUNT_ID: << pipeline.parameters.lower_env_account_id >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -867,7 +945,9 @@ jobs:
       - run:
           name: Start Glue Job
           command: |
-            ./scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
+            ./scripts/glue/start-glue-job.ts \
+              --destination-table "efcms-${LOWER_ENV}-alpha" \
+              --lower-env-account-id "$LOWER_ENV_ACCOUNT_ID"
       - run:
           name: Enable Check Glue Job Run State Cron
           command: |
@@ -882,6 +962,7 @@ jobs:
     resource_class: medium+
     environment:
       LOWER_ENV: << pipeline.parameters.lower_env >>
+      LOWER_ENV_ACCOUNT_ID: << pipeline.parameters.lower_env_account_id >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -934,12 +1015,14 @@ only-prod: &only-prod
         - prod
 
 only-test: &only-test
+  context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
         - test
 
 only-deployed-lower-environments: &only-deployed-lower-environments
+  context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
@@ -1017,8 +1100,8 @@ workflows:
           requires:
             - switch-colors
 
-  build-and-deploy-with-context:
-    when: << pipeline.parameters.run_build_and_deploy_with_context >>
+  build-and-deploy-to-prod:
+    when: << pipeline.parameters.run_build_and_deploy_to_prod >>
     jobs:
       - deploy:
           <<: *only-prod
@@ -1081,8 +1164,8 @@ workflows:
           requires:
             - backup-source-dynamo-table
 
-  build-and-deploy-empty:
-    when: << pipeline.parameters.run_build_and_deploy_empty >>
+  build-and-deploy-minimal:
+    when: << pipeline.parameters.run_build_and_deploy_minimal >>
     jobs:
       - deploy:
           <<: *only-deployed-lower-environments
@@ -1101,21 +1184,8 @@ workflows:
         - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
         - << pipeline.parameters.run_glue_to_test >>
     jobs:
-      - delete-existing-data:
-          <<: *only-test
-      - redeploy-environment:
-          <<: *only-test
-          requires:
-            - delete-existing-data
-      - wait-for-deployment-workflow:
-          <<: *only-test
-          type: approval
-          requires:
-            - redeploy-environment
       - initiate-glue-job:
           <<: *only-test
-          requires:
-            - wait-for-deployment-workflow
       - wait-for-glue-workflow:
           <<: *only-test
           type: approval
@@ -1131,11 +1201,23 @@ workflows:
           requires:
             - wait-for-glue-workflow
             - wait-for-s3-sync-workflow
+      - index-cases:
+          <<: *only-test
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - index-docket-entries:
+          <<: *only-test
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
       - wait-for-glued-data-to-index:
           <<: *only-test
           type: approval
           requires:
             - index-glued-data
+            - index-cases
+            - index-docket-entries
       - cleanup-glue-job:
           <<: *only-test
           requires:
@@ -1160,6 +1242,17 @@ workflows:
           requires:
             - restore-postgres
             - wait-for-glue-job
+
+  s3-to-test:
+    when: << pipeline.parameters.run_s3_to_test >>
+    jobs:
+      - initiate-s3-sync:
+          <<: *only-test
+      - wait-for-s3-sync-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - initiate-s3-sync
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>

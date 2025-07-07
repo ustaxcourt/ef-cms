@@ -94,7 +94,7 @@ describe('petitions clerk edits a petition payment fee', () => {
     ).toMatchObject({
       documentTitle: MINUTE_ENTRIES_MAP.filingFeePaid.documentType,
       eventCode: 'FEE',
-      filingDate: '2001-01-01T00:00:00.000-05:00',
+      filingDate: '2001-01-01T05:00:00.000Z',
       index: 3,
     });
   });

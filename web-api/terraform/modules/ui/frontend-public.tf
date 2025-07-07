@@ -1,5 +1,6 @@
 data "aws_acm_certificate" "public_certificate" {
   domain = var.dns_domain
+  most_recent = true
 }
 
 resource "aws_s3_bucket" "frontend_public" {
@@ -34,6 +35,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_public_s
       sse_algorithm = "AES256"
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "unblock_frontend_public" {
+  bucket = aws_s3_bucket.frontend_public.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 resource "aws_s3_bucket" "failover_public" {
@@ -73,6 +83,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "failover_public_s
       sse_algorithm = "AES256"
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "unblock_failover_public" {
+  bucket = aws_s3_bucket.failover_public.id
+  provider = aws.us-west-1
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 data "aws_iam_policy_document" "public_policy_bucket" {
@@ -141,7 +161,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = var.zone_name
+      value = var.dns_domain
     }
   }
 
@@ -159,7 +179,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = var.zone_name
+      value = var.dns_domain
     }
   }
 
@@ -273,7 +293,7 @@ resource "aws_cloudfront_distribution" "public_distribution" {
 }
 
 data "aws_route53_zone" "public_zone" {
-  name = "${var.zone_name}."
+  name = "${var.dns_domain}."
 }
 
 resource "aws_route53_record" "public_www" {

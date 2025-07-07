@@ -30,7 +30,7 @@ describe('validateSelectDocumentTypeAction', () => {
     expect(errorMock).toHaveBeenCalled();
   });
 
-    it('should not return the category validation error', () => {
+  it('should not return the category validation error', () => {
     applicationContext
       .getUseCases()
       .validateExternalDocumentInteractor.mockReturnValue({
@@ -51,7 +51,6 @@ describe('validateSelectDocumentTypeAction', () => {
         'documentTitle',
         'documentType',
         'freeText',
-        'freeText2',
         'previousDocument',
         'serviceDate',
         'trialLocation',
