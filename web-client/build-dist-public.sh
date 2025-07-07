@@ -15,7 +15,7 @@ USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcm
 
 CLIENT_ID=$(aws cognito-idp list-user-pool-clients --user-pool-id "${USER_POOL_ID}" --query "UserPoolClients[?ClientName == 'client'].ClientId | [0]" --max-results 30 --region "${REGION}" --output text)
 
-STAGE="${CLIENT_STAGE}" \
+STAGE="${ENV}" \
   COGNITO_CLIENT_ID="${CLIENT_ID}" \
   CIRCLE_SHA1="${CIRCLE_SHA1}" \
   EFCMS_DOMAIN="${EFCMS_DOMAIN}" \

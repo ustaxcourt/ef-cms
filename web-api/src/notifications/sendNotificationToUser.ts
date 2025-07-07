@@ -14,10 +14,7 @@ export const sendNotificationToUser = async ({
 }) => {
   let connections = await applicationContext
     .getPersistenceGateway()
-    .getWebSocketConnectionsByUserId({
-      applicationContext,
-      userId,
-    });
+    .getWebSocketConnectionsByUserId(userId);
 
   if (clientConnectionId) {
     connections = connections.filter(connection => {

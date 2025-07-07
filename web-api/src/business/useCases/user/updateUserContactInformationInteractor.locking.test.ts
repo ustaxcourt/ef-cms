@@ -134,7 +134,7 @@ describe('updateUserContactInformationInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .setChangeOfAddressCaseAsDone.mockReturnValue({ remaining: 0 });
+      .setChangeOfAddressCaseAsDone.mockReturnValue([{ remaining: 0 }]);
   });
 
   describe('locked', () => {
