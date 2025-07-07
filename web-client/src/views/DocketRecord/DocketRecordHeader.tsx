@@ -132,7 +132,6 @@ export const NonMobileHeaderControls = ({
       >
         Filter by
       </label>
-      {/* @ts-ignore: BindedSelect expects children */}
       <BindedSelect
         aria-describedby="docket-record-filter-label"
         aria-label="docket record filter"
@@ -148,8 +147,10 @@ export const NonMobileHeaderControls = ({
           </option>
         ))}
       </BindedSelect>
-      <span className="text-semibold text-align-right">Count: </span>
-      <span>{docketRecordCount || 0}</span>
+      <div className="text-right margin-left-auto">
+        <span className="text-semibold">Count: </span>
+        {docketRecordCount}
+      </div>
     </>
   );
 };
