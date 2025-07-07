@@ -9,11 +9,11 @@ parameters:
     default: true
     type: boolean
 
-  run_build_and_deploy_with_context:
+  run_build_and_deploy_to_prod:
     default: true
     type: boolean
 
-  run_build_and_deploy_empty:
+  run_build_and_deploy_minimal:
     default: false
     type: boolean
 
@@ -22,6 +22,10 @@ parameters:
     type: boolean
 
   run_glue_to_dev:
+    default: false
+    type: boolean
+
+  run_s3_to_test:
     default: false
     type: boolean
 
@@ -121,7 +125,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: xlarge
     environment:
-      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_empty >>
+      DEPLOY_EMPTY_PERSISTENCE: << pipeline.parameters.run_build_and_deploy_minimal >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -659,7 +663,7 @@ jobs:
               --header "content-type: application/json" \
               --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
                 \"run_build_and_deploy\":false, \
-                \"run_build_and_deploy_empty\":true}}" | jq -r '.id')
+                \"run_build_and_deploy_minimal\":true}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda
@@ -717,9 +721,10 @@ jobs:
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
               --data "{\"branch\":\"prod\", \"parameters\":{ \
-                \"run_build_and_deploy_with_context\":false, \
+                \"run_build_and_deploy_to_prod\":false, \
                 \"run_glue_to_lower_env\":true, \
-                \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
+                \"lower_env\":\"${ENV}\", \
+                \"lower_env_account_id\":\"${LOWER_ENV_ACCOUNT_ID}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda
@@ -980,6 +985,7 @@ only-prod: &only-prod
         - prod
 
 only-test: &only-test
+  context: efcms-<< pipeline.git.branch >>
   filters:
     branches:
       only:
@@ -1071,8 +1077,8 @@ workflows:
           requires:
             - switch-colors
 
-  build-and-deploy-with-context:
-    when: << pipeline.parameters.run_build_and_deploy_with_context >>
+  build-and-deploy-to-prod:
+    when: << pipeline.parameters.run_build_and_deploy_to_prod >>
     jobs:
       - deploy:
           <<: *only-prod
@@ -1135,8 +1141,8 @@ workflows:
           requires:
             - backup-source-dynamo-table
 
-  build-and-deploy-empty:
-    when: << pipeline.parameters.run_build_and_deploy_empty >>
+  build-and-deploy-minimal:
+    when: << pipeline.parameters.run_build_and_deploy_minimal >>
     jobs:
       - deploy:
           <<: *only-deployed-lower-environments
@@ -1238,17 +1244,6 @@ workflows:
           requires:
             - wait-for-glued-data-to-index
 
-  s3-to-dev:
-    when: << pipeline.parameters.run_s3_to_dev >>
-    jobs:
-      - initiate-s3-sync:
-          <<: *only-dev
-      - wait-for-s3-sync-workflow:
-          <<: *only-dev
-          type: approval
-          requires:
-            - initiate-s3-sync
-
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
     jobs:
@@ -1268,6 +1263,28 @@ workflows:
           requires:
             - restore-postgres
             - wait-for-glue-job
+
+  s3-to-dev:
+    when: << pipeline.parameters.run_s3_to_dev >>
+    jobs:
+      - initiate-s3-sync:
+          <<: *only-dev
+      - wait-for-s3-sync-workflow:
+          <<: *only-dev
+          type: approval
+          requires:
+            - initiate-s3-sync
+
+  s3-to-test:
+    when: << pipeline.parameters.run_s3_to_test >>
+    jobs:
+      - initiate-s3-sync:
+          <<: *only-test
+      - wait-for-s3-sync-workflow:
+          <<: *only-test
+          type: approval
+          requires:
+            - initiate-s3-sync
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>

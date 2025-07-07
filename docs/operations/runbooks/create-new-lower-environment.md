@@ -386,6 +386,20 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
         --expression-attribute-names '{"#current":"current"}' \
         --expression-attribute-values '{":current":{"BOOL":true}}'
       ```
+1. If this lower environment is to have prod-like data:
+   1. Sync the `documents` bucket:
+      ```bash
+      export EFCMS_DOMAIN="${ENV}.ef-cms.ustaxcourt.gov"
+      export PROD_DOCUMENTS_BUCKET_NAME="<PROD DOCUMENTS BUCKET NAME>"
+      export DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENV}-us-east-1"
+      aws s3 sync "s3://${PROD_DOCUMENTS_BUCKET_NAME}" "s3://${DOCUMENTS_BUCKET_NAME}"
+      ```
+   1. Deploy the `remote_role`:
+      ```bash
+      cd shared/admin-tools/glue/remote_role
+      ./bin/deploy-remote-role.sh "${ENV}"
+      cd ../../../..
+      ```
 1. Create a configuration file for this environment:
    1. Copy the example configuration:
       ```bash
@@ -416,7 +430,9 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
    ```bash
    cd ./scripts/postgres && ./create-rds-users.sh && cd ../..
    ```
-1. In [CircleCI](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms), trigger a deployment in the new environment, with the following settings:
-   1. `run_build_and_deploy`: `false`
-   1. `run_build_and_deploy_empty`: `true`
-1. After the "empty" deployment completes, trigger another deployment, this time accepting the default settings. Note: outgoing email will fail until the account is promoted out of the SES sandbox.
+1. If this lower environment is to have prod-like data, kick off a glue job now:
+   1. In [CircleCI](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms), trigger a glue job, choosing the following settings:
+      1. `run_build_and_deploy`: `false`
+      1. `run_glue_to_[ENV]`: `true`
+1. If this lower environment is NOT to have prod-like data, kick off a deployment now:
+   1. In [CircleCI](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms), trigger a deployment in the new environment, accepting the default settings. Note: outgoing email will fail until the account is promoted out of the SES sandbox.
