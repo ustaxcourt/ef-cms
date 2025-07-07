@@ -118,10 +118,8 @@ export const DocketRecordMobileHeader = ({
 
 export const NonMobileHeaderControls = ({
   filterOptions,
-  docketRecordCount,
 }: {
   filterOptions: Record<string, string>;
-  docketRecordCount: number;
 }) => {
   return (
     <>
@@ -147,10 +145,6 @@ export const NonMobileHeaderControls = ({
           </option>
         ))}
       </BindedSelect>
-      <div className="text-right margin-left-auto">
-        <span className="text-semibold">Count: </span>
-        {docketRecordCount}
-      </div>
     </>
   );
 };
@@ -236,6 +230,10 @@ export const DocketRecordHeader = connect<
                       Download
                     </Button>
                   )}
+                  <span className="text-semibold text-align-right">
+                    Count:{' '}
+                  </span>
+                  <span>{docketRecordCount}</span>
                 </div>
               </div>
             </div>
