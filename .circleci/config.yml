@@ -719,7 +719,8 @@ jobs:
               --data "{\"branch\":\"prod\", \"parameters\":{ \
                 \"run_build_and_deploy_to_prod\":false, \
                 \"run_glue_to_lower_env\":true, \
-                \"lower_env\":\"${ENV}\"}}" | jq -r '.id')
+                \"lower_env\":\"${ENV}\", \
+                \"lower_env_account_id\":\"${LOWER_ENV_ACCOUNT_ID}\"}}" | jq -r '.id')
             echo "export CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}" >> $BASH_ENV
       - run:
           name: Deploy Wait for Workflow Cron Lambda

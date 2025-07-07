@@ -19,7 +19,7 @@ REGION=us-east-1
 export TF_VAR_remote_account_number=$PROD_ENV_ACCOUNT_ID
 
 rm -rf .terraform
-rm .terraform.lock.hcl
+rm -f .terraform.lock.hcl
 
 terraform init -backend=true \
  -backend-config=bucket="${BUCKET}" \
