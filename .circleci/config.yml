@@ -41,6 +41,10 @@ parameters:
     default: test
     type: string
 
+  lower_env_account_id:
+    default: ''
+    type: string
+
   run_sync_s3_to_lower_env:
     default: false
     type: boolean
@@ -786,6 +790,44 @@ jobs:
           command: |
             ./scripts/migration/toggle-streams.sh --on
 
+  index-cases:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Index Cases
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/index-cases.ts
+
+  index-docket-entries:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Index Docket Entries
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/index-docket-entries.ts
+
   cleanup-glue-job:
     docker:
       - image: *efcms-docker-image
@@ -804,13 +846,15 @@ jobs:
             CIRCLE_PROJECT_SLUG="${VCS}/${CIRCLE_PROJECT_USERNAME}/${CIRCLE_PROJECT_REPONAME}"
             echo "export CIRCLE_PROJECT_SLUG=${CIRCLE_PROJECT_SLUG}" >> $BASH_ENV
       - run:
-          name: Kick off a deployment
+          name: Kick off a minimal deployment
           command: |
             CIRCLE_PIPELINE_ID=$(curl --request POST \
               --url "https://circleci.com/api/v2/project/${CIRCLE_PROJECT_SLUG}/pipeline" \
               --header "Circle-Token: ${CIRCLE_MACHINE_USER_TOKEN}" \
               --header "content-type: application/json" \
-              --data "{\"branch\":\"${CIRCLE_BRANCH}\"}")
+              --data "{\"branch\":\"${CIRCLE_BRANCH}\", \"parameters\":{ \
+                \"run_build_and_deploy\":false, \
+                \"run_build_and_deploy_minimal\":true}}" | jq -r '.id')
 
   sync-s3-buckets-with-timeout:
     docker:
@@ -900,6 +944,7 @@ jobs:
     resource_class: medium+
     environment:
       LOWER_ENV: << pipeline.parameters.lower_env >>
+      LOWER_ENV_ACCOUNT_ID: << pipeline.parameters.lower_env_account_id >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -918,7 +963,9 @@ jobs:
       - run:
           name: Start Glue Job
           command: |
-            ./scripts/glue/start-glue-job.ts "efcms-${LOWER_ENV}-alpha"
+            ./scripts/glue/start-glue-job.ts \
+              --destination-table "efcms-${LOWER_ENV}-alpha" \
+              --lower-env-account-id "$LOWER_ENV_ACCOUNT_ID"
       - run:
           name: Enable Check Glue Job Run State Cron
           command: |
@@ -933,6 +980,7 @@ jobs:
     resource_class: medium+
     environment:
       LOWER_ENV: << pipeline.parameters.lower_env >>
+      LOWER_ENV_ACCOUNT_ID: << pipeline.parameters.lower_env_account_id >>
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -1204,21 +1252,8 @@ workflows:
   glue-to-dev:
     when: << pipeline.parameters.run_glue_to_dev >>
     jobs:
-      - delete-existing-data:
-          <<: *only-dev
-      - redeploy-environment:
-          <<: *only-dev
-          requires:
-            - delete-existing-data
-      - wait-for-deployment-workflow:
-          <<: *only-dev
-          type: approval
-          requires:
-            - redeploy-environment
       - initiate-glue-job:
           <<: *only-dev
-          requires:
-            - wait-for-deployment-workflow
       - wait-for-glue-workflow:
           <<: *only-dev
           type: approval
@@ -1234,11 +1269,23 @@ workflows:
           requires:
             - wait-for-glue-workflow
             - wait-for-s3-sync-workflow
+      - index-cases:
+          <<: *only-dev
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - index-docket-entries:
+          <<: *only-dev
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
       - wait-for-glued-data-to-index:
           <<: *only-dev
           type: approval
           requires:
             - index-glued-data
+            - index-cases
+            - index-docket-entries
       - cleanup-glue-job:
           <<: *only-dev
           requires:
