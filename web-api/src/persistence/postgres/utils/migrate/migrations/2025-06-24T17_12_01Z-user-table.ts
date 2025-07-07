@@ -48,9 +48,17 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('pending', 'boolean')
     .addPrimaryKeyConstraint('pk_user_on_case', ['userId', 'docketNumber'])
     .execute();
+
+  await db.schema
+    .createTable('dwUserConfirmationCode')
+    .addColumn('userId', 'varchar', col => col.primaryKey())
+    .addColumn('confirmationCode', 'varchar', col => col.notNull())
+    .addColumn('ttl', 'bigint', col => col.notNull())
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('dwUser').execute();
   await db.schema.dropTable('dwUserOnCase').execute();
+  await db.schema.dropTable('dwUserConfirmationCode').execute();
 }

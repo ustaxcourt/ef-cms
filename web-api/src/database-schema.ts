@@ -59,7 +59,14 @@ import {
   DW_USER_COLUMNS,
   UserTable,
 } from '@web-api/persistence/postgres/users/schema';
-import { DW_USER_ON_CASE_COLUMNS, UserOnCaseTable } from '@web-api/persistence/postgres/cases/userOnCase/schema';
+import {
+  DW_USER_ON_CASE_COLUMNS,
+  UserOnCaseTable,
+} from '@web-api/persistence/postgres/cases/userOnCase/schema';
+import {
+  DW_USER_CONFIRMATION_CODE_COLUMNS,
+  UserConfirmationCodeTable,
+} from '@web-api/persistence/postgres/users/confirmationCodes/schema';
 
 const DEFAULT = {};
 
@@ -73,12 +80,13 @@ interface DatabaseSchemaType {
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
-  dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
-  dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
+  dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwUser: DatabaseTableMetadata<UserTable>;
-  dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
+  dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
+  dwUserConfirmationCode: DatabaseTableMetadata<UserConfirmationCodeTable>;
   dwUserOnCase: DatabaseTableMetadata<UserOnCaseTable>;
+  dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -154,6 +162,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUser: {
     table: DEFAULT as UserTable,
     columns: DW_USER_COLUMNS,
+  },
+  dwUserConfirmationCode: {
+    table: DEFAULT as UserConfirmationCodeTable,
+    columns: DW_USER_CONFIRMATION_CODE_COLUMNS,
   },
   dwUserOnCase: {
     table: DEFAULT as UserOnCaseTable,

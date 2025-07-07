@@ -19,8 +19,6 @@ import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSession
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
-import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
-import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/getAccountConfirmationCode';
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
@@ -56,7 +54,6 @@ import { getWebSocketConnectionsByUserId } from '@web-api/persistence/postgres/c
 import { incrementCounter } from './persistence/dynamo/helpers/incrementCounter';
 import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
-import { refreshConfirmationCodeExpiration } from '@web-api/persistence/dynamo/users/refreshConfirmationCodeExpiration';
 import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
 import { saveDispatchNotification } from '@web-api/persistence/postgres/notifications/saveDispatchNotification';
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
@@ -148,8 +145,6 @@ const gatewayMethods = {
   deleteTrialSessionWorkingCopy,
   deleteUserConnection,
   fetchEventCodesCountForJudges,
-  generateAccountConfirmationCode,
-  getAccountConfirmationCode,
   getAllUsersByRole,
   getAllWebSocketConnections,
   getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
@@ -185,7 +180,6 @@ const gatewayMethods = {
   getWebSocketConnectionsByUserId,
   isEmailAvailable,
   isFileExists,
-  refreshConfirmationCodeExpiration,
   setChangeOfAddressCaseAsDone,
   uploadDocument,
   verifyPendingCaseForUser,
