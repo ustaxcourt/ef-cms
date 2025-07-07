@@ -14,7 +14,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteCounselFromCase = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { docketNumber, userId }: { docketNumber: string; userId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
@@ -45,12 +45,6 @@ export const deleteCounselFromCase = async (
   caseEntity = setupServiceIndicatorForUnrepresentedPetitioners(caseEntity);
 
   aggregatePartiesForService(caseEntity);
-
-  await applicationContext.getPersistenceGateway().deleteUserFromCase({
-    applicationContext,
-    docketNumber,
-    userId,
-  });
 
   await updateCaseAndAssociations({
     authorizedUser,

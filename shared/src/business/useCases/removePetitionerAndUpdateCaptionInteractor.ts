@@ -62,19 +62,12 @@ export const removePetitionerAndUpdateCaption = async (
   caseEntity = await applicationContext
     .getUseCaseHelpers()
     .removeCounselFromRemovedPetitioner({
-      applicationContext,
       authorizedUser,
       caseEntity,
       petitionerContactId,
     });
 
   caseEntity.removePetitioner(petitionerContactId);
-
-  await applicationContext.getPersistenceGateway().deleteUserFromCase({
-    applicationContext,
-    docketNumber,
-    userId: petitionerContactId,
-  });
 
   caseEntity.caseCaption = caseCaption;
 
