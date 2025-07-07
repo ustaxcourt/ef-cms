@@ -10,6 +10,7 @@ import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHe
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { documentsArray } from '@shared/business/entities/EntityConstants';
 
 export const EditDocketEntryMetaFormDocument = connect(
   {
@@ -34,6 +35,7 @@ export const EditDocketEntryMetaFormDocument = connect(
     validateDocumentSequence,
     validationErrors,
   }) {
+    console.log(form);
     return (
       <div className="blue-container">
         <FormGroup errorText={validationErrors.lodged}>
@@ -95,16 +97,11 @@ export const EditDocketEntryMetaFormDocument = connect(
             isClearable={true}
             name="eventCode"
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
-            value={
-              form.eventCode === 'NOTR'
-                ? [{ label: form.documentTitle, value: form.eventCode }]
-                : reactSelectValue({
-                    documentTypes:
-                      internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
-                    selectedEventCode: form.eventCode,
-                  })
-            }
-            isDisabled={form.eventCode === 'NOTR'}
+            value={reactSelectValue({
+              documentTypes: documentsArray,
+              selectedEventCode: form.eventCode,
+            })}
+            isDisabled={form.filedByRole === 'System'}
             onChange={inputValue => {
               const value = inputValue?.value || '';
               updateDocketEntryMetaDocumentFormValueSequence({
