@@ -14,7 +14,8 @@ import {
 import { indexOpenSearchDocketEntries } from 'web-api/elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 
 const scriptConfig: ScriptConfig = {
-  description: 'add-cases-to-opensearch - Reupsert cases',
+  description:
+    'index-docket-entries: a script to reindex docket entry data from Postgres to OpenSearch',
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',

@@ -14,7 +14,8 @@ import {
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 const scriptConfig: ScriptConfig = {
-  description: 'add-cases-to-opensearch - Reupsert cases',
+  description:
+    'index-docket-entries: a script to reindex case data from Postgres to OpenSearch',
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',
