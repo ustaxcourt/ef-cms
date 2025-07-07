@@ -28,6 +28,8 @@ import {
   updatePrivatePractitionerOnCase,
 } from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
 
+// TODO: 10495 - add logic to associate petitioenrs to cases
+
 // Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
 // In the future, it would be good to avoid doing so by leveraging SQL more effectively.
 export const updateCaseAndAssociations = async ({

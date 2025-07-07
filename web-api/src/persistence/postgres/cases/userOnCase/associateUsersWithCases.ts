@@ -1,7 +1,7 @@
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
 import { pgInsertInto } from '../../utils/operation/pgInsertInto';
 
-export const upsertUserOnCaseRecords = async (
+export const associateUsersWithCases = async (
   userOnCaseRecords: Array<{
     userId: string;
     docketNumber: string;

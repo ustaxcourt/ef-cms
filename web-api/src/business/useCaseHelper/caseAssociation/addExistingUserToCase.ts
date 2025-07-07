@@ -6,8 +6,7 @@ import {
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const addExistingUserToCase = async ({
@@ -43,6 +42,10 @@ export const addExistingUserToCase = async ({
     userId: user.userId,
   });
 
+  if (!userToAdd) {
+    throw new NotFoundError(`Could not find user ${user.userId}`);
+  }
+
   const contact = caseEntity.getPetitionerById(contactId);
 
   caseEntity.privatePractitioners?.forEach(practitioner => {
@@ -65,16 +68,6 @@ export const addExistingUserToCase = async ({
   } else {
     throw new Error(`no contact found with that user name of ${name}`);
   }
-
-  const rawCase = caseEntity.toRawObject();
-  const userCaseEntity = new UserCase(rawCase);
-
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
-    applicationContext,
-    docketNumber: rawCase.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId: userToAdd.userId,
-  });
 
   return userToAdd.userId;
 };

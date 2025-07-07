@@ -3,7 +3,6 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UserCase } from '@shared/business/entities/UserCase';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
@@ -38,15 +37,6 @@ export const associateIrsPractitionerToCase = async ({
   if (isAssociated) {
     return caseEntity.toRawObject();
   }
-
-  const userCaseEntity = new UserCase(caseToUpdate);
-
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
-    applicationContext,
-    docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId: user.userId,
-  });
 
   caseEntity.attachIrsPractitioner(
     new IrsPractitioner({ ...user, serviceIndicator }),

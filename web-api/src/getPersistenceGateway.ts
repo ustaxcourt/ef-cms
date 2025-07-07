@@ -1,6 +1,5 @@
 import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
-import { associateUserWithCase } from './persistence/dynamo/cases/associateUserWithCase';
 import { associateUserWithCasePending } from './persistence/dynamo/cases/associateUserWithCasePending';
 import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
@@ -125,7 +124,6 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
 const gatewayMethods = {
   ...isValidatedDecorator({
     addCaseToHearing,
-    associateUserWithCase,
     associateUserWithCasePending,
     bulkDeleteRecords,
     bulkIndexRecords,

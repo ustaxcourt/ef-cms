@@ -266,7 +266,6 @@ export const updatePetitionerInformation = async (
       caseEntity = await applicationContext
         .getUseCaseHelpers()
         .createUserForContact({
-          applicationContext,
           authorizedUser,
           caseEntity,
           contactId: updatedPetitionerData.contactId,

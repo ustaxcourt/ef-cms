@@ -4,22 +4,18 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
-import { UserCase } from '../../../../../shared/src/business/entities/UserCase';
 import { createNewPetitionerUser } from '@web-api/persistence/postgres/users/createNewPetitionerUser';
 
 export const createUserForContact = async ({
-  applicationContext,
   authorizedUser,
   caseEntity,
   contactId,
   email,
   name,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: UnknownAuthUser;
   caseEntity: Case;
   contactId: string;
@@ -45,16 +41,6 @@ export const createUserForContact = async ({
 
   await createNewPetitionerUser({
     user: userRaw,
-  });
-
-  const rawCase = caseEntity.toRawObject();
-  const userCaseEntity = new UserCase(rawCase);
-
-  await applicationContext.getPersistenceGateway().associateUserWithCase({
-    applicationContext,
-    docketNumber: rawCase.docketNumber,
-    userCase: userCaseEntity.validate().toRawObject(),
-    userId: userRaw.userId,
   });
 
   return caseEntity;

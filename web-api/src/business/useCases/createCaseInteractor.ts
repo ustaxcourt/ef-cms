@@ -17,13 +17,11 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { UserCase } from '@shared/business/entities/UserCase';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
@@ -331,21 +329,9 @@ export const createCaseInteractor = async (
     await removeLockFunction();
   }
 
-  const userCaseEntity = new UserCase(caseToAdd);
-
-  const caseAssociationUpdates = [
-    upsertWorkItems({
-      workItems: [workItem.validate().toRawObject()],
-    }),
-    applicationContext.getPersistenceGateway().associateUserWithCase({
-      applicationContext,
-      docketNumber: caseToAdd.docketNumber,
-      userCase: userCaseEntity.validate().toRawObject(),
-      userId: user.userId,
-    }),
-  ];
-
-  await settlePromises(caseAssociationUpdates);
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,
