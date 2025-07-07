@@ -88,7 +88,7 @@
     "parse-full-name": "1.2.6",
     "pdf-lib": "1.17.1",
     "pdfjs-dist": "5.0.375",
-    "pg": "8.16.3",
+    "pg": "8.16.2",
     "process": "0.11.10",
     "promise-retry": "2.0.1",
     "pug": "3.0.3",
