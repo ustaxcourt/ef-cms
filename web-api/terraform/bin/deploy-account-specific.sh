@@ -22,7 +22,7 @@ KEY="permissions-${ENV}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 
 rm -rf .terraform
-rm .terraform.lock.hcl
+rm -f .terraform.lock.hcl
 
 echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]"
 sh ../../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
