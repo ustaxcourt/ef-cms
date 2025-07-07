@@ -1,6 +1,6 @@
 export const replaceBracketed = (
-  template: string,
-  ...values: string[]
+  template: string = '',
+  ...values: (string | undefined)[]
 ): string => {
   const bracketsMatcher = /\[.*?\]/;
   while (bracketsMatcher.test(template)) {
