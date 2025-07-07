@@ -91,7 +91,7 @@ function DocketClerkFilterMarkup({
     return (
       <>
         <div
-          className={`action-section grid-row margin-bottom-1${isMobile ? '' : ' inline-block'}`}
+          className={`action-section grid-row ${isMobile ? '' : ' inline-block margin-bottom-1'}`}
         >
           <label
             className={`dropdown-label-serif padding-top-05 mobile:grid-col-12 ${isMobile ? 'margin-bottom-1' : ''}`}
@@ -150,7 +150,7 @@ function DocketClerkFilterMarkup({
           )}
           {showSendToBar && (
             <span
-              className="assign-work-item-count-docket"
+              className={`assign-work-item-count-docket ${isMobile && 'assign-work-item-count-docket-mobile'}`}
               data-testid="assign-work-item-count-docket"
             >
               <Icon aria-label="selected work items count" icon="check" />
@@ -166,6 +166,7 @@ function DocketClerkFilterMarkup({
       </>
     );
   }
+
   return (
     <>
       <Mobile>{Markup(true)}</Mobile>
