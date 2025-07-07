@@ -109,7 +109,7 @@ export const DocketRecordMobileHeader = ({
         </Button>
         <div className="padding-top-1 margin-top-auto margin-bottom-auto margin-left-auto">
           <span className="text-semibold">Count: </span>
-          <span>{totalCount}</span>
+          <span> {totalCount}</span>
         </div>
       </div>
     </div>
@@ -118,8 +118,10 @@ export const DocketRecordMobileHeader = ({
 
 export const NonMobileHeaderControls = ({
   filterOptions,
+  docketRecordCount,
 }: {
   filterOptions: Record<string, string>;
+  docketRecordCount: number;
 }) => {
   return (
     <>
@@ -130,6 +132,7 @@ export const NonMobileHeaderControls = ({
       >
         Filter by
       </label>
+      {/* @ts-ignore: BindedSelect expects children */}
       <BindedSelect
         aria-describedby="docket-record-filter-label"
         aria-label="docket record filter"
@@ -145,6 +148,8 @@ export const NonMobileHeaderControls = ({
           </option>
         ))}
       </BindedSelect>
+      <span className="text-semibold text-align-right">Count: </span>
+      <span>{docketRecordCount || 0}</span>
     </>
   );
 };
@@ -159,6 +164,7 @@ type DocketRecordHeaderProps = {
 const DocketRecordHeaderDeps = {
   DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
   docketRecordHelper: state.docketRecordHelper,
+  docketRecordCount: state.docketRecordHelper.docketRecordCount,
   formattedCaseDetail: state.formattedCaseDetail,
   formattedDocketEntriesHelper: state.formattedDocketEntries,
   gotoPrintableDocketRecordSequence:
@@ -178,6 +184,7 @@ export const DocketRecordHeader = connect<
   function DocketRecordHeader({
     DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper,
+    docketRecordCount,
     docketRecordTableSortData,
     formattedCaseDetail,
     formattedDocketEntriesHelper,
@@ -195,6 +202,7 @@ export const DocketRecordHeader = connect<
                 <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
                   <NonMobileHeaderControls
                     filterOptions={DOCKET_RECORD_FILTER_OPTIONS}
+                    docketRecordCount={docketRecordCount}
                   />
                 </div>
                 <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
@@ -241,6 +249,7 @@ export const DocketRecordHeader = connect<
                 gotoPrintableDocketRecordSequence
               }
               sortTableSequence={sortTableSequence}
+              totalCount={docketRecordCount}
             />
           </Phone>
         </div>
