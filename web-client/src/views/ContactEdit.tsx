@@ -4,12 +4,12 @@ import { Country } from './StartCase/Country';
 import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { Hint } from '../ustc-ui/Hint/Hint';
 import { InternationalAddress } from './StartCase/InternationalAddress';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { InfoNotificationComponent } from './InfoNotification';
 
 export const ContactEdit = connect(
   {
@@ -56,9 +56,13 @@ export const ContactEdit = connect(
             information is accurate before submitting.
           </p>
 
-          <Hint wider>
-            To change the case caption, please file a Motion to Change Caption
-          </Hint>
+          <InfoNotificationComponent
+            alertInfo={{
+              message: `To change the case caption, please file a Motion to Change Caption`,
+            }}
+            dismissible={false}
+            scrollToTop={false}
+          />
 
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">
