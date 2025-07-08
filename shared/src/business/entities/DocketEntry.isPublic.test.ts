@@ -4,6 +4,7 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
   POLICY_DATE_IMPACTED_EVENTCODES,
+  Role,
   ROLES,
 } from './EntityConstants';
 import { DocketEntry } from './DocketEntry';
@@ -131,7 +132,7 @@ describe('DocketEntry isPublic', () => {
           ![...amendmentEventCodes, 'SDEC', 'AMBR'].includes(eventCode),
       );
 
-      const practitionerRoles = [
+      const practitionerRoles: Role[] = [
         ROLES.privatePractitioner,
         ROLES.irsPractitioner,
       ];
