@@ -4,12 +4,6 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
 import { environment } from '@web-api/environment';
 import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-// import {
-//   DocketEntryWorksheet,
-//   RawDocketEntryWorksheet,
-// } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
-// import { writeFileSync } from 'fs';
-// import { upsertDocketEntryWorksheets } from '@web-api/persistence/postgres/docketEntryWorksheets/upsertDocketEntryWorksheets';
 import {
   parseArgsAndEnvVars,
   ScriptConfig,
@@ -33,7 +27,9 @@ const scriptConfig: ScriptConfig = {
 };
 parseArgsAndEnvVars(scriptConfig);
 
-const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
+const dynamoDbClient = new DynamoDBClient({
+  region: 'us-east-1',
+});
 const documentClient = DynamoDBDocument.from(dynamoDbClient, {
   marshallOptions: { removeUndefinedValues: true },
 });
@@ -49,9 +45,6 @@ async function main() {
         TotalSegments: totalSegments,
       }),
     ),
-  );
-  console.log(
-    'Finished table scan. Writing docket entry worksheets to allDocketEntryWorksheets.json',
   );
 }
 
@@ -98,7 +91,7 @@ export const upsertUsers = async (
         .insertInto('dwUser')
         .values(dbUsers)
         .onConflict(oc =>
-          oc.columns(['userId']).doUpdateSet(() => {
+          oc.columns(['userId']).doUpdateSet(c => {
             return Object.fromEntries(
               getColumnsForTable('dwUser')
                 .filter(x => !['userId'].includes(x))
@@ -175,9 +168,6 @@ async function scanContinuously(params: ScanCommandInput) {
         userOnCasePendingRecords.push(record);
       }
     }
-
-    // This is a chance that a user is associated to a case but does not have a user record
-    // is this an issues though?
 
     await associateUsersWithCases([
       ...irsPractitionerCaseAssociations,
