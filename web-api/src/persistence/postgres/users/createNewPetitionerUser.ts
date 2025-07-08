@@ -3,33 +3,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { applicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getUserGateway } from '@web-api/getUserGateway';
-import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
-import { toKyselyNewUser } from './mapper';
-
-// export const createUserRecords = async ({
-//   applicationContext,
-//   newUser,
-//   userId,
-// }: {
-//   applicationContext: IApplicationContext;
-//   newUser: RawUser;
-//   userId: string;
-// }) => {
-//   await client.put({
-//     Item: {
-//       ...newUser,
-//       pk: `user|${userId}`,
-//       sk: `user|${userId}`,
-//       userId,
-//     },
-//     applicationContext,
-//   });
-
-//   return {
-//     ...newUser,
-//     userId,
-//   };
-// };
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const createNewPetitionerUser = async ({
   user,
@@ -44,19 +18,7 @@ export const createNewPetitionerUser = async ({
     userId: user.userId,
   });
 
-  console.log('we are here');
-  const postgresCreatePromise = pgInsertInto({
-    table: 'dwUser',
-    values: [toKyselyNewUser(user)],
-  });
-
-  throw new Error('gg');
-
-  // const createUserRecordsPromise = createUserRecords({
-  //   applicationContext,
-  //   newUser: user,
-  //   userId: user.userId,
-  // });
+  const postgresCreatePromise = upsertUsers([user]);
 
   await settlePromises([createUserPromise, postgresCreatePromise]);
 };

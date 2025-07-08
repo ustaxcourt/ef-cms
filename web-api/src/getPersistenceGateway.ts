@@ -4,7 +4,6 @@ import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
-import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
 import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
@@ -112,7 +111,6 @@ const gatewayMethods = {
     bulkDeleteRecords,
     bulkIndexRecords,
     createJobStatus,
-    createNewPetitionerUser,
     createPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
