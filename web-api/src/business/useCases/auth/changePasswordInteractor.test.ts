@@ -12,13 +12,13 @@ import {
   Role,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import {
   changePasswordInteractor,
   updateUserPendingEmailRecord,
 } from './changePasswordInteractor';
 import jwt from 'jsonwebtoken';
+import { RawUser } from '@shared/business/entities/User';
 
 describe('changePasswordInteractor', () => {
   const mockUserId = '8c2af03d-d736-4561-afe3-c78b67b7cc59';
@@ -40,7 +40,7 @@ describe('changePasswordInteractor', () => {
   describe('when the user is attempting to log in with a temporary password', () => {
     let mockInitiateAuthResponse;
     let mockRespondToAuthChallengeResponse: RespondToAuthChallengeResponse;
-    let mockUserWithPendingEmail: UserRecord;
+    let mockUserWithPendingEmail: RawUser;
 
     beforeEach(() => {
       mockInitiateAuthResponse = {
@@ -60,9 +60,7 @@ describe('changePasswordInteractor', () => {
         entityName: 'User',
         name: 'Test Petitioner',
         pendingEmail: mockEmail,
-        pk: `user|${mockUserId}`,
         role: ROLES.petitioner,
-        sk: `user|${mockUserId}`,
         userId: mockUserId,
       };
 
@@ -144,9 +142,7 @@ describe('changePasswordInteractor', () => {
         mockUserWithPendingEmail = {
           ...MOCK_PRACTITIONER,
           pendingEmail: mockEmail,
-          pk: `user|${mockUserId}`,
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          sk: `user|${mockUserId}`,
           userId: mockUserId, // Explicitly set to paper to verify it changes to electronic once pending email is confirmed
         };
 

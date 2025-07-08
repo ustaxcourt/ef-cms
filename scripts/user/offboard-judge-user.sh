@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# ⚠️ WARNING ⚠️
+# THIS SCRIPT IS BROKEN AFTER THE POSTGRES REFACTORING.  YOU WILL NEED TO UPDATE IT IF YOU PLAN TO RUN IT
+# ⚠️ WARNING ⚠️
+
 # Updates the offboarded judge user in the dynamo table based on their userId passed in
 
 # Usage

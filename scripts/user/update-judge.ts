@@ -1,13 +1,11 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
-import * as client from '../../web-api/src/persistence/dynamodbClientService';
 import { JudgeTitle } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
 import { RawUser, User } from '@shared/business/entities/User';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { createApplicationContext } from '@web-api/applicationContext';
 import {
   emailIsInExpectedFormat,
@@ -19,17 +17,15 @@ import {
   promptUser,
 } from 'scripts/user/add-or-update-judge-helpers';
 import { environment } from '@web-api/environment';
-import {
-  getDestinationTableInfo,
-  getUserPoolId,
-} from '../../shared/admin-tools/util';
+import { getUserPoolId } from '../../shared/admin-tools/util';
 import { isEmpty } from 'lodash';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateUser as updateUserFromPersistence } from '@web-api/persistence/postgres/users/updateUser';
 import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
-import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 /**
  * This script will update the judge user in a deployed environment.
- * It updates both the Cognito record (if necessary) and the associated Dynamo record.
+ * It updates both the Cognito record (if necessary) and the associated Postgres record.
  * Required parameters: the current email of the judge to update
  * Optional parameters (although at least one required): --judgeTitle, --email, --phone, --isSeniorJudge
  * There is some initial logic for updating --name, but testing has revealed more that needs done so it is not yet supported.
@@ -46,7 +42,6 @@ const scriptConfig: ScriptConfig = {
   description:
     'update-judge - Updates an existing Judge user in a deployed environment.',
   environment: {
-    dynamoDbTableName: 'DYNAMODB_TABLE_NAME',
     env: 'ENV',
     userPoolId: 'USER_POOL_ID',
   },
@@ -128,103 +123,80 @@ const updateCognitoRecord = async ({
   }
 };
 
-const updateDynamoRecords = async ({
-  applicationContext,
+const updatePostgresRecords = async ({
   updates,
   userId,
 }: {
   updates: Record<string, string>;
   userId: string;
-  applicationContext: any;
 }) => {
-  console.log('Getting existing Dynamo record ...');
-  const dynamoUser: UserRecord = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId });
+  console.log('Getting existing Postgres record ...');
+  const postgresUser = await getUserById({ userId });
+  if (!postgresUser) {
+    throw new Error(`Could not find user with id ${userId}`);
+  }
 
   // If the name is updated, then we will need to update the chambers section
-  const oldChambersSection = dynamoUser.section;
+  const oldChambersSection = postgresUser.section;
   const updatedChambersSection =
-    updates.name && updates.name != dynamoUser.name // No need to update if same name
+    updates.name && updates.name != postgresUser.name // No need to update if same name
       ? getChambersNameFromJudgeName(updates.name)
       : '';
 
-  await updateDynamoJudgeUserRecord({
+  await updatePostgresJudgeUserRecord({
     chambersSection: updatedChambersSection || oldChambersSection!,
-    dynamoUser,
+    postgresUser,
     updates,
   });
 
   if (updatedChambersSection) {
-    await updateDynamoChambersRecords({
-      applicationContext,
+    await updatePostgresChambersRecords({
       oldChambersSection,
       updatedChambersSection,
-      userId,
     });
   }
-  return dynamoUser;
+  return postgresUser;
 };
 
-const updateDynamoJudgeUserRecord = async ({
+const updatePostgresJudgeUserRecord = async ({
   chambersSection,
-  dynamoUser,
+  postgresUser,
   updates,
 }: {
   updates: Record<string, string>;
-  dynamoUser: UserRecord;
+  postgresUser: RawUser;
   chambersSection: string;
 }) => {
-  console.log('Updating the judge user Dynamo record ...');
-  dynamoUser.email = updates.email || dynamoUser.email;
-  dynamoUser.name = updates.name || dynamoUser.name;
-  dynamoUser.judgePhoneNumber = updates.phone
+  console.log('Updating the judge user Postgres record ...');
+  postgresUser.email = updates.email || postgresUser.email;
+  postgresUser.name = updates.name || postgresUser.name;
+  postgresUser.judgePhoneNumber = updates.phone
     ? updates.phone
-    : dynamoUser.judgePhoneNumber;
-  dynamoUser.isSeniorJudge =
+    : postgresUser.judgePhoneNumber;
+  postgresUser.isSeniorJudge =
     updates.isSeniorJudge != ''
       ? updates.isSeniorJudge.toLowerCase() === 'true'
-      : dynamoUser.isSeniorJudge;
-  dynamoUser.judgeFullName = updates.judgeFullName || dynamoUser.judgeFullName;
-  dynamoUser.section = chambersSection;
-  dynamoUser.judgeTitle =
-    (updates.judgeTitle as JudgeTitle) || dynamoUser.judgeTitle;
+      : postgresUser.isSeniorJudge;
+  postgresUser.judgeFullName =
+    updates.judgeFullName || postgresUser.judgeFullName;
+  postgresUser.section = chambersSection;
+  postgresUser.judgeTitle =
+    (updates.judgeTitle as JudgeTitle) || postgresUser.judgeTitle;
 
-  const rawUser = new User(dynamoUser).validate().toRawObject();
+  const rawUser = new User(postgresUser).validate().toRawObject();
 
-  console.log('Updating the Dynamo record ...');
-  await upsertUsers([rawUser]);
+  console.log('Updating the Postgres record ...');
+  await updateUserFromPersistence({ userToUpdate: rawUser });
 };
 
-const createUserChambersSectionRecord = async ({
-  applicationContext,
-  chambersSection,
-  userId,
-}) => {
-  await client.put({
-    Item: {
-      pk: `section|${chambersSection}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-};
-
-const updateDynamoChambersRecords = async ({
-  applicationContext,
+const updatePostgresChambersRecords = async ({
   oldChambersSection,
   updatedChambersSection,
-  userId,
 }) => {
   console.log('Chambers section needs to be updated.');
   console.log(`Adding a record for ${updatedChambersSection}`);
   // If there is no old chambers section, we only need to add the section record
   if (!oldChambersSection) {
-    await createUserChambersSectionRecord({
-      applicationContext,
-      chambersSection: updatedChambersSection,
-      userId,
-    });
     return;
   }
 
@@ -232,7 +204,7 @@ const updateDynamoChambersRecords = async ({
   console.log(
     `Updating members of ${oldChambersSection} to be members of ${updatedChambersSection} ...`,
   );
-  const chambersUsers: RawUser[] = await getUsersInSections({
+  const chambersUsers: User[] = await getUsersInSections({
     sections: [oldChambersSection],
   });
 
@@ -242,18 +214,8 @@ const updateDynamoChambersRecords = async ({
     const rawChambersUser = new User(chambersUser).validate().toRawObject();
 
     // Update the user record, create the section record, and remove the old section record
-    await upsertUsers([rawChambersUser]);
-    await createUserChambersSectionRecord({
-      applicationContext,
-      chambersSection: updatedChambersSection,
-      userId: chambersUser.userId,
-    });
-    await client.remove({
-      applicationContext,
-      key: {
-        pk: `section|${oldChambersSection}`,
-        sk: `user|${chambersUser.userId}`,
-      },
+    await updateUserFromPersistence({
+      userToUpdate: rawChambersUser,
     });
   }
 };
@@ -292,8 +254,6 @@ const updateDynamoChambersRecords = async ({
 
   const userPoolId = await getUserPoolId();
   environment.userPoolId = userPoolId;
-  const { tableName } = await getDestinationTableInfo();
-  environment.dynamoDbTableName = tableName;
 
   console.log('Getting the Cognito record for the user ...');
   const existingCognitoRecord = await applicationContext
@@ -347,14 +307,13 @@ const updateDynamoChambersRecords = async ({
     userPoolId,
   });
 
-  const updatedDynamoUser = await updateDynamoRecords({
-    applicationContext,
+  const updatedPostgresUser = await updatePostgresRecords({
     updates,
     userId,
   });
 
   console.log(
-    `\n\nSuccess! Updated Judge ${updatedDynamoUser.judgeFullName}. Current email = ${updatedDynamoUser.email}.`,
+    `\n\nSuccess! Updated Judge ${updatedPostgresUser.judgeFullName}. Current email = ${updatedPostgresUser.email}.`,
   );
   console.log(
     'If you need to update this judge further (including an update to undo this update), run update-judge.ts using this email.\n\n',

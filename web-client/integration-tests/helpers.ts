@@ -157,16 +157,6 @@ export const getConnection = async connectionId => {
   );
 };
 
-export const getUserRecordById = (userId: string) => {
-  return client.get({
-    Key: {
-      pk: `user|${userId}`,
-      sk: `user|${userId}`,
-    },
-    applicationContext,
-  });
-};
-
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
@@ -196,23 +186,6 @@ export const setChiefJudgeNameFlagValue = newJudgeName => {
       pk: 'chief-judge-name',
       sk: 'chief-judge-name',
     },
-    applicationContext,
-  });
-};
-
-export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
-  return client.update({
-    ExpressionAttributeNames: {
-      '#judgeTitle': 'judgeTitle',
-    },
-    ExpressionAttributeValues: {
-      ':judgeTitle': newJudgeTitle,
-    },
-    Key: {
-      pk: `user|${judgeUserId}`,
-      sk: `user|${judgeUserId}`,
-    },
-    UpdateExpression: 'SET #judgeTitle = :judgeTitle',
     applicationContext,
   });
 };

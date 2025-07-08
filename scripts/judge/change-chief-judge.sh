@@ -1,5 +1,9 @@
 #!/bin/bash -e
 
+# ⚠️ WARNING ⚠️
+# THIS SCRIPT IS BROKEN AFTER THE POSTGRES REFACTORING.  YOU WILL NEED TO UPDATE IT IF YOU PLAN TO RUN IT
+# ⚠️ WARNING ⚠️
+
 # Run this script to change an old chief judge to a judge, and promote a new judge to a chief judge
 
 # example usage:
