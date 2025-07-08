@@ -862,11 +862,8 @@ textarea#case-caption {
   color: $color-blue;
 }
 
-.action-section {
-  padding-top: 6px;
-  padding-bottom: 10px;
 
-  .assign-work-item-count {
+.assign-work-item-count {
     top: 50%;
     width: 70px;
     padding: 8px;
@@ -874,6 +871,17 @@ textarea#case-caption {
     margin-right: 20px;
     background-color: color($theme-color-primary-dark);
     float: left;
+}
+
+.action-section {
+  padding-top: 6px;
+  padding-bottom: 10px;
+
+  .assign-work-item-count-mobile {
+    top: 50%;
+    width: 70px;
+    padding: 8px;
+    background-color: color($theme-color-primary-dark);
   }
 
   .assign-work-item-count-docket {

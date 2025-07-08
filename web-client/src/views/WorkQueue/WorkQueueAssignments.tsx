@@ -190,38 +190,60 @@ function AssignToBarMarkup({
   users,
   formattedWorkQueueLength,
 }: AssignToBarMarkupParams) {
-  return (
-    <>
-      <div className="action-section grid-row inline-block margin-bottom-1">
-        <span className="assign-work-item-count">
+  function Markup(isMobile: boolean) {
+    function StatusBadge() {
+      return (
+        <span className={`assign-work-item-count`}>
           <Icon aria-label="selected work items count" icon="check" />
           {selectedWorkItemsLength}
         </span>
-        <select
-          aria-label="select an assignee"
-          className="usa-select"
-          data-testid="dropdown-select-assignee"
-          id="options"
-          name="options"
-          onChange={evt => {
-            selectAssigneeSequence({
-              assigneeId: evt.target.value,
-              assigneeName: evt.target.options[evt.target.selectedIndex].text,
-            });
-            assignSelectedWorkItemsSequence();
-          }}
+      );
+    }
+
+    return (
+      <>
+        <div
+          className={`grid-row ${isMobile ? '' : 'action-section inline-block margin-bottom-1'}`}
         >
-          <option value="">Assign to...</option>
-          {users.map(user => (
-            <option key={user.userId} value={user.userId}>
-              {user.name}
-            </option>
-          ))}
-        </select>
-      </div>
-      <div className="push-right margin-top-4">
-        <b className="text-semibold">Count:</b> {formattedWorkQueueLength}
-      </div>
+          {!isMobile && StatusBadge()}
+          <select
+            aria-label="select an assignee"
+            className={`usa-select ${isMobile ? 'grid-col-12' : ''}`}
+            data-testid="dropdown-select-assignee"
+            id="options"
+            name="options"
+            onChange={evt => {
+              selectAssigneeSequence({
+                assigneeId: evt.target.value,
+                assigneeName: evt.target.options[evt.target.selectedIndex].text,
+              });
+              assignSelectedWorkItemsSequence();
+            }}
+          >
+            <option value="">Assign to...</option>
+            {users.map(user => (
+              <option key={user.userId} value={user.userId}>
+                {user.name}
+              </option>
+            ))}
+          </select>
+          {isMobile && (
+            <div className={`grid-col-12 margin-top-3`}>{StatusBadge()}</div>
+          )}
+        </div>
+        <div
+          className={`push-right ${isMobile ? 'margin-top-3 margin-bottom-3 text-right' : 'margin-top-4'}`}
+        >
+          <b className="text-semibold">Count:</b> {formattedWorkQueueLength}
+        </div>
+      </>
+    );
+  }
+
+  return (
+    <>
+      <NonMobile>{Markup(false)}</NonMobile>
+      <Mobile>{Markup(true)}</Mobile>
     </>
   );
 }
