@@ -6,9 +6,7 @@ import {
   validatePdfHeader,
   validatePermissions,
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
-import {
-  getPdfJs,
-} from '@shared/business/utilities/pdfs/getPdfJs';
+import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
 
 export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
   'We noticed you are on an older or unsupported browser. For security reasons, this request could not be completed. \
@@ -36,6 +34,9 @@ export const validatePdf = ({
       const { result } = fileReader;
 
       if (!result || typeof result === 'string') {
+        console.error(
+          `FileReader result is invalid for file: ${file.name}. Result: ${result}`,
+        );
         resolve({
           errorInformation: {
             errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,

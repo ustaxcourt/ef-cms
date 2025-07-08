@@ -21,7 +21,9 @@ type PDFJSModule = typeof import('pdfjs-dist/legacy/build/pdf.mjs');
 export async function getPdfJs(): Promise<PDFJSModule> {
   try {
     const pdfJs = await import('pdfjs-dist/legacy/build/pdf.mjs');
+
     pdfJs.GlobalWorkerOptions.workerSrc = './pdf.worker.mjs';
+
     return pdfJs;
   } catch (error) {
     if (!clientSupportsES2022()) { // If we end up here the browser cannot even import pdfjs-dist
