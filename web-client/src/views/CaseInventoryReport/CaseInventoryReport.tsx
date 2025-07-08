@@ -110,22 +110,28 @@ export const CaseInventoryReport = connect(
 
           {caseInventoryReportHelper.showResultsTable && (
             <>
-              <div ref={paginatorTop}>
-                {caseInventoryReportHelper.pageCount > 1 && (
-                  <Paginator
-                    currentPageIndex={activePage}
-                    totalPages={caseInventoryReportHelper.pageCount}
-                    onPageChange={async pageChange => {
-                      setActivePage(pageChange);
-                      await getCaseInventoryReportSequence({
-                        key: null,
-                        selectedPage: pageChange,
-                        value: null,
-                      });
-                      focusPaginatorTop(paginatorTop);
-                    }}
-                  />
-                )}
+              <div ref={paginatorTop} className="grid-row">
+                <div className="grid-col-11">
+                  {caseInventoryReportHelper.pageCount > 1 && (
+                    <Paginator
+                      currentPageIndex={activePage}
+                      totalPages={caseInventoryReportHelper.pageCount}
+                      onPageChange={async pageChange => {
+                        setActivePage(pageChange);
+                        await getCaseInventoryReportSequence({
+                          key: null,
+                          selectedPage: pageChange,
+                          value: null,
+                        });
+                        focusPaginatorTop(paginatorTop);
+                      }}
+                    />
+                  )}
+                </div>
+                <div className="grid-col-1 text-right margin-top-3 padding-0">
+                  <span className="text-semibold">Count: </span>
+                  {foundCasesTotalCount}
+                </div>
               </div>
 
               <div className="grid-row grid-gap margin-top-1"></div>
