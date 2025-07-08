@@ -19,24 +19,24 @@ export const CaseDeadlines = connect(
     caseDeadlineReportHelper: state.caseDeadlineReportHelper,
     filterCaseDeadlinesByJudgeSequence:
       sequences.filterCaseDeadlinesByJudgeSequence,
-    judgeFilter: state.screenMetadata.caseDeadlinesFilter.judge,
-    screenMetadata: state.screenMetadata,
     selectDateRangeFromCalendarSequence:
       sequences.selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence:
       sequences.updateDateRangeForDeadlinesSequence,
     updateCaseDeadlineReportPageSequence:
       sequences.updateCaseDeadlineReportPageSequence,
+    updateScreenMetadataSequence:
+      sequences.updateScreenMetadataSequence,
     validationErrors: state.validationErrors,
   },
   function CaseDeadlines({
     caseDeadlineReport,
     caseDeadlineReportHelper,
     filterCaseDeadlinesByJudgeSequence,
-    screenMetadata,
     selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence,
     updateCaseDeadlineReportPageSequence,
+    updateScreenMetadataSequence,
     validationErrors,
   }) {
     const paginatorTop = useRef(null);
@@ -51,146 +51,71 @@ export const CaseDeadlines = connect(
           <div className="title">
             <h1>Deadlines</h1>
           </div>
+          <h2>{caseDeadlineReportHelper.formattedFilterStartDateHeader} - {caseDeadlineReportHelper.formattedFilterEndDateHeader}</h2>
           <div className="grid-row grid-gap">
-            <div className="grid-col-3">
-              <div className="header-with-blue-background">
-                <h3>Show Deadlines by Date(s)</h3>
-              </div>
-              <div className="blue-container">
-                <DateRangePickerComponent
-                  endDateErrorText={validationErrors.endDate}
-                  endName="deadlineEnd"
-                  endValue={screenMetadata.filterEndDateState}
-                  startDateErrorText={validationErrors.startDate}
-                  startName="deadlineStart"
-                  startValue={screenMetadata.filterStartDateState}
-                  onChangeEnd={e => {
-                    selectDateRangeFromCalendarSequence({
-                      endDate: e.target.value,
-                    });
-                  }}
-                  onChangeStart={e => {
-                    selectDateRangeFromCalendarSequence({
-                      startDate: e.target.value,
-                    });
-                  }}
-                />
-                <Button
-                  data-testid="submit-case-deadlines-report-button"
-                  onClick={() => {
-                    updateDateRangeForDeadlinesSequence();
-                    setActivePage(0);
-                  }}
-                >
-                  Show Deadlines
-                </Button>
-              </div>
+            <DateRangePickerComponent
+              endDateErrorText={validationErrors.endDate}
+              endName="deadlineEnd"
+              endValue={caseDeadlineReportHelper.filterEndDate}
+              rangePickerCls={'display-flex flex-wrap gap-2'}
+              startDateErrorText={validationErrors.startDate}
+              startName="deadlineStart"
+              startValue={caseDeadlineReportHelper.filterStartDate}
+              onChangeEnd={e => {
+                selectDateRangeFromCalendarSequence({
+                  endDate: e.target.value,
+                });
+              }}
+              onChangeStart={e => {
+                selectDateRangeFromCalendarSequence({
+                  startDate: e.target.value,
+                });
+              }}
+              onLoad={() => {
+                updateScreenMetadataSequence({ key: 'filterEndDateState', value: caseDeadlineReportHelper.filterEndDate })
+                updateScreenMetadataSequence({ key: 'filterStartDateState', value: caseDeadlineReportHelper.filterStartDate })
+              }}
+            />
+            <div>
+              <label className="usa-label" htmlFor="judges-filter">
+                Judge
+              </label>
+              <BindedSelect
+                aria-describedby="case-deadlines-tab case-deadlines-filter-label"
+                aria-label="judge filter"
+                className="select-left width-card-lg"
+                name="judges"
+                placeholder="Buch"
+                value={caseDeadlineReportHelper.selectedJudgeFilterValue}
+                onChange={e => {
+                  filterCaseDeadlinesByJudgeSequence({
+                    selectedJudgeId: e,
+                  })
+                  setActivePage(0);
+                }}
+              >
+                {caseDeadlineReportHelper.judgeOptions.map(judgeOption => (
+                  <option key={judgeOption.id} value={judgeOption.id}>
+                    {judgeOption.name}
+                  </option>
+                ))}
+              </BindedSelect>
             </div>
-            <div className="grid-col-9">
-              <div className="grid-row">
-                <div className="grid-col-6">
-                  <h2>{caseDeadlineReportHelper.formattedFilterDateHeader}</h2>
-                </div>
-              </div>
-              {caseDeadlineReportHelper.showJudgeSelect && (
-                <div className="padding-bottom-4">
-                  <label
-                    className="dropdown-label-serif margin-right-3"
-                    htmlFor="inline-select"
-                    id="case-deadlines-filter-label"
-                  >
-                    Filter by
-                  </label>
-                  <BindedSelect
-                    aria-describedby="case-deadlines-tab case-deadlines-filter-label"
-                    aria-label="judge filter"
-                    className="select-left width-card-lg inline-select"
-                    name="judges"
-                    placeholder="- Judge -"
-                    value={caseDeadlineReport.judgeIdFilter}
-                    onChange={e => {
-                      filterCaseDeadlinesByJudgeSequence({
-                        selectedJudgeId: e,
-                      });
-                      setActivePage(0);
-                    }}
-                  >
-                    <option value="">-Judge-</option>
-                    {caseDeadlineReportHelper.judgeOptions.map(judgeOption => (
-                      <option key={judgeOption.id} value={judgeOption.id}>
-                        {judgeOption.name}
-                      </option>
-                    ))}
-                  </BindedSelect>
-                </div>
-              )}
-              <div ref={paginatorTop}>
-                {caseDeadlineReportHelper.pageCount > 1 && (
-                  <Paginator
-                    currentPageIndex={activePage}
-                    totalPages={caseDeadlineReportHelper.pageCount}
-                    onPageChange={pageChange => {
-                      setActivePage(pageChange);
-                      updateCaseDeadlineReportPageSequence({
-                        selectedPage: pageChange,
-                      });
-                      focusPaginatorTop(paginatorTop);
-                    }}
-                  />
-                )}
-              </div>
-              <div className="margin-bottom-2">
-                <div className="text-right">
-                  <span className="text-semibold">
-                    Count: {caseDeadlineReport.caseDeadlinesTotalCount}
-                  </span>
-                </div>
-              </div>
-              {caseDeadlineReportHelper.formattedCaseDeadlines.length > 0 && (
-                <table className="usa-table subsection ustc-table deadlines">
-                  <thead>
-                    <tr>
-                      <th>Due Date</th>
-                      <th
-                        aria-hidden="true"
-                        className="consolidated-case-column"
-                      ></th>
-                      <th aria-label="Docket number">Docket No.</th>
-                      <th>Case Title</th>
-                      <th>Description</th>
-                      <th>Judge</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {caseDeadlineReportHelper.formattedCaseDeadlines.map(
-                      row => (
-                        <tr key={row.caseDeadlineId}>
-                          <td className="smaller-column">
-                            {row.formattedDeadline}
-                          </td>
-                          <td className="consolidated-case-column">
-                            <ConsolidatedCaseIcon
-                              consolidatedIconTooltipText={
-                                row.consolidatedIconTooltipText
-                              }
-                              inConsolidatedGroup={row.inConsolidatedGroup}
-                              showLeadCaseIcon={row.inLeadCase}
-                            />
-                          </td>
-                          <td className="smaller-column">
-                            <CaseLink formattedCase={row} />
-                          </td>
-                          <td>{row.caseTitle}</td>
-                          <td className="padding-extra">{row.description}</td>
-                          <td className="no-wrap">
-                            {row.associatedJudgeFormatted}
-                          </td>
-                        </tr>
-                      ),
-                    )}
-                  </tbody>
-                </table>
-              )}
+            <div>
+              <label className="usa-label" htmlFor="judges-filter-button">&shy;</label>
+              <Button
+                data-testid="submit-case-deadlines-report-button"
+                onClick={() => {
+                  updateDateRangeForDeadlinesSequence();
+                  setActivePage(0);
+                }}
+              >
+                Run Report
+              </Button>
+            </div>
+          </div>
+          <div>
+            <div ref={paginatorTop}>
               {caseDeadlineReportHelper.pageCount > 1 && (
                 <Paginator
                   currentPageIndex={activePage}
@@ -204,10 +129,75 @@ export const CaseDeadlines = connect(
                   }}
                 />
               )}
-              {caseDeadlineReportHelper.showNoDeadlines && (
-                <p>There are no deadlines for the selected date(s).</p>
-              )}
             </div>
+            <div className="margin-bottom-2">
+              <div className="text-right">
+                <span className="text-semibold">
+                  Count: {caseDeadlineReport.caseDeadlinesTotalCount}
+                </span>
+              </div>
+            </div>
+            {caseDeadlineReportHelper.formattedCaseDeadlines.length > 0 && (
+              <table className="usa-table subsection ustc-table deadlines">
+                <thead>
+                  <tr>
+                    <th>Due Date</th>
+                    <th
+                      aria-hidden="true"
+                      className="consolidated-case-column"
+                    ></th>
+                    <th aria-label="Docket number">Docket No.</th>
+                    <th>Case Title</th>
+                    <th>Description</th>
+                    <th>Judge</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {caseDeadlineReportHelper.formattedCaseDeadlines.map(
+                    row => (
+                      <tr key={row.caseDeadlineId}>
+                        <td className="smaller-column">
+                          {row.formattedDeadline}
+                        </td>
+                        <td className="consolidated-case-column">
+                          <ConsolidatedCaseIcon
+                            consolidatedIconTooltipText={
+                              row.consolidatedIconTooltipText
+                            }
+                            inConsolidatedGroup={row.inConsolidatedGroup}
+                            showLeadCaseIcon={row.inLeadCase}
+                          />
+                        </td>
+                        <td className="smaller-column">
+                          <CaseLink formattedCase={row} />
+                        </td>
+                        <td>{row.caseTitle}</td>
+                        <td className="padding-extra">{row.description}</td>
+                        <td className="no-wrap">
+                          {row.associatedJudgeFormatted}
+                        </td>
+                      </tr>
+                    ),
+                  )}
+                </tbody>
+              </table>
+            )}
+            {caseDeadlineReportHelper.pageCount > 1 && (
+              <Paginator
+                currentPageIndex={activePage}
+                totalPages={caseDeadlineReportHelper.pageCount}
+                onPageChange={pageChange => {
+                  setActivePage(pageChange);
+                  updateCaseDeadlineReportPageSequence({
+                    selectedPage: pageChange,
+                  });
+                  focusPaginatorTop(paginatorTop);
+                }}
+              />
+            )}
+            {caseDeadlineReportHelper.showNoDeadlines && (
+              <p>There are no deadlines for the selected date(s).</p>
+            )}
           </div>
         </section>
       </>
