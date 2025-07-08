@@ -4,15 +4,16 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
-import { getDbReader, getDbWriter } from '@web-api/database';
+import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import { RawUser } from '@shared/business/entities/User';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { toKyselyNewUser } from '@web-api/persistence/postgres/users/mapper';
-import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
+import { getConnection } from '@web-api/getConnection';
+import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
+// import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+// import { RawPractitioner } from '@shared/business/entities/Practitioner';
+// import { toKyselyNewUser } from '@web-api/persistence/postgres/users/mapper';
+// import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -39,24 +40,53 @@ const getCasesToMovePetitioners = async (offset: number) => {
   );
 };
 
-const upsertUsers = async (
-  users: (RawUser | RawPractitioner | RawIrsPractitioner)[],
-): Promise<void> => {
-  const dbUsers = users.map(user => toKyselyNewUser(user));
+// const upsertUsers = async (
+//   users: (RawUser | RawPractitioner | RawIrsPractitioner)[],
+// ): Promise<void> => {
+//   const dbUsers = users.map(user => toKyselyNewUser(user));
 
-  // Bypassing upsertUsers + pgInsertInto as there will be duplicate information in petitioners.
-  // When we upsert there will be duplicate petitioners with the same contactId in the same insert statement.
-  // This onConflict doNothing() will pick the first value if there are duplicate userIds
-  await getDbWriter({
-    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
+//   // Bypassing upsertUsers + pgInsertInto as there will be duplicate information in petitioners.
+//   // When we upsert there will be duplicate petitioners with the same contactId in the same insert statement.
+//   // This onConflict doNothing() will pick the first value if there are duplicate userIds
+//   await getDbWriter({
+//     action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
+//     cb: db =>
+//       db
+//         .insertInto('dwUser')
+//         .values(dbUsers)
+//         .onConflict(oc => oc.columns(['userId']).doNothing())
+//         .returningAll()
+//         .execute(),
+//     table: 'dwUser',
+//   });
+// };
+
+const associateUsersWithCases = async (
+  userOnCaseRecords: Array<{
+    userId: string;
+    docketNumber: string;
+    representing?: string[];
+    serviceIndicator?: string;
+  }>,
+) => {
+  if (!userOnCaseRecords.length) {
+    return;
+  }
+  const dbUserOnCases = userOnCaseRecords.map(toKyselyNewUserOnCase);
+
+  await getConnection({
     cb: db =>
       db
-        .insertInto('dwUser')
-        .values(dbUsers)
-        .onConflict(oc => oc.columns(['userId']).doNothing())
+        .insertInto('dwUserOnCase')
+        .values(dbUserOnCases)
+        .onConflict(oc =>
+          oc.columns(['userId', 'docketNumber']).doUpdateSet(eb => ({
+            representing: eb.ref('excluded.representing'),
+            serviceIndicator: eb.ref('excluded.serviceIndicator'),
+          })),
+        )
         .returningAll()
         .execute(),
-    table: 'dwUser',
   });
 };
 
@@ -80,7 +110,7 @@ async function main() {
         petitionersToUpsert.push(petitionerToUpsert);
       });
     });
-    await upsertUsers(petitionersToUpsert);
+    // await upsertUsers(petitionersToUpsert);
     await associateUsersWithCases(petitionersToUpsert);
 
     totalItems += casesToIndex.length;

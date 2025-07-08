@@ -9,6 +9,10 @@ export const associateUsersWithCases = async (
     serviceIndicator?: string;
   }>,
 ) => {
+  if (!userOnCaseRecords.length) {
+    return;
+  }
+
   await pgInsertInto({
     table: 'dwUserOnCase',
     values: userOnCaseRecords.map(toKyselyNewUserOnCase),
