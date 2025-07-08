@@ -38,29 +38,15 @@ const { startDate, endDate } = parseArgsAndEnvVars(scriptConfig) as {
   startDate: string;
   endDate: string;
 };
-
 const PAGE_SIZE = 2000;
-
-const getDocketEntriesToIndex = async (startDate: Date) => {
-  console.log('startDate', startDate);
-  return await getDbReader(reader =>
-    reader
-      .selectFrom('dwDocketEntry')
-      .select(['docketEntryId', 'docketNumber', 'createdAt'])
-      .orderBy('createdAt')
-      .orderBy('docketNumber')
-      .orderBy('docketEntryId')
-      .where('createdAt', '>', startDate)
-      .where('createdAt', '<=', calculateDate({ dateString: endDate }))
-      .limit(PAGE_SIZE)
-      .execute(),
-  );
-};
 
 let totalItems = 0;
 
+/*
+This script is only meant to be kicked off by index-docket-entries.ts. It paginates over a partition
+of docket entries in a date range to index them.
+*/
 async function main() {
-  console.log('HERE WE ARE!', startDate, endDate);
   let currentStartDate = calculateDate({ dateString: startDate });
   let docketEntriesToIndex = await getDocketEntriesToIndex(currentStartDate);
 
@@ -88,5 +74,20 @@ async function main() {
     `Done indexing docket entries for for date range ${startDate} to ${endDate}`,
   );
 }
+
+const getDocketEntriesToIndex = async (startDate: Date) => {
+  return await getDbReader(reader =>
+    reader
+      .selectFrom('dwDocketEntry')
+      .select(['docketEntryId', 'docketNumber', 'createdAt'])
+      .orderBy('createdAt')
+      .orderBy('docketNumber')
+      .orderBy('docketEntryId')
+      .where('createdAt', '>', startDate)
+      .where('createdAt', '<=', calculateDate({ dateString: endDate }))
+      .limit(PAGE_SIZE)
+      .execute(),
+  );
+};
 
 main().catch(console.error);
