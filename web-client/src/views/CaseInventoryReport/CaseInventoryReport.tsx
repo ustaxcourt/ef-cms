@@ -99,20 +99,19 @@ export const CaseInventoryReport = connect(
                 );
               })}
             </select>
-            {/* <div className="grid-col-12 text-align-right">
-              <span className="text-semibold">Count:</span>{' '}
-              {foundCasesTotalCount}
-            </div> */}
-            <div className="push-right margin-top-3">
-              <b className="text-semibold">Count:</b> {foundCasesTotalCount}
-            </div>
+            {caseInventoryReportHelper.pageCount <= 1 && (
+              <div className="push-right margin-top-3">
+                <span className="text-semibold">Count: </span>
+                {foundCasesTotalCount}
+              </div>
+            )}
           </div>
 
           {caseInventoryReportHelper.showResultsTable && (
             <>
-              <div ref={paginatorTop} className="grid-row">
-                <div className="grid-col-11">
-                  {caseInventoryReportHelper.pageCount > 1 && (
+              {caseInventoryReportHelper.pageCount > 1 && (
+                <div ref={paginatorTop} className="grid-row">
+                  <div className="grid-col-11">
                     <Paginator
                       currentPageIndex={activePage}
                       totalPages={caseInventoryReportHelper.pageCount}
@@ -126,13 +125,13 @@ export const CaseInventoryReport = connect(
                         focusPaginatorTop(paginatorTop);
                       }}
                     />
-                  )}
+                  </div>
+                  <div className="grid-col-1 text-right margin-top-3 padding-0">
+                    <span className="text-semibold">Count: </span>
+                    {foundCasesTotalCount}
+                  </div>
                 </div>
-                <div className="grid-col-1 text-right margin-top-3 padding-0">
-                  <span className="text-semibold">Count: </span>
-                  {foundCasesTotalCount}
-                </div>
-              </div>
+              )}
 
               <div className="grid-row grid-gap margin-top-1"></div>
               <div className="grid-row grid-gap margin-top-1">
