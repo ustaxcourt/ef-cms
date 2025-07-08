@@ -195,15 +195,12 @@ export class DocketEntryFactory extends JoiValidationEntity {
 
     const exDoc = ExternalDocumentFactory(this);
     const rules = exDoc.getValidationRules();
-    const docketEntryExternalDocumentSchema = rules.validate
-      ? rules
-      : joi.object().keys(rules);
-
+    const docketEntryExternalDocumentSchema = joi.object().keys(rules);
     schema = schema.concat(docketEntryExternalDocumentSchema).concat(
       joi.object({
         category: JoiValidationConstants.STRING.optional().messages({
           '*': 'Select a Category.',
-        }), // omitting category
+        }),
       }),
     );
 
