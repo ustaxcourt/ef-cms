@@ -37,4 +37,19 @@ describe('Broweser Compatibility Checks', () => {
     const result = clientSupportsES2022();
     expect(result).toBe(false);
   });
+
+  it('clientSupportsES2022 should be false if safari user agent without version', () => {
+    mockUserAgent('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Safari');
+    const result = clientSupportsES2022();
+    expect(result).toBe(false);
+  });
+
+  it('clientSupportsES2022 should be false for unsupported browser', () => {
+    jest.spyOn(global, 'Function').mockImplementation(() => {
+      throw new Error('UnsupportedBrowserException');
+    });
+    mockUserAgent('UnsupportedBrowser/1.0');
+    const result = clientSupportsES2022();
+    expect(result).toBe(false);
+  });
 });
