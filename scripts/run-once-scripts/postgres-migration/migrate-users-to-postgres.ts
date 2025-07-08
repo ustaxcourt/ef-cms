@@ -4,12 +4,12 @@ import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { DynamoDBClient, ScanCommandInput } from '@aws-sdk/client-dynamodb';
 import { environment } from '@web-api/environment';
 import { TDynamoRecord } from '@web-api/persistence/dynamo/dynamoTypes';
-import {
-  DocketEntryWorksheet,
-  RawDocketEntryWorksheet,
-} from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
-import { writeFileSync } from 'fs';
-import { upsertDocketEntryWorksheets } from '@web-api/persistence/postgres/docketEntryWorksheets/upsertDocketEntryWorksheets';
+// import {
+//   DocketEntryWorksheet,
+//   RawDocketEntryWorksheet,
+// } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
+// import { writeFileSync } from 'fs';
+// import { upsertDocketEntryWorksheets } from '@web-api/persistence/postgres/docketEntryWorksheets/upsertDocketEntryWorksheets';
 import {
   parseArgsAndEnvVars,
   ScriptConfig,
@@ -21,6 +21,7 @@ import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColum
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
+import { associateUsersWithCasesPending } from '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending';
 
 const scriptConfig: ScriptConfig = {
   description: 'Move users and case associations from dynamo to postgres ',
@@ -175,11 +176,15 @@ async function scanContinuously(params: ScanCommandInput) {
       }
     }
 
+    // This is a chance that a user is associated to a case but does not have a user record
+    // is this an issues though?
+
     await associateUsersWithCases([
       ...irsPractitionerCaseAssociations,
       ...privatePractitionerCaseAssociations,
     ]);
     await upsertUsers(userRecords);
+    await associateUsersWithCasesPending(userOnCasePendingRecords);
 
     itemsScanned += items.length;
     console.log(`itemsScanned: ${itemsScanned}`);

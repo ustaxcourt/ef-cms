@@ -6,7 +6,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
-import { associateUserWithCasePending } from '@web-api/persistence/postgres/cases/pendingCases/associateUserWithCasePending';
+import { associateUsersWithCasesPending } from '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending';
 import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 
 /**
@@ -35,14 +35,16 @@ export const submitPendingCaseAssociationRequestInteractor = async (
   });
 
   const isAssociationPending = await verifyPendingCaseForUser({
-      docketNumber,
-      userId: user.userId,
-    });
+    docketNumber,
+    userId: user.userId,
+  });
 
   if (!isAssociated && !isAssociationPending) {
-    await associateUserWithCasePending({
-      docketNumber,
-      userId: user.userId,
-    });
+    await associateUsersWithCasesPending([
+      {
+        docketNumber,
+        userId: user.userId,
+      },
+    ]);
   }
 };
