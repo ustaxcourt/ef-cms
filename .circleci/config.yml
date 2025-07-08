@@ -827,7 +827,7 @@ jobs:
       - run:
           name: Index Docket Entries
           command: |
-            ./scripts/run-once-scripts/postgres-migration/index-docket-entries.ts
+            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries.ts 5
 
   cleanup-glue-job:
     docker:
