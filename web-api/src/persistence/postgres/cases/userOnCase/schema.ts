@@ -7,7 +7,6 @@ const userOnCaseTableDefinition = {
   docketNumber: DEFAULT as string,
   representing: DEFAULT as ColumnType<string[], string, string> | null,
   serviceIndicator: DEFAULT as string | null,
-  pending: DEFAULT as boolean | null,
 };
 
 export type UserOnCaseTable = typeof userOnCaseTableDefinition;
