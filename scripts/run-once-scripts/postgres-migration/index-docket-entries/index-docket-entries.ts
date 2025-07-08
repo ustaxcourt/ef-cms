@@ -35,6 +35,10 @@ This script partitions docket entries into N (= num_processes argument) equal gr
 to index each group.
 */
 async function main() {
+  // eslint-disable-next-line custom-rules-plugin/no-new-dates
+  if (new Date().toISOString().slice(0, 10) !== '2025-07-08') {
+    process.exit(0); //Run only today, this is a failsafe in case we don't remove this before the next person deploys
+  }
   const count = await getDocketEntriesCount();
 
   const numProcesses = Number(num_processes);

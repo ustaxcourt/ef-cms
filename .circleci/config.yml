@@ -357,6 +357,25 @@ jobs:
               ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
 
+  index-docket-entries-once-test:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Index Docket Entries
+          command: |
+            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries.ts 6
+
   disable-reindex-cron:
     docker:
       - image: *efcms-docker-image
@@ -1059,6 +1078,9 @@ workflows:
           type: approval
           requires:
             - migrate
+      - index-docket-entries-once-test:
+          requires:
+            - wait-for-migration
       - prepare-for-reindex:
           <<: *only-deployed-lower-environments
           requires:
