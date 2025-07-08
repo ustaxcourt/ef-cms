@@ -72,10 +72,6 @@ export function toKyselyNewDocketEntry(
     privatePractitioners:
       JSON.stringify(docketEntry.privatePractitioners) ?? null,
     processingStatus: docketEntry.processingStatus,
-    qcAt: docketEntry.qcAt
-      ? calculateDate({ dateString: docketEntry.qcAt })
-      : null,
-    qcByUserId: docketEntry.qcByUserId ?? null,
     receivedAt: calculateDate({ dateString: docketEntry.receivedAt }),
     redactionAcknowledgement: docketEntry.redactionAcknowledgement ?? null,
     relationship: docketEntry.relationship ?? null,
@@ -131,8 +127,6 @@ export function fromKyselyDocketEntry<T extends object>(record: T) {
       value: typeof dwDocketEntrySchema.noticeIssuedDate,
       _: Partial<DocketEntry>,
     ) => value?.toISOString(),
-    qcAt: (value: typeof dwDocketEntrySchema.qcAt, _: Partial<DocketEntry>) =>
-      value?.toISOString(),
     receivedAt: (
       value: typeof dwDocketEntrySchema.receivedAt,
       _: Partial<DocketEntry>,

@@ -317,8 +317,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   processingStatus: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
   ).required(),
-  qcAt: JoiValidationConstants.ISO_DATE.optional(),
-  qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
   redactionAcknowledgement: joi.boolean().optional().invalid(false),
   relationship: JoiValidationConstants.STRING.valid(

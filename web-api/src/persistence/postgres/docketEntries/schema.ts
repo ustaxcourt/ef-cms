@@ -76,8 +76,6 @@ export const docketEntryTableDefinition = {
     string
   > | null,
   processingStatus: DEFAULT as string,
-  qcAt: DEFAULT as Date | null,
-  qcByUserId: DEFAULT as string | null,
   receivedAt: DEFAULT as Date,
   redactionAcknowledgement: DEFAULT as boolean | null,
   relationship: DEFAULT as string | null,

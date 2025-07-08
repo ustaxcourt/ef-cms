@@ -182,8 +182,6 @@ export class DocketEntry extends JoiValidationEntity {
     documentTitle: string;
     documentType: string;
   };
-  public qcAt?: string;
-  public qcByUserId?: string;
   public signedByUserId?: string;
   public signedJudgeName?: string;
   public signedJudgeUserId?: string;
@@ -331,8 +329,6 @@ export class DocketEntry extends JoiValidationEntity {
         documentType: rawDocketEntry.previousDocument.documentType,
       };
     }
-    this.qcAt = rawDocketEntry.qcAt;
-    this.qcByUserId = rawDocketEntry.qcByUserId;
     this.signedAt = rawDocketEntry.signedAt;
     this.signedByUserId = rawDocketEntry.signedByUserId;
     this.signedJudgeName = rawDocketEntry.signedJudgeName;
@@ -418,15 +414,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.signedByUserId = signByUserId;
     this.signedJudgeName = signedJudgeName;
     this.signedAt = createISODateString();
-  }
-
-  /**
-   * attaches a qc date and a user to the document
-   * @param {object} user the user completing QC process
-   */
-  setQCed(user) {
-    this.qcByUserId = user.userId;
-    this.qcAt = createISODateString();
   }
 
   /**
