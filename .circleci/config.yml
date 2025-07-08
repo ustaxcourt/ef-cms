@@ -374,7 +374,7 @@ jobs:
       - run:
           name: Index Docket Entries
           command: |
-            NODE_ENV=production .scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts 6
+            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts 6
 
   disable-reindex-cron:
     docker:
