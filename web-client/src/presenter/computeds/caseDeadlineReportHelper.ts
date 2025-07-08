@@ -21,9 +21,13 @@ export const caseDeadlineReportHelper = (
     inConsolidatedGroup: boolean;
     inLeadCase: boolean;
   })[];
-  formattedFilterDateHeader;
-  judgeOptions: Array<{ id: string; name: string }>;
+  filterStartDate;
+  filterEndDate;
+  formattedFilterEndDateHeader: string;
+  formattedFilterStartDateHeader: string;
+  judgeOptions: Array<{ id: string, name: string }>;
   pageCount: number;
+  selectedJudgeFilterValue: { id: string, name: string };
   showJudgeSelect: boolean;
   showNoDeadlines: boolean;
 } => {
@@ -37,38 +41,41 @@ export const caseDeadlineReportHelper = (
   const showNoDeadlines = caseDeadlinesForCurrentPage.length === 0;
   const judgeOptions = (get(state.judges) || [])
     .map(judge => ({
-      id: judge.userId,
       name: applicationContext.getUtilities().formatJudgeName(judge.name),
+      id: judge.userId
     }))
-    .concat({ id: CHIEF_JUDGE, name: CHIEF_JUDGE })
+    .concat({
+      name: CHIEF_JUDGE,
+      id: CHIEF_JUDGE
+    })
     .sort((a, b) => a.name.localeCompare(b.name));
+  const allJudges = { name: '- All Judges -', id: '' }
+  judgeOptions.unshift(allJudges);
+  const selectedJudgeFilterValue = judgeOptions.find(judge => judge.id === get(state.caseDeadlineReport.judgeIdFilter))
+    || allJudges;
 
   let filterStartDate = get(state.screenMetadata.filterStartDate);
   let filterEndDate = get(state.screenMetadata.filterEndDate);
 
-  filterStartDate = applicationContext
-    .getUtilities()
-    .prepareDateFromString(filterStartDate);
-
-  filterEndDate = applicationContext
-    .getUtilities()
-    .prepareDateFromString(filterEndDate);
-
-  let formattedFilterDateHeader = applicationContext
+  const formattedFilterStartDateHeader = applicationContext
     .getUtilities()
     .formatDateString(filterStartDate, DATE_FORMATS.MONTH_DAY_YEAR);
 
-  if (filterEndDate && !filterStartDate.hasSame(filterEndDate, 'day')) {
-    formattedFilterDateHeader +=
-      ' – ' +
-      applicationContext
-        .getUtilities()
-        .formatDateString(filterEndDate, DATE_FORMATS.MONTH_DAY_YEAR);
-  }
+  const formattedFilterEndDateHeader = applicationContext
+    .getUtilities()
+    .formatDateString(filterEndDate, DATE_FORMATS.MONTH_DAY_YEAR)
+
+  filterStartDate = applicationContext
+    .getUtilities()
+    .formatDateString(filterStartDate, DATE_FORMATS.MMDDYYYY);
+
+  filterEndDate = applicationContext
+    .getUtilities()
+    .formatDateString(filterEndDate, DATE_FORMATS.MMDDYYYY);
 
   const pageCount = Math.ceil(
     get(state.caseDeadlineReport.caseDeadlinesTotalCount) /
-      CASE_DEADLINES_REPORT_PAGE_SIZE,
+    CASE_DEADLINES_REPORT_PAGE_SIZE,
   );
 
   const formattedCaseDeadlines = caseDeadlinesForCurrentPage.map(d => {
@@ -100,10 +107,14 @@ export const caseDeadlineReportHelper = (
   });
 
   return {
+    filterStartDate,
+    filterEndDate,
     formattedCaseDeadlines,
-    formattedFilterDateHeader,
+    formattedFilterEndDateHeader,
+    formattedFilterStartDateHeader,
     judgeOptions,
     pageCount,
+    selectedJudgeFilterValue,
     showJudgeSelect,
     showNoDeadlines,
   };
