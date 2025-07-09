@@ -102,7 +102,6 @@ export const docketEntryTableDefinition = {
   signedAt: DEFAULT as string | null,
   signedByUserId: DEFAULT as string | null,
   signedJudgeName: DEFAULT as string | null,
-  signedJudgeUserId: DEFAULT as string | null,
   stampData: DEFAULT as ColumnType<Record<string, any>, string, string> | null,
   strickenAt: DEFAULT as Date | null,
   strickenBy: DEFAULT as string | null,

@@ -90,7 +90,6 @@ export function toKyselyNewDocketEntry(
     signedAt: docketEntry.signedAt ?? null,
     signedByUserId: docketEntry.signedByUserId ?? null,
     signedJudgeName: docketEntry.signedJudgeName ?? null,
-    signedJudgeUserId: docketEntry.signedJudgeUserId ?? null,
     stampData: JSON.stringify(docketEntry.stampData) ?? null,
     strickenAt: docketEntry.strickenAt
       ? calculateDate({ dateString: docketEntry.strickenAt })

@@ -5,6 +5,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .alterTable('dwDocketEntry')
     .dropColumn('qcAt')
     .dropColumn('qcByUserId')
+    .dropColumn('signedJudgeUserId')
     .execute();
 }
 
@@ -13,5 +14,6 @@ export async function down(db: Kysely<any>): Promise<void> {
     .alterTable('dwDocketEntry')
     .addColumn('qcAt', 'timestamptz')
     .addColumn('qcByUserId', 'varchar')
+    .addColumn('signedJudgeUserId', 'varchar')
     .execute();
 }

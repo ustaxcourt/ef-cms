@@ -184,7 +184,6 @@ export class DocketEntry extends JoiValidationEntity {
   };
   public signedByUserId?: string;
   public signedJudgeName?: string;
-  public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
   public workItem?: any;
@@ -332,7 +331,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.signedAt = rawDocketEntry.signedAt;
     this.signedByUserId = rawDocketEntry.signedByUserId;
     this.signedJudgeName = rawDocketEntry.signedJudgeName;
-    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
     this.strickenBy = rawDocketEntry.strickenBy;
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
@@ -422,7 +420,6 @@ export class DocketEntry extends JoiValidationEntity {
   unsignDocument() {
     this.signedAt = undefined;
     this.signedJudgeName = undefined;
-    this.signedJudgeUserId = undefined;
     this.signedByUserId = undefined;
   }
 

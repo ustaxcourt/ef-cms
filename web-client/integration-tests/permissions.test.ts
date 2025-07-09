@@ -139,9 +139,6 @@ const internalFieldsBlocked = () => {
     cerebralTest.getState('caseDetail.docketEntries.0.signedJudgeName'),
   ).toBeUndefined();
   expect(
-    cerebralTest.getState('caseDetail.docketEntries.0.signedJudgeUserId'),
-  ).toBeUndefined();
-  expect(
     cerebralTest.getState('caseDetail.docketEntries.0.strickenBy'),
   ).toBeUndefined();
   expect(
