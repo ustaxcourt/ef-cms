@@ -18,6 +18,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export type FormattedCaseInventoryReportEntry = {
   docketNumber: string;
@@ -51,7 +52,10 @@ export const computeIsNotServedDocument = ({ formattedEntry }) => {
   );
 };
 
-export const formatDocketEntry = (applicationContext, docketEntry) => {
+export const formatDocketEntry = (
+  applicationContext: ServerApplicationContext,
+  docketEntry,
+) => {
   const formattedEntry = cloneDeep(docketEntry);
 
   formattedEntry.servedAtFormatted = formatDateString(
@@ -466,16 +470,12 @@ const formatCounsel = ({ caseDetail, counsel }) => {
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
 export const sortUndefined = (
-  a: { createdAtFormatted: string },
-  b: { createdAtFormatted: string },
+  a: { createdAtFormatted: string | undefined },
+  b: { createdAtFormatted: string | undefined },
 ) => {
-  if (a.createdAtFormatted && !b.createdAtFormatted) {
-    return -1;
-  }
-
-  if (!a.createdAtFormatted && b.createdAtFormatted) {
-    return 1;
-  }
+  if (a.createdAtFormatted && !b.createdAtFormatted) return -1;
+  if (!a.createdAtFormatted && b.createdAtFormatted) return 1;
+  return 0;
 };
 
 export const sortDocketEntries = (
