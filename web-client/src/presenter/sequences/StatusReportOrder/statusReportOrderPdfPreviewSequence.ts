@@ -7,9 +7,15 @@ import { setMetadataAsPristineAction } from '../../actions/setMetadataAsPristine
 import { setPdfFileAction } from '../../actions/CourtIssuedOrder/setPdfFileAction';
 import { setPdfPreviewUrlAction } from '../../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
+import { getTrialSessionDetailsAction } from '@web-client/presenter/actions/TrialSession/getTrialSessionDetailsAction';
+import { setTrialSessionDetailsAction } from '@web-client/presenter/actions/TrialSession/setTrialSessionDetailsAction';
+import { setTrialSessionIdFromCaseDetailAction } from './setTrialSessionIdFromCaseDetailAction';
 
 export const statusReportOrderPdfPreviewSequence =
   showProgressSequenceDecorator([
+    setTrialSessionIdFromCaseDetailAction,
+    getTrialSessionDetailsAction,
+    setTrialSessionDetailsAction,
     prepareStatusReportOrderAction,
     createOrderAction,
     clearPdfPreviewUrlAction,
