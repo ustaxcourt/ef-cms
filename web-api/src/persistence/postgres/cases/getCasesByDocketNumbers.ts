@@ -219,7 +219,7 @@ function convertDbCaseToRawCase(
     archivedCorrespondences: dbCase.archivedCorrespondences?.map(cc =>
       caseCorrespondenceEntity(cc),
     ),
-    irsPractitioners: dbCase.privatePractitioners.map(ip => rawUser(ip)),
+    irsPractitioners: dbCase.irsPractitioners.map(ip => rawUser(ip)),
     privatePractitioners: dbCase.privatePractitioners.map(pp => rawUser(pp)),
     docketEntries: dbCase.docketEntries.map(d => fromKyselyDocketEntry(d)),
     archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
