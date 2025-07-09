@@ -239,7 +239,7 @@ export const createStartOfDayISO = (params?: {
   day: string | number;
   month: string | number;
   year: string | number;
-}): string | null => {
+}): string | undefined => {
   const dateObject = params
     ? DateTime.fromObject(
         {
@@ -251,7 +251,7 @@ export const createStartOfDayISO = (params?: {
       )
     : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.startOf('day').setZone('utc').toISO();
+  return dateObject.startOf('day').setZone('utc').toISO() || undefined;
 };
 
 /**
@@ -534,7 +534,7 @@ export const validateDateAndCreateISO = ({
   day: string;
   month: string;
   year: string;
-}): string | undefined | null => {
+}): string | undefined => {
   if (isValidDateString(`${month}-${day}-${year}`)) {
     return createStartOfDayISO({
       day,
