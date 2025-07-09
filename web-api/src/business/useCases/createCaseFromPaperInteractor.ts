@@ -11,7 +11,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { RawUser } from '@shared/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   AuthUser,
   UnknownAuthUser,
@@ -304,6 +304,10 @@ export const createCaseFromPaperInteractor = async (
   }
 
   const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   const removeLockFunction = await acquireLock({
     applicationContext,

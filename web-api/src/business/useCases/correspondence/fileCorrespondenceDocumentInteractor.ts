@@ -25,6 +25,10 @@ export const fileCorrespondenceDocumentInteractor = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
+
   const caseToUpdate = await getCaseByDocketNumber({
     docketNumber,
   });

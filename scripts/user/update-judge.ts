@@ -20,8 +20,8 @@ import { environment } from '@web-api/environment';
 import { getUserPoolId } from '../../shared/admin-tools/util';
 import { isEmpty } from 'lodash';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { updateUser as updateUserFromPersistence } from '@web-api/persistence/postgres/users/updateUser';
 import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 /**
  * This script will update the judge user in a deployed environment.
@@ -186,7 +186,7 @@ const updatePostgresJudgeUserRecord = async ({
   const rawUser = new User(postgresUser).validate().toRawObject();
 
   console.log('Updating the Postgres record ...');
-  await updateUserFromPersistence({ userToUpdate: rawUser });
+  await upsertUsers([rawUser]);
 };
 
 const updatePostgresChambersRecords = async ({
@@ -204,7 +204,7 @@ const updatePostgresChambersRecords = async ({
   console.log(
     `Updating members of ${oldChambersSection} to be members of ${updatedChambersSection} ...`,
   );
-  const chambersUsers: User[] = await getUsersInSections({
+  const chambersUsers: RawUser[] = await getUsersInSections({
     sections: [oldChambersSection],
   });
 
@@ -214,9 +214,7 @@ const updatePostgresChambersRecords = async ({
     const rawChambersUser = new User(chambersUser).validate().toRawObject();
 
     // Update the user record, create the section record, and remove the old section record
-    await updateUserFromPersistence({
-      userToUpdate: rawChambersUser,
-    });
+    await upsertUsers([rawChambersUser]);
   }
 };
 

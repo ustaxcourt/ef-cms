@@ -102,6 +102,10 @@ export const serveCourtIssuedDocument = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
+
   let serviceResults;
   let caseEntities = [subjectCaseEntity];
 

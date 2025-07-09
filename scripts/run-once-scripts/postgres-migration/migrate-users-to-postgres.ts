@@ -125,8 +125,8 @@ async function scanContinuously(params: ScanCommandInput) {
       representing?: string[];
       serviceIndicator?: string;
     }> = []; // {pk: case|, sk: privatePractitioner| }
-    const userRecords = []; // {pk: user|, sk: user| }
-    const userOnCasePendingRecords = []; // {pk: case|, sk: pending-case| }
+    const userRecords: any[] = []; // {pk: user|, sk: user| }
+    const userOnCasePendingRecords: any[] = []; // {pk: case|, sk: pending-case| }
     // const userRecords = [] // {pk: user|, sk: case| } We should not need to process these. For irs/private association is defined through the {pk: case|, sk: privatePractitioner| }. For petitioners it is defined by the dwCase.petitioners array
 
     const result = await documentClient.scan({

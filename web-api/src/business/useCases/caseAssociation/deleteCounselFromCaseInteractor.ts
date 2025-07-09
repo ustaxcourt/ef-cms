@@ -5,7 +5,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -31,6 +31,10 @@ export const deleteCounselFromCase = async (
   const userToDelete = await getUserById({
     userId,
   });
+
+  if (!userToDelete) {
+    throw new NotFoundError(`Could not find user ${userId}`);
+  }
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 

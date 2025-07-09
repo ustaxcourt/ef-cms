@@ -9,12 +9,18 @@ export const updatePractitionerUser = async ({
   applicationContext: ServerApplicationContext;
   user: RawUser;
 }) => {
+  const emailToUse = user.email ? user.email : user.pendingEmail;
+
+  if (!emailToUse) {
+    throw new Error('expected an email when updating a user record');
+  }
+
   try {
     await applicationContext.getUserGateway().updateUser(applicationContext, {
       attributesToUpdate: {
         role: user.role,
       },
-      email: user.email ? user.email : user.pendingEmail,
+      email: emailToUse,
     });
   } catch (error) {
     applicationContext.logger.error(error);

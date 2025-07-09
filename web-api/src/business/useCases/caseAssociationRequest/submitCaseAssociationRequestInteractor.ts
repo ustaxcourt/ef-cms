@@ -4,10 +4,11 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -37,6 +38,10 @@ const submitCaseAssociationRequest = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
+
   const isPrivatePractitioner =
     authorizedUser.role === ROLES.privatePractitioner;
   const isIrsPractitioner = authorizedUser.role === ROLES.irsPractitioner;
@@ -48,7 +53,7 @@ const submitCaseAssociationRequest = async (
         authorizedUser,
         docketNumber,
         representing: filers,
-        user,
+        user: user as RawPractitioner,
       });
   } else if (isIrsPractitioner) {
     return await applicationContext

@@ -55,6 +55,10 @@ export const fileAndServeCourtIssuedDocument = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
+
   const subjectCase = await getCaseByDocketNumber({
     docketNumber: subjectCaseDocketNumber,
   });
