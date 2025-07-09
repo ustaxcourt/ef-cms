@@ -71,6 +71,10 @@ import {
   DW_USER_ON_CASE_PENDING_COLUMNS,
   UserOnCasePendingTable,
 } from '@web-api/persistence/postgres/cases/pendingCases/schema';
+import {
+  indexOpenSearchUser,
+  transformOpenSearchUser,
+} from 'web-api/elasticsearch/index-users';
 
 const DEFAULT = {};
 
@@ -167,6 +171,8 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUser: {
     table: DEFAULT as UserTable,
     columns: DW_USER_COLUMNS,
+    indexOpenSearchMessage: indexOpenSearchUser,
+    transformOpenSearchMessage: transformOpenSearchUser,
   },
   dwUserConfirmationCode: {
     table: DEFAULT as UserConfirmationCodeTable,
