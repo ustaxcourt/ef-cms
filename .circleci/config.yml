@@ -34,7 +34,7 @@ parameters:
     type: boolean
 
   index_threads:
-    default: ''
+    default: '5'
     type: string
 
   lower_env:
