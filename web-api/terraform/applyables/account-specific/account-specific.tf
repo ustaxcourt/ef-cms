@@ -62,8 +62,8 @@ module "edge-lambda-permissions" {
 }
 
 module "route53-zone" {
-  source    = "../../modules/route53-zone"
-  zone_name = var.zone_name
+  source = "../../modules/route53-zone"
+  dns_domain = var.dns_domain
 }
 
 module "email-monitoring" {

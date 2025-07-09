@@ -10,10 +10,6 @@ variable "environment" {
   type = string
 }
 
-variable "zone_name" {
-  type = string
-}
-
 variable "blue_table_name" {
   type = string
 }

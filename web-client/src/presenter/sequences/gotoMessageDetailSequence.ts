@@ -18,6 +18,11 @@ import { setupCurrentPageAction } from '../actions/setupCurrentPageAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
+import { runPathForUserRoleAction } from '../actions/runPathForUserRoleAction';
+import { takePathForRoles } from './takePathForRoles';
+import { getConstants } from '@web-client/getConstants';
+
+const { USER_ROLES } = getConstants();
 
 export const gotoMessageDetailSequence =
   startWebSocketConnectionSequenceDecorator(
@@ -27,8 +32,35 @@ export const gotoMessageDetailSequence =
       clearErrorAlertsAction,
       getCaseAction,
       setCaseAction,
-      getJudgesCaseNoteForCaseAction,
-      setJudgesCaseNoteOnCaseDetailAction,
+      runPathForUserRoleAction,
+      {
+        ...takePathForRoles(
+          [
+            USER_ROLES.chambers,
+            USER_ROLES.judge
+          ],
+          [
+            getJudgesCaseNoteForCaseAction,
+            setJudgesCaseNoteOnCaseDetailAction
+          ]
+        ),
+        ...takePathForRoles(
+          [
+            USER_ROLES.adc,
+            USER_ROLES.admin,
+            USER_ROLES.admissionsClerk,
+            USER_ROLES.clerkOfCourt,
+            USER_ROLES.docketClerk,
+            USER_ROLES.caseServicesSupervisor,
+            USER_ROLES.floater,
+            USER_ROLES.general,
+            USER_ROLES.petitionsClerk,
+            USER_ROLES.reportersOffice,
+            USER_ROLES.trialClerk,
+          ],
+          [],
+        ),
+      },
       setParentMessageIdAction,
       getMessageThreadAction,
       setMessageAction,
