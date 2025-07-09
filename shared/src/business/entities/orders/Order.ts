@@ -6,7 +6,7 @@ export class Order extends JoiValidationEntity {
   public documentType: string;
   public orderBody: string;
 
-  constructor(rawOrder: RawOrder) {
+  constructor(rawOrder) {
     super('Order');
     this.documentTitle = rawOrder.documentTitle;
     this.documentType = rawOrder.documentType;
