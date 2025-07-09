@@ -58,7 +58,7 @@ export const prepareDateFromEST = (dateString: string, inputFormat: string) => {
   const result = DateTime.fromFormat(dateString, inputFormat, {
     zone: USTC_TZ,
   })
-    .setZone(0)
+    .setZone('utc')
     .toISO();
 
   return result;
@@ -220,7 +220,7 @@ export const createEndOfDayISO = (params?: {
   day: string | number;
   month: string | number;
   year: string | number;
-}): string => {
+}): string | null => {
   const dateObject = params
     ? DateTime.fromObject(
         {
@@ -239,7 +239,7 @@ export const createStartOfDayISO = (params?: {
   day: string | number;
   month: string | number;
   year: string | number;
-}): string => {
+}): string | null => {
   const dateObject = params
     ? DateTime.fromObject(
         {
@@ -534,7 +534,7 @@ export const validateDateAndCreateISO = ({
   day: string;
   month: string;
   year: string;
-}): string | undefined => {
+}): string | undefined | null => {
   if (isValidDateString(`${month}-${day}-${year}`)) {
     return createStartOfDayISO({
       day,
