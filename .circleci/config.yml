@@ -29,6 +29,14 @@ parameters:
     default: false
     type: boolean
 
+  run_index_once:
+    default: false
+    type: boolean
+
+  index_threads:
+    default: ''
+    type: string
+
   lower_env:
     default: test
     type: string
@@ -607,6 +615,27 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
+
+  index-docket-entries-once:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: xlarge
+    environment:
+      THREADS: << pipeline.parameters.index_threads >>
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Index Docket Entries
+          command: |
+            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts "$THREADS"
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
@@ -1253,6 +1282,12 @@ workflows:
           type: approval
           requires:
             - initiate-s3-sync
+
+  index-once:
+    when: << pipeline.parameters.run_index_once >>
+    jobs:
+      - index-docket-entries-once:
+          <<: *only-deployed-lower-environments
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>
