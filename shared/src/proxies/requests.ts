@@ -172,6 +172,11 @@ export const put = async ({
   asyncSyncId = undefined,
   body,
   endpoint,
+}: {
+  applicationContext: ClientApplicationContext;
+  asyncSyncId?: string;
+  body?: any;
+  endpoint: string;
 }) => {
   getMemoized.clear();
   const res = await applicationContext
