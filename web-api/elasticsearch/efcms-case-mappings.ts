@@ -61,9 +61,6 @@ export const efcmsCaseMappings: Record<string, Object> = {
     'highPriority.BOOL': {
       type: 'boolean',
     },
-    'indexedTimestamp.N': {
-      type: 'text',
-    },
     'irsPractitioners.L.M.email.S': {
       type: 'keyword',
     },
@@ -128,7 +125,7 @@ export const efcmsCaseMappings: Record<string, Object> = {
           type: 'keyword',
         },
       },
-      type: 'integer',
+      type: 'long',
     },
     'status.S': {
       type: 'keyword',

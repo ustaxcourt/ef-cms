@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock('@web-api/persistence/postgres/docketEntries/upsertDocketEntries');
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
@@ -8,7 +9,6 @@ import {
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import {
@@ -17,8 +17,10 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { setWorkItemAsReadInteractor } from './setWorkItemAsReadInteractor';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 describe('setWorkItemAsReadInteractor', () => {
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -49,7 +51,6 @@ describe('setWorkItemAsReadInteractor', () => {
   it('should throw an error when an unauthorized user tries to invoke this interactor', async () => {
     await expect(
       setWorkItemAsReadInteractor(
-        applicationContext,
         {
           workItemId: mockWorkItem.workItemId,
         },
@@ -68,7 +69,6 @@ describe('setWorkItemAsReadInteractor', () => {
 
     await expect(
       setWorkItemAsReadInteractor(
-        applicationContext,
         {
           workItemId: mockWorkItem.workItemId,
         },
@@ -77,26 +77,23 @@ describe('setWorkItemAsReadInteractor', () => {
     ).rejects.toThrow(NotFoundError);
   });
 
-  it('should call updateDocketEntry with the docket entry work item marked as read', async () => {
+  it('should call upsertDocketEntries with the docket entry work item marked as read', async () => {
     await setWorkItemAsReadInteractor(
-      applicationContext,
       {
         workItemId: mockWorkItem.workItemId,
       },
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry.mock
-        .calls[0][0],
-    ).toMatchObject({
-      document: { workItem: { isRead: true } },
-    });
+    expect(upsertDocketEntries).toHaveBeenCalledWith([
+      expect.objectContaining({
+        workItem: expect.objectContaining({ isRead: true }),
+      }),
+    ]);
   });
 
   it('should call saveWorkItem with the work item marked as read', async () => {
     await setWorkItemAsReadInteractor(
-      applicationContext,
       {
         workItemId: mockWorkItem.workItemId,
       },

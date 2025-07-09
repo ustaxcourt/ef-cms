@@ -7,7 +7,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * deleteCaseNote
@@ -18,7 +19,7 @@ import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
  * @returns {Promise} the promise of the delete call
  */
 export const deleteCaseNote = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -27,19 +28,15 @@ export const deleteCaseNote = async (
   }
 
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
   delete caseRecord.caseNote;
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseRecord,
-    });
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseRecord,
+  });
 
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };

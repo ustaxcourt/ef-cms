@@ -44,7 +44,6 @@ describe('getCaseInteractor', () => {
     getCaseByDocketNumber.mockResolvedValue(testCase);
 
     await getCaseInteractor(
-      applicationContext,
       {
         docketNumber: '000123-19S',
       },
@@ -52,7 +51,6 @@ describe('getCaseInteractor', () => {
     );
 
     expect(getCaseByDocketNumber.mock.calls[0][0]).toEqual({
-      applicationContext,
       docketNumber: '123-19',
       user: {
         email: 'mockPetitionsClerk@example.com',
@@ -78,7 +76,6 @@ describe('getCaseInteractor', () => {
 
     await expect(
       getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '123-19',
         },
@@ -102,7 +99,6 @@ describe('getCaseInteractor', () => {
     });
 
     const result = await getCaseInteractor(
-      applicationContext,
       {
         docketNumber: '00101-00',
       },
@@ -124,7 +120,6 @@ describe('getCaseInteractor', () => {
     getCaseByDocketNumber.mockResolvedValue(testCase);
 
     const result = await getCaseInteractor(
-      applicationContext,
       {
         docketNumber: testCase.docketNumber,
       },
@@ -149,7 +144,6 @@ describe('getCaseInteractor', () => {
     });
 
     const result = await getCaseInteractor(
-      applicationContext,
       {
         docketNumber: testCase.docketNumber,
       },
@@ -188,7 +182,6 @@ describe('getCaseInteractor', () => {
     });
 
     const result = await getCaseInteractor(
-      applicationContext,
       {
         docketNumber: '00101-00',
       },
@@ -223,7 +216,6 @@ describe('getCaseInteractor', () => {
     );
 
     const result = (await getCaseInteractor(
-      applicationContext,
       {
         docketNumber: '00101-00',
       },
@@ -255,7 +247,6 @@ describe('getCaseInteractor', () => {
     });
 
     const result = (await getCaseInteractor(
-      applicationContext,
       {
         docketNumber: '00101-00',
       },
@@ -287,7 +278,6 @@ describe('getCaseInteractor', () => {
     });
 
     const result = await getCaseInteractor(
-      applicationContext,
       {
         docketNumber: '101-18',
       },
@@ -305,7 +295,6 @@ describe('getCaseInteractor', () => {
 
     await expect(
       getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '123-45',
         },
@@ -320,7 +309,6 @@ describe('getCaseInteractor', () => {
 
     await expect(
       getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '123-45',
         },
@@ -346,7 +334,6 @@ describe('getCaseInteractor', () => {
 
     it(`allows unfiltered view of sealed contact addresses when role is ${ROLES.docketClerk}`, async () => {
       const result = (await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '101-18',
         },
@@ -367,7 +354,6 @@ describe('getCaseInteractor', () => {
 
     it('returns limited contact address information when address is sealed and requesting user is not docket clerk', async () => {
       const result = (await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '101-18',
         },
@@ -414,7 +400,6 @@ describe('getCaseInteractor', () => {
 
     it('should return a RestrictedCase entity when the current user is NOT authorized to view a sealed case and is NOT associated with the case', async () => {
       const result = await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '101-18',
         },
@@ -431,7 +416,6 @@ describe('getCaseInteractor', () => {
 
     it('should return a Case entity when the current user is authorized to view a sealed case and is NOT associated with the case', async () => {
       const result = (await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '101-18',
         },
@@ -445,7 +429,6 @@ describe('getCaseInteractor', () => {
 
     it('should return a Case entity when the current user is associated with a sealed case and NOT authorized to view it', async () => {
       const result = (await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '101-18',
         },
@@ -482,7 +465,6 @@ describe('getCaseInteractor', () => {
 
     it('should return a Case entity when the current user is an internal user', async () => {
       const result = (await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '101-18',
         },
@@ -496,7 +478,6 @@ describe('getCaseInteractor', () => {
 
     it('should return a PublicCase entity when the current user is an external user who is NOT associated with the case', async () => {
       const result = (await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '101-18',
         },
@@ -511,7 +492,6 @@ describe('getCaseInteractor', () => {
 
     it('should return a Case entity when the current user is associated with the case', async () => {
       const result = (await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: '101-18',
         },

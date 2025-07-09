@@ -1,4 +1,7 @@
-import { CaseInventoryReport } from '@shared/business/utilities/pdfGenerator/documentTemplates/CaseInventoryReport';
+import {
+  CaseInventoryReport,
+  CaseInventoryReportParams,
+} from '@shared/business/utilities/pdfGenerator/documentTemplates/CaseInventoryReport';
 import { DatePrintedFooter } from '@shared/business/utilities/pdfGenerator/components/DatePrintedFooter';
 import { ReportsMetaHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsMetaHeader';
 import { ServerApplicationContext } from '@web-api/applicationContext';
@@ -11,33 +14,13 @@ export const caseInventoryReport = async ({
   data,
 }: {
   applicationContext: ServerApplicationContext;
-  data: {
-    formattedCases: {
-      isLeadCase: boolean;
-      inConsolidatedGroup: boolean;
-      docketNumber: string;
-      caseTitle: string;
-      docketNumberSuffix?: string | null;
-      status: string;
-      associatedJudge?: string;
-    }[];
-    reportTitle: string;
-    showJudgeColumn: boolean;
-    showStatusColumn: boolean;
-  };
+  data: CaseInventoryReportParams;
 }) => {
-  const { formattedCases, reportTitle, showJudgeColumn, showStatusColumn } =
-    data;
-
   const caseInventoryReportTemplate = ReactDOM.renderToString(
-    React.createElement(CaseInventoryReport, {
-      formattedCases,
-      reportTitle,
-      showJudgeColumn,
-      showStatusColumn,
-    }),
+    React.createElement(CaseInventoryReport, data),
   );
 
+  const { reportTitle } = data;
   const headerHtml = ReactDOM.renderToString(
     React.createElement(ReportsMetaHeader, {
       headerTitle: `Case Inventory Report: ${reportTitle}`,

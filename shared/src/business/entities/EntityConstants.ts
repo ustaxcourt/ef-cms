@@ -19,6 +19,7 @@ export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
   TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
+  CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
 } as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
@@ -561,7 +562,6 @@ export const SCENARIOS = [
   'Nonstandard G',
   'Nonstandard H',
   'Nonstandard I',
-  'Nonstandard J',
   'Type A',
   'Type B',
   'Type C',
@@ -1135,13 +1135,27 @@ export type Role = (typeof ROLES)[keyof typeof ROLES];
 // it's a separate constant.
 export const SYSTEM_ROLE = 'System';
 
+export const FILING_TYPES_DICT = {
+  MYSELF: 'Myself',
+  MYSELF_AND_SPOUSE: 'Myself and my spouse',
+  BUSINESS: 'A business',
+  OTHER: 'Other',
+  PETITIONER: 'Individual petitioner',
+  PETITIONER_SPOUSE: 'Petitioner and spouse',
+};
+
 export const FILING_TYPES = {
-  [ROLES.petitioner]: ['Myself', 'Myself and my spouse', 'A business', 'Other'],
+  [ROLES.petitioner]: [
+    FILING_TYPES_DICT.MYSELF,
+    FILING_TYPES_DICT.MYSELF_AND_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
+  ],
   [ROLES.privatePractitioner]: [
-    'Individual petitioner',
-    'Petitioner and spouse',
-    'A business',
-    'Other',
+    FILING_TYPES_DICT.PETITIONER,
+    FILING_TYPES_DICT.PETITIONER_SPOUSE,
+    FILING_TYPES_DICT.BUSINESS,
+    FILING_TYPES_DICT.OTHER,
   ],
 } as const;
 
@@ -2027,3 +2041,5 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
   HYBRID_CASE_MINIMUM_QUANTITY: 50,
   HYBRID_CASE_MAX_QUANTITY: 100,
 } as const;
+
+export const MOBILE_SCREEN_BREAKPOINT = 640;

@@ -30,7 +30,6 @@ export const validateSelectDocumentTypeAction = ({
       'documentTitle',
       'documentType',
       'freeText',
-      'freeText2',
       'previousDocument',
       'serviceDate',
       'trialLocation',

@@ -44,8 +44,6 @@ export const practitionerFilesDocumentForStipulatedDecision = (
       'Proposed Stipulated Decision',
     );
 
-    expect(cerebralTest.getState('form.partyPrimary')).toEqual(undefined);
-
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
