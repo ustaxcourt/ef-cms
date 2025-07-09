@@ -5,7 +5,10 @@ ENVIRONMENT=$1
 [ -z "${ENVIRONMENT}" ] && echo "You must pass in the environment as an argument to the script" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 
+../../../../scripts/verify-terraform-version.sh
+
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+[ -z "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
 KEY="glue-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1

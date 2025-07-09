@@ -11,12 +11,15 @@ echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 
+export TF_VAR_remote_account_number=$PROD_ENV_ACCOUNT_ID
+
+../../../../scripts/verify-terraform-version.sh
+
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+[ -z "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
 KEY="glue-role-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
-
-export TF_VAR_remote_account_number=$PROD_ENV_ACCOUNT_ID
 
 rm -rf .terraform
 rm -f .terraform.lock.hcl

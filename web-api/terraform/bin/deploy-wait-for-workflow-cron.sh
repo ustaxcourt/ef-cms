@@ -26,12 +26,21 @@ export TF_VAR_environment=$ENVIRONMENT
 
 ../../../../scripts/verify-terraform-version.sh
 
+BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+[ -z "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
+KEY="wait-for-workflow-cron-${ENVIRONMENT}.tfstate"
+LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
+rm -rf .terraform
+rm -f .terraform.lock.hcl
+
 npm run build:assets
 
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${EFCMS_DOMAIN}.terraform.deploys" \
- -backend-config=key="wait-for-workflow-cron-${ENVIRONMENT}.tfstate" \
- -backend-config=dynamodb_table="efcms-terraform-lock" \
- -backend-config=region="us-east-1"
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
 terraform plan
 terraform apply -auto-approve

@@ -1,47 +1,123 @@
-#!/bin/bash
+#!/bin/bash -e
 
-ENVIRONMENT=$1
+ENV=$1
 
+MIGRATE_FLAG=$(../../../../scripts/migration/get-migrate-flag.sh "${ENV}")
+
+export MIGRATE_FLAG
+
+# Getting the environment-specific deployment settings and injecting them into the shell environment
+if [ -z "${SECRETS_LOADED}" ]; then
+  pushd ../../../../
+  # shellcheck disable=SC1091
+  . ./scripts/load-environment-from-secrets.sh
+  popd
+fi
+
+[ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
-[ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
+[ -z "${EMAIL_DMARC_POLICY}" ] && echo "You must have EMAIL_DMARC_POLICY set in your environment" && exit 1
+[ -z "${ENABLE_HEALTH_CHECKS}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
+[ -z "${ENV}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
+[ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
+[ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
+[ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
+echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
+echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
-echo "  - ENVIRONMENT=${ENVIRONMENT}"
+echo "  - EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}"
+echo "  - ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}"
+echo "  - ENV=${ENV}"
+echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
+echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
+echo "  - LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}"
+echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
+echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
+echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 
-
-../../../scripts/verify-terraform-version.sh
+../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
-KEY="documents-${ENVIRONMENT}.tfstate"
+[ -z "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
+KEY="documents-${ENV}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
 rm -rf .terraform
+rm -f .terraform.lock.hcl
 
-BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENVIRONMENT}")
-GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENVIRONMENT}")
-BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENVIRONMENT}")
-GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENVIRONMENT}")
+echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]"
+sh ../../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
-export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
-export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
-export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
-export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
-export TF_VAR_destination_table=$DESTINATION_TABLE
+echo "checking for the dynamodb lock table..."
+aws dynamodb list-tables --output json --region "${REGION}" --query "contains(TableNames, '${LOCK_TABLE}')" | grep 'true'
+result=$?
+if [ ${result} -ne 0 ]; then
+  echo "dynamodb lock does not exist, creating"
+  sh ../../bin/create-dynamodb.sh "${LOCK_TABLE}" "${REGION}"
+else
+  echo "dynamodb lock table already exists"
+fi
+
+# exit on any failure
+set -eo pipefail
+
+if [ "${MIGRATE_FLAG}" == 'false' ]; then
+  DESTINATION_DOMAIN=$(../../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+
+  if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
+    SHOULD_ES_ALPHA_EXIST=true
+    SHOULD_ES_BETA_EXIST=false
+  else
+    SHOULD_ES_ALPHA_EXIST=false
+    SHOULD_ES_BETA_EXIST=true
+  fi
+else
+  SHOULD_ES_ALPHA_EXIST=true
+  SHOULD_ES_BETA_EXIST=true
+fi
+
+ACTIVE_SES_RULESET=$(../../../../scripts/ses/get-ses-ruleset.sh)
+
+export TF_VAR_environment=$ENV
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_active_ses_ruleset=$ACTIVE_SES_RULESET
+export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
-export TF_VAR_environment=$ENVIRONMENT
-export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT 
+export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
+export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
-export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
-export TF_VAR_green_table_name=$GREEN_TABLE_NAME
-export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
-export TF_VAR_my_s3_state_bucket=$BUCKET
-export TF_VAR_my_s3_state_key=$KEY
-export TF_WARN_OUTPUT_ERRORS=1
+export TF_VAR_lower_env_account_id=$LOWER_ENV_ACCOUNT_ID
+export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
+export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
+export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
+export TF_VAR_postgres_master_username="${POSTGRES_MASTER_USERNAME}"
+export TF_VAR_postgres_master_password="${POSTGRES_MASTER_PASSWORD}"
+export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
+export TF_VAR_rum_sample_rate=$RUM_SAMPLE_RATE
 
-terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+if [[ -n "${RDS_MIN_CAPACITY}" ]]
+then
+  export TF_VAR_rds_min_capacity=$RDS_MIN_CAPACITY
+fi
+
+if [[ -n "${RDS_MAX_CAPACITY}" ]]
+then
+  export TF_VAR_rds_max_capacity=$RDS_MAX_CAPACITY
+fi
+
+if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
+then
+  export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
+fi
+
+terraform init -upgrade -backend=true \
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
 terraform plan -destroy -out execution-plan
-terraform destroy -auto-approve  
+terraform destroy -auto-approve

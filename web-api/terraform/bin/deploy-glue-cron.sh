@@ -7,6 +7,7 @@ ENVIRONMENT=$1
 [ -z "$EFCMS_DOMAIN" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
+echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
 
 export ENVIRONMENT="${ENVIRONMENT}"
@@ -16,12 +17,21 @@ export TF_VAR_environment=$ENVIRONMENT
 
 ../../../../scripts/verify-terraform-version.sh
 
+BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+[ -z "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
+KEY="glue-cron-${ENVIRONMENT}.tfstate"
+LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
+rm -rf .terraform
+rm -f .terraform.lock.hcl
+
 npm run build:assets
 
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${EFCMS_DOMAIN}.terraform.deploys" \
- -backend-config=key="glue-cron-${ENVIRONMENT}.tfstate" \
- -backend-config=dynamodb_table="efcms-terraform-lock" \
- -backend-config=region="us-east-1"
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
 terraform plan
 terraform apply -auto-approve

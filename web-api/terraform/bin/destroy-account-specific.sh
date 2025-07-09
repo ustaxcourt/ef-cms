@@ -61,4 +61,5 @@ terraform init -upgrade -backend=true \
  -backend-config=key="$KEY" \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
-terraform apply
+terraform plan -destroy -out execution-plan
+terraform destroy -auto-approve
