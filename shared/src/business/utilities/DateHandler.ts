@@ -220,7 +220,7 @@ export const createEndOfDayISO = (params?: {
   day: string | number;
   month: string | number;
   year: string | number;
-}): string | null => {
+}): string => {
   const dateObject = params
     ? DateTime.fromObject(
         {
@@ -232,14 +232,14 @@ export const createEndOfDayISO = (params?: {
       )
     : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.endOf('day').setZone('utc').toISO();
+  return dateObject.endOf('day').setZone('utc').toISO() || '';
 };
 
 export const createStartOfDayISO = (params?: {
   day: string | number;
   month: string | number;
   year: string | number;
-}): string | undefined => {
+}): string  => {
   const dateObject = params
     ? DateTime.fromObject(
         {
@@ -251,7 +251,7 @@ export const createStartOfDayISO = (params?: {
       )
     : DateTime.now().setZone(USTC_TZ);
 
-  return dateObject.startOf('day').setZone('utc').toISO() || undefined;
+  return dateObject.startOf('day').setZone('utc').toISO() || '';
 };
 
 /**
