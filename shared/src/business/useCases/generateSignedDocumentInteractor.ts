@@ -15,10 +15,14 @@ export const computeCoordinates = ({
   textHeight,
   titleTextWidth,
 }) => {
-  const bottomLeftBoxCoordinates = {
+  const bottomLeftBoxCoordinates: {
+    x: number;
+    y?: number;
+  } = {
     x: posX / scale,
     y: undefined,
   };
+
   if (pageRotation === 90 || pageRotation === 270) {
     bottomLeftBoxCoordinates.y = cropBox.pageWidth - (posY + boxHeight) / scale;
   } else {
@@ -104,7 +108,7 @@ export const generateSignedDocumentInteractor = async (
     pdfData: any;
     posX: number;
     posY: number;
-    scale: number;
+    scale?: number;
     sigTextData: any;
   },
 ) => {
