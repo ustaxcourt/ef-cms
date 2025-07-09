@@ -234,38 +234,37 @@ export const StatusReportOrder = connect(
                       }}
                     />
                   </FormGroup>
-
-                  <hr className="border-top-2px border-base-lighter" />
-
-                  <FormGroup
-                    className="grid-container padding-left-2"
-                    errorText={validationErrors.strickenFromTrialSessions}
-                    id="stricken-from-trial-sessions-form-group"
-                  >
-                    <div>
-                      <input
-                        checked={form.strickenFromTrialSessions || false}
-                        className="usa-checkbox__input"
-                        id="stricken-from-trial-sessions"
-                        name="strickenFromTrialSessions"
-                        type="checkbox"
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.checked,
-                          });
-                        }}
-                      />
-                      <label
-                        className="usa-checkbox__label"
-                        htmlFor="stricken-from-trial-sessions"
-                        id="stricken-from-trial-sessions-label"
-                      >
-                        Case is stricken from the trial session
-                      </label>
-                    </div>
-                  </FormGroup>
-
+                  
+                  {statusReportOrderHelper.isCalendared && (
+                    <><hr className="border-top-2px border-base-lighter" /><FormGroup
+                      className="grid-container padding-left-2"
+                      errorText={validationErrors.strickenFromTrialSessions}
+                      id="stricken-from-trial-sessions-form-group"
+                    >
+                      <div>
+                        <input
+                          checked={form.strickenFromTrialSessions || false}
+                          className="usa-checkbox__input"
+                          id="stricken-from-trial-sessions"
+                          name="strickenFromTrialSessions"
+                          type="checkbox"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                          } } />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="stricken-from-trial-sessions"
+                          id="stricken-from-trial-sessions-label"
+                        >
+                          Case is stricken from the trial session
+                        </label>
+                      </div>
+                    </FormGroup></>
+                  )}
+                  
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup

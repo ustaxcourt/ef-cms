@@ -1,5 +1,5 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES, STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareStatusReportOrderAction = ({
@@ -20,6 +20,7 @@ export const prepareStatusReportOrderAction = ({
     state.statusReportOrder,
   );
 
+  const isCalendared = caseDetail.status === CASE_STATUS_TYPES.calendared;
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
@@ -34,11 +35,19 @@ export const prepareStatusReportOrderAction = ({
     .getUtilities()
     .formatDateString(statusReportFilingDate, FORMATS.MONTH_DAY_YEAR);
 
+  let calendaredLine = ''
+  if(isCalendared) {
+    const formattedTrialDate = applicationContext
+      .getUtilities()
+      .formatDateString(caseDetail.trialDate, FORMATS.MONTH_DAY_YEAR);
+    calendaredLine = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate} in ${caseDetail.trialLocation}.`;
+  }
+
   const filedLine =
     isLeadCase &&
     issueOrder === STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup
-      ? `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (Lead case document no. ${statusReportIndex}). For cause, it is</p>`
-      : `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (Document no. ${statusReportIndex}). For cause, it is</p>`;
+      ? `<p class="indent-paragraph">${calendaredLine} On ${statusReportFilingDateFormatted}, a status report was filed (Lead case document no. ${statusReportIndex}). For cause, it is</p>`
+      : `<p class="indent-paragraph">${calendaredLine} On ${statusReportFilingDateFormatted}, a status report was filed (Document no. ${statusReportIndex}). For cause, it is</p>`;
 
   const orderTypeLine =
     hasOrderType &&
