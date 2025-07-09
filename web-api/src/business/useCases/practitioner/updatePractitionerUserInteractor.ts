@@ -82,6 +82,8 @@ export const updatePractitionerUser = async (
       .getPersistenceGateway()
       .updatePractitionerUser({ applicationContext, user: validatedUserData });
   } else if (!oldUser.email && user.updatedEmail) {
+    // TODO: 10495 - we are updating the practitioner early which causes the diff for the NCA to
+    // not think anything changes; we probably need to pass the old data into the sqs event to fix this maybe.
     updatedUser = await upsertPractitioner({
       applicationContext,
       user: new Practitioner({

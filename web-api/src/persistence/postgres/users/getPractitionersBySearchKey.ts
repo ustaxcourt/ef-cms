@@ -14,8 +14,8 @@ export const getPractitionersBySearchKey = async ({
     reader
       .selectFrom('dwUser as u')
       .where(
-        sql<boolean>`${sql.ref('p.name')} ILIKE ${searchKey} OR ${sql.ref(
-          'p.barNumber',
+        sql<boolean>`${sql.ref('u.name')} ILIKE ${searchKey} OR ${sql.ref(
+          'u.barNumber',
         )} ILIKE ${searchKey}`,
       )
       .where('u.role', '=', role)
