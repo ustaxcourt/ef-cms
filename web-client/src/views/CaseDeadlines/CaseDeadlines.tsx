@@ -51,7 +51,7 @@ export const CaseDeadlines = connect(
           <div className="title">
             <h1>Deadlines</h1>
           </div>
-          <h2>{caseDeadlineReportHelper.formattedFilterStartDateHeader} - {caseDeadlineReportHelper.formattedFilterEndDateHeader}</h2>
+          <h2>{caseDeadlineReportHelper.formattedFilterDateHeader}</h2>
           <div className="grid-row grid-gap">
             <DateRangePickerComponent
               endDateErrorText={validationErrors.endDate}

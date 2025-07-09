@@ -40,23 +40,10 @@ describe('caseDeadlineReportHelper', () => {
       },
     });
     expect(result.formattedCaseDeadlines).toEqual([]);
-    expect(result.formattedFilterDateHeader).toBeTruthy();
+    expect(result.formattedFilterDateHeader).toEqual('');
   });
 
-  it('should use only the formatted startDate in header if start and end date are on the same day in ET', () => {
-    const result = runCompute(caseDeadlineReportHelper, {
-      state: {
-        caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
-        screenMetadata: {
-          filterEndDate: '2019-08-21T12:59:59.000Z',
-          filterStartDate: '2019-08-21T04:00:00.000Z',
-        },
-      },
-    });
-    expect(result.formattedFilterDateHeader).toEqual('August 21, 2019');
-  });
-
-  it('should return formatted judges options sorted by name with Chief Judge included', () => {
+  it('should return formatted judges options sorted by name with Chief Judge included, as well as allJudges option at the front', () => {
     const result = runCompute(caseDeadlineReportHelper, {
       state: {
         caseDeadlineReport: { caseDeadlinesForCurrentPage: caseDeadlines },
@@ -72,12 +59,56 @@ describe('caseDeadlineReportHelper', () => {
       },
     });
     expect(result.judgeOptions).toEqual([
+      { id: '', name: '- All Judges -' },
       { id: '234567', name: 'Buch' },
       { id: '123456', name: 'Carluzzo' },
       { id: CHIEF_JUDGE, name: CHIEF_JUDGE },
       { id: '345678', name: 'Dredd' },
     ]);
   });
+
+  describe('selectedJudgeFilterValue', () => {
+    it('should return the selected judge', () => {
+      const result = runCompute(caseDeadlineReportHelper, {
+        state: {
+          caseDeadlineReport: { 
+            caseDeadlinesForCurrentPage: caseDeadlines,
+            judgeIdFilter: '123456'
+          },
+          judges: [
+            { userId: '123456', name: 'Carluzzo' },
+            { userId: '234567', name: 'Buch' },
+            { userId: '345678', name: 'Dredd' },
+          ],
+          screenMetadata: {
+            filterEndDate: '2019-08-21T12:59:59.000Z',
+            filterStartDate: '2019-08-21T04:00:00.000Z',
+          },
+        },
+      });
+      expect(result.selectedJudgeFilterValue).toEqual({ id: '123456', name: 'Carluzzo' });
+    });
+    it('should return all judges the default value if judge is not found', () => {
+      const result = runCompute(caseDeadlineReportHelper, {
+        state: {
+          caseDeadlineReport: { 
+            caseDeadlinesForCurrentPage: caseDeadlines,
+            judgeIdFilter: 'abc'
+          },
+          judges: [
+            { userId: '123456', name: 'Carluzzo' },
+            { userId: '234567', name: 'Buch' },
+            { userId: '345678', name: 'Dredd' },
+          ],
+          screenMetadata: {
+            filterEndDate: '2019-08-21T12:59:59.000Z',
+            filterStartDate: '2019-08-21T04:00:00.000Z',
+          },
+        },
+      });
+      expect(result.selectedJudgeFilterValue).toEqual({ id: '', name: '- All Judges -'})
+    });
+  })
 
   it('should format the associated judge name to remove title so only the last name is returned', () => {
     const result = runCompute(caseDeadlineReportHelper, {
@@ -232,5 +263,18 @@ describe('caseDeadlineReportHelper', () => {
       });
       expect(result.showNoDeadlines).toBeFalsy();
     });
+  });
+
+  it('should get the filterStartDate and filterEndDate from screenMetadata and return it in MMDDYYYY format', () => {
+    const result = runCompute(caseDeadlineReportHelper, {
+      state: {
+        screenMetadata: {
+          filterEndDate: '2019-08-22T12:59:59.000Z',
+          filterStartDate: '2019-08-21T04:00:00.000Z',
+        },
+      },
+    });
+    expect(result.filterStartDate).toEqual('08/21/2019');
+    expect(result.filterEndDate).toEqual('08/22/2019');
   });
 });
