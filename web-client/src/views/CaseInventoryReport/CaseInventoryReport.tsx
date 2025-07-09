@@ -111,7 +111,8 @@ export const CaseInventoryReport = connect(
             <>
               {caseInventoryReportHelper.pageCount > 1 && (
                 <div ref={paginatorTop} className="grid-row">
-                  <div className="grid-col-11">
+                  <div className="grid-col-2"></div>
+                  <div className="grid-col-8">
                     <Paginator
                       currentPageIndex={activePage}
                       totalPages={caseInventoryReportHelper.pageCount}
@@ -126,7 +127,7 @@ export const CaseInventoryReport = connect(
                       }}
                     />
                   </div>
-                  <div className="grid-col-1 text-right margin-top-3 padding-0">
+                  <div className="grid-col-2 text-right margin-top-3 padding-0">
                     <span className="text-semibold">Count: </span>
                     {foundCasesTotalCount}
                   </div>
