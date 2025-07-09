@@ -75,6 +75,7 @@ import {
   indexOpenSearchUser,
   transformOpenSearchUser,
 } from 'web-api/elasticsearch/index-users';
+import { transformOpenSearchUserOnCase } from 'web-api/elasticsearch/cases/transformOpenSearchUserOnCase';
 
 const DEFAULT = {};
 
@@ -181,6 +182,8 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwUserOnCase: {
     table: DEFAULT as UserOnCaseTable,
     columns: DW_USER_ON_CASE_COLUMNS,
+    transformOpenSearchMessage: transformOpenSearchUserOnCase,
+    indexOpenSearchMessage: indexOpenSearchCases,
   },
   dwUserOnCasePending: {
     table: DEFAULT as UserOnCasePendingTable,
