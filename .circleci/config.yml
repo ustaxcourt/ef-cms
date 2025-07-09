@@ -25,6 +25,14 @@ parameters:
     default: false
     type: boolean
 
+  run_index_once:
+    default: false
+    type: boolean
+
+  index_threads:
+    default: '5'
+    type: string
+
   lower_env:
     default: test
     type: string
@@ -600,6 +608,35 @@ jobs:
               npm run migration:cleanup -- $ENV
             fi
 
+  index-docket-entries-once:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: xlarge
+    environment:
+      THREADS: << pipeline.parameters.index_threads >>
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+      - run:
+          name: Index Docket Entries
+          command: |
+            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts "$THREADS"
+
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
   delete-existing-data:
@@ -772,6 +809,44 @@ jobs:
           name: Enable Dynamodb Streams
           command: |
             ./scripts/migration/toggle-streams.sh --on
+
+  index-cases:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Index Cases
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/index-cases.ts
+
+  index-docket-entries:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+      - run:
+          name: Index Docket Entries
+          command: |
+            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts 5
 
   cleanup-glue-job:
     docker:
@@ -1131,11 +1206,23 @@ workflows:
           requires:
             - wait-for-glue-workflow
             - wait-for-s3-sync-workflow
+      - index-cases:
+          <<: *only-test
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - index-docket-entries:
+          <<: *only-test
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
       - wait-for-glued-data-to-index:
           <<: *only-test
           type: approval
           requires:
             - index-glued-data
+            - index-cases
+            - index-docket-entries
       - cleanup-glue-job:
           <<: *only-test
           requires:
@@ -1160,6 +1247,12 @@ workflows:
           requires:
             - restore-postgres
             - wait-for-glue-job
+
+  index-once:
+    when: << pipeline.parameters.run_index_once >>
+    jobs:
+      - index-docket-entries-once:
+          <<: *only-deployed-lower-environments
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>
