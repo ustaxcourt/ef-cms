@@ -21,10 +21,9 @@ export const caseDeadlineReportHelper = (
     inConsolidatedGroup: boolean;
     inLeadCase: boolean;
   })[];
-  filterStartDate;
-  filterEndDate;
-  formattedFilterEndDateHeader: string;
-  formattedFilterStartDateHeader: string;
+  filterStartDate: string;
+  filterEndDate: string;
+  formattedFilterDateHeader: string;
   judgeOptions: Array<{ id: string, name: string }>;
   pageCount: number;
   selectedJudgeFilterValue: { id: string, name: string };
@@ -64,6 +63,11 @@ export const caseDeadlineReportHelper = (
   const formattedFilterEndDateHeader = applicationContext
     .getUtilities()
     .formatDateString(filterEndDate, DATE_FORMATS.MONTH_DAY_YEAR)
+  
+  let formattedFilterDateHeader = '';
+  if(formattedFilterStartDateHeader && formattedFilterEndDateHeader) {
+    formattedFilterDateHeader = `${formattedFilterStartDateHeader} - ${formattedFilterEndDateHeader}`;
+  }
 
   filterStartDate = applicationContext
     .getUtilities()
@@ -110,8 +114,7 @@ export const caseDeadlineReportHelper = (
     filterStartDate,
     filterEndDate,
     formattedCaseDeadlines,
-    formattedFilterEndDateHeader,
-    formattedFilterStartDateHeader,
+    formattedFilterDateHeader,
     judgeOptions,
     pageCount,
     selectedJudgeFilterValue,
