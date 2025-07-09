@@ -1,8 +1,8 @@
-import { createApplicationContext } from '@web-api/applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
+import { processStreamRecordsInteractor } from '@web-api/business/useCases/processStreamRecords/processStreamRecordsInteractor';
 import { shouldProcessRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { DynamoDBRecord, DynamoDBStreamEvent } from 'aws-lambda';
 
-const applicationContext = createApplicationContext({});
 const deploymentTimestamp: number =
   Number(process.env.DEPLOYMENT_TIMESTAMP!) || 0; // epoch seconds
 
@@ -14,8 +14,8 @@ export const processStreamRecordsLambda = async (
   );
 
   if (recordsToProcess.length > 0) {
-    await applicationContext
-      .getUseCases()
-      .processStreamRecordsInteractor(applicationContext, { recordsToProcess });
+    await processStreamRecordsInteractor(applicationContext, {
+      recordsToProcess,
+    });
   }
 };

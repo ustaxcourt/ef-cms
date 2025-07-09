@@ -18,7 +18,6 @@ describe('gotoDocketEntryQcSequence', () => {
     filingDate: '2019-04-19T17:29:13.120Z',
     isFileAttached: true,
     isOnDocketRecord: true,
-    partyPrimary: true,
     scenario: 'Standard',
     servedAt: '2019-06-19T17:29:13.120Z',
   };

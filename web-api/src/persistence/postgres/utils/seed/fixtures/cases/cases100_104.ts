@@ -1350,7 +1350,6 @@ export const cases100_104: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     createdAt: '2023-01-06T22:33:08.581Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_100_104['104-23'],
     docketNumberSuffix: 'D',
-    // gsi1pk: 'leadCase|104-23',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption: 'Armand Fulton, Petitioner',
