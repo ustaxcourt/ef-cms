@@ -1,12 +1,7 @@
 import { createApplicationContext } from '../../../../web-api/src/applicationContext';
 
 export const createSilentApplicationContext = user => {
-  const applicationContext = createApplicationContext(user, {
-    debug: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-    warn: jest.fn(),
-  });
+  const applicationContext = createApplicationContext(user);
 
   applicationContext.environment.dynamoDbTableName = 'mocked';
   applicationContext.getPersistenceGateway().getMaintenanceMode = jest
