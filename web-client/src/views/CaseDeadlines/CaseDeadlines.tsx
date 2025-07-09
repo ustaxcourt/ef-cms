@@ -93,7 +93,7 @@ export const CaseDeadlines = connect(
                 </div>
               </div>
               {caseDeadlineReportHelper.showJudgeSelect && (
-                <div className="padding-bottom-4">
+                <div className="margin-bottom-3">
                   <label
                     className="dropdown-label-serif margin-right-3"
                     htmlFor="inline-select"
@@ -122,30 +122,38 @@ export const CaseDeadlines = connect(
                       </option>
                     ))}
                   </BindedSelect>
+                  {caseDeadlineReportHelper.pageCount <= 1 && (
+                    <div className="push-right margin-top-3">
+                      <span className="text-semibold">Count: </span>
+                      {caseDeadlineReport.caseDeadlinesTotalCount}
+                    </div>
+                  )}
                 </div>
               )}
-              <div ref={paginatorTop}>
-                {caseDeadlineReportHelper.pageCount > 1 && (
-                  <Paginator
-                    currentPageIndex={activePage}
-                    totalPages={caseDeadlineReportHelper.pageCount}
-                    onPageChange={pageChange => {
-                      setActivePage(pageChange);
-                      updateCaseDeadlineReportPageSequence({
-                        selectedPage: pageChange,
-                      });
-                      focusPaginatorTop(paginatorTop);
-                    }}
-                  />
-                )}
-              </div>
-              <div className="margin-bottom-2">
-                <div className="text-right">
-                  <span className="text-semibold">
-                    Count: {caseDeadlineReport.caseDeadlinesTotalCount}
-                  </span>
+
+              {caseDeadlineReportHelper.pageCount > 1 && (
+                <div ref={paginatorTop} className="grid-row margin-bottom-3">
+                  <div className="grid-col-2"></div>
+                  <div className="grid-col-8">
+                    <Paginator
+                      currentPageIndex={activePage}
+                      totalPages={caseDeadlineReportHelper.pageCount}
+                      onPageChange={pageChange => {
+                        setActivePage(pageChange);
+                        updateCaseDeadlineReportPageSequence({
+                          selectedPage: pageChange,
+                        });
+                        focusPaginatorTop(paginatorTop);
+                      }}
+                    />
+                  </div>
+                  <div className="grid-col-2 text-right margin-top-3 padding-0">
+                    <span className="text-semibold">Count: </span>
+                    {caseDeadlineReport.caseDeadlinesTotalCount}
+                  </div>
                 </div>
-              </div>
+              )}
+
               {caseDeadlineReportHelper.formattedCaseDeadlines.length > 0 && (
                 <table className="usa-table subsection ustc-table deadlines">
                   <thead>
