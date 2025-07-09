@@ -15,7 +15,7 @@ Usage: node generateCategories.js [internal/external] spreadsheet.csv > output.j
 
 const type = process.argv[2];
 
-const files = [];
+const files: string[] = [];
 process.argv.forEach((val, index) => {
   if (index > 2) {
     files.push(val);

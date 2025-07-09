@@ -18,7 +18,15 @@ export const setCurrentUserToken = (newToken: string) => {
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-export const head = async ({ applicationContext, endpoint, params }) => {
+export const head = async ({
+  applicationContext,
+  endpoint,
+  params,
+}: {
+  applicationContext: ClientApplicationContext;
+  endpoint: string;
+  params?: any;
+}) => {
   return await applicationContext
     .getHttpClient()
     .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
@@ -71,6 +79,11 @@ export const getResponse = ({
   asyncSyncId,
   endpoint,
   params,
+}: {
+  applicationContext: ClientApplicationContext;
+  asyncSyncId?: string;
+  endpoint: string;
+  params?: any;
 }) => {
   return applicationContext
     .getHttpClient()
