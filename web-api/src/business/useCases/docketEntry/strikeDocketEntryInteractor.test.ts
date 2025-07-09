@@ -72,7 +72,6 @@ describe('strikeDocketEntryInteractor', () => {
   it('should throw an error when not authorized', async () => {
     await expect(
       strikeDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: caseRecord.docketNumber,
@@ -85,7 +84,6 @@ describe('strikeDocketEntryInteractor', () => {
   it('should throw an error when the docket record is not found on the case', async () => {
     await expect(
       strikeDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: 'does-not-exist',
           docketNumber: caseRecord.docketNumber,
@@ -97,7 +95,6 @@ describe('strikeDocketEntryInteractor', () => {
 
   it('should call getCaseByDocketNumber, getUserById, and upsertDocketEntries', async () => {
     await strikeDocketEntryInteractor(
-      applicationContext,
       {
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
@@ -122,7 +119,6 @@ describe('strikeDocketEntryInteractor', () => {
 
     await expect(
       strikeDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: caseRecord.docketNumber,

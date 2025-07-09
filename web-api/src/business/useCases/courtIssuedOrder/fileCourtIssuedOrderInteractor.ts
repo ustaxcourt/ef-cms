@@ -48,6 +48,7 @@ export const fileCourtIssuedOrder = async (
 
   const caseToUpdate = await getCaseByDocketNumber({
     docketNumber,
+    includeConsolidatedCases: false,
   });
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
 

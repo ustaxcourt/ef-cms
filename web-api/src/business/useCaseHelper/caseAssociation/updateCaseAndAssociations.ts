@@ -54,6 +54,7 @@ export const updateCaseAndAssociations = async ({
 
   const oldCaseEntity = await getCaseByDocketNumber({
     docketNumber: caseToUpdate.docketNumber,
+    includeConsolidatedCases: false,
   });
 
   const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
