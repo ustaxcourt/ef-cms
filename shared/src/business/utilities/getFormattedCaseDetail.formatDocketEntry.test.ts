@@ -3,12 +3,11 @@ import {
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
 } from '../entities/EntityConstants';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
 import { formatDocketEntry } from './getFormattedCaseDetail';
 
 describe('formatDocketEntry', () => {
   it('should format the servedAt date', () => {
-    const results = formatDocketEntry(applicationContext, {
+    const results = formatDocketEntry({
       servedAt: '2019-03-27T21:53:00.297Z',
     });
 
@@ -18,7 +17,7 @@ describe('formatDocketEntry', () => {
   });
 
   it('should format only lodged documents with overridden eventCode MISCL', () => {
-    const result = formatDocketEntry(applicationContext, {
+    const result = formatDocketEntry({
       docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
       documentType: 'Motion for Leave to File Administrative Record',
       eventCode: 'M115',
@@ -29,7 +28,7 @@ describe('formatDocketEntry', () => {
   });
 
   it('should return isTranscript true for transcript documents', () => {
-    const result = formatDocketEntry(applicationContext, {
+    const result = formatDocketEntry({
       docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
       documentType: 'Transcript',
       eventCode: TRANSCRIPT_EVENT_CODE,
@@ -39,7 +38,7 @@ describe('formatDocketEntry', () => {
   });
 
   it('should return isStipDecision true for stipulated decision documents', () => {
-    const result = formatDocketEntry(applicationContext, {
+    const result = formatDocketEntry({
       docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
       documentType: 'Stipulated Decision',
       eventCode: STIPULATED_DECISION_EVENT_CODE,
@@ -49,7 +48,7 @@ describe('formatDocketEntry', () => {
   });
 
   it('should return isTranscript and isStipDecision false for non-transcript documents', () => {
-    const result = formatDocketEntry(applicationContext, {
+    const result = formatDocketEntry({
       docketEntryId: '5d96bdfd-dc10-40db-b640-ef10c2591b6a',
       documentType: 'Answer',
       eventCode: 'A',
@@ -60,7 +59,7 @@ describe('formatDocketEntry', () => {
   });
 
   it('should set isCourtIssuedDocument to false when document.eventCode is not present in the list of court issued documents', () => {
-    const results = formatDocketEntry(applicationContext, {
+    const results = formatDocketEntry({
       eventCode: 'PMT',
     });
 
@@ -68,7 +67,7 @@ describe('formatDocketEntry', () => {
   });
 
   it('should format certificate of service date', () => {
-    const result = formatDocketEntry(applicationContext, {
+    const result = formatDocketEntry({
       certificateOfServiceDate: '2019-04-27T21:53:00.297Z',
       createdAt: '2019-05-27T21:53:00.297Z',
       docketEntryId: 'd-1-2-3',
@@ -81,7 +80,7 @@ describe('formatDocketEntry', () => {
   });
 
   it('should correctly format legacy served docket entries', () => {
-    const result = formatDocketEntry(applicationContext, {
+    const result = formatDocketEntry({
       isLegacyServed: true,
     });
 
@@ -91,7 +90,7 @@ describe('formatDocketEntry', () => {
 
   describe('isNotServedDocument', () => {
     it('should be true when isLegacyServed and servedAt are undefined and document is not a minute entry', () => {
-      const result = formatDocketEntry(applicationContext, {
+      const result = formatDocketEntry({
         eventCode: 'A',
         isLegacyServed: undefined,
         servedAt: undefined,
@@ -101,7 +100,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should be false when isLegacyServed is true, servedAt are undefined, and document is not a minute entry', () => {
-      const result = formatDocketEntry(applicationContext, {
+      const result = formatDocketEntry({
         eventCode: 'A',
         isLegacyServed: true,
         servedAt: undefined,
@@ -111,7 +110,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should be false when isLegacyServed and servedAt are undefined and the document is a minute entry', () => {
-      const result = formatDocketEntry(applicationContext, {
+      const result = formatDocketEntry({
         eventCode:
           MINUTE_ENTRIES_MAP[Object.keys(MINUTE_ENTRIES_MAP)[0]].eventCode,
         isLegacyServed: undefined,
@@ -122,7 +121,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should be false when servedAt is defined and isLegacyServed and is not a minute entry', () => {
-      const result = formatDocketEntry(applicationContext, {
+      const result = formatDocketEntry({
         eventCode: 'A',
         isLegacyServed: undefined,
         servedAt: '2019-06-27T21:53:00.297Z',
@@ -134,7 +133,7 @@ describe('formatDocketEntry', () => {
 
   describe('isInProgress', () => {
     it('should return isInProgress true if the document is not court-issued, not a minute entry, does not have a file attached, and is not unservable', () => {
-      const results = formatDocketEntry(applicationContext, {
+      const results = formatDocketEntry({
         eventCode: 'A', //not unservable, not court-issued, not minute entry
         isFileAttached: false,
       });
@@ -143,7 +142,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should return isInProgress true if the document has a file attached and is not served or unservable', () => {
-      const results = formatDocketEntry(applicationContext, {
+      const results = formatDocketEntry({
         eventCode: 'A', //not unservable
         isFileAttached: true,
       });
@@ -152,7 +151,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should return isInProgress false if the document is court-issued', () => {
-      const results = formatDocketEntry(applicationContext, {
+      const results = formatDocketEntry({
         eventCode: 'O', //court-issued
       });
 
@@ -160,7 +159,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should return isInProgress false if the document has a file attached and is served', () => {
-      const results = formatDocketEntry(applicationContext, {
+      const results = formatDocketEntry({
         isFileAttached: true,
         servedAt: '2019-03-01T21:40:46.415Z',
       });
@@ -169,7 +168,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should return isInProgress false if the document has a file attached and is unservable', () => {
-      const results = formatDocketEntry(applicationContext, {
+      const results = formatDocketEntry({
         eventCode: 'CTRA', //unservable
         isFileAttached: true,
       });
@@ -178,7 +177,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should return isInProgress false if the document is a minute entry', () => {
-      const results = formatDocketEntry(applicationContext, {
+      const results = formatDocketEntry({
         eventcode: 'RQT', // minute entry
       });
 
@@ -186,7 +185,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should return isInProgress false if the document is unservable', () => {
-      const results = formatDocketEntry(applicationContext, {
+      const results = formatDocketEntry({
         eventCode: 'CTRA', //unservable
       });
 
@@ -196,7 +195,7 @@ describe('formatDocketEntry', () => {
 
   describe('qcNeeded', () => {
     it('should be true for a docket entry that is not in-progress and has an incomplete work item', () => {
-      const result = formatDocketEntry(applicationContext, {
+      const result = formatDocketEntry({
         isFileAttached: true,
         isLegacySealed: true,
         isOnDocketRecord: true,
@@ -210,7 +209,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should be false for a docket entry that is in-progress and has an incomplete work item', () => {
-      const result = formatDocketEntry(applicationContext, {
+      const result = formatDocketEntry({
         isFileAttached: false,
         isLegacySealed: true,
         isOnDocketRecord: true,
@@ -225,7 +224,7 @@ describe('formatDocketEntry', () => {
     });
 
     it('should be false for a docket entry that is not in-progress and does not have an incomplete work item', () => {
-      const result = formatDocketEntry(applicationContext, {
+      const result = formatDocketEntry({
         isFileAttached: true,
         isLegacySealed: true,
         isOnDocketRecord: true,
@@ -303,7 +302,7 @@ describe('formatDocketEntry', () => {
     createdAtFormattedTests.forEach(
       ({ description, docketEntry, expectation }) => {
         it(`${description}`, () => {
-          const result = formatDocketEntry(applicationContext, docketEntry);
+          const result = formatDocketEntry(docketEntry);
 
           expect(result.createdAtFormatted).toEqual(expectation);
         });
@@ -313,7 +312,7 @@ describe('formatDocketEntry', () => {
 
   describe('sortingFilingDate', () => {
     it('should set the property "sortingFilingDate" correctly using filingDate', () => {
-      const result = formatDocketEntry(applicationContext, {
+      const result = formatDocketEntry({
         createdAt: '2020-03-01T21:40:46.415Z',
         filingDate: '2019-03-01T21:40:46.415Z',
         isOnDocketRecord: true,
@@ -322,7 +321,7 @@ describe('formatDocketEntry', () => {
       expect(result.sortingFilingDate).toEqual('20190301');
     });
     it('should set the property "sortingFilingDate" correctly using createdAt', () => {
-      const result = formatDocketEntry(applicationContext, {
+      const result = formatDocketEntry({
         createdAt: '2020-03-01T21:40:46.415Z',
         filingDate: '2019-03-01T21:40:46.415Z',
         isOnDocketRecord: false,
