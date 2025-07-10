@@ -14,45 +14,53 @@ export const MessagesCompleted = connect(
           <p className="margin-bottom-10">There are no messages.</p>
         )}
         {formattedCompletedMessages.length > 0 && (
-          <table className="usa-table row-border-only subsection messages">
-            <thead>
-              <tr>
-                <th className="header-fixed-width">Completed</th>
-                <th className="header-fixed-width">Last Message</th>
-                <th className="header-fixed-width">Comment</th>
-                <th>Completed By</th>
-                <th>Section</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              {formattedCompletedMessages.map(message => (
-                <tr key={message.messageId}>
-                  <td className="responsive-title padding-extra">
-                    {message.completedAtFormatted}
-                  </td>
-                  <td className="padding-extra">
-                    <div className="message-document-title">
-                      <Button
-                        link
-                        className="padding-0"
-                        href={message.messageDetailLink}
-                      >
-                        {message.subject}
-                      </Button>
-                    </div>
-
-                    <div className="message-document-detail">
-                      {message.message}
-                    </div>
-                  </td>
-                  <td className="padding-extra">{message.completedMessage}</td>
-                  <td className="padding-extra">{message.completedBy}</td>
-                  <td>{message.completedBySection}</td>
+          <>
+            <div className="text-right margin-bottom-3">
+              <span className="text-semibold">Count:</span>{' '}
+              {formattedCompletedMessages.length}
+            </div>
+            <table className="usa-table row-border-only subsection messages">
+              <thead>
+                <tr>
+                  <th className="header-fixed-width">Completed</th>
+                  <th className="header-fixed-width">Last Message</th>
+                  <th className="header-fixed-width">Comment</th>
+                  <th>Completed By</th>
+                  <th>Section</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+
+              <tbody>
+                {formattedCompletedMessages.map(message => (
+                  <tr key={message.messageId}>
+                    <td className="responsive-title padding-extra">
+                      {message.completedAtFormatted}
+                    </td>
+                    <td className="padding-extra">
+                      <div className="message-document-title">
+                        <Button
+                          link
+                          className="padding-0"
+                          href={message.messageDetailLink}
+                        >
+                          {message.subject}
+                        </Button>
+                      </div>
+
+                      <div className="message-document-detail">
+                        {message.message}
+                      </div>
+                    </td>
+                    <td className="padding-extra">
+                      {message.completedMessage}
+                    </td>
+                    <td className="padding-extra">{message.completedBy}</td>
+                    <td>{message.completedBySection}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </>
         )}
       </>
     );
