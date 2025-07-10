@@ -17,5 +17,9 @@ export const getPractitionerByBarNumber = async ({
       .executeTakeFirst(),
   );
 
+  if (!user) {
+    return undefined;
+  }
+
   return rawUser(user) as RawPractitioner;
 };
