@@ -97,6 +97,13 @@ const updateUserContactInformationHelper = async (
 
   await upsertUsers([userEntity.validate().toRawObject()]);
 
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: { action: 'user_contact_initial_update_complete' },
+    userId: user.userId,
+    clientConnectionId,
+  });
+
   const results = await generateChangeOfAddress({
     applicationContext,
     authorizedUser,
