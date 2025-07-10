@@ -34,7 +34,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('practitionerType', 'varchar')
     .addColumn('suffix', 'varchar')
     .addColumn('updatedEmail', 'varchar')
-    .addColumn('entityName', 'varchar')
     .execute();
 
   // TODO: 10495: add indexs on columns

@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+import { ROLES } from '@shared/business/entities/EntityConstants';
 import {
   IrsPractitioner,
   RawIrsPractitioner,
@@ -26,14 +27,13 @@ import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/tr
 function pickUserFields(
   user: RawUser | RawIrsPractitioner | RawPractitioner,
 ): NewUserKysely {
-  // this is questionable
+  //TODO 10495: this is questionable
   const rawPractitioner = user as RawPractitioner;
 
   return {
     userId: user.userId,
     contact: user.contact ? JSON.stringify(user.contact) : null,
     email: user.email, // 10495: Note that this field was previously trimmed and all lower-case
-    entityName: user.entityName,
     isSeniorJudge: user.isSeniorJudge ?? null,
     isUpdatingInformation: user.isUpdatingInformation,
     judgeFullName: user.judgeFullName,
@@ -93,7 +93,7 @@ export function fromKyselyPractitioner(
 export function rawUser(
   user,
 ): RawPrivatePractitioner | RawIrsPractitioner | RawPractitioner | RawUser {
-  if (user.entityName === PrivatePractitioner.ENTITY_NAME) {
+  if (user.role === ROLES.privatePractitioner) {
     return new PrivatePractitioner(
       transformNullToUndefined({
         ...user,
@@ -107,7 +107,7 @@ export function rawUser(
     )
       .validate()
       .toRawObject();
-  } else if (user.entityName === IrsPractitioner.ENTITY_NAME) {
+  } else if (user.role === ROLES.irsPractitioner) {
     return new IrsPractitioner(
       transformNullToUndefined({
         ...user,
@@ -121,7 +121,7 @@ export function rawUser(
     )
       .validate()
       .toRawObject();
-  } else if (user.entityName === Practitioner.ENTITY_NAME) {
+  } else if (user.role === ROLES.inactivePractitioner) {
     return new Practitioner(
       transformNullToUndefined({
         ...user,

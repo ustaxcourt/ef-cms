@@ -34,7 +34,6 @@ const userTableDefinition = {
   practitionerType: DEFAULT as string | null,
   suffix: DEFAULT as string | null,
   updatedEmail: DEFAULT as string | null,
-  entityName: DEFAULT as string | null,
 };
 
 export type UserTable = typeof userTableDefinition;

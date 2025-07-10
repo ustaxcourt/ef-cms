@@ -5,7 +5,6 @@ import { NewUserKysely } from '@web-api/persistence/postgres/users/schema';
 export const users: NewUserKysely[] = [
   {
     role: 'irsSuperuser',
-    entityName: 'User',
     name: 'Test IRS Superuser',
     section: 'irsSuperuser',
     userId: '02c9b614-e498-4dae-b0f5-751b9ab5e8b3',
@@ -15,7 +14,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Judge',
     judgeFullName: 'Tia W. Mowry',
     role: 'judge',
-    entityName: 'User',
     name: 'Mowry',
     section: 'mowryChambers',
     userId: '09b7c6c9-2d9e-43a5-83a4-096ae5362725',
@@ -24,7 +22,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'general',
-    entityName: 'User',
     name: 'Test General',
     section: 'general',
     userId: '0a03718f-595e-4e2e-bde0-e0b3c3c5ae16',
@@ -32,7 +29,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'chambers',
-    entityName: 'User',
     name: "Test Cohen's Chambers",
     section: 'cohensChambers',
     userId: '0bd3bc49-4e46-4caa-adeb-4960c56e17c8',
@@ -40,7 +36,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'docketclerk',
-    entityName: 'User',
     name: 'Test Docketclerk',
     section: 'docket',
     userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
@@ -48,7 +43,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'clerkofcourt',
-    entityName: 'User',
     name: 'Test Clerk of Court',
     section: 'clerkofcourt',
     userId: '23dd8806-c0c7-4265-81f0-5f264ef78248',
@@ -56,7 +50,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'reportersOffice',
-    entityName: 'User',
     name: "Test Reporter's Office",
     section: 'reportersOffice',
     userId: '27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f',
@@ -64,7 +57,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'docketclerk',
-    entityName: 'User',
     name: 'Test Docketclerk1',
     section: 'docket',
     userId: '2805d1ab-18d0-43ec-bafb-654e83405416',
@@ -82,7 +74,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Alden',
     barNumber: 'RA3333',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -110,7 +101,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Nero',
     barNumber: 'WN7777',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -127,7 +117,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'caseServicesSupervisor',
-    entityName: 'User',
     name: 'Test Case Services Supervisor',
     section: 'caseServicesSupervisor',
     userId: '35959d1a-0981-40b2-a93d-f65c7977db52',
@@ -135,7 +124,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'petitionsclerk',
-    entityName: 'User',
     name: 'Test Petitionsclerk',
     section: 'petitions',
     userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
@@ -143,7 +131,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'chambers',
-    entityName: 'User',
     name: "Test Gustafson's Chambers",
     section: 'gustafsonsChambers',
     userId: '3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2',
@@ -151,7 +138,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'chambers',
-    entityName: 'User',
     name: "Test Urda's Chambers",
     section: 'urdasChambers',
     userId: '44f02385-e4c6-49f9-a554-ecf93531d8a3',
@@ -159,7 +145,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'petitionsclerk',
-    entityName: 'User',
     name: 'Test Petitionsclerk1',
     section: 'petitions',
     userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
@@ -167,7 +152,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'chambers',
-    entityName: 'User',
     name: "Test Buch's Chambers",
     section: 'buchsChambers',
     userId: '49421c68-0c09-4b4b-b32c-a535279be8d0',
@@ -185,7 +169,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Test',
     barNumber: 'RT6789',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -213,7 +196,6 @@ export const users: NewUserKysely[] = [
     firstName: 'DOJ_Test',
     barNumber: 'DT1111',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: '',
       address2: '',
@@ -241,7 +223,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Stuart',
     barNumber: 'MS8888',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -258,7 +239,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'floater',
-    entityName: 'User',
     name: 'Test Floater1',
     section: 'floater',
     userId: '5dffc4d8-423d-4de9-bca0-585c7b6627f7',
@@ -276,7 +256,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Test',
     barNumber: 'RT0987',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -296,7 +275,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Chief Judge',
     judgeFullName: 'Maurice B. Foley',
     role: 'judge',
-    entityName: 'User',
     name: 'Foley',
     section: 'foleysChambers',
     userId: '659789b4-acc5-40b7-9318-3354e7eb8604',
@@ -306,7 +284,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'adc',
-    entityName: 'User',
     name: 'Test ADC',
     section: 'adc',
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -325,14 +302,12 @@ export const users: NewUserKysely[] = [
     firstName: 'Jaquelyn',
     barNumber: 'LJ9999',
     birthYear: 1950,
-    entityName: 'Practitioner',
     name: 'Jaquelyn Lane',
     originalBarState: 'TN',
     email: 'irspractitioner4@example.com',
   },
   {
     role: 'petitioner',
-    entityName: 'User',
     name: 'Test Petitioner',
     section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -340,7 +315,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'petitioner',
-    entityName: 'User',
     name: 'Test Petitioner 2',
     section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405417',
@@ -348,7 +322,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'petitioner',
-    entityName: 'User',
     name: 'Test Petitioner 3',
     section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405418',
@@ -356,7 +329,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'chambers',
-    entityName: 'User',
     name: "Test Ashford's Chambers",
     section: 'ashfordsChambers',
     userId: '817b48c5-d4e5-4544-9e11-9ba0102918f4',
@@ -364,7 +336,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'admin',
-    entityName: 'User',
     name: 'Test Admin',
     section: 'admin',
     userId: '86c3f87b-350b-477d-92c3-43bd095cb006',
@@ -372,7 +343,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'chambers',
-    entityName: 'User',
     name: "Test Carluzzo's Chambers",
     section: 'carluzzosChambers',
     userId: '8c0902ab-d156-4cca-b80d-43f595aa5ab0',
@@ -390,7 +360,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Lilah',
     barNumber: 'GL1111',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -408,7 +377,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'caseServicesSupervisor',
-    entityName: 'User',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -436,7 +404,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Test',
     barNumber: 'PT1234',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -456,7 +423,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'chambers',
-    entityName: 'User',
     name: "Test Colvin's Chambers",
     section: 'colvinsChambers',
     userId: '9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5',
@@ -464,7 +430,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'admissionsclerk',
-    entityName: 'User',
     name: 'Test Admissions Clerk1',
     section: 'admissions',
     userId: '9d7d63a3-d7a5-4905-ba89-ef71bf30057f',
@@ -472,7 +437,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'admissionsclerk',
-    entityName: 'User',
     name: 'Test Admissions Clerk',
     section: 'admissions',
     userId: '9d7d63b7-d7a5-4905-ba89-ef71bf30057f',
@@ -480,7 +444,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'floater',
-    entityName: 'User',
     name: 'Test Floater',
     section: 'floater',
     userId: '9ef02385-e4c6-49f9-a554-ecf93531d8a4',
@@ -498,7 +461,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Clark',
     barNumber: 'SC2222',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -516,7 +478,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'chambers',
-    entityName: 'User',
     name: "Test Pugh's Chambers",
     section: 'pughsChambers',
     userId: '9fbae83a-a55b-4132-96df-e04a8ee675e3',
@@ -534,7 +495,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Test',
     barNumber: 'PT9999',
     birthYear: 1952,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 99',
@@ -563,7 +523,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Test',
     barNumber: 'PT5432',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -593,7 +552,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Ronald',
     barNumber: 'BR1335',
     birthYear: 1970,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: null,
       address2: null,
@@ -610,7 +568,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'petitioner',
-    entityName: 'User',
     name: 'Test Petitioner 9',
     section: 'petitioner',
     userId: 'b2d1941f-230a-47bb-80ec-6b561c1765cd',
@@ -618,7 +575,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'petitioner',
-    entityName: 'User',
     name: 'Test Petitioner 4',
     section: 'petitioner',
     userId: 'b3e1941f-230a-47bb-80ec-6b561c1765cd',
@@ -626,7 +582,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'petitioner',
-    entityName: 'User',
     name: 'Test Petitioner 1',
     section: 'petitioner',
     userId: 'b84acb19-008f-4911-bfb6-773ca4020464',
@@ -644,7 +599,6 @@ export const users: NewUserKysely[] = [
     firstName: 'Test',
     barNumber: 'IP1111',
     birthYear: 1950,
-    entityName: 'Practitioner',
     contact: JSON.stringify({
       address3: 'Under the stairs',
       address2: 'Apartment 4',
@@ -662,7 +616,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'trialclerk',
-    entityName: 'User',
     name: 'Test trialclerk1',
     section: 'trialClerks',
     userId: 'd1f8a729-cbfa-4d22-a09b-73743a12f188',
@@ -670,7 +623,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'petitioner',
-    entityName: 'User',
     name: 'Test Petitioner 7',
     section: 'petitioner',
     userId: 'd3e1941f-230a-47bb-80ec-6b561c1765cd',
@@ -680,7 +632,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Judge',
     judgeFullName: 'John O. Colvin',
     role: 'judge',
-    entityName: 'User',
     name: 'Colvin',
     section: 'colvinsChambers',
     userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
@@ -692,7 +643,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Judge',
     judgeFullName: 'Tamara W. Ashford',
     role: 'judge',
-    entityName: 'User',
     name: 'Ashford',
     section: 'ashfordsChambers',
     userId: 'dabbad01-18d0-43ec-bafb-654e83405416',
@@ -704,7 +654,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Judge',
     judgeFullName: 'Ronald L. Buch',
     role: 'judge',
-    entityName: 'User',
     name: 'Buch',
     section: 'buchsChambers',
     userId: 'dabbad02-18d0-43ec-bafb-654e83405416',
@@ -716,7 +665,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Chief Special Trial Judge',
     judgeFullName: 'Lewis R. Carluzzo',
     role: 'judge',
-    entityName: 'User',
     name: 'Carluzzo',
     section: 'carluzzosChambers',
     userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
@@ -728,7 +676,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Judge',
     judgeFullName: 'Mary Ann Cohen',
     role: 'judge',
-    entityName: 'User',
     name: 'Cohen',
     section: 'cohensChambers',
     userId: 'dabbad04-18d0-43ec-bafb-654e83405416',
@@ -740,7 +687,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Judge',
     judgeFullName: 'David Gustafson',
     role: 'judge',
-    entityName: 'User',
     name: 'Gustafson',
     section: 'gustafsonsChambers',
     userId: 'dabbad05-18d0-43ec-bafb-654e83405416',
@@ -752,7 +698,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Judge',
     judgeFullName: 'Cary Douglas Pugh',
     role: 'judge',
-    entityName: 'User',
     name: 'Pugh',
     section: 'pughsChambers',
     userId: 'dabbad06-18d0-43ec-bafb-654e83405416',
@@ -764,7 +709,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Judge',
     judgeFullName: 'Patrick J. Urda',
     role: 'judge',
-    entityName: 'User',
     name: 'Urda',
     section: 'urdasChambers',
     userId: 'dabbad0a-18d0-43ec-bafb-654e83405416',
@@ -776,7 +720,6 @@ export const users: NewUserKysely[] = [
     judgeTitle: 'Judge',
     judgeFullName: 'Guy S. B. Fieri',
     role: 'legacyJudge',
-    entityName: 'User',
     name: 'Fieri',
     section: 'legacyJudgesChambers',
     userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
@@ -784,7 +727,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'petitioner',
-    entityName: 'User',
     name: 'Test Petitioner 8',
     section: 'petitioner',
     userId: 'e3e1941f-230a-47bb-80ec-6b561c1765cd',
@@ -792,7 +734,6 @@ export const users: NewUserKysely[] = [
   },
   {
     role: 'trialclerk',
-    entityName: 'User',
     name: 'Test Trial Clerk',
     section: 'trialClerks',
     userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
