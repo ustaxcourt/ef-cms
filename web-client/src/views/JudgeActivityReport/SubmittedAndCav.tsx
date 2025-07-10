@@ -27,11 +27,13 @@ export const SubmittedAndCav = connect(
         >
           <caption id="progressDescription">
             <div className="grid-row display-flex flex-row flex-align-end">
-              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
-                Count:{' '}
-                {formatPositiveNumber(
-                  judgeActivityReportHelper.progressDescriptionTableTotal,
-                )}
+              <div className="display-flex flex-justify-end grid-col-fill">
+                <span className="text-semibold">Count:&nbsp;</span>
+                <span className="text-normal">
+                  {formatPositiveNumber(
+                    judgeActivityReportHelper.progressDescriptionTableTotal,
+                  )}
+                </span>
               </div>
             </div>
           </caption>
