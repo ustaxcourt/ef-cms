@@ -74,8 +74,8 @@ import {
 import {
   indexOpenSearchUser,
   transformOpenSearchUser,
-} from 'web-api/elasticsearch/index-users';
-import { transformOpenSearchUserOnCase } from 'web-api/elasticsearch/cases/transformOpenSearchUserOnCase';
+} from '../elasticsearch/index-users';
+import { transformOpenSearchUserOnCase } from '../elasticsearch/cases/transformOpenSearchUserOnCase';
 
 const DEFAULT = {};
 

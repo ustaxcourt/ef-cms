@@ -4,7 +4,7 @@ import { getSearchClient } from '@web-api/getSearchClient';
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getUsersByIds } from '@web-api/persistence/postgres/users/getUsersById';
 import { UserKysely } from '@web-api/persistence/postgres/users/schema';
-import { efcmsUserIndex } from 'web-api/elasticsearch/efcms-user-mappings';
+import { efcmsUserIndex } from '../elasticsearch/efcms-user-mappings';
 
 export const transformOpenSearchUser = (
   userData: UserKysely | UserKysely[],
