@@ -66,4 +66,26 @@ describe('addDraftWatermarkToDocument', () => {
     );
     expect(result).toEqual('mock-pdf-bytes');
   });
+
+  it('reduces font size until watermark fits the page width', async () => {
+    mockTextFont.widthOfTextAtSize = jest
+      .fn()
+      .mockReturnValueOnce(600) // too large
+      .mockReturnValueOnce(500) // still too large
+      .mockReturnValueOnce(300); // fits
+
+    const result = await addDraftWatermarkToDocument({
+      applicationContext: mockApplicationContext,
+      pdfFile: new Uint8Array(),
+    });
+
+    expect(mockTextFont.widthOfTextAtSize).toHaveBeenCalledTimes(3);
+    expect(mockPage.drawText).toHaveBeenCalledWith(
+      'DRAFT',
+      expect.objectContaining({
+        size: expect.any(Number),
+      }),
+    );
+    expect(result).toEqual('mock-pdf-bytes');
+  });
 });
