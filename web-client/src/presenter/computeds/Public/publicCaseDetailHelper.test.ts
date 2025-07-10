@@ -24,7 +24,7 @@ import {
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../../withAppContext';
 
-const stipDecisionDocument = formatDocketEntry(applicationContextPublic, {
+const stipDecisionDocument = formatDocketEntry({
   addToCoversheet: false,
   attachments: false,
   createdAt: '2023-07-25T15:32:03.506Z',
