@@ -3,6 +3,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { get } from 'lodash';
 import { getCurrentInvoke } from '@vendia/serverless-express';
 import { getUserFromAuthHeader } from '@web-api/middleware/apiGatewayHelper';
+import { resetTransaction } from '@web-api/persistence/postgres/utils/transactions';
 
 export const headerOverride = {
   'Access-Control-Expose-Headers': 'X-Terminal-User',
@@ -25,6 +26,7 @@ export const lambdaWrapper = (
   options = defaultOptions,
   applicationContext?: ServerApplicationContext,
 ) => {
+  resetTransaction();
   return async (req, res) => {
     // 'shouldMimicApiGatewayAsyncEndpoint' flag is set to mimic how API gateway async endpoints work locally.
     // When an async endpoint invoked in API gateway, the service immediately returns a 204 response with no body.

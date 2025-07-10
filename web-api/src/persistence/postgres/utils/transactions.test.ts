@@ -26,7 +26,7 @@ describe('database transactions', () => {
   });
 
   describe('inTransaction', () => {
-    it('inTransaction should return true insider of transaction', async () => {
+    it('inTransaction should return true inside of transaction', async () => {
       const { inTransaction, withTransaction } = loadTransactionModule();
       const result = await withTransaction(() => {
         return Promise.resolve(inTransaction());
@@ -52,7 +52,7 @@ describe('database transactions', () => {
       expect(sqls).toEqual(['BEGIN', 'COMMIT']);
     });
 
-    it('should roll back on error in root transaction', async () => {
+    it('should roll back on error in transaction', async () => {
       const { withTransaction } = loadTransactionModule();
       await expect(
         withTransaction(() => {
@@ -64,7 +64,7 @@ describe('database transactions', () => {
       expect(sqls).toEqual(['BEGIN', 'ROLLBACK']);
     });
 
-    it('should use savepoints for nested transactions', async () => {
+    it('should begin/commit once on nested transactions', async () => {
       const { withTransaction } = loadTransactionModule();
       await withTransaction(() =>
         withTransaction(() => {
@@ -73,13 +73,11 @@ describe('database transactions', () => {
       );
 
       const sqls = mockExecute.mock.calls.map(c => c[0].sql);
-      console.log(sqls);
-      expect(sqls[1]).toMatch(/^SAVEPOINT/);
-      expect(sqls[2]).toMatch(/^RELEASE SAVEPOINT/);
-      expect(sqls).toEqual(expect.arrayContaining(['BEGIN', 'COMMIT']));
+      expect(sqls[0]).toMatch(/^BEGIN/);
+      expect(sqls[1]).toMatch(/^COMMIT/);
     });
 
-    it('should roll back to savepoint on inner failure and roll back outer transaction', async () => {
+    it('should roll back once on nested transactions', async () => {
       const { withTransaction } = loadTransactionModule();
       await expect(
         withTransaction(async () => {
@@ -90,9 +88,8 @@ describe('database transactions', () => {
       ).rejects.toThrow('inner fail');
 
       const sqls = mockExecute.mock.calls.map(c => c[0].sql);
-      expect(sqls[1]).toMatch(/^SAVEPOINT/);
-      expect(sqls[2]).toMatch(/^ROLLBACK TO SAVEPOINT/);
-      expect(sqls[3]).toBe('ROLLBACK');
+      expect(sqls[0]).toMatch(/^BEGIN/);
+      expect(sqls[1]).toBe('ROLLBACK');
     });
 
     it('calls onCommit callbacks after commit', async () => {
