@@ -92,24 +92,24 @@ export const DocketRecordMobileHeader = ({
             ))}
           </BindedSelect>
         </div>
-      </div>
-      <div className="grid-row">
-        <Button
-          link
-          aria-hidden="true"
-          className="margin-top-1 text-left"
-          icon="print"
-          onClick={() => {
-            gotoPrintableDocketRecordSequence({
-              docketNumber,
-            });
-          }}
-        >
-          Printable Docket Record
-        </Button>
-        <div className="padding-top-1 margin-top-auto margin-bottom-auto margin-left-auto">
-          <span className="text-semibold">Count: </span>
-          <span> {totalCount}</span>
+        <div className="grid-row">
+          <Button
+            link
+            aria-hidden="true"
+            className="margin-top-1 text-left"
+            icon="print"
+            onClick={() => {
+              gotoPrintableDocketRecordSequence({
+                docketNumber,
+              });
+            }}
+          >
+            Printable Docket Record
+          </Button>
+          <div className="padding-top-1 margin-top-auto margin-bottom-auto margin-left-auto">
+            <span className="text-semibold">Count: </span>
+            <span> {totalCount}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -194,13 +194,13 @@ export const DocketRecordHeader = connect<
           <NonPhone>
             <div className="grid-container padding-0 docket-record-header">
               <div className="grid-row grid-gap margin-bottom-2">
-                <div className="desktop:grid-col-8 tablet:grid-col-12 display-flex flex-align-center">
+                <div className="desktop:grid-col-4 tablet:grid-col-12 display-flex flex-align-center">
                   <NonMobileHeaderControls
                     filterOptions={DOCKET_RECORD_FILTER_OPTIONS}
                     docketRecordCount={docketRecordCount}
                   />
                 </div>
-                <div className="desktop:grid-col-4 tablet:grid-col-12 tablet:margin-top-2 text-right">
+                <div className="desktop:grid-col-8 tablet:grid-col-8 tablet:margin-top-2 text-right">
                   {docketRecordHelper.showPrintableDocketRecord && (
                     <Button
                       link
