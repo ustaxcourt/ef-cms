@@ -12,12 +12,11 @@ import {
  */
 
 export const getDocumentTitleForNoticeOfChange = ({
-  applicationContext,
   docketEntry,
 }) => {
   let { documentTitle } = docketEntry;
   const filingsAndProceedings = getFilingsAndProceedings(
-    formatDocketEntry(applicationContext, docketEntry),
+    formatDocketEntry(docketEntry),
   );
 
   documentTitle = `${documentTitle} ${

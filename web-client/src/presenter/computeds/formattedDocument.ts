@@ -20,7 +20,7 @@ export const formattedDocument = (
 
   const docketEntryFormatted = applicationContext
     .getUtilities()
-    .formatDocketEntry(applicationContext, doc);
+    .formatDocketEntry(doc);
 
   return docketEntryFormatted;
 };
