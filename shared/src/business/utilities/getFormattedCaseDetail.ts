@@ -18,7 +18,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { ClientApplicationContext } from '@web-client/applicationContext';
 
 export type FormattedCaseInventoryReportEntry = {
   docketNumber: string;
@@ -53,7 +53,7 @@ export const computeIsNotServedDocument = ({ formattedEntry }) => {
 };
 
 export const formatDocketEntry = (
-  applicationContext: ServerApplicationContext,
+  applicationContext: ClientApplicationContext,
   docketEntry,
 ) => {
   const formattedEntry = cloneDeep(docketEntry);
