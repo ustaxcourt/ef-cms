@@ -9,6 +9,10 @@ import {
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getConnection } from '@web-api/getConnection';
+import {
+  inTransaction,
+  onTransactionCommit,
+} from '@web-api/persistence/postgres/utils/transactions';
 
 export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
   return getConnection({
@@ -51,8 +55,7 @@ export async function getDbWriter<T>({
         type: table as OpenSearchSyncMessageType,
         action,
       };
-
-      await openSearchGateway().queueSync({ message });
+      await syncWriteToOpenSearch(message);
     } catch (err) {
       getDawsonLogger().error(
         'Error queuing message for opensearch from postgres',
@@ -62,4 +65,15 @@ export async function getDbWriter<T>({
   }
 
   return rawResult;
+}
+
+async function syncWriteToOpenSearch(message: OpenSearchSyncMessage) {
+  const syncFunc = async () => openSearchGateway().queueSync({ message });
+  if (!inTransaction()) {
+    // If we are not in a transaction, go ahead and send the message to OpenSearch directly.
+    await syncFunc();
+  } else {
+    // Otherwise, add it as a callback to be run if the transaction is successful.
+    onTransactionCommit(syncFunc);
+  }
 }
