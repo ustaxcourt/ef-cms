@@ -84,8 +84,6 @@ export const MOCK_ANSWER: RawDocketEntry = {
   numberOfPages: 5,
   pending: false,
   processingStatus: 'complete',
-  qcAt: '2023-03-31T14:03:56.079Z',
-  qcByUserId: 'f0c1cd15-9d23-4dac-86b8-700b77e315b7',
   receivedAt: '2023-03-30T04:00:00.000Z',
   relationship: 'primaryDocument',
   scenario: 'Standard',

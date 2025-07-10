@@ -213,7 +213,7 @@ const prepareToGenerateAndServeDocketEntry = async ({
   }
 
   newData.name = practitionerName;
-  const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
+  await generateAndServeDocketEntry({
     applicationContext,
     authorizedUser,
     caseEntity,
@@ -225,6 +225,4 @@ const prepareToGenerateAndServeDocketEntry = async ({
     servedParties,
     user,
   });
-
-  caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 };

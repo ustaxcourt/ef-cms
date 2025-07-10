@@ -174,7 +174,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     'any.required': 'Provide an answer',
     'string.max': 'Limit is 1000 characters. Enter 1000 or fewer characters.',
   }),
-  freeText2: JoiValidationConstants.STRING.max(1000).optional(),
   hasOtherFilingParty: joi
     .boolean()
     .optional()
@@ -318,8 +317,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
   processingStatus: JoiValidationConstants.STRING.valid(
     ...Object.values(DOCUMENT_PROCESSING_STATUS_OPTIONS),
   ).required(),
-  qcAt: JoiValidationConstants.ISO_DATE.optional(),
-  qcByUserId: JoiValidationConstants.UUID.optional().allow(null),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
   redactionAcknowledgement: joi.boolean().optional().invalid(false),
   relationship: JoiValidationConstants.STRING.valid(
@@ -420,9 +417,6 @@ export const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
       }),
     })
     .description('The judge who signed the document.'),
-  signedJudgeUserId: JoiValidationConstants.UUID.optional() // Optional for now, but should eventually follow same logic as signedJudgeName
-    .allow(null)
-    .description('The user id of the judge who signed the document.'),
   strickenAt: JoiValidationConstants.ISO_DATE.max('now')
     .optional()
     .description('Date that this Docket Record item was stricken.'),
