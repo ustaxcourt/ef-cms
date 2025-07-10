@@ -139,7 +139,8 @@ export const updatePractitionerUser = async (
       requestUserId: authorizedUser.userId,
       updatedEmail: validatedUserData.email,
       updatedName: validatedUserData.name,
-      user: oldUser,
+      user: validatedUserData,
+      oldUser,
       websocketMessagePrefix: 'admin',
     });
   } else {

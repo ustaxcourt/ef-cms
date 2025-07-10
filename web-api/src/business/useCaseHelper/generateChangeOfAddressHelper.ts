@@ -17,6 +17,8 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 
 /**
  * generateChangeOfAddressHelper
@@ -34,6 +36,7 @@ export const generateChangeOfAddressHelper = async ({
   docketNumber,
   firmName,
   jobId,
+  oldUser,
   requestUserId,
   updatedEmail,
   updatedName,
@@ -49,6 +52,7 @@ export const generateChangeOfAddressHelper = async ({
   updatedEmail?: string;
   updatedName?: string;
   jobId: string;
+  oldUser: RawPractitioner | RawPrivatePractitioner | RawIrsPractitioner;
   user: RawPractitioner;
   requestUserId?: string;
   websocketMessagePrefix: 'user' | 'admin';
@@ -74,7 +78,7 @@ export const generateChangeOfAddressHelper = async ({
       );
     }
 
-    const oldData = clone(practitionerObject.contact);
+    const oldData = clone(oldUser.contact);
 
     // This updates the case by reference!
     practitionerObject.contact = contactInfo;

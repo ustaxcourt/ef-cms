@@ -4,7 +4,7 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { isArray, isEqual } from 'lodash';
 import {
@@ -46,6 +46,10 @@ const updateUserContactInformationHelper = async (
   authorizedUser: AuthUser,
 ) => {
   const user = await getUserById({ userId });
+
+  if (!user) {
+    throw new NotFoundError(`User not found with user id ${userId}`);
+  }
 
   const isPractitioner = u => {
     return (
@@ -111,6 +115,7 @@ const updateUserContactInformationHelper = async (
     contactInfo,
     firmName,
     user: userEntity.validate().toRawObject(),
+    oldUser: user,
     websocketMessagePrefix: 'user',
   });
 
