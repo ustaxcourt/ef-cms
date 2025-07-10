@@ -205,6 +205,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
             state: 'IL',
           },
           name: 'Private Practitioner',
+          originalBarState: 'IL',
           practiceType: 'Private',
           practitionerType: 'Attorney',
         },
