@@ -146,7 +146,6 @@ const getCsvString = (records: any[]) => {
     { header: 'Case Type', key: 'caseType' },
     { header: 'Judge', key: 'associatedJudge' },
     { header: 'Requested Place of Trial', key: 'preferredTrialCity' },
-    { header: 'Calendaring High Priority', key: 'calendaringHighPriority' },
   ];
 
   const updatedRecords = records.map(record => {

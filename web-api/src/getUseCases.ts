@@ -138,7 +138,6 @@ import { opinionAdvancedSearchInteractor } from '../../shared/src/business/useCa
 import { opinionPublicSearchInteractor } from './business/useCases/public/opinionPublicSearchInteractor';
 import { orderAdvancedSearchInteractor } from '../../shared/src/business/useCases/orderAdvancedSearchInteractor';
 import { orderPublicSearchInteractor } from './business/useCases/public/orderPublicSearchInteractor';
-import { prioritizeCaseInteractor } from '../../shared/src/business/useCases/prioritizeCaseInteractor';
 import { processStreamRecordsInteractor } from './business/useCases/processStreamRecords/processStreamRecordsInteractor';
 import { queueEmailUpdateAssociatedCasesWorker } from '@web-api/business/useCases/user/queueEmailUpdateAssociatedCasesWorker';
 import { queueUpdateAssociatedCasesWorker } from './business/useCases/user/queueUpdateAssociatedCasesWorker';
@@ -174,7 +173,6 @@ import { strikeDocketEntryInteractor } from './business/useCases/docketEntry/str
 import { submitCaseAssociationRequestInteractor } from './business/useCases/caseAssociationRequest/submitCaseAssociationRequestInteractor';
 import { submitPendingCaseAssociationRequestInteractor } from './business/useCases/caseAssociationRequest/submitPendingCaseAssociationRequestInteractor';
 import { unblockCaseFromTrialInteractor } from '../../shared/src/business/useCases/unblockCaseFromTrialInteractor';
-import { unprioritizeCaseInteractor } from '../../shared/src/business/useCases/unprioritizeCaseInteractor';
 import { unsealCaseInteractor } from '../../shared/src/business/useCases/unsealCaseInteractor';
 import { unsealDocketEntryInteractor } from './business/useCases/docketEntry/unsealDocketEntryInteractor';
 import { updateAssociatedCaseWorker } from './business/useCases/user/updateAssociatedCaseWorker';
@@ -344,7 +342,6 @@ const useCases = {
   opinionPublicSearchInteractor,
   orderAdvancedSearchInteractor,
   orderPublicSearchInteractor,
-  prioritizeCaseInteractor,
   processStreamRecordsInteractor,
   queueEmailUpdateAssociatedCasesWorker,
   queueUpdateAssociatedCasesWorker,
@@ -380,7 +377,6 @@ const useCases = {
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
   unblockCaseFromTrialInteractor,
-  unprioritizeCaseInteractor,
   unsealCaseInteractor,
   unsealDocketEntryInteractor,
   updateAssociatedCaseWorker,

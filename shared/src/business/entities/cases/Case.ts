@@ -1436,27 +1436,6 @@ export class Case extends JoiValidationEntity {
     return this;
   }
 
-  /**
-   * set as high priority with a highPriorityReason
-   * @param {string} highPriorityReason - the reason the case was set to high priority
-   * @returns {Case} the updated case entity
-   */
-  setAsHighPriority(highPriorityReason) {
-    this.highPriority = true;
-    this.highPriorityReason = highPriorityReason;
-    return this;
-  }
-
-  /**
-   * unset as high priority and remove the highPriorityReason
-   * @returns {Case} the updated case entity
-   */
-  unsetAsHighPriority() {
-    this.highPriority = false;
-    this.highPriorityReason = undefined;
-    return this;
-  }
-
   removeFromTrial({
     associatedJudge = CHIEF_JUDGE,
     associatedJudgeId = undefined,

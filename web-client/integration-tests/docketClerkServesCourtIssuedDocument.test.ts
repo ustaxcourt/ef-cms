@@ -11,7 +11,6 @@ import { docketClerkViewsCaseDetailDocumentView } from './journey/docketClerkVie
 import { docketClerkViewsDraftOrder } from './journey/docketClerkViewsDraftOrder';
 import { docketClerkViewsSavedCourtIssuedDocketEntryInProgress } from './journey/docketClerkViewsSavedCourtIssuedDocketEntryInProgress';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { petitionsClerkViewsDraftOrder } from './journey/petitionsClerkViewsDraftOrder';
 
@@ -52,7 +51,6 @@ describe('Docket Clerk Adds Court-Issued Order to Docket Record', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkViewsCaseDetail(cerebralTest, 6);
   petitionsClerkViewsDraftOrder(cerebralTest, 0);
-  petitionsClerkPrioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkViewsDraftOrder(cerebralTest);
