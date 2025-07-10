@@ -24,14 +24,14 @@ describe('prioritizeCaseInteractor', () => {
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
-  it('should update the case with the highPriority flag set as true and attach a reason', async () => {
-    getCaseByDocketNumber.mockReturnValue(
-      Promise.resolve({
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-      }),
-    );
+  getCaseByDocketNumber.mockReturnValue(
+    Promise.resolve({
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    }),
+  );
 
+  it('should update the case with the highPriority flag set as true and attach a reason', async () => {
     const result = await prioritizeCaseInteractor(
       applicationContext,
       {
@@ -60,7 +60,7 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should throw an error if the case status is calendared', async () => {
-    getCaseByDocketNumber.mockReturnValue(
+    getCaseByDocketNumber.mockReturnValueOnce(
       Promise.resolve({
         ...MOCK_CASE,
         status: CASE_STATUS_TYPES.calendared,
@@ -80,7 +80,7 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should throw an error if the case is blocked', async () => {
-    getCaseByDocketNumber.mockReturnValue(
+    getCaseByDocketNumber.mockReturnValueOnce(
       Promise.resolve({
         ...MOCK_CASE,
         blocked: true,
