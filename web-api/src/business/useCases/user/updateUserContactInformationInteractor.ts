@@ -2,7 +2,6 @@ import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
@@ -12,7 +11,6 @@ import {
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
 import { Practitioner } from '@shared/business/entities/Practitioner';
-import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getCasesForUser } from '@web-api/persistence/postgres/users/getCasesForUser';
 import {
@@ -20,6 +18,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
 /**
  * updateUserContactInformationHelper
@@ -52,11 +51,11 @@ const updateUserContactInformationHelper = async (
   }
 
   const isPractitioner = u => {
-    return (
-      u.entityName === PrivatePractitioner.ENTITY_NAME ||
-      u.entityName === IrsPractitioner.ENTITY_NAME ||
-      u.entityName === Practitioner.ENTITY_NAME
-    );
+    return [
+      ROLES.privatePractitioner,
+      ROLES.irsPractitioner,
+      ROLES.inactivePractitioner,
+    ].includes(u.role);
   };
 
   const isPractitionerUnchanged = u =>
@@ -84,11 +83,7 @@ const updateUserContactInformationHelper = async (
   }
 
   let userEntity;
-  if (
-    user.entityName === PrivatePractitioner.ENTITY_NAME ||
-    user.entityName === IrsPractitioner.ENTITY_NAME ||
-    user.entityName === Practitioner.ENTITY_NAME
-  ) {
+  if (isPractitioner(user)) {
     userEntity = new Practitioner({
       ...user,
       contact: { ...contactInfo },
@@ -101,13 +96,6 @@ const updateUserContactInformationHelper = async (
   }
 
   await upsertUsers([userEntity.validate().toRawObject()]);
-
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: { action: 'user_contact_initial_update_complete' },
-    userId: user.userId,
-    clientConnectionId,
-  });
 
   const results = await generateChangeOfAddress({
     applicationContext,

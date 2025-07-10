@@ -1,18 +1,8 @@
 /* eslint-disable complexity */
-import { ROLES } from '@shared/business/entities/EntityConstants';
-import {
-  IrsPractitioner,
-  RawIrsPractitioner,
-} from '@shared/business/entities/IrsPractitioner';
-import {
-  Practitioner,
-  RawPractitioner,
-} from '@shared/business/entities/Practitioner';
-import {
-  PrivatePractitioner,
-  RawPrivatePractitioner,
-} from '@shared/business/entities/PrivatePractitioner';
-import { RawUser, User } from '@shared/business/entities/User';
+import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawPractitioner } from '@shared/business/entities/Practitioner';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import { RawUser } from '@shared/business/entities/User';
 import {
   calculateDate,
   formatDateString,
@@ -86,70 +76,21 @@ export function fromKyselyPractitioner(
       practitioner.admissionsDate?.toISOString(),
       FORMATS.YYYYMMDD,
     ),
-  });
+  }) as any;
 }
 
 // TODO: 10495 potentially rewrite to have less validation errors
 export function rawUser(
   user,
 ): RawPrivatePractitioner | RawIrsPractitioner | RawPractitioner | RawUser {
-  if (user.role === ROLES.privatePractitioner) {
-    return new PrivatePractitioner(
-      transformNullToUndefined({
-        ...user,
-        admissionsDate: formatDateString(
-          user.admissionsDate?.toISOString(),
-          FORMATS.YYYYMMDD,
-        ),
-        pendingEmailVerificationTokenTimestamp:
-          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
-      }),
-    )
-      .validate()
-      .toRawObject();
-  } else if (user.role === ROLES.irsPractitioner) {
-    return new IrsPractitioner(
-      transformNullToUndefined({
-        ...user,
-        admissionsDate: formatDateString(
-          user.admissionsDate?.toISOString(),
-          FORMATS.YYYYMMDD,
-        ),
-        pendingEmailVerificationTokenTimestamp:
-          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
-      }),
-    )
-      .validate()
-      .toRawObject();
-  } else if (user.role === ROLES.inactivePractitioner) {
-    return new Practitioner(
-      transformNullToUndefined({
-        ...user,
-        admissionsDate: formatDateString(
-          user.admissionsDate?.toISOString(),
-          FORMATS.YYYYMMDD,
-        ),
-        pendingEmailVerificationTokenTimestamp:
-          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
-      }),
-    )
-      .validate()
-      .toRawObject();
-  } else {
-    return new User(
-      transformNullToUndefined({
-        ...user,
-        admissionsDate: formatDateString(
-          user.admissionsDate?.toISOString(),
-          FORMATS.YYYYMMDD,
-        ),
-        pendingEmailVerificationTokenTimestamp:
-          user.pendingEmailVerificationTokenTimestamp?.toISOString(),
-      }),
-    )
-      .validate()
-      .toRawObject();
-  }
+  return transformNullToUndefined({
+    ...user,
+    admissionsDate: user.admissionsDate
+      ? formatDateString(user.admissionsDate?.toISOString(), FORMATS.YYYYMMDD)
+      : null,
+    pendingEmailVerificationTokenTimestamp:
+      user.pendingEmailVerificationTokenTimestamp?.toISOString(),
+  });
 }
 
 export function toKyselyNewUser(user: RawUser): NewUserKysely {
