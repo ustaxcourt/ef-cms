@@ -18,7 +18,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { cloneDeep, isEmpty, sortBy } from 'lodash';
 import { isMiscellaneousDocketEntry } from '@shared/business/utilities/isMiscellaneousDocketEntry';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
-import { ClientApplicationContext } from '@web-client/applicationContext';
+import { getDescriptionDisplay } from '@shared/business/utilities/getDescriptionDisplay';
 
 export type FormattedCaseInventoryReportEntry = {
   docketNumber: string;
@@ -52,10 +52,7 @@ export const computeIsNotServedDocument = ({ formattedEntry }) => {
   );
 };
 
-export const formatDocketEntry = (
-  applicationContext: ClientApplicationContext,
-  docketEntry,
-) => {
+export const formatDocketEntry = docketEntry => {
   const formattedEntry = cloneDeep(docketEntry);
 
   formattedEntry.servedAtFormatted = formatDateString(
@@ -124,27 +121,29 @@ export const formatDocketEntry = (
   ) {
     formattedEntry.createdAtFormatted = '';
   } else if (formattedEntry.isOnDocketRecord) {
-    formattedEntry.createdAtFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.filingDate, 'MMDDYY');
-    formattedEntry.sortingFilingDate = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.filingDate, 'YYYYMMDD_NUMERIC');
+    formattedEntry.createdAtFormatted = formatDateString(
+      formattedEntry.filingDate,
+      'MMDDYY',
+    );
+    formattedEntry.sortingFilingDate = formatDateString(
+      formattedEntry.filingDate,
+      'YYYYMMDD_NUMERIC',
+    );
   } else {
-    formattedEntry.createdAtFormatted = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.createdAt, 'MMDDYY');
-    formattedEntry.sortingFilingDate = applicationContext
-      .getUtilities()
-      .formatDateString(formattedEntry.createdAt, 'YYYYMMDD_NUMERIC');
+    formattedEntry.createdAtFormatted = formatDateString(
+      formattedEntry.createdAt,
+      'MMDDYY',
+    );
+    formattedEntry.sortingFilingDate = formatDateString(
+      formattedEntry.createdAt,
+      'YYYYMMDD_NUMERIC',
+    );
   }
 
   formattedEntry.filingsAndProceedings =
     getFilingsAndProceedings(formattedEntry);
 
-  formattedEntry.descriptionDisplay = applicationContext
-    .getUtilities()
-    .getDescriptionDisplay(formattedEntry);
+  formattedEntry.descriptionDisplay = getDescriptionDisplay(formattedEntry);
 
   if (formattedEntry.lodged) {
     formattedEntry.eventCode = 'MISCL';
@@ -291,7 +290,7 @@ export const formatCase = (
     result.draftDocumentsUnsorted = result.docketEntries
       .filter(docketEntry => docketEntry.isDraft && !docketEntry.archived)
       .map(docketEntry => ({
-        ...formatDocketEntry(applicationContext, docketEntry),
+        ...formatDocketEntry(docketEntry),
         editUrl: getEditUrl(docketEntry),
         signUrl: `/case-detail/${caseDetail.docketNumber}/edit-order/${docketEntry.docketEntryId}/sign`,
         signedAtFormatted: applicationContext
@@ -305,7 +304,7 @@ export const formatCase = (
     result.draftDocuments = sortBy(result.draftDocumentsUnsorted, 'receivedAt');
 
     result.formattedDocketEntries = result.docketEntries.map(d =>
-      formatDocketEntry(applicationContext, d),
+      formatDocketEntry(d),
     );
     // establish an initial sort by ascending index
     result.formattedDocketEntries.sort(byIndexSortFunction);

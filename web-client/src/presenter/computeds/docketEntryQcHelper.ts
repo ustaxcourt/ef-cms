@@ -28,7 +28,7 @@ export const docketEntryQcHelper = (
 
   const formattedDocketEntry = applicationContext
     .getUtilities()
-    .formatDocketEntry(applicationContext, currentDocument);
+    .formatDocketEntry(currentDocument);
 
   return { formattedDocketEntry, showPaperServiceWarning };
 };

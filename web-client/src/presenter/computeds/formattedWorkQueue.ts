@@ -380,10 +380,7 @@ export const getWorkItemDocumentLink = ({
 }) => {
   const result = cloneDeep(workItem);
 
-  const formattedDocketEntry = formatDocketEntry(
-    applicationContext,
-    result.docketEntry,
-  );
+  const formattedDocketEntry = formatDocketEntry(result.docketEntry);
 
   const isInProgress = workItem.inProgress;
 

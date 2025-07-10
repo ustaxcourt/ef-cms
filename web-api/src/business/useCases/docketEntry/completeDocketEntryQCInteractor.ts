@@ -121,12 +121,10 @@ const completeDocketEntryQC = async (
   updatedDocketEntry.setQCed(user);
 
   const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
-    applicationContext,
     docketEntry: updatedDocketEntry,
   });
 
   const currentDocumentTitle = getDocumentTitleForNoticeOfChange({
-    applicationContext,
     docketEntry: currentDocketEntry,
   });
 
