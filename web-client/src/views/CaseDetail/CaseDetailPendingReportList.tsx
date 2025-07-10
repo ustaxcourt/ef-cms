@@ -22,16 +22,25 @@ export const CaseDetailPendingReportList = connect(
   }) {
     return (
       <>
-        <div className="margin-top-3 margin-bottom-105 text-right">
+        <div className="margin-top-3 margin-bottom-3 text-right">
           <Button
             link
             aria-describedby="tab-pending-report"
-            className="margin-right-0"
+            className="margin-right-0 padding-0"
             href={`/case-detail/${formattedDocketEntries.docketNumber}/pending-report`}
             icon="print"
           >
             Printable Report
           </Button>
+          <span className="text-semibold text-align-right padding-left-2">
+            Count:{' '}
+          </span>
+          <span>
+            {
+              formattedDocketEntries.formattedPendingDocketEntriesOnDocketRecord
+                .length
+            }
+          </span>
         </div>
         <table
           aria-describedby="judgeFilter"
