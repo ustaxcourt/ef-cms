@@ -1545,7 +1545,6 @@ export class Case extends JoiValidationEntity {
     if (isClosedStatus(updatedCaseStatus)) {
       this.closedDate = date;
       this.unsetAsBlocked();
-      this.unsetAsHighPriority();
     } else {
       if (isClosedStatus(previousCaseStatus)) {
         this.closedDate = undefined;
