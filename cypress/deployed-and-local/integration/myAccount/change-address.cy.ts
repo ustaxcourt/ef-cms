@@ -13,7 +13,6 @@ describe('change of address', () => {
   it('changing the address of a private practitioner should generate NCA and update their cases', () => {
     const newAddress = faker.location.streetAddress();
     loginAsPrivatePractitioner('privatePractitioner2@example.com');
-    loginAsPrivatePractitioner('privatePractitioner2@example.com');
     externalUserCreatesElectronicCase().then(docketNumber => {
       logout();
 

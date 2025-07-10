@@ -61,7 +61,6 @@ export const fixRaceConditionServedInDrafts = async (
   },
 ) => {
   const subjectCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
   const caseEntity = new Case(subjectCase, { authorizedUser: undefined });
