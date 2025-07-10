@@ -7,10 +7,11 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * removeConsolidatedCases
@@ -22,7 +23,7 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
  * @returns {object} the updated case data
  */
 const removeConsolidatedCases = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     docketNumber,
     docketNumbersToRemove,
@@ -34,7 +35,6 @@ const removeConsolidatedCases = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -46,7 +46,7 @@ const removeConsolidatedCases = async (
 
   const { leadDocketNumber } = caseToUpdate;
 
-  const allConsolidatedCases = await getCasesByLeadDocketNumber({
+  const allConsolidatedCases = await getConsolidatedCases({
     leadDocketNumber,
   });
 
@@ -68,8 +68,7 @@ const removeConsolidatedCases = async (
       caseEntity.setLeadCase(newLeadCase.docketNumber);
 
       updateCasePromises.push(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
+        updateCaseAndAssociations({
           authorizedUser,
           caseToUpdate: caseEntity,
         }),
@@ -83,8 +82,7 @@ const removeConsolidatedCases = async (
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       }),
@@ -103,8 +101,7 @@ const removeConsolidatedCases = async (
     caseEntity.removeConsolidation();
 
     updateCasePromises.push(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       }),

@@ -10,7 +10,7 @@ import { sealDocketEntryInteractor } from '@web-api/business/useCases/docketEntr
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const sealDocketEntryLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const {
       pathParameters: { docketEntryId, docketNumber },
     } = event;
@@ -18,7 +18,6 @@ export const sealDocketEntryLambda = (event, authorizedUser: UnknownAuthUser) =>
     const { docketEntrySealedTo } = JSON.parse(event.body);
 
     return await sealDocketEntryInteractor(
-      applicationContext,
       {
         docketEntryId,
         docketEntrySealedTo,

@@ -4,6 +4,7 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
+import { environment } from '@web-api/environment';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import {
@@ -13,7 +14,8 @@ import {
 import { indexOpenSearchDocketEntries } from 'web-api/elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 
 const scriptConfig: ScriptConfig = {
-  description: 'add-cases-to-opensearch - Reupsert cases',
+  description:
+    'index-docket-entries: a script to reindex docket entry data from Postgres to OpenSearch',
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',
@@ -21,6 +23,9 @@ const scriptConfig: ScriptConfig = {
   requireActiveAwsSession: true,
 };
 parseArgsAndEnvVars(scriptConfig);
+
+// We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
+environment.nodeEnv = 'production';
 
 const pageSize = 2000;
 
