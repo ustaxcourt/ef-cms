@@ -11,8 +11,10 @@ import {
 import {
   expireUserConfirmationCode,
   getEmailVerificationToken,
-  getFeatureFlagValue,
   getNewAccountVerificationCode,
+} from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+import {
+  getFeatureFlagValue,
   toggleFeatureFlag,
 } from './cypress/helpers/cypressTasks/dynamo/dynamo-helpers';
 import { parsePdf } from './cypress/helpers/cypressTasks/pdf/parsePdf';
