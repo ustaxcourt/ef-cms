@@ -234,37 +234,40 @@ export const StatusReportOrder = connect(
                       }}
                     />
                   </FormGroup>
-                  
-                  {statusReportOrderHelper.isCalendared && (
-                    <><hr className="border-top-2px border-base-lighter" /><FormGroup
-                      className="grid-container padding-left-2"
-                      errorText={validationErrors.strickenFromTrialSessions}
-                      id="stricken-from-trial-sessions-form-group"
-                    >
-                      <div>
-                        <input
-                          checked={form.strickenFromTrialSessions || false}
-                          className="usa-checkbox__input"
-                          id="stricken-from-trial-sessions"
-                          name="strickenFromTrialSessions"
-                          type="checkbox"
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            });
-                          } } />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor="stricken-from-trial-sessions"
-                          id="stricken-from-trial-sessions-label"
-                        >
-                          Case is stricken from the trial session
-                        </label>
-                      </div>
-                    </FormGroup></>
-                  )}
-                  
+
+                  <hr className="border-top-2px border-base-lighter" />
+
+                  <FormGroup
+                    className="grid-container padding-left-2"
+                    errorText={validationErrors.strickenFromTrialSessions}
+                    id="stricken-from-trial-sessions-form-group"
+                    data-testid="stricken-from-test-header"
+                  >
+                    <div>
+                      <input
+                        checked={form.strickenFromTrialSessions || false}
+                        className="usa-checkbox__input"
+                        id="stricken-from-trial-sessions"
+                        name="strickenFromTrialSessions"
+                        type="checkbox"
+                        disabled={!statusReportOrderHelper.isCalendared}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.checked,
+                          });
+                        }} />
+                      <label
+                        className="usa-checkbox__label"
+                        htmlFor="stricken-from-trial-sessions"
+                        id="stricken-from-trial-sessions-label"
+                        title={statusReportOrderHelper.isCalendared?'':'Case is not calendared'}
+                      >
+                        Case is stricken from the trial session
+                      </label>
+                    </div>
+                  </FormGroup>
+
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup
@@ -304,6 +307,8 @@ export const StatusReportOrder = connect(
                       <label
                         className="usa-radio__label"
                         htmlFor="jurisdiction-retained"
+                        data-testid="jurisdiction-retained-label"
+                        title={statusReportOrderHelper.isCalendared?'':'Case is not calendared'}
                       >
                         Retained
                       </label>
@@ -337,6 +342,8 @@ export const StatusReportOrder = connect(
                       <label
                         className="usa-radio__label"
                         htmlFor="jurisdiction-restored-to-general-docket"
+                        data-testid="jurisdiction-restored-label"
+                        title={statusReportOrderHelper.isCalendared?'':'Case is not calendared'}
                       >
                         Restored to the general docket
                       </label>

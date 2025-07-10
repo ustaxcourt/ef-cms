@@ -3,22 +3,96 @@ import {
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
 import {
-  docketNumber,
   getLastDraftOrderElementFromDrafts,
 } from '../../../support/statusReportOrder';
 import {
   loginAsColvin,
   loginAsColvinChambers,
   loginAsDocketClerk,
+  loginAsPetitionsClerk1,
 } from '../../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../../helpers/authentication/logout';
+import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
+import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
+import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
+import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
+import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
+import { attachFile } from 'cypress/helpers/file/upload-file';
+
+const createStatusReport = (docketNumber: string) => {
+  loginAsDocketClerk();
+  goToCase(docketNumber);
+  cy.get('[data-testid="case-detail-menu-button"]').click();
+  cy.get('[data-testid="menu-button-add-paper-filing"]').click();
+  cy.get('.usa-date-picker__wrapper > [data-testid="date-received-picker"]').type('07/08/2025');
+  selectTypeaheadInput('primary-document-type-search', 'Status Report');
+  cy.get('[data-testid="filed-by-option"').first().click();
+  cy.get('[data-testid="upload-pdf-button"]').click();
+  attachFile({
+    filePath: '../../helpers/file/sample.pdf',
+    selector: 'input#primaryDocumentFile-file',
+    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
+  });
+  cy.get('[data-testid="save-and-serve"]').click();
+  cy.get('[data-testid="modal-button-confirm"]').click();
+  cy.get('[data-testid="print-paper-service-done-button"]').click();
+};
+
+const scheduleTrialSession = (docketNumber: string, trialSessionId: string) => {
+  loginAsDocketClerk();
+  goToCase(docketNumber);
+  cy.get('[data-testid="tab-case-information"]').click();
+  cy.get('[data-testid="add-to-trial-session-btn"]').click();
+  cy.get('[data-testid="all-locations-option"]').click();
+  cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
+  cy.get('[data-testid="modal-button-confirm"]').click();
+};
+
+const calendarTrialSession = (trialSessionId: string) => {
+  loginAsPetitionsClerk1();
+  cy.get('[data-testid="inbox-tab-content"]').should('exist');
+  cy.get('[data-testid="trial-session-link"]').click();
+  cy.get('[data-testid="new-trial-sessions-tab"]').click();
+  cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
+  cy.get('[data-testid="set-calendar-button"]').click();
+  cy.get('[data-testid="modal-button-confirm"]').click();
+};
+
+const setupCaseWithStatusReport = (docketNumber: string) => {
+  createStatusReport(docketNumber);
+  updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
+};
 
 describe('should default status report order descriptions', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
+
+  let unscheduledCaseDocketNumber: string;
+  let scheduledCaseDocketNumber: string;
+  before(() => {
+    loginAsPetitionsClerk1();
+
+    // scheduled case
+    createTrialSession().then(({ trialSessionId }) => {
+      createAndServePaperPetition().then(({ docketNumber }) => {
+        scheduledCaseDocketNumber = docketNumber;
+        setupCaseWithStatusReport(docketNumber);
+        calendarTrialSession(trialSessionId);
+        scheduleTrialSession(docketNumber, trialSessionId);
+      })
+    })
+
+    // unscheduled case
+    createAndServePaperPetition().then(({ docketNumber }) => {
+      unscheduledCaseDocketNumber = docketNumber;
+      setupCaseWithStatusReport(docketNumber);
+    })
+  });
+
   it('should display default description when document type is an Order', () => {
-    judgeOrChambersCreatesStatusReportOrder(today);
+    judgeOrChambersCreatesStatusReportOrder(today, unscheduledCaseDocketNumber);
     loginAsDocketClerk();
-    cy.visit(`/case-detail/${docketNumber}`);
+    cy.visit(`/case-detail/${unscheduledCaseDocketNumber}`);
     cy.get('#tab-drafts').click();
     getLastDraftOrderElementFromDrafts().click();
     cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
@@ -37,9 +111,9 @@ describe('should default status report order descriptions', () => {
   });
 
   it('should set event code to OJR when case is stricken from trial session and jurisdiction is retained and display default description', () => {
-    judgeOrChambersCreatesStatusReportOrder(today, true);
+    judgeOrChambersCreatesStatusReportOrder(today, scheduledCaseDocketNumber, { jurisdictionRetained: true, isCalendared: true });
     loginAsDocketClerk();
-    cy.visit(`/case-detail/${docketNumber}`);
+    cy.visit(`/case-detail/${scheduledCaseDocketNumber}`);
     cy.get('#tab-drafts').click();
     getLastDraftOrderElementFromDrafts().click();
     cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
@@ -59,9 +133,9 @@ describe('should default status report order descriptions', () => {
   });
 
   it('should continue to handle OJR and set correct signing judge when status order report is signed by chambers user', () => {
-    judgeOrChambersCreatesStatusReportOrder(today, true, true);
+    judgeOrChambersCreatesStatusReportOrder(today, scheduledCaseDocketNumber, { jurisdictionRetained: true, chambersUser: true, isCalendared: true });
     loginAsDocketClerk();
-    cy.visit(`/case-detail/${docketNumber}`);
+    cy.visit(`/case-detail/${scheduledCaseDocketNumber}`);
     cy.get('#tab-drafts').click();
     getLastDraftOrderElementFromDrafts().click();
     cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
@@ -83,9 +157,21 @@ describe('should default status report order descriptions', () => {
 
 function judgeOrChambersCreatesStatusReportOrder(
   today: string,
-  jurisdictionRetained: boolean = false,
-  chambersUser: boolean = false,
+  docketNumber: string,
+  options: {
+    jurisdictionRetained?: boolean,
+    jurisdictionRestored?: boolean,
+    chambersUser?: boolean,
+    isCalendared?: boolean,
+  } = {}
 ) {
+  const {
+    jurisdictionRetained = false,
+    jurisdictionRestored = false,
+    chambersUser = false,
+    isCalendared = false
+  } = options;
+
   if (chambersUser) {
     loginAsColvinChambers();
   } else {
@@ -98,13 +184,25 @@ function judgeOrChambersCreatesStatusReportOrder(
   cy.get('[data-testid="order-type-status-report"]').check({ force: true });
   cy.get('#status-report-due-date-picker').type(today);
 
-  if (jurisdictionRetained) {
-    cy.get('#stricken-from-trial-sessions-label').click();
-    cy.get(
-      '#jurisdiction-form-group > :nth-child(2) > .usa-radio__label',
-    ).click();
-    cy.get('#jurisdiction-retained').check();
+  if (isCalendared) {
+    cy.get('#stricken-from-trial-sessions').should('be.enabled');
+    if (jurisdictionRetained) {
+      cy.get('#stricken-from-trial-sessions-label').click();
+      cy.get('#stricken-from-trial-sessions').should('be.checked');
+      cy.get('[data-testid="jurisdiction-retained-label"]').click();
+      cy.get('#jurisdiction-retained').check();
+    } else if (jurisdictionRestored) {
+      cy.get('#stricken-from-trial-sessions-label').click();
+      cy.get('#stricken-from-trial-sessions').should('be.checked');
+      cy.get('[data-testid="jurisdiction-restored-label"]').click();
+      cy.get('#jurisdiction-restored-to-general-docket').check();
+    }
+  } else {
+    cy.get('#stricken-from-trial-sessions').should('be.disabled');
+    cy.get('#jurisdiction-retained').should('be.disabled');
+    cy.get('#jurisdiction-restored-to-general-docket').should('be.disabled');
   }
+
   cy.get('[data-testid="save-draft-button"]').click();
   cy.get('[data-testid="sign-pdf-canvas"]').click();
   cy.get('[data-testid="save-signature-button"]').click();
