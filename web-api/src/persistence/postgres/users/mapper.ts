@@ -1,7 +1,6 @@
 /* eslint-disable complexity */
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawUser } from '@shared/business/entities/User';
 import {
   calculateDate,
@@ -80,9 +79,7 @@ export function fromKyselyPractitioner(
 }
 
 // TODO: 10495 potentially rewrite to have less validation errors
-export function rawUser(
-  user,
-): RawPrivatePractitioner | RawIrsPractitioner | RawPractitioner | RawUser {
+export function rawUser(user: UserKysely) {
   return transformNullToUndefined({
     ...user,
     admissionsDate: user.admissionsDate

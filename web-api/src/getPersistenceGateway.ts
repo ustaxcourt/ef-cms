@@ -17,7 +17,6 @@ import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSession
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
-import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
@@ -140,7 +139,6 @@ const gatewayMethods = {
   deleteTrialSessionWorkingCopy,
   deleteUserConnection,
   fetchEventCodesCountForJudges,
-  getAllUsersByRole,
   getAllWebSocketConnections,
   getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
   getCalendaredCasesForTrialSession,

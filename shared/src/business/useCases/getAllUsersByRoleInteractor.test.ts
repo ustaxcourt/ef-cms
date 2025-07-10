@@ -18,7 +18,6 @@ describe('getAllUsersByRoleInteractor', () => {
   it('should throw an Unauthorized error when user does not have permission', async () => {
     await expect(
       getAllUsersByRoleInteractor(
-        applicationContext,
         {
           roles: TEST_ROLES,
         },
@@ -29,7 +28,6 @@ describe('getAllUsersByRoleInteractor', () => {
 
   it('should call the persistance method with corred params', async () => {
     const results = await getAllUsersByRoleInteractor(
-      applicationContext,
       {
         roles: TEST_ROLES,
       },
