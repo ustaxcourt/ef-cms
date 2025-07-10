@@ -362,45 +362,13 @@ describe('DocketEntry entity', () => {
     });
   });
 
-  describe('judgeUserId', () => {
-    it('sets the judgeUserId property when a value is passed in', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          judgeUserId: mockJudgeUserId,
-        },
-        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
-      );
-
-      expect(docketEntry).toMatchObject({
-        judgeUserId: mockJudgeUserId,
-      });
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
-
-    it('does not fail validation without a judgeUserId', () => {
-      const docketEntry = new DocketEntry(
-        {
-          ...A_VALID_DOCKET_ENTRY,
-          judgeUserId: undefined,
-        },
-        { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
-      );
-      expect(docketEntry.judgeUserId).toBeUndefined();
-      expect(docketEntry.isValid()).toBeTruthy();
-    });
-  });
-
   describe('eventCode', () => {
     it('when isDraft is true, the eventCode should be optional (thus allowing undefined)', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           eventCode: undefined,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -409,13 +377,11 @@ describe('DocketEntry entity', () => {
     });
 
     it('when isDraft is true, the eventCode should be optional (thus allowing null)', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           eventCode: null,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -424,13 +390,11 @@ describe('DocketEntry entity', () => {
     });
 
     it('eventCode should be required if isDraft is false', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           eventCode: null,
           isDraft: false,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -441,13 +405,11 @@ describe('DocketEntry entity', () => {
 
   describe('documentType', () => {
     it('when isDraft is true, the documentType should be optional (thus allowing undefined)', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentType: undefined,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -456,13 +418,11 @@ describe('DocketEntry entity', () => {
     });
 
     it('when isDraft is true, the documentType should be optional (thus allowing null)', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentType: null,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -471,13 +431,11 @@ describe('DocketEntry entity', () => {
     });
 
     it('documentType should be required if isDraft is false', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentType: null,
           isDraft: false,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -488,14 +446,12 @@ describe('DocketEntry entity', () => {
 
   describe('judge', () => {
     it('judge should be optional when documentType is undefined', () => {
-      const mockJudgeUserId = 'f5aa0760-9fee-4a58-9658-d043b01f2fb0';
       const docketEntry = new DocketEntry(
         {
           ...A_VALID_DOCKET_ENTRY,
           documentType: undefined,
           eventCode: undefined,
           isDraft: true,
-          judgeUserId: mockJudgeUserId,
         },
         { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },
       );
@@ -511,19 +467,15 @@ describe('DocketEntry entity', () => {
         editState: 'editing',
         isDraft: false,
         judge: 'Buch',
-        judgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         pending: false,
         previousDocument: {
           docketEntryId: '6adff7fc-ba8d-4f32-89b5-18f340b22b6e',
           documentTitle: 'Hello',
           documentType: 'O',
         },
-        qcAt: '2023-11-21T20:49:28.192Z',
-        qcByUserId: '196d8891-9863-4530-af23-e385e6bf071c',
         signedAt: '2022-10-21T20:49:28.192Z',
         signedByUserId: '384906db-2f1d-4fdf-941e-41fe800e14db',
         signedJudgeName: 'Buch',
-        signedJudgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         stampData: {},
         strickenBy: 'Talon',
         strickenByUserId: '3c620b4a-e12b-47b7-835c-1d873401f732',
@@ -543,22 +495,16 @@ describe('DocketEntry entity', () => {
       expect(docketEntryEntity.editState).toEqual(docketEntry.editState);
       expect(docketEntryEntity.isDraft).toEqual(docketEntry.isDraft);
       expect(docketEntryEntity.judge).toEqual(docketEntry.judge);
-      expect(docketEntryEntity.judgeUserId).toEqual(docketEntry.judgeUserId);
       expect(docketEntryEntity.pending).toEqual(docketEntry.pending);
       expect(docketEntryEntity.previousDocument).toEqual(
         docketEntry.previousDocument,
       );
-      expect(docketEntryEntity.qcAt).toEqual(docketEntry.qcAt);
-      expect(docketEntryEntity.qcByUserId).toEqual(docketEntry.qcByUserId);
       expect(docketEntryEntity.signedAt).toEqual(docketEntry.signedAt);
       expect(docketEntryEntity.signedByUserId).toEqual(
         docketEntry.signedByUserId,
       );
       expect(docketEntryEntity.signedJudgeName).toEqual(
         docketEntry.signedJudgeName,
-      );
-      expect(docketEntryEntity.signedJudgeUserId).toEqual(
-        docketEntry.signedJudgeUserId,
       );
       expect(docketEntryEntity.stampData).toEqual(docketEntry.stampData);
       expect(docketEntryEntity.strickenBy).toEqual(docketEntry.strickenBy);
@@ -578,19 +524,15 @@ describe('DocketEntry entity', () => {
         editState: 'editing',
         isDraft: false,
         judge: 'Buch',
-        judgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         pending: false,
         previousDocument: {
           docketEntryId: '6adff7fc-ba8d-4f32-89b5-18f340b22b6e',
           documentTitle: 'Hello',
           documentType: 'O',
         },
-        qcAt: '2023-11-21T20:49:28.192Z',
-        qcByUserId: '196d8891-9863-4530-af23-e385e6bf071c',
         signedAt: '2022-10-21T20:49:28.192Z',
         signedByUserId: '384906db-2f1d-4fdf-941e-41fe800e14db',
         signedJudgeName: 'Buch',
-        signedJudgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         stampData: {},
         strickenBy: 'Talon',
         strickenByUserId: '3c620b4a-e12b-47b7-835c-1d873401f732',
@@ -608,15 +550,11 @@ describe('DocketEntry entity', () => {
       expect(docketEntryEntity.editState).toBeFalsy();
       expect(docketEntryEntity.isDraft).toBeFalsy();
       expect(docketEntryEntity.judge).toBeFalsy();
-      expect(docketEntryEntity.judgeUserId).toBeFalsy();
       expect(docketEntryEntity.pending).toBeFalsy();
       expect(docketEntryEntity.previousDocument).toBeFalsy();
-      expect(docketEntryEntity.qcAt).toBeFalsy();
-      expect(docketEntryEntity.qcByUserId).toBeFalsy();
       expect(docketEntryEntity.signedAt).toBeFalsy();
       expect(docketEntryEntity.signedByUserId).toBeFalsy();
       expect(docketEntryEntity.signedJudgeName).toBeFalsy();
-      expect(docketEntryEntity.signedJudgeUserId).toBeFalsy();
       expect(docketEntryEntity.stampData).toBeFalsy();
       expect(docketEntryEntity.strickenBy).toBeFalsy();
       expect(docketEntryEntity.strickenByUserId).toBeFalsy();

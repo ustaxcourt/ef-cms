@@ -862,15 +862,14 @@ textarea#case-caption {
   color: $color-blue;
 }
 
-
 .assign-work-item-count {
-    top: 50%;
-    width: 70px;
-    padding: 8px;
-    margin-top: 2px;
-    margin-right: 20px;
-    background-color: color($theme-color-primary-dark);
-    float: left;
+  top: 50%;
+  width: 70px;
+  padding: 8px;
+  margin-top: 2px;
+  margin-right: 20px;
+  background-color: color($theme-color-primary-dark);
+  float: left;
 }
 
 .action-section {
@@ -891,9 +890,9 @@ textarea#case-caption {
     background-color: color($theme-color-primary-dark);
   }
 
-	.assign-work-item-count-docket-mobile {
-		margin: 16px 0 0 0;
-	}
+  .assign-work-item-count-docket-mobile {
+    margin: 16px 0 0 0;
+  }
 
   .usa-select {
     width: 230px;
@@ -2499,17 +2498,43 @@ button.change-scanner-button {
 }
 
 .term-builder-form {
-	p {
-		max-width: 100%;
-	}
+  p {
+    max-width: 100%;
+  }
 
-	input {
-		max-width: 2.5rem;
-		margin-right: 5px !important;
-		margin-left: 5px !important;
-	}
+  input {
+    max-width: 2.5rem;
+    margin-right: 5px !important;
+    margin-left: 5px !important;
+  }
 }
 
 .force-full-width {
-	width: 100% !important;
+  width: 100% !important;
+}
+
+.service-party {
+  display: flex;
+  align-items: baseline;
+  margin-bottom: 1rem;
+  gap: 1rem;
+
+  .service-party-name {
+    overflow-wrap: anywhere;
+    white-space: normal;
+    word-break: normal;
+  }
+
+  .service-party-indicator {
+    margin-left: auto;
+  }
+
+  @media (max-width: $medium-screen) {
+    flex-flow: column wrap;
+    align-items: flex-start;
+
+    .service-party-indicator {
+      margin-left: 0;
+    }
+  }
 }

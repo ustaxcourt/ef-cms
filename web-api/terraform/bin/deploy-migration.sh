@@ -4,10 +4,9 @@
 ENVIRONMENT=$1
 
 [ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
-[ -z "${ZONE_NAME}" ] && echo "You must set ZONE_NAME as an environment variable" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must set EFCMS_DOMAIN as an environment variable" && exit 1
 [ -z "${SOURCE_TABLE}" ] && echo "You must set SOURCE_TABLE as an environment variable" && exit 1
 [ -z "${DESTINATION_TABLE}" ] && echo "You must set DESTINATION_TABLE as an environment variable" && exit 1
-[ -z "${EFCMS_DOMAIN}" ] && echo "You must set EFCMS_DOMAIN as an environment variable" && exit 1
 
 STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
 SOURCE_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --key '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"}}' | jq -r ".Item.current.S")
@@ -15,10 +14,9 @@ ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain --region us-east-1
 
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
-echo "  - ZONE_NAME=${ZONE_NAME}"
+echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - SOURCE_TABLE=${SOURCE_TABLE}"
 echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
-echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
@@ -32,7 +30,7 @@ export TF_VAR_elasticsearch_domain=$ELASTICSEARCH_ENDPOINT
 npm run build:assets
 
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${ZONE_NAME}.terraform.deploys" \
+ -backend-config=bucket="${EFCMS_DOMAIN}.terraform.deploys" \
  -backend-config=key="migration-${ENVIRONMENT}.tfstate" \
  -backend-config=dynamodb_table="efcms-terraform-lock" \
  -backend-config=region="us-east-1"

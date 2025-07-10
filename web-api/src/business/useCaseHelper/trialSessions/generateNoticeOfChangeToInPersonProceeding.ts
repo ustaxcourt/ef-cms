@@ -56,7 +56,6 @@ export const generateNoticeOfChangeToInPersonProceeding = async (
   };
 
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

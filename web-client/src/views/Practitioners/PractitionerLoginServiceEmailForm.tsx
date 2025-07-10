@@ -57,7 +57,7 @@ export const PractitionerLoginServiceEmailForm = connect<
           <div>
             <FormGroup
               errorText={
-                validationErrors.updatedEmail || validationErrors.email
+                validationErrors.updatedEmail ?? validationErrors.email
               }
             >
               <label className="usa-label" htmlFor="updatedEmail">
@@ -71,7 +71,7 @@ export const PractitionerLoginServiceEmailForm = connect<
                 id={emailFormName}
                 name={emailFormName}
                 type="text"
-                value={form[emailFormName] || ''}
+                value={form[emailFormName] ?? ''}
                 onBlur={() => validateSequence()}
                 onChange={e =>
                   updateFormValueSequence({
@@ -93,7 +93,7 @@ export const PractitionerLoginServiceEmailForm = connect<
                 id="confirm-email"
                 name="confirmEmail"
                 type="text"
-                value={form.confirmEmail || ''}
+                value={form.confirmEmail ?? ''}
                 onBlur={() => validateSequence()}
                 onChange={e =>
                   updateFormValueSequence({

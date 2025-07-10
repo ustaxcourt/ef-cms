@@ -60,8 +60,6 @@ export const respondentAddsMotionWithBrief = (
       'Motion for Continuance',
     );
 
-    expect(cerebralTest.getState('form.partyPrimary')).toBeUndefined();
-
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {

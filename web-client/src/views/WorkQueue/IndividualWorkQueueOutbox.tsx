@@ -42,7 +42,7 @@ export const IndividualWorkQueueOutbox = connect(
           </thead>
           {formattedWorkQueue.map(item => (
             <tbody key={item.workItemId}>
-              <tr>
+              <tr data-testid={`work-item-outbox-row-${item.docketNumber}`}>
                 <td className="consolidated-case-column">
                   <ConsolidatedCaseIcon
                     consolidatedIconTooltipText={
@@ -65,7 +65,11 @@ export const IndividualWorkQueueOutbox = connect(
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
-                    <a className="case-link" href={item.editLink}>
+                    <a
+                      className="case-link"
+                      data-testid="work-item-outbox-document-link"
+                      href={item.editLink}
+                    >
                       {item.docketEntry.descriptionDisplay ||
                         item.docketEntry.documentType}
                     </a>

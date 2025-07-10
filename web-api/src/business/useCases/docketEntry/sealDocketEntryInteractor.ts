@@ -4,12 +4,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 export const sealDocketEntryInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     docketEntryId,
     docketEntrySealedTo,
@@ -35,7 +34,6 @@ export const sealDocketEntryInteractor = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -51,12 +49,7 @@ export const sealDocketEntryInteractor = async (
 
   docketEntryEntity.sealEntry({ sealedTo: docketEntrySealedTo });
 
-  await applicationContext.getPersistenceGateway().updateDocketEntry({
-    applicationContext,
-    docketEntryId,
-    docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
-  });
+  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
 
   return docketEntryEntity.toRawObject();
 };
