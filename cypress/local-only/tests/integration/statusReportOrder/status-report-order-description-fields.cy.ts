@@ -14,55 +14,11 @@ import {
 import { logout } from '../../../../helpers/authentication/logout';
 import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-session';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
-import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/update-case-status';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { selectTypeaheadInput } from 'cypress/helpers/components/typeAhead/select-typeahead-input';
-import { attachFile } from 'cypress/helpers/file/upload-file';
-
-const createStatusReport = (docketNumber: string) => {
-  loginAsDocketClerk();
-  goToCase(docketNumber);
-  cy.get('[data-testid="case-detail-menu-button"]').click();
-  cy.get('[data-testid="menu-button-add-paper-filing"]').click();
-  cy.get('.usa-date-picker__wrapper > [data-testid="date-received-picker"]').type('07/08/2025');
-  selectTypeaheadInput('primary-document-type-search', 'Status Report');
-  cy.get('[data-testid="filed-by-option"').first().click();
-  cy.get('[data-testid="upload-pdf-button"]').click();
-  attachFile({
-    filePath: '../../helpers/file/sample.pdf',
-    selector: 'input#primaryDocumentFile-file',
-    selectorToAwaitOnSuccess: '[data-testid="remove-pdf"]',
-  });
-  cy.get('[data-testid="save-and-serve"]').click();
-  cy.get('[data-testid="modal-button-confirm"]').click();
-  cy.get('[data-testid="print-paper-service-done-button"]').click();
-};
-
-const scheduleTrialSession = (docketNumber: string, trialSessionId: string) => {
-  loginAsDocketClerk();
-  goToCase(docketNumber);
-  cy.get('[data-testid="tab-case-information"]').click();
-  cy.get('[data-testid="add-to-trial-session-btn"]').click();
-  cy.get('[data-testid="all-locations-option"]').click();
-  cy.get('[data-testid="trial-session-select"]').select(trialSessionId);
-  cy.get('[data-testid="modal-button-confirm"]').click();
-};
-
-const calendarTrialSession = (trialSessionId: string) => {
-  loginAsPetitionsClerk1();
-  cy.get('[data-testid="inbox-tab-content"]').should('exist');
-  cy.get('[data-testid="trial-session-link"]').click();
-  cy.get('[data-testid="new-trial-sessions-tab"]').click();
-  cy.get(`[data-testid="trial-location-link-${trialSessionId}"]`).click();
-  cy.get('[data-testid="set-calendar-button"]').click();
-  cy.get('[data-testid="modal-button-confirm"]').click();
-};
-
-const setupCaseWithStatusReport = (docketNumber: string) => {
-  createStatusReport(docketNumber);
-  updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-};
+import { scheduleTrialSession } from 'cypress/helpers/trialSession/schedule-trial-session';
+import { calendarTrialSession } from 'cypress/helpers/trialSession/calendar-trial-session';
+import { createStatusReport } from 'cypress/helpers/caseDetail/docketRecord/courtIssuedFiling/create-status-report-order';
 
 describe('should default status report order descriptions', () => {
   const today = formatNow(FORMATS.MMDDYYYY);
@@ -72,20 +28,22 @@ describe('should default status report order descriptions', () => {
   before(() => {
     loginAsPetitionsClerk1();
 
-    // scheduled case
+    // create scheduled case
     createTrialSession().then(({ trialSessionId }) => {
       createAndServePaperPetition().then(({ docketNumber }) => {
         scheduledCaseDocketNumber = docketNumber;
-        setupCaseWithStatusReport(docketNumber);
+        createStatusReport(docketNumber);
+        updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
         calendarTrialSession(trialSessionId);
         scheduleTrialSession(docketNumber, trialSessionId);
       })
     })
 
-    // unscheduled case
+    // create unscheduled case
     createAndServePaperPetition().then(({ docketNumber }) => {
       unscheduledCaseDocketNumber = docketNumber;
-      setupCaseWithStatusReport(docketNumber);
+      createStatusReport(docketNumber);
+      updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
     })
   });
 

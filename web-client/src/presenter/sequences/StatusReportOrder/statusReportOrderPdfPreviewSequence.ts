@@ -9,13 +9,20 @@ import { setPdfPreviewUrlAction } from '../../actions/CourtIssuedOrder/setPdfPre
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
 import { getTrialSessionDetailsAction } from '@web-client/presenter/actions/TrialSession/getTrialSessionDetailsAction';
 import { setTrialSessionDetailsAction } from '@web-client/presenter/actions/TrialSession/setTrialSessionDetailsAction';
-import { setTrialSessionIdFromCaseDetailAction } from './setTrialSessionIdFromCaseDetailAction';
+import { setTrialSessionIdFromCaseDetailAction } from '@web-client/presenter/actions/CaseDetail/setTrialSessionIdFromCaseDetailAction';
+import { isCaseCalendaredAction } from '@web-client/presenter/actions/CaseDetail/isCaseCalendaredAction';
 
 export const statusReportOrderPdfPreviewSequence =
   showProgressSequenceDecorator([
-    setTrialSessionIdFromCaseDetailAction,
-    getTrialSessionDetailsAction,
-    setTrialSessionDetailsAction,
+    isCaseCalendaredAction,
+    {
+      yes: [
+        setTrialSessionIdFromCaseDetailAction,
+        getTrialSessionDetailsAction,
+        setTrialSessionDetailsAction,
+      ],
+      no: []
+    },
     prepareStatusReportOrderAction,
     createOrderAction,
     clearPdfPreviewUrlAction,

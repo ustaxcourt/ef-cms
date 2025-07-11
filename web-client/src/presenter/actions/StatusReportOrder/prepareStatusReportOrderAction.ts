@@ -21,6 +21,8 @@ export const prepareStatusReportOrderAction = ({
   const { statusReportFilingDate, statusReportIndex } = get(
     state.statusReportOrder,
   );
+  
+  // console.log('casedetailstate', caseDetail);
 
   const isCalendared = caseDetail.status === CASE_STATUS_TYPES.calendared;
   const isMotionOrHearing = trialSession.sessionType === SESSION_TYPES.motionHearing;
@@ -43,14 +45,14 @@ export const prepareStatusReportOrderAction = ({
     const formattedTrialDate = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.trialDate, FORMATS.MONTH_DAY_YEAR);
-    calendaredLine = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate} in ${caseDetail.trialLocation}.`;
+    calendaredLine = `This case is set for trial at the session of the Court commencing on ${formattedTrialDate} in ${caseDetail.trialLocation}. `;
   }
 
   const filedLine =
     isLeadCase &&
     issueOrder === STATUS_REPORT_ORDER_OPTIONS.issueOrderOptions.allCasesInGroup
-      ? `<p class="indent-paragraph">${calendaredLine} On ${statusReportFilingDateFormatted}, a status report was filed (Lead case document no. ${statusReportIndex}). For cause, it is</p>`
-      : `<p class="indent-paragraph">${calendaredLine} On ${statusReportFilingDateFormatted}, a status report was filed (Document no. ${statusReportIndex}). For cause, it is</p>`;
+      ? `<p class="indent-paragraph">${calendaredLine}On ${statusReportFilingDateFormatted}, a status report was filed (Lead case document no. ${statusReportIndex}). For cause, it is</p>`
+      : `<p class="indent-paragraph">${calendaredLine}On ${statusReportFilingDateFormatted}, a status report was filed (Document no. ${statusReportIndex}). For cause, it is</p>`;
 
   const orderTypeLine =
     hasOrderType &&
