@@ -482,7 +482,6 @@ export const CustomCaseReport = connect(
           <div ref={paginatorTop}>
             <Paginator
               currentPageIndex={activePage}
-              showSinglePage={true}
               totalPages={customCaseReportHelper.pageCount}
               onPageChange={async pageChange => {
                 setActivePage(pageChange);
@@ -528,7 +527,6 @@ export const CustomCaseReport = connect(
           {customCaseReportHelper.pageCount > 1 && (
             <Paginator
               currentPageIndex={activePage}
-              showSinglePage={true}
               totalPages={customCaseReportHelper.pageCount}
               onPageChange={async pageChange => {
                 setActivePage(pageChange);
