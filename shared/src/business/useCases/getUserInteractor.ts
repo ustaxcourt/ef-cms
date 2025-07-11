@@ -1,14 +1,8 @@
-import {
-  IrsPractitioner,
-  RawIrsPractitioner,
-} from '../entities/IrsPractitioner';
+import { RawIrsPractitioner } from '../entities/IrsPractitioner';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { Practitioner, RawPractitioner } from '../entities/Practitioner';
-import {
-  PrivatePractitioner,
-  RawPrivatePractitioner,
-} from '../entities/PrivatePractitioner';
-import { RawUser, User } from '../entities/User';
+import { RawPractitioner } from '../entities/Practitioner';
+import { RawPrivatePractitioner } from '../entities/PrivatePractitioner';
+import { RawUser } from '../entities/User';
 import {
   UnknownAuthUser,
   isAuthUser,
@@ -37,13 +31,5 @@ export const getUserInteractor = async (
     );
   }
 
-  if (user.entityName === PrivatePractitioner.ENTITY_NAME) {
-    return new PrivatePractitioner(user).validate().toRawObject();
-  } else if (user.entityName === IrsPractitioner.ENTITY_NAME) {
-    return new IrsPractitioner(user).validate().toRawObject();
-  } else if (user.entityName === Practitioner.ENTITY_NAME) {
-    return new Practitioner(user).validate().toRawObject();
-  } else {
-    return new User(user).validate().toRawObject();
-  }
+  return user;
 };
