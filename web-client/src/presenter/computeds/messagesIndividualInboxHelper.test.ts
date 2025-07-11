@@ -125,4 +125,37 @@ describe('messagesIndividualInboxHelper', () => {
       someMessagesSelected: true,
     });
   });
+  describe('messagesDisplayedCount', () => {
+    it('should return the count of displayed messages', () => {
+      const result = runCompute(inboxHelperComputed, {
+        state: {
+          formattedMessages: { messages: mockMessages },
+          messagesPage: {
+            completionSuccess: false,
+            messagesCompletedAt: 'Yesterday',
+            messagesCompletedBy: 'Test User',
+            selectedMessages: new Map(),
+          },
+        },
+      });
+
+      expect(result.messagesDisplayedCount).toBe(mockMessages.length);
+    });
+
+    it('should return zero when no messages are displayed', () => {
+      const result = runCompute(inboxHelperComputed, {
+        state: {
+          formattedMessages: { messages: [] },
+          messagesPage: {
+            completionSuccess: false,
+            messagesCompletedAt: 'Yesterday',
+            messagesCompletedBy: 'Test User',
+            selectedMessages: new Map(),
+          },
+        },
+      });
+
+      expect(result.messagesDisplayedCount).toBe(0);
+    });
+  });
 });
