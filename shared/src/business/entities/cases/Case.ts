@@ -88,8 +88,6 @@ export class Case extends JoiValidationEntity {
   public caseStatusHistory?: CaseStatusChange[];
   public caseNote?: string;
   public damages?: number;
-  public highPriority?: boolean;
-  public highPriorityReason?: string;
   public litigationCosts?: number;
   public qcCompleteForTrial?: Record<string, any>;
   public noticeOfAttachments?: boolean;
@@ -351,8 +349,6 @@ export class Case extends JoiValidationEntity {
     this.caseStatusHistory = rawCase.caseStatusHistory || [];
     this.caseNote = rawCase.caseNote;
     this.damages = rawCase.damages;
-    this.highPriority = rawCase.highPriority;
-    this.highPriorityReason = rawCase.highPriorityReason;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
@@ -507,17 +503,6 @@ export class Case extends JoiValidationEntity {
         'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
       )
       .messages({ '*': 'Indicate whether you received an IRS notice' }),
-    highPriority: joi
-      .boolean()
-      .optional()
-      .meta({ tags: ['Restricted'] }),
-    highPriorityReason: JoiValidationConstants.STRING.max(250)
-      .when('highPriority', {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      })
-      .meta({ tags: ['Restricted'] }),
     initialCaption: JoiValidationConstants.CASE_CAPTION.allow(null)
       .optional()
       .description('Case caption before modification.'),
@@ -2043,11 +2028,10 @@ export class Case extends JoiValidationEntity {
    */
   getShouldHaveTrialSortMappingRecords() {
     return !!(
-      (this.highPriority ||
-        this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
+      this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
       this.preferredTrialCity &&
       !this.blocked &&
-      (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
+      !this.automaticBlocked
     );
   }
 

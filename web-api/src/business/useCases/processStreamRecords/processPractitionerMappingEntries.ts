@@ -149,7 +149,6 @@ const getCaseDataFromPostgres = async ({
       closedDate: caseMetadataWithCounsel.closedDate,
       createdAt: caseMetadataWithCounsel.createdAt,
       hasPendingItems: caseMetadataWithCounsel.hasPendingItems,
-      highPriority: caseMetadataWithCounsel.highPriority,
       isPaper: caseMetadataWithCounsel.isPaper,
       leadDocket: caseMetadataWithCounsel.leadDocketNumber,
       preferredTrialCity: caseMetadataWithCounsel.preferredTrialCity,

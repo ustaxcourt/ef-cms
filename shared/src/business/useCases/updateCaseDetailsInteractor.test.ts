@@ -260,7 +260,6 @@ describe('updateCaseDetailsInteractor', () => {
   it('does not allow fields that do not exist on the editableFields list to be updated on the case', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...generalDocketReadyForTrialCase,
-      highPriorityReason: 'roll out',
     });
 
     await updateCaseDetailsInteractor(

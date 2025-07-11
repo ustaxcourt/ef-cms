@@ -9,7 +9,7 @@ export const updateCaseAutomaticBlock = async ({
   caseEntity: Case;
   hasCaseDeadline?: boolean;
 }) => {
-  if (caseEntity.trialDate || caseEntity.highPriority) {
+  if (caseEntity.trialDate) {
     return caseEntity;
   }
 

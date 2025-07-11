@@ -51,7 +51,6 @@ describe('createCsvCustomCaseReportFileAction', () => {
       clientConnectionId: 'TEST_CLIENT_CONNECTION_ID',
       endDate: '2024-03-13T03:59:59.999Z',
       filingMethod: 'all',
-      highPriority: false,
       judges: ['user-id-buch'],
       preferredTrialCities: ['Detroit, Michigan'],
       procedureType: 'All',

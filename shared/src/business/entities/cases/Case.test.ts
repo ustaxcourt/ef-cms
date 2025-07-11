@@ -834,35 +834,6 @@ describe('Case entity', () => {
       expect(myCase.isValid()).toBeFalsy();
     });
 
-    it('Creates an invalid case with highPriority set to true but no highPriorityReason', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          highPriority: true,
-        },
-        {
-          authorizedUser: mockDocketClerkUser,
-        },
-      );
-
-      expect(myCase.isValid()).toBeFalsy();
-    });
-
-    it('Creates a valid case with highPriority set to true and a highPriorityReason', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          highPriority: true,
-          highPriorityReason: 'something',
-        },
-        {
-          authorizedUser: mockDocketClerkUser,
-        },
-      );
-
-      expect(myCase.getFormattedValidationErrors()).toEqual(null);
-    });
-
     it('Creates an invalid case with closed status and no closed date', () => {
       const myCase = new Case(
         {

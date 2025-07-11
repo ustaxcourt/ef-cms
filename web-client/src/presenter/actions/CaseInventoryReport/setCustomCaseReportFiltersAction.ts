@@ -24,7 +24,6 @@ export const setCustomCaseReportFiltersAction = ({
     action: 'add' | 'remove';
     preferredTrialCity: string;
   };
-  highPriority?: boolean;
   procedureType?: CustomCaseProcedureTypes;
   judges?: { action: 'add' | 'remove'; judge: string };
 }>) => {
@@ -40,13 +39,6 @@ export const setCustomCaseReportFiltersAction = ({
   }
   if (props.filingMethod) {
     store.set(state.customCaseReport.filters.filingMethod, props.filingMethod);
-  }
-
-  if (props.highPriority) {
-    store.set(
-      state.customCaseReport.filters.highPriority,
-      !get(state.customCaseReport.filters.highPriority),
-    );
   }
 
   if (props.procedureType) {
