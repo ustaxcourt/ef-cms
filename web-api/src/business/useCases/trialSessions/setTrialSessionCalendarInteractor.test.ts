@@ -302,7 +302,6 @@ describe('setTrialSessionCalendarInteractor', () => {
         ...MOCK_CASE,
         docketNumber: hpSuffixDocketNumber,
         docketNumberSuffix: HIGH_PRIORITY_SUFFIXES[0],
-        highPriority: false,
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
@@ -311,8 +310,6 @@ describe('setTrialSessionCalendarInteractor', () => {
         ...MOCK_CASE,
         docketNumber: highPriorityDocketNumber,
         docketNumberSuffix: 'NotHighPriority',
-        highPriority: true,
-        highPriorityReason: 'When the going gets weird, the weird turn pro',
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
@@ -321,7 +318,6 @@ describe('setTrialSessionCalendarInteractor', () => {
         ...MOCK_CASE,
         docketNumber: regularDocketNumber,
         docketNumberSuffix: 'AlsoNotHighPriority',
-        highPriority: false,
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },

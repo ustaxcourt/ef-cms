@@ -48,8 +48,6 @@ export const petitionerViewsCaseDetail = (cerebralTest, overrides = {}) => {
     expect(caseDetail.blockedDate).toBeUndefined();
     expect(caseDetail.blockedReason).toBeUndefined();
     expect(caseDetail.caseNote).toBeUndefined();
-    expect(caseDetail.highPriority).toBeUndefined();
-    expect(caseDetail.highPriorityReason).toBeUndefined();
     expect(caseDetail.qcCompleteForTrial).toBeUndefined();
   });
 };
