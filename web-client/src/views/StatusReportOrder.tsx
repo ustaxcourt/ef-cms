@@ -261,7 +261,7 @@ export const StatusReportOrder = connect(
                         className="usa-checkbox__label"
                         htmlFor="stricken-from-trial-sessions"
                         id="stricken-from-trial-sessions-label"
-                        title={statusReportOrderHelper.isCalendared?'':'Case is not calendared'}
+                        title={statusReportOrderHelper.isCalendared ? '' : 'Case is not calendared'}
                       >
                         Case is stricken from the trial session
                       </label>
@@ -308,7 +308,7 @@ export const StatusReportOrder = connect(
                         className="usa-radio__label"
                         htmlFor="jurisdiction-retained"
                         data-testid="jurisdiction-retained-label"
-                        title={statusReportOrderHelper.isCalendared?'':'Case is not calendared'}
+                        title={statusReportOrderHelper.isCalendared ? '' : 'Case is not calendared'}
                       >
                         Retained
                       </label>
@@ -343,7 +343,7 @@ export const StatusReportOrder = connect(
                         className="usa-radio__label"
                         htmlFor="jurisdiction-restored-to-general-docket"
                         data-testid="jurisdiction-restored-label"
-                        title={statusReportOrderHelper.isCalendared?'':'Case is not calendared'}
+                        title={statusReportOrderHelper.isCalendared ? '' : 'Case is not calendared'}
                       >
                         Restored to the general docket
                       </label>

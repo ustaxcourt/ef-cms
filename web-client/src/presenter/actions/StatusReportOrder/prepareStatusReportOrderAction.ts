@@ -21,8 +21,6 @@ export const prepareStatusReportOrderAction = ({
   const { statusReportFilingDate, statusReportIndex } = get(
     state.statusReportOrder,
   );
-  
-  // console.log('casedetailstate', caseDetail);
 
   const isCalendared = caseDetail.status === CASE_STATUS_TYPES.calendared;
   const isMotionOrHearing = trialSession.sessionType === SESSION_TYPES.motionHearing;
