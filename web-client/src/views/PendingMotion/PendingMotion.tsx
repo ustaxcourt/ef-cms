@@ -46,7 +46,10 @@ export const PendingMotion = connect<
           .
         </div>
 
-        <div className="display-flex flex-justify-end grid-col-fill margin-bottom-2">
+        <div
+          className="display-flex flex-justify-end grid-col-fill margin-bottom-2"
+          data-testid="pending-motions-total-count-text"
+        >
           <span className="text-semibold">Count:&nbsp;</span>
           <span className="text-normal">
             {pendingMotionsHelper.formattedPendingMotions.length}
