@@ -182,6 +182,7 @@
     "lint:file": "TIMING=1 eslint --",
     "esbuild:build": "node esbuild.config.mjs",
     "esbuild:start": "node esbuild.config.mjs -w",
+    "git:backmerge-staging": "scripts/git/merge-staging-to.sh",
     "git:pr-to": "scripts/git/pr-to.sh",
     "git:pr-to-test": "scripts/git/pr-to-test.sh",
     "lint:fix": "npm run lint:css:fix & npm run lint:js/ts:fix",
