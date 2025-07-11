@@ -11,10 +11,9 @@ PROTECTED_BRANCHES="develop prod staging test"
 [[ -n $(git diff) ]] && echo "Stash or commit local changes first" && exit 1
 
 HEAD_REV=$(git rev-parse HEAD)
-echo "Would force push ${HEAD_REV} to ${TARGET}"
-#git checkout "$TARGET"
-#git reset --hard "$HEAD_REV"
-#git push --force
+git checkout "$TARGET"
+git reset --hard "$HEAD_REV"
+git push --force
 
-#git checkout "$SOURCE"
-#git pull
+git checkout "$SOURCE"
+git pull
