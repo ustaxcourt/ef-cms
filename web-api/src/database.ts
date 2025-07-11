@@ -8,14 +8,14 @@ import {
   OpenSearchSyncMessage,
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import { getConnection } from '@web-api/getConnection';
+import { runQuery } from '@web-api/getConnection';
 import {
   inTransaction,
   onTransactionCommit,
 } from '@web-api/persistence/postgres/utils/transactions';
 
 export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
-  return getConnection({
+  return runQuery({
     cb,
   });
 }
@@ -33,12 +33,12 @@ export async function getDbWriter<T>({
   const writeDoesNotNeedToBeIndexedInOpenSearch =
     !table || !DatabaseSchema[table].indexOpenSearchMessage || !action;
   if (writeDoesNotNeedToBeIndexedInOpenSearch) {
-    return await getConnection({
+    return await runQuery({
       cb,
     });
   }
 
-  const rawResult: T = await getConnection({
+  const rawResult: T = await runQuery({
     cb,
   });
 

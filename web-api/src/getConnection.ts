@@ -1,38 +1,73 @@
-import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';
+import {
+  CamelCasePlugin,
+  CompiledQuery,
+  Kysely,
+  PostgresDialect,
+} from 'kysely';
 import { Database } from './database-schema';
 import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
 
+/**
+ * The way Postgres connection handling works:
+ * We have only one "main," long-lived connection connection per lambda. This makes keeping track of connections a little easier.
+ * The connection needs to be long-lived so that, e.g., connections with a transaction are not expired/reset midway through the transaction.
+ * (This also helps reduce the likelihood of spamming our db with connections, although this should be the responsibility of a proxy/reserved concurrency.)
+ * Every connection makes a quick ping to the db for a health check. With a lambda in the same AZ as RDS, this should be extremely fast.
+ */
+
 let dbInstance: Promise<Kysely<Database>> | null = null;
-let tokenExpirationTime: number = 0;
 let pool: Pool | null = null;
 let poolConfig: PoolConfig;
-export async function getConnection<T>({
+export async function getConnection(): Promise<Kysely<Database>> {
+  if (!dbInstance) {
+    dbInstance = establishConnection();
+  }
+  const awaitedInstance = await dbInstance;
+  return awaitedInstance;
+}
+
+export async function runQuery<T>({
   cb,
 }: {
   cb: (r: Kysely<Database>) => T;
 }): Promise<T> {
-  if (!dbInstance) {
-    dbInstance = establishConnection();
-  }
+  const db = await getConnection();
+  await checkDBHealth(db);
+  return cb(db);
+}
 
-  if (Date.now() > tokenExpirationTime) {
-    if (pool) {
-      await resetPoolPassword();
+let healthCheck: Promise<any> | null = null;
+async function checkDBHealth(
+  db: Kysely<Database>,
+  throwOnError: boolean | undefined = false,
+) {
+  if (!healthCheck) {
+    healthCheck = db.executeQuery(CompiledQuery.raw('SELECT 1'));
+  }
+  try {
+    await healthCheck;
+  } catch (e) {
+    if (throwOnError) {
+      throw new DatabaseConnectionError(e);
+    } else {
+      healthCheck = null;
+      dbInstance = null;
+      const db = await getConnection();
+      await checkDBHealth(db, true);
     }
   }
-  const awaitedInstance = await dbInstance;
-  return await cb(awaitedInstance);
+  healthCheck = null;
 }
 
 async function establishConnection(): Promise<Kysely<Database>> {
   try {
+    // This should only ever be called by one process at a time
     poolConfig = getPoolConfig();
-    let token: string | null = null;
-    token = await getToken();
-    pool = new Pool({ ...poolConfig, password: token });
+    await pool?.end(); // Clear existing pool
+    pool = new Pool({ ...poolConfig });
     return new Kysely<Database>({
       dialect: new PostgresDialect({
         pool,
@@ -41,7 +76,7 @@ async function establishConnection(): Promise<Kysely<Database>> {
     });
   } catch (e) {
     dbInstance = null;
-    throw new Error(`Failed to connect to database: ${e}`);
+    throw new DatabaseConnectionError(`Failed to connect to database: ${e}`);
   }
 }
 
@@ -64,33 +99,15 @@ async function getToken() {
       ? environment.rds.pool.password
       : await generateRDSAuthToken();
 
-  tokenExpirationTime = Date.now() + 13 * 60 * 1000; // rds auth token expires every 15min. So refresh every 13min
   return token;
-}
-
-let tokenPromise: Promise<string> | null;
-async function resetPoolPassword() {
-  if (pool) {
-    if (!tokenPromise) {
-      tokenPromise = getToken();
-    }
-    let token;
-    try {
-      token = await tokenPromise;
-      pool.options.password = token;
-    } catch (e) {
-      tokenExpirationTime = 0;
-      throw new Error(`Could not reset db password: ${e}`);
-    } finally {
-      tokenPromise = null;
-    }
-  }
 }
 
 function getPoolConfig(): PoolConfig {
   if (!poolConfig) {
     poolConfig = {
       ...environment.rds.pool,
+      password: getToken,
+      max: 1, // Must remain at max 1 in pool so that any locking/transaction connection stays alive.
       ssl: environment.rds.useGlobalCert
         ? {
             ca: fs.readFileSync('global-bundle.pem').toString(),
@@ -99,4 +116,15 @@ function getPoolConfig(): PoolConfig {
     };
   }
   return poolConfig;
+}
+
+export class DatabaseConnectionError extends Error {
+  constructor(e?: unknown) {
+    const message =
+      e instanceof Error
+        ? `Could not connect to database: ${e.message}`
+        : `Could not connect to database: ${e}`;
+    super(message);
+    this.name = 'DatabaseConnectionError';
+  }
 }
