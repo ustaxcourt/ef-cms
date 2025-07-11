@@ -46,7 +46,7 @@ export const environment = {
           ? 'localhost'
           : getJestDBConnectionError()),
       idleTimeoutMillis: isRunningOnLambda ? null : 1000, // null idleTimeoutMillis means the db connection is never closed.
-      max: 1,
+      max: 1, // Must remain at max 1 in pool so that any locking/transaction connection stays alive.
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,
       user: process.env.POSTGRES_USER || 'postgres',

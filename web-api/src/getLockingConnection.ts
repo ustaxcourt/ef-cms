@@ -52,8 +52,6 @@ function getPoolConfig(): PoolConfig {
   if (!poolConfig) {
     poolConfig = {
       ...environment.rds.pool,
-      max: 1, // Must remain at max 1 in pool so that the locking connection stays alive.
-      idleTimeoutMillis: null, // Never expire connection as locking relies on an active connection. If connection is destroyed, so too is the lock.
       ssl: environment.rds.useGlobalCert
         ? {
             ca: fs.readFileSync('global-bundle.pem').toString(),

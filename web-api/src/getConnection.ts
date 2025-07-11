@@ -107,7 +107,6 @@ function getPoolConfig(): PoolConfig {
     poolConfig = {
       ...environment.rds.pool,
       password: getToken,
-      max: 1, // Must remain at max 1 in pool so that any locking/transaction connection stays alive.
       ssl: environment.rds.useGlobalCert
         ? {
             ca: fs.readFileSync('global-bundle.pem').toString(),
