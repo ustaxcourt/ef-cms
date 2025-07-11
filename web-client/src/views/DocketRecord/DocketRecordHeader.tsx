@@ -159,7 +159,8 @@ type DocketRecordHeaderProps = {
 const DocketRecordHeaderDeps = {
   DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
   docketRecordHelper: state.docketRecordHelper,
-  docketRecordCount: state.docketRecordHelper.docketRecordCount,
+  docketRecordCount:
+    state.formattedDocketEntries.formattedDocketEntriesOnDocketRecord.length,
   formattedCaseDetail: state.formattedCaseDetail,
   formattedDocketEntriesHelper: state.formattedDocketEntries,
   gotoPrintableDocketRecordSequence:
