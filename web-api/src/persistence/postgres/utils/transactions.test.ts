@@ -1,8 +1,10 @@
 import {
   inTransaction,
   onTransactionCommit,
+  TRANSACTION_LOCK_ID,
   withTransaction,
 } from '@web-api/persistence/postgres/utils/transactions';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 const mockExecute = jest.fn().mockResolvedValue(undefined);
 const fakeReader = { executeQuery: mockExecute };
@@ -49,7 +51,11 @@ describe('database transactions', () => {
       expect(result).toBe('ok');
 
       const sqls = mockExecute.mock.calls.map(c => c[0].sql);
-      expect(sqls).toEqual(['BEGIN', 'COMMIT']);
+      expect(sqls).toEqual([
+        `SELECT pg_advisory_xact_lock(${TRANSACTION_LOCK_ID})`,
+        'BEGIN',
+        'COMMIT',
+      ]);
     });
 
     it('should roll back on error in transaction', async () => {
@@ -61,7 +67,11 @@ describe('database transactions', () => {
       ).rejects.toThrow('fail');
 
       const sqls = mockExecute.mock.calls.map(c => c[0].sql);
-      expect(sqls).toEqual(['BEGIN', 'ROLLBACK']);
+      expect(sqls).toEqual([
+        `SELECT pg_advisory_xact_lock(${TRANSACTION_LOCK_ID})`,
+        'BEGIN',
+        'ROLLBACK',
+      ]);
     });
 
     it('should begin/commit once on nested transactions', async () => {
@@ -73,8 +83,34 @@ describe('database transactions', () => {
       );
 
       const sqls = mockExecute.mock.calls.map(c => c[0].sql);
-      expect(sqls[0]).toMatch(/^BEGIN/);
-      expect(sqls[1]).toMatch(/^COMMIT/);
+      expect(sqls).toEqual([
+        `SELECT pg_advisory_xact_lock(${TRANSACTION_LOCK_ID})`,
+        'BEGIN',
+        'COMMIT',
+      ]);
+    });
+
+    it('should begin/commit separately for each separate process in a Promise.all', async () => {
+      const { withTransaction } = loadTransactionModule();
+      await settlePromises([
+        withTransaction(() => {
+          return Promise.resolve('nested');
+        }),
+        withTransaction(() => {
+          return Promise.resolve('nested');
+        }),
+      ]);
+
+      const sqls = mockExecute.mock.calls.map(c => c[0].sql);
+      sqls.sort();
+      expect(sqls).toEqual([
+        'BEGIN',
+        'BEGIN',
+        'COMMIT',
+        'COMMIT',
+        `SELECT pg_advisory_xact_lock(${TRANSACTION_LOCK_ID})`,
+        `SELECT pg_advisory_xact_lock(${TRANSACTION_LOCK_ID})`,
+      ]);
     });
 
     it('should roll back once on nested transactions', async () => {
@@ -88,8 +124,11 @@ describe('database transactions', () => {
       ).rejects.toThrow('inner fail');
 
       const sqls = mockExecute.mock.calls.map(c => c[0].sql);
-      expect(sqls[0]).toMatch(/^BEGIN/);
-      expect(sqls[1]).toBe('ROLLBACK');
+      expect(sqls).toEqual([
+        `SELECT pg_advisory_xact_lock(${TRANSACTION_LOCK_ID})`,
+        'BEGIN',
+        'ROLLBACK',
+      ]);
     });
 
     it('calls onCommit callbacks after commit', async () => {
