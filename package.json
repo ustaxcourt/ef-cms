@@ -185,6 +185,7 @@
     "git:backmerge-staging": "scripts/git/merge-staging-to.sh",
     "git:pr-to": "scripts/git/pr-to.sh",
     "git:pr-to-test": "scripts/git/pr-to-test.sh",
+    "git:push-to": "scripts/git/push-current-branch-to.sh",
     "lint:fix": "npm run lint:css:fix & npm run lint:js/ts:fix",
     "lint:js/ts:fix:plain": "npm run lint:js/ts:fix -- --rule 'prettier/prettier: 0'",
     "lint:js/ts:fix": "npm run lint:js/ts -- --fix",
