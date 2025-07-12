@@ -8,7 +8,7 @@ const mockExecute = jest.fn().mockResolvedValue(undefined);
 const fakeReader = { executeQuery: mockExecute };
 
 describe('getConnection', () => {
-  it('should not establish multiple connections at the same time', async () => {
+  it('should not establish multiple database pools at the same time', async () => {
     const [db1, db2, db3] = await Promise.all([
       getConnection(),
       getConnection(),

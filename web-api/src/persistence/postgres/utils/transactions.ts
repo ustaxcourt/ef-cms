@@ -1,81 +1,41 @@
-import { getDbReader } from '@web-api/database';
-import { CompiledQuery } from 'kysely';
-
-import { AsyncLocalStorage } from 'async_hooks';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { ConnectionStore, getConnection } from '@web-api/getConnection';
 
-export const TRANSACTION_LOCK_ID = 85939012019;
-
-type TransactionStore = {
-  inTransaction: boolean;
-  onCommitCallbacks?: (() => Promise<void>)[];
-};
-
-// We use this to keep track of whether a process is nested or parent-level
-const als = new AsyncLocalStorage<TransactionStore>();
-
-/**
- * withTransaction is the heart of this file. How does it work?
- * Assuming one connection per lambda, we do the following:
- * 1) Wait for any existing transaction that is in progress on the connection via a lock.
- * 2) Start a new transaction.
- * 3) Run the callback, establishing a context for any child processes via AsyncLocalStorage. This is so that a nested transaction knows it is nested and does not wait for the lock.
- * 3) Commit or rollback.
- */
 export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
-  const store = als.getStore();
+  // If we are already in a transaction, continue like normal.
+  if (inTransaction()) return fn();
 
-  // If we are in a nested transaction, continue like normal and let the outer transaction handle commit/rollback.
-  if (store && store.inTransaction) {
-    return await fn();
-  }
+  const db = await getConnection();
 
-  // Otherwise, we need to start a new transaction.
-  // Acquire a transaction lock so that only one transaction runs at a time.
-  await getDbReader(reader =>
-    reader.executeQuery(
-      CompiledQuery.raw(`SELECT pg_advisory_xact_lock(${TRANSACTION_LOCK_ID})`),
-    ),
-  );
+  // Otherwise, we need to start a transaction. We let kysely take care of the begin/commit/rollback details
+  return db.transaction().execute(async trx => {
+    const store = {
+      inTransaction: true,
+      currentConnection: trx,
+      onCommitCallbacks: [] as Array<() => Promise<void>>,
+    };
 
-  // Then we pass in information to any nested processes. If any fail, the whole transaction will fail.
-  const rootStore = {
-    inTransaction: true,
-    onCommitCallbacks: [] as (() => Promise<void>)[],
-  };
-
-  try {
-    return await als.run(rootStore, async () => {
-      await getDbReader(reader =>
-        reader.executeQuery(CompiledQuery.raw(`BEGIN`)),
-      );
-
+    // Then we pass in information to any nested processes. If any fail, the whole transaction will fail.
+    return ConnectionStore.run(store, async () => {
       const result = await fn();
 
-      await getDbReader(reader =>
-        reader.executeQuery(CompiledQuery.raw(`COMMIT`)),
-      );
+      // At the end, we run all the things we need to do on commit, like indexing in OpenSearch.
+      await settlePromises(store.onCommitCallbacks.map(cb => cb()));
 
-      await settlePromises(rootStore.onCommitCallbacks.map(cb => cb()));
       return result;
     });
-  } catch (err) {
-    await getDbReader(reader =>
-      reader.executeQuery(CompiledQuery.raw(`ROLLBACK`)),
-    );
-    throw err;
-  }
+  });
 }
 
 // Whether or not the caller is currently part of a transaction
 export function inTransaction() {
-  const store = als.getStore();
-  return !!(store && store.inTransaction);
+  const store = ConnectionStore.getStore();
+  return !!store && !!store.inTransaction;
 }
 
 // Callbacks to run once the commit is successful
 export function onTransactionCommit(cb: () => Promise<void>) {
-  const store = als.getStore();
+  const store = ConnectionStore.getStore();
   if (store && store.onCommitCallbacks) {
     store.onCommitCallbacks.push(cb);
   } else {
