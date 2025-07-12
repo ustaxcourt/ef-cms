@@ -101,7 +101,7 @@ async function generateRDSAuthToken() {
   return token;
 }
 
-let tokenPromise: Promise<string> | null = null;
+let tokenPromise: Promise<string> | null = null; // So parallel processes don't all try to get a token at the same time
 let token: string | null = null;
 let tokenExpirationTime = 0;
 async function getToken(): Promise<string> {
@@ -112,7 +112,7 @@ async function getToken(): Promise<string> {
     token = null;
   }
   if (token) {
-    return Promise.resolve(token);
+    return token;
   }
   if (!tokenPromise) {
     tokenPromise = generateRDSAuthToken()
