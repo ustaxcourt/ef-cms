@@ -1,4 +1,4 @@
-import { getConnection } from '@web-api/getConnection';
+import { getDb } from '@web-api/databaseConnection';
 
 jest.doMock('@web-api/database', () => ({
   getDbReader: cb => cb(fakeReader),
@@ -7,13 +7,9 @@ jest.doMock('@web-api/database', () => ({
 const mockExecute = jest.fn().mockResolvedValue(undefined);
 const fakeReader = { executeQuery: mockExecute };
 
-describe('getConnection', () => {
+describe('getDb', () => {
   it('should not establish multiple database pools at the same time', async () => {
-    const [db1, db2, db3] = await Promise.all([
-      getConnection(),
-      getConnection(),
-      getConnection(),
-    ]);
+    const [db1, db2, db3] = await Promise.all([getDb(), getDb(), getDb()]);
 
     expect(new Set([db1, db2, db3]).size).toBe(1);
   });

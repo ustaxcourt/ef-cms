@@ -23,14 +23,14 @@ export const ConnectionStore = new AsyncLocalStorage<ConnectionInfo>();
 let dbInstance: Promise<Kysely<Database>> | null = null;
 let pool: Pool | null = null;
 let poolConfig: PoolConfig;
-export async function getConnection(): Promise<Kysely<Database>> {
+export async function getDb(): Promise<Kysely<Database>> {
   const currentConnection = ConnectionStore.getStore()?.currentConnection;
   if (currentConnection) {
     return currentConnection;
   }
 
   if (!dbInstance) {
-    dbInstance = establishConnection();
+    dbInstance = establishDbPool();
   }
 
   const awaitedInstance = await dbInstance;
@@ -42,7 +42,7 @@ export async function runQuery<T>({
 }: {
   cb: (r: Kysely<Database>) => T;
 }): Promise<T> {
-  const db = await getConnection();
+  const db = await getDb();
   await checkDBHealth(db);
   return cb(db);
 }
@@ -63,14 +63,14 @@ async function checkDBHealth(
     } else {
       healthCheck = null;
       dbInstance = null;
-      const db = await getConnection();
+      const db = await getDb();
       await checkDBHealth(db, true);
     }
   }
   healthCheck = null;
 }
 
-async function establishConnection(): Promise<Kysely<Database>> {
+async function establishDbPool(): Promise<Kysely<Database>> {
   try {
     // This should only ever be called by one process at a time
     poolConfig = getPoolConfig();

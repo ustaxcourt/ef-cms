@@ -1,11 +1,11 @@
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { ConnectionStore, getConnection } from '@web-api/getConnection';
+import { ConnectionStore, getDb } from '@web-api/databaseConnection';
 
 export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   // If we are already in a transaction, continue like normal.
   if (inTransaction()) return fn();
 
-  const db = await getConnection();
+  const db = await getDb();
 
   // Otherwise, we need to start a transaction. We let kysely take care of the begin/commit/rollback details
   return db.transaction().execute(async trx => {
