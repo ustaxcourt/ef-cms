@@ -11,6 +11,9 @@ type TransactionStore = {
   onCommitCallbacks?: (() => Promise<void>)[];
 };
 
+// We use this to keep track of whether a process is nested or parent-level
+const als = new AsyncLocalStorage<TransactionStore>();
+
 /**
  * withTransaction is the heart of this file. How does it work?
  * Assuming one connection per lambda, we do the following:
@@ -19,29 +22,6 @@ type TransactionStore = {
  * 3) Run the callback, establishing a context for any child processes via AsyncLocalStorage. This is so that a nested transaction knows it is nested and does not wait for the lock.
  * 3) Commit or rollback.
  */
-
-// We use this to keep track of whether a process is nested or parent-level
-const als = new AsyncLocalStorage<TransactionStore>();
-
-// Whether or not the caller is currently part of a transaction
-export function inTransaction() {
-  const store = als.getStore();
-  return !!(store && store.inTransaction);
-}
-
-// Callbacks to run once the commit is successful
-export function onTransactionCommit(cb: () => Promise<void>) {
-  const store = als.getStore();
-  if (store && store.onCommitCallbacks) {
-    store.onCommitCallbacks.push(cb);
-  } else {
-    throw new Error(
-      'onTransactionCommit was called without an ongoing transaction',
-    );
-  }
-}
-
-// A wrapper to keep everything within it scoped to a transaction
 export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   const store = als.getStore();
 
@@ -84,5 +64,23 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
       reader.executeQuery(CompiledQuery.raw(`ROLLBACK`)),
     );
     throw err;
+  }
+}
+
+// Whether or not the caller is currently part of a transaction
+export function inTransaction() {
+  const store = als.getStore();
+  return !!(store && store.inTransaction);
+}
+
+// Callbacks to run once the commit is successful
+export function onTransactionCommit(cb: () => Promise<void>) {
+  const store = als.getStore();
+  if (store && store.onCommitCallbacks) {
+    store.onCommitCallbacks.push(cb);
+  } else {
+    throw new Error(
+      'onTransactionCommit was called without an ongoing transaction',
+    );
   }
 }
