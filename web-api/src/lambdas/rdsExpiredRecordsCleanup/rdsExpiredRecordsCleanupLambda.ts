@@ -1,5 +1,5 @@
-import { getDbReader } from '@web-api/database';
-import { Database } from '@web-api/database-schema';
+import { getDbReader } from '@web-api/persistence/postgres/database';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 import type { Handler } from 'aws-lambda';
 

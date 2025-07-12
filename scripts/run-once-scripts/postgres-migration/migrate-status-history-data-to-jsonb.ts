@@ -4,7 +4,7 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { isEmpty } from 'lodash';
 import { environment } from '@web-api/environment';
 import { CompiledQuery } from 'kysely';

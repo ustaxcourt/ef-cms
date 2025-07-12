@@ -1,5 +1,5 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import {
   ALL_OMITTABLE_CASE_FIELDS,
   getCasesByDocketNumbers,

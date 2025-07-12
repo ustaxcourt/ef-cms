@@ -1,8 +1,8 @@
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 import { Kysely } from 'kysely';
-import { Database } from '@web-api/database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { Case } from '@shared/business/entities/cases/Case';
 
 const MAX_RESULTS = 5000;

@@ -1,5 +1,8 @@
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { ConnectionStore, getDb } from '@web-api/databaseConnection';
+import {
+  ConnectionStore,
+  getDb,
+} from '@web-api/persistence/postgres/databaseConnection';
 
 export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   // If we are already in a transaction, continue like normal.
@@ -10,8 +13,7 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
   // Otherwise, we need to start a transaction. We let kysely take care of the begin/commit/rollback details
   return db.transaction().execute(async trx => {
     const store = {
-      inTransaction: true,
-      currentConnection: trx,
+      currentTransaction: trx,
       onCommitCallbacks: [] as Array<() => Promise<void>>,
     };
 
@@ -30,7 +32,7 @@ export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
 // Whether or not the caller is currently part of a transaction
 export function inTransaction() {
   const store = ConnectionStore.getStore();
-  return !!store && !!store.inTransaction;
+  return !!store && !!store.currentTransaction;
 }
 
 // Callbacks to run once the commit is successful

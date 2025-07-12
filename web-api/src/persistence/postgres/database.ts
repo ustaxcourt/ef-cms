@@ -8,7 +8,7 @@ import {
   OpenSearchSyncMessage,
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import { runQuery } from '@web-api/databaseConnection';
+import { runQuery } from '@web-api/persistence/postgres/databaseConnection';
 import {
   inTransaction,
   onTransactionCommit,

@@ -1,5 +1,5 @@
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const getUserCaseNote = async ({

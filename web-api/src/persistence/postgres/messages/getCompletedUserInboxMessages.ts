@@ -1,6 +1,6 @@
 import { Message } from '@shared/business/entities/Message';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getCompletedUserInboxMessages = async ({

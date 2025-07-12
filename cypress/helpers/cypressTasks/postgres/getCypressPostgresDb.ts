@@ -1,5 +1,5 @@
 import { Signer } from '@aws-sdk/rds-signer';
-import type { Database } from '@web-api/database-schema';
+import type { Database } from '@web-api/persistence/postgres/database-schema';
 import { getCypressEnv } from 'cypress/helpers/env/cypressEnvironment';
 import fs from 'fs';
 import { CamelCasePlugin, Kysely, PostgresDialect } from 'kysely';

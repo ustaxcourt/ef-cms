@@ -1,5 +1,5 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getDocumentQCInboxForUser = async ({

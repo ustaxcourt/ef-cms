@@ -13,7 +13,7 @@ import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import PQueue from 'p-queue';
 import fs from 'fs';
 import path from 'path';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:

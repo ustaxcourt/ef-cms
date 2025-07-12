@@ -1,5 +1,5 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { messageResultEntity } from '@web-api/persistence/postgres/messages/mapper';
 
 export const getSectionInboxMessages = async ({

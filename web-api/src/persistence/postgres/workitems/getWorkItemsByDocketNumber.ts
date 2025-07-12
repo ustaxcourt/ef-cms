@@ -1,5 +1,5 @@
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { workItemEntity } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getWorkItemsByDocketNumber = async ({

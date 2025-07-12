@@ -3,7 +3,7 @@ import {
   CASE_STATUS_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { Case } from '@shared/business/entities/cases/Case';
 
 export const getCaseInventoryReport = async ({

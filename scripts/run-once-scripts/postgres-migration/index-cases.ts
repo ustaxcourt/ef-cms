@@ -5,7 +5,7 @@ import {
   type ScriptConfig,
 } from '../../helpers/parseArgsAndEnvVars';
 import { environment } from '@web-api/environment';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { isEmpty } from 'lodash';
 import { indexOpenSearchCases } from 'web-api/elasticsearch/cases/indexOpenSearchCases';
 import {

@@ -1,5 +1,5 @@
-import { getDbWriter } from '@web-api/database';
-import { Database } from '@web-api/database-schema';
+import { getDbWriter } from '@web-api/persistence/postgres/database';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
 import { AnyColumn } from 'kysely';
@@ -43,6 +43,6 @@ export const pgInsertInto = async <T extends keyof Database>({
       return await query.returningAll().execute();
     },
     table,
-    action: OPENSEARCH_SYNC_ACTIONS.UPSERT
+    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 };

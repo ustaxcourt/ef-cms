@@ -8,7 +8,7 @@ import {
 } from '../../helpers/parseArgsAndEnvVars';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
 import { environment } from '@web-api/environment';
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { isEmpty } from 'lodash';
 
 const scriptConfig: ScriptConfig = {

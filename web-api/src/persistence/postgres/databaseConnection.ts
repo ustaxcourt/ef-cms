@@ -3,17 +3,17 @@ import {
   CompiledQuery,
   Kysely,
   PostgresDialect,
+  Transaction,
 } from 'kysely';
-import { Database } from './database-schema';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
-import { environment } from './environment';
+import { environment } from '../../environment';
 import fs from 'fs';
 import { AsyncLocalStorage } from 'async_hooks';
 
 type ConnectionInfo = {
-  inTransaction: boolean;
-  currentConnection: Kysely<Database>;
+  currentTransaction: Transaction<Database>;
   onCommitCallbacks?: (() => Promise<void>)[];
 };
 
@@ -24,7 +24,7 @@ let dbInstance: Promise<Kysely<Database>> | null = null;
 let pool: Pool | null = null;
 let poolConfig: PoolConfig;
 export async function getDb(): Promise<Kysely<Database>> {
-  const currentConnection = ConnectionStore.getStore()?.currentConnection;
+  const currentConnection = ConnectionStore.getStore()?.currentTransaction;
   if (currentConnection) {
     return currentConnection;
   }
