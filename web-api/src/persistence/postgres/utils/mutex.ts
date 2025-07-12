@@ -1,14 +1,12 @@
 import crypto from 'crypto';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import {
-  tryGetLocks,
-  tryReleaseLocks,
-} from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { tryGetLocks } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { sleep } from '@shared/tools/helpers';
 import { acquireOneDbConnection } from '@web-api/persistence/postgres/acquireOneDbConnection';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { tryReleaseLocks } from '@web-api/persistence/postgres/utils/operation/tryReleaseLocks';
 
 /**
  * Converts a string into a consistent 32-bit integer to use as an advisory lock ID.

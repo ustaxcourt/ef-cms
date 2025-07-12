@@ -1,6 +1,6 @@
 import { getDb } from '@web-api/persistence/postgres/databaseConnection';
 
-jest.doMock('@web-api/database', () => ({
+jest.doMock('@web-api/persistence/postgres/databaseConnection', () => ({
   getDbReader: cb => cb(fakeReader),
 }));
 
