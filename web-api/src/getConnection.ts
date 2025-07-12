@@ -104,7 +104,10 @@ async function generateRDSAuthToken() {
 let tokenPromise: Promise<string> | null = null;
 let token: string | null = null;
 let tokenExpirationTime = 0;
-export function getToken(): Promise<string> {
+async function getToken(): Promise<string> {
+  if (environment.nodeEnv !== 'production') {
+    return environment.rds.pool.password;
+  }
   if (Date.now() > tokenExpirationTime) {
     token = null;
   }
