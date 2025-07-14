@@ -115,7 +115,7 @@ export const OpinionSearchForm = connect(
                       endDateErrorText={validationErrors.endDate}
                       endLabel="End date"
                       endName="endDate"
-                      endPickerCls={'grid-col-5'}
+                      endPickerCls={'grid-col-6'}
                       endValue={advancedSearchForm.opinionSearch.endDate}
                       formGroupCls="margin-bottom-0"
                       maxDate={advancedDocumentSearchHelper.maxDate}
@@ -124,7 +124,7 @@ export const OpinionSearchForm = connect(
                       startLabel="Start date"
                       startName="startDate"
                       showDateHint={true}
-                      startPickerCls={'grid-col-5'}
+                      startPickerCls={'grid-col-6'}
                       startValue={advancedSearchForm.opinionSearch.startDate}
                       onChangeEnd={e => {
                         updateAdvancedOpinionSearchFormValueSequence({
@@ -262,7 +262,7 @@ export const OpinionSearchForm = connect(
                             endDateErrorText={validationErrors.endDate}
                             endLabel="End date"
                             endName="endDate"
-                            endPickerCls={'grid-col-5'}
+                            endPickerCls={'grid-col-6'}
                             endValue={advancedSearchForm.opinionSearch.endDate}
                             formGroupCls="margin-bottom-0"
                             maxDate={advancedDocumentSearchHelper.maxDate}
@@ -271,7 +271,7 @@ export const OpinionSearchForm = connect(
                             startLabel="Start date"
                             startName="startDate"
                             showDateHint={true}
-                            startPickerCls={'grid-col-5'}
+                            startPickerCls={'grid-col-6'}
                             startValue={
                               advancedSearchForm.opinionSearch.startDate
                             }
