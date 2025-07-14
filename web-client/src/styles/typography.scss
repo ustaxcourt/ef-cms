@@ -207,3 +207,12 @@ a:hover {
   font-size: 17px;
   font-weight: bold;
 }
+
+.order-alert-headers {
+  margin-top: 0;
+  margin-bottom: 0.75em;
+  font-family: 'Source Sans Pro', $font-source-sans;
+  font-size: 18px;
+  font-weight: $font-bold;
+  line-height: 1.3em;
+}

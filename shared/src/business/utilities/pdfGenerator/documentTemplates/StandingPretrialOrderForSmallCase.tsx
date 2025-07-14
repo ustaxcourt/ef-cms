@@ -1,18 +1,52 @@
 import React from 'react';
 
-import { OrderDocketHeader } from '../components/OrderDocketHeader';
-import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader';
+import { OrderDocketHeader } from '@shared/business/utilities/pdfGenerator/components/OrderDocketHeader';
+import { OrderPrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/OrderPrimaryHeader';
 import { TROUBLESHOOTING_INFO } from '@shared/business/entities/EntityConstants';
 
-export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
+type StandingPretrialOrderForSmallCaseOptions = {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+};
+
+export type StandingPretrialOrderForSmallCaseTrialInfo = {
+  trialLocation: string;
+  formattedStartTime: string;
+  formattedStartDateWithDayOfWeek: string;
+  formattedServedDate: string;
+  formattedJudgeName: string;
+  chambersPhoneNumber: string;
+};
+
+export type StandingPretrialOrderForSmallCaseParams = {
+  options: StandingPretrialOrderForSmallCaseOptions;
+  trialInfo: StandingPretrialOrderForSmallCaseTrialInfo;
+};
+
+export const StandingPretrialOrderForSmallCase = ({
+  options,
+  trialInfo,
+}: StandingPretrialOrderForSmallCaseParams) => {
+  const { caseCaptionExtension, caseTitle, docketNumberWithSuffix } = options;
+
+  const {
+    trialLocation,
+    formattedStartTime,
+    formattedStartDateWithDayOfWeek,
+    formattedServedDate,
+    formattedJudgeName,
+    chambersPhoneNumber,
+  } = trialInfo;
+
   return (
     <div id="standing-pretrial-order">
       <div className="standing-pretrial-order-small-case">
         <OrderPrimaryHeader />
         <OrderDocketHeader
-          caseCaptionExtension={options.caseCaptionExtension}
-          caseTitle={options.caseTitle.toUpperCase()}
-          docketNumberWithSuffix={options.docketNumberWithSuffix}
+          caseCaptionExtension={caseCaptionExtension}
+          caseTitle={caseTitle.toUpperCase()}
+          docketNumberWithSuffix={docketNumberWithSuffix}
         />
 
         <div
@@ -20,14 +54,10 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           id="trial-information-card"
         >
           <p>
-            This case is set for trial at the {trialInfo.trialLocation} trial
-            session beginning at <br />
-            <span className="text-bold">
-              {trialInfo.formattedStartTime}
-            </span> on{' '}
-            <span className="text-bold">
-              {trialInfo.formattedStartDateWithDayOfWeek}
-            </span>
+            This case is set for trial at the {trialLocation} trial session
+            beginning at <br />
+            <span className="text-bold">{formattedStartTime}</span> on{' '}
+            <span className="text-bold">{formattedStartDateWithDayOfWeek}</span>
             .
           </p>
           <p>
@@ -394,7 +424,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
         </ol>
         <div className="judge-signature">
           <p style={{ float: 'left', width: '40%' }}>
-            Dated: {trialInfo.formattedServedDate}
+            Dated: {formattedServedDate}
           </p>
           <p
             style={{
@@ -404,9 +434,9 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
               width: '59%',
             }}
           >
-            <b>(Signed) {trialInfo.formattedJudgeName}</b>
+            <b>(Signed) {formattedJudgeName}</b>
             <br />
-            {trialInfo.chambersPhoneNumber}
+            {chambersPhoneNumber}
           </p>
         </div>
         <br />

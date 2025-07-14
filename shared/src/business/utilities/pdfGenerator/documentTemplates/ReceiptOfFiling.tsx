@@ -1,26 +1,33 @@
-import { CompressedDocketHeader } from '../components/CompressedDocketHeader.tsx';
-import { PrimaryHeader } from '../components/PrimaryHeader.tsx';
+import { CompressedDocketHeader } from '@shared/business/utilities/pdfGenerator/components/CompressedDocketHeader';
+import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
 import React from 'react';
 
-const DocumentRow = ({ document }) => {
-  const hasAttachments = !!document.attachments;
-  const hasCertificateOfService = !!document.certificateOfService;
-  const hasObjections = !!document.objections;
-  const objectionsText = ['No', 'Unknown'].includes(document.objections)
-    ? `${document.objections} Objections`
+const DocumentRow = ({ document }: { document: ReceiptOfFilingDocument }) => {
+  const {
+    attachments,
+    certificateOfService,
+    objections,
+    documentTitle,
+    formattedCertificateOfServiceDate,
+  } = document;
+
+  const hasAttachments = !!attachments;
+  const hasCertificateOfService = !!certificateOfService;
+  const hasObjections = !!objections;
+  const objectionsText = ['No', 'Unknown'].includes(objections)
+    ? `${objections} Objections`
     : 'Objections';
 
   return (
     <tr className="receipt-filed-document">
-      <td className="receipt-document-title">{document.documentTitle}</td>
+      <td className="receipt-document-title">{documentTitle}</td>
       <td>
         {(hasAttachments || hasCertificateOfService) && (
           <>
             {hasAttachments && <p className="included">Attachment(s)</p>}
             {hasCertificateOfService && (
               <p className="included">
-                Certificate of Service{' '}
-                {document.formattedCertificateOfServiceDate}
+                Certificate of Service {formattedCertificateOfServiceDate}
               </p>
             )}
           </>
@@ -33,6 +40,32 @@ const DocumentRow = ({ document }) => {
   );
 };
 
+type ReceiptOfFilingOptions = {
+  caseCaptionExtension: string;
+  caseTitle: string;
+  docketNumberWithSuffix: string;
+};
+
+type ReceiptOfFilingDocument = {
+  attachments: string;
+  certificateOfService: boolean;
+  objections: string;
+  documentTitle: string;
+  formattedCertificateOfServiceDate: string;
+};
+
+type ReceiptOfFilingParams = {
+  consolidatedCasesDocketNumbers: string[];
+  document: ReceiptOfFilingDocument;
+  supportingDocuments: ReceiptOfFilingDocument[];
+  fileAcrossConsolidatedGroup: boolean;
+  filedAt: string;
+  filedBy: string;
+  options: ReceiptOfFilingOptions;
+  secondaryDocument: ReceiptOfFilingDocument;
+  secondarySupportingDocuments: ReceiptOfFilingDocument[];
+};
+
 export const ReceiptOfFiling = ({
   consolidatedCasesDocketNumbers,
   document,
@@ -43,21 +76,22 @@ export const ReceiptOfFiling = ({
   secondaryDocument,
   secondarySupportingDocuments,
   supportingDocuments,
-}) => {
+}: ReceiptOfFilingParams) => {
   const hasSupportingDocuments =
     supportingDocuments && supportingDocuments.length;
   const hasSecondaryDocument = !!secondaryDocument;
   const hasSecondarySupportingDocuments =
     secondarySupportingDocuments && secondarySupportingDocuments.length;
 
+  const { caseCaptionExtension, caseTitle, docketNumberWithSuffix } = options;
   return (
     <div id="receipt-of-filing">
       <PrimaryHeader />
       <CompressedDocketHeader
-        caseCaptionExtension={options.caseCaptionExtension}
-        caseTitle={options.caseTitle}
+        caseCaptionExtension={caseCaptionExtension}
+        caseTitle={caseTitle}
         consolidatedCasesDocketNumbers={consolidatedCasesDocketNumbers}
-        docketNumberWithSuffix={options.docketNumberWithSuffix}
+        docketNumberWithSuffix={docketNumberWithSuffix}
         documentTitle="Receipt of Filing"
         fileAcrossConsolidatedGroup={fileAcrossConsolidatedGroup}
       />

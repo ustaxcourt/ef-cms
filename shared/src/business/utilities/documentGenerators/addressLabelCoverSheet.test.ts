@@ -1,6 +1,7 @@
 import { addressLabelCoverSheet } from './addressLabelCoverSheet';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 
 describe('addressLabelCoverSheet', () => {
   generateAndVerifyPdfDiff({
@@ -17,6 +18,8 @@ describe('addressLabelCoverSheet', () => {
           name: 'Test Person',
           postalCode: '89890',
           state: 'ZZ',
+          countryType: COUNTRY_TYPES.INTERNATIONAL,
+          country: 'TEST_COUNTRY',
         },
       });
     },
