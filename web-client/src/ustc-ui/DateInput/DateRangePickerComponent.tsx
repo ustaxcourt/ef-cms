@@ -18,6 +18,7 @@ export const DateRangePickerComponent = ({
   onBlurStart,
   onChangeEnd,
   onChangeStart,
+  onLoad,
   parentModalHasMounted = false,
   rangePickerCls,
   showDateHint = false,
@@ -40,6 +41,7 @@ export const DateRangePickerComponent = ({
   onBlurStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onLoad?: () => void;
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string | React.ReactNode;
@@ -194,8 +196,15 @@ export const DateRangePickerComponent = ({
     };
   }, [startDateInputRef, endDateInputRef, parentModalHasMounted]);
 
+  useEffect(() => {
+    if (onLoad) {
+      onLoad();
+    }
+  }, []);
+
   return (
     <FormGroup
+      id="case-deadlines-datepicker"
       className={formGroupCls}
       ref={dateRangePickerRef}
       omitFormGroupClass={omitFormGroupClass}
@@ -209,6 +218,7 @@ export const DateRangePickerComponent = ({
           <FormGroup
             errorText={startDateErrorText}
             ref={startDatePickerRef}
+            id="case-deadlines-start-formgroup"
           >
             <label
               className="usa-label"
@@ -237,6 +247,7 @@ export const DateRangePickerComponent = ({
           <FormGroup
             errorText={endDateErrorText}
             ref={endDatePickerRef}
+            id="case-deadlines-end-formgroup"
           >
             <label
               className="usa-label"
