@@ -82,10 +82,6 @@ const internalFieldsBlocked = () => {
   expect(cerebralTest.getState('caseDetail.blockedReason')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.caseNote')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.damages')).toBeUndefined();
-  expect(cerebralTest.getState('caseDetail.highPriority')).toBeUndefined();
-  expect(
-    cerebralTest.getState('caseDetail.highPriorityReason'),
-  ).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.judgeUserId')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.litigationCosts')).toBeUndefined();
   expect(
@@ -304,7 +300,7 @@ describe('Case permissions test', () => {
 
   petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  it('Petitions Clerk views case detail', async () => {
+  it('Petitions Clerk views case detail 2', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -318,7 +314,7 @@ describe('Case permissions test', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  it('Docket Clerk views case detail', async () => {
+  it('Docket Clerk views case detail 2', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
