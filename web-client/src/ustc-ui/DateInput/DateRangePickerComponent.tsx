@@ -195,15 +195,16 @@ export const DateRangePickerComponent = ({
       }
     };
   }, [startDateInputRef, endDateInputRef, parentModalHasMounted]);
-  
+
   useEffect(() => {
-    if(onLoad) {
+    if (onLoad) {
       onLoad();
     }
   }, []);
 
   return (
     <FormGroup
+      id="case-deadlines-datepicker"
       className={formGroupCls}
       ref={dateRangePickerRef}
       omitFormGroupClass={omitFormGroupClass}
@@ -217,6 +218,7 @@ export const DateRangePickerComponent = ({
           <FormGroup
             errorText={startDateErrorText}
             ref={startDatePickerRef}
+            id="case-deadlines-start-formgroup"
           >
             <label
               className="usa-label"
@@ -245,6 +247,7 @@ export const DateRangePickerComponent = ({
           <FormGroup
             errorText={endDateErrorText}
             ref={endDatePickerRef}
+            id="case-deadlines-end-formgroup"
           >
             <label
               className="usa-label"
