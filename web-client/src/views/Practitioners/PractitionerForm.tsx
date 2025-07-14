@@ -251,7 +251,7 @@ export const PractitionerForm = connect(
                       alertWarning={{
                         message: (
                           <>
-                            Practitioner has associated with one or more open
+                            Practitioner is associated with one or more open
                             cases.
                             <br />
                             Practitioner has to be withdrawn from all open cases
