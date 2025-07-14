@@ -90,3 +90,8 @@ jest.mock(
   '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases',
   () => mockFactory('getSuggestedCalendarCases'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases',
+  () => mockFactory('disassociateUsersFromCases'),
+);

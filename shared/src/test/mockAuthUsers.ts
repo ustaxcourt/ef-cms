@@ -34,6 +34,7 @@ export const mockPrivatePractitionerUser: AuthUser = {
   name: 'Reginald Barclay',
   role: ROLES.privatePractitioner,
   userId: '73dedd03-e353-4703-bf6b-5b864b8c16ae',
+  representing: [],
 };
 
 export const mockAdmissionsClerkUser: AuthUser = {

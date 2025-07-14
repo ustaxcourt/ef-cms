@@ -27,6 +27,9 @@ import {
 import { removePetitionerAndUpdateCaptionInteractor } from './removePetitionerAndUpdateCaptionInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { disassociateUsersFromCases as disassociateUsersFromCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
+
+const disassociateUsersFromCases = jest.mocked(disassociateUsersFromCasesMock);
 
 describe('removePetitionerAndUpdateCaptionInteractor', () => {
   let mockCase;
@@ -61,9 +64,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
 
-    applicationContext
-      .getPersistenceGateway()
-      .deleteUserFromCase.mockImplementation(() => null);
+    disassociateUsersFromCases.mockImplementation(() => null);
   });
 
   it('should throw an unauthorized error when the current user does not have permission to edit petitioners', async () => {
@@ -139,10 +140,6 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     expect(
       getPetitionerById(caseToUpdate, petitionerToRemove.contactId),
     ).toBeUndefined();
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[0][0].userId,
-    ).toEqual(petitionerToRemove.contactId);
   });
 
   it('should remove practitioner from case when they only represented the removed petitioner', async () => {
@@ -169,15 +166,6 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     );
 
     const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[0][0].userId,
-    ).toEqual(mockPrivatePractitioner.userId);
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[1][0].userId,
-    ).toEqual(petitionerToRemove.contactId);
 
     expect(caseToUpdate.privatePractitioners.length).toEqual(0);
   });

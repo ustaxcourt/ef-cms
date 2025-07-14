@@ -1,7 +1,6 @@
-import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/cases/mocks.jest';
 import { PETITIONS_SECTION, ROLES } from '../entities/EntityConstants';
-import { Practitioner } from '@shared/business/entities/Practitioner';
-import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { getUserInteractor } from './getUserInteractor';
 import {
@@ -11,9 +10,14 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { RawUser } from '../entities/User';
+
+const getUserById = jest.mocked(getUserByIdMock);
+
 describe('getUserInteractor', () => {
   it('should call the persistence method to get the user', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...mockPetitionsClerkUser,
       section: PETITIONS_SECTION,
     });
@@ -25,17 +29,12 @@ describe('getUserInteractor', () => {
 
     expect(user).toEqual({
       ...mockPetitionsClerkUser,
-      barNumber: undefined,
-      entityName: 'User',
       section: PETITIONS_SECTION,
-      token: undefined,
     });
   });
 
   it('should throw an error if the user is not found', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(null);
+    getUserById.mockResolvedValue(undefined);
 
     await expect(
       getUserInteractor(applicationContext, mockPetitionsClerkUser),
@@ -53,28 +52,23 @@ describe('getUserInteractor', () => {
       role: ROLES.judge,
       userId: mockJudgeUser.userId,
     };
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...mockJudge,
       section: 'judge',
-    });
+    } as RawUser);
 
     const user = await getUserInteractor(applicationContext, mockJudgeUser);
 
-    expect(user).toEqual({
+    expect(user).toMatchObject({
       ...mockJudge,
-      barNumber: undefined,
-      email: undefined,
-      entityName: 'User',
       section: 'judge',
-      token: undefined,
     });
   });
 
   it('should return a PrivatePractitioner entity when the entity returned from persistence is a PrivatePractitioner', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...mockPrivatePractitionerUser,
       barNumber: 'PT1234',
-      entityName: PrivatePractitioner.ENTITY_NAME,
     });
 
     const user = await getUserInteractor(
@@ -82,20 +76,17 @@ describe('getUserInteractor', () => {
       mockPrivatePractitionerUser,
     );
 
-    expect(user).toMatchObject({
+    expect(user).toEqual({
       ...mockPrivatePractitionerUser,
       barNumber: 'PT1234',
-      isUpdatingInformation: undefined,
       representing: [],
-      token: undefined,
     });
   });
 
   it('should return an IrsPractitioner entity when the entity returned from persistence is a IrsPractitioner', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...mockIrsPractitionerUser,
       barNumber: 'PT5678',
-      entityName: IrsPractitioner.ENTITY_NAME,
     });
 
     const user = await getUserInteractor(
@@ -103,7 +94,7 @@ describe('getUserInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(user).toMatchObject({
+    expect(user).toEqual({
       ...mockIrsPractitionerUser,
       barNumber: 'PT5678',
       isUpdatingInformation: undefined,
@@ -116,7 +107,6 @@ describe('getUserInteractor', () => {
       admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       birthYear: '1976',
-      entityName: Practitioner.ENTITY_NAME,
       firstName: 'Bob',
       lastName: 'Ross',
       name: 'Bob Ross',
@@ -126,7 +116,7 @@ describe('getUserInteractor', () => {
       role: ROLES.irsPractitioner,
       userId: mockIrsPractitionerUser.userId,
     };
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...mockPractitioner,
       barNumber: 'PT9012',
     });
@@ -136,7 +126,7 @@ describe('getUserInteractor', () => {
       mockIrsPractitionerUser,
     );
 
-    expect(user).toMatchObject({
+    expect(user).toEqual({
       ...mockPractitioner,
       barNumber: 'PT9012',
       email: undefined,

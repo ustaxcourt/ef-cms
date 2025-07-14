@@ -1,13 +1,16 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+
+const getCasesForUser = jest.mocked(getCasesForUserMock);
 
 describe('getCasesForUserInteractor', () => {
   const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
@@ -80,16 +83,14 @@ describe('getCasesForUserInteractor', () => {
       memberCase1.petitioners = [];
       leadCase.petitioners = [];
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([
-          unconsolidatedCase1,
-          unconsolidatedCase2,
-          unconsolidatedCase3,
-          unconsolidatedClosedCase1,
-          unconsolidatedClosedCase2,
-          memberCase2,
-        ]);
+      getCasesForUser.mockResolvedValue([
+        unconsolidatedCase1,
+        unconsolidatedCase2,
+        unconsolidatedCase3,
+        unconsolidatedClosedCase1,
+        unconsolidatedClosedCase2,
+        memberCase2,
+      ]);
 
       getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
@@ -153,9 +154,7 @@ describe('getCasesForUserInteractor', () => {
         },
         memberCase1,
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue(consolidatedGroup);
+      getCasesForUser.mockResolvedValue(consolidatedGroup);
       getCasesByDocketNumbers.mockResolvedValue(consolidatedGroup);
       getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
@@ -183,9 +182,7 @@ describe('getCasesForUserInteractor', () => {
         { ...leadCase, petitioners: [], status: CASE_STATUS_TYPES.closed },
         memberCase1,
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([memberCase1]);
+      getCasesForUser.mockResolvedValue([memberCase1]);
       getCasesByDocketNumbers.mockResolvedValue([memberCase1]);
       getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
@@ -213,9 +210,7 @@ describe('getCasesForUserInteractor', () => {
         leadCase,
         { ...memberCase1, petitioners: [], status: CASE_STATUS_TYPES.closed },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([leadCase]);
+      getCasesForUser.mockResolvedValue([leadCase]);
       getCasesByDocketNumbers.mockResolvedValue([leadCase]);
       getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
@@ -265,9 +260,7 @@ describe('getCasesForUserInteractor', () => {
           closedDate: '2045-08-16T17:29:10.132Z',
         },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([leadCase, ...unconsolidatedCases]);
+      getCasesForUser.mockResolvedValue([leadCase, ...unconsolidatedCases]);
       getCasesByDocketNumbers.mockResolvedValue([
         leadCase,
         ...unconsolidatedCases,
@@ -291,16 +284,14 @@ describe('getCasesForUserInteractor', () => {
       memberCase1.petitioners = [];
       leadCase.petitioners = [];
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([
-          unconsolidatedCase1,
-          unconsolidatedCase2,
-          unconsolidatedCase3,
-          unconsolidatedClosedCase1,
-          unconsolidatedClosedCase2,
-          memberCase2,
-        ]);
+      getCasesForUser.mockResolvedValue([
+        unconsolidatedCase1,
+        unconsolidatedCase2,
+        unconsolidatedCase3,
+        unconsolidatedClosedCase1,
+        unconsolidatedClosedCase2,
+        memberCase2,
+      ]);
       getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
@@ -334,13 +325,11 @@ describe('getCasesForUserInteractor', () => {
 
   describe('Non Consolidated Cases', () => {
     it('should return the expected associated cases with NO consolidated groups or lead cases', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([
-          unconsolidatedCase1,
-          unconsolidatedCase2,
-          unconsolidatedClosedCase1,
-        ]);
+      getCasesForUser.mockResolvedValue([
+        unconsolidatedCase1,
+        unconsolidatedCase2,
+        unconsolidatedClosedCase1,
+      ]);
       getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
@@ -374,14 +363,12 @@ describe('getCasesForUserInteractor', () => {
       };
 
       //construct list of cases w/ at least one bogus/corrupted record
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([
-          unconsolidatedCase1,
-          unconsolidatedCase2,
-          unconsolidatedClosedCase1,
-          corruptedCase,
-        ]);
+      getCasesForUser.mockResolvedValue([
+        unconsolidatedCase1,
+        unconsolidatedCase2,
+        unconsolidatedClosedCase1,
+        corruptedCase,
+      ]);
       getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,

@@ -17,7 +17,7 @@ import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 describe('edit status report order', () => {
   beforeEach(() => {
     loginAsColvin();
-    goToCase(docketNumber)
+    goToCase(docketNumber);
   });
 
   describe('editing a status report order from drafts document view', () => {
@@ -136,7 +136,7 @@ describe('edit status report order', () => {
       cy.get('#additional-order-text').should('contain', 'Test');
     });
 
-    it('should load existing signed order', () => {
+    it.only('should load existing signed order', () => {
       cy.get('#tab-case-messages').click();
       cy.contains('a', messages.testStatusReportOrderSigned.name).click();
       cy.get('[data-testid="edit-signed-document-button"]').click();

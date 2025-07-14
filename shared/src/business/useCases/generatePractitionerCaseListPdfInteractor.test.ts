@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
@@ -7,13 +8,17 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { RawPrivatePractitioner } from '../entities/PrivatePractitioner';
+
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('generatePractitionerCaseListPdfInteractor', () => {
   beforeEach(() => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       barNumber: 'PT1234',
       name: 'Ben Matlock',
-    });
+    } as RawPrivatePractitioner);
   });
 
   it('returns an unauthorized error on non internal users', async () => {
@@ -67,19 +72,16 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getUserById,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(getUserById).toHaveBeenCalledWith({
       userId: 'a54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
   });
 
   it('throws an error if a practitioner user with the given userId does not exist', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       firstName: 'Nadia',
       lastName: 'Practitioner',
-    });
+    } as unknown as RawPrivatePractitioner);
 
     await expect(
       generatePractitionerCaseListPdfInteractor(
