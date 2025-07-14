@@ -195,6 +195,12 @@ export const DateRangePickerComponent = ({
       }
     };
   }, [startDateInputRef, endDateInputRef, parentModalHasMounted]);
+  
+  useEffect(() => {
+    if(onLoad) {
+      onLoad();
+    }
+  }, []);
 
   useEffect(() => {
     if (onLoad) {

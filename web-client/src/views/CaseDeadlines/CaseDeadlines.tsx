@@ -36,6 +36,7 @@ export const CaseDeadlines = connect(
     updateDateRangeForDeadlinesSequence,
     updateCaseDeadlineReportPageSequence,
     updateScreenMetadataSequence,
+    updateScreenMetadataSequence,
     validationErrors,
   }) {
     const paginatorTop = useRef(null);
