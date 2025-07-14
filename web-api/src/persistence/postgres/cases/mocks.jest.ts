@@ -95,3 +95,8 @@ jest.mock(
   '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases',
   () => mockFactory('disassociateUsersFromCases'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases',
+  () => mockFactory('associateUsersWithCases'),
+);

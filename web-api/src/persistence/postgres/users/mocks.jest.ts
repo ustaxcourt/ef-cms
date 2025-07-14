@@ -22,3 +22,12 @@ jest.mock('@web-api/persistence/postgres/users/getUsersInSections', () =>
 jest.mock('@web-api/persistence/postgres/users/getUsersByRoles', () =>
   mockFactory('getUsersByRoles'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/users/getPractitionerByBarNumber',
+  () => mockFactory('getPractitionerByBarNumber'),
+);
+
+jest.mock('@web-api/persistence/postgres/users/upsertUsers', () =>
+  mockFactory('upsertUsers'),
+);

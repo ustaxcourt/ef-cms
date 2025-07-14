@@ -112,9 +112,7 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
     expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
@@ -130,9 +128,7 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
@@ -153,9 +149,7 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     updatedCase.petitioners.forEach(petitioner => {
       expect(petitioner.serviceIndicator).toEqual(
@@ -177,9 +171,7 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     const updatedCase = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate;
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(getContactSecondary(updatedCase)).toMatchObject({
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -206,9 +198,7 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
 
     expect(errorSpy).toHaveBeenCalledWith(
       `BUG 9323: Private Practitioner with userId: ${MOCK_PRACTITIONER.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
@@ -232,9 +222,7 @@ describe('associatePrivatePractitionerToCase', () => {
       user: MOCK_PRACTITIONER,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 });

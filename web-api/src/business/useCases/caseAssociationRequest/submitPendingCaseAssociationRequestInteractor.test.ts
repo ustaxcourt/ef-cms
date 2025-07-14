@@ -38,9 +38,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       mockPrivatePractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCasePending,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCasePending).not.toHaveBeenCalled();
   });
 
   it('should not add mapping if these is already a pending association', async () => {
@@ -52,9 +50,7 @@ describe('submitPendingCaseAssociationRequest', () => {
       mockPrivatePractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCasePending,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCasePending).not.toHaveBeenCalled();
   });
 
   it('should add mapping', async () => {
@@ -73,8 +69,6 @@ describe('submitPendingCaseAssociationRequest', () => {
       mockPrivatePractitionerUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCasePending,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCasePending).toHaveBeenCalled();
   });
 });

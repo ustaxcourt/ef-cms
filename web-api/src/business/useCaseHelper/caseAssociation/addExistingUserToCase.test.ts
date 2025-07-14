@@ -110,10 +110,7 @@ describe('addExistingUserToCase', () => {
       name: 'Bob Ross',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
       userId: mockUserId,
     });
     expect(getContactPrimary(caseEntity)).toMatchObject({

@@ -58,16 +58,13 @@ describe('associateIrsPractitionerToCase', () => {
       .verifyCaseForUser.mockReturnValue(true);
 
     await associateIrsPractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user: irsPractitionerUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).not.toHaveBeenCalled();
+    expect(associateUserWithCase).not.toHaveBeenCalled();
     expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
@@ -77,16 +74,13 @@ describe('associateIrsPractitionerToCase', () => {
       .verifyCaseForUser.mockReturnValue(false);
 
     await associateIrsPractitionerToCase({
-      applicationContext,
       authorizedUser: mockDocketClerkUser,
       docketNumber: caseRecord.docketNumber,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
       user: irsPractitionerUser,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUserWithCase).toHaveBeenCalled();
     expect(updateCaseAndAssociations).toHaveBeenCalled();
     expect(
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,

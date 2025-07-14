@@ -127,7 +127,6 @@ describe('createUserForContact', () => {
     );
 
     await createUserForContact({
-      applicationContext,
       authorizedUser: mockAdmissionsClerkUser,
       caseEntity,
       contactId: USER_ID,
@@ -135,10 +134,7 @@ describe('createUserForContact', () => {
       name: 'Bob Ross',
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase.mock
-        .calls[0][0],
-    ).toMatchObject({
+    expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
       docketNumber: caseEntity.docketNumber,
       userId: USER_ID,
     });
