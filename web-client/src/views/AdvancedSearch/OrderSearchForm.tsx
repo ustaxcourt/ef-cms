@@ -35,13 +35,7 @@ export const OrderSearchForm = connect(
   }) {
     return (
       <>
-        <form
-          data-testid="order-search-container"
-          onSubmit={e => {
-            e.preventDefault();
-            submitAdvancedSearchSequence();
-          }}
-        >
+        <form data-testid="order-search-container">
           <Mobile>
             <div className="margin-bottom-3">
               <HowToSearch />
@@ -214,9 +208,9 @@ export const OrderSearchForm = connect(
                             endPickerCls={'grid-col-6'}
                             endValue={advancedSearchForm.orderSearch.endDate}
                             formGroupCls="margin-bottom-0"
-                            maxDate={advancedDocumentSearchHelper.maxDate}
                             rangePickerCls={'grid-row grid-gap'}
                             startDateErrorText={validationErrors.startDate}
+                            maxDate={advancedDocumentSearchHelper.maxDate}
                             startLabel="Start date"
                             startName="startDate"
                             showDateHint={true}
@@ -257,6 +251,10 @@ export const OrderSearchForm = connect(
                 data-testid="submit-order-advanced-search-button"
                 id="advanced-search-button"
                 type="submit"
+                onClick={e => {
+                  e.preventDefault();
+                  submitAdvancedSearchSequence();
+                }}
               >
                 Search
               </Button>

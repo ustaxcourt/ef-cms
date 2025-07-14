@@ -38,13 +38,7 @@ export const OpinionSearchForm = connect(
   }) {
     return (
       <>
-        <form
-          data-testid="opinion-search-container"
-          onSubmit={e => {
-            e.preventDefault();
-            submitAdvancedSearchSequence();
-          }}
-        >
+        <form data-testid="opinion-search-container">
           <Mobile>
             <div className="margin-bottom-3">
               <HowToSearch />
@@ -111,7 +105,6 @@ export const OpinionSearchForm = connect(
                 {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
                     <DateRangePickerComponent
-                      omitFormGroupClass
                       endDateErrorText={validationErrors.endDate}
                       endLabel="End date"
                       endName="endDate"
@@ -258,7 +251,6 @@ export const OpinionSearchForm = connect(
                       {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
                           <DateRangePickerComponent
-                            omitFormGroupClass
                             endDateErrorText={validationErrors.endDate}
                             endLabel="End date"
                             endName="endDate"
@@ -347,6 +339,10 @@ export const OpinionSearchForm = connect(
                 data-testid="advanced-search-button"
                 id="advanced-search-button"
                 type="submit"
+                onClick={e => {
+                  e.preventDefault();
+                  submitAdvancedSearchSequence();
+                }}
               >
                 Search
               </Button>
