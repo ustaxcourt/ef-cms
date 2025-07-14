@@ -1,4 +1,4 @@
-jest.mock('@web-api/database');
+jest.mock('@web-api/persistence/postgres/database');
 jest.mock('@web-api/persistence/postgres/utils/operation/pgDeleteFrom');
 import { handler as rdsExpiredRecordsCleanupLambda } from '@web-api/lambdas/rdsExpiredRecordsCleanup/rdsExpiredRecordsCleanupLambda';
 import { getDbReader as getDbReaderMock } from '@web-api/persistence/postgres/database';

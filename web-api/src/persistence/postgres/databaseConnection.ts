@@ -154,3 +154,7 @@ export class DatabaseConnectionError extends Error {
     this.name = 'DatabaseConnectionError';
   }
 }
+
+export const exportedForTesting = {
+  getToken,
+};
