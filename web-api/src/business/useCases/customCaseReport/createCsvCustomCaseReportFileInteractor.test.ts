@@ -106,7 +106,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
 
     const saveFileAndGenerateUrlCalls = saveFileAndGenerateUrl.mock.calls;
     const csvStringBuffer = Buffer.from(
-      `Docket No.,Date Created,Case Title,Case Status,Case Type,Judge,Requested Place of Trial,Calendaring High Priority\ndocketNumberWithSuffix,Invalid DateTime,caseCaption,${CASE_STATUS_TYPES.assignedCase},${CASE_TYPES_MAP.cdp},associatedJudge,preferredTrialCity,yes\n`,
+      `Docket No.,Date Created,Case Title,Case Status,Case Type,Judge,Requested Place of Trial\ndocketNumberWithSuffix,Invalid DateTime,caseCaption,${CASE_STATUS_TYPES.assignedCase},${CASE_TYPES_MAP.cdp},associatedJudge,preferredTrialCity\n`,
     );
     const bomBuffer = Buffer.from([239, 187, 191]);
 
@@ -193,7 +193,7 @@ describe('createCsvCustomCaseReportFileInteractor', () => {
       .filter(x => !!x);
 
     expect(records[1]).toEqual(
-      `docketNumberWithSuffix,Invalid DateTime,caseCaption,${CASE_STATUS_TYPES.calendared},${CASE_TYPES_MAP.cdp},associatedJudge,preferredTrialCity,yes`,
+      `docketNumberWithSuffix,Invalid DateTime,caseCaption,${CASE_STATUS_TYPES.calendared},${CASE_TYPES_MAP.cdp},associatedJudge,preferredTrialCity`,
     );
   });
 });
