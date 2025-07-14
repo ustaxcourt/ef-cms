@@ -37,7 +37,6 @@ describe('getCustomCaseReportAction', () => {
       caseTypes: ['Deficiency'],
       endDate: '05/14/2022',
       filingMethod: 'electronic',
-      highPriority: true,
       judges: [CHIEF_JUDGE],
       preferredTrialCities: ['Jackson, Mississippi'],
       procedureType: 'All',
@@ -113,27 +112,6 @@ describe('getCustomCaseReportAction', () => {
     expect(result.state.customCaseReport.totalCases).toEqual(
       mockCustomCaseReportResponse.totalCount,
     );
-  });
-
-  it('should remove the high priority filter when the value is false', async () => {
-    await runAction(getCustomCaseReportAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        selectedPage: 0,
-      },
-      state: {
-        customCaseReport: {
-          filters: { ...filterValues, highPriority: false },
-        },
-      },
-    });
-
-    expect(getCustomCaseReportInteractor).toHaveBeenCalledWith({
-      ...expectedRequest,
-      highPriority: undefined,
-    });
   });
 
   it('should not format the start or end date if they have not been selected', async () => {

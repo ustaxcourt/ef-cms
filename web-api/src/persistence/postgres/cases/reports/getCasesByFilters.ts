@@ -53,9 +53,6 @@ export const getCasesByFilters = async ({
     if (params.procedureType !== 'All') {
       query = query.where('procedureType', '=', params.procedureType);
     }
-    if (params.highPriority) {
-      query = query.where('highPriority', 'is', true);
-    }
     if (params.judges.length) {
       if (params.judges.includes(CHIEF_JUDGE)) {
         query = query.where(eb =>
@@ -90,7 +87,6 @@ export const getCasesByFilters = async ({
         'preferredTrialCity',
         'receivedAt',
         'status',
-        'highPriority',
       ])
       .offset(params.page * params.pageSize)
       .limit(params.pageSize)

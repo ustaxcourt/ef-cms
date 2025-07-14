@@ -87,9 +87,6 @@ export const setTrialSessionCalendarInteractor = async (
           eligibleCase.qcCompleteForTrial[trialSessionId] === true,
       )
       .sort((a, b) => {
-        if (a.highPriority && !b.highPriority) return -1;
-        if (!a.highPriority && b.highPriority) return 1;
-
         const aSuffixIsHighPriority =
           a.docketNumberSuffix &&
           HIGH_PRIORITY_SUFFIXES.includes(a.docketNumberSuffix);

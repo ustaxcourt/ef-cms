@@ -285,8 +285,8 @@ describe('setTrialSessionCalendarInteractor', () => {
 
   it('should sort eligible cases in the correct priority order (highPriority, docketNumberSuffix) before calendaring them', async () => {
     const hpSuffixDocketNumber = '101-20';
-    const highPriorityDocketNumber = '103-20';
-    const regularDocketNumber = '104-20';
+    const regularDocketNumber1 = '103-20';
+    const regularDocketNumber2 = '104-20';
 
     applicationContext
       .getPersistenceGateway()
@@ -297,26 +297,22 @@ describe('setTrialSessionCalendarInteractor', () => {
         ...MOCK_CASE,
         docketNumber: hpSuffixDocketNumber,
         docketNumberSuffix: HIGH_PRIORITY_SUFFIXES[0],
-        highPriority: false,
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
       },
       {
         ...MOCK_CASE,
-        docketNumber: highPriorityDocketNumber,
+        docketNumber: regularDocketNumber1,
         docketNumberSuffix: 'NotHighPriority',
-        highPriority: true,
-        highPriorityReason: 'When the going gets weird, the weird turn pro',
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
       },
       {
         ...MOCK_CASE,
-        docketNumber: regularDocketNumber,
+        docketNumber: regularDocketNumber2,
         docketNumberSuffix: 'AlsoNotHighPriority',
-        highPriority: false,
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
@@ -337,9 +333,9 @@ describe('setTrialSessionCalendarInteractor', () => {
     );
 
     expect(updatedDocketNumbers).toEqual([
-      highPriorityDocketNumber,
       hpSuffixDocketNumber,
-      regularDocketNumber,
+      regularDocketNumber1,
+      regularDocketNumber2,
     ]);
   });
 });

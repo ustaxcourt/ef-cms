@@ -18,7 +18,6 @@ export const updateCaseAutomaticBlock = async ({
   );
 
   if (caseEntity.trialDate && !docketedStipulatedDecision) return caseEntity;
-  if (caseEntity.highPriority) return caseEntity;
 
   if (hasCaseDeadline === undefined) {
     hasCaseDeadline = !isEmpty(

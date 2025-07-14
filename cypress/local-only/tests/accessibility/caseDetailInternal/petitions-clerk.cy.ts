@@ -127,30 +127,6 @@ describe('Case Detail Page - Petitions Clerk Accessibility', () => {
       checkA11y();
     });
 
-    it('should be free of a11y issues when prioritizing case', () => {
-      loginAsPetitionsClerk();
-
-      cy.visit('/case-detail/101-19');
-      cy.get('[data-testid="docket-record-table"]').should('exist');
-      cy.get('#tab-case-information').click();
-      cy.get('.high-priority-btn').click();
-      cy.get('#prioritize-case-modal').should('exist');
-
-      checkA11y();
-    });
-
-    it('should be free of a11y issues when unprioritizing case', () => {
-      loginAsPetitionsClerk();
-
-      cy.visit('/case-detail/110-19');
-      cy.get('[data-testid="docket-record-table"]').should('exist');
-      cy.get('#tab-case-information').click();
-      cy.get('#remove-high-priority-btn').click();
-      cy.get('#unprioritize-modal').should('exist');
-
-      checkA11y();
-    });
-
     describe('Statistics tab', () => {
       it('should be free of a11y issues', () => {
         loginAsPetitionsClerk();

@@ -32,7 +32,6 @@ export const createCsvCustomCaseReportFileInteractor = async (
     clientConnectionId,
     endDate,
     filingMethod,
-    highPriority,
     judges,
     preferredTrialCities,
     procedureType,
@@ -77,7 +76,6 @@ export const createCsvCustomCaseReportFileInteractor = async (
         caseTypes,
         endDate,
         filingMethod,
-        highPriority,
         judges,
         page,
         pageSize,
@@ -105,7 +103,6 @@ export const createCsvCustomCaseReportFileInteractor = async (
 
   const formattedCases = cases.map(aCase => ({
     ...aCase,
-    calendaringHighPriority: aCase.highPriority ? 'yes' : '',
     caseCaption: Case.getCaseTitle(aCase.caseCaption),
     receivedAt: formatDateString(aCase.receivedAt, FORMATS.MMDDYY),
   }));
@@ -146,7 +143,6 @@ const getCsvString = (records: any[]) => {
     { header: 'Case Type', key: 'caseType' },
     { header: 'Judge', key: 'associatedJudge' },
     { header: 'Requested Place of Trial', key: 'preferredTrialCity' },
-    { header: 'Calendaring High Priority', key: 'calendaringHighPriority' },
   ];
 
   const updatedRecords = records.map(record => {

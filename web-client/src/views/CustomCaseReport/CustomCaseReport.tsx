@@ -9,7 +9,6 @@ import {
 import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
 import { ErrorNotification } from '../ErrorNotification';
-import { Icon } from '../../ustc-ui/Icon/Icon';
 import { Paginator } from '../../ustc-ui/Pagination/Paginator';
 import { PillButton } from '@web-client/ustc-ui/Button/PillButton';
 import { SelectSearch } from '@web-client/ustc-ui/Select/SelectSearch';
@@ -436,27 +435,6 @@ export const CustomCaseReport = connect(
               })}
             </div>
           </div>
-          <div className="usa-checkbox">
-            <input
-              aria-label="Select calendaring high priority"
-              checked={customCaseReportFilters.highPriority}
-              className="usa-checkbox__input"
-              id="high-priority-checkbox"
-              type="checkbox"
-              onChange={() => {
-                setCustomCaseReportFiltersSequence({
-                  highPriority: true,
-                });
-              }}
-            />
-            <label
-              className="usa-checkbox__label desktop:grid-col-2 tablet:grid-col-6 padding-bottom-1"
-              htmlFor="high-priority-checkbox"
-              id={'label-high-priority'}
-            >
-              Calendaring high priority
-            </label>
-          </div>
           <div className="button-container">
             <Button
               data-testid="submit-custom-case-report-button"
@@ -573,10 +551,6 @@ const ReportTable = ({
             <th>
               Requested Place <br /> of Trial
             </th>
-            <th>
-              Calendaring <br />
-              High Priority
-            </th>
           </tr>
         </thead>
         {cases.length !== 0 && (
@@ -608,16 +582,6 @@ const ReportTable = ({
                 <td>{entry.caseType}</td>
                 <td>{entry.associatedJudge}</td>
                 <td>{entry.preferredTrialCity}</td>
-                <td>
-                  {entry.highPriority && (
-                    <Icon
-                      aria-label={'High priority calendaring'}
-                      className="margin-left-5 mini-success margin-top-1"
-                      icon="check"
-                      size="1x"
-                    />
-                  )}
-                </td>
               </tr>
             ))}
           </tbody>

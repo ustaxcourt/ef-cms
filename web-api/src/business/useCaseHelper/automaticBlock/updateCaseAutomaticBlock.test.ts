@@ -72,7 +72,6 @@ describe('updateCaseAutomaticBlock', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE_WITHOUT_PENDING,
-        highPriority: false,
         trialDate: '2021-03-01T21:40:46.415Z',
       },
       {
@@ -124,27 +123,6 @@ describe('updateCaseAutomaticBlock', () => {
     });
 
     expect(updateAutomaticBlockedSpy).toHaveBeenCalled();
-  });
-
-  it('does not set the case to automaticBlocked when the case is marked as high priority', async () => {
-    getCaseDeadlinesByDocketNumber.mockResolvedValue([
-      { deadline: 'something' } as any,
-    ]);
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE_WITHOUT_PENDING,
-        highPriority: true,
-        trialDate: undefined,
-      },
-      {
-        authorizedUser: mockDocketClerkUser,
-      },
-    );
-    const updatedCase = await updateCaseAutomaticBlock({
-      caseEntity,
-    });
-
-    expect(updatedCase.automaticBlocked).toBeFalsy();
   });
 
   it('sets the case to not automaticBlocked if the case does not have deadlines or pending items and the case is not generalDocketReadyForTrial status', async () => {

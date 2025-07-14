@@ -335,23 +335,6 @@ describe('setCustomCaseReportFiltersAction', () => {
       ]);
     });
 
-    it('should negate the highPriority filter when passed in as props', async () => {
-      const result = await runAction(setCustomCaseReportFiltersAction, {
-        modules: { presenter },
-        props: {
-          highPriority: true,
-        },
-        state: {
-          customCaseReport: {
-            ...initialFilterState,
-            filters: { highPriority: false },
-          },
-        },
-      });
-
-      expect(result.state.customCaseReport.filters.highPriority).toEqual(true);
-    });
-
     it('should set the procedureType on the filters if one is passed in props', async () => {
       const result = await runAction(setCustomCaseReportFiltersAction, {
         modules: { presenter },

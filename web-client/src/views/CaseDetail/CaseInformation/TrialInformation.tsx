@@ -47,11 +47,9 @@ export const TrialInformation = connect(
       props.openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence: props.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: props.openBlockFromTrialModalSequence,
-    openPrioritizeCaseModalSequence: props.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       props.openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence: props.openUnblockFromTrialModalSequence,
-    openUnprioritizeCaseModalSequence: props.openUnprioritizeCaseModalSequence,
     trialSessionJudge: props.trialSessionJudge,
   },
   function TrialInformation({
@@ -59,64 +57,12 @@ export const TrialInformation = connect(
     openAddEditCalendarNoteModalSequence,
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
-    openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openUnblockFromTrialModalSequence,
-    openUnprioritizeCaseModalSequence,
     trialSessionJudge,
   }) {
     return (
       <>
-        {caseDetail.showPrioritized && (
-          <>
-            <h3 className="underlined">
-              Trial - Not Scheduled - High Priority
-              <FontAwesomeIcon
-                className="margin-left-1 text-secondary-dark"
-                icon={['fas', 'exclamation-circle']}
-                size="1x"
-              />
-            </h3>
-            <div className="grid-row">
-              <table className="usa-table ustc-table trial-list">
-                <thead>
-                  <tr>
-                    <th>Place of Trial</th>
-                    <th>Trial date</th>
-                    <th>Judge</th>
-                    <th>&nbsp;</th>
-                  </tr>
-                </thead>
-                <tbody className="hoverable">
-                  <tr>
-                    <td>{caseDetail.formattedPreferredTrialCity}</td>
-                    <td>{caseDetail.formattedTrialDate}</td>
-                    <td>{caseDetail.formattedAssociatedJudge}</td>
-                    <td>&nbsp;</td>
-                  </tr>
-                  {caseDetail.highPriorityReason && (
-                    <tr>
-                      <td colSpan={4}>{caseDetail.highPriorityReason}</td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-
-            <Button
-              link
-              className="red-warning"
-              icon="trash"
-              id="remove-high-priority-btn"
-              onClick={() => {
-                openUnprioritizeCaseModalSequence();
-              }}
-            >
-              Remove High Priority
-            </Button>
-          </>
-        )}
-
         {caseDetail.showTrialCalendared && (
           <>
             <h3 className="underlined">
@@ -246,18 +192,6 @@ export const TrialInformation = connect(
                 }}
               >
                 Add to Trial
-              </Button>
-            </div>
-            <div className="margin-bottom-1">
-              <Button
-                link
-                className="high-priority-btn"
-                icon="exclamation-circle"
-                onClick={() => {
-                  openPrioritizeCaseModalSequence();
-                }}
-              >
-                Mark High Priority
               </Button>
             </div>
             <div>

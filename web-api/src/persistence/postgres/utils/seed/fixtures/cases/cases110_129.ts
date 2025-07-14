@@ -35,8 +35,6 @@ export const cases110_129: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS_110_129['110-19'],
     docketNumberSuffix: 'W',
     filingType: 'Myself',
-    highPriority: true,
-    highPriorityReason: 'testing',
     initialCaption: 'Brett Osborne, Petitioner',
     partyType: PARTY_TYPES.petitioner,
     petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
@@ -700,9 +698,9 @@ export const cases110_129: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
       },
     ],
     docketEntries: [],
-    // eslint-disable-next-line max-lines
     hearings: [],
     correspondence: [],
+    // eslint-disable-next-line max-lines
     consolidatedCases: [],
   },
   {

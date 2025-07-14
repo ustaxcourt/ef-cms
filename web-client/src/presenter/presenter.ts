@@ -313,7 +313,6 @@ import { openItemizedPenaltiesModalSequence } from './sequences/openItemizedPena
 import { openPractitionerDocumentDownloadUrlSequence } from './sequences/openPractitionerDocumentDownloadUrlSequence';
 import { openPrintGeneratedPaperServiceSequence } from '@web-client/presenter/sequences/openPrintGeneratedPaperServiceSequence';
 import { openPrintableTrialSessionWorkingCopyModalSequence } from './sequences/openPrintableTrialSessionWorkingCopyModalSequence';
-import { openPrioritizeCaseModalSequence } from './sequences/openPrioritizeCaseModalSequence';
 import { openRemoveFromTrialSessionModalSequence } from './sequences/openRemoveFromTrialSessionModalSequence';
 import { openRemovePetitionerCounselModalSequence } from './sequences/openRemovePetitionerCounselModalSequence';
 import { openRemovePetitionerModalSequence } from './sequences/openRemovePetitionerModalSequence';
@@ -327,14 +326,12 @@ import { openSetForHearingModalSequence } from './sequences/openSetForHearingMod
 import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocketEntryModalSequence';
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
-import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
 import { openUnsealDocketEntryModalSequence } from './sequences/openUnsealDocketEntryModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { paperServiceCompleteSequence } from './sequences/paperServiceCompleteSequence';
 import { petitionGenerationLiveValidationSequence } from '@web-client/presenter/sequences/petitionGenerationLiveValidationSequence';
 import { printPaperServiceForTrialCompleteSequence } from './sequences/printPaperServiceForTrialCompleteSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
-import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
 import { redirectToDashboardSequence } from './sequences/redirectToDashboardSequence';
 import { refreshPdfSequence } from './sequences/refreshPdfSequence';
 import { refreshStatisticsSequence } from './sequences/refreshStatisticsSequence';
@@ -504,7 +501,6 @@ import { toggleWorkingCopySortSequence } from './sequences/toggleWorkingCopySort
 import { unauthorizedErrorSequence } from './sequences/unauthorizedErrorSequence';
 import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSequence';
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
-import { unprioritizeCaseSequence } from './sequences/unprioritizeCaseSequence';
 import { unsealCaseSequence } from './sequences/unsealCaseSequence';
 import { unsealDocketEntrySequence } from './sequences/unsealDocketEntrySequence';
 import { updateAddDeficiencyFormValueSequence } from './sequences/updateAddDeficiencyFormValueSequence';
@@ -611,7 +607,6 @@ import { validatePetitionFromPaperSequence } from './sequences/validatePetitionF
 import { validatePetitionerSequence } from './sequences/validatePetitionerSequence';
 import { validatePractitionerSearchByBarNumberFormSequence } from './sequences/validatePractitionerSearchByBarNumberFormSequence';
 import { validatePractitionerSearchByNameFormSequence } from './sequences/validatePractitionerSearchByNameFormSequence';
-import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCaseSequence';
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
@@ -1129,8 +1124,6 @@ export const presenterSequences = {
     openPrintGeneratedPaperServiceSequence as unknown as Function,
   openPrintableTrialSessionWorkingCopyModalSequence:
     openPrintableTrialSessionWorkingCopyModalSequence as unknown as Function,
-  openPrioritizeCaseModalSequence:
-    openPrioritizeCaseModalSequence as unknown as Function,
   openRemoveFromTrialSessionModalSequence:
     openRemoveFromTrialSessionModalSequence as unknown as Function,
   openRemovePetitionerCounselModalSequence:
@@ -1157,8 +1150,6 @@ export const presenterSequences = {
     openTrialSessionPlanningModalSequence as unknown as Function,
   openUnblockFromTrialModalSequence:
     openUnblockFromTrialModalSequence as unknown as Function,
-  openUnprioritizeCaseModalSequence:
-    openUnprioritizeCaseModalSequence as unknown as Function,
   openUnsealDocketEntryModalSequence:
     openUnsealDocketEntryModalSequence as unknown as Function,
   openUpdateCaseModalSequence:
@@ -1169,7 +1160,6 @@ export const presenterSequences = {
   printPaperServiceForTrialCompleteSequence:
     printPaperServiceForTrialCompleteSequence as unknown as Function,
   printTrialCalendarSequence: printTrialCalendarSequence as unknown as Function,
-  prioritizeCaseSequence: prioritizeCaseSequence as unknown as Function,
   redirectToDashboardSequence:
     redirectToDashboardSequence as unknown as Function,
   refreshPdfSequence: refreshPdfSequence as unknown as Function,
@@ -1433,7 +1423,6 @@ export const presenterSequences = {
     unblockCaseFromTrialSequence as unknown as Function,
   unidentifiedUserErrorSequence:
     unidentifiedUserErrorSequence as unknown as Function,
-  unprioritizeCaseSequence: unprioritizeCaseSequence as unknown as Function,
   unsealCaseSequence: unsealCaseSequence as unknown as Function,
   unsealDocketEntrySequence: unsealDocketEntrySequence as unknown as Function,
   updateAddDeficiencyFormValueSequence:
@@ -1612,8 +1601,6 @@ export const presenterSequences = {
     validatePractitionerSearchByBarNumberFormSequence as unknown as Function,
   validatePractitionerSearchByNameFormSequence:
     validatePractitionerSearchByNameFormSequence as unknown as Function,
-  validatePrioritizeCaseSequence:
-    validatePrioritizeCaseSequence as unknown as Function,
   validateRemoveFromTrialSessionSequence:
     validateRemoveFromTrialSessionSequence as unknown as Function,
   validateSelectDocumentTypeSequence:
