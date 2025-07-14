@@ -25,8 +25,7 @@ export const CaseDeadlines = connect(
       sequences.updateDateRangeForDeadlinesSequence,
     updateCaseDeadlineReportPageSequence:
       sequences.updateCaseDeadlineReportPageSequence,
-    updateScreenMetadataSequence:
-      sequences.updateScreenMetadataSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
     validationErrors: state.validationErrors,
   },
   function CaseDeadlines({
@@ -52,7 +51,7 @@ export const CaseDeadlines = connect(
             <h1>Deadlines</h1>
           </div>
           <h2>{caseDeadlineReportHelper.formattedFilterDateHeader}</h2>
-          <div className="grid-row grid-gap">
+          <div className="grid-row margin-bottom-3">
             <DateRangePickerComponent
               endDateErrorText={validationErrors.endDate}
               endName="deadlineEnd"
@@ -72,11 +71,35 @@ export const CaseDeadlines = connect(
                 });
               }}
               onLoad={() => {
-                updateScreenMetadataSequence({ key: 'filterEndDateState', value: caseDeadlineReportHelper.filterEndDate })
-                updateScreenMetadataSequence({ key: 'filterStartDateState', value: caseDeadlineReportHelper.filterStartDate })
+                updateScreenMetadataSequence({
+                  key: 'filterEndDateState',
+                  value: caseDeadlineReportHelper.filterEndDate,
+                });
+                updateScreenMetadataSequence({
+                  key: 'filterStartDateState',
+                  value: caseDeadlineReportHelper.filterStartDate,
+                });
+                const caseDeadlinesDP = window.document.getElementById(
+                  'case-deadlines-datepicker',
+                );
+                if (caseDeadlinesDP) {
+                  caseDeadlinesDP.style.marginBottom = '0';
+                }
+                const caseDeadlinesStartFG = window.document.getElementById(
+                  'case-deadlines-start-formgroup',
+                );
+                if (caseDeadlinesStartFG) {
+                  caseDeadlinesStartFG.style.marginBottom = '0';
+                }
+                const caseDeadlinesEndFG = window.document.getElementById(
+                  'case-deadlines-end-formgroup',
+                );
+                if (caseDeadlinesEndFG) {
+                  caseDeadlinesEndFG.style.marginBottom = '0';
+                }
               }}
             />
-            <div>
+            <div className="margin-left-3">
               <label className="usa-label" htmlFor="judges-filter">
                 Judge
               </label>
@@ -90,7 +113,7 @@ export const CaseDeadlines = connect(
                 onChange={e => {
                   filterCaseDeadlinesByJudgeSequence({
                     selectedJudgeId: e,
-                  })
+                  });
                   setActivePage(0);
                 }}
               >
@@ -101,8 +124,10 @@ export const CaseDeadlines = connect(
                 ))}
               </BindedSelect>
             </div>
-            <div>
-              <label className="usa-label" htmlFor="judges-filter-button">&shy;</label>
+            <div className="margin-left-3">
+              <label className="usa-label" htmlFor="judges-filter-button">
+                &shy;
+              </label>
               <Button
                 data-testid="submit-case-deadlines-report-button"
                 onClick={() => {
@@ -113,10 +138,17 @@ export const CaseDeadlines = connect(
                 Run Report
               </Button>
             </div>
+            {caseDeadlineReportHelper.pageCount <= 1 && (
+              <div style={{ alignSelf: 'flex-end', marginLeft: 'auto' }}>
+                <span className="text-semibold">Count: </span>
+                {caseDeadlineReport.caseDeadlinesTotalCount}
+              </div>
+            )}
           </div>
-          <div>
-            <div ref={paginatorTop}>
-              {caseDeadlineReportHelper.pageCount > 1 && (
+          {caseDeadlineReportHelper.pageCount > 1 && (
+            <div ref={paginatorTop} className="grid-row margin-bottom-3">
+              <div className="grid-col-2"></div>
+              <div className="grid-col-8">
                 <Paginator
                   currentPageIndex={activePage}
                   totalPages={caseDeadlineReportHelper.pageCount}
@@ -128,15 +160,14 @@ export const CaseDeadlines = connect(
                     focusPaginatorTop(paginatorTop);
                   }}
                 />
-              )}
-            </div>
-            <div className="margin-bottom-2">
-              <div className="text-right">
-                <span className="text-semibold">
-                  Count: {caseDeadlineReport.caseDeadlinesTotalCount}
-                </span>
+              </div>
+              <div className="grid-col-fill text-right margin-top-3 padding-0">
+                <span className="text-semibold">Count: </span>
+                {caseDeadlineReport.caseDeadlinesTotalCount}
               </div>
             </div>
+          )}
+          <div>
             {caseDeadlineReportHelper.formattedCaseDeadlines.length > 0 && (
               <table className="usa-table subsection ustc-table deadlines">
                 <thead>
@@ -153,32 +184,30 @@ export const CaseDeadlines = connect(
                   </tr>
                 </thead>
                 <tbody>
-                  {caseDeadlineReportHelper.formattedCaseDeadlines.map(
-                    row => (
-                      <tr key={row.caseDeadlineId}>
-                        <td className="smaller-column">
-                          {row.formattedDeadline}
-                        </td>
-                        <td className="consolidated-case-column">
-                          <ConsolidatedCaseIcon
-                            consolidatedIconTooltipText={
-                              row.consolidatedIconTooltipText
-                            }
-                            inConsolidatedGroup={row.inConsolidatedGroup}
-                            showLeadCaseIcon={row.inLeadCase}
-                          />
-                        </td>
-                        <td className="smaller-column">
-                          <CaseLink formattedCase={row} />
-                        </td>
-                        <td>{row.caseTitle}</td>
-                        <td className="padding-extra">{row.description}</td>
-                        <td className="no-wrap">
-                          {row.associatedJudgeFormatted}
-                        </td>
-                      </tr>
-                    ),
-                  )}
+                  {caseDeadlineReportHelper.formattedCaseDeadlines.map(row => (
+                    <tr key={row.caseDeadlineId}>
+                      <td className="smaller-column">
+                        {row.formattedDeadline}
+                      </td>
+                      <td className="consolidated-case-column">
+                        <ConsolidatedCaseIcon
+                          consolidatedIconTooltipText={
+                            row.consolidatedIconTooltipText
+                          }
+                          inConsolidatedGroup={row.inConsolidatedGroup}
+                          showLeadCaseIcon={row.inLeadCase}
+                        />
+                      </td>
+                      <td className="smaller-column">
+                        <CaseLink formattedCase={row} />
+                      </td>
+                      <td>{row.caseTitle}</td>
+                      <td className="padding-extra">{row.description}</td>
+                      <td className="no-wrap">
+                        {row.associatedJudgeFormatted}
+                      </td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
             )}
