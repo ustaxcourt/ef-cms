@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -8,6 +9,9 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+
+const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
 
 describe('getPractitionerCasesInteractor', () => {
   const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
@@ -101,9 +105,7 @@ describe('getPractitionerCasesInteractor', () => {
   });
 
   it('handles scenario where getDocketNumbersByUser returns an empty array', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockResolvedValueOnce([]);
+    getDocketNumbersByUser.mockResolvedValueOnce([]);
     getCasesByDocketNumbers.mockResolvedValueOnce(undefined);
 
     const { closedCases, openCases } = await getPractitionerCasesInteractor(
