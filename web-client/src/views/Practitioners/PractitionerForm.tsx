@@ -8,6 +8,7 @@ import { props } from 'cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { WarningNotificationComponent } from '../WarningNotification';
 
 export const PractitionerForm = connect(
   {
@@ -19,6 +20,7 @@ export const PractitionerForm = connect(
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateSequence: sequences[props.validateSequenceName],
     validationErrors: state.validationErrors,
+    practitionerInformationHelper: state.practitionerInformationHelper,
   },
   function PractitionerForm({
     constants,
@@ -29,6 +31,7 @@ export const PractitionerForm = connect(
     validateSequence,
     validateSequenceName,
     validationErrors,
+    practitionerInformationHelper,
   }) {
     return (
       <>
@@ -219,6 +222,10 @@ export const PractitionerForm = connect(
                             id={`practiceType-${option}`}
                             name="practiceType"
                             type="radio"
+                            disabled={
+                              !!practitionerInformationHelper.openCasesTotal &&
+                              form.practiceType !== option
+                            }
                             value={option}
                             onChange={e => {
                               updateFormValueSequence({
@@ -239,6 +246,25 @@ export const PractitionerForm = connect(
                       ))}
                     </fieldset>
                   </FormGroup>
+                  {!!practitionerInformationHelper.openCasesTotal && (
+                    <WarningNotificationComponent
+                      alertWarning={{
+                        message: (
+                          <>
+                            Practitioner has associated with one or more open
+                            cases.
+                            <br />
+                            Practitioner has to be withdrawn from all open cases
+                            or all cases closed to change practice type.
+                          </>
+                        ),
+                        title: `Practice type cannot be changed.`,
+                      }}
+                      dismissible={false}
+                      messageNotBold={true}
+                      scrollToTop={false}
+                    />
+                  )}
                 </div>
               </div>
             </div>
