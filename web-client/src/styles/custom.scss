@@ -2505,6 +2505,7 @@ button.change-scanner-button {
 
   .service-party-indicator {
     margin-left: auto;
+    white-space: nowrap;
   }
 
   @media (max-width: $medium-screen) {
