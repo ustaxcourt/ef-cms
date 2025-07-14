@@ -102,7 +102,7 @@ export const OrderSearchForm = connect(
                       endDateErrorText={validationErrors.endDate}
                       endLabel="End date"
                       endName="endDate"
-                      endPickerCls={'grid-col-6'}
+                      endPickerCls={'grid-col-5'}
                       endValue={advancedSearchForm.orderSearch.endDate}
                       formGroupCls="margin-bottom-0"
                       maxDate={advancedDocumentSearchHelper.maxDate}
@@ -110,7 +110,8 @@ export const OrderSearchForm = connect(
                       startDateErrorText={validationErrors.startDate}
                       startLabel="Start date"
                       startName="startDate"
-                      startPickerCls={'grid-col-6'}
+                      showDateHint={true}
+                      startPickerCls={'grid-col-5'}
                       startValue={advancedSearchForm.orderSearch.startDate}
                       onChangeEnd={e => {
                         updateAdvancedOrderSearchFormValueSequence({
@@ -210,7 +211,7 @@ export const OrderSearchForm = connect(
                             endDateErrorText={validationErrors.endDate}
                             endLabel="End date"
                             endName="endDate"
-                            endPickerCls={'grid-col-6'}
+                            endPickerCls={'grid-col-5'}
                             endValue={advancedSearchForm.orderSearch.endDate}
                             formGroupCls="margin-bottom-0"
                             maxDate={advancedDocumentSearchHelper.maxDate}
@@ -218,7 +219,8 @@ export const OrderSearchForm = connect(
                             startDateErrorText={validationErrors.startDate}
                             startLabel="Start date"
                             startName="startDate"
-                            startPickerCls={'grid-col-6'}
+                            showDateHint={true}
+                            startPickerCls={'grid-col-5'}
                             startValue={
                               advancedSearchForm.orderSearch.startDate
                             }
