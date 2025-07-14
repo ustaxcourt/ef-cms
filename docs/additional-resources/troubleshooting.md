@@ -107,7 +107,7 @@ Solution:
 
 Problem:
 
-- When updating the environment variables, `ZONE_NAME` and `EFCMS_DOMAIN`, we ran into this error:
+- When updating the environment variable `EFCMS_DOMAIN`, we ran into this error:
 
 ```text
 An error occurred (UsernameExistsException) when calling the SignUp operation: An account with the given email already exists.

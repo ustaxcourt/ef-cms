@@ -7,9 +7,9 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * deleteTrialSession
@@ -56,7 +56,7 @@ export const deleteTrialSessionInteractor = async (
       ({ docketNumber }) => docketNumber,
     );
 
-    await acquireLock({
+    const removeLockFunction = await acquireLock({
       applicationContext,
       authorizedUser,
       identifiers: docketNumbers?.map(item => `case|${item}`),
@@ -69,21 +69,13 @@ export const deleteTrialSessionInteractor = async (
 
       caseEntity.removeFromTrial({});
 
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       });
     }
 
-    await settlePromises(
-      docketNumbers.map(docketNumber =>
-        applicationContext.getPersistenceGateway().removeLock({
-          applicationContext,
-          identifiers: [`case|${docketNumber}`],
-        }),
-      ),
-    );
+    await removeLockFunction();
   }
 
   await applicationContext.getPersistenceGateway().deleteTrialSession({

@@ -241,6 +241,7 @@ export const StatusReportOrder = connect(
                     className="grid-container padding-left-2"
                     errorText={validationErrors.strickenFromTrialSessions}
                     id="stricken-from-trial-sessions-form-group"
+                    data-testid="stricken-from-test-header"
                   >
                     <div>
                       <input
@@ -249,17 +250,18 @@ export const StatusReportOrder = connect(
                         id="stricken-from-trial-sessions"
                         name="strickenFromTrialSessions"
                         type="checkbox"
+                        disabled={!statusReportOrderHelper.isCalendared}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.checked,
                           });
-                        }}
-                      />
+                        }} />
                       <label
                         className="usa-checkbox__label"
                         htmlFor="stricken-from-trial-sessions"
                         id="stricken-from-trial-sessions-label"
+                        title={statusReportOrderHelper.isCalendared ? '' : 'Case is not calendared'}
                       >
                         Case is stricken from the trial session
                       </label>
@@ -305,6 +307,8 @@ export const StatusReportOrder = connect(
                       <label
                         className="usa-radio__label"
                         htmlFor="jurisdiction-retained"
+                        data-testid="jurisdiction-retained-label"
+                        title={statusReportOrderHelper.isCalendared ? '' : 'Case is not calendared'}
                       >
                         Retained
                       </label>
@@ -338,6 +342,8 @@ export const StatusReportOrder = connect(
                       <label
                         className="usa-radio__label"
                         htmlFor="jurisdiction-restored-to-general-docket"
+                        data-testid="jurisdiction-restored-label"
+                        title={statusReportOrderHelper.isCalendared ? '' : 'Case is not calendared'}
                       >
                         Restored to the general docket
                       </label>

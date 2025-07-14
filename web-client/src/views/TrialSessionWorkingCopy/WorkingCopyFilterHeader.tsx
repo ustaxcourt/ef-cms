@@ -57,7 +57,7 @@ export const WorkingCopyFilterHeader = connect(
                 </label>
               </div>
             </div>
-            {statusFilterComponent(trialStatusFilters, filters)}
+            {statusFilterComponent(trialStatusFilters, filters, trialSessionWorkingCopyHelper.trialStatusCounts)}
           </div>
         </div>
       </div>
@@ -65,8 +65,8 @@ export const WorkingCopyFilterHeader = connect(
   },
 );
 
-const statusFilterComponent = (trialStatusFilters, filters) => {
-  const filterCheckboxes = [];
+const statusFilterComponent = (trialStatusFilters, filters, trialStatusCounts) => {
+  const filterCheckboxes: React.ReactElement[] = [];
 
   for (let i = 0; i < trialStatusFilters.length; i += 2) {
     const filterColumn = (
@@ -75,11 +75,13 @@ const statusFilterComponent = (trialStatusFilters, filters) => {
           filters={filters}
           i={i}
           trialStatusFilters={trialStatusFilters}
+          trialStatusCounts={trialStatusCounts}
         />
         <FilterCheckbox
           filters={filters}
           i={i + 1}
           trialStatusFilters={trialStatusFilters}
+          trialStatusCounts={trialStatusCounts}
         />
       </div>
     );
@@ -89,7 +91,7 @@ const statusFilterComponent = (trialStatusFilters, filters) => {
   return filterCheckboxes;
 };
 
-const FilterCheckbox = connect(
+const FilterCheckbox: React.FC<any> = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
       sequences.autoSaveTrialSessionWorkingCopySequence,
@@ -99,10 +101,11 @@ const FilterCheckbox = connect(
     filters,
     i,
     trialStatusFilters,
+    trialStatusCounts,
   }) {
     if (trialStatusFilters[i]) {
       return (
-        <div className="usa-checkbox">
+        <div className="usa-checkbox" data-testid={`trial-session-working-copy-filter-${trialStatusFilters[i].key}`}>
           <input
             checked={!!filters[trialStatusFilters[i].key]}
             className="usa-checkbox__input"
@@ -121,6 +124,9 @@ const FilterCheckbox = connect(
             htmlFor={`filters.${trialStatusFilters[i].key}`}
           >
             {trialStatusFilters[i].label}
+            {trialStatusFilters[i].key in trialStatusCounts && (
+              <span className="text-bold margin-left-05">({trialStatusCounts[trialStatusFilters[i].key]})</span>
+            )}
           </label>
         </div>
       );

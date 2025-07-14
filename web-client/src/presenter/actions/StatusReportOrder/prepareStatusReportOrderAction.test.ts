@@ -1,5 +1,5 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import { CASE_STATUS_TYPES, SESSION_TYPES, STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { prepareStatusReportOrderAction } from './prepareStatusReportOrderAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
@@ -10,14 +10,20 @@ describe('prepareStatusReportOrderAction,', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
+  const trialLocation = 'Richmond, Virginia';
+
   const statusReportFilingDate = '2024-07-04';
   const dueDate = '2024-08-04';
+  const trialDate = '2024-09-04';
   const statusReportFilingDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(statusReportFilingDate, FORMATS.MONTH_DAY_YEAR);
   const dueDateFormatted = applicationContext
     .getUtilities()
     .formatDateString(dueDate, FORMATS.MONTH_DAY_YEAR);
+  const trialDateFormatted = applicationContext
+    .getUtilities()
+    .formatDateString(trialDate, FORMATS.MONTH_DAY_YEAR);
   const statusReportIndex = 4;
   const expectedFiledLine = `<p class="indent-paragraph">On ${statusReportFilingDateFormatted}, a status report was filed (Document no. ${statusReportIndex}). For cause, it is</p>`;
 
@@ -39,6 +45,9 @@ describe('prepareStatusReportOrderAction,', () => {
         statusReportOrder: {
           statusReportFilingDate,
           statusReportIndex,
+        },
+        trialSession: {
+          sessionType: 'abc'
         },
       },
     });
@@ -72,6 +81,9 @@ describe('prepareStatusReportOrderAction,', () => {
         statusReportOrder: {
           statusReportFilingDate,
           statusReportIndex,
+        },
+        trialSession: {
+          sessionType: 'abc'
         },
       },
     });
@@ -107,6 +119,9 @@ describe('prepareStatusReportOrderAction,', () => {
             statusReportFilingDate,
             statusReportIndex,
           },
+          trialSession: {
+            sessionType: 'abc'
+          },
         },
       });
 
@@ -139,6 +154,9 @@ describe('prepareStatusReportOrderAction,', () => {
             statusReportFilingDate,
             statusReportIndex,
           },
+          trialSession: {
+            sessionType: 'abc'
+          },
         },
       });
 
@@ -170,9 +188,60 @@ describe('prepareStatusReportOrderAction,', () => {
           statusReportFilingDate,
           statusReportIndex,
         },
+        trialSession: {
+          sessionType: 'abc'
+        },
       },
     });
 
     expect(result.state.form.richText).toBe(output);
   });
+  it('should list the time and place of the trial if it is calendared and not a motion/hearing', async () => {
+    const result = await runAction(prepareStatusReportOrderAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          status: CASE_STATUS_TYPES.calendared,
+          trialLocation,
+          trialDate
+        },
+        form: {
+          docketEntryDescription: 'Order',
+        },
+        statusReportOrder: {
+          statusReportFilingDate,
+          statusReportIndex,
+        },
+        trialSession: {
+          sessionType: 'abc'
+        },
+      },
+    });
+    expect(result.state.form.richText).toContain(`This case is set for trial at the session of the Court commencing on ${trialDateFormatted} in ${trialLocation}.`);
+  });
+  it('should not list the time and place of the trial if it is calendared and a motion/hearing', async () => {
+    const result = await runAction(prepareStatusReportOrderAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          status: CASE_STATUS_TYPES.calendared,
+        },
+        form: {
+          docketEntryDescription: 'Order',
+        },
+        statusReportOrder: {
+          statusReportFilingDate,
+          statusReportIndex,
+        },
+        trialSession: {
+          sessionType: SESSION_TYPES.motionHearing
+        },
+      },
+    });
+    expect(result.state.form.richText).toEqual(expectedFiledLine);
+  })
 });

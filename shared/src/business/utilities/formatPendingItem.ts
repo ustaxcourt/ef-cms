@@ -32,7 +32,7 @@ export const formatPendingItem = (item: PendingItem): PendingItemFormatted => {
 
   const associatedJudgeFormatted = formatJudgeName(item.associatedJudge);
 
-  const formattedName = item.documentTitle || item.documentType;
+  const formattedName = item.documentTitle || item.documentType || '';
 
   const formattedStatus: string = caseStatusWithTrialInformation({
     caseStatus: item.status,
