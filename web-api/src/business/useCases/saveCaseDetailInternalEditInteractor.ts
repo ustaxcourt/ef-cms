@@ -156,20 +156,23 @@ export const saveCaseDetailInternalEdit = async (
       docketNumber,
       docketEntryId: petitionDocketEntry?.docketEntryId,
     });
-
-    if (petitionWorkItem) {
-      const workItemEntity = new WorkItem({
-        ...petitionWorkItem,
-        docketEntryId: petitionDocketEntry.docketEntryId,
-        assigneeId: user.userId,
-        assigneeName: user.name,
-        inProgress: true,
-      });
-
-      await upsertWorkItems({
-        workItems: [workItemEntity.validate().toRawObject()],
-      });
+    
+    if (!petitionWorkItem) {
+      throw new NotFoundError(
+        `Could not find work item associated with petition on case ${petitionDocketEntry}`,
+      );
     }
+    const workItemEntity = new WorkItem({
+      ...petitionWorkItem,
+      docketEntryId: petitionDocketEntry.docketEntryId,
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      inProgress: true,
+    });
+
+    await upsertWorkItems({
+      workItems: [workItemEntity.validate().toRawObject()],
+    });
   }
 
   const updatedCase = await applicationContext
