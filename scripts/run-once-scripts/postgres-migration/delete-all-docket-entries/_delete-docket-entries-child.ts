@@ -58,7 +58,7 @@ const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 let totalItems = 0;
 
 /*
-This script is only meant to be kicked off by index-docket-entries.ts. It paginates over a partition
+This script is only meant to be kicked off by delete-docket-entries.ts. It paginates over a partition
 of docket entries in a date range to index them.
 */
 async function main() {
