@@ -228,7 +228,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.documentIdBeforeSignature = rawDocketEntry.documentIdBeforeSignature;
     this.documentTitle = rawDocketEntry.documentTitle;
     this.documentType = rawDocketEntry.documentType;
-    this.draftOrderState = rawDocketEntry.draftOrderState;
     this.eventCode = rawDocketEntry.eventCode;
     this.filedBy = rawDocketEntry.filedBy;
     this.filedByRole = rawDocketEntry.filedByRole;
@@ -368,7 +367,7 @@ export class DocketEntry extends JoiValidationEntity {
    */
   setAsServed(servedParties: any[] | null = null) {
     this.servedAt = createISODateString();
-    this.draftOrderState = {};
+    this.draftOrderState = undefined;
 
     if (this.eventCode === 'ATP') {
       const irsSuperUserParty = [
@@ -397,7 +396,7 @@ export class DocketEntry extends JoiValidationEntity {
     const inAutoGenDeadlineDocType = AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES.some(
       item => item.eventCode === this.eventCode,
     );
-    return inAutoGenDeadlineDocType || this.isStatusReport;
+    return inAutoGenDeadlineDocType || this.isStatusReport();
   }
 
   /**
@@ -752,6 +751,10 @@ export class DocketEntry extends JoiValidationEntity {
       return DocketEntry.isTranscriptOldEnoughToUnseal(entry);
     return true;
   };
+  
+  setDraftOrderState(draftOrderState) {
+    this.draftOrderState = draftOrderState;
+  }
 
   /**
    * sets the number of pages for the docket entry
