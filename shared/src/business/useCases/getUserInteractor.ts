@@ -16,7 +16,6 @@ export type GetUserResponse =
   | RawPrivatePractitioner;
 
 export const getUserInteractor = async (
-  _: IApplicationContext,
   authorizedUser: UnknownAuthUser,
 ): Promise<GetUserResponse> => {
   if (!isAuthUser(authorizedUser)) {

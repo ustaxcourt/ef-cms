@@ -122,7 +122,6 @@ import { getTrialSessionsInteractor } from './business/useCases/trialSessions/ge
 import { getUploadPolicyInteractor } from './business/useCases/document/getUploadPolicyInteractor';
 import { getUserCaseNoteForCasesInteractor } from './business/useCases/caseNote/getUserCaseNoteForCasesInteractor';
 import { getUserCaseNoteInteractor } from './business/useCases/caseNote/getUserCaseNoteInteractor';
-import { getUserInteractor } from '../../shared/src/business/useCases/getUserInteractor';
 import { getUserPendingEmailInteractor } from './business/useCases/user/getUserPendingEmailInteractor';
 import { getUserPendingEmailStatusInteractor } from './business/useCases/user/getUserPendingEmailStatusInteractor';
 import { getUsersPendingEmailInteractor } from './business/useCases/user/getUsersPendingEmailInteractor';
@@ -323,7 +322,6 @@ const useCases = {
   getUploadPolicyInteractor,
   getUserCaseNoteForCasesInteractor,
   getUserCaseNoteInteractor,
-  getUserInteractor,
   getUserPendingEmailInteractor,
   getUserPendingEmailStatusInteractor,
   getUsersPendingEmailInteractor,
