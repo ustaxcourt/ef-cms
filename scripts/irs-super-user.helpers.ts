@@ -18,16 +18,20 @@ const scriptConfig: ScriptConfig = {
     'irs-super-user - Enrolls an IRS superuser in Cognito MFA and generates a bearer token.',
   environment: {
     ClientId: 'IRS_CLIENT_ID',
+    defaultPassword: 'DEFAULT_ACCOUNT_PASS',
     email: 'IRS_SUPERUSER_EMAIL',
-    password: 'DEFAULT_ACCOUNT_PASS',
   },
   requireActiveAwsSession: true,
 };
-const { ClientId, email, password } = parseArgsAndEnvVars(scriptConfig) as {
+const { ClientId, defaultPassword, email } = parseArgsAndEnvVars(
+  scriptConfig,
+) as {
   ClientId: string;
+  defaultPassword: string;
   email: string;
-  password: string;
 };
+
+const password = process.env.IRS_SUPERUSER_PASS || defaultPassword;
 
 const cognito = new CognitoIdentityProviderClient({
   region: 'us-east-1',
