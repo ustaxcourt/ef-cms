@@ -56,7 +56,10 @@ export const CaseDeadlines = connect(
               endDateErrorText={validationErrors.endDate}
               endName="deadlineEnd"
               endValue={caseDeadlineReportHelper.filterEndDate}
-              rangePickerCls={'display-flex flex-wrap gap-2'}
+              formGroupCls="margin-bottom-0"
+              formGroupStartCls="margin-bottom-0"
+              formGroupEndCls="margin-bottom-0"
+              rangePickerCls="display-flex flex-wrap gap-2"
               startDateErrorText={validationErrors.startDate}
               startName="deadlineStart"
               startValue={caseDeadlineReportHelper.filterStartDate}
@@ -79,24 +82,6 @@ export const CaseDeadlines = connect(
                   key: 'filterStartDateState',
                   value: caseDeadlineReportHelper.filterStartDate,
                 });
-                const caseDeadlinesDP = window.document.getElementById(
-                  'case-deadlines-datepicker',
-                );
-                if (caseDeadlinesDP) {
-                  caseDeadlinesDP.style.marginBottom = '0';
-                }
-                const caseDeadlinesStartFG = window.document.getElementById(
-                  'case-deadlines-start-formgroup',
-                );
-                if (caseDeadlinesStartFG) {
-                  caseDeadlinesStartFG.style.marginBottom = '0';
-                }
-                const caseDeadlinesEndFG = window.document.getElementById(
-                  'case-deadlines-end-formgroup',
-                );
-                if (caseDeadlinesEndFG) {
-                  caseDeadlinesEndFG.style.marginBottom = '0';
-                }
               }}
             />
             <div className="margin-left-3">
