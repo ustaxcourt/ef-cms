@@ -11,10 +11,9 @@ import { v2ApiWrapper } from './v2ApiWrapper';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(event, ({ applicationContext }) =>
+  genericHandler(event, () =>
     v2ApiWrapper(async () => {
       const caseObject = await getCaseInteractor(
-        applicationContext,
         {
           docketNumber: event.pathParameters.docketNumber,
         },

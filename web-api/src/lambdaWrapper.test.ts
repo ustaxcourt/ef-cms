@@ -1,4 +1,4 @@
-import { CHUNK_SIZE, lambdaWrapper } from './lambdaWrapper';
+import { lambdaWrapper } from './lambdaWrapper';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 jest.mock('@vendia/serverless-express');
 jest.mock('@web-api/middleware/apiGatewayHelper');
@@ -224,59 +224,9 @@ describe('lambdaWrapper', () => {
     expect(
       applicationContext.getNotificationGateway().saveRequestResponse,
     ).toHaveBeenCalledWith({
-      applicationContext,
-      chunk: JSON.stringify({ a: 'LAMBDA_RESULTS', body: TEST_BODY }),
-      index: 0,
+      responseString: JSON.stringify({ a: 'LAMBDA_RESULTS', body: TEST_BODY }),
       requestId: 'some-id',
-      totalNumberOfChunks: 1,
       userId: 'user-id',
     });
-  });
-
-  it('should save multiple chunks when over max chunk size', async () => {
-    req.headers.asyncsyncid = 'some-id';
-    const TEST_BODY = {
-      testBody: 'z'.repeat(CHUNK_SIZE),
-    };
-    let response = { a: 'LAMBDA_RESULTS', body: JSON.stringify(TEST_BODY) };
-    await lambdaWrapper(
-      () => response,
-      { isAsyncSync: true },
-      applicationContext,
-    )(req, res);
-
-    response = {
-      ...response,
-      body: JSON.parse(response.body),
-    };
-
-    // chunk pt1
-    expect(
-      applicationContext.getNotificationGateway().saveRequestResponse,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getNotificationGateway().saveRequestResponse.mock
-        .calls[0][0],
-    ).toMatchObject({
-      index: 0,
-      totalNumberOfChunks: 2,
-    });
-    expect(
-      applicationContext.getNotificationGateway().saveRequestResponse.mock
-        .calls[0][0].chunk,
-    ).toHaveLength(CHUNK_SIZE);
-
-    // chunk pt2
-    expect(
-      applicationContext.getNotificationGateway().saveRequestResponse.mock
-        .calls[1][0],
-    ).toMatchObject({
-      index: 1,
-      totalNumberOfChunks: 2,
-    });
-    expect(
-      applicationContext.getNotificationGateway().saveRequestResponse.mock
-        .calls[1][0].chunk,
-    ).toHaveLength(JSON.stringify(response).length - CHUNK_SIZE);
   });
 });

@@ -1,12 +1,14 @@
+import { DynamoDBRecord } from 'aws-lambda';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { processRemoveEntries } from './processRemoveEntries';
+import { cloneDeep } from 'lodash';
 
 describe('processRemoveEntries', () => {
-  const mockRemoveRecord = {
+  const mockRemoveRecord: DynamoDBRecord = {
     dynamodb: {
       NewImage: {
         entityName: {
-          S: 'Case',
+          S: 'Dinosaur',
         },
         pk: {
           S: 'case|123-45',
@@ -28,6 +30,23 @@ describe('processRemoveEntries', () => {
     expect(
       applicationContext.getPersistenceGateway().bulkDeleteRecords,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should not delete docket entries and cases', async () => {
+    const mockCaseRecord: any = cloneDeep(mockRemoveRecord);
+    mockCaseRecord.dynamodb.NewImage.entityName.S = 'Case';
+    const mockDocketEntryRecord: any = cloneDeep(mockRemoveRecord);
+    mockDocketEntryRecord.dynamodb.NewImage.entityName.S = 'DocketEntry';
+
+    await processRemoveEntries({
+      applicationContext,
+      removeRecords: [mockCaseRecord, mockDocketEntryRecord],
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().bulkDeleteRecords.mock
+        .calls[0][0].records,
+    ).toEqual([]);
   });
 
   it('should make a persistence call to remove the provided remove records', async () => {

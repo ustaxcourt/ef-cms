@@ -1,6 +1,7 @@
 resource "aws_rds_global_cluster" "global_cluster" {
   global_cluster_identifier = "${var.environment}-dawson-global"
   engine                    = "aurora-postgresql"
+  engine_version            = var.engine_version
   storage_encrypted         = true
   deletion_protection       = var.delete_protection
 
