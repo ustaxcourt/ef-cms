@@ -20,8 +20,8 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
 
   const { orderType, dueDate } = (
     (caseDetail.docketEntries || [])
-    .find((docketEntry) => docketEntry.docketEntryId == docketEntryId) || { draftOrderState: {} })
-    .draftOrderState;
+    .find((docketEntry) => docketEntry.docketEntryId == docketEntryId) || { draftOrderState: {} }
+  ).draftOrderState || {};
 
   if (orderType === 'statusReport' || orderType === 'statusReportStipulatedDecision') {
     form.date = createISODateString(dueDate);
