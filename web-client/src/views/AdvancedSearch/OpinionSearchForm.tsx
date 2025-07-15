@@ -113,10 +113,10 @@ export const OpinionSearchForm = connect(
                       formGroupCls="margin-bottom-0"
                       maxDate={advancedDocumentSearchHelper.maxDate}
                       rangePickerCls={'grid-row grid-gap'}
+                      showDateHint={true}
                       startDateErrorText={validationErrors.startDate}
                       startLabel="Start date"
                       startName="startDate"
-                      showDateHint={true}
                       startPickerCls={'grid-col-6'}
                       startValue={advancedSearchForm.opinionSearch.startDate}
                       onChangeEnd={e => {

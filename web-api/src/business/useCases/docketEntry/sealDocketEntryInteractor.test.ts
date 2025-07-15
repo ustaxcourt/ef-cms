@@ -1,5 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -18,7 +18,6 @@ describe('sealDocketEntryInteractor', () => {
   it('should require a value for dockeEntrySealedTo', async () => {
     await expect(
       sealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           //@ts-ignore this error is intentional
@@ -33,7 +32,6 @@ describe('sealDocketEntryInteractor', () => {
   it('should only allow docket clerks to seal a docket entry', async () => {
     await expect(
       sealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
@@ -50,7 +48,6 @@ describe('sealDocketEntryInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     await expect(
       sealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
@@ -66,7 +63,6 @@ describe('sealDocketEntryInteractor', () => {
 
     await expect(
       sealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: answerDocketEntryId,
           docketEntrySealedTo: 'invalid',
@@ -82,7 +78,6 @@ describe('sealDocketEntryInteractor', () => {
   it('should mark the docket entry as sealed and save', async () => {
     getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     const sealedDocketEntry = await sealDocketEntryInteractor(
-      applicationContext,
       {
         docketEntryId: answerDocketEntryId,
         docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,

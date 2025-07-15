@@ -7,15 +7,9 @@
 
 set -e
 
-ENVIRONMENTS=("$@")
+ENV=$1
 
-if [[ -z "${ENVIRONMENTS[0]}" ]]; then
-  echo "Pass environment list as space-separated arguments."
-  echo
-  echo "Example: "
-  echo "  ./create-missing-log-groups.sh dev stg"
-  exit 1
-fi
+[ -z "${ENV}" ] && echo "You must pass in ENV as command line argument 1" && exit 1
 
 export AWS_PAGER="" # Don’t show `less` on AWS CLI responses
 
@@ -38,29 +32,26 @@ process_group () {
 echo
 echo "Checking for expected log groups…"
 
-for ENV in "${ENVIRONMENTS[@]}"; do
-  for COLOR in blue green; do
-    process_group "/aws/lambda/api_${ENV}_${COLOR}"
-    process_group "/aws/lambda/api_public_${ENV}_${COLOR}"
-    process_group "/aws/lambda/api_async_${ENV}_${COLOR}"
-    process_group "/aws/lambda/streams_${ENV}_${COLOR}"
-    process_group "/aws/lambda/migration_segments_lambda_${ENV}"
-    process_group "/aws/apigateway/gateway_api_${ENV}_${COLOR}"
-    process_group "/aws/apigateway/gateway_api_public_${ENV}_${COLOR}"
-    process_group "/aws/lambda/websockets_connect_${ENV}_${COLOR}"
-    process_group "/aws/lambda/websockets_disconnect_${ENV}_${COLOR}"
-    process_group "/aws/lambda/send_emails_${ENV}_${COLOR}"
-    process_group "/aws/lambda/set_trial_session_${ENV}_${COLOR}"
-  done
-
-  process_group "/aws/lambda/legacy_documents_migration_lambda_${ENV}"
+for COLOR in blue green; do
+  process_group "/aws/lambda/api_${ENV}_${COLOR}"
+  process_group "/aws/lambda/api_public_${ENV}_${COLOR}"
+  process_group "/aws/lambda/api_async_${ENV}_${COLOR}"
+  process_group "/aws/lambda/streams_${ENV}_${COLOR}"
+  process_group "/aws/apigateway/gateway_api_${ENV}_${COLOR}"
+  process_group "/aws/apigateway/gateway_api_public_${ENV}_${COLOR}"
+  process_group "/aws/lambda/websockets_connect_${ENV}_${COLOR}"
+  process_group "/aws/lambda/websockets_disconnect_${ENV}_${COLOR}"
+  process_group "/aws/lambda/send_emails_${ENV}_${COLOR}"
+  process_group "/aws/lambda/set_trial_session_${ENV}_${COLOR}"
 done
+process_group "/aws/lambda/migration_segments_lambda_${ENV}"
+process_group "/aws/lambda/cognito_authorizer_lambda_${ENV}"
 
 echo
 echo "${#EAST_EXISTING_GROUPS[@]} (us-east-1) group already exist."
 echo
 
-TOTAL_TO_ADD=$(${#EAST_GROUPS_TO_CREATE[@]})
+TOTAL_TO_ADD="${#EAST_GROUPS_TO_CREATE[@]}"
 
 if [[ "$TOTAL_TO_ADD" == "0" ]]; then
   echo "No other log groups to create. Exiting!"
