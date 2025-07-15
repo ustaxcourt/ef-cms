@@ -95,7 +95,7 @@ export const PetitionersAndCounsel = connect(
                   {petitioner.showPaperPetitionEmail && (
                     <>
                       <p className="semi-bold margin-bottom-0">
-                        Petition email address
+                        Contact email address
                       </p>
                       <span
                         className={classNames(
