@@ -18,8 +18,10 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  const { orderType, dueDate } = (caseDetail.docketEntries
-    .find((docketEntry) => docketEntry.docketEntryId == docketEntryId) || { draftOrderState: {} }).draftOrderState;
+  const { orderType, dueDate } = (
+    (caseDetail.docketEntries || [])
+    .find((docketEntry) => docketEntry.docketEntryId == docketEntryId) || { draftOrderState: {} })
+    .draftOrderState;
 
   if (orderType === 'statusReport' || orderType === 'statusReportStipulatedDecision') {
     form.date = createISODateString(dueDate);
