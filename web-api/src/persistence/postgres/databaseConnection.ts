@@ -1,6 +1,5 @@
 import {
   CamelCasePlugin,
-  CompiledQuery,
   Kysely,
   PostgresDialect,
   Transaction,
@@ -43,31 +42,7 @@ export async function runQuery<T>({
   cb: (r: Kysely<Database>) => T;
 }): Promise<T> {
   const db = await getDb();
-  await checkDBHealth(db);
   return cb(db);
-}
-
-let healthCheck: Promise<any> | null = null;
-async function checkDBHealth(
-  db: Kysely<Database>,
-  throwOnError: boolean | undefined = false,
-) {
-  if (!healthCheck) {
-    healthCheck = db.executeQuery(CompiledQuery.raw('SELECT 1'));
-  }
-  try {
-    await healthCheck;
-  } catch (e) {
-    if (throwOnError) {
-      throw new DatabaseConnectionError(e);
-    } else {
-      healthCheck = null;
-      dbInstance = null;
-      const db = await getDb();
-      await checkDBHealth(db, true);
-    }
-  }
-  healthCheck = null;
 }
 
 async function establishDbPool(): Promise<Kysely<Database>> {
