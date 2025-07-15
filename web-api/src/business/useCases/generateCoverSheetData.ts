@@ -62,7 +62,7 @@ export const generateCoverSheetData = async ({
   applicationContext: ServerApplicationContext;
   caseEntity: Case;
   docketEntryEntity: DocketEntry;
-  filingDateUpdated: boolean;
+  filingDateUpdated?: boolean;
   stampData?: any;
   useInitialData?: boolean;
 }) => {
@@ -92,7 +92,7 @@ export const generateCoverSheetData = async ({
   }
 
   const docketNumberSuffixToUse = useInitialData
-    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
+    ? (caseEntity.initialDocketNumberSuffix || '').replace('_', '')
     : caseEntity.docketNumberSuffix;
 
   const docketNumberWithSuffix =
