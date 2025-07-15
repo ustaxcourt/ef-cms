@@ -18,7 +18,6 @@ export const DateRangePickerComponent = ({
   onBlurStart,
   onChangeEnd,
   onChangeStart,
-  onLoad,
   parentModalHasMounted = false,
   rangePickerCls,
   showDateHint = false,
@@ -41,7 +40,6 @@ export const DateRangePickerComponent = ({
   onBlurStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onLoad?: () => void;
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string | React.ReactNode;
@@ -195,12 +193,6 @@ export const DateRangePickerComponent = ({
       }
     };
   }, [startDateInputRef, endDateInputRef, parentModalHasMounted]);
-  
-  useEffect(() => {
-    if(onLoad) {
-      onLoad();
-    }
-  }, []);
 
   return (
     <FormGroup
