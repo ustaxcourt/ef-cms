@@ -473,12 +473,9 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Hello',
           documentType: 'O',
         },
-        qcAt: '2023-11-21T20:49:28.192Z',
-        qcByUserId: '196d8891-9863-4530-af23-e385e6bf071c',
         signedAt: '2022-10-21T20:49:28.192Z',
         signedByUserId: '384906db-2f1d-4fdf-941e-41fe800e14db',
         signedJudgeName: 'Buch',
-        signedJudgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         stampData: {},
         strickenBy: 'Talon',
         strickenByUserId: '3c620b4a-e12b-47b7-835c-1d873401f732',
@@ -502,17 +499,12 @@ describe('DocketEntry entity', () => {
       expect(docketEntryEntity.previousDocument).toEqual(
         docketEntry.previousDocument,
       );
-      expect(docketEntryEntity.qcAt).toEqual(docketEntry.qcAt);
-      expect(docketEntryEntity.qcByUserId).toEqual(docketEntry.qcByUserId);
       expect(docketEntryEntity.signedAt).toEqual(docketEntry.signedAt);
       expect(docketEntryEntity.signedByUserId).toEqual(
         docketEntry.signedByUserId,
       );
       expect(docketEntryEntity.signedJudgeName).toEqual(
         docketEntry.signedJudgeName,
-      );
-      expect(docketEntryEntity.signedJudgeUserId).toEqual(
-        docketEntry.signedJudgeUserId,
       );
       expect(docketEntryEntity.stampData).toEqual(docketEntry.stampData);
       expect(docketEntryEntity.strickenBy).toEqual(docketEntry.strickenBy);
@@ -538,12 +530,9 @@ describe('DocketEntry entity', () => {
           documentTitle: 'Hello',
           documentType: 'O',
         },
-        qcAt: '2023-11-21T20:49:28.192Z',
-        qcByUserId: '196d8891-9863-4530-af23-e385e6bf071c',
         signedAt: '2022-10-21T20:49:28.192Z',
         signedByUserId: '384906db-2f1d-4fdf-941e-41fe800e14db',
         signedJudgeName: 'Buch',
-        signedJudgeUserId: '5c9685be-6cbc-4c00-bf26-c2b59f31a0d7',
         stampData: {},
         strickenBy: 'Talon',
         strickenByUserId: '3c620b4a-e12b-47b7-835c-1d873401f732',
@@ -563,12 +552,9 @@ describe('DocketEntry entity', () => {
       expect(docketEntryEntity.judge).toBeFalsy();
       expect(docketEntryEntity.pending).toBeFalsy();
       expect(docketEntryEntity.previousDocument).toBeFalsy();
-      expect(docketEntryEntity.qcAt).toBeFalsy();
-      expect(docketEntryEntity.qcByUserId).toBeFalsy();
       expect(docketEntryEntity.signedAt).toBeFalsy();
       expect(docketEntryEntity.signedByUserId).toBeFalsy();
       expect(docketEntryEntity.signedJudgeName).toBeFalsy();
-      expect(docketEntryEntity.signedJudgeUserId).toBeFalsy();
       expect(docketEntryEntity.stampData).toBeFalsy();
       expect(docketEntryEntity.strickenBy).toBeFalsy();
       expect(docketEntryEntity.strickenByUserId).toBeFalsy();

@@ -12,6 +12,7 @@ import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginato
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useRef, useState } from 'react';
+import { updateScreenMetadataSequence } from '@web-client/presenter/sequences/updateScreenMetadataSequence';
 
 export const CaseDeadlines = connect(
   {

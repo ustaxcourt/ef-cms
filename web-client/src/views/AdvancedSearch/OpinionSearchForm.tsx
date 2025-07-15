@@ -14,7 +14,6 @@ import React from 'react';
 import classNames from 'classnames';
 import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 
-
 export const OpinionSearchForm = connect(
   {
     ADVANCED_SEARCH_OPINION_TYPES_LIST:
@@ -39,13 +38,7 @@ export const OpinionSearchForm = connect(
   }) {
     return (
       <>
-        <form
-          data-testid="opinion-search-container"
-          onSubmit={e => {
-            e.preventDefault();
-            submitAdvancedSearchSequence();
-          }}
-        >
+        <form data-testid="opinion-search-container">
           <Mobile>
             <div className="margin-bottom-3">
               <HowToSearch />
@@ -269,6 +262,7 @@ export const OpinionSearchForm = connect(
                             startDateErrorText={validationErrors.startDate}
                             startLabel="Start date"
                             startName="startDate"
+                            showDateHint={true}
                             startPickerCls={'grid-col-6'}
                             startValue={
                               advancedSearchForm.opinionSearch.startDate
@@ -345,6 +339,10 @@ export const OpinionSearchForm = connect(
                 data-testid="advanced-search-button"
                 id="advanced-search-button"
                 type="submit"
+                onClick={e => {
+                  e.preventDefault();
+                  submitAdvancedSearchSequence();
+                }}
               >
                 Search
               </Button>
