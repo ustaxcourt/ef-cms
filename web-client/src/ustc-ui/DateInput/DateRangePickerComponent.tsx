@@ -214,8 +214,8 @@ export const DateRangePickerComponent = ({
               id={`${startName}-date-start-label`}
             >
               {startLabel}{' '}
+              {showDateHint && <span className="usa-hint">(MM/DD/YYYY)</span>}
             </label>
-            {showDateHint && <span className="usa-hint">MM/DD/YYYY</span>}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${startName}-date-start-label ${startName}-date-start-hint`}
@@ -239,8 +239,8 @@ export const DateRangePickerComponent = ({
               id={`${endName}-date-end-label`}
             >
               {endLabel}{' '}
+              {showDateHint && <span className="usa-hint">(MM/DD/YYYY)</span>}
             </label>
-            {showDateHint && <span className="usa-hint">MM/DD/YYYY</span>}
             <div className="usa-date-picker">
               <input
                 aria-describedby={`${endName}-date-end-label ${endName}-date-end-hint`}
