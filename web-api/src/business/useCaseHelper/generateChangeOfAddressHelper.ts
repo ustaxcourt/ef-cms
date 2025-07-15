@@ -85,7 +85,7 @@ export const generateChangeOfAddressHelper = async ({
     practitionerObject.firmName = firmName;
     practitionerObject.name = practitionerName;
 
-    if (!oldData.email && updatedEmail) {
+    if (updatedEmail) {
       practitionerObject.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
       practitionerObject.email = updatedEmail;
