@@ -14,7 +14,7 @@ export const order = async ({
     caseCaptionExtension: string;
     caseTitle: string;
     docketNumberWithSuffix: string;
-    addedDocketNumbers: string[];
+    addedDocketNumbers?: string[];
     nameOfClerk: string;
     orderContent: string;
     orderTitle: string;
@@ -36,7 +36,7 @@ export const order = async ({
     React.createElement(Order, {
       nameOfClerk,
       options: {
-        addedDocketNumbers,
+        addedDocketNumbers: addedDocketNumbers || [],
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
