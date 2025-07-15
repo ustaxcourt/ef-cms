@@ -1,14 +1,31 @@
-import { PrimaryHeader } from '../components/PrimaryHeader';
-import { ReportsHeader } from '../components/ReportsHeader';
+import { PrimaryHeader } from '@shared/business/utilities/pdfGenerator/components/PrimaryHeader';
+import { ReportsHeader } from '@shared/business/utilities/pdfGenerator/components/ReportsHeader';
 import React from 'react';
 import classNames from 'classnames';
+
+export type CaseInventoryReportFormattedCase = {
+  isLeadCase: boolean;
+  inConsolidatedGroup: boolean;
+  docketNumber: string;
+  caseTitle: string;
+  docketNumberSuffix?: string | null;
+  status: string;
+  associatedJudge?: string;
+};
+
+export type CaseInventoryReportParams = {
+  formattedCases: CaseInventoryReportFormattedCase[];
+  reportTitle: string;
+  showJudgeColumn: boolean;
+  showStatusColumn: boolean;
+};
 
 export const CaseInventoryReport = ({
   formattedCases,
   reportTitle,
   showJudgeColumn,
   showStatusColumn,
-}) => {
+}: CaseInventoryReportParams) => {
   return (
     <div>
       <PrimaryHeader />

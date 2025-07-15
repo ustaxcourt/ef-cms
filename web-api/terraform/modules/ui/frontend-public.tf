@@ -1,5 +1,6 @@
 data "aws_acm_certificate" "public_certificate" {
   domain = var.dns_domain
+  most_recent = true
 }
 
 resource "aws_s3_bucket" "frontend_public" {

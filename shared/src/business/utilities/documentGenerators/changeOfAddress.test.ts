@@ -65,6 +65,7 @@ describe('changeOfAddress', () => {
       phone: '123-124-1234',
       postalCode: '12345',
       state: 'AL',
+      caseCaptionExtension: 'TEST_CASE_CAPTION_EXTENSION',
     };
 
     generateAndVerifyPdfDiff({

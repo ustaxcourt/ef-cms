@@ -44,11 +44,6 @@ export const standingPretrialOrder = async ({ applicationContext, data }) => {
 
   const reactGettingReadyForTrialChecklistTemplate = ReactDOM.renderToString(
     React.createElement(GettingReadyForTrialChecklist, {
-      options: {
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
-      },
       trialInfo,
     }),
   );
