@@ -643,7 +643,7 @@ jobs:
       - run:
           name: Index Docket Entries
           command: |
-            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts "$THREADS"
+            NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts "$THREADS"
 
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
@@ -826,7 +826,7 @@ jobs:
       - run:
           name: Index Cases
           command: |
-            ./scripts/run-once-scripts/postgres-migration/index-cases.ts
+            NODE_ENV=production ./scripts/reindex/index-cases/index-cases.ts 5
 
   index-docket-entries:
     docker:
@@ -845,7 +845,7 @@ jobs:
       - run:
           name: Index Docket Entries
           command: |
-            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts 5
+            NODE_ENV=production ./scripts/reindex/index-docket-entries/index-docket-entries.ts 5
 
   cleanup-glue-job:
     docker:
