@@ -13,6 +13,7 @@ function pickFields(workItem) {
     completedByUserId: workItem.completedByUserId,
     completedMessage: workItem.completedMessage,
     createdAt: workItem.createdAt,
+    docketEntry: JSON.stringify(workItem.docketEntry),
     docketEntryId: workItem.docketEntryId,
     docketNumber: workItem.docketNumber,
     inProgress: workItem.inProgress,
@@ -79,6 +80,7 @@ export function toWorkItemWithCaseInfo(dbWorkItem): WorkItemWithCaseInfo {
     leadDocketNumber: dbWorkItem?.leadDocketNumber || undefined,
     trialDate: dbWorkItem?.trialDate?.toISOString(),
     trialLocation: dbWorkItem?.trialLocation || undefined,
+    docketEntry: dbWorkItem.docketEntry,
   };
   return transformNullToUndefined(workItemWithCaseInfo);
 }
