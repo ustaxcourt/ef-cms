@@ -656,4 +656,44 @@ describe('DocketEntry entity', () => {
       expect(result).toBe(false);
     });
   });
+
+  describe('isStatusReport', () => {
+    it('should return false if draftOrderState does not exist', () => {
+      const doc = new DocketEntry({
+        ...A_VALID_DOCKET_ENTRY
+      },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },);
+      expect(doc.isStatusReport()).toEqual(false);
+    });
+    it('should return true if orderType is of statusReport', () => {
+      const doc = new DocketEntry({
+        ...A_VALID_DOCKET_ENTRY,
+        draftOrderState: {
+          orderType: 'statusReport'
+        }
+      },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },);
+      expect(doc.isStatusReport()).toEqual(true);
+    });
+    it('should return true if orderType is of statusReportStipulatedDecision', () => {
+      const doc = new DocketEntry({
+        ...A_VALID_DOCKET_ENTRY,
+        draftOrderState: {
+          orderType: 'statusReportStipulatedDecision'
+        }
+      },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },);
+      expect(doc.isStatusReport()).toEqual(true);
+    });
+    it('should return false if orderType is not statusReport or statusReportStipulatedDecision', () => {
+      const doc = new DocketEntry({
+        ...A_VALID_DOCKET_ENTRY,
+        draftOrderState: {
+          orderType: 'hello'
+        }
+      },
+      { authorizedUser: undefined, petitioners: MOCK_PETITIONERS },);
+      expect(doc.isStatusReport()).toEqual(false);
+    })
+  });
 });
