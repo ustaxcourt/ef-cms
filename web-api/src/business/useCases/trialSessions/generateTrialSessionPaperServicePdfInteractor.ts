@@ -17,7 +17,7 @@ export const generateTrialSessionPaperServicePdfInteractor = async (
   }: {
     trialNoticePdfsKeys: string[];
     trialSessionId: string;
-    clientConnectionId: string;
+    clientConnectionId?: string;
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {

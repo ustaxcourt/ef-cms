@@ -2,6 +2,8 @@ import { Case } from '../../../../../shared/src/business/entities/cases/Case';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { generateCoverSheetData } from '../../useCases/generateCoverSheetData';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 /**
  * a helper function which creates a coversheet with stampData on it, then returns the new coversheet pdf
@@ -18,6 +20,11 @@ const createStampedCoversheetPdf = async ({
   caseEntity,
   docketEntryEntity,
   stampData,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  docketEntryEntity: DocketEntry;
+  stampData?: any;
 }) => {
   docketEntryEntity.servedAt = undefined;
 

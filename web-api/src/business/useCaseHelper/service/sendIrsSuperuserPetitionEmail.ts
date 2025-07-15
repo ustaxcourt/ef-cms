@@ -1,11 +1,12 @@
-import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { Case } from '@shared/business/entities/cases/Case';
 import {
   FORMATS,
   formatDateString,
   formatNow,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { PetitionService } from '@shared/business/utilities/emailGenerator/emailTemplates/PetitionService';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 import React from 'react';
 import ReactDOM from 'react-dom/server';
 
@@ -13,6 +14,10 @@ export const sendIrsSuperuserPetitionEmail = async ({
   applicationContext,
   caseEntity,
   docketEntryId,
+}: {
+  applicationContext: ServerApplicationContext;
+  caseEntity: Case;
+  docketEntryId: string;
 }) => {
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
@@ -34,7 +39,7 @@ export const sendIrsSuperuserPetitionEmail = async ({
   const { documentType, eventCode, filingDate, servedAt } = docketEntryEntity;
 
   privatePractitioners.forEach(practitioner => {
-    const representingFormatted = [];
+    const representingFormatted: string[] = [];
 
     caseEntity.petitioners.forEach(p => {
       if (practitioner.isRepresenting(p.contactId)) {
@@ -78,7 +83,7 @@ export const sendIrsSuperuserPetitionEmail = async ({
   );
 
   const destination = {
-    email: applicationContext.getIrsSuperuserEmail(),
+    email: applicationContext.getIrsSuperuserEmail()!,
     templateData: {
       docketNumber: docketNumberWithSuffix,
       emailContent: templateHtml,
@@ -92,7 +97,7 @@ export const sendIrsSuperuserPetitionEmail = async ({
       emailContent: 'A petition has been served.',
     },
     destinations: [destination],
-    templateName: process.env.EMAIL_SERVED_PETITION_TEMPLATE,
+    templateName: process.env.EMAIL_SERVED_PETITION_TEMPLATE!,
   });
 
   applicationContext.logger.info('served a document to the irs', {
