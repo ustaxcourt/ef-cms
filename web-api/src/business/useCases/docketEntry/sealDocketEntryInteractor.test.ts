@@ -1,5 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';

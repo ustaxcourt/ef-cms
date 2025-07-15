@@ -18,6 +18,7 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
@@ -73,14 +74,11 @@ export const serveExternallyFiledDocument = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocketEntryPendingServiceStatus({
-      applicationContext,
-      docketEntryId,
-      docketNumber: subjectCaseDocketNumber,
-      status: true,
-    });
+  await updateDocketEntryPendingServiceStatus({
+    docketEntryId,
+    docketNumber: subjectCaseDocketNumber,
+    status: true,
+  });
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -163,14 +161,11 @@ export const serveExternallyFiledDocument = async (
         docketEntryId,
       });
   } finally {
-    await applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
-        applicationContext,
-        docketEntryId,
-        docketNumber: subjectCaseDocketNumber,
-        status: false,
-      });
+    await updateDocketEntryPendingServiceStatus({
+      docketEntryId,
+      docketNumber: subjectCaseDocketNumber,
+      status: false,
+    });
   }
 
   const successMessage =

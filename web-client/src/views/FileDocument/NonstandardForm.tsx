@@ -151,30 +151,6 @@ export const NonstandardForm = connect(
             />
           </FormGroup>
         )}
-        {helper[level].showTextInput2 && (
-          <FormGroup errorText={validationErrors?.freeText2}>
-            <label className="usa-label" htmlFor={`${namespace}free-text2`}>
-              {helper[level].textInputLabel2}
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              id={`${namespace}free-text2`}
-              name={`${namespace}freeText2`}
-              type="text"
-              value={get(form, `${namespace}freeText2`, '')}
-              onBlur={() => {
-                validateSequence();
-              }}
-              onChange={e => {
-                updateSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </FormGroup>
-        )}
         {helper[level].previousDocumentSelectLabel && (
           <FormGroup errorText={validationErrors?.previousDocument}>
             <label

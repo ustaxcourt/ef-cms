@@ -9,6 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 /**
  * setWorkItemAsReadInteractor
@@ -55,12 +56,7 @@ export const setWorkItemAsReadInteractor = async (
 
   docketEntryEntity.workItem.markAsRead();
 
-  await applicationContext.getPersistenceGateway().updateDocketEntry({
-    applicationContext,
-    docketEntryId,
-    docketNumber,
-    document: docketEntryEntity.validate().toRawObject(),
-  });
+  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
 
   return upsertWorkItems({
     workItems: [docketEntryEntity.workItem.validate().toRawObject()],

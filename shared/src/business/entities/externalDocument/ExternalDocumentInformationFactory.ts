@@ -44,7 +44,6 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
   public currentUser: { userId: string; role: string };
 
   private scenario: string;
-  private freeText2: string;
 
   constructor(rawProps) {
     super('ExternalDocumentInformationFactory');
@@ -74,7 +73,6 @@ export class ExternalDocumentInformationFactory extends JoiValidationEntity {
     this.currentUser = rawProps.currentUser;
 
     this.scenario = rawProps.scenario;
-    this.freeText2 = rawProps.freeText2;
 
     if (this.secondaryDocument) {
       this.secondaryDocument = new SecondaryDocumentInformationFactory({

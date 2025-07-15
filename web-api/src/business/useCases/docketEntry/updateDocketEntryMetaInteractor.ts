@@ -15,6 +15,7 @@ import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocumentTitleWithAdditionalInfo } from '@shared/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 
 export const updateDocketEntryMeta = async (
   applicationContext: ServerApplicationContext,
@@ -74,7 +75,6 @@ export const updateDocketEntryMeta = async (
     filers: docketEntryMeta.filers,
     filingDate: docketEntryMeta.filingDate,
     freeText: docketEntryMeta.freeText,
-    freeText2: docketEntryMeta.freeText2,
     hasOtherFilingParty: docketEntryMeta.hasOtherFilingParty,
     judge: docketEntryMeta.judge,
     lodged: docketEntryMeta.lodged,
@@ -148,12 +148,7 @@ export const updateDocketEntryMeta = async (
     .updateCaseAutomaticBlock({ caseEntity });
 
   if (shouldGenerateCoversheet) {
-    await applicationContext.getPersistenceGateway().updateDocketEntry({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber,
-      document: docketEntryEntity.validate(),
-    });
+    await upsertDocketEntries([docketEntryEntity.validate()]);
 
     const updatedDocketEntry = await applicationContext
       .getUseCases()

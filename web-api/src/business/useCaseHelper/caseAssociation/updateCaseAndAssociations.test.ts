@@ -2,6 +2,7 @@ import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 jest.mock('@shared/business/entities/CaseDeadline');
 jest.mock('@web-api/persistence/postgres/messages/getMessagesByDocketNumber');
 jest.mock('@web-api/persistence/postgres/messages/updateMessage');
@@ -23,11 +24,13 @@ import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persist
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { MOCK_MESSAGE } from '@shared/test/mockMessage';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
+import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 
 describe('updateCaseAndAssociations', () => {
   let validMockCase;
 
+  const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const upsertCases = jest.mocked(upsertCasesMock);
   const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
@@ -129,9 +132,7 @@ describe('updateCaseAndAssociations', () => {
     ).rejects.toThrow('query problem');
 
     // updateCaseDocketEntries
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry,
-    ).not.toHaveBeenCalled();
+    expect(upsertDocketEntries).not.toHaveBeenCalled();
 
     // updateCaseMessages
     expect(updateMessage).not.toHaveBeenCalled();
@@ -223,7 +224,7 @@ describe('updateCaseAndAssociations', () => {
   });
 
   describe('docket entries', () => {
-    it('does not call updateDocketEntry if all docket entries are unchanged', async () => {
+    it('does not call upsertDocketEntries if all docket entries are unchanged', async () => {
       const oldCase = {
         ...validMockCase,
         archivedDocketEntries: MOCK_DOCUMENTS,
@@ -243,13 +244,11 @@ describe('updateCaseAndAssociations', () => {
         caseToUpdate,
       });
 
-      expect(
-        applicationContext.getPersistenceGateway().updateDocketEntry,
-      ).not.toHaveBeenCalled();
+      expect(upsertDocketEntries).toHaveBeenCalledWith([]);
       expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
     });
 
-    it('calls updateDocketEntry for each docket entry which has been added or changed', async () => {
+    it('calls upsertDocketEntries for each docket entry which has been added or changed', async () => {
       const oldCase = {
         ...MOCK_CASE,
         archivedDocketEntries: [MOCK_DOCUMENTS[0]],
@@ -282,9 +281,7 @@ describe('updateCaseAndAssociations', () => {
       expect(
         upsertCases.mock.calls[0][0][0].archivedDocketEntries,
       ).toMatchObject(caseToUpdate.archivedDocketEntries);
-      expect(
-        applicationContext.getPersistenceGateway().updateDocketEntry,
-      ).toHaveBeenCalledTimes(4);
+      expect(upsertDocketEntries).toHaveBeenCalledTimes(1);
     });
 
     it('should not compare work item differences when comparing docket entries', async () => {
