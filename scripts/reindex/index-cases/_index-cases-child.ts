@@ -3,19 +3,19 @@
 import {
   parseArgsAndEnvVars,
   type ScriptConfig,
-} from '../../../helpers/parseArgsAndEnvVars';
+} from '../../helpers/parseArgsAndEnvVars';
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import {
   OPENSEARCH_SYNC_ACTIONS,
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import { indexOpenSearchDocketEntries } from 'web-api/elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { indexOpenSearchCases } from 'web-api/elasticsearch/cases/indexOpenSearchCases';
 
 const scriptConfig: ScriptConfig = {
   description:
-    '_index-docket-entries-child: a subprocess script for indexing a chunk of docket entry data that should only be kicked off by index-docket-entries',
+    '_index-cases-child: a subprocess script for indexing a chunk of case data that should only be kicked off by index-cases',
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',
@@ -43,46 +43,41 @@ const PAGE_SIZE = 2000;
 let totalItems = 0;
 
 /*
-This script is only meant to be kicked off by index-docket-entries.ts. It paginates over a partition
-of docket entries in a date range to index them.
+This script is only meant to be kicked off by index-cases.ts. It paginates over a partition
+of cases in a date range to index them.
 */
 async function main() {
   let currentStartDate = calculateDate({ dateString: startDate });
-  let docketEntriesToIndex = await getDocketEntriesToIndex(currentStartDate);
+  let casesToIndex = await getCasesToIndex(currentStartDate);
 
-  while (!isEmpty(docketEntriesToIndex)) {
+  while (!isEmpty(casesToIndex)) {
     const message = {
-      payload: docketEntriesToIndex.map(data => ({
-        docketEntryId: data.docketEntryId,
-        docketNumber: data.docketNumber,
-      })),
-      type: 'dwDocketEntry' as OpenSearchSyncMessageType,
+      payload: casesToIndex.map(c => c.docketNumber),
+      type: 'dwCase' as OpenSearchSyncMessageType,
       timestamp: Date.now().toString(),
       action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
     };
-    await indexOpenSearchDocketEntries({ message });
-    totalItems += docketEntriesToIndex.length;
+    await indexOpenSearchCases({ message });
+    totalItems += casesToIndex.length;
     console.log(
-      `Total docket entries indexed for date range ${startDate} to ${endDate} so far: ${totalItems}`,
+      `Total cases indexed for date range ${startDate} to ${endDate} so far: ${totalItems}`,
     );
-    const lastSeenDate =
-      docketEntriesToIndex[docketEntriesToIndex.length - 1].createdAt;
+    const lastSeenDate = casesToIndex[casesToIndex.length - 1].createdAt;
     currentStartDate = lastSeenDate;
-    docketEntriesToIndex = await getDocketEntriesToIndex(currentStartDate);
+    casesToIndex = await getCasesToIndex(currentStartDate);
   }
   console.log(
-    `Done indexing docket entries for for date range ${startDate} to ${endDate}`,
+    `Done indexing cases for for date range ${startDate} to ${endDate}`,
   );
 }
 
-const getDocketEntriesToIndex = async (startDate: Date) => {
+const getCasesToIndex = async (startDate: Date) => {
   return await getDbReader(reader =>
     reader
-      .selectFrom('dwDocketEntry')
-      .select(['docketEntryId', 'docketNumber', 'createdAt'])
+      .selectFrom('dwCase')
+      .select(['docketNumber', 'createdAt'])
       .orderBy('createdAt')
       .orderBy('docketNumber')
-      .orderBy('docketEntryId')
       .where('createdAt', '>', startDate)
       .where('createdAt', '<=', calculateDate({ dateString: endDate }))
       .limit(PAGE_SIZE)

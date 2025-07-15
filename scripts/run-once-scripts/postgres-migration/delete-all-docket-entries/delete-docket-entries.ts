@@ -9,13 +9,16 @@ import { getDbReader } from '@web-api/database';
 import { spawn } from 'child_process';
 import { CompiledQuery } from 'kysely';
 
+/**
+ * This script is basically a shameless copy of index-docket-entries.
+ */
+
 const scriptConfig: ScriptConfig = {
   description:
-    'index-docket-entries: a script to re-index docket entries from Postgres to OpenSearch',
+    'delete-docket-entries: a script to delete docket entries from dynamo',
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',
-    elasticSearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
   },
   parameters: {
     num_processes: {
@@ -33,7 +36,7 @@ const { num_processes } = parseArgsAndEnvVars(scriptConfig) as {
 
 /*
 This script partitions docket entries into N (= num_processes argument) equal groups and kicks off a separate process
-to index each group.
+to delete each group.
 */
 async function main() {
   const count = await getDocketEntriesCount();
@@ -59,7 +62,7 @@ async function main() {
       [
         'ts-node',
         '--transpile-only',
-        './scripts/run-once-scripts/postgres-migration/index-docket-entries/_index-docket-entries-child.ts',
+        './scripts/run-once-scripts/postgres-migration/delete-all-docket-entries/_delete-docket-entries-child.ts',
         dateInterval[0].toISOString(),
         dateInterval[1].toISOString(),
       ],
@@ -95,13 +98,6 @@ async function getDocketEntriesCount() {
       .executeTakeFirst(),
   );
 
-  // In a perfect world, we would not need paddingToAccountForNewData: new data will already be indexed,
-  // and it *should* have a createdAt of now(), putting it at the end of our sort. In other words,
-  // if X new docket entries come in, we still only need to index the first N, not N+X.
-  // However, in app code, docket entry createdAt is, inexplicably, not always set to now(). This is sad.
-  // So we added a constant factor that says, "Index all N of your existing docket entries ... plus a small
-  // batch extra, just in case we got a bunch of new docket entries with an older date that threw off our
-  // offsets."
   const paddingToAccountForNewData = 1000;
   const count = Number(countQuery?.count) + paddingToAccountForNewData;
   console.log(
