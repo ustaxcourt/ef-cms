@@ -46,11 +46,21 @@ export const DocumentViewer = connect(
     }, []);
 
     useEffect(() => {
-      setViewerDocumentToDisplaySequence({
-        viewerDocumentToDisplay:
-          formattedDocketEntries.formattedDocketEntriesOnDocketRecord[0],
-      });
-    }, [formattedDocketEntries.formattedDocketEntriesOnDocketRecord]);
+      const docketEntries =
+        formattedDocketEntries.formattedDocketEntriesOnDocketRecord;
+      const currentDoc = docketEntries.find(
+        entry => entry.docketEntryId === viewDocumentId,
+      );
+
+      if (!currentDoc && docketEntries.length > 0) {
+        setViewerDocumentToDisplaySequence({
+          viewerDocumentToDisplay: docketEntries[0],
+        });
+      }
+    }, [
+      formattedDocketEntries.formattedDocketEntriesOnDocketRecord,
+      viewDocumentId,
+    ]);
 
     return (
       <>
