@@ -35,7 +35,6 @@ export const CaseDeadlines = connect(
     selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence,
     updateCaseDeadlineReportPageSequence,
-    updateScreenMetadataSequence,
     validationErrors,
   }) {
     const paginatorTop = useRef(null);
@@ -69,34 +68,6 @@ export const CaseDeadlines = connect(
                 selectDateRangeFromCalendarSequence({
                   startDate: e.target.value,
                 });
-              }}
-              onLoad={() => {
-                updateScreenMetadataSequence({
-                  key: 'filterEndDateState',
-                  value: caseDeadlineReportHelper.filterEndDate,
-                });
-                updateScreenMetadataSequence({
-                  key: 'filterStartDateState',
-                  value: caseDeadlineReportHelper.filterStartDate,
-                });
-                const caseDeadlinesDP = window.document.getElementById(
-                  'case-deadlines-datepicker',
-                );
-                if (caseDeadlinesDP) {
-                  caseDeadlinesDP.style.marginBottom = '0';
-                }
-                const caseDeadlinesStartFG = window.document.getElementById(
-                  'case-deadlines-start-formgroup',
-                );
-                if (caseDeadlinesStartFG) {
-                  caseDeadlinesStartFG.style.marginBottom = '0';
-                }
-                const caseDeadlinesEndFG = window.document.getElementById(
-                  'case-deadlines-end-formgroup',
-                );
-                if (caseDeadlinesEndFG) {
-                  caseDeadlinesEndFG.style.marginBottom = '0';
-                }
               }}
             />
             <div className="margin-left-3">
