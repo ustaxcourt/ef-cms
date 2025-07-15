@@ -1,3 +1,4 @@
+import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -17,8 +18,12 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
 
-  const { dueDate, orderType } = caseDetail.docketEntries
+  const {orderType, dueDate} = caseDetail.docketEntries
     .find((docketEntry) => docketEntry.docketEntryId == docketEntryId)?.draftOrderState || {};
+
+  if(orderType) {
+    form.date = createISODateString(dueDate);
+  }
 
   const clientConnectionId = get(state.clientConnectionId);
 
@@ -32,7 +37,6 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
       docketNumbers,
       form: {
         ...form,
-        dueDate,
         orderType,
       },
       subjectCaseDocketNumber: caseDetail.docketNumber,
