@@ -11,7 +11,11 @@ import {
   dateStringsCompared,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { InvalidRequest, UnauthorizedError } from '@web-api/errors/errors';
+import {
+  InvalidRequest,
+  NotFoundError,
+  UnauthorizedError,
+} from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -52,6 +56,12 @@ const completeDocketEntryQC = async (
   } = entryMetadata;
 
   const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const caseToUpdate = await getCaseByDocketNumber({
     docketNumber,

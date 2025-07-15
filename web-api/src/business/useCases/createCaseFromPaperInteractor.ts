@@ -21,7 +21,6 @@ import { generateDocketNumber } from '@web-api/persistence/postgres/cases/genera
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
@@ -79,7 +78,7 @@ const createCaseMetadata = async (
     petitionMetadata: CreatedCaseType;
     requestForPlaceOfTrialFileId?: string;
     stinFileId?: string;
-    user: UserRecord;
+    user: RawUser;
   },
   authorizedUser: AuthUser,
 ) => {

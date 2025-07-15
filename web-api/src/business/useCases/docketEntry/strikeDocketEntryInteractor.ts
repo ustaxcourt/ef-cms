@@ -41,6 +41,12 @@ export const strikeDocketEntryInteractor = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
   docketEntryEntity.strikeEntry({ name: user.name, userId: user.userId });
 
   caseEntity.updateDocketEntry(docketEntryEntity);
