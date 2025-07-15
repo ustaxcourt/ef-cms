@@ -11,7 +11,7 @@ import { environment } from '../../environment';
 import fs from 'fs';
 import { AsyncLocalStorage } from 'async_hooks';
 
-type ConnectionInfo = {
+export type ConnectionInfo = {
   currentTransaction: Transaction<Database>;
   onCommitCallbacks?: (() => Promise<void>)[];
 };

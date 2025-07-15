@@ -1,32 +1,39 @@
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import {
+  ConnectionInfo,
   ConnectionStore,
   getDb,
 } from '@web-api/persistence/postgres/databaseConnection';
 
 export async function withTransaction<T>(fn: () => Promise<T>): Promise<T> {
-  // If we are already in a transaction, continue like normal.
-  if (inTransaction()) return fn();
+  // If we're already in a transaction, just run the callback directly.
+  if (inTransaction()) {
+    return fn();
+  }
 
   const db = await getDb();
 
-  // Otherwise, we need to start a transaction. We let kysely take care of the begin/commit/rollback details
-  return db.transaction().execute(async trx => {
-    const store = {
+  // We'll capture the store here so it's available after commit.
+  let transactionStore: ConnectionInfo = {} as ConnectionInfo;
+
+  // Start the transaction; Kysely handles BEGIN/COMMIT/ROLLBACK.
+  const result = await db.transaction().execute(async trx => {
+    // Initialize store for this transaction.
+    transactionStore = {
       currentTransaction: trx,
       onCommitCallbacks: [] as Array<() => Promise<void>>,
     };
 
-    // Then we pass in information to any nested processes. If any fail, the whole transaction will fail.
-    return ConnectionStore.run(store, async () => {
-      const result = await fn();
-
-      // At the end, we run all the things we need to do on commit, like indexing in OpenSearch.
-      await settlePromises(store.onCommitCallbacks.map(cb => cb()));
-
-      return result;
-    });
+    // Run the user-supplied function within the transaction context.
+    return ConnectionStore.run(transactionStore, () => fn());
   });
+
+  // After the transaction completes successfully, run the onCommit callbacks.
+  if (transactionStore.onCommitCallbacks?.length) {
+    await settlePromises(transactionStore.onCommitCallbacks.map(cb => cb()));
+  }
+
+  return result;
 }
 
 // Whether or not the caller is currently part of a transaction
