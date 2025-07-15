@@ -21,7 +21,6 @@ import { parsePdf } from './cypress/helpers/cypressTasks/pdf/parsePdf';
 import { overrideIdleTimeouts } from './cypress/local-only/support/idleLogoutHelpers';
 import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
-import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 import type { Page } from 'puppeteer-core';
 import { retry, setup } from '@cypress/puppeteer';
 
@@ -75,18 +74,6 @@ export default defineConfig({
         },
         waitForNoce({ docketNumber }: { docketNumber: string }) {
           return waitForNoce({ docketNumber });
-        },
-        waitForPractitionerEmailUpdate({
-          docketNumber,
-          practitionerEmail,
-        }: {
-          docketNumber: string;
-          practitionerEmail: string;
-        }) {
-          return waitForPractitionerEmailUpdate({
-            docketNumber,
-            practitionerEmail,
-          });
         },
       });
       // Setup for puppeteer, which supports multi-tab tests
