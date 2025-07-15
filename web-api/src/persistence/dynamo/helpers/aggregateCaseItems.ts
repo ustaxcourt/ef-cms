@@ -1,23 +1,26 @@
+import { RawCorrespondence } from '@shared/business/entities/Correspondence';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import {
-  CaseRecord,
   IrsPractitionerOnCaseRecord,
   PrivatePractitionerOnCaseRecord,
 } from '@web-api/persistence/dynamo/dynamoTypes';
 import { sortBy } from 'lodash';
 
-export const isArchivedCorrespondenceItem = item =>
+export const isArchivedCorrespondenceItem = (
+  item: any,
+): item is RawCorrespondence =>
   item.sk.startsWith('correspondence|') && item.archived;
 
-export const isArchivedDocketEntryItem = item =>
+export const isArchivedDocketEntryItem = (item: any): item is DocketEntry =>
   item.sk.startsWith('docket-entry|') && item.archived;
 
-export const isCaseItem = (item: any): item is CaseRecord =>
+export const isCaseItem = (item: any): item is RawCase =>
   item.pk?.startsWith('case|') && item.sk.startsWith('case|');
 
-export const isCorrespondenceItem = item =>
+export const isCorrespondenceItem = (item: any): item is RawCorrespondence =>
   item.sk.startsWith('correspondence|') && !item.archived;
 
-export const isDocketEntryItem = item =>
+export const isDocketEntryItem = (item: any): item is DocketEntry =>
   item.sk.startsWith('docket-entry|') && !item.archived;
 
 export const isWorkItemItem = item => item.sk.startsWith('work-item|');
@@ -35,14 +38,14 @@ export const isPrivatePractitionerItem = (
   item.pk?.startsWith('case|') && item.sk.startsWith('privatePractitioner|');
 
 export const aggregateCaseItems = (caseAndCaseItems): RawCase => {
-  const archivedCorrespondences = [];
-  const archivedDocketEntries = [];
-  const caseRecords = [];
-  const correspondences = [];
-  const docketEntries = []; // documents
-  const hearings = [];
-  const irsPractitioners = [];
-  const privatePractitioners = [];
+  const archivedCorrespondences: RawCorrespondence[] = [];
+  const archivedDocketEntries: DocketEntry[] = [];
+  const caseRecords: RawCase[] = [];
+  const correspondences: RawCorrespondence[] = [];
+  const docketEntries: DocketEntry[] = []; // documents
+  const hearings: any[] = [];
+  const irsPractitioners: any = [];
+  const privatePractitioners: any = [];
 
   caseAndCaseItems.forEach(item => {
     if (isDocketEntryItem(item)) {
@@ -78,7 +81,7 @@ export const aggregateCaseItems = (caseAndCaseItems): RawCase => {
     }
   });
 
-  const theCase = caseRecords.pop();
+  const theCase = caseRecords.pop()!;
 
   const sortedDocketEntries = sortBy(docketEntries, 'createdAt');
 
