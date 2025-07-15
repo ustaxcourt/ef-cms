@@ -291,6 +291,12 @@ export const updatePetitionerInformation = async (
         userId: contactId,
       });
 
+      if (!userToUpdate) {
+        throw new NotFoundError(
+          `User not found with user id ${authorizedUser.userId}`,
+        );
+      }
+
       await updateCaseEntityAndGenerateChange({
         applicationContext,
         authorizedUser,
