@@ -15,6 +15,7 @@ const scriptConfig: ScriptConfig = {
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',
+    elasticSearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
   },
   parameters: {
     num_processes: {
