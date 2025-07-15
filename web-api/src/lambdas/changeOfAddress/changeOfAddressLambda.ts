@@ -22,5 +22,6 @@ export const changeOfAddressHandler = async event => {
     updatedName: eventBody.updatedName,
     user: eventBody.user,
     websocketMessagePrefix: eventBody.websocketMessagePrefix,
+    oldUser: eventBody.oldUser,
   });
 };

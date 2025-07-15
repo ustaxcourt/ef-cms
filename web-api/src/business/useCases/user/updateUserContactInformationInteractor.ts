@@ -44,9 +44,9 @@ const updateUserContactInformationHelper = async (
   },
   authorizedUser: AuthUser,
 ) => {
-  const user = await getUserById({ userId });
+  const oldUser = await getUserById({ userId });
 
-  if (!user) {
+  if (!oldUser) {
     throw new NotFoundError(`User not found with user id ${userId}`);
   }
 
@@ -60,47 +60,47 @@ const updateUserContactInformationHelper = async (
 
   const isPractitionerUnchanged = u =>
     isPractitioner(u) &&
-    isEqual(user.contact, contactInfo) &&
-    isEqual(user.firmName, firmName);
+    isEqual(oldUser.contact, contactInfo) &&
+    isEqual(oldUser.firmName, firmName);
 
   const isUserUnchanged = u =>
-    !isPractitioner(u) && isEqual(user.contact, contactInfo);
+    !isPractitioner(u) && isEqual(oldUser.contact, contactInfo);
 
-  if (isPractitionerUnchanged(user) || isUserUnchanged(user)) {
+  if (isPractitionerUnchanged(oldUser) || isUserUnchanged(oldUser)) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: { action: 'user_contact_initial_update_complete' },
-      userId: user.userId,
+      userId: oldUser.userId,
       clientConnectionId,
     });
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
-      message: { action: 'user_contact_full_update_complete', user },
-      userId: user.userId,
+      message: { action: 'user_contact_full_update_complete', user: oldUser },
+      userId: oldUser.userId,
       clientConnectionId,
     });
     return;
   }
 
-  let userEntity;
-  if (isPractitioner(user)) {
-    userEntity = new Practitioner({
-      ...user,
+  let updatedUserEntity;
+  if (isPractitioner(oldUser)) {
+    updatedUserEntity = new Practitioner({
+      ...oldUser,
       contact: { ...contactInfo },
       isUpdatingInformation: true,
     });
 
-    userEntity.firmName = firmName;
+    updatedUserEntity.firmName = firmName;
   } else {
-    throw new Error(`Unrecognized entityType ${user.entityName}`);
+    throw new Error(`Unrecognized entityType ${oldUser.entityName}`);
   }
 
-  await upsertUsers([userEntity.validate().toRawObject()]);
+  await upsertUsers([updatedUserEntity.validate().toRawObject()]);
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: { action: 'user_contact_initial_update_complete' },
-    userId: user.userId,
+    userId: oldUser.userId,
     clientConnectionId,
   });
 
@@ -109,22 +109,22 @@ const updateUserContactInformationHelper = async (
     authorizedUser,
     contactInfo,
     firmName,
-    user: userEntity.validate().toRawObject(),
-    oldUser: user,
+    user: updatedUserEntity.validate().toRawObject(),
+    oldUser,
     websocketMessagePrefix: 'user',
   });
 
   if (isArray(results) && !results.length) {
-    userEntity.setIsUpdatingInformation(false);
-    await upsertUsers([userEntity.validate().toRawObject()]);
+    updatedUserEntity.setIsUpdatingInformation(false);
+    await upsertUsers([updatedUserEntity.validate().toRawObject()]);
 
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       message: {
         action: 'user_contact_full_update_complete',
-        user: userEntity.validate().toRawObject(),
+        user: updatedUserEntity.validate().toRawObject(),
       },
-      userId: user.userId,
+      userId: oldUser.userId,
       clientConnectionId,
     });
   }
