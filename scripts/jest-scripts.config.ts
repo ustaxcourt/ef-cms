@@ -6,6 +6,7 @@ const config: Config = {
   clearMocks: true,
   collectCoverage: true,
   collectCoverageFrom: [
+    '**/*.{js,ts}',
     '!archived/**',
     '!checkAllFilesForTypeErrorCount.ts',
     '!circleci/*.ts',
@@ -44,7 +45,6 @@ const config: Config = {
     '!template.ts',
     '!upload-practitioner-application-packages.ts',
     '!user/**',
-    '**/*.{js,ts}',
   ],
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
