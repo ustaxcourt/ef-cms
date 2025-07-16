@@ -27,7 +27,6 @@ import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/ut
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
-
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
 
