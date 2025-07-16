@@ -1,9 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import {
-  applicationContext,
-  ServerApplicationContext,
-} from '@web-api/applicationContext';
+import { applicationContext } from '@web-api/applicationContext';
 import { getDbReader } from '@web-api/database';
 import { NotFoundError } from '@web-api/errors/errors';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
@@ -14,39 +11,86 @@ import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorr
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
-import { difference, isEmpty, partition, sortBy } from 'lodash';
+import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
+import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
+import { difference, isEmpty, sortBy } from 'lodash';
 
-export async function getCasesByDocketNumbers({
+export const ALL_OMITTABLE_CASE_FIELDS = [
+  'docketEntries',
+  'privatePractitioners',
+  'irsPractitioners',
+  'correspondence',
+  'hearings',
+] as const;
+
+export type OmittableCaseFields = (typeof ALL_OMITTABLE_CASE_FIELDS)[number];
+
+/**
+ * Returns subsets of case data based on excludeFields. If excludeFields is not passed in,
+ * it fetches all case-related data except consolidated cases.
+ * @param {string[]} docketNumbers
+ * @param {OmittableCaseFields[]} excludeFields - OmittableCaseFields[]
+ */
+export async function getCasesByDocketNumbers<
+  T extends OmittableCaseFields[] = [],
+>({
   docketNumbers,
+  excludeFields,
 }: {
   docketNumbers: string[];
-}): Promise<Omit<RawCase, 'consolidatedCases'>[]> {
+  excludeFields?: T;
+}): Promise<Omit<RawCase, 'consolidatedCases' | T[number]>[]> {
   if (isEmpty(docketNumbers)) {
     return [];
   }
-  const casesData = await getAllCaseData({ docketNumbers });
+  const casesData = await getAllCaseData({ docketNumbers, excludeFields });
   const casesDataSorted = sortCaseFields({ cases: casesData, docketNumbers });
   const rawCases = casesDataSorted.map(c => convertDbCaseToRawCase(c));
-  return rawCases;
+
+  return rawCases as Omit<RawCase, 'consolidatedCases' | T[number]>[];
 }
 
-async function getAllCaseData({
+async function getAllCaseData<T extends OmittableCaseFields[]>({
   docketNumbers,
+  excludeFields,
 }: {
   docketNumbers: string[];
+  excludeFields?: T;
 }): Promise<EnrichedCaseRow[]> {
   const [
     cases,
-    practitionerInfo,
+    privatePractitioners,
+    irsPractitioners,
     docketEntriesFromDb,
     caseCorrespondences,
     hearings,
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
-    getPractitioners(docketNumbers, applicationContext),
-    getDocketEntries(docketNumbers, applicationContext),
-    getCaseCorrespondenceByDocketNumber(docketNumbers),
-    getHearings(docketNumbers),
+    (async () => {
+      if (!excludeFields?.includes('privatePractitioners')) {
+        return await getPrivatePractitioners(docketNumbers, applicationContext);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('irsPractitioners')) {
+        return await getIrsPractitioners(docketNumbers, applicationContext);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('docketEntries')) {
+        return getDocketEntries(docketNumbers);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('correspondence')) {
+        return getCaseCorrespondenceByDocketNumber(docketNumbers);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('hearings')) {
+        return getHearings(docketNumbers);
+      } else return [];
+    })(),
   ]);
 
   const notFoundCases = difference(
@@ -76,27 +120,50 @@ async function getAllCaseData({
   });
   docketEntriesFromDb.forEach(docketEntryInfo => {
     const caseInfo = caseMap.get(docketEntryInfo.docketNumber)!;
-    caseMap.set(docketEntryInfo.docketNumber, {
+    if (docketEntryInfo.archived) {
+      const archivedDocketEntries = caseInfo.archivedDocketEntries ?? [];
+      archivedDocketEntries.push(docketEntryInfo);
+      caseMap.set(docketEntryInfo.docketNumber, {
+        ...caseInfo,
+        archivedDocketEntries,
+      });
+    } else {
+      const docketEntries = caseInfo.docketEntries ?? [];
+      docketEntries.push(docketEntryInfo);
+      caseMap.set(docketEntryInfo.docketNumber, { ...caseInfo, docketEntries });
+    }
+  });
+  privatePractitioners.forEach(info => {
+    const caseInfo = caseMap.get(info.docketNumber)!;
+    caseMap.set(info.docketNumber, {
       ...caseInfo,
-      docketEntries: docketEntryInfo.docketEntries,
+      privatePractitioners: info.privatePractitioners,
     });
   });
-  practitionerInfo.forEach(info => {
+  irsPractitioners.forEach(info => {
     const caseInfo = caseMap.get(info.docketNumber)!;
     caseMap.set(info.docketNumber, {
       ...caseInfo,
       irsPractitioners: info.irsPractitioners,
-      privatePractitioners: info.privatePractitioners,
     });
   });
   caseCorrespondences.forEach(correspondence => {
     const caseInfo = caseMap.get(correspondence.docketNumber!)!;
-    const correspondences = caseInfo.correspondence ?? [];
-    correspondences.push(correspondence);
-    caseMap.set(correspondence.docketNumber!, {
-      ...caseInfo,
-      correspondence: correspondences,
-    });
+    if (correspondence.archived) {
+      const archivedCorrespondences = caseInfo.archivedCorrespondences ?? [];
+      archivedCorrespondences.push(correspondence);
+      caseMap.set(correspondence.docketNumber!, {
+        ...caseInfo,
+        archivedCorrespondences,
+      });
+    } else {
+      const correspondences = caseInfo.correspondence ?? [];
+      correspondences.push(correspondence);
+      caseMap.set(correspondence.docketNumber!, {
+        ...caseInfo,
+        correspondence: correspondences,
+      });
+    }
   });
   hearings.forEach(hearingInfo => {
     const caseInfo = caseMap.get(hearingInfo.docketNumber)!;
@@ -117,19 +184,11 @@ function sortCaseFields({
   docketNumbers: string[];
 }): EnrichedCaseRow[] {
   cases.forEach(c => {
-    const [docketEntries, archivedDocketEntries] = partition(
-      c.docketEntries,
-      docketEntry => !docketEntry.archived,
-    );
-    c.docketEntries = sortBy(docketEntries, 'createdAt');
-    c.archivedDocketEntries = sortBy(archivedDocketEntries, 'createdAt');
+    c.docketEntries = sortBy(c.docketEntries, 'createdAt');
+    c.archivedDocketEntries = sortBy(c.archivedDocketEntries, 'createdAt');
 
-    const [correspondence, archivedCorrespondences] = partition(
-      c.correspondence,
-      correspondenceItem => !correspondenceItem.archived,
-    );
-    c.correspondence = sortBy(correspondence, 'filingDate');
-    c.archivedCorrespondences = sortBy(archivedCorrespondences, 'filingDate');
+    c.correspondence = sortBy(c.correspondence, 'filingDate');
+    c.archivedCorrespondences = sortBy(c.archivedCorrespondences, 'filingDate');
   });
 
   // Sort the cases in the original docketNumber order
@@ -155,6 +214,10 @@ function convertDbCaseToRawCase(
     archivedCorrespondences: dbCase.archivedCorrespondences?.map(cc =>
       caseCorrespondenceEntity(cc),
     ),
+    docketEntries: dbCase.docketEntries.map(d => fromKyselyDocketEntry(d)),
+    archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
+      fromKyselyDocketEntry(aD),
+    ),
   };
 
   return purgeDynamoKeys(appCase);
@@ -171,13 +234,38 @@ async function getCasesMetadata(docketNumbers: string[]) {
   return caseInfo;
 }
 
-async function getPractitioners(
+async function getIrsPractitioners(
   docketNumbers: string[],
   applicationContext,
 ): Promise<
   {
     docketNumber: string;
     irsPractitioners: any[];
+  }[]
+> {
+  const practitionerInfo = await Promise.all(
+    docketNumbers.map(async docketNumber => {
+      const irsPractitioners = await getIrsPractitionersOnCase({
+        applicationContext,
+        docketNumber,
+      });
+
+      return {
+        docketNumber,
+        irsPractitioners,
+      };
+    }),
+  );
+
+  return practitionerInfo;
+}
+
+async function getPrivatePractitioners(
+  docketNumbers: string[],
+  applicationContext,
+): Promise<
+  {
+    docketNumber: string;
     privatePractitioners: any[];
   }[]
 > {
@@ -188,14 +276,8 @@ async function getPractitioners(
         applicationContext,
       });
 
-      const irsPractitioners = await getIrsPractitionersOnCase({
-        applicationContext,
-        docketNumber,
-      });
-
       return {
         docketNumber,
-        irsPractitioners,
         privatePractitioners,
       };
     }),
@@ -204,41 +286,16 @@ async function getPractitioners(
   return practitionerInfo;
 }
 
-async function getDocketEntries(
-  docketNumbers: string[],
-  applicationContext: ServerApplicationContext,
-): Promise<{ docketNumber: string; docketEntries: RawDocketEntry[] }[]> {
-  const docketEntryInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const docketEntries = await getDocketEntriesOnCase({
-        applicationContext,
-        docketNumber,
-      });
-      return { docketNumber, docketEntries };
-    }),
+async function getDocketEntries(docketNumbers: string[]) {
+  const dbDocketEntries = await getDbReader(reader =>
+    reader
+      .selectFrom('dwDocketEntry')
+      .where('docketNumber', 'in', docketNumbers)
+      .selectAll()
+      .execute(),
   );
-  return docketEntryInfo;
-}
 
-async function getDocketEntriesOnCase({
-  applicationContext,
-  docketNumber,
-}: {
-  applicationContext: ServerApplicationContext;
-  docketNumber: string;
-}) {
-  return await queryFull<RawDocketEntry>({
-    ExpressionAttributeNames: {
-      '#pk': 'pk',
-      '#sk': 'sk',
-    },
-    ExpressionAttributeValues: {
-      ':pkValue': `case|${docketNumber}`,
-      ':skPrefix': 'docket-entry|',
-    },
-    KeyConditionExpression: '#pk = :pkValue AND begins_with(#sk, :skPrefix)',
-    applicationContext,
-  });
+  return dbDocketEntries;
 }
 
 async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
@@ -279,8 +336,8 @@ async function getHearings(
 
 type EnrichedCaseRow = CaseKysely & {
   docketNumberWithSuffix: string;
-  docketEntries: RawDocketEntry[];
-  archivedDocketEntries: RawDocketEntry[];
+  docketEntries: DocketEntryKysely[];
+  archivedDocketEntries: DocketEntryKysely[];
   irsPractitioners: RawPractitioner[];
   privatePractitioners: RawPractitioner[];
   correspondence: CaseCorrespondenceKysely[];

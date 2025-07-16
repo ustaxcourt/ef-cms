@@ -29,7 +29,6 @@ export const replyToMessage = async (
   }
 
   const associatedCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
