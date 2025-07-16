@@ -1,6 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { formatCaseTitle } from '@web-api/business/useCases/generateCoverSheetData';
-import { getCasesByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
+import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 
 /**
  * Formats consolidated cases coversheet data
@@ -17,7 +17,7 @@ export const formatConsolidatedCaseCoversheetData = async ({
   docketEntryEntity,
   useInitialData,
 }) => {
-  let consolidatedCases = await getCasesByLeadDocketNumber({
+  let consolidatedCases = await getConsolidatedCases({
     leadDocketNumber: caseEntity.leadDocketNumber,
   });
 
