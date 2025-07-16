@@ -1,6 +1,5 @@
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
-import { NullablePick } from '@web-api/persistence/postgres/utils/typeHelpers';
 import { Selectable, Insertable, Nullable } from 'kysely';
 
 const DEFAULT = {};
@@ -32,9 +31,11 @@ export const DW_WORK_ITEM_COLUMNS = Object.keys(
 ) as Array<keyof WorkItemTable>;
 
 export type WorkItemWithAssociatedCaseDataKysely = WorkItemKysely &
-  NullablePick<
-    CaseKysely,
-    'status' | 'trialDate' | 'trialLocation' | 'leadDocketNumber' | 'caption'
+  Nullable<
+    Pick<
+      CaseKysely,
+      'status' | 'trialDate' | 'trialLocation' | 'leadDocketNumber' | 'caption'
+    >
   > & { docketEntry: Nullable<DocketEntryKysely> | null };
 
 export type WorkItemKysely = Selectable<WorkItemTable>;
