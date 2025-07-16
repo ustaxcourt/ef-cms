@@ -29,7 +29,7 @@ describe('addDocketEntryForPaymentStatus', () => {
     );
 
     expect(addedDocketRecord).toBeDefined();
-    expect(addedDocketRecord.filingDate).toEqual('Today');
+    expect(addedDocketRecord!.filingDate).toEqual('Today');
   });
 
   it('adds a docketRecord for a waived petition payment', async () => {
@@ -53,6 +53,6 @@ describe('addDocketEntryForPaymentStatus', () => {
     );
 
     expect(addedDocketRecord).toBeDefined();
-    expect(addedDocketRecord.filingDate).toEqual('Today');
+    expect(addedDocketRecord!.filingDate).toEqual('Today');
   });
 });

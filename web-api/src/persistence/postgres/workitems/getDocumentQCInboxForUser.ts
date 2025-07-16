@@ -1,6 +1,9 @@
 import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { getDbReader } from '@web-api/database';
 import { fromKyselyWorkItemAndCase } from '@web-api/persistence/postgres/workitems/mapper';
+import { Database } from '@web-api/database-schema';
+import { Kysely } from 'kysely';
+import { jsonObjectFrom } from 'kysely/helpers/postgres';
 
 export const getDocumentQCInboxForUser = async ({
   userId,
@@ -8,19 +11,9 @@ export const getDocumentQCInboxForUser = async ({
   userId: string;
 }): Promise<WorkItemWithCaseInfo[]> => {
   const workItems = await getDbReader(reader => {
-    return reader
-      .selectFrom('dwWorkItem as w')
+    return workItemQCQueryBase(reader)
       .where('w.assigneeId', '=', userId)
       .where('w.completedAt', 'is', null)
-      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
-      .select([
-        'c.status',
-        'c.caption',
-        'c.leadDocketNumber',
-        'c.trialDate',
-        'c.trialLocation',
-      ])
-      .selectAll('w')
       .limit(5000)
       .execute();
   });
@@ -28,10 +21,37 @@ export const getDocumentQCInboxForUser = async ({
   return workItems.map(fromKyselyWorkItemAndCase);
 };
 
-export type WorkItemWithCaseInfo = RawWorkItem & {
+export type WorkItemWithCaseInfo = Omit<RawWorkItem, 'docketEntry'> & {
   caseTitle?: string;
   caseStatus?: string;
   leadDocketNumber?: string;
   trialDate?: string;
   trialLocation?: string;
+  docketEntry: RawDocketEntry;
+};
+
+export const workItemQCQueryBase = (dbReader: Kysely<Database>) => {
+  return dbReader
+    .selectFrom('dwWorkItem as w')
+    .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
+    .innerJoin('dwDocketEntry as d', join =>
+      join
+        .onRef('d.docketEntryId', '=', 'w.docketEntryId')
+        .onRef('d.docketNumber', '=', 'w.docketNumber'),
+    )
+    .selectAll('w')
+    .select(eb => [
+      jsonObjectFrom(
+        eb
+          .selectFrom('dwDocketEntry as de')
+          .selectAll()
+          .whereRef('de.docketEntryId', '=', 'w.docketEntryId')
+          .whereRef('de.docketNumber', '=', 'w.docketNumber'),
+      ).as('docketEntry'),
+      'c.status',
+      'c.caption',
+      'c.leadDocketNumber',
+      'c.trialDate',
+      'c.trialLocation',
+    ]);
 };
