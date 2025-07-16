@@ -4,11 +4,40 @@ import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
 import { isEmpty } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
+import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
+
+type CaseDetailHelperResults = {
+  caseDeadlines: RawCaseDeadline[];
+  documentDetailTab: string;
+  hasConsolidatedCases: boolean;
+  hasIrsPractitioners: boolean;
+  hasPrivatePractitioners: boolean;
+  hasTrackedItemsPermission: boolean;
+  showAddCorrespondenceButton: boolean;
+  showAddRemoveFromHearingButtons: boolean;
+  showCaseDeadlinesExternal: boolean;
+  showCaseDeadlinesInternal: boolean;
+  showCaseDeadlinesInternalEmpty: boolean;
+  showCaseInformationExternal: boolean;
+  showConsolidatedCasesCard: boolean;
+  showDocketRecordInProgressState: boolean;
+  showEditCaseDetailsButton: boolean;
+  showFileDocumentButton: boolean;
+  showFilingFeeExternal: boolean;
+  showJudgesNotes: boolean;
+  showPetitionProcessingAlert: boolean;
+  showPractitionerSection: boolean;
+  showPreferredTrialCity?: string;
+  showQcWorkItemsUntouchedState: boolean;
+  showSealedCaseView: boolean;
+  userCanViewCase: boolean;
+  userHasAccessToCase: boolean;
+};
 
 export const caseDetailHelper = (
   get: Get,
   applicationContext: ClientApplicationContext,
-): any => {
+): CaseDetailHelperResults => {
   const user = get(state.user);
   const { USER_ROLES } = applicationContext.getConstants();
   const permissions = get(state.permissions);
@@ -21,7 +50,9 @@ export const caseDetailHelper = (
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
-  const userIsAssociatedWithCase = get(state.screenMetadata.isAssociated);
+  const userIsAssociatedWithCase: boolean = get(
+    state.screenMetadata.isAssociated,
+  );
 
   let showFileDocumentButton =
     permissions.FILE_EXTERNAL_DOCUMENT && ['CaseDetail'].includes(currentPage);
@@ -80,7 +111,7 @@ export const caseDetailHelper = (
 
   const showJudgesNotes = permissions.JUDGES_NOTES;
 
-  const showPetitionProcessingAlert =
+  const showPetitionProcessingAlert: boolean =
     isExternalUser &&
     !canAllowDocumentServiceForCase &&
     userIsAssociatedWithCase;

@@ -98,7 +98,7 @@ resource "aws_cloudfront_distribution" "public_distribution_www" {
 }
 
 data "aws_route53_zone" "public_zone_www" {
-  name = "${var.zone_name}."
+  name = "${var.dns_domain}."
 }
 
 resource "aws_route53_record" "public_www_redirect" {
@@ -111,4 +111,13 @@ resource "aws_route53_record" "public_www_redirect" {
     zone_id                = aws_cloudfront_distribution.public_distribution_www.hosted_zone_id
     evaluate_target_health = false
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "unblock_public_www_redirect" {
+  bucket = aws_s3_bucket.public_redirect.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }

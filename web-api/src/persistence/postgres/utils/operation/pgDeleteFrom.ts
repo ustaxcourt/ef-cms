@@ -15,6 +15,7 @@ export const pgDeleteFrom = async <T extends keyof Database>({
   table: T;
   where: DeleteWhereCallback<T>;
 }) => {
+  console.log('HERE! pgDeleteFrom');
   return await getDbWriter({
     cb: async writer => {
       const query = writer.deleteFrom(table);

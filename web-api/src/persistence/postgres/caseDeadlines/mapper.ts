@@ -18,6 +18,7 @@ export function toKyselyNewCaseDeadline(
     description: deadline.description,
     docketNumber: deadline.docketNumber,
     sortableDocketNumber: deadline.sortableDocketNumber,
+    consolidatedCaseDeadlineId: deadline.consolidatedCaseDeadlineId,
   };
 }
 
