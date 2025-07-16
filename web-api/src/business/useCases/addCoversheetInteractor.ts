@@ -39,7 +39,6 @@ export const addCoversheetInteractor = async (
 ) => {
   if (!caseEntity) {
     const caseRecord = await getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
     });
 

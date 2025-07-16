@@ -71,6 +71,7 @@ export const NonstandardForm = connect(
             <select
               className="usa-select"
               id={`${namespace}ordinal-field-select`}
+              data-testid={`${namespace}ordinal-field-select-search`}
               name={`${namespace}ordinalValue`}
               value={get(form, `${namespace}ordinalValue`)}
               onChange={e => {
@@ -166,6 +167,7 @@ export const NonstandardForm = connect(
                 validationErrors?.previousDocument && 'usa-select--error',
               )}
               id={`${namespace}previous-document`}
+              data-testid={`${namespace}previous-document-search`}
               name={`${namespace}previousDocument`}
               value={get(
                 form,

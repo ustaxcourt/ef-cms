@@ -9,7 +9,6 @@ import {
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import {
@@ -52,7 +51,6 @@ describe('setWorkItemAsReadInteractor', () => {
   it('should throw an error when an unauthorized user tries to invoke this interactor', async () => {
     await expect(
       setWorkItemAsReadInteractor(
-        applicationContext,
         {
           workItemId: mockWorkItem.workItemId,
         },
@@ -71,7 +69,6 @@ describe('setWorkItemAsReadInteractor', () => {
 
     await expect(
       setWorkItemAsReadInteractor(
-        applicationContext,
         {
           workItemId: mockWorkItem.workItemId,
         },
@@ -82,7 +79,6 @@ describe('setWorkItemAsReadInteractor', () => {
 
   it('should call upsertDocketEntries with the docket entry work item marked as read', async () => {
     await setWorkItemAsReadInteractor(
-      applicationContext,
       {
         workItemId: mockWorkItem.workItemId,
       },
@@ -98,7 +94,6 @@ describe('setWorkItemAsReadInteractor', () => {
 
   it('should call saveWorkItem with the work item marked as read', async () => {
     await setWorkItemAsReadInteractor(
-      applicationContext,
       {
         workItemId: mockWorkItem.workItemId,
       },

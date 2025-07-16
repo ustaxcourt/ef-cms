@@ -89,6 +89,7 @@ export const DocketEntryQc = connect(
                   <Button
                     disableOnClick
                     id="save-and-finish"
+                    data-testid="save-and-finish-document-qc"
                     type="submit"
                     onClick={async () => {
                       await completeDocketEntryQCSequence();

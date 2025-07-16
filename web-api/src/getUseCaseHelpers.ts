@@ -1,4 +1,3 @@
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
 import { addDocketEntryForSystemGeneratedOrder } from './business/useCaseHelper/addDocketEntryForSystemGeneratedOrder';
 import { addDraftStampOrderDocketEntryInteractor } from '@web-api/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor';
 import { addDraftWatermarkToDocument } from '@shared/business/useCases/courtIssuedDocument/addDraftWatermarkToDocument';
@@ -46,7 +45,6 @@ import { updateCaseAutomaticBlock } from './business/useCaseHelper/automaticBloc
 import { updateInitialFilingDocuments } from './business/useCaseHelper/initialFilingDocuments/updateInitialFilingDocuments';
 
 const useCaseHelpers = {
-  acquireLock,
   addDocketEntryForSystemGeneratedOrder,
   addDraftStampOrderDocketEntryInteractor,
   addDraftWatermarkToDocument,

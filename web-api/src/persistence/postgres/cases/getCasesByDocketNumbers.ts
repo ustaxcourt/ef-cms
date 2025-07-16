@@ -15,37 +15,82 @@ import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntri
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
 
-export async function getCasesByDocketNumbers({
+export const ALL_OMITTABLE_CASE_FIELDS = [
+  'docketEntries',
+  'privatePractitioners',
+  'irsPractitioners',
+  'correspondence',
+  'hearings',
+] as const;
+
+export type OmittableCaseFields = (typeof ALL_OMITTABLE_CASE_FIELDS)[number];
+
+/**
+ * Returns subsets of case data based on excludeFields. If excludeFields is not passed in,
+ * it fetches all case-related data except consolidated cases.
+ * @param {string[]} docketNumbers
+ * @param {OmittableCaseFields[]} excludeFields - OmittableCaseFields[]
+ */
+export async function getCasesByDocketNumbers<
+  T extends OmittableCaseFields[] = [],
+>({
   docketNumbers,
+  excludeFields,
 }: {
   docketNumbers: string[];
-}): Promise<Omit<RawCase, 'consolidatedCases'>[]> {
+  excludeFields?: T;
+}): Promise<Omit<RawCase, 'consolidatedCases' | T[number]>[]> {
   if (isEmpty(docketNumbers)) {
     return [];
   }
-  const casesData = await getAllCaseData({ docketNumbers });
+  const casesData = await getAllCaseData({ docketNumbers, excludeFields });
   const casesDataSorted = sortCaseFields({ cases: casesData, docketNumbers });
   const rawCases = casesDataSorted.map(c => convertDbCaseToRawCase(c));
-  return rawCases;
+
+  return rawCases as Omit<RawCase, 'consolidatedCases' | T[number]>[];
 }
 
-async function getAllCaseData({
+async function getAllCaseData<T extends OmittableCaseFields[]>({
   docketNumbers,
+  excludeFields,
 }: {
   docketNumbers: string[];
+  excludeFields?: T;
 }): Promise<EnrichedCaseRow[]> {
   const [
     cases,
-    practitionerInfo,
+    privatePractitioners,
+    irsPractitioners,
     docketEntriesFromDb,
     caseCorrespondences,
     hearings,
   ] = await Promise.all([
     getCasesMetadata(docketNumbers),
-    getPractitioners(docketNumbers, applicationContext),
-    getDocketEntries(docketNumbers),
-    getCaseCorrespondenceByDocketNumber(docketNumbers),
-    getHearings(docketNumbers),
+    (async () => {
+      if (!excludeFields?.includes('privatePractitioners')) {
+        return await getPrivatePractitioners(docketNumbers, applicationContext);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('irsPractitioners')) {
+        return await getIrsPractitioners(docketNumbers, applicationContext);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('docketEntries')) {
+        return getDocketEntries(docketNumbers);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('correspondence')) {
+        return getCaseCorrespondenceByDocketNumber(docketNumbers);
+      } else return [];
+    })(),
+    (async () => {
+      if (!excludeFields?.includes('hearings')) {
+        return getHearings(docketNumbers);
+      } else return [];
+    })(),
   ]);
 
   const notFoundCases = difference(
@@ -88,12 +133,18 @@ async function getAllCaseData({
       caseMap.set(docketEntryInfo.docketNumber, { ...caseInfo, docketEntries });
     }
   });
-  practitionerInfo.forEach(info => {
+  privatePractitioners.forEach(info => {
+    const caseInfo = caseMap.get(info.docketNumber)!;
+    caseMap.set(info.docketNumber, {
+      ...caseInfo,
+      privatePractitioners: info.privatePractitioners,
+    });
+  });
+  irsPractitioners.forEach(info => {
     const caseInfo = caseMap.get(info.docketNumber)!;
     caseMap.set(info.docketNumber, {
       ...caseInfo,
       irsPractitioners: info.irsPractitioners,
-      privatePractitioners: info.privatePractitioners,
     });
   });
   caseCorrespondences.forEach(correspondence => {
@@ -183,13 +234,38 @@ async function getCasesMetadata(docketNumbers: string[]) {
   return caseInfo;
 }
 
-async function getPractitioners(
+async function getIrsPractitioners(
   docketNumbers: string[],
   applicationContext,
 ): Promise<
   {
     docketNumber: string;
     irsPractitioners: any[];
+  }[]
+> {
+  const practitionerInfo = await Promise.all(
+    docketNumbers.map(async docketNumber => {
+      const irsPractitioners = await getIrsPractitionersOnCase({
+        applicationContext,
+        docketNumber,
+      });
+
+      return {
+        docketNumber,
+        irsPractitioners,
+      };
+    }),
+  );
+
+  return practitionerInfo;
+}
+
+async function getPrivatePractitioners(
+  docketNumbers: string[],
+  applicationContext,
+): Promise<
+  {
+    docketNumber: string;
     privatePractitioners: any[];
   }[]
 > {
@@ -200,14 +276,8 @@ async function getPractitioners(
         applicationContext,
       });
 
-      const irsPractitioners = await getIrsPractitionersOnCase({
-        applicationContext,
-        docketNumber,
-      });
-
       return {
         docketNumber,
-        irsPractitioners,
         privatePractitioners,
       };
     }),

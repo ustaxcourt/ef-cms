@@ -19,7 +19,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     entityName: 'DocketEntry',
     docketEntryId: '06115c26-ecd8-425a-b58b-4d25649f1d96',
     documentTitle: 'Request for Place of Trial at Birmingham, Alabama',
-    docketNumber: '100-22',
+    docketNumber: '103-22',
     addToCoversheet: false,
     stampData: {},
   },
@@ -57,10 +57,10 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     servedPartiesCode: 'B',
     signedAt: '2022-02-01T17:21:07.439Z',
     editState:
-      '{"attachments":false,"docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","docketNumber":"100-22","documentTitle":"Order of Dismissal for Lack of Jurisdiction","documentType":"Order of Dismissal for Lack of Jurisdiction","eventCode":"ODJ","freeText":"abcdef","generatedDocumentTitle":"Order of Dismissal for Lack of Jurisdiction","judge":"Carluzzo","richText":"<p>Testing</p>","serviceStamp":"Served","draftOrderState":{"attachments":false,"docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","docketNumber":"100-22","documentTitle":"Order of Dismissal for Lack of Jurisdiction","documentType":"Order of Dismissal for Lack of Jurisdiction","eventCode":"ODJ","freeText":"abcdef","generatedDocumentTitle":"Order of Dismissal for Lack of Jurisdiction","judge":"Carluzzo","serviceStamp":"Served"},"documentContentsId":"97248a8b-d393-446a-9907-d7743b5cc56c"}',
+      '{"attachments":false,"docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","docketNumber":"103-22","documentTitle":"Order of Dismissal for Lack of Jurisdiction","documentType":"Order of Dismissal for Lack of Jurisdiction","eventCode":"ODJ","freeText":"abcdef","generatedDocumentTitle":"Order of Dismissal for Lack of Jurisdiction","judge":"Carluzzo","richText":"<p>Testing</p>","serviceStamp":"Served","draftOrderState":{"attachments":false,"docketEntryId":"25100ec6-eeeb-4e88-872f-c99fad1fe6c7","docketNumber":"103-22","documentTitle":"Order of Dismissal for Lack of Jurisdiction","documentType":"Order of Dismissal for Lack of Jurisdiction","eventCode":"ODJ","freeText":"abcdef","generatedDocumentTitle":"Order of Dismissal for Lack of Jurisdiction","judge":"Carluzzo","serviceStamp":"Served"},"documentContentsId":"97248a8b-d393-446a-9907-d7743b5cc56c"}',
     servedAt: '2022-02-01T17:21:07.581Z',
     signedByUserId: '1805d1ab-18d0-43ec-bafb-654e83405416',
-    docketNumber: '100-22',
+    docketNumber: '103-22',
     stampData: {},
   },
   {
@@ -86,7 +86,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     eventCode: 'P',
     processingStatus: 'complete',
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
-    docketNumber: '100-22',
+    docketNumber: '103-22',
     stampData: {},
   },
   {
@@ -112,7 +112,7 @@ export const docketEntrySeeds: RawDocketEntry[] = [
     eventCode: 'STIN',
     processingStatus: 'complete',
     filers: ['7805d1ab-18d0-43ec-bafb-654e83405416'],
-    docketNumber: '100-22',
+    docketNumber: '103-22',
     stampData: {},
   },
   {
