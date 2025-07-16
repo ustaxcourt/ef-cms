@@ -2,7 +2,6 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
-import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
@@ -84,9 +83,7 @@ export function fromKyselyWorkItemAndCase(
     leadDocketNumber: dbWorkItem?.leadDocketNumber || undefined,
     trialDate: dbWorkItem?.trialDate?.toISOString(),
     trialLocation: dbWorkItem?.trialLocation || undefined,
-    docketEntry: fromKyselyDocketEntry(
-      dbWorkItem.docketEntry as DocketEntryKysely,
-    ),
+    docketEntry: fromKyselyDocketEntry(dbWorkItem.docketEntry),
   };
   return transformNullToUndefined(workItemWithCaseInfo);
 }
