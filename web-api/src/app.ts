@@ -1085,7 +1085,7 @@ app.delete(
  * ZenDesk Automations
  */
 app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: These are meant for admins and zendesk automations. Not meant for regular application use.
-app.get('users/userSummary', lambdaWrapper(regStatusLambda));
+app.get('/users/userSummary', lambdaWrapper(regStatusLambda));
 
 /**
  * work-items
