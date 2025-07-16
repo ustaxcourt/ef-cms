@@ -5,7 +5,7 @@ import {
 } from '@shared/business/utilities/trialSession/getFormattedTrialSessionDetails';
 import { Get } from 'cerebral';
 import { TRIAL_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
-import { TrialSessionState } from '@web-client/presenter/state/trialSessionState';
+import { CalendaredCaseItemType, TrialSessionState } from '@web-client/presenter/state/trialSessionState';
 import { UserCaseNote } from '@shared/business/entities/notes/UserCaseNote';
 import { isClosed, isLeadCase } from '@shared/business/entities/cases/Case';
 import { partition, pickBy } from 'lodash';
@@ -25,6 +25,7 @@ export const trialSessionWorkingCopyHelper = (
   formattedCases: TrialSessionWorkingCopyCase[];
   showPrintButton: boolean;
   trialStatusFilters: { key: string; label: string }[];
+  trialStatusCounts: { [trialStatus: string]: number }
 } => {
   const trialSession = get(state.trialSession);
   const {
@@ -101,12 +102,23 @@ export const trialSessionWorkingCopyHelper = (
       key: 'statusUnassigned',
       label: 'Unassigned',
     });
-
+  const trialStatusCounts = trialSession.calendaredCases
+    .filter(isOpenCaseInATrial)
+    .reduce((counters, c) => {
+    if(caseMetadata[c.docketNumber] === undefined || caseMetadata[c.docketNumber].trialStatus === "" 
+      || caseMetadata[c.docketNumber].trialStatus === undefined) {
+      counters["statusUnassigned"] = (counters["statusUnassigned"] || 0) + 1;
+    } else {
+      counters[caseMetadata[c.docketNumber].trialStatus] = (counters[caseMetadata[c.docketNumber].trialStatus] || 0) + 1;
+    }
+    return counters
+  }, {});
   return {
     casesShownCount: formattedCases.length,
     formattedCases: topLevelCases,
     showPrintButton: formattedCases.length > 0,
     trialStatusFilters,
+    trialStatusCounts,
   };
 };
 
@@ -141,12 +153,12 @@ function isTopLevelCase(aCase: RawCase, scheduledCases: RawCase[]): boolean {
   );
 }
 
-function isOpenCaseInATrial(aCase: RawCase): boolean {
+function isOpenCaseInATrial(aCase: CalendaredCaseItemType): boolean {
   return !isClosed(aCase) && aCase.removedFromTrial !== true;
 }
 
 function isCaseTrialStatusEnabledInFilters(
-  calendaredCase: RawCase,
+  calendaredCase: CalendaredCaseItemType,
   caseMetadata: { [docketNumber: string]: { trialStatus: string } },
   enabledTrialStatusFilters: string[],
 ): boolean {
