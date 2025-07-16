@@ -4,9 +4,7 @@ import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getCasesForUser } from '@web-api/persistence/postgres/users/getCasesForUser';
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawUser } from '@shared/business/entities/User';
 
 export type TUserContact = {
   address1: string;
@@ -52,7 +50,7 @@ const generateChangeOfAddressForPractitioner = async ({
   bypassDocketEntry?: boolean;
   contactInfo: TUserContact;
   firmName: string;
-  oldUser: RawPractitioner | RawPrivatePractitioner | RawIrsPractitioner;
+  oldUser: RawUser;
   requestUserId?: string;
   updatedEmail?: string;
   updatedName?: string;

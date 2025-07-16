@@ -17,8 +17,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
-import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
+import { RawUser } from '@shared/business/entities/User';
 
 /**
  * generateChangeOfAddressHelper
@@ -52,7 +51,7 @@ export const generateChangeOfAddressHelper = async ({
   updatedEmail?: string;
   updatedName?: string;
   jobId: string;
-  oldUser: RawPractitioner | RawPrivatePractitioner | RawIrsPractitioner;
+  oldUser: RawUser;
   user: RawPractitioner;
   requestUserId?: string;
   websocketMessagePrefix: 'user' | 'admin';

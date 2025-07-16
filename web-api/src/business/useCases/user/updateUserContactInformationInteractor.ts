@@ -19,6 +19,7 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 import { ROLES } from '@shared/business/entities/EntityConstants';
+import { RawUser } from '@shared/business/entities/User';
 
 /**
  * updateUserContactInformationHelper
@@ -75,7 +76,7 @@ const updateUserContactInformationHelper = async (
     });
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
-      message: { action: 'user_contact_full_update_complete', user: oldUser },
+      message: { action: 'user_contact_full_update_complete', user: oldUser as RawUser },
       userId: oldUser.userId,
       clientConnectionId,
     });
@@ -92,7 +93,7 @@ const updateUserContactInformationHelper = async (
 
     updatedUserEntity.firmName = firmName;
   } else {
-    throw new Error(`Unrecognized entityType ${oldUser.entityName}`);
+    throw new Error(`Unrecognized role ${oldUser.role}`);
   }
 
   await upsertUsers([updatedUserEntity.validate().toRawObject()]);
@@ -110,7 +111,7 @@ const updateUserContactInformationHelper = async (
     contactInfo,
     firmName,
     user: updatedUserEntity.validate().toRawObject(),
-    oldUser,
+    oldUser: oldUser as RawUser,
     websocketMessagePrefix: 'user',
   });
 

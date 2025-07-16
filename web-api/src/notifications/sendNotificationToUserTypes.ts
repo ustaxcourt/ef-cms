@@ -19,7 +19,7 @@ type ContactUpdateCompleteNotification = {
   action:
     | 'user_contact_full_update_complete'
     | 'admin_contact_full_update_complete';
-  user?: RawPractitioner | RawUser;
+  user?: Omit<RawPractitioner, 'serviceIndicator'> | RawUser;
 };
 
 type ServeDocumentErrorNotification = {
