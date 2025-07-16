@@ -1,6 +1,5 @@
-import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { getDbReader } from '@web-api/database';
-import { fromKyselyPractitioner } from '@web-api/persistence/postgres/users/mapper';
+import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
 import { sql } from 'kysely';
 
 export const getPractitionersBySearchKey = async ({
@@ -9,7 +8,7 @@ export const getPractitionersBySearchKey = async ({
 }: {
   searchKey: string;
   role: string;
-}): Promise<RawPractitioner[]> => {
+}): Promise<DbUser[]> => {
   const practitioners = await getDbReader(reader =>
     reader
       .selectFrom('dwUser as u')
@@ -23,5 +22,5 @@ export const getPractitionersBySearchKey = async ({
       .execute(),
   );
 
-  return practitioners.map(fromKyselyPractitioner);
+  return practitioners.map(rawUser);
 };

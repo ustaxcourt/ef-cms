@@ -11,7 +11,10 @@ import {
   NewUserKysely,
   UserKysely,
 } from '@web-api/persistence/postgres/users/schema';
-import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
+import {
+  ReplaceNullWithUndefined,
+  transformNullToUndefined,
+} from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 function pickUserFields(
   user: RawUser | RawIrsPractitioner | RawPractitioner,
@@ -66,19 +69,6 @@ function pickUserFields(
   };
 }
 
-export function fromKyselyPractitioner(
-  practitioner: UserKysely,
-): RawPractitioner {
-  return transformNullToUndefined({
-    ...practitioner,
-    admissionsDate: formatDateString(
-      practitioner.admissionsDate?.toISOString(),
-      FORMATS.YYYYMMDD,
-    ),
-  }) as any;
-}
-
-// TODO: 10495 potentially rewrite to have less validation errors
 export function rawUser(user: UserKysely) {
   return transformNullToUndefined({
     ...user,
@@ -93,3 +83,18 @@ export function rawUser(user: UserKysely) {
 export function toKyselyNewUser(user: RawUser): NewUserKysely {
   return pickUserFields(user);
 }
+
+/*
+ This type is not ideal and should not be used outside of persistence functions.
+ Ideally our persistence functions should be returning business entities (RawMessage, RawUser, RawDocketEntry...), 
+ however in order to match parity in dynamo and not lie about our types we needed to return exactly what's in the table.
+*/
+export type DbUser = ReplaceNullWithUndefined<
+  Omit<
+    UserKysely,
+    'admissionsDate' | 'pendingEmailVerificationTokenTimestamp'
+  > & {
+    admissionsDate?: string;
+    pendingEmailVerificationTokenTimestamp?: string;
+  }
+>;
