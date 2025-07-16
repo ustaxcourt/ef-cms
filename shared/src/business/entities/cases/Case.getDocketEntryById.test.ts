@@ -11,6 +11,6 @@ describe('getDocketEntryById', () => {
     const result = myCase.getDocketEntryById({
       docketEntryId: MOCK_DOCUMENTS[0].docketEntryId,
     });
-    expect(result.docketEntryId).toEqual(MOCK_DOCUMENTS[0].docketEntryId);
+    expect(result?.docketEntryId).toEqual(MOCK_DOCUMENTS[0].docketEntryId);
   });
 });
