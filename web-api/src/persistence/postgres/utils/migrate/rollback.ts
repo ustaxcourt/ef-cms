@@ -37,6 +37,7 @@ async function rollbackLastMigration() {
       await writer.destroy();
     },
     table: null,
+    action: null,
   });
 }
 

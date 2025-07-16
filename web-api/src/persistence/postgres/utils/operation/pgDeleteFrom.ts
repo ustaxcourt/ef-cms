@@ -1,5 +1,6 @@
 import { getDbWriter } from '@web-api/database';
 import { Database } from '@web-api/database-schema';
+import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { DeleteQueryBuilder, DeleteResult } from 'kysely';
 import { DeleteFrom } from 'kysely/dist/cjs/parser/delete-from-parser';
 
@@ -14,11 +15,13 @@ export const pgDeleteFrom = async <T extends keyof Database>({
   table: T;
   where: DeleteWhereCallback<T>;
 }) => {
+  console.log('HERE! pgDeleteFrom');
   return await getDbWriter({
     cb: async writer => {
       const query = writer.deleteFrom(table);
       return await where(query).returningAll().execute();
     },
-    table: null,
+    table,
+    action: OPENSEARCH_SYNC_ACTIONS.DELETE,
   });
 };
