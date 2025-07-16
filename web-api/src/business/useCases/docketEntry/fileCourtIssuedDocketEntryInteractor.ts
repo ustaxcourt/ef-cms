@@ -74,6 +74,12 @@ export const fileCourtIssuedDocketEntry = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
   const isUnservable = DocketEntry.isUnservable(documentMeta);
 
   const casesToUpdate = await getCasesByDocketNumbers({

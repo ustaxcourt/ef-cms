@@ -10,7 +10,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
@@ -71,6 +71,12 @@ export const addPaperFiling = async (
     documentMetadata.isFileAttached === false ? documentMetadata : {};
 
   const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;

@@ -2,7 +2,7 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
@@ -32,6 +32,12 @@ export const associateIrsPractitionerWithCaseInteractor = async (
   }
 
   const user = await getUserById({ userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   return await associateIrsPractitionerToCase({
     authorizedUser,

@@ -56,7 +56,19 @@ export const createMessageInteractor = async (
 
   const fromUser = await getUserById({ userId: authorizedUser.userId });
 
+  if (!fromUser) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
   const toUser = await getUserById({ userId: toUserId });
+
+  if (!toUser) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const validatedRawMessage = new Message({
     attachments,

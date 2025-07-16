@@ -82,6 +82,12 @@ export const serveExternallyFiledDocument = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
   let paperServiceResult;
   let caseEntities: Case[] = [];
   const coversheetLength = 1;

@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessageAsReply } from '@web-api/persistence/postgres/messages/createMessageAsReply';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { pinkLog } from '@shared/tools/pinkLog';
 
 export const replyToMessage = async (
   {
@@ -23,6 +24,7 @@ export const replyToMessage = async (
   }: ReplyMessageType,
   authorizedUser: UnknownAuthUser,
 ): Promise<RawMessage> => {
+  pinkLog({ authorizedUser });
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.SEND_RECEIVE_MESSAGES)) {
     throw new UnauthorizedError('Unauthorized');
   }
@@ -40,6 +42,13 @@ export const replyToMessage = async (
   const fromUser = await getUserById({ userId: authorizedUser.userId });
 
   const toUser = await getUserById({ userId: toUserId });
+
+  if (!fromUser) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
+  if (!toUser) {
+    throw new NotFoundError(`Could not find user ${toUserId}`);
+  }
 
   const validatedRawMessage = new Message({
     attachments,

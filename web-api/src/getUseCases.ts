@@ -50,7 +50,6 @@ import { fileCourtIssuedDocketEntryInteractor } from './business/useCases/docket
 import { fileCourtIssuedOrderInteractor } from './business/useCases/courtIssuedOrder/fileCourtIssuedOrderInteractor';
 import { fileExternalDocumentInteractor } from '@web-api/business/useCases/externalDocument/fileExternalDocumentInteractor';
 import { forgotPasswordInteractor } from '@web-api/business/useCases/auth/forgotPasswordInteractor';
-import { forwardMessageInteractor } from './business/useCases/messages/forwardMessageInteractor';
 import { generateDocketRecordPdfInteractor } from './business/useCases/generateDocketRecordPdfInteractor';
 import { generateDraftStampOrderInteractor } from '../../shared/src/business/useCases/generateDraftStampOrderInteractor';
 import { generateEntryOfAppearancePdfInteractor } from './business/useCases/caseAssociationRequest/generateEntryOfAppearancePdfInteractor';
@@ -146,7 +145,6 @@ import { removePdfFromDocketEntryInteractor } from '../../shared/src/business/us
 import { removePetitionerAndUpdateCaptionInteractor } from '../../shared/src/business/useCases/removePetitionerAndUpdateCaptionInteractor';
 import { removeSignatureFromDocumentInteractor } from '../../shared/src/business/useCases/removeSignatureFromDocumentInteractor';
 import { renewIdTokenInteractor } from './business/useCases/auth/renewIdTokenInteractor';
-import { replyToMessageInteractor } from './business/useCases/messages/replyToMessageInteractor';
 import { runTrialSessionPlanningReportInteractor } from './business/useCases/trialSessions/runTrialSessionPlanningReportInteractor';
 import { saveCalendarNoteInteractor } from './business/useCases/trialSessions/saveCalendarNoteInteractor';
 import { saveCaseDetailInternalEditInteractor } from './business/useCases/saveCaseDetailInternalEditInteractor';
@@ -253,7 +251,6 @@ const useCases = {
   fileCourtIssuedOrderInteractor,
   fileExternalDocumentInteractor,
   forgotPasswordInteractor,
-  forwardMessageInteractor,
   generateDocketRecordPdfInteractor,
   generateDraftStampOrderInteractor,
   generateEntryOfAppearancePdfInteractor,
@@ -349,7 +346,6 @@ const useCases = {
   removePetitionerAndUpdateCaptionInteractor,
   removeSignatureFromDocumentInteractor,
   renewIdTokenInteractor,
-  replyToMessageInteractor,
   runTrialSessionPlanningReportInteractor,
   saveCalendarNoteInteractor,
   saveCaseDetailInternalEditInteractor,

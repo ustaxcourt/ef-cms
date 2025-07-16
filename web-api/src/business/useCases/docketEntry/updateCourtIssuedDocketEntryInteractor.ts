@@ -45,6 +45,12 @@ export const updateCourtIssuedDocketEntry = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
   const editableFields = {
     attachments: documentMeta.attachments,
     date: documentMeta.date,

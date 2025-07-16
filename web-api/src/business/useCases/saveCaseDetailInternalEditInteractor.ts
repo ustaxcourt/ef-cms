@@ -6,6 +6,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
+  NotFoundError,
   UnauthorizedError,
   UnprocessableEntityError,
 } from '@web-api/errors/errors';
@@ -36,6 +37,12 @@ export const saveCaseDetailInternalEdit = async (
   }
 
   const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   if (!caseToUpdate || docketNumber !== caseToUpdate.docketNumber) {
     throw new UnprocessableEntityError();

@@ -7,10 +7,11 @@ import {
 import { PARTIES_CODES } from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { seedEntries } from '../../web-api/storage/fixtures/seed';
+// import { seedEntries } from '../../web-api/storage/fixtures/seed';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
 
 describe('View and manage the deadlines of a case', () => {
   const cerebralTest = setupTest();
@@ -198,17 +199,15 @@ describe('View and manage the deadlines of a case', () => {
     //return an array of all docket entries that were served to IRS
     const getDocketEntryData = () => {
       const docketEntries = new Array<DocketEntry>();
-      for (const item of seedEntries) {
-        if (item.entityName === 'DocketEntry') {
-          const de = new DocketEntry(item, { authorizedUser: undefined });
-          if (
-            [PARTIES_CODES.BOTH, PARTIES_CODES.RESPONDENT].includes(
-              de.servedPartiesCode ?? '',
-            ) &&
-            de.servedAt
-          )
-            docketEntries.push(de);
-        }
+      for (const item of docketEntrySeeds) {
+        const de = new DocketEntry(item, { authorizedUser: undefined });
+        if (
+          [PARTIES_CODES.BOTH, PARTIES_CODES.RESPONDENT].includes(
+            de.servedPartiesCode ?? '',
+          ) &&
+          de.servedAt
+        )
+          docketEntries.push(de);
       }
       return docketEntries;
     };

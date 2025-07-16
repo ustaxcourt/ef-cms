@@ -27,10 +27,10 @@ export const createPractitionerUserInteractor = async (
     user,
   });
 
-  const createdUser = await upsertPractitioner({
+  await upsertPractitioner({
     applicationContext,
     user: practitioner,
   });
 
-  return { barNumber: createdUser.barNumber };
+  return { barNumber: practitioner.barNumber };
 };

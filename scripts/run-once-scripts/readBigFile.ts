@@ -13,8 +13,20 @@ const rl = readline.createInterface({
 rl.on('line', line => {
   const obj = JSON.parse(line);
 
-  if (obj.pk.startsWith('irsPractitioner|') && obj.sk.startsWith('user')) {
-    console.log(obj);
+  if (obj.pk.startsWith('user|') && obj.sk.startsWith('user')) {
+    if (obj.contact?.email) {
+      console.log(obj);
+    }
+  }
+  if (obj.pk.startsWith('case|') && obj.sk.startsWith('irsPractitioner')) {
+    if (obj.contact?.email) {
+      console.log(obj);
+    }
+  }
+  if (obj.pk.startsWith('case|') && obj.sk.startsWith('privatePractitioner')) {
+    if (obj.contact?.email) {
+      console.log(obj);
+    }
   }
 
   if (scanCount % 100000 === 0) {

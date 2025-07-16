@@ -12,18 +12,20 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { RawUser } from '@shared/business/entities/User';
+import { cloneDeep } from 'lodash';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
@@ -69,9 +71,9 @@ const createCaseMetadata = async (
     petitionEntity: ElectronicPetition;
     petitionFileId: string;
     petitionMetadata: any;
-    privatePractitioners: UserRecord[];
+    privatePractitioners: RawUser[];
     stinFileId: string;
-    user: UserRecord;
+    user: RawUser;
   },
   authorizedUser: AuthUser,
 ) => {
@@ -269,13 +271,17 @@ export const createCaseInteractor = async (
 
   const user = await getUserById({ userId: authorizedUser.userId });
 
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
-  let privatePractitioners: UserRecord[] = [];
+  let privatePractitioners: RawUser[] = [];
   if (user.role === ROLES.privatePractitioner) {
-    const practitionerUser = await getUserById({
-      userId: user.userId,
-    });
+    const practitionerUser = cloneDeep(user) as RawPrivatePractitioner;
 
     practitionerUser.representing = [
       petitionEntity.getContactPrimary().contactId,
