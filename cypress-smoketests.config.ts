@@ -27,7 +27,6 @@ import { unzipFile } from './cypress/helpers/file/unzip-file';
 import { waitForNoce } from './cypress/helpers/cypressTasks/wait-for-noce';
 import { waitForPractitionerEmailUpdate } from './cypress/helpers/cypressTasks/wait-for-practitioner-email-update';
 
-// eslint-disable-next-line import/no-default-export
 export default defineConfig({
   chromeWebSecurity: false,
   defaultCommandTimeout: 60000,
