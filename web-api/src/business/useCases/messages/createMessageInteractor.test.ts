@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
@@ -7,7 +8,6 @@ import {
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createMessageInteractor } from './createMessageInteractor';
 import { createMessage as createMessageMock } from '@web-api/persistence/postgres/messages/createMessage';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -15,15 +15,16 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const createMessage = createMessageMock as jest.Mock;
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('createMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     await expect(
       createMessageInteractor(
-        applicationContext,
         {
           attachments: [],
           docketNumber: '101-20',
@@ -55,9 +56,8 @@ describe('createMessageInteractor', () => {
       toSection: PETITIONS_SECTION,
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValueOnce({
+    getUserById
+      .mockReturnValueOnce({
         name: 'Test Petitionsclerk',
         role: ROLES.petitionsClerk,
         section: PETITIONS_SECTION,
@@ -77,7 +77,6 @@ describe('createMessageInteractor', () => {
     });
 
     await createMessageInteractor(
-      applicationContext,
       {
         ...messageData,
         attachments: mockAttachments,

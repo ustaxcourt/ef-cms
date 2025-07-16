@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
@@ -27,10 +28,12 @@ import {
   getCasesByDocketNumbers as getCasesByDocketNumbersMock,
   OmittableCaseFields,
 } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const updateDocketEntryPendingServiceStatus = jest.mocked(
   updateDocketEntryPendingServiceStatusMock,
 );
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('consolidated cases', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -78,9 +81,7 @@ describe('consolidated cases', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getUseCaseHelpers()

@@ -16,6 +16,16 @@ jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber', () =>
   mockFactory('getCaseByDocketNumber'),
 );
 
+jest.mock(
+  '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser',
+  () => mockFactory('verifyPendingCaseForUser'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending',
+  () => mockFactory('associateUsersWithCasesPending'),
+);
+
 jest.mock('@web-api/persistence/postgres/cases/getCasesByDocketNumbers', () =>
   mockFactory('getCasesByDocketNumbers'),
 );
@@ -104,4 +114,13 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser',
   () => mockFactory('verifyCaseForUser'),
+);
+
+jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber', () =>
+  mockFactory('getCaseByDocketNumber'),
+);
+
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone',
+  () => mockFactory('setChangeOfAddressCaseAsDone'),
 );

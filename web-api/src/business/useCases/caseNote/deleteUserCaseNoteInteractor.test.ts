@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/userCaseNotes/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -8,9 +9,11 @@ import { deleteUserCaseNoteInteractor } from './deleteUserCaseNoteInteractor';
 import { deleteUserCaseNote as deleteUserCaseNoteMock } from '@web-api/persistence/postgres/userCaseNotes/deleteUserCaseNote';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('deleteUserCaseNoteInteractor', () => {
   const deleteUserCaseNote = deleteUserCaseNoteMock as jest.Mock;
+  const getUserById = jest.mocked(getUserByIdMock);
 
   it('throws an error if the user is not valid or authorized', async () => {
     const user = {} as UnknownAuthUser;
@@ -34,9 +37,7 @@ describe('deleteUserCaseNoteInteractor', () => {
       section: 'colvinChambers',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     }) as UnknownAuthUser;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
+    getUserById.mockReturnValue(mockUser);
     deleteUserCaseNote.mockImplementation(v => v);
     applicationContext
       .getUseCaseHelpers()
@@ -61,9 +62,7 @@ describe('deleteUserCaseNoteInteractor', () => {
       ...mockJudgeUser,
       section: 'colvinChambers',
     } as UnknownAuthUser;
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockUser);
+    getUserById.mockReturnValue(mockUser);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
