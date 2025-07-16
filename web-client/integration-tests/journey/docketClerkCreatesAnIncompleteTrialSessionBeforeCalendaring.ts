@@ -16,8 +16,6 @@ export const docketClerkCreatesAnIncompleteTrialSessionBeforeCalendaring = (
       maxCases: 'Enter a valid number of maximum cases',
       sessionType: 'Select a session type',
       startDate: 'Enter a valid start date',
-      term: 'Term session is not valid',
-      termYear: 'Term year is required',
       trialLocation: 'Select a trial session location',
     });
 

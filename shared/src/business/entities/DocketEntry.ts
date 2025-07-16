@@ -182,11 +182,8 @@ export class DocketEntry extends JoiValidationEntity {
     documentTitle: string;
     documentType: string;
   };
-  public qcAt?: string;
-  public qcByUserId?: string;
   public signedByUserId?: string;
   public signedJudgeName?: string;
-  public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
   public workItem?: any;
@@ -331,12 +328,9 @@ export class DocketEntry extends JoiValidationEntity {
         documentType: rawDocketEntry.previousDocument.documentType,
       };
     }
-    this.qcAt = rawDocketEntry.qcAt;
-    this.qcByUserId = rawDocketEntry.qcByUserId;
     this.signedAt = rawDocketEntry.signedAt;
     this.signedByUserId = rawDocketEntry.signedByUserId;
     this.signedJudgeName = rawDocketEntry.signedJudgeName;
-    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
     this.strickenBy = rawDocketEntry.strickenBy;
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
@@ -421,21 +415,11 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   /**
-   * attaches a qc date and a user to the document
-   * @param {object} user the user completing QC process
-   */
-  setQCed(user) {
-    this.qcByUserId = user.userId;
-    this.qcAt = createISODateString();
-  }
-
-  /**
    * Unsets signature related fields on the docket entry
    */
   unsignDocument() {
     this.signedAt = undefined;
     this.signedJudgeName = undefined;
-    this.signedJudgeUserId = undefined;
     this.signedByUserId = undefined;
   }
 

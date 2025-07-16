@@ -157,6 +157,7 @@ export const fileAndServeCourtIssuedDocument = async (
             attachments: form.attachments,
             date: form.date,
             docketNumber: caseEntity.docketNumber,
+            docketNumbers: form.docketNumbers,
             documentContentsId,
             documentTitle: form.generatedDocumentTitle,
             documentType: form.documentType,

@@ -27,7 +27,7 @@ RUM_IDENTITY_POOL_ID=$(aws rum get-app-monitor \
   --region "us-east-1" \
   --output text)
 
-STAGE="${CLIENT_STAGE}" \
+STAGE="${ENV}" \
   CIRCLE_SHA1="${CIRCLE_SHA1}" \
   EFCMS_DOMAIN="${EFCMS_DOMAIN}" \
   SESSION_TIMEOUT="${SESSION_TIMEOUT}" \

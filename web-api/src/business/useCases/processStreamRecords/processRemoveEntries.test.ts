@@ -6,7 +6,7 @@ import { cloneDeep } from 'lodash';
 describe('processRemoveEntries', () => {
   const mockRemoveRecord: DynamoDBRecord = {
     dynamodb: {
-      NewImage: {
+      OldImage: {
         entityName: {
           S: 'Dinosaur',
         },
@@ -34,9 +34,9 @@ describe('processRemoveEntries', () => {
 
   it('should not delete docket entries and cases', async () => {
     const mockCaseRecord: any = cloneDeep(mockRemoveRecord);
-    mockCaseRecord.dynamodb.NewImage.entityName.S = 'Case';
+    mockCaseRecord.dynamodb.OldImage.entityName.S = 'Case';
     const mockDocketEntryRecord: any = cloneDeep(mockRemoveRecord);
-    mockDocketEntryRecord.dynamodb.NewImage.entityName.S = 'DocketEntry';
+    mockDocketEntryRecord.dynamodb.OldImage.entityName.S = 'DocketEntry';
 
     await processRemoveEntries({
       applicationContext,

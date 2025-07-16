@@ -34,47 +34,53 @@ export const OrdersNeededSummary = connect(
                   <div className="tablet:grid-col-10">
                     {reviewSavedPetitionHelper.showOrdersAndNoticesNeededHeader && (
                       <p
-                        className="heading-4 padding-top-0"
+                        className="padding-top-0 order-alert-headers"
                         id="orders-notices-needed-header"
                       >
-                        Orders/Notices Needed
+                        <b>Orders/Notices Needed</b>
                       </p>
                     )}
-                    {reviewSavedPetitionHelper.ordersAndNoticesNeeded.map(
-                      order => (
-                        <div
-                          className="margin-0 font-weight-normal"
-                          key={order}
-                        >
-                          {order}
-                        </div>
-                      ),
-                    )}
+                    <div>
+                      <ul className="margin-0">
+                        {reviewSavedPetitionHelper.ordersAndNoticesNeeded.map(
+                          order => (
+                            <li className="font-weight-normal" key={order}>
+                              {order}
+                            </li>
+                          ),
+                        )}
+                      </ul>
+                    </div>
 
                     {reviewSavedPetitionHelper.showOrdersAndNoticesInDraftHeader && (
                       <p
                         className={classNames(
-                          'heading-4',
                           reviewSavedPetitionHelper.ordersAndNoticesNeeded
                             .length && 'padding-top-2',
+                          'order-alert-headers',
                         )}
                         id="orders-notices-auto-created-in-draft"
                       >
-                        Orders/Notices Automatically Created in Drafts After
-                        Service
+                        <b>
+                          Orders/Notices Automatically Created in Drafts After
+                          Service
+                        </b>
                       </p>
                     )}
-
-                    {reviewSavedPetitionHelper.ordersAndNoticesInDraft.map(
-                      order => (
-                        <div
-                          className="margin-0 font-weight-normal"
-                          key={order}
-                        >
-                          {order}
-                        </div>
-                      ),
-                    )}
+                    <div>
+                      <ul className="margin-0">
+                        {reviewSavedPetitionHelper.ordersAndNoticesInDraft.map(
+                          order => (
+                            <li
+                              className="margin-0 font-weight-normal"
+                              key={order}
+                            >
+                              {order}
+                            </li>
+                          ),
+                        )}
+                      </ul>
+                    </div>
                   </div>
                   <div className="tablet:grid-col-2 usa-alert__action">
                     <Button

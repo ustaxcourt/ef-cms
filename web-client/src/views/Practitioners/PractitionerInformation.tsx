@@ -10,7 +10,8 @@ import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
+import React, { useRef } from 'react';
 
 export const PractitionerInformation = connect(
   {
@@ -36,6 +37,7 @@ export const PractitionerInformation = connect(
   }) {
     const numOpenCases = practitionerInformationHelper.openCasesTotal || 0;
     const numClosedCases = practitionerInformationHelper.closedCasesTotal || 0;
+    const paginatorTop = useRef(null);
 
     const openPagesPaginator = () => {
       return (
@@ -47,6 +49,7 @@ export const PractitionerInformation = connect(
               setPractitionerOpenCasesPageSequence({
                 pageNumber: selectedPage,
               });
+              focusPaginatorTop(paginatorTop);
             }}
           />
         )
@@ -65,6 +68,7 @@ export const PractitionerInformation = connect(
               setPractitionerClosedCasesPageSequence({
                 pageNumber: selectedPage,
               });
+              focusPaginatorTop(paginatorTop);
             }}
           />
         )
@@ -126,7 +130,7 @@ export const PractitionerInformation = connect(
               tabName="practitioner-open-cases"
               title={`Open Cases (${numOpenCases})`}
             >
-              <div className="tab-content-with-top-margin">
+              <div className="tab-content-with-top-margin" ref={paginatorTop}>
                 {openPagesPaginator()}
                 <PractitionerCaseList
                   caseType={'open'}
@@ -139,7 +143,7 @@ export const PractitionerInformation = connect(
               tabName="practitioner-closed-cases"
               title={`Closed Cases (${numClosedCases})`}
             >
-              <div className="tab-content-with-top-margin">
+              <div className="tab-content-with-top-margin" ref={paginatorTop}>
                 {closedPagesPaginator()}
                 <PractitionerCaseList
                   caseType={'closed'}

@@ -590,29 +590,6 @@ describe('updatePetitionerInformationInteractor', () => {
     });
 
     it('should call the update addExistingUserToCase use case helper when the petitioner is adding an email address', async () => {
-      // generateAndServeDocketEntry.mockReturnValue({
-      //   changeOfAddressDocketEntry: new DocketEntry(
-      //     {
-      //       createdAt: '2018-11-21T20:49:28.192Z',
-      //       docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-      //       docketNumber: '101-18',
-      //       documentTitle: 'Petition',
-      //       documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-      //       eventCode: INITIAL_DOCUMENT_TYPES.petition.eventCode,
-      //       filedBy: 'Test Petitioner',
-      //       filedByRole: ROLES.petitioner,
-      //       filingDate: '2018-03-01T05:00:00.000Z',
-      //       index: 1,
-      //       isFileAttached: true,
-      //       isOnDocketRecord: true,
-      //       processingStatus: 'complete',
-      //       receivedAt: '2018-03-01T05:00:00.000Z',
-      //       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      //     },
-      //     { authorizedUser: undefined },
-      //   ),
-      // });
-
       await updatePetitionerInformationInteractor(
         applicationContext,
         {

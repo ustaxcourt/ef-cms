@@ -117,7 +117,6 @@ const completeDocketEntryQC = async (
     },
     { authorizedUser, petitioners: caseToUpdate.petitioners },
   ).validate();
-  updatedDocketEntry.setQCed(user);
 
   const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
