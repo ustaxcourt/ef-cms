@@ -1,11 +1,12 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { MOCK_LOCK } from '../../../../../shared/src/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -15,8 +16,7 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 
 describe('completeWorkItemInteractor', () => {
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
-
-  let mockLock;
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   const mockRequest = {
     completedMessage: 'Completed',
@@ -47,14 +47,7 @@ describe('completeWorkItemInteractor', () => {
     workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
 
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockImplementation(() => mockLock);
-  });
-
   beforeEach(() => {
-    mockLock = undefined;
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
@@ -62,7 +55,10 @@ describe('completeWorkItemInteractor', () => {
   });
 
   it('throws a ServiceUnavailableError if a Case is currently locked', async () => {
-    mockLock = MOCK_LOCK;
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
+
     await expect(
       completeWorkItemInteractor(
         applicationContext,
@@ -76,34 +72,17 @@ describe('completeWorkItemInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('acquires a lock that lasts for 30 seconds on the case', async () => {
+  it('acquires and releases a lock on the case', async () => {
     await completeWorkItemInteractor(
       applicationContext,
       mockRequest,
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifier: `case|${MOCK_CASE.docketNumber}`,
-      ttl: 30,
-    });
-  });
-
-  it('removes the lock when it is finished', async () => {
-    await completeWorkItemInteractor(
-      applicationContext,
-      mockRequest,
-      mockDocketClerkUser,
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
     );
-
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
   });
 });

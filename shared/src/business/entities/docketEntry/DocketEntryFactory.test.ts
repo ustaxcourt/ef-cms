@@ -323,7 +323,6 @@ describe('DocketEntryFactory', () => {
       rawEntity.documentTitle = 'Order to do something';
       rawEntity.documentType = 'Order';
       rawEntity.eventCode = 'O';
-      rawEntity.partyPrimary = true;
     });
 
     it(`should be required when the docket entry event code is ${AMICUS_BRIEF_EVENT_CODE}`, () => {
