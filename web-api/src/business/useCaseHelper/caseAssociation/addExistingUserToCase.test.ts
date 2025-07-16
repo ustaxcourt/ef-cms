@@ -1,3 +1,4 @@
+jest.mock('@web-api/persistence/postgres/users/getUserById');
 import {
   CONTACT_TYPES,
   SERVICE_INDICATOR_TYPES,
@@ -14,20 +15,25 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { petitionerUser } from '@shared/test/mockUsers';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('addExistingUserToCase', () => {
   const mockUserId = '674fdded-1d17-4081-b9fa-950abc677cee';
   const mockContactId = '60dd21b3-5abb-447f-b036-9794962252a0';
   const mockUpdatedEmail = 'testing@example.com';
+  const getUserById = jest.mocked(getUserByIdMock);
 
   beforeEach(() => {
     applicationContext.getUserGateway().getUserByEmail.mockReturnValue({
       userId: mockUserId,
     });
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
+      ...petitionerUser,
       userId: mockUserId,
-    });
+    } as DbUser);
   });
 
   it('should throw an unauthorized error when the user is not authorized to add a user to a case', async () => {
@@ -84,7 +90,7 @@ describe('addExistingUserToCase', () => {
     ).rejects.toThrow('no contact found with that user name of Bob Ross');
   });
 
-  it('should call associateUserWithCase and return the updated case with contact primary email', async () => {
+  it('should return the updated case with contact primary email', async () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -110,9 +116,6 @@ describe('addExistingUserToCase', () => {
       name: 'Bob Ross',
     });
 
-    expect(associateUserWithCase.mock.calls[0][0]).toMatchObject({
-      userId: mockUserId,
-    });
     expect(getContactPrimary(caseEntity)).toMatchObject({
       contactId: mockUserId, // contactId was updated to new userId
       email: mockUpdatedEmail,
@@ -121,7 +124,7 @@ describe('addExistingUserToCase', () => {
     });
   });
 
-  it('should call associateUserWithCase and update the representing arrays entries with the expect contactId', async () => {
+  it('should update the representing arrays entries with the expect contactId', async () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -230,10 +233,10 @@ describe('addExistingUserToCase', () => {
   });
 
   it('should not change the service indicator to electronic when the user has a pendingEmail', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       pendingEmail: 'testing@example.com',
       userId: mockUserId,
-    });
+    } as DbUser);
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
