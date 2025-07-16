@@ -87,11 +87,6 @@ export const SectionWorkQueueOutbox = connect(
                       {item.formattedCaseStatus}
                     </td>
                   )}
-                  {workQueueHelper.showAssignedToColumn && (
-                    <td className="message-queue-row">
-                      {item.currentMessage.to}
-                    </td>
-                  )}
                   <td className="message-queue-row">{item.completedBy}</td>
                   <td className="message-queue-row">
                     {item.completedAtFormatted}

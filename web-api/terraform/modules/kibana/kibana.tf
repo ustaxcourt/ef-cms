@@ -54,8 +54,8 @@ resource "aws_cloudwatch_log_group" "elasticsearch_kibana_logs" {
 }
 
 resource "aws_opensearch_domain" "efcms-logs" {
-  domain_name           = "info"
-  engine_version        = "OpenSearch_2.11"
+  domain_name    = "info"
+  engine_version = "OpenSearch_2.11"
 
   cluster_config {
     instance_type  = var.es_logs_instance_type
@@ -208,7 +208,7 @@ module "logs_alarms" {
 }
 
 resource "aws_iam_role" "lambda_elasticsearch_execution_role" {
-  name = "lambda_elasticsearch_execution_role"
+  name               = "lambda_elasticsearch_execution_role"
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -226,8 +226,8 @@ EOF
 }
 
 resource "aws_iam_role_policy" "lambda_elasticsearch_execution_policy" {
-  name = "lambda_elasticsearch_execution_policy"
-  role = aws_iam_role.lambda_elasticsearch_execution_role.id
+  name   = "lambda_elasticsearch_execution_policy"
+  role   = aws_iam_role.lambda_elasticsearch_execution_role.id
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -291,23 +291,10 @@ resource "aws_lambda_permission" "allow_cloudwatch" {
   }
 }
 
-
 module "regional-log-subscription-filters-east" {
   source                           = "../regional-log-subscription-filters"
   log_group_environments           = var.log_group_environments
   logs_to_elasticsearch_lambda_arn = module.logs_to_es.arn
-  
-  depends_on = [aws_lambda_permission.allow_cloudwatch]
-}
-
-module "regional-log-subscription-filters-west" {
-  source                           = "../regional-log-subscription-filters"
-  log_group_environments           = var.log_group_environments
-  logs_to_elasticsearch_lambda_arn = module.logs_to_es.arn
-
-  providers = {
-    aws = aws.us-west-1
-  }
 
   depends_on = [aws_lambda_permission.allow_cloudwatch]
 }

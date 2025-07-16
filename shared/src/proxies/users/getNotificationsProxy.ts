@@ -12,11 +12,12 @@ import qs from 'qs';
  */
 export const getNotificationsInteractor = (
   applicationContext,
-  { caseServicesSupervisorData, judgeUserId },
+  { judgeId, section, selectedSection },
 ) => {
   const queryString = qs.stringify({
-    caseServicesSupervisorData,
-    judgeUserId,
+    judgeId,
+    section,
+    selectedSection,
   });
 
   return get({

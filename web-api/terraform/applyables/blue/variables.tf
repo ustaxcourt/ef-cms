@@ -67,10 +67,6 @@ variable "irs_superuser_email" {
   type = string
 }
 
-variable "scanner_resource_uri" {
-  type = string
-}
-
 variable "slack_webhook_url" {
   type = string
 }

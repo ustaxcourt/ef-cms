@@ -4,7 +4,6 @@ import { CreateMessageModalDialog } from './Messages/CreateMessageModalDialog';
 import { DocumentDisplayIframe } from './DocumentDisplayIframe';
 import { ErrorNotification } from './ErrorNotification';
 import { FormCancelModalDialog } from './FormCancelModalDialog';
-import { Hint } from '../ustc-ui/Hint/Hint';
 import { PrimaryDocumentForm } from './EditDocketEntry/PrimaryDocumentForm';
 import { SuccessNotification } from './SuccessNotification';
 import { WorkItemAlreadyCompletedModal } from './DocketEntryQc/WorkItemAlreadyCompletedModal';
@@ -12,6 +11,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { InfoNotificationComponent } from './InfoNotification';
 
 export const DocketEntryQc = connect(
   {
@@ -46,10 +46,14 @@ export const DocketEntryQc = connect(
           data-testid="docket-entry-qc-container"
         >
           {docketEntryQcHelper.showPaperServiceWarning && (
-            <Hint fullWidth>
-              This document was automatically generated and requires paper
-              service.
-            </Hint>
+            <InfoNotificationComponent
+              alertInfo={{
+                message: `This document was automatically generated and requires paper
+              service.`,
+              }}
+              dismissible={false}
+              scrollToTop={false}
+            />
           )}
           <h2 className="heading-1">
             {docketEntryQcHelper.formattedDocketEntry.documentTitle ||
@@ -85,6 +89,7 @@ export const DocketEntryQc = connect(
                   <Button
                     disableOnClick
                     id="save-and-finish"
+                    data-testid="save-and-finish-document-qc"
                     type="submit"
                     onClick={async () => {
                       await completeDocketEntryQCSequence();

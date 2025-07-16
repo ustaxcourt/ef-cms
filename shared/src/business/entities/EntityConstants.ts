@@ -561,7 +561,6 @@ export const SCENARIOS = [
   'Nonstandard G',
   'Nonstandard H',
   'Nonstandard I',
-  'Nonstandard J',
   'Type A',
   'Type B',
   'Type C',
@@ -1498,7 +1497,6 @@ export const CHAMBERS_SECTION = 'chambers';
 export const CLERK_OF_COURT_SECTION = 'clerkofcourt';
 export const DOCKET_SECTION = 'docket';
 export const FLOATER_SECTION = 'floater';
-export const IRS_SYSTEM_SECTION = 'irsSystem';
 export const PETITIONS_SECTION = 'petitions';
 export const REPORTERS_OFFICE_SECTION = 'reportersOffice';
 export const TRIAL_CLERKS_SECTION = 'trialClerks';
@@ -2042,3 +2040,5 @@ export const TERM_GENERATOR_DEFAULT_VALUES = {
   HYBRID_CASE_MINIMUM_QUANTITY: 50,
   HYBRID_CASE_MAX_QUANTITY: 100,
 } as const;
+
+export const MOBILE_SCREEN_BREAKPOINT = 640;

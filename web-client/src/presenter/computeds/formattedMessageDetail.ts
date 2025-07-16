@@ -14,14 +14,8 @@ const formatMessage = ({ applicationContext, caseDetail, message }) => {
   return {
     ...message,
     attachments: formattedAttachments,
-    completedAtFormatted: formatDateIfToday(
-      message.completedAt,
-      applicationContext,
-    ),
-    createdAtFormatted: formatDateIfToday(
-      message.createdAt,
-      applicationContext,
-    ),
+    completedAtFormatted: formatDateIfToday(message.completedAt),
+    createdAtFormatted: formatDateIfToday(message.createdAt),
   };
 };
 

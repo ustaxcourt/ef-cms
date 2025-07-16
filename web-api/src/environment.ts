@@ -36,7 +36,6 @@ export const environment = {
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress,
   isRunningOnLambda,
-  masterRegion: process.env.MASTER_REGION || 'us-east-1',
   nodeEnv: process.env.NODE_ENV,
   rds: {
     pool: {
@@ -46,7 +45,7 @@ export const environment = {
         (process.env.NODE_ENV !== 'test'
           ? 'localhost'
           : getJestDBConnectionError()),
-      idleTimeoutMillis: isRunningOnLambda ? 10000 : 1000,
+      idleTimeoutMillis: isRunningOnLambda ? null : 1000, // null idleTimeoutMillis means the db connection is never closed.
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,
@@ -64,8 +63,7 @@ export const environment = {
     : `${process.env.EFCMS_DOMAIN}-temp-documents-${stage}-us-east-1`,
   userPoolId: process.env.USER_POOL_ID || 'local_2pHzece7',
   userPoolIrsId: process.env.USER_POOL_IRS_ID || 'NOT_REAL_USER_POOL_ID',
-  workerQueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+  workerQueueUrl: `https://sqs.${region}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/worker_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
   opensearchQueueUrl: `https://sqs.${process.env.AWS_REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/opensearch_sync_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
-
   wsEndpoint: process.env.WS_ENDPOINT || 'http://localhost:3011',
 };

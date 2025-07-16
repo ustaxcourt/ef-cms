@@ -3,12 +3,12 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getAllPendingMotionDocketEntriesForJudge } from '@web-api/persistence/postgres/docketEntries/reports/getAllPendingMotionDocketEntriesForJudge';
 import { isLeadCase } from '@shared/business/entities/cases/Case';
 import { partition } from 'lodash';
+import { getDocketEntryWorksheetsByDocketEntryIds } from '@web-api/persistence/postgres/docketEntryWorksheets/getDocketEntryWorksheetsByDocketEntryIds';
 
 export type FormattedPendingMotion = {
   docketNumber: string;
@@ -29,7 +29,6 @@ export type FormattedPendingMotionWithWorksheet = FormattedPendingMotion & {
 };
 
 export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
-  applicationContext: ServerApplicationContext,
   params: { judgeIds: string[] },
   authorizedUser: UnknownAuthUser,
 ): Promise<{
@@ -45,7 +44,6 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 
   const judgePendingMotionsWithWorksheet: FormattedPendingMotionWithWorksheet[] =
     await attachDocketEntryWorkSheets(
-      applicationContext,
       allPendingMotionDocketEntriesOlderThan180Days,
     );
 
@@ -58,19 +56,15 @@ export const getPendingMotionDocketEntriesForCurrentJudgeInteractor = async (
 };
 
 async function attachDocketEntryWorkSheets(
-  applicationContext: ServerApplicationContext,
   docketEntries: FormattedPendingMotion[],
 ): Promise<FormattedPendingMotionWithWorksheet[]> {
   const docketEntryIds = docketEntries.map(
     docketEntry => docketEntry.docketEntryId,
   );
 
-  const docketEntryWorksheets = await applicationContext
-    .getPersistenceGateway()
-    .getDocketEntryWorksheetsByDocketEntryIds({
-      applicationContext,
-      docketEntryIds,
-    });
+  const docketEntryWorksheets = await getDocketEntryWorksheetsByDocketEntryIds({
+    docketEntryIds,
+  });
 
   const docketEntryWorksheetDictionary = docketEntryWorksheets.reduce(
     (accumulator, docketEntryWorksheet) => {

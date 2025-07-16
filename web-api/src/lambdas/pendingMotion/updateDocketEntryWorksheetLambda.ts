@@ -6,9 +6,8 @@ export const updateDocketEntryWorksheetLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     return await updateDocketEntryWorksheetInteractor(
-      applicationContext,
       JSON.parse(event.body),
       authorizedUser,
     );

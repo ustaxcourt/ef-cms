@@ -7856,10 +7856,6 @@
             }
           }
         },
-        "dynamsoft": {
-          "type": "boolean",
-          "description": "the status of static hosted dynamsoft files"
-        },
         "elasticsearch": {
           "type": "boolean",
           "description": "the status of elasticsearch"

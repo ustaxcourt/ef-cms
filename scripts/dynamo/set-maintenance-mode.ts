@@ -49,9 +49,6 @@ async function setMaintenanceMode() {
   const eastClient = new LambdaClient({
     region: 'us-east-1',
   });
-  const westClient = new LambdaClient({
-    region: 'us-west-1',
-  });
 
   console.log(
     `Setting Maintenance mode to ${enableMaintenanceMode} for ${env}`,
@@ -67,7 +64,7 @@ async function setMaintenanceMode() {
     ),
   });
 
-  await Promise.all([eastClient.send(command), westClient.send(command)]);
+  await eastClient.send(command);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises

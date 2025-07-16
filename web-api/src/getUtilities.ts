@@ -34,10 +34,6 @@ import {
 import { getCaseDocumentsIdsFilteredByDocumentType } from '@shared/business/utilities/getCaseDocumentsIdsFilteredByDocumentType';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDescriptionDisplay } from '../../shared/src/business/utilities/getDescriptionDisplay';
-import {
-  getDocQcSectionForUser,
-  getWorkQueueFilters,
-} from '../../shared/src/business/utilities/getWorkQueueFilters';
 import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
 import { getFormattedCaseDetail } from '../../shared/src/business/utilities/getFormattedCaseDetail';
@@ -77,14 +73,12 @@ const utilities = {
   getCaseDocumentsIdsFilteredByDocumentType,
   getCropBox,
   getDescriptionDisplay,
-  getDocQcSectionForUser,
   getDocketEntriesByFilter,
   getDocumentTitleWithAdditionalInfo,
   getDocumentTypeForAddressChange,
   getFormattedCaseDetail,
   getFormattedTrialSessionDetails,
   getStampBoxCoordinates,
-  getWorkQueueFilters,
   isLeadCase,
   isPending: DocketEntry.isPending,
   isSealedCase,

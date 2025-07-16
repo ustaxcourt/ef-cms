@@ -64,16 +64,14 @@ describe('setEnvironmentVariables', () => {
       name: 'Error',
     });
     expect.assertions(1);
-    try {
-      await setEnvironmentVariables({
+
+    await expect(() =>
+      setEnvironmentVariables({
         Environment: updatedEnvironment,
         FunctionName: 'nonExistentLambda',
         region: 'us-east-1',
-      });
-    } catch (err) {
-      const error = err as Error;
-      expect(error.name).toEqual('Error');
-    }
+      }),
+    ).rejects.toThrow('General error');
   });
 
   it('adds new environment variables even if the existing lambda has none', async () => {
@@ -96,50 +94,14 @@ describe('setEnvironmentVariables', () => {
       name: 'Error',
     });
     expect.assertions(1);
-    try {
-      await setEnvironmentVariables({
+
+    await expect(() =>
+      setEnvironmentVariables({
         Environment: updatedEnvironment,
         FunctionName: 'extantLambda',
         region: 'us-east-1',
-      });
-    } catch (err) {
-      const error = err as Error;
-      expect(error.name).toEqual('Error');
-    }
-  });
-
-  it('edits the lambda in us-east-1 and us-west-1 if no region is provided', async () => {
-    mockedLambdaClient
-      .on(UpdateFunctionConfigurationCommand, {
-        Environment: updatedEnvironment,
-        FunctionName: 'extantLambda',
-      })
-      .resolves({});
-
-    const result = await setEnvironmentVariables({
-      Environment: updatedEnvironment,
-      FunctionName: 'extantLambda',
-    });
-
-    expect(result).toEqual(2);
-  });
-
-  it('only edits the lambda in regions where it exists', async () => {
-    mockedLambdaClient
-      .on(GetFunctionConfigurationCommand, { FunctionName: 'westLambda' })
-      .resolvesOnce({ Environment: mockedEnvironment })
-      .resolvesOnce({ Environment: mockedEnvironment })
-      .rejects({
-        message: 'Resource not found',
-        name: 'ResourceNotFoundException',
-      });
-
-    const result = await setEnvironmentVariables({
-      Environment: updatedEnvironment,
-      FunctionName: 'westLambda',
-    });
-
-    expect(result).toEqual(1);
+      }),
+    ).rejects.toThrow('General error');
   });
 
   it('does not edit the lambda if no environment variables are specified', async () => {

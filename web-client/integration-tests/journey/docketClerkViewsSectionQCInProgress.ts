@@ -33,7 +33,7 @@ export const docketClerkViewsSectionQCInProgress = (
 
     if (shouldExist) {
       expect(inProgressWorkItem).toBeTruthy();
-      expect(inProgressWorkItem.docketEntry.otherFilingParty).toEqual(
+      expect(inProgressWorkItem!.docketEntry.otherFilingParty).toEqual(
         'Brianna Noble',
       );
     } else {

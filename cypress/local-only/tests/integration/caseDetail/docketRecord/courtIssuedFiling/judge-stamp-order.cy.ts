@@ -83,9 +83,14 @@ describe('Judge`s chambers stamps an order', () => {
       cy.get('[data-testid="success-alert"]').contains(
         'Motion for Continuance stamped successfully.',
       );
-      cy.get('[data-testid="docket-entry-description-1"]').contains(
-        'Motion for Continuance GRANTED',
-      );
+      cy.get('button.attachment-viewer-button')
+        .filter((_, el) => {
+          return Cypress.$(el)
+            .find('*')
+            .text()
+            .includes('Motion for Continuance GRANTED');
+        })
+        .should('have.length.at.least', 1);
     });
   });
 

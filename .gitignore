@@ -62,3 +62,4 @@ dist-lambdas/
 .cognito/db/local_2pHzece7.json
 *execution-plan*
 *.dump
+Resources/

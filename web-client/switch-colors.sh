@@ -39,7 +39,6 @@ npx ts-node --transpile-only ./web-client/switch-ui-colors.ts
 npx ts-node --transpile-only ./web-client/switch-api-colors.ts
 npx ts-node --transpile-only ./web-client/switch-public-api-colors.ts
 npx ts-node --transpile-only ./web-api/switch-bounce-handler-colors.ts
-npx ts-node --transpile-only ./web-api/switch-health-check-domain.ts
 
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_async_${ENV}_${CURRENT_COLOR}" -k DISABLE_HTTP_TRAFFIC -v true
 ./web-api/terraform/bin/edit-lambda-environment.sh -l "api_${ENV}_${CURRENT_COLOR}" -k DISABLE_HTTP_TRAFFIC -v true

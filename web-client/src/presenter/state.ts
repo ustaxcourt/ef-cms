@@ -166,6 +166,7 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
+import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
@@ -741,6 +742,11 @@ export const baseState = {
   login: {} as any,
   logoutType: '',
   maintenanceMode: false,
+  messageBoxToDisplay: {
+    box: undefined,
+    queue: undefined,
+    section: undefined,
+  },
   messages: [] as RawMessage[],
   messagesInboxCount: 0,
   messagesPage: {
@@ -852,13 +858,16 @@ export const baseState = {
     scanMode: undefined,
     scannerSourceName: undefined,
     selectedBatchIndex: 0,
+    dynamScriptClass: null,
+    initiateScriptLoaded: false,
+    configScriptLoaded: false,
   },
   screenMetadata: {} as any,
   searchResults: {} as any,
   sectionInProgressCount: 0,
   sectionInboxCount: 0,
   sectionUsers: [],
-  selectedWorkItems: [],
+  selectedWorkItems: [] as { workItemId: string }[],
   sessionMetadata: {
     docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: [],
@@ -915,8 +924,8 @@ export const baseState = {
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
-  workQueue: [],
-  workQueueToDisplay: { box: 'inbox', queue: 'my' },
+  workQueue: [] as WorkItemWithCaseInfo[],
+  workQueueToDisplay: { box: 'inbox', queue: 'my', section: '' },
   workitemAllCheckbox: false,
 };
 

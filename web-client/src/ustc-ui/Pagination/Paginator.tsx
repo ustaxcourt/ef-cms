@@ -2,6 +2,7 @@ import { LeftChevron } from '@web-client/ustc-ui/Icon/LeftChevron';
 import { RightChevron } from '@web-client/ustc-ui/Icon/RightChevron';
 import React from 'react';
 import classNames from 'classnames';
+import { MOBILE_SCREEN_BREAKPOINT } from '@shared/business/entities/EntityConstants';
 
 /*
 This component is based off of USWDS implementation of a paginator: https://designsystem.digital.gov/components/pagination/
@@ -12,19 +13,19 @@ totalPages could be 20 but the maximum value currentPageIndex could be is 19 and
 export const Paginator = ({
   currentPageIndex,
   onPageChange,
-  showSinglePage = false,
   totalPages,
 }: {
   currentPageIndex: number;
   totalPages: number;
-  showSinglePage?: boolean;
   onPageChange: (selectedPage: number) => any;
 }) => {
   if (totalPages === 0 || totalPages === 1) {
     // This is default behavior requested by UX. Do not show paginator if there is only one page.
     return;
   }
-  const numberOfPaginatorSlots = showSinglePage ? 1 : 7;
+
+  const isMobile = window.innerWidth <= MOBILE_SCREEN_BREAKPOINT;
+  const numberOfPaginatorSlots = isMobile ? 1 : 7;
   const sevenDisplayedSlots: React.JSX.Element[] = [];
 
   for (let slotNumber = 0; slotNumber < numberOfPaginatorSlots; slotNumber++) {
@@ -107,7 +108,7 @@ const PreviousPage = ({
 }) => {
   return (
     <>
-      <li className="usa-pagination__item usa-pagination__arrow">
+      <li className="usa-pagination__item" >
         <button
           aria-label="Previous page"
           className={classNames(
@@ -138,7 +139,7 @@ const NextPage = ({
 }) => {
   return (
     <>
-      <li className="usa-pagination__item usa-pagination__arrow">
+      <li className="usa-pagination__item">
         <button
           aria-label="Next page"
           className={classNames(

@@ -23,7 +23,7 @@ export const Focus = ({
   };
 
   useEffect(() => {
-    if (focused) setTimeout(setFocus, 50);
+    if (!focused) setTimeout(setFocus, 50);
   }, []);
 
   const focusClassName = classNames('focus-component', className);

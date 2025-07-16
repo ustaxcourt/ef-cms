@@ -1,18 +1,21 @@
 import { CerebralTest } from 'cerebral/test';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { chooseWorkQueueSequence } from '../sequences/chooseWorkQueueSequence';
+import { getDocumentQCInboxForSectionInteractor } from '@shared/proxies/workitems/getDocumentQCInboxForSectionProxy';
 import { docketClerk1User } from '@shared/test/mockUsers';
 import { presenter } from '../presenter-mock';
 
+jest.mock('@shared/proxies/workitems/getDocumentQCInboxForSectionProxy');
+
 describe('chooseWorkQueueSequence', () => {
+  const mockGetDocumentQCInboxForSectionInteractor =
+    getDocumentQCInboxForSectionInteractor as jest.Mock;
   let cerebralTest;
 
   beforeAll(() => {
-    applicationContext
-      .getUseCases()
-      .getDocumentQCInboxForSectionInteractor.mockReturnValue([
-        { docketEntry: { isFileAttached: true } },
-      ]);
+    mockGetDocumentQCInboxForSectionInteractor.mockReturnValue([
+      { docketEntry: { isFileAttached: true } },
+    ]);
     applicationContext
       .getUseCases()
       .getNotificationsInteractor.mockReturnValue({});
@@ -35,8 +38,6 @@ describe('chooseWorkQueueSequence', () => {
       box: 'inbox',
       queue: 'section',
     });
-    expect(
-      applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor,
-    ).toHaveBeenCalled();
+    expect(mockGetDocumentQCInboxForSectionInteractor).toHaveBeenCalled();
   });
 });

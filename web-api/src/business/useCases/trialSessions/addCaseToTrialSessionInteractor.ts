@@ -9,8 +9,8 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { setPriorityOnAllWorkItems } from '@web-api/persistence/postgres/workitems/setPriorityOnAllWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
  * addCaseToTrialSession
@@ -52,7 +52,6 @@ export const addCaseToTrialSession = async (
   }
 
   const caseDetails = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -74,20 +73,10 @@ export const addCaseToTrialSession = async (
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
-  if (trialSessionEntity.isCalendared) {
-    await setPriorityOnAllWorkItems({
-      docketNumbers: [caseEntity.docketNumber],
-      highPriority: true,
-    });
-  }
-
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,

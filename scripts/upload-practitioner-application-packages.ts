@@ -319,7 +319,7 @@ const writeChunkToDynamoDb = async ({
     try {
       const batchWriteParams = { RequestItems: unprocessedItems };
       const res = await applicationContext
-        .getDocumentClient(applicationContext)
+        .getDocumentClient()
         .batchWrite(batchWriteParams);
       unprocessedItems = res.UnprocessedItems;
     } catch (err) {

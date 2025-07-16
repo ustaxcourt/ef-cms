@@ -58,7 +58,7 @@ const getPrivatePractitionersOnCase = async ({
 }): Promise<RawPractitioner[]> => {
   let privatePractitioners: RawPractitioner[] = [];
   const result = await applicationContext
-    .getDocumentClient(applicationContext)
+    .getDocumentClient()
     .query({
       ExpressionAttributeNames: {
         '#pk': 'pk',

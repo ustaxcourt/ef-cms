@@ -1,5 +1,4 @@
 import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { RawOutboxItem } from '@shared/business/entities/OutboxItem';
 import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { RawUser } from '@shared/business/entities/User';
@@ -36,8 +35,6 @@ export type PutRequest = {
 
 export type DocketEntryDynamoRecord = TDynamoRecord<RawDocketEntry>;
 export type UserRecord = TDynamoRecord & RawUser;
-
-export type OutboxDynamoRecord = TDynamoRecord<RawOutboxItem>;
 
 export type IrsPractitionerOnCaseRecord = TDynamoRecord<RawIrsPractitioner>;
 

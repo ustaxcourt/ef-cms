@@ -3,7 +3,8 @@ import * as fs from 'fs';
 import * as readline from 'readline';
 
 const DOMAIN_REPLACER = 'ef-cms.ustaxcourt.gov';
-const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
+// Use a negative look-behind to avoid \nSOMEEMAIL --> \SOMEEMAIL
+const emailRegex = /(?<!\\)[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
 export function sanitizeEmail(email: string) {
   const hash = crypto.createHash('md5').update(email).digest('hex');

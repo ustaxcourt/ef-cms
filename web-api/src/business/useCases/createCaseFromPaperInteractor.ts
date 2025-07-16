@@ -23,8 +23,7 @@ import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utili
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
-import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
-import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
+import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -37,31 +36,20 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
 }): {
   workItem: WorkItem;
 } => {
-  const workItemEntity = new WorkItem(
-    {
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      associatedJudge: caseToAdd.associatedJudge,
-      associatedJudgeId: caseToAdd.associatedJudgeId,
-      caseIsInProgress: true,
-      caseStatus: caseToAdd.status,
-      caseTitle: Case.getCaseTitle(Case.getCaseCaption(caseToAdd)),
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
-      docketNumber: caseToAdd.docketNumber,
-      docketNumberWithSuffix: caseToAdd.docketNumberWithSuffix,
-      isInitializeCase: true,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-      trialDate: caseToAdd.trialDate,
-      trialLocation: caseToAdd.trialLocation,
+  const workItemEntity = new WorkItem({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    docketEntry: {
+      ...docketEntryEntity.toRawObject(),
+      createdAt: docketEntryEntity.createdAt,
     },
-    { caseEntity: caseToAdd },
-  );
+    docketNumber: caseToAdd.docketNumber,
+    inProgress: true,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
 
   docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);
@@ -318,7 +306,7 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  await acquireLock({
+  const removeLockFunction = await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
@@ -345,10 +333,7 @@ export const createCaseFromPaperInteractor = async (
       authorizedUser,
     ));
   } finally {
-    await removeLock({
-      applicationContext,
-      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
-    });
+    await removeLockFunction();
   }
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 

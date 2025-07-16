@@ -305,7 +305,7 @@ describe('Create a work item', () => {
     });
 
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
-      docketEntryId: ratificationWorkItem.docketEntry.docketEntryId,
+      docketEntryId: ratificationWorkItem?.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
@@ -375,7 +375,7 @@ describe('Create a work item', () => {
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
 
     const ratificationDocketEntry = docketEntries.find(
-      d => d.docketEntryId === ratificationWorkItem.docketEntry.docketEntryId,
+      d => d.docketEntryId === ratificationWorkItem?.docketEntry.docketEntryId,
     );
 
     const noticeDocketEntry = docketEntries.find(
@@ -407,7 +407,7 @@ describe('Create a work item', () => {
     });
 
     await cerebralTest.runSequence('gotoDocketEntryQcSequence', {
-      docketEntryId: ratificationWorkItem.docketEntry.docketEntryId,
+      docketEntryId: ratificationWorkItem?.docketEntry.docketEntryId,
       docketNumber: caseDetail.docketNumber,
     });
 
@@ -456,7 +456,7 @@ describe('Create a work item', () => {
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
 
     const ratificationDocketEntry = docketEntries.find(
-      d => d.docketEntryId === ratificationWorkItem.docketEntry.docketEntryId,
+      d => d.docketEntryId === ratificationWorkItem?.docketEntry.docketEntryId,
     );
 
     const noticeDocketEntry = docketEntries.find(

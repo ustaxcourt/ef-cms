@@ -6,9 +6,8 @@ export const getPendingMotionDocketEntriesForCurrentJudgeLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, ({ applicationContext }) =>
+  genericHandler(event, () =>
     getPendingMotionDocketEntriesForCurrentJudgeInteractor(
-      applicationContext,
       event.queryStringParameters,
       authorizedUser,
     ),

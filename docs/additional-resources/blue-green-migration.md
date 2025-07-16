@@ -25,9 +25,7 @@ The first step is to [delete the destination table](#delete-the-destination-tabl
 
 ### Delete the Destination Tables
 
-We need to delete the destination tables (if they exist) in order to perform a blue green migration. It is recommended to delete the `west` table first because we are using DynamoDB Global tables with replication.
-
-The `east` table is main table. AWS will throw an error if you attempt to delete the `east` table before the `west` table if both exist and they have been deleted within the last 24 hours.
+We need to delete the destination tables (if they exist) in order to perform a blue green migration.
 
 #### Via the command line
 
@@ -54,22 +52,16 @@ The `east` table is main table. AWS will throw an error if you attempt to delete
 
     If you do not, then it exists, and you must delete the table.
 
-3. If it exists, delete the **destination table** in both `east` and `west`. You can do this via this handy script:
+3. If it exists, delete the **destination table** in both `east`. You can do this via this handy script:
 
     ```bash
     ./scripts/dynamo/delete-dynamo-table.sh efcms-dev-alpha
     ```
 
-    NOTE: after deleting the `west` table, you may have to wait a few minutes before you can delete the `east` table.
-
-
 #### Via the AWS Console
 
 1. Identify the source table and destination table. Both should be the same value, and that is what the application is currently using as it its main data store. If they are both `alpha`, then the destination table is `beta`. If they are both `beta`, the destination table is `alpha`. If they are different, inspect at the current color Lamdba's environment config to determine the dynamo table that the application is currently using as its data store.
-2. Switch to the `west-1` region.
-3. Delete the destination table in `west`
-4. Go back to east region
-5. Delete the destination table in `east`; note this may take a few minutes as the west table is deleting.
+1. Delete the destination table in `east`;
 
 ### Delete the Destination Opensearch Cluster
 1. Using the identified **destination table** version from the steps above, check if an Opensearch cluster exists for the environment you are working in and the destination version.
@@ -88,7 +80,7 @@ There are two good ways to trigger a migration. You can either remove a migratio
 1. Go into the environment's deploy table `efcms-<ENV>-deploy`.
 2. Change the `migrate` flag to `true`.
 4. Change the value for the `current` key of the `pk`:`destination-table-version` to the destination table you identified in the preparation steps(`alpha` or `beta`).
-8. Delete the destination table in `east`; note this may take a few minutes as the west table is deleting.
+8. Delete the destination table in `east`;
 
 After either removing a record of a previous migration, or explicitly configuring the deploy table, kick off a CircleCI deploy to begin the migration.
 

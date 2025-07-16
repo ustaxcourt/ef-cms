@@ -1,7 +1,6 @@
 import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
-import { WorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
 
 // TODO: Remove this once associatedJudge stuff is no longer on deadlines.
 // Exported just to test.
@@ -21,32 +20,6 @@ export async function updateDeadlinesForCasesToCalendar({
   };
   await pgUpdateTable({
     table: 'dwCaseDeadline',
-    values,
-    where: db =>
-      db.where(
-        'docketNumber',
-        'in',
-        casesToCalendar.map(c => c.docketNumber),
-      ),
-  });
-}
-
-// TODO: Remove this once associatedJudge stuff is no longer on work items. Just set high priority via setPriorityOnAllWorkItems.
-// Exported just to test.
-export async function updateWorkItemsForCasesToCalendar({
-  casesToCalendar,
-  trialSessionEntity,
-}: {
-  casesToCalendar: RawCase[];
-  trialSessionEntity: RawTrialSession;
-}) {
-  const values: Partial<WorkItemKysely> = { highPriority: true }; // Set work items to high priority
-  if (trialSessionEntity.judge && trialSessionEntity.judge.name) {
-    values.associatedJudge = trialSessionEntity.judge?.name; // And update judge info if it exists on the trial session
-    values.associatedJudgeId = trialSessionEntity.judge?.userId ?? null;
-  }
-  await pgUpdateTable({
-    table: 'dwWorkItem',
     values,
     where: db =>
       db.where(

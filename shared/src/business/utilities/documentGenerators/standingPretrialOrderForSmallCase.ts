@@ -48,11 +48,6 @@ export const standingPretrialOrderForSmallCase = async ({
 
   const reactGettingReadyForTrialChecklistTemplate = ReactDOM.renderToString(
     React.createElement(GettingReadyForTrialChecklist, {
-      options: {
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
-      },
       trialInfo,
     }),
   );

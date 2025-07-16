@@ -37,30 +37,18 @@ describe('getDocumentQCInboxForSectionInteractor', () => {
     );
   });
 
-  it('should default to query workItems for the DOCKET_SECTION when a section is provided that is NOT PETITIONS_SECTION', async () => {
+  it('should query workItems using a judge id when one is provided', async () => {
+    const judgeId = '123456';
     await getDocumentQCInboxForSectionInteractor(
       {
-        section: 'ANY_OTHER_SECTION',
-      },
-      mockDocketClerkUser,
-    );
-
-    expect(getDocumentQCInboxForSection.mock.calls[0][0].section).toEqual(
-      DOCKET_SECTION,
-    );
-  });
-
-  it('should query workItems using a judge name when one is provided', async () => {
-    await getDocumentQCInboxForSectionInteractor(
-      {
-        judgeUserName: 'Ashford',
+        judgeId,
         section: getTestJudgesChambers().ASHFORDS_CHAMBERS_SECTION.section,
       },
       mockJudgeUser,
     );
 
-    expect(getDocumentQCInboxForSection.mock.calls[0][0].judgeUserName).toEqual(
-      'Ashford',
+    expect(getDocumentQCInboxForSection.mock.calls[0][0].judgeId).toEqual(
+      judgeId,
     );
   });
 });

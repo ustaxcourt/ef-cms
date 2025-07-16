@@ -57,7 +57,6 @@ describe('onConnectInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveUserConnection,
     ).toHaveBeenCalledWith({
-      applicationContext,
       clientConnectionId: mockClientConnectionId,
       connectionId: mockConnectionId,
       endpoint: 'https://' + endpoint,
@@ -80,7 +79,6 @@ describe('onConnectInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveUserConnection,
     ).toHaveBeenCalledWith({
-      applicationContext,
       clientConnectionId: mockClientConnectionId,
       connectionId: mockConnectionId,
       endpoint,

@@ -45,9 +45,7 @@ export const describeTable = async ({
 }: {
   applicationContext: IApplicationContext;
 }): Promise<DescribeTableCommandOutput> => {
-  const dynamoClient = applicationContext.getDynamoClient(applicationContext, {
-    useMainRegion: false,
-  });
+  const dynamoClient = applicationContext.getDynamoClient();
 
   const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
     TableName: getTableName({ applicationContext }),
@@ -61,9 +59,7 @@ export const describeDeployTable = async ({
 }: {
   applicationContext: IApplicationContext;
 }): Promise<DescribeTableCommandOutput> => {
-  const dynamoClient = applicationContext.getDynamoClient(applicationContext, {
-    useMainRegion: true,
-  });
+  const dynamoClient = applicationContext.getDynamoClient();
 
   const describeTableCommand: DescribeTableCommand = new DescribeTableCommand({
     TableName: getDeployTableName({ applicationContext }),
@@ -80,7 +76,7 @@ export const put = ({
   applicationContext: IApplicationContext;
 }): Promise<TDynamoRecord> => {
   return applicationContext
-    .getDocumentClient(applicationContext)
+    .getDocumentClient()
     .put({
       Item: filterEmptyStrings(Item),
       TableName: getTableName({
@@ -107,7 +103,7 @@ export const update = ({
 }): Promise<TDynamoRecord[]> => {
   const filteredValues = filterEmptyStrings(ExpressionAttributeValues);
   return applicationContext
-    .getDocumentClient(applicationContext)
+    .getDocumentClient()
     .update({
       ConditionExpression,
       ExpressionAttributeNames,
@@ -129,9 +125,7 @@ export const update = ({
 export const updateToDeployTable = params => {
   const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
-    .getDocumentClient(params.applicationContext, {
-      useMainRegion: true,
-    })
+    .getDocumentClient()
     .update({
       TableName: getDeployTableName({
         applicationContext: params.applicationContext,
@@ -150,9 +144,7 @@ export const updateToDeployTable = params => {
 export const updateConsistent = params => {
   const filteredParams = filterEmptyStrings(params);
   return params.applicationContext
-    .getDocumentClient(params.applicationContext, {
-      useMainRegion: true,
-    })
+    .getDocumentClient()
     .update({
       TableName: getTableName({
         applicationContext: params.applicationContext,
@@ -170,9 +162,7 @@ export const updateConsistent = params => {
  */
 export const get = params => {
   return params.applicationContext
-    .getDocumentClient(params.applicationContext, {
-      useMainRegion: !!params.ConsistentRead,
-    })
+    .getDocumentClient()
     .get({
       TableName: getTableName({
         applicationContext: params.applicationContext,
@@ -192,9 +182,7 @@ export const get = params => {
  */
 export const getFromDeployTable = params => {
   return params.applicationContext
-    .getDocumentClient(params.applicationContext, {
-      useMainRegion: true,
-    })
+    .getDocumentClient()
     .get({
       TableName: getDeployTableName({
         applicationContext: params.applicationContext,
@@ -211,9 +199,7 @@ export const putInDeployTable = async (
   item: TDynamoRecord,
 ): Promise<void> => {
   await applicationContext
-    .getDocumentClient(applicationContext, {
-      useMainRegion: true,
-    })
+    .getDocumentClient()
     .put({
       Item: item,
       TableName: getDeployTableName({
@@ -244,7 +230,7 @@ export const query = ({
   params?: Record<string, any>;
 }): Promise<TDynamoRecord[]> => {
   return applicationContext
-    .getDocumentClient(applicationContext)
+    .getDocumentClient()
     .query({
       ConsistentRead,
       ExpressionAttributeNames,
@@ -272,7 +258,7 @@ export const scan = async params => {
     hasMoreResults = false;
 
     await params.applicationContext
-      .getDocumentClient(params.applicationContext)
+      .getDocumentClient()
       .scan({
         ExclusiveStartKey: lastKey,
         TableName: getTableName({
@@ -316,7 +302,7 @@ export const queryFull = async <T>({
     hasMoreResults = false;
 
     const subsetResults = await applicationContext
-      .getDocumentClient(applicationContext)
+      .getDocumentClient()
       .query({
         ConsistentRead,
         ExclusiveStartKey: lastKey,
@@ -365,7 +351,7 @@ export const batchGet = async ({
   const chunks = chunk(uniqueKeys, 100);
 
   const promises: Promise<BatchGetResponseMap>[] = chunks.map(chunkOfKeys =>
-    applicationContext.getDocumentClient(applicationContext).batchGet({
+    applicationContext.getDocumentClient().batchGet({
       RequestItems: {
         [tableName]: {
           Keys: chunkOfKeys,
@@ -393,7 +379,7 @@ export const batchDelete = async ({ applicationContext, items }) => {
   }
 
   const batchDeleteItems = itemsToDelete => {
-    return applicationContext.getDocumentClient(applicationContext).batchWrite({
+    return applicationContext.getDocumentClient().batchWrite({
       RequestItems: {
         [getTableName({ applicationContext })]: itemsToDelete.map(item => ({
           DeleteRequest: {
@@ -441,7 +427,7 @@ export const batchWrite = async (
   uniqueCommands.forEach(command => filterEmptyStrings(command));
 
   const documentClient =
-    applicationContext.getDocumentClient(applicationContext);
+    applicationContext.getDocumentClient();
   const chunks = chunk(uniqueCommands, 25);
 
   await Promise.all(
@@ -464,7 +450,7 @@ export const remove = ({
   applicationContext: IApplicationContext;
   key: Record<string, string>;
 }) => {
-  return applicationContext.getDocumentClient(applicationContext).delete({
+  return applicationContext.getDocumentClient().delete({
     Key: key,
     TableName: getTableName({ applicationContext }),
   });

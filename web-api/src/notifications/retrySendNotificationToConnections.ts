@@ -1,4 +1,4 @@
-import { Connection } from '@web-api/notifications/sendNotificationToConnection';
+import { ConnectionKysely } from '@web-api/persistence/postgres/connections/schema';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const retrySendNotificationToConnections = async ({
@@ -8,7 +8,7 @@ export const retrySendNotificationToConnections = async ({
   messageStringified,
 }: {
   applicationContext: ServerApplicationContext;
-  connections: Connection[];
+  connections: ConnectionKysely[];
   deleteGoneConnections?: boolean;
   messageStringified: string;
 }) => {
@@ -36,7 +36,6 @@ export const retrySendNotificationToConnections = async ({
               await applicationContext
                 .getPersistenceGateway()
                 .deleteUserConnection({
-                  applicationContext,
                   connectionId: connection.connectionId,
                 });
             } catch (error) {

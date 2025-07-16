@@ -14,6 +14,7 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { clone } from 'lodash';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * generateChangeOfAddressHelper
@@ -54,7 +55,6 @@ export const generateChangeOfAddressHelper = async ({
     const newData = contactInfo;
 
     const userCase = await getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
     });
     const caseEntity = new Case(userCase, {
@@ -97,8 +97,7 @@ export const generateChangeOfAddressHelper = async ({
       });
     }
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });
@@ -119,13 +118,16 @@ export const generateChangeOfAddressHelper = async ({
     userId: requestUserId || user.userId,
   });
 
-  const updatedJob = await applicationContext
+  const [updatedJob] = await applicationContext
     .getPersistenceGateway()
-    .setChangeOfAddressCaseAsDone({ applicationContext, docketNumber, jobId });
-
+    .setChangeOfAddressCaseAsDone(jobId);
   const isDoneProcessing = updatedJob.remaining === 0;
 
   if (isDoneProcessing) {
+    await applicationContext
+      .getPersistenceGateway()
+      .deleteChangeOfAddressCaseRecord(jobId);
+
     applicationContext.logger.info(
       `"change-of-address-job|${jobId}" job finished`,
     );
@@ -210,7 +212,7 @@ const prepareToGenerateAndServeDocketEntry = async ({
   }
 
   newData.name = practitionerName;
-  const { changeOfAddressDocketEntry } = await generateAndServeDocketEntry({
+  await generateAndServeDocketEntry({
     applicationContext,
     authorizedUser,
     caseEntity,
@@ -222,6 +224,4 @@ const prepareToGenerateAndServeDocketEntry = async ({
     servedParties,
     user,
   });
-
-  caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 };

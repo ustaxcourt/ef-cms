@@ -11,27 +11,22 @@ export const getNotificationsAction = async ({
   applicationContext,
   get,
 }: ActionProps) => {
-  const judgeUserId = get(state.judgeUser.userId);
+  const user = get(state.user);
+  const judgeId = get(state.judgeUser.userId);
   const sectionToDisplay =
     get(state.messageBoxToDisplay.section) ||
     get(state.workQueueToDisplay.section);
 
-  const user = get(state.user);
-
-  let caseServicesSupervisorData;
-
-  if (sectionToDisplay) {
-    caseServicesSupervisorData = {
-      section: sectionToDisplay,
-      userId: user.userId,
-    };
+  if (!user.section) {
+    throw new Error('Unable to fetch work items without a section');
   }
 
   const notifications = await applicationContext
     .getUseCases()
     .getNotificationsInteractor(applicationContext, {
-      caseServicesSupervisorData,
-      judgeUserId,
+      judgeId,
+      section: user.section,
+      selectedSection: sectionToDisplay,
     });
 
   return { notifications };

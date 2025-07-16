@@ -94,10 +94,6 @@ export TF_VAR_lower_env_account_id=$LOWER_ENV_ACCOUNT_ID
 export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
 export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
-export TF_VAR_is_dynamsoft_enabled=$IS_DYNAMSOFT_ENABLED
-export TF_VAR_dynamsoft_s3_zip_path=$DYNAMSOFT_S3_ZIP_PATH
-export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
-export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
 export TF_VAR_postgres_master_username="${POSTGRES_MASTER_USERNAME}"
 export TF_VAR_postgres_master_password="${POSTGRES_MASTER_PASSWORD}"
 export TF_VAR_restoring_aws_account_id=$PROD_ENV_ACCOUNT_ID
@@ -117,12 +113,6 @@ if [[ -n "${CW_VIEWER_PROTOCOL_POLICY}" ]]
 then
   export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
 fi
-
-# temporary-remove after both blue and green records have been destroyed
-DEPLOYING_COLOR=$(../../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
-[ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
-echo "Running latency record deletion script"
-npx ts-node --transpile-only ../../bin/delete-route53-latency-records.ts
 
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 

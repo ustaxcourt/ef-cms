@@ -24,17 +24,14 @@ describe('setWorkItemsAction', () => {
 
     expect(result.state.workQueue).toEqual([
       {
-        uiKey: expect.anything(),
         updatedAt: 3,
         workItemId: 'work-item-id-345',
       },
       {
-        uiKey: expect.anything(),
         updatedAt: 2,
         workItemId: 'work-item-id-234',
       },
       {
-        uiKey: expect.anything(),
         updatedAt: 1,
         workItemId: 'work-item-id-123',
       },
