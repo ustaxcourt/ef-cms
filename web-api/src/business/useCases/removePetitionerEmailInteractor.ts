@@ -24,7 +24,6 @@ export const removePetitionerEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
   const rawCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
     includeConsolidatedCases: false,
   });

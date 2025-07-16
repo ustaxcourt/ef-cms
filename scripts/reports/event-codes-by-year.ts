@@ -53,7 +53,7 @@ const OUTPUT_DIR = `${process.env.HOME}/Documents`;
 const CONCURRENCY = 8;
 
 const cachedCases: { [key: string]: RawCase } = {};
-const rows: { [k: string]: string }[] = [];
+const rows: { [k: string]: string | undefined }[] = [];
 
 const getCase = async ({
   applicationContext,
