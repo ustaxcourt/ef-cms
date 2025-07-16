@@ -40,7 +40,7 @@ export const CreateMessageModalDialog = connect<
     messageModalHelper,
     onConfirmSequence,
     showChambersSelect,
-    title = 'Create Message',
+    title = '*Create Message',
     updateChambersInCreateMessageModalSequence,
     updateModalFormValueSequence,
     updateSectionInCreateMessageModalSequence,

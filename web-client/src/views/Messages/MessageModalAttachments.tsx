@@ -15,6 +15,7 @@ const getDocumentOption = doc => {
       key={doc.docketEntryId}
       value={`${doc.docketEntryId}`}
     >
+      {doc.index != null ? `${doc.index} - ` : ''}
       {doc.createdAtFormatted} - {documentTitle}
     </option>
   );
@@ -80,18 +81,36 @@ export const MessageModalAttachments = connect(
                     <div className="grid-col-2">
                       <Button
                         link
-                        aria-label={`remove ${doc.documentTitle} selection`}
-                        className="modal-button-link"
-                        icon="times"
-                        style={{ lineHeight: '0', padding: '0' }}
+                        className="modal-button-link no-underline"
+                        icon="times-circle"
+                        iconColor="blue"
+                        iconRight
                         onClick={() => {
                           updateMessageModalAttachmentsSequence({
                             action: 'remove',
                             documentId: doc.documentId,
                           });
                         }}
+                        style={{
+                          textDecoration: 'none', // Remove underline from button
+                        }}
                       >
-                        Remove
+                        <span
+                          className="close-text"
+                          style={{
+                            display: 'inline-block', // Ensure it's treated as an inline element for hover effect
+                          }}
+                          onMouseEnter={e =>
+                            ((e.target as HTMLElement).style.textDecoration =
+                              'underline')
+                          } // Cast to HTMLElement for style
+                          onMouseLeave={e =>
+                            ((e.target as HTMLElement).style.textDecoration =
+                              'none')
+                          } // Cast to HTMLElement for style
+                        >
+                          Close
+                        </span>
                       </Button>
                     </div>
                   </div>

@@ -17,6 +17,7 @@ export const messageModalHelper = (
   );
 
   const caseDetail = get(state.caseDetail);
+  console.log('caseDetails : ', caseDetail);
   const screenMetadata = get(state.screenMetadata);
   const attachments = get(state.modal.form.attachments);
   const draftAttachments = get(state.modal.form.draftAttachments);
@@ -41,10 +42,12 @@ export const messageModalHelper = (
     title: string;
   })[] = [];
   for (const entry of formattedDocketEntries) {
-    if (entry.isFileAttached && entry.isOnDocketRecord) {
+    console.log('formattedDocketEntries : ', formattedDocketEntries);
+    console.log('index : ', entry.index);
+
+    if (entry.isFileAttached && entry.isOnDocketRecord && entry.index) {
       entry.title = entry.descriptionDisplay || entry.documentType;
       entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
-
       documents.push(entry);
     }
   }
