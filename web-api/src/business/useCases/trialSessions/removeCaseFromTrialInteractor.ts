@@ -9,8 +9,9 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -60,7 +61,6 @@ export const removeCaseFromTrial = async (
   });
 
   const myCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -81,13 +81,10 @@ export const removeCaseFromTrial = async (
     caseEntity.removeFromHearing(trialSessionId);
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };
