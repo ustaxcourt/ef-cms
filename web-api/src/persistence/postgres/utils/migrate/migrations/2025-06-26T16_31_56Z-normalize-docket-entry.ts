@@ -4,7 +4,7 @@ export async function up(db: Kysely<any>): Promise<void> {
   // Add the docketEntryId column
   await db.schema
     .alterTable('dwWorkItem')
-    .addColumn('docketEntryId', 'varchar', col => col.notNull().defaultTo(''))
+    .addColumn('docketEntryId', 'varchar')
     .execute();
   await db.schema
     .alterTable('dwWorkItem')
