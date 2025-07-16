@@ -18,7 +18,6 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 describe('blockCaseFromTrialInteractor', () => {
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {

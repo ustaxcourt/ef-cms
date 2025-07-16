@@ -7,7 +7,6 @@ import {
 import { PARTIES_CODES } from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-// import { seedEntries } from '../../web-api/storage/fixtures/seed';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
