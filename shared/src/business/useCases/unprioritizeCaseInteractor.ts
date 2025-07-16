@@ -9,7 +9,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { applicationContext } from '@web-api/applicationContext';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 /**
@@ -29,7 +28,6 @@ export const unprioritizeCase = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -42,7 +40,6 @@ export const unprioritizeCase = async (
   });
 
   const updatedCase = await updateCaseAndAssociations({
-    applicationContext,
     authorizedUser,
     caseToUpdate: caseEntity,
   });

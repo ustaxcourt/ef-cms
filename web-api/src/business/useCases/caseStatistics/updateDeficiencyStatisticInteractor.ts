@@ -28,7 +28,7 @@ import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
  * @returns {object} the updated case
  */
 export const updateDeficiencyStatistic = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     determinationDeficiencyAmount,
     determinationTotalPenalties,
@@ -64,7 +64,6 @@ export const updateDeficiencyStatistic = async (
   }
 
   const oldCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
