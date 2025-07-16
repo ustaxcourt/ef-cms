@@ -29,7 +29,6 @@ import { createCaseInteractor } from './business/useCases/createCaseInteractor';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from './business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor';
 import { createMessageInteractor } from './business/useCases/messages/createMessageInteractor';
 import { createPractitionerDocumentInteractor } from './business/useCases/practitioner/createPractitionerDocumentInteractor';
-import { createPractitionerUserInteractor } from './business/useCases/practitioner/createPractitionerUserInteractor';
 import { createTrialSessionInteractor } from './business/useCases/trialSessions/createTrialSessionInteractor';
 import { deleteCaseDeadlineInteractor } from './business/useCases/caseDeadline/deleteCaseDeadlineInteractor';
 import { deleteCaseNoteInteractor } from './business/useCases/caseNote/deleteCaseNoteInteractor';
@@ -122,7 +121,6 @@ import { getTrialSessionsInteractor } from './business/useCases/trialSessions/ge
 import { getUploadPolicyInteractor } from './business/useCases/document/getUploadPolicyInteractor';
 import { getUserCaseNoteForCasesInteractor } from './business/useCases/caseNote/getUserCaseNoteForCasesInteractor';
 import { getUserCaseNoteInteractor } from './business/useCases/caseNote/getUserCaseNoteInteractor';
-import { getUserPendingEmailInteractor } from './business/useCases/user/getUserPendingEmailInteractor';
 import { getUserPendingEmailStatusInteractor } from './business/useCases/user/getUserPendingEmailStatusInteractor';
 import { getUsersPendingEmailInteractor } from './business/useCases/user/getUsersPendingEmailInteractor';
 import { handleBounceNotificationInteractor } from './business/useCases/email/handleBounceNotificationInteractor';
@@ -229,7 +227,6 @@ const useCases = {
   createCourtIssuedOrderPdfFromHtmlInteractor,
   createMessageInteractor,
   createPractitionerDocumentInteractor,
-  createPractitionerUserInteractor,
   createTrialSessionInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
@@ -322,7 +319,6 @@ const useCases = {
   getUploadPolicyInteractor,
   getUserCaseNoteForCasesInteractor,
   getUserCaseNoteInteractor,
-  getUserPendingEmailInteractor,
   getUserPendingEmailStatusInteractor,
   getUsersPendingEmailInteractor,
   handleBounceNotificationInteractor,

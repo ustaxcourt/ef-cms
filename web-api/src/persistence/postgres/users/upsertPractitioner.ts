@@ -1,20 +1,19 @@
+import { getUniqueId } from '@shared/sharedAppContext';
 import {
   ROLES,
   Role,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getUserGateway } from '@web-api/getUserGateway';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
+import { applicationContext } from '@web-api/applicationContext';
 
 export const upsertPractitioner = async ({
-  applicationContext,
   user,
 }: {
-  applicationContext: ServerApplicationContext;
   user: Omit<RawUser, 'userId'>;
 }) => {
-  let userId = applicationContext.getUniqueId();
+  let userId = getUniqueId();
   const practitionerRoleTypes: Role[] = [
     ROLES.privatePractitioner,
     ROLES.irsPractitioner,
@@ -30,11 +29,12 @@ export const upsertPractitioner = async ({
   const userEmail = user.email || user.pendingEmail;
 
   if (userEmail) {
-    const existingUser = await applicationContext
-      .getUserGateway()
-      .getUserByEmail(applicationContext, {
+    const existingUser = await getUserGateway().getUserByEmail(
+      applicationContext,
+      {
         email: userEmail,
-      });
+      },
+    );
 
     if (!existingUser) {
       await getUserGateway().createUser(applicationContext, {

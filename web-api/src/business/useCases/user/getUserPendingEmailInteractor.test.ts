@@ -1,12 +1,12 @@
 import '@web-api/persistence/postgres/users/mocks.jest';
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPendingEmailInteractor } from './getUserPendingEmailInteractor';
 import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('getUserPendingEmailInteractor', () => {
   const PENDING_EMAIL = 'pending@example.com';
@@ -17,7 +17,6 @@ describe('getUserPendingEmailInteractor', () => {
   it('should throw an error when not authorized', async () => {
     await expect(
       getUserPendingEmailInteractor(
-        applicationContext,
         {
           userId: USER_ID,
         },
@@ -27,15 +26,14 @@ describe('getUserPendingEmailInteractor', () => {
   });
 
   it("should return user's pending email", async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       name: 'Test Petitioner',
       pendingEmail: PENDING_EMAIL,
       role: ROLES.petitioner,
       userId: USER_ID,
-    });
+    } as DbUser);
 
     const result = await getUserPendingEmailInteractor(
-      applicationContext,
       {
         userId: USER_ID,
       },
@@ -46,14 +44,13 @@ describe('getUserPendingEmailInteractor', () => {
   });
 
   it('should return undefined if user does not have a pending email', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       name: 'Test Petitioner',
       role: ROLES.petitioner,
       userId: USER_ID,
-    });
+    } as DbUser);
 
     const result = await getUserPendingEmailInteractor(
-      applicationContext,
       {
         userId: USER_ID,
       },
@@ -67,7 +64,6 @@ describe('getUserPendingEmailInteractor', () => {
     getUserById.mockResolvedValue(undefined);
 
     const result = await getUserPendingEmailInteractor(
-      applicationContext,
       {
         userId: USER_ID,
       },

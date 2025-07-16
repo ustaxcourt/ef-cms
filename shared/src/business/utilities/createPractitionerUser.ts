@@ -1,11 +1,12 @@
 import { createBarNumber } from '@web-api/persistence/postgres/users/createBarNumber';
 import { Practitioner, RawPractitioner } from '../entities/Practitioner';
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getUniqueId } from '@shared/sharedAppContext';
 
-export const createPractitionerUser = async (
-  applicationContext: ServerApplicationContext,
-  { user }: { user: RawPractitioner },
-): Promise<RawPractitioner> => {
+export const createPractitionerUser = async ({
+  user,
+}: {
+  user: RawPractitioner;
+}): Promise<RawPractitioner> => {
   const barNumber =
     user.barNumber ||
     (await createBarNumber({
@@ -17,7 +18,7 @@ export const createPractitionerUser = async (
   return new Practitioner({
     ...user,
     barNumber,
-    userId: applicationContext.getUniqueId(),
+    userId: getUniqueId(),
   })
     .validate()
     .toRawObject();

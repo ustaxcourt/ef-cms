@@ -2,7 +2,6 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
@@ -17,7 +16,6 @@ import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
  * @returns {Promise} the user's pending email
  */
 export const getUserPendingEmailInteractor = async (
-  _: ServerApplicationContext,
   { userId }: { userId: string },
   authorizedUser: UnknownAuthUser,
 ) => {

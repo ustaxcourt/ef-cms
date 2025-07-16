@@ -3,14 +3,12 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createPractitionerUser } from '../../../../../shared/src/business/utilities/createPractitionerUser';
 import { upsertPractitioner } from '@web-api/persistence/postgres/users/upsertPractitioner';
 
 export const createPractitionerUserInteractor = async (
-  applicationContext: ServerApplicationContext,
   { user }: { user: RawPractitioner },
   authorizedUser: UnknownAuthUser,
 ): Promise<{ barNumber: string }> => {
@@ -23,12 +21,11 @@ export const createPractitionerUserInteractor = async (
   user.pendingEmail = user.email;
   user.email = undefined;
 
-  const practitioner = await createPractitionerUser(applicationContext, {
+  const practitioner = await createPractitionerUser({
     user,
   });
 
   await upsertPractitioner({
-    applicationContext,
     user: practitioner,
   });
 
