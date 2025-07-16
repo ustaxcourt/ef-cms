@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
@@ -25,7 +26,7 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { Case } from '@shared/business/entities/cases/Case';
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
-
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
   const updateDocketEntryPendingServiceStatus = jest.mocked(
@@ -33,6 +34,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
   );
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const getUserById = jest.mocked(getUserByIdMock);
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -70,9 +72,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);
