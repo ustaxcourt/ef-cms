@@ -52,9 +52,7 @@ function pickUserFields(
       : null,
     admissionsStatus: rawPractitioner.admissionsStatus ?? null,
     barNumber: rawPractitioner.barNumber || null,
-    birthYear: rawPractitioner.birthYear
-      ? parseInt(rawPractitioner.birthYear)
-      : null,
+    birthYear: rawPractitioner.birthYear ? +rawPractitioner.birthYear : null, //Some birthYears are strings in dynamo. Need to convert to num before storing.
     confirmEmail: rawPractitioner.confirmEmail ?? null,
     practiceType: rawPractitioner.practiceType ?? null,
     firmName: rawPractitioner.firmName ?? null,

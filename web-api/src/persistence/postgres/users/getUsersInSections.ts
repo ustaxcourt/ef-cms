@@ -1,13 +1,12 @@
-import { RawUser } from '@shared/business/entities/User';
 import { getDbReader } from '@web-api/database';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { rawUser } from '@web-api/persistence/postgres/users/mapper';
+import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
 
 export const getUsersInSections = async ({
   sections,
 }: {
   sections: string[];
-}): Promise<RawUser[]> => {
+}): Promise<DbUser[]> => {
   const users = await getDbReader(async reader => {
     let query = reader.selectFrom('dwUser as u');
 

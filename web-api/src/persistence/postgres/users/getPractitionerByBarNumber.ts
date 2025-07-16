@@ -6,7 +6,7 @@ export const getPractitionerByBarNumber = async ({
   barNumber,
 }: {
   barNumber: string;
-}): Promise<RawPractitioner | undefined> => {
+}): Promise<Omit<RawPractitioner, 'serviceIndicator'> | undefined> => {
   const upperCaseBarNumber = barNumber.toUpperCase();
 
   const user = await getDbReader(db =>
@@ -21,5 +21,5 @@ export const getPractitionerByBarNumber = async ({
     return undefined;
   }
 
-  return rawUser(user) as RawPractitioner;
+  return rawUser(user) as Omit<RawPractitioner, 'serviceIndicator'>;
 };
