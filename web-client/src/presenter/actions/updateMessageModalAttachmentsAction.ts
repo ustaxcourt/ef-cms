@@ -6,7 +6,6 @@ export const updateMessageModalAttachmentsAction = ({
   props,
   store,
 }: ActionProps) => {
-  console.log('updateMessageModalAttachmentsAction called', props);
   const { attachments, draftAttachments, subject } = get(state.modal.form);
   const caseDetail = get(state.caseDetail);
   const documentId = props.documentId || get(state.docketEntryId);
@@ -22,18 +21,11 @@ export const updateMessageModalAttachmentsAction = ({
     const documentTitle = applicationContext
       .getUtilities()
       .getDescriptionDisplay(document);
-    
-    console.log(`Subject state: ${subject}`);
-    // TODO: Alter this logic for 10693
-    if (attachments.length + draftAttachments.length === 0) {
-      // TODO 10693: Bug here. If the subject is removed, it will not be updated.
-      // This is the first attachment, so we should update the subject
-      // We are updating the subject line
-      console.log(`Updating subject to: ${documentTitle.slice(0, 250)}`);
+
+    const isSubjectEmpty = !subject || subject.trim() === '';
+    if (isSubjectEmpty && attachments.length + draftAttachments.length === 0) {
       store.set(state.modal.form.subject, documentTitle.slice(0, 250));
-      
     }
-    console.log(`Document title: ${documentTitle}`);
     if (props.action === 'add') {
       draftAttachments.push({
         documentId,
