@@ -31,9 +31,11 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getClinicLetterKey } from '@shared/business/utilities/getClinicLetterKey';
 import { random } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 export const addDocketEntryForPaymentStatus = ({ caseEntity, user }) => {
   if (caseEntity.petitionPaymentStatus === PAYMENT_STATUS.PAID) {
@@ -315,7 +317,7 @@ const generateNoticeOfReceipt = async ({
     pdfName: caseConfirmationPdfName,
   });
 
-  const notrDocketEntryId = applicationContext.getUniqueId();
+  const notrDocketEntryId = getUniqueId();
   await applicationContext.getPersistenceGateway().uploadDocument({
     applicationContext,
     pdfData: Buffer.from(combinedNotrPdfData),
@@ -489,7 +491,6 @@ export const serveCaseToIrs = async (
     }
 
     const caseToBatch = await getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
     });
 
@@ -653,8 +654,7 @@ export const serveCaseToIrs = async (
       userServingPetition: authorizedUser,
     });
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });

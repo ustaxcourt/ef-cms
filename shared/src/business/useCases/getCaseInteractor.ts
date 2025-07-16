@@ -1,7 +1,6 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
   UnknownAuthUser,
   isAuthUser,
@@ -10,7 +9,6 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
 
 export const getCaseInteractor = async (
-  applicationContext: ServerApplicationContext,
   { docketNumber }: { docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<RawCase> => {
@@ -22,7 +20,6 @@ export const getCaseInteractor = async (
 
   const [caseRecord, workItems] = await Promise.all([
     getCaseByDocketNumber({
-      applicationContext,
       docketNumber: Case.formatDocketNumber(docketNumber),
       user: authorizedUser,
     }),

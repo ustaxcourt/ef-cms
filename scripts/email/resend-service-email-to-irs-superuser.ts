@@ -42,12 +42,12 @@ const { endTimestamp, startTimestamp } = parseArgsAndEnvVars(scriptConfig) as {
   startTimestamp: string;
 };
 
-const getCase = async (
-  applicationContext: ServerApplicationContext,
-  { docketNumber }: { docketNumber: string },
-): Promise<Case> => {
+const getCase = async ({
+  docketNumber,
+}: {
+  docketNumber: string;
+}): Promise<Case> => {
   const caseToBatch = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -61,7 +61,7 @@ const resendServiceEmail = async (
     docketNumber,
   }: { docketEntryId: string; docketNumber: string },
 ): Promise<void> => {
-  const caseEntity = await getCase(applicationContext, { docketNumber });
+  const caseEntity = await getCase({ docketNumber });
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
   if (

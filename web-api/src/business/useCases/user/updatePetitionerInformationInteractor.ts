@@ -22,8 +22,9 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -121,7 +122,6 @@ export const updatePetitionerInformation = async (
   }
 
   const petitionerCaseRaw = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -305,13 +305,10 @@ export const updatePetitionerInformation = async (
     }
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: caseEntity,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: caseEntity,
+  });
 
   return {
     paperServiceParties: servedParties.paper,

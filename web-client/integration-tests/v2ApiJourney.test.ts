@@ -7,10 +7,10 @@ import {
 import { PARTIES_CODES } from '../../shared/src/business/entities/EntityConstants';
 import { loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { seedEntries } from '../../web-api/storage/fixtures/seed';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
+import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
 
 describe('View and manage the deadlines of a case', () => {
   const cerebralTest = setupTest();
@@ -198,7 +198,7 @@ describe('View and manage the deadlines of a case', () => {
     //return an array of all docket entries that were served to IRS
     const getDocketEntryData = () => {
       const docketEntries = new Array<DocketEntry>();
-      for (const item of seedEntries) {
+      for (const item of docketEntrySeeds) {
         if (item.entityName === 'DocketEntry') {
           const de = new DocketEntry(item, { authorizedUser: undefined });
           if (
@@ -250,7 +250,7 @@ describe('View and manage the deadlines of a case', () => {
       const response = await executeReconciliationReport(
         `${dateArg}?start=${saTimeBefore}`,
       );
-      let { totalDocketEntries } = response;
+      const { totalDocketEntries } = response;
       expect(totalDocketEntries).toBeGreaterThan(0);
 
       //some docket entries should be filtered out if we choose a later time
@@ -265,7 +265,7 @@ describe('View and manage the deadlines of a case', () => {
       const response = await executeReconciliationReport(
         `${dateArg}?end=${saTimeAfter}`,
       );
-      let { totalDocketEntries } = response;
+      const { totalDocketEntries } = response;
       //some docket entries should be filtered out if we move up the timeEnd value
       const response2 = await executeReconciliationReport(
         `${dateArg}?end=${saTimeBefore}`,
