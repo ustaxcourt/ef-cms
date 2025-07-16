@@ -269,7 +269,6 @@ const createCaseMetadata = async (
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
-    applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });

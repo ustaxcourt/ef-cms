@@ -3,7 +3,6 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
 import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
@@ -73,19 +72,10 @@ const connectPetitioners = async ({
   );
 };
 
-/**
- * createCaseAndAssociations
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseToCreate the case object to be created
- * @returns {Promise} which resolves when case and associations have been created
- */
 export const createCaseAndAssociations = async ({
   authorizedUser,
   caseToCreate,
 }: {
-  applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   caseToCreate: any;
 }) => {
