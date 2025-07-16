@@ -1,41 +1,69 @@
 import { ConsolidatedCaseSummary } from '@shared/business/dto/cases/ConsolidatedCaseSummary';
+import { NotFoundError } from '@web-api/errors/errors';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { aggregateCaseItems } from '@web-api/persistence/dynamo/helpers/aggregateCaseItems';
+import { getCasesMetadataWithCounselByLeadDocketNumber } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
+import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
+import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
+import { queryFull } from '@web-api/persistence/dynamodbClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatSealedAddresses } from '@shared/business/utilities/caseFilter';
-import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getWorkItemsByDocketNumber } from '@web-api/persistence/postgres/workitems/getWorkItemsByDocketNumber';
-import { WorkItem } from '@shared/business/entities/WorkItem';
+import { getCaseCorrespondenceByDocketNumber } from '@web-api/persistence/postgres/caseCorrespondences/getCaseCorrespondenceByDocketNumber';
+import { getCaseMetadataByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseMetadataByDocketNumber';
 
 export const getCaseByDocketNumber = async ({
+  applicationContext,
   docketNumber,
   includeConsolidatedCases = true,
   user = undefined, // Only needed to check permissions on sealed addresses for consolidated cases
 }: {
   docketNumber: string;
+  applicationContext: ServerApplicationContext;
   includeConsolidatedCases?: boolean;
   user?: UnknownAuthUser;
 }): Promise<RawCase> => {
-  const [caseData, workItems] = await settlePromises([
-    getCasesByDocketNumbers({
-      docketNumbers: [docketNumber],
+  // These case items are no longer in dynamoDB
+  const SK_FILTER_OUT = ['work-item', 'correspondence', 'case'];
+
+  const dbCaseMetadata = await getCaseMetadataByDocketNumber({
+    docketNumber,
+  });
+  if (!dbCaseMetadata) {
+    throw new NotFoundError(`Case ${docketNumber} not found`);
+  }
+
+  const [caseCorrespondences, workItems, caseItemsRaw] = await Promise.all([
+    getCaseCorrespondenceByDocketNumber({
+      docketNumber,
     }),
-    getWorkItemsByDocketNumber({ docketNumber }),
+    getWorkItemsByDocketNumber({
+      docketNumber,
+    }),
+    queryFull({
+      ExpressionAttributeNames: {
+        '#pk': 'pk',
+      },
+      ExpressionAttributeValues: {
+        ':pk': `case|${docketNumber}`,
+      },
+      KeyConditionExpression: '#pk = :pk',
+      applicationContext,
+    }),
   ]);
 
-  const theCase = caseData[0];
+  const caseItems = caseItemsRaw.filter(
+    item => !SK_FILTER_OUT.some(prefix => item.sk.startsWith(prefix)),
+  );
 
   let consolidatedCases: Omit<
     RawCase,
     'consolidatedCases' | 'correspondence' | 'hearings' | 'docketEntries'
   >[] = [];
   if (includeConsolidatedCases) {
-    consolidatedCases = await getConsolidatedCases({
-      leadDocketNumber: theCase.leadDocketNumber!,
-      excludeFields: ['correspondence', 'docketEntries', 'hearings'],
+    consolidatedCases = await getCasesMetadataWithCounselByLeadDocketNumber({
+      applicationContext,
+      leadDocketNumber: dbCaseMetadata.leadDocketNumber!,
     });
-    // This formatting should not be done here; we are mixing the data persistence layer with the interactor layer.
-    // It was done here to quickly fix a high-severity bug.
     if (user) {
       consolidatedCases = consolidatedCases.map(c =>
         formatSealedAddresses(c, user),
@@ -43,31 +71,27 @@ export const getCaseByDocketNumber = async ({
     }
   }
 
-  attachWorkItemsToDocketEntries({ theCase, workItems });
-
-  return {
-    ...theCase,
+  return purgeDynamoKeys({
+    ...aggregateCaseItems([
+      ...caseItems,
+      {
+        ...dbCaseMetadata,
+        pk: `case|${dbCaseMetadata.docketNumber}`,
+        sk: `case|${dbCaseMetadata.docketNumber}`,
+      },
+      ...caseCorrespondences.map(correspondenceItem => ({
+        ...correspondenceItem,
+        pk: `case|${docketNumber}`,
+        sk: `correspondence|${correspondenceItem.correspondenceId}`,
+      })),
+      ...workItems.map(workItem => ({
+        ...workItem,
+        pk: `case|${docketNumber}`,
+        sk: `work-item|${workItem.workItemId}`,
+      })),
+    ]),
     consolidatedCases: consolidatedCases.map(
       c => new ConsolidatedCaseSummary(c),
     ),
-  };
+  });
 };
-
-// This function is super stupid. We need it because certain spots
-// in the code expect fields from work items on the docket entry.
-function attachWorkItemsToDocketEntries({
-  theCase,
-  workItems,
-}: {
-  theCase: Omit<RawCase, 'consolidatedCases'>;
-  workItems: WorkItem[];
-}) {
-  for (const docketEntry of theCase.docketEntries) {
-    for (const workItem of workItems) {
-      if (workItem.docketEntry.docketEntryId === docketEntry.docketEntryId) {
-        docketEntry.workItem = workItem;
-        break;
-      }
-    }
-  }
-}

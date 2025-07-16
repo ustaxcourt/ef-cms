@@ -68,6 +68,8 @@ export const respondentFilesFirstIRSDocumentOnCase = (
 
     expect(cerebralTest.getState('form.documentType')).toEqual('Answer');
 
+    expect(cerebralTest.getState('form.partyPrimary')).toEqual(undefined);
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {

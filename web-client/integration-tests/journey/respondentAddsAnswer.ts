@@ -51,6 +51,8 @@ export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
 
     expect(cerebralTest.getState('form.documentType')).toEqual('Answer');
 
+    expect(cerebralTest.getState('form.partyPrimary')).toBeUndefined();
+
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {

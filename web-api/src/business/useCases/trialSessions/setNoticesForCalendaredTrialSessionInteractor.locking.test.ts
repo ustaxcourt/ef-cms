@@ -1,17 +1,15 @@
-import '@web-api/persistence/postgres/utils/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   determineEntitiesToLock,
+  
   setNoticesForCalendaredTrialSessionInteractor,
 } from './setNoticesForCalendaredTrialSessionInteractor';
 import { mockTrialClerkUser } from '@shared/test/mockAuthUsers';
-import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
-
-const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('determineEntitiesToLock', () => {
   const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -65,6 +63,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     clientConnectionId: '8916f743-a22d-4946-ab06-57ddcf386912',
     trialSessionId,
   };
+  let mockLock;
 
   beforeEach(() => {
     applicationContext
@@ -72,6 +71,9 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .getTrialSessionJobStatusForCase.mockReturnValue({
         unfinishedCases: 0,
       });
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
 
     applicationContext
       .getPersistenceGateway()
@@ -92,11 +94,11 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   describe('is locked', () => {
-    it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-      tryGetLocks.mockResolvedValueOnce([
-        { successfullyLocked: false, identifier: 'abc' },
-      ]);
+    beforeEach(() => {
+      mockLock = MOCK_LOCK; // locked
+    });
 
+    it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
       await expect(
         setNoticesForCalendaredTrialSessionInteractor(
           applicationContext,
@@ -112,7 +114,27 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   describe('is not locked', () => {
-    it('should acquire locks on the cases', async () => {
+    beforeEach(() => {
+      mockLock = undefined; // unlocked
+    });
+
+    it('should acquire a lock that lasts for 15 minutes', async () => {
+      await setNoticesForCalendaredTrialSessionInteractor(
+        applicationContext,
+        mockRequest,
+        mockTrialClerkUser,
+      );
+
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: `case|${MOCK_CASE.docketNumber}`,
+        ttl: 900,
+      });
+    });
+
+    it('should remove the lock', async () => {
       await setNoticesForCalendaredTrialSessionInteractor(
         applicationContext,
         mockRequest,
@@ -122,12 +144,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       const expectedIdentifiers = mockCases.map(
         aCase => `case|${aCase.docketNumber}`,
       );
-
-      expect(tryGetLocks).toHaveBeenCalledWith(
-        expect.objectContaining({
-          identifiers: expectedIdentifiers,
-        }),
-      );
+      expect(
+        applicationContext.getPersistenceGateway().removeLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifiers: expectedIdentifiers,
+      });
     });
   });
 });

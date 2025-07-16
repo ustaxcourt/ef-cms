@@ -44,6 +44,7 @@ export const generatePrintablePendingReportInteractor = async (
     reportTitle = `Judge ${judge}`;
   } else if (docketNumber) {
     const caseResult = await getCaseByDocketNumber({
+      applicationContext,
       docketNumber,
     });
     reportTitle = `Docket ${caseResult.docketNumberWithSuffix}`;

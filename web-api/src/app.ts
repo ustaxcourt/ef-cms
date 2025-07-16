@@ -207,7 +207,6 @@ import { verifyUserPendingEmailLambda } from './lambdas/users/verifyUserPendingE
 import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
-import { getConsolidatedCaseDeadlinesLambda } from '@web-api/lambdas/caseDeadline/getConsolidatedCaseDeadlinesLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
 
 export const app = express();
@@ -322,39 +321,22 @@ app.use(expressLogger);
  */
 {
   app.put(
-    '/async/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(
-      updateCaseDeadlineLambda,
-      { isAsyncSync: true },
-      applicationContext,
-    ),
+    '/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(updateCaseDeadlineLambda),
   );
   app.delete(
-    '/async/case-deadlines/:docketNumber/:caseDeadlineId',
-    lambdaWrapper(
-      deleteCaseDeadlineLambda,
-      { isAsyncSync: true },
-      applicationContext,
-    ),
+    '/case-deadlines/:docketNumber/:caseDeadlineId',
+    lambdaWrapper(deleteCaseDeadlineLambda),
   );
-
   app.post(
-    '/async/case-deadlines/:docketNumber',
-    lambdaWrapper(
-      createCaseDeadlineLambda,
-      { isAsyncSync: true },
-      applicationContext,
-    ),
+    '/case-deadlines/:docketNumber',
+    lambdaWrapper(createCaseDeadlineLambda),
   );
   app.get(
     '/case-deadlines/:docketNumber',
     lambdaWrapper(getCaseDeadlinesForCaseLambda),
   );
   app.get('/case-deadlines', lambdaWrapper(getCaseDeadlinesLambda));
-  app.get(
-    '/consolidated-case-deadlines/:consolidatedCaseDeadlineId',
-    lambdaWrapper(getConsolidatedCaseDeadlinesLambda),
-  );
 }
 
 /**

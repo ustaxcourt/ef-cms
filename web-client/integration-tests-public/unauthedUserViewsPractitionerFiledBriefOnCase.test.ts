@@ -125,6 +125,8 @@ describe('unauthed user views practitioner filed brief', () => {
         seriatimBriefDocument.documentType,
       );
 
+      expect(testClient.getState('form.partyPrimary')).toEqual(undefined);
+
       await testClient.runSequence(
         'updateFileDocumentWizardFormValueSequence',
         {
@@ -175,7 +177,7 @@ describe('unauthed user views practitioner filed brief', () => {
     loginAs(testClient, 'privatePractitioner3@example.com');
     practitionerSearchesForCase(testClient);
     it('unassociated practitioner is able to view the previously filed seriatim brief and access the document link', async () => {
-      const { formattedDocketEntriesOnDocketRecord } =
+      let { formattedDocketEntriesOnDocketRecord } =
         await getFormattedDocketEntriesForTest(testClient);
 
       const practitioner1FiledSeriatimBrief =
@@ -220,6 +222,8 @@ describe('unauthed user views practitioner filed brief', () => {
       expect(testClient.getState('form.documentType')).toEqual(
         servableBriefDocument.documentType,
       );
+
+      expect(testClient.getState('form.partyPrimary')).toEqual(undefined);
 
       await testClient.runSequence(
         'updateFileDocumentWizardFormValueSequence',
@@ -270,7 +274,7 @@ describe('unauthed user views practitioner filed brief', () => {
   describe('petitionsClerk serves the simultaneous opening brief', () => {
     loginAs(testClient, 'petitionsclerk@example.com');
     it('should serve the brief', async () => {
-      const { formattedDocketEntriesOnDocketRecord } =
+      let { formattedDocketEntriesOnDocketRecord } =
         await getFormattedDocketEntriesForTest(testClient);
 
       const simultaneousBrief = formattedDocketEntriesOnDocketRecord.find(
@@ -323,6 +327,8 @@ describe('unauthed user views practitioner filed brief', () => {
       expect(testClient.getState('form.documentType')).toEqual(
         qcableSeriatimBriefDocument.documentType,
       );
+
+      expect(testClient.getState('form.partyPrimary')).toEqual(undefined);
 
       await testClient.runSequence(
         'updateFileDocumentWizardFormValueSequence',
@@ -383,7 +389,7 @@ describe('unauthed user views practitioner filed brief', () => {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      const { formattedDocketEntriesOnDocketRecord } = runCompute(
+      let { formattedDocketEntriesOnDocketRecord } = runCompute(
         publicCaseDetailHelper,
         {
           state: cerebralTest.getState(),

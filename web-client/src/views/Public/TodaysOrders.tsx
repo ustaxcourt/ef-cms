@@ -30,10 +30,15 @@ export const TodaysOrders = connect(
             {todaysOrdersHelper.formattedCurrentDate}
           </h1>
 
-          <div className="grid-row">
+          <div className="grid-row margin-bottom-105">
             <div className="tablet:grid-col-10">
               <p>Note: Orders in sealed cases will not be displayed.</p>
             </div>
+            {todaysOrdersHelper.hasResults && (
+              <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
+                {todaysOrdersHelper.totalCount} Order(s)
+              </div>
+            )}
           </div>
 
           {!todaysOrdersHelper.hasResults && (
@@ -43,10 +48,10 @@ export const TodaysOrders = connect(
           {todaysOrdersHelper.hasResults && (
             <>
               <NonMobile>
-                <div className="grid-row margin-top-105">
+                <div className="tablet:grid-col-2">
                   <select
                     aria-label="Today’s Orders Sort"
-                    className="usa-select margin-bottom-2 sort tablet:grid-col-2"
+                    className="usa-select margin-top-0 margin-bottom-2 sort"
                     name="todaysOrdersSort"
                     value={todaysOrdersHelper.todaysOrdersSort}
                     onChange={e => {
@@ -62,11 +67,6 @@ export const TodaysOrders = connect(
                       </option>
                     ))}
                   </select>
-                  {todaysOrdersHelper.hasResults && (
-                    <div className="tablet:grid-col-fill text-right text-middle-margin">
-                      {todaysOrdersHelper.totalCount} Order(s)
-                    </div>
-                  )}
                 </div>
                 <table
                   aria-label="todays orders"
@@ -120,14 +120,6 @@ export const TodaysOrders = connect(
               </NonMobile>
 
               <Mobile>
-                <div className="grid-row margin-bottom-105">
-                  {todaysOrdersHelper.hasResults && (
-                    <div className="tablet:grid-col-2 float-right text-right text-middle-margin">
-                      {todaysOrdersHelper.totalCount} Order(s)
-                    </div>
-                  )}
-                </div>
-
                 <table
                   aria-label="todays orders"
                   className="usa-table gray-header todays-orders responsive-table row-border-only"

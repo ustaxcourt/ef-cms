@@ -31,6 +31,7 @@ export const generateStandingPretrialOrderForSmallCaseInteractor = async (
   }
 
   const caseDetail = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 

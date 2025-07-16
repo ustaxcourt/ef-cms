@@ -15,12 +15,11 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import {
   asyncHandleLockError,
   withLocking,
-} from '@web-api/persistence/postgres/utils/mutex';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+} from '@web-api/business/useCaseHelper/acquireLock';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -76,9 +75,7 @@ export const addPaperFiling = async (
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;
 
-  const consolidatedGroupCases = await getCasesByDocketNumbers({
-    docketNumbers: consolidatedGroupDocketNumbers,
-  });
+  const consolidatedGroupCases = await getCasesByDocketNumbers({docketNumbers: consolidatedGroupDocketNumbers})
 
   for (const rawCase of consolidatedGroupCases) {
     let caseEntity = new Case(rawCase, { authorizedUser });
@@ -161,7 +158,8 @@ export const addPaperFiling = async (
 
     caseEntities.push(caseEntity);
 
-    await updateCaseAndAssociations({
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
       authorizedUser,
       caseToUpdate: caseEntity.validate().toRawObject(),
     });

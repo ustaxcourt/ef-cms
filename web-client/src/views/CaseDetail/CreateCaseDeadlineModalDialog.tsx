@@ -5,12 +5,10 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { ConsolidatedCaseGroupInfo } from '@web-client/views/CaseDetail/CaseDeadline/ConsolidatedCaseGroupInfo';
 
 export const CreateCaseDeadlineModalDialog = connect(
   {
     DATE_FORMATS: state.constants.DATE_FORMATS,
-    caseDetail: state.caseDetail,
     createCaseDeadlineSequence: sequences.createCaseDeadlineSequence,
     dismissModalSequence: sequences.dismissModalSequence,
     form: state.form,
@@ -23,7 +21,6 @@ export const CreateCaseDeadlineModalDialog = connect(
   },
   function CreateCaseDeadlineModalDialog({
     createCaseDeadlineSequence,
-    caseDetail,
     DATE_FORMATS,
     dismissModalSequence,
     form,
@@ -33,7 +30,6 @@ export const CreateCaseDeadlineModalDialog = connect(
     validateCaseDeadlineSequence,
     validationErrors,
   }) {
-    const { docketNumber, leadDocketNumber, consolidatedCases } = caseDetail;
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -79,13 +75,6 @@ export const CreateCaseDeadlineModalDialog = connect(
               }}
             />
           </FormGroup>
-
-          <ConsolidatedCaseGroupInfo
-            option="add"
-            docketNumber={docketNumber}
-            leadDocketNumber={leadDocketNumber}
-            consolidatedCases={consolidatedCases}
-          />
         </div>
       </ModalDialog>
     );

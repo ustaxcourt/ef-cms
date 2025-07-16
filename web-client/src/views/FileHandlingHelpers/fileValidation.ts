@@ -9,7 +9,6 @@ export enum ErrorTypes {
   CORRUPT_FILE = 'CORRUPT_FILE',
   ENCRYPTED_FILE = 'ENCRYPTED_FILE',
   UNKNOWN = 'UNKNOWN',
-  UNSUPPORTED_BROWSER = "UNSUPPORTED_BROWSER",
 }
 
 interface FileValidationErrorInfo {

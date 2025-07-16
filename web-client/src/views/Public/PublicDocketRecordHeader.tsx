@@ -48,12 +48,12 @@ export const PublicDocketRecordHeader = connect<
   }) {
     return (
       <React.Fragment>
-        <div className="title display-flex">
+        <div className="title">
           <h1>Docket Record</h1>
           {publicCaseDetailHelper.showPrintableDocketRecord && (
             <Button
               link
-              className="hide-on-mobile margin-right-2 margin-left-auto"
+              className="hide-on-mobile float-right margin-right-0 margin-top-1"
               data-testid="print-public-docket-record-button"
               icon="print"
               onClick={() => {
@@ -63,15 +63,6 @@ export const PublicDocketRecordHeader = connect<
               Printable Docket Record
             </Button>
           )}
-          <div className="hide-on-mobile margin-top-auto margin-bottom-auto">
-            <span className="text-semibold">Count: </span>
-            <span>
-              {
-                publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord
-                  .length
-              }
-            </span>
-          </div>
         </div>
 
         <NonMobile>
@@ -98,9 +89,6 @@ export const PublicDocketRecordHeader = connect<
               gotoPublicPrintableDocketRecordSequence
             }
             sortTableSequence={sortTableSequence}
-            totalCount={
-              publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.length
-            }
           />
         </Mobile>
 

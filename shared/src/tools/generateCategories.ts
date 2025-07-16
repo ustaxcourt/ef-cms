@@ -33,6 +33,7 @@ if (type === 'internal') {
     'scenario',
     'labelPreviousDocument',
     'labelFreeText',
+    'labelFreeText2',
     'ordinalField',
   ];
   csvColumns = [
@@ -47,6 +48,7 @@ if (type === 'internal') {
     'variations-ignore',
     'labelPreviousDocument',
     'labelFreeText',
+    'labelFreeText2',
     'ordinalField',
   ];
 } else if (type === 'external') {

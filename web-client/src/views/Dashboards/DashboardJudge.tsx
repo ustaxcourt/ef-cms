@@ -14,13 +14,11 @@ export const DashboardJudge = connect(
   {
     caseWorksheetsHelper: state.caseWorksheetsHelper,
     pendingMotionsHelper: state.pendingMotionsHelper,
-    recentMessagesHelper: state.recentMessagesHelper,
     user: state.user,
   },
   function DashboardJudge({
     caseWorksheetsHelper,
     pendingMotionsHelper,
-    recentMessagesHelper,
     user,
   }) {
     return (
@@ -31,10 +29,7 @@ export const DashboardJudge = connect(
           <ErrorNotification />
           <TrialSessionsSummary />
           <Tabs className="margin-top-6" marginBottom={false}>
-            <Tab
-              tabName="recentMessages"
-              title={`Recent Messages (${recentMessagesHelper.recentMessages.length})`}
-            >
+            <Tab tabName="recentMessages" title="Recent Messages">
               <RecentMessages />
             </Tab>
 

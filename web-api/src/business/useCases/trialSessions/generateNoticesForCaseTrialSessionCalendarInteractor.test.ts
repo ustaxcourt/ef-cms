@@ -1,5 +1,4 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
@@ -26,7 +25,7 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCaseAndAssociations = jest
+  jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
 
@@ -393,8 +392,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
 
-    const generatedTrialNotice =
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+    const generatedTrialNotice = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'SPTO',
       );
     expect(generatedTrialNotice).toMatchObject({

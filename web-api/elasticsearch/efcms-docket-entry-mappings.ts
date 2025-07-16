@@ -51,6 +51,9 @@ export const efcmsDocketEntryMappings: Property = {
     'filingDate.S': {
       type: 'date',
     },
+    'indexedTimestamp.N': {
+      type: 'text',
+    },
     'irsPractitioners.L.M.userId.S': {
       type: 'keyword',
     },

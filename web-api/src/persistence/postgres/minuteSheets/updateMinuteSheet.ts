@@ -1,6 +1,5 @@
 import { MinuteSheet } from '@shared/business/entities/trialSessionMinutes/MinuteSheet';
 import { getDbWriter } from '@web-api/database';
-import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 
 export const upsertMinuteSheet = async ({
@@ -29,7 +28,6 @@ export const upsertMinuteSheet = async ({
         )
         .executeTakeFirst(),
     table: 'dwMinuteSheet',
-    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 
   return transformNullToUndefined(newOrUpdatedMinuteSheet) as {

@@ -8,11 +8,11 @@ import { Statistic } from '@shared/business/entities/Statistic';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 
 export const addDeficiencyStatistic = async (
-  _applicationContext: ServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     determinationDeficiencyAmount,
     determinationTotalPenalties,
@@ -46,6 +46,7 @@ export const addDeficiencyStatistic = async (
   }
 
   const oldCase = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 

@@ -1,48 +1,41 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
-import '@web-api/persistence/postgres/utils/mocks.jest';
-jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
-);
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber',
-);
 import { MOCK_CASE } from '@shared/test/mockCase';
-
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { removeConsolidatedCasesInteractor } from '@web-api/business/useCases/caseConsolidation/removeConsolidatedCasesInteractor';
+import { removeConsolidatedCasesInteractor } from './removeConsolidatedCasesInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
-import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('removeConsolidatedCasesInteractor', () => {
   let mockCases;
+  let mockLock;
   const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
-  const tryGetLocks = jest.mocked(tryGetLocksMock);
+  const getCasesByLeadDocketNumber =
+    getCasesByLeadDocketNumberMock as jest.Mock;
 
   // In this file, getCasesByDocketNumbers should be the cases that are to be removed
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-  const getCaseDeadlinesByDocketNumber = jest.mocked(
-    getCaseDeadlinesByDocketNumberMock,
-  );
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
 
   beforeEach(() => {
-    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
+    mockLock = undefined;
     mockCases = {
       '101-19': {
         ...MOCK_CASE,
@@ -79,7 +72,7 @@ describe('removeConsolidatedCasesInteractor', () => {
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
       return mockCases[docketNumber];
     });
-    getConsolidatedCases.mockImplementation(({ leadDocketNumber }) => {
+    getCasesByLeadDocketNumber.mockImplementation(({ leadDocketNumber }) => {
       return Object.keys(mockCases)
         .map(key => mockCases[key])
         .filter(mockCase => mockCase.leadDocketNumber === leadDocketNumber);
@@ -212,9 +205,9 @@ describe('removeConsolidatedCasesInteractor', () => {
       },
       mockDocketClerkUser,
     );
-    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(
-      docketNumbersToRemove.length,
-    );
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalledTimes(docketNumbersToRemove.length);
   });
 
   it('Should update ALL cases to remove consolidation if new consolidated cases length is 1', async () => {
@@ -237,14 +230,14 @@ describe('removeConsolidatedCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCaseAndAssociations).toHaveBeenCalledTimes(
-      allDocketNumbers.length,
-    );
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalledTimes(allDocketNumbers.length);
 
     allDocketNumbers.forEach((docketNumber, callIndex) => {
       expect(
-        updateCaseAndAssociations.mock.calls[callIndex][0].caseToUpdate
-          .docketNumber,
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+          .calls[callIndex][0].caseToUpdate.docketNumber,
       ).toBe(docketNumber);
     });
   });
@@ -307,9 +300,7 @@ describe('removeConsolidatedCasesInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLocks.mockResolvedValueOnce([
-      { successfullyLocked: false, identifier: 'abc' },
-    ]);
+    mockLock = MOCK_LOCK;
     getCasesByDocketNumbers.mockResolvedValue([mockCases['104-19']]);
 
     await expect(
@@ -326,7 +317,7 @@ describe('removeConsolidatedCasesInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire a lock on the cases', async () => {
+  it('should acquire and remove the lock on the cases', async () => {
     getCasesByDocketNumbers.mockResolvedValue([mockCases['104-19']]);
     await removeConsolidatedCasesInteractor(
       applicationContext,
@@ -337,12 +328,26 @@ describe('removeConsolidatedCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(tryGetLocks).toHaveBeenCalledTimes(1);
-
-    expect(tryGetLocks).toHaveBeenCalledWith(
-      expect.objectContaining({
-        identifiers: ['case|105-19', 'case|104-19'],
-      }),
-    );
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: ['case|105-19', 'case|104-19'],
+    });
+    ['105-19', '104-19'].forEach(docketNumber => {
+      expect(
+        applicationContext.getPersistenceGateway().createLock,
+      ).toHaveBeenCalledWith({
+        applicationContext,
+        identifier: `case|${docketNumber}`,
+        ttl: 30,
+      });
+    });
   });
 });

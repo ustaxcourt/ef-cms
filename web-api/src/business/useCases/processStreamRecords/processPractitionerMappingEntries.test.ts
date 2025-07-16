@@ -1,9 +1,14 @@
+jest.mock(
+  '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo',
+);
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { processPractitionerMappingEntries } from '@web-api/business/useCases/processStreamRecords/processPractitionerMappingEntries';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getCaseMetadataWithCounsel as getCaseMetadataWithCounselMock } from '@web-api/persistence/postgres/cases/getCaseMetadataWithCounsel';
+import { getCaseDataFromDynamo as getCaseDataFromDynamoMock } from '@web-api/business/useCases/processStreamRecords/getCaseDataFromDynamo';
 
-const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+const getCaseMetadataWithCounsel = jest.mocked(getCaseMetadataWithCounselMock);
+const getCaseDataFromDynamo = jest.mocked(getCaseDataFromDynamoMock);
 
 describe('processPractitionerMappingEntries', () => {
   const mockCaseRecord = {
@@ -56,7 +61,7 @@ describe('processPractitionerMappingEntries', () => {
       practitionerMappingRecords: [],
     });
 
-    expect(getCasesByDocketNumbers).not.toHaveBeenCalled();
+    expect(getCaseMetadataWithCounsel).not.toHaveBeenCalled();
   });
 
   it('should retrieve and index each case for each provided practitioner mapping record', async () => {
@@ -65,21 +70,35 @@ describe('processPractitionerMappingEntries', () => {
         '|',
       )[1];
 
-    getCasesByDocketNumbers.mockResolvedValue([mockCaseRecord] as any[]);
+    getCaseMetadataWithCounsel.mockResolvedValue(mockCaseRecord as any);
 
     await processPractitionerMappingEntries({
       applicationContext,
       practitionerMappingRecords: mockPractitionerMappingEntries,
     });
 
-    expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(
+    expect(getCaseMetadataWithCounsel).toHaveBeenCalledTimes(
       mockPractitionerMappingEntries.length,
     );
-    expect(getCasesByDocketNumbers.mock.calls[0][0].docketNumbers).toEqual([
+    expect(getCaseMetadataWithCounsel.mock.calls[0][0].docketNumber).toEqual(
       docketNumberInPractitionerMapping,
-    ]);
+    );
     expect(
       applicationContext.getPersistenceGateway().bulkIndexRecords,
     ).toHaveBeenCalled();
+  });
+
+  it('should fallback to dynamo when case is not found in postgres during re-indexing', async () => {
+    getCaseMetadataWithCounsel.mockRejectedValue({});
+    getCaseDataFromDynamo.mockResolvedValue({});
+
+    await processPractitionerMappingEntries({
+      applicationContext,
+      practitionerMappingRecords: mockPractitionerMappingEntries,
+    });
+
+    expect(getCaseDataFromDynamo).toHaveBeenCalledTimes(
+      mockPractitionerMappingEntries.length,
+    );
   });
 });

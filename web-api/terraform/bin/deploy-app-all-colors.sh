@@ -22,6 +22,7 @@ fi
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
+[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
@@ -36,10 +37,11 @@ echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 echo "  - LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
+echo "  - ZONE_NAME=${ZONE_NAME}"
 
 ../../../../scripts/verify-terraform-version.sh
 
-BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENV}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 
@@ -80,6 +82,7 @@ ACTIVE_SES_RULESET=$(../../../../scripts/ses/get-ses-ruleset.sh)
 
 export TF_VAR_environment=$ENV
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_active_ses_ruleset=$ACTIVE_SES_RULESET
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY

@@ -7,9 +7,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { applicationContext } from '@web-api/applicationContext';
 
 /**
  * used for removing the high priority from a case
@@ -28,6 +29,7 @@ export const unprioritizeCase = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 
@@ -40,6 +42,7 @@ export const unprioritizeCase = async (
   });
 
   const updatedCase = await updateCaseAndAssociations({
+    applicationContext,
     authorizedUser,
     caseToUpdate: caseEntity,
   });

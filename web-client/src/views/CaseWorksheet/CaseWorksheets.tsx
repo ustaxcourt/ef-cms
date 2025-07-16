@@ -28,9 +28,8 @@ export const CaseWorksheets = connect(
                 className="text-semibold"
                 data-testid="case-worksheets-total-count-text"
               >
-                Count:&nbsp;
+                Count: {caseWorksheetsHelper.caseWorksheetsFormatted.length}
               </span>
-              {caseWorksheetsHelper.caseWorksheetsFormatted.length}
             </div>
           </div>
         </div>

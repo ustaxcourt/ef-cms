@@ -43,7 +43,3 @@ resource "aws_iam_role_policy" "cloudwatch" {
 }
 EOF
 }
-
-resource "aws_api_gateway_account" "cloudwatch_role" {
-  cloudwatch_role_arn = aws_iam_role.cloudwatch.arn
-}

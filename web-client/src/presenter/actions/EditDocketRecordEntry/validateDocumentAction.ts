@@ -43,6 +43,7 @@ export const validateDocumentAction = ({
       'receivedAt',
       'eventCode',
       'freeText',
+      'freeText2',
       'previousDocument',
       'serviceDate',
       'trialLocation',

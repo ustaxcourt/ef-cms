@@ -25,14 +25,6 @@ export const PrintableWorkingCopySessionList = ({
       ? `${formattedTrialSession.formattedStartDateFull} - ${formattedTrialSession.formattedEstimatedEndDateFull}`
       : `${formattedTrialSession.formattedStartDateFull}`;
 
-  const trialStatusCounts = formattedCases.reduce((counters, c) => {
-    if(c.trialStatus === undefined) {
-      counters["statusUnassigned"] = (counters["statusUnassigned"] || 0) + 1;
-    } else {
-      counters[c.trialStatus] = (counters[c.trialStatus] || 0) + 1;
-    }
-    return counters;
-  }, {});
   return (
     <div className="printable-working-copy-list">
       <PrimaryHeader />
@@ -54,7 +46,6 @@ export const PrintableWorkingCopySessionList = ({
         <SelectedFiltersSection
           count={formattedCases.length}
           selectedFilters={filters}
-          trialStatusCounts={trialStatusCounts}
         />
 
         <table>

@@ -4,8 +4,8 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
 
 /**
  * addCoversheetInteractor
@@ -39,6 +39,7 @@ export const addCoversheetInteractor = async (
 ) => {
   if (!caseEntity) {
     const caseRecord = await getCaseByDocketNumber({
+      applicationContext,
       docketNumber,
     });
 
@@ -87,50 +88,56 @@ export const addCoversheetInteractor = async (
     docketNumbers: docketNumbersToUpdate,
   });
 
-  const updatedDocketEntries = casesToUpdate.map(caseRecord => {
-    const consolidatedCaseEntity =
-      caseRecord.docketNumber === docketNumber
-        ? caseEntity
-        : new Case(caseRecord, {
-            authorizedUser,
-          });
+  const updatedDocketEntries = await settlePromises(
+    casesToUpdate.map(async caseRecord => {
+      const consolidatedCaseEntity =
+        caseRecord.docketNumber === docketNumber
+          ? caseEntity
+          : new Case(caseRecord, {
+              authorizedUser,
+            });
 
-    const consolidatedCaseDocketEntryEntity =
-      consolidatedCaseEntity!.getDocketEntryById({
-        docketEntryId,
-      });
+      const consolidatedCaseDocketEntryEntity =
+        consolidatedCaseEntity!.getDocketEntryById({
+          docketEntryId,
+        });
 
-    if (consolidatedCaseDocketEntryEntity) {
-      const isSimultaneousDocType =
-        SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-          consolidatedCaseDocketEntryEntity.eventCode,
-        ) ||
-        consolidatedCaseDocketEntryEntity.documentTitle?.includes(
-          'Simultaneous',
-        );
+      if (consolidatedCaseDocketEntryEntity) {
+        const isSimultaneousDocType =
+          SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
+            consolidatedCaseDocketEntryEntity.eventCode,
+          ) ||
+          consolidatedCaseDocketEntryEntity.documentTitle?.includes(
+            'Simultaneous',
+          );
 
-      if (
-        !isSimultaneousDocType ||
-        (isSimultaneousDocType &&
-          caseEntity &&
-          caseRecord.docketNumber === docketNumber)
-      ) {
-        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        if (
+          !isSimultaneousDocType ||
+          (isSimultaneousDocType &&
+            caseEntity &&
+            caseRecord.docketNumber === docketNumber)
+        ) {
+          consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        }
+
+        consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
+
+        const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
+          .validate()
+          .toRawObject();
+
+        await applicationContext.getPersistenceGateway().updateDocketEntry({
+          applicationContext,
+          docketEntryId,
+          docketNumber: caseRecord.docketNumber,
+          document: updateConsolidatedDocketEntry,
+        });
+        return updateConsolidatedDocketEntry;
       }
-
-      consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
-
-      const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
-        .validate()
-        .toRawObject();
-
-      return updateConsolidatedDocketEntry;
-    }
-  });
-
-  await upsertDocketEntries(updatedDocketEntries);
-
-  return updatedDocketEntries.find(
-    entry => entry.docketNumber === docketNumber,
+    }),
   );
+
+  return updatedDocketEntries
+    .filter(Boolean)
+    .find(entry => entry.docketNumber === docketNumber);
 };

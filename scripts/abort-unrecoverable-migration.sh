@@ -8,7 +8,8 @@
 
 ./check-env-variables.sh \
   "ENV" \
-  "EFCMS_DOMAIN"
+  "ZONE_NAME" \
+  "EFCMS_DOMAIN" \
 
 MIGRATE_FLAG=$(./scripts/migration/get-migrate-flag.sh "$ENV")
 SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh "$ENV")

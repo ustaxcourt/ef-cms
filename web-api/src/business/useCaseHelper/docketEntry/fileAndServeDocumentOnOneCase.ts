@@ -81,6 +81,7 @@ export const fileAndServeDocumentOnOneCase = async ({
   }
 
   const validRawCaseEntity = await updateCaseAndAssociations({
+    applicationContext,
     authorizedUser: user,
     caseToUpdate: caseEntity,
   });

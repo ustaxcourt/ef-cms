@@ -11,7 +11,6 @@ export const docketRecordHelper = (
   showEditOrSealDocketRecordEntry: boolean;
   showPrintableDocketRecord?: boolean;
   sortLabelTextMobile: string;
-  docketRecordCount: number;
 } => {
   const permissions = get(state.permissions);
   const { docketRecordFilter, docketRecordSort } = get(state.sessionMetadata);
@@ -45,6 +44,5 @@ export const docketRecordHelper = (
       permissions.EDIT_DOCKET_ENTRY || permissions.SEAL_DOCKET_ENTRY,
     showPrintableDocketRecord,
     sortLabelTextMobile,
-    docketRecordCount: docketEntries.length,
   };
 };

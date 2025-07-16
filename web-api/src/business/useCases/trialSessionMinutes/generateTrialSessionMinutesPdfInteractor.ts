@@ -27,8 +27,9 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
+  
   const aCase = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 
@@ -102,6 +103,7 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   caseEntity.addDocketEntry(draftDocketEntry);
 
   await updateCaseAndAssociations({
+    applicationContext,
     authorizedUser,
     caseToUpdate: caseEntity,
   });

@@ -2,6 +2,10 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
@@ -11,13 +15,8 @@ import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConsta
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
-import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/persistence/postgres/utils/mutex';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -47,6 +46,7 @@ export const serveCourtIssuedDocument = async (
   }
 
   const subjectCase = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber: subjectCaseDocketNumber,
   });
 
@@ -71,11 +71,14 @@ export const serveCourtIssuedDocument = async (
     throw new Error('Docket entry is already being served');
   }
 
-  await updateDocketEntryPendingServiceStatus({
-    docketEntryId: docketEntryToServe.docketEntryId,
-    docketNumber: subjectCaseEntity.docketNumber,
-    status: true,
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .updateDocketEntryPendingServiceStatus({
+      applicationContext,
+      docketEntryId: docketEntryToServe.docketEntryId,
+      docketNumber: subjectCaseEntity.docketNumber,
+      status: true,
+    });
 
   const stampedPdf = await applicationContext
     .getUseCaseHelpers()
@@ -145,11 +148,14 @@ export const serveCourtIssuedDocument = async (
   } finally {
     for (const caseEntity of caseEntities) {
       try {
-        await updateDocketEntryPendingServiceStatus({
-          docketEntryId,
-          docketNumber: caseEntity.docketNumber,
-          status: false,
-        });
+        await applicationContext
+          .getPersistenceGateway()
+          .updateDocketEntryPendingServiceStatus({
+            applicationContext,
+            docketEntryId,
+            docketNumber: caseEntity.docketNumber,
+            status: false,
+          });
       } catch (e) {
         applicationContext.logger.error(
           `Encountered an exception trying to reset isPendingService on Docket Number ${caseEntity.docketNumber}.`,

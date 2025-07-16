@@ -7,8 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * updateOtherStatistics
@@ -21,7 +20,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
  * @returns {object} the updated case
  */
 export const updateOtherStatistics = async (
-  _applicationContext: ServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     damages,
     docketNumber,
@@ -34,6 +33,7 @@ export const updateOtherStatistics = async (
   }
 
   const oldCase = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 
@@ -42,10 +42,13 @@ export const updateOtherStatistics = async (
     { authorizedUser },
   );
 
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: newCase,
-  });
+  const updatedCase = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      authorizedUser,
+      caseToUpdate: newCase,
+    });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

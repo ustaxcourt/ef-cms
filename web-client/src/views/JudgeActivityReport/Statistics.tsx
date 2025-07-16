@@ -39,13 +39,11 @@ export const Statistics = connect(
               <div className="grid-col-9 table-caption-serif">
                 Cases Closed{' '}
               </div>
-              <div className="display-flex flex-justify-end grid-col-fill">
-                <span className="text-semibold">Total:&nbsp;</span>
-                <span className="text-normal">
-                  {formatPositiveNumber(
-                    judgeActivityReportHelper.closedCasesTotal,
-                  )}
-                </span>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total:{' '}
+                {formatPositiveNumber(
+                  judgeActivityReportHelper.closedCasesTotal,
+                )}
               </div>
             </div>
           </caption>
@@ -81,13 +79,11 @@ export const Statistics = connect(
               <div className="grid-col-9 table-caption-serif">
                 Sessions Held
               </div>
-              <div className="display-flex flex-justify-end grid-col-fill">
-                <span className="text-semibold">Total:&nbsp;</span>
-                <span className="text-normal">
-                  {formatPositiveNumber(
-                    judgeActivityReportHelper.trialSessionsHeldTotal,
-                  )}
-                </span>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total:{' '}
+                {formatPositiveNumber(
+                  judgeActivityReportHelper.trialSessionsHeldTotal,
+                )}
               </div>
             </div>
           </caption>
@@ -124,13 +120,11 @@ export const Statistics = connect(
               <div className="grid-col-9 table-caption-serif">
                 Orders Issued
               </div>
-              <div className="display-flex flex-justify-end grid-col-fill">
-                <span className="text-semibold">Total:&nbsp;</span>
-                <span className="text-normal">
-                  {formatPositiveNumber(
-                    judgeActivityReportHelper.ordersFiledTotal,
-                  )}
-                </span>
+              <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                Total:{' '}
+                {formatPositiveNumber(
+                  judgeActivityReportHelper.ordersFiledTotal,
+                )}
               </div>
             </div>
           </caption>
@@ -172,13 +166,11 @@ export const Statistics = connect(
                 <div className="grid-col-9 table-caption-serif">
                   Opinions Issued
                 </div>
-                <div className="display-flex flex-justify-end grid-col-fill">
-                  <span className="text-semibold">Total:&nbsp;</span>
-                  <span className="text-normal">
-                    {formatPositiveNumber(
-                      judgeActivityReportHelper.opinionsFiledTotal,
-                    )}
-                  </span>
+                <div className="display-flex flex-column flex-align-end grid-col-fill text-semibold">
+                  Total:{' '}
+                  {formatPositiveNumber(
+                    judgeActivityReportHelper.opinionsFiledTotal,
+                  )}
                 </div>
               </div>
             </caption>

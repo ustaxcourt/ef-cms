@@ -12,8 +12,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * updateCaseDetails
@@ -25,7 +24,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
  * @returns {object} the updated case data
  */
 export const updateCaseDetails = async (
-  _applicationContext: ServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -47,6 +46,7 @@ export const updateCaseDetails = async (
   };
 
   const oldCase = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 
@@ -110,10 +110,13 @@ export const updateCaseDetails = async (
     }
   }
 
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: newCaseEntity,
-  });
+  const updatedCase = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      authorizedUser,
+      caseToUpdate: newCaseEntity,
+    });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

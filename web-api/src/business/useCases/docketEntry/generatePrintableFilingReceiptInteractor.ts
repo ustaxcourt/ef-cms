@@ -58,6 +58,7 @@ export const generatePrintableFilingReceiptInteractor = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 
@@ -75,6 +76,7 @@ export const generatePrintableFilingReceiptInteractor = async (
 
   if (fileAcrossConsolidatedGroup) {
     const leadCase = await getCaseByDocketNumber({
+      applicationContext,
       docketNumber: caseEntity.leadDocketNumber!,
     });
     consolidatedCasesDocketNumbers = leadCase.consolidatedCases

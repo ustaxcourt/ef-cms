@@ -1,4 +1,4 @@
-import { asyncSyncHandler, remove } from '../requests';
+import { remove } from '../requests';
 
 /**
  * deleteCaseDeadlineInteractorProxy
@@ -13,13 +13,8 @@ export const deleteCaseDeadlineInteractor = (
   applicationContext,
   { caseDeadlineId, docketNumber },
 ) => {
-  return asyncSyncHandler(
+  return remove({
     applicationContext,
-    async asyncSyncId =>
-      await remove({
-        applicationContext,
-        asyncSyncId,
-        endpoint: `/async/case-deadlines/${docketNumber}/${caseDeadlineId}`,
-      }),
-  );
+    endpoint: `/case-deadlines/${docketNumber}/${caseDeadlineId}`,
+  });
 };

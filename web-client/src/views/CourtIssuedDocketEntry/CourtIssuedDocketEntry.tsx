@@ -230,13 +230,11 @@ export const CourtIssuedDocketEntry = connect(
                       {addCourtIssuedDocketEntryHelper.serviceParties.map(
                         party => (
                           <div
-                            className="service-party"
+                            className="margin-bottom-2"
                             key={party.displayName}
                           >
-                            <div className="service-party-name">
-                              {party.displayName}
-                            </div>
-                            <div className="service-party-indicator">
+                            {party.displayName}
+                            <div className="float-right">
                               <b>Service: </b>
                               {party.serviceIndicator}
                             </div>

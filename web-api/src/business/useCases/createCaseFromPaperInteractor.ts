@@ -23,7 +23,8 @@ import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utili
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { CREATE_CASE_LOCK_IDENTIFIER } from '@web-api/business/useCases/createCaseInteractor';
-import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { acquireLock } from '@web-api/business/useCaseHelper/acquireLock';
+import { removeLock } from '@web-api/persistence/dynamo/locks/acquireLock';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
@@ -306,7 +307,7 @@ export const createCaseFromPaperInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const removeLockFunction = await acquireLock({
+  await acquireLock({
     applicationContext,
     authorizedUser,
     identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
@@ -333,7 +334,10 @@ export const createCaseFromPaperInteractor = async (
       authorizedUser,
     ));
   } finally {
-    await removeLockFunction();
+    await removeLock({
+      applicationContext,
+      identifiers: [CREATE_CASE_LOCK_IDENTIFIER],
+    });
   }
   setServiceIndicatorsForPetitionersOnCase(caseToAdd);
 

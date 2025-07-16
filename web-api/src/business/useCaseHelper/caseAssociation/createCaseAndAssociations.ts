@@ -5,16 +5,27 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { createCase } from '@web-api/persistence/postgres/cases/createCase';
-import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 
-const createCaseDocketEntries = async ({
+/**
+ * createCaseDocketEntries
+ *
+ * @param {object} providers the providers object
+ * @param {Array<object>} providers.docketEntries a list of docket entries
+ * @param {object} providers.docketNumber the docket number
+ * @returns {Array<Promise>} promises which resolve upon creation of all docket entries
+ */
+const createCaseDocketEntries = ({
+  applicationContext,
   authorizedUser,
   docketEntries,
+  docketNumber,
   petitioners,
 }: {
+  applicationContext: ServerApplicationContext;
   authorizedUser: AuthUser;
   docketEntries: any;
+  docketNumber: string;
   petitioners: any;
 }) => {
   const validDocketEntries = DocketEntry.validateRawCollection(docketEntries, {
@@ -22,7 +33,14 @@ const createCaseDocketEntries = async ({
     petitioners,
   });
 
-  await upsertDocketEntries(validDocketEntries);
+  return validDocketEntries.map(doc =>
+    applicationContext.getPersistenceGateway().updateDocketEntry({
+      applicationContext,
+      docketEntryId: doc.docketEntryId,
+      docketNumber,
+      document: doc,
+    }),
+  );
 };
 
 /**
@@ -113,9 +131,11 @@ export const createCaseAndAssociations = async ({
     createCase({
       caseToCreate,
     }),
-    createCaseDocketEntries({
+    ...createCaseDocketEntries({
+      applicationContext,
       authorizedUser,
       docketEntries,
+      docketNumber,
       petitioners: caseToCreate.petitioners,
     }),
     ...connectIrsPractitioners({

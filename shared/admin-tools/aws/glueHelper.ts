@@ -35,13 +35,9 @@ export const getRunStateOfMostRecentJobRun = async (
 
 export const startGlueJob = async ({
   destinationTable,
-  lowerEnvAccountId,
-  prodEnvAccountId,
   sourceTable,
 }: {
   destinationTable: string;
-  lowerEnvAccountId: string;
-  prodEnvAccountId: string;
   sourceTable: string;
 }): Promise<boolean> => {
   let glueJobStarted = false;
@@ -54,7 +50,6 @@ export const startGlueJob = async ({
   const startJobRunCommand = new StartJobRunCommand({
     Arguments: {
       '--destination_table': destinationTable,
-      '--external_role_arn': `arn:aws:iam::${lowerEnvAccountId}:role/efcms_remote_user_${prodEnvAccountId}`,
       '--source_table': sourceTable,
     },
     JobName,

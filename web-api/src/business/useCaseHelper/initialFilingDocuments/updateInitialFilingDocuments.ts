@@ -1,4 +1,3 @@
-import { deleteDocketEntry } from '@web-api/persistence/postgres/docketEntries/deleteDocketEntry';
 import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
   INITIAL_DOCUMENT_TYPES,
@@ -72,7 +71,8 @@ const deleteInitialFilingFromCase = async ({
     docketEntryId: originalCaseDocument.docketEntryId,
   });
 
-  await deleteDocketEntry({
+  await applicationContext.getPersistenceGateway().deleteDocketEntry({
+    applicationContext,
     docketEntryId: originalCaseDocument.docketEntryId,
     docketNumber: caseEntity.docketNumber,
   });

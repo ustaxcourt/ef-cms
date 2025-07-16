@@ -8,8 +8,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * sealCase
@@ -28,6 +27,7 @@ export const sealCase = async (
   }
 
   const rawCaseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 
@@ -35,10 +35,13 @@ export const sealCase = async (
 
   caseToUpdate.setAsSealed();
 
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate,
-  });
+  const updatedCase = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      authorizedUser,
+      caseToUpdate,
+    });
 
   await applicationContext
     .getDispatchers()

@@ -6,12 +6,14 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { cloneDeep } from 'lodash';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { getCasesMetadataWithCounselByLeadDocketNumber as getCasesMetadataWithCounselByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
 
 describe('getCasesForUserInteractor', () => {
-  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
-  const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
+  const getCasesMetadataByDocketNumbers =
+    getCasesMetadataByDocketNumbersMock as jest.Mock;
+  const getCasesMetadataWithCounselByLeadDocketNumber =
+    getCasesMetadataWithCounselByLeadDocketNumberMock as jest.Mock;
   const mockPetitioner: AuthUser = {
     ...mockPetitionerUser,
     userId: MOCK_CASE.petitioners[0].contactId,
@@ -91,7 +93,7 @@ describe('getCasesForUserInteractor', () => {
           memberCase2,
         ]);
 
-      getCasesByDocketNumbers.mockResolvedValue([
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedCase3,
@@ -100,7 +102,9 @@ describe('getCasesForUserInteractor', () => {
         memberCase2,
       ]);
 
-      getConsolidatedCases.mockResolvedValue(consolidatedGroupLeadCase11119);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroupLeadCase11119,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -159,8 +163,10 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue(consolidatedGroup);
-      getCasesByDocketNumbers.mockResolvedValue(consolidatedGroup);
-      getConsolidatedCases.mockResolvedValue(consolidatedGroup);
+      getCasesMetadataByDocketNumbers.mockResolvedValue(consolidatedGroup);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroup,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -192,8 +198,10 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue([memberCase1]);
-      getCasesByDocketNumbers.mockResolvedValue([memberCase1]);
-      getConsolidatedCases.mockResolvedValue(consolidatedGroup);
+      getCasesMetadataByDocketNumbers.mockResolvedValue([memberCase1]);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroup,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -225,8 +233,10 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue([leadCase]);
-      getCasesByDocketNumbers.mockResolvedValue([leadCase]);
-      getConsolidatedCases.mockResolvedValue(consolidatedGroup);
+      getCasesMetadataByDocketNumbers.mockResolvedValue([leadCase]);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroup,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -280,11 +290,13 @@ describe('getCasesForUserInteractor', () => {
       applicationContext
         .getPersistenceGateway()
         .getCasesForUser.mockResolvedValue([leadCase, ...unconsolidatedCases]);
-      getCasesByDocketNumbers.mockResolvedValue([
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
         leadCase,
         ...unconsolidatedCases,
       ]);
-      getConsolidatedCases.mockResolvedValue(consolidatedGroup);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroup,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -316,7 +328,7 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedClosedCase2,
           memberCase2,
         ]);
-      getCasesByDocketNumbers.mockResolvedValue([
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedCase3,
@@ -324,7 +336,9 @@ describe('getCasesForUserInteractor', () => {
         unconsolidatedClosedCase2,
         memberCase2,
       ]);
-      getConsolidatedCases.mockResolvedValue(consolidatedGroupLeadCase11119);
+      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
+        consolidatedGroupLeadCase11119,
+      );
 
       const userCases = await getCasesForUserInteractor(
         applicationContext,
@@ -359,7 +373,7 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedCase2,
           unconsolidatedClosedCase1,
         ]);
-      getCasesByDocketNumbers.mockResolvedValue([
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedClosedCase1,
@@ -403,7 +417,7 @@ describe('getCasesForUserInteractor', () => {
           unconsolidatedClosedCase1,
           corruptedCase,
         ]);
-      getCasesByDocketNumbers.mockResolvedValue([
+      getCasesMetadataByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedClosedCase1,

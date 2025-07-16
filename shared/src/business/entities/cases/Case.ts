@@ -289,10 +289,7 @@ export class Case extends JoiValidationEntity {
    * @param {Array} cases the cases to check for lead case computation
    * @returns {Case} the lead Case entity
    */
-  static findLeadCaseForCases<T>(
-    cases: (T & { docketNumber: string })[],
-  ): T | undefined {
-    if (!cases.length) return undefined;
+  static findLeadCaseForCases(cases) {
     const casesOrdered = Case.sortByDocketNumber([...cases]);
     return casesOrdered.shift();
   }

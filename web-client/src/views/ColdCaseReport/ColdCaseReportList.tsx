@@ -72,7 +72,7 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
         </div>
       )}
 
-      <div className="margin-bottom-105">
+      <div className="margin-bottom-2">
         <div className="text-right">
           <Button
             link
@@ -86,9 +86,8 @@ export function ColdCaseReportList({ entries }: { entries: ColdCaseEntry[] }) {
             Export
           </Button>
           <span className="text-semibold" data-testid="display-data-count">
-            Count:{' '}
+            Count: {entries.length}
           </span>
-          {entries.length}
         </div>
       </div>
 

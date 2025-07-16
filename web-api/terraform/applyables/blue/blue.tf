@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-       version = "~> 6.2.0"
+       version = "~> 6.0.0"
     }
   }
 }
@@ -42,7 +42,7 @@ data "terraform_remote_state" "remote" {
 }
 
 data "aws_route53_zone" "zone" {
-  name         = "${var.dns_domain}."
+  name         = "${var.zone_name}."
   private_zone = "false"
 }
 
@@ -160,6 +160,7 @@ module "worker-east-blue" {
   providers = {
     aws = aws.us-east-1
   }
+
   environment = var.environment
 }
 
@@ -177,6 +178,7 @@ module "opensearch-sync-east-blue" {
   providers = {
     aws = aws.us-east-1
   }
+
   environment = var.environment
 }
 
@@ -185,6 +187,7 @@ module "ui-blue" {
   current_color          = "blue"
   environment            = var.environment
   dns_domain             = var.dns_domain
+  zone_name              = var.zone_name
   viewer_protocol_policy = var.viewer_protocol_policy
   providers = {
     aws           = aws.us-east-1

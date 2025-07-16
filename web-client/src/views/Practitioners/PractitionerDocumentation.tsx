@@ -36,10 +36,10 @@ export const PractitionerDocumentation = connect(
   }) {
     return (
       <>
-        <div className="display-flex margin-bottom-1">
+        <div className="display-flex flex-justify-end">
           <Button
             link
-            className="margin-left-auto margin-right-2"
+            className="push-right margin-bottom-1"
             data-testid="add-practitioner-document-button"
             href={`/practitioner-detail/${barNumber}/add-document`}
             icon="plus-circle"
@@ -47,12 +47,12 @@ export const PractitionerDocumentation = connect(
           >
             Add file
           </Button>
-          <div className="text-semibold margin-bottom-auto margin-top-auto">
-            Count:{' '}
-            <span className="text-normal">
-              {practitionerDocumentationHelper.practitionerDocumentsCount}
-            </span>
-          </div>
+        </div>
+        <div className="float-right text-semibold margin-bottom-2">
+          Count:{' '}
+          <span className="text-normal">
+            {practitionerDocumentationHelper.practitionerDocumentsCount}
+          </span>
         </div>
         <table className="usa-table ustc-table subsection">
           <thead>

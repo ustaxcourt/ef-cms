@@ -22,9 +22,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { defaults, pick } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { generateAndServeDocketEntry } from '@web-api/business/useCaseHelper/service/createChangeItems';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const getIsUserAuthorized = ({
   petitionerCaseRaw,
@@ -92,18 +90,21 @@ const updateCaseEntityAndGenerateChange = async ({
     .getDocumentTypeForAddressChange({ newData, oldData });
 
   if (userHasAnEmail && caseEntity.shouldGenerateNoticesForCase()) {
-    await generateAndServeDocketEntry({
-      applicationContext,
-      authorizedUser,
-      caseEntity,
-      docketMeta: undefined,
-      documentType,
-      newData,
-      oldData,
-      privatePractitionersRepresentingContact,
-      servedParties,
-      user,
-    });
+    const { changeOfAddressDocketEntry } = await applicationContext
+      .getUseCaseHelpers()
+      .generateAndServeDocketEntry({
+        applicationContext,
+        authorizedUser,
+        caseEntity,
+        docketMeta: undefined,
+        documentType,
+        newData,
+        oldData,
+        privatePractitionersRepresentingContact,
+        servedParties,
+        user,
+      });
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
   }
 
   return caseEntity.validate();
@@ -122,6 +123,7 @@ export const updatePetitionerInformation = async (
   }
 
   const petitionerCaseRaw = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 
@@ -235,18 +237,20 @@ export const updatePetitionerInformation = async (
         existingPetitionerInfo.contactId,
       );
 
-    const { url } = await generateAndServeDocketEntry({
-      applicationContext,
-      authorizedUser,
-      caseEntity,
-      docketMeta: undefined,
-      documentType: documentTypeToGenerate,
-      newData: editableFields,
-      oldData: existingPetitionerInfo,
-      privatePractitionersRepresentingContact,
-      servedParties,
-      user: authorizedUser,
-    });
+    const { url } = await applicationContext
+      .getUseCaseHelpers()
+      .generateAndServeDocketEntry({
+        applicationContext,
+        authorizedUser,
+        caseEntity,
+        docketMeta: undefined,
+        documentType: documentTypeToGenerate,
+        newData: editableFields,
+        oldData: existingPetitionerInfo,
+        privatePractitionersRepresentingContact,
+        servedParties,
+        user: authorizedUser,
+      });
     serviceUrl = url;
   }
 
@@ -305,10 +309,13 @@ export const updatePetitionerInformation = async (
     }
   }
 
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
+  const updatedCase = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
 
   return {
     paperServiceParties: servedParties.paper,

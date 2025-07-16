@@ -9,8 +9,9 @@ import { getCaseInteractor } from '@shared/business/useCases/getCaseInteractor';
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 export const getCaseLambda = (event, authorizedUser: UnknownAuthUser) =>
-  genericHandler(event, () =>
+  genericHandler(event, ({ applicationContext }) =>
     getCaseInteractor(
+      applicationContext,
       {
         docketNumber: event.pathParameters.docketNumber,
       },

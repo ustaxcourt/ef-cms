@@ -1,11 +1,10 @@
-import { MOBILE_SCREEN_BREAKPOINT } from '@shared/business/entities/EntityConstants';
 import React from 'react';
 import Responsive from 'react-responsive';
 
-export const NonMobile = props => <Responsive {...props} minWidth={MOBILE_SCREEN_BREAKPOINT} />;
+export const NonMobile = props => <Responsive {...props} minWidth={640} />;
 NonMobile.displayName = 'NonMobile';
 
-export const Mobile = props => <Responsive {...props} maxWidth={MOBILE_SCREEN_BREAKPOINT - 1} />;
+export const Mobile = props => <Responsive {...props} maxWidth={639} />;
 Mobile.displayName = 'Mobile';
 
 export const Phone = props => <Responsive {...props} maxWidth={479} />;

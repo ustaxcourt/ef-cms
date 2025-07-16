@@ -45,15 +45,11 @@ export const PendingMotion = connect<
           </Button>
           .
         </div>
-
         <div
-          className="display-flex flex-justify-end grid-col-fill margin-bottom-2"
+          className="float-right margin-bottom-2 text-semibold"
           data-testid="pending-motions-total-count-text"
         >
-          <span className="text-semibold">Count:&nbsp;</span>
-          <span className="text-normal">
-            {pendingMotionsHelper.formattedPendingMotions.length}
-          </span>
+          Count: {pendingMotionsHelper.formattedPendingMotions.length}
         </div>
 
         <table className="usa-table ustc-table">

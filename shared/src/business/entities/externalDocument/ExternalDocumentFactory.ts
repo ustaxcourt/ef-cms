@@ -8,6 +8,7 @@ import { ExternalDocumentNonStandardF } from './ExternalDocumentNonStandardF';
 import { ExternalDocumentNonStandardG } from './ExternalDocumentNonStandardG';
 import { ExternalDocumentNonStandardH } from './ExternalDocumentNonStandardH';
 import { ExternalDocumentNonStandardI } from './ExternalDocumentNonStandardI';
+import { ExternalDocumentNonStandardJ } from './ExternalDocumentNonStandardJ';
 import { ExternalDocumentStandard } from './ExternalDocumentStandard';
 
 export function ExternalDocumentFactory(
@@ -35,6 +36,8 @@ export function ExternalDocumentFactory(
         return new ExternalDocumentNonStandardH(documentMetadata);
       case 'nonstandard i':
         return new ExternalDocumentNonStandardI(documentMetadata);
+      case 'nonstandard j':
+        return new ExternalDocumentNonStandardJ(documentMetadata);
     }
   }
 

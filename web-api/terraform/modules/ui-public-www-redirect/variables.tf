@@ -6,6 +6,10 @@ variable "environment" {
   type = string
 }
 
+variable "zone_name" {
+  type = string
+}
+
 variable "public_certificate_arn" {
   type = string
 }

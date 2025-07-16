@@ -3,6 +3,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/business/useCaseHelper/acquireLock';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
@@ -14,13 +18,8 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
-import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/persistence/postgres/utils/mutex';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -50,6 +49,7 @@ export const serveExternallyFiledDocument = async (
   }
 
   const subjectCase = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber: subjectCaseDocketNumber,
   });
 
@@ -73,11 +73,14 @@ export const serveExternallyFiledDocument = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  await updateDocketEntryPendingServiceStatus({
-    docketEntryId,
-    docketNumber: subjectCaseDocketNumber,
-    status: true,
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .updateDocketEntryPendingServiceStatus({
+      applicationContext,
+      docketEntryId,
+      docketNumber: subjectCaseDocketNumber,
+      status: true,
+    });
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -160,11 +163,14 @@ export const serveExternallyFiledDocument = async (
         docketEntryId,
       });
   } finally {
-    await updateDocketEntryPendingServiceStatus({
-      docketEntryId,
-      docketNumber: subjectCaseDocketNumber,
-      status: false,
-    });
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId,
+        docketNumber: subjectCaseDocketNumber,
+        status: false,
+      });
   }
 
   const successMessage =

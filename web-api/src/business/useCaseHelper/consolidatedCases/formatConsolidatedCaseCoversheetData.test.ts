@@ -2,14 +2,15 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { formatConsolidatedCaseCoversheetData } from './formatConsolidatedCaseCoversheetData';
-import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 
 describe('formatConsolidatedCaseCoversheetData', () => {
   const mockDocketEntry = MOCK_CASE.docketEntries[0];
-  const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
+  const getCasesByLeadDocketNumber =
+    getCasesByLeadDocketNumberMock as jest.Mock;
 
   beforeEach(() => {
-    getConsolidatedCases.mockResolvedValue([
+    getCasesByLeadDocketNumber.mockResolvedValue([
       {
         docketEntries: [],
         docketNumber: '102-19',

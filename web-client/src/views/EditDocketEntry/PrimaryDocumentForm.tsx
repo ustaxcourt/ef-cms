@@ -193,7 +193,6 @@ export const PrimaryDocumentForm = connect(
               autoCapitalize="none"
               className="usa-textarea height-8 textarea-resize-vertical"
               id="additional-info"
-              data-testid="additional-info-primary-document-form"
               name="additionalInfo"
               value={form.additionalInfo || ''}
               onChange={e => {
@@ -210,7 +209,6 @@ export const PrimaryDocumentForm = connect(
                 checked={form.addToCoversheet || false}
                 className="usa-checkbox__input"
                 id="add-to-coversheet"
-                data-testid="add-to-coversheet-primary-document-form"
                 name="addToCoversheet"
                 type="checkbox"
                 onChange={e => {

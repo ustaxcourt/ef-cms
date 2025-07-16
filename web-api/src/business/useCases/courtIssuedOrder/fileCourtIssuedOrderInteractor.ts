@@ -4,17 +4,17 @@ import {
   EVENT_CODES_THAT_ALLOW_FREE_TEXT,
   MOTION_ORDER_RESPONSE_OPTIONS,
 } from '@shared/business/entities/EntityConstants';
-import { Case } from '@shared/business/entities/cases/Case';
-import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { Case } from '../../../../../shared/src/business/entities/cases/Case';
+import { DocketEntry } from '../../../../../shared/src/business/entities/DocketEntry';
 import {
   FORMATS,
   formatDateString,
 } from '@shared/business/utilities/DateHandler';
-import { Message } from '@shared/business/entities/Message';
+import { Message } from '../../../../../shared/src/business/entities/Message';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '@shared/authorization/authorizationClientService';
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
@@ -22,8 +22,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { orderBy, some } from 'lodash';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 export const fileCourtIssuedOrder = async (
   applicationContext: ServerApplicationContext,
@@ -44,6 +43,7 @@ export const fileCourtIssuedOrder = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
   const caseEntity = new Case(caseToUpdate, { authorizedUser });
@@ -115,7 +115,8 @@ export const fileCourtIssuedOrder = async (
 
   caseEntity.addDocketEntry(docketEntryEntity);
 
-  await updateCaseAndAssociations({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
     authorizedUser,
     caseToUpdate: caseEntity,
   });

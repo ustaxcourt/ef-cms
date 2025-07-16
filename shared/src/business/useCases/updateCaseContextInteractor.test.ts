@@ -2,7 +2,6 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -24,9 +23,10 @@ import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persisten
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
+
 describe('updateCaseContextInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCaseAndAssociations = jest
+  jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
@@ -200,7 +200,9 @@ describe('updateCaseContextInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalled();
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
   });
@@ -212,9 +214,11 @@ describe('updateCaseContextInteractor', () => {
       trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
-    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) => {
-      return caseToUpdate;
-    });
+    applicationContext.getUseCaseHelpers().updateCaseAndAssociations = jest
+      .fn()
+      .mockImplementation(({ caseToUpdate }) => {
+        return caseToUpdate;
+      });
 
     const result = await updateCaseContextInteractor(
       applicationContext,
@@ -226,7 +230,9 @@ describe('updateCaseContextInteractor', () => {
     );
 
     expect(result.status).toEqual(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-    expect(updateCaseAndAssociations).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalled();
   });
 
   it('should only update the associated judge without changing the status if only the associated judge is passed in', async () => {

@@ -34,6 +34,7 @@ type PendingReportListParams = {
 };
 
 export function PendingReportList({
+  hasPendingItemsResults,
   pendingItems,
   pendingItemsTotal,
   pendingReportListHelper,
@@ -48,8 +49,8 @@ export function PendingReportList({
 
   return (
     <>
-      <div className="grid-row margin-bottom-3">
-        <div className="tablet:grid-col-11">
+      <div className="grid-row margin-bottom-2">
+        <div className="tablet:grid-col-8">
           <div className="grid-row grid-gap">
             <label
               className="dropdown-label-serif margin-right-3"
@@ -82,31 +83,26 @@ export function PendingReportList({
             </BindedSelect>
           </div>
         </div>
-        {totalPages <= 1 && (
-          <div className="text-right margin-top-3 grid-col-fill">
-            <span className="text-semibold">Count: </span>
-            {pendingItemsTotal}
-          </div>
+      </div>
+
+      <div ref={paginatorTop}>
+        {totalPages > 1 && (
+          <Paginator
+            currentPageIndex={activePage}
+            totalPages={totalPages}
+            onPageChange={pageChange => {
+              setActivePage(pageChange);
+              focusPaginatorTop(paginatorTop);
+            }}
+          />
         )}
       </div>
 
-      {totalPages > 1 && (
-        <div ref={paginatorTop} className="grid-row margin-bottom-3">
-          <div className="grid-col-2"></div>
-          <div className="grid-col-8">
-            <Paginator
-              currentPageIndex={activePage}
-              totalPages={totalPages}
-              onPageChange={pageChange => {
-                setActivePage(pageChange);
-                focusPaginatorTop(paginatorTop);
-              }}
-            />
-          </div>
-          <div className="grid-col-fill text-right margin-top-3 padding-0">
-            <span className="text-semibold">Count: </span>
-            {pendingItemsTotal}
-          </div>
+      {hasPendingItemsResults && (
+        <div className="text-right margin-bottom-2">
+          <span className="text-semibold" data-testid="display-data-count">
+            Count: {pendingItemsTotal}
+          </span>
         </div>
       )}
 

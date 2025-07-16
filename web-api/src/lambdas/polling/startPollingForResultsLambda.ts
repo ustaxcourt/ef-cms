@@ -6,8 +6,9 @@ export const startPollingForResultsLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async () => {
+  genericHandler(event, async ({ applicationContext }) => {
     return await startPollingForResultsInteractor(
+      applicationContext,
       {
         ...event.pathParameters,
       },

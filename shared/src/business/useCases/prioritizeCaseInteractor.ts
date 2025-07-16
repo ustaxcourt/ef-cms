@@ -7,8 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 
 /**
  * used for setting a case as high priority
@@ -19,7 +18,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
  * @returns {object} the case data
  */
 export const prioritizeCase = async (
-  _applicationContext: ServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   { docketNumber, reason }: { docketNumber: string; reason: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<RawCase> => {
@@ -28,6 +27,7 @@ export const prioritizeCase = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 
@@ -42,10 +42,13 @@ export const prioritizeCase = async (
 
   caseEntity.setAsHighPriority(reason);
 
-  const updatedCase = await updateCaseAndAssociations({
-    authorizedUser,
-    caseToUpdate: caseEntity,
-  });
+  const updatedCase = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      authorizedUser,
+      caseToUpdate: caseEntity,
+    });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();
 };

@@ -41,6 +41,7 @@ const { docketNumber, userId } = parseArgsAndEnvVars(scriptConfig) as {
   const applicationContext = createApplicationContext({});
 
   const rawCase = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
   if (!rawCase.docketNumber) {

@@ -13,7 +13,6 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPagesAndAppendToTargetPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -310,7 +309,8 @@ const setNoticeForCase = async ({
     standingPretrialFile,
   });
 
-  await updateCaseAndAssociations({
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
     authorizedUser: undefined,
     caseToUpdate: caseEntity,
   });
@@ -373,6 +373,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
   const trialSessionEntity = new TrialSession(trialSession);
 
   const caseRecord = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 

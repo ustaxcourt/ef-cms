@@ -14,6 +14,8 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
+import { NodeHttpHandler } from '@smithy/node-http-handler';
+import { SQSClient } from '@aws-sdk/client-sqs';
 import { WorkerMessage } from '@web-api/gateways/worker/workerRouter';
 import { environment } from '@web-api/environment';
 import { getBatchClient } from '@web-api/persistence/batch/getBatchClient';
@@ -53,7 +55,7 @@ import pug from 'pug';
 import * as sass from 'sass'
 import { getEntityByName } from '@web-api/business/getEntityByName';
 import { type SendBulkTemplatedEmailCommandInput } from '@aws-sdk/client-ses';
-import { getMessagingClient } from '@web-api/gateways/message/getMessagingClient';
+let sqsCache: SQSClient;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export const createApplicationContext = (appContextUser = {}) => {
@@ -144,7 +146,19 @@ export const createApplicationContext = (appContextUser = {}) => {
         }
       },
     }),
-    getMessagingClient,
+    getMessagingClient: () => {
+      if (!sqsCache) {
+        sqsCache = new SQSClient({
+          maxAttempts: 3,
+          region: environment.region,
+          requestHandler: new NodeHttpHandler({
+            connectionTimeout: 3000,
+            requestTimeout: 5000,
+          }),
+        });
+      }
+      return sqsCache;
+    },
     getNodeSass: () => {
       return sass;
     },

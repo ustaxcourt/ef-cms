@@ -172,8 +172,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "ses:SendEmail"
             ],
             "Resource": [
-                "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}",
-                "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:template/*"
+                "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}"
             ],
             "Effect": "Allow"
         },

@@ -11,14 +11,15 @@ import {
   mockDocketClerkUser,
   mockIrsSuperuser,
 } from '@shared/test/mockAuthUsers';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 
 describe('getReconciliationReportInteractor', () => {
   const mockCaseCaption = 'Kaitlin Chaney, Petitioner';
-  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
+  const getCasesMetadataByDocketNumbers =
+    getCasesMetadataByDocketNumbersMock as jest.Mock;
 
   beforeAll(() => {
-    getCasesByDocketNumbers.mockResolvedValue([
+    getCasesMetadataByDocketNumbers.mockResolvedValue([
       {
         caseCaption: mockCaseCaption,
         docketNumber: '135-20',
@@ -184,9 +185,9 @@ describe('getReconciliationReportInteractor', () => {
       mockIrsSuperuser,
     );
 
-    expect(getCasesByDocketNumbers.mock.calls[0][0].docketNumbers).toEqual([
-      '135-20',
-    ]);
+    expect(
+      getCasesMetadataByDocketNumbers.mock.calls[0][0].docketNumbers,
+    ).toEqual(['135-20']);
   });
 
   //Given date may contain ISO time component

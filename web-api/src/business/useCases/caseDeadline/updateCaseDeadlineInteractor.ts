@@ -1,15 +1,11 @@
+import { CaseDeadline } from '../../../../../shared/src/business/entities/CaseDeadline';
 import {
-  CaseDeadline,
-  RawCaseDeadline,
-} from '@shared/business/entities/CaseDeadline';
-import {
-  isAuthorized,
   ROLE_PERMISSIONS,
-} from '@shared/authorization/authorizationClientService';
+  isAuthorized,
+} from '../../../../../shared/src/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
 
 export const updateCaseDeadlineInteractor = async (
   { caseDeadline }: { caseDeadline: CaseDeadline },
@@ -23,33 +19,7 @@ export const updateCaseDeadlineInteractor = async (
     .validate()
     .toRawObject();
 
-  const consolidatedCaseDeadlines: RawCaseDeadline[] =
-    await getCaseDeadlinesByConsolidatedCaseDeadlineId(
-      caseDeadlineToUpdate.caseDeadlineId,
-      caseDeadlineToUpdate.docketNumber,
-    );
-
-  const updatedConsolidatedCaseDeadlines: RawCaseDeadline[] =
-    consolidatedCaseDeadlines
-      .filter(
-        ({ docketNumber: ccDocketNumber }) =>
-          ccDocketNumber !== caseDeadlineToUpdate.docketNumber,
-      )
-      .map(ccd =>
-        new CaseDeadline({
-          ...ccd,
-          createdAt: caseDeadlineToUpdate.createdAt,
-          deadlineDate: caseDeadlineToUpdate.deadlineDate,
-          description: caseDeadlineToUpdate.description,
-        })
-          .validate()
-          .toRawObject(),
-      );
-
-  await upsertCaseDeadlines([
-    caseDeadlineToUpdate,
-    ...updatedConsolidatedCaseDeadlines,
-  ]);
+  await upsertCaseDeadlines([caseDeadlineToUpdate]);
 
   return caseDeadlineToUpdate;
 };

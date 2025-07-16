@@ -31,7 +31,7 @@ async function establishConnection(): Promise<Kysely<Database>> {
   try {
     poolConfig = getPoolConfig();
     let token: string | null = null;
-    token = await getToken({ resetExpiration: true });
+    token = await getToken();
     pool = new Pool({ ...poolConfig, password: token });
     return new Kysely<Database>({
       dialect: new PostgresDialect({
@@ -49,7 +49,7 @@ async function generateRDSAuthToken() {
   const signer = new Signer({
     hostname: environment.rds.pool.host,
     port: 5432,
-    region: environment.region,
+    region: 'us-east-1', // 10502 TODO: After west is deleted use environment.region
     username: environment.rds.pool.user,
   });
 
@@ -58,15 +58,13 @@ async function generateRDSAuthToken() {
   return token;
 }
 
-async function getToken({ resetExpiration }: { resetExpiration: boolean }) {
+async function getToken() {
   const token =
     environment.nodeEnv !== 'production'
       ? environment.rds.pool.password
       : await generateRDSAuthToken();
 
-  if (resetExpiration) {
-    tokenExpirationTime = Date.now() + 13 * 60 * 1000; // rds auth token expires every 15min. So refresh every 13min
-  }
+  tokenExpirationTime = Date.now() + 13 * 60 * 1000; // rds auth token expires every 15min. So refresh every 13min
   return token;
 }
 
@@ -74,7 +72,7 @@ let tokenPromise: Promise<string> | null;
 async function resetPoolPassword() {
   if (pool) {
     if (!tokenPromise) {
-      tokenPromise = getToken({ resetExpiration: true });
+      tokenPromise = getToken();
     }
     let token;
     try {

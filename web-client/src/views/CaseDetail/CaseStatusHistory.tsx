@@ -18,8 +18,10 @@ export const CaseStatusHistory = connect(
               <h4>Case Status</h4>
             </div>
             <div className="grid-col-6 text-right margin-top-1">
-              <span className="text-semibold">Count: </span>
-              {caseStatusHistoryHelper.formattedCaseStatusHistory.length}
+              <span className="text-semibold">
+                Count:{' '}
+                {caseStatusHistoryHelper.formattedCaseStatusHistory.length}
+              </span>
             </div>
           </div>
 

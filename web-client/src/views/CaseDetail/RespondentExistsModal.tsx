@@ -8,13 +8,12 @@ import classNames from 'classnames';
 export const RespondentExistsModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    caseDetailPractitionerSearchHelper:
-      state.caseDetailPractitionerSearchHelper,
+    caseDetailHelper: state.caseDetailHelper,
     confirmSequence: sequences.clearModalSequence,
   },
   function RespondentExistsModal({
     cancelSequence,
-    caseDetailPractitionerSearchHelper,
+    caseDetailHelper,
     confirmSequence,
   }) {
     return (
@@ -42,24 +41,13 @@ export const RespondentExistsModal = connect(
                 Counsel match(es) found
               </legend>
 
-              {caseDetailPractitionerSearchHelper.respondentSearchResultsCount ===
-                1 && (
+              {caseDetailHelper.respondentSearchResultsCount === 1 && (
                 <span>
-                  {
-                    caseDetailPractitionerSearchHelper
-                      .respondentMatchesFormatted[0].name
-                  }{' '}
-                  (
-                  {
-                    caseDetailPractitionerSearchHelper
-                      .respondentMatchesFormatted[0].barNumber
-                  }
+                  {caseDetailHelper.respondentMatchesFormatted[0].name} (
+                  {caseDetailHelper.respondentMatchesFormatted[0].barNumber}
                   )
                   <br />
-                  {
-                    caseDetailPractitionerSearchHelper
-                      .respondentMatchesFormatted[0].cityStateZip
-                  }
+                  {caseDetailHelper.respondentMatchesFormatted[0].cityStateZip}
                 </span>
               )}
             </fieldset>

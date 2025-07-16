@@ -9,9 +9,9 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
+import { getCasesMetadataByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 import { getCaseDeadlinesByDateRange } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDateRange';
 import { pick } from 'lodash';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 type CaseDeadlineResponseInfo = {
   associatedJudge: string;
@@ -54,9 +54,8 @@ export const getCaseDeadlinesInteractor = async (
   const validatedCaseDeadlines =
     CaseDeadline.validateRawCollection(foundDeadlines);
 
-  const associatedCases = await getCasesByDocketNumbers({
+  const associatedCases = await getCasesMetadataByDocketNumbers({
     docketNumbers: validatedCaseDeadlines.map(item => item.docketNumber),
-    excludeFields: ['docketEntries', 'hearings', 'correspondence'],
   });
 
   const deadlinesWithFullInfo: CaseDeadlineResponseInfo[] = [];

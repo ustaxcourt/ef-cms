@@ -23,11 +23,13 @@ export const switchUiColors = async ({
   deployingColor,
   efcmsDomain,
   publicUi,
+  zoneName,
 }: {
   currentColor: string;
   deployingColor: string;
   efcmsDomain: string;
   publicUi: boolean;
+  zoneName: string;
 }) => {
   const { DistributionList } = await cloudfront.send(
     new ListDistributionsCommand({}),
@@ -114,7 +116,7 @@ export const switchUiColors = async ({
   }
 
   const zone = await route53.send(
-    new ListHostedZonesByNameCommand({ DNSName: `${efcmsDomain}.` }),
+    new ListHostedZonesByNameCommand({ DNSName: `${zoneName}.` }),
   );
 
   if (

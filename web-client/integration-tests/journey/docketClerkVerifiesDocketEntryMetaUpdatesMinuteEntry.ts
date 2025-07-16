@@ -14,7 +14,9 @@ export const docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry = (
       entry => entry.index === docketRecordIndex,
     );
 
-    expect(docketRecordEntry.filingDate).toEqual('2020-01-04T05:00:00.000Z');
+    expect(docketRecordEntry.filingDate).toEqual(
+      '2020-01-04T00:00:00.000-05:00',
+    );
     expect(docketRecordEntry.documentTitle).toEqual(
       'Request for Place of Trial at Boise, Idaho',
     );

@@ -135,7 +135,6 @@ export const PractitionerInformation = connect(
                 <PractitionerCaseList
                   caseType={'open'}
                   cases={practitionerInformationHelper.openCasesToDisplay}
-                  totalCount={numOpenCases}
                 />
                 {openPagesPaginator()}
               </div>
@@ -149,7 +148,6 @@ export const PractitionerInformation = connect(
                 <PractitionerCaseList
                   caseType={'closed'}
                   cases={practitionerInformationHelper.closedCasesToDisplay}
-                  totalCount={numClosedCases}
                 />
                 {closedPagesPaginator()}
               </div>

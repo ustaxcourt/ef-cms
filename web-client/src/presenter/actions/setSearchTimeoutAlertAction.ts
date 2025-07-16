@@ -7,11 +7,15 @@ import { state } from '@web-client/presenter/app.cerebral';
  * @param {object} providers.store the cerebral store used for setting the state.alertError
  * @param {object} providers.props the cerebral props object used for passing the props.error
  */
-export const setSearchTimeoutAlertAction = ({ props, store }: ActionProps) => {
+export const setSearchTimeoutAlertAction = ({
+  applicationContext,
+  props,
+  store,
+}: ActionProps) => {
   const responseCode =
     props.error?.responseCode || props.error?.originalError?.response?.status;
 
-  console.error(props.error);
+  applicationContext.getLogger().error(props.error);
 
   store.set(state.alertError, {
     message:

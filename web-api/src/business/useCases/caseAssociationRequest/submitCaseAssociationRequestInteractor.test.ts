@@ -1,4 +1,3 @@
-import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   COUNTRY_TYPES,
   ROLES,

@@ -7,12 +7,12 @@ import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
 import { JudgeSelect } from './AdvancedDocumentSearch/JudgeSelect';
 import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
+import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
-import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 
 export const OpinionSearchForm = connect(
   {
@@ -38,7 +38,13 @@ export const OpinionSearchForm = connect(
   }) {
     return (
       <>
-        <form data-testid="opinion-search-container">
+        <form
+          data-testid="opinion-search-container"
+          onSubmit={e => {
+            e.preventDefault();
+            submitAdvancedSearchSequence();
+          }}
+        >
           <Mobile>
             <div className="margin-bottom-3">
               <HowToSearch />
@@ -104,33 +110,12 @@ export const OpinionSearchForm = connect(
 
                 {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
-                    <DateRangePickerComponent
-                      endDateErrorText={validationErrors.endDate}
-                      endLabel="End date"
-                      endName="endDate"
-                      endPickerCls={'grid-col-6'}
-                      endValue={advancedSearchForm.opinionSearch.endDate}
-                      formGroupCls="margin-bottom-0"
-                      maxDate={advancedDocumentSearchHelper.maxDate}
-                      rangePickerCls={'grid-row grid-gap'}
-                      showDateHint={true}
-                      startDateErrorText={validationErrors.startDate}
-                      startLabel="Start date"
-                      startName="startDate"
-                      startPickerCls={'grid-col-6'}
-                      startValue={advancedSearchForm.opinionSearch.startDate}
-                      onChangeEnd={e => {
-                        updateAdvancedOpinionSearchFormValueSequence({
-                          key: 'endDate',
-                          value: e.target.value,
-                        });
-                      }}
-                      onChangeStart={e => {
-                        updateAdvancedOpinionSearchFormValueSequence({
-                          key: 'startDate',
-                          value: e.target.value,
-                        });
-                      }}
+                    <SearchDateRangePickerComponent
+                      formType="opinionSearch"
+                      updateSequence={
+                        updateAdvancedOpinionSearchFormValueSequence
+                      }
+                      validateSequence={validateOpinionSearchSequence}
                     />
                   </div>
                 )}
@@ -250,35 +235,12 @@ export const OpinionSearchForm = connect(
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
                       {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
-                          <DateRangePickerComponent
-                            endDateErrorText={validationErrors.endDate}
-                            endLabel="End date"
-                            endName="endDate"
-                            endPickerCls={'grid-col-6'}
-                            endValue={advancedSearchForm.opinionSearch.endDate}
-                            formGroupCls="margin-bottom-0"
-                            maxDate={advancedDocumentSearchHelper.maxDate}
-                            rangePickerCls={'grid-row grid-gap'}
-                            startDateErrorText={validationErrors.startDate}
-                            startLabel="Start date"
-                            startName="startDate"
-                            showDateHint={true}
-                            startPickerCls={'grid-col-6'}
-                            startValue={
-                              advancedSearchForm.opinionSearch.startDate
+                          <SearchDateRangePickerComponent
+                            formType="opinionSearch"
+                            updateSequence={
+                              updateAdvancedOpinionSearchFormValueSequence
                             }
-                            onChangeEnd={e => {
-                              updateAdvancedOpinionSearchFormValueSequence({
-                                key: 'endDate',
-                                value: e.target.value,
-                              });
-                            }}
-                            onChangeStart={e => {
-                              updateAdvancedOpinionSearchFormValueSequence({
-                                key: 'startDate',
-                                value: e.target.value,
-                              });
-                            }}
+                            validateSequence={validateOpinionSearchSequence}
                           />
                         </div>
                       )}
@@ -339,10 +301,6 @@ export const OpinionSearchForm = connect(
                 data-testid="advanced-search-button"
                 id="advanced-search-button"
                 type="submit"
-                onClick={e => {
-                  e.preventDefault();
-                  submitAdvancedSearchSequence();
-                }}
               >
                 Search
               </Button>

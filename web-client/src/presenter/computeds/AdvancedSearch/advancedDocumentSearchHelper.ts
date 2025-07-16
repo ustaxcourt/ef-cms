@@ -4,7 +4,6 @@ import { Get } from 'cerebral';
 import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
-import { calculateISODate } from '@shared/business/utilities/DateHandler';
 
 export const advancedDocumentSearchHelper = (
   get: Get,
@@ -73,11 +72,6 @@ export const advancedDocumentSearchHelper = (
     manyResults: MAX_SEARCH_RESULTS,
     showDateRangePicker,
     showManyResultsMessage,
-    maxDate: calculateISODate({
-      dateString: applicationContext.getUtilities().createISODateString(),
-      howMuch: 0,
-      units: 'days',
-    }),
   };
 };
 

@@ -1,7 +1,6 @@
 import React from 'react';
 
-export const SelectedFiltersSection = ({ count, selectedFilters, trialStatusCounts }) => {  
-  return(
+export const SelectedFiltersSection = ({ count, selectedFilters }) => (
   <div className="card margin-top-0">
     <div className="card-header filters-selected-header">
       <div>Trial Status Filters Selected</div>
@@ -9,26 +8,19 @@ export const SelectedFiltersSection = ({ count, selectedFilters, trialStatusCoun
     </div>
     <div className="filters-selected-content">
       <div className="filters-row">
-        {[0, 2, 4, 6, 8].map(index => (
-          <div key={index} className="filter">
-            {selectedFilters[index]?.label || ''}
-            {selectedFilters[index]?.key in trialStatusCounts && (
-              <span className="text-bold margin-left-05">({trialStatusCounts[selectedFilters[index].key]})</span>
-            )}
-          </div>
-        ))}
+        <div className="filter">{selectedFilters[0]?.label || ''}</div>
+        <div className="filter">{selectedFilters[2]?.label || ''}</div>
+        <div className="filter">{selectedFilters[4]?.label || ''}</div>
+        <div className="filter">{selectedFilters[6]?.label || ''}</div>
+        <div className="filter">{selectedFilters[8]?.label || ''}</div>
       </div>
       <div className="filters-row">
-        {[1, 3, 5, 7, 9].map(index => (
-          <div key={index} className="filter">
-            {selectedFilters[index]?.label || ''}
-            {selectedFilters[index]?.key in trialStatusCounts && (
-              <span className="text-bold margin-left-05">({trialStatusCounts[selectedFilters[index].key]})</span>
-            )}
-          </div>
-        ))}
+        <div className="filter">{selectedFilters[1]?.label || ''}</div>
+        <div className="filter">{selectedFilters[3]?.label || ''}</div>
+        <div className="filter">{selectedFilters[5]?.label || ''}</div>
+        <div className="filter">{selectedFilters[7]?.label || ''}</div>
+        <div className="filter">{selectedFilters[9]?.label || ''}</div>
       </div>
     </div>
   </div>
-  )
-};
+);

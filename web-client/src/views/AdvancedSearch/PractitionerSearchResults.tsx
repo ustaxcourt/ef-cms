@@ -28,6 +28,7 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   currentPageIndex={practitionerSearchHelper.activePage}
+                  showSinglePage={true}
                   totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
@@ -39,7 +40,7 @@ export const PractitionerSearchResults = connect(
               )}
             </div>
             <div className="text-right margin-bottom-2">
-              <span className="text-semibold" id="custom-case-result-count">
+              <span className="text-bold" id="custom-case-result-count">
                 Count: &nbsp;
               </span>
               <span data-testid="practitioner-search-result-count">
@@ -168,6 +169,7 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   currentPageIndex={practitionerSearchHelper.activePage}
+                  showSinglePage={true}
                   totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({

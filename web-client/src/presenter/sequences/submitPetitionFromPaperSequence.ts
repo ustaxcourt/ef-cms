@@ -39,6 +39,7 @@ export const submitPetitionFromPaperSequence = [
           setValidationAlertErrorsAction,
         ],
         success: [
+          setupCurrentPageAction('Interstitial'),
           stopShowValidationAction,
           showProgressSequenceDecorator([
             setCaseTypeAction,
@@ -48,7 +49,6 @@ export const submitPetitionFromPaperSequence = [
             {
               error: [openFileUploadErrorModal],
               success: [
-                setupCurrentPageAction('Interstitial'),
                 clearConfirmationTextStatisticsAction,
                 setCaseAction,
                 assignPetitionToAuthenticatedUserAction,

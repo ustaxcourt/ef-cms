@@ -61,7 +61,6 @@ const getCaseRow = ({
             aria-label="trial status"
             bind={`trialSessionWorkingCopy.caseMetadata.${formattedCase.docketNumber}.trialStatus`}
             id={`trialSessionWorkingCopy-${formattedCase.docketNumber}`}
-            data-testid={`trialSessionWorkingCopy-${formattedCase.docketNumber}`}
             onChange={value => {
               trialSequences.autoSaveTrialSessionWorkingCopySequence({
                 key: `caseMetadata.${formattedCase.docketNumber}.trialStatus`,
@@ -69,7 +68,7 @@ const getCaseRow = ({
               });
             }}
           >
-            <option value="statusUnassigned">-Unassigned-</option>
+            <option value="">-Unassigned-</option>
             {Object.keys(ALL_TRIAL_STATUS_TYPES).map(key => {
               if (
                 !ALL_TRIAL_STATUS_TYPES[key].deprecated ||

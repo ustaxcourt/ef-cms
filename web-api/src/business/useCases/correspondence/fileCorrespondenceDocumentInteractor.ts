@@ -29,6 +29,7 @@ export const fileCorrespondenceDocumentInteractor = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 

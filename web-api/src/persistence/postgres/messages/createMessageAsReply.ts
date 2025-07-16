@@ -2,7 +2,6 @@ import { Message, RawMessage } from '@shared/business/entities/Message';
 import { getDbWriter } from '@web-api/database';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { toKyselyNewMessage } from './mapper';
-import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 export const createMessageAsReply = async ({
   newMessage,
@@ -37,7 +36,6 @@ export const createMessageAsReply = async ({
           });
       }),
     table: null,
-    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 
   return new Message(createdMessage);

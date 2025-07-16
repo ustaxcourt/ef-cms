@@ -482,6 +482,7 @@ export const CustomCaseReport = connect(
           <div ref={paginatorTop}>
             <Paginator
               currentPageIndex={activePage}
+              showSinglePage={true}
               totalPages={customCaseReportHelper.pageCount}
               onPageChange={async pageChange => {
                 setActivePage(pageChange);
@@ -492,7 +493,7 @@ export const CustomCaseReport = connect(
               }}
             />
           </div>
-          <div className="text-right margin-bottom-105">
+          <div className="text-right margin-bottom-2">
             <Button
               link
               aria-label="export pending report"
@@ -509,10 +510,7 @@ export const CustomCaseReport = connect(
             >
               Export
             </Button>
-            <span
-              className="text-semibold"
-              data-testid="custom-case-result-count"
-            >
+            <span className="text-bold" data-testid="custom-case-result-count">
               Count: &nbsp;
             </span>
             <span data-testid="custom-case-report-count">
@@ -527,6 +525,7 @@ export const CustomCaseReport = connect(
           {customCaseReportHelper.pageCount > 1 && (
             <Paginator
               currentPageIndex={activePage}
+              showSinglePage={true}
               totalPages={customCaseReportHelper.pageCount}
               onPageChange={async pageChange => {
                 setActivePage(pageChange);

@@ -1,13 +1,9 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-jest.mock(
-  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
-);
-import '@web-api/persistence/postgres/docketEntries/mocks.jest';
-import '@web-api/persistence/postgres/utils/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { MOCK_LOCK } from '@shared/test/mockLock';
 import {
   MOTION_DISPOSITIONS,
   ORDER_TYPES,
@@ -24,13 +20,11 @@ import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messag
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+
+const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
-  const tryGetLocks = jest.mocked(tryGetLocksMock);
-  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  let mockLock;
   const mockSigningName = 'Roslindis Angelino';
   const mockStampedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
@@ -46,7 +40,15 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     stampedDocketEntryId: mockStampedDocketEntryId,
   };
 
+  beforeAll(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getLock.mockImplementation(() => mockLock);
+  });
+
   beforeEach(() => {
+    mockLock = undefined;
+
     getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
   });
 
@@ -57,7 +59,9 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       mockJudgeUser,
     );
 
-    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0];
 
     expect(caseToUpdate.docketEntries.length).toEqual(
       MOCK_DOCUMENTS.length + 1,
@@ -91,7 +95,9 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       mockJudgeUser,
     );
 
-    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
+    const { caseToUpdate } =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0];
 
     const draftDocketEntryEntity = caseToUpdate.docketEntries.find(
       doc =>
@@ -147,9 +153,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLocks.mockResolvedValueOnce([
-      { successfullyLocked: false, identifier: 'abc' },
-    ]);
+    mockLock = MOCK_LOCK;
 
     await expect(
       addDraftStampOrderDocketEntryInteractor(
@@ -162,18 +166,27 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire a lock on the case', async () => {
+  it('should acquire and remove the lock on the case', async () => {
     await addDraftStampOrderDocketEntryInteractor(
       applicationContext,
       args,
       mockJudgeUser,
     );
 
-    expect(tryGetLocks).toHaveBeenCalledWith(
-      expect.objectContaining({
-        identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      }),
-    );
+    expect(
+      applicationContext.getPersistenceGateway().createLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifier: `case|${MOCK_CASE.docketNumber}`,
+      ttl: 30,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().removeLock,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      identifiers: [`case|${MOCK_CASE.docketNumber}`],
+    });
   });
 
   it('should throw an Unauthorized error if the user is not authorized', async () => {

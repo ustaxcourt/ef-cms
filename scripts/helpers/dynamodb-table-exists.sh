@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 function check_dynamo_table_exists() {
   TABLE_NAME=$1

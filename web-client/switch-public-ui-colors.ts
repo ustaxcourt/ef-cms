@@ -1,9 +1,14 @@
 import { requireEnvVars } from '../shared/admin-tools/util';
 import { switchUiColors } from './switch-ui-colors.helpers';
 
-requireEnvVars(['CURRENT_COLOR', 'DEPLOYING_COLOR', 'EFCMS_DOMAIN']);
+requireEnvVars([
+  'CURRENT_COLOR',
+  'DEPLOYING_COLOR',
+  'EFCMS_DOMAIN',
+  'ZONE_NAME',
+]);
 
-const { CURRENT_COLOR, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
+const { CURRENT_COLOR, DEPLOYING_COLOR, EFCMS_DOMAIN, ZONE_NAME } = process.env;
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
@@ -12,5 +17,6 @@ const { CURRENT_COLOR, DEPLOYING_COLOR, EFCMS_DOMAIN } = process.env;
     deployingColor: DEPLOYING_COLOR!,
     efcmsDomain: EFCMS_DOMAIN!,
     publicUi: true,
+    zoneName: ZONE_NAME!,
   });
 })();

@@ -33,6 +33,7 @@ export const BlockedCasesReport = connect(
         blockedCasesReportHelper.blockedCasesFormatted,
         100,
       );
+
     const debounceSubmit = (timeout: number) => {
       setIsSubmitDebounced(true);
       setTimeout(() => {
@@ -78,22 +79,13 @@ export const BlockedCasesReport = connect(
               {blockedCaseReportFilter.trialLocationFilter && (
                 <>
                   <div>
-                    <div className="margin-bottom-3">
-                      <h2 className="display-inline-block width-auto margin-bottom-0">
-                        {blockedCaseReportFilter.trialLocationFilter}
-                      </h2>
-                      {totalPages <= 1 && (
-                        <div className="push-right margin-top-1">
-                          <span className="text-semibold">Count: </span>
-                          {blockedCasesReportHelper.blockedCasesCount}
-                        </div>
-                      )}
+                    <div>
+                      <h2>{blockedCaseReportFilter.trialLocationFilter}</h2>
                     </div>
-
-                    {totalPages > 1 && (
-                      <div className="grid-row flex-align-center flex-wrap margin-bottom-3">
-                        <div className="grid-col-2"></div>
-                        <div ref={paginatorTop} className="grid-col">
+                    <div className="grid-row flex-align-center flex-wrap">
+                      <div className="grid-col-2"></div>
+                      <div ref={paginatorTop} className="grid-col">
+                        {totalPages > 1 && (
                           <Paginator
                             currentPageIndex={activePage}
                             totalPages={totalPages}
@@ -102,15 +94,18 @@ export const BlockedCasesReport = connect(
                               focusPaginatorTop(paginatorTop);
                             }}
                           />
-                        </div>
-                        <div className="grid-col-2 text-right margin-top-3 padding-0">
-                          <span className="text-semibold">Count: </span>
+                        )}
+                      </div>
+                      <div className="grid-col-2 text-right">
+                        <span className="text-semibold">
+                          Count:{' '}
                           <span data-testid="blocked-cases-count">
                             {blockedCasesReportHelper.blockedCasesCount}
                           </span>
-                        </div>
+                        </span>
                       </div>
-                    )}
+                    </div>
+                    <div className='padding-2'></div>
                   </div>
 
                   {blockedCasesReportHelper.blockedCasesCount > 0 && (
@@ -185,17 +180,16 @@ export const BlockedCasesReport = connect(
                 </p>
               )}
 
-              {blockedCaseReportFilter.trialLocationFilter &&
-                totalPages > 1 && (
-                  <Paginator
-                    currentPageIndex={activePage}
-                    totalPages={totalPages}
-                    onPageChange={pageChange => {
-                      setActivePage(pageChange);
-                      focusPaginatorTop(paginatorTop);
-                    }}
-                  />
-                )}
+              {totalPages > 1 && (
+                <Paginator
+                  currentPageIndex={activePage}
+                  totalPages={totalPages}
+                  onPageChange={pageChange => {
+                    setActivePage(pageChange);
+                    focusPaginatorTop(paginatorTop);
+                  }}
+                />
+              )}
             </div>
           </div>
         </section>

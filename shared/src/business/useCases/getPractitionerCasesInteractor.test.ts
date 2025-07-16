@@ -7,13 +7,14 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
 
 describe('getPractitionerCasesInteractor', () => {
-  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
+  const getCasesMetadataByDocketNumbers =
+    getCasesMetadataByDocketNumbersMock as jest.Mock;
 
   beforeEach(() => {
-    getCasesByDocketNumbers.mockResolvedValue([
+    getCasesMetadataByDocketNumbers.mockResolvedValue([
       {
         ...MOCK_CASE,
         docketNumber: '108-07',
@@ -56,7 +57,7 @@ describe('getPractitionerCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCasesByDocketNumbers).toHaveBeenCalled();
+    expect(getCasesMetadataByDocketNumbers).toHaveBeenCalled();
 
     expect(
       closedCases.map(closedCase => {
@@ -85,8 +86,8 @@ describe('getPractitionerCasesInteractor', () => {
     ]);
   });
 
-  it('returns empty arrays if `getCasesByDocketNumbers` returns empty array', async () => {
-    getCasesByDocketNumbers.mockResolvedValueOnce([]);
+  it('returns empty arrays if `getCasesMetadataByDocketNumbers` returns undefined', async () => {
+    getCasesMetadataByDocketNumbers.mockResolvedValueOnce(undefined);
 
     const { closedCases, openCases } = await getPractitionerCasesInteractor(
       applicationContext,
@@ -104,7 +105,7 @@ describe('getPractitionerCasesInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocketNumbersByUser.mockResolvedValueOnce([]);
-    getCasesByDocketNumbers.mockResolvedValueOnce(undefined);
+    getCasesMetadataByDocketNumbers.mockResolvedValueOnce(undefined);
 
     const { closedCases, openCases } = await getPractitionerCasesInteractor(
       applicationContext,
@@ -114,11 +115,9 @@ describe('getPractitionerCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCasesByDocketNumbers).toHaveBeenCalledWith(
-      expect.objectContaining({
-        docketNumbers: [],
-      }),
-    );
+    expect(getCasesMetadataByDocketNumbers).toHaveBeenCalledWith({
+      docketNumbers: [],
+    });
     expect(closedCases).toEqual([]);
     expect(openCases).toEqual([]);
   });

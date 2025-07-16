@@ -16,10 +16,9 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -38,6 +37,7 @@ export const fileExternalDocument = async (
   const workItems: WorkItem[] = [];
 
   const currentCase = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 
@@ -186,7 +186,8 @@ export const fileExternalDocument = async (
           caseEntity,
         });
 
-      await updateCaseAndAssociations({
+      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+        applicationContext,
         authorizedUser,
         caseToUpdate: caseEntity,
         includeCorrespondence: false,

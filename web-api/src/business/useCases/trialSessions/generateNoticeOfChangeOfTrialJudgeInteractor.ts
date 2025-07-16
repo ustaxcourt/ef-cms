@@ -43,6 +43,7 @@ export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
   };
 
   const caseDetail = await getCaseByDocketNumber({
+    applicationContext,
     docketNumber,
   });
 

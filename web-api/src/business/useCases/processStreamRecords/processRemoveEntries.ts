@@ -1,12 +1,11 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { DynamoDBRecord } from 'aws-lambda';
 
 export const processRemoveEntries = async ({
   applicationContext,
   removeRecords,
 }: {
   applicationContext: ServerApplicationContext;
-  removeRecords: DynamoDBRecord[];
+  removeRecords: any[];
 }) => {
   if (!removeRecords.length) return;
 
@@ -14,22 +13,11 @@ export const processRemoveEntries = async ({
     `going to index ${removeRecords.length} removeRecords`,
   );
 
-  // When purging Dynamo data after it has been migrated to Postgres, we do not
-  // want to remove the data from the OpenSearch index.
-  const recordsToDelete = removeRecords.filter(record => {
-    const entityName = record?.dynamodb?.NewImage?.entityName?.S;
-    const ignoreEntities: (string | undefined)[] = ['DocketEntry', 'Case'];
-    if (ignoreEntities.includes(entityName)) {
-      return false;
-    }
-    return true;
-  });
-
   const { failedRecords } = await applicationContext
     .getPersistenceGateway()
     .bulkDeleteRecords({
       applicationContext,
-      records: recordsToDelete,
+      records: removeRecords,
     });
 
   if (failedRecords.length > 0) {

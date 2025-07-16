@@ -8,10 +8,6 @@ import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgIn
 export const upsertCaseDeadlines = async (
   caseDeadlinesToUpsert: RawCaseDeadline[],
 ) => {
-  if (!caseDeadlinesToUpsert.length) {
-    return [];
-  }
-
   const caseDeadlines = await pgInsertInto({
     table: 'dwCaseDeadline',
     values: caseDeadlinesToUpsert.map(cd => toKyselyNewCaseDeadline(cd)),

@@ -12,11 +12,6 @@ export const IndividualWorkQueueOutbox = connect(
   function IndividualWorkQueueOutbox({ formattedWorkQueue, workQueueHelper }) {
     return (
       <React.Fragment>
-        <div className="text-right">
-          <span className="text-semibold">Count: </span>
-          {formattedWorkQueue.length}
-        </div>
-        <div className="padding-1"></div>
         <table
           aria-describedby="tab-my-queue"
           className="usa-table ustc-table subsection"
@@ -42,7 +37,7 @@ export const IndividualWorkQueueOutbox = connect(
           </thead>
           {formattedWorkQueue.map(item => (
             <tbody key={item.workItemId}>
-              <tr data-testid={`work-item-outbox-row-${item.docketNumber}`}>
+              <tr>
                 <td className="consolidated-case-column">
                   <ConsolidatedCaseIcon
                     consolidatedIconTooltipText={
@@ -65,11 +60,7 @@ export const IndividualWorkQueueOutbox = connect(
                 </td>
                 <td className="message-queue-row message-queue-document">
                   <div className="message-document-title">
-                    <a
-                      className="case-link"
-                      data-testid="work-item-outbox-document-link"
-                      href={item.editLink}
-                    >
+                    <a className="case-link" href={item.editLink}>
                       {item.docketEntry.descriptionDisplay ||
                         item.docketEntry.documentType}
                     </a>

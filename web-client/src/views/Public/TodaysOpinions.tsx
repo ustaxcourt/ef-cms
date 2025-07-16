@@ -5,7 +5,6 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { Mobile, NonMobile } from '@web-client/ustc-ui/Responsive/Responsive';
 
 export const TodaysOpinions = connect(
   {
@@ -24,27 +23,11 @@ export const TodaysOpinions = connect(
         <section className="usa-section grid-container todays-opinions">
           <h1>{todaysOpinionsHelper.formattedCurrentDate}</h1>
 
-          <div className="grid-row">
-            <p className="grid-col-fill">
-              Any online sourced citations in these opinions can be viewed
-              directly from the associated docket record.
-            </p>
-            <NonMobile>
-              {todaysOpinionsHelper.totalCount > 0 && (
-                <p className="grid-col-2 text-right">
-                  {todaysOpinionsHelper.totalCount} Opinion(s)
-                </p>
-              )}
-            </NonMobile>
-          </div>
-          {/* here FOR MOBILE */}
-          <Mobile>
-            {todaysOpinionsHelper.totalCount > 0 && (
-              <p className="text-right">
-                {todaysOpinionsHelper.totalCount} Opinion(s)
-              </p>
-            )}
-          </Mobile>
+          <p>
+            Any online sourced citations in these opinions can be viewed
+            directly from the associated docket record.
+          </p>
+
           {todaysOpinionsHelper.formattedOpinions.length === 0 && (
             <h3 className="maxw-tablet">
               Opinions are generally filed at 3:00 PM. If you are receiving this
