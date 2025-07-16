@@ -31,7 +31,6 @@ import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/ut
 
 describe('removeCaseFromTrialInteractor', () => {
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
-
   let mockTrialSession: RawTrialSession;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
