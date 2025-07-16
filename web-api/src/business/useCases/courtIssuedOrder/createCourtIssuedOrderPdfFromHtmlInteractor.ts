@@ -38,7 +38,6 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   }
 
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
