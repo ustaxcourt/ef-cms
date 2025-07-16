@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
@@ -307,9 +308,6 @@ describe('fileExternalDocumentInteractor', () => {
     expect(getCasesByDocketNumbers).toHaveBeenCalledTimes(1);
     expect(upsertWorkItems).toHaveBeenCalledTimes(1);
     expect(updateCaseAndAssociations).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalledTimes(2);

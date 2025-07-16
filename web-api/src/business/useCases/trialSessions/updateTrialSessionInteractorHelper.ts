@@ -11,6 +11,7 @@ import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions
 import { get } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 type GetCasesInTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -130,8 +131,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
 
     caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
+    await updateCaseAndAssociations({
       authorizedUser,
       caseToUpdate: caseEntity,
     });

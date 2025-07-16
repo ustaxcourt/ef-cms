@@ -14,6 +14,7 @@ import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const updateCaseContext = async (
   applicationContext: ServerApplicationContext,
@@ -38,7 +39,6 @@ export const updateCaseContext = async (
   }
 
   const oldCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -117,13 +117,10 @@ export const updateCaseContext = async (
     }
   }
 
-  const updatedCase = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: newCase,
-    });
+  const updatedCase = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: newCase,
+  });
 
   return new Case(updatedCase, {
     authorizedUser,

@@ -24,14 +24,12 @@ describe('prioritizeCaseInteractor', () => {
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
-  getCaseByDocketNumber.mockReturnValue(
-    Promise.resolve({
+  it('should update the case with the highPriority flag set as true and attach a reason', async () => {
+    getCaseByDocketNumber.mockResolvedValueOnce({
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    }),
-  );
+    });
 
-  it('should update the case with the highPriority flag set as true and attach a reason', async () => {
     const result = await prioritizeCaseInteractor(
       applicationContext,
       {
@@ -60,12 +58,10 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should throw an error if the case status is calendared', async () => {
-    getCaseByDocketNumber.mockReturnValueOnce(
-      Promise.resolve({
-        ...MOCK_CASE,
-        status: CASE_STATUS_TYPES.calendared,
-      }),
-    );
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.calendared,
+    });
 
     await expect(
       prioritizeCaseInteractor(
@@ -80,14 +76,12 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should throw an error if the case is blocked', async () => {
-    getCaseByDocketNumber.mockReturnValueOnce(
-      Promise.resolve({
-        ...MOCK_CASE,
-        blocked: true,
-        blockedDate: '2019-08-16T17:29:10.132Z',
-        blockedReason: 'something',
-      }),
-    );
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...MOCK_CASE,
+      blocked: true,
+      blockedDate: '2019-08-16T17:29:10.132Z',
+      blockedReason: 'something',
+    });
 
     await expect(
       prioritizeCaseInteractor(
@@ -121,6 +115,10 @@ describe('prioritizeCaseInteractor', () => {
   });
 
   it('should acquire a lock on the case', async () => {
+    getCaseByDocketNumber.mockResolvedValueOnce({
+      ...MOCK_CASE,
+      status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+    });
     await prioritizeCaseInteractor(
       applicationContext,
       {

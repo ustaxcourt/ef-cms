@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
@@ -224,8 +225,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     const updatedCaseDocketEntries =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.docketEntries;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries;
     const noticeOfDocketChangeDocketEntry = updatedCaseDocketEntries.find(
       d =>
         d.eventCode ===

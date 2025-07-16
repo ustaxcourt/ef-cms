@@ -1,20 +1,8 @@
 import { sleep } from '@shared/tools/helpers';
-import { environment } from '@web-api/environment';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { Browser } from 'puppeteer-core';
 
-let browser: Promise<Browser> | null = null;
-
-const getChromiumBrowserLocal = async (): Promise<Browser> => {
-  const { default: puppeteer } = await import('puppeteer');
-  const theBrowser = await puppeteer.launch({
-    args: ['--no-sandbox'],
-  });
-
-  return theBrowser as unknown as Browser;
-};
-
-const getChromiumBrowserAWS = async (): Promise<Browser> => {
+export const getChromiumBrowserAWS = async (): Promise<Browser> => {
   // we need to import these as external dependencies to allow us to reuse the application
   // context in lambdas that DO NOT have the layer.
 
@@ -47,14 +35,3 @@ const getChromiumBrowserAWS = async (): Promise<Browser> => {
 
   throw new Error('Error: Failed to launch chromium, so cannot produce a pdf');
 };
-
-export async function getChromiumBrowser(): Promise<Browser> {
-  if (!browser) {
-    browser =
-      environment.stage === 'local'
-        ? getChromiumBrowserLocal()
-        : getChromiumBrowserAWS();
-  }
-
-  return await browser;
-}

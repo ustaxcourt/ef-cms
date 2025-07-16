@@ -10,10 +10,11 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteCaseDeadline = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     caseDeadlineId,
     docketNumber,
@@ -25,7 +26,6 @@ export const deleteCaseDeadline = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -46,13 +46,10 @@ export const deleteCaseDeadline = async (
     hasCaseDeadline: deadlinesBeforeDelete.length > 1,
   });
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: updatedCase,
-    });
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: updatedCase,
+  });
   return new Case(result, { authorizedUser }).validate().toRawObject();
 };
 
