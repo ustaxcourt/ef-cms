@@ -1364,7 +1364,7 @@ export const workItems: NewWorkItemKysely[] = [
   {
     createdAt: new Date('2020-01-21T16:41:39.482Z'),
     docketEntry:
-      '{"documentType":"Petition","practitioner":[],"filingDate":"2020-01-21T16:41:39.481Z","partyPrimary":true,"pending":false,"receivedAt":"2020-01-21T16:41:39.481Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-01-21T16:41:39.481Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Eve Brewer","docketEntryId":"d854a954-7332-4e92-93bd-dc28c9fea0a5","partySecondary":false,"documentId":"d854a954-7332-4e92-93bd-dc28c9fea0a5"}',
+      '{"documentType":"Petition","practitioner":[],"filingDate":"2020-01-21T16:41:39.481Z","pending":false,"receivedAt":"2020-01-21T16:41:39.481Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-01-21T16:41:39.481Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Eve Brewer","docketEntryId":"d854a954-7332-4e92-93bd-dc28c9fea0a5","documentId":"d854a954-7332-4e92-93bd-dc28c9fea0a5"}',
     docketNumber: '102-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -1440,7 +1440,7 @@ export const workItems: NewWorkItemKysely[] = [
   {
     createdAt: new Date('2020-01-23T21:44:54.043Z'),
     docketEntry:
-      '{"documentType":"Petition","practitioner":[],"filingDate":"2020-01-23T21:44:54.043Z","partyPrimary":true,"pending":false,"receivedAt":"2020-01-23T21:44:54.043Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-01-23T21:44:54.043Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Reuben Blair","docketEntryId":"ac62f25a-49f9-46a5-aed7-d6b955a2dc34","partySecondary":false,"documentId":"ac62f25a-49f9-46a5-aed7-d6b955a2dc34"}',
+      '{"documentType":"Petition","practitioner":[],"filingDate":"2020-01-23T21:44:54.043Z","pending":false,"receivedAt":"2020-01-23T21:44:54.043Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-01-23T21:44:54.043Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Reuben Blair","docketEntryId":"ac62f25a-49f9-46a5-aed7-d6b955a2dc34","documentId":"ac62f25a-49f9-46a5-aed7-d6b955a2dc34"}',
     docketNumber: '103-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -1451,7 +1451,7 @@ export const workItems: NewWorkItemKysely[] = [
   {
     createdAt: new Date('2020-01-23T21:45:34.520Z'),
     docketEntry:
-      '{"hasSupportingDocuments":false,"attachments":false,"documentType":"Administrative Record","practitioner":[],"filingDate":"2020-01-23T21:45:34.520Z","partyPrimary":true,"pending":false,"exhibits":false,"receivedAt":"2020-01-23T21:45:34.520Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ADMR","createdAt":"2020-01-23T21:45:34.520Z","processingStatus":"pending","numberOfPages":1,"scenario":"Standard","filedBy":"Petr. Reuben Blair","docketEntryId":"2cca1543-21b2-4783-a1de-eeaaf269d32c","certificateOfService":false,"certificateOfServiceDate":null,"documentId":"2cca1543-21b2-4783-a1de-eeaaf269d32c","category":"Miscellaneous","documentTitle":"Administrative Record","relationship":"primaryDocument","docketNumber":"103-20"}',
+      '{"hasSupportingDocuments":false,"attachments":false,"documentType":"Administrative Record","practitioner":[],"filingDate":"2020-01-23T21:45:34.520Z","pending":false,"exhibits":false,"receivedAt":"2020-01-23T21:45:34.520Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"ADMR","createdAt":"2020-01-23T21:45:34.520Z","processingStatus":"pending","numberOfPages":1,"scenario":"Standard","filedBy":"Petr. Reuben Blair","docketEntryId":"2cca1543-21b2-4783-a1de-eeaaf269d32c","certificateOfService":false,"certificateOfServiceDate":null,"documentId":"2cca1543-21b2-4783-a1de-eeaaf269d32c","category":"Miscellaneous","documentTitle":"Administrative Record","relationship":"primaryDocument","docketNumber":"103-20"}',
     docketNumber: '103-20',
     section: 'docket',
     sentBy: 'Test Petitioner',
@@ -1519,7 +1519,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-04-14T19:59:46.118Z'),
     docketEntry:
-      '{"isPaper":true,"documentType":"Petition","filingDate":"2020-04-12T04:00:00.000Z","partyPrimary":true,"pending":false,"mailingDate":"04/12/2020","receivedAt":"2020-04-12T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-04-12T04:00:00.000Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Luksa Lucia","docketEntryId":"596223c1-527b-46b4-98b0-1b10455e9495","partySecondary":false,"documentId":"596223c1-527b-46b4-98b0-1b10455e9495"}',
+      '{"isPaper":true,"documentType":"Petition","filingDate":"2020-04-12T04:00:00.000Z","pending":false,"mailingDate":"04/12/2020","receivedAt":"2020-04-12T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-04-12T04:00:00.000Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Luksa Lucia","docketEntryId":"596223c1-527b-46b4-98b0-1b10455e9495","documentId":"596223c1-527b-46b4-98b0-1b10455e9495"}',
     docketNumber: '104-17',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
@@ -1537,7 +1537,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-04-14T19:59:46.118Z'),
     docketEntry:
-      '{"isPaper":true,"documentType":"Petition","filingDate":"2020-04-12T04:00:00.000Z","partyPrimary":true,"pending":false,"mailingDate":"04/12/2020","receivedAt":"2020-04-12T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-04-12T04:00:00.000Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Luksa Lucia","docketEntryId":"596223c1-527b-46b4-98b0-1b10455e9495","partySecondary":false,"documentId":"596223c1-527b-46b4-98b0-1b10455e9495"}',
+      '{"isPaper":true,"documentType":"Petition","filingDate":"2020-04-12T04:00:00.000Z","pending":false,"mailingDate":"04/12/2020","receivedAt":"2020-04-12T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","createdAt":"2020-04-12T04:00:00.000Z","processingStatus":"pending","numberOfPages":1,"filedBy":"Petr. Luksa Lucia","docketEntryId":"596223c1-527b-46b4-98b0-1b10455e9495","documentId":"596223c1-527b-46b4-98b0-1b10455e9495"}',
     docketNumber: '104-18',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
@@ -1555,7 +1555,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-04-14T19:59:46.118Z'),
     docketEntry:
-      '{"isPaper":true,"documentType":"Petition","filingDate":"2020-04-12T04:00:00.000Z","partyPrimary":true,"pending":false,"mailingDate":"04/12/2020","receivedAt":"2020-04-12T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-04-12T04:00:00.000Z","numberOfPages":1,"filedBy":"Petr. Luksa Lucia","docketEntryId":"596223c1-527b-46b4-98b0-1b10455e9495","partySecondary":false,"documentId":"596223c1-527b-46b4-98b0-1b10455e9495"}',
+      '{"isPaper":true,"documentType":"Petition","filingDate":"2020-04-12T04:00:00.000Z","pending":false,"mailingDate":"04/12/2020","receivedAt":"2020-04-12T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-04-12T04:00:00.000Z","numberOfPages":1,"filedBy":"Petr. Luksa Lucia","docketEntryId":"596223c1-527b-46b4-98b0-1b10455e9495","documentId":"596223c1-527b-46b4-98b0-1b10455e9495"}',
     docketNumber: '104-20',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
@@ -1573,7 +1573,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2023-01-06T22:33:08.582Z'),
     docketEntry:
-      '{"stampData":{},"servedParties":[{"name":"IRS","role":"irsSuperuser"}],"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2023-01-02T05:00:00.000Z","pending":false,"isDraft":false,"receivedAt":"2023-01-02T05:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-01-02T05:00:00.000Z","numberOfPages":3,"entityName":"DocketEntry","filedBy":"Petr. Armand Fulton","docketEntryId":"38b33b7b-2017-41fe-9453-e9732ebf28f7","sk":"docket-entry|38b33b7b-2017-41fe-9453-e9732ebf28f7","documentTitle":"Petition","addToCoversheet":false,"draftOrderState":null,"filedByRole":"petitioner","index":1,"mailingDate":"asdf","isFileAttached":true,"userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"complete","filers":["40eb0890-aab3-4925-8769-e056b30c502d"],"servedPartiesCode":"R","pk":"case|104-23","servedAt":"2023-01-06T22:33:13.813Z","docketNumber":"104-23"}',
+      '{"stampData":{},"servedParties":[{"name":"IRS","role":"irsSuperuser"}],"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2023-01-02T05:00:00.000Z","pending":false,"isDraft":false,"receivedAt":"2023-01-02T05:00:00.000Z","isOnDocketRecord":true,"createdAt":"2023-01-02T05:00:00.000Z","numberOfPages":3,"entityName":"DocketEntry","filedBy":"Petr. Armand Fulton","docketEntryId":"38b33b7b-2017-41fe-9453-e9732ebf28f7","documentTitle":"Petition","addToCoversheet":false,"draftOrderState":null,"filedByRole":"petitioner","index":1,"mailingDate":"asdf","isFileAttached":true,"userId":"4805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"complete","filers":["40eb0890-aab3-4925-8769-e056b30c502d"],"servedPartiesCode":"R","servedAt":"2023-01-06T22:33:13.813Z","docketNumber":"104-23"}',
     docketNumber: '104-23',
     inProgress: false,
     section: 'petitions',
@@ -1630,7 +1630,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-04-29T15:50:41.698Z'),
     docketEntry:
-      '{"documentType":"Petition","filingDate":"2020-04-29T15:50:41.686Z","partyPrimary":true,"pending":false,"receivedAt":"2020-04-29T15:50:41.698Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-04-29T15:50:41.698Z","numberOfPages":1,"entityName":"Document","filedBy":"Petr. Astra Santiago","docketEntryId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","partySecondary":false,"documentId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","privatePractitioners":[]}',
+      '{"documentType":"Petition","filingDate":"2020-04-29T15:50:41.686Z","pending":false,"receivedAt":"2020-04-29T15:50:41.698Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-04-29T15:50:41.698Z","numberOfPages":1,"entityName":"Document","filedBy":"Petr. Astra Santiago","docketEntryId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","documentId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","privatePractitioners":[]}',
     docketNumber: '105-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -2152,7 +2152,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'completed',
     createdAt: new Date('2019-07-12T17:11:27.244Z'),
     docketEntry:
-      '{"isPaper":true,"serviceDate":null,"documentType":"Proposed Stipulated Decision","practitioner":[],"filingDate":"1990-10-10","partyPrimary":true,"receivedAt":"1990-10-10","userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"PSDE","createdAt":"2019-07-12T17:11:26.955Z","processingStatus":"pending","lodged":false,"numberOfPages":1,"scenario":"Standard","filedBy":"Petr. Denise Gould","docketEntryId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","documentId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","category":"Decision","documentTitle":"Proposed Stipulated Decision","relationship":"primaryDocument","docketNumber":"106-19"}',
+      '{"isPaper":true,"serviceDate":null,"documentType":"Proposed Stipulated Decision","practitioner":[],"filingDate":"1990-10-10","receivedAt":"1990-10-10","userId":"1805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"PSDE","createdAt":"2019-07-12T17:11:26.955Z","processingStatus":"pending","lodged":false,"numberOfPages":1,"scenario":"Standard","filedBy":"Petr. Denise Gould","docketEntryId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","documentId":"7a923abd-fc41-407a-b76b-7f724fa5d47f","category":"Decision","documentTitle":"Proposed Stipulated Decision","relationship":"primaryDocument","docketNumber":"106-19"}',
     docketNumber: '106-19',
     section: 'docket',
     sentBy: 'Test Docketclerk',
@@ -2335,7 +2335,7 @@ export const workItems: NewWorkItemKysely[] = [
     assigneeName: 'Test Petitionsclerk',
     createdAt: new Date('2020-08-10T17:16:49.187Z'),
     docketEntry:
-      '{"isPaper":true,"documentType":"Petition","filingDate":"2020-08-10T04:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"05-Apr-1990","isFileAttached":true,"receivedAt":"2020-08-10T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-08-10T04:00:00.000Z","entityName":"Document","filedBy":"Petr. Idola Flowers","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentId":"1a92894e-83a5-48ba-9994-3ada44235deb"}',
+      '{"isPaper":true,"documentType":"Petition","filingDate":"2020-08-10T04:00:00.000Z","pending":false,"isDraft":false,"mailingDate":"05-Apr-1990","isFileAttached":true,"receivedAt":"2020-08-10T04:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","eventCode":"P","processingStatus":"pending","createdAt":"2020-08-10T04:00:00.000Z","entityName":"Document","filedBy":"Petr. Idola Flowers","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","documentId":"1a92894e-83a5-48ba-9994-3ada44235deb"}',
     docketNumber: '121-20',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
@@ -2347,7 +2347,7 @@ export const workItems: NewWorkItemKysely[] = [
   {
     createdAt: new Date('2020-09-25T19:27:00.206Z'),
     docketEntry:
-      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-09-25T19:27:00.201Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-09-25T19:27:00.205Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-25T19:27:00.205Z","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
+      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-09-25T19:27:00.201Z","pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-09-25T19:27:00.205Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-25T19:27:00.205Z","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '122-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -2358,7 +2358,7 @@ export const workItems: NewWorkItemKysely[] = [
   {
     createdAt: new Date('2020-09-30T20:22:10.387Z'),
     docketEntry:
-      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-09-30T20:22:10.380Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-09-30T20:22:10.386Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-30T20:22:10.386Z","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
+      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-09-30T20:22:10.380Z","pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-09-30T20:22:10.386Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-30T20:22:10.386Z","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '123-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -2375,7 +2375,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-09-30T20:23:57.360Z'),
     docketEntry:
-      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-09-02T04:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"03/03/2020","isFileAttached":true,"receivedAt":"2020-09-02T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-02T04:00:00.000Z","entityName":"DocketEntry","filedBy":"Petr. Stacy Russold","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-09-30T20:24:15.162Z","documentTitle":"Petition"}',
+      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-09-02T04:00:00.000Z","pending":false,"isDraft":false,"mailingDate":"03/03/2020","isFileAttached":true,"receivedAt":"2020-09-02T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-02T04:00:00.000Z","entityName":"DocketEntry","filedBy":"Petr. Stacy Russold","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2020-09-30T20:24:15.162Z","documentTitle":"Petition"}',
     docketNumber: '124-20',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
@@ -2387,7 +2387,7 @@ export const workItems: NewWorkItemKysely[] = [
   {
     createdAt: new Date('2020-10-13T20:23:17.559Z'),
     docketEntry:
-      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-10-13T20:23:17.556Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-10-13T20:23:17.558Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-10-13T20:23:17.558Z","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
+      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-10-13T20:23:17.556Z","pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-10-13T20:23:17.558Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-10-13T20:23:17.558Z","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '125-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -2398,7 +2398,7 @@ export const workItems: NewWorkItemKysely[] = [
   {
     createdAt: new Date('2020-10-16T15:19:38.087Z'),
     docketEntry:
-      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-10-16T15:19:38.084Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-10-16T15:19:38.086Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-10-16T15:19:38.086Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
+      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-10-16T15:19:38.084Z","pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-10-16T15:19:38.086Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-10-16T15:19:38.086Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '126-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -2409,7 +2409,7 @@ export const workItems: NewWorkItemKysely[] = [
   {
     createdAt: new Date('2020-11-18T19:32:11.465Z'),
     docketEntry:
-      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-11-18T19:32:11.463Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-11-18T19:32:11.464Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-11-18T19:32:11.464Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
+      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-11-18T19:32:11.463Z","pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-11-18T19:32:11.464Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-11-18T19:32:11.464Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '127-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -2420,7 +2420,7 @@ export const workItems: NewWorkItemKysely[] = [
   {
     createdAt: new Date('2020-11-30T21:58:13.409Z'),
     docketEntry:
-      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-11-30T21:58:13.406Z","partyPrimary":true,"pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-11-30T21:58:13.408Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-11-30T21:58:13.408Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"documentTitle":"Petition","privatePractitioners":[]}',
+      '{"isStricken":false,"documentType":"Petition","filingDate":"2020-11-30T21:58:13.406Z","pending":false,"isDraft":false,"isFileAttached":true,"receivedAt":"2020-11-30T21:58:13.408Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-11-30T21:58:13.408Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Brett Osborne","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","documentTitle":"Petition","privatePractitioners":[]}',
     docketNumber: '128-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -2437,7 +2437,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-11-30T22:57:58.406Z'),
     docketEntry:
-      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-01-20T05:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"25-Sep-1995","isFileAttached":true,"receivedAt":"2020-01-20T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-01-20T05:00:00.000Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Valentine Holman","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-11-30T22:58:08.081Z","documentTitle":"Petition"}',
+      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-01-20T05:00:00.000Z","pending":false,"isDraft":false,"mailingDate":"25-Sep-1995","isFileAttached":true,"receivedAt":"2020-01-20T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-01-20T05:00:00.000Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Valentine Holman","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2020-11-30T22:58:08.081Z","documentTitle":"Petition"}',
     docketNumber: '129-20',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
@@ -4748,7 +4748,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-04-29T15:50:41.698Z'),
     docketEntry:
-      '{"createdAt":"2020-04-29T15:50:41.698Z","documentId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","documentType":"Petition","entityName":"Document","eventCode":"P","filedBy":"Petr. Astra Santiago","filingDate":"2020-04-29T15:50:41.686Z","numberOfPages":1,"partyPrimary":true,"partySecondary":false,"pending":false,"privatePractitioners":[],"processingStatus":"pending","receivedAt":"2020-04-29T15:50:41.698Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
+      '{"createdAt":"2020-04-29T15:50:41.698Z","documentId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","documentType":"Petition","entityName":"Document","eventCode":"P","filedBy":"Petr. Astra Santiago","filingDate":"2020-04-29T15:50:41.686Z","numberOfPages":1,"pending":false,"privatePractitioners":[],"processingStatus":"pending","receivedAt":"2020-04-29T15:50:41.698Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -4765,7 +4765,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-09-30T20:23:57.360Z'),
     docketEntry:
-      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-09-02T04:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"03/03/2020","isFileAttached":true,"receivedAt":"2020-09-02T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-02T04:00:00.000Z","entityName":"DocketEntry","filedBy":"Petr. Stacy Russold","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-09-30T20:24:15.162Z","documentTitle":"Petition"}',
+      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-09-02T04:00:00.000Z","pending":false,"isDraft":false,"mailingDate":"03/03/2020","isFileAttached":true,"receivedAt":"2020-09-02T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-02T04:00:00.000Z","entityName":"DocketEntry","filedBy":"Petr. Stacy Russold","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2020-09-30T20:24:15.162Z","documentTitle":"Petition"}',
     docketNumber: '124-20',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',
@@ -4783,7 +4783,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-11-30T22:57:58.406Z'),
     docketEntry:
-      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-01-20T05:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"25-Sep-1995","isFileAttached":true,"receivedAt":"2020-01-20T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-01-20T05:00:00.000Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Valentine Holman","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-11-30T22:58:08.081Z","documentTitle":"Petition"}',
+      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-01-20T05:00:00.000Z","pending":false,"isDraft":false,"mailingDate":"25-Sep-1995","isFileAttached":true,"receivedAt":"2020-01-20T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-01-20T05:00:00.000Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Valentine Holman","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2020-11-30T22:58:08.081Z","documentTitle":"Petition"}',
     docketNumber: '129-20',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
@@ -6279,7 +6279,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-04-29T15:50:41.698Z'),
     docketEntry:
-      '{"createdAt":"2020-04-29T15:50:41.698Z","documentId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","documentType":"Petition","entityName":"Document","eventCode":"P","filedBy":"Petr. Astra Santiago","filingDate":"2020-04-29T15:50:41.686Z","numberOfPages":1,"partyPrimary":true,"partySecondary":false,"pending":false,"privatePractitioners":[],"processingStatus":"pending","receivedAt":"2020-04-29T15:50:41.698Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
+      '{"createdAt":"2020-04-29T15:50:41.698Z","documentId":"af9e2d43-1255-4e3d-80d0-63f0aedfab5a","documentType":"Petition","entityName":"Document","eventCode":"P","filedBy":"Petr. Astra Santiago","filingDate":"2020-04-29T15:50:41.686Z","numberOfPages":1,"pending":false,"privatePractitioners":[],"processingStatus":"pending","receivedAt":"2020-04-29T15:50:41.698Z","userId":"7805d1ab-18d0-43ec-bafb-654e83405416"}',
     docketNumber: '105-20',
     section: 'petitions',
     sentBy: 'Test Petitioner',
@@ -6314,7 +6314,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-11-30T22:57:58.406Z'),
     docketEntry:
-      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-01-20T05:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"25-Sep-1995","isFileAttached":true,"receivedAt":"2020-01-20T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-01-20T05:00:00.000Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Valentine Holman","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-11-30T22:58:08.081Z","documentTitle":"Petition"}',
+      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-01-20T05:00:00.000Z","pending":false,"isDraft":false,"mailingDate":"25-Sep-1995","isFileAttached":true,"receivedAt":"2020-01-20T05:00:00.000Z","userId":"3805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","createdAt":"2020-01-20T05:00:00.000Z","processingStatus":"pending","entityName":"DocketEntry","filedBy":"Petr. Valentine Holman","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2020-11-30T22:58:08.081Z","documentTitle":"Petition"}',
     docketNumber: '129-20',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk',
@@ -6529,7 +6529,7 @@ export const workItems: NewWorkItemKysely[] = [
     completedMessage: 'Served to IRS',
     createdAt: new Date('2020-09-30T20:23:57.360Z'),
     docketEntry:
-      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-09-02T04:00:00.000Z","partyPrimary":true,"pending":false,"isDraft":false,"mailingDate":"03/03/2020","isFileAttached":true,"receivedAt":"2020-09-02T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-02T04:00:00.000Z","entityName":"DocketEntry","filedBy":"Petr. Stacy Russold","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","partySecondary":false,"servedAt":"2020-09-30T20:24:15.162Z","documentTitle":"Petition"}',
+      '{"isPaper":true,"isStricken":false,"documentType":"Petition","filingDate":"2020-09-02T04:00:00.000Z","pending":false,"isDraft":false,"mailingDate":"03/03/2020","isFileAttached":true,"receivedAt":"2020-09-02T04:00:00.000Z","userId":"4805d1ab-18d0-43ec-bafb-654e83405416","isOnDocketRecord":true,"eventCode":"P","processingStatus":"pending","createdAt":"2020-09-02T04:00:00.000Z","entityName":"DocketEntry","filedBy":"Petr. Stacy Russold","docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb","servedAt":"2020-09-30T20:24:15.162Z","documentTitle":"Petition"}',
     docketNumber: '124-20',
     section: 'petitions',
     sentBy: 'Test Petitionsclerk1',

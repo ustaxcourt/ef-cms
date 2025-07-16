@@ -281,7 +281,6 @@ export const cases105_109: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     createdAt: '2023-04-03T15:52:32.341Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['105-67'],
     docketNumberSuffix: 'L',
-    // gsi1pk: 'leadCase|102-67',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption:
@@ -392,7 +391,6 @@ export const cases105_109: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     createdAt: '2023-01-06T22:34:19.386Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_105_109['106-23'],
     filingType: 'Myself',
-    // gsi1pk: 'leadCase|104-23',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption: 'Thaddeus Nicholson, Petitioner',
