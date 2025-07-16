@@ -4,6 +4,7 @@ import { openSearchGateway } from '@web-api/gateways/openSearch/openSearchGatewa
 import { formatNow } from '@shared/business/utilities/DateHandler';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import {
+  OpenSearchSyncAction,
   OpenSearchSyncMessage,
   OpenSearchSyncMessageType,
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
@@ -19,11 +20,15 @@ export function getDbReader<T>(cb: (r: Kysely<Database>) => T): Promise<T> {
 export async function getDbWriter<T>({
   cb,
   table,
+  action,
 }: {
   cb: (db: Kysely<Database>) => Promise<T>;
   table: keyof Database | null;
+  action: OpenSearchSyncAction | null;
 }): Promise<T> {
-  if (!table || !DatabaseSchema[table].indexOpenSearchMessage) {
+  const writeDoesNotNeedToBeIndexedInOpenSearch =
+    !table || !DatabaseSchema[table].indexOpenSearchMessage || !action;
+  if (writeDoesNotNeedToBeIndexedInOpenSearch) {
     return await getConnection({
       cb,
     });
@@ -44,6 +49,7 @@ export async function getDbWriter<T>({
         timestamp: formatNow(),
         payload: result,
         type: table as OpenSearchSyncMessageType,
+        action,
       };
 
       await openSearchGateway().queueSync({ message });
