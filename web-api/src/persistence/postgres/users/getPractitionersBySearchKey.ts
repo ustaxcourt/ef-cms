@@ -1,3 +1,4 @@
+import { Role } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
 import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
 import { sql } from 'kysely';
@@ -7,7 +8,7 @@ export const getPractitionersBySearchKey = async ({
   role,
 }: {
   searchKey: string;
-  role: string;
+  role: Role;
 }): Promise<DbUser[]> => {
   const practitioners = await getDbReader(reader =>
     reader

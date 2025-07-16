@@ -11,7 +11,7 @@ describe('createUserConfirmation', () => {
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
-      .getAccountConfirmationCode.mockReturnValue(mockConfirmationCode);
+      .getUserConfirmationCode.mockReturnValue(mockConfirmationCode);
 
     applicationContext
       .getPersistenceGateway()
@@ -39,14 +39,14 @@ describe('createUserConfirmation', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getAccountConfirmationCode.mockReturnValueOnce(undefined);
+      .getUserConfirmationCode.mockReturnValueOnce(undefined);
 
     await createUserConfirmation(applicationContext, {
       email: mockEmail,
       userId: mockUserId,
     });
     expect(
-      applicationContext.getPersistenceGateway().getAccountConfirmationCode,
+      applicationContext.getPersistenceGateway().getUserConfirmationCode,
     ).toHaveBeenCalledTimes(1);
     expect(
       applicationContext.getPersistenceGateway()
@@ -84,7 +84,7 @@ describe('createUserConfirmation', () => {
 
     expect(result).toEqual({ confirmationCode: mockConfirmationCode });
     expect(
-      applicationContext.getPersistenceGateway().getAccountConfirmationCode,
+      applicationContext.getPersistenceGateway().getUserConfirmationCode,
     ).toHaveBeenCalledTimes(1);
     expect(
       applicationContext.getPersistenceGateway()
