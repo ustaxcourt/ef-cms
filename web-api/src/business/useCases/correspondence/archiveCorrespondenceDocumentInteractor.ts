@@ -8,8 +8,9 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { Correspondence } from '@shared/business/entities/Correspondence';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const archiveCorrespondenceDocument = async (
   applicationContext: ServerApplicationContext,
@@ -29,7 +30,6 @@ export const archiveCorrespondenceDocument = async (
   });
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -50,8 +50,7 @@ export const archiveCorrespondenceDocument = async (
     (correspondenceToArchiveEntity as Correspondence).validate().toRawObject(),
   ]);
 
-  return applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  return updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

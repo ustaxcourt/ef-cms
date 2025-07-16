@@ -35,7 +35,10 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { AuthUser, UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { User } from './User';
 import { WorkItem } from './WorkItem';
 import {
@@ -83,7 +86,7 @@ export class DocketEntry extends JoiValidationEntity {
   public additionalInfo2?: string;
   public addToCoversheet?: boolean;
   public archived?: boolean;
-  public attachments?: string;
+  public attachments?: boolean;
   public caseType?: string;
   public taxYear?: string;
   public noticeIssuedDate?: string;
@@ -97,13 +100,12 @@ export class DocketEntry extends JoiValidationEntity {
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
   public documentTitle: string;
-  public documentType: string;
-  public eventCode: string;
+  public documentType?: string;
+  public eventCode: string; // technically optional as draft docketEntry does not require it
   public filedBy?: string;
   public filedByRole?: string;
   public filingDate: string;
   public freeText?: string;
-  public freeText2?: string;
   public hasOtherFilingParty?: boolean;
   public hasSupportingDocuments?: boolean;
   public index?: number;
@@ -134,7 +136,7 @@ export class DocketEntry extends JoiValidationEntity {
   public scenario?: string;
   public secondaryDocument?: {
     secondaryDocumentInfo: string;
-  };
+  } & any;
   public servedAt?: string;
   public servedPartiesCode?: string;
   public serviceDate?: string;
@@ -143,7 +145,10 @@ export class DocketEntry extends JoiValidationEntity {
   public trialLocation?: string;
   public supportingDocument?: string;
   public userId?: string;
-  public privatePractitioners?: any[];
+  public privatePractitioners?: {
+    name: string;
+    partyPrivatePractitioner?: boolean;
+  }[];
   public servedParties?: any[];
   public signedAt?: string;
   public draftOrderState?: {
@@ -168,22 +173,18 @@ export class DocketEntry extends JoiValidationEntity {
     statusReportIndex?: string;
     strickenFromTrialSessions?: boolean;
   };
-  public stampData!: object;
+  public stampData!: Record<string, any>;
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
   public judge?: string;
-  public judgeUserId?: string;
   public pending?: boolean;
   public previousDocument?: {
-    docketEntryId: string;
+    docketEntryId?: string;
     documentTitle: string;
     documentType: string;
   };
-  public qcAt?: string;
-  public qcByUserId?: string;
   public signedByUserId?: string;
   public signedJudgeName?: string;
-  public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
   public workItem?: any;
@@ -233,7 +234,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.filedByRole = rawDocketEntry.filedByRole;
     this.filingDate = rawDocketEntry.filingDate || createISODateString();
     this.freeText = rawDocketEntry.freeText;
-    this.freeText2 = rawDocketEntry.freeText2;
     this.hasOtherFilingParty = rawDocketEntry.hasOtherFilingParty;
     this.hasSupportingDocuments = rawDocketEntry.hasSupportingDocuments;
     this.index = rawDocketEntry.index;
@@ -318,7 +318,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.stampData = rawDocketEntry.stampData || {};
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
-    this.judgeUserId = rawDocketEntry.judgeUserId;
     this.pending =
       rawDocketEntry.pending === undefined
         ? DocketEntry.isPendingOnCreation(rawDocketEntry)
@@ -330,12 +329,9 @@ export class DocketEntry extends JoiValidationEntity {
         documentType: rawDocketEntry.previousDocument.documentType,
       };
     }
-    this.qcAt = rawDocketEntry.qcAt;
-    this.qcByUserId = rawDocketEntry.qcByUserId;
     this.signedAt = rawDocketEntry.signedAt;
     this.signedByUserId = rawDocketEntry.signedByUserId;
     this.signedJudgeName = rawDocketEntry.signedJudgeName;
-    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
     this.strickenBy = rawDocketEntry.strickenBy;
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
@@ -424,21 +420,11 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   /**
-   * attaches a qc date and a user to the document
-   * @param {object} user the user completing QC process
-   */
-  setQCed(user) {
-    this.qcByUserId = user.userId;
-    this.qcAt = createISODateString();
-  }
-
-  /**
    * Unsets signature related fields on the docket entry
    */
   unsignDocument() {
     this.signedAt = undefined;
     this.signedJudgeName = undefined;
-    this.signedJudgeUserId = undefined;
     this.signedByUserId = undefined;
   }
 

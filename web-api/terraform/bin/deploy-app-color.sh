@@ -25,7 +25,6 @@ fi
 [ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
 [ -z "${IRS_SUPERUSER_EMAIL}" ] && echo "You must have IRS_SUPERUSER_EMAIL set in your environment" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
-[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 [ -z "${COLOR}" ] && echo "You must have COLOR set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
@@ -44,12 +43,11 @@ echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
 echo "  - LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
-echo "  - ZONE_NAME=${ZONE_NAME}"
-echo "  - ZONE_NAME=${COLOR}"
+echo "  - COLOR=${COLOR}"
 
 ../../../../scripts/verify-terraform-version.sh
 
-BUCKET="${ZONE_NAME}.terraform.deploys"
+BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
 ALL_COLORS_KEY="documents-${ENV}.tfstate"
 KEY="documents-${ENV}-${COLOR}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
@@ -105,7 +103,6 @@ DEPLOYMENT_TIMESTAMP=$(date "+%s")
 export TF_VAR_all_colors_tfstate_bucket=$BUCKET
 export TF_VAR_all_colors_tfstate_key=$ALL_COLORS_KEY
 export TF_VAR_environment=$ENV
-export TF_VAR_zone_name=$ZONE_NAME
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN

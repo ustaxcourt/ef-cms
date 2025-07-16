@@ -1,4 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CASE_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -73,9 +76,6 @@ describe('updateTrialSessionInteractorHelper', () => {
         .combineAllPdfDocuments.mockImplementation(
           () => MOCK_PAPER_SERVICE_PDF_COMBINED,
         );
-
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations =
-        jest.fn();
     });
 
     it('should generate all notices for the cases that are callendared and update case hearing', async () => {

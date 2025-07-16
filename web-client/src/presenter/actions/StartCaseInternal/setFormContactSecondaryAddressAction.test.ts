@@ -20,6 +20,7 @@ describe('setFormContactSecondaryAddressAction', () => {
             hasConsentedToElectronicService: true,
             name: 'Roslindis Angelino',
             paperPetitionEmail: 'petitioner@example.com',
+            email: 'contact@example.com',
           },
           contactSecondary: {
             city: 'Greenbough',
@@ -39,6 +40,7 @@ describe('setFormContactSecondaryAddressAction', () => {
       hasConsentedToElectronicService: true,
       name: 'Roslindis Angelino',
       paperPetitionEmail: 'petitioner@example.com',
+      email: 'contact@example.com',
     });
     expect(result.state.form.contactSecondary).toMatchObject({
       city: 'Flavortown',
@@ -48,5 +50,6 @@ describe('setFormContactSecondaryAddressAction', () => {
       name: 'Forrest',
       paperPetitionEmail: 'notacopy@example.com',
     });
+    expect(result.state.form.contactSecondary.email).toBeUndefined();
   });
 });

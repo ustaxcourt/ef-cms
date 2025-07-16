@@ -9,54 +9,70 @@ import { updateCaseStatus } from 'cypress/helpers/caseDetail/caseInformation/upd
 import { goToCase } from 'cypress/helpers/caseDetail/go-to-case';
 import { createAndServePaperPetition } from 'cypress/helpers/fileAPetition/create-and-serve-paper-petition';
 
-export function createAndServeConsolidatedGroup(
-  {
-    caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    judge = '',
-    procedureType = undefined,
-    trialLocation = undefined,
-    includeApwDocument = undefined,
-  }: Partial<{
-    includeApwDocument: boolean;
-    caseStatus: CaseStatus;
-    judge: string;
-    procedureType: ProcedureType;
-    trialLocation: string;
-  }> = {
-    includeApwDocument: undefined,
-    caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
-    judge: '',
-    procedureType: undefined,
-    trialLocation: undefined,
-  },
-): Cypress.Chainable<{
+export type GroupInfoType = {
   leadDocketNumber: string;
-  memberDocketNumber: string;
-}> {
+  memberDocketNumbers: string[];
+};
+
+export function createAndServeConsolidatedGroup({
+  caseStatus = CASE_STATUS_TYPES.generalDocketReadyForTrial,
+  leadCaseJudge = '',
+  memeberCaseJudge = '',
+  procedureType = undefined,
+  trialLocation = undefined,
+  includeApwDocument = undefined,
+  numberOfMemberCases = 1,
+  leadYearReceived = '2019',
+  memberYearReceived = '2023',
+}: {
+  includeApwDocument?: boolean;
+  caseStatus?: CaseStatus;
+  leadCaseJudge?: string;
+  memeberCaseJudge?: string;
+  procedureType?: ProcedureType;
+  trialLocation?: string;
+  numberOfMemberCases?: number;
+  leadYearReceived?: string;
+  memberYearReceived?: string;
+}): Cypress.Chainable<GroupInfoType> {
   return createAndServePaperPetition({
-    yearReceived: '2019',
+    yearReceived: leadYearReceived,
     includeApwDocument,
     procedureType,
     trialLocation,
   }).then(({ docketNumber: leadDocketNumber }) => {
+    cy.wrap<GroupInfoType>({
+      leadDocketNumber,
+      memberDocketNumbers: [],
+    }).as('CONSOLIDATED_GROUP_INFO');
+
     loginAsDocketClerk1();
     goToCase(leadDocketNumber);
-    updateCaseStatus(caseStatus, judge);
+    updateCaseStatus(caseStatus, leadCaseJudge);
 
-    return createAndServePaperPetition({
-      yearReceived: '2023',
-      includeApwDocument,
-      procedureType,
-      trialLocation,
-    }).then(({ docketNumber: memberDocketNumber }) => {
-      loginAsDocketClerk1();
-      goToCase(memberDocketNumber);
-      updateCaseStatus(caseStatus);
-      addCaseToGroup(leadDocketNumber);
-      return cy.wrap({
-        leadDocketNumber,
-        memberDocketNumber,
+    for (let index = 0; index < numberOfMemberCases; index++) {
+      createAndServePaperPetition({
+        yearReceived: memberYearReceived,
+        includeApwDocument,
+        procedureType,
+        trialLocation,
+      }).then(({ docketNumber: memberDocketNumber }) => {
+        loginAsDocketClerk1();
+        goToCase(memberDocketNumber);
+        updateCaseStatus(caseStatus, memeberCaseJudge);
+        addCaseToGroup(leadDocketNumber);
+
+        cy.get<GroupInfoType>('@CONSOLIDATED_GROUP_INFO').then(
+          consolidatedGroupInfo => {
+            consolidatedGroupInfo.memberDocketNumbers.push(memberDocketNumber);
+            cy.wrap<GroupInfoType>(consolidatedGroupInfo).as(
+              'CONSOLIDATED_GROUP_INFO',
+            );
+          },
+        );
       });
-    });
+    }
+
+    return cy.get<GroupInfoType>('@CONSOLIDATED_GROUP_INFO');
   });
 }
