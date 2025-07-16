@@ -1,10 +1,7 @@
+jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { updatePractitionerUser } from './updatePractitionerUser';
-import { updateUserRecords } from './updateUserRecords';
-
-jest.mock('./updateUserRecords');
-const updateUserRecordsMock = updateUserRecords as jest.Mock;
 
 describe('updatePractitionerUser', () => {
   const userId = '9b52c605-edba-41d7-b045-d5f992a499d3';
@@ -48,7 +45,6 @@ describe('updatePractitionerUser', () => {
   });
 
   it('should return updated practitioner data when the update was successful', async () => {
-    updateUserRecordsMock.mockImplementation(() => updatedUser);
     const results = await updatePractitionerUser({
       applicationContext,
       user: updatedUser as any,
@@ -65,8 +61,6 @@ describe('updatePractitionerUser', () => {
   });
 
   it("should update an existing practitioner user's Cognito attributes using the users email", async () => {
-    updateUserRecordsMock.mockImplementation(() => updatedUser);
-
     await updatePractitionerUser({
       applicationContext,
       user: updatedUser as any,
@@ -87,7 +81,6 @@ describe('updatePractitionerUser', () => {
   it("should update an existing practitioner user's Cognito attributes using the users pending email", async () => {
     updatedUser.email = undefined as any;
     updatedUser.pendingEmail = pendingEmail;
-    updateUserRecordsMock.mockImplementation(() => updatedUser);
 
     await updatePractitionerUser({
       applicationContext,

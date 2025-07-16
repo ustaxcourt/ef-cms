@@ -27,7 +27,6 @@ export const updatePractitionerUser = async ({
     throw error;
   }
 
-  console.log('aaazzz');
   await upsertUsers([user]);
 
   return user;
