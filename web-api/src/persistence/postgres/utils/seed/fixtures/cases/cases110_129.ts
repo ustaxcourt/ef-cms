@@ -133,7 +133,6 @@ export const cases110_129: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     docketNumber: SEEDED_DOCKET_NUMBERS_110_129['112-19'],
     docketNumberSuffix: 'L',
     filingType: 'Myself',
-    // gsi1pk: 'leadCase|111-19',
     hasPendingItems: false,
     hasVerifiedIrsNotice: false,
     initialCaption: 'Brian Earl Spilner, Petitioner',

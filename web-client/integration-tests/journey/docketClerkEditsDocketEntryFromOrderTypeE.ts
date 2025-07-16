@@ -82,7 +82,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     );
 
     expect(updatedOrderDocument).toMatchObject({
-      date: '2002-01-01T00:00:00.000-05:00',
+      date: '2002-01-01T05:00:00.000Z',
       documentTitle:
         'Order time is extended to 01-01-2002 for petr(s) to pay the filing fee',
       documentType: 'Order time is extended for petr(s) to pay the filing fee',
@@ -95,7 +95,7 @@ export const docketClerkEditsDocketEntryFromOrderTypeE = (
     });
 
     expect(cerebralTest.getState('form')).toMatchObject({
-      date: '2002-01-01T00:00:00.000-05:00',
+      date: '2002-01-01T05:00:00.000Z',
       documentTitle:
         'Order time is extended to 01-01-2002 for petr(s) to pay the filing fee',
       documentType: 'Order time is extended for petr(s) to pay the filing fee',

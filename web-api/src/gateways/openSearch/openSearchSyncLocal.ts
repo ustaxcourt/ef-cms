@@ -10,7 +10,7 @@ export const openSearchSyncLocal = async ({
     const handlerFn = DatabaseSchema[message.type].indexOpenSearchMessage;
     if (!handlerFn) {
       throw new Error(
-        `No matching router found for message: ${JSON.stringify(message)}`,
+        `No matching handler found for message: ${JSON.stringify(message)}`,
       );
     }
     await handlerFn({ message });
