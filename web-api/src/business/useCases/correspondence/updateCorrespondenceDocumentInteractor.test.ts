@@ -8,7 +8,6 @@ import {
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { Correspondence } from '@shared/business/entities/Correspondence';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
@@ -81,7 +80,6 @@ describe('updateCorrespondenceDocumentInteractor', () => {
   it('should throw an Unauthorized error when the user role does not have the CASE_CORRESPONDENCE permission', async () => {
     await expect(
       updateCorrespondenceDocumentInteractor(
-        applicationContext,
         {
           documentMetadata: { docketNumber: mockCase.docketNumber } as any,
         },
@@ -92,7 +90,6 @@ describe('updateCorrespondenceDocumentInteractor', () => {
 
   it('should update the specified correspondence document title when the case entity is valid', async () => {
     await updateCorrespondenceDocumentInteractor(
-      applicationContext,
       {
         documentMetadata: {
           correspondenceId: mockCorrespondence.correspondenceId,
@@ -113,7 +110,6 @@ describe('updateCorrespondenceDocumentInteractor', () => {
 
   it('should return an updated raw case object', async () => {
     const result = await updateCorrespondenceDocumentInteractor(
-      applicationContext,
       {
         documentMetadata: {
           correspondenceId: mockCorrespondence.correspondenceId,
