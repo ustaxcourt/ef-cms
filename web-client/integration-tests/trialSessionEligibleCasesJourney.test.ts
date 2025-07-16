@@ -215,7 +215,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         ]),
       );
     });
-
+    
     it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session; Case #2 and #3 are not assigned`, async () => {
       //Case #1 - assigned
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
