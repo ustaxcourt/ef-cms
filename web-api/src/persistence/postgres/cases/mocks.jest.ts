@@ -100,3 +100,8 @@ jest.mock(
   '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases',
   () => mockFactory('associateUsersWithCases'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser',
+  () => mockFactory('verifyCaseForUser'),
+);
