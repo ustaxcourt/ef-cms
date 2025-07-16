@@ -136,7 +136,7 @@ export class Case extends JoiValidationEntity {
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: any[];
+  public docketEntries: DocketEntry[];
   public isSealed?: boolean;
   public hearings: any[];
   public privatePractitioners?: any[];
@@ -993,14 +993,16 @@ export class Case extends JoiValidationEntity {
     });
   }
 
-  toRawObject(processPendingItems = true) {
+  //@ts-ignore
+  toRawObject(processPendingItems = true): RawCase {
     const result = this.toRawObjectFromJoi();
 
     if (processPendingItems) {
       (result as any).hasPendingItems = this.doesHavePendingItems();
     }
 
-    return result;
+    // @ts-ignore
+    return result as RawCase;
   }
 
   doesHavePendingItems() {
@@ -1122,7 +1124,7 @@ export class Case extends JoiValidationEntity {
    *
    * @param {object} docketEntryEntity the docket entry to add to the case
    */
-  addDocketEntry(docketEntryEntity) {
+  addDocketEntry(docketEntryEntity: DocketEntry) {
     docketEntryEntity.docketNumber = this.docketNumber;
 
     if (docketEntryEntity.isOnDocketRecord) {
@@ -1277,7 +1279,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} params.docketEntryId the id of the docketEntry to retrieve
    * @returns {object} the retrieved docketEntry
    */
-  getDocketEntryById({ docketEntryId }) {
+  getDocketEntryById({ docketEntryId }: { docketEntryId: string }) {
     return this.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );
@@ -1394,7 +1396,7 @@ export class Case extends JoiValidationEntity {
   }
 
   getPetitionDocketEntry() {
-    return getPetitionDocketEntry(this);
+    return getPetitionDocketEntry(this) as DocketEntry; // We know it is a DocketEntry not RawDocketEntry because this is the Case entity
   }
 
   getIrsSendDate() {
@@ -1716,6 +1718,7 @@ export class Case extends JoiValidationEntity {
     const nextIndex =
       this.docketEntries
         .filter(d => d.isOnDocketRecord && d.index !== undefined)
+        // @ts-ignore
         .sort((a, b) => a.index - b.index).length + 1;
     return nextIndex;
   }
@@ -2235,7 +2238,9 @@ export const getPractitionersRepresenting = function (
   );
 };
 
-export const getPetitionDocketEntry = function (rawCase) {
+export const getPetitionDocketEntry = function (
+  rawCase: RawCase | RawPublicCase,
+) {
   return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -2433,7 +2438,9 @@ export const getOtherFilers = function (rawCase) {
 };
 
 declare global {
-  type RawCase = ExcludeMethods<Case>;
+  type RawCase = Omit<ExcludeMethods<Case>, 'docketEntries'> & {
+    docketEntries: RawDocketEntry[];
+  };
 }
 
 const generateCaptionFromContacts = ({

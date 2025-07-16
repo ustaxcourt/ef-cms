@@ -1,7 +1,6 @@
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
 import { createISODateString } from '../utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
-import { pick } from 'lodash';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import joi from 'joi';
@@ -14,7 +13,7 @@ export class WorkItem extends JoiValidationEntity {
   public completedByUserId?: string;
   public completedMessage?: string;
   public createdAt: string;
-  public docketEntry: any;
+  public docketEntryId: string;
   public docketNumber: string;
   public inProgress?: boolean;
   public isRead?: boolean;
@@ -35,25 +34,7 @@ export class WorkItem extends JoiValidationEntity {
     this.completedByUserId = rawWorkItem.completedByUserId;
     this.completedMessage = rawWorkItem.completedMessage;
     this.createdAt = rawWorkItem.createdAt || createISODateString();
-    this.docketEntry = pick(rawWorkItem.docketEntry, [
-      'additionalInfo',
-      'createdAt',
-      'descriptionDisplay',
-      'docketEntryId',
-      'documentTitle',
-      'documentType',
-      'eventCode',
-      'filedBy',
-      'index',
-      'isFileAttached',
-      'isPaper',
-      'otherFilingParty',
-      'receivedAt',
-      'sentBy',
-      'servedAt',
-      'userId',
-    ]);
-
+    this.docketEntryId = rawWorkItem.docketEntryId;
     this.docketNumber = rawWorkItem.docketNumber;
     this.inProgress = rawWorkItem.inProgress;
     this.isRead = rawWorkItem.isRead;
@@ -75,9 +56,7 @@ export class WorkItem extends JoiValidationEntity {
       .optional()
       .allow(null),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
-    // TODO: validate DocketEntry in WorkItem
-    // docketEntry: joi.object().keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS).required(),
-    docketEntry: joi.object().required(),
+    docketEntryId: joi.string().required(),
     docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
       'Unique case identifier in XXXXX-YY format.',
     ),
