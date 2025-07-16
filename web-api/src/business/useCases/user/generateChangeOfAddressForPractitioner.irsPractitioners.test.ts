@@ -1,11 +1,13 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-import '@web-api/persistence/postgres/users/mocks.jest'
+import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 jest.mock('@web-api/persistence/postgres/users/getCasesForUser');
-jest.mock('@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord')
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+);
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -110,6 +112,7 @@ describe('generateChangeOfAddress', () => {
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,
+      oldUser: mockIrsPractitioner as any,
       websocketMessagePrefix: 'user',
     });
 
@@ -137,6 +140,7 @@ describe('generateChangeOfAddress', () => {
       firmName: 'my firm',
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
+      oldUser: mockIrsPractitioner as any,
       updatedName: 'rich',
       user: { ...mockIrsPractitioner, role: ROLES.adc } as any,
       websocketMessagePrefix: 'user',
@@ -160,6 +164,7 @@ describe('generateChangeOfAddress', () => {
       } as any,
       firmName: 'my firm',
       requestUserId: 'abc',
+      oldUser: mockIrsPractitioner as any,
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,
@@ -192,6 +197,7 @@ describe('generateChangeOfAddress', () => {
       applicationContext,
       authorizedUser: mockDocketClerkUser,
       bypassDocketEntry: false,
+      oldUser: mockIrsPractitioner as any,
       contactInfo: {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
@@ -223,6 +229,7 @@ describe('generateChangeOfAddress', () => {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
       } as any,
+      oldUser: mockIrsPractitioner as any,
       firmName: 'my firm',
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
@@ -254,6 +261,7 @@ describe('generateChangeOfAddress', () => {
       } as any,
       firmName: 'my firm',
       requestUserId: 'abc',
+      oldUser: mockIrsPractitioner as any,
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,
