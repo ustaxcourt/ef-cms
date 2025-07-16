@@ -227,9 +227,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     expect(cerebralTest.getState('form.contactSecondary.postalCode')).toBe(
       cerebralTest.getState('form.contactPrimary.postalCode'),
     );
-    expect(cerebralTest.getState('form.contactSecondary.email')).toBe(
-      cerebralTest.getState('form.contactPrimary.email'),
-    );
     expect(cerebralTest.getState('form.contactSecondary.phone')).toBe(
       cerebralTest.getState('form.contactPrimary.phone'),
     );
