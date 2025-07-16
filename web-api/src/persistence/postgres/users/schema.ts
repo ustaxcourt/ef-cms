@@ -1,3 +1,5 @@
+import { JudgeTitle, Role } from '@shared/business/entities/EntityConstants';
+import { UserContact } from '@shared/business/entities/User';
 import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
 
 const DEFAULT = {};
@@ -9,12 +11,12 @@ const userTableDefinition = {
   email: DEFAULT as string | null,
   name: DEFAULT as string,
   pendingEmail: DEFAULT as string | null,
-  role: DEFAULT as string,
+  role: DEFAULT as Role,
   token: DEFAULT as string | null,
   isUpdatingInformation: DEFAULT as boolean | null,
-  contact: DEFAULT as ColumnType<Record<string, any>, string, string> | null,
+  contact: DEFAULT as ColumnType<UserContact, string, string> | null,
   judgeFullName: DEFAULT as string | null,
-  judgeTitle: DEFAULT as string | null,
+  judgeTitle: DEFAULT as JudgeTitle | null,
   section: DEFAULT as string | null,
   isSeniorJudge: DEFAULT as boolean | null,
   judgePhoneNumber: DEFAULT as string | null,
