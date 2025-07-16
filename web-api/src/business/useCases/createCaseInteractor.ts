@@ -281,7 +281,9 @@ export const createCaseInteractor = async (
 
   let privatePractitioners: RawUser[] = [];
   if (user.role === ROLES.privatePractitioner) {
-    const practitionerUser = cloneDeep(user) as RawPrivatePractitioner;
+    const practitionerUser = cloneDeep(
+      user,
+    ) as unknown as RawPrivatePractitioner; // Doing a type conversion because we know in this instance their role is a private practitioner
 
     practitionerUser.representing = [
       petitionEntity.getContactPrimary().contactId,
