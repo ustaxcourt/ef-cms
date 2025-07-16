@@ -5,6 +5,7 @@ import {
   RespondToAuthChallengeResponse,
   UserStatusType,
 } from '@aws-sdk/client-cognito-identity-provider';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import { MOCK_PRACTITIONER, petitionerUser } from '@shared/test/mockUsers';
 import {
@@ -19,12 +20,17 @@ import {
 } from './changePasswordInteractor';
 import jwt from 'jsonwebtoken';
 import { RawUser } from '@shared/business/entities/User';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
+
+const upsertUsers = jest.mocked(upsertUsersMock);
 
 describe('changePasswordInteractor', () => {
   const mockUserId = '8c2af03d-d736-4561-afe3-c78b67b7cc59';
   const mockEmail = 'example@example.com';
   const mockPassword = 'Testing1234$';
   const mockToken = jwt.sign('abcdef', 'secret');
+  const getUserById = jest.mocked(getUserByIdMock);
 
   it('should throw an error when the change password request is invalid', async () => {
     await expect(
@@ -74,9 +80,7 @@ describe('changePasswordInteractor', () => {
           mockRespondToAuthChallengeResponse,
         );
 
-      applicationContext
-        .getPersistenceGateway()
-        .getUserById.mockImplementation(() => mockUserWithPendingEmail);
+      getUserById.mockImplementation(() => mockUserWithPendingEmail);
     });
 
     it('should throw an error when the user is NOT in NEW_PASSWORD_REQUIRED state', async () => {
@@ -112,16 +116,13 @@ describe('changePasswordInteractor', () => {
           tempPassword: mockPassword,
         });
 
-        expect(
-          applicationContext.getPersistenceGateway().updateUser.mock
-            .calls[0][0],
-        ).toMatchObject({
-          user: {
+        expect(upsertUsers.mock.calls[0][0]).toMatchObject([
+          {
             email: mockUserWithPendingEmail.pendingEmail,
             pendingEmail: undefined,
             pendingEmailVerificationToken: undefined,
           },
-        });
+        ]);
         expect(
           applicationContext.getWorkerGateway().queueWork.mock.calls[0][1],
         ).toMatchObject({
@@ -153,17 +154,14 @@ describe('changePasswordInteractor', () => {
           tempPassword: mockPassword,
         });
 
-        expect(
-          applicationContext.getPersistenceGateway().updateUser.mock
-            .calls[0][0],
-        ).toMatchObject({
-          user: {
+        expect(upsertUsers.mock.calls[0][0]).toMatchObject([
+          {
             email: mockUserWithPendingEmail.pendingEmail,
             pendingEmail: undefined,
             pendingEmailVerificationToken: undefined,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
           },
-        });
+        ]);
         expect(
           applicationContext.getWorkerGateway().queueWork.mock.calls[0][1],
         ).toMatchObject({
@@ -328,9 +326,7 @@ describe('changePasswordInteractor', () => {
 
 describe('updateUserPendingEmailRecord', () => {
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .updateUser.mockResolvedValue(null);
+    upsertUsers.mockResolvedValue(null);
   });
 
   it('should set isUpdatingInformation to true if flag is enabled', async () => {
@@ -342,12 +338,13 @@ describe('updateUserPendingEmailRecord', () => {
       },
     });
 
-    const updateUserCalls =
-      applicationContext.getPersistenceGateway().updateUser.mock.calls;
+    const updateUserCalls = upsertUsers.mock.calls;
     expect(updateUserCalls.length).toEqual(1);
-    expect(updateUserCalls[0][0].user).toMatchObject({
-      isUpdatingInformation: true,
-    });
+    expect(updateUserCalls[0][0]).toMatchObject([
+      {
+        isUpdatingInformation: true,
+      },
+    ]);
   });
 
   it('should not update isUpdatingInformation property when flag is disabled', async () => {
@@ -359,11 +356,12 @@ describe('updateUserPendingEmailRecord', () => {
       },
     });
 
-    const updateUserCalls =
-      applicationContext.getPersistenceGateway().updateUser.mock.calls;
+    const updateUserCalls = upsertUsers.mock.calls;
     expect(updateUserCalls.length).toEqual(1);
-    expect(updateUserCalls[0][0].user).toMatchObject({
-      isUpdatingInformation: false,
-    });
+    expect(updateUserCalls[0][0]).toMatchObject([
+      {
+        isUpdatingInformation: false,
+      },
+    ]);
   });
 });

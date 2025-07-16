@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
@@ -30,6 +31,7 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
@@ -44,6 +46,7 @@ describe('editPaperFilingInteractor', () => {
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
   );
+  const getUserById = jest.mocked(getUserByIdMock);
 
   const mockDocketEntryId = '50107716-6d08-4693-bfd5-a07a4e6eadce';
   const mockServedDocketEntryId = '08ecbf7e-b316-46bb-9a66-b7474823d202';
@@ -102,9 +105,7 @@ describe('editPaperFilingInteractor', () => {
       ],
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockReturnValue(docketClerkUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     fileAndServeDocumentOnOneCase.mockImplementation(

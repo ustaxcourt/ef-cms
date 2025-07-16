@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -31,10 +32,12 @@ import { updateMessage } from '@web-api/persistence/postgres/messages/updateMess
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 const tryGetLocks = jest.mocked(tryGetLocksMock);
+const getUserById = jest.mocked(getUserByIdMock);
 
 /* eslint-disable max-lines */
 describe('fileCourtIssuedOrderInteractor', () => {
@@ -97,7 +100,7 @@ describe('fileCourtIssuedOrderInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue(
+    getUserById.mockReturnValue(
       new User({
         name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
         role: ROLES.petitionsClerk,
