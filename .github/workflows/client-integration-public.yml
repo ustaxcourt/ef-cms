@@ -43,7 +43,6 @@ jobs:
         with:
           opensearch-version: 2.11
       - name: Setup DynamoDB Local
-        uses: rrainn/dynamodb-action@v4.0.0
         uses: codyseibert/dynamodb-action@v4.1.0
         with:
           port: 8000
