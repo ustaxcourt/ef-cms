@@ -18,6 +18,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { setChangeOfAddressCaseAsDone as setChangeOfAddressCaseAsDoneMock } from '@web-api/persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
 import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
 import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const setChangeOfAddressCaseAsDone = jest.mocked(
@@ -27,6 +28,7 @@ const getCasesForUser = jest.mocked(getCasesForUserMock);
 const getUserByIdOnceAllUpdatesComplete = jest.mocked(
   getUserByIdOnceAllUpdatesCompleteMock,
 );
+const getUserById = jest.mocked(getUserByIdMock);
 const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 const contactInfo = {
@@ -106,11 +108,9 @@ describe('updateUserContactInformationInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...MOCK_PRACTITIONER,
-      entityName: 'Practitioner',
     });
-
     getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     getCasesForUser.mockResolvedValue([MOCK_CASE]);
