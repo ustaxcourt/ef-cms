@@ -2,6 +2,7 @@
 
 # shellcheck disable=SC1091
 ENVIRONMENT=$1
+export ENVIRONMENT="$ENVIRONMENT"
 
 [ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
 [ -z "${ELASTICSEARCH_ENDPOINT}" ] && echo "You must set ELASTICSEARCH_ENDPOINT as an environment variable" && exit 1
@@ -18,24 +19,22 @@ echo "  - ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}"
 echo "  - EMAIL_SOURCE=${EMAIL_SOURCE}"
 echo "  - INACTIVITY_REPORT_RECIPIENTS=${INACTIVITY_REPORT_RECIPIENTS}"
 
-export ENVIRONMENT="$ENVIRONMENT"
-
-export TF_VAR_environment="$ENVIRONMENT"
-export TF_VAR_elasticsearch_endpoint="$ELASTICSEARCH_ENDPOINT"
-export TF_VAR_disable_emails="false"
-export TF_VAR_email_source="$EMAIL_SOURCE"
-export TF_VAR_inactivity_report_recipients="$INACTIVITY_REPORT_RECIPIENTS"
-
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
-[ -n "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
+[ -n "$ZONE_NAME" ] && BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="stale-cases-email-cron-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
 rm -rf .terraform
 rm -f .terraform.lock.hcl
+
+export TF_VAR_environment="$ENVIRONMENT"
+export TF_VAR_elasticsearch_endpoint="$ELASTICSEARCH_ENDPOINT"
+export TF_VAR_disable_emails="false"
+export TF_VAR_email_source="$EMAIL_SOURCE"
+export TF_VAR_inactivity_report_recipients="$INACTIVITY_REPORT_RECIPIENTS"
 
 terraform init -upgrade -backend=true \
  -backend-config=bucket="$BUCKET" \

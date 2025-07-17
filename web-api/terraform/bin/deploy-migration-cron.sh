@@ -13,21 +13,21 @@ echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 
-export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
-export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
-export TF_VAR_environment=$ENVIRONMENT
-export TF_VAR_migrate_flag=$MIGRATE_FLAG
-
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
-[ -n "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
+[ -n "$ZONE_NAME" ] && BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="migration-cron-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
 rm -rf .terraform
 rm -f .terraform.lock.hcl
+
+export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
+export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
+export TF_VAR_environment=$ENVIRONMENT
+export TF_VAR_migrate_flag=$MIGRATE_FLAG
 
 npm run build:assets
 

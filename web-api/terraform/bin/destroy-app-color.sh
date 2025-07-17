@@ -48,11 +48,17 @@ echo "  - COLOR=${COLOR}"
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
-[ -n "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
 ALL_COLORS_KEY="documents-${ENV}.tfstate"
 KEY="documents-${ENV}-${COLOR}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
+
+# ZONE_NAME is deprecated and will only be set in legacy accounts
+DNS_DOMAIN="$EFCMS_DOMAIN"
+if [[ -n "$ZONE_NAME" ]]; then
+  BUCKET="${ZONE_NAME}.terraform.deploys"
+  DNS_DOMAIN="$ZONE_NAME"
+fi
 
 rm -rf .terraform
 rm -f .terraform.lock.hcl
@@ -107,7 +113,7 @@ export TF_VAR_all_colors_tfstate_bucket=$BUCKET
 export TF_VAR_all_colors_tfstate_key=$ALL_COLORS_KEY
 export TF_VAR_environment=$ENV
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
-export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_dns_domain=$DNS_DOMAIN
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID

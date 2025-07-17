@@ -18,10 +18,16 @@ popd || exit
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
-[ -n "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
 KEY="permissions-${ENV}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
+
+# ZONE_NAME is deprecated and will only be set in legacy accounts
+DNS_DOMAIN="$EFCMS_DOMAIN"
+if [[ -n "$ZONE_NAME" ]]; then
+  BUCKET="${ZONE_NAME}.terraform.deploys"
+  DNS_DOMAIN="$ZONE_NAME"
+fi
 
 rm -rf .terraform
 rm -f .terraform.lock.hcl
@@ -41,7 +47,7 @@ fi
 
 export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
-export TF_VAR_dns_domain="${EFCMS_DOMAIN}"
+export TF_VAR_dns_domain="$DNS_DOMAIN"
 export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
 export TF_VAR_es_logs_instance_type="${ES_LOGS_INSTANCE_TYPE}"
 export TF_VAR_es_logs_ebs_volume_size_gb="${ES_LOGS_EBS_VOLUME_SIZE_GB}"

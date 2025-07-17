@@ -18,23 +18,29 @@ echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - SOURCE_TABLE=${SOURCE_TABLE}"
 echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 
-export TF_VAR_destination_table=$DESTINATION_TABLE
-export TF_VAR_dns_domain=$EFCMS_DOMAIN
-export TF_VAR_environment=$ENVIRONMENT
-export TF_VAR_source_table=$SOURCE_TABLE
-export TF_VAR_stream_arn=$STREAM_ARN
-export TF_VAR_elasticsearch_domain=$ELASTICSEARCH_ENDPOINT
-
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
-[ -n "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
 KEY="migration-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
+# ZONE_NAME is deprecated and will only be set in legacy accounts
+DNS_DOMAIN="$EFCMS_DOMAIN"
+if [[ -n "$ZONE_NAME" ]]; then
+  BUCKET="${ZONE_NAME}.terraform.deploys"
+  DNS_DOMAIN="$ZONE_NAME"
+fi
+
 rm -rf .terraform
 rm -f .terraform.lock.hcl
+
+export TF_VAR_destination_table=$DESTINATION_TABLE
+export TF_VAR_dns_domain=$DNS_DOMAIN
+export TF_VAR_environment=$ENVIRONMENT
+export TF_VAR_source_table=$SOURCE_TABLE
+export TF_VAR_stream_arn=$STREAM_ARN
+export TF_VAR_elasticsearch_domain=$ELASTICSEARCH_ENDPOINT
 
 npm run build:assets
 

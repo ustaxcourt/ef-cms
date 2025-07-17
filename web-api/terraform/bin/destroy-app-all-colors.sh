@@ -40,10 +40,16 @@ echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
-[ -n "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
 KEY="documents-${ENV}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
+
+# ZONE_NAME is deprecated and will only be set in legacy accounts
+DNS_DOMAIN="$EFCMS_DOMAIN"
+if [[ -n "$ZONE_NAME" ]]; then
+  BUCKET="${ZONE_NAME}.terraform.deploys"
+  DNS_DOMAIN="$ZONE_NAME"
+fi
 
 rm -rf .terraform
 rm -f .terraform.lock.hcl
@@ -82,7 +88,7 @@ fi
 ACTIVE_SES_RULESET=$(../../../../scripts/ses/get-ses-ruleset.sh)
 
 export TF_VAR_environment=$ENV
-export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_dns_domain=$DNS_DOMAIN
 export TF_VAR_active_ses_ruleset=$ACTIVE_SES_RULESET
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
