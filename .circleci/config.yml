@@ -1070,6 +1070,7 @@ workflows:
             - loadtests
             - smoketests-readonly
             - api-hosted-environment-tests
+      # TODO post-10494: index-docket-entries
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
@@ -1201,16 +1202,6 @@ workflows:
           requires:
             - wait-for-glue-workflow
             - wait-for-s3-sync-workflow
-      - index-cases:
-          <<: *only-test
-          requires:
-            - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
-      - index-docket-entries:
-          <<: *only-test
-          requires:
-            - wait-for-glue-workflow
-            - wait-for-s3-sync-workflow
       - wait-for-glued-data-to-index:
           <<: *only-test
           type: approval
@@ -1218,6 +1209,14 @@ workflows:
             - index-glued-data
             - index-cases
             - index-docket-entries
+      - index-cases:
+          <<: *only-test
+          requires:
+            - wait-for-glued-data-to-index
+      - index-docket-entries:
+          <<: *only-test
+          requires:
+            - index-cases
       - cleanup-glue-job:
           <<: *only-test
           requires:
