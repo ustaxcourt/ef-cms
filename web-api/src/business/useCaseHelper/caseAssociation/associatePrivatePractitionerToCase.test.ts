@@ -31,7 +31,6 @@ describe('associatePrivatePractitionerToCase', () => {
   const logger = getDawsonLogger();
   const errorSpy = jest.spyOn(logger, 'error');
 
-  const verifyCaseForUser = jest.mocked(verifyCaseForUserMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const verifyCaseForUser = jest.mocked(verifyCaseForUserMock);
