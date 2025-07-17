@@ -25,6 +25,7 @@ const config: Config = {
     '!elasticsearch/ready-cluster-for-migration.ts',
     '!elasticsearch/reindex.ts',
     '!email/**',
+    '!generate-uuid.ts',
     '!glue/**',
     '!import-case-status-changes-from-csv.ts',
     '!irs-super-user.ts',
