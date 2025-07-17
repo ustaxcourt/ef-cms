@@ -60,7 +60,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PP1234',
-        birthYear: '1983',
+        birthYear: 1983,
         email: undefined,
         entityName: 'Practitioner',
         // we return all practitioner search results as a Practitioner user.
@@ -114,7 +114,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PI5678',
-        birthYear: '1983',
+        birthYear: 1983,
         email: undefined,
         entityName: 'Practitioner',
         firmName: 'GW Law Offices',

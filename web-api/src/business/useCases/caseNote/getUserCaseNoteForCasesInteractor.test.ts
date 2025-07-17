@@ -93,7 +93,7 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       userId: userIdToExpect,
     } as UnknownAuthUser;
     getUserById.mockImplementation(() =>
-      Promise.resolve(mockCurrentUser as DbUser),
+      Promise.resolve(mockUser as DbUser),
     );
     applicationContext
       .getUseCaseHelpers()
