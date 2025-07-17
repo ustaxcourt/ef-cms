@@ -9,21 +9,20 @@ import { createJobStatus } from './persistence/dynamo/trialSessions/createJobSta
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
-import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
+import { createOrEditPractitionerDocument } from './persistence/postgres/practitionerDocuments/createOrEditPractitionerDocument';
 import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
 import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
-import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
+import { deletePractitionerDocument } from './persistence/postgres/practitionerDocuments/deletePractitionerDocument';
 import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
 import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
-import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
 import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/getAccountConfirmationCode';
@@ -49,8 +48,8 @@ import { getFeatureFlagValue } from './persistence/dynamo/deployTable/getFeature
 import { getInternalUsers } from './persistence/dynamo/users/getInternalUsers';
 import { getMaintenanceMode } from './persistence/dynamo/deployTable/getMaintenanceMode';
 import { getPractitionerByBarNumber } from './persistence/dynamo/users/getPractitionerByBarNumber';
-import { getPractitionerDocumentByFileId } from './persistence/dynamo/practitioners/getPractitionerDocumentByFileId';
-import { getPractitionerDocuments } from './persistence/dynamo/practitioners/getPractitionerDocuments';
+import { getPractitionerDocumentByFileId } from './persistence/postgres/practitionerDocuments/getPractitionerDocumentByFileId';
+import { getPractitionerDocuments } from './persistence/postgres/practitionerDocuments/getPractitionerDocuments';
 import { getPractitionersByName } from './persistence/elasticsearch/getPractitionersByName';
 import { getReconciliationReport } from './persistence/elasticsearch/getReconciliationReport';
 import { getSesStatus } from './persistence/ses/getSesStatus';
@@ -151,11 +150,10 @@ const gatewayMethods = {
     createNewPetitionerUser,
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
-    createPractitionerDocument,
+    createOrEditPractitionerDocument,
     createTrialSession,
     createTrialSessionWorkingCopy,
     createUserRecords,
-    editPractitionerDocument,
     incrementCounter,
     persistUser,
     removeCaseFromHearing,
