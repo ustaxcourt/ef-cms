@@ -8,11 +8,16 @@ ENVIRONMENT=$1
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
-[ -n "$TERRAFORM_BUCKET" ] && BUCKET="$TERRAFORM_BUCKET"
+[ -n "$ZONE_NAME" ] && BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="glue-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
 rm -rf .terraform
+rm -f .terraform.lock.hcl
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -upgrade -backend=true \
+ -backend-config=bucket="${BUCKET}" \
+ -backend-config=key="${KEY}" \
+ -backend-config=dynamodb_table="${LOCK_TABLE}" \
+ -backend-config=region="${REGION}"
