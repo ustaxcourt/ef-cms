@@ -18,7 +18,6 @@ const scriptConfig: ScriptConfig = {
     '_index-docket-entries-child: a subprocess script for indexing a chunk of docket entry data that should only be kicked off by index-docket-entries',
   environment: {
     env: 'ENV',
-    sourceTable: 'SOURCE_TABLE',
   },
   parameters: {
     startDate: {

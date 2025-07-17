@@ -18,7 +18,6 @@ const scriptConfig: ScriptConfig = {
     '_index-cases-child: a subprocess script for indexing a chunk of case data that should only be kicked off by index-cases',
   environment: {
     env: 'ENV',
-    sourceTable: 'SOURCE_TABLE',
   },
   parameters: {
     startDate: {

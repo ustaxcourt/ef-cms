@@ -21,17 +21,17 @@ const scriptConfig: ScriptConfig = {
     sourceTable: 'SOURCE_TABLE',
   },
   parameters: {
-    num_processes: {
+    numProcesses: {
       position: 0,
       required: true,
-      transform: 'toLowerCase',
+      transform: 'number',
       type: 'string',
     },
   },
   requireActiveAwsSession: true,
 };
-const { num_processes } = parseArgsAndEnvVars(scriptConfig) as {
-  num_processes: string;
+const { numProcesses } = parseArgsAndEnvVars(scriptConfig) as {
+  numProcesses: number;
 };
 
 /*
@@ -40,8 +40,6 @@ to delete each group.
 */
 async function main() {
   const count = await getDocketEntriesCount();
-
-  const numProcesses = Number(num_processes);
 
   console.log(`Calculating chunk sizes for ${numProcesses} processes`);
   const chunkSize = Math.ceil(count / numProcesses);
