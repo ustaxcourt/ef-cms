@@ -20,6 +20,7 @@ import {
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
+import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 
 /**
  * updateUserContactInformationHelper
@@ -185,12 +186,10 @@ export const updateUserContactInformation = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _: ServerApplicationContext,
   { userId }: { userId: string },
 ) => {
-  await applicationContext
-    .getPersistenceGateway()
-    .getUserByIdOnceAllUpdatesComplete({ userId });
+  await getUserByIdOnceAllUpdatesComplete({ userId });
 
   const cases = await getCasesForUser({ userId });
 
