@@ -447,7 +447,7 @@ export const filterWorkItems = ({
 }: {
   assignmentFilterValue: any;
   section: string;
-  workItems: WorkItemWithCaseInfo[];
+  workItems: RawWorkItemWithCaseAndDocketEntryInfo[];
   workQueueToDisplay: {
     box: string;
     queue: string;
@@ -482,27 +482,28 @@ export const filterWorkItems = ({
   return filteredWorkItems;
 };
 
-export type FormattedWorkItemWithCaseInfo = RawWorkItemWithCaseAndDocketEntryInfo & {
-  assigneeName: string;
-  completedAtFormatted: string;
-  completedAtFormattedTZ: string;
-  consolidatedIconTooltipText: string;
-  createdAtFormatted: string;
-  docketEntry: any;
-  editLink: string;
-  formattedCaseStatus: string;
-  highPriority: boolean;
-  inConsolidatedGroup: boolean;
-  inLeadCase: boolean;
-  isCourtIssuedDocument: boolean;
-  isOrder: boolean;
-  received: string;
-  receivedAt: any;
-  selected: boolean;
-  sentBySection: string;
-  sentDateFormatted: string;
-  showHighPriorityIcon: boolean;
-  showUnassignedIcon: boolean;
-  showUnreadIndicators: boolean;
-  showUnreadStatusIcon: boolean;
-};
+export type FormattedWorkItemWithCaseInfo =
+  RawWorkItemWithCaseAndDocketEntryInfo & {
+    assigneeName: string;
+    completedAtFormatted: string;
+    completedAtFormattedTZ: string;
+    consolidatedIconTooltipText: string;
+    createdAtFormatted: string;
+    docketEntry: any;
+    editLink: string;
+    formattedCaseStatus: string;
+    highPriority: boolean;
+    inConsolidatedGroup: boolean;
+    inLeadCase: boolean;
+    isCourtIssuedDocument: boolean;
+    isOrder: boolean;
+    received: string;
+    receivedAt: any;
+    selected: boolean;
+    sentBySection: string;
+    sentDateFormatted: string;
+    showHighPriorityIcon: boolean;
+    showUnassignedIcon: boolean;
+    showUnreadIndicators: boolean;
+    showUnreadStatusIcon: boolean;
+  };
