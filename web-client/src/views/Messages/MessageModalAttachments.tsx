@@ -62,7 +62,7 @@ export const MessageModalAttachments = connect(
                 icon="file-pdf"
                 size="1x"
               />
-              <span className="margin-left-1 semi-bold">Attachment(s)</span>
+              <span className="margin-left-1 semi-bold">*Attachment(s)</span>
             </div>
             {form.attachments.map(doc => {
               return (
@@ -73,11 +73,19 @@ export const MessageModalAttachments = connect(
                 </div>
               );
             })}
-            {form.draftAttachments.map(doc => {
+            {form.draftAttachments.map(doc1 => {
+              // Find the matching doc2 by comparing documentId and docketEntryId
+              const doc2 = messageModalHelper.documents.find(
+                doc => doc.docketEntryId === doc1.documentId,
+              );
+
               return (
-                <div className="margin-top-1" key={doc.documentId}>
+                <div className="margin-top-1" key={doc1.documentId}>
                   <div className="grid-row">
-                    <div className="grid-col-10">{doc.documentTitle}</div>
+                    <div className="grid-col-10">
+                      {/* If a matching doc2 is found, use doc2.docketEntryId, otherwise leave it blank */}
+                      {doc2 ? doc2.index : ''} - {doc1.documentTitle}
+                    </div>
                     <div className="grid-col-2">
                       <Button
                         link
@@ -88,7 +96,7 @@ export const MessageModalAttachments = connect(
                         onClick={() => {
                           updateMessageModalAttachmentsSequence({
                             action: 'remove',
-                            documentId: doc.documentId,
+                            documentId: doc1.documentId,
                           });
                         }}
                         style={{
