@@ -1,5 +1,5 @@
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import type { AttributeValue, DynamoDBRecord, StreamRecord } from 'aws-lambda';
+import type { AttributeValue, DynamoDBRecord } from 'aws-lambda';
 
 export const getApproximateCreationDateTime = ({
   applicationContext,
@@ -69,12 +69,4 @@ export const shouldProcessRecord = ({
 
 export interface AttributeValueWithName extends AttributeValue {
   name?: string | undefined;
-}
-
-interface IStreamRecord extends StreamRecord {
-  NewImage?: { [key: string]: AttributeValueWithName } | undefined;
-}
-
-export interface IDynamoDBRecord extends DynamoDBRecord {
-  dynamodb?: IStreamRecord | undefined;
 }
