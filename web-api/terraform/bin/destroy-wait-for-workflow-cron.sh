@@ -18,17 +18,26 @@ echo "  - CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}"
 echo "  - CIRCLE_PIPELINE_ID=${CIRCLE_PIPELINE_ID}"
 echo "  - APPROVAL_JOB_NAME=${APPROVAL_JOB_NAME}"
 
+../../../../scripts/verify-terraform-version.sh
+
+BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+[ -n "$ZONE_NAME" ] && BUCKET="${ZONE_NAME}.terraform.deploys"
+KEY="wait-for-workflow-cron-${ENVIRONMENT}.tfstate"
+LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
+rm -rf .terraform
+rm -f .terraform.lock.hcl
+
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
 export TF_VAR_circle_pipeline_id=$CIRCLE_PIPELINE_ID
 export TF_VAR_approval_job_name=$APPROVAL_JOB_NAME
 export TF_VAR_environment=$ENVIRONMENT
 
-../../../../scripts/verify-terraform-version.sh
-
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${EFCMS_DOMAIN}.terraform.deploys" \
- -backend-config=key="wait-for-workflow-cron-${ENVIRONMENT}.tfstate" \
- -backend-config=dynamodb_table="efcms-terraform-lock" \
- -backend-config=region="us-east-1"
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
 terraform destroy -auto-approve

@@ -20,9 +20,17 @@ popd || exit
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
 KEY="permissions-${ENV}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
+# ZONE_NAME is deprecated and will only be set in legacy accounts
+DNS_DOMAIN="$EFCMS_DOMAIN"
+if [[ -n "$ZONE_NAME" ]]; then
+  BUCKET="${ZONE_NAME}.terraform.deploys"
+  DNS_DOMAIN="$ZONE_NAME"
+fi
 
 rm -rf .terraform
-rm .terraform.lock.hcl
+rm -f .terraform.lock.hcl
 
 echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]"
 sh ../../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
@@ -39,7 +47,8 @@ fi
 
 export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
-export TF_VAR_dns_domain="${EFCMS_DOMAIN}"
+export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_zone_name=$DNS_DOMAIN
 export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
 export TF_VAR_es_logs_instance_type="${ES_LOGS_INSTANCE_TYPE}"
 export TF_VAR_es_logs_ebs_volume_size_gb="${ES_LOGS_EBS_VOLUME_SIZE_GB}"
@@ -55,8 +64,8 @@ export TF_VAR_lower_env_account_id="$LOWER_ENV_ACCOUNT_ID"
 npm run build:assets
 
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${BUCKET}" \
- -backend-config=key="${KEY}" \
- -backend-config=dynamodb_table="${LOCK_TABLE}" \
- -backend-config=region="us-east-1"
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
 terraform apply
