@@ -48,6 +48,7 @@ fi
 export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
 export TF_VAR_dns_domain="$DNS_DOMAIN"
+export TF_VAR_zone_name=$DNS_DOMAIN
 export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
 export TF_VAR_es_logs_instance_type="${ES_LOGS_INSTANCE_TYPE}"
 export TF_VAR_es_logs_ebs_volume_size_gb="${ES_LOGS_EBS_VOLUME_SIZE_GB}"
