@@ -7,7 +7,7 @@ import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React from 'react';
+import React, { useEffect } from 'react';
 
 export const DocketRecordMobileHeader = ({
   docketNumber,
@@ -162,6 +162,9 @@ const DocketRecordHeaderDeps = {
   showModal: state.modal.showModal,
   sortTableSequence: sequences.sortTableSequence,
   toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
+  setViewerDocumentToDisplaySequence:
+    sequences.setViewerDocumentToDisplaySequence,
+  docketRecordFilter: state.sessionMetadata.docketRecordFilter,
 };
 
 export const DocketRecordHeader = connect<
@@ -179,7 +182,19 @@ export const DocketRecordHeader = connect<
     openDownloadDocketEntriesModalSequence,
     showModal,
     sortTableSequence,
+    setViewerDocumentToDisplaySequence,
+    docketRecordFilter,
   }) {
+    useEffect(() => {
+      const docketEntries =
+        formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord;
+      if (docketEntries.length > 0) {
+        setViewerDocumentToDisplaySequence({
+          viewerDocumentToDisplay: docketEntries[0],
+        });
+      }
+    }, [docketRecordFilter]);
+
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">

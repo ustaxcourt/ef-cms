@@ -45,23 +45,6 @@ export const DocumentViewer = connect(
       blueHeader?.scrollIntoView();
     }, []);
 
-    useEffect(() => {
-      const docketEntries =
-        formattedDocketEntries.formattedDocketEntriesOnDocketRecord;
-      const currentDoc = docketEntries.find(
-        entry => entry.docketEntryId === viewDocumentId,
-      );
-
-      if (!currentDoc && docketEntries.length > 0) {
-        setViewerDocumentToDisplaySequence({
-          viewerDocumentToDisplay: docketEntries[0],
-        });
-      }
-    }, [
-      formattedDocketEntries.formattedDocketEntriesOnDocketRecord,
-      viewDocumentId,
-    ]);
-
     return (
       <>
         <div
