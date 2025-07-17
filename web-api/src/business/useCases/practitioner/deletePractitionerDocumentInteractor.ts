@@ -41,7 +41,6 @@ export const deletePractitionerDocumentInteractor = async (
   return await applicationContext
     .getPersistenceGateway()
     .deletePractitionerDocument({
-      applicationContext,
       barNumber,
       practitionerDocumentFileId,
     });

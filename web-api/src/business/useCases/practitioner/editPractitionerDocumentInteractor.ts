@@ -53,11 +53,12 @@ export const editPractitionerDocumentInteractor = async (
     { applicationContext },
   );
 
-  await applicationContext.getPersistenceGateway().editPractitionerDocument({
-    applicationContext,
-    barNumber,
-    practitionerDocument: documentEntity.validate().toRawObject(),
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .createOrEditPractitionerDocument({
+      barNumber,
+      practitionerDocument: documentEntity.validate().toRawObject(),
+    });
 
   return documentEntity.toRawObject();
 };
