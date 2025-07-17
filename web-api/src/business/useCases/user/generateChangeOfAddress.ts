@@ -33,7 +33,7 @@ export type TUserContact = {
  * @param {string}  providers.websocketMessagePrefix is it the `user` or an `admin` performing this action?
  * @returns {Promise<Case[]>} the cases that were updated
  */
-const generateChangeOfAddressForPractitioner = async ({
+export const generateChangeOfAddress = async ({
   applicationContext,
   authorizedUser,
   bypassDocketEntry = false,
@@ -147,5 +147,3 @@ const generateChangeOfAddressForPractitioner = async ({
     );
   }
 };
-
-export { generateChangeOfAddressForPractitioner as generateChangeOfAddress };

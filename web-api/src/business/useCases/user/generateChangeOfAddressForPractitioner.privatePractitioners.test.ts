@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/getCasesForUser');
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -9,6 +10,10 @@ jest.mock('../addCoversheetInteractor', () => ({
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+);
+jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
@@ -100,7 +105,8 @@ describe('generateChangeOfAddress', () => {
       },
       oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
-    } as any);
+      
+    });
 
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
@@ -137,9 +143,9 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should call applicationContext.logger.error and continue processing the next case if the case currently being processed is invalid', async () => {
-    getCasesForUser.mockReturnValueOnce([
-      { ...mockCaseWithPrivatePractitioner, docketNumber: undefined },
-      mockCaseWithPrivatePractitioner,
+    getCasesForUser.mockResolvedValue([
+      { docketNumber: undefined as unknown as string },
+      { docketNumber: mockCaseWithPrivatePractitioner.docketNumber },
     ]);
     getCaseByDocketNumber
       .mockResolvedValue({
