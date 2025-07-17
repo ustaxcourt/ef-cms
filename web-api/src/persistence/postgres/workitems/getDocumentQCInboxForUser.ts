@@ -7,7 +7,6 @@ import {
   WorkItemWithCaseInfoKysely,
 } from '@web-api/persistence/postgres/workitems/schema';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
-import { NotFoundError } from '@web-api/errors/errors';
 
 export const getDocumentQCInboxForUser = async ({
   userId,
@@ -62,14 +61,9 @@ export const attachDocketEntriesToWorkItemQC = async ({
 
   const workItemsWithDocketEntries = workItems.map(w => {
     const docketEntry = entryById.get(w.docketEntryId);
-    if (!docketEntry) {
-      throw new NotFoundError(
-        `Could not find docket entry for work item ${w.docketNumber}, docket entry id ${w.docketEntryId}`,
-      );
-    }
     return {
       ...fromKyselyWorkItemAndCase(w),
-      docketEntry,
+      docketEntry: docketEntry ?? ({} as RawDocketEntry),
     };
   });
 
