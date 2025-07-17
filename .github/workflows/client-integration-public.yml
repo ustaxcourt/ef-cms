@@ -60,7 +60,7 @@ jobs:
       - name: Web Client - Integration Tests Public
         run: |
           mkdir -p /tmp/web-client
-          npm run start:api:ci > /tmp/web-client/server-output${{ matrix.ci_node_index }}.txt &
+          npm run start:api:ci &
           ./wait-until-services.sh
           export TESTFILES=$(npx ts-node split-tests.ts -public)
           npm run test:client:integration:ci
