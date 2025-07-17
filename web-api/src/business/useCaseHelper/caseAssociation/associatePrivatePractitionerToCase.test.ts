@@ -4,6 +4,7 @@ import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock('@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser');
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import {
@@ -30,6 +31,7 @@ describe('associatePrivatePractitionerToCase', () => {
   const logger = getDawsonLogger();
   const errorSpy = jest.spyOn(logger, 'error');
 
+  const verifyCaseForUser = jest.mocked(verifyCaseForUserMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const verifyCaseForUser = jest.mocked(verifyCaseForUserMock);

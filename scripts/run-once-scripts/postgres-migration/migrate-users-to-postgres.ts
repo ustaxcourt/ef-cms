@@ -77,7 +77,7 @@ async function associateUsersWithCases(
   });
 }
 
-export const upsertUsers = async (
+const upsertUsers = async (
   users: (RawUser | RawPractitioner | RawIrsPractitioner)[],
 ): Promise<void> => {
   if (!users.length) {

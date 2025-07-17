@@ -8,16 +8,6 @@ import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { verifyCaseForUser } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
 
-/**
- * associatePrivatePractitionerToCase
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {string} providers.docketNumber the docket number of the case
- * @param {Array} params.representing the contact ids the private practitioner is representing
- * @param {object} providers.user the user object for the logged in user
- * @param {object} providers.serviceIndicator the service indicator
- * @returns {Promise<*>} the updated case entity
- */
 export const associatePrivatePractitionerToCase = async ({
   authorizedUser,
   docketNumber,

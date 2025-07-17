@@ -1,5 +1,6 @@
-import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/users/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/upsertUsers');
+jest.mock('@web-api/persistence/postgres/users/getUserById');
+jest.mock('./generateChangeOfAddress');
 import {
   ADMISSIONS_STATUS_OPTIONS,
   COUNTRY_TYPES,
@@ -11,16 +12,17 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { irsPractitionerUser } from '../../../../../shared/src/test/mockUsers';
 import { updateUserContactInformation } from './updateUserContactInformationInteractor';
-jest.mock('./generateChangeOfAddress');
 import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
-import { generateChangeOfAddress } from './generateChangeOfAddress';
+import { generateChangeOfAddress as generateChangeOfAddressMock } from './generateChangeOfAddress';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
-import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
-import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('updateUserContactInformation', () => {
+  const getUserById = jest.mocked(getUserByIdMock);
+  const upsertUsers = jest.mocked(upsertUsersMock);
+  const generateChangeOfAddress = jest.mocked(generateChangeOfAddressMock);
   let mockUser;
   const clientConnectionId = '384048';
 
@@ -36,13 +38,7 @@ describe('updateUserContactInformation', () => {
     state: 'IL',
   };
 
-
-  const getCasesForUser = jest.mocked(getCasesForUserMock);
-  const getUserById = jest.mocked(getUserByIdMock);
-  const upsertUsers = jest.mocked(upsertUsersMock);
-
   beforeEach(() => {
-
     mockUser = {
       ...irsPractitionerUser,
       admissionsDate: '2020-03-14',
@@ -58,11 +54,12 @@ describe('updateUserContactInformation', () => {
       role: ROLES.irsPractitioner,
     };
 
-    getCasesForUser.mockResolvedValue([]);
-    getUserById.mockImplementation(() => mockUser);
-    upsertUsers.mockImplementation(() => Promise.resolve());
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValue();
 
-    applicationContext.getPersistenceGateway().updateUser.mockResolvedValue({});
+    getUserById.mockResolvedValue(mockUser);
+    upsertUsers.mockResolvedValue();
   });
 
   it('should throw unauthorized error when user does not have permission to update contact information', async () => {
@@ -173,9 +170,7 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(
-      upsertUsers.mock.calls[0][0]
-    ).toMatchObject([{
+    expect(upsertUsers.mock.calls[0][0][0]).toMatchObject({
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -191,8 +186,7 @@ describe('updateUserContactInformation', () => {
       isUpdatingInformation: true,
       token: undefined,
       userId: mockUser.userId,
-    },
-    ]);
+    });
   });
 
   it('should update the user when the user being updated is a irsPractitioner', async () => {
@@ -211,11 +205,9 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(
-      upsertUsers.mock.calls[0][0]
-    ).toMatchObject([{
+    expect(upsertUsers.mock.calls[0][0][0]).toMatchObject({
       isUpdatingInformation: true,
-    }]);
+    });
   });
 
   it('should notify and not update the user when the user being updated is not a privatePractitioner, irsPractitioner, or petitioner', async () => {
@@ -264,7 +256,7 @@ describe('updateUserContactInformation', () => {
   });
 
   it('should clean up DB and send websocket message if "generateChangeOfAddress" returns empty array', async () => {
-    (generateChangeOfAddress as jest.Mock).mockReturnValue([]);
+    generateChangeOfAddress.mockResolvedValue([]);
 
     await updateUserContactInformation(
       applicationContext,
@@ -275,12 +267,9 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(
-      upsertUsers.mock.calls[1][0]
-    ).toMatchObject([{
-      isUpdatingInformation: false,
-    }]);
-
+    expect(upsertUsers.mock.calls[1][0][0].isUpdatingInformation).toEqual(
+      false,
+    );
     const notificationCalls =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls;
@@ -297,7 +286,7 @@ describe('updateUserContactInformation', () => {
   });
 
   it('should not clean up DB and send websocket message if "generateChangeOfAddress" returns undefined', async () => {
-    (generateChangeOfAddress as jest.Mock).mockReturnValue(undefined);
+    generateChangeOfAddress.mockResolvedValue(undefined);
 
     await updateUserContactInformation(
       applicationContext,
@@ -308,9 +297,7 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(
-      upsertUsers.mock.calls.length,
-    ).toEqual(1);
+    expect(upsertUsers.mock.calls.length).toEqual(1);
 
     const notificatsionCalls =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -332,11 +319,9 @@ describe('updateUserContactInformation', () => {
       },
       mockUser,
     );
-    expect(
-      upsertUsers.mock.calls[0][0]
-    ).toMatchObject([{
+    expect(upsertUsers.mock.calls[0][0][0]).toMatchObject({
       firmName: 'testing',
-    }]);
+    });
   });
 
   it('should return early if the firmName and contact info was not changed', async () => {
@@ -356,8 +341,6 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(
-      upsertUsers,
-    ).not.toHaveBeenCalled();
+    expect(upsertUsers).not.toHaveBeenCalled();
   });
 });
