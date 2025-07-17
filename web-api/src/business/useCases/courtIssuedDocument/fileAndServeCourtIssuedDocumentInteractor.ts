@@ -162,6 +162,9 @@ export const fileAndServeCourtIssuedDocument = async (
             documentContentsId,
             documentTitle: form.generatedDocumentTitle,
             documentType: form.documentType,
+            draftOrderState: {
+              orderType: form.orderType,
+            },
             editState: JSON.stringify({
               ...form,
               docketEntryId: docketEntryToServe.docketEntryId,
@@ -183,9 +186,6 @@ export const fileAndServeCourtIssuedDocument = async (
           { authorizedUser },
         );
 
-        docketEntryEntity.setDraftOrderState({
-          orderType: form.orderType,
-        });
         docketEntryEntity.setFiledBy(user);
 
         const isSubjectCase =

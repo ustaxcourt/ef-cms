@@ -464,7 +464,7 @@ export class DocketEntry extends JoiValidationEntity {
 
   isStatusReport(): boolean {
     if(!this.draftOrderState) return false;
-    return this.draftOrderState.orderType === 'statusReport' || this.draftOrderState?.orderType === 'statusReportStipulatedDecision';
+    return this.draftOrderState.orderType === 'statusReport' || this.draftOrderState.orderType === 'statusReportStipulatedDecision';
   }
   
   static hasWorkItemInfo(docketEntry: RawDocketEntry) {
