@@ -1,6 +1,5 @@
 import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
-import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
 import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
@@ -107,7 +106,6 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
 const gatewayMethods = {
   ...isValidatedDecorator({
     addCaseToHearing,
-    bulkDeleteRecords,
     bulkIndexRecords,
     createJobStatus,
     createPractitionerDocument,

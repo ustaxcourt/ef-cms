@@ -27,7 +27,6 @@ import {
 import { User } from '@shared/business/entities/User';
 import { abbreviateState } from '@shared/business/utilities/abbreviateState';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
-import { bulkDeleteRecords } from '@web-api/persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from '@web-api/persistence/elasticsearch/bulkIndexRecords';
 import { calculateDaysElapsedSinceLastStatusChange } from '@shared/business/utilities/calculateDaysElapsedSinceLastStatusChange';
 import { calculateDifferenceInDays } from '@shared/business/utilities/DateHandler';
@@ -381,7 +380,6 @@ const createTestApplicationContext = () => {
   const mockGetPersistenceGateway = appContextProxy({
     acquireLock: jest.fn().mockImplementation(() => Promise.resolve(null)),
     addCaseToHearing: jest.fn(),
-    bulkDeleteRecords: jest.fn().mockImplementation(bulkDeleteRecords),
     bulkIndexRecords: jest.fn().mockImplementation(bulkIndexRecords),
     createElasticsearchReindexRecord: jest.fn(),
     deleteDocumentFile: jest.fn(),
