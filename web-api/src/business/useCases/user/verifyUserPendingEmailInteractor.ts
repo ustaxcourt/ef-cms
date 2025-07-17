@@ -16,6 +16,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
 
@@ -28,11 +29,11 @@ export const verifyUserPendingEmail = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserByIdOnceAllUpdatesComplete({
-      userId: authorizedUser.userId,
-    });
+  const user = await getUserByIdOnceAllUpdatesComplete({
+    userId: authorizedUser.userId,
+  });
+
+  console.log('user', user);
 
   if (
     !user.pendingEmailVerificationToken ||

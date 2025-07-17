@@ -1,3 +1,5 @@
+import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   ADMISSIONS_STATUS_OPTIONS,
   COUNTRY_TYPES,
@@ -14,6 +16,9 @@ import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockPetitionsClerkUser } from '@shared/test/mockAuthUsers';
+import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
 
 describe('updateUserContactInformation', () => {
   let mockUser;
@@ -31,7 +36,13 @@ describe('updateUserContactInformation', () => {
     state: 'IL',
   };
 
+
+  const getCasesForUser = jest.mocked(getCasesForUserMock);
+  const getUserById = jest.mocked(getUserByIdMock);
+  const upsertUsers = jest.mocked(upsertUsersMock);
+
   beforeEach(() => {
+
     mockUser = {
       ...irsPractitionerUser,
       admissionsDate: '2020-03-14',
@@ -47,13 +58,9 @@ describe('updateUserContactInformation', () => {
       role: ROLES.irsPractitioner,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesByUserId.mockReturnValue();
-
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockResolvedValue(mockUser);
+    getCasesForUser.mockResolvedValue([]);
+    getUserById.mockImplementation(() => mockUser);
+    upsertUsers.mockImplementation(() => Promise.resolve());
 
     applicationContext.getPersistenceGateway().updateUser.mockResolvedValue({});
   });
@@ -98,7 +105,7 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
 
-    expect(applicationContext.getUseCases().updateUser).not.toHaveBeenCalled();
+    expect(upsertUsers).not.toHaveBeenCalled();
     expect(generateChangeOfAddress).not.toHaveBeenCalled();
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
@@ -119,11 +126,9 @@ describe('updateUserContactInformation', () => {
   });
 
   it('should throw an error when updateUser throws an error', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .updateUser.mockImplementation(() => {
-        throw new Error('something wicked');
-      });
+    upsertUsers.mockImplementation(() => {
+      throw new Error('something wicked');
+    });
 
     await expect(
       updateUserContactInformation(
@@ -169,9 +174,8 @@ describe('updateUserContactInformation', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-        .user,
-    ).toMatchObject({
+      upsertUsers.mock.calls[0][0]
+    ).toMatchObject([{
       contact: {
         address1: '234 Main St',
         address2: 'Apartment 4',
@@ -187,7 +191,8 @@ describe('updateUserContactInformation', () => {
       isUpdatingInformation: true,
       token: undefined,
       userId: mockUser.userId,
-    });
+    },
+    ]);
   });
 
   it('should update the user when the user being updated is a irsPractitioner', async () => {
@@ -207,17 +212,16 @@ describe('updateUserContactInformation', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-        .user,
-    ).toMatchObject({
+      upsertUsers.mock.calls[0][0]
+    ).toMatchObject([{
       isUpdatingInformation: true,
-    });
+    }]);
   });
 
   it('should notify and not update the user when the user being updated is not a privatePractitioner, irsPractitioner, or petitioner', async () => {
-    applicationContext.getPersistenceGateway().getUserById.mockResolvedValue({
+    getUserById.mockResolvedValue({
       ...mockUser,
-      entityName: 'notapractitioner',
+      role: 'notapractitioner',
     });
 
     await expect(
@@ -243,7 +247,7 @@ describe('updateUserContactInformation', () => {
         applicationContext.getNotificationGateway().sendNotificationToUser.mock
           .calls[0][0].message.error,
       ),
-    ).toContain('Error: Unrecognized entityType notapractitioner');
+    ).toContain('Error: Unrecognized role notapractitioner');
   });
 
   it('should generate a change of address document', async () => {
@@ -272,9 +276,10 @@ describe('updateUserContactInformation', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[1][0]
-        .isUpdatingInformation,
-    ).not.toBeDefined();
+      upsertUsers.mock.calls[1][0]
+    ).toMatchObject([{
+      isUpdatingInformation: false,
+    }]);
 
     const notificationCalls =
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -304,7 +309,7 @@ describe('updateUserContactInformation', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls.length,
+      upsertUsers.mock.calls.length,
     ).toEqual(1);
 
     const notificatsionCalls =
@@ -328,20 +333,17 @@ describe('updateUserContactInformation', () => {
       mockUser,
     );
     expect(
-      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
-        .user,
-    ).toMatchObject({
+      upsertUsers.mock.calls[0][0]
+    ).toMatchObject([{
       firmName: 'testing',
-    });
+    }]);
   });
 
   it('should return early if the firmName and contact info was not changed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => ({
-        ...mockUser,
-        contact: contactInfo,
-      }));
+    getUserById.mockImplementation(() => ({
+      ...mockUser,
+      contact: contactInfo,
+    }));
 
     await updateUserContactInformation(
       applicationContext,
@@ -355,7 +357,7 @@ describe('updateUserContactInformation', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().updateUser,
+      upsertUsers,
     ).not.toHaveBeenCalled();
   });
 });

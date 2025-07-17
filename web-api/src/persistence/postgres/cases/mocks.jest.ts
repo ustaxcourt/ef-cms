@@ -124,3 +124,8 @@ jest.mock(
   '@web-api/persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone',
   () => mockFactory('setChangeOfAddressCaseAsDone'),
 );
+
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+  () => mockFactory('deleteChangeOfAddressCaseRecord'),
+);
