@@ -4,8 +4,8 @@ import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/tr
 import { isArray } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getSearchClient } from '@web-api/getSearchClient';
-import { efcmsDocketEntryIndex } from 'web-api/elasticsearch/efcms-docket-entry-mappings';
-import { efcmsCaseIndex } from 'web-api/elasticsearch/efcms-case-mappings';
+import { efcmsDocketEntryIndex } from '../../elasticsearch/efcms-docket-entry-mappings';
+import { efcmsCaseIndex } from '../../elasticsearch/efcms-case-mappings';
 
 export const indexOpenSearchCases = async ({
   message,
