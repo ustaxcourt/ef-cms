@@ -35,14 +35,18 @@ localStreamsApp.get('/isDone', (_req, res) => {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
+  console.log('starting local streams');
   const describeTableResults = await dynamodbClient.send(
     new DescribeTableCommand({ TableName }),
   );
+  console.log('local dynamodb describeTableResults', describeTableResults);
   const StreamArn = describeTableResults?.Table?.LatestStreamArn!;
 
   const { StreamDescription } = await dynamodbStreamsClient.send(
     new DescribeStreamCommand({ StreamArn }),
   );
+
+  console.log('local stream client StreamDescription', StreamDescription);
 
   const processShard = shard => {
     const readable = DynamoDBReadable(dynamodbStreamsClient, StreamArn, {
