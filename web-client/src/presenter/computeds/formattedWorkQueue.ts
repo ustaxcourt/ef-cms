@@ -10,7 +10,6 @@ import {
 } from '@shared/business/entities/authUser/AuthUser';
 import { capitalize, cloneDeep, orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
@@ -28,6 +27,7 @@ import {
 import { formatDocketEntry } from '@shared/business/utilities/getFormattedCaseDetail';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 export const formattedWorkQueue = (
   get: Get,
@@ -182,11 +182,11 @@ export const formatDateIfToday = (
 
 export const formatWorkItem = ({
   isSelected = false,
-  workItem = {} as WorkItemWithCaseInfo,
+  workItem = {} as RawWorkItemWithCaseAndDocketEntryInfo,
 }: {
   isSelected?: boolean;
-  workItem: WorkItemWithCaseInfo;
-}): WorkItemWithCaseInfo & {
+  workItem: RawWorkItemWithCaseAndDocketEntryInfo;
+}): RawWorkItemWithCaseAndDocketEntryInfo & {
   assigneeName: string;
   completedAtFormatted: string;
   completedAtFormattedTZ: string;
@@ -454,7 +454,7 @@ export const filterWorkItems = ({
     section: string;
   };
   authorizedUser: AuthUser;
-}): WorkItemWithCaseInfo[] => {
+}): RawWorkItemWithCaseAndDocketEntryInfo[] => {
   const { box, queue } = workQueueToDisplay;
 
   const filters = getWorkQueueFilters({ section, user: authorizedUser });
@@ -464,7 +464,7 @@ export const filterWorkItems = ({
   let filteredWorkItems = workItems.filter(composedFilter);
   if (queue === 'section') {
     filteredWorkItems = filteredWorkItems.filter(
-      (workItem: WorkItemWithCaseInfo) => {
+      (workItem: RawWorkItemWithCaseAndDocketEntryInfo) => {
         if (assignmentFilterValue && assignmentFilterValue.userId) {
           if (assignmentFilterValue.userId === 'UA') {
             return !workItem.assigneeId;
@@ -482,7 +482,7 @@ export const filterWorkItems = ({
   return filteredWorkItems;
 };
 
-export type FormattedWorkItemWithCaseInfo = WorkItemWithCaseInfo & {
+export type FormattedWorkItemWithCaseInfo = RawWorkItemWithCaseAndDocketEntryInfo & {
   assigneeName: string;
   completedAtFormatted: string;
   completedAtFormattedTZ: string;
