@@ -1,5 +1,5 @@
+import { RawWorkItem } from '@shared/business/entities/WorkItem';
 import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
-import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { NullablePick } from '@web-api/persistence/postgres/utils/typeHelpers';
 import { Selectable, Insertable } from 'kysely';
 
@@ -31,11 +31,23 @@ export const DW_WORK_ITEM_COLUMNS = Object.keys(
   workItemTableDefinition,
 ) as Array<keyof WorkItemTable>;
 
-export type WorkItemWithAssociatedCaseDataKysely = WorkItemKysely &
+export type WorkItemWithCaseInfoKysely = WorkItemKysely &
   NullablePick<
     CaseKysely,
     'status' | 'trialDate' | 'trialLocation' | 'leadDocketNumber' | 'caption'
-  > & { docketEntry: DocketEntryKysely };
+  >;
+
+export type RawWorkItemWithCaseInfo = RawWorkItem & {
+  caseTitle?: string;
+  caseStatus?: string;
+  leadDocketNumber?: string;
+  trialDate?: string;
+  trialLocation?: string;
+};
+
+export type RawWorkItemWithCaseAndDocketEntryInfo = RawWorkItemWithCaseInfo & {
+  docketEntry: RawDocketEntry;
+};
 
 export type WorkItemKysely = Selectable<WorkItemTable>;
 export type NewWorkItemKysely = Insertable<WorkItemTable>;

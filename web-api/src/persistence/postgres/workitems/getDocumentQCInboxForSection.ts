@@ -3,11 +3,14 @@ import {
   PETITIONS_SECTION,
 } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/database';
-import { fromKyselyWorkItemAndCase } from '@web-api/persistence/postgres/workitems/mapper';
 import {
+  attachDocketEntriesToWorkItemQC,
   workItemQCQueryBase,
-  WorkItemWithCaseInfo,
 } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import {
+  RawWorkItemWithCaseAndDocketEntryInfo,
+  WorkItemWithCaseInfoKysely,
+} from '@web-api/persistence/postgres/workitems/schema';
 
 export const getDocumentQCInboxForSection = async ({
   judgeId,
@@ -15,8 +18,8 @@ export const getDocumentQCInboxForSection = async ({
 }: {
   judgeId?: string | null;
   section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
-}): Promise<WorkItemWithCaseInfo[]> => {
-  const workItems = await getDbReader(reader => {
+}): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
+  const workItems: WorkItemWithCaseInfoKysely[] = await getDbReader(reader => {
     let builder = workItemQCQueryBase(reader)
       .where('w.section', '=', section)
       .where('w.completedAt', 'is', null)
@@ -31,5 +34,5 @@ export const getDocumentQCInboxForSection = async ({
     return builder.execute();
   });
 
-  return workItems.map(fromKyselyWorkItemAndCase);
+  return attachDocketEntriesToWorkItemQC({ workItems });
 };

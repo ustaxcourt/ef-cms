@@ -1,13 +1,12 @@
 import { Case } from '@shared/business/entities/cases/Case';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
   NewWorkItemKysely,
   WorkItemKysely,
-  WorkItemWithAssociatedCaseDataKysely,
+  RawWorkItemWithCaseInfo,
+  WorkItemWithCaseInfoKysely,
 } from '@web-api/persistence/postgres/workitems/schema';
 
 function getWorkItemSection({
@@ -69,9 +68,9 @@ export function fromKyselyWorkItem(workItem: WorkItemKysely) {
 
 // Sometimes we need to augment WorkItem data with data from the associated case
 export function fromKyselyWorkItemAndCase(
-  dbWorkItem: WorkItemWithAssociatedCaseDataKysely,
-): WorkItemWithCaseInfo {
-  const workItemWithCaseInfo: WorkItemWithCaseInfo = {
+  dbWorkItem: WorkItemWithCaseInfoKysely,
+): RawWorkItemWithCaseInfo {
+  const workItemWithCaseInfo: RawWorkItemWithCaseInfo = {
     ...new WorkItem({
       ...dbWorkItem,
       completedAt: dbWorkItem.completedAt?.toISOString(),
@@ -83,7 +82,6 @@ export function fromKyselyWorkItemAndCase(
     leadDocketNumber: dbWorkItem?.leadDocketNumber || undefined,
     trialDate: dbWorkItem?.trialDate?.toISOString(),
     trialLocation: dbWorkItem?.trialLocation || undefined,
-    docketEntry: fromKyselyDocketEntry(dbWorkItem.docketEntry),
   };
   return transformNullToUndefined(workItemWithCaseInfo);
 }
