@@ -76,7 +76,10 @@ const updateUserContactInformationHelper = async (
     });
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
-      message: { action: 'user_contact_full_update_complete', user: oldUser as RawUser },
+      message: {
+        action: 'user_contact_full_update_complete',
+        user: oldUser as RawUser,
+      },
       userId: oldUser.userId,
       clientConnectionId,
     });
