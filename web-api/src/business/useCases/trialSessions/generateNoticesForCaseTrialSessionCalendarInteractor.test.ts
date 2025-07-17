@@ -25,6 +25,7 @@ import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppen
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -58,7 +59,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       clinicLetterKey,
     });
 
-    getUserById.mockResolvedValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(fakeData);

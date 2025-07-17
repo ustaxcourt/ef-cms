@@ -13,6 +13,7 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generateEntryOfAppearancePdfInteractor', () => {
   const mockFile = {
@@ -33,7 +34,7 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
   const getUserById = jest.mocked(getUserByIdMock);
 
   beforeAll(() => {
-    getUserById.mockReturnValue(MOCK_PRACTITIONER);
+    getUserById.mockResolvedValue(MOCK_PRACTITIONER as DbUser);
     applicationContext
       .getDocumentGenerators()
       .entryOfAppearance.mockReturnValue(mockFile);
@@ -103,7 +104,7 @@ describe('generateEntryOfAppearancePdfInteractor', () => {
   });
 
   it('should use Respondent as the filer name when an IRS practitioner is filing an entry of appearance', async () => {
-    getUserById.mockReturnValueOnce(irsPractitionerUser);
+    getUserById.mockResolvedValueOnce(irsPractitionerUser as unknown as DbUser);
 
     const expectedFilerNames = ['Respondent'];
     const result = await generateEntryOfAppearancePdfInteractor(

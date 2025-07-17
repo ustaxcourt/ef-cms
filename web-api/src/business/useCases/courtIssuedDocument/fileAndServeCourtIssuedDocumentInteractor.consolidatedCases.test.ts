@@ -29,6 +29,7 @@ import {
   OmittableCaseFields,
 } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const updateDocketEntryPendingServiceStatus = jest.mocked(
   updateDocketEntryPendingServiceStatusMock,
@@ -81,7 +82,7 @@ describe('consolidated cases', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     applicationContext
       .getUseCaseHelpers()

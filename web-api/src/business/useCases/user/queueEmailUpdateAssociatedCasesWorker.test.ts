@@ -28,8 +28,6 @@ describe('queueEmailUpdateAssociatedCasesWorker', () => {
       isUpdatingInformation: true,
     };
 
-    upsertUsers.mockResolvedValue(null);
-
     applicationContext
       .getUseCases()
       .queueUpdateAssociatedCasesWorker.mockResolvedValue(null);

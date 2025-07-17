@@ -27,6 +27,7 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { Case } from '@shared/business/entities/cases/Case';
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
   const updateDocketEntryPendingServiceStatus = jest.mocked(
@@ -72,7 +73,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);

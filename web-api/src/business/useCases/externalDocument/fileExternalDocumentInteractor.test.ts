@@ -34,6 +34,7 @@ import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -126,7 +127,7 @@ describe('fileExternalDocumentInteractor', () => {
       userId: '0e97c6b4-d299-44f5-af99-2ce905d520f2',
     };
 
-    getUserById.mockReturnValue(mockIrsPractitionerUser);
+    getUserById.mockResolvedValue(mockIrsPractitionerUser as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     getCasesByDocketNumbers.mockResolvedValue([caseRecord]);

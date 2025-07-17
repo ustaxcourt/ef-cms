@@ -21,6 +21,7 @@ import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } fr
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
@@ -95,7 +96,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    getUserById.mockReturnValue(mockDocketClerkUser);
+    getUserById.mockResolvedValue(mockDocketClerkUser as DbUser);
     getCaseByDocketNumber.mockResolvedValue(mockCase);
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
   });

@@ -5,12 +5,18 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getUsersByRoles as getUsersByRolesMock } from '@web-api/persistence/postgres/users/getUsersByRoles';
+import { docketClerk1User, petitionsClerkUser } from '@shared/test/mockUsers';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { Role } from '@shared/business/entities/EntityConstants';
 
 const getUsersByRoles = jest.mocked(getUsersByRolesMock);
 
 describe('getAllUsersByRoleInteractor', () => {
-  const TEST_ROLES = ['SOME', 'ROLES'];
-  const EXPECTED_RESULTS = ['user1', 'user2'];
+  const TEST_ROLES: Role[] = ['adc', 'admin'];
+  const EXPECTED_RESULTS = [
+    docketClerk1User as DbUser,
+    petitionsClerkUser as DbUser,
+  ];
 
   beforeEach(() => {
     getUsersByRoles.mockResolvedValue(EXPECTED_RESULTS);

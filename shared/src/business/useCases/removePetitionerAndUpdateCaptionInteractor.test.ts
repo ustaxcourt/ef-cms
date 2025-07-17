@@ -27,9 +27,6 @@ import {
 import { removePetitionerAndUpdateCaptionInteractor } from './removePetitionerAndUpdateCaptionInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { disassociateUsersFromCases as disassociateUsersFromCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
-
-const disassociateUsersFromCases = jest.mocked(disassociateUsersFromCasesMock);
 
 describe('removePetitionerAndUpdateCaptionInteractor', () => {
   let mockCase;
@@ -63,8 +60,6 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     };
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
-
-    disassociateUsersFromCases.mockImplementation(() => null);
   });
 
   it('should throw an unauthorized error when the current user does not have permission to edit petitioners', async () => {

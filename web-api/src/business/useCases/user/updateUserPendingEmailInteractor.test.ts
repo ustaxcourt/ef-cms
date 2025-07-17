@@ -10,6 +10,7 @@ import { updateUserPendingEmailInteractor } from './updateUserPendingEmailIntera
 import { validUser } from '../../../../../shared/src/test/mockUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
 const upsertUsers = jest.mocked(upsertUsersMock);
@@ -98,8 +99,7 @@ describe('updateUserPendingEmailInteractor', () => {
 
   it('should return the updated User entity when currentUser.role is petitioner', async () => {
     const mockUserPetitioner = { ...validUser, ...mockPetitionerUser };
-    getUserById.mockReturnValueOnce(mockUserPetitioner);
-    upsertUsers.mockReturnValueOnce(mockUserPetitioner);
+    getUserById.mockResolvedValueOnce(mockUserPetitioner as DbUser);
 
     const results = await updateUserPendingEmailInteractor(
       applicationContext,

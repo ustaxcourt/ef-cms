@@ -24,6 +24,7 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getCasesByDocketNumber = jest.mocked(getCasesByDocketNumbersMock);
@@ -94,7 +95,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let mockRequest;
 
   beforeAll(() => {
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getCasesByDocketNumber.mockResolvedValue([mockCase]);
     getCaseByDocketNumber.mockResolvedValue(mockCase);
   });

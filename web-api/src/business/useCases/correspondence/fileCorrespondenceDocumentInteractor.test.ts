@@ -22,6 +22,7 @@ import {
 import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
@@ -71,7 +72,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCorrespondenceId = '14bb669b-0962-4781-87a0-50718f556e2b';
 
   beforeEach(() => {
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
@@ -107,7 +108,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   });
 
   it('should add the correspondence document to the case when the case entity is valid', async () => {
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await fileCorrespondenceDocumentInteractor(

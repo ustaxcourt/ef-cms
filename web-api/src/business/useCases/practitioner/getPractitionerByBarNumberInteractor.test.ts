@@ -28,11 +28,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('calls the persistence method to get a private practitioner with the given bar number', async () => {
-      getPractitionerByBarNumber.mockReturnValue({
+      getPractitionerByBarNumber.mockResolvedValue({
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PP1234',
-        birthYear: '1983',
+        birthYear: 1983,
         firmName: 'GW Law Offices',
         firstName: 'Private',
         lastName: 'Practitioner',
@@ -84,11 +84,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('calls the persistence method to get an IRS practitioner with the given bar number', async () => {
-      getPractitionerByBarNumber.mockReturnValue({
+      getPractitionerByBarNumber.mockResolvedValue({
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PI5678',
-        birthYear: '1983',
+        birthYear: 1983,
         firmName: 'GW Law Offices',
         firstName: 'IRS',
         lastName: 'Practitioner',
@@ -136,7 +136,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('throws a not found error if no practitioner is found with the given bar number', async () => {
-      getPractitionerByBarNumber.mockReturnValue(undefined);
+      getPractitionerByBarNumber.mockResolvedValue(undefined);
 
       const practitioner = await getPractitionerByBarNumberInteractor(
         applicationContext,
@@ -152,11 +152,11 @@ describe('getPractitionerByBarNumberInteractor', () => {
 
   describe('Public User', () => {
     beforeEach(() => {
-      getPractitionerByBarNumber.mockReturnValue({
+      getPractitionerByBarNumber.mockResolvedValue({
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PP1234',
-        birthYear: '1983',
+        birthYear: 1983,
         firmName: 'GW Law Offices',
         firstName: 'Private',
         lastName: 'Practitioner',

@@ -31,6 +31,7 @@ import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/pos
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('saveCaseDetailInternalEditInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
@@ -73,10 +74,10 @@ describe('saveCaseDetailInternalEditInteractor', () => {
   };
 
   beforeEach(() => {
-    getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...petitionsClerkUser,
       userId: mockPetitionsClerkUser.userId,
-    });
+    } as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(mockCase);
   });

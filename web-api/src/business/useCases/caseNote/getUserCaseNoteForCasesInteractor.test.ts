@@ -10,6 +10,7 @@ import { getUserCaseNoteForCases as getUserCaseNoteForCasesMock } from '@web-api
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('getUserCaseNoteForCasesInteractor', () => {
   let mockCurrentUser: UnknownAuthUser;
@@ -32,7 +33,9 @@ describe('getUserCaseNoteForCasesInteractor', () => {
   beforeEach(() => {
     mockCurrentUser = mockJudge;
     mockNote = MOCK_NOTE;
-    getUserById.mockImplementation(() => mockCurrentUser);
+    getUserById.mockImplementation(() =>
+      Promise.resolve(mockCurrentUser as DbUser),
+    );
     getUserCaseNoteForCases.mockResolvedValue([new UserCaseNote(mockNote)]);
     applicationContext
       .getUseCaseHelpers()
@@ -89,7 +92,9 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       ...mockJudge,
       userId: userIdToExpect,
     } as UnknownAuthUser;
-    getUserById.mockImplementation(() => mockUser);
+    getUserById.mockImplementation(() =>
+      Promise.resolve(mockCurrentUser as DbUser),
+    );
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);

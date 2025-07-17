@@ -9,6 +9,7 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('getDocumentQCInboxForUserInteractor', () => {
   const getUserById = jest.mocked(getUserByIdMock);
@@ -30,7 +31,7 @@ describe('getDocumentQCInboxForUserInteractor', () => {
 
   beforeEach(() => {
     getDocumentQCInboxForUser.mockResolvedValue(workItems);
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
   });
 
   it('should throw an error when the user does not have access retrieve work items', async () => {

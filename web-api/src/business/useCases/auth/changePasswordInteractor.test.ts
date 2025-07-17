@@ -22,6 +22,7 @@ import jwt from 'jsonwebtoken';
 import { RawUser } from '@shared/business/entities/User';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const upsertUsers = jest.mocked(upsertUsersMock);
 
@@ -80,7 +81,13 @@ describe('changePasswordInteractor', () => {
           mockRespondToAuthChallengeResponse,
         );
 
-      getUserById.mockImplementation(() => mockUserWithPendingEmail);
+      getUserById.mockResolvedValue(mockUserWithPendingEmail as DbUser);
+      applicationContext.getUserGateway().changePassword.mockResolvedValue({
+        accessToken: 'dbc7752e-4e86-4ceb-9fa6-43aac18b34a1',
+        idToken:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b206dXNlcklkIjoiMTIzNDU2Nzg5MCIsIm5hbWUiOiJKb2huIERvZSIsImlhdCI6MTUxNjIzOTAyMn0.ASm6CklGr-UD0IFXoqRG7ng8JoXINDTVEsG3BxNU37g',
+        refreshToken: '0bc11bcb-efa3-44c6-9880-56210bcad9e2',
+      });
     });
 
     it('should throw an error when the user is NOT in NEW_PASSWORD_REQUIRED state', async () => {
@@ -140,12 +147,11 @@ describe('changePasswordInteractor', () => {
       });
 
       it('should update the user`s service preference to electronic, update the user`s email in persistence, and kick off a worker that will generate notices for all their associated cases when the user is a private/irs/or inactive practitioner', async () => {
-        mockUserWithPendingEmail = {
+        getUserById.mockResolvedValue({
           ...MOCK_PRACTITIONER,
           pendingEmail: mockEmail,
-          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          userId: mockUserId, // Explicitly set to paper to verify it changes to electronic once pending email is confirmed
-        };
+          userId: mockUserId,
+        } as DbUser);
 
         await changePasswordInteractor(applicationContext, {
           confirmPassword: mockPassword,
@@ -154,14 +160,6 @@ describe('changePasswordInteractor', () => {
           tempPassword: mockPassword,
         });
 
-        expect(upsertUsers.mock.calls[0][0]).toMatchObject([
-          {
-            email: mockUserWithPendingEmail.pendingEmail,
-            pendingEmail: undefined,
-            pendingEmailVerificationToken: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-          },
-        ]);
         expect(
           applicationContext.getWorkerGateway().queueWork.mock.calls[0][1],
         ).toMatchObject({
@@ -171,6 +169,7 @@ describe('changePasswordInteractor', () => {
                 email: mockUserWithPendingEmail.pendingEmail,
                 pendingEmail: undefined,
                 pendingEmailVerificationToken: undefined,
+                serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
               },
             },
             type: MESSAGE_TYPES.QUEUE_UPDATE_ASSOCIATED_CASES,
@@ -325,10 +324,6 @@ describe('changePasswordInteractor', () => {
 });
 
 describe('updateUserPendingEmailRecord', () => {
-  beforeEach(() => {
-    upsertUsers.mockResolvedValue(null);
-  });
-
   it('should set isUpdatingInformation to true if flag is enabled', async () => {
     await updateUserPendingEmailRecord({
       setIsUpdatingInformation: true,

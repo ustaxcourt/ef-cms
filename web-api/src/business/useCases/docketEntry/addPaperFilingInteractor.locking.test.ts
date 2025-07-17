@@ -19,6 +19,7 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
@@ -77,7 +78,7 @@ describe('addPaperFilingInteractor', () => {
   };
 
   beforeEach(() => {
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
     updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),

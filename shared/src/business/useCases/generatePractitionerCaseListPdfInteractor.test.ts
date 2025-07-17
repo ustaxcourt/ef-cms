@@ -9,16 +9,15 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
-import { RawPrivatePractitioner } from '../entities/PrivatePractitioner';
-
-const getUserById = jest.mocked(getUserByIdMock);
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('generatePractitionerCaseListPdfInteractor', () => {
+  const getUserById = jest.mocked(getUserByIdMock);
   beforeEach(() => {
     getUserById.mockResolvedValue({
       barNumber: 'PT1234',
       name: 'Ben Matlock',
-    } as RawPrivatePractitioner);
+    } as DbUser);
   });
 
   it('returns an unauthorized error on non internal users', async () => {
@@ -81,7 +80,7 @@ describe('generatePractitionerCaseListPdfInteractor', () => {
     getUserById.mockResolvedValue({
       firstName: 'Nadia',
       lastName: 'Practitioner',
-    } as unknown as RawPrivatePractitioner);
+    } as unknown as DbUser);
 
     await expect(
       generatePractitionerCaseListPdfInteractor(

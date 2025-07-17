@@ -40,6 +40,7 @@ import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
@@ -517,7 +518,7 @@ describe('updatePetitionerInformationInteractor', () => {
       email: undefined,
       userId: applicationContext.getUniqueId(),
     };
-    getUserById.mockReturnValue(unverifiedNewPetitioner);
+    getUserById.mockResolvedValue(unverifiedNewPetitioner as DbUser);
 
     await updatePetitionerInformationInteractor(
       applicationContext,
@@ -581,7 +582,7 @@ describe('updatePetitionerInformationInteractor', () => {
         .getUserGateway()
         .getUserByEmail.mockReturnValue('someMockId');
 
-      getUserById.mockReturnValue(foundMockVerifiedPetitioner);
+      getUserById.mockResolvedValue(foundMockVerifiedPetitioner as DbUser);
 
       applicationContext
         .getUseCaseHelpers()

@@ -26,6 +26,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -87,7 +88,7 @@ describe('completeDocketEntryQCInteractor', () => {
       ],
     };
 
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
 

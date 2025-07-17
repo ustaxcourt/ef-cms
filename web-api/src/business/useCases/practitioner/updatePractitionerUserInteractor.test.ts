@@ -29,8 +29,9 @@ describe('updatePractitionerUser', () => {
     mockPractitioner = { ...MOCK_PRACTITIONER };
     getDocketNumbersByUser.mockResolvedValue(['123-23']);
     getPractitionerByBarNumber.mockResolvedValue(mockPractitioner);
-    upsertPractitioner.mockImplementation(({ user }) => user);
-    upsertUsers.mockImplementation(({ user }) => user);
+    upsertPractitioner.mockImplementation(({ user }) =>
+      Promise.resolve({ ...user, userId: 'theId' }),
+    );
     applicationContext
       .getPersistenceGateway()
       .updatePractitionerUser.mockImplementation(({ user }) => user);

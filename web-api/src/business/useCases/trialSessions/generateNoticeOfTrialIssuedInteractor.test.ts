@@ -8,6 +8,7 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { generateNoticeOfTrialIssuedInteractor } from './generateNoticeOfTrialIssuedInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getUsersInSections = jest.mocked(getUsersInSectionsMock);
@@ -62,7 +63,7 @@ describe('generateNoticeOfTrialIssuedInteractor', () => {
         ({ contentHtml }) => contentHtml,
       );
 
-    getUsersInSections.mockReturnValue([TEST_JUDGE]);
+    getUsersInSections.mockResolvedValue([TEST_JUDGE as DbUser]);
   });
 
   it('should generate a template with the case and trial information and call the pdf generator', async () => {

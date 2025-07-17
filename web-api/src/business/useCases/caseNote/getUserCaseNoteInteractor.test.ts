@@ -3,13 +3,13 @@ import '@web-api/persistence/postgres/users/mocks.jest';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { User } from '../../../../../shared/src/business/entities/User';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserCaseNoteInteractor } from './getUserCaseNoteInteractor';
 import { getUserCaseNote as getUserCaseNoteMock } from '@web-api/persistence/postgres/userCaseNotes/getUserCaseNote';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { omit } from 'lodash';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('Get case note', () => {
   const MOCK_NOTE = {
@@ -27,7 +27,6 @@ describe('Get case note', () => {
   const getUserById = jest.mocked(getUserByIdMock);
 
   it('throws error if user is unauthorized', async () => {
-    getUserById.mockImplementation(() => new User(mockUnauthorizedUser));
     getUserCaseNote.mockReturnValue({});
     applicationContext
       .getUseCaseHelpers()
@@ -45,7 +44,7 @@ describe('Get case note', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    getUserById.mockImplementation(() => new User(mockJudgeUser));
+    getUserById.mockResolvedValue(mockJudgeUser as DbUser);
     getUserCaseNote.mockResolvedValue(omit(MOCK_NOTE, 'userId'));
     applicationContext
       .getUseCaseHelpers()
@@ -63,7 +62,7 @@ describe('Get case note', () => {
   });
 
   it('correctly returns data from persistence if a judgeUser exists', async () => {
-    getUserById.mockImplementation(() => new User(mockJudgeUser));
+    getUserById.mockResolvedValue(mockJudgeUser as DbUser);
     getUserCaseNote.mockResolvedValue(MOCK_NOTE);
     applicationContext
       .getUseCaseHelpers()
@@ -81,7 +80,7 @@ describe('Get case note', () => {
   });
 
   it('correctly returns data from persistence for the current user if a judgeUser does not exist', async () => {
-    getUserById.mockImplementation(() => new User(mockJudgeUser));
+    getUserById.mockResolvedValue(mockJudgeUser as DbUser);
     getUserCaseNote.mockResolvedValue(MOCK_NOTE);
     applicationContext
       .getUseCaseHelpers()
@@ -102,7 +101,7 @@ describe('Get case note', () => {
   });
 
   it('does not return anything if nothing is returned from persistence', async () => {
-    getUserById.mockImplementation(() => new User(mockJudgeUser));
+    getUserById.mockResolvedValue(mockJudgeUser as DbUser);
     getUserCaseNote.mockReturnValue(null);
     applicationContext
       .getUseCaseHelpers()

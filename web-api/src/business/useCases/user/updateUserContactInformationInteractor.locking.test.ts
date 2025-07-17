@@ -19,6 +19,7 @@ import { setChangeOfAddressCaseAsDone as setChangeOfAddressCaseAsDoneMock } from
 import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
 import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const setChangeOfAddressCaseAsDone = jest.mocked(
@@ -54,8 +55,8 @@ describe('determineEntitiesToLock', () => {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     };
-    getCasesForUser.mockReturnValue(mockCases);
-    getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
+    getCasesForUser.mockResolvedValue(mockCases);
+    getUserByIdOnceAllUpdatesComplete.mockResolvedValue(undefined as any);
   });
 
   it('should lookup the docket numbers for the specified user', async () => {
@@ -108,13 +109,13 @@ describe('updateUserContactInformationInteractor', () => {
   };
 
   beforeEach(() => {
-    getUserById.mockResolvedValue({
-      ...MOCK_PRACTITIONER,
-    });
-    getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null);
+    getUserById.mockResolvedValue(MOCK_PRACTITIONER as DbUser);
+    getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null as any);
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     getCasesForUser.mockResolvedValue([MOCK_CASE]);
-    setChangeOfAddressCaseAsDone.mockResolvedValue([{ remaining: 0 }]);
+    setChangeOfAddressCaseAsDone.mockResolvedValue([
+      { remaining: 0, jobId: '2918' },
+    ]);
   });
 
   describe('locked', () => {

@@ -20,6 +20,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -89,7 +90,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.privatePractitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    } as DbUser);
     getCaseByDocketNumber.mockReturnValue(caseRecord);
     verifyCaseForUser.mockResolvedValue(false);
 

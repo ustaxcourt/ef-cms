@@ -27,6 +27,7 @@ import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteM
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
 import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('Verify User Pending Email', () => {
   const TOKEN = '41189629-abe1-46d7-b7a4-9d3834f919cb';
@@ -84,7 +85,7 @@ describe('Verify User Pending Email', () => {
       admissionsDate: '2019-03-01',
       admissionsStatus: 'Active',
       barNumber: 'RA3333',
-      birthYear: '1950',
+      birthYear: 1950,
       email: 'test@example.com',
       firstName: 'Alden',
       lastName: 'Rivas',
@@ -96,8 +97,7 @@ describe('Verify User Pending Email', () => {
       practiceType: 'Private',
       practitionerType: 'Attorney',
       role: ROLES.privatePractitioner,
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-    };
+    } as DbUser;
 
     const mockPetitioner = {
       ...validUser,
@@ -109,7 +109,7 @@ describe('Verify User Pending Email', () => {
       pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_VALID,
       role: ROLES.petitioner,
       userId: getContactPrimary(MOCK_CASE).contactId,
-    };
+    } as DbUser;
 
     const mockCase = {
       ...MOCK_CASE,
@@ -194,7 +194,7 @@ describe('Verify User Pending Email', () => {
     });
 
     it('should throw an unauthorized error when token timestamp is expired', async () => {
-      getUserByIdOnceAllUpdatesComplete.mockReturnValue({
+      getUserByIdOnceAllUpdatesComplete.mockResolvedValue({
         ...mockPractitioner,
         pendingEmailVerificationTokenTimestamp: TOKEN_TIMESTAMP_EXPIRED,
       });
@@ -288,7 +288,7 @@ describe('Verify User Pending Email', () => {
       await verifyUserPendingEmailInteractor(
         applicationContext,
         {
-          token: mockPetitioner.pendingEmailVerificationToken,
+          token: mockPetitioner.pendingEmailVerificationToken!,
         },
         mockPetitionerUser,
       );

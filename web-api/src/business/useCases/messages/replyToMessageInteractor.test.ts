@@ -15,6 +15,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { replyToMessageInteractor } from './replyToMessageInteractor';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const createMessageAsReply = createMessageAsReplyMock as jest.Mock;
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -57,18 +58,18 @@ describe('replyToMessageInteractor', () => {
       toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
     };
     getUserById
-      .mockReturnValueOnce({
+      .mockResolvedValueOnce({
         name: 'Test Petitionsclerk',
         role: ROLES.petitionsClerk,
         section: PETITIONS_SECTION,
         userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
-      })
-      .mockReturnValueOnce({
+      } as DbUser)
+      .mockResolvedValueOnce({
         name: 'Test Petitionsclerk2',
         role: ROLES.petitionsClerk,
         section: PETITIONS_SECTION,
         userId: 'd90c8a79-9628-4ca9-97c6-02a161a02904',
-      });
+      } as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue({
       caseCaption: 'Roslindis Angelino, Petitioner',

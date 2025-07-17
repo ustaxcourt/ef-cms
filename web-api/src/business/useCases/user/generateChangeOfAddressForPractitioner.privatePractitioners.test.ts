@@ -81,7 +81,7 @@ describe('generateChangeOfAddress', () => {
     );
   });
   beforeEach(() => {
-    getCasesForUser.mockReturnValue([{ docketNumber }]);
+    getCasesForUser.mockResolvedValue([{ docketNumber }]);
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithPrivatePractitioner);
 
     applicationContext
@@ -105,8 +105,7 @@ describe('generateChangeOfAddress', () => {
       },
       oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
-      
-    });
+    } as any);
 
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,

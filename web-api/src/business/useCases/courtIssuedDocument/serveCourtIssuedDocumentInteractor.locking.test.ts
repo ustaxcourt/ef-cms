@@ -23,6 +23,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
@@ -99,7 +100,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getCaseByDocketNumber.mockResolvedValue(mockCase);
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
   });

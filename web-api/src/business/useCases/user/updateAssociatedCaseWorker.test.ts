@@ -38,6 +38,7 @@ import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -113,10 +114,10 @@ describe('updateAssociatedCaseWorker', () => {
   });
 
   it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
-    getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...mockPetitioner,
       userId: 'cde00f40-56e8-46c2-94c3-b1155b89a203',
-    });
+    } as DbUser);
 
     await updateAssociatedCaseWorker(
       applicationContext,
@@ -261,7 +262,7 @@ describe('updateAssociatedCaseWorker', () => {
 
   describe('generating a docket entry for petitioners', () => {
     beforeEach(() => {
-      getUserById.mockReturnValue(mockPetitioner);
+      getUserById.mockResolvedValue(mockPetitioner as DbUser);
     });
 
     it('should call generateAndServeDocketEntry if case is open', async () => {

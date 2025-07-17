@@ -9,6 +9,7 @@ import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/us
 import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
 import { verifyPendingCaseForUser as verifyPendingCaseForUserMock } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 import { associateUsersWithCasesPending as associateUsersWithCasesPendingMock } from '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('submitPendingCaseAssociationRequest', () => {
   const caseRecord = {
@@ -33,8 +34,8 @@ describe('submitPendingCaseAssociationRequest', () => {
   });
 
   it('should not add mapping if already associated', async () => {
-    getUserById.mockReturnValue(mockPrivatePractitionerUser);
-    verifyCaseForUser.mockReturnValue(true);
+    getUserById.mockResolvedValue(mockPrivatePractitionerUser as DbUser);
+    verifyCaseForUser.mockResolvedValue(true);
 
     await submitPendingCaseAssociationRequestInteractor(
       {
@@ -58,8 +59,8 @@ describe('submitPendingCaseAssociationRequest', () => {
   });
 
   it('should add mapping', async () => {
-    verifyCaseForUser.mockReturnValue(false);
-    verifyPendingCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockResolvedValue(false);
+    verifyPendingCaseForUser.mockResolvedValue(false);
 
     await submitPendingCaseAssociationRequestInteractor(
       {

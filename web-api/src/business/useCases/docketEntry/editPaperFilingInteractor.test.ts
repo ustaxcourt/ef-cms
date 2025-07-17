@@ -32,6 +32,7 @@ import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServic
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('editPaperFilingInteractor', () => {
   let caseRecord;
@@ -105,7 +106,7 @@ describe('editPaperFilingInteractor', () => {
       ],
     };
 
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     fileAndServeDocumentOnOneCase.mockImplementation(

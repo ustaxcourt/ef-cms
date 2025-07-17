@@ -7,6 +7,7 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('getUserPendingEmailStatusInteractor', () => {
   const PENDING_EMAIL = 'pending@example.com';
@@ -34,7 +35,7 @@ describe('getUserPendingEmailStatusInteractor', () => {
       pendingEmail: PENDING_EMAIL,
       role: ROLES.petitioner,
       userId: USER_ID,
-    });
+    } as DbUser);
 
     const result = await getUserPendingEmailStatusInteractor(
       applicationContext,
@@ -52,7 +53,7 @@ describe('getUserPendingEmailStatusInteractor', () => {
       name: 'Test Petitioner',
       role: ROLES.petitioner,
       userId: USER_ID,
-    });
+    } as DbUser);
 
     const result = await getUserPendingEmailStatusInteractor(
       applicationContext,

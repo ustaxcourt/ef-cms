@@ -11,7 +11,7 @@ jest.mock(
 );
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
-import { judgeUser } from '@shared/test/mockUsers';
+import { docketClerkUser, judgeUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
@@ -19,6 +19,7 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -34,7 +35,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   const getUserById = jest.mocked(getUserByIdMock);
 
   beforeEach(() => {
-    getUserById.mockReturnValue(getUserByIdMock);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
     getCasesByDocketNumbers.mockResolvedValue([MOCK_CASE]);
 

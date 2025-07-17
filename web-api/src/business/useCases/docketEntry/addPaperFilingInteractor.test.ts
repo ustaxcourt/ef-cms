@@ -30,6 +30,7 @@ import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
 import { MOCK_CASE_DEADLINE } from '@shared/test/mockCaseDeadline';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -62,7 +63,7 @@ describe('addPaperFilingInteractor', () => {
       isSavingForLater: false,
     };
 
-    getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
   });

@@ -24,6 +24,7 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -59,7 +60,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     getCaseByDocketNumber.mockResolvedValue(mockCase);
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
 
-    getUserById.mockResolvedValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     fileAndServeDocumentOnOneCase.mockImplementation(
       ({ caseEntity }) => caseEntity,

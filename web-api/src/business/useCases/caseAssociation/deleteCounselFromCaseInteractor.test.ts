@@ -26,6 +26,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('deleteCounselFromCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -91,7 +92,8 @@ describe('deleteCounselFromCaseInteractor', () => {
         ...mockIrsPractitioners,
         ...mockPetitioners,
       ];
-      return allUsers.find(user => user.userId === userId);
+      const theUser = allUsers.find(user => user.userId === userId);
+      return Promise.resolve(theUser as DbUser);
     });
 
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => ({

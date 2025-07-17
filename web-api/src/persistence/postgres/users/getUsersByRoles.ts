@@ -1,8 +1,12 @@
 import { getDbReader } from '@web-api/database';
 import { Role } from '@shared/business/entities/EntityConstants';
-import { rawUser } from '@web-api/persistence/postgres/users/mapper';
+import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
 
-export const getUsersByRoles = async ({ roles }: { roles: Role[] }) => {
+export const getUsersByRoles = async ({
+  roles,
+}: {
+  roles: Role[];
+}): Promise<DbUser[]> => {
   const users = await getDbReader(async db =>
     db
       .selectFrom('dwUser')

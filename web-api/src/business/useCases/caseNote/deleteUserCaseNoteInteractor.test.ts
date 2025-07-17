@@ -10,6 +10,7 @@ import { deleteUserCaseNote as deleteUserCaseNoteMock } from '@web-api/persisten
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('deleteUserCaseNoteInteractor', () => {
   const deleteUserCaseNote = deleteUserCaseNoteMock as jest.Mock;
@@ -37,7 +38,7 @@ describe('deleteUserCaseNoteInteractor', () => {
       section: 'colvinChambers',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     }) as UnknownAuthUser;
-    getUserById.mockReturnValue(mockUser);
+    getUserById.mockResolvedValue(mockUser as DbUser);
     deleteUserCaseNote.mockImplementation(v => v);
     applicationContext
       .getUseCaseHelpers()
@@ -62,7 +63,7 @@ describe('deleteUserCaseNoteInteractor', () => {
       ...mockJudgeUser,
       section: 'colvinChambers',
     } as UnknownAuthUser;
-    getUserById.mockReturnValue(mockUser);
+    getUserById.mockResolvedValue(mockUser as DbUser);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);

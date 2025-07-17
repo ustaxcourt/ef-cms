@@ -23,6 +23,7 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -63,11 +64,11 @@ describe('updateCourtIssuedDocketEntryInteractor', () => {
       ],
     };
 
-    getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.petitioner,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    } as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });

@@ -8,7 +8,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
-import { RawUser } from '../entities/User';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
@@ -17,7 +17,7 @@ describe('getUserInteractor', () => {
     getUserById.mockResolvedValue({
       ...mockPetitionsClerkUser,
       section: PETITIONS_SECTION,
-    });
+    } as DbUser);
 
     const user = await getUserInteractor(mockPetitionsClerkUser);
 
@@ -47,7 +47,7 @@ describe('getUserInteractor', () => {
     getUserById.mockResolvedValue({
       ...mockJudge,
       section: 'judge',
-    } as RawUser);
+    } as DbUser);
 
     const user = await getUserInteractor(mockJudgeUser);
 

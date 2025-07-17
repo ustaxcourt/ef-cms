@@ -14,6 +14,7 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { casesClosedResults } from '@web-api/business/useCases/judgeActivityReport/mockCasesClosedResults';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 const getCasesClosedCountByJudge = getCasesClosedCountByJudgeMock as jest.Mock;
 const getUserById = jest.mocked(getUserByIdMock);
@@ -43,7 +44,7 @@ describe('getCasesClosedByJudgeInteractor', () => {
   };
 
   beforeEach(() => {
-    getUserById.mockReturnValue(judgeUser);
+    getUserById.mockResolvedValue(judgeUser as DbUser);
     getCasesClosedCountByJudge.mockResolvedValue(casesClosedResults);
   });
 

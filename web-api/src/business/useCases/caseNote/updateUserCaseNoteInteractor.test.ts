@@ -9,6 +9,7 @@ import { omit } from 'lodash';
 import { updateUserCaseNoteInteractor } from './updateUserCaseNoteInteractor';
 import { upsertUserCaseNotes as upsertUserCaseNotesMock } from '@web-api/persistence/postgres/userCaseNotes/upsertUserCaseNotes';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('updateUserCaseNoteInteractor', () => {
   const mockCaseNote = {
@@ -38,7 +39,7 @@ describe('updateUserCaseNoteInteractor', () => {
       ...mockJudgeUser,
       section: 'colvinChambers',
     } as UnknownAuthUser;
-    getUserById.mockImplementation(() => mockUser);
+    getUserById.mockResolvedValue(mockUser as DbUser);
     upsertUserCaseNotes.mockImplementation(v => v.caseNoteToUpsert);
     applicationContext
       .getUseCaseHelpers()
@@ -67,7 +68,7 @@ describe('updateUserCaseNoteInteractor', () => {
       userId: userIdToExpect,
     } as UnknownAuthUser;
 
-    getUserById.mockImplementation(() => mockUser);
+    getUserById.mockResolvedValue(mockUser as DbUser);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
