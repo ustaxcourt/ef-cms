@@ -46,21 +46,26 @@ export const attachDocketEntriesToWorkItemQC = async ({
     return [];
   }
 
-  const docketEntryInfo = workItems.map(w => ({
-    docketEntryId: w.docketEntryId,
+  const docketNumbersAndIds = workItems.map(w => ({
     docketNumber: w.docketNumber,
+    docketEntryId: w.docketEntryId,
   }));
+
+  // We could get docket entries in workItemQCQueryBase, but it made getting good types extremely tricky, and the query is more difficult.
+  // Instead, we make a separate query for docket entries and do an in-app join.
   const docketEntries = await getDocketEntriesByDocketNumberAndDocketEntryId({
-    docketNumbersAndIds: docketEntryInfo,
+    docketNumbersAndIds,
   });
 
-  const entryById = new Map<string, RawDocketEntry>();
-  for (const docketEntry of docketEntries) {
-    entryById.set(docketEntry.docketEntryId, docketEntry);
+  const entryByCompositeKey = new Map<string, RawDocketEntry>(); // We need to join on both docketEntryId and docketNumber
+  for (const entry of docketEntries) {
+    const key = `${entry.docketNumber}|${entry.docketEntryId}`;
+    entryByCompositeKey.set(key, entry);
   }
 
   const workItemsWithDocketEntries = workItems.map(w => {
-    const docketEntry = entryById.get(w.docketEntryId);
+    const key = `${w.docketNumber}|${w.docketEntryId}`;
+    const docketEntry = entryByCompositeKey.get(key);
     return {
       ...fromKyselyWorkItemAndCase(w),
       docketEntry: docketEntry ?? ({} as RawDocketEntry),
