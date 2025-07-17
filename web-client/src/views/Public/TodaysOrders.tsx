@@ -6,6 +6,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { formatDateString, FORMATS } from '@shared/business/utilities/DateHandler';
 
 export const TodaysOrders = connect(
   {
@@ -48,33 +49,13 @@ export const TodaysOrders = connect(
           {todaysOrdersHelper.hasResults && (
             <>
               <NonMobile>
-                <div className="tablet:grid-col-2">
-                  <select
-                    aria-label="Today’s Orders Sort"
-                    className="usa-select margin-top-0 margin-bottom-2 sort"
-                    name="todaysOrdersSort"
-                    value={todaysOrdersHelper.todaysOrdersSort}
-                    onChange={e => {
-                      sortTodaysOrdersSequence({
-                        key: e.target.name,
-                        value: e.target.value,
-                      });
-                    }}
-                  >
-                    {todaysOrdersHelper.sortOptions.map(({ label, value }) => (
-                      <option key={value} value={value}>
-                        Sort by {label}
-                      </option>
-                    ))}
-                  </select>
-                </div>
                 <table
                   aria-label="todays orders"
                   className="usa-table gray-header todays-orders responsive-table row-border-only"
                 >
                   <thead>
                     <tr>
-                      <th aria-hidden="true" />
+                      <th>Time Filed</th>
                       <th aria-hidden="true" />
                       <th aria-label="Docket Number">Docket No.</th>
                       <th>Case Title</th>
@@ -84,11 +65,13 @@ export const TodaysOrders = connect(
                     </tr>
                   </thead>
                   <tbody>
-                    {todaysOrdersHelper.formattedOrders.map((order, idx) => (
+                    {todaysOrdersHelper.formattedOrders.map((order) => {
+                      console.log('order:', order);
+                      return (
                       <tr
                         key={`todays-orders-${order.docketNumber}-${order.docketEntryId}`}
                       >
-                        <td className="center-column">{idx + 1}</td>
+                        <td className="center-column">{formatDateString(order.filingDate, FORMATS.TIME_TZ)}</td>
                         <td aria-hidden="true"></td>
                         <td>
                           <CaseLink formattedCase={order} />
@@ -114,12 +97,33 @@ export const TodaysOrders = connect(
                         <td>{order.numberOfPagesFormatted}</td>
                         <td>{order.formattedJudgeName}</td>
                       </tr>
-                    ))}
+                    )})
+                    }
                   </tbody>
                 </table>
               </NonMobile>
 
               <Mobile>
+                <div className="tablet:grid-col-2">
+                  <select
+                    aria-label="Today’s Orders Sort"
+                    className="usa-select margin-top-0 margin-bottom-2 sort"
+                    name="todaysOrdersSort"
+                    value={todaysOrdersHelper.todaysOrdersSort}
+                    onChange={e => {
+                      sortTodaysOrdersSequence({
+                        key: e.target.name,
+                        value: e.target.value,
+                      });
+                    }}
+                  >
+                    {todaysOrdersHelper.sortOptions.map(({ label, value }) => (
+                      <option key={value} value={value}>
+                        Sort by {label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
                 <table
                   aria-label="todays orders"
                   className="usa-table gray-header todays-orders responsive-table row-border-only"
