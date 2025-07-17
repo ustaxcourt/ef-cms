@@ -1207,8 +1207,6 @@ workflows:
           type: approval
           requires:
             - index-glued-data
-            - index-cases
-            - index-docket-entries
       - index-cases:
           <<: *only-test
           requires:
