@@ -1120,11 +1120,6 @@ workflows:
           <<: *only-prod
           requires:
             - disable-reindex-cron
-      - index-cases:
-          <<: *only-prod
-          requires:
-            - loadtests
-            - smoketests-readonly
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
