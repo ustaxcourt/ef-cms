@@ -1047,10 +1047,21 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - wait-for-reindex
+      - index-cases:
+          <<: *only-deployed-lower-environments
+          requires:
+            - wait-for-reindex
+      # - index-docket-entries:
+      #     <<: *only-deployed-lower-environments
+      #     requires:
+      #       - disable-reindex-cron
+      #       - index-cases
       - smoketests:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
+            - index-cases
+            # replace the two lines above with: - index-docket-entries
       - loadtests:
           <<: *only-deployed-lower-environments
           requires:
@@ -1063,14 +1074,6 @@ workflows:
           <<: *only-deployed-lower-environments
           requires:
             - disable-reindex-cron
-      - index-cases:
-          <<: *only-deployed-lower-environments
-          requires:
-            - smoketests
-            - loadtests
-            - smoketests-readonly
-            - api-hosted-environment-tests
-      # TODO post-10494: index-docket-entries
       - switch-colors:
           <<: *only-deployed-lower-environments
           requires:
@@ -1112,10 +1115,20 @@ workflows:
           <<: *only-prod
           requires:
             - wait-for-reindex
+      # - index-cases:
+      #     <<: *only-prod
+      #     requires:
+      #       - wait-for-reindex
+      # - index-docket-entries:
+      #     <<: *only-prod
+      #     requires:
+      #       - disable-reindex-cron
+      #       - index-cases
       - loadtests:
           <<: *only-prod
           requires:
             - disable-reindex-cron
+            # - index-docket-entries
       - smoketests-readonly:
           <<: *only-prod
           requires:
@@ -1213,7 +1226,7 @@ workflows:
       - cleanup-glue-job:
           <<: *only-test
           requires:
-            - wait-for-glued-data-to-index
+            - index-docket-entries
 
   glue-to-lower-env:
     when: << pipeline.parameters.run_glue_to_lower_env >>
