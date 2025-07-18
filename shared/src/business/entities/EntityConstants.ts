@@ -19,6 +19,7 @@ export const STATE_KEYS = {
   DOCKET_RECORD_TABLE_SORT: 'DOCKET_RECORD_TABLE_SORT',
   TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
+  CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
 } as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
@@ -781,6 +782,11 @@ export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
+
+export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
+  statusReport: 'Status Report Due',
+  statusReportStipulatedDecision: 'Status Report or Proposed Stipulated Decision Due'
+};
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {

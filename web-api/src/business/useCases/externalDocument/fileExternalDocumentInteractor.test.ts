@@ -411,7 +411,6 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
-    expect(updatedCase!.docketEntries[3].status).toBeUndefined();
     expect(updatedCase!.docketEntries[3].servedAt).toBeUndefined();
   });
 

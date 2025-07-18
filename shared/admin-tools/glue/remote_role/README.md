@@ -6,7 +6,7 @@ The terraform in this folder will create a role that allows reading/writing/upda
 
 ## Initialize Terraform
 
-The `bin` folder has a bash script that will setup the terraform backend to use the appropriate s3 bucket and DynamoDB table. To use, set the environmental variable `ZONE_NAME` to the appropriate value such as `ef-cms.ustaxcourt.gov`. Run the script from this directory passing the environment as an argument:
+The `bin` folder has a bash script that will setup the terraform backend to use the appropriate s3 bucket and DynamoDB table. To use, set the environmental variable `EFCMS_DOMAIN` to the appropriate value such as `mig.ef-cms.ustaxcourt.gov`. Run the script from this directory passing the environment as an argument:
 
 `./bin/deploy-init.sh mig`
 
