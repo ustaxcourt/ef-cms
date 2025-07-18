@@ -1,3 +1,3 @@
-variable "zone_name" {
+variable "dns_domain" {
   type = string
 }

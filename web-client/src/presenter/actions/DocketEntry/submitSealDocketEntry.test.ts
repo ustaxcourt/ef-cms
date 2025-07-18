@@ -70,7 +70,7 @@ describe('submitSealDocketEntryAction', () => {
     const updatedDocketEntryInState =
       result.state.caseDetail.docketEntries.find(
         entry => entry.docketEntryId === mockDocketEntryId,
-      );
+      )!;
     expect(updatedDocketEntryInState.sealedTo).toBe(
       DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
     );

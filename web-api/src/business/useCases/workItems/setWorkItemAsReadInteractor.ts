@@ -1,15 +1,11 @@
-import { Case } from '@shared/business/entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
-
 /**
  * setWorkItemAsReadInteractor
  *
@@ -26,36 +22,15 @@ export const setWorkItemAsReadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const workItemRecord = await getWorkItemById({ workItemId });
+  const workItem = await getWorkItemById({ workItemId });
 
-  if (!workItemRecord) {
+  if (!workItem) {
     throw new NotFoundError(`WorkItem ${workItemId} was not found.`);
   }
 
-  const { docketNumber } = workItemRecord;
-  const { docketEntryId } = workItemRecord.docketEntry;
-
-  const caseRecord = await getCaseByDocketNumber({
-    docketNumber,
-  });
-
-  const caseEntity = new Case(caseRecord, { authorizedUser });
-
-  const docketEntryEntity = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
-
-  if (!docketEntryEntity) {
-    throw new NotFoundError(
-      `Docket entry ${docketEntryId} was not found on the case ${docketNumber}`,
-    );
-  }
-
-  docketEntryEntity.workItem.markAsRead();
-
-  await upsertDocketEntries([docketEntryEntity.validate().toRawObject()]);
+  workItem.markAsRead();
 
   return upsertWorkItems({
-    workItems: [docketEntryEntity.workItem.validate().toRawObject()],
+    workItems: [workItem.validate().toRawObject()],
   });
 };

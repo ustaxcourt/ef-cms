@@ -3,18 +3,16 @@
 ENVIRONMENT=$1
 
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
-[ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
-[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
+[ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
-echo "  - ZONE_NAME=${ZONE_NAME}"
 
 
 ../../../scripts/verify-terraform-version.sh
 
-BUCKET="${ZONE_NAME}.terraform.deploys"
+BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
@@ -42,7 +40,6 @@ export TF_VAR_green_table_name=$GREEN_TABLE_NAME
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_my_s3_state_bucket=$BUCKET
 export TF_VAR_my_s3_state_key=$KEY
-export TF_VAR_zone_name=$ZONE_NAME
 export TF_WARN_OUTPUT_ERRORS=1
 
 terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
