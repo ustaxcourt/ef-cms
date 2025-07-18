@@ -7,6 +7,17 @@ import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import { formatDateString, FORMATS } from '@shared/business/utilities/DateHandler';
+import { SortableColumn } from '@web-client/ustc-ui/Table/SortableColumn';
+import { ASCENDING, SORT_ASCENDING_TEXT, SORT_DESCENDING_TEXT } from '@shared/business/entities/EntityConstants';
+
+const columnData = [
+  { columnName: 'Time Filed', sortFieldInfo: { sortField: 'filingDate', sortType: 'date' } },
+  { columnName: 'Docket No.', sortFieldInfo: { sortField: 'docketNumber', sortType: 'string' } },
+  { columnName: 'Case Title', sortFieldInfo: { sortField: 'caseCaption', sortType: 'string' } },
+  { columnName: 'Order', sortFieldInfo: { sortField: 'documentTitle', sortType: 'string' } },
+  { columnName: 'Pages', sortFieldInfo: { sortField: 'numberOfPages', sortType: 'number' } },
+  { columnName: 'Judge', sortFieldInfo: { sortField: 'formattedJudgeName', sortType: 'string' } },
+]
 
 export const TodaysOrders = connect(
   {
@@ -14,12 +25,16 @@ export const TodaysOrders = connect(
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     sortTodaysOrdersSequence: sequences.sortTodaysOrdersSequence,
+    sortTableSequence: sequences.sortTableSequence,
+    tableSort: state.tableSort,
     todaysOrdersHelper: state.todaysOrdersHelper,
   },
   function TodaysOrders({
     loadMoreTodaysOrdersSequence,
     openCaseDocumentDownloadUrlSequence,
     sortTodaysOrdersSequence,
+    sortTableSequence,
+    tableSort,
     todaysOrdersHelper,
   }) {
     return (
@@ -51,52 +66,31 @@ export const TodaysOrders = connect(
               <NonMobile>
                 <table
                   aria-label="todays orders"
-                  className="usa-table gray-header todays-orders responsive-table row-border-only"
+                  className="usa-table ustc-table"
                 >
                   <thead>
                     <tr>
-                      <th>Time Filed</th>
-                      <th aria-hidden="true" />
-                      <th aria-label="Docket Number">Docket No.</th>
-                      <th>Case Title</th>
-                      <th>Order</th>
-                      <th>Pages</th>
-                      <th>Judge</th>
+                      {columnData.map((col, idx) => {
+                        return (
+                          <TodaysOrdersColumnHeader
+                            columnData={col}
+                            key={idx}
+                            orderListId={idx.toString()}
+                            onSort={sortTableSequence}
+                            tableSort={tableSort}
+                          />
+                        )
+                      })}
                     </tr>
                   </thead>
                   <tbody>
-                    {todaysOrdersHelper.formattedOrders.map((order) => {
-                      console.log('order:', order);
+                    {todaysOrdersHelper.formattedOrders.map((order, idx) => {
                       return (
-                      <tr
-                        key={`todays-orders-${order.docketNumber}-${order.docketEntryId}`}
-                      >
-                        <td className="center-column">{formatDateString(order.filingDate, FORMATS.TIME_TZ)}</td>
-                        <td aria-hidden="true"></td>
-                        <td>
-                          <CaseLink formattedCase={order} />
-                        </td>
-                        <td>{order.caseCaption}</td>
-                        <td>
-                          <Button
-                            link
-                            aria-label={`View PDF: ${order.documentTitle}`}
-                            className="text-left line-height-standard padding-0"
-                            onClick={() => {
-                              openCaseDocumentDownloadUrlSequence({
-                                docketEntryId: order.docketEntryId,
-                                docketNumber: order.docketNumber,
-                                isPublic: true,
-                                useSameTab: true,
-                              });
-                            }}
-                          >
-                            {order.documentTitle}
-                          </Button>
-                        </td>
-                        <td>{order.numberOfPagesFormatted}</td>
-                        <td>{order.formattedJudgeName}</td>
-                      </tr>
+                      <TodaysOrdersRow
+                        key={`order${idx}`}
+                        order={order}
+                        openCaseDocumentDownloadUrlSequence={openCaseDocumentDownloadUrlSequence}
+                      />
                     )})
                     }
                   </tbody>
@@ -191,5 +185,89 @@ export const TodaysOrders = connect(
     );
   },
 );
+
+const TodaysOrdersColumnHeader = ({
+  columnData,
+  orderListId,
+  onSort,
+  tableSort,
+}: {
+  orderListId: string;
+  columnData: any;
+  tableSort: any;
+  onSort: ({
+    sortField,
+    sortOrder,
+  }: {
+    sortField: string;
+    sortOrder: 'asc' | 'desc';
+  }) => void;
+}) => {
+  return (
+    <>
+      {columnData.headerIconClassName && (
+        <th className={columnData.headerIconClassName}></th>
+      )}
+      <th
+        aria-label={columnData.columnName}
+        className={columnData.headerClassName}
+        // colSpan={2}
+      >
+        <SortableColumn
+          ascText={SORT_ASCENDING_TEXT[columnData.sortFieldInfo.sortType]}
+          // className="text-left text-ink text-semibold"
+          currentlySortedField={tableSort.sortField}
+          currentlySortedOrder={tableSort.sortOrder}
+          data-testid={`${orderListId}-${columnData.sortFieldInfo.sortField}-header-button`}
+          defaultSortOrder={ASCENDING}//fix later
+          descText={SORT_DESCENDING_TEXT[columnData.sortFieldInfo.sortType]}
+          hasRows={true} //fix later
+          sortField={columnData.sortFieldInfo.sortField}
+          title={columnData.columnName}
+          onClickSequence={onSort}
+        />
+      </th>
+    </>
+  );
+};
+
+const TodaysOrdersRow = ({
+  order,
+  openCaseDocumentDownloadUrlSequence,
+}: {
+  order: any;
+  openCaseDocumentDownloadUrlSequence: any;
+}) => {
+  return (
+    <tr
+      key={`todays-orders-${order.docketNumber}-${order.docketEntryId}`}
+    >
+      <td>{formatDateString(order.filingDate, FORMATS.TIME_TZ)}</td>
+      <td>
+        <CaseLink formattedCase={order} />
+      </td>
+      <td>{order.caseCaption}</td>
+      <td>
+        <Button
+          link
+          aria-label={`View PDF: ${order.documentTitle}`}
+          className="text-left line-height-standard padding-0"
+          onClick={() => {
+            openCaseDocumentDownloadUrlSequence({
+              docketEntryId: order.docketEntryId,
+              docketNumber: order.docketNumber,
+              isPublic: true,
+              useSameTab: true,
+            });
+          }}
+        >
+          {order.documentTitle}
+        </Button>
+      </td>
+      <td>{order.numberOfPagesFormatted}</td>
+      <td>{order.formattedJudgeName}</td>
+    </tr>
+  );
+};
 
 TodaysOrders.displayName = 'TodaysOrders';

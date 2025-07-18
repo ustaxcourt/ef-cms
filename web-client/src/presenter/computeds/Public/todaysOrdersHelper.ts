@@ -1,7 +1,17 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { Get } from 'cerebral';
-import { STANDING_PRETRIAL_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { DESCENDING, STANDING_PRETRIAL_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app-public.cerebral';
+import { Case } from '@shared/business/entities/cases/Case';
+
+const SUPPORTED_SORT_FIELDS_FOR_TODAYS_ORDERS = [
+  'filingDate',
+  'docketNumber',
+  'caseCaption',
+  'documentTitle',
+  'numberOfPages',
+  'formattedJudgeName',
+];
 
 export const todaysOrdersHelper = (
   get: Get,
@@ -51,15 +61,40 @@ export const todaysOrdersHelper = (
     };
   });
 
-  const hasResults = formattedOrders.length > 0;
+  const tableSort = get(state.tableSort);
 
-  const showLoadMoreButton = formattedOrders.length < totalCount;
+  const sortedFormattedOrders = formattedOrders.sort((orderA, orderB) => {
+    let sortNumber = 0;
+    const compare1 =
+      tableSort?.sortOrder === DESCENDING ? orderB : orderA;
+    const compare2 =
+      tableSort?.sortOrder === DESCENDING ? orderA : orderB;
+
+    if (!tableSort) {
+      sortNumber = compare1.createdAt.localeCompare(compare2.createdAt);
+    } else if (SUPPORTED_SORT_FIELDS_FOR_TODAYS_ORDERS.includes(tableSort.sortField)) {
+      const compare1SortField: string = compare1[tableSort.sortField] || '';
+      const compare2SortField: string = compare2[tableSort.sortField] || '';
+
+      sortNumber = compare1SortField.toString().localeCompare(compare2SortField.toString());
+    } else if (tableSort.sortField === 'docketNumber') {
+      sortNumber = Case.docketNumberSort(
+        compare1.docketNumber,
+        compare2.docketNumber,
+      );
+    }
+    return sortNumber;
+  })
+
+  const hasResults = sortedFormattedOrders.length > 0;
+
+  const showLoadMoreButton = sortedFormattedOrders.length < totalCount;
   const todaysOrdersSort =
     get(state.sessionMetadata.todaysOrdersSort) || TODAYS_ORDERS_SORT_DEFAULT;
 
   return {
     formattedCurrentDate,
-    formattedOrders,
+    formattedOrders: sortedFormattedOrders,
     hasResults,
     showLoadMoreButton,
     sortOptions,
