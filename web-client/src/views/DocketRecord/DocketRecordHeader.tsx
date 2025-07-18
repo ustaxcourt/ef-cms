@@ -7,7 +7,7 @@ import { STATE_KEYS } from '@shared/business/entities/EntityConstants';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef } from 'react';
 
 export const DocketRecordMobileHeader = ({
   docketNumber,
@@ -165,6 +165,7 @@ const DocketRecordHeaderDeps = {
   setViewerDocumentToDisplaySequence:
     sequences.setViewerDocumentToDisplaySequence,
   docketRecordFilter: state.sessionMetadata.docketRecordFilter,
+  viewerDocumentToDisplay: state.viewerDocumentToDisplay,
 };
 
 export const DocketRecordHeader = connect<
@@ -184,11 +185,25 @@ export const DocketRecordHeader = connect<
     sortTableSequence,
     setViewerDocumentToDisplaySequence,
     docketRecordFilter,
+    viewerDocumentToDisplay,
   }) {
+    const isFirstRender = useRef(true);
+
     useEffect(() => {
       const docketEntries =
         formattedDocketEntriesHelper.formattedDocketEntriesOnDocketRecord;
-      if (docketEntries.length > 0) {
+
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
+      }
+
+      if (
+        docketEntries.length > 0 &&
+        (!viewerDocumentToDisplay ||
+          viewerDocumentToDisplay.docketEntryId !==
+            docketEntries[0].docketEntryId)
+      ) {
         setViewerDocumentToDisplaySequence({
           viewerDocumentToDisplay: docketEntries[0],
         });
