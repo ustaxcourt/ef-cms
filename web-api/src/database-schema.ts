@@ -73,7 +73,6 @@ interface DatabaseSchemaType {
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
-  dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
@@ -140,6 +139,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwNotification: {
     table: DEFAULT as NotificationTable,
     columns: DW_NOTIFICATION_COLUMNS,
+  },
+  dwResponseString: {
+    table: DEFAULT as ResponseStringTable,
+    columns: DW_RESPONSE_STRING_COLUMNS,
   },
   dwResponseString: {
     table: DEFAULT as ResponseStringTable,
