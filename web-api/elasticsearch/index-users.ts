@@ -1,10 +1,10 @@
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { ROLES } from '@shared/business/entities/EntityConstants';
-import { getSearchClient } from '@web-api/getSearchClient';
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { getUsersByIds } from '@web-api/persistence/postgres/users/getUsersById';
 import { UserKysely } from '@web-api/persistence/postgres/users/schema';
 import { efcmsUserIndex } from '../elasticsearch/efcms-user-mappings';
+import { getSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
 
 export const transformOpenSearchUser = (
   userData: UserKysely | UserKysely[],

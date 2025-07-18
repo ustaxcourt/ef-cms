@@ -3,9 +3,9 @@ import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyn
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
 import { isArray } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { getSearchClient } from '@web-api/getSearchClient';
 import { efcmsDocketEntryIndex } from '../../elasticsearch/efcms-docket-entry-mappings';
 import { efcmsCaseIndex } from '../../elasticsearch/efcms-case-mappings';
+import { getSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
 
 export const indexOpenSearchCases = async ({
   message,
