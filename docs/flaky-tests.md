@@ -52,9 +52,11 @@ jobs:
           security-enabled: false
       - name: Setup DynamoDB Local
         uses: rrainn/dynamodb-action@v4.0.0
+        uses: codyseibert/dynamodb-action@v4.1.0
         with:
           port: 8000
           cors: '*'
+          version: '2.6.1'
       - name: Collect Workflow Telemetry
         uses: runforesight/workflow-telemetry-action@v2
         with:
