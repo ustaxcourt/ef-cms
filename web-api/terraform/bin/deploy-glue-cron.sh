@@ -4,6 +4,7 @@
 ENVIRONMENT=$1
 
 [ -z "${ENVIRONMENT}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
+[ -z "$EFCMS_DOMAIN" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
@@ -18,7 +19,7 @@ export TF_VAR_environment=$ENVIRONMENT
 npm run build:assets
 
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${ZONE_NAME}.terraform.deploys" \
+ -backend-config=bucket="${EFCMS_DOMAIN}.terraform.deploys" \
  -backend-config=key="glue-cron-${ENVIRONMENT}.tfstate" \
  -backend-config=dynamodb_table="efcms-terraform-lock" \
  -backend-config=region="us-east-1"

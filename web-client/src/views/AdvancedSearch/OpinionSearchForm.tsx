@@ -113,6 +113,7 @@ export const OpinionSearchForm = connect(
                       formGroupCls="margin-bottom-0"
                       maxDate={advancedDocumentSearchHelper.maxDate}
                       rangePickerCls={'grid-row grid-gap'}
+
                       startDateErrorText={validationErrors.startDate}
                       startLabel="Start date"
                       startName="startDate"

@@ -234,7 +234,6 @@ import { loginInteractor } from '@shared/proxies/auth/loginProxy';
 import { openUrlInNewTab } from './presenter/utilities/openUrlInNewTab';
 import { opinionAdvancedSearchInteractor } from '../../shared/src/proxies/opinionAdvancedSearchProxy';
 import { orderAdvancedSearchInteractor } from '../../shared/src/proxies/orderAdvancedSearchProxy';
-import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
 import { removeCasePendingItemInteractor } from '../../shared/src/proxies/removeCasePendingItemProxy';
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';
@@ -277,7 +276,6 @@ import { submitPendingCaseAssociationRequestInteractor } from '../../shared/src/
 import { transformFormValueToTitleCaseOrdinal } from '../../shared/src/business/utilities/transformFormValueToTitleCaseOrdinal';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { unblockCaseFromTrialInteractor } from '../../shared/src/proxies/unblockCaseFromTrialProxy';
-import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
 import { unsealCaseInteractor } from '../../shared/src/proxies/unsealCaseProxy';
 import { unsealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/unsealDocketEntryProxy';
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
@@ -349,6 +347,7 @@ import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users
 import ImageBlobReduce from 'image-blob-reduce';
 import deepFreeze from 'deep-freeze';
 import { getTrialSessionOpenCasesCountInteractor } from '@shared/proxies/trialSessions/getTrialSessionOpenCasesCountProxy';
+import { getConsolidatedCaseDeadlinesInteractor } from '@shared/proxies/caseDeadline/getConsolidatedCaseDeadlinesProxy';
 import { removePetitionerEmailInteractor } from '@shared/proxies/removePetitionerEmailProxy';
 
 const reduce = ImageBlobReduce({
@@ -438,6 +437,7 @@ const allUseCases = {
   getCalendaredCasesForTrialSessionInteractor,
   getCaseDeadlinesForCaseInteractor,
   getCaseDeadlinesInteractor,
+  getConsolidatedCaseDeadlinesInteractor,
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
@@ -494,7 +494,6 @@ const allUseCases = {
   loginInteractor,
   opinionAdvancedSearchInteractor,
   orderAdvancedSearchInteractor,
-  prioritizeCaseInteractor,
   removeCaseFromTrialInteractor,
   removeCasePendingItemInteractor,
   removeConsolidatedCasesInteractor,
@@ -530,7 +529,6 @@ const allUseCases = {
   submitCaseAssociationRequestInteractor,
   submitPendingCaseAssociationRequestInteractor,
   unblockCaseFromTrialInteractor,
-  unprioritizeCaseInteractor,
   unsealCaseInteractor,
   unsealDocketEntryInteractor,
   updateCaseContextInteractor,

@@ -10,7 +10,7 @@ const workItemTableDefinition = {
   completedByUserId: DEFAULT as string | undefined,
   completedMessage: DEFAULT as string | undefined,
   createdAt: DEFAULT as Date,
-  docketEntry: DEFAULT as any,
+  docketEntryId: DEFAULT as string,
   docketNumber: DEFAULT as string,
   inProgress: DEFAULT as boolean | undefined,
   isRead: DEFAULT as boolean | undefined,
