@@ -20,3 +20,11 @@ export const DW_USER_ON_CASE_COLUMNS = Object.keys(
 export type UserOnCaseKysely = Selectable<UserOnCaseTable>;
 export type NewUserOnCaseKysely = Insertable<UserOnCaseTable>;
 export type UpdateUserOnCaseKysely = Updateable<UserOnCaseTable>;
+
+export type UserOnCaseAssociation = {
+  userId: string;
+  docketNumber: string;
+  representing?: string[];
+  serviceIndicator?: string;
+  actingAsRole: Role;
+};

@@ -10,6 +10,7 @@ import { RawUser } from '@shared/business/entities/User';
 import { Role, ROLES } from '@shared/business/entities/EntityConstants';
 import { getConnection } from '@web-api/getConnection';
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
+import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -37,13 +38,7 @@ const getCasesToMovePetitioners = async (offset: number) => {
 };
 
 const associateUsersWithCases = async (
-  userOnCaseRecords: Array<{
-    userId: string;
-    docketNumber: string;
-    representing?: string[];
-    serviceIndicator?: string;
-    actingAsRole: Role;
-  }>,
+  userOnCaseRecords: Array<UserOnCaseAssociation>,
 ) => {
   if (!userOnCaseRecords.length) {
     return;

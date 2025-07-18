@@ -16,7 +16,8 @@ import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { associateUsersWithCasesPending } from '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending';
-import { Role, ROLES } from '@shared/business/entities/EntityConstants';
+import { ROLES } from '@shared/business/entities/EntityConstants';
+import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 const scriptConfig: ScriptConfig = {
   description: 'Move users and case associations from dynamo to postgres ',
@@ -50,13 +51,7 @@ async function main() {
 }
 
 async function associateUsersWithCases(
-  userOnCaseRecords: Array<{
-    userId: string;
-    docketNumber: string;
-    representing?: string[];
-    serviceIndicator?: string;
-    actingAsRole: Role;
-  }>,
+  userOnCaseRecords: Array<UserOnCaseAssociation>,
 ) {
   if (!userOnCaseRecords.length) {
     return;
@@ -118,20 +113,8 @@ async function scanContinuously(params: ScanCommandInput) {
   let lastEvaluatedKey: typeof params.ExclusiveStartKey | undefined = undefined;
 
   do {
-    const irsPractitionerCaseAssociations: Array<{
-      userId: string;
-      docketNumber: string;
-      representing?: string[];
-      serviceIndicator?: string;
-      actingAsRole: Role;
-    }> = []; // {pk: case|, sk: irsPractitioner| }
-    const privatePractitionerCaseAssociations: Array<{
-      userId: string;
-      docketNumber: string;
-      representing?: string[];
-      serviceIndicator?: string;
-      actingAsRole: Role;
-    }> = []; // {pk: case|, sk: privatePractitioner| }
+    const irsPractitionerCaseAssociations: Array<UserOnCaseAssociation> = []; // {pk: case|, sk: irsPractitioner| }
+    const privatePractitionerCaseAssociations: Array<UserOnCaseAssociation> = []; // {pk: case|, sk: privatePractitioner| }
     const userRecords: any[] = []; // {pk: user|, sk: user| }
     const userOnCasePendingRecords: any[] = []; // {pk: case|, sk: pending-case| }
     // const userRecords = [] // {pk: user|, sk: case| } We should not need to process these. For irs/private association is defined through the {pk: case|, sk: privatePractitioner| }. For petitioners it is defined by the dwCase.petitioners array

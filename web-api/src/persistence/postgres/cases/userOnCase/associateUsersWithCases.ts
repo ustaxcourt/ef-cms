@@ -1,15 +1,9 @@
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
 import { pgInsertInto } from '../../utils/operation/pgInsertInto';
-import { Role } from '@shared/business/entities/EntityConstants';
+import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 export const associateUsersWithCases = async (
-  userOnCaseRecords: Array<{
-    userId: string;
-    docketNumber: string;
-    representing?: string[];
-    serviceIndicator?: string;
-    actingAsRole: Role;
-  }>,
+  userOnCaseRecords: Array<UserOnCaseAssociation>,
 ) => {
   if (!userOnCaseRecords.length) {
     return;
