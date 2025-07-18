@@ -37,7 +37,7 @@ export const indexOpenSearchCases = async ({
     // Docket Entry Index
     caseIndexCommands.push({
       index: {
-        _id: `${marshalledCase.pk.S}_${marshalledCase.sk.S}|mapping'`,
+        _id: `${marshalledCase.pk.S}_${marshalledCase.sk.S}|mapping`,
         _index: efcmsDocketEntryIndex,
       },
     });
@@ -51,7 +51,7 @@ export const indexOpenSearchCases = async ({
     // Case Index
     caseIndexCommands.push({
       index: {
-        _id: `${marshalledCase.pk.S}_${marshalledCase.sk.S}'`,
+        _id: `${marshalledCase.pk.S}_${marshalledCase.sk.S}`,
         _index: efcmsCaseIndex,
       },
     });
@@ -59,5 +59,8 @@ export const indexOpenSearchCases = async ({
     caseIndexCommands.push(marshalledCase);
   }
 
-  await getSearchClient().bulk({ refresh: false, body: caseIndexCommands });
+  await getSearchClient().bulk({
+    refresh: false,
+    body: caseIndexCommands,
+  });
 };
