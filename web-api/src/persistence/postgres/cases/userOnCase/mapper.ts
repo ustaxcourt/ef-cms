@@ -1,3 +1,4 @@
+import { Role } from '@shared/business/entities/EntityConstants';
 import { NewUserOnCaseKysely } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 
 export function toKyselyNewUserOnCase(association: {
@@ -5,6 +6,7 @@ export function toKyselyNewUserOnCase(association: {
   docketNumber: string;
   representing?: string[];
   serviceIndicator?: string;
+  actingAsRole: Role;
 }): NewUserOnCaseKysely {
   return {
     userId: association.userId,
@@ -13,5 +15,6 @@ export function toKyselyNewUserOnCase(association: {
       ? JSON.stringify(association.representing)
       : null,
     serviceIndicator: association.serviceIndicator || null,
+    actingAsRole: association.actingAsRole,
   };
 }

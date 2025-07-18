@@ -240,7 +240,7 @@ async function getPrivatePractitioners({
       .selectFrom('dwUserOnCase as uoc')
       .innerJoin('dwUser as u', 'uoc.userId', 'u.userId')
       .where('uoc.docketNumber', 'in', docketNumbers)
-      .where('u.role', '=', ROLES.privatePractitioner)
+      .where('uoc.actingAsRole', '=', ROLES.privatePractitioner)
       .selectAll('uoc')
       .selectAll('u')
       .execute();
@@ -255,14 +255,16 @@ async function getIrsPractitioners({
   docketNumbers: string[];
 }) {
   const practitionerInfo = await getDbReader(reader => {
-    return reader
-      .selectFrom('dwUserOnCase as uoc')
-      .innerJoin('dwUser as u', 'uoc.userId', 'u.userId')
-      .where('uoc.docketNumber', 'in', docketNumbers)
-      .where('u.role', '=', ROLES.irsPractitioner)
-      .selectAll('uoc')
-      .selectAll('u')
-      .execute();
+    return (
+      reader
+        .selectFrom('dwUserOnCase as uoc')
+        .innerJoin('dwUser as u', 'uoc.userId', 'u.userId')
+        .where('uoc.docketNumber', 'in', docketNumbers)
+        .where('uoc.actingAsRole', '=', ROLES.irsPractitioner)
+        .selectAll('uoc')
+        .selectAll('u')
+        .execute()
+    );
   });
 
   return practitionerInfo;

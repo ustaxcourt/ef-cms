@@ -7,7 +7,7 @@ import {
 import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import { RawUser } from '@shared/business/entities/User';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import { Role, ROLES } from '@shared/business/entities/EntityConstants';
 import { getConnection } from '@web-api/getConnection';
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
 // import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
@@ -67,6 +67,7 @@ const associateUsersWithCases = async (
     docketNumber: string;
     representing?: string[];
     serviceIndicator?: string;
+    actingAsRole: Role;
   }>,
 ) => {
   if (!userOnCaseRecords.length) {
@@ -83,6 +84,7 @@ const associateUsersWithCases = async (
           oc.columns(['userId', 'docketNumber']).doUpdateSet(eb => ({
             representing: eb.ref('excluded.representing'),
             serviceIndicator: eb.ref('excluded.serviceIndicator'),
+            actingAsRole: eb.ref('excluded.actingAsRole'),
           })),
         )
         .returningAll()
@@ -97,7 +99,10 @@ async function main() {
   let casesToIndex = await getCasesToMovePetitioners(offset);
 
   while (!isEmpty(casesToIndex)) {
-    const petitionersToUpsert: (RawUser & { docketNumber: string })[] = [];
+    const petitionersToUpsert: (RawUser & {
+      docketNumber: string;
+      actingAsRole: Role;
+    })[] = [];
 
     casesToIndex.forEach(aCase => {
       aCase.petitioners?.forEach(petitioner => {
@@ -106,6 +111,7 @@ async function main() {
           userId: petitioner.contactId,
           role: ROLES.petitioner,
           docketNumber: aCase.docketNumber,
+          actingAsRole: ROLES.petitioner,
         };
         petitionersToUpsert.push(petitionerToUpsert);
       });

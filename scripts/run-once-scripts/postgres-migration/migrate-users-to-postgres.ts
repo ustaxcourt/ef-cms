@@ -16,6 +16,7 @@ import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
 import { RawUser } from '@shared/business/entities/User';
 import { associateUsersWithCasesPending } from '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending';
+import { Role, ROLES } from '@shared/business/entities/EntityConstants';
 
 const scriptConfig: ScriptConfig = {
   description: 'Move users and case associations from dynamo to postgres ',
@@ -54,6 +55,7 @@ async function associateUsersWithCases(
     docketNumber: string;
     representing?: string[];
     serviceIndicator?: string;
+    actingAsRole: Role;
   }>,
 ) {
   if (!userOnCaseRecords.length) {
@@ -70,6 +72,7 @@ async function associateUsersWithCases(
           oc.columns(['userId', 'docketNumber']).doUpdateSet(eb => ({
             representing: eb.ref('excluded.representing'),
             serviceIndicator: eb.ref('excluded.serviceIndicator'),
+            actingAsRole: eb.ref('excluded.actingAsRole'),
           })),
         )
         .returningAll()
@@ -118,12 +121,14 @@ async function scanContinuously(params: ScanCommandInput) {
       docketNumber: string;
       representing?: string[];
       serviceIndicator?: string;
+      actingAsRole: Role;
     }> = []; // {pk: case|, sk: irsPractitioner| }
     const privatePractitionerCaseAssociations: Array<{
       userId: string;
       docketNumber: string;
       representing?: string[];
       serviceIndicator?: string;
+      actingAsRole: Role;
     }> = []; // {pk: case|, sk: privatePractitioner| }
     const userRecords: any[] = []; // {pk: user|, sk: user| }
     const userOnCasePendingRecords: any[] = []; // {pk: case|, sk: pending-case| }
@@ -145,6 +150,7 @@ async function scanContinuously(params: ScanCommandInput) {
           docketNumber: record.pk.split('|')[1],
           userId: record.sk.split('|')[1],
           serviceIndicator: record.serviceIndicator,
+          actingAsRole: ROLES.irsPractitioner,
         });
       }
       if (
@@ -156,6 +162,7 @@ async function scanContinuously(params: ScanCommandInput) {
           userId: record.sk.split('|')[1],
           serviceIndicator: record.serviceIndicator,
           representing: record.representing,
+          actingAsRole: ROLES.privatePractitioner,
         });
       }
       if (record.pk.startsWith('user|') && record.sk.startsWith('user|')) {

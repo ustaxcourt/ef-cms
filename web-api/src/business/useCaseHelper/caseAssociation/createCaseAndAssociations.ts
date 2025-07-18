@@ -8,6 +8,7 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { Contact } from '@shared/business/entities/contacts/Contact';
 import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
+import { ROLES } from '@shared/business/entities/EntityConstants';
 
 const createCaseDocketEntries = async ({
   authorizedUser,
@@ -35,6 +36,7 @@ const connectIrsPractitioners = async ({ docketNumber, irsPractitioners }) => {
       docketNumber,
       userId: irs.userId,
       serviceIndicator: irs.serviceIndicator,
+      actingAsRole: ROLES.irsPractitioner,
     })),
   );
 };
@@ -52,6 +54,7 @@ const connectPrivatePractitioners = async ({
       userId: privatePractitioner.userId,
       serviceIndicator: privatePractitioner.serviceIndicator,
       representing: privatePractitioner.representing,
+      actingAsRole: ROLES.privatePractitioner,
     })),
   );
 };
@@ -68,6 +71,7 @@ const connectPetitioners = async ({
       docketNumber,
       userId: petitioner.contactId,
       serviceIndicator: petitioner.serviceIndicator,
+      actingAsRole: ROLES.petitioner,
     })),
   );
 };

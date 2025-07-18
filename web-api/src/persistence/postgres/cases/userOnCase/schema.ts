@@ -1,4 +1,5 @@
 import { ColumnType, Insertable, Selectable, Updateable } from 'kysely';
+import { Role } from '@shared/business/entities/EntityConstants';
 
 const DEFAULT = {};
 
@@ -7,6 +8,7 @@ const userOnCaseTableDefinition = {
   docketNumber: DEFAULT as string,
   representing: DEFAULT as ColumnType<string[], string, string> | null,
   serviceIndicator: DEFAULT as string | null,
+  actingAsRole: DEFAULT as Role,
 };
 
 export type UserOnCaseTable = typeof userOnCaseTableDefinition;

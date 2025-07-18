@@ -33,6 +33,7 @@ import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { removeCaseFromHearing } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
 import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
+import { Role, ROLES } from '@shared/business/entities/EntityConstants';
 
 // Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
 // In the future, it would be good to avoid doing so by leveraging SQL more effectively.
@@ -272,8 +273,14 @@ const getIrsPractitionersToDeleteAndUpdate = ({
   caseToUpdate: RawCase;
   oldCase: RawCase;
 }): {
-  irsPractitionersToDelete: (RawIrsPractitioner & { docketNumber: string })[];
-  irsPractitionersToUpdate: (RawIrsPractitioner & { docketNumber: string })[];
+  irsPractitionersToDelete: (RawIrsPractitioner & {
+    docketNumber: string;
+    actingAsRole: Role;
+  })[];
+  irsPractitionersToUpdate: (RawIrsPractitioner & {
+    docketNumber: string;
+    actingAsRole: Role;
+  })[];
 } => {
   const {
     added: addedIrsPractitioners,
@@ -294,10 +301,12 @@ const getIrsPractitionersToDeleteAndUpdate = ({
     irsPractitionersToDelete: deletedIrsPractitioners.map(irs => ({
       ...irs,
       docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.irsPractitioner,
     })),
     irsPractitionersToUpdate: validIrsPractitioners.map(irs => ({
       ...irs,
       docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.irsPractitioner,
     })),
   };
 };
@@ -311,9 +320,11 @@ const getPrivatePractitionersToDeleteAndUpdate = ({
 }): {
   privatePractitionersToDelete: (RawPrivatePractitioner & {
     docketNumber: string;
+    actingAsRole: Role;
   })[];
   privatePractitionersToUpdate: (RawPrivatePractitioner & {
     docketNumber: string;
+    actingAsRole: Role;
   })[];
 } => {
   const {
@@ -339,10 +350,12 @@ const getPrivatePractitionersToDeleteAndUpdate = ({
     privatePractitionersToDelete: deletedPrivatePractitioners.map(pp => ({
       ...pp,
       docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.privatePractitioner,
     })),
     privatePractitionersToUpdate: validPrivatePractitioners.map(pp => ({
       ...pp,
       docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.privatePractitioner,
     })),
   };
 };
@@ -357,10 +370,12 @@ const getPetitionersToDeleteAndUpdate = ({
   petitionersToDelete: (TPetitioner & {
     docketNumber: string;
     userId: string;
+    actingAsRole: Role;
   })[];
   petitionersToUpdate: (TPetitioner & {
     docketNumber: string;
     userId: string;
+    actingAsRole: Role;
   })[];
 } => {
   const {
@@ -376,11 +391,13 @@ const getPetitionersToDeleteAndUpdate = ({
       ...petitioner,
       userId: petitioner.contactId,
       docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.petitioner,
     })),
     petitionersToUpdate: currentPetitioners.map(petitioner => ({
       ...petitioner,
       userId: petitioner.contactId,
       docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.petitioner,
     })),
   };
 };
