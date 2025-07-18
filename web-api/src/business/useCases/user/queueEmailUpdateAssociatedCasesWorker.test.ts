@@ -12,7 +12,7 @@ import { petitionerUser } from '@shared/test/mockUsers';
 import { sleep } from '@shared/tools/helpers';
 import { getCasesByEmailTotal as getCasesByEmailTotalMock } from '@web-api/persistence/elasticsearch/getCasesByEmailTotal';
 import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
-import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 describe('queueEmailUpdateAssociatedCasesWorker', () => {
   const getCasesByEmailTotal = jest.mocked(getCasesByEmailTotalMock);

@@ -4,7 +4,7 @@ import { RawPractitioner } from '../../../../../shared/src/business/entities/Pra
 import { RawUser } from '../../../../../shared/src/business/entities/User';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 export const queueUpdateAssociatedCasesWorker = async (
   applicationContext: ServerApplicationContext,

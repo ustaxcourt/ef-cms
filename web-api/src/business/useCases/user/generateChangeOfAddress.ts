@@ -3,8 +3,8 @@ import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { SQSClient, SendMessageCommand } from '@aws-sdk/client-sqs';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getCasesForUser } from '@web-api/persistence/postgres/users/getCasesForUser';
 import { RawUser } from '@shared/business/entities/User';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 export type TUserContact = {
   address1: string;
@@ -58,7 +58,7 @@ export const generateChangeOfAddress = async ({
   websocketMessagePrefix?: 'user' | 'admin';
   authorizedUser: AuthUser;
 }): Promise<any[] | undefined> => {
-  const associatedUserCases = await getCasesForUser({
+  const associatedUserCases = await getDocketNumbersByUser({
     userId: user.userId,
   });
 
@@ -92,7 +92,7 @@ export const generateChangeOfAddress = async ({
   const jobId = applicationContext.getUniqueId();
 
   await applicationContext.getPersistenceGateway().createChangeOfAddressJob({
-    docketNumbers: associatedUserCases.map(caseInfo => caseInfo.docketNumber),
+    docketNumbers: associatedUserCases,
     jobId,
   });
 
@@ -100,12 +100,12 @@ export const generateChangeOfAddress = async ({
 
   if (isChangeOfAddressLambdaEnabled) {
     const sqs: SQSClient = await applicationContext.getMessagingClient();
-    const cmds = associatedUserCases.map(caseInfo => {
+    const cmds = associatedUserCases.map(docketNumber => {
       return new SendMessageCommand({
         MessageBody: JSON.stringify({
           bypassDocketEntry,
           contactInfo,
-          docketNumber: caseInfo.docketNumber,
+          docketNumber,
           firmName,
           jobId,
           oldUser,
@@ -125,7 +125,7 @@ export const generateChangeOfAddress = async ({
     await settlePromises(cmds.map(cmd => sqs.send(cmd)));
   } else {
     await settlePromises(
-      associatedUserCases.map(async caseInfo => {
+      associatedUserCases.map(async docketNumber => {
         return await applicationContext
           .getUseCaseHelpers()
           .generateChangeOfAddressHelper({
@@ -133,7 +133,7 @@ export const generateChangeOfAddress = async ({
             authorizedUser,
             bypassDocketEntry,
             contactInfo,
-            docketNumber: caseInfo.docketNumber,
+            docketNumber,
             firmName,
             jobId,
             oldUser,

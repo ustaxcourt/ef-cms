@@ -16,7 +16,7 @@ import { sleep } from '@shared/tools/helpers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { setChangeOfAddressCaseAsDone as setChangeOfAddressCaseAsDoneMock } from '@web-api/persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
-import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getUserByIdOnceAllUpdatesComplete as getUserByIdOnceAllUpdatesCompleteMock } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
@@ -25,7 +25,7 @@ const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const setChangeOfAddressCaseAsDone = jest.mocked(
   setChangeOfAddressCaseAsDoneMock,
 );
-const getCasesForUser = jest.mocked(getCasesForUserMock);
+const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
 const getUserByIdOnceAllUpdatesComplete = jest.mocked(
   getUserByIdOnceAllUpdatesCompleteMock,
 );
@@ -55,13 +55,15 @@ describe('determineEntitiesToLock', () => {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     };
-    getCasesForUser.mockResolvedValue(mockCases);
+    getDocketNumbersByUser.mockResolvedValue(
+      mockCases.map(c => c.docketNumber),
+    );
     getUserByIdOnceAllUpdatesComplete.mockResolvedValue(undefined as any);
   });
 
   it('should lookup the docket numbers for the specified user', async () => {
     await determineEntitiesToLock(applicationContext, mockParams);
-    expect(getCasesForUser).toHaveBeenCalledWith({
+    expect(getDocketNumbersByUser).toHaveBeenCalledWith({
       userId: mockParams.userId,
     });
   });
@@ -86,14 +88,14 @@ describe('determineEntitiesToLock', () => {
     void determineEntitiesToLock(applicationContext, mockParams);
 
     await sleep(50);
-    expect(getCasesForUser).not.toHaveBeenCalled();
+    expect(getDocketNumbersByUser).not.toHaveBeenCalled();
 
     await sleep(50);
-    expect(getCasesForUser).not.toHaveBeenCalled();
+    expect(getDocketNumbersByUser).not.toHaveBeenCalled();
 
     resolver!(null);
     await sleep(50);
-    expect(getCasesForUser).toHaveBeenCalled();
+    expect(getDocketNumbersByUser).toHaveBeenCalled();
   });
 });
 
@@ -112,7 +114,7 @@ describe('updateUserContactInformationInteractor', () => {
     getUserById.mockResolvedValue(MOCK_PRACTITIONER as DbUser);
     getUserByIdOnceAllUpdatesComplete.mockResolvedValue(null as any);
     getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
-    getCasesForUser.mockResolvedValue([MOCK_CASE]);
+    getDocketNumbersByUser.mockResolvedValue([MOCK_CASE.docketNumber]);
     setChangeOfAddressCaseAsDone.mockResolvedValue([
       { remaining: 0, jobId: '2918' },
     ]);

@@ -1,4 +1,4 @@
-jest.mock('@web-api/persistence/postgres/users/getCasesForUser');
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import {
   MOCK_PRACTITIONER,
@@ -6,7 +6,7 @@ import {
 } from '../../../../../shared/src/test/mockUsers';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { queueUpdateAssociatedCasesWorker } from './queueUpdateAssociatedCasesWorker';
-import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 describe('queueUpdateAssociatedCasesWorker', () => {
   const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);

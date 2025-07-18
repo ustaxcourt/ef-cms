@@ -1,5 +1,5 @@
 import '@web-api/persistence/postgres/utils/mocks.jest';
-jest.mock('@web-api/persistence/postgres/users/getCasesForUser');
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock('@web-api/persistence/postgres/users/getPractitionerByBarNumber');
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
@@ -12,7 +12,7 @@ import {
   updatePractitionerUserInteractor,
 } from './updatePractitionerUserInteractor';
 import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
-import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
 
 const tryGetLocks = jest.mocked(tryGetLocksMock);

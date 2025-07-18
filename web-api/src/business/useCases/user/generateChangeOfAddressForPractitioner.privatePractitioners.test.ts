@@ -1,7 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
-jest.mock('@web-api/persistence/postgres/users/getCasesForUser');
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -28,12 +28,12 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const getCasesForUser = jest.mocked(getCasesForUserMock);
+  const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
   const { docketNumber } = MOCK_CASE;
   const mockPrivatePractitioner = {
     admissionsDate: '2019-04-10',
@@ -81,7 +81,7 @@ describe('generateChangeOfAddress', () => {
     );
   });
   beforeEach(() => {
-    getCasesForUser.mockResolvedValue([{ docketNumber }]);
+    getDocketNumbersByUser.mockResolvedValue([docketNumber]);
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithPrivatePractitioner);
 
     applicationContext
@@ -111,7 +111,7 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
 
-    expect(getCasesForUser).toHaveBeenCalled();
+    expect(getDocketNumbersByUser).toHaveBeenCalled();
 
     expect(
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
@@ -142,9 +142,9 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should call applicationContext.logger.error and continue processing the next case if the case currently being processed is invalid', async () => {
-    getCasesForUser.mockResolvedValue([
-      { docketNumber: undefined as unknown as string },
-      { docketNumber: mockCaseWithPrivatePractitioner.docketNumber },
+    getDocketNumbersByUser.mockResolvedValue([
+      undefined as unknown as string,
+      mockCaseWithPrivatePractitioner.docketNumber,
     ]);
     getCaseByDocketNumber
       .mockResolvedValue({

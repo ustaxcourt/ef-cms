@@ -12,7 +12,6 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { Practitioner } from '@shared/business/entities/Practitioner';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
-import { getCasesForUser } from '@web-api/persistence/postgres/users/getCasesForUser';
 import {
   asyncHandleLockError,
   withLocking,
@@ -21,6 +20,7 @@ import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 /**
  * updateUserContactInformationHelper
@@ -191,10 +191,10 @@ export const determineEntitiesToLock = async (
 ) => {
   await getUserByIdOnceAllUpdatesComplete({ userId });
 
-  const cases = await getCasesForUser({ userId });
+  const cases = await getDocketNumbersByUser({ userId });
 
   return {
-    identifiers: cases?.map(item => `case|${item.docketNumber}`),
+    identifiers: cases?.map(docketNumber => `case|${docketNumber}`),
     ttl: 900,
   };
 };

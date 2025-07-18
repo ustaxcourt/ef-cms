@@ -4,7 +4,7 @@ import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-jest.mock('@web-api/persistence/postgres/users/getCasesForUser');
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock(
   '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
 );
@@ -25,7 +25,7 @@ import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
@@ -36,7 +36,7 @@ jest.mock('../addCoversheetInteractor', () => ({
 describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const getCasesForUser = jest.mocked(getCasesForUserMock);
+  const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
   // const upsertUsers = jest.mocked(upsertUsersMock);
   const { docketNumber } = MOCK_CASE;
   const mockIrsPractitioner = {
@@ -82,7 +82,7 @@ describe('generateChangeOfAddress', () => {
       ({ caseToUpdate }) => caseToUpdate,
     );
 
-    getCasesForUser.mockResolvedValue([{ docketNumber }]);
+    getDocketNumbersByUser.mockResolvedValue([docketNumber]);
 
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithIrsPractitioner);
 
@@ -191,7 +191,7 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should NOT send a notification to the user if they have no associated cases', async () => {
-    getCasesForUser.mockResolvedValueOnce([]);
+    getDocketNumbersByUser.mockResolvedValueOnce([]);
 
     await generateChangeOfAddress({
       applicationContext,

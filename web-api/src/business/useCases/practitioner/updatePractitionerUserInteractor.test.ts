@@ -12,7 +12,7 @@ import { updatePractitionerUser } from './updatePractitionerUserInteractor';
 import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 import { upsertUsers as upsertUsersMock } from '@web-api/persistence/postgres/users/upsertUsers';
-import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { upsertPractitioner as upsertPractitionerMock } from '@web-api/persistence/postgres/users/upsertPractitioner';
 
 describe('updatePractitionerUser', () => {

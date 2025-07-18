@@ -51,18 +51,6 @@ describe('updateCaseAndAssociations', () => {
     getCaseDeadlinesByDocketNumberMock as jest.Mock;
   const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
   const removeCaseFromHearing = jest.mocked(removeCaseFromHearingMock);
-  // const updateIrsPractitionerOnCase = jest.mocked(
-  //   updateIrsPractitionerOnCaseMock,
-  // );
-  // const removeIrsPractitionerOnCase = jest.mocked(
-  //   removeIrsPractitionerOnCaseMock,
-  // );
-  // const updatePrivatePractitionerOnCase = jest.mocked(
-  //   updatePrivatePractitionerOnCaseMock,
-  // );
-  // const removePrivatePractitionerOnCase = jest.mocked(
-  //   removePrivatePractitionerOnCaseMock,
-  // );
 
   beforeAll(() => {
     validMockCase = new Case(

@@ -13,7 +13,7 @@ import {
 import { compareISODateStrings } from '../utilities/sortFunctions';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { partition, uniqBy } from 'lodash';
-import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 interface UserCaseDTO {

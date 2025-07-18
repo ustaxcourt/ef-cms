@@ -8,9 +8,9 @@ import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
-import { getCasesForUser as getCasesForUserMock } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
-const getCasesForUser = jest.mocked(getCasesForUserMock);
+const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
 
 describe('getCasesForUserInteractor', () => {
   const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
@@ -83,14 +83,16 @@ describe('getCasesForUserInteractor', () => {
       memberCase1.petitioners = [];
       leadCase.petitioners = [];
 
-      getCasesForUser.mockResolvedValue([
-        unconsolidatedCase1,
-        unconsolidatedCase2,
-        unconsolidatedCase3,
-        unconsolidatedClosedCase1,
-        unconsolidatedClosedCase2,
-        memberCase2,
-      ]);
+      getDocketNumbersByUser.mockResolvedValue(
+        [
+          unconsolidatedCase1,
+          unconsolidatedCase2,
+          unconsolidatedCase3,
+          unconsolidatedClosedCase1,
+          unconsolidatedClosedCase2,
+          memberCase2,
+        ].map(c => c.docketNumber),
+      );
 
       getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
@@ -154,7 +156,9 @@ describe('getCasesForUserInteractor', () => {
         },
         memberCase1,
       ];
-      getCasesForUser.mockResolvedValue(consolidatedGroup);
+      getDocketNumbersByUser.mockResolvedValue(
+        consolidatedGroup.map(c => c.docketNumber),
+      );
       getCasesByDocketNumbers.mockResolvedValue(consolidatedGroup);
       getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
@@ -182,7 +186,9 @@ describe('getCasesForUserInteractor', () => {
         { ...leadCase, petitioners: [], status: CASE_STATUS_TYPES.closed },
         memberCase1,
       ];
-      getCasesForUser.mockResolvedValue([memberCase1]);
+      getDocketNumbersByUser.mockResolvedValue(
+        [memberCase1].map(c => c.docketNumber),
+      );
       getCasesByDocketNumbers.mockResolvedValue([memberCase1]);
       getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
@@ -210,7 +216,9 @@ describe('getCasesForUserInteractor', () => {
         leadCase,
         { ...memberCase1, petitioners: [], status: CASE_STATUS_TYPES.closed },
       ];
-      getCasesForUser.mockResolvedValue([leadCase]);
+      getDocketNumbersByUser.mockResolvedValue(
+        [leadCase].map(c => c.docketNumber),
+      );
       getCasesByDocketNumbers.mockResolvedValue([leadCase]);
       getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
@@ -260,7 +268,9 @@ describe('getCasesForUserInteractor', () => {
           closedDate: '2045-08-16T17:29:10.132Z',
         },
       ];
-      getCasesForUser.mockResolvedValue([leadCase, ...unconsolidatedCases]);
+      getDocketNumbersByUser.mockResolvedValue(
+        [leadCase, ...unconsolidatedCases].map(c => c.docketNumber),
+      );
       getCasesByDocketNumbers.mockResolvedValue([
         leadCase,
         ...unconsolidatedCases,
@@ -284,14 +294,16 @@ describe('getCasesForUserInteractor', () => {
       memberCase1.petitioners = [];
       leadCase.petitioners = [];
 
-      getCasesForUser.mockResolvedValue([
-        unconsolidatedCase1,
-        unconsolidatedCase2,
-        unconsolidatedCase3,
-        unconsolidatedClosedCase1,
-        unconsolidatedClosedCase2,
-        memberCase2,
-      ]);
+      getDocketNumbersByUser.mockResolvedValue(
+        [
+          unconsolidatedCase1,
+          unconsolidatedCase2,
+          unconsolidatedCase3,
+          unconsolidatedClosedCase1,
+          unconsolidatedClosedCase2,
+          memberCase2,
+        ].map(c => c.docketNumber),
+      );
       getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
@@ -325,11 +337,13 @@ describe('getCasesForUserInteractor', () => {
 
   describe('Non Consolidated Cases', () => {
     it('should return the expected associated cases with NO consolidated groups or lead cases', async () => {
-      getCasesForUser.mockResolvedValue([
-        unconsolidatedCase1,
-        unconsolidatedCase2,
-        unconsolidatedClosedCase1,
-      ]);
+      getDocketNumbersByUser.mockResolvedValue(
+        [
+          unconsolidatedCase1,
+          unconsolidatedCase2,
+          unconsolidatedClosedCase1,
+        ].map(c => c.docketNumber),
+      );
       getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
@@ -363,12 +377,14 @@ describe('getCasesForUserInteractor', () => {
       };
 
       //construct list of cases w/ at least one bogus/corrupted record
-      getCasesForUser.mockResolvedValue([
-        unconsolidatedCase1,
-        unconsolidatedCase2,
-        unconsolidatedClosedCase1,
-        corruptedCase,
-      ]);
+      getDocketNumbersByUser.mockResolvedValue(
+        [
+          unconsolidatedCase1,
+          unconsolidatedCase2,
+          unconsolidatedClosedCase1,
+          corruptedCase,
+        ].map(c => c.docketNumber),
+      );
       getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,

@@ -10,10 +10,6 @@ import { RawUser } from '@shared/business/entities/User';
 import { Role, ROLES } from '@shared/business/entities/EntityConstants';
 import { getConnection } from '@web-api/getConnection';
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
-// import { RawIrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-// import { RawPractitioner } from '@shared/business/entities/Practitioner';
-// import { toKyselyNewUser } from '@web-api/persistence/postgres/users/mapper';
-// import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -40,27 +36,6 @@ const getCasesToMovePetitioners = async (offset: number) => {
   );
 };
 
-// const upsertUsers = async (
-//   users: (RawUser | RawPractitioner | RawIrsPractitioner)[],
-// ): Promise<void> => {
-//   const dbUsers = users.map(user => toKyselyNewUser(user));
-
-//   // Bypassing upsertUsers + pgInsertInto as there will be duplicate information in petitioners.
-//   // When we upsert there will be duplicate petitioners with the same contactId in the same insert statement.
-//   // This onConflict doNothing() will pick the first value if there are duplicate userIds
-//   await getDbWriter({
-//     action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
-//     cb: db =>
-//       db
-//         .insertInto('dwUser')
-//         .values(dbUsers)
-//         .onConflict(oc => oc.columns(['userId']).doNothing())
-//         .returningAll()
-//         .execute(),
-//     table: 'dwUser',
-//   });
-// };
-
 const associateUsersWithCases = async (
   userOnCaseRecords: Array<{
     userId: string;
@@ -75,6 +50,7 @@ const associateUsersWithCases = async (
   }
   const dbUserOnCases = userOnCaseRecords.map(toKyselyNewUserOnCase);
 
+  // We are specifically not using pgInsertInto because we do not want to trigger openSearch. We do not want to trigger openSearch because not all users have been moved yet.
   await getConnection({
     cb: db =>
       db
@@ -116,7 +92,6 @@ async function main() {
         petitionersToUpsert.push(petitionerToUpsert);
       });
     });
-    // await upsertUsers(petitionersToUpsert);
     await associateUsersWithCases(petitionersToUpsert);
 
     totalItems += casesToIndex.length;

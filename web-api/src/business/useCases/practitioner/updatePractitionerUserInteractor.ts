@@ -12,7 +12,7 @@ import {
   Practitioner,
 } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
-import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { upsertPractitioner } from '@web-api/persistence/postgres/users/upsertPractitioner';
 import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
 import {

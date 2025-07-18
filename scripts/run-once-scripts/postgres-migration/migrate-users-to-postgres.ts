@@ -63,6 +63,7 @@ async function associateUsersWithCases(
   }
   const dbUsers = userOnCaseRecords.map(toKyselyNewUserOnCase);
 
+  // We are specifically not using pgInsertInto because we do not want to trigger openSearch. We do not want to trigger openSearch because not all users have been moved yet.
   await getConnection({
     cb: db =>
       db
@@ -88,6 +89,7 @@ const upsertUsers = async (
   }
   const dbUsers = users.map(toKyselyNewUser);
 
+  // We are specifically not using pgInsertInto because we do not want to trigger openSearch. We do not want to trigger openSearch because not all users have been moved yet.
   await getConnection({
     cb: db =>
       db

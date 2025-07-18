@@ -9,7 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { partition } from 'lodash';
-import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const getPractitionerCasesInteractor = async (

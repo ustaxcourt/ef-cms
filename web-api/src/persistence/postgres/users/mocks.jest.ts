@@ -4,7 +4,7 @@ jest.mock('@web-api/persistence/postgres/users/createBarNumber', () =>
   mockFactory('createBarNumber'),
 );
 
-jest.mock('@web-api/persistence/postgres/users/getCasesForUser', () => {
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser', () => {
   return {
     ...mockFactory('getCasesForUser'),
     ...mockFactory('getDocketNumbersByUser'),

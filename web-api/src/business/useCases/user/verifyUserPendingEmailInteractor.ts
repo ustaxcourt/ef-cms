@@ -15,7 +15,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
-import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getCasesForUser';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getUserByIdOnceAllUpdatesComplete } from '@web-api/persistence/postgres/users/getUserByIdOnceAllUpdatesComplete';
 
 export const TOKEN_EXPIRATION_TIME_HOURS = 24;
