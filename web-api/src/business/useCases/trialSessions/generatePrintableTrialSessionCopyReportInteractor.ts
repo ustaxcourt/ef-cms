@@ -18,7 +18,6 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     showCaseNotes,
     sort,
     userHeading,
-    trialStatusCounts,
   }: {
     filters: TPrintableTableFilters;
     formattedCases: Case[];
@@ -27,7 +26,6 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     showCaseNotes: boolean;
     sort: string;
     userHeading: string;
-    trialStatusCounts: {[caseNumber: string]: number}
   },
   authorizedUser: UnknownAuthUser,
 ): Promise<string> => {
@@ -49,7 +47,6 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
         showCaseNotes,
         sort,
         userHeading,
-        trialStatusCounts,
       },
     });
 

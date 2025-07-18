@@ -2,7 +2,6 @@ import {
   FORMATTED_CASES,
   FORMATTED_TRIAL_SESSION,
   SESSION_NOTES,
-  TRIAL_STATUS_COUNTS,
 } from './constants/printableTrialSessionWorkingCopyConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generateAndVerifyPdfDiff } from './generateAndVerifyPdfDiff';
@@ -33,7 +32,6 @@ describe('printableWorkingCopySessionList', () => {
           showCaseNotes: true,
           sort: 'docket',
           userHeading: 'Gustafson - Session Copy',
-          trialStatusCounts: TRIAL_STATUS_COUNTS,
         },
       }),
     testDescription:
@@ -72,7 +70,6 @@ describe('printableWorkingCopySessionList', () => {
           showCaseNotes: true,
           sort: 'docket',
           userHeading: 'Gustafson - Session Copy',
-          trialStatusCounts: TRIAL_STATUS_COUNTS,
         },
       }),
     testDescription:
@@ -103,7 +100,6 @@ describe('printableWorkingCopySessionList', () => {
           showCaseNotes: true,
           sort: 'docket',
           userHeading: 'Gustafson - Session Copy',
-          trialStatusCounts: TRIAL_STATUS_COUNTS,
         },
       }),
     testDescription:
@@ -132,7 +128,6 @@ describe('printableWorkingCopySessionList', () => {
           showCaseNotes: false,
           sort: 'docket',
           userHeading: 'Gustafson - Session Copy',
-          trialStatusCounts: TRIAL_STATUS_COUNTS,
         },
       }),
     testDescription:
@@ -161,7 +156,6 @@ describe('printableWorkingCopySessionList', () => {
           showCaseNotes: false,
           sort: 'docket',
           userHeading: 'Gustafson - Session Copy',
-          trialStatusCounts: TRIAL_STATUS_COUNTS,
         },
       }),
     testDescription:

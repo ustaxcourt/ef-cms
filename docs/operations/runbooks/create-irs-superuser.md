@@ -22,23 +22,15 @@ This runbook describes the process of creating a new IRS superuser for the IRS t
     ```bash
     . scripts/env/set-env.zsh myenv
     ```
-1. Make a note of the IRS Cognito pool's client id, which will have been set as an environment variable by the environment switcher:
-   ```bash
-   echo $IRS_CLIENT_ID
-   ```
 1. Create a user in the deployed DAWSON environment's IRS Cognito pool:
     ```bash
-    NEW_UUID=$(scripts/generate-uuid.ts)
     aws cognito-idp admin-create-user \
      --user-pool-id "$COGNITO_IRS_USER_POOL" \
      --username "$IRS_SUPERUSER_EMAIL" \
      --temporary-password "$IRS_SUPERUSER_PASS" \
-     --user-attributes \
-       Name="name",Value="${IRS_SUPERUSER_EMAIL}" \
-       Name="custom:role",Value="irsSuperuser" \
-       Name="custom:userId",Value="${NEW_UUID}"
+     --user-attributes Name="name",Value="${IRS_SUPERUSER_EMAIL}" Name="custom:role",Value="irsSuperuser"
     ```
 1. Follow the rest of the "Getting Started" instructions in [irs-super-user.md](../../additional-resources/irs-super-user.md), starting after the `aws cognito-idp` command that is very similar to the one you just ran.
-1. After completing MFA enrollment and verification, create a new text file containing the client id that you echoed earlier along with this IRS superuser's email address, password, and MFA secret.
+1. After completing MFA enrollment and verification, create a new text file containing this IRS superuser's password and MFA secret.
 1. Upload the text file containing the credentials to the provided KiteWorks directory and notify the IRS stakeholders.
 1. Delete your local copy of the file and remove the credentials from the `.env` file that you edited earlier.

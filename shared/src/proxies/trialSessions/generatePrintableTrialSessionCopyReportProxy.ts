@@ -19,7 +19,6 @@ export const generatePrintableTrialSessionCopyReportInteractor = (
     sort,
     trialSessionId,
     userHeading,
-    trialStatusCounts,
   },
 ) => {
   return post({
@@ -32,7 +31,6 @@ export const generatePrintableTrialSessionCopyReportInteractor = (
       showCaseNotes,
       sort,
       userHeading,
-      trialStatusCounts,
     },
     endpoint: `/trial-sessions/${trialSessionId}/printable-working-copy`,
   });
