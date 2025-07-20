@@ -16,7 +16,7 @@ export const indexOpenSearchCases = async ({
 }: {
   message: OpenSearchSyncMessage;
 }): Promise<void> => {
-  const docketNumbers = isArray(message.payload)
+  const docketNumbers: string[] = isArray(message.payload)
     ? message.payload
     : [message.payload];
   const cases = await getCasesByDocketNumbers({
