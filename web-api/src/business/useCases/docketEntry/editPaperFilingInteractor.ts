@@ -18,13 +18,15 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { cloneDeep, uniq } from 'lodash';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
+import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { settlePromises } from '@web-api/utilities/settlePromises';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import {
   asyncHandleLockError,
   withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
-import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
+} from '@web-api/persistence/postgres/utils/mutex';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -53,7 +55,6 @@ export const editPaperFiling = async (
   }
 
   const { caseEntity, docketEntryEntity } = await getDocketEntryToEdit({
-    applicationContext,
     authorizedUser,
     docketEntryId: request.docketEntryId,
     docketNumber: request.documentMetadata.docketNumber,
@@ -132,8 +133,7 @@ const saveForLaterStrategy = async ({
     user,
   });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });
@@ -251,14 +251,11 @@ const serveDocketEntry = async ({
   message: string;
   authorizedUser: AuthUser;
 }) => {
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocketEntryPendingServiceStatus({
-      applicationContext,
-      docketEntryId: docketEntryEntity.docketEntryId,
-      docketNumber: subjectCaseEntity.docketNumber,
-      status: true,
-    });
+  await updateDocketEntryPendingServiceStatus({
+    docketEntryId: docketEntryEntity.docketEntryId,
+    docketNumber: subjectCaseEntity.docketNumber,
+    status: true,
+  });
 
   try {
     const user = await applicationContext
@@ -310,23 +307,17 @@ const serveDocketEntry = async ({
       userId: user.userId,
     });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
-        applicationContext,
-        docketEntryId: docketEntryEntity.docketEntryId,
-        docketNumber: subjectCaseEntity.docketNumber,
-        status: false,
-      });
+    await updateDocketEntryPendingServiceStatus({
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber: subjectCaseEntity.docketNumber,
+      status: false,
+    });
   } catch (e) {
-    await applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
-        applicationContext,
-        docketEntryId: docketEntryEntity.docketEntryId,
-        docketNumber: subjectCaseEntity.docketNumber,
-        status: false,
-      });
+    await updateDocketEntryPendingServiceStatus({
+      docketEntryId: docketEntryEntity.docketEntryId,
+      docketNumber: subjectCaseEntity.docketNumber,
+      status: false,
+    });
 
     throw e;
   }
@@ -403,7 +394,6 @@ const updateDocketEntry = async ({
     eventCode: documentMetadata.eventCode,
     filers: documentMetadata.filers,
     freeText: documentMetadata.freeText,
-    freeText2: documentMetadata.freeText2,
     hasOtherFilingParty: documentMetadata.hasOtherFilingParty,
     isFileAttached: documentMetadata.isFileAttached,
     lodged: documentMetadata.lodged,
@@ -470,12 +460,10 @@ const updateAndSaveWorkItem = async ({
 };
 
 const getDocketEntryToEdit = async ({
-  applicationContext,
   authorizedUser,
   docketEntryId,
   docketNumber,
 }: {
-  applicationContext: ServerApplicationContext;
   docketNumber: string;
   docketEntryId: string;
   authorizedUser: AuthUser;
@@ -484,7 +472,6 @@ const getDocketEntryToEdit = async ({
   docketEntryEntity: DocketEntry;
 }> => {
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
