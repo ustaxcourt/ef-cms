@@ -748,7 +748,10 @@ export const setupTest = ({ constantsOverrides = {} } = {}) => {
     return value;
   });
 
-  const routes = [];
+  const routes: {
+    cb: Function;
+    route: string;
+  }[] = [];
 
   presenter.providers.router = {
     back,

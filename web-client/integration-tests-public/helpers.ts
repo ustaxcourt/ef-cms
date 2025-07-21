@@ -1,4 +1,4 @@
-import { CerebralTest } from 'cerebral/test';
+import { CerebralTest, CerebralTestType } from 'cerebral/test';
 import { applicationContextPublic as applicationContext } from '../src/applicationContextPublic';
 import { getFakeFile } from '../../shared/src/business/test/getFakeFile';
 import { isFunction, mapValues } from 'lodash';
@@ -8,7 +8,11 @@ import { withAppContextDecorator } from '../src/withAppContext';
 export const fakeFile = getFakeFile();
 
 export const setupTest = ({ useCases = {} } = {}) => {
-  let cerebralTest;
+  const cerebralTest: CerebralTestType & {
+    closeSocket?: Function;
+    currentRouteUrl?: string | null;
+    docketNumber?: string;
+  } = CerebralTest(presenter);
 
   presenter.providers.applicationContext = applicationContext;
   const originalUseCases = applicationContext.getUseCases();
@@ -51,10 +55,10 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
-  cerebralTest = CerebralTest(presenter);
   cerebralTest.closeSocket = () => {
     /* no-op */
   };
+
   cerebralTest.currentRouteUrl = null;
 
   return cerebralTest;

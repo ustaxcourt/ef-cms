@@ -83,7 +83,7 @@ export const socketProvider = ({ socketRouter }) => {
     }
   };
 
-  const initialize = (_app, _applicationContext) => {
+  const initialize = (_app, _applicationContext?) => {
     app = _app;
     applicationContext = _applicationContext;
   };
