@@ -1,7 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
   mockDocketClerkUser,
@@ -16,7 +15,6 @@ describe('unsealDocketEntryInteractor', () => {
   it('should only allow docket clerks to unseal a docket entry', async () => {
     await expect(
       unsealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: '101-20',
@@ -30,7 +28,6 @@ describe('unsealDocketEntryInteractor', () => {
     getCaseByDocketNumber.mockReturnValue({});
     await expect(
       unsealDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: '101-20',
@@ -43,7 +40,6 @@ describe('unsealDocketEntryInteractor', () => {
   it('should mark the docket entry as unsealed and save', async () => {
     getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     const unsealedDocketEntry = await unsealDocketEntryInteractor(
-      applicationContext,
       {
         docketEntryId: answerDocketEntryId,
         docketNumber: MOCK_CASE.docketNumber,

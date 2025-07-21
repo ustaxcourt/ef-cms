@@ -40,7 +40,6 @@ describe('getHealthCheckInteractor', () => {
           getTableStatus: () => 'ACTIVE',
         };
       },
-      getScannerResourceUri: () => '',
       logger: {
         error: () => {},
       },
@@ -52,7 +51,6 @@ describe('getHealthCheckInteractor', () => {
         efcms: true,
         efcmsDeploy: true,
       },
-      dynamsoft: true,
       elasticsearch: true,
       emailService: true,
       s3: {
@@ -104,7 +102,6 @@ describe('getHealthCheckInteractor', () => {
           },
         };
       },
-      getScannerResourceUri: () => '',
       logger: {
         error: () => {},
       },
@@ -116,7 +113,6 @@ describe('getHealthCheckInteractor', () => {
         efcms: false,
         efcmsDeploy: false,
       },
-      dynamsoft: false,
       elasticsearch: false,
       emailService: false,
       s3: {

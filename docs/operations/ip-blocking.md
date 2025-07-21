@@ -41,7 +41,7 @@ The script accepts both IPv4 and IPv6 addresses.
 
 4. Save the IP set by clicking `Add`.
 
-5. Repeat this process for both `us-east-1` and `us-west-1` regions.
+5. Repeat this process for the `us-east-1` region.
 
 ## What happens to blocked requests?
 

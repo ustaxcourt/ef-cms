@@ -1,4 +1,23 @@
+import { RawContact } from '@shared/business/entities/contacts/Contact';
+import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 import React from 'react';
+
+export type AddressLabelParams = Pick<
+  RawContact,
+  | 'additionalName'
+  | 'address1'
+  | 'address2'
+  | 'address3'
+  | 'city'
+  | 'country'
+  | 'countryType'
+  | 'inCareOf'
+  | 'name'
+  | 'postalCode'
+  | 'secondaryName'
+  | 'state'
+  | 'title'
+>;
 
 export const AddressLabel = ({
   additionalName,
@@ -14,7 +33,7 @@ export const AddressLabel = ({
   secondaryName,
   state,
   title,
-}) => {
+}: AddressLabelParams) => {
   return (
     <div className="address-label">
       <style type="text/css">
@@ -40,7 +59,7 @@ export const AddressLabel = ({
       <div>
         {city}, {state} {postalCode}
       </div>
-      <div>{countryType === 'international' && country}</div>
+      <div>{countryType === COUNTRY_TYPES.INTERNATIONAL && country}</div>
     </div>
   );
 };

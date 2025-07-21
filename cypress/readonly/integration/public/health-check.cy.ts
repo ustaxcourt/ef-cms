@@ -2,7 +2,6 @@ const HEALTH_CHECK_IDS = [
   'cognito',
   'dynamoEfcms',
   'dynamo-deploy-table',
-  'dynamsoft',
   'elasticsearch',
   // 'emailService', disable for now due to flaky tests
   's3-app',

@@ -54,7 +54,6 @@ app.use(expressLogger);
 import { casePublicSearchLambda } from './lambdas/public-api/casePublicSearchLambda';
 import { generatePublicDocketRecordPdfLambda } from './lambdas/public-api/generatePublicDocketRecordPdfLambda';
 import { getAllFeatureFlagsLambda } from './lambdas/featureFlag/getAllFeatureFlagsLambda';
-import { getCachedHealthCheckLambda } from '@web-api/lambdas/health/getCachedHealthCheckLambda';
 import { getHealthCheckLambda } from './lambdas/health/getHealthCheckLambda';
 import { getMaintenanceModeLambda } from './lambdas/maintenance/getMaintenanceModeLambda';
 import { getPractitionerByBarNumberLambda } from '@web-api/lambdas/practitioners/getPractitionerByBarNumberLambda';
@@ -128,10 +127,6 @@ app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
  */
 {
   app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
-  app.get(
-    '/public-api/cached-health',
-    lambdaWrapper(getCachedHealthCheckLambda),
-  );
   app.get(
     '/public-api/maintenance-mode',
     lambdaWrapper(getMaintenanceModeLambda),

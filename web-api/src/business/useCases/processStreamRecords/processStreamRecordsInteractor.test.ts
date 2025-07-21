@@ -2,12 +2,10 @@ jest.mock('./processStreamUtilities');
 jest.mock('./processDocketEntries');
 jest.mock('./processPractitionerMappingEntries');
 jest.mock('./processRemoveEntries');
-jest.mock('./processCaseEntries');
 jest.mock('./processOtherEntries');
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { partitionRecords } from './processStreamUtilities';
-import { processCaseEntries } from './processCaseEntries';
 import { processDocketEntries } from './processDocketEntries';
 import { processOtherEntries } from './processOtherEntries';
 import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
@@ -20,7 +18,6 @@ const errorSpy = jest.spyOn(logger, 'error');
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {
     (processRemoveEntries as jest.Mock).mockResolvedValue([]);
-    (processCaseEntries as jest.Mock).mockResolvedValue([]);
     (processDocketEntries as jest.Mock).mockResolvedValue([]);
     (processPractitionerMappingEntries as jest.Mock).mockResolvedValue([]);
     (processOtherEntries as jest.Mock).mockResolvedValue([]);
@@ -58,28 +55,10 @@ describe('processStreamRecordsInteractor', () => {
     ).rejects.toThrow();
 
     expect(processRemoveEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(processCaseEntries).not.toHaveBeenCalled();
     expect(processDocketEntries).not.toHaveBeenCalled();
     expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
-  });
-
-  it('should log an error, throw an exception, and halt further execution when processCaseEntries fails', async () => {
-    (processCaseEntries as jest.Mock).mockRejectedValueOnce(new Error());
-
-    await expect(
-      processStreamRecordsInteractor(applicationContext, {
-        recordsToProcess: [],
-      }),
-    ).rejects.toThrow();
-
-    expect(processRemoveEntries).toHaveBeenCalled();
-    expect(processCaseEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(processDocketEntries).not.toHaveBeenCalled();
-    expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
-    expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processDocketEntries fails', async () => {
@@ -92,11 +71,10 @@ describe('processStreamRecordsInteractor', () => {
     ).rejects.toThrow();
 
     expect(processRemoveEntries).toHaveBeenCalled();
-    expect(processCaseEntries).toHaveBeenCalled();
     expect(processDocketEntries).toHaveBeenCalled(); // the one that throws an error
     expect(processPractitionerMappingEntries).not.toHaveBeenCalled();
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processPractitionerMappingEntries fails', async () => {
@@ -111,11 +89,10 @@ describe('processStreamRecordsInteractor', () => {
     ).rejects.toThrow();
 
     expect(processRemoveEntries).toHaveBeenCalled();
-    expect(processCaseEntries).toHaveBeenCalled();
     expect(processDocketEntries).toHaveBeenCalled();
     expect(processPractitionerMappingEntries).toHaveBeenCalled(); // the one that throws an error
     expect(processOtherEntries).not.toHaveBeenCalled();
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 
   it('should log an error, throw an exception, and halt further execution when processOtherEntries fails', async () => {
@@ -128,10 +105,9 @@ describe('processStreamRecordsInteractor', () => {
     ).rejects.toThrow();
 
     expect(processRemoveEntries).toHaveBeenCalled();
-    expect(processCaseEntries).toHaveBeenCalled();
     expect(processDocketEntries).toHaveBeenCalled();
     expect(processPractitionerMappingEntries).toHaveBeenCalled();
     expect(processOtherEntries).toHaveBeenCalled(); // the one that throws an error
-    expect(errorSpy).toHaveBeenCalledTimes(2);
+    expect(errorSpy).toHaveBeenCalled();
   });
 });

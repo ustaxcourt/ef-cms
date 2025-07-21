@@ -36,7 +36,6 @@ EOF
 }
 
 resource "aws_s3_bucket" "documents_us_east_1" {
-  provider = aws.us-east-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-east-1"
   tags = {
     environment = var.environment

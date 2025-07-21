@@ -6,7 +6,7 @@ export const sendMaintenanceNotificationsInteractor = async (
 ) => {
   const allWebsocketConnections = await applicationContext
     .getPersistenceGateway()
-    .getAllWebSocketConnections({ applicationContext });
+    .getAllWebSocketConnections();
 
   await applicationContext
     .getPersistenceGateway()

@@ -28,7 +28,6 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   currentPageIndex={practitionerSearchHelper.activePage}
-                  showSinglePage={true}
                   totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({
@@ -169,7 +168,6 @@ export const PractitionerSearchResults = connect(
               {practitionerSearchHelper.showPaginator && (
                 <Paginator
                   currentPageIndex={practitionerSearchHelper.activePage}
-                  showSinglePage={true}
                   totalPages={practitionerSearchHelper.pageCount}
                   onPageChange={pageChange => {
                     submitPractitionerNameSearchSequence({

@@ -1,4 +1,4 @@
-import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
+import { getChromiumBrowser } from '@shared/business/utilities/chromium/getChromiumBrowser';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { sleep } from '@shared/tools/helpers';
 import {

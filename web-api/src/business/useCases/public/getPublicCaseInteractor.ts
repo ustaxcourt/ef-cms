@@ -3,15 +3,14 @@ import { CaseFactory } from '@shared/business/entities/cases/CaseFactory';
 import { NotFoundError } from '@web-api/errors/errors';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { RestrictedCase } from '@shared/business/entities/cases/RestrictedCase';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 
-export const getPublicCaseInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { docketNumber }: { docketNumber: string },
-) => {
+export const getPublicCaseInteractor = async ({
+  docketNumber,
+}: {
+  docketNumber: string;
+}) => {
   const rawCaseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: Case.formatDocketNumber(docketNumber),
   });
 

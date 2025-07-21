@@ -20,11 +20,15 @@ You will only have to follow these steps once per environment. If you have alrea
     ```
 1. Create a user in the desired environment's IRS Cognito pool:
     ```bash
+    NEW_UUID=$(scripts/generate-uuid.ts)
     aws cognito-idp admin-create-user \
      --user-pool-id "$COGNITO_IRS_USER_POOL" \
      --username "$IRS_SUPERUSER_EMAIL" \
      --temporary-password "$DEFAULT_ACCOUNT_PASS" \
-     --user-attributes Name="name",Value="${IRS_SUPERUSER_EMAIL}" Name="custom:role",Value="irsSuperuser"
+     --user-attributes \
+       Name="name",Value="${IRS_SUPERUSER_EMAIL}" \
+       Name="custom:role",Value="irsSuperuser" \
+       Name="custom:userId",Value="${NEW_UUID}"
     ```
 1. Run the `irs-super-user.ts` script to enroll your IRS test user in MFA:
     ```bash

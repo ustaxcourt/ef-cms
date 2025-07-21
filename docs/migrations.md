@@ -26,11 +26,6 @@ The following is an example of how one might write a migration script for this s
 // this is needed for various utility functions and writing to dynamo
 const createApplicationContext = require('../../../../src/applicationContext');
 
-// a utility function for combining all the separate case dynamo records into a single case object
-const {
-  aggregateCaseItems,
-} = require('../../../../../web-api/src/persistence/dynamo/helpers/aggregateCaseItems');
-
 // since we will be adding a field to the case, we need to bring in the case entity to validate our data.
 const {
   Case,

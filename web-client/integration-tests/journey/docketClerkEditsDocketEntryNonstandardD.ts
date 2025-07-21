@@ -86,7 +86,7 @@ export const docketClerkEditsDocketEntryNonstandardD = cerebralTest => {
       documentTitle: 'Certificate of Service of Petition 05-05-2015',
       documentType: 'Certificate of Service',
       eventCode: 'MISCL',
-      serviceDate: '2015-05-05T00:00:00.000-04:00',
+      serviceDate: '2015-05-05T04:00:00.000Z',
     });
   });
 };

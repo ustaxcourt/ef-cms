@@ -105,8 +105,6 @@ API Gateway has a default timeout of 30 seconds.  That means if your lambda exec
 
 Route53 is a service which allows you to configure a zone and DNS records associated with that zone.  Before an environment is first deployed, someone will need to setup a domain to point to a manually created Route53 zone.  For example, our sub domain at `ustc-case-mgmt.flexion.us` was created and points to our Route53 zone.  This allows us to use AWS to configure and manage various sub domains, such as `exp1.ustc-case-mgmt.flexion.us` without the need to go to the top level DNS management service that is hosting `flexion.us`.  
 
-Route53 also allows us to setup routes which will route to other aws services based on latency or geographical location.  We use latency routing on this project since we have APIs deployed on both east and west regions.  For example, `api-blue.exp1.ustc-case-mgmt.flexion.us` might route to the east region depending on where you live.  These routes will also failover in case the target resources on the region were unavailable.
-
 ## CloudFront
 
 CloudFront is a CDN.  It is a service which takes your static web assets, such as images and html files, and hosts it across the global on various nodes.  This allows for much quicker access times of files since no matter where you are in the world, the files are hosted at a location close to your location.  It also provides built in caching capabilities to speed up load times.
@@ -136,7 +134,3 @@ IN Dawson, we use SQS for a variety of things.  Our migration process uses a SQS
 SNS is a service which allows you to setup topics.  Topics are a way to broadcast a message and have many other subscribers receive that same message.  It is different from SQS in that it is a one to many relationship instead of one to one.
 
 In Dawson, we use SNS to notify lower environments when a case is sealed in production to prevent anyone, including our developers, from seeing that sealed case.
-
-## EC2
-
-EC2 is a service which allows you to host a virtual machine.  We use EC2 to host dynamsoft which is a front end library used for scanning documents.  The only reason we host dynamsoft on an EC2 instance is due to how the license works for dynamsoft.  They require the license to be hosted only one machine, so having it hosted on S3 violates that license.

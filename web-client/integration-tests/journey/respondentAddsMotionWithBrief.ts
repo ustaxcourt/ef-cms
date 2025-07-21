@@ -16,7 +16,6 @@ export const respondentAddsMotionWithBrief = (
     await cerebralTest.runSequence('completeDocumentSelectSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
-      category: 'Select a Category.',
       documentType: 'Select a document type',
     });
 
@@ -60,8 +59,6 @@ export const respondentAddsMotionWithBrief = (
     expect(cerebralTest.getState('form.documentType')).toEqual(
       'Motion for Continuance',
     );
-
-    expect(cerebralTest.getState('form.partyPrimary')).toBeUndefined();
 
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',

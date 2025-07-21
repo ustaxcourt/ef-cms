@@ -1,7 +1,9 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -232,7 +234,7 @@ describe('addPaperFilingInteractor', () => {
 
     expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
       {
-        leadDocketNumber: mockCase.leadDocketNumber,
+        docketNumber: mockCase.docketNumber,
       },
     ]);
     expect(updateCaseAndAssociations).toHaveBeenCalled();
@@ -513,9 +515,7 @@ describe('addPaperFilingInteractor', () => {
         mockDocketClerkUser,
       );
 
-      expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-      ).toHaveBeenCalledTimes(1);
+      expect(updateCaseAndAssociations).toHaveBeenCalledTimes(1);
       expect(upsertWorkItems).toHaveBeenCalledTimes(1);
     });
 

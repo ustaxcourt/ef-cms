@@ -5,7 +5,7 @@ import {
   UpdateFunctionConfigurationCommand,
 } from '@aws-sdk/client-lambda';
 
-const supportedRegions = ['us-west-1', 'us-east-1'];
+const supportedRegions = ['us-east-1'];
 const lambdaClientCache = {};
 
 const getLambdaClient = ({ region }: { region: string }): LambdaClient => {

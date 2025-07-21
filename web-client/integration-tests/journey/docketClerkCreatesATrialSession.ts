@@ -44,8 +44,6 @@ export const docketClerkCreatesATrialSession = (
       maxCases: 'Enter a valid number of maximum cases',
       sessionType: 'Select a session type',
       startDate: 'Enter a valid start date',
-      term: 'Term session is not valid',
-      termYear: 'Term year is required',
       trialLocation: 'Select a trial session location',
     });
 
@@ -65,7 +63,7 @@ export const docketClerkCreatesATrialSession = (
       trialClerk,
     };
 
-    for (let [key, value] of Object.entries(createTrialSessionForm)) {
+    for (const [key, value] of Object.entries(createTrialSessionForm)) {
       await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
         key,
         value,
@@ -94,7 +92,6 @@ export const docketClerkCreatesATrialSession = (
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
       startDate: 'Enter a valid start date',
-      term: 'Term session is not valid',
       trialLocation: 'Select a trial session location',
     });
 

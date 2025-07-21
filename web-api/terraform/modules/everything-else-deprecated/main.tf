@@ -1,17 +1,3 @@
-provider "aws" {
-  region = "us-east-1"
-}
-
-provider "aws" {
-  region = "us-east-1"
-  alias  = "us-east-1"
-}
-
-provider "aws" {
-  region = "us-west-1"
-  alias  = "us-west-1"
-}
-
 module "dynamo_table_alpha" {
   source = "../dynamo-table"
 
@@ -47,10 +33,6 @@ module "elasticsearch_alpha" {
   es_instance_type    = var.es_instance_type
   es_volume_size      = var.es_volume_size
   alert_sns_topic_arn = var.alert_sns_topic_arn
-
-  providers = {
-    aws = aws.us-east-1
-  }
 }
 
 resource "aws_ssm_parameter" "elasticsearch_alpha_endpoint_ssm" {
@@ -70,10 +52,6 @@ module "elasticsearch_beta" {
   es_instance_type    = var.es_instance_type
   es_volume_size      = var.es_volume_size
   alert_sns_topic_arn = var.alert_sns_topic_arn
-
-  providers = {
-    aws = aws.us-east-1
-  }
 }
 
 resource "aws_ssm_parameter" "elasticsearch_beta_endpoint_ssm" {
