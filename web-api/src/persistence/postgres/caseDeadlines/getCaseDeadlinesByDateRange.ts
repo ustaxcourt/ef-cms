@@ -1,4 +1,4 @@
-import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '../../../../../shared/src/business/entities/EntityConstants';
+import { CASE_DEADLINES_REPORT_PAGE_SIZE } from '@shared/business/entities/EntityConstants';
 import { caseDeadlineEntity } from '@web-api/persistence/postgres/caseDeadlines/mapper';
 import { getDbReader } from '@web-api/database';
 
