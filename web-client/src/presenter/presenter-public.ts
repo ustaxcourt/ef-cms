@@ -66,6 +66,7 @@ import { validateOpinionSearchSequence } from './sequences/validateOpinionSearch
 import { validateOrderSearchSequence } from './sequences/validateOrderSearchSequence';
 import { validatePractitionerSearchByBarNumberFormSequence } from '@web-client/presenter/sequences/validatePractitionerSearchByBarNumberFormSequence';
 import { validatePractitionerSearchByNameFormSequence } from '@web-client/presenter/sequences/validatePractitionerSearchByNameFormSequence';
+import { ModuleDefinition } from 'cerebral';
 
 export const presenterSequences = {
   advancedSearchTabChangeSequence,
@@ -143,13 +144,19 @@ export const presenterSequences = {
   validatePractitionerSearchByNameFormSequence,
 };
 
-export const presenter = {
+export const presenter: ModuleDefinition & {
+  providers: { [key: string]: any };
+  state: { [key: string]: any };
+} = {
   catch: [
     // ORDER MATTERS! Based on inheritance, the first match will be used
-    [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
-    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    [NotFoundError, notFoundErrorSequence], //404
-    [ActionError, setCurrentPageErrorSequence], // generic error handler
+    [InvalidRequestError, setCurrentPageErrorSequence as unknown as Function], // 418, other unknown 4xx series
+    [
+      ServerInvalidResponseError,
+      setCurrentPageErrorSequence as unknown as Function,
+    ], // 501, 503, etc
+    [NotFoundError, notFoundErrorSequence as unknown as Function], //404
+    [ActionError, setCurrentPageErrorSequence as unknown as Function], // generic error handler
   ],
   providers: {
     applicationContext: {} as any,
