@@ -40,7 +40,7 @@ let itemsScanned = 0;
 
 async function main() {
   await Promise.all(
-    Array.from({ length: 10 }).map((_, segment) =>
+    Array.from({ length: totalSegments }).map((_, segment) =>
       scanContinuously({
         TableName: environment.dynamoDbTableName,
         Segment: segment,
@@ -114,7 +114,8 @@ async function scanContinuously(params: ScanCommandInput) {
 
   do {
     const irsPractitionerCaseAssociations: Array<UserOnCaseAssociation> = []; // {pk: case|, sk: irsPractitioner| }
-    const privatePractitionerCaseAssociations: Array<UserOnCaseAssociation> = []; // {pk: case|, sk: privatePractitioner| }
+    const privatePractitionerCaseAssociations: Array<UserOnCaseAssociation> =
+      []; // {pk: case|, sk: privatePractitioner| }
     const userRecords: any[] = []; // {pk: user|, sk: user| }
     const userOnCasePendingRecords: any[] = []; // {pk: user|, sk: pending-case| }
     // const userRecords = [] // {pk: user|, sk: case| } We should not need to process these. For irs/private association is defined through the {pk: case|, sk: privatePractitioner| }. For petitioners it is defined by the dwCase.petitioners array
