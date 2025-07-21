@@ -18,6 +18,7 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 describe('archiveDraftDocumentInteractor', () => {
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
@@ -89,13 +90,7 @@ describe('archiveDraftDocumentInteractor', () => {
           signedByUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3111',
           signedJudgeName: 'Test Judge',
           userId: '11181f4d-1e47-423a-8caf-6d2fdc3d3111',
-          workItem: {
-            docketNumber: '101-20',
-            section: 'docket',
-            sentBy: 'Test User',
-            workItemId: '22181f4d-1e47-423a-8caf-6d2fdc3d3122',
-          },
-        },
+        } as DocketEntry,
       ],
     });
 

@@ -160,7 +160,6 @@ module "worker-east-blue" {
   providers = {
     aws = aws.us-east-1
   }
-
   environment = var.environment
 }
 
@@ -178,7 +177,6 @@ module "opensearch-sync-east-blue" {
   providers = {
     aws = aws.us-east-1
   }
-
   environment = var.environment
 }
 

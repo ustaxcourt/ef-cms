@@ -39,10 +39,7 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   const workItemEntity = new WorkItem({
     assigneeId: user.userId,
     assigneeName: user.name,
-    docketEntry: {
-      ...docketEntryEntity.toRawObject(),
-      createdAt: docketEntryEntity.createdAt,
-    },
+    docketEntryId: docketEntryEntity.docketEntryId,
     docketNumber: caseToAdd.docketNumber,
     inProgress: true,
     section: user.section,
@@ -51,7 +48,6 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
     sentByUserId: user.userId,
   });
 
-  docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);
 
   return {

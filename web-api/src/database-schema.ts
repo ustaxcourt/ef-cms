@@ -45,6 +45,14 @@ import {
 } from '@web-api/persistence/postgres/workitems/schema';
 
 import {
+  DocketEntryWorksheetTable,
+  DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
+} from '@web-api/persistence/postgres/docketEntryWorksheets/schema';
+import {
+  DW_MINUTE_SHEET_COLUMNS,
+  MinuteSheetTable,
+} from '@web-api/persistence/postgres/minuteSheets/schema';
+import {
   ConnectionTable,
   DW_CONNECTION_COLUMNS,
 } from '@web-api/persistence/postgres/connections/schema';
@@ -56,14 +64,6 @@ import {
   ChangeOfAddressTable,
   DW_CHANGE_OF_ADDRESS_COLUMNS,
 } from '@web-api/persistence/postgres/jobs/changeOfAddress/schema';
-import {
-  DocketEntryWorksheetTable,
-  DW_DOCKET_ENTRY_WORKSHEET_COLUMNS,
-} from '@web-api/persistence/postgres/docketEntryWorksheets/schema';
-import {
-  DW_MINUTE_SHEET_COLUMNS,
-  MinuteSheetTable,
-} from '@web-api/persistence/postgres/minuteSheets/schema';
 
 const DEFAULT = {};
 
@@ -143,13 +143,13 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as MessageTable,
     columns: DW_MESSAGE_COLUMNS,
   },
-  dwNotification: {
-    table: DEFAULT as NotificationTable,
-    columns: DW_NOTIFICATION_COLUMNS,
-  },
   dwMinuteSheet: {
     table: DEFAULT as MinuteSheetTable,
     columns: DW_MINUTE_SHEET_COLUMNS,
+  },
+  dwNotification: {
+    table: DEFAULT as NotificationTable,
+    columns: DW_NOTIFICATION_COLUMNS,
   },
   dwResponseString: {
     table: DEFAULT as ResponseStringTable,

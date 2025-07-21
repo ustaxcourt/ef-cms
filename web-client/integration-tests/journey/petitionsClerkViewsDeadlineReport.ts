@@ -100,6 +100,8 @@ export const petitionsClerkViewsDeadlineReport = (
     await cerebralTest.runSequence('filterCaseDeadlinesByJudgeSequence', {
       selectedJudgeId: buchUserId,
     });
+    
+    await cerebralTest.runSequence('updateDateRangeForDeadlinesSequence');
 
     deadlines = cerebralTest.getState(
       'caseDeadlineReport.caseDeadlinesForCurrentPage',

@@ -8,6 +8,12 @@ jest.mock('../addCoversheetInteractor', () => ({
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+);
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob',
+);
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
@@ -187,12 +193,7 @@ describe('generateChangeOfAddress', () => {
       user: mockPrivatePractitioner,
     } as any);
 
-    const noticeDocketEntry = getDocketEntryForNotice(
-      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
-    );
-
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(noticeDocketEntry.workItem).toBeDefined();
   });
 
   it("should NOT create a work item for an associated practitioner's notice of change of address when there is no paper service for the case", async () => {
