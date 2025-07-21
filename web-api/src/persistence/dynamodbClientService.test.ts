@@ -21,7 +21,7 @@ import {
 } from './dynamodbClientService';
 
 describe('dynamodbClientService', function () {
-  const MOCK_ITEM = {
+  const MOCK_ITEM: any = {
     docketNumber: '123-20',
   };
   const dynamoDbTableName = 'efcms-local';
@@ -187,9 +187,11 @@ describe('dynamodbClientService', function () {
 
     it('should filterEmptyStrings in params then return the same Item property passed in in the params', async () => {
       const result = await put({
-        Item: MOCK_ITEM,
+        Item: {
+          ...MOCK_ITEM,
+          fake: '',
+        },
         applicationContext,
-        fake: '',
       });
       expect(result).toEqual(MOCK_ITEM);
     });
@@ -205,8 +207,11 @@ describe('dynamodbClientService', function () {
   describe('update', () => {
     it('should return undefined after the update was successful', async () => {
       const result = await update({
-        Item: MOCK_ITEM,
         applicationContext,
+        ExpressionAttributeNames: {},
+        ExpressionAttributeValues: {},
+        Key: {},
+        UpdateExpression: '',
       });
       expect(result).toBeUndefined();
     });
@@ -304,15 +309,27 @@ describe('dynamodbClientService', function () {
   });
   describe('query', () => {
     it('should remove the global aws fields on the object returned', async () => {
-      const result = await query({ applicationContext });
+      const result = await query({
+        applicationContext,
+        ExpressionAttributeNames: {},
+        ExpressionAttributeValues: {},
+        KeyConditionExpression: '',
+      });
       expect(result).toEqual([MOCK_ITEM]);
     });
+
     it('uses the ConsistentRead flag to query perform strongly consistent reads', async () => {
       const flags = [true, false];
 
       for (let i = 0; i < flags.length; i++) {
         const ConsistentRead = flags[i];
-        await query({ ConsistentRead, applicationContext });
+        await query({
+          ConsistentRead,
+          applicationContext,
+          ExpressionAttributeNames: {},
+          ExpressionAttributeValues: {},
+          KeyConditionExpression: '',
+        });
         expect(
           applicationContext.getDocumentClient().query.mock.calls[i][0],
         ).toMatchObject({ ConsistentRead });
@@ -322,6 +339,9 @@ describe('dynamodbClientService', function () {
       await query({
         FilterExpression: 'single origin for me',
         applicationContext,
+        ExpressionAttributeNames: {},
+        ExpressionAttributeValues: {},
+        KeyConditionExpression: '',
       });
       expect(
         applicationContext.getDocumentClient().query.mock.calls[0][0],
@@ -330,6 +350,9 @@ describe('dynamodbClientService', function () {
     it('passes an undefined FilterExpression to perform an unfiltered query', async () => {
       await query({
         applicationContext,
+        ExpressionAttributeNames: {},
+        ExpressionAttributeValues: {},
+        KeyConditionExpression: '',
       });
       expect(
         applicationContext.getDocumentClient().query.mock.calls[0][0],
@@ -339,7 +362,12 @@ describe('dynamodbClientService', function () {
 
   describe('queryFull', () => {
     it('should remove the global aws fields on the object returned', async () => {
-      const result = await queryFull({ applicationContext });
+      const result = await queryFull({
+        applicationContext,
+        ExpressionAttributeNames: {},
+        ExpressionAttributeValues: {},
+        KeyConditionExpression: '',
+      });
       expect(result).toEqual([MOCK_ITEM]);
     });
     it('uses the ConsistentRead flag to query perform strongly consistent reads', async () => {
@@ -347,16 +375,26 @@ describe('dynamodbClientService', function () {
 
       for (let i = 0; i < flags.length; i++) {
         const ConsistentRead = flags[i];
-        await queryFull({ ConsistentRead, applicationContext });
+        await queryFull({
+          ConsistentRead,
+          applicationContext,
+          ExpressionAttributeNames: {},
+          ExpressionAttributeValues: {},
+          KeyConditionExpression: '',
+        });
         expect(
           applicationContext.getDocumentClient().query.mock.calls[i][0],
         ).toMatchObject({ ConsistentRead });
       }
     });
+
     it('uses the optional FilterExpression parameter to perform a filtered query', async () => {
       await queryFull({
         FilterExpression: 'single origin for me',
         applicationContext,
+        ExpressionAttributeNames: {},
+        ExpressionAttributeValues: {},
+        KeyConditionExpression: '',
       });
       expect(
         applicationContext.getDocumentClient().query.mock.calls[0][0],
@@ -365,6 +403,9 @@ describe('dynamodbClientService', function () {
     it('passes an undefined FilterExpression to perform an unfiltered query', async () => {
       await queryFull({
         applicationContext,
+        ExpressionAttributeNames: {},
+        ExpressionAttributeValues: {},
+        KeyConditionExpression: '',
       });
       expect(
         applicationContext.getDocumentClient().query.mock.calls[0][0],

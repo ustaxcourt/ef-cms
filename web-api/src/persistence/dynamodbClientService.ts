@@ -6,6 +6,7 @@ import {
 } from '@aws-sdk/client-dynamodb';
 import { chunk, flatten, isEmpty, uniqBy } from 'lodash';
 import { filterEmptyStrings } from '../../../shared/src/business/utilities/filterEmptyStrings';
+import { ServerApplicationContext } from '@web-api/applicationContext';
 
 /**
  * PUT for dynamodb aws-sdk client
@@ -198,14 +199,12 @@ export const putInDeployTable = async (
   applicationContext: IApplicationContext,
   item: TDynamoRecord,
 ): Promise<void> => {
-  await applicationContext
-    .getDocumentClient()
-    .put({
-      Item: item,
-      TableName: getDeployTableName({
-        applicationContext,
-      }),
-    });
+  await applicationContext.getDocumentClient().put({
+    Item: item,
+    TableName: getDeployTableName({
+      applicationContext,
+    }),
+  });
 };
 
 export const query = ({
@@ -250,10 +249,13 @@ export const query = ({
     });
 };
 
-export const scan = async params => {
+export const scan = async (params: {
+  applicationContext: ServerApplicationContext;
+  [key: string]: any;
+}) => {
   let hasMoreResults = true;
   let lastKey;
-  const allItems = [];
+  const allItems: Record<string, any>[] = [];
   while (hasMoreResults) {
     hasMoreResults = false;
 
@@ -269,7 +271,7 @@ export const scan = async params => {
       .then(results => {
         hasMoreResults = !!results.LastEvaluatedKey;
         lastKey = results.LastEvaluatedKey;
-        allItems.push(...results.Items);
+        allItems.push(...(results.Items || []));
       });
   }
   return allItems;
@@ -301,21 +303,19 @@ export const queryFull = async <T>({
   while (hasMoreResults) {
     hasMoreResults = false;
 
-    const subsetResults = await applicationContext
-      .getDocumentClient()
-      .query({
-        ConsistentRead,
-        ExclusiveStartKey: lastKey,
-        ExpressionAttributeNames,
-        ExpressionAttributeValues,
-        FilterExpression,
-        IndexName,
-        KeyConditionExpression,
-        TableName: getTableName({
-          applicationContext,
-        }),
-        ...params,
-      });
+    const subsetResults = await applicationContext.getDocumentClient().query({
+      ConsistentRead,
+      ExclusiveStartKey: lastKey,
+      ExpressionAttributeNames,
+      ExpressionAttributeValues,
+      FilterExpression,
+      IndexName,
+      KeyConditionExpression,
+      TableName: getTableName({
+        applicationContext,
+      }),
+      ...params,
+    });
 
     hasMoreResults = !!subsetResults.LastEvaluatedKey;
     lastKey = subsetResults.LastEvaluatedKey;
@@ -426,8 +426,7 @@ export const batchWrite = async (
   });
   uniqueCommands.forEach(command => filterEmptyStrings(command));
 
-  const documentClient =
-    applicationContext.getDocumentClient();
+  const documentClient = applicationContext.getDocumentClient();
   const chunks = chunk(uniqueCommands, 25);
 
   await Promise.all(

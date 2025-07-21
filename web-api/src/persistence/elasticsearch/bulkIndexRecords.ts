@@ -2,6 +2,7 @@ import { chunk } from 'lodash';
 import { getIndexNameForRecord } from './getIndexNameForRecord';
 import type { IDynamoDBRecord } from '@web-api/business/useCases/processStreamRecords/processStreamUtilities';
 import type { ServerApplicationContext } from '@web-api/applicationContext';
+import { Bulk_RequestBody } from '@opensearch-project/opensearch/api';
 
 export const bulkIndexRecords = async ({
   applicationContext,
@@ -18,11 +19,11 @@ export const bulkIndexRecords = async ({
     Number(process.env.ES_CHUNK_SIZE) || CHUNK_SIZE,
   );
 
-  const failedRecords = [];
+  const failedRecords: Record<string, any>[] = [];
 
   await Promise.all(
     chunkOfRecords.map(async recordChunk => {
-      const body = recordChunk
+      const body: Bulk_RequestBody = recordChunk
         .map(record => ({
           ...record.dynamodb?.NewImage,
         }))
@@ -60,15 +61,15 @@ export const bulkIndexRecords = async ({
             ];
           }
         })
-        .filter(item => item);
+        .filter(item => item) as Record<string, any>[];
 
       if (body.length) {
         const response = await searchClient.bulk({
           body,
           refresh: false,
         });
-        if (response.errors) {
-          response.items.forEach((action, i) => {
+        if (response['errors']) {
+          response['items'].forEach((action, i) => {
             const operation = Object.keys(action)[0];
             if (action[operation].error) {
               const record = body[i * 2 + 1];
