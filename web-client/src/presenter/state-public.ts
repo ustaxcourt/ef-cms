@@ -87,7 +87,7 @@ export const baseState = {
   isPublic: true,
   isTerminalUser: false,
   judges: [] as RawUser[],
-  modal: {},
+  modal: {} as { [key: string]: any },
   progressIndicator: {
     // used for the spinner that shows when waiting for network responses
     waitingForResponse: false,
