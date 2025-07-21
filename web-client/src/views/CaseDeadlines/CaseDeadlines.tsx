@@ -99,7 +99,6 @@ export const CaseDeadlines = connect(
                   filterCaseDeadlinesByJudgeSequence({
                     selectedJudgeId: e,
                   });
-                  setActivePage(0);
                 }}
               >
                 {caseDeadlineReportHelper.judgeOptions.map(judgeOption => (
