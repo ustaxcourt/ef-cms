@@ -632,6 +632,7 @@ import { gotoTrialSessionTermBuilderSequence } from '@web-client/presenter/seque
 import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
 import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/sequences/showRemovePetitionerEmailModalSequence';
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
+import { ModuleDefinition } from 'cerebral';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1644,16 +1645,28 @@ export const presenterSequences = {
 /**
  * Main Cerebral module
  */
-export const presenter = {
+export const presenter: ModuleDefinition & {
+  providers: { [key: string]: any };
+  state: { [key: string]: any };
+} = {
   catch: [
     // ORDER MATTERS! Based on inheritance, the first match will be used
-    [InvalidRequestError, setCurrentPageErrorSequence], // 418, other unknown 4xx series
-    [ServerInvalidResponseError, setCurrentPageErrorSequence], // 501, 503, etc
-    [UnauthorizedRequestError, unauthorizedErrorSequence], // 403
-    [NotFoundError, notFoundErrorSequence], //404
-    [UnidentifiedUserError, unidentifiedUserErrorSequence], //401
-    [GatewayTimeoutError, gatewayTimeoutErrorSequence], //504
-    [ActionError, setCurrentPageErrorSequence], // generic error handler
+    [InvalidRequestError, setCurrentPageErrorSequence as unknown as Function], // 418, other unknown 4xx series
+    [
+      ServerInvalidResponseError,
+      setCurrentPageErrorSequence as unknown as Function,
+    ], // 501, 503, etc
+    [
+      UnauthorizedRequestError,
+      unauthorizedErrorSequence as unknown as Function,
+    ], // 403
+    [NotFoundError, notFoundErrorSequence as unknown as Function], //404
+    [
+      UnidentifiedUserError,
+      unidentifiedUserErrorSequence as unknown as Function,
+    ], //401
+    [GatewayTimeoutError, gatewayTimeoutErrorSequence as unknown as Function], //504
+    [ActionError, setCurrentPageErrorSequence as unknown as Function], // generic error handler
   ],
   providers: {} as { applicationContext: ClientApplicationContext; router: {} },
   sequences: presenterSequences,
