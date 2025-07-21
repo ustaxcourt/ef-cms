@@ -126,10 +126,5 @@ terraform init -upgrade -backend=true \
  -backend-config=key="$KEY" \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
-
-if [ -z "${OUTPUT_ONLY}" ]; then 
-  terraform plan -out execution-plan
-  terraform apply -auto-approve execution-plan
-else 
-  terraform output -json > output.json
-fi
+terraform plan -destroy -out execution-plan
+terraform destroy -auto-approve

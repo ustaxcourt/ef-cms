@@ -6,19 +6,23 @@ This runbook describes the process of creating a new DAWSON lower environment in
 
 ## ⚠️ Caution ⚠️
 
-Proceed with the expectation that this runbook is out of date. Carefully inspect every command and script herein, cross-referencing operational environments, before running. Assume all AWS console and CircleCI navigation directions are out of date. Update this document as necessary.
+- Proceed with the expectation that this runbook is out of date.
+- Carefully inspect every command and script herein, cross-referencing operational environments, before running.
+- Assume all AWS console and CircleCI navigation directions are out of date.
+- ⚖️ indicates steps that should only be performed in environments that are to have prod-like data.
+- Update this document as necessary.
 
 ## Preqrequisites
 - New AWS account
   - DAWSON AWS accounts should be named in the following convention: `dawson-workloads-[env]`
 - SSO user that is able to assume an admin role in the new AWS account
-- You should know ahead of time if this environment will have prod-like data
+- You should know ahead of time if this environment will have prod-like data ⚖️
 - Some secrets:
   - Dmarc Policy for outgoing email (string)
   - Production AWS account ID (number)
   - Production documents bucket name (string)
   - ARN of the external flexion developer role (string)
-  - Additional secrets for environments with prod-like data:
+  - ⚖️ Additional secrets for environments with prod-like data:
     - Days to keep logs in Kibana (number)
     - Nodes in the Opensearch cluster for Kibana (number)
     - Opensearch instance type for Kibana (string)
@@ -65,7 +69,7 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
         --env "$ENV" \
         --external-trusted-role-arn "<Flexion-Developer ARN>"
       ```
-   1. Lower environment with prod-like data:
+   1. ⚖️ Lower environment with prod-like data:
       ```bash
       scripts/secrets/create-account-secrets.ts \
         --domain "ustaxcourt.gov" \
@@ -88,7 +92,7 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
         --prod-account-id "<PROD ACCOUNT ID>" \
         --prod-documents-bucket "<PROD DOCUMENTS BUCKET NAME>"
       ```
-   1. Lower environment with prod-like data:
+   1. ⚖️ Lower environment with prod-like data:
       ```bash
       scripts/secrets/create-env-secrets.ts \
         --admin-user-email "<ADMIN USER EMAIL>" \
@@ -190,6 +194,27 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
    export AWS_ACCESS_KEY_ID=<CIRCLECI AWS_ACCESS_KEY_ID>
    export AWS_SECRET_ACCESS_KEY=<CIRCLECI AWS_SECRET_ACCESS_KEY>
    ```
+1. Copy the `NS` record for this hosted zone into the hosted zones that precede it:
+   1. Log into this new account in the AWS console and navigate to the Route 53 dashboard
+   1. Click on "Hosted zones" and select this environment's hosted zone
+   1. Click on the "Type" filter and select "NS"
+   1. Copy the value of this hosted zone's `NS` record to your clipboard
+   1. Log into the AWS console for the account that owns the `ustaxcourt.gov` hosted zone and navigate to the Route 53 dashboard
+   1. Click on "Hosted zones" and select the `ustaxcourt.gov` hosted zone
+   1. Create a new `NS` record:
+      1. Click "Create record"
+      1. Record name: `<env>.ef-cms`
+      1. Record type: `NS`
+      1. Paste the value you copied earlier
+      1. Click "Create record" to create the `NS` record
+   1. Log into the AWS console for the account that owns the `ef-cms.ustaxcourt.gov` hosted zone and navigate to the Route 53 dashboard
+   1. Click on "Hosted zones" and select the `ef-cms.ustaxcourt.gov` hosted zone
+   1. Create a new `NS` record:
+      1. Click "Create record"
+      1. Record name: `<env>`
+      1. Record type: `NS`
+      1. Paste the value you copied earlier
+      1. Click "Create record" to create the `NS` record
 1. Run an `allColors` terraform deployment, resolving errors when necessary:
    1. Set up some environment variables emulating a blue -> green deployment:
       ```bash
@@ -202,27 +227,6 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
       ```bash
       npm run deploy:allColors "$ENV"
       ```
-   1. The ACM (SSL) certificates will fail to validate. To resolve, you will need to copy the `NS` record for this hosted zone into all of the hosted zones that precede it:
-      1. Log into this new account in the AWS console and navigate to the Route 53 dashboard
-      1. Click on "Hosted zones" and select this environment's hosted zone
-      1. Click on the "Type" filter and select "NS"
-      1. Copy the value of this hosted zone's `NS` record to your clipboard
-      1. Log into the AWS console for the account that owns the `ustaxcourt.gov` hosted zone and navigate to the Route 53 dashboard
-      1. Click on "Hosted zones" and select the `ustaxcourt.gov` hosted zone
-      1. Create a new `NS` record:
-         1. Click "Create record"
-         1. Record name: `<env>.ef-cms`
-         1. Record type: `NS`
-         1. Paste the value you copied earlier
-         1. Click "Create record" to create the `NS` record
-      1. Log into the AWS console for the account that owns the `ef-cms.ustaxcourt.gov` hosted zone and navigate to the Route 53 dashboard
-      1. Click on "Hosted zones" and select the `ef-cms.ustaxcourt.gov` hosted zone
-      1. Create a new `NS` record:
-         1. Click "Create record"
-         1. Record name: `<env>`
-         1. Record type: `NS`
-         1. Paste the value you copied earlier
-         1. Click "Create record" to create the `NS` record
    1. The Cognito pool will fail to create. To resolve, run a script to verify the `noreply@<env>.ef-cms.ustaxcourt.gov` email address:
       ```bash
       EFCMS_DOMAIN="${ENV}.ef-cms.ustaxcourt.gov" REGION=us-east-1 web-api/verify-ses-email.sh
@@ -386,7 +390,7 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
         --expression-attribute-names '{"#current":"current"}' \
         --expression-attribute-values '{":current":{"BOOL":true}}'
       ```
-1. If this lower environment is to have prod-like data:
+1. ⚖️ If this lower environment is to have prod-like data:
    1. Sync the `documents` bucket:
       ```bash
       export EFCMS_DOMAIN="${ENV}.ef-cms.ustaxcourt.gov"
@@ -430,7 +434,7 @@ Proceed with the expectation that this runbook is out of date. Carefully inspect
    ```bash
    cd ./scripts/postgres && ./create-rds-users.sh && cd ../..
    ```
-1. If this lower environment is to have prod-like data, kick off a glue job now:
+1. ⚖️ If this lower environment is to have prod-like data, kick off a glue job now:
    1. In [CircleCI](https://app.circleci.com/pipelines/github/ustaxcourt/ef-cms), trigger a glue job, choosing the following settings:
       1. `run_build_and_deploy`: `false`
       1. `run_glue_to_[ENV]`: `true`

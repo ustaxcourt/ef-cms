@@ -18,6 +18,17 @@ echo "  - SOURCE_TABLE=${SOURCE_TABLE}"
 echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 
+../../../../scripts/verify-terraform-version.sh
+
+BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+[ -n "$ZONE_NAME" ] && BUCKET="${ZONE_NAME}.terraform.deploys"
+KEY="migration-${ENVIRONMENT}.tfstate"
+LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
+rm -rf .terraform
+rm -f .terraform.lock.hcl
+
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_environment=$ENVIRONMENT
@@ -25,11 +36,9 @@ export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_stream_arn=$STREAM_ARN
 export TF_VAR_elasticsearch_domain=$ELASTICSEARCH_ENDPOINT
 
-../../../../scripts/verify-terraform-version.sh
-
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${EFCMS_DOMAIN}.terraform.deploys" \
- -backend-config=key="migration-${ENVIRONMENT}.tfstate" \
- -backend-config=dynamodb_table="efcms-terraform-lock" \
- -backend-config=region="us-east-1"
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
 terraform destroy -auto-approve

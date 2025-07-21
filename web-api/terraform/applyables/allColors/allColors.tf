@@ -44,6 +44,7 @@ module "ef-cms_apis" {
   prod_env_account_id   = var.prod_env_account_id
   should_es_alpha_exist = var.should_es_alpha_exist
   should_es_beta_exist  = var.should_es_beta_exist
+  zone_name             = var.zone_name
   providers = {
     aws           = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
@@ -53,7 +54,7 @@ module "ef-cms_apis" {
 module "ui-public-certificate" {
   source                    = "../../modules/certificates"
   domain_name               = var.dns_domain
-  hosted_zone_name          = "${var.dns_domain}."
+  hosted_zone_name          = "${var.zone_name}."
   subject_alternative_names = ["*.${var.dns_domain}"]
   certificate_name          = var.dns_domain
   environment               = var.environment
@@ -65,6 +66,7 @@ module "ui-public-www-redirect" {
   source                 = "../../modules/ui-public-www-redirect"
   dns_domain             = var.dns_domain
   environment            = var.environment
+  zone_name              = var.zone_name
   public_certificate_arn = module.ui-public-certificate.acm_certificate_arn
   viewer_protocol_policy = var.viewer_protocol_policy
 }
