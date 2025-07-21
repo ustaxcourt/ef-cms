@@ -162,10 +162,6 @@ const DocketRecordHeaderDeps = {
   showModal: state.modal.showModal,
   sortTableSequence: sequences.sortTableSequence,
   toggleMobileDocketSortSequence: sequences.toggleMobileDocketSortSequence,
-  setViewerDocumentToDisplaySequence:
-    sequences.setViewerDocumentToDisplaySequence,
-  docketRecordFilter: state.sessionMetadata.docketRecordFilter,
-  viewerDocumentToDisplay: state.viewerDocumentToDisplay,
 };
 
 export const DocketRecordHeader = connect<
