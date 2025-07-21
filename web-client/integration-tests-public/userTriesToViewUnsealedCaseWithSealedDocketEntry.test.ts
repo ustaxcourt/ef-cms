@@ -81,7 +81,7 @@ describe('Unauthed user views todays orders', () => {
     );
 
     const helper = runCompute(publicCaseDetailHelper, {
-      state: publicTestClient.getState(''),
+      state: publicTestClient.getState(),
     });
 
     const sealedDocketEntry = helper.formattedDocketEntriesOnDocketRecord.find(
@@ -111,7 +111,7 @@ describe('Unauthed user views todays orders', () => {
     );
 
     const helper = runCompute(publicCaseDetailHelper, {
-      state: publicTestClient.getState(''),
+      state: publicTestClient.getState(),
     });
 
     const unsealedDocketEntry =

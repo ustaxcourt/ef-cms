@@ -386,7 +386,7 @@ describe('unauthed user views practitioner filed brief', () => {
       const { formattedDocketEntriesOnDocketRecord } = runCompute(
         publicCaseDetailHelper,
         {
-          state: cerebralTest.getState(''),
+          state: cerebralTest.getState(),
         },
       );
 
