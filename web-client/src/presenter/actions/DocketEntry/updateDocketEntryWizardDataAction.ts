@@ -27,6 +27,7 @@ export const updateDocketEntryWizardDataAction = ({
   const supporting = get(state.screenMetadata.supporting);
   switch (props.key) {
     case 'initEventCode':
+      if (props.value === 'NOTR') break; 
       form = setDocumentPropsFromFormAndBaseDocument({
         eventCode: props.value,
         formProperties: get(state.form),
@@ -38,6 +39,7 @@ export const updateDocketEntryWizardDataAction = ({
       store.unset(state.form.certificateOfServiceDate);
       break;
     case 'eventCode':
+      if (props.value === 'NOTR') break;
       form = setDocumentPropsFromFormAndBaseDocument({
         eventCode: props.value,
         formProperties: get(state.form),
