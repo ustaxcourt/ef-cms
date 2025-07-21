@@ -11,17 +11,20 @@ echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 
+../../../../scripts/verify-terraform-version.sh
+
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+[ -n "$ZONE_NAME" ] && BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="glue-role-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
-export TF_VAR_remote_account_number=$PROD_ENV_ACCOUNT_ID
-
 rm -rf .terraform
 rm -f .terraform.lock.hcl
 
-terraform init -backend=true \
+export TF_VAR_remote_account_number=$PROD_ENV_ACCOUNT_ID
+
+terraform init -upgrade -backend=true \
  -backend-config=bucket="${BUCKET}" \
  -backend-config=key="${KEY}" \
  -backend-config=dynamodb_table="${LOCK_TABLE}" \
