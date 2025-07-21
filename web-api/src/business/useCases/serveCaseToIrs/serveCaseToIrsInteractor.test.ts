@@ -130,6 +130,18 @@ describe('serveCaseToIrsInteractor', () => {
 
     getCaseByDocketNumber.mockImplementation(() => mockCase);
 
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: {
+            name: 'James Bond',
+            title: 'Clerk of the Court (Interim)',
+          },
+        },
+      },
+    ]);
+
     applicationContext
       .getUseCases()
       .addCoversheetInteractor.mockImplementation(
