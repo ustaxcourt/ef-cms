@@ -3,13 +3,18 @@ import { get } from 'lodash';
 import { getIndexNameFromAlias } from '../../../elasticsearch/elasticsearch-aliases';
 import { unmarshall } from '@aws-sdk/util-dynamodb';
 import { updateIndex } from '@web-api/persistence/elasticsearch/helpers/getIndexName';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import {
+import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
+import type {
+  Common,
+  Core_Search,
+} from '@opensearch-project/opensearch/api/_types';
+import type {
   Count_Request,
   Search_Request,
 } from '@opensearch-project/opensearch/api';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
-const CHUNK_SIZE = 10000;
+const CHUNK_SIZE = MAX_ELASTICSEARCH_PAGINATION;
 export type SearchClientResultsType = {
   aggregations?: {
     [x: string]: {
@@ -98,17 +103,14 @@ export const searchRaw = async ({
   applicationContext,
   searchParameters,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   searchParameters: Search_Request;
 }): Promise<any> => {
   updateIndex({ searchParameters });
   try {
-    const response = await applicationContext
-      .getSearchClient()
-      .search(searchParameters);
-    return response;
+    return await applicationContext.getSearchClient().search(searchParameters);
   } catch (searchError) {
-    applicationContext.logger.error(searchError);
+    applicationContext.logger.error('OpenSearch error', searchError);
     throw new Error('Search client encountered an error.');
   }
 };
@@ -117,7 +119,7 @@ export const searchAll = async ({
   applicationContext,
   searchParameters,
 }: {
-  applicationContext: IApplicationContext;
+  applicationContext: ServerApplicationContext;
   searchParameters: Search_Request;
 }): Promise<SearchClientResultsType> => {
   updateIndex({ searchParameters });
@@ -125,37 +127,36 @@ export const searchAll = async ({
   const query = searchParameters.body?.query || {};
   const size = searchParameters.size || CHUNK_SIZE;
 
-  let countQ;
-  try {
-    countQ = await applicationContext.getSearchClient().count({
+  const expected = await count({
+    applicationContext,
+    searchParameters: {
       body: {
         query,
       },
       index,
-    });
-  } catch (searchError) {
-    applicationContext.logger.error(searchError);
-    throw new Error('Search client encountered an error.');
-  }
+    },
+  });
 
-  const _source = searchParameters.body?._source || [];
-  let search_after = [0];
+  const _source: Core_Search.SourceConfigParam =
+    (searchParameters.body?._source as Core_Search.SourceConfigParam) || [];
+  let search_after: Common.SortResults = [0];
   const sort = searchParameters.body?.sort || [{ 'pk.S': 'asc' }]; // sort is required for paginated queries
-
-  const expected = get(countQ, 'body.count', 0);
 
   let i = 0;
   let results = [];
   while (i < expected) {
-    const chunk = await applicationContext.getSearchClient().search({
-      _source,
-      body: {
-        query,
-        search_after,
-        sort,
+    const chunk = await searchRaw({
+      applicationContext,
+      searchParameters: {
+        _source,
+        body: {
+          query,
+          search_after,
+          sort,
+        },
+        index,
+        size,
       },
-      index,
-      size,
     });
     const hits = get(chunk, 'body.hits.hits', []);
 
@@ -163,6 +164,7 @@ export const searchAll = async ({
       results = results.concat(hits);
       search_after = hits[hits.length - 1].sort;
     }
+    // i += hits.length;
     i += size; // this avoids an endless loop if expected is somehow greater than the sum of all hits
   }
 

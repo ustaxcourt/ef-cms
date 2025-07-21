@@ -7,7 +7,7 @@ jest.mock('@web-api/gateways/lambda/getLambdaClient', () => {
   }
   return { getLambdaClient: () => new LambdaClient() };
 });
-import { getChromiumBrowser } from '@shared/business/utilities/getChromiumBrowser';
+import { getChromiumBrowser } from '@shared/business/utilities/chromium/getChromiumBrowser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePdfFromHtmlInteractor } from '@web-api/business/useCases/pdf/generatePdfFromHtmlInteractor';
 

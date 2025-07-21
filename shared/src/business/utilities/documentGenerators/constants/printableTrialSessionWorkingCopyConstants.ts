@@ -460,3 +460,11 @@ export const FORMATTED_TRIAL_SESSION = {
 
 export const SESSION_NOTES =
   'Bacon ipsum dolor amet bresaola sirloin capicola, prosciutto pork belly cupim fatback picanha ham meatball drumstick shankle turducken shank. Pork pork belly tail beef filet mignon burgdoggen pastrami porchetta shankle. T-bone ball tip kielbasa, capicola pork pork loin venison pork belly shank shoulder buffalo andouille hamburger sirloin. Rump drumstick pig beef filet mignon, shankle picanha. Rump pastrami meatball, ham pancetta prosciutto jerky pork belly ribeye tongue bacon. Turducken ham hock burgdoggen andouille beef ribs, pork belly fatback t-bone tail. Shank pork chop meatball brisket.\n\nChislic picanha burgdoggen drumstick kielbasa flank biltong chuck frankfurter jowl fatback shankle filet mignon. Bacon pancetta bresaola beef ribs. Bacon leberkas meatloaf sausage pig, turkey bresaola fatback flank pastrami. Meatloaf prosciutto pastrami filet mignon.';
+
+export const TRIAL_STATUS_COUNTS = {
+  recall: 1,
+  setForTrial: 1,
+  basisReached: 1,
+  continued: 1,
+  statusUnassigned: 1,
+}

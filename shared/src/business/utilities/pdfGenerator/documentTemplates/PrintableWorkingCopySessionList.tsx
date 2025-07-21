@@ -19,12 +19,12 @@ export const PrintableWorkingCopySessionList = ({
   showCaseNotes,
   sort,
   userHeading,
+  trialStatusCounts,
 }) => {
   const trialSessionDateRange =
     formattedTrialSession.formattedEstimatedEndDateFull
       ? `${formattedTrialSession.formattedStartDateFull} - ${formattedTrialSession.formattedEstimatedEndDateFull}`
       : `${formattedTrialSession.formattedStartDateFull}`;
-
   return (
     <div className="printable-working-copy-list">
       <PrimaryHeader />
@@ -46,6 +46,7 @@ export const PrintableWorkingCopySessionList = ({
         <SelectedFiltersSection
           count={formattedCases.length}
           selectedFilters={filters}
+          trialStatusCounts={trialStatusCounts}
         />
 
         <table>

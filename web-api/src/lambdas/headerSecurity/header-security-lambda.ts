@@ -39,7 +39,7 @@ export const handler = async (
   const cognitoIdentityUrl = 'https://cognito-identity.us-east-1.amazonaws.com';
   const rumEndpointUrl = 'https://dataplane.rum.us-east-1.amazonaws.com';
   const contentSecurityPolicy = [
-    'base-uri resource://pdf.js',
+    `base-uri ${subdomainsUrl} ${applicationUrl} resource://pdf.js`,
     `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${s3Url} ${unpkgUrl} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl} ${cognitoIdentityUrl} ${rumEndpointUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",

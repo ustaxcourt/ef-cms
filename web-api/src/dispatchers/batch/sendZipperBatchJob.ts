@@ -11,10 +11,7 @@ export const sendZipperBatchJob = async (
   const [currentConnection] = (
     await applicationContext
       .getPersistenceGateway()
-      .getWebSocketConnectionsByUserId({
-        applicationContext,
-        userId,
-      })
+      .getWebSocketConnectionsByUserId(userId)
   ).filter(connection => {
     return connection.clientConnectionId === clientConnectionId;
   });
