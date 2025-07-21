@@ -47,7 +47,7 @@ fi
 
 export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
-export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_dns_domain="$DNS_DOMAIN"
 export TF_VAR_zone_name=$DNS_DOMAIN
 export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
 export TF_VAR_es_logs_instance_type="${ES_LOGS_INSTANCE_TYPE}"
@@ -68,4 +68,5 @@ terraform init -upgrade -backend=true \
  -backend-config=key="$KEY" \
  -backend-config=dynamodb_table="$LOCK_TABLE" \
  -backend-config=region="$REGION"
-terraform apply
+terraform plan -destroy -out execution-plan
+terraform destroy -auto-approve

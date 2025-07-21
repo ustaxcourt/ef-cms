@@ -187,13 +187,11 @@ module "ui-green" {
   dns_domain             = var.dns_domain
   zone_name              = var.zone_name
   viewer_protocol_policy = var.viewer_protocol_policy
-
   providers = {
     aws           = aws.us-east-1
     aws.us-west-1 = aws.us-west-1
   }
 }
-
 
 module "rds-expired-records-cleanup" {
     source                 = "../../modules/rds-expired-records-cleanup"

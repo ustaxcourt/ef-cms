@@ -13,6 +13,6 @@
 ENV=$1
 
 SOURCE_TABLE_VERSION=$(aws ssm get-parameter --region us-east-1 --name "/DAWSON/${ENV}/source-table-version" --with-decryption --query "Parameter.Value" --output text 2>/dev/null)
-[ -z "$SOURCE_TABLE_VERSION" ] && echo "efcms-search-${ENV}" && exit
+[ -z "$SOURCE_TABLE_VERSION" ] && echo "efcms-search-${ENV}-alpha" && exit
 
 echo "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}"

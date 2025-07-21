@@ -1078,6 +1078,10 @@ only-deployed-lower-environments: &only-deployed-lower-environments
         - experimental3
         - experimental4
         - experimental5
+        - experimental6
+        - experimental7
+        - experimental8
+        - experimental9
         - irs
         - migration
         - staging
