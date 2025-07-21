@@ -8,7 +8,8 @@ import { withAppContextDecorator } from '../src/withAppContext';
 export const fakeFile = getFakeFile();
 
 export const setupTest = ({ useCases = {} } = {}) => {
-  const cerebralTest: CerebralTestType & {
+  const cerebralTest: Omit<CerebralTestType, 'getState'> & {
+    getState: Function;
     closeSocket?: Function;
     currentRouteUrl?: string | null;
     docketNumber?: string;

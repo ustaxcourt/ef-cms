@@ -24,10 +24,8 @@ const PublicDocketRecordHeaderDep = {
   gotoPublicPrintableDocketRecordSequence:
     sequences.gotoPublicPrintableDocketRecordSequence,
   publicCaseDetailHelper: state.publicCaseDetailHelper,
-  sessionMetadata: state.sessionMetadata,
   showModal: state.modal.showModal,
   sortTableSequence: sequences.sortTableSequence,
-  updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
 };
 
 export const PublicDocketRecordHeader = connect<
@@ -41,10 +39,8 @@ export const PublicDocketRecordHeader = connect<
     gotoPublicPrintableDocketRecordSequence,
     PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
     publicCaseDetailHelper,
-    sessionMetadata,
     showModal,
     sortTableSequence,
-    updateSessionMetadataSequence,
   }) {
     return (
       <React.Fragment>
@@ -79,10 +75,7 @@ export const PublicDocketRecordHeader = connect<
             <div className="grid-row grid-gap margin-bottom-2">
               <div className="grid-col-12 display-flex flex-align-center">
                 <NonMobileHeaderControls
-                  docketNumber={docketNumber}
                   filterOptions={PUBLIC_DOCKET_RECORD_FILTER_OPTIONS}
-                  sessionMetadata={sessionMetadata}
-                  updateSessionMetadataSequence={updateSessionMetadataSequence}
                 />
               </div>
             </div>
