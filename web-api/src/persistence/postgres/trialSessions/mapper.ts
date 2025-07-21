@@ -3,14 +3,24 @@ import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
-import { NewTrialSessionKysely, TrialSessionKysely } from './schema';
+import {
+  NewTrialSessionKysely,
+  NewTrialSessionWorkingCopyKysely,
+  TrialSessionKysely,
+  TrialSessionWorkingCopyKysely,
+} from './schema';
 import { transformNullToUndefined } from '../utils/transformNullToUndefined';
-import { TrialSessionProceedingType, TrialSessionScope, TrialSessionTypes } from '@shared/business/entities/EntityConstants';
+import {
+  TrialSessionProceedingType,
+  TrialSessionScope,
+  TrialSessionTypes,
+} from '@shared/business/entities/EntityConstants';
+import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 
 // Select the relevant RawCase fields from dwCase and map them correctly.
-export const toKyselyNewTrialSession = (
+export function toKyselyNewTrialSession(
   rawTrialSession: RawTrialSession,
-): NewTrialSessionKysely => {
+): NewTrialSessionKysely {
   return {
     trialSessionId: rawTrialSession.trialSessionId,
     address1: rawTrialSession.address1,
@@ -59,7 +69,7 @@ export const toKyselyNewTrialSession = (
     trialLocation: rawTrialSession.trialLocation,
     paperServicePdfs: JSON.stringify(rawTrialSession.paperServicePdfs),
   };
-};
+}
 
 export function fromKyselyTrialSession(
   record: TrialSessionKysely,
@@ -73,6 +83,29 @@ export function fromKyselyTrialSession(
     proceedingType: record.proceedingType as TrialSessionProceedingType,
     sessionScope: record.sessionScope as TrialSessionScope,
     sessionType: record.sessionType as TrialSessionTypes,
-    caseOrder: record.caseOrder || []
+    caseOrder: record.caseOrder || [],
   });
-} 
+}
+
+export function toKyselyNewTrialSessionWorkingCopy(
+  rawTrialSessionWorkingCopy: RawTrialSessionWorkingCopy,
+): NewTrialSessionWorkingCopyKysely {
+  return {
+    trialSessionId: rawTrialSessionWorkingCopy.trialSessionId,
+    caseMetadata: JSON.stringify(rawTrialSessionWorkingCopy.caseMetadata),
+    filters: JSON.stringify(rawTrialSessionWorkingCopy.filters),
+    sessionNotes: rawTrialSessionWorkingCopy.sessionNotes,
+    sort: rawTrialSessionWorkingCopy.sort,
+    sortOrder: rawTrialSessionWorkingCopy.sortOrder,
+    userId: rawTrialSessionWorkingCopy.userId,
+  };
+}
+
+export function fromKyselyNewTrialSessionWorkingCopy(
+  trialSessionWorkingCopy: TrialSessionWorkingCopyKysely,
+): RawTrialSessionWorkingCopy {
+  return transformNullToUndefined({
+    ...trialSessionWorkingCopy,
+    sortOrder: trialSessionWorkingCopy.sortOrder as 'asc' | 'desc' | undefined,
+  });
+}

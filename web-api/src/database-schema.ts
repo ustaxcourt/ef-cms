@@ -59,7 +59,7 @@ import {
   DW_MINUTE_SHEET_COLUMNS,
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
-import { DW_TRIAL_SESSION_COLUMNS, TrialSessionTable } from './persistence/postgres/trialSessions/schema';
+import { DW_TRIAL_SESSION_COLUMNS, DW_TRIAL_SESSION_WORKING_COPY_COLUMNS, TrialSessionTable, TrialSessionWorkingCopyTable } from './persistence/postgres/trialSessions/schema';
 
 const DEFAULT = {};
 
@@ -73,12 +73,13 @@ interface DatabaseSchemaType {
   dwDocketEntry: DatabaseTableMetadata<DocketEntryTable>;
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
-  dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
+  dwTrialSession: DatabaseTableMetadata<TrialSessionTable>;
+  dwTrialSessionWorkingCopy: DatabaseTableMetadata<TrialSessionWorkingCopyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
-  dwTrialSession: DatabaseTableMetadata<TrialSessionTable>;
 }
 
 // transformOpenSearchMessage takes in a message--a result from the DB--and gets it into the right format to pass into the queue
@@ -147,6 +148,14 @@ export const DatabaseSchema: DatabaseSchemaType = {
     table: DEFAULT as ResponseStringTable,
     columns: DW_RESPONSE_STRING_COLUMNS,
   },
+  dwTrialSession: {
+    table: DEFAULT as TrialSessionTable,
+    columns: DW_TRIAL_SESSION_COLUMNS
+  },
+  dwTrialSessionWorkingCopy: {
+    table: DEFAULT as TrialSessionWorkingCopyTable,
+    columns: DW_TRIAL_SESSION_WORKING_COPY_COLUMNS
+  },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,
     columns: DW_USER_CASE_NOTE_COLUMNS,
@@ -154,10 +163,6 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwWorkItem: {
     table: DEFAULT as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
-  },
-  dwTrialSession: {
-    table: DEFAULT as TrialSessionTable,
-    columns: DW_TRIAL_SESSION_COLUMNS
   }
 };
 

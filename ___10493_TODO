@@ -2,4 +2,5 @@
 - [ ] hasNOTTBeenServed will have a casing issue
 - [ ] Determine what columns are actually nullable
 - [ ] TrialClerk and Judge are both still any in the schema.ts file
-- [ ] Need to update mapper from kysley object
+- [x] Need to update mapper from kysley object
+- [ ] Why do some records in dynamo trial-session-working-copy have userCaseNotes??

@@ -1,4 +1,5 @@
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
+import { TrialSessionWorkingCopyCaseMetadata } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { Selectable, Insertable, ColumnType } from 'kysely';
 
 const DEFAULT = {};
@@ -52,3 +53,22 @@ export const DW_TRIAL_SESSION_COLUMNS = Object.keys(
 
 export type TrialSessionKysely = Selectable<TrialSessionTable>;
 export type NewTrialSessionKysely = Insertable<TrialSessionTable>;
+
+export const trialSessionWorkingCopyTableDefinition = {
+    trialSessionId: DEFAULT as string,
+    caseMetadata: DEFAULT as  ColumnType<TrialSessionWorkingCopyCaseMetadata, string, string>,
+    filters: DEFAULT as any,
+    sessionNotes: DEFAULT as string | null,
+    sort: DEFAULT as string | null,
+    sortOrder: DEFAULT as string | null,
+    userId: DEFAULT as string,
+};
+
+export type TrialSessionWorkingCopyTable = typeof trialSessionWorkingCopyTableDefinition;
+
+export const DW_TRIAL_SESSION_WORKING_COPY_COLUMNS = Object.keys(
+    trialSessionWorkingCopyTableDefinition,
+) as Array<keyof TrialSessionWorkingCopyTable>;
+
+export type TrialSessionWorkingCopyKysely = Selectable<TrialSessionWorkingCopyTable>;
+export type NewTrialSessionWorkingCopyKysely = Insertable<TrialSessionWorkingCopyTable>;

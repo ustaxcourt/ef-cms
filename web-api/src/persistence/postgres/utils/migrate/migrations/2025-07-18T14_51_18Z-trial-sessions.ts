@@ -42,9 +42,25 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('trialLocation', 'varchar')
     .addColumn('paperServicePdfs', 'jsonb')
     .execute();
+
+  await db.schema
+    .createTable('dwTrialSessionWorkingCopy')
+    .addColumn('trialSessionId', 'uuid')
+    .addColumn('userId', 'uuid')
+    .addColumn('caseMetaData', 'jsonb')
+    .addColumn('filters', 'jsonb')
+    .addColumn('sessionNotes', 'varchar')
+    .addColumn('sort', 'varchar')
+    .addColumn('sortOrder', 'varchar')
+    .addPrimaryKeyConstraint('dwTrialSessionWorkingCopyPK', [
+      'trialSessionId',
+      'userId',
+    ])
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
-  await db.schema
-    .dropTable('dwTrialSession');
+  await db.schema.dropTable('dwTrialSession').execute();
+
+  await db.schema.dropTable('dwTrialSessionWorkingCopy').execute();
 }

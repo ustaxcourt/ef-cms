@@ -3,8 +3,9 @@ import { JoiValidationConstants } from '../JoiValidationConstants';
 import { JoiValidationEntity } from '../JoiValidationEntity';
 import joi from 'joi';
 
+export type TrialSessionWorkingCopyCaseMetadata = { [docketNumber: string]: { trialStatus: string } };
 export class TrialSessionWorkingCopy extends JoiValidationEntity {
-  public caseMetadata: { [docketNumber: string]: { trialStatus: string } };
+  public caseMetadata: TrialSessionWorkingCopyCaseMetadata;
   public filters: {
     basisReached: boolean;
     continued: boolean;
@@ -21,9 +22,9 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
     statusUnassigned: boolean;
     submittedCAV: boolean;
   };
-  public sessionNotes: string;
-  public sort: string;
-  public sortOrder: 'asc' | 'desc';
+  public sessionNotes?: string;
+  public sort?: string;
+  public sortOrder?: 'asc' | 'desc';
   public trialSessionId: string;
   public userId: string;
 
