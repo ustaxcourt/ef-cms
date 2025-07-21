@@ -14,15 +14,13 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { getReadyForTrialCases as getReadyForTrialCasesMock } from '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 const getReadyForTrialCases = getReadyForTrialCasesMock as jest.Mock;
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('checkForReadyForTrialCasesInteractor', () => {
   let mockCasesReadyForTrial;
@@ -153,7 +151,9 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   });
 
   it('should attempt to lock the case before it processes it and unlock when done', async () => {
-    tryGetLock.mockResolvedValueOnce(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocket,
@@ -175,8 +175,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     await expect(
       checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
-    expect(tryGetLock).toHaveBeenCalledTimes(3);
-    expect(releaseLock).toHaveBeenCalledTimes(2);
+    expect(tryGetLocks).toHaveBeenCalledTimes(3);
     // longer timeout to account for trying to get lock with 5000ms wait time
   }, 10000);
 });

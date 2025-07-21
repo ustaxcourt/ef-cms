@@ -19,6 +19,10 @@ import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { getDbWriter } from '@web-api/database';
 import { Case } from '@shared/business/entities/cases/Case';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
+import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -45,7 +49,7 @@ export const seed = async () => {
     onConflictColumns: ['docketNumber'],
   });
 
-  const insertWorkItem = await getDbWriter({
+  const insertWorkItem = getDbWriter({
     cb: writer =>
       writer
         .insertInto('dwWorkItem')
@@ -53,6 +57,7 @@ export const seed = async () => {
         .onConflict(oc => oc.column('workItemId').doNothing()) // ensure doesn't fail if exists
         .execute(),
     table: null,
+    action: OPENSEARCH_SYNC_ACTIONS.UPSERT,
   });
 
   // Seed the cases
@@ -69,7 +74,7 @@ export const seed = async () => {
     ...cases440_449,
     ...cases450_plus,
   ];
-  await upsertCases(
+  const insertCases = upsertCases(
     cases.map(c => ({
       ...c,
       docketNumberWithSuffix: Case.getDocketNumberWithSuffix({
@@ -84,6 +89,18 @@ export const seed = async () => {
     values: featureFlags,
     onConflictColumns: ['name'],
   });
+  const validatedDocketEntrySeeds = DocketEntry.validateRawCollection(
+    docketEntrySeeds,
+    {
+      authorizedUser: {
+        email: 'system@ustc.gov',
+        name: 'ustc automated system',
+        role: 'docketclerk',
+        userId: 'N/A',
+      },
+    },
+  );
+  const insertDocketEntries = upsertDocketEntries(validatedDocketEntrySeeds);
 
   await Promise.all([
     insertMessages,
@@ -92,6 +109,8 @@ export const seed = async () => {
     insertCaseWorksheet,
     insertWorkItem,
     insertFeatureFlags,
+    insertCases,
+    insertDocketEntries,
   ]);
 };
 

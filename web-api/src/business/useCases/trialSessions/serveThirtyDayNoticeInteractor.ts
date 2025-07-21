@@ -29,6 +29,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
@@ -221,8 +222,7 @@ export const serveThirtyDayNotice = async (
           authorizedUser,
         );
 
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
       });

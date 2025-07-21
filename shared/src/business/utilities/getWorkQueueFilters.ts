@@ -1,4 +1,8 @@
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  PETITIONS_SECTION,
+  ROLES,
+} from '@shared/business/entities/EntityConstants';
 import { RawUser } from '@shared/business/entities/User';
 import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
 import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
@@ -18,14 +22,6 @@ export const getWorkQueueFilters = ({
   const canViewPetitionsSection = isPetitionsClerk || isCaseServicesSupervisor;
   const canViewDocketSection = isDocketClerk || isCaseServicesSupervisor;
 
-  let sectionToMatch;
-
-  if (isCaseServicesSupervisor) {
-    sectionToMatch = section || sectionToDisplay;
-  } else {
-    sectionToMatch = user.section;
-  }
-
   return {
     my: {
       inProgress: (item: WorkItemWithCaseInfo) => {
@@ -42,6 +38,17 @@ export const getWorkQueueFilters = ({
         );
       },
       inbox: (item: WorkItemWithCaseInfo) => {
+        if (sectionToDisplay === PETITIONS_SECTION) {
+          return (
+            item.assigneeId === user.userId &&
+            !item.completedAt &&
+            item.docketEntry.isFileAttached !== false &&
+            !item.inProgress &&
+            item.caseStatus === CASE_STATUS_TYPES.new
+          );
+        }
+
+        // DOCKET SECTION
         return (
           item.assigneeId === user.userId &&
           !item.completedAt &&
@@ -64,13 +71,24 @@ export const getWorkQueueFilters = ({
           // DocketClerks
           (!item.completedAt &&
             canViewDocketSection &&
-            item.section === sectionToMatch &&
+            item.section === sectionToDisplay &&
             (item.docketEntry.isFileAttached === false || item.inProgress)) ||
           // PetitionsClerks
           (canViewPetitionsSection && item.inProgress === true)
         );
       },
       inbox: (item: WorkItemWithCaseInfo) => {
+        if (sectionToDisplay === PETITIONS_SECTION) {
+          return (
+            !item.completedAt &&
+            item.section === sectionToDisplay &&
+            item.docketEntry.isFileAttached !== false &&
+            !item.inProgress &&
+            item.caseStatus === CASE_STATUS_TYPES.new
+          );
+        }
+
+        // Docket section
         return (
           !item.completedAt &&
           item.section === sectionToDisplay &&

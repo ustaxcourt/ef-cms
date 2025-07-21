@@ -170,7 +170,7 @@ export const setTrialSessionCalendarInteractor = async (
 
     if (!isEmpty(caseEntitiesToCalendar)) {
       updatesToPersist.push(
-        // We may need to update related work items and deadlines for newly calendared cases depending on the trial session judge.
+        // We may need to update related deadlines for newly calendared cases depending on the trial session judge.
         // TODO: These updates should NOT be done here. Instead, we should remove associatedJudge and associatedJudgeId from dwCaseDeadline and dwWorkItem and reference these columns on dwCase.
         updateDeadlinesForCasesToCalendar({
           casesToCalendar: caseEntitiesToCalendar,

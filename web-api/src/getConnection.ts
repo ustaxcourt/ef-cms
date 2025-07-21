@@ -49,7 +49,7 @@ async function generateRDSAuthToken() {
   const signer = new Signer({
     hostname: environment.rds.pool.host,
     port: 5432,
-    region: 'us-east-1', // 10502 TODO: After west is deleted use environment.region
+    region: environment.region,
     username: environment.rds.pool.user,
   });
 
@@ -100,23 +100,3 @@ function getPoolConfig(): PoolConfig {
   }
   return poolConfig;
 }
-
-export const getScopedDbConnection = async (): Promise<{
-  db: Kysely<Database>;
-  destroy: () => Promise<void>;
-}> => {
-  const poolConfig = getPoolConfig();
-  const token = await getToken();
-  const pool = new Pool({ ...poolConfig, password: token });
-
-  const db = new Kysely<Database>({
-    dialect: new PostgresDialect({ pool }),
-  });
-
-  return {
-    db,
-    destroy: async () => {
-      await db.destroy();
-    },
-  };
-};

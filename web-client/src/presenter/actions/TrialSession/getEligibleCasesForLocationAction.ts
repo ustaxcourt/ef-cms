@@ -6,9 +6,12 @@ export const getEligibleCasesForLocationAction = async ({
 }: ActionProps) => {
   const { trialLocation } = props;
 
-  const eligibleCases = await getEligibleCasesForCityInteractor(applicationContext, {
+  const eligibleCases = await getEligibleCasesForCityInteractor(
+    applicationContext,
+    {
       trialCity: trialLocation,
-    });
+    },
+  );
 
   return { eligibleCases };
 };

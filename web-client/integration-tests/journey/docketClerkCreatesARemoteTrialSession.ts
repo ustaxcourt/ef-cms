@@ -19,8 +19,6 @@ export const docketClerkCreatesARemoteTrialSession = (
       maxCases: 'Enter a valid number of maximum cases',
       sessionType: 'Select a session type',
       startDate: 'Enter a valid start date',
-      term: 'Term session is not valid',
-      termYear: 'Term year is required',
       trialLocation: 'Select a trial session location',
     });
 
@@ -72,7 +70,6 @@ export const docketClerkCreatesARemoteTrialSession = (
 
     expect(cerebralTest.getState('validationErrors')).toMatchObject({
       startDate: 'Enter a valid start date',
-      term: 'Term session is not valid',
     });
 
     await cerebralTest.runSequence(

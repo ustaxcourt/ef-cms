@@ -30,6 +30,8 @@ export class DocumentSearch extends JoiValidationEntity {
     this.dateRange = rawProps.dateRange;
     this.caseTitleOrPetitioner = rawProps.caseTitleOrPetitioner;
 
+    if (rawProps.dateRange === DATE_RANGE_SEARCH_OPTIONS.ALL_DATES) return;
+
     if (rawProps.startDate) {
       const [month, day, year] = rawProps.startDate.split('/'); // 11/31/2019
       if (month && day && year) {

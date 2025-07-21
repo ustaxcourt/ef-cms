@@ -1,6 +1,5 @@
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
-jest.mock('@web-api/business/useCases/user/generateChangeOfAddress');
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
@@ -12,12 +11,9 @@ import { sleep } from '@shared/tools/helpers';
 import { COUNTRY_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 const contactInfo = {
   address1: '234 Main St',
@@ -136,7 +132,9 @@ describe('updateUserContactInformationInteractor', () => {
 
   describe('locked', () => {
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-      tryGetLock.mockResolvedValueOnce(false);
+      tryGetLocks.mockResolvedValueOnce([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
 
       await expect(
         updateUserContactInformationInteractor(
@@ -160,12 +158,10 @@ describe('updateUserContactInformationInteractor', () => {
         MOCK_PRACTITIONER as UnknownAuthUser,
       );
 
-      expect(tryGetLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${MOCK_CASE.docketNumber}`],
+        }),
       );
     });
   });

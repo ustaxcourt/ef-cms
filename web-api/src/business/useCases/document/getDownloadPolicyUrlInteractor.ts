@@ -21,7 +21,6 @@ export const getDownloadPolicyUrlInteractor = async (
   }
 
   const caseData = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

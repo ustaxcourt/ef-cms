@@ -29,6 +29,7 @@ import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/ge
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 const completeDocketEntryQC = async (
@@ -55,7 +56,6 @@ const completeDocketEntryQC = async (
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -85,7 +85,6 @@ const completeDocketEntryQC = async (
     filedBy: entryMetadata.filedBy,
     filers: entryMetadata.filers,
     freeText: entryMetadata.freeText,
-    freeText2: entryMetadata.freeText2,
     hasOtherFilingParty: entryMetadata.hasOtherFilingParty,
     isFileAttached: true,
     lodged: entryMetadata.lodged,
@@ -119,7 +118,6 @@ const completeDocketEntryQC = async (
     },
     { authorizedUser, petitioners: caseToUpdate.petitioners },
   ).validate();
-  updatedDocketEntry.setQCed(user);
 
   const updatedDocumentTitle = getDocumentTitleForNoticeOfChange({
     applicationContext,
@@ -338,8 +336,7 @@ const completeDocketEntryQC = async (
     }
   }
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
+  await updateCaseAndAssociations({
     authorizedUser,
     caseToUpdate: caseEntity,
   });

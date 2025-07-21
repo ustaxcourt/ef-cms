@@ -5,9 +5,9 @@ import { getCypressEnv } from '../../../../helpers/env/cypressEnvironment';
 import { logout } from '../../../../helpers/authentication/logout';
 import { v4 } from 'uuid';
 import {
-  login,
   loginAsAdmissionsClerk,
   loginAsDocketClerk1,
+  loginAsPrivatePractitioner,
 } from 'cypress/helpers/authentication/login-as-helpers';
 
 describe('Admissions Clerk Grants E-Access', () => {
@@ -237,8 +237,7 @@ describe('Admissions Clerk Grants E-Access', () => {
           cy.get('[data-testid="practitioner-representing-0"]').click();
           cy.get('[data-testid="modal-button-confirm"]').click();
           logout();
-          login({ email: practitionerEmail });
-          cy.get('[data-testid="my-cases-link"]');
+          loginAsPrivatePractitioner(practitionerEmail);
           cy.get(`[data-testid="${docketNumber}"]`)
             .contains(docketNumber)
             .click();

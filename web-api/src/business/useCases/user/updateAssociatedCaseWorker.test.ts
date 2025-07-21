@@ -1,4 +1,5 @@
 jest.mock('@shared/tools/helpers');
+jest.mock('@web-api/business/useCaseHelper/service/createChangeItems');
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
@@ -17,7 +18,6 @@ import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
 } from '@shared/test/mockCase';
-import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
 import { MOCK_PRACTITIONER, validUser } from '@shared/test/mockUsers';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -33,10 +33,9 @@ import {
   updatePractitionerCase,
 } from './updateAssociatedCaseWorker';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 const mockPractitioner = {
   ...validUser,
@@ -79,13 +78,15 @@ const mockCase = {
 };
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
-jest
+const updateCaseAndAssociations = jest
   .mocked(updateCaseAndAssociationsMock)
   .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('updateAssociatedCaseWorker', () => {
+  const generateAndServeDocketEntry = jest.mocked(
+    generateAndServeDocketEntryMock,
+  );
   it('should log an error when the practitioner is not found on one of their associated cases by userId', async () => {
     getCaseByDocketNumber.mockResolvedValue({
       ...mockCase,
@@ -104,9 +105,7 @@ describe('updateAssociatedCaseWorker', () => {
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'Could not find user|3ab77c88-1dd0-4adb-a03c-c466ad72d417 barNumber: RA3333 on 101-18',
     );
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
@@ -130,17 +129,20 @@ describe('updateAssociatedCaseWorker', () => {
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       'Could not find user|cde00f40-56e8-46c2-94c3-b1155b89a203 on 101-18',
     );
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   describe('locking', () => {
     afterEach(() => {
-      tryGetLock.mockResolvedValue(true);
+      tryGetLocks.mockResolvedValue([
+        { successfullyLocked: true, identifier: 'abc' },
+      ]);
     });
+
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-      tryGetLock.mockResolvedValue(false);
+      tryGetLocks.mockResolvedValue([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
 
       await expect(
         updateAssociatedCaseWorker(
@@ -166,12 +168,10 @@ describe('updateAssociatedCaseWorker', () => {
         mockPrivatePractitionerUser,
       );
 
-      expect(tryGetLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${MOCK_CASE.docketNumber}`],
+        }),
       );
     });
   });
@@ -208,9 +208,7 @@ describe('updateAssociatedCaseWorker', () => {
         },
         mockPetitionerUser,
       );
-      const { servedParties } =
-        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry.mock
-          .calls[0][0];
+      const { servedParties } = generateAndServeDocketEntry.mock.calls[0][0];
       expect(servedParties.electronic).toEqual([
         { email: 'user@example.com', name: 'Test Petitioner' },
       ]);
@@ -226,24 +224,19 @@ describe('updateAssociatedCaseWorker', () => {
         mockPrivatePractitionerUser,
       );
 
-      expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-      ).toHaveBeenCalled();
+      expect(updateCaseAndAssociations).toHaveBeenCalled();
 
       expect(
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-          .calls[0][0].caseToUpdate,
+        updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
       ).toMatchObject({
         privatePractitioners: [{ email: 'test@example.com' }],
       });
     });
 
     it('should not send any user notifications if the call to updateCase fails', async () => {
-      applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAndAssociations.mockRejectedValueOnce(
-          new Error('updateCaseAndAssociations failure'),
-        );
+      updateCaseAndAssociations.mockRejectedValueOnce(
+        new Error('updateCaseAndAssociations failure'),
+      );
 
       await expect(
         updateAssociatedCaseWorker(
@@ -265,15 +258,6 @@ describe('updateAssociatedCaseWorker', () => {
   describe('generating a docket entry for petitioners', () => {
     beforeEach(() => {
       applicationContext
-        .getUseCaseHelpers()
-        .generateAndServeDocketEntry.mockReturnValue({
-          changeOfAddressDocketEntry: {
-            ...MOCK_DOCUMENTS[0],
-            entityName: 'DocketEntry',
-          },
-        });
-
-      applicationContext
         .getPersistenceGateway()
         .getUserById.mockReturnValue(mockPetitioner);
     });
@@ -292,9 +276,7 @@ describe('updateAssociatedCaseWorker', () => {
         ),
       ).resolves.toBeUndefined(); // has no return value
 
-      expect(
-        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-      ).toHaveBeenCalled();
+      expect(generateAndServeDocketEntry).toHaveBeenCalled();
     });
 
     it('should call generateAndServeDocketEntry if case was closed recently', async () => {
@@ -319,9 +301,7 @@ describe('updateAssociatedCaseWorker', () => {
         ),
       ).resolves.toBeUndefined(); // has no return value
 
-      expect(
-        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-      ).toHaveBeenCalled();
+      expect(generateAndServeDocketEntry).toHaveBeenCalled();
     });
 
     it('should not call generateAndServeDocketEntry if case has been closed longer than six months', async () => {
@@ -347,9 +327,7 @@ describe('updateAssociatedCaseWorker', () => {
         ),
       ).resolves.toBeUndefined(); // has no return value
 
-      expect(
-        applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-      ).not.toHaveBeenCalled();
+      expect(generateAndServeDocketEntry).not.toHaveBeenCalled();
     });
   });
 });
@@ -380,9 +358,7 @@ describe('updatePetitionerCases', () => {
       docketNumber: mockCase.docketNumber,
     });
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should log an error if the petitioner is not found on a case returned by getCasesForUser', async () => {
@@ -411,9 +387,7 @@ describe('updatePetitionerCases', () => {
     expect(applicationContext.logger.error).toHaveBeenCalledWith(
       `Could not find user|${mockPetitionerUser2.userId} on ${caseMock.docketNumber}`,
     );
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should log an error if any case update is invalid and prevent updateCaseAndAssociations from being called', async () => {
@@ -432,9 +406,7 @@ describe('updatePetitionerCases', () => {
       }),
     ).rejects.toThrow('entity was invalid');
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+    expect(updateCaseAndAssociations).not.toHaveBeenCalled();
   });
 
   it('should call updateCaseAndAssociations with updated email address for a contactSecondary', async () => {
@@ -462,9 +434,7 @@ describe('updatePetitionerCases', () => {
       user: mockPetitionerUser2,
     });
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
     expect(caseToUpdate.petitioners[1].email).toBe(UPDATED_EMAIL);
     expect(caseToUpdate.docketNumber).toBe(MOCK_CASE.docketNumber);
   });
@@ -501,9 +471,7 @@ describe('updatePetitionerCases', () => {
       user: mockPetitionerUser2,
     });
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
     expect(caseToUpdate.petitioners[1].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -540,9 +508,7 @@ describe('updatePetitionerCases', () => {
       user: mockPetitionerUser2,
     });
 
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
+    const { caseToUpdate } = updateCaseAndAssociations.mock.calls[0][0];
 
     expect(caseToUpdate.petitioners[1].serviceIndicator).toBe(
       SERVICE_INDICATOR_TYPES.SI_NONE,
@@ -579,8 +545,8 @@ describe('updatePractitionerCases', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.privatePractitioners[0].serviceIndicator,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+        .privatePractitioners[0].serviceIndicator,
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
   });
 });

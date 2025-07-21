@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
@@ -23,7 +24,7 @@ import {
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -36,7 +37,7 @@ describe('completeDocketEntryQCInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
-  const tryGetLock = jest.mocked(tryGetLockMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeAll(() => {
     applicationContext
@@ -59,7 +60,6 @@ describe('completeDocketEntryQCInteractor', () => {
         },
       },
     ]);
-
     const workItem = {
       docketEntry: {
         docketEntryId: mockDocketEntryId,
@@ -239,8 +239,7 @@ describe('completeDocketEntryQCInteractor', () => {
     );
 
     const updatedCaseDocketEntries =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.docketEntries;
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries;
     const noticeOfDocketChangeDocketEntry = updatedCaseDocketEntries.find(
       d =>
         d.eventCode ===
@@ -631,7 +630,9 @@ describe('completeDocketEntryQCInteractor', () => {
       },
     ]);
 
-    tryGetLock.mockResolvedValueOnce(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
     await expect(() =>
       completeDocketEntryQCInteractor(
         applicationContext,

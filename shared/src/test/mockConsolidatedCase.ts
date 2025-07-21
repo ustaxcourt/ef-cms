@@ -431,7 +431,6 @@ export const MOCK_CONSOLIDATED_CASE: RawCase = {
         assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
         assigneeName: 'Test Petitionsclerk',
         associatedJudge: 'Colvin',
-        caseIsInProgress: true,
         caseStatus: 'Calendared',
         caseTitle: 'Dacey Cox',
         completedAt: '2023-04-03T15:52:59.441Z',

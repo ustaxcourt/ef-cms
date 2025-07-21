@@ -1,7 +1,7 @@
 import {
+  ALLOWLIST_FEATURE_FLAGS,
   FILING_TYPES_DICT,
   PARTY_TYPES,
-  ALLOWLIST_FEATURE_FLAGS,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';

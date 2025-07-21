@@ -9,10 +9,7 @@ import { createAPetitioner } from '../../../helpers/accountCreation/create-a-pet
 import { externalUserCreatesElectronicCase } from '../../../helpers/fileAPetition/petitioner-creates-electronic-case';
 import { faker } from '@faker-js/faker';
 import { getCypressEnv } from '../../../helpers/env/cypressEnvironment';
-import {
-  login,
-  loginAsPetitioner,
-} from '../../../helpers/authentication/login-as-helpers';
+import { loginAsPetitioner } from '../../../helpers/authentication/login-as-helpers';
 import { logout } from '../../../helpers/authentication/logout';
 import { petitionsClerkServesPetition } from '../../../helpers/documentQC/petitionsclerk-serves-petition';
 import { v4 } from 'uuid';
@@ -41,7 +38,7 @@ describe('Petitioner Updates e-mail', () => {
     const name = faker.person.fullName();
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
-    login({ email });
+    loginAsPetitioner(email);
     cy.get('[data-testid="account-menu-button"]').click();
     cy.get('[data-testid="my-account-link"]').click();
     const newUsername = `cypress_test_account+new${v4()}`;
@@ -75,13 +72,13 @@ describe('Petitioner Updates e-mail', () => {
     createAPetitioner({ email, name, password });
     verifyPetitionerAccount({ email });
 
-    login({ email });
+    loginAsPetitioner(email);
 
     externalUserCreatesElectronicCase().then(docketNumber => {
       petitionsClerkServesPetition(docketNumber);
 
       const updatedEmail = `cypress_test_account+${v4()}@example.com`;
-      login({ email });
+      loginAsPetitioner(email);
       goToMyAccount();
       clickChangeEmail();
       changeEmailTo(updatedEmail);
@@ -101,9 +98,8 @@ describe('Petitioner Updates e-mail', () => {
           'Your email address is verified. You can now log in to DAWSON.',
         );
       cy.url().should('contain', '/login');
-      login({ email: updatedEmail });
+      loginAsPetitioner(updatedEmail);
 
-      cy.get('[data-testid="my-cases-link"]');
       cy.task('waitForNoce', { docketNumber }).then(isNOCECreated => {
         expect(isNOCECreated).to.equal(
           true,
@@ -151,7 +147,7 @@ describe('Petitioner Updates e-mail', () => {
     verifyPetitionerAccount({ email });
 
     const updatedEmail = `cypress_test_account+${v4()}@example.com`;
-    login({ email });
+    loginAsPetitioner(email);
     goToMyAccount();
     clickChangeEmail();
     changeEmailTo(updatedEmail);

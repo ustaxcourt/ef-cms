@@ -13,20 +13,17 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getCasesByLeadDocketNumber as getCasesByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesByLeadDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('addConsolidatedCaseInteractor', () => {
   let mockCases;
 
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const getCasesByLeadDocketNumber = jest.mocked(
-    getCasesByLeadDocketNumberMock,
-  );
+  const getConsolidatedCases = jest.mocked(getConsolidatedCasesMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const tryGetLock = jest.mocked(tryGetLockMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
     mockCases = {
@@ -74,7 +71,7 @@ describe('addConsolidatedCaseInteractor', () => {
     getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
       return Promise.resolve(mockCases[docketNumber]);
     });
-    getCasesByLeadDocketNumber.mockImplementation(({ leadDocketNumber }) => {
+    getConsolidatedCases.mockImplementation(({ leadDocketNumber }) => {
       return Promise.resolve(
         Object.keys(mockCases)
           .map(key => mockCases[key])
@@ -100,7 +97,9 @@ describe('addConsolidatedCaseInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    tryGetLock.mockResolvedValueOnce(false);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await expect(
       addConsolidatedCaseInteractor(
@@ -116,7 +115,7 @@ describe('addConsolidatedCaseInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the cases', async () => {
+  it('should acquire a lock on the cases', async () => {
     await addConsolidatedCaseInteractor(
       applicationContext,
       {
@@ -126,9 +125,13 @@ describe('addConsolidatedCaseInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(tryGetLock).toHaveBeenCalledTimes(2);
+    expect(tryGetLocks).toHaveBeenCalledTimes(1);
 
-    expect(tryGetLock.mock.calls[0][1]).toEqual(hashLockId('case|519-19'));
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: ['case|519-19', 'case|319-19'],
+      }),
+    );
   });
 
   it('Should try to get the case by its docketNumber', async () => {

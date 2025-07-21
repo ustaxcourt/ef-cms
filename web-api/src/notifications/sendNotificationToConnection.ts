@@ -3,13 +3,7 @@ import {
   PostToConnectionCommand,
 } from '@aws-sdk/client-apigatewaymanagementapi';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-
-export type Connection = {
-  clientConnectionId: string;
-  connectionId: string;
-  endpoint: string;
-  userId: string;
-};
+import { ConnectionKysely } from '@web-api/persistence/postgres/connections/schema';
 
 export const sendNotificationToConnection = async ({
   applicationContext,
@@ -17,7 +11,7 @@ export const sendNotificationToConnection = async ({
   messageStringified,
 }: {
   applicationContext: ServerApplicationContext;
-  connection: Connection;
+  connection: ConnectionKysely;
   messageStringified: string;
 }) => {
   const { connectionId, endpoint } = connection;

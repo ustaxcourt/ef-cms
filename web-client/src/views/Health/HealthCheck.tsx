@@ -47,13 +47,6 @@ export const HealthCheck = connect(
           item={health.dynamo.efcmsDeploy}
         />
       ),
-      dynamsoft: (
-        <RenderHealthStatus
-          id="dynamsoft"
-          item={health.dynamsoft}
-          requiresMargin={true}
-        />
-      ),
       elasticsearch: (
         <RenderHealthStatus
           id="elasticsearch"
@@ -113,12 +106,6 @@ export const HealthCheck = connect(
                   <h2 className="margin-top-2 margin-left-205 grid-row">
                     <div className="grid-col-9">Cognito</div>
                     {components.cognito}
-                  </h2>
-                </div>
-                <div className="card height-8">
-                  <h2 className="margin-top-2 margin-left-205 grid-row">
-                    <div className="grid-col-9"> Dynamsoft</div>
-                    {components.dynamsoft}
                   </h2>
                 </div>
                 <div className="card">
@@ -220,12 +207,6 @@ export const HealthCheck = connect(
                 <h2 className="margin-top-2 margin-left-205 grid-row">
                   <div className="grid-col-9"> Cognito</div>
                   {components.cognito}
-                </h2>
-              </div>
-              <div className="card height-8 width-full">
-                <h2 className="margin-top-2 margin-left-205 grid-row">
-                  <div className="grid-col-9"> Dynamsoft</div>
-                  {components.dynamsoft}
                 </h2>
               </div>
             </div>

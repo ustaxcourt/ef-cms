@@ -1,12 +1,12 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { ErrorNotification } from './ErrorNotification';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { Hint } from '../ustc-ui/Hint/Hint';
 import { UserContactEditForm } from './UserContactEditForm';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { InfoNotificationComponent } from './InfoNotification';
 
 export const UserContactEdit = connect(
   {
@@ -40,10 +40,14 @@ export const UserContactEdit = connect(
             information is accurate before submitting.
           </p>
 
-          <Hint wider>
-            For name and Bar Number changes, please contact the Court’s
-            Admissions section at (202) 521-0700
-          </Hint>
+          <InfoNotificationComponent
+            alertInfo={{
+              message: `For name and Bar Number changes, please contact the Court’s
+            Admissions section at (202) 521-0700.`,
+            }}
+            dismissible={false}
+            scrollToTop={false}
+          />
 
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group">

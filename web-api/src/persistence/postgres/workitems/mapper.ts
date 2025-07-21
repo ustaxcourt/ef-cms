@@ -31,7 +31,7 @@ function getWorkItemSection({
   documentTitle,
 }: {
   section: string;
-  documentTitle: string;
+  documentTitle?: string;
 }) {
   // We have sections for caseServicesSupervisor and clerkofcourt, but as far as we can tell, they aren't used.
   // Instead, we need to translate these into either the petitions section or the docket section depending
@@ -39,7 +39,7 @@ function getWorkItemSection({
   if (!['caseServicesSupervisor', 'clerkofcourt'].includes(section)) {
     return section;
   }
-  if (documentTitle.toLocaleLowerCase() == 'petition') {
+  if (documentTitle?.toLocaleLowerCase() == 'petition') {
     return 'petitions';
   }
   return 'docket';
@@ -50,7 +50,7 @@ export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
     ...pickFields(workItem),
     section: getWorkItemSection({
       section: workItem.section,
-      documentTitle: workItem.docketEntry.documentTitle,
+      documentTitle: workItem.docketEntry?.documentTitle,
     }),
   };
 }

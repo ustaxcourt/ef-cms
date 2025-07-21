@@ -4,9 +4,10 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import type { ServerApplicationContext } from '@web-api/applicationContext';
 
 export const getAllUsersByRoleInteractor = async (
-  applicationContext: IApplicationContext,
+  applicationContext: ServerApplicationContext,
   { roles }: { roles: string[] },
   authorizedUser: UnknownAuthUser,
 ) => {

@@ -43,7 +43,6 @@ The overall structure of the web-client directory is as follows with a short des
 └── terraform // terraform files for deploying the UIs
     ├── bin // script for running terraform
     ├── common // shared UI module
-    ├── dynamsoft // module for deploying dynamsoft EC2 instance
     ├── main // the entrypoint for terraform
     └── ui // module for creating the UI related resources
 ```

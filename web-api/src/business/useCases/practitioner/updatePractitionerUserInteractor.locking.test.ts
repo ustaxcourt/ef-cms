@@ -1,7 +1,5 @@
 import '@web-api/persistence/postgres/utils/mocks.jest';
-import { tryGetLock as tryGetLockMock } from '@web-api/persistence/postgres/utils/operation/tryGetLock';
-import { releaseLock as releaseLockMock } from '@web-api/persistence/postgres/utils/operation/releaseLock';
-import { hashLockId } from '@web-api/persistence/postgres/utils/mutex';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { MOCK_PRACTITIONER } from '../../../../../shared/src/test/mockUsers';
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
@@ -13,8 +11,7 @@ import {
 } from './updatePractitionerUserInteractor';
 import { mockAdmissionsClerkUser } from '@shared/test/mockAuthUsers';
 
-const tryGetLock = jest.mocked(tryGetLockMock);
-const releaseLock = jest.mocked(releaseLockMock);
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('determineEntitiesToLock', () => {
   const mockPractitioner: RawPractitioner = MOCK_PRACTITIONER;
@@ -79,7 +76,9 @@ describe('updatePractitionerUserInteractor', () => {
 
   describe('locked', () => {
     it('should throw a ServiceUnavailableError if a Case is currently locked', async () => {
-      tryGetLock.mockResolvedValueOnce(false);
+      tryGetLocks.mockResolvedValueOnce([
+        { successfullyLocked: false, identifier: 'abc' },
+      ]);
 
       await expect(
         updatePractitionerUserInteractor(
@@ -103,12 +102,10 @@ describe('updatePractitionerUserInteractor', () => {
         mockAdmissionsClerkUser,
       );
 
-      expect(tryGetLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
-      );
-
-      expect(releaseLock.mock.calls[0][1]).toEqual(
-        hashLockId(`case|${MOCK_CASE.docketNumber}`),
+      expect(tryGetLocks).toHaveBeenCalledWith(
+        expect.objectContaining({
+          identifiers: [`case|${MOCK_CASE.docketNumber}`],
+        }),
       );
     });
   });

@@ -11,7 +11,6 @@ export const MOCK_WORK_ITEM: RawWorkItem = Object.freeze({
   assigneeName: 'Test Docketclerk',
   associatedJudge: 'Chief Judge',
   associatedJudgeId: '93c9fa05-ded6-4f23-8b15-53c3a0f12130',
-  caseIsInProgress: false,
   caseStatus: CASE_STATUS_TYPES.closed,
   caseTitle: MOCK_CASE.caseCaption,
   completedAt: '2022-02-01T17:21:07.638Z',
