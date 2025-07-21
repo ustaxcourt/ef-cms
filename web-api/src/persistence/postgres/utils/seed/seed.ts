@@ -22,6 +22,8 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 import { docketEntrySeeds } from '@web-api/persistence/postgres/utils/seed/fixtures/docketEntries';
 import { OPENSEARCH_SYNC_ACTIONS } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { trialSessions } from './fixtures/trialSessions';
+import { toKyselyNewTrialSession } from '../../trialSessions/mapper';
 
 export const seed = async () => {
   const insertMessages = pgInsertInto({
@@ -47,6 +49,12 @@ export const seed = async () => {
     values: caseWorksheets,
     onConflictColumns: ['docketNumber'],
   });
+
+  const insertTrialSession = pgInsertInto({
+    table: 'dwTrialSession', 
+    values: trialSessions.map(ts => toKyselyNewTrialSession(ts)),
+    onConflictColumns:['trialSessionId']
+  })
 
   const insertWorkItem = getDbWriter({
     cb: writer =>
@@ -104,6 +112,7 @@ export const seed = async () => {
     insertWorkItem,
     insertCases,
     insertDocketEntries,
+    insertTrialSession
   ]);
 };
 

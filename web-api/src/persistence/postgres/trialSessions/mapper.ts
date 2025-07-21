@@ -1,13 +1,15 @@
 
-import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import {
     calculateDate,
     formatNow,
 } from '@shared/business/utilities/DateHandler';
+import { NewTrialSessionKysely, TrialSessionKysely } from './schema';
 
 // Select the relevant RawCase fields from dwCase and map them correctly.
-export const toKyselyNewTrialSession = (rawTrialSession: TrialSession) => {
+export const toKyselyNewTrialSession = (rawTrialSession: RawTrialSession): NewTrialSessionKysely => {
     return {
+        trialSessionId: rawTrialSession.trialSessionId,
         address1: rawTrialSession.address1,
         address2: rawTrialSession.address2,
         alternateTrialClerkName: rawTrialSession.alternateTrialClerkName,
@@ -56,6 +58,6 @@ export const toKyselyNewTrialSession = (rawTrialSession: TrialSession) => {
     };
 };
 
-export function fromKyselyTrialSession(record: TrialSession) {
-    return record;
+export function fromKyselyTrialSession(record: TrialSessionKysely): RawTrialSession {
+    return record as any; //TODO
 }
