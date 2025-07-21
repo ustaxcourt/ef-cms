@@ -11,22 +11,34 @@ const scriptConfig: ScriptConfig = {
     'start-glue-job - Starts a glue job into the provided dynamo database.',
   environment: {
     env: 'ENV',
+    prodEnvAccountId: 'PROD_ENV_ACCOUNT_ID',
     sourceTable: 'SOURCE_TABLE',
   },
   parameters: {
     destinationTable: {
-      position: 0,
+      long: 'destination-table',
+      required: true,
+      type: 'string',
+    },
+    lowerEnvAccountId: {
+      long: 'lower-env-account-id',
       required: true,
       type: 'string',
     },
   },
   requireActiveAwsSession: true,
 };
-const { destinationTable, env, sourceTable } = parseArgsAndEnvVars(
-  scriptConfig,
-) as {
+const {
+  destinationTable,
+  env,
+  lowerEnvAccountId,
+  prodEnvAccountId,
+  sourceTable,
+} = parseArgsAndEnvVars(scriptConfig) as {
   destinationTable: string;
   env: string;
+  lowerEnvAccountId: string;
+  prodEnvAccountId: string;
   sourceTable: string;
 };
 
@@ -37,5 +49,10 @@ if (env !== 'prod') {
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  await startGlueJob({ destinationTable, sourceTable });
+  await startGlueJob({
+    destinationTable,
+    lowerEnvAccountId,
+    prodEnvAccountId,
+    sourceTable,
+  });
 })();
