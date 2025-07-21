@@ -909,7 +909,7 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
 
-export const MERGED_DOCUMENT_TYPES = [
+export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
   ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).map(doc => ({
     ...doc,
     label: doc.documentTitle,

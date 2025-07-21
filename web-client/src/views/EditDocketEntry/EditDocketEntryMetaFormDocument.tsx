@@ -10,7 +10,10 @@ import { reactSelectValue } from '@web-client/ustc-ui/Utils/documentTypeSelectHe
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
-import { MERGED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  SYSTEM_AND_INTERNAL_DOCUMENT_TYPES,
+  SYSTEM_ROLE,
+} from '@shared/business/entities/EntityConstants';
 
 export const EditDocketEntryMetaFormDocument = connect(
   {
@@ -97,10 +100,10 @@ export const EditDocketEntryMetaFormDocument = connect(
             name="eventCode"
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
             value={reactSelectValue({
-              documentTypes: MERGED_DOCUMENT_TYPES,
+              documentTypes: SYSTEM_AND_INTERNAL_DOCUMENT_TYPES,
               selectedEventCode: form.eventCode,
             })}
-            isDisabled={form.filedByRole === 'System'}
+            isDisabled={form.filedByRole === SYSTEM_ROLE}
             onChange={inputValue => {
               const value = inputValue?.value || '';
               updateDocketEntryMetaDocumentFormValueSequence({
