@@ -41,7 +41,7 @@ async function generateRDSAuthToken() {
 
 async function getToken() {
   const token =
-    environment.nodeEnv !== 'production'
+    environment.stage !== 'prod'
       ? environment.rds.pool.password
       : await generateRDSAuthToken();
 
