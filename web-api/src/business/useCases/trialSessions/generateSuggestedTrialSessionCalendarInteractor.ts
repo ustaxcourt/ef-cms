@@ -40,6 +40,7 @@ import {
 import { sortObjectByKey } from '@shared/tools/helpers';
 import { writeTrialSessionDataToExcel } from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
+import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 export const WASHINGTON_DC_STRING = 'Washington, District of Columbia';
 export const WASHINGTON_DC_NORTH_STRING =
@@ -75,9 +76,7 @@ export const generateSuggestedTrialSessionCalendarInteractor = async (
   const { termEndDate, termStartDate, ...calendaringConfig } =
     TERM_BUILDER_INFORMATION;
 
-  const sessions = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessions({ applicationContext });
+  const sessions = await getTrialSessions();
 
   const specialSessions = getSpecialSessionsInTerm({
     sessions,

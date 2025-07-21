@@ -32,7 +32,7 @@ export const trialSessionTableDefinition = {
     sessionScope: DEFAULT as string,
     sessionStatus: DEFAULT as string,
     sessionType: DEFAULT as string,
-    startDate: DEFAULT as Date | null,
+    startDate: DEFAULT as Date,
     startTime: DEFAULT as string | null,
     state: DEFAULT as string | null,
     swingSession: DEFAULT as boolean | null,

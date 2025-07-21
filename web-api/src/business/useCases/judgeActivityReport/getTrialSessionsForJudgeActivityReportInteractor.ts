@@ -16,6 +16,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { sum } from 'lodash';
+import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 export type TrialSessionTypes = {
   [SESSION_TYPES.regular]: number;
@@ -51,11 +52,7 @@ export const getTrialSessionsForJudgeActivityReportInteractor = async (
     );
   }
 
-  const trialSessions = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessions({
-      applicationContext,
-    });
+  const trialSessions = await getTrialSessions();
 
   const trialSessionsForSelectedJudges = trialSessions.filter(session => {
     if (!session.judge) {

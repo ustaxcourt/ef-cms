@@ -59,7 +59,6 @@ import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
 import { getTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/getTrialSessionProcessingStatus';
 import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
-import { getTrialSessions } from './persistence/dynamo/trialSessions/getTrialSessions';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
@@ -221,7 +220,6 @@ const gatewayMethods = {
   getTrialSessionJobStatusForCase,
   getTrialSessionProcessingStatus,
   getTrialSessionWorkingCopy,
-  getTrialSessions,
   getUploadPolicy,
   getUserByEmail,
   getUserById,

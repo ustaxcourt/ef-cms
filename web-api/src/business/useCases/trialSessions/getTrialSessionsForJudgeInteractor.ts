@@ -7,6 +7,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { TrialSessionInfoDTO } from '@shared/business/dto/trialSessions/TrialSessionInfoDTO';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessions } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 /**
  * getTrialSessionsForJudgeInteractor
@@ -23,11 +24,7 @@ export const getTrialSessionsForJudgeInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSessions = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessions({
-      applicationContext,
-    });
+  const trialSessions = await getTrialSessions();
 
   const judgeSessions = trialSessions.filter(
     session => session.judge?.userId === judgeId,
