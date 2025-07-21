@@ -1,9 +1,17 @@
-import { getIndexNameForRecord } from './getIndexNameForRecord';
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { getIndexNameForRecord } from '@web-api/persistence/elasticsearch/getIndexNameForRecord';
+import { Bulk_RequestBody } from '@opensearch-project/opensearch/api';
 
-export const bulkDeleteRecords = async ({ applicationContext, records }) => {
+export const bulkDeleteRecords = async ({
+  applicationContext,
+  records,
+}: {
+  applicationContext: ServerApplicationContext;
+  records: any[];
+}) => {
   const searchClient = applicationContext.getSearchClient();
 
-  const body = records
+  const body: Bulk_RequestBody = records
     .map(record => ({
       ...record.dynamodb.OldImage,
     }))
@@ -14,17 +22,18 @@ export const bulkDeleteRecords = async ({ applicationContext, records }) => {
         return [{ delete: { _id: `${doc.pk.S}_${doc.sk.S}`, _index: index } }];
       }
     })
-    .filter(item => item);
+    .filter(item => item) as Record<string, any>[];
 
-  const failedRecords = [];
+  const failedRecords: Record<string, any>[] = [];
+
   if (body.length) {
     const response = await searchClient.bulk({
       body,
       refresh: false,
     });
 
-    if (response.errors) {
-      response.items.forEach((action, i) => {
+    if (response['errors']) {
+      response['items'].forEach((action, i) => {
         const operation = Object.keys(action)[0];
         if (action[operation].error) {
           const record = body[i];
@@ -33,5 +42,6 @@ export const bulkDeleteRecords = async ({ applicationContext, records }) => {
       });
     }
   }
+
   return { failedRecords };
 };
