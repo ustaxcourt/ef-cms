@@ -279,7 +279,7 @@ export const formatWorkItem = ({
   ).includes(workItem.docketEntry.eventCode);
 
   const isOrder = !!orderDocumentTypes.includes(
-    workItem.docketEntry.documentType,
+    workItem.docketEntry.documentType || '',
   );
 
   let descriptionDisplay = workItem.docketEntry.documentType;

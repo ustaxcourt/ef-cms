@@ -136,7 +136,6 @@ import { logErrorLambda } from '@web-api/lambdas/errors/logErrorLambda';
 import { loginLambda } from '@web-api/lambdas/auth/loginLambda';
 import { opinionAdvancedSearchLambda } from './lambdas/documents/opinionAdvancedSearchLambda';
 import { orderAdvancedSearchLambda } from './lambdas/documents/orderAdvancedSearchLambda';
-import { prioritizeCaseLambda } from './lambdas/cases/prioritizeCaseLambda';
 import { privatePractitionerCaseAssociationLambda } from './lambdas/cases/privatePractitionerCaseAssociationLambda';
 import { privatePractitionerPendingCaseAssociationLambda } from './lambdas/cases/privatePractitionerPendingCaseAssociationLambda';
 import { removeCaseFromTrialLambda } from './lambdas/trialSessions/removeCaseFromTrialLambda';
@@ -171,7 +170,6 @@ import { strikeDocketEntryLambda } from './lambdas/documents/strikeDocketEntryLa
 import { swaggerJsonLambda } from './lambdas/swagger/swaggerJsonLambda';
 import { swaggerLambda } from './lambdas/swagger/swaggerLambda';
 import { unblockCaseFromTrialLambda } from './lambdas/cases/unblockCaseFromTrialLambda';
-import { unprioritizeCaseLambda } from './lambdas/cases/unprioritizeCaseLambda';
 import { unsealCaseLambda } from './lambdas/cases/unsealCaseLambda';
 import { unsealDocketEntryLambda } from './lambdas/documents/unsealDocketEntryLambda';
 import { updateCaseContextLambda } from './lambdas/cases/updateCaseContextLambda';
@@ -529,14 +527,6 @@ app.use(expressLogger);
   app.delete(
     '/case-meta/:docketNumber/block',
     lambdaWrapper(unblockCaseFromTrialLambda),
-  );
-  app.post(
-    '/case-meta/:docketNumber/high-priority',
-    lambdaWrapper(prioritizeCaseLambda),
-  );
-  app.delete(
-    '/case-meta/:docketNumber/high-priority',
-    lambdaWrapper(unprioritizeCaseLambda),
   );
   app.put(
     '/case-meta/:docketNumber/case-context',

@@ -783,6 +783,11 @@ export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
 
+export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
+  statusReport: 'Status Report Due',
+  statusReportStipulatedDecision: 'Status Report or Proposed Stipulated Decision Due'
+};
+
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {
     content:
@@ -908,6 +913,19 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   },
   ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
+
+export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
+  ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).map(doc => ({
+    ...doc,
+    label: doc.documentTitle,
+    value: doc.eventCode,
+  })),
+  ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
+    ...doc,
+    label: doc.documentTitle,
+    value: doc.eventCode,
+  })),
+];
 
 export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
   Object.values(AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES),

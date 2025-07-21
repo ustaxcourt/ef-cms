@@ -21,6 +21,17 @@ echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 
 DEPLOYMENT_TIMESTAMP=$(date "+%s")
 
+../../../../scripts/verify-terraform-version.sh
+
+BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
+[ -n "$ZONE_NAME" ] && BUCKET="${ZONE_NAME}.terraform.deploys"
+KEY="reindex-cron-${ENVIRONMENT}.tfstate"
+LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
+rm -rf .terraform
+rm -f .terraform.lock.hcl
+
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
 export TF_VAR_deployment_timestamp=$DEPLOYMENT_TIMESTAMP
@@ -29,11 +40,9 @@ export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_migrate_flag=$MIGRATE_FLAG
 export TF_VAR_source_table=$SOURCE_TABLE
 
-../../../../scripts/verify-terraform-version.sh
-
 terraform init -upgrade -backend=true \
- -backend-config=bucket="${EFCMS_DOMAIN}.terraform.deploys" \
- -backend-config=key="reindex-cron-${ENVIRONMENT}.tfstate" \
- -backend-config=dynamodb_table="efcms-terraform-lock" \
- -backend-config=region="us-east-1"
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
 terraform destroy -auto-approve

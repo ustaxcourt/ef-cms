@@ -51,8 +51,17 @@ BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
 ALL_COLORS_KEY="documents-${ENV}.tfstate"
 KEY="documents-${ENV}-${COLOR}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
+# ZONE_NAME is deprecated and will only be set in legacy accounts
+DNS_DOMAIN="$EFCMS_DOMAIN"
+if [[ -n "$ZONE_NAME" ]]; then
+  BUCKET="${ZONE_NAME}.terraform.deploys"
+  DNS_DOMAIN="$ZONE_NAME"
+fi
 
 rm -rf .terraform
+rm -f .terraform.lock.hcl
 
 echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]"
 sh ../../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
@@ -103,6 +112,7 @@ DEPLOYMENT_TIMESTAMP=$(date "+%s")
 export TF_VAR_all_colors_tfstate_bucket=$BUCKET
 export TF_VAR_all_colors_tfstate_key=$ALL_COLORS_KEY
 export TF_VAR_environment=$ENV
+export TF_VAR_zone_name=$DNS_DOMAIN
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
@@ -125,6 +135,10 @@ then
   export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
 fi
 
-terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -upgrade -backend=true \
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
 terraform plan -out execution-plan
 terraform apply -auto-approve execution-plan

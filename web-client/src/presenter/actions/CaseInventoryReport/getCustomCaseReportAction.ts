@@ -18,10 +18,6 @@ export const getCustomCaseReportAction = async ({
   const currentJudges = get(state.judges);
   const page = props.selectedPage;
 
-  if (!filterValues.highPriority) {
-    delete filterValues.highPriority;
-  }
-
   let formattedStartDate: string | undefined;
   if (filterValues.startDate) {
     const [startMonth, startDay, startYear] = filterValues.startDate.split('/');

@@ -11,6 +11,8 @@ export const DateRangePickerComponent = ({
   endPickerCls,
   endValue,
   formGroupCls,
+  formGroupStartCls,
+  formGroupEndCls,
   maxDate,
   minDate,
   omitFormGroupClass,
@@ -18,6 +20,7 @@ export const DateRangePickerComponent = ({
   onBlurStart,
   onChangeEnd,
   onChangeStart,
+  onLoad,
   parentModalHasMounted = false,
   rangePickerCls,
   showDateHint = false,
@@ -35,11 +38,14 @@ export const DateRangePickerComponent = ({
   endPickerCls?: string;
   endValue: string;
   formGroupCls?: string;
+  formGroupStartCls?: string,
+  formGroupEndCls?: string,
   rangePickerCls?: string;
   onBlurEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlurStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onChangeStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onLoad?: () => void;
   startDateErrorText?: string;
   startPickerCls?: string;
   startLabel?: string | React.ReactNode;
@@ -194,6 +200,12 @@ export const DateRangePickerComponent = ({
     };
   }, [startDateInputRef, endDateInputRef, parentModalHasMounted]);
 
+  useEffect(() => {
+    if (onLoad) {
+      onLoad();
+    }
+  }, []);
+
   return (
     <FormGroup
       className={formGroupCls}
@@ -206,7 +218,13 @@ export const DateRangePickerComponent = ({
         data-min-date={minDate}
       >
         <div className={startPickerCls} data-testid={`${startName}-date-start`}>
-          <FormGroup errorText={startDateErrorText} ref={startDatePickerRef}>
+
+          <FormGroup
+            className={formGroupStartCls}
+            errorText={startDateErrorText}
+            ref={startDatePickerRef}
+          >
+
             <label
               className="usa-label"
               data-testid={`${startName}-date-start-label`}
@@ -231,7 +249,13 @@ export const DateRangePickerComponent = ({
           </FormGroup>
         </div>
         <div className={endPickerCls} data-testid={`${endName}-date-end}`}>
-          <FormGroup errorText={endDateErrorText} ref={endDatePickerRef}>
+
+          <FormGroup
+            className={formGroupEndCls}
+            errorText={endDateErrorText}
+            ref={endDatePickerRef}
+            id="case-deadlines-end-formgroup"
+          >
             <label
               className="usa-label"
               data-testid={`${endName}-date-end-label`}

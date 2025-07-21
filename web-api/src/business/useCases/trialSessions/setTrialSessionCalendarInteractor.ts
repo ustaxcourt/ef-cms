@@ -15,8 +15,8 @@ import { isEmpty, flatten, partition, uniq } from 'lodash';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { updateDeadlinesForCasesToCalendar } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
-import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -87,9 +87,6 @@ export const setTrialSessionCalendarInteractor = async (
           eligibleCase.qcCompleteForTrial[trialSessionId] === true,
       )
       .sort((a, b) => {
-        if (a.highPriority && !b.highPriority) return -1;
-        if (!a.highPriority && b.highPriority) return 1;
-
         const aSuffixIsHighPriority =
           a.docketNumberSuffix &&
           HIGH_PRIORITY_SUFFIXES.includes(a.docketNumberSuffix);
