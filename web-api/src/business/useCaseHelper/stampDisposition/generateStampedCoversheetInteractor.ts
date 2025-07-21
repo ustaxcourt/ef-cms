@@ -59,7 +59,6 @@ export const generateStampedCoversheetInteractor = async (
   authorizedUser: UnknownAuthUser,
 ) => {
   const caseRecord = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

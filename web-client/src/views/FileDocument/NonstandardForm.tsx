@@ -71,6 +71,7 @@ export const NonstandardForm = connect(
             <select
               className="usa-select"
               id={`${namespace}ordinal-field-select`}
+              data-testid={`${namespace}ordinal-field-select-search`}
               name={`${namespace}ordinalValue`}
               value={get(form, `${namespace}ordinalValue`)}
               onChange={e => {
@@ -151,30 +152,6 @@ export const NonstandardForm = connect(
             />
           </FormGroup>
         )}
-        {helper[level].showTextInput2 && (
-          <FormGroup errorText={validationErrors?.freeText2}>
-            <label className="usa-label" htmlFor={`${namespace}free-text2`}>
-              {helper[level].textInputLabel2}
-            </label>
-            <input
-              autoCapitalize="none"
-              className="usa-input"
-              id={`${namespace}free-text2`}
-              name={`${namespace}freeText2`}
-              type="text"
-              value={get(form, `${namespace}freeText2`, '')}
-              onBlur={() => {
-                validateSequence();
-              }}
-              onChange={e => {
-                updateSequence({
-                  key: e.target.name,
-                  value: e.target.value,
-                });
-              }}
-            />
-          </FormGroup>
-        )}
         {helper[level].previousDocumentSelectLabel && (
           <FormGroup errorText={validationErrors?.previousDocument}>
             <label
@@ -190,6 +167,7 @@ export const NonstandardForm = connect(
                 validationErrors?.previousDocument && 'usa-select--error',
               )}
               id={`${namespace}previous-document`}
+              data-testid={`${namespace}previous-document-search`}
               name={`${namespace}previousDocument`}
               value={get(
                 form,

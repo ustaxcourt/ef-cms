@@ -509,7 +509,6 @@ export const cases400_409: Omit<RawCase, 'docketNumberWithSuffix'>[] = [
     caseType: CASE_TYPES_MAP.partnershipSection6226,
     createdAt: '2021-10-29T13:41:06.778Z',
     docketNumber: SEEDED_DOCKET_NUMBERS_400_409['405-22'],
-    // gsi1pk: 'leadCase|404-22',
     hasPendingItems: true,
     hasVerifiedIrsNotice: false,
     initialCaption:

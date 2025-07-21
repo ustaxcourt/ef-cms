@@ -37,7 +37,7 @@ const documentClient = DynamoDBDocument.from(dynamodb, {
         lastKey = results.LastEvaluatedKey;
 
         const chunks = chunk(results.Items, CHUNK_SIZE);
-        for (let c of chunks) {
+        for (const c of chunks) {
           count += CHUNK_SIZE;
           console.log(`reindexing chunk: ${count} total reindexed`);
 
@@ -45,7 +45,7 @@ const documentClient = DynamoDBDocument.from(dynamodb, {
             RequestItems: {
               [tableName]: c.map(item => ({
                 PutRequest: {
-                  Item: { ...item, indexedTimestamp: Date.now() },
+                  Item: item,
                 },
               })),
             },
