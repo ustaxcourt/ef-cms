@@ -48,6 +48,7 @@ async function main() {
       }),
     ),
   );
+  console.log('Finished moving users from dynamo to postgres');
 }
 
 async function associateUsersWithCases(

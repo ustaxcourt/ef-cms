@@ -90,11 +90,11 @@ async function main() {
     await associateUsersWithCases(petitionersToUpsert);
 
     totalItems += casesToIndex.length;
-    console.log(`Total cases index so far: ${totalItems}`);
+    console.log(`Total cases scanned so far: ${totalItems}`);
     offset += pageSize;
     casesToIndex = await getCasesToMovePetitioners(offset);
   }
-  console.log('Done indexing cases');
+  console.log('Done moving petitioners');
 }
 
 main().catch(console.error);
