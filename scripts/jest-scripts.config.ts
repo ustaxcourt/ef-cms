@@ -40,6 +40,7 @@ const config: Config = {
     '!migration/track-successful-migrations.ts',
     '!npm/upgrade-npm-packages.ts',
     '!postgres/**',
+    '!reindex/**',
     '!reports/**',
     '!run-once-scripts/**',
     '!secrets/**',
