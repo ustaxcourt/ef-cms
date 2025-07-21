@@ -8,13 +8,14 @@ import { withAppContextDecorator } from '../src/withAppContext';
 export const fakeFile = getFakeFile();
 
 export const setupTest = ({ useCases = {} } = {}) => {
-  const cerebralTest: Omit<CerebralTestType, 'getState'> & {
+  // eslint-disable-next-line prefer-const
+  let cerebralTest: Omit<CerebralTestType, 'getState'> & {
     getState: Function;
     closeSocket?: Function;
     currentRouteUrl?: string | null;
     docketNumber?: string;
     [key: string]: any;
-  } = CerebralTest(presenter);
+  };
 
   presenter.providers.applicationContext = applicationContext;
   const originalUseCases = applicationContext.getUseCases();
@@ -57,6 +58,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     return value;
   });
 
+  cerebralTest = CerebralTest(presenter);
   cerebralTest.closeSocket = () => {
     /* no-op */
   };
