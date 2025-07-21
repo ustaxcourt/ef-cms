@@ -21,7 +21,7 @@ export const sendIrsSuperuserPetitionEmail = async ({
 }) => {
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
-  if (docketEntryEntity.index === undefined) {
+  if (!docketEntryEntity || docketEntryEntity.index === undefined) {
     throw new Error('Cannot serve a docket entry without an index.');
   }
 
