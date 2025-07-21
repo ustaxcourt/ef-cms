@@ -8,6 +8,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 /**
  * saveCalendarNoteInteractor
@@ -34,10 +35,7 @@ export const saveCalendarNoteInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 

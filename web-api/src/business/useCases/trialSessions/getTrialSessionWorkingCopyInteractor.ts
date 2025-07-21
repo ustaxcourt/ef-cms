@@ -8,6 +8,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { TrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 /**
  * getTrialSessionWorkingCopyInteractor
@@ -62,10 +63,7 @@ export const getTrialSessionWorkingCopyInteractor = async (
       .validate()
       .toRawObject();
   } else {
-    const trialSessionDetails = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
-        applicationContext,
+    const trialSessionDetails = await getTrialSessionById({
         trialSessionId,
       });
 

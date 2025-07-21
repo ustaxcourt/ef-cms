@@ -7,6 +7,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 /**
  * dismissNOTTReminderForTrialInteractor
@@ -23,10 +24,7 @@ export const dismissNOTTReminderForTrialInteractor = async (
     throw new UnauthorizedError('Unauthorized to dismiss NOTT reminder');
   }
 
-  const currentTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const currentTrialSession = await getTrialSessionById({
       trialSessionId,
     });
 

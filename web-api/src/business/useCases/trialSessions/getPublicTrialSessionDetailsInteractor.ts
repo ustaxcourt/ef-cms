@@ -1,6 +1,7 @@
 import { NotFoundError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export type PublicTrialSessionDetails = Pick<
   TrialSession,
@@ -22,10 +23,7 @@ export const getPublicTrialSessionDetailsInteractor = async (
   applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ): Promise<PublicTrialSessionDetails> => {
-  const trialSessionDetails = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSessionDetails = await getTrialSessionById({
       trialSessionId,
     });
 
@@ -39,10 +37,7 @@ export const getPublicTrialSessionDetailsInteractor = async (
 
   let swingSessionLocation: string | undefined;
   if (fullTrialSessionEntity.swingSessionId) {
-    const swingSessionDetails = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
-        applicationContext,
+    const swingSessionDetails = await getTrialSessionById({
         trialSessionId: fullTrialSessionEntity.swingSessionId,
       });
     swingSessionLocation = swingSessionDetails?.trialLocation;

@@ -11,6 +11,7 @@ import { formatPhoneNumber } from '@shared/business/utilities/formatPhoneNumber'
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 /**
  * generateStandingPretrialOrderInteractor
@@ -28,10 +29,7 @@ export const generateStandingPretrialOrderInteractor = async (
     trialSessionId,
   }: { docketNumber: string; trialSessionId: string },
 ) => {
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 

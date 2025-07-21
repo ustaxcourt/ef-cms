@@ -56,7 +56,6 @@ import { getReconciliationReport } from './persistence/elasticsearch/getReconcil
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getColdCases } from './persistence/elasticsearch/getColdCases';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
-import { getTrialSessionById } from './persistence/dynamo/trialSessions/getTrialSessionById';
 import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
 import { getTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/getTrialSessionProcessingStatus';
 import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
@@ -219,7 +218,6 @@ const gatewayMethods = {
   getSesStatus,
   getColdCases,
   getTableStatus,
-  getTrialSessionById,
   getTrialSessionJobStatusForCase,
   getTrialSessionProcessingStatus,
   getTrialSessionWorkingCopy,

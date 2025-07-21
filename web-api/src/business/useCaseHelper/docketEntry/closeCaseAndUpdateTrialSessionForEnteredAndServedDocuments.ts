@@ -7,6 +7,7 @@ import { TrialSession } from '../../../../../shared/src/business/entities/trialS
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { deleteCaseDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
   async ({ applicationContext, caseEntity, eventCode }) => {
@@ -36,10 +37,7 @@ export const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments =
     caseEntity.updateAutomaticBlocked({ hasCaseDeadline: false });
 
     if (caseEntity.trialSessionId) {
-      const trialSession = await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById({
-          applicationContext,
+      const trialSession = await getTrialSessionById({
           trialSessionId: caseEntity.trialSessionId,
         });
 

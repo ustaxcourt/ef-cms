@@ -10,6 +10,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export const associateSwingTrialSessions = async (
   applicationContext: ServerApplicationContext,
@@ -23,10 +24,7 @@ export const associateSwingTrialSessions = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const swingTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const swingTrialSession = await getTrialSessionById({
       trialSessionId: swingSessionId,
     });
 

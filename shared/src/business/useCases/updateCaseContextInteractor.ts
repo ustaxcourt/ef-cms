@@ -15,6 +15,7 @@ import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/ca
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export const updateCaseContext = async (
   applicationContext: ServerApplicationContext,
@@ -71,10 +72,7 @@ export const updateCaseContext = async (
         );
       }
 
-      const trialSession = await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById({
-          applicationContext,
+      const trialSession = await getTrialSessionById({
           trialSessionId: oldCase.trialSessionId,
         });
 

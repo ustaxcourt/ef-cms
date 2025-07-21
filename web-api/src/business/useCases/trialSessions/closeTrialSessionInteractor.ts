@@ -9,6 +9,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { isEmpty, isEqual } from 'lodash';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 /**
  * closeTrialSessionInteractor
@@ -26,10 +27,7 @@ export const closeTrialSessionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 

@@ -17,6 +17,7 @@ import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { updateDeadlinesForCasesToCalendar } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -37,10 +38,7 @@ export const setTrialSessionCalendarInteractor = async (
       throw new UnauthorizedError('Unauthorized');
     }
 
-    const trialSession = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
-        applicationContext,
+    const trialSession = await getTrialSessionById({
         trialSessionId,
       });
 

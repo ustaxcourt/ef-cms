@@ -2,19 +2,19 @@ import { RawTrialSession } from '../../../../../shared/src/business/entities/tri
 import { getDbReader } from '@web-api/database';
 import { fromKyselyTrialSession } from './mapper';
 
-export const getTrialSessionById = async (
-  _applicationContext: {
-    applicationContext: IApplicationContext;
-  },
-  trialSessionId: string,
-): Promise<RawTrialSession[]> => {
-  const dbTrialSessions = await getDbReader(reader =>
+export const getTrialSessionById = async ({ trialSessionId }: { trialSessionId: string }
+): Promise<RawTrialSession | undefined> => {
+  const dbTrialSession = await getDbReader(reader =>
     reader
       .selectFrom('dwTrialSession')
       .selectAll()
       .where('trialSessionId', '=', trialSessionId)
-      .execute(),
+      .executeTakeFirst(),
   );
 
-  return dbTrialSessions.map(ts => fromKyselyTrialSession(ts));
+  if (!dbTrialSession) {
+    return undefined;
+  }
+
+  return fromKyselyTrialSession(dbTrialSession)
 };

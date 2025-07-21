@@ -10,6 +10,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 const setNoticesForCalendaredTrialSession = async (
   applicationContext: ServerApplicationContext,
@@ -58,10 +59,7 @@ const setNoticesForCalendaredTrialSession = async (
     userId: authorizedUser.userId,
   });
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 

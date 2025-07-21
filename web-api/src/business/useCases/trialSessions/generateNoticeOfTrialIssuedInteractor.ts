@@ -10,6 +10,7 @@ import { TRIAL_SESSION_PROCEEDING_TYPES } from '@shared/business/entities/Entity
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMeta';
 import { getJudgeWithTitle } from '@shared/business/utilities/getJudgeWithTitle';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export type FormattedTrialInfoType = RawTrialSession & {
   formattedStartDate: string;
@@ -24,10 +25,7 @@ export const generateNoticeOfTrialIssuedInteractor = async (
     trialSessionId,
   }: { docketNumber: string; trialSessionId: string },
 ): Promise<Uint8Array> => {
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 

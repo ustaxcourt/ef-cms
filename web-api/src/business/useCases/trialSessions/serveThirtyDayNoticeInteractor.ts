@@ -29,6 +29,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
@@ -57,10 +58,7 @@ export const serveThirtyDayNotice = async (
         applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
     });
 
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const trialSession = await getTrialSessionById({
       trialSessionId,
     });
 
@@ -285,17 +283,14 @@ export const serveThirtyDayNotice = async (
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     trialSessionId,
   }: {
     trialSessionId: string;
   },
 ) => {
-  const currentTrialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
+  const currentTrialSession = await getTrialSessionById({
       trialSessionId,
     });
 

@@ -15,9 +15,9 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { minuteSheet as minuteSheetDocumentGenerator } from '@shared/business/utilities/documentGenerators/minuteSheet';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { getTrialSessionById } from '@web-api/persistence/dynamo/trialSessions/getTrialSessionById';
 import { getDownloadPolicyUrl } from '@web-api/persistence/s3/getDownloadPolicyUrl';
 import { generateMinuteSheetFilename } from '@web-api/business/useCaseHelper/trialSessionMinutes/generateMinuteSheetFilename';
+import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 export const generateTrialSessionMinutesPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -33,8 +33,7 @@ export const generateTrialSessionMinutesPdfInteractor = async (
   });
 
   const trialSession = await getTrialSessionById({
-    applicationContext,
-    trialSessionId,
+    trialSessionId
   });
 
   if (!aCase || !trialSession) {
