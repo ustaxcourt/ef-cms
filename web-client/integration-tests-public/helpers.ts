@@ -12,6 +12,7 @@ export const setupTest = ({ useCases = {} } = {}) => {
     closeSocket?: Function;
     currentRouteUrl?: string | null;
     docketNumber?: string;
+    [key: string]: any;
   } = CerebralTest(presenter);
 
   presenter.providers.applicationContext = applicationContext;
