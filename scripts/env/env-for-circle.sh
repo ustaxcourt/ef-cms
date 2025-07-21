@@ -48,19 +48,19 @@ case $CIRCLE_BRANCH in
     ;;
 
   experimental6)
-    ENV="exp5"
+    ENV="exp6"
     ;;
 
   experimental7)
-    ENV="exp5"
+    ENV="exp7"
     ;;
 
   experimental8)
-    ENV="exp5"
+    ENV="exp8"
     ;;
 
   experimental9)
-    ENV="exp5"
+    ENV="exp9"
     ;;
 
   *)
