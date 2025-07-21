@@ -18,6 +18,7 @@ import { updateDeadlinesForCasesToCalendar } from '@web-api/business/useCases/tr
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -51,11 +52,8 @@ export const setTrialSessionCalendarInteractor = async (
     trialSessionEntity.validate();
 
     // We will get cases already associated with the trial session as well as cases that are eligible
-    const manuallyAddedCases = await applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession({
-        applicationContext,
-        trialSessionId,
+    const manuallyAddedCases = await getCalendaredCasesForTrialSession({
+      trialSessionId,
       });
 
     // Manually added cases are already on the caseOrder, so if they have not been QCed we have to remove them

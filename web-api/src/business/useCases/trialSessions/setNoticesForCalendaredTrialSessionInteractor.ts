@@ -11,6 +11,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 
 const setNoticesForCalendaredTrialSession = async (
   applicationContext: ServerApplicationContext,
@@ -24,10 +25,7 @@ const setNoticesForCalendaredTrialSession = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const calendaredCases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
-      applicationContext,
+  const calendaredCases = await getCalendaredCasesForTrialSession({
       trialSessionId,
     });
 
@@ -200,12 +198,10 @@ const waitForJobToFinish = async ({
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ) => {
-  const calendaredCases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({ applicationContext, trialSessionId });
+  const calendaredCases = await getCalendaredCasesForTrialSession({  trialSessionId });
 
   return {
     identifiers: calendaredCases.map(

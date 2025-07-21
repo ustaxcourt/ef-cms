@@ -13,6 +13,7 @@ import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '@shared/business/entities/E
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 
 /**
  * get eligible cases for trial session
@@ -43,10 +44,7 @@ export const getEligibleCasesForTrialSessionInteractor = async (
   // trial session itself is not considered calendared (see issue #3254).
   let calendaredCases: (Omit<RawCase, 'consolidatedCases'> & TCaseOrder)[] = [];
   if (trialSession.isCalendared === false && trialSession.caseOrder) {
-    calendaredCases = await applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession({
-        applicationContext,
+    calendaredCases = await getCalendaredCasesForTrialSession({
         trialSessionId,
       });
   }

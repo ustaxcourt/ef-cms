@@ -15,6 +15,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { padStart } from 'lodash';
 import sanitize from 'sanitize-filename';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 
 export const batchDownloadTrialSessionInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -69,10 +70,7 @@ const batchDownloadTrialSessionInteractorHelper = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const allSessionCases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
-      applicationContext,
+  const allSessionCases = await getCalendaredCasesForTrialSession({
       trialSessionId,
     });
 

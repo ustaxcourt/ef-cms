@@ -5,6 +5,7 @@ import { compareCasesByDocketNumberFactory } from '@shared/business/utilities/tr
 import { formatDateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 
 export const generateTrialCalendarPdfInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -18,10 +19,7 @@ export const generateTrialCalendarPdfInteractor = async (
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
   }
 
-  const calendaredCases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
-      applicationContext,
+  const calendaredCases = await getCalendaredCasesForTrialSession({
       trialSessionId,
     });
 

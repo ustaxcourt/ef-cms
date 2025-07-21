@@ -10,7 +10,6 @@ import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPet
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
-import { createTrialSession } from './persistence/dynamo/trialSessions/createTrialSession';
 import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
 import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
@@ -18,7 +17,6 @@ import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
 import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
 import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
-import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTrialSession';
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
@@ -30,7 +28,6 @@ import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/ge
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
 import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
-import { getCalendaredCasesForTrialSession } from './persistence/dynamo/trialSessions/getCalendaredCasesForTrialSession';
 import {
   getCasesForUser,
   getDocketNumbersByUser,
@@ -150,7 +147,6 @@ const gatewayMethods = {
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
     createPractitionerDocument,
-    createTrialSession,
     createTrialSessionWorkingCopy,
     createUserRecords,
     editPractitionerDocument,
@@ -181,7 +177,6 @@ const gatewayMethods = {
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
-  deleteTrialSession,
   deleteTrialSessionWorkingCopy,
   deleteUserConnection,
   deleteUserFromCase,
@@ -191,7 +186,6 @@ const gatewayMethods = {
   getAllUsersByRole,
   getAllWebSocketConnections,
   getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
-  getCalendaredCasesForTrialSession,
   getCasesByEmailTotal,
   getCasesForUser,
   getClientId,

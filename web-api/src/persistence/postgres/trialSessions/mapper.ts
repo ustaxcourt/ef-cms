@@ -73,6 +73,6 @@ export function fromKyselyTrialSession(
     proceedingType: record.proceedingType as TrialSessionProceedingType,
     sessionScope: record.sessionScope as TrialSessionScope,
     sessionType: record.sessionType as TrialSessionTypes,
-
+    caseOrder: record.caseOrder || []
   });
 } 

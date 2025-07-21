@@ -1,7 +1,7 @@
 import { NotFoundError } from '@web-api/errors/errors';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 
 export type PublicTrialSessionDetails = Pick<
   TrialSession,
@@ -20,7 +20,6 @@ export type PublicTrialSessionDetails = Pick<
 };
 
 export const getPublicTrialSessionDetailsInteractor = async (
-  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
 ): Promise<PublicTrialSessionDetails> => {
   const trialSessionDetails = await getTrialSessionById({
@@ -43,10 +42,7 @@ export const getPublicTrialSessionDetailsInteractor = async (
     swingSessionLocation = swingSessionDetails?.trialLocation;
   }
 
-  const cases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
-      applicationContext,
+  const cases = await getCalendaredCasesForTrialSession({
       trialSessionId,
     });
 

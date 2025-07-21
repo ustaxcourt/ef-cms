@@ -11,6 +11,7 @@ import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/get
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { deleteTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
 
 /**
  * deleteTrialSession
@@ -76,8 +77,7 @@ export const deleteTrialSessionInteractor = async (
     await removeLockFunction();
   }
 
-  await applicationContext.getPersistenceGateway().deleteTrialSession({
-    applicationContext,
+  await deleteTrialSession({
     trialSessionId,
   });
 
