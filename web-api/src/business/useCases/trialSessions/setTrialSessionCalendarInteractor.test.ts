@@ -36,7 +36,6 @@ describe('setTrialSessionCalendarInteractor', () => {
   const upsertCases = jest.mocked(upsertCasesMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
   const tryGetLocks = jest.mocked(tryGetLocksMock);
-
   const MOCK_TRIAL = {
     chambersPhoneNumber: '1111111',
     joinPhoneNumber: '0987654321',

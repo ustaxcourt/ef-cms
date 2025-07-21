@@ -98,7 +98,7 @@ resource "aws_cloudfront_distribution" "public_distribution_www" {
 }
 
 data "aws_route53_zone" "public_zone_www" {
-  name = "${var.dns_domain}."
+  name = "${var.zone_name}."
 }
 
 resource "aws_route53_record" "public_www_redirect" {

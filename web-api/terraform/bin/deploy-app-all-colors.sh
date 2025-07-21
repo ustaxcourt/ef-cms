@@ -18,13 +18,12 @@ fi
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${EMAIL_DMARC_POLICY}" ] && echo "You must have EMAIL_DMARC_POLICY set in your environment" && exit 1
 [ -z "${ENABLE_HEALTH_CHECKS}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
-[ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
+[ -z "${ENV}" ] && echo "You must pass in ENVIRONMENT as command line argument 1" && exit 1
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
 [ -z "${MIGRATE_FLAG}" ] && echo "You must have MIGRATE_FLAG set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
-echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
 echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
@@ -36,14 +35,24 @@ echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 echo "  - LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
+echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${EFCMS_DOMAIN}.terraform.deploys"
 KEY="documents-${ENV}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
+REGION=us-east-1
+
+# ZONE_NAME is deprecated and will only be set in legacy accounts
+DNS_DOMAIN="$EFCMS_DOMAIN"
+if [[ -n "$ZONE_NAME" ]]; then
+  BUCKET="${ZONE_NAME}.terraform.deploys"
+  DNS_DOMAIN="$ZONE_NAME"
+fi
 
 rm -rf .terraform
+rm -f .terraform.lock.hcl
 
 echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]"
 sh ../../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
@@ -80,6 +89,7 @@ ACTIVE_SES_RULESET=$(../../../../scripts/ses/get-ses-ruleset.sh)
 
 export TF_VAR_environment=$ENV
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
+export TF_VAR_zone_name=$DNS_DOMAIN
 export TF_VAR_active_ses_ruleset=$ACTIVE_SES_RULESET
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
@@ -111,7 +121,11 @@ then
   export TF_VAR_viewer_protocol_policy=$CW_VIEWER_PROTOCOL_POLICY
 fi
 
-terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -upgrade -backend=true \
+ -backend-config=bucket="$BUCKET" \
+ -backend-config=key="$KEY" \
+ -backend-config=dynamodb_table="$LOCK_TABLE" \
+ -backend-config=region="$REGION"
 
 if [ -z "${OUTPUT_ONLY}" ]; then 
   terraform plan -out execution-plan

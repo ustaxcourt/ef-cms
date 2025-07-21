@@ -33,5 +33,5 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropIndex(responseStringTableUserRequestIndex).execute();
   await db.schema.dropIndex(responseStringTableTTLIndex).execute();
 
-  await db.schema.dropTable('dwResponseString').execute();
+  await db.schema.dropTable(responseTableName).execute();
 }
