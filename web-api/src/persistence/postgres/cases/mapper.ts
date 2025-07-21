@@ -7,11 +7,14 @@ import {
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 import { DatabaseSchema } from '@web-api/database-schema';
-import { CaseKysely, NewCaseKysely } from '@web-api/persistence/postgres/cases/schema';
+import {
+  CaseKysely,
+  NewCaseKysely,
+} from '@web-api/persistence/postgres/cases/schema';
 import { DatabaseToAppCodeMapper } from '@web-api/persistence/postgres/utils/databaseToAppCodeMapper';
 
 // Select the relevant RawCase fields from dwCase and map them correctly.
-export const toKyselyNewCase = (rawCase: RawCase): NewCaseKysely => {
+export function toKyselyNewCase(rawCase: RawCase): NewCaseKysely {
   return {
     associatedJudge: rawCase.associatedJudge,
     associatedJudgeId: rawCase.associatedJudgeId,
@@ -96,7 +99,7 @@ export const toKyselyNewCase = (rawCase: RawCase): NewCaseKysely => {
     trialTime: rawCase.trialTime ?? null,
     useSameAsPrimary: rawCase.useSameAsPrimary,
   };
-};
+}
 
 export function fromKyselyCase<T extends object>(record: T) {
   // Map for renaming keys from DB format to the desired RawCase format.
