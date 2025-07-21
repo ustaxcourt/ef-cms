@@ -47,6 +47,22 @@ case $CIRCLE_BRANCH in
     ENV="exp5"
     ;;
 
+  experimental6)
+    ENV="exp5"
+    ;;
+
+  experimental7)
+    ENV="exp5"
+    ;;
+
+  experimental8)
+    ENV="exp5"
+    ;;
+
+  experimental9)
+    ENV="exp5"
+    ;;
+
   *)
     echo "ERROR - Unknown Circle Branch: '${CIRCLE_BRANCH}'"
     exit 1
