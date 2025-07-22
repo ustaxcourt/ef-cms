@@ -25,10 +25,11 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
   });
 
   const viewerDocumentToDisplayInState = get(state.viewerDocumentToDisplay);
+  console.log('state:', viewerDocumentToDisplayInState);
 
   let viewerDocumentToDisplay;
 
-  if (docketEntriesByFilter.length) {
+  if (docketEntriesByFilter?.length) {
     viewerDocumentToDisplay = docketEntriesByFilter[0];
     const foundDocketEntry = docketEntriesByFilter.find(
       d => d.docketEntryId === docketEntryId,
@@ -39,6 +40,8 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
       viewerDocumentToDisplay = foundDocketEntry;
     }
   }
+
+  console.log('Display:', viewerDocumentToDisplay);
 
   return {
     viewerDocumentToDisplay,
