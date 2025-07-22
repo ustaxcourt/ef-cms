@@ -37,6 +37,15 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "frontend_public_s
   }
 }
 
+resource "aws_s3_bucket_public_access_block" "unblock_frontend_public" {
+  bucket = aws_s3_bucket.frontend_public.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
+
 resource "aws_s3_bucket" "failover_public" {
   bucket = "failover-${var.current_color}.${var.dns_domain}"
 
@@ -74,6 +83,16 @@ resource "aws_s3_bucket_server_side_encryption_configuration" "failover_public_s
       sse_algorithm = "AES256"
     }
   }
+}
+
+resource "aws_s3_bucket_public_access_block" "unblock_failover_public" {
+  bucket = aws_s3_bucket.failover_public.id
+  provider = aws.us-west-1
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
 }
 
 data "aws_iam_policy_document" "public_policy_bucket" {

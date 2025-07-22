@@ -37,7 +37,7 @@ module "api-gateway-global-logging-permissions" {
 
 module "ci-cd" {
   source               = "../../modules/ci-cd"
-  lower_env_account_id = var.lower_env_account_id
+  lower_env_restore_roles = var.lower_env_restore_roles
 }
 
 module "kibana" {
