@@ -96,15 +96,11 @@ export const EditDocketEntryMetaFormDocument = connect(
             isClearable={true}
             name="eventCode"
             options={internalTypesHelper.internalDocumentTypesForSelectSorted}
-            value={
-              form.eventCode === 'NOTR'
-                ? [{ label: form.documentType, value: form.eventCode }]
-                : reactSelectValue({
-                    documentTypes:
-                      internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
-                    selectedEventCode: form.eventCode,
-                  })
-            }
+            value={reactSelectValue({
+              documentTypes:
+                internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
+              selectedEventCode: form.eventCode,
+            })}
             isDisabled={form.eventCode === 'NOTR'}
             onChange={inputValue => {
               const value = inputValue?.value || '';
