@@ -25,7 +25,6 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
   });
 
   const viewerDocumentToDisplayInState = get(state.viewerDocumentToDisplay);
-  console.log('state:', viewerDocumentToDisplayInState);
 
   let viewerDocumentToDisplay;
 
@@ -41,7 +40,6 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
     }
   }
 
-  console.log('Display:', viewerDocumentToDisplay);
 
   return {
     viewerDocumentToDisplay,
