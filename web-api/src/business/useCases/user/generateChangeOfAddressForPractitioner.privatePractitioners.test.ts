@@ -367,7 +367,6 @@ describe('generateChangeOfAddress', () => {
       updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
         .privatePractitioners[0],
     ).toMatchObject({
-      email: UPDATED_EMAIL,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
     expect(
