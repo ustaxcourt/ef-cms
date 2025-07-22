@@ -5,8 +5,8 @@ import {
 import { RawPractitioner } from '../../../../../shared/src/business/entities/Practitioner';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import { createNewPractitioner } from '@web-api/persistence/postgres/users/createNewPractitioner';
 import { upsertPractitioner } from '@web-api/persistence/postgres/users/upsertPractitioner';
+import { createPractitionerUser } from '@shared/business/utilities/createPractitionerUser';
 
 export const createPractitionerUserInteractor = async (
   { user }: { user: RawPractitioner },
@@ -21,7 +21,7 @@ export const createPractitionerUserInteractor = async (
   user.pendingEmail = user.email;
   user.email = undefined;
 
-  const practitioner = await createNewPractitioner({
+  const practitioner = await createPractitionerUser({
     user,
   });
 
