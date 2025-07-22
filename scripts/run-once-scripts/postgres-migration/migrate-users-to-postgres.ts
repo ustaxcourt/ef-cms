@@ -18,6 +18,8 @@ import { RawUser } from '@shared/business/entities/User';
 import { associateUsersWithCasesPending } from '@web-api/persistence/postgres/cases/pendingCases/associateUsersWithCasesPending';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
+import { BarNumberKysely } from '@web-api/persistence/postgres/users/barNumber/schema';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 const scriptConfig: ScriptConfig = {
   description: 'Move users and case associations from dynamo to postgres ',
@@ -110,6 +112,13 @@ const upsertUsers = async (
   });
 };
 
+async function addBarNumberCount(barNumbers: BarNumberKysely[]) {
+  if (!barNumbers.length) {
+    return;
+  }
+  await pgInsertInto({ table: 'dwBarNumber', values: barNumbers });
+}
+
 async function scanContinuously(params: ScanCommandInput) {
   let lastEvaluatedKey: typeof params.ExclusiveStartKey | undefined = undefined;
 
@@ -120,6 +129,7 @@ async function scanContinuously(params: ScanCommandInput) {
     const userRecords: any[] = []; // {pk: user|, sk: user| }
     const userOnCasePendingRecords: any[] = []; // {pk: user|, sk: pending-case| }
     // const userRecords = [] // {pk: user|, sk: case| } We should not need to process these. For irs/private association is defined through the {pk: case|, sk: privatePractitioner| }. For petitioners it is defined by the dwCase.petitioners array
+    const barNumberRecords: BarNumberKysely[] = [];
 
     const result = await documentClient.scan({
       ...params,
@@ -161,6 +171,16 @@ async function scanContinuously(params: ScanCommandInput) {
       ) {
         userOnCasePendingRecords.push(record);
       }
+
+      if (
+        record.pk.startsWith('barNumberCounter') &&
+        record.sk.startsWith('barNumberCounter')
+      ) {
+        const lastUsedNumber = record.id; // pk looks like 'barNumberCounter-2024'
+        const year = Number(record.pk.slice(-4));
+
+        barNumberRecords.push({ lastUsedNumber, year });
+      }
     }
 
     await associateUsersWithCases([
@@ -169,6 +189,7 @@ async function scanContinuously(params: ScanCommandInput) {
     ]);
     await upsertUsers(userRecords);
     await associateUsersWithCasesPending(userOnCasePendingRecords);
+    await addBarNumberCount(barNumberRecords);
 
     itemsScanned += items.length;
     console.log(`itemsScanned: ${itemsScanned}`);
