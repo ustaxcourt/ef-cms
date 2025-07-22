@@ -15,32 +15,28 @@ export const deleteAllItemsInEmailBucket = async ({
 }: {
   bucketName: string;
   retries: number;
-}): Promise<Object[] | null> => {
+}): Promise<null> => {
   try {
     const objectsList = await s3.send(
       new ListObjectsV2Command({ Bucket: bucketName }),
     );
+    if (objectsList.Contents && objectsList.Contents.length > 0) {
+      const deleteObjectsParams = {
+        Bucket: bucketName,
+        Delete: {
+          Objects: objectsList.Contents.map(obj => ({ Key: obj.Key })),
+        },
+      };
+      await s3.send(new DeleteObjectsCommand(deleteObjectsParams));
 
-    if (!objectsList.Contents || objectsList.Contents.length < 1) {
+      retries--;
       if (retries > 0) {
         await new Promise(resolve => setTimeout(resolve, 2000));
         return deleteAllItemsInEmailBucket({ bucketName, retries });
       }
-      return null;
     }
-
-    retries--;
-
-    const deleteObjectsParams = {
-      Bucket: bucketName,
-      Delete: {
-        Objects: (objectsList.Contents || []).map(obj => ({ Key: obj.Key })),
-      },
-    };
-
-    await s3.send(new DeleteObjectsCommand(deleteObjectsParams));
   } catch (error) {
-    return null;
+    console.error('Error deleting objects', error);
   }
   return null;
 };
@@ -64,7 +60,7 @@ export const readAllItemsInBucket = async ({
 
       retries--;
 
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 10000));
       return readAllItemsInBucket({ bucketName, retries });
     }
 
