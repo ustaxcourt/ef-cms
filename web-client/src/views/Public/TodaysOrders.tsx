@@ -131,7 +131,7 @@ export const TodaysOrders = connect(
 
                 <table
                   aria-label="todays orders"
-                  className="usa-table gray-header todays-orders responsive-table row-only todays-orders"
+                  className="usa-table gray-header responsive-table row-only todays-orders-mobile"
                 >
                   <thead>
                     <tr>
