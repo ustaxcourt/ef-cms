@@ -10,6 +10,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getTrialSessionWorkingCopies } from '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies';
+import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
 
 /**
  * getTrialSessionWorkingCopyInteractor
@@ -85,12 +86,9 @@ export const getTrialSessionWorkingCopyInteractor = async (
       validRawTrialSessionWorkingCopyEntity = trialSessionWorkingCopyEntity
         .validate()
         .toRawObject();
-      await applicationContext
-        .getPersistenceGateway()
-        .createTrialSessionWorkingCopy({
-          applicationContext,
-          trialSessionWorkingCopy: validRawTrialSessionWorkingCopyEntity,
-        });
+      await createTrialSessionWorkingCopy({
+        trialSessionWorkingCopy: validRawTrialSessionWorkingCopyEntity,
+      });
     } else {
       throw new NotFoundError('Trial session working copy not found');
     }

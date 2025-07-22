@@ -12,6 +12,7 @@ import { get } from 'lodash';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
 
 type GetCasesInTrialSessionParams = {
   trialSession: RawTrialSession;
@@ -164,13 +165,11 @@ export const updateCasesAndSetNoticeOfChange = async ({
 };
 
 type CreateWorkingCopyForNewUserOnSessionParams = {
-  applicationContext: ServerApplicationContext;
   trialSessionId: string | undefined;
   userId: string | undefined;
 };
 
 export const createWorkingCopyForNewUserOnSession = async ({
-  applicationContext,
   trialSessionId,
   userId,
 }: CreateWorkingCopyForNewUserOnSessionParams) => {
@@ -179,14 +178,11 @@ export const createWorkingCopyForNewUserOnSession = async ({
     userId,
   });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .createTrialSessionWorkingCopy({
-      applicationContext,
-      trialSessionWorkingCopy: trialSessionWorkingCopyEntity
-        .validate()
-        .toRawObject(),
-    });
+  await createTrialSessionWorkingCopy({
+    trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+      .validate()
+      .toRawObject(),
+  });
 };
 
 export const getPaperServicePdfName = ({

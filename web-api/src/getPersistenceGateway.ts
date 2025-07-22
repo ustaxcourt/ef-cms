@@ -10,14 +10,12 @@ import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPet
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
-import { createTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/createTrialSessionWorkingCopy';
 import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
 import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
 import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
 import { deleteRecord } from './persistence/elasticsearch/deleteRecord';
-import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
 import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
@@ -86,7 +84,6 @@ import {
 import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
 import { updatePractitionerUser } from './persistence/dynamo/users/updatePractitionerUser';
 import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
-import { updateTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/updateTrialSessionWorkingCopy';
 import { updateUser } from './persistence/dynamo/users/updateUser';
 import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
@@ -145,7 +142,6 @@ const gatewayMethods = {
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
     createPractitionerDocument,
-    createTrialSessionWorkingCopy,
     createUserRecords,
     editPractitionerDocument,
     incrementCounter,
@@ -162,7 +158,6 @@ const gatewayMethods = {
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
     updateTrialSession,
-    updateTrialSessionWorkingCopy,
     updateUser,
     updateUserRecords,
   }),
@@ -175,7 +170,6 @@ const gatewayMethods = {
   deleteMessage,
   deletePractitionerDocument,
   deleteRecord,
-  deleteTrialSessionWorkingCopy,
   deleteUserConnection,
   deleteUserFromCase,
   fetchEventCodesCountForJudges,

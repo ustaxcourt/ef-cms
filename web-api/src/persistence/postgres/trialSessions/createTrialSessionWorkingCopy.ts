@@ -1,26 +1,24 @@
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { put } from '../../dynamodbClientService';
+import {
+  fromKyselyNewTrialSessionWorkingCopy,
+  toKyselyNewTrialSessionWorkingCopy,
+} from '@web-api/persistence/postgres/trialSessions/mapper';
+import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
-/**
- * createTrialSessionWorkingCopy
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.trialSessionWorkingCopy the trial session working copy data
- * @returns {Promise} the promise of the call to persistence
- */
-export const createTrialSessionWorkingCopy = ({
-  applicationContext,
+export const createTrialSessionWorkingCopy = async ({
   trialSessionWorkingCopy,
 }: {
-  applicationContext: IApplicationContext;
   trialSessionWorkingCopy: RawTrialSessionWorkingCopy;
-}) =>
-  put({
-    Item: {
-      ...trialSessionWorkingCopy,
-      pk: `trial-session-working-copy|${trialSessionWorkingCopy.trialSessionId}`,
-      sk: `user|${trialSessionWorkingCopy.userId}`,
-    },
-    applicationContext,
-  });
+}): Promise<RawTrialSessionWorkingCopy> => {
+  const result = (
+    await pgInsertInto({
+      table: 'dwTrialSessionWorkingCopy',
+      values: [toKyselyNewTrialSessionWorkingCopy(trialSessionWorkingCopy)],
+    })
+  ).at(0);
+
+  if (!result)
+    throw Error('CreateTrialSessionWorkingCopy failed to create a record!!');
+
+  return fromKyselyNewTrialSessionWorkingCopy(result);
+};

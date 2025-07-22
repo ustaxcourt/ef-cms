@@ -59,7 +59,7 @@ import {
   DW_MINUTE_SHEET_COLUMNS,
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
-import { DW_TRIAL_SESSION_COLUMNS, DW_TRIAL_SESSION_WORKING_COPY_COLUMNS, TrialSessionTable, TrialSessionWorkingCopyTable } from './persistence/postgres/trialSessions/schema';
+import { DW_TRIAL_SESSION_COLUMNS, DW_TRIAL_SESSION_PAPER_PDF_COLUMNS, DW_TRIAL_SESSION_WORKING_COPY_COLUMNS, TrialSessionPaperPdfTable, TrialSessionTable, TrialSessionWorkingCopyTable } from './persistence/postgres/trialSessions/schema';
 
 const DEFAULT = {};
 
@@ -77,6 +77,7 @@ interface DatabaseSchemaType {
   dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
   dwTrialSession: DatabaseTableMetadata<TrialSessionTable>;
+  dwTrialSessionPaperPdf: DatabaseTableMetadata<TrialSessionPaperPdfTable>;
   dwTrialSessionWorkingCopy: DatabaseTableMetadata<TrialSessionWorkingCopyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
@@ -151,6 +152,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwTrialSession: {
     table: DEFAULT as TrialSessionTable,
     columns: DW_TRIAL_SESSION_COLUMNS
+  },
+  dwTrialSessionPaperPdf: {
+    table: DEFAULT as TrialSessionPaperPdfTable,
+    columns: DW_TRIAL_SESSION_PAPER_PDF_COLUMNS
   },
   dwTrialSessionWorkingCopy: {
     table: DEFAULT as TrialSessionWorkingCopyTable,

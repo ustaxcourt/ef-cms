@@ -12,6 +12,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { deleteTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteTrialSession';
+import { deleteTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/deleteTrialSessionWorkingCopy';
 
 /**
  * deleteTrialSession
@@ -82,10 +83,7 @@ export const deleteTrialSessionInteractor = async (
   });
 
   if (trialSessionEntity.judge) {
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteTrialSessionWorkingCopy({
-        applicationContext,
+    await deleteTrialSessionWorkingCopy({
         trialSessionId,
         userId: trialSessionEntity.judge.userId,
       });

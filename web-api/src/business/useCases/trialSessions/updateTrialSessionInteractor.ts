@@ -97,7 +97,6 @@ export const updateTrialSession = async (
 
   if (createWorkingCopyForNewJudge) {
     await createWorkingCopyForNewUserOnSession({
-      applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
       userId: updatedTrialSessionEntity.judge?.userId,
     });
@@ -111,7 +110,6 @@ export const updateTrialSession = async (
 
   if (createWorkingCopyForNewTrialClerk) {
     await createWorkingCopyForNewUserOnSession({
-      applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
       userId: updatedTrialSessionEntity.trialClerk?.userId,
     });

@@ -42,7 +42,6 @@ export const trialSessionTableDefinition = {
     termYear: DEFAULT as string,
     trialClerk: DEFAULT as any,
     trialLocation: DEFAULT as string | null,
-    paperServicePdfs: DEFAULT as ColumnType<any[], string, string>,
 };
 
 export type TrialSessionTable = typeof trialSessionTableDefinition;
@@ -53,6 +52,8 @@ export const DW_TRIAL_SESSION_COLUMNS = Object.keys(
 
 export type TrialSessionKysely = Selectable<TrialSessionTable>;
 export type NewTrialSessionKysely = Insertable<TrialSessionTable>;
+
+//////////////////////////////
 
 export const trialSessionWorkingCopyTableDefinition = {
     trialSessionId: DEFAULT as string,
@@ -72,3 +73,22 @@ export const DW_TRIAL_SESSION_WORKING_COPY_COLUMNS = Object.keys(
 
 export type TrialSessionWorkingCopyKysely = Selectable<TrialSessionWorkingCopyTable>;
 export type NewTrialSessionWorkingCopyKysely = Insertable<TrialSessionWorkingCopyTable>;
+
+///////////////////////////
+
+export const trialSessionPaperPdfTableDefinition = {
+    trialSessionId: DEFAULT as string,
+    ttl: DEFAULT as number,
+    fileId: DEFAULT as string,
+    title: DEFAULT as string
+};
+
+export type TrialSessionPaperPdfTable = typeof trialSessionPaperPdfTableDefinition;
+
+export const DW_TRIAL_SESSION_PAPER_PDF_COLUMNS = Object.keys(
+    trialSessionPaperPdfTableDefinition,
+) as Array<keyof TrialSessionPaperPdfTable>;
+
+export type TrialSessionPaperPdfKysely = Selectable<TrialSessionPaperPdfTable>;
+export type NewTrialSessionPaperPdfKysely = Insertable<TrialSessionPaperPdfTable>;
+

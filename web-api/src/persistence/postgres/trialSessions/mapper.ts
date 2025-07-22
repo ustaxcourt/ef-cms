@@ -19,7 +19,7 @@ import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessi
 
 // Select the relevant RawCase fields from dwCase and map them correctly.
 export function toKyselyNewTrialSession(
-  rawTrialSession: RawTrialSession,
+  rawTrialSession: Omit<RawTrialSession, "paperServicePdfs">,
 ): NewTrialSessionKysely {
   return {
     trialSessionId: rawTrialSession.trialSessionId,
@@ -67,12 +67,12 @@ export function toKyselyNewTrialSession(
     termYear: rawTrialSession.termYear,
     trialClerk: rawTrialSession.trialClerk,
     trialLocation: rawTrialSession.trialLocation,
-    paperServicePdfs: JSON.stringify(rawTrialSession.paperServicePdfs),
   };
 }
 
 export function fromKyselyTrialSession(
   record: TrialSessionKysely,
+  paperPdfs: { fileId: string; title: string }[],
 ): RawTrialSession {
   return transformNullToUndefined({
     ...record,
@@ -84,6 +84,7 @@ export function fromKyselyTrialSession(
     sessionScope: record.sessionScope as TrialSessionScope,
     sessionType: record.sessionType as TrialSessionTypes,
     caseOrder: record.caseOrder || [],
+    paperServicePdfs: paperPdfs,
   });
 }
 

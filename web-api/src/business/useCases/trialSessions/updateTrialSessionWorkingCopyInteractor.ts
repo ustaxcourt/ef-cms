@@ -6,10 +6,10 @@ import {
   RawTrialSessionWorkingCopy,
   TrialSessionWorkingCopy,
 } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionWorkingCopies } from '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies';
+import { upsertTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/upsertTrialSessionWorkingCopy';
 
 /**
  * updateTrialSessionWorkingCopyInteractor
@@ -20,7 +20,6 @@ import { getTrialSessionWorkingCopies } from '@web-api/persistence/postgres/tria
  * @returns {TrialSessionWorkingCopy} the updated trial session working copy returned from persistence
  */
 export const updateTrialSessionWorkingCopyInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     trialSessionWorkingCopyToUpdate,
   }: { trialSessionWorkingCopyToUpdate: RawTrialSessionWorkingCopy },
@@ -56,12 +55,9 @@ export const updateTrialSessionWorkingCopyInteractor = async (
     .validate()
     .toRawObject();
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateTrialSessionWorkingCopy({
-      applicationContext,
-      trialSessionWorkingCopyToUpdate: updatedTrialSessionWorkingCopy,
-    });
+  await upsertTrialSessionWorkingCopy({
+    trialSessionWorkingCopyToUpdate: updatedTrialSessionWorkingCopy,
+  });
 
   return updatedTrialSessionWorkingCopy;
 };

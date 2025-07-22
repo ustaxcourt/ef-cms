@@ -52,9 +52,21 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('sessionNotes', 'varchar')
     .addColumn('sort', 'varchar')
     .addColumn('sortOrder', 'varchar')
-    .addPrimaryKeyConstraint('dwTrialSessionWorkingCopyPK', [
+    .addPrimaryKeyConstraint('dwTrialSessionWorkingCopyPk', [
       'trialSessionId',
       'userId',
+    ])
+    .execute();
+
+  await db.schema
+    .createTable('dwTrialSessionPaperPdf')
+    .addColumn('ttl', 'bigint', col => col.notNull())
+    .addColumn('fileId', 'varchar', col => col.notNull())
+    .addColumn('title', 'varchar', col => col.notNull())
+    .addColumn('trialSessionId', 'uuid', col => col.notNull())
+    .addPrimaryKeyConstraint('dwTrialSessionPaperPdfPk', [
+      'fileId',
+      'trialSessionId',
     ])
     .execute();
 }
@@ -63,4 +75,6 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('dwTrialSession').execute();
 
   await db.schema.dropTable('dwTrialSessionWorkingCopy').execute();
+  
+  await db.schema.dropTable('dwTrialSessionPaperPdf').execute();
 }
