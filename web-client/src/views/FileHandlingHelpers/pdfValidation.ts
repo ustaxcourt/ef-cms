@@ -9,9 +9,7 @@ import {
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
 
 export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
-  'We noticed you are on an older or unsupported browser. For security reasons, this request could not be completed. \
-  You can try updating the browser or using a different browser or machine. If you need help uploading \
-  this document, contact DAWSON support.';
+  'Your internet browser is unsupported. Please update your browser and try again.';
 
 export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
   'The file is encrypted or password protected. Remove encryption or password protection and try again.';
