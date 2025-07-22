@@ -252,10 +252,8 @@ export const PractitionerForm = connect(
                         message: (
                           <>
                             Practitioner is associated with one or more open
-                            cases.
-                            <br />
-                            Practitioner has to be withdrawn from all open cases
-                            or all cases closed to change practice type.
+                            cases. Practitioner has to be withdrawn from all
+                            open cases to change practice type.
                           </>
                         ),
                         title: `Practice type cannot be changed.`,
