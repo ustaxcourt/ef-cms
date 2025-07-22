@@ -24,7 +24,6 @@ export const getOptionsForCategory = ({
   showTrialLocationSelect?: boolean;
   ordinalField?: string;
   showSecondaryDocumentSelect?: boolean;
-  showTextInput2?: boolean;
   textInputLabel2?: string;
 } => {
   let options: {
@@ -37,7 +36,6 @@ export const getOptionsForCategory = ({
     showTrialLocationSelect?: boolean;
     ordinalField?: string;
     showSecondaryDocumentSelect?: boolean;
-    showTextInput2?: boolean;
     textInputLabel2?: string;
   } = {};
   if (!categoryInformation) {
@@ -140,16 +138,6 @@ export const getOptionsForCategory = ({
         showNonstandardForm: true,
         showTextInput: true,
         textInputLabel: categoryInformation.labelFreeText,
-      };
-      break;
-    }
-    case 'Nonstandard J': {
-      options = {
-        showNonstandardForm: true,
-        showTextInput: true,
-        showTextInput2: true,
-        textInputLabel: categoryInformation.labelFreeText,
-        textInputLabel2: categoryInformation.labelFreeText2,
       };
       break;
     }
