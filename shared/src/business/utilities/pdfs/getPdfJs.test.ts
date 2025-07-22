@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { clientSupportsES2022, getPdfJs } from './getPdfJs';
-=======
-import { clientSupportsES2022 } from './getPdfJs';
->>>>>>> 4a77b3e0aa (10670: fix mocks on test)
 
 describe('Broweser Compatibility Checks', () => {
   const mockUserAgent = (userAgent: string) => {
@@ -11,7 +7,6 @@ describe('Broweser Compatibility Checks', () => {
       value: userAgent,
     });
   };
-<<<<<<< HEAD
   describe('getPdfJs - Dynamic Import Failure', () => {
     jest.mock('pdfjs-dist/legacy/build/pdf.mjs', () => {
       throw new Error('Dynamic import failed');
@@ -23,8 +18,6 @@ describe('Broweser Compatibility Checks', () => {
       jest.restoreAllMocks();
     });
   });
-=======
->>>>>>> 4a77b3e0aa (10670: fix mocks on test)
 
   it('clientSupportsES2022 should reject old Safari browser (version < 16)', () => {
     // Set Safari 15.6 user agent
@@ -55,7 +48,6 @@ describe('Broweser Compatibility Checks', () => {
     const result = clientSupportsES2022();
     expect(result).toBe(false);
   });
-<<<<<<< HEAD
 
   it('clientSupportsES2022 should be false if safari user agent without version', () => {
     mockUserAgent(
@@ -73,6 +65,4 @@ describe('Broweser Compatibility Checks', () => {
     const result = clientSupportsES2022();
     expect(result).toBe(false);
   });
-=======
->>>>>>> 4a77b3e0aa (10670: fix mocks on test)
 });
