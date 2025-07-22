@@ -9,6 +9,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getTrialSessionWorkingCopies } from '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies';
 
 /**
  * updateTrialSessionWorkingCopyInteractor
@@ -31,13 +32,14 @@ export const updateTrialSessionWorkingCopyInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const oldWorkingCopy = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionWorkingCopy({
-      applicationContext,
-      trialSessionId: trialSessionWorkingCopyToUpdate.trialSessionId,
-      userId: trialSessionWorkingCopyToUpdate.userId,
-    });
+  const oldWorkingCopy = (await getTrialSessionWorkingCopies({
+    tsWorkingCopyIds: [
+      {
+        trialSessionId: trialSessionWorkingCopyToUpdate.trialSessionId,
+        userId: trialSessionWorkingCopyToUpdate.userId,
+      },
+    ],
+  })).at(0);
 
   const editableFields = {
     caseMetadata: trialSessionWorkingCopyToUpdate.caseMetadata,

@@ -27,7 +27,6 @@ import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/use
 import { getAccountConfirmationCode } from '@web-api/persistence/dynamo/users/getAccountConfirmationCode';
 import { getAllUsersByRole } from '@web-api/persistence/elasticsearch/users/getAllUsersByRole';
 import { getAllWebSocketConnections } from '@web-api/persistence/postgres/connections/getAllWebSocketConnections';
-import { getBulkTrialSessionWorkingCopies } from './persistence/dynamo/trialSessions/getBulkTrialSessionWorkingCopies';
 import {
   getCasesForUser,
   getDocketNumbersByUser,
@@ -55,7 +54,6 @@ import { getColdCases } from './persistence/elasticsearch/getColdCases';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
 import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
 import { getTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/getTrialSessionProcessingStatus';
-import { getTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/getTrialSessionWorkingCopy';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
@@ -185,7 +183,6 @@ const gatewayMethods = {
   getAccountConfirmationCode,
   getAllUsersByRole,
   getAllWebSocketConnections,
-  getBulkTrialSessionWorkingCopyNotes: getBulkTrialSessionWorkingCopies,
   getCasesByEmailTotal,
   getCasesForUser,
   getClientId,
@@ -213,7 +210,6 @@ const gatewayMethods = {
   getTableStatus,
   getTrialSessionJobStatusForCase,
   getTrialSessionProcessingStatus,
-  getTrialSessionWorkingCopy,
   getUploadPolicy,
   getUserByEmail,
   getUserById,

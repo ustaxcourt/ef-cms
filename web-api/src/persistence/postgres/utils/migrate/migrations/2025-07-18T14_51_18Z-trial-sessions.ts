@@ -47,7 +47,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('dwTrialSessionWorkingCopy')
     .addColumn('trialSessionId', 'uuid')
     .addColumn('userId', 'uuid')
-    .addColumn('caseMetaData', 'jsonb')
+    .addColumn('caseMetadata', 'jsonb')
     .addColumn('filters', 'jsonb')
     .addColumn('sessionNotes', 'varchar')
     .addColumn('sort', 'varchar')

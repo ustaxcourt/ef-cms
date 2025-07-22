@@ -4,3 +4,4 @@
 - [ ] TrialClerk and Judge are both still any in the schema.ts file
 - [x] Need to update mapper from kysley object
 - [ ] Why do some records in dynamo trial-session-working-copy have userCaseNotes??
+- [ ] Deal with SpecialTrialSession type
