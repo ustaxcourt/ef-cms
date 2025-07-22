@@ -33,7 +33,6 @@ export const generateChangeOfAddressHelper = async ({
   bypassDocketEntry,
   contactInfo,
   docketNumber,
-  firmName,
   jobId,
   oldUser,
   requestUserId,
@@ -47,7 +46,6 @@ export const generateChangeOfAddressHelper = async ({
   docketNumber: string;
   bypassDocketEntry: boolean;
   contactInfo: TUserContact;
-  firmName: string;
   updatedEmail?: string;
   updatedName?: string;
   jobId: string;
@@ -79,15 +77,10 @@ export const generateChangeOfAddressHelper = async ({
 
     const oldData = clone(oldUser.contact);
 
-    // This updates the case by reference!
-    practitionerObject.contact = contactInfo;
-    practitionerObject.firmName = firmName;
-    practitionerObject.name = practitionerName;
-
     if (updatedEmail) {
+      // This updates the case by reference!
       practitionerObject.serviceIndicator =
         SERVICE_INDICATOR_TYPES.SI_ELECTRONIC;
-      practitionerObject.email = updatedEmail;
     }
 
     if (!bypassDocketEntry && caseEntity.shouldGenerateNoticesForCase()) {

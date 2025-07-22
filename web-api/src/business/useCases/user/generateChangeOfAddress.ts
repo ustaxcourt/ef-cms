@@ -38,7 +38,6 @@ export const generateChangeOfAddress = async ({
   authorizedUser,
   bypassDocketEntry = false,
   contactInfo,
-  firmName,
   oldUser,
   requestUserId,
   updatedEmail,
@@ -49,7 +48,6 @@ export const generateChangeOfAddress = async ({
   applicationContext: ServerApplicationContext;
   bypassDocketEntry?: boolean;
   contactInfo: TUserContact;
-  firmName: string;
   oldUser: RawUser;
   requestUserId?: string;
   updatedEmail?: string;
@@ -106,7 +104,6 @@ export const generateChangeOfAddress = async ({
           bypassDocketEntry,
           contactInfo,
           docketNumber,
-          firmName,
           jobId,
           oldUser,
           requestUser: {
@@ -134,7 +131,6 @@ export const generateChangeOfAddress = async ({
             bypassDocketEntry,
             contactInfo,
             docketNumber,
-            firmName,
             jobId,
             oldUser,
             requestUserId,

@@ -15,7 +15,6 @@ export const changeOfAddressHandler = async event => {
     bypassDocketEntry: eventBody.bypassDocketEntry,
     contactInfo: eventBody.contactInfo,
     docketNumber: eventBody.docketNumber,
-    firmName: eventBody.firmName,
     jobId: eventBody.jobId,
     requestUserId: eventBody.requestUserId,
     updatedEmail: eventBody.updatedEmail,

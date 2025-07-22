@@ -113,7 +113,6 @@ const updateUserContactInformationHelper = async (
     applicationContext,
     authorizedUser,
     contactInfo,
-    firmName,
     user: updatedUserEntity.validate().toRawObject(),
     oldUser: oldUser as RawUser,
     websocketMessagePrefix: 'user',

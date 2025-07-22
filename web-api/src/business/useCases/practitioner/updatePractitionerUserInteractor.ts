@@ -132,7 +132,6 @@ export const updatePractitionerUser = async (
       authorizedUser,
       bypassDocketEntry,
       contactInfo: validatedUserData.contact,
-      firmName: validatedUserData.firmName,
       requestUserId: authorizedUser.userId,
       updatedEmail: validatedUserData.email,
       updatedName: validatedUserData.name,
