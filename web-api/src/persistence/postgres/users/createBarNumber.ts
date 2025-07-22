@@ -2,12 +2,16 @@ import { getMonthDayYearInETObj } from '@shared/business/utilities/DateHandler';
 import { getDbWriter } from '@web-api/database';
 import { sql } from 'kysely';
 
-export const createBarNumber = async ({ initials }: { initials: string }) => {
+export const createBarNumber = async ({
+  initials,
+}: {
+  initials: string;
+}): Promise<string> => {
   const year = `${getMonthDayYearInETObj().year}`;
   const twoDigitYear = year.slice(-2);
 
   const { lastUsedNumber: incrementedNextNumber } = await getDbWriter({
-    table: null,
+    table: 'dwBarNumber',
     action: null,
     cb: writer =>
       writer
