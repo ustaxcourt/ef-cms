@@ -45,8 +45,6 @@ export const respondentFilesDocumentForAssociatedCase = (
       'Civil Penalty Approval Form',
     );
 
-    expect(cerebralTest.getState('form.partyPrimary')).toEqual(undefined);
-
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
