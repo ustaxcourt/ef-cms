@@ -51,7 +51,6 @@ export const removePetitionerEmailInteractor = async (
 
   const caseToUpdate = caseEntity.validate().toRawObject();
 
-  // TODO 10495: This will be a problem when petitioners are moved over to dwUser table as disassociateUsersFromCases will totally remove the petitioner from a case, not just their access to the case.
   await settlePromises([
     upsertCases([caseToUpdate]),
     disassociateUsersFromCases([

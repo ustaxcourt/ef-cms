@@ -2,7 +2,7 @@ import { Insertable, Selectable, Updateable } from 'kysely';
 
 const DEFAULT = {};
 
-// TODO: After 10495, consider redesiging userOnCase "pending" feature. As-is,
+// TODO: consider redesiging "dwUserOnCasePending" feature. As-is,
 // when a practitioner submits a document that requires court approval before
 // they are associated with the case, the system creates a "pending" case
 // association. This "pending" association is never deleted: it is instead

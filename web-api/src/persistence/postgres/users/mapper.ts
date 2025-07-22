@@ -19,19 +19,18 @@ import {
 function pickUserFields(
   user: RawUser | RawIrsPractitioner | RawPractitioner,
 ): NewUserKysely {
-  //TODO 10495: this is questionable
   const rawPractitioner = user as RawPractitioner;
 
   return {
     userId: user.userId,
     contact: user.contact ? JSON.stringify(user.contact) : null,
-    email: user.email, // 10495: Note that this field was previously trimmed and all lower-case
+    email: user.email,
     isSeniorJudge: user.isSeniorJudge ?? null,
     isUpdatingInformation: user.isUpdatingInformation,
     judgeFullName: user.judgeFullName,
     judgePhoneNumber: user.judgePhoneNumber,
     judgeTitle: user.judgeTitle,
-    name: user.name, // 10495: Note that this field was previously all upper-case
+    name: user.name,
     pendingEmail: user.pendingEmail ?? null,
     pendingEmailVerificationToken: user.pendingEmailVerificationToken ?? null,
     pendingEmailVerificationTokenTimestamp:
@@ -43,7 +42,6 @@ function pickUserFields(
     role: user.role,
     section: user.section,
     token: user.token,
-    // this is questionable
     additionalPhone: rawPractitioner.additionalPhone ?? null,
     admissionsDate: rawPractitioner.admissionsDate
       ? calculateDate({
