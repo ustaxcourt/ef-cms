@@ -131,7 +131,7 @@ terraform init -upgrade -backend=true \
 
 if [ -z "${OUTPUT_ONLY}" ]; then 
   terraform plan -out execution-plan
-  #terraform apply -auto-approve execution-plan
+  terraform apply -auto-approve execution-plan
 else 
   terraform output -json > output.json
 fi
