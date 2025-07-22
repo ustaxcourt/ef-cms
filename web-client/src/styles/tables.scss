@@ -46,7 +46,7 @@ table,
   min-width: 150px;
 }
 
-.usa-table.todays-orders {
+.usa-table.todays-orders-mobile {
   button {
     padding: 0;
   }
@@ -57,6 +57,11 @@ table,
 
   td {
     padding: 0 0 24px 16px;
+  }
+
+  tr:hover {
+    background: inherit;
+    box-shadow: none;
   }
 
   td.docket-number-head {
