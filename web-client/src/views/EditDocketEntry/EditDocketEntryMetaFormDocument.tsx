@@ -101,7 +101,6 @@ export const EditDocketEntryMetaFormDocument = connect(
                 internalTypesHelper.internalDocumentTypesForSelectWithLegacySorted,
               selectedEventCode: form.eventCode,
             })}
-            isDisabled={form.eventCode === 'NOTR'}
             onChange={inputValue => {
               const value = inputValue?.value || '';
               updateDocketEntryMetaDocumentFormValueSequence({
