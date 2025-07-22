@@ -139,7 +139,7 @@ module "api-east-green" {
   web_acl_arn            = data.terraform_remote_state.remote.outputs.east_web_acl_arn
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
-  create_seal_in_lower = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
+  create_seal_in_lower = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? 0 : 1
   prod_env_account_id  = var.prod_env_account_id
 
   # lambda to handle bounced service email notifications

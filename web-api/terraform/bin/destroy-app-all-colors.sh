@@ -32,7 +32,6 @@ echo "  - ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}"
 echo "  - ENV=${ENV}"
 echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
-echo "  - LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
 echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
@@ -50,6 +49,9 @@ if [[ -n "$ZONE_NAME" ]]; then
   BUCKET="${ZONE_NAME}.terraform.deploys"
   DNS_DOMAIN="$ZONE_NAME"
 fi
+
+LOWER_ENV_ACCOUNT_IDS=$(aws sts get-caller-identity --query Account --output text)
+[[ -n "$PRODLIKE_LOWER_ENV_ACCOUNT_IDS" ]] && LOWER_ENV_ACCOUNT_IDS="$PRODLIKE_LOWER_ENV_ACCOUNT_IDS"
 
 rm -rf .terraform
 rm -f .terraform.lock.hcl
@@ -97,7 +99,7 @@ export TF_VAR_enable_health_checks=$ENABLE_HEALTH_CHECKS
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
-export TF_VAR_lower_env_account_id=$LOWER_ENV_ACCOUNT_ID
+export TF_VAR_lower_env_principal_identifiers="[\"${LOWER_ENV_ACCOUNT_IDS//,/\",\"}\"]"
 export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
 export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
