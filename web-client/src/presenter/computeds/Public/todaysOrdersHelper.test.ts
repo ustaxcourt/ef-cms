@@ -153,7 +153,7 @@ describe('todaysOrdersHelper', () => {
       },
     });
 
-    expect(result.sortOptions.length).toBe(4);
+    expect(result.sortOptions.length).toBe(12);
   });
 
   describe('hasResults', () => {
@@ -191,6 +191,53 @@ describe('todaysOrdersHelper', () => {
       const result = runCompute(todaysOrdersHelper, { state });
 
       expect(result.showLoadMoreButton).toBeFalsy();
+    });
+  });
+
+  describe('formattedOrders', () => {
+    it('should sort by filing date ascending', () => {
+      state = {
+        tableSort: {
+          sortField: 'filingDate',
+          sortOrder: 'asc',
+        },
+        todaysOrders: {
+          results: [
+            {
+              filingDate: '2020-06-11T20:17:10.646Z',
+            },
+            {
+              filingDate: '2030-06-11T20:17:10.646Z',
+            },
+            {
+              filingDate: '2025-06-11T20:17:10.646Z',
+            },
+          ],
+        },
+      };
+
+      const result = runCompute(todaysOrdersHelper, { state });
+
+      expect(result.formattedOrders).toEqual([
+        {
+          filingDate: '2020-06-11T20:17:10.646Z',
+          formattedFilingDate: '06/11/20',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+        {
+          filingDate: '2025-06-11T20:17:10.646Z',
+          formattedFilingDate: '06/11/25',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+        {
+          filingDate: '2030-06-11T20:17:10.646Z',
+          formattedFilingDate: '06/11/30',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+      ]);
     });
   });
 });
