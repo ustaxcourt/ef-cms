@@ -4,7 +4,7 @@ const DEFAULT = {};
 
 export const barNumberTableDefinition = {
   year: DEFAULT as string,
-  lastUsedNumber: DEFAULT as string,
+  lastUsedNumber: DEFAULT as number,
 };
 
 export type BarNumberTable = typeof barNumberTableDefinition;
