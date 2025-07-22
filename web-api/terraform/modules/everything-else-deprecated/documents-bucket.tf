@@ -122,7 +122,7 @@ data "aws_iam_policy_document" "allow_access_for_glue_job" {
 
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.lower_env_account_id}:root"]
+      identifiers = var.lower_env_principal_identifiers
     }
 
     actions = [
