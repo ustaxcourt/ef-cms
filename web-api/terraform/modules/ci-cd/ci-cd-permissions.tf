@@ -358,9 +358,7 @@ resource "aws_iam_policy" "ci_cd_policy" {
     {
       "Action": "sts:AssumeRole",
       "Effect": "Allow",
-      "Resource": [
-        "arn:aws:iam::${var.lower_env_account_id}:role/restore_role_*"
-      ]
+      "Resource": ${jsonencode(var.lower_env_restore_roles)}
     }
   ]
 }
