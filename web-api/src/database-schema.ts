@@ -80,10 +80,15 @@ import {
   transformOpenSearchUser,
 } from '../elasticsearch/index-users';
 import { transformOpenSearchUserOnCase } from '../elasticsearch/cases/transformOpenSearchUserOnCase';
+import {
+  BarNumberTable,
+  DW_BAR_NUMBER_COLUMNS,
+} from '@web-api/persistence/postgres/users/barNumber/schema';
 
 const DEFAULT = {};
 
 interface DatabaseSchemaType {
+  dwBarNumber: DatabaseTableMetadata<BarNumberTable>;
   dwCase: DatabaseTableMetadata<CaseTable>;
   dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
@@ -118,6 +123,10 @@ type DatabaseTableMetadata<TTable> = {
 };
 
 export const DatabaseSchema: DatabaseSchemaType = {
+  dwBarNumber: {
+    table: DEFAULT as BarNumberTable,
+    columns: DW_BAR_NUMBER_COLUMNS,
+  },
   dwCase: {
     table: DEFAULT as CaseTable,
     columns: DW_CASE_COLUMNS,

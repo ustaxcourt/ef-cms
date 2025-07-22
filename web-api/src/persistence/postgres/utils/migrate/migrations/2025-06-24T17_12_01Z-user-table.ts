@@ -99,6 +99,13 @@ export async function up(db: Kysely<any>): Promise<void> {
     .on('dwUserConfirmationCode')
     .column('ttl')
     .execute();
+
+  // dwBarNumber
+  await db.schema
+    .createTable('dwBarNumber')
+    .addColumn('year', 'int8', col => col.primaryKey())
+    .addColumn('lastUsedNumber', 'int8', col => col.notNull())
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
