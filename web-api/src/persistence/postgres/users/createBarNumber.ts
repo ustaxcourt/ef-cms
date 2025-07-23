@@ -17,7 +17,7 @@ export const createBarNumber = async ({
       writer
         .insertInto('dwBarNumber')
         .values({
-          year,
+          year: Number(year),
           lastUsedNumber: 1,
         })
         .onConflict(oc =>
