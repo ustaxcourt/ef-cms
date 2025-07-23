@@ -1,9 +1,4 @@
-import {
-  CamelCasePlugin,
-  Kysely,
-  PostgresDialect,
-  Transaction,
-} from 'kysely';
+import { CamelCasePlugin, Kysely, PostgresDialect, Transaction } from 'kysely';
 import { Database } from '@web-api/persistence/postgres/database-schema';
 import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
@@ -83,32 +78,38 @@ async function getToken(): Promise<string> {
   if (environment.nodeEnv !== 'production') {
     return environment.rds.pool.password;
   }
+  // Unset the token if we are past the expiration time
   if (Date.now() > tokenExpirationTime) {
     token = null;
   }
+  // If we still have a valid token, return it
   if (token) {
     return token;
   }
+  // We get a new token, careful to make sure concurrent processes all wait for the same call to generateRDSAuthToken
   if (!tokenPromise) {
+    // "Lock" the token fetching code by setting tokenPromise
     tokenPromise = generateRDSAuthToken()
       .then(t => {
-        // on success, cache the token and its expiry
+        // On success, cache the token and its expiration time
         token = t;
         tokenExpirationTime = Date.now() + 13 * 60 * 1000;
         return t;
       })
       .finally(() => {
-        tokenPromise = null;
+        tokenPromise = null; // "Unlock" the token fetching code by unsetting tokenPromise
       });
   }
-  return tokenPromise;
+  return await tokenPromise;
 }
 
 function getPoolConfig(): PoolConfig {
   if (!poolConfig) {
     poolConfig = {
       ...environment.rds.pool,
-      password: getToken,
+      password: async () => {
+        return await getToken();
+      },
       ssl: environment.rds.useGlobalCert
         ? {
             ca: fs.readFileSync('global-bundle.pem').toString(),
