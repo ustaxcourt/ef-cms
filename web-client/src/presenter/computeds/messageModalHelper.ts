@@ -42,9 +42,6 @@ export const messageModalHelper = (
     title: string;
   })[] = [];
   for (const entry of formattedDocketEntries) {
-    console.log('formattedDocketEntries : ', formattedDocketEntries);
-    console.log('index : ', entry.index);
-
     if (entry.isFileAttached && entry.isOnDocketRecord && entry.index) {
       entry.title = entry.descriptionDisplay || entry.documentType;
       entry.isAlreadyAttached = computeIsAlreadyAttached(entry);
