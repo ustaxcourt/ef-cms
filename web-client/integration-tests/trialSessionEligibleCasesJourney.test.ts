@@ -341,7 +341,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       );
 
       await cerebralTest.runSequence('addCaseToTrialSessionSequence');
-      await wait(1000); // we need to wait for some reason
+      await wait(1000); //we need to wait for some reason
 
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
