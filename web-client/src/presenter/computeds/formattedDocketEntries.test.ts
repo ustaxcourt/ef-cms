@@ -14,7 +14,7 @@ import {
   docketClerkUser,
   petitionerUser,
   petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
+} from '@shared/test/mockUsers';
 import {
   formattedDocketEntries as formattedDocketEntriesComputed,
   setupIconsToDisplay,
@@ -912,10 +912,9 @@ describe('formattedDocketEntries', () => {
             docketEntries: [
               {
                 ...mockDocketEntry,
-                workItem: {
-                  completedAt: undefined,
-                  isRead: false,
-                },
+                qcViewed: false,
+                qcComplete: false,
+                workItemId: 'someId',
               },
             ],
           },

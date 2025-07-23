@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearCaseDeadlineReportAction } from '../actions/CaseDeadline/clearCaseDeadlineReportAction';
 import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
@@ -25,7 +24,6 @@ export const updateDateRangeForDeadlinesSequence =
         clearAlertsAction,
         updateDateRangeForDeadlinesAction,
         stopShowValidationAction,
-        clearCaseDeadlineReportAction,
         getCaseDeadlinesAction,
         setCaseDeadlinesAction,
       ],

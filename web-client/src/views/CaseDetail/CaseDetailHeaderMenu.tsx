@@ -11,10 +11,8 @@ import { DeleteCaseDeadlineModalDialog } from './DeleteCaseDeadlineModalDialog';
 import { EditCaseDeadlineModalDialog } from './EditCaseDeadlineModalDialog';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '../../ustc-ui/Icon/Icon';
-import { PrioritizeCaseModal } from './PrioritizeCaseModal';
 import { RemoveFromTrialSessionModal } from './RemoveFromTrialSessionModal';
 import { UnblockFromTrialModal } from './UnblockFromTrialModal';
-import { UnprioritizeCaseModal } from './UnprioritizeCaseModal';
 import { UpdateCaseModalDialog } from '../CaseDetailEdit/UpdateCaseModalDialog';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
@@ -324,8 +322,6 @@ export const CaseDetailHeaderMenu = connect(
         )}
         {showModal === 'BlockFromTrialModal' && <BlockFromTrialModal />}
         {showModal === 'UnblockFromTrialModal' && <UnblockFromTrialModal />}
-        {showModal === 'PrioritizeCaseModal' && <PrioritizeCaseModal />}
-        {showModal === 'UnprioritizeCaseModal' && <UnprioritizeCaseModal />}
         {showModal === 'RemoveFromTrialSessionModal' && (
           <RemoveFromTrialSessionModal />
         )}

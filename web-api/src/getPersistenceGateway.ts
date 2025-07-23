@@ -22,7 +22,6 @@ import { deleteTrialSession } from './persistence/dynamo/trialSessions/deleteTri
 import { deleteTrialSessionWorkingCopy } from './persistence/dynamo/trialSessions/deleteTrialSessionWorkingCopy';
 import { deleteUserConnection } from '@web-api/persistence/postgres/connections/deleteUserConnection';
 import { deleteUserFromCase } from './persistence/dynamo/cases/deleteUserFromCase';
-import { deleteChangeOfAddressCaseRecord } from '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord';
 import { editPractitionerDocument } from './persistence/dynamo/practitioners/editPractitionerDocument';
 import { fetchEventCodesCountForJudges } from './persistence/elasticsearch/fetchEventCodesCountForJudges';
 import { generateAccountConfirmationCode } from '@web-api/persistence/dynamo/users/generateAccountConfirmationCode';
@@ -178,7 +177,6 @@ const gatewayMethods = {
   advancedDocumentSearch,
   createChangeOfAddressJob,
   decrementJobCounter,
-  deleteChangeOfAddressCaseRecord,
   deleteDocumentFile,
   deleteMessage,
   deletePractitionerDocument,
