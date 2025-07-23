@@ -72,7 +72,7 @@ export const CaseDetailInternal = connect(
               <Tab
                 id="tab-document-view"
                 tabName="documentView"
-                title="*Document View"
+                title="Document View"
               >
                 <DocumentViewer />
               </Tab>

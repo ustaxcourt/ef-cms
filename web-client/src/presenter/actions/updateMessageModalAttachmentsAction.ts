@@ -30,6 +30,7 @@ export const updateMessageModalAttachmentsAction = ({
       draftAttachments.push({
         documentId,
         documentTitle,
+        index: document.index,
       });
     } else if (props.action === 'remove') {
       const foundIndex = draftAttachments.findIndex(

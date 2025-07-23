@@ -62,63 +62,52 @@ export const MessageModalAttachments = connect(
                 icon="file-pdf"
                 size="1x"
               />
-              <span className="margin-left-1 semi-bold">*Attachment(s)</span>
+              <span className="margin-left-1 semi-bold">Attachment(s)</span>
             </div>
             {form.attachments.map(doc => {
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row">
-                    <div className="grid-col-9">{doc.documentTitle}</div>
+                    <div className="grid-col-9">
+                      {doc.index ? doc.index + ' - ' : ''}
+                      {doc.documentTitle}
+                    </div>
                   </div>
                 </div>
               );
             })}
-            {form.draftAttachments.map(doc1 => {
-              // Find the matching doc2 by comparing documentId and docketEntryId
-              const doc2 = messageModalHelper.documents.find(
-                doc => doc.docketEntryId === doc1.documentId,
-              );
-
+            {form.draftAttachments.map(doc => {
               return (
-                <div className="margin-top-1" key={doc1.documentId}>
+                // <div className="margin-top-1" key={doc.documentId}>
+                <div key={doc.documentId}>
                   <div className="grid-row">
-                    <div className="grid-col-10">
-                      {/* If a matching doc2 is found, use doc2.docketEntryId, otherwise leave it blank */}
-                      {doc2 ? doc2.index : ''} - {doc1.documentTitle}
+                    <div
+                      className="grid-col-10"
+                      style={{
+                        display: 'inline-block',
+                        height: '22px',
+                        lineHeight: '22px',
+                        padding: '0',
+                        margin: '0',
+                      }}
+                    >
+                      {doc.index ? doc.index + ' - ' : ''}
+                      {doc.documentTitle}
                     </div>
                     <div className="grid-col-2">
                       <Button
-                        link
-                        className="modal-button-link no-underline"
-                        icon="times-circle"
-                        iconColor="blue"
                         iconRight
+                        link
+                        className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
+                        icon="times-circle"
                         onClick={() => {
                           updateMessageModalAttachmentsSequence({
                             action: 'remove',
-                            documentId: doc1.documentId,
+                            documentId: doc.documentId,
                           });
                         }}
-                        style={{
-                          textDecoration: 'none', // Remove underline from button
-                        }}
                       >
-                        <span
-                          className="close-text"
-                          style={{
-                            display: 'inline-block', // Ensure it's treated as an inline element for hover effect
-                          }}
-                          onMouseEnter={e =>
-                            ((e.target as HTMLElement).style.textDecoration =
-                              'underline')
-                          } // Cast to HTMLElement for style
-                          onMouseLeave={e =>
-                            ((e.target as HTMLElement).style.textDecoration =
-                              'none')
-                          } // Cast to HTMLElement for style
-                        >
-                          Close
-                        </span>
+                        Remove
                       </Button>
                     </div>
                   </div>
