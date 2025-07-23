@@ -32,7 +32,6 @@ export const columnData = [
 
 export const SUPPORTED_SORT_FIELDS_FOR_TODAYS_ORDERS = [
   'filingDate',
-  'docketNumber',
   'caseCaption',
   'documentTitle',
   'numberOfPages',

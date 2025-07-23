@@ -239,5 +239,91 @@ describe('todaysOrdersHelper', () => {
         },
       ]);
     });
+    it('should sort by docketNumber', () => {
+      state = {
+        tableSort: {
+          sortField: 'docketNumber',
+          sortOrder: 'asc',
+        },
+        todaysOrders: {
+          results: [
+            { docketNumber: '10323-25' },
+            { docketNumber: '15607-20' },
+            { docketNumber: '15619-20' },
+            { docketNumber: '15631-22' },
+            { docketNumber: '16017-21' },
+          ],
+        },
+      };
+
+      const result = runCompute(todaysOrdersHelper, { state });
+
+      expect(result.formattedOrders).toEqual([
+        {
+          docketNumber: '15607-20',
+          formattedFilingDate: '',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+        {
+          docketNumber: '15619-20',
+          formattedFilingDate: '',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+        {
+          docketNumber: '16017-21',
+          formattedFilingDate: '',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+        {
+          docketNumber: '15631-22',
+          formattedFilingDate: '',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+        {
+          docketNumber: '10323-25',
+          formattedFilingDate: '',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+      ]);
+    });
+    it('should not sort if state.tableSort does not exist', () => {
+      state = {
+        todaysOrders: {
+          results: [
+            { filingDate: '2020-06-11T20:17:10.646Z' },
+            { filingDate: '2030-06-11T20:17:10.646Z' },
+            { filingDate: '2025-06-11T20:17:10.646Z' },
+          ],
+        },
+      };
+
+      const result = runCompute(todaysOrdersHelper, { state });
+
+      expect(result.formattedOrders).toEqual([
+        {
+          filingDate: '2020-06-11T20:17:10.646Z',
+          formattedFilingDate: '06/11/20',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+        {
+          filingDate: '2030-06-11T20:17:10.646Z',
+          formattedFilingDate: '06/11/30',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+        {
+          filingDate: '2025-06-11T20:17:10.646Z',
+          formattedFilingDate: '06/11/25',
+          formattedJudgeName: '',
+          numberOfPagesFormatted: 'n/a',
+        },
+      ]);
+    })
   });
 });
