@@ -1,3 +1,5 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { PutParameterCommand, SSMClient } from '@aws-sdk/client-ssm';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';

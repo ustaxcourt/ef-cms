@@ -360,8 +360,7 @@ jobs:
       - run:
           name: migrate Feature flags from dynamo to postgres
           command: |
-            npx ts-node --transpileOnly ./scripts/run-once-scripts/migrate-feature-flags-dynamo-to-postgres.ts
-
+            ./scripts/run-once-scripts/migrate-feature-flags-dynamo-to-postgres.ts
 
   disable-reindex-cron:
     docker:
