@@ -9,12 +9,24 @@ jest.mock('@aws-sdk/rds-signer', () => {
     Signer,
   };
 });
+jest.mock('pg', () => {
+  class Pool {
+    connect() {
+      return { release() {} };
+    }
+  }
+  return {
+    Pool,
+  };
+});
 import { getConnection } from '@web-api/getConnection';
 import { environment } from '@web-api/environment';
 
 describe('getConnection', () => {
-  environment.nodeEnv = 'production';
+  environment.stage = 'testing';
   it('should re-establish db connection after failure', async () => {
+    mockGetAuthToken.mockRejectedValueOnce(new Error('Failed!'));
+    mockGetAuthToken.mockRejectedValueOnce(new Error('Failed!'));
     mockGetAuthToken.mockRejectedValueOnce(new Error('Failed!'));
     await expect(() => getConnection({ cb: () => {} })).rejects.toThrow();
 

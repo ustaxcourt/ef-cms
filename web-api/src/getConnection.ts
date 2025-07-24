@@ -4,6 +4,8 @@ import { Pool, PoolConfig } from 'pg';
 import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from './environment';
 import fs from 'fs';
+import { sleep } from '@shared/tools/helpers';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 let dbInstance: Promise<Kysely<Database>> | null = null;
 let tokenExpirationTime: number = 0;
@@ -27,22 +29,40 @@ export async function getConnection<T>({
   return await cb(awaitedInstance);
 }
 
+// Only 1 process should be calling this function at a time.
 async function establishConnection(): Promise<Kysely<Database>> {
-  try {
-    poolConfig = getPoolConfig();
-    let token: string | null = null;
-    token = await getToken();
-    pool = new Pool({ ...poolConfig, password: token });
-    return new Kysely<Database>({
-      dialect: new PostgresDialect({
-        pool,
-      }),
-      plugins: [new CamelCasePlugin()],
-    });
-  } catch (e) {
-    dbInstance = null;
-    throw new Error(`Failed to connect to database: ${e}`);
+  let attempt = 0;
+  while (attempt < 3) {
+    try {
+      poolConfig = getPoolConfig();
+      const token = await getToken();
+      const thePool = new Pool({
+        ...poolConfig,
+        password: token,
+      });
+
+      const client = await thePool.connect(); // Verify we can connect to the DB before continuing
+      client.release();
+      pool = thePool;
+
+      return new Kysely<Database>({
+        dialect: new PostgresDialect({
+          pool,
+        }),
+        plugins: [new CamelCasePlugin()],
+      });
+    } catch (e) {
+      attempt++;
+      getDawsonLogger().error(
+        `Error establishing connection with database on attempt ${attempt}`,
+        e,
+      );
+      await sleep(20 * 2 ** attempt);
+    }
   }
+
+  dbInstance = null;
+  throw new Error(`Failed to connect to database after 3 attempts`);
 }
 
 async function generateRDSAuthToken() {
@@ -60,7 +80,7 @@ async function generateRDSAuthToken() {
 
 async function getToken() {
   const token =
-    environment.nodeEnv !== 'production'
+    environment.stage === 'local'
       ? environment.rds.pool.password
       : await generateRDSAuthToken();
 

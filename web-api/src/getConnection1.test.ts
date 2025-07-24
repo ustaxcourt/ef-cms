@@ -9,11 +9,21 @@ jest.mock('@aws-sdk/rds-signer', () => {
     Signer,
   };
 });
+jest.mock('pg', () => {
+  class Pool {
+    connect() {
+      return { release() {} };
+    }
+  }
+  return {
+    Pool,
+  };
+});
 import { getConnection } from '@web-api/getConnection';
 import { environment } from '@web-api/environment';
 
 describe('getConnection', () => {
-  environment.nodeEnv = 'production';
+  environment.stage = 'testing';
   it('should not establish multiple connections at the same time', async () => {
     mockGetAuthToken.mockResolvedValue('12346789');
     await Promise.all([
