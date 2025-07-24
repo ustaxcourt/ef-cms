@@ -908,6 +908,21 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
 
+export const SYSTEM_GENERATED_DOCUMENT_TYPES_ARRAY = [
+  'Notice of Change of Trial Judge',
+  ORDER_TYPES.find(order => order.eventCode === 'OSCP')!.documentType,
+  'Notice of Receipt of Petition',
+  'Notice of Trial',
+  'Notice of Change of Trial Location',
+  'Notice of Change to In Person Proceeding',
+  'Notice of Change to Remote Proceeding',
+  'Notice of Docket Change',
+  SPTO_DOCUMENT.documentType,
+  SPOS_DOCUMENT.documentType,
+  ORDER_TYPES.find(order => order.eventCode === 'O')!.documentType,
+  ORDER_TYPES.find(order => order.eventCode === 'NOT')!.documentType,
+];
+
 export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
   ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).map(doc => ({
     ...doc,
