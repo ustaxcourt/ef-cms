@@ -90,7 +90,6 @@ const generateFilename = ({
     fs.mkdirSync(unsealedDir);
   }
   const caseEntity = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
   let numSealed = 0;

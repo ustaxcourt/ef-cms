@@ -646,20 +646,6 @@ const applicationContext = {
   getHttpClient: () => {
     return getHttpClient(forceRefreshCallback);
   },
-  getLogger: () => ({
-    error: value => {
-      console.error(value);
-    },
-    info: (key, value) => {
-      console.info(key, JSON.stringify(value));
-    },
-    time: key => {
-      console.time(key);
-    },
-    timeEnd: key => {
-      console.timeEnd(key);
-    },
-  }),
   getPdfLib: () => {
     const pdfLib = import('pdf-lib');
     return pdfLib;

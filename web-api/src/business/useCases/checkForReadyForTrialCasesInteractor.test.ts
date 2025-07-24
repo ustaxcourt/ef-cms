@@ -2,23 +2,25 @@ import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { MOCK_LOCK } from '@shared/test/mockLock';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { checkForReadyForTrialCasesInteractor } from './checkForReadyForTrialCasesInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getReadyForTrialCases as getReadyForTrialCasesMock } from '@web-api/persistence/postgres/cases/reports/getReadyForTrialCases';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 const getReadyForTrialCases = getReadyForTrialCasesMock as jest.Mock;
+const tryGetLocks = jest.mocked(tryGetLocksMock);
 
 describe('checkForReadyForTrialCasesInteractor', () => {
   let mockCasesReadyForTrial;
@@ -28,12 +30,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     updateCaseAndAssociations.mockResolvedValue({} as RawCase);
     getCasesByDocketNumbers.mockResolvedValue([]);
-  });
-
-  beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValue(undefined);
   });
 
   it('should successfully run without error', async () => {
@@ -155,9 +151,9 @@ describe('checkForReadyForTrialCasesInteractor', () => {
   });
 
   it('should attempt to lock the case before it processes it and unlock when done', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getLock.mockReturnValueOnce(MOCK_LOCK);
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
     getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       status: CASE_STATUS_TYPES.generalDocket,
@@ -179,16 +175,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     await expect(
       checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
-    expect(applicationContext.getUtilities().sleep).toHaveBeenCalledTimes(1);
-    expect(
-      applicationContext.getPersistenceGateway().createLock,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getPersistenceGateway().removeLock,
-    ).toHaveBeenCalledTimes(2);
-
-    expect(
-      applicationContext.getPersistenceGateway().getLock,
-    ).toHaveBeenCalledTimes(3);
-  });
+    expect(tryGetLocks).toHaveBeenCalledTimes(3);
+    // longer timeout to account for trying to get lock with 5000ms wait time
+  }, 10000);
 });

@@ -8,13 +8,14 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
 import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteCaseDeadline = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     caseDeadlineId,
     docketNumber,
@@ -31,7 +32,6 @@ export const deleteCaseDeadline = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -52,13 +52,10 @@ export const deleteCaseDeadline = async (
     hasCaseDeadline: deadlinesBeforeDelete.length > 1,
   });
 
-  const result = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      authorizedUser,
-      caseToUpdate: updatedCase,
-    });
+  const result = await updateCaseAndAssociations({
+    authorizedUser,
+    caseToUpdate: updatedCase,
+  });
 
   const { leadDocketNumber } = caseToUpdate;
   if (!handlingConsolidatedCases && docketNumber === leadDocketNumber) {
@@ -73,7 +70,7 @@ export const deleteCaseDeadline = async (
         ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
       ).map(({ docketNumber: ccDocketNumber, caseDeadlineId }) => {
         return deleteCaseDeadline(
-          applicationContext,
+          _applicationContext,
           {
             caseDeadlineId,
             docketNumber: ccDocketNumber,
@@ -102,7 +99,6 @@ export async function getDeleteCaseDeadlineInteractorLockInfo(
   ttl?: number;
 }> {
   const { leadDocketNumber } = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
