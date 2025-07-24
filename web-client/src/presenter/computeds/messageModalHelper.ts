@@ -17,7 +17,6 @@ export const messageModalHelper = (
   );
 
   const caseDetail = get(state.caseDetail);
-  console.log('caseDetails : ', caseDetail);
   const screenMetadata = get(state.screenMetadata);
   const attachments = get(state.modal.form.attachments);
   const draftAttachments = get(state.modal.form.draftAttachments);

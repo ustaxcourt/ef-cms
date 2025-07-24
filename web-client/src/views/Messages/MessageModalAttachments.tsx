@@ -78,19 +78,9 @@ export const MessageModalAttachments = connect(
             })}
             {form.draftAttachments.map(doc => {
               return (
-                // <div className="margin-top-1" key={doc.documentId}>
-                <div key={doc.documentId}>
-                  <div className="grid-row">
-                    <div
-                      className="grid-col-10"
-                      style={{
-                        display: 'inline-block',
-                        height: '22px',
-                        lineHeight: '22px',
-                        padding: '0',
-                        margin: '0',
-                      }}
-                    >
+                <div className="margin-top-1" key={doc.documentId}>
+                  <div className="grid-row message-modal-add-document-form">
+                    <div className="grid-col-10">
                       {doc.index ? doc.index + ' - ' : ''}
                       {doc.documentTitle}
                     </div>
@@ -98,7 +88,7 @@ export const MessageModalAttachments = connect(
                       <Button
                         iconRight
                         link
-                        className="text-no-underline hide-on-mobile float-right margin-right-0 padding-top-0"
+                        className="text-no-underline hide-on-mobile margin-right-0 padding-top-0"
                         icon="times-circle"
                         onClick={() => {
                           updateMessageModalAttachmentsSequence({
