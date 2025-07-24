@@ -57,6 +57,20 @@ export const updatePractitionerUser = async (
     throw new Error('Bar number does not match user data.');
   }
 
+  if (oldUser.practiceType !== user.practiceType) {
+    const practitionerCases = await applicationContext
+      .getUseCases()
+      .getPractitionerCasesInteractor(
+        applicationContext,
+        { userId: oldUser.userId },
+        authorizedUser,
+      );
+    if (practitionerCases.openCases.length !== 0)
+      throw new Error(
+        'Practitioner is associated with one or more open cases. Practitioner has to be withdrawn from all open cases to change practice type.',
+      );
+  }
+
   if (userHasAccount && userIsUpdatingEmail) {
     await updateUserPendingEmail({
       applicationContext,
@@ -92,33 +106,27 @@ export const updatePractitionerUser = async (
           .toRawObject(),
       });
   } else {
-    await applicationContext
-      .getPersistenceGateway()
-      .updateUserRecords({
-        applicationContext,
-        oldUser: new Practitioner(oldUser).validate().toRawObject(),
-        updatedUser: validatedUserData,
-        userId: oldUser.userId,
-      });
+    await applicationContext.getPersistenceGateway().updateUserRecords({
+      applicationContext,
+      oldUser: new Practitioner(oldUser).validate().toRawObject(),
+      updatedUser: validatedUserData,
+      userId: oldUser.userId,
+    });
   }
 
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      message: { action: 'admin_contact_initial_update_complete' },
-      userId: authorizedUser.userId,
-      clientConnectionId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: { action: 'admin_contact_initial_update_complete' },
+    userId: authorizedUser.userId,
+    clientConnectionId,
+  });
 
   if (userHasAccount && userIsUpdatingEmail) {
-    await applicationContext
-      .getUseCaseHelpers()
-      .sendEmailVerificationLink({
-        applicationContext,
-        pendingEmail: user.pendingEmail,
-        pendingEmailVerificationToken: user.pendingEmailVerificationToken,
-      });
+    await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
+      applicationContext,
+      pendingEmail: user.pendingEmail,
+      pendingEmailVerificationToken: user.pendingEmailVerificationToken,
+    });
   }
 
   const updatedFields = getUpdatedFieldNames({
@@ -152,14 +160,12 @@ export const updatePractitionerUser = async (
       websocketMessagePrefix: 'admin',
     });
   } else {
-    await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        message: { action: 'admin_contact_full_update_complete' },
-        userId: authorizedUser.userId,
-        clientConnectionId,
-      });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: { action: 'admin_contact_full_update_complete' },
+      userId: authorizedUser.userId,
+      clientConnectionId,
+    });
   }
 };
 
