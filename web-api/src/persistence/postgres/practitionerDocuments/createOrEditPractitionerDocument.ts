@@ -1,4 +1,5 @@
 import { RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
+import { toKyselyNewPractitionerDocument } from '@web-api/persistence/postgres/practitionerDocuments/mapper';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const createOrEditPractitionerDocument = async ({
@@ -12,7 +13,7 @@ export const createOrEditPractitionerDocument = async ({
 
   await pgInsertInto({
     table: 'dwPractitionerDocuments',
-    values: { ...practitionerDocument, barNumber },
-    onConflictColumns: ['barNumber', 'practitionerDocumentFileId'],
+    values: toKyselyNewPractitionerDocument(practitionerDocument, barNumber),
+    onConflictColumns: ['practitionerDocumentFileId'],
   });
 };
