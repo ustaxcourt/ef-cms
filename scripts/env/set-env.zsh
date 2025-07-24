@@ -17,7 +17,7 @@ DEVGLOB="develop development"
 if [[ $DEVGLOB =~ (^|[[:space:]])$env($|[[:space:]]) ]]; then
   env="dev"
 fi
-if [[ $env == "staging" ]]; then
+if [[ $env == "stg" ]]; then
   env="stg"
 fi
 if [[ $env == "production" ]]; then
