@@ -11,6 +11,7 @@ jest.mock('@aws-sdk/rds-signer', () => {
 });
 jest.mock('pg', () => {
   class Pool {
+    options = {};
     connect() {
       return { release() {} };
     }
