@@ -1,4 +1,5 @@
 import {
+  DESCENDING,
   PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   PUBLIC_TRIAL_SESSIONS_DATA_KEY,
   STATE_KEYS,
@@ -99,6 +100,10 @@ export const baseState = {
     todaysOrdersSort: '',
   },
   showPassword: false,
+  tableSort: {
+    sortField: 'filingDate',
+    sortOrder: DESCENDING,
+  },
   todaysOpinions: [],
   todaysOrders: {
     page: 1,

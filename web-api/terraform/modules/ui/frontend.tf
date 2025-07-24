@@ -164,7 +164,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = var.dns_domain
+      value = var.zone_name
     }
   }
 
@@ -182,7 +182,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 
     custom_header {
       name  = "x-allowed-domain"
-      value = var.dns_domain
+      value = var.zone_name
     }
   }
 
@@ -267,7 +267,7 @@ resource "aws_cloudfront_distribution" "distribution" {
 }
 
 data "aws_route53_zone" "zone" {
-  name = "${var.dns_domain}."
+  name = "${var.zone_name}."
 }
 
 resource "aws_route53_record" "www" {

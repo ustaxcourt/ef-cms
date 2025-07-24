@@ -20,7 +20,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-       version = "~> 6.2.0"
+       version = "~> 6.3.0"
     }
   }
 }
@@ -42,7 +42,7 @@ data "terraform_remote_state" "remote" {
 }
 
 data "aws_route53_zone" "zone" {
-  name         = "${var.dns_domain}."
+  name         = "${var.zone_name}."
   private_zone = "false"
 }
 
@@ -139,7 +139,7 @@ module "api-east-blue" {
   web_acl_arn            = data.terraform_remote_state.remote.outputs.east_web_acl_arn
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
-  create_seal_in_lower = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
+  create_seal_in_lower = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? 0 : 1
   prod_env_account_id  = var.prod_env_account_id
 
   # lambda to handle bounced service email notifications
@@ -185,6 +185,7 @@ module "ui-blue" {
   current_color          = "blue"
   environment            = var.environment
   dns_domain             = var.dns_domain
+  zone_name              = var.zone_name
   viewer_protocol_policy = var.viewer_protocol_policy
   providers = {
     aws           = aws.us-east-1
