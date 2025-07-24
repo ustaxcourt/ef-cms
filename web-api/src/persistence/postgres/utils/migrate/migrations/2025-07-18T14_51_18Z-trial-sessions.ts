@@ -40,7 +40,6 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('termYear', 'varchar')
     .addColumn('trialClerk', 'jsonb') //come back
     .addColumn('trialLocation', 'varchar')
-    .addColumn('paperServicePdfs', 'jsonb')
     .execute();
 
   await db.schema
