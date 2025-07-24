@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/caseCorrespondences/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
@@ -10,7 +11,6 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { docketClerkUser } from '@shared/test/mockUsers';
 import { fileCorrespondenceDocumentInteractor } from './fileCorrespondenceDocumentInteractor';
@@ -21,11 +21,14 @@ import {
 } from '@shared/test/mockAuthUsers';
 import { upsertCaseCorrespondences as upsertCaseCorrespondencesMock } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const upsertCaseCorrespondences = upsertCaseCorrespondencesMock as jest.Mock;
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getUserById = jest.mocked(getUserByIdMock);
   const mockCase = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
@@ -69,9 +72,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   const mockCorrespondenceId = '14bb669b-0962-4781-87a0-50718f556e2b';
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
       Promise.resolve(caseToUpdate),
@@ -81,7 +82,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   it('should throw an Unauthorized error when the user role does not have theCASE_CORRESPONDENCE permission', async () => {
     await expect(
       fileCorrespondenceDocumentInteractor(
-        applicationContext,
         {
           documentMetadata: {
             docketNumber: mockCase.docketNumber,
@@ -98,7 +98,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
 
     await expect(
       fileCorrespondenceDocumentInteractor(
-        applicationContext,
         {
           documentMetadata: { docketNumber: mockCase.docketNumber } as any,
           primaryDocumentFileId: mockCorrespondenceId,
@@ -109,13 +108,10 @@ describe('fileCorrespondenceDocumentInteractor', () => {
   });
 
   it('should add the correspondence document to the case when the case entity is valid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     getCaseByDocketNumber.mockReturnValue(mockCase);
 
     await fileCorrespondenceDocumentInteractor(
-      applicationContext,
       {
         documentMetadata: {
           docketNumber: mockCase.docketNumber,
@@ -142,7 +138,6 @@ describe('fileCorrespondenceDocumentInteractor', () => {
     getCaseByDocketNumber.mockReturnValue(mockCase);
 
     const result = await fileCorrespondenceDocumentInteractor(
-      applicationContext,
       {
         documentMetadata: {
           docketNumber: mockCase.docketNumber,

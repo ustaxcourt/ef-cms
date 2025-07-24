@@ -23,6 +23,7 @@ import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/post
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import {
   asyncHandleLockError,
@@ -115,9 +116,13 @@ const saveForLaterStrategy = async ({
   docketEntryEntity: DocketEntry;
   authorizedUser: AuthUser;
 }) => {
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const updatedDocketEntryEntity = await updateDocketEntry({
     applicationContext,
@@ -259,9 +264,13 @@ const serveDocketEntry = async ({
   });
 
   try {
-    const user = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId });
+    const user = await getUserById({ userId });
+
+    if (!user) {
+      throw new NotFoundError(
+        `User not found with user id ${authorizedUser.userId}`,
+      );
+    }
 
     const updatedDocketEntry = await updateDocketEntry({
       applicationContext,

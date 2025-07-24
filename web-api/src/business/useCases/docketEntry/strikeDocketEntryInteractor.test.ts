@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/getUserById');
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -13,12 +14,15 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { strikeDocketEntryInteractor } from './strikeDocketEntryInteractor';
 import { upsertDocketEntries as upsertDocketEntriesMock } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('strikeDocketEntryInteractor', () => {
   let caseRecord;
   const mockUserId = applicationContext.getUniqueId();
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
+  const getUserById = jest.mocked(getUserByIdMock);
 
   beforeEach(() => {
     caseRecord = {
@@ -61,10 +65,11 @@ describe('strikeDocketEntryInteractor', () => {
       userId: '8100e22a-c7f2-4574-b4f6-eb092fca9f35',
     };
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+      role: 'admin',
+    } as DbUser);
 
     getCaseByDocketNumber.mockReturnValue(caseRecord);
   });
@@ -72,7 +77,6 @@ describe('strikeDocketEntryInteractor', () => {
   it('should throw an error when not authorized', async () => {
     await expect(
       strikeDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: caseRecord.docketNumber,
@@ -85,7 +89,6 @@ describe('strikeDocketEntryInteractor', () => {
   it('should throw an error when the docket record is not found on the case', async () => {
     await expect(
       strikeDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: 'does-not-exist',
           docketNumber: caseRecord.docketNumber,
@@ -97,7 +100,6 @@ describe('strikeDocketEntryInteractor', () => {
 
   it('should call getCaseByDocketNumber, getUserById, and upsertDocketEntries', async () => {
     await strikeDocketEntryInteractor(
-      applicationContext,
       {
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
         docketNumber: caseRecord.docketNumber,
@@ -106,9 +108,7 @@ describe('strikeDocketEntryInteractor', () => {
     );
 
     expect(getCaseByDocketNumber).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().getUserById,
-    ).toHaveBeenCalled();
+    expect(getUserById).toHaveBeenCalled();
     expect(upsertDocketEntries).toHaveBeenCalled();
 
     const [[docketEntry]] = upsertDocketEntries.mock.calls[0];
@@ -122,7 +122,6 @@ describe('strikeDocketEntryInteractor', () => {
 
     await expect(
       strikeDocketEntryInteractor(
-        applicationContext,
         {
           docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
           docketNumber: caseRecord.docketNumber,

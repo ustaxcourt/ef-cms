@@ -13,7 +13,7 @@ describe('Practitioner', () => {
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
     barNumber: 'PT20001',
-    birthYear: '2019',
+    birthYear: 2019,
     contact: {
       address1: '234 Main St',
       address2: 'Apartment 4',

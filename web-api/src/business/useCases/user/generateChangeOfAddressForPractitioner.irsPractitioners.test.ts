@@ -1,7 +1,12 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
 );
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
@@ -26,10 +31,13 @@ import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 describe('generateChangeOfAddress', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
+  // const upsertUsers = jest.mocked(upsertUsersMock);
   const { docketNumber } = MOCK_CASE;
   const mockIrsPractitioner = {
     admissionsDate: '2019-04-10',
@@ -74,9 +82,7 @@ describe('generateChangeOfAddress', () => {
       ({ caseToUpdate }) => caseToUpdate,
     );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([{ docketNumber }]);
+    getDocketNumbersByUser.mockResolvedValue([docketNumber]);
 
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithIrsPractitioner);
 
@@ -101,11 +107,11 @@ describe('generateChangeOfAddress', () => {
         ...mockIrsPractitioner.contact,
         address1: '23456 Main St',
       } as any,
-      firmName: 'my firm',
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,
+      oldUser: mockIrsPractitioner as any,
       websocketMessagePrefix: 'user',
     });
 
@@ -130,9 +136,9 @@ describe('generateChangeOfAddress', () => {
         ...mockIrsPractitioner.contact,
         address1: '23456 Main St',
       } as any,
-      firmName: 'my firm',
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
+      oldUser: mockIrsPractitioner as any,
       updatedName: 'rich',
       user: { ...mockIrsPractitioner, role: ROLES.adc } as any,
       websocketMessagePrefix: 'user',
@@ -154,8 +160,8 @@ describe('generateChangeOfAddress', () => {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
       } as any,
-      firmName: 'my firm',
       requestUserId: 'abc',
+      oldUser: mockIrsPractitioner as any,
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,
@@ -182,19 +188,17 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should NOT send a notification to the user if they have no associated cases', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValueOnce([]);
+    getDocketNumbersByUser.mockResolvedValueOnce([]);
 
     await generateChangeOfAddress({
       applicationContext,
       authorizedUser: mockDocketClerkUser,
       bypassDocketEntry: false,
+      oldUser: mockIrsPractitioner as any,
       contactInfo: {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
       } as any,
-      firmName: 'my firm',
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
@@ -221,7 +225,7 @@ describe('generateChangeOfAddress', () => {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
       } as any,
-      firmName: 'my firm',
+      oldUser: mockIrsPractitioner as any,
       requestUserId: 'abc',
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
@@ -250,8 +254,8 @@ describe('generateChangeOfAddress', () => {
         ...mockIrsPractitioner.contact,
         address1: '234 Main St',
       } as any,
-      firmName: 'my firm',
       requestUserId: 'abc',
+      oldUser: mockIrsPractitioner as any,
       updatedEmail: 'new@exaple.com',
       updatedName: 'rich',
       user: mockIrsPractitioner as any,

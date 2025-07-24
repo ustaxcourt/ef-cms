@@ -4,20 +4,18 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
-import type { ServerApplicationContext } from '@web-api/applicationContext';
+import { getUsersByRoles } from '@web-api/persistence/postgres/users/getUsersByRoles';
+import { Role } from '@shared/business/entities/EntityConstants';
 
 export const getAllUsersByRoleInteractor = async (
-  applicationContext: ServerApplicationContext,
-  { roles }: { roles: string[] },
+  { roles }: { roles: Role[] },
   authorizedUser: UnknownAuthUser,
 ) => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const results = await applicationContext
-    .getPersistenceGateway()
-    .getAllUsersByRole(applicationContext, roles);
+  const results = await getUsersByRoles({ roles });
 
   return results;
 };
