@@ -86,7 +86,7 @@ export const deleteCaseDeadline = async (
 };
 
 export async function getDeleteCaseDeadlineInteractorLockInfo(
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     caseDeadlineId,
     docketNumber,
