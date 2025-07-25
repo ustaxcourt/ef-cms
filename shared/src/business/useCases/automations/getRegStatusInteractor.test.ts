@@ -2,8 +2,8 @@ import { applicationContext } from '@shared/business/test/createTestApplicationC
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { getCognito as getCognitoMock } from '@web-api/persistence/cognito/getCognito';
-import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
-import { getBarNumberByPractitionerId as getBarNumberByPractitionerIdMock } from '@web-api/persistence/postgres/users/getBarNumberByPractitionerId';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { getRegStatusInteractor } from '@shared/business/useCases/automations/getRegStatusInteractor';
 jest.mock('@aws-sdk/client-sesv2', () => {
   const original = jest.requireActual('@aws-sdk/client-sesv2');
@@ -23,9 +23,11 @@ jest.mock('@aws-sdk/client-sesv2', () => {
   };
 });
 import { send as mockSend } from '@aws-sdk/client-sesv2';
+import { privatePractitionerUser } from '@shared/test/mockUsers';
+import { RawUser } from '@shared/business/entities/User';
 jest.mock('@web-api/persistence/cognito/getCognito');
-jest.mock('@web-api/persistence/postgres/users/cases/getCasesForUser');
-jest.mock('@web-api/persistence/postgres/users/getBarNumberByPractitionerId');
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
+jest.mock('@web-api/persistence/postgres/users/getUserById');
 
 describe('getRegStatusInteractor', () => {
   const userEmail = 'user@example.com';
@@ -59,7 +61,9 @@ describe('getRegStatusInteractor', () => {
 
     getDocketNumbersByUser.mockResolvedValue(['101-23', '202-24']);
 
-    jest.mocked(getBarNumberByPractitionerIdMock).mockResolvedValue('AB1234');
+    jest
+      .mocked(getUserByIdMock)
+      .mockResolvedValue(privatePractitionerUser as RawUser);
   });
 
   it('throws UnauthorizedError for unauthorized user', async () => {
@@ -105,7 +109,7 @@ describe('getRegStatusInteractor', () => {
       Username: 'user-2',
     };
 
-    getCognito.mockReturnValue({
+    getCognito.mockReturnValueOnce({
       send: jest
         .fn()
         .mockResolvedValue({ Users: [baseCognitoUser, matchingUser2] }),
@@ -115,9 +119,13 @@ describe('getRegStatusInteractor', () => {
       .mockResolvedValueOnce(['123-45'])
       .mockResolvedValueOnce(['987-65']);
 
-    mockSend.mockRejectedValue({
-      name: 'NotFoundException',
-    });
+    mockSend
+      .mockRejectedValueOnce({
+        name: 'NotFoundException',
+      })
+      .mockRejectedValueOnce({
+        name: 'NotFoundException',
+      });
 
     const result = await getRegStatusInteractor(
       applicationContext,
@@ -145,7 +153,7 @@ describe('getRegStatusInteractor', () => {
   });
 
   it('returns message if no matching users are found', async () => {
-    getCognito.mockReturnValue({
+    getCognito.mockReturnValueOnce({
       send: jest.fn().mockResolvedValue({ Users: [] }),
     });
 
@@ -170,7 +178,7 @@ describe('getRegStatusInteractor', () => {
       ],
     };
 
-    getCognito.mockReturnValue({
+    getCognito.mockReturnValueOnce({
       send: jest.fn().mockResolvedValue({ Users: [nonPractitionerUser] }),
     });
 
@@ -189,7 +197,7 @@ describe('getRegStatusInteractor', () => {
       Enabled: false,
     };
 
-    getCognito.mockReturnValue({
+    getCognito.mockReturnValueOnce({
       send: jest.fn().mockResolvedValue({ Users: [disabledUser] }),
     });
 

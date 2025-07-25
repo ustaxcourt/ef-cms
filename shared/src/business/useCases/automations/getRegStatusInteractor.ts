@@ -12,14 +12,14 @@ import {
   SESv2Client,
 } from '@aws-sdk/client-sesv2';
 import { getCognito } from '@web-api/persistence/cognito/getCognito';
-import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/cases/getCasesForUser';
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { getBarNumberByPractitionerId } from '@web-api/persistence/postgres/users/getBarNumberByPractitionerId';
 import { NodeHttpHandler } from '@smithy/node-http-handler';
 import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const getRegStatusInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -51,9 +51,8 @@ export const getRegStatusInteractor = async (
         user.role === ROLES.privatePractitioner ||
         user.role === ROLES.irsPractitioner
       ) {
-        barNumber = await getBarNumberByPractitionerId({
-          userId: user.userId,
-        });
+        const practitionerUser = await getUserById({ userId: user.userId });
+        barNumber = practitionerUser?.barNumber;
       }
 
       const isSuppressed = await isEmailSuppressed(user.email);
