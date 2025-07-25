@@ -39,10 +39,6 @@ variable "deployment_timestamp" {
   type = number
 }
 
-variable "lower_env_account_id" {
-  type = string
-}
-
 variable "bounce_alert_recipients" {
   type = string
 }
