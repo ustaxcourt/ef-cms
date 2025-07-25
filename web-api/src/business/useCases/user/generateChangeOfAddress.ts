@@ -91,7 +91,7 @@ export const generateChangeOfAddress = async ({
   const jobId = applicationContext.getUniqueId();
 
   await createChangeOfAddressJob({
-    docketNumbers: associatedUserCases.map(caseInfo => caseInfo.docketNumber),
+    docketNumbers: associatedUserCases,
     jobId,
   });
 
