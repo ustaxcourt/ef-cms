@@ -1080,7 +1080,6 @@ only-prod: &only-prod
     branches:
       only:
         - prod
-        - test
 
 only-test: &only-test
   context: efcms-<< pipeline.git.branch >>
@@ -1225,22 +1224,21 @@ workflows:
           <<: *only-prod
           requires:
             - index-cases
-      # - loadtests: # 10495 Post deployment: Uncomment after users to postgres has been deployed
-      #     <<: *only-prod
-      #     requires:
-      #       - disable-reindex-cron
-      #       - index-docket-entries
-      # - smoketests-readonly:
-      #     <<: *only-prod
-      #     requires:
-      #       - disable-reindex-cron
-      #       - index-docket-entries
+      - loadtests:
+          <<: *only-prod
+          requires:
+            - disable-reindex-cron
+            - index-docket-entries
+      - smoketests-readonly:
+          <<: *only-prod
+          requires:
+            - disable-reindex-cron
+            - index-docket-entries
       - deploy-switch-colors-cron:
           <<: *only-prod
           requires:
-            - index-cases # 10495 Post deployment: Uncomment after users to postgres has been deployed
-            # - loadtests
-            # - smoketests-readonly
+            - loadtests
+            - smoketests-readonly
       - wait-for-switch:
           <<: *only-prod
           type: approval
