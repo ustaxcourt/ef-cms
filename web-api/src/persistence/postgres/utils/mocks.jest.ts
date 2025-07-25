@@ -7,3 +7,7 @@ jest.mock('@web-api/persistence/postgres/utils/operation/tryGetLocks', () =>
 jest.mock('@web-api/persistence/postgres/utils/operation/tryReleaseLocks', () =>
   mockFactory('tryReleaseLocks'),
 );
+
+jest.mock('@web-api/persistence/postgres/acquireOneDbConnection', () =>
+  mockFactory('acquireOneDbConnection'),
+);

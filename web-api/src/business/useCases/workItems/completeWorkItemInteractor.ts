@@ -2,7 +2,7 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
@@ -19,8 +19,7 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
  * @returns {object} the completed work item
  */
 export const completeWorkItem = async (
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     completedMessage,
     workItemId,
