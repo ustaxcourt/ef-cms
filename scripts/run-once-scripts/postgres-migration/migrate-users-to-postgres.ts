@@ -127,7 +127,7 @@ async function scanContinuously(params: ScanCommandInput) {
     const privatePractitionerCaseAssociations: Array<UserOnCaseAssociation> =
       []; // {pk: case|, sk: privatePractitioner| }
     const userRecords: any[] = []; // {pk: user|, sk: user| }
-    const userOnCasePendingRecords: any[] = []; // {pk: user|, sk: pending-case| }
+    const userOnCasePendingRecords: TDynamoRecord[] = []; // {pk: user|, sk: pending-case| }
     // const userRecords = [] // {pk: user|, sk: case| } We should not need to process these. For irs/private association is defined through the {pk: case|, sk: privatePractitioner| }. For petitioners it is defined by the dwCase.petitioners array
     const barNumberRecords: BarNumberKysely[] = [];
 
@@ -188,7 +188,16 @@ async function scanContinuously(params: ScanCommandInput) {
       ...privatePractitionerCaseAssociations,
     ]);
     await upsertUsers(userRecords);
-    await associateUsersWithCasesPending(userOnCasePendingRecords);
+    await associateUsersWithCasesPending(
+      userOnCasePendingRecords.map(record => {
+        const userId = record.pk.split('|')[1];
+        const docketNumber = record.sk.split('|')[1];
+        return {
+          docketNumber,
+          userId,
+        };
+      }),
+    );
     await addBarNumberCount(barNumberRecords);
 
     itemsScanned += items.length;
