@@ -2,10 +2,8 @@ import { Get } from 'cerebral';
 import { orderBy } from 'lodash';
 import { state } from '@web-client/presenter/app.cerebral';
 import {
-  INTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENTS_ARRAY,
   LODGED_EVENT_CODE,
-  SYSTEM_GENERATED_DOCUMENT_TYPES_ARRAY,
 } from '@shared/business/entities/EntityConstants';
 import { InternalFilingEvent } from '@shared/business/entities/docketEntry/internalFilingEvents';
 
@@ -20,18 +18,12 @@ export const internalTypesHelper = (
     label: string;
     value: string;
   })[];
-  disabledFromDropdownDocumentTypes: string[];
 } => {
   const searchText = get(state.screenMetadata.searchText) || '';
 
   const internalDocumentTypesForSelect = getDocumentTypesForSelect(
     INTERNAL_DOCUMENTS_ARRAY,
   );
-
-  const disabledFromDropdownDocumentTypes =
-    SYSTEM_GENERATED_DOCUMENT_TYPES_ARRAY.filter(entity => {
-      return !INTERNAL_DOCUMENT_TYPES.includes(entity);
-    });
 
   const internalDocumentTypesForSelectWithLegacySorted =
     internalDocumentTypesForSelect
@@ -44,7 +36,6 @@ export const internalTypesHelper = (
   return {
     internalDocumentTypesForSelectSorted,
     internalDocumentTypesForSelectWithLegacySorted,
-    disabledFromDropdownDocumentTypes,
   };
 };
 
