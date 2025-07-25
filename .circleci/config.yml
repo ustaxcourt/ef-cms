@@ -1080,6 +1080,7 @@ only-prod: &only-prod
     branches:
       only:
         - prod
+        - test
 
 only-test: &only-test
   context: efcms-<< pipeline.git.branch >>
