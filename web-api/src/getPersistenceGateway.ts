@@ -1,4 +1,4 @@
-import { addCaseToHearing } from './persistence/dynamo/trialSessions/addCaseToHearing';
+import { addCaseToHearing } from './persistence/postgres/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from './persistence/dynamo/cases/associateUserWithCase';
 import { associateUserWithCasePending } from './persistence/dynamo/cases/associateUserWithCasePending';

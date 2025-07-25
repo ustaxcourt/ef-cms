@@ -8,6 +8,7 @@
 - [ ] Add typing to return type on insert and update functions
 - [ ] Figure out differences between trial sessions and hearings
 - [ ] Maybe come back and refactor the mapping table for cases and trial hearings
+- [ ] Ensure the hearings are sorted just as there were in the case entity (.sort((a, b) => compareStrings(a.createdAt, b.createdAt));)
 
 
 # NOTES
