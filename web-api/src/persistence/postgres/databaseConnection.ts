@@ -5,6 +5,10 @@ import { Signer } from '@aws-sdk/rds-signer';
 import { environment } from '../../environment';
 import fs from 'fs';
 import { AsyncLocalStorage } from 'async_hooks';
+import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { sleep } from '@shared/tools/helpers';
+
+const CONNECTION_RETRY_COUNT = 3;
 
 export type ConnectionInfo = {
   currentTransaction: Transaction<Database>;
@@ -40,22 +44,36 @@ export async function runQuery<T>({
   return cb(db);
 }
 
+// This should only ever be called by one process at a time
 async function establishDbPool(): Promise<Kysely<Database>> {
-  try {
-    // This should only ever be called by one process at a time
-    poolConfig = getPoolConfig();
-    await pool?.end(); // Clear existing pool
-    pool = new Pool({ ...poolConfig });
-    return new Kysely<Database>({
-      dialect: new PostgresDialect({
-        pool,
-      }),
-      plugins: [new CamelCasePlugin()],
-    });
-  } catch (e) {
-    dbInstance = null;
-    throw new DatabaseConnectionError(`Failed to connect to database: ${e}`);
+  let attempt = 0;
+  while (attempt < CONNECTION_RETRY_COUNT) {
+    try {
+      poolConfig = getPoolConfig();
+      await pool?.end(); // Clear existing pool
+      const pendingPool = new Pool({ ...poolConfig });
+
+      const client = await pendingPool.connect(); // Verify we can connect to the DB before continuing
+      client.release();
+      pool = pendingPool;
+
+      return new Kysely<Database>({
+        dialect: new PostgresDialect({
+          pool,
+        }),
+        plugins: [new CamelCasePlugin()],
+      });
+    } catch (e) {
+      attempt++;
+      getDawsonLogger().error(
+        `Error establishing connection with database on attempt ${CONNECTION_RETRY_COUNT}`,
+        e,
+      );
+      await sleep(20 * 2 ** attempt);
+    }
   }
+  dbInstance = null;
+  throw new Error(`Failed to connect to database after 3 attempts`);
 }
 
 async function generateRDSAuthToken() {
