@@ -35,6 +35,7 @@ export const CaseDeadlines = connect(
     selectDateRangeFromCalendarSequence,
     updateDateRangeForDeadlinesSequence,
     updateCaseDeadlineReportPageSequence,
+    updateScreenMetadataSequence,
     validationErrors,
   }) {
     const paginatorTop = useRef(null);
@@ -55,7 +56,10 @@ export const CaseDeadlines = connect(
               endDateErrorText={validationErrors.endDate}
               endName="deadlineEnd"
               endValue={caseDeadlineReportHelper.filterEndDate}
-              rangePickerCls={'display-flex flex-wrap gap-2'}
+              formGroupCls="margin-bottom-0"
+              formGroupStartCls="margin-bottom-0"
+              formGroupEndCls="margin-bottom-0"
+              rangePickerCls="display-flex flex-wrap gap-2"
               startDateErrorText={validationErrors.startDate}
               startName="deadlineStart"
               startValue={caseDeadlineReportHelper.filterStartDate}
@@ -67,6 +71,16 @@ export const CaseDeadlines = connect(
               onChangeStart={e => {
                 selectDateRangeFromCalendarSequence({
                   startDate: e.target.value,
+                });
+              }}
+              onLoad={() => {
+                updateScreenMetadataSequence({
+                  key: 'filterEndDateState',
+                  value: caseDeadlineReportHelper.filterEndDate,
+                });
+                updateScreenMetadataSequence({
+                  key: 'filterStartDateState',
+                  value: caseDeadlineReportHelper.filterStartDate,
                 });
               }}
             />
@@ -85,7 +99,6 @@ export const CaseDeadlines = connect(
                   filterCaseDeadlinesByJudgeSequence({
                     selectedJudgeId: e,
                   });
-                  setActivePage(0);
                 }}
               >
                 {caseDeadlineReportHelper.judgeOptions.map(judgeOption => (

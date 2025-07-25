@@ -10,6 +10,10 @@ variable "dns_domain" {
   type = string
 }
 
+variable "zone_name" {
+  type = string
+}
+
 variable "cognito_suffix" {
   type = string
 }
@@ -36,8 +40,8 @@ variable "prod_env_account_id" {
   type = string
 }
 
-variable "lower_env_account_id" {
-  type = string
+variable "lower_env_principal_identifiers" {
+  type = set(string)
 }
 
 variable "should_es_alpha_exist" {

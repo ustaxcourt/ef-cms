@@ -9,7 +9,7 @@ describe('validatePractitionerInteractor', () => {
       practitioner: {} as RawPractitioner,
     });
 
-    expect(Object.keys(errors)).toEqual([
+    expect(Object.keys(errors!)).toEqual([
       'role',
       'userId',
       'admissionsDate',
@@ -30,7 +30,7 @@ describe('validatePractitionerInteractor', () => {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PT7890',
-        birthYear: '2009',
+        birthYear: 2009,
         firstName: 'Test',
         lastName: 'Practitioner',
         originalBarState: 'IL',

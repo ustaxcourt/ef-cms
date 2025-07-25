@@ -5,8 +5,11 @@ export const respondent1ViewsCaseDetailOfAssociatedCase = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
-    expect(cerebralTest.getState('caseDetail.irsPractitioners.1.name')).toEqual(
-      'Test IRS Practitioner1',
-    );
+
+    const irsPractitioner1UserId = '5fb6e815-b5d3-459b-b08b-49c61f0fce5e';
+    const irsPractitioner = cerebralTest
+      .getState('caseDetail.irsPractitioners')
+      .find(practitioner => practitioner.userId === irsPractitioner1UserId);
+    expect(irsPractitioner.name).toEqual('Test IRS Practitioner1');
   });
 };

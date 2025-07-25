@@ -9,6 +9,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDateRangeForDeadlinesAction } from '../actions/CaseDeadline/updateDateRangeForDeadlinesAction';
 import { validateSearchDeadlinesAction } from '../actions/CaseDeadline/validateSearchDeadlinesAction';
+import { updateJudgeIdFilterForDeadlinesAction } from '../actions/CaseDeadline/updateJudgeIdForDeadlinesAction';
 
 export const updateDateRangeForDeadlinesSequence =
   showProgressSequenceDecorator([
@@ -23,6 +24,7 @@ export const updateDateRangeForDeadlinesSequence =
       success: [
         clearAlertsAction,
         updateDateRangeForDeadlinesAction,
+        updateJudgeIdFilterForDeadlinesAction,
         stopShowValidationAction,
         getCaseDeadlinesAction,
         setCaseDeadlinesAction,

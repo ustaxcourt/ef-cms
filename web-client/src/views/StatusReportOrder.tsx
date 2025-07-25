@@ -261,6 +261,7 @@ export const StatusReportOrder = connect(
                         className="usa-checkbox__label"
                         htmlFor="stricken-from-trial-sessions"
                         id="stricken-from-trial-sessions-label"
+                        style={!statusReportOrderHelper.isCalendared ? { color: '#757575' } : {}}
                         title={statusReportOrderHelper.isCalendared ? '' : 'Case is not calendared'}
                       >
                         Case is stricken from the trial session

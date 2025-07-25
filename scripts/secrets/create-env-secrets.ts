@@ -9,7 +9,7 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { getLowerEnvAccountId, getRepoName } from './createSecretsHelpers';
+import { getRepoName } from './createSecretsHelpers';
 import { makeNewPassword } from '../user/make-new-password';
 
 const scriptConfig: ScriptConfig = {
@@ -193,7 +193,6 @@ if (env === 'prod') {
   const defaultAccountPass = generateSecureDefaultAccountPassword
     ? makeNewPassword()
     : 'Testing1234$';
-  const lowerEnvAccountId = await getLowerEnvAccountId();
   const postgresOriginalPassword = makeNewPassword(
     ['uppercase', 'lowercase', 'numbers'],
     42,
@@ -215,7 +214,6 @@ if (env === 'prod') {
     IRS_SUPERUSER_EMAIL:
       irsSuperuserEmail || `service.agent.${env}@example.com`,
     IS_DYNAMSOFT_ENABLED: enableDynamsoft ? 1 : 0,
-    LOWER_ENV_ACCOUNT_ID: lowerEnvAccountId,
     POSTGRES_MASTER_PASSWORD: postgresOriginalPassword,
     POSTGRES_MASTER_USERNAME: postgresOriginalUsername,
     POSTGRES_USER: `${env}_dawson`,

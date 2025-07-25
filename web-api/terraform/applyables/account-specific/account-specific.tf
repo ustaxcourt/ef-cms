@@ -18,7 +18,7 @@ terraform {
   required_providers {
     aws = {
       source  = "hashicorp/aws"
-       version = "~> 6.2.0"
+       version = "~> 6.3.0"
     }
     opensearch = {
       source  = "opensearch-project/opensearch"
@@ -37,7 +37,7 @@ module "api-gateway-global-logging-permissions" {
 
 module "ci-cd" {
   source               = "../../modules/ci-cd"
-  lower_env_account_id = var.lower_env_account_id
+  lower_env_restore_roles = var.lower_env_restore_roles
 }
 
 module "kibana" {
@@ -62,8 +62,8 @@ module "edge-lambda-permissions" {
 }
 
 module "route53-zone" {
-  source = "../../modules/route53-zone"
-  dns_domain = var.dns_domain
+  source    = "../../modules/route53-zone"
+  zone_name = var.zone_name
 }
 
 module "email-monitoring" {

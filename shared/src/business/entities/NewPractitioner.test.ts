@@ -9,7 +9,7 @@ describe('NewPractitioner', () => {
   const mockPractitioner: RawNewPractitioner = {
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
-    birthYear: '2019',
+    birthYear: 2019,
     confirmEmail: 'test@example.com',
     contact: {
       address1: '234 Main St',

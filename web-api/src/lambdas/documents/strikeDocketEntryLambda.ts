@@ -13,13 +13,12 @@ export const strikeDocketEntryLambda = (
   event,
   authorizedUser: UnknownAuthUser,
 ) =>
-  genericHandler(event, async ({ applicationContext }) => {
+  genericHandler(event, async () => {
     const {
       pathParameters: { docketEntryId, docketNumber },
     } = event;
 
     return await strikeDocketEntryInteractor(
-      applicationContext,
       {
         docketEntryId,
         docketNumber,

@@ -1,4 +1,4 @@
-variable "dns_domain" {
+variable "zone_name" {
   type = string
 }
 
@@ -38,6 +38,6 @@ variable "log_snapshot_bucket_name" {
   type = string
 }
 
-variable "lower_env_account_id" {
-  type = string
+variable "lower_env_restore_roles" {
+  type = set(string)
 }
