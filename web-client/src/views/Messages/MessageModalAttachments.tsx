@@ -80,15 +80,16 @@ export const MessageModalAttachments = connect(
               return (
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row message-modal-add-document-form">
-                    <div className="grid-col-10">
+                    <div className="grid-col-9">
                       {doc.index ? doc.index + ' - ' : ''}
                       {doc.documentTitle}
                     </div>
+                    <div className="grid-col-1"></div>
                     <div className="grid-col-2">
                       <Button
                         iconRight
                         link
-                        className="text-no-underline hide-on-mobile margin-right-0 padding-top-0"
+                        className="text-no-underline hide-on-mobile margin-right-0 padding-top-0 message-modal-remove-button"
                         icon="times-circle"
                         onClick={() => {
                           updateMessageModalAttachmentsSequence({
