@@ -4,7 +4,7 @@ import {
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -16,9 +16,11 @@ import { aggregatePartiesForService } from '@shared/business/utilities/aggregate
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { pick } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const fileExternalDocument = async (
   applicationContext: ServerApplicationContext,
@@ -29,15 +31,18 @@ export const fileExternalDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const { docketNumber } = documentMetadata;
   const workItems: WorkItem[] = [];
 
   const currentCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -149,17 +154,13 @@ export const fileExternalDocument = async (
           const workItem = new WorkItem({
             assigneeId: null,
             assigneeName: null,
-            docketEntry: {
-              ...docketEntryEntity.toRawObject(),
-              createdAt: docketEntryEntity.createdAt,
-            },
+            docketEntryId: docketEntryEntity.docketEntryId,
             docketNumber: caseToUpdate.docketNumber,
             section: DOCKET_SECTION,
             sentBy: user.name,
             sentByUserId: user.userId,
           }).validate();
 
-          docketEntryEntity.setWorkItem(workItem);
           workItems.push(workItem);
           caseEntity.addDocketEntry(docketEntryEntity);
 
@@ -186,8 +187,7 @@ export const fileExternalDocument = async (
           caseEntity,
         });
 
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
+      await updateCaseAndAssociations({
         authorizedUser,
         caseToUpdate: caseEntity,
         includeCorrespondence: false,

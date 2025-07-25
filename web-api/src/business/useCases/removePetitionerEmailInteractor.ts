@@ -10,11 +10,10 @@ import {
 } from '@shared/business/entities/contacts/Petitioner';
 import { Case } from '@shared/business/entities/cases/Case';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-import { applicationContext } from '@web-api/applicationContext';
-import { deleteUserFromCase } from '@web-api/persistence/dynamo/cases/deleteUserFromCase';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
+import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
 
 export const removePetitionerEmailInteractor = async (
   { docketNumber, email }: { docketNumber: string; email: string },
@@ -24,7 +23,6 @@ export const removePetitionerEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
   const rawCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
     includeConsolidatedCases: false,
   });
@@ -55,11 +53,12 @@ export const removePetitionerEmailInteractor = async (
 
   await settlePromises([
     upsertCases([caseToUpdate]),
-    deleteUserFromCase({
-      applicationContext,
-      docketNumber,
-      userId: oldContactId,
-    }),
+    disassociateUsersFromCases([
+      {
+        docketNumber,
+        userId: oldContactId,
+      },
+    ]),
   ]);
 
   return new Petitioner(updatedPetitioner).toRawObject();

@@ -18,7 +18,6 @@ export const setCustomCaseReportFiltersSequence = [
     action: 'add' | 'remove';
     preferredTrialCity: string;
   };
-  highPriority?: boolean;
   procedureType?: CustomCaseProcedureTypes;
   judges?: { action: 'add' | 'remove'; judge: string };
 }) => void;

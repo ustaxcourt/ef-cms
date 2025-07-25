@@ -6,7 +6,7 @@ export const updateMessageModalAttachmentsAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { attachments, draftAttachments } = get(state.modal.form);
+  const { attachments, draftAttachments, subject } = get(state.modal.form);
   const caseDetail = get(state.caseDetail);
   const documentId = props.documentId || get(state.docketEntryId);
 
@@ -22,8 +22,8 @@ export const updateMessageModalAttachmentsAction = ({
       .getUtilities()
       .getDescriptionDisplay(document);
 
-    if (attachments.length + draftAttachments.length === 0) {
-      // This is the first attachment, so we should update the subject
+    const isSubjectEmpty = !subject || subject.trim() === '';
+    if (isSubjectEmpty && attachments.length + draftAttachments.length === 0) {
       store.set(state.modal.form.subject, documentTitle.slice(0, 250));
     }
     if (props.action === 'add') {

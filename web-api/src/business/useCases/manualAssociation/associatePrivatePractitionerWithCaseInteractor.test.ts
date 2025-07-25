@@ -1,5 +1,11 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -11,9 +17,15 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerWithCaseInteractor } from './associatePrivatePractitionerWithCaseInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { verifyCaseForUser as verifyCaseForUserMock } from '@web-api/persistence/postgres/cases/userOnCase/verifyCaseForUser';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const getUserById = jest.mocked(getUserByIdMock);
+  const verifyCaseForUser = jest.mocked(verifyCaseForUserMock);
   const caseRecord = {
     caseCaption: 'Caption',
     caseType: CASE_TYPES_MAP.deficiency,
@@ -73,21 +85,14 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       role: ROLES.adc,
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => {
-        return {
-          barNumber: 'BN1234',
-          name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-          role: ROLES.privatePractitioner,
-          userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-        };
-      });
+    getUserById.mockResolvedValue({
+      barNumber: 'BN1234',
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.privatePractitioner,
+      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    } as DbUser);
     getCaseByDocketNumber.mockReturnValue(caseRecord);
-
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
+    verifyCaseForUser.mockResolvedValue(false);
 
     await associatePrivatePractitionerWithCaseInteractor(
       applicationContext,
@@ -99,8 +104,6 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       mockUser,
     );
 
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 });

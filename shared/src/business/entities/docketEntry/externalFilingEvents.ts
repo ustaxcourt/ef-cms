@@ -8,7 +8,6 @@ export type ExternalFilingEvent = {
   scenario: string;
   labelPreviousDocument: string;
   labelFreeText: string;
-  labelFreeText2?: string;
   ordinalField: string;
   allowStamp?: boolean;
   allowOrderResponse?: boolean;
@@ -176,7 +175,6 @@ export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
       scenario: 'Standard',
       labelPreviousDocument: '',
       labelFreeText: '',
-      labelFreeText2: '',
       canBeFirstIrsDocument: true,
       ordinalField: '',
     },
@@ -1611,7 +1609,6 @@ export const EXTERNAL_FILING_EVENTS: AllExternalFilingEvents = {
       scenario: 'Standard',
       labelPreviousDocument: '',
       labelFreeText: '',
-      labelFreeText2: '',
       ordinalField: '',
       allowStamp: true,
       allowOrderResponse: true,

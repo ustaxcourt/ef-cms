@@ -4,10 +4,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { omit, union } from 'lodash';
 import { updateUserPendingEmail } from '@web-api/business/useCases/user/updateUserPendingEmailInteractor';
 import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
@@ -16,6 +12,14 @@ import {
   Practitioner,
 } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { upsertPractitioner } from '@web-api/persistence/postgres/users/upsertPractitioner';
+import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -42,9 +46,7 @@ export const updatePractitionerUser = async (
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
-  const oldUser = await applicationContext
-    .getPersistenceGateway()
-    .getPractitionerByBarNumber({ applicationContext, barNumber });
+  const oldUser = await getPractitionerByBarNumber({ barNumber });
 
   if (!oldUser) {
     throw new NotFoundError('Could not find user');
@@ -80,45 +82,31 @@ export const updatePractitionerUser = async (
       .getPersistenceGateway()
       .updatePractitionerUser({ applicationContext, user: validatedUserData });
   } else if (!oldUser.email && user.updatedEmail) {
-    updatedUser = await applicationContext
-      .getPersistenceGateway()
-      .createNewPractitionerUser({
-        applicationContext,
-        user: new Practitioner({
-          ...validatedUserData,
-          pendingEmail: user.updatedEmail,
-        })
-          .validate()
-          .toRawObject(),
-      });
+    updatedUser = await upsertPractitioner({
+      user: new Practitioner({
+        ...validatedUserData,
+        pendingEmail: user.updatedEmail,
+      })
+        .validate()
+        .toRawObject(),
+    });
   } else {
-    await applicationContext
-      .getPersistenceGateway()
-      .updateUserRecords({
-        applicationContext,
-        oldUser: new Practitioner(oldUser).validate().toRawObject(),
-        updatedUser: validatedUserData,
-        userId: oldUser.userId,
-      });
+    await upsertUsers([validatedUserData]);
   }
 
-  await applicationContext
-    .getNotificationGateway()
-    .sendNotificationToUser({
-      applicationContext,
-      message: { action: 'admin_contact_initial_update_complete' },
-      userId: authorizedUser.userId,
-      clientConnectionId,
-    });
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: { action: 'admin_contact_initial_update_complete' },
+    userId: authorizedUser.userId,
+    clientConnectionId,
+  });
 
   if (userHasAccount && userIsUpdatingEmail) {
-    await applicationContext
-      .getUseCaseHelpers()
-      .sendEmailVerificationLink({
-        applicationContext,
-        pendingEmail: user.pendingEmail,
-        pendingEmailVerificationToken: user.pendingEmailVerificationToken,
-      });
+    await applicationContext.getUseCaseHelpers().sendEmailVerificationLink({
+      applicationContext,
+      pendingEmail: user.pendingEmail,
+      pendingEmailVerificationToken: user.pendingEmailVerificationToken,
+    });
   }
 
   const updatedFields = getUpdatedFieldNames({
@@ -144,22 +132,20 @@ export const updatePractitionerUser = async (
       authorizedUser,
       bypassDocketEntry,
       contactInfo: validatedUserData.contact,
-      firmName: validatedUserData.firmName,
       requestUserId: authorizedUser.userId,
       updatedEmail: validatedUserData.email,
       updatedName: validatedUserData.name,
-      user: oldUser,
+      user: validatedUserData,
+      oldUser,
       websocketMessagePrefix: 'admin',
     });
   } else {
-    await applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser({
-        applicationContext,
-        message: { action: 'admin_contact_full_update_complete' },
-        userId: authorizedUser.userId,
-        clientConnectionId,
-      });
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: { action: 'admin_contact_full_update_complete' },
+      userId: authorizedUser.userId,
+      clientConnectionId,
+    });
   }
 };
 
@@ -196,12 +182,12 @@ const getUpdatedFieldNames = ({
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { user }: { user: Practitioner },
 ) => {
-  const docketNumbers: string[] = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({ applicationContext, userId: user.userId });
+  const docketNumbers: string[] = await getDocketNumbersByUser({
+    userId: user.userId,
+  });
 
   return { identifiers: docketNumbers.map(item => `case|${item}`), ttl: 900 };
 };

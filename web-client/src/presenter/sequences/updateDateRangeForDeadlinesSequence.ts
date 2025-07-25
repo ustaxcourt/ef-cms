@@ -1,5 +1,4 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { clearCaseDeadlineReportAction } from '../actions/CaseDeadline/clearCaseDeadlineReportAction';
 import { getCaseDeadlinesAction } from '../actions/CaseDeadline/getCaseDeadlinesAction';
 import { setCaseDeadlinesAction } from '../actions/CaseDeadline/setCaseDeadlinesAction';
 import { setScrollToErrorNotificationAction } from '@web-client/presenter/actions/setScrollToErrorNotificationAction';
@@ -10,6 +9,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { updateDateRangeForDeadlinesAction } from '../actions/CaseDeadline/updateDateRangeForDeadlinesAction';
 import { validateSearchDeadlinesAction } from '../actions/CaseDeadline/validateSearchDeadlinesAction';
+import { updateJudgeIdFilterForDeadlinesAction } from '../actions/CaseDeadline/updateJudgeIdForDeadlinesAction';
 
 export const updateDateRangeForDeadlinesSequence =
   showProgressSequenceDecorator([
@@ -24,8 +24,8 @@ export const updateDateRangeForDeadlinesSequence =
       success: [
         clearAlertsAction,
         updateDateRangeForDeadlinesAction,
+        updateJudgeIdFilterForDeadlinesAction,
         stopShowValidationAction,
-        clearCaseDeadlineReportAction,
         getCaseDeadlinesAction,
         setCaseDeadlinesAction,
       ],

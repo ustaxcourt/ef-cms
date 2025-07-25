@@ -1,5 +1,8 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -21,6 +24,9 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+
+import { associateUsersWithCases as associateUsersWithCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 
 jest.mock('@shared/business/utilities/DateHandler', () => {
   const originalModule = jest.requireActual(
@@ -35,6 +41,9 @@ jest.mock('@shared/business/utilities/DateHandler', () => {
 
 describe('createCaseInteractor', () => {
   let user;
+
+  const associateUsersWithCases = jest.mocked(associateUsersWithCasesMock);
+
   const mockPetitionMetadata = {
     caseType: CASE_TYPES_MAP.other,
     contactPrimary: {
@@ -66,6 +75,7 @@ describe('createCaseInteractor', () => {
   const date = '2020-11-21T20:49:28.192Z';
   const mockCreateIsoDateString = createISODateString as jest.Mock;
   mockCreateIsoDateString.mockReturnValue(date);
+  const getUserById = jest.mocked(getUserByIdMock);
 
   beforeEach(() => {
     user = new User({
@@ -75,13 +85,9 @@ describe('createCaseInteractor', () => {
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    (generateDocketNumber as jest.Mock).mockResolvedValue(
-      '00101-00',
-    );
+    (generateDocketNumber as jest.Mock).mockResolvedValue('00101-00');
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => user);
+    getUserById.mockImplementation(() => user);
 
     applicationContext
       .getUseCases()
@@ -131,7 +137,7 @@ describe('createCaseInteractor', () => {
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode,
     );
     expect(petitionDocketEntry).toBeDefined();
-    expect(petitionDocketEntry.redactionAcknowledgement).toEqual(true);
+    expect(petitionDocketEntry!.redactionAcknowledgement).toEqual(true);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations.mock
         .calls[0][0].caseToCreate,
@@ -144,9 +150,7 @@ describe('createCaseInteractor', () => {
         },
       ],
     });
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUsersWithCases).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
   });
 
@@ -182,9 +186,7 @@ describe('createCaseInteractor', () => {
         },
       ],
     });
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
+    expect(associateUsersWithCases).toHaveBeenCalled();
     expect(upsertWorkItems).toHaveBeenCalled();
   });
 
@@ -241,7 +243,7 @@ describe('createCaseInteractor', () => {
 
     const stinDocketEntry = result.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
-    );
+    )!;
     expect(stinDocketEntry.index).toEqual(0);
   });
 
@@ -302,7 +304,7 @@ describe('createCaseInteractor', () => {
     );
 
     expect(petitionDocketEntry).toBeDefined();
-    expect(petitionDocketEntry.redactionAcknowledgement).toEqual(true);
+    expect(petitionDocketEntry!.redactionAcknowledgement).toEqual(true);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
     ).toHaveBeenCalled();
@@ -354,7 +356,7 @@ describe('createCaseInteractor', () => {
     );
 
     expect(atpDocketEntry).toBeDefined();
-    expect(atpDocketEntry.redactionAcknowledgement).toEqual(true);
+    expect(atpDocketEntry!.redactionAcknowledgement).toEqual(true);
   });
 
   it('should create a case successfully with multiple "Attachment to Petition" documents', async () => {

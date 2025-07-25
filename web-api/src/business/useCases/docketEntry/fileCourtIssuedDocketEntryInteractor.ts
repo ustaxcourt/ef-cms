@@ -12,9 +12,11 @@ import { WorkItem } from '../../../../../shared/src/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { omit } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { withLocking } from '@web-api/business/useCaseHelper/acquireLock';
+import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
  *
@@ -47,7 +49,6 @@ export const fileCourtIssuedDocketEntry = async (
   const { docketEntryId } = documentMeta;
 
   const subjectCaseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectDocketNumber,
   });
 
@@ -71,9 +72,13 @@ export const fileCourtIssuedDocketEntry = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const isUnservable = DocketEntry.isUnservable(documentMeta);
 
@@ -118,10 +123,7 @@ export const fileCourtIssuedDocketEntry = async (
       const workItem = new WorkItem({
         assigneeId: null,
         assigneeName: null,
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
+        docketEntryId: docketEntryEntity.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         inProgress: true,
         section: DOCKET_SECTION,
@@ -132,8 +134,6 @@ export const fileCourtIssuedDocketEntry = async (
       if (isUnservable) {
         workItem.setAsCompleted({ message: 'completed', user });
       }
-
-      docketEntryEntity.setWorkItem(workItem);
 
       const isDocketEntryAlreadyOnCase = !!caseEntity.getDocketEntryById({
         docketEntryId,
@@ -155,8 +155,7 @@ export const fileCourtIssuedDocketEntry = async (
       });
 
       const saveItems: Promise<any>[] = [
-        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
+        updateCaseAndAssociations({
           authorizedUser,
           caseToUpdate: caseEntity,
         }),
@@ -175,7 +174,6 @@ export const fileCourtIssuedDocketEntry = async (
   );
 
   const rawSubjectCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectDocketNumber,
   });
 

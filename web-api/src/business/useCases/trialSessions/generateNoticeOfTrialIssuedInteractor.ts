@@ -36,7 +36,6 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   }
 
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -55,7 +54,6 @@ export const generateNoticeOfTrialIssuedInteractor = async (
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
   const judgeWithTitle = await getJudgeWithTitle({
-    applicationContext,
     judgeUserName: trialSession.judge.name,
   });
 

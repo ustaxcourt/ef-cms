@@ -1,6 +1,11 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
+);
+jest.mock(
+  '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
 );
 import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -17,6 +22,11 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
@@ -24,6 +34,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   let mockCase: RawCase;
   const fileAndServeDocumentOnOneCase = jest.mocked(
     fileAndServeDocumentOnOneCaseMock,
+  );
+  const updateDocketEntryPendingServiceStatus = jest.mocked(
+    updateDocketEntryPendingServiceStatusMock,
   );
 
   const mockClientConnectionId = '987654';
@@ -41,15 +54,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     mockCase = {
       ...MOCK_CASE,
       docketEntries: [
-        { docketEntryId: mockDocketEntryId, documentTitle: 'something cool' },
+        {
+          docketEntryId: mockDocketEntryId,
+          documentTitle: 'something cool',
+        } as RawDocketEntry,
       ],
     };
     getCaseByDocketNumber.mockResolvedValue(mockCase);
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockResolvedValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     fileAndServeDocumentOnOneCase.mockImplementation(
       ({ caseEntity }) => caseEntity,
@@ -101,7 +115,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         {
           docketEntryId: mockDocketEntryId,
           servedAt: '2018-03-01T05:00:00.000Z',
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -126,7 +140,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         {
           docketEntryId: mockDocketEntryId,
           isPendingService: true,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -155,8 +169,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
-          draftOrderState: 'abc',
-        },
+          draftOrderState: {},
+        } as RawDocketEntry,
       ],
     });
 
@@ -191,7 +205,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           documentTitle: 'fake title',
           eventCode: 'A',
           filingDate: 'abc',
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -222,7 +236,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
           filingDate: mockOriginalFilingDate,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -251,7 +265,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           isDraft: true,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -279,7 +293,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           isFileAttached: false,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -308,7 +322,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           isOnDocketRecord: false,
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -355,7 +369,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           processingStatus: 'abc',
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -386,7 +400,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'fake title',
           eventCode: SIMULTANEOUS_DOCUMENT_EVENT_CODES[0],
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -416,7 +430,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         {
           docketEntryId: mockDocketEntryId,
           documentTitle: 'Simultaneous doc title',
-        },
+        } as RawDocketEntry,
       ],
     });
 
@@ -446,7 +460,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           {
             docketEntryId: mockDocketEntryId,
             documentTitle: 'fake title',
-          },
+          } as RawDocketEntry,
         ],
       });
 
@@ -512,24 +526,13 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(2);
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: true,
     });
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledWith({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: false,
@@ -557,21 +560,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       ),
     ).rejects.toThrow(mockErrorText);
 
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(2);
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(2);
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus.mock.calls[0][0],
+      updateDocketEntryPendingServiceStatus.mock.calls[0][0],
     ).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,
       status: true,
     });
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus.mock.calls[1][0],
+      updateDocketEntryPendingServiceStatus.mock.calls[1][0],
     ).toMatchObject({
       docketEntryId: mockDocketEntryId,
       docketNumber: mockCase.docketNumber,

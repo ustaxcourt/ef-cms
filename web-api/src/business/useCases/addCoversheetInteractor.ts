@@ -4,8 +4,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { addCoverToPdf } from './addCoverToPdf';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries/upsertDocketEntries';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
-import { settlePromises } from '@web-api/utilities/settlePromises';
+import { NotFoundError } from '@web-api/errors/errors';
+import { DocketEntry } from '@shared/business/entities/DocketEntry';
 
 /**
  * addCoversheetInteractor
@@ -39,7 +41,6 @@ export const addCoversheetInteractor = async (
 ) => {
   if (!caseEntity) {
     const caseRecord = await getCaseByDocketNumber({
-      applicationContext,
       docketNumber,
     });
 
@@ -56,6 +57,12 @@ export const addCoversheetInteractor = async (
   const docketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
   });
+
+  if (!docketEntryEntity) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
 
   const {
     consolidatedCases, // if feature flag is off, this will always be null
@@ -88,8 +95,8 @@ export const addCoversheetInteractor = async (
     docketNumbers: docketNumbersToUpdate,
   });
 
-  const updatedDocketEntries = await settlePromises(
-    casesToUpdate.map(async caseRecord => {
+  const updatedDocketEntries = casesToUpdate
+    .map(caseRecord => {
       const consolidatedCaseEntity =
         caseRecord.docketNumber === docketNumber
           ? caseEntity
@@ -97,19 +104,22 @@ export const addCoversheetInteractor = async (
               authorizedUser,
             });
 
-      const consolidatedCaseDocketEntryEntity =
+      const consolidatedCaseDocketEntry =
         consolidatedCaseEntity!.getDocketEntryById({
           docketEntryId,
         });
 
-      if (consolidatedCaseDocketEntryEntity) {
+      if (consolidatedCaseDocketEntry) {
         const isSimultaneousDocType =
           SIMULTANEOUS_DOCUMENT_EVENT_CODES.includes(
-            consolidatedCaseDocketEntryEntity.eventCode,
+            consolidatedCaseDocketEntry.eventCode,
           ) ||
-          consolidatedCaseDocketEntryEntity.documentTitle?.includes(
-            'Simultaneous',
-          );
+          consolidatedCaseDocketEntry.documentTitle?.includes('Simultaneous');
+
+        const consolidatedCaseDocketEntryEntity = new DocketEntry(
+          consolidatedCaseDocketEntry,
+          { authorizedUser },
+        );
 
         if (
           !isSimultaneousDocType ||
@@ -126,18 +136,14 @@ export const addCoversheetInteractor = async (
           .validate()
           .toRawObject();
 
-        await applicationContext.getPersistenceGateway().updateDocketEntry({
-          applicationContext,
-          docketEntryId,
-          docketNumber: caseRecord.docketNumber,
-          document: updateConsolidatedDocketEntry,
-        });
         return updateConsolidatedDocketEntry;
       }
-    }),
-  );
+    })
+    .filter(docketEntry => docketEntry !== undefined);
 
-  return updatedDocketEntries
-    .filter(Boolean)
-    .find(entry => entry.docketNumber === docketNumber);
+  await upsertDocketEntries(updatedDocketEntries);
+
+  return updatedDocketEntries.find(
+    entry => entry.docketNumber === docketNumber,
+  );
 };

@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -7,14 +8,16 @@ import {
   mockDocketClerkUser,
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
-import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+
+const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
 
 describe('getPractitionerCasesInteractor', () => {
-  const getCasesMetadataByDocketNumbers =
-    getCasesMetadataByDocketNumbersMock as jest.Mock;
+  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
 
   beforeEach(() => {
-    getCasesMetadataByDocketNumbers.mockResolvedValue([
+    getCasesByDocketNumbers.mockResolvedValue([
       {
         ...MOCK_CASE,
         docketNumber: '108-07',
@@ -57,7 +60,7 @@ describe('getPractitionerCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCasesMetadataByDocketNumbers).toHaveBeenCalled();
+    expect(getCasesByDocketNumbers).toHaveBeenCalled();
 
     expect(
       closedCases.map(closedCase => {
@@ -86,8 +89,8 @@ describe('getPractitionerCasesInteractor', () => {
     ]);
   });
 
-  it('returns empty arrays if `getCasesMetadataByDocketNumbers` returns undefined', async () => {
-    getCasesMetadataByDocketNumbers.mockResolvedValueOnce(undefined);
+  it('returns empty arrays if `getCasesByDocketNumbers` returns empty array', async () => {
+    getCasesByDocketNumbers.mockResolvedValueOnce([]);
 
     const { closedCases, openCases } = await getPractitionerCasesInteractor(
       applicationContext,
@@ -102,10 +105,8 @@ describe('getPractitionerCasesInteractor', () => {
   });
 
   it('handles scenario where getDocketNumbersByUser returns an empty array', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getDocketNumbersByUser.mockResolvedValueOnce([]);
-    getCasesMetadataByDocketNumbers.mockResolvedValueOnce(undefined);
+    getDocketNumbersByUser.mockResolvedValueOnce([]);
+    getCasesByDocketNumbers.mockResolvedValueOnce(undefined);
 
     const { closedCases, openCases } = await getPractitionerCasesInteractor(
       applicationContext,
@@ -115,9 +116,11 @@ describe('getPractitionerCasesInteractor', () => {
       mockDocketClerkUser,
     );
 
-    expect(getCasesMetadataByDocketNumbers).toHaveBeenCalledWith({
-      docketNumbers: [],
-    });
+    expect(getCasesByDocketNumbers).toHaveBeenCalledWith(
+      expect.objectContaining({
+        docketNumbers: [],
+      }),
+    );
     expect(closedCases).toEqual([]);
     expect(openCases).toEqual([]);
   });

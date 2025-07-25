@@ -24,7 +24,7 @@ describe('selectDocumentTypeHelper', () => {
   describe('getOptionsForCategory', () => {
     const mockSelectedDocketEntryId = MOCK_CASE.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
-    ).docketEntryId;
+    )!.docketEntryId;
 
     // Only served documents are valid to select
     const mockServedDocuments = MOCK_DOCUMENTS.map(d => {
@@ -274,29 +274,6 @@ describe('selectDocumentTypeHelper', () => {
         showNonstandardForm: true,
         showTextInput: true,
         textInputLabel: 'What is this something for?',
-      });
-    });
-
-    it('should return correct data for Nonstandard J document scenario', () => {
-      const mockCategoryInformation = {
-        labelFreeText: "Judge's Name",
-        labelFreeText2: 'Decision Notes',
-        scenario: 'Nonstandard J',
-      };
-
-      const result = getOptionsForCategory({
-        authorizedUser: mockDocketClerkUser,
-        caseDetail: MOCK_CASE,
-        categoryInformation: mockCategoryInformation,
-        selectedDocketEntryId: '',
-      });
-
-      expect(result).toEqual({
-        showNonstandardForm: true,
-        showTextInput: true,
-        showTextInput2: true,
-        textInputLabel: "Judge's Name",
-        textInputLabel2: 'Decision Notes',
       });
     });
   });

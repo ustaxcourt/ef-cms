@@ -8,14 +8,24 @@ const emailFromAddress =
 const isRunningOnLambda = !!process.env.LAMBDA_TASK_ROOT;
 
 function getJestDBConnectionError(): string {
-  return [
-    '\n',
+  const error = new Error();
+
+  const message = [
+    '',
     'Hello Developer',
     'You should not connect to the Database when running JEST tests',
     'Something was not mocked out',
-    'If you are running Integration tests and need a Database connection',
-    'Set the environment variable "NODE_ENV" to "integration"',
-  ].join('\n');
+    'If you are running Integration tests and need a Database connection,',
+    'set the environment variable "NODE_ENV" to "integration".',
+    '',
+    'Call Stack:',
+  ];
+
+  // Include stack trace but strip the first line (which is the error message itself)
+  const stack =
+    error.stack?.split('\n').slice(1).join('\n') ?? 'No stack trace available.';
+
+  return [...message, stack].join('\n');
 }
 
 export const environment = {
@@ -45,7 +55,7 @@ export const environment = {
         (process.env.NODE_ENV !== 'test'
           ? 'localhost'
           : getJestDBConnectionError()),
-      idleTimeoutMillis: isRunningOnLambda ? 10000 : 1000,
+      idleTimeoutMillis: isRunningOnLambda ? null : 1000, // null idleTimeoutMillis means the db connection is never closed.
       max: 1,
       password: process.env.POSTGRES_PASSWORD || 'example',
       port: 5432,
