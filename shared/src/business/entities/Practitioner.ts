@@ -17,7 +17,7 @@ export class Practitioner extends User {
   public admissionsDate: string;
   public admissionsStatus: string;
   public barNumber: string;
-  public birthYear: string;
+  public birthYear: number;
   public confirmEmail?: string;
   public practiceType: string;
   public firmName?: string;
