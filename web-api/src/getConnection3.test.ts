@@ -9,12 +9,23 @@ jest.mock('@aws-sdk/rds-signer', () => {
     Signer,
   };
 });
+jest.mock('pg', () => {
+  class Pool {
+    options = {};
+    connect() {
+      return { release() {} };
+    }
+  }
+  return {
+    Pool,
+  };
+});
 import { getConnection } from '@web-api/getConnection';
 import { environment } from '@web-api/environment';
 import { sleep } from '@shared/tools/helpers';
 
 describe('getConnection', () => {
-  environment.stage = 'prod';
+  environment.stage = 'testing';
   it('should wait for pool password when multiple promises are attempting to reset', async () => {
     // first two calls to Date.now() correspond to the FIRST getConnection call (Date.now is called twice)
     // thereafter, our token should be expired (set to 15 minutes later which is greater than the 13 minute timer in getConnection)
@@ -32,9 +43,7 @@ describe('getConnection', () => {
     mockGetAuthToken.mockImplementation(async () => {
       await sleep(20);
       hasResetPassword = true;
-      return Promise.resolve(resolve => {
-        return resolve('123456789');
-      });
+      return Promise.resolve('123456789');
     });
 
     const result = await Promise.all([
