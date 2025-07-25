@@ -12,10 +12,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('city', 'varchar')
     .addColumn('courthouseName', 'varchar')
     .addColumn('courtReporter', 'varchar')
-    .addColumn('createdAt', 'date')
+    .addColumn('createdAt', 'date') //should likely be timestamptz
     .addColumn('dismissedAlertForNOTT', 'boolean')
     .addColumn('hasNOTTBeenServed', 'boolean')
-    .addColumn('estimatedEndDate', 'date')
+    .addColumn('estimatedEndDate', 'date') //should likely be timestamptz
     .addColumn('irsCalendarAdministrator', 'varchar')
     .addColumn('irsCalendarAdministratorInfo', 'jsonb') //COME BACK
     .addColumn('isCalendared', 'boolean')
@@ -24,14 +24,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('maxCases', 'integer')
     .addColumn('meetingId', 'varchar')
     .addColumn('notes', 'varchar')
-    .addColumn('noticeIssuedDate', 'date')
+    .addColumn('noticeIssuedDate', 'date') //should likely be timestamptz
     .addColumn('password', 'varchar')
     .addColumn('postalCode', 'varchar')
     .addColumn('proceedingType', 'varchar')
     .addColumn('sessionScope', 'varchar')
     .addColumn('sessionStatus', 'varchar')
     .addColumn('sessionType', 'varchar')
-    .addColumn('startDate', 'date')
+    .addColumn('startDate', 'date') //should likely be timestamptz
     .addColumn('startTime', 'varchar')
     .addColumn('state', 'varchar')
     .addColumn('swingSession', 'boolean')
@@ -75,6 +75,6 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('dwTrialSession').execute();
 
   await db.schema.dropTable('dwTrialSessionWorkingCopy').execute();
-  
+
   await db.schema.dropTable('dwTrialSessionPaperPdf').execute();
 }
