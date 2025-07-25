@@ -32,6 +32,12 @@ describe('updatePractitionerUser', () => {
     applicationContext
       .getPersistenceGateway()
       .isEmailAvailable.mockReturnValue(true);
+    applicationContext
+      .getUseCases()
+      .getPractitionerCasesInteractor.mockReturnValue({
+        closedCases: [],
+        openCases: [],
+      });
   });
 
   it('should throw an unauthorized error when the user does not have permission to update the practitioner user', async () => {
@@ -448,6 +454,76 @@ describe('updatePractitionerUser', () => {
       );
 
       expect(generateChangeOfAddress).toHaveBeenCalled();
+    });
+    it('should throw error when practitioner has open cases and practice type has been changed', async () => {
+      //mock oldUser and user object oth w/keys practiceType with different values
+      applicationContext
+        .getPersistenceGateway()
+        .getPractitionerByBarNumber.mockResolvedValue({
+          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+          practiceType: 'DOJ',
+        });
+      //practitionerCases obj w/ openCases array
+      applicationContext
+        .getUseCases()
+        .getPractitionerCasesInteractor.mockReturnValue({
+          closedCases: [],
+          openCases: ['practitioner'],
+        });
+      await expect(
+        updatePractitionerUser(
+          applicationContext,
+          {
+            barNumber: 'AB1111',
+            bypassDocketEntry: false,
+            clientConnectionId,
+            user: {
+              ...mockPractitioner,
+              barNumber: 'AB1111',
+              updatedEmail: 'bc@example.com',
+              userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+              practiceType: 'IRS',
+            },
+          },
+          mockAdmissionsClerkUser,
+        ),
+      ).rejects.toThrow(
+        'Practitioner is associated with one or more open cases. Practitioner has to be withdrawn from all open cases to change practice type.',
+      );
+    });
+    it('should not throw an error when the practice type changed and there are no open cases', async () => {
+      //mock oldUser and user object oth w/keys practiceType with different values
+      applicationContext
+        .getPersistenceGateway()
+        .getPractitionerByBarNumber.mockResolvedValue({
+          ...mockPractitioner,
+          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+          practiceType: 'DOJ',
+        });
+      //practitionerCases obj w/ openCases array
+      applicationContext
+        .getUseCases()
+        .getPractitionerCasesInteractor.mockReturnValue({
+          closedCases: ['practitioner'],
+          openCases: [],
+        });
+      await expect(
+        updatePractitionerUser(
+          applicationContext,
+          {
+            barNumber: 'AB1111',
+            bypassDocketEntry: false,
+            clientConnectionId,
+            user: {
+              ...mockPractitioner,
+              barNumber: 'AB1111',
+              userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+              practiceType: 'IRS',
+            },
+          },
+          mockAdmissionsClerkUser,
+        ),
+      ).resolves.not.toThrow();
     });
   });
 });
