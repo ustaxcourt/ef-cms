@@ -35,7 +35,6 @@ export const getPractitionerDocumentsInteractor = async (
   const practitionerDocuments = await applicationContext
     .getPersistenceGateway()
     .getPractitionerDocuments({
-      applicationContext,
       barNumber,
     });
 
