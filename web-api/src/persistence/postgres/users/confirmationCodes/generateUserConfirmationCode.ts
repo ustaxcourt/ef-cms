@@ -15,15 +15,16 @@ export const generateUserConfirmationCode = async ({
     howMuch: 1,
     units: 'days',
   });
-  const confirmationCode = await pgInsertInto({
+  const confirmationCode = getUniqueId();
+  await pgInsertInto({
     table: 'dwUserConfirmationCode',
     values: {
       userId,
-      confirmationCode: getUniqueId(),
+      confirmationCode,
       ttl: Math.floor(expiresAt.getTime() / 1000),
     },
     onConflictColumns: ['userId'],
-  })[0];
+  });
 
   return {
     confirmationCode,
