@@ -18,6 +18,18 @@ jest.mock('@aws-sdk/rds-signer', () => {
   };
 });
 
+jest.mock('pg', () => {
+  class Pool {
+    options = {};
+    connect() {
+      return { release() {} };
+    }
+  }
+  return {
+    Pool,
+  };
+});
+
 const mockExecute = jest.fn().mockResolvedValue(undefined);
 const fakeReader = { executeQuery: mockExecute };
 
