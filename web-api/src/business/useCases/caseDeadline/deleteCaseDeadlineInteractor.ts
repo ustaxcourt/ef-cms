@@ -10,12 +10,12 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { deleteCaseDeadline as deleteDeadline } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { updateCaseAutomaticBlock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
-import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteCaseDeadline = async (
-  _applicationContext: ServerApplicationContext,
+  applicationContext: ServerApplicationContext,
   {
     caseDeadlineId,
     docketNumber,
@@ -86,7 +86,7 @@ export const deleteCaseDeadline = async (
 };
 
 export async function getDeleteCaseDeadlineInteractorLockInfo(
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     caseDeadlineId,
     docketNumber,

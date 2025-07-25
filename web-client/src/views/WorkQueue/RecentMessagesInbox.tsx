@@ -13,6 +13,18 @@ export const RecentMessagesInbox = connect(
   function RecentMessagesInbox({ recentMessagesHelper }) {
     return (
       <React.Fragment>
+        <div className="push-right margin-bottom-3">
+          <Button
+            link
+            className="padding-0"
+            href="/messages/my/inbox"
+            overrideMargin="margin-0"
+          >
+            View All Messages
+          </Button>{' '}
+          <span className="text-semibold padding-left-3">Count: </span>
+          {recentMessagesHelper.recentMessages.length}
+        </div>
         <table
           aria-describedby="recent-messages-tab"
           className="usa-table ustc-table subsection messages"

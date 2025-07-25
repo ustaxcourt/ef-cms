@@ -6,6 +6,9 @@ jest.mock('@web-api/persistence/postgres/cases/getCaseByDocketNumber');
 jest.mock(
   '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock',
 );
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
 import {
   CaseDeadline,
   RawCaseDeadline,
@@ -20,6 +23,7 @@ import { createCaseDeadline } from '@web-api/business/useCases/caseDeadline/crea
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAutomaticBlock as updateCaseAutomaticBlockMock } from '@web-api/business/useCaseHelper/automaticBlock/updateCaseAutomaticBlock';
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
   const LEAD_DOCKET_NUMBER = '101-25';
@@ -27,11 +31,15 @@ describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
   const CASE_DEADLINE_ID = getUniqueId();
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const updateCaseAutomaticBlock = jest.mocked(updateCaseAutomaticBlockMock);
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
 
   beforeEach(() => {
     updateCaseAutomaticBlock.mockImplementation(
       // eslint-disable-next-line @typescript-eslint/require-await
       async params => params.caseEntity,
+    );
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
     );
   });
 

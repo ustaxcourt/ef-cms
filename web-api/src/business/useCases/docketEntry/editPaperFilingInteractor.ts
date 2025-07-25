@@ -22,6 +22,7 @@ import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/d
 import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import {
   asyncHandleLockError,
@@ -443,14 +444,23 @@ const updateAndSaveWorkItem = async ({
   docketEntry: DocketEntry;
   user: RawUser;
 }): Promise<void> => {
-  const { workItem } = docketEntry;
-  workItem.docketEntry = docketEntry.toRawObject();
+  const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
+    docketNumber: docketEntry.docketNumber,
+    docketEntryId: docketEntry.docketEntryId,
+  });
+
+  if (!workItem) {
+    throw new NotFoundError(
+      `Could not find work item associated with case ${docketEntry.docketNumber} docket entry ${docketEntry.docketEntryId}`,
+    );
+  }
+
   workItem.inProgress = true;
 
   workItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: user.section,
+    section: user.section!,
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
@@ -479,7 +489,16 @@ const getDocketEntryToEdit = async ({
 
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
-  return { caseEntity, docketEntryEntity };
+  if (!docketEntryEntity) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
+
+  return {
+    caseEntity,
+    docketEntryEntity,
+  };
 };
 
 export const determineEntitiesToLock = (

@@ -19,6 +19,8 @@ export const SectionWorkQueueInProgress = connect(
     users: state.users,
     workQueueHelper: state.workQueueHelper,
     workitemAllCheckbox: state.workitemAllCheckbox,
+    showDocketClerkFilter: state.workQueueHelper.showDocketClerkFilter,
+    showSendToBar: state.workQueueHelper.showSendToBar,
   },
   function SectionWorkQueueInProgress({
     formattedWorkQueue,
@@ -27,74 +29,90 @@ export const SectionWorkQueueInProgress = connect(
     users,
     workitemAllCheckbox,
     workQueueHelper,
+    showDocketClerkFilter,
+    showSendToBar,
   }) {
     return (
       <React.Fragment>
+        {!showDocketClerkFilter && !showSendToBar && (
+          <>
+            <div className="text-right">
+              <span className="text-semibold">Count: </span>
+              {formattedWorkQueue.length}
+            </div>
+            <div className="padding-1"></div>
+          </>
+        )}
         <WorkQueueAssignments users={users} />
-        <table
-          aria-describedby="tab-work-queue"
-          className="usa-table ustc-table subsection"
-          data-testid="section-work-queue-in-progress"
-          id="section-work-queue"
-        >
-          <thead>
-            <tr>
-              {workQueueHelper.showSelectColumn && (
-                <>
-                  <th className="message-select-control select-all-checkbox">
-                    {workQueueHelper.showSelectAllCheckbox && (
-                      <>
-                        <input
-                          aria-label="select all work items"
-                          checked={workitemAllCheckbox}
-                          className="usa-checkbox__input"
-                          id="workitem-select-all-checkbox"
-                          name="workitem-select-all-checkbox"
-                          type="checkbox"
-                          value="workitem-select-all-checkbox"
-                          onChange={() =>
-                            toggleAllWorkItemCheckboxChangeSequence()
-                          }
-                        />
-                        <label
-                          className="padding-top-05 usa-checkbox__label"
-                          htmlFor="workitem-select-all-checkbox"
-                          id="label-workitem-select-all-checkbox"
-                        >
-                          {''}
-                        </label>
-                      </>
-                    )}
-                  </th>
-                </>
-              )}
-              <th aria-hidden="true" className="consolidated-case-column"></th>
-              <th aria-label="Docket Number" className="no-wrap">
-                Docket No.
-              </th>
-              <th>Filed</th>
-              <th>Case Title</th>
-              <th>Document</th>
-              {workQueueHelper.showFiledByColumn && <th>Filed By</th>}
-              <th>Case Status</th>
-              {workQueueHelper.showAssignedToColumn && (
-                <th className="no-wrap">Assigned To</th>
-              )}
-            </tr>
-          </thead>
-          {formattedWorkQueue.map(item => {
-            return (
-              <SectionWorkQueueInProgressRow
-                item={item}
-                key={item.workItemId}
-                selectWorkItemSequence={selectWorkItemSequence}
-                showAssignedToColumn={workQueueHelper.showAssignedToColumn}
-                showFiledByColumn={workQueueHelper.showFiledByColumn}
-                showSelectColumn={workQueueHelper.showSelectColumn}
-              />
-            );
-          })}
-        </table>
+        <div className="overflow-x-auto overflow-y-hidden">
+          <table
+            aria-describedby="tab-work-queue"
+            className="usa-table ustc-table subsection"
+            data-testid="section-work-queue-in-progress"
+            id="section-work-queue"
+          >
+            <thead>
+              <tr>
+                {workQueueHelper.showSelectColumn && (
+                  <>
+                    <th className="message-select-control select-all-checkbox">
+                      {workQueueHelper.showSelectAllCheckbox && (
+                        <>
+                          <input
+                            aria-label="select all work items"
+                            checked={workitemAllCheckbox}
+                            className="usa-checkbox__input"
+                            id="workitem-select-all-checkbox"
+                            name="workitem-select-all-checkbox"
+                            type="checkbox"
+                            value="workitem-select-all-checkbox"
+                            onChange={() =>
+                              toggleAllWorkItemCheckboxChangeSequence()
+                            }
+                          />
+                          <label
+                            className="padding-top-05 usa-checkbox__label"
+                            htmlFor="workitem-select-all-checkbox"
+                            id="label-workitem-select-all-checkbox"
+                          >
+                            {''}
+                          </label>
+                        </>
+                      )}
+                    </th>
+                  </>
+                )}
+                <th
+                  aria-hidden="true"
+                  className="consolidated-case-column"
+                ></th>
+                <th aria-label="Docket Number" className="no-wrap">
+                  Docket No.
+                </th>
+                <th>Filed</th>
+                <th>Case Title</th>
+                <th>Document</th>
+                {workQueueHelper.showFiledByColumn && <th>Filed By</th>}
+                <th>Case Status</th>
+                {workQueueHelper.showAssignedToColumn && (
+                  <th className="no-wrap">Assigned To</th>
+                )}
+              </tr>
+            </thead>
+            {formattedWorkQueue.map(item => {
+              return (
+                <SectionWorkQueueInProgressRow
+                  item={item}
+                  key={item.workItemId}
+                  selectWorkItemSequence={selectWorkItemSequence}
+                  showAssignedToColumn={workQueueHelper.showAssignedToColumn}
+                  showFiledByColumn={workQueueHelper.showFiledByColumn}
+                  showSelectColumn={workQueueHelper.showSelectColumn}
+                />
+              );
+            })}
+          </table>
+        </div>
         {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
     );

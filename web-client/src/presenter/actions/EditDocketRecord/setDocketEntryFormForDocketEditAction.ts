@@ -33,14 +33,12 @@ export const setDocketEntryFormForDocketEditAction = ({
     }
   }
 
-  docketEntryFormData.filersMap = {};
-  docketEntryFormData.filers?.forEach(
-    filer => (docketEntryFormData.filersMap[filer] = true),
-  );
+  const filersMap = {};
+  docketEntryFormData.filers?.forEach(filer => (filersMap[filer] = true));
 
   docketEntryFormData.lodged = !!docketEntryFormData.lodged;
 
-  store.set(state.form, docketEntryFormData);
+  store.set(state.form, { ...docketEntryFormData, filersMap });
 
   return {
     docketEntry: docketEntryFormData,

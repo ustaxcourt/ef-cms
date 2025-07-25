@@ -80,7 +80,7 @@ export const createCaseDeadline = async (
 };
 
 export async function getcreateCaseDeadlineLockInfo(
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { caseDeadline }: { caseDeadline: CaseDeadline },
 ): Promise<{
   identifiers: string[];
@@ -88,7 +88,6 @@ export async function getcreateCaseDeadlineLockInfo(
 }> {
   const { docketNumber, leadDocketNumber, consolidatedCases } =
     await getCaseByDocketNumber({
-      applicationContext,
       docketNumber: caseDeadline.docketNumber,
     });
 

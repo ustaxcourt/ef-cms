@@ -9,4 +9,5 @@ import { state } from '@web-client/presenter/app.cerebral';
 export const clearCaseDeadlinesAction = ({ store }: ActionProps) => {
   store.unset(state.caseDeadlineReport.caseDeadlinesForCurrentPage);
   store.unset(state.caseDeadlineReport.caseDeadlinesTotalCount);
+  store.unset(state.caseDeadlineReport.judgeIdFilter);
 };

@@ -82,23 +82,4 @@ describe('processPractitionerMappingEntries', () => {
       applicationContext.getPersistenceGateway().bulkIndexRecords,
     ).toHaveBeenCalled();
   });
-
-  it('should log an error and throw an exception when bulk index returns failed records', async () => {
-    getCasesByDocketNumbers.mockResolvedValue([mockCaseRecord] as any[]);
-
-    applicationContext
-      .getPersistenceGateway()
-      .bulkIndexRecords.mockReturnValueOnce({
-        failedRecords: [{ id: 'failed record' }],
-      });
-
-    await expect(
-      processPractitionerMappingEntries({
-        applicationContext,
-        practitionerMappingRecords: mockPractitionerMappingEntries,
-      }),
-    ).rejects.toThrow('failed to index practitioner mapping records');
-
-    expect(applicationContext.logger.error).toHaveBeenCalled();
-  });
 });

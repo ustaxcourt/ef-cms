@@ -40,7 +40,7 @@ export const updateDocketEntryMeta = async (
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
 
-  const originalDocketEntry: RawDocketEntry = caseEntity.getDocketEntryById({
+  const originalDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId: docketEntryMeta.docketEntryId,
   });
 
@@ -123,15 +123,15 @@ export const updateDocketEntryMeta = async (
     originalDocketEntry.certificateOfService !==
     docketEntryMeta.certificateOfService;
 
-  const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry({
-    certificateOfServiceUpdated,
-    documentTitleUpdated,
-    entryRequiresCoverSheet,
-    filingDateUpdated,
-    originalDocketEntry,
-    servedAtUpdated,
-    shouldAddNewCoverSheet,
-  });
+    const shouldGenerateCoversheet = shouldGenerateCoversheetForDocketEntry({
+      certificateOfServiceUpdated,
+      documentTitleUpdated,
+      entryRequiresCoverSheet,
+      filingDateUpdated,
+      originalDocketEntry,
+      servedAtUpdated,
+      shouldAddNewCoverSheet,
+    });
 
   const docketEntryEntity = new DocketEntry(
     {
