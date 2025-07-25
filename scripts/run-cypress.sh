@@ -120,7 +120,7 @@ else
   export CYPRESS_USTC_ADMIN_PASS=$USTC_ADMIN_PASS
   export CYPRESS_BASE_URL="https://${NON_PUBLIC}${CYPRESS_DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
   export CYPRESS_SMOKETEST_BUCKET="${EFCMS_DOMAIN}-email-inbox-${ENV}-us-east-1"
-  DYNAMODB_TABLE_NAME=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
+  DYNAMODB_TABLE_NAME=$(./scripts/ssm/get-destination-table.sh "${ENV}")
   export CYPRESS_DYNAMODB_TABLE_NAME=$DYNAMODB_TABLE_NAME
   export CYPRESS_DYNAMODB_DEPLOY_TABLE_NAME="efcms-deploy-${ENV}"
   CYPRESS_MIGRATE=$(./scripts/migration/get-migrate-flag.sh "${ENV}")

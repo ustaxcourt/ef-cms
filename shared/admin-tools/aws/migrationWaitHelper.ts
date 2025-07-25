@@ -5,10 +5,10 @@ import {
 } from '@aws-sdk/client-cloudwatch';
 import { DateTime } from 'luxon';
 import { countItemsInQueue } from './sqsHelper';
-import { getItem, putItem } from './deployTableHelper';
+import { getSSMItem, putSSMItem } from './ssmHelper';
 
 const cloudwatchClient = new CloudWatchClient({ region: 'us-east-1' });
-const env = process.env.STAGE;
+const { STAGE } = process.env;
 const key = 'migration-queue-empty';
 
 export const getMetricStatistics = async (
@@ -20,7 +20,7 @@ export const getMetricStatistics = async (
     Dimensions: [
       {
         Name: 'FunctionName',
-        Value: `migration_segments_lambda_${process.env.STAGE}`,
+        Value: `migration_segments_lambda_${STAGE}`,
       },
     ],
     EndTime: now.toJSDate(),
@@ -37,18 +37,12 @@ export const getSqsQueueCount = (queueUrl: string): Promise<number> => {
   return countItemsInQueue({ QueueUrl: queueUrl });
 };
 
-export const putMigrationQueueIsEmptyFlag = (
+export async function putMigrationQueueIsEmptyFlag(
   value: boolean,
-): Promise<boolean> => {
-  if (env) {
-    return putItem({ env, key, value });
-  }
-  return Promise.resolve(false);
-};
+): Promise<boolean> {
+  return await putSSMItem(key, value);
+}
 
-export const getMigrationQueueIsEmptyFlag = async (): Promise<boolean> => {
-  if (env) {
-    return (await getItem({ env, key })) as boolean;
-  }
-  return false;
-};
+export async function getMigrationQueueIsEmptyFlag(): Promise<boolean> {
+  return (await getSSMItem(key)) === 'true';
+}
