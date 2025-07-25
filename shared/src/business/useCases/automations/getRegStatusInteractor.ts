@@ -67,8 +67,8 @@ export const getRegStatusInteractor = async (
   );
 
   let returnHtml =
-    `Searching for ${userEmail} in DAWSON<br><br>` +
-    `Found ${fullUsers.length} user(s) matching ${userEmail}`;
+    `Searching for ${escapeHtml(userEmail)} in DAWSON<br><br>` +
+    `Found ${fullUsers.length} user(s) matching ${escapeHtml(userEmail)}`;
 
   for (const user of fullUsers) {
     returnHtml +=
@@ -181,6 +181,15 @@ async function isEmailSuppressed(email: string): Promise<boolean> {
     console.error('Failed to check suppression list:', err);
     throw err;
   }
+}
+
+function escapeHtml(unsafe: string): string {
+  return unsafe
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 type UserInfo = {

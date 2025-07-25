@@ -23,8 +23,8 @@ jest.mock('@aws-sdk/client-sesv2', () => {
   };
 });
 import { send as mockSend } from '@aws-sdk/client-sesv2';
-import { privatePractitionerUser } from '@shared/test/mockUsers';
-import { RawUser } from '@shared/business/entities/User';
+import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 jest.mock('@web-api/persistence/cognito/getCognito');
 jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock('@web-api/persistence/postgres/users/getUserById');
@@ -61,9 +61,7 @@ describe('getRegStatusInteractor', () => {
 
     getDocketNumbersByUser.mockResolvedValue(['101-23', '202-24']);
 
-    jest
-      .mocked(getUserByIdMock)
-      .mockResolvedValue(privatePractitionerUser as RawUser);
+    jest.mocked(getUserByIdMock).mockResolvedValue(MOCK_PRACTITIONER as DbUser);
   });
 
   it('throws UnauthorizedError for unauthorized user', async () => {
@@ -91,7 +89,7 @@ describe('getRegStatusInteractor', () => {
       `Role: privatePractitioner <br>` +
       `Current status is CONFIRMED; They need to change their own password <br>` +
       `Cases: 101-23, 202-24 <br>` +
-      `Bar Number: AB1234 <br>` +
+      `Bar Number: AB1111 <br>` +
       `❗ Email is on Suppression List <br>`;
 
     expect(result).toEqual(expectedHtml);
@@ -141,7 +139,7 @@ describe('getRegStatusInteractor', () => {
       `Role: privatePractitioner <br>` +
       `Current status is CONFIRMED; They need to change their own password <br>` +
       `Cases: 123-45 <br>` +
-      `Bar Number: AB1234 <br>` +
+      `Bar Number: AB1111 <br>` +
       `<br><br>` +
       `Email: user+user@example.com <br>` +
       `Role: petitionsclerk <br>` +
