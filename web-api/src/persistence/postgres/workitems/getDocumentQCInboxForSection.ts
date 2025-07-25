@@ -3,7 +3,10 @@ import {
   PETITIONS_SECTION,
 } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/persistence/postgres/database';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import {
+  workItemQCQueryBase,
+  WorkItemWithCaseInfo,
+} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getDocumentQCInboxForSection = async ({
@@ -14,11 +17,9 @@ export const getDocumentQCInboxForSection = async ({
   section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
 }): Promise<WorkItemWithCaseInfo[]> => {
   const workItems = await getDbReader(reader => {
-    let builder = reader
-      .selectFrom('dwWorkItem as w')
+    let builder = workItemQCQueryBase(reader)
       .where('w.section', '=', section)
       .where('w.completedAt', 'is', null)
-      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
       .limit(5000);
 
     if (judgeId) {
@@ -27,16 +28,7 @@ export const getDocumentQCInboxForSection = async ({
       builder = builder.where('c.associatedJudgeId', 'is', null);
     }
 
-    return builder
-      .selectAll('w')
-      .select([
-        'c.status',
-        'c.caption',
-        'c.leadDocketNumber',
-        'c.trialDate',
-        'c.trialLocation',
-      ])
-      .execute();
+    return builder.execute();
   });
 
   return workItems.map(toWorkItemWithCaseInfo);

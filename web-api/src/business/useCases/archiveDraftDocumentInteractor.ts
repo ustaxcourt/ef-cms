@@ -4,10 +4,11 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { deleteWorkItem } from '@web-api/persistence/postgres/workitems/deleteWorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
@@ -33,9 +34,18 @@ export const archiveDraftDocument = async (
     docketEntryId,
   });
 
+  if (!docketEntryToArchive) {
+    throw new NotFoundError(
+      `Could not find docket entry ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
+
   caseEntity.archiveDocketEntry(docketEntryToArchive);
 
-  const { workItem } = docketEntryToArchive;
+  const workItem = await getWorkItemByDocketNumberAndDocketEntryId({
+    docketNumber,
+    docketEntryId,
+  });
 
   if (workItem) {
     await deleteWorkItem({

@@ -29,6 +29,14 @@ parameters:
     default: false
     type: boolean
 
+  run_index_once:
+    default: false
+    type: boolean
+
+  index_threads:
+    default: '5'
+    type: string
+
   lower_env:
     default: test
     type: string
@@ -608,6 +616,35 @@ jobs:
               npm run migration:cleanup -- $ENV
             fi
 
+  index-docket-entries-once:
+    docker:
+      - image: *efcms-docker-image
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: xlarge
+    environment:
+      THREADS: << pipeline.parameters.index_threads >>
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            ./scripts/env/env-for-circle.sh
+            source $BASH_ENV
+            DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+            ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
+              --domain-name "${DESTINATION_DOMAIN}" \
+              --region "us-east-1" \
+              --query 'DomainStatus.Endpoint' \
+              --output text)
+            echo "export ELASTICSEARCH_ENDPOINT=${ELASTICSEARCH_ENDPOINT}" >> $BASH_ENV
+      - run:
+          name: Index Docket Entries
+          command: |
+            NODE_ENV=production ./scripts/run-once-scripts/postgres-migration/index-docket-entries/index-docket-entries.ts "$THREADS"
+
   ######################## GLUE JOB: Jobs that run in a lower environment ########################
 
   delete-existing-data:
@@ -695,16 +732,6 @@ jobs:
             fi
             echo "export SOURCE_BUCKET=${PROD_DOCUMENTS_BUCKET_NAME}" >> $BASH_ENV
             echo "export DESTINATION_BUCKET=${EFCMS_DOMAIN}-documents-${ENV}-us-east-1" >> $BASH_ENV
-      - run:
-          name: Disable Wait for Workflow Cron
-          command: |
-            ./scripts/wait-for-workflow/disable-wait-for-workflow-cron.sh
-      - run:
-          name: Destroy Wait for Workflow Lambda
-          command: |
-            export APPROVAL_JOB_NAME=wait-for-deployment-workflow
-            export CIRCLE_PIPELINE_ID=noop
-            npm run destroy:wait-for-workflow-cron -- $ENV
       - run:
           name: Disable Dynamodb Streams
           command: |
@@ -1255,21 +1282,8 @@ workflows:
         - equal: [glue-to-test-schedule, << pipeline.schedule.name >>]
         - << pipeline.parameters.run_glue_to_test >>
     jobs:
-      - delete-existing-data:
-          <<: *only-test
-      - redeploy-environment:
-          <<: *only-test
-          requires:
-            - delete-existing-data
-      - wait-for-deployment-workflow:
-          <<: *only-test
-          type: approval
-          requires:
-            - redeploy-environment
       - initiate-glue-job:
           <<: *only-test
-          requires:
-            - wait-for-deployment-workflow
       - wait-for-glue-workflow:
           <<: *only-test
           type: approval
@@ -1281,6 +1295,16 @@ workflows:
           requires:
             - initiate-glue-job
       - index-glued-data:
+          <<: *only-test
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - index-cases:
+          <<: *only-test
+          requires:
+            - wait-for-glue-workflow
+            - wait-for-s3-sync-workflow
+      - index-docket-entries:
           <<: *only-test
           requires:
             - wait-for-glue-workflow
@@ -1333,6 +1357,12 @@ workflows:
           type: approval
           requires:
             - initiate-s3-sync
+
+  index-once:
+    when: << pipeline.parameters.run_index_once >>
+    jobs:
+      - index-docket-entries-once:
+          <<: *only-deployed-lower-environments
 
   sync-s3-to-lower-env:
     when: << pipeline.parameters.run_sync_s3_to_lower_env >>

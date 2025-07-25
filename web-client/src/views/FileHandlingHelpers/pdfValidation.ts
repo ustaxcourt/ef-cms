@@ -8,6 +8,9 @@ import {
 } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
 import { getPdfJs } from '@shared/business/utilities/pdfs/getPdfJs';
 
+export const UNSUPPORTED_BROWSER_ERROR_MESSAGE =
+  'Your internet browser is unsupported. Please update your browser and try again.';
+
 export const PDF_PASSWORD_PROTECTED_ERROR_MESSAGE =
   'The file is encrypted or password protected. Remove encryption or password protection and try again.';
 export const PDF_CORRUPTED_ERROR_MESSAGE =
@@ -29,6 +32,9 @@ export const validatePdf = ({
       const { result } = fileReader;
 
       if (!result || typeof result === 'string') {
+        console.error(
+          `FileReader result is invalid for file: ${file.name}. Result: ${result}`,
+        );
         resolve({
           errorInformation: {
             errorMessageToDisplay: GENERIC_FILE_ERROR_MESSAGE,
@@ -37,6 +43,7 @@ export const validatePdf = ({
           },
           isValid: false,
         });
+
         return;
       }
 
@@ -50,8 +57,6 @@ export const validatePdf = ({
           corruptPdfError.name = 'CorruptPDFHeaderException';
           throw corruptPdfError;
         }
-
-        // Attempt to load the PDF to check for any errors
         const pdfjs = await getPdfJs();
         const document = await pdfjs.getDocument({
           data: fileAsArrayBuffer,
@@ -92,6 +97,16 @@ export const validatePdf = ({
               },
               isValid: false,
             });
+          } else if (['UnsupportedBrowserException'].includes(err.name)) {
+            resolve({
+              errorInformation: {
+                errorMessageToDisplay: UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+                errorMessageToLog: `${UNSUPPORTED_BROWSER_ERROR_MESSAGE} (User agent: ${navigator.userAgent})`,
+                errorType: ErrorTypes.UNSUPPORTED_BROWSER,
+              },
+              isValid: false,
+            });
+            return;
           }
         }
         resolve({

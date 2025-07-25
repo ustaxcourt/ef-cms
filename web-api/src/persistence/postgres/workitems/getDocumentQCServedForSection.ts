@@ -3,7 +3,10 @@ import {
   PETITIONS_SECTION,
 } from '@shared/business/entities/EntityConstants';
 import { getDbReader } from '@web-api/persistence/postgres/database';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import {
+  workItemQCQueryBase,
+  WorkItemWithCaseInfo,
+} from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { toWorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/mapper';
 
 export const getDocumentQCServedForSection = async ({
@@ -14,20 +17,9 @@ export const getDocumentQCServedForSection = async ({
   afterDate: Date;
 }): Promise<WorkItemWithCaseInfo[]> => {
   const workItems = await getDbReader(reader => {
-    return reader
-      .selectFrom('dwWorkItem as w')
-      .leftJoin('dwCase as c', 'c.docketNumber', 'w.docketNumber')
+    return workItemQCQueryBase(reader)
       .where('w.section', '=', section)
       .where('w.completedAt', '>=', afterDate)
-      .select([
-        'c.status',
-        'c.caption',
-        'c.leadDocketNumber',
-        'c.trialDate',
-        'c.trialLocation',
-      ])
-      .selectAll('w')
-      .select('w.docketNumber')
       .execute();
   });
 

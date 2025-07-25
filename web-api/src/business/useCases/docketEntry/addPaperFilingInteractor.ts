@@ -2,6 +2,7 @@ import { Case, isLeadCase } from '@shared//business/entities/cases/Case';
 import {
   DOCUMENT_RELATIONSHIPS,
   DOCUMENT_SERVED_MESSAGES,
+  INITIAL_DOCUMENT_TYPES,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
@@ -10,7 +11,7 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
@@ -21,6 +22,7 @@ import {
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const addPaperFiling = async (
   applicationContext: ServerApplicationContext,
@@ -69,9 +71,13 @@ export const addPaperFiling = async (
   const docketRecordEditState =
     documentMetadata.isFileAttached === false ? documentMetadata : {};
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const caseEntities: Case[] = [];
   let filedByFromLeadCase;
@@ -113,11 +119,8 @@ export const addPaperFiling = async (
     const workItem = new WorkItem({
       assigneeId: user.userId,
       assigneeName: user.name,
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
       docketNumber: caseEntity.docketNumber,
+      docketEntryId: docketEntryEntity.docketEntryId,
       inProgress: isSavingForLater,
       isRead: user.role !== ROLES.privatePractitioner,
       section: user.section,
@@ -138,8 +141,6 @@ export const addPaperFiling = async (
     await saveWorkItemInternal({
       workItem,
     });
-
-    docketEntryEntity.setWorkItem(workItem);
 
     if (isFileAttached) {
       docketEntryEntity.numberOfPages = await applicationContext
@@ -174,7 +175,10 @@ export const addPaperFiling = async (
       docketEntryId,
     });
     const electronicParties =
-      currentDocketEntry.eventCode === 'ATP' ? [] : undefined;
+      currentDocketEntry?.eventCode ===
+      INITIAL_DOCUMENT_TYPES.attachmentToPetition.eventCode
+        ? []
+        : undefined;
 
     const paperServiceResult = await applicationContext
       .getUseCaseHelpers()

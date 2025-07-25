@@ -1,5 +1,9 @@
 #!/usr/bin/env -S npx ts-node --transpile-only
 
+// ⚠️ WARNING ⚠️
+// THIS SCRIPT IS BROKEN AFTER THE POSTGRES REFACTORING.  YOU WILL NEED TO UPDATE IT IF YOU PLAN TO RUN IT
+// ⚠️ WARNING ⚠️
+
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
