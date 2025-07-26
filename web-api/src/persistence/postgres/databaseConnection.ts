@@ -73,7 +73,9 @@ async function establishDbPool(): Promise<Kysely<Database>> {
     }
   }
   dbInstance = null;
-  throw new Error(`Failed to connect to database after 3 attempts`);
+  throw new DatabaseConnectionError(
+    `Failed to connect to database after 3 attempts`,
+  );
 }
 
 async function generateRDSAuthToken() {
