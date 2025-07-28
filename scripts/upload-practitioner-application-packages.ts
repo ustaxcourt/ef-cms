@@ -287,55 +287,6 @@ const uploadChunkToS3 = async ({
   );
 };
 
-// const writeChunkToDynamoDb = async ({
-//   applicationContext,
-//   chunk,
-// }: {
-//   applicationContext: ServerApplicationContext;
-//   chunk: PractitionerDocumentTable[];
-// }): Promise<void> => {
-//   const { dynamoDbTableName } = applicationContext.environment;
-//   let unprocessedItems: any = { [dynamoDbTableName]: chunk };
-//   let tries = 0;
-//   while (
-//     unprocessedItems &&
-//     Object.keys(unprocessedItems).length > 0 &&
-//     tries < MAX_TRIES
-//   ) {
-//     try {
-//       const batchWriteParams = { RequestItems: unprocessedItems };
-//       const res = await applicationContext
-//         .getDocumentClient()
-//         .batchWrite(batchWriteParams);
-//       unprocessedItems = res.UnprocessedItems;
-//     } catch (err) {
-//       output.failed.writeToDynamoDB.error.push(...chunk);
-//     }
-//     tries++;
-//   }
-//   if (unprocessedItems && dynamoDbTableName in unprocessedItems) {
-//     output.failed.writeToDynamoDB.unprocessed.push(
-//       ...unprocessedItems[dynamoDbTableName],
-//     );
-//   }
-//   const failedWrites = output.failed.writeToDynamoDB.error.map(
-//     doc => doc.practitionerDocumentFileId,
-//   );
-//   const unprocessedWrites = output.failed.writeToDynamoDB.unprocessed.map(
-//     doc => doc.practitionerDocumentFileId,
-//   );
-//   for (const doc of chunk) {
-//     const barNumber = doc.barNumber.toUpperCase();
-//     const { fileName, practitionerDocumentFileId: fileId } = doc;
-//     if (!failedWrites.includes(fileId) && !unprocessedWrites.includes(fileId)) {
-//       output.completed.writeToDynamoDB[barNumber] = {
-//         fileId,
-//         fileName,
-//       };
-//     }
-//   }
-// };
-
 const writeChunkToPostgres = async ({
   chunk,
 }: {
