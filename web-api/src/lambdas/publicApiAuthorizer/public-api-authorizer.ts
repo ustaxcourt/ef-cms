@@ -1,14 +1,7 @@
-import { getDbReader } from '@web-api/database';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 const getWhiteListIps = async () => {
-  const [IPS_RECORD] = await getDbReader(reader =>
-    reader
-      .selectFrom('dwFeatureFlag')
-      .select(['value'])
-      .where('name', '=', 'allowed-terminal-ips')
-      .execute(),
-  );
-
+  const [IPS_RECORD] = await getFeatureFlagValues(['allowed-terminal-ips']);
   return IPS_RECORD ? (IPS_RECORD.value.current as string[]) : [];
 };
 
