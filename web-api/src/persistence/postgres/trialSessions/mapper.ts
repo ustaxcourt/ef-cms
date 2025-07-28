@@ -19,7 +19,7 @@ import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessi
 
 // Select the relevant RawCase fields from dwCase and map them correctly.
 export function toKyselyNewTrialSession(
-  rawTrialSession: Omit<RawTrialSession, "paperServicePdfs">,
+  rawTrialSession: Omit<RawTrialSession, 'paperServicePdfs'>,
 ): NewTrialSessionKysely {
   return {
     trialSessionId: rawTrialSession.trialSessionId,
@@ -72,7 +72,12 @@ export function toKyselyNewTrialSession(
 
 export function fromKyselyTrialSession(
   record: TrialSessionKysely,
-  paperPdfs: { fileId: string; title: string }[],
+  paperPdfs: {
+    fileId: string;
+    title: string;
+    trialSessionId?: string;
+    ttl?: string;
+  }[],
 ): RawTrialSession {
   return transformNullToUndefined({
     ...record,
@@ -84,7 +89,10 @@ export function fromKyselyTrialSession(
     sessionScope: record.sessionScope as TrialSessionScope,
     sessionType: record.sessionType as TrialSessionTypes,
     caseOrder: record.caseOrder || [],
-    paperServicePdfs: paperPdfs,
+    paperServicePdfs: paperPdfs.map(pdf => ({
+      fileId: pdf.fileId,
+      title: pdf.title,
+    })),
   });
 }
 
