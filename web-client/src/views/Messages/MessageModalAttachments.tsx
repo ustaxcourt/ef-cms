@@ -69,7 +69,7 @@ export const MessageModalAttachments = connect(
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row">
                     <div className="grid-col-9">
-                      {doc.index ? doc.index + ' - ' : ''}
+                      {doc.index != null ? `${doc.index} - ` : ''}
                       {doc.documentTitle}
                     </div>
                   </div>
@@ -81,7 +81,7 @@ export const MessageModalAttachments = connect(
                 <div className="margin-top-1" key={doc.documentId}>
                   <div className="grid-row message-modal-add-document-form">
                     <div className="grid-col-9">
-                      {doc.index ? doc.index + ' - ' : ''}
+                      {doc.index != null ? `${doc.index} - ` : ''}
                       {doc.documentTitle}
                     </div>
                     <div className="grid-col-1"></div>
