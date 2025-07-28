@@ -25,13 +25,17 @@ export const docketClerkEditsServiceIndicatorForRespondent = cerebralTest => {
     });
 
     expect(
-      cerebralTest.getState('caseDetail.irsPractitioners.0.serviceIndicator'),
+      cerebralTest.getState('caseDetail.irsPractitioners').find(p => {
+        return p.barNumber === barNumber;
+      }).serviceIndicator,
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_ELECTRONIC);
 
     await cerebralTest.runSequence('submitEditRespondentCounselSequence');
 
     expect(
-      cerebralTest.getState('caseDetail.irsPractitioners.0.serviceIndicator'),
+      cerebralTest.getState('caseDetail.irsPractitioners').find(p => {
+        return p.barNumber === barNumber;
+      }).serviceIndicator,
     ).toEqual(SERVICE_INDICATOR_TYPES.SI_PAPER);
   });
 };

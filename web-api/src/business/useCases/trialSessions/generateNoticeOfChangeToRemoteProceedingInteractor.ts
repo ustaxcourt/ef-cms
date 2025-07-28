@@ -36,7 +36,6 @@ export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
   const judgeWithTitle = await getJudgeWithTitle({
-    applicationContext,
     judgeUserName: trialSessionInformation.judgeName,
   });
 

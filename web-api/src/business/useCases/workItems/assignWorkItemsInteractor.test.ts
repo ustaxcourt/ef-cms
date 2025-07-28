@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
@@ -7,6 +8,10 @@ import { caseServicesSupervisorUser } from '@shared/test/mockUsers';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('assignWorkItemsInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
@@ -28,10 +33,10 @@ describe('assignWorkItemsInteractor', () => {
       workItemId: '78de1ba3-add3-4329-8372-ce37bda6bc93',
     };
 
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+    getUserById.mockResolvedValue({
       ...mockDocketClerkUser,
       section: DOCKET_SECTION,
-    });
+    } as DbUser);
 
     getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
   });
@@ -121,13 +126,12 @@ describe('assignWorkItemsInteractor', () => {
   });
 
   it('assigns a work item to a user with their original section value when the person making the assignment is a case services user', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValueOnce(caseServicesSupervisorUser)
-      .mockReturnValueOnce({
+    getUserById
+      .mockResolvedValueOnce(caseServicesSupervisorUser as DbUser)
+      .mockResolvedValueOnce({
         ...mockDocketClerkUser,
         section: DOCKET_SECTION,
-      });
+      } as DbUser);
 
     await assignWorkItemsInteractor(
       applicationContext,
