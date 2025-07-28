@@ -441,21 +441,21 @@ describe('updatePractitionerUser', () => {
 
       expect(generateChangeOfAddress).toHaveBeenCalled();
     });
+  });
+  describe('update practiceType', () => {
     it('should throw error when practitioner has open cases and practice type has been changed', async () => {
-      //mock oldUser and user object oth w/keys practiceType with different values
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockResolvedValue({
-          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
-          practiceType: 'DOJ',
-        });
-      //practitionerCases obj w/ openCases array
+      getPractitionerByBarNumber.mockResolvedValue({
+        ...mockPractitioner,
+        userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+        practiceType: 'DOJ',
+      });
       applicationContext
         .getUseCases()
         .getPractitionerCasesInteractor.mockReturnValue({
           closedCases: [],
           openCases: ['practitioner'],
         });
+
       await expect(
         updatePractitionerUser(
           applicationContext,
@@ -466,7 +466,6 @@ describe('updatePractitionerUser', () => {
             user: {
               ...mockPractitioner,
               barNumber: 'AB1111',
-              updatedEmail: 'bc@example.com',
               userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
               practiceType: 'IRS',
             },
@@ -478,14 +477,12 @@ describe('updatePractitionerUser', () => {
       );
     });
     it('should not throw an error when the practice type changed and there are no open cases', async () => {
-      //mock oldUser and user object oth w/keys practiceType with different values
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockResolvedValue({
-          ...mockPractitioner,
-          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
-          practiceType: 'DOJ',
-        });
+      //mock oldUser and user object w/keys practiceType with different values
+      getPractitionerByBarNumber.mockResolvedValue({
+        ...mockPractitioner,
+        userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+        practiceType: 'DOJ',
+      });
       //practitionerCases obj w/ openCases array
       applicationContext
         .getUseCases()
