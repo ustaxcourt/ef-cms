@@ -50,4 +50,24 @@ describe('setPractitionerDetailOnFormAction', () => {
 
     expect(state.form.originalEmail).toEqual(mockEmail);
   });
+  it('should set state.form.originalPracticeType to the value of props.practitionerDetail.practiceType', async () => {
+    const mockPracticeType = 'IRS';
+
+    const { state } = await runAction(setPractitionerDetailOnFormAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        practitionerDetail: {
+          practiceType: mockPracticeType,
+        },
+      },
+      state: {
+        form: {
+          originalPracticeType: undefined,
+        },
+      },
+    });
+    expect(state.form.originalPracticeType).toEqual(mockPracticeType);
+  });
 });
