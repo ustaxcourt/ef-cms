@@ -7,7 +7,6 @@ import {
 } from '../helpers/parseArgsAndEnvVars';
 import { getSSMItem } from 'shared/admin-tools/aws/ssmHelper';
 
-//TODO - TEST AGAINST EXP3
 const scriptConfig: ScriptConfig = {
   description: 'set-maintenance-mode - Toggles Maintenance Mode',
   environment: { env: 'ENV' },

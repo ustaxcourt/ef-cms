@@ -366,10 +366,9 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: migrate Feature flags from dynamo to postgres
+          name: Migrate Feature Flags from Dynamo to Postgres
           command: |
-            npx ts-node --transpileOnly ./scripts/run-once-scripts/migrate-feature-flags-dynamo-to-postgres.ts
-
+            ./scripts/run-once-scripts/migrate-feature-flags-dynamo-to-postgres.ts
 
   disable-reindex-cron:
     docker:

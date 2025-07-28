@@ -1,3 +1,5 @@
+#!/usr/bin/env -S npx ts-node --transpile-only
+
 import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { DynamoDBDocument } from '@aws-sdk/lib-dynamodb';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
