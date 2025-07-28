@@ -27,6 +27,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
     loginAsColvin();
     cy.visit(`/case-detail/${docketNumber}`);
     cy.get('#tab-document-view').click();
+    cy.contains('button span', 'Status Report').closest('button').click();
     cy.get('[data-testid="status-report-order-button"]').click();
     cy.get('[data-testid="order-type-status-report"]').check({ force: true });
     cy.get('#status-report-due-date-picker').type(today);
@@ -37,6 +38,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
     // add docket entry
     loginAsDocketClerk();
     cy.visit(`/case-detail/${docketNumber}`);
+    cy.get('[data-testid="tab-drafts"]').click();
     getLastDraftOrderElementFromDrafts().click();
     cy.get('[data-testid="add-court-issued-docket-entry-button"]').click();
     cy.get('[data-testid="service-stamp-Served"]').click();
