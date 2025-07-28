@@ -9,7 +9,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getMessageThreadByParentId } from '@web-api/persistence/postgres/messages/getMessageThreadByParentId';
 import { markMessageThreadRepliedTo } from '@web-api/persistence/postgres/messages/markMessageThreadRepliedTo';
 import { orderBy } from 'lodash';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export const completeMessageInteractor = async (
@@ -51,9 +51,7 @@ export const completeMessageInteractor = async (
 
       const validatedRawMessage = updatedMessage.validate().toRawObject();
 
-      await updateMessage({
-        message: validatedRawMessage,
-      });
+      await upsertMessages([validatedRawMessage]);
 
       completedMessageIds.push(validatedRawMessage.messageId);
     }

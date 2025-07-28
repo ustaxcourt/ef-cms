@@ -21,7 +21,6 @@ import { applicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { isEmpty, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
@@ -31,6 +30,7 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { removeCaseFromHearing } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
 import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
 import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
 import { Role, ROLES } from '@shared/business/entities/EntityConstants';
@@ -120,7 +120,7 @@ export const updateCaseAndAssociations = async ({
   // Then persist all related case data
   await settlePromises([
     upsertDocketEntries(docketEntries),
-    ...messages.map(message => updateMessage({ message })),
+    upsertMessages(messages),
     upsertCaseCorrespondences(correspondences),
     ...deletedHearings.map(({ trialSessionId }) =>
       removeCaseFromHearing({
