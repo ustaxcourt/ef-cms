@@ -103,6 +103,9 @@ export type NewTrialSessionPaperPdfKysely =
 
 ////////////////////////////
 
+export type trialSessionNotificationProcessingStatusType = 'complete' | 'processing';
+export type trialSessionNotificationProcessingCaseStatusType = 'processing' | 'processed';
+
 export const trialSessionNotificationProcessingTableDefinition = {
   trialSessionId: DEFAULT as string,
   caseStatuses: DEFAULT as any,

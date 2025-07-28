@@ -367,7 +367,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
 
   await updateTrialSessionNotificationProcessing({
     trialSessionId: jobId,
-    caseStatus: { docketNumber, status: 'processing' },
+    caseStatus: { [docketNumber]: 'processing' },
   });
 
   const trialSessionEntity = new TrialSession(trialSession);
@@ -389,7 +389,7 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
   await updateTrialSessionNotificationProcessing({
     trialSessionId: jobId,
     decrementUnfinishedCases: true,
-    caseStatus: { docketNumber, status: 'processed' },
+    caseStatus: { [docketNumber]: 'processed' },
   });
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({

@@ -1,3 +1,4 @@
+import { trialSessionNotificationProcessingStatusType } from '@web-api/persistence/postgres/trialSessions/schema';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 
 export const createTrialSessionNotificationProcessing = async ({
@@ -7,7 +8,7 @@ export const createTrialSessionNotificationProcessing = async ({
   unfinishedCasesCount: number,
   trialSessionId: string;
 }) => {
-  const status: 'processing' | 'complete' = 'processing';
+  const status: trialSessionNotificationProcessingStatusType = 'processing';
 
   await pgInsertInto({
     table: 'dwTrialSessionNotificationProcessing',
@@ -15,7 +16,7 @@ export const createTrialSessionNotificationProcessing = async ({
       status,
       trialSessionId,
       unfinishedCases: unfinishedCasesCount,
-      caseStatuses: []
+      caseStatuses: {}
     }]
   })
 }

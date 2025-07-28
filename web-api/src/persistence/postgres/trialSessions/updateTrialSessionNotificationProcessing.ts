@@ -1,3 +1,7 @@
+import {
+  trialSessionNotificationProcessingCaseStatusType,
+  trialSessionNotificationProcessingStatusType,
+} from '@web-api/persistence/postgres/trialSessions/schema';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
 
 export const updateTrialSessionNotificationProcessing = async ({
@@ -7,16 +11,22 @@ export const updateTrialSessionNotificationProcessing = async ({
   caseStatus,
 }: {
   trialSessionId: string;
-  status?: 'processing' | 'complete';
+  status?: trialSessionNotificationProcessingStatusType;
   decrementUnfinishedCases?: boolean;
-  caseStatus?: any;
+  caseStatus?: {
+    [index: string]: trialSessionNotificationProcessingCaseStatusType;
+  };
 }) => {
   await pgUpdateTable({
     table: 'dwTrialSessionNotificationProcessing',
     values: eb => ({
-      caseStatuses: caseStatus ? eb('caseStatuses', '||', caseStatus) : undefined,
+      caseStatuses: caseStatus
+        ? eb('caseStatuses', '||', caseStatus)
+        : undefined,
       status,
-      unfinishedCases: decrementUnfinishedCases ? eb('unfinishedCases', '-', 1) : undefined,
+      unfinishedCases: decrementUnfinishedCases
+        ? eb('unfinishedCases', '-', 1)
+        : undefined,
     }),
     where: cb => cb.where('trialSessionId', '=', trialSessionId),
   });
