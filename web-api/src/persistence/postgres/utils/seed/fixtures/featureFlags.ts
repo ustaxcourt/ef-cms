@@ -1,6 +1,6 @@
-import { NewFeatureFlagKysely } from '@web-api/persistence/postgres/featureFlag/schema';
+import { FeatureFlagTable } from '@web-api/persistence/postgres/featureFlag/schema';
 
-export const featureFlags: NewFeatureFlagKysely[] = [
+export const featureFlags: FeatureFlagTable[] = [
   {
     name: 'section-outbox-number-of-days',
     value: { current: 7 },
