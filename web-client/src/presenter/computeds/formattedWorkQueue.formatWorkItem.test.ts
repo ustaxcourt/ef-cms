@@ -2,9 +2,9 @@ import { MOCK_WORK_ITEM } from '@shared/test/mockWorkItem';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { formatWorkItem } from './formattedWorkQueue';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { WorkItem } from '@shared/business/entities/WorkItem';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 jest.mock('@shared/business/entities/WorkItem');
 
@@ -16,7 +16,7 @@ describe('formatWorkItem', () => {
 
   const { DOCKET_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
-  const baseWorkItem: WorkItemWithCaseInfo = {
+  const baseWorkItem: RawWorkItemWithCaseAndDocketEntryInfo = {
     ...MOCK_WORK_ITEM,
     assigneeId: docketClerkUser.userId,
     assigneeName: '',
