@@ -9,6 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 /**
  * saveCalendarNoteInteractor
@@ -53,8 +54,7 @@ export const saveCalendarNoteInteractor = async (
     .validate()
     .toRawObject();
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: rawTrialSessionEntity,
   });
 
@@ -64,10 +64,10 @@ export const saveCalendarNoteInteractor = async (
 
   if (
     caseDetail.trialSessionId !== trialSessionId &&
-    caseDetail.hearings?.length
+    caseDetail.hearingIds?.length
   ) {
-    const hearing = caseDetail.hearings.find(
-      caseHearing => caseHearing.trialSessionId === trialSessionId,
+    const hearing = caseDetail.hearingIds.find(
+      caseHearing => caseHearing === trialSessionId,
     );
 
     if (hearing) {

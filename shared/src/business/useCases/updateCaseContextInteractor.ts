@@ -16,9 +16,10 @@ import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
-export const updateCaseContext = async (
-  applicationContext: ServerApplicationContext,
+const updateCaseContext = async (
+  _applicationContext: ServerApplicationContext,
   {
     caseCaption,
     caseStatus,
@@ -89,8 +90,7 @@ export const updateCaseContext = async (
         docketNumber: oldCase.docketNumber,
       });
 
-      await applicationContext.getPersistenceGateway().updateTrialSession({
-        applicationContext,
+      await updateTrialSession({
         trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
       });
 

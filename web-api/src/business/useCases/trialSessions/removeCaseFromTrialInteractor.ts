@@ -13,6 +13,7 @@ import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseA
 import { CaseStatus } from '@shared/business/entities/EntityConstants';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 export const removeCaseFromTrial = async (
   applicationContext: ServerApplicationContext,
@@ -53,8 +54,7 @@ export const removeCaseFromTrial = async (
     trialSessionEntity.deleteCaseFromCalendar({ docketNumber });
   }
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 

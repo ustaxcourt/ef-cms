@@ -3,11 +3,11 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 /**
  * dismissNOTTReminderForTrialInteractor
@@ -16,7 +16,6 @@ import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions
  * @param {object} providers.trialSessionId the trial session ID
  */
 export const dismissNOTTReminderForTrialInteractor = async (
-  applicationContext: ServerApplicationContext,
   { trialSessionId }: { trialSessionId: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
@@ -37,8 +36,7 @@ export const dismissNOTTReminderForTrialInteractor = async (
     dismissedAlertForNOTT: true,
   });
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
   });
 };

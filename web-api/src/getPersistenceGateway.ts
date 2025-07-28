@@ -83,7 +83,6 @@ import {
 } from './persistence/dynamo/cases/updatePractitionerOnCase';
 import { updateMaintenanceMode } from './persistence/dynamo/deployTable/updateMaintenanceMode';
 import { updatePractitionerUser } from './persistence/dynamo/users/updatePractitionerUser';
-import { updateTrialSession } from './persistence/dynamo/trialSessions/updateTrialSession';
 import { updateUser } from './persistence/dynamo/users/updateUser';
 import { updateUserRecords } from './persistence/dynamo/users/updateUserRecords';
 import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
@@ -157,7 +156,6 @@ const gatewayMethods = {
     updateMaintenanceMode,
     updatePractitionerUser,
     updatePrivatePractitionerOnCase,
-    updateTrialSession,
     updateUser,
     updateUserRecords,
   }),

@@ -30,6 +30,7 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 export const serveThirtyDayNotice = async (
   applicationContext: ServerApplicationContext,
@@ -264,8 +265,7 @@ export const serveThirtyDayNotice = async (
 
   trialSessionEntity.hasNOTTBeenServed = true;
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 

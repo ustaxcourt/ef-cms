@@ -12,6 +12,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 /**
  * addCaseToTrialSession
@@ -22,8 +23,8 @@ import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise} the promise of the addCaseToTrialSession call
  */
-export const addCaseToTrialSession = async (
-  applicationContext: ServerApplicationContext,
+const addCaseToTrialSession = async (
+  _applicationContext: ServerApplicationContext,
   {
     calendarNotes,
     docketNumber,
@@ -76,8 +77,7 @@ export const addCaseToTrialSession = async (
     caseToUpdate: caseEntity,
   });
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 

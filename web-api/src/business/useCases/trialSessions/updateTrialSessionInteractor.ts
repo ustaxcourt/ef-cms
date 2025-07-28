@@ -24,7 +24,7 @@ import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { saveFileAndGenerateUrl } from '@web-api/business/useCaseHelper/saveFileAndGenerateUrl';
 import { associateSwingTrialSessions } from '@web-api/business/useCaseHelper/trialSessions/associateSwingTrialSessions';
 import { sendNotificationToUser } from '@web-api/notifications/sendNotificationToUser';
-import { updateTrialSession as updateTrialSessionPersistence } from '@web-api/persistence/dynamo/trialSessions/updateTrialSession';
+import { updateTrialSession as updateTrialSessionPersistence } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 import {
   asyncHandleLockError,
   withLocking,
@@ -177,7 +177,6 @@ export const updateTrialSession = async (
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
     await associateSwingTrialSessions(
-      applicationContext,
       {
         swingSessionId: trialSession.swingSessionId,
         trialSessionEntity: updatedTrialSessionEntity,
@@ -187,7 +186,6 @@ export const updateTrialSession = async (
   }
 
   await updateTrialSessionPersistence({
-    applicationContext,
     trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
   });
 

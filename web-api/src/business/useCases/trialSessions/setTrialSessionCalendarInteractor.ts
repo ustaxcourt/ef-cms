@@ -19,6 +19,7 @@ import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -179,8 +180,7 @@ export const setTrialSessionCalendarInteractor = async (
     await settlePromises(updatesToPersist);
 
     // Persist the update to the trial session itself
-    await applicationContext.getPersistenceGateway().updateTrialSession({
-      applicationContext,
+    await updateTrialSession({
       trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
     });
 

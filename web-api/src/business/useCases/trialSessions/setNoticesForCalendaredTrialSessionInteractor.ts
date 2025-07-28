@@ -12,6 +12,7 @@ import {
 } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 const setNoticesForCalendaredTrialSession = async (
   applicationContext: ServerApplicationContext,
@@ -129,8 +130,7 @@ const setNoticesForCalendaredTrialSession = async (
 
   trialSessionEntity.setNoticesIssued();
 
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  await updateTrialSession({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 

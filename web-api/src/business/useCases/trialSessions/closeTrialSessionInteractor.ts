@@ -10,6 +10,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { isEmpty, isEqual } from 'lodash';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 /**
  * closeTrialSessionInteractor
@@ -65,8 +66,7 @@ export const closeTrialSessionInteractor = async (
 
   trialSessionEntity.setAsClosed();
 
-  return await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
+  return await updateTrialSession({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 };
