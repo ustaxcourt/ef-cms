@@ -14,6 +14,9 @@ import { copyPagesAndAppendToTargetPdf } from '@shared/business/utilities/copyPa
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { updateTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
+import { getTrialSessionNotificationProcessing } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
+import { NotFoundError } from '@web-api/errors/errors';
 
 /**
  * serves a notice of trial session and standing pretrial document on electronic
@@ -342,14 +345,15 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     userId: string;
   },
 ) => {
-  const jobStatus = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionJobStatusForCase({
-      applicationContext,
-      jobId,
-    });
+  const processingJob = await getTrialSessionNotificationProcessing({
+    trialSessionId: jobId,
+  });
+  if (!processingJob)
+    throw new NotFoundError(
+      `Could not get notification processing job with id ${jobId}`,
+    );
 
-  if (jobStatus[docketNumber] === 'processed') {
+  if (processingJob.caseStatuses[docketNumber] === 'processed') {
     applicationContext.logger.warn(
       `skipping the processing of the docketNumber ${docketNumber} for job ${jobId} because it was already processed`,
     );
@@ -361,14 +365,10 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     userId,
   });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .setTrialSessionJobStatusForCase({
-      applicationContext,
-      docketNumber,
-      jobId,
-      status: 'processing',
-    });
+  await updateTrialSessionNotificationProcessing({
+    trialSessionId: jobId,
+    caseStatus: { docketNumber, status: 'processing' },
+  });
 
   const trialSessionEntity = new TrialSession(trialSession);
 
@@ -386,19 +386,11 @@ export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
     user,
   });
 
-  await applicationContext.getPersistenceGateway().decrementJobCounter({
-    applicationContext,
-    jobId,
+  await updateTrialSessionNotificationProcessing({
+    trialSessionId: jobId,
+    decrementUnfinishedCases: true,
+    caseStatus: { docketNumber, status: 'processed' },
   });
-
-  await applicationContext
-    .getPersistenceGateway()
-    .setTrialSessionJobStatusForCase({
-      applicationContext,
-      docketNumber,
-      jobId,
-      status: 'processed',
-    });
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,

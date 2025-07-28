@@ -1,17 +1,14 @@
-import { addCaseToHearing } from './persistence/postgres/trialSessions/addCaseToHearing';
 import { advancedDocumentSearch } from './persistence/elasticsearch/advancedDocumentSearch';
 import { associateUserWithCase } from './persistence/dynamo/cases/associateUserWithCase';
 import { associateUserWithCasePending } from './persistence/dynamo/cases/associateUserWithCasePending';
 import { bulkDeleteRecords } from './persistence/elasticsearch/bulkDeleteRecords';
 import { bulkIndexRecords } from './persistence/elasticsearch/bulkIndexRecords';
 import { createChangeOfAddressJob } from './persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob';
-import { createJobStatus } from './persistence/dynamo/trialSessions/createJobStatus';
 import { createNewPetitionerUser } from './persistence/dynamo/users/createNewPetitionerUser';
 import { createNewPractitionerUser } from './persistence/dynamo/users/createNewPractitionerUser';
 import { createOrUpdatePractitionerUser } from './persistence/dynamo/users/createOrUpdatePractitionerUser';
 import { createPractitionerDocument } from './persistence/dynamo/practitioners/createPractitionerDocument';
 import { createUserRecords } from './persistence/dynamo/users/createUserRecords';
-import { decrementJobCounter } from './persistence/dynamo/trialSessions/decrementJobCounter';
 import { deleteDocumentFile } from './persistence/s3/deleteDocumentFile';
 import { deleteMessage } from './persistence/sqs/deleteMessage';
 import { deletePractitionerDocument } from './persistence/dynamo/practitioners/deletePractitionerDocument';
@@ -50,8 +47,6 @@ import { getReconciliationReport } from './persistence/elasticsearch/getReconcil
 import { getSesStatus } from './persistence/ses/getSesStatus';
 import { getColdCases } from './persistence/elasticsearch/getColdCases';
 import { getTableStatus } from './persistence/dynamo/getTableStatus';
-import { getTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase';
-import { getTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/getTrialSessionProcessingStatus';
 import { getUploadPolicy } from './persistence/s3/getUploadPolicy';
 import { getUserByEmail } from './persistence/dynamo/users/getUserByEmail';
 import { getUserById } from './persistence/dynamo/users/getUserById';
@@ -74,8 +69,6 @@ import { saveDispatchNotification } from '@web-api/persistence/postgres/notifica
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
 import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
-import { setTrialSessionJobStatusForCase } from './persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase';
-import { setTrialSessionProcessingStatus } from './persistence/dynamo/trialSessions/setTrialSessionProcessingStatus';
 import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
 import {
   updateIrsPractitionerOnCase,
@@ -131,12 +124,10 @@ const isValidatedDecorator = <T>(persistenceGatewayMethods: T): T => {
 
 const gatewayMethods = {
   ...isValidatedDecorator({
-    addCaseToHearing,
     associateUserWithCase,
     associateUserWithCasePending,
     bulkDeleteRecords,
     bulkIndexRecords,
-    createJobStatus,
     createNewPetitionerUser,
     createNewPractitionerUser,
     createOrUpdatePractitionerUser,
@@ -149,8 +140,6 @@ const gatewayMethods = {
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
-    setTrialSessionJobStatusForCase,
-    setTrialSessionProcessingStatus,
     updateCaseHearing,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
@@ -162,7 +151,6 @@ const gatewayMethods = {
   // methods below are not known to create or update "entity" records
   advancedDocumentSearch,
   createChangeOfAddressJob,
-  decrementJobCounter,
   deleteChangeOfAddressCaseRecord,
   deleteDocumentFile,
   deleteMessage,
@@ -200,8 +188,6 @@ const gatewayMethods = {
   getSesStatus,
   getColdCases,
   getTableStatus,
-  getTrialSessionJobStatusForCase,
-  getTrialSessionProcessingStatus,
   getUploadPolicy,
   getUserByEmail,
   getUserById,

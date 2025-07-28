@@ -59,7 +59,16 @@ import {
   DW_MINUTE_SHEET_COLUMNS,
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
-import { DW_TRIAL_SESSION_COLUMNS, DW_TRIAL_SESSION_PAPER_PDF_COLUMNS, DW_TRIAL_SESSION_WORKING_COPY_COLUMNS, TrialSessionPaperPdfTable, TrialSessionTable, TrialSessionWorkingCopyTable } from './persistence/postgres/trialSessions/schema';
+import {
+  DW_TRIAL_SESSION_COLUMNS,
+  DW_TRIAL_SESSION_NOTIFICATION_PROCESSING,
+  DW_TRIAL_SESSION_PAPER_PDF_COLUMNS,
+  DW_TRIAL_SESSION_WORKING_COPY_COLUMNS,
+  TrialSessionNotificationProcessingTable,
+  TrialSessionPaperPdfTable,
+  TrialSessionTable,
+  TrialSessionWorkingCopyTable,
+} from './persistence/postgres/trialSessions/schema';
 
 const DEFAULT = {};
 
@@ -77,6 +86,7 @@ interface DatabaseSchemaType {
   dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
   dwTrialSession: DatabaseTableMetadata<TrialSessionTable>;
+  dwTrialSessionNotificationProcessing: DatabaseTableMetadata<TrialSessionNotificationProcessingTable>;
   dwTrialSessionPaperPdf: DatabaseTableMetadata<TrialSessionPaperPdfTable>;
   dwTrialSessionWorkingCopy: DatabaseTableMetadata<TrialSessionWorkingCopyTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
@@ -151,15 +161,19 @@ export const DatabaseSchema: DatabaseSchemaType = {
   },
   dwTrialSession: {
     table: DEFAULT as TrialSessionTable,
-    columns: DW_TRIAL_SESSION_COLUMNS
+    columns: DW_TRIAL_SESSION_COLUMNS,
+  },
+  dwTrialSessionNotificationProcessing: {
+    table: DEFAULT as TrialSessionNotificationProcessingTable,
+    columns: DW_TRIAL_SESSION_NOTIFICATION_PROCESSING,
   },
   dwTrialSessionPaperPdf: {
     table: DEFAULT as TrialSessionPaperPdfTable,
-    columns: DW_TRIAL_SESSION_PAPER_PDF_COLUMNS
+    columns: DW_TRIAL_SESSION_PAPER_PDF_COLUMNS,
   },
   dwTrialSessionWorkingCopy: {
     table: DEFAULT as TrialSessionWorkingCopyTable,
-    columns: DW_TRIAL_SESSION_WORKING_COPY_COLUMNS
+    columns: DW_TRIAL_SESSION_WORKING_COPY_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,
@@ -168,7 +182,7 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwWorkItem: {
     table: DEFAULT as WorkItemTable,
     columns: DW_WORK_ITEM_COLUMNS,
-  }
+  },
 };
 
 type ExtractTable<T> = T extends { table: infer U } ? U : never;
