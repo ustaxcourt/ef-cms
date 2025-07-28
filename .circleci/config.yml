@@ -358,7 +358,7 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
-          name: migrate Feature flags from dynamo to postgres
+          name: Migrate Feature Flags from Dynamo to Postgres
           command: |
             ./scripts/run-once-scripts/migrate-feature-flags-dynamo-to-postgres.ts
 
