@@ -88,8 +88,6 @@ export class Case extends JoiValidationEntity {
   public caseStatusHistory?: CaseStatusChange[];
   public caseNote?: string;
   public damages?: number;
-  public highPriority?: boolean;
-  public highPriorityReason?: string;
   public litigationCosts?: number;
   public qcCompleteForTrial?: Record<string, any>;
   public noticeOfAttachments?: boolean;
@@ -136,7 +134,7 @@ export class Case extends JoiValidationEntity {
   public canAllowPrintableDocketRecord?: boolean;
   public canDojPractitionersRepresentParty?: boolean;
   public archivedDocketEntries?: RawDocketEntry[];
-  public docketEntries: any[];
+  public docketEntries: DocketEntry[];
   public isSealed?: boolean;
   public hearings: any[];
   public privatePractitioners?: any[];
@@ -289,7 +287,10 @@ export class Case extends JoiValidationEntity {
    * @param {Array} cases the cases to check for lead case computation
    * @returns {Case} the lead Case entity
    */
-  static findLeadCaseForCases(cases) {
+  static findLeadCaseForCases<T>(
+    cases: (T & { docketNumber: string })[],
+  ): T | undefined {
+    if (!cases.length) return undefined;
     const casesOrdered = Case.sortByDocketNumber([...cases]);
     return casesOrdered.shift();
   }
@@ -351,8 +352,6 @@ export class Case extends JoiValidationEntity {
     this.caseStatusHistory = rawCase.caseStatusHistory || [];
     this.caseNote = rawCase.caseNote;
     this.damages = rawCase.damages;
-    this.highPriority = rawCase.highPriority;
-    this.highPriorityReason = rawCase.highPriorityReason;
     this.litigationCosts = rawCase.litigationCosts;
     this.qcCompleteForTrial = rawCase.qcCompleteForTrial || {};
     this.noticeOfAttachments = rawCase.noticeOfAttachments || false;
@@ -507,17 +506,6 @@ export class Case extends JoiValidationEntity {
         'Whether the petitioner received an IRS notice, verified by the petitions clerk.',
       )
       .messages({ '*': 'Indicate whether you received an IRS notice' }),
-    highPriority: joi
-      .boolean()
-      .optional()
-      .meta({ tags: ['Restricted'] }),
-    highPriorityReason: JoiValidationConstants.STRING.max(250)
-      .when('highPriority', {
-        is: true,
-        otherwise: joi.optional().allow(null),
-        then: joi.required(),
-      })
-      .meta({ tags: ['Restricted'] }),
     initialCaption: JoiValidationConstants.CASE_CAPTION.allow(null)
       .optional()
       .description('Case caption before modification.'),
@@ -990,14 +978,16 @@ export class Case extends JoiValidationEntity {
     });
   }
 
-  toRawObject(processPendingItems = true) {
+  //@ts-ignore
+  toRawObject(processPendingItems = true): RawCase {
     const result = this.toRawObjectFromJoi();
 
     if (processPendingItems) {
       (result as any).hasPendingItems = this.doesHavePendingItems();
     }
 
-    return result;
+    // @ts-ignore
+    return result as RawCase;
   }
 
   doesHavePendingItems() {
@@ -1119,7 +1109,7 @@ export class Case extends JoiValidationEntity {
    *
    * @param {object} docketEntryEntity the docket entry to add to the case
    */
-  addDocketEntry(docketEntryEntity) {
+  addDocketEntry(docketEntryEntity: DocketEntry) {
     docketEntryEntity.docketNumber = this.docketNumber;
 
     if (docketEntryEntity.isOnDocketRecord) {
@@ -1274,7 +1264,7 @@ export class Case extends JoiValidationEntity {
    * @params {string} params.docketEntryId the id of the docketEntry to retrieve
    * @returns {object} the retrieved docketEntry
    */
-  getDocketEntryById({ docketEntryId }) {
+  getDocketEntryById({ docketEntryId }: { docketEntryId: string }) {
     return this.docketEntries.find(
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );
@@ -1391,7 +1381,7 @@ export class Case extends JoiValidationEntity {
   }
 
   getPetitionDocketEntry() {
-    return getPetitionDocketEntry(this);
+    return getPetitionDocketEntry(this) as DocketEntry; // We know it is a DocketEntry not RawDocketEntry because this is the Case entity
   }
 
   getIrsSendDate() {
@@ -1433,27 +1423,6 @@ export class Case extends JoiValidationEntity {
       }
     });
 
-    return this;
-  }
-
-  /**
-   * set as high priority with a highPriorityReason
-   * @param {string} highPriorityReason - the reason the case was set to high priority
-   * @returns {Case} the updated case entity
-   */
-  setAsHighPriority(highPriorityReason) {
-    this.highPriority = true;
-    this.highPriorityReason = highPriorityReason;
-    return this;
-  }
-
-  /**
-   * unset as high priority and remove the highPriorityReason
-   * @returns {Case} the updated case entity
-   */
-  unsetAsHighPriority() {
-    this.highPriority = false;
-    this.highPriorityReason = undefined;
     return this;
   }
 
@@ -1566,7 +1535,6 @@ export class Case extends JoiValidationEntity {
     if (isClosedStatus(updatedCaseStatus)) {
       this.closedDate = date;
       this.unsetAsBlocked();
-      this.unsetAsHighPriority();
     } else {
       if (isClosedStatus(previousCaseStatus)) {
         this.closedDate = undefined;
@@ -1713,6 +1681,7 @@ export class Case extends JoiValidationEntity {
     const nextIndex =
       this.docketEntries
         .filter(d => d.isOnDocketRecord && d.index !== undefined)
+        // @ts-ignore
         .sort((a, b) => a.index - b.index).length + 1;
     return nextIndex;
   }
@@ -2065,11 +2034,10 @@ export class Case extends JoiValidationEntity {
    */
   getShouldHaveTrialSortMappingRecords() {
     return !!(
-      (this.highPriority ||
-        this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial) &&
+      this.status === CASE_STATUS_TYPES.generalDocketReadyForTrial &&
       this.preferredTrialCity &&
       !this.blocked &&
-      (!this.automaticBlocked || (this.automaticBlocked && this.highPriority))
+      !this.automaticBlocked
     );
   }
 
@@ -2232,7 +2200,9 @@ export const getPractitionersRepresenting = function (
   );
 };
 
-export const getPetitionDocketEntry = function (rawCase) {
+export const getPetitionDocketEntry = function (
+  rawCase: RawCase | RawPublicCase,
+) {
   return rawCase.docketEntries?.find(
     docketEntry =>
       docketEntry.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
@@ -2430,7 +2400,9 @@ export const getOtherFilers = function (rawCase) {
 };
 
 declare global {
-  type RawCase = ExcludeMethods<Case>;
+  type RawCase = Omit<ExcludeMethods<Case>, 'docketEntries'> & {
+    docketEntries: RawDocketEntry[];
+  };
 }
 
 const generateCaptionFromContacts = ({

@@ -2,10 +2,6 @@ import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
@@ -15,8 +11,14 @@ import { DOCUMENT_SERVED_MESSAGES } from '@shared/business/entities/EntityConsta
 import { createISODateString } from '@shared/business/utilities/DateHandler';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const serveCourtIssuedDocument = async (
   applicationContext: ServerApplicationContext,
@@ -46,7 +48,6 @@ export const serveCourtIssuedDocument = async (
   }
 
   const subjectCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectCaseDocketNumber,
   });
 
@@ -63,6 +64,7 @@ export const serveCourtIssuedDocument = async (
   if (!docketEntryToServe) {
     throw new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
   }
+
   if (docketEntryToServe.servedAt) {
     throw new Error('Docket entry has already been served');
   }
@@ -71,20 +73,18 @@ export const serveCourtIssuedDocument = async (
     throw new Error('Docket entry is already being served');
   }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocketEntryPendingServiceStatus({
-      applicationContext,
-      docketEntryId: docketEntryToServe.docketEntryId,
-      docketNumber: subjectCaseEntity.docketNumber,
-      status: true,
-    });
+  await updateDocketEntryPendingServiceStatus({
+    docketEntryId: docketEntryToServe.docketEntryId,
+    docketNumber: subjectCaseEntity.docketNumber,
+    status: true,
+  });
 
   const stampedPdf = await applicationContext
     .getUseCaseHelpers()
     .stampDocumentForService({
       applicationContext,
       docketEntryId: docketEntryToServe.docketEntryId,
+      // @ts-ignore
       documentToStamp: docketEntryToServe,
     });
 
@@ -102,9 +102,11 @@ export const serveCourtIssuedDocument = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   let serviceResults;
   let caseEntities = [subjectCaseEntity];
@@ -148,14 +150,11 @@ export const serveCourtIssuedDocument = async (
   } finally {
     for (const caseEntity of caseEntities) {
       try {
-        await applicationContext
-          .getPersistenceGateway()
-          .updateDocketEntryPendingServiceStatus({
-            applicationContext,
-            docketEntryId,
-            docketNumber: caseEntity.docketNumber,
-            status: false,
-          });
+        await updateDocketEntryPendingServiceStatus({
+          docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          status: false,
+        });
       } catch (e) {
         applicationContext.logger.error(
           `Encountered an exception trying to reset isPendingService on Docket Number ${caseEntity.docketNumber}.`,

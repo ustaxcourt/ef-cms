@@ -1,4 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
 );
@@ -22,10 +25,17 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { Case } from '@shared/business/entities/cases/Case';
+import { updateDocketEntryPendingServiceStatus as updateDocketEntryPendingServiceStatusMock } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
+  const updateDocketEntryPendingServiceStatus = jest.mocked(
+    updateDocketEntryPendingServiceStatusMock,
+  );
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const getUserById = jest.mocked(getUserByIdMock);
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -63,9 +73,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);
@@ -178,10 +186,9 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
     const initialCall = 1;
     const finallyBlockCalls = 3;
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(finallyBlockCalls + initialCall);
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(
+      finallyBlockCalls + initialCall,
+    );
   });
 
   it('should call updateDocketEntryPendingServiceStatus on error', async () => {
@@ -212,10 +219,9 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
     const initialCall = 1;
     const finallyBlockCalls = 3;
 
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledTimes(finallyBlockCalls + initialCall);
+    expect(updateDocketEntryPendingServiceStatus).toHaveBeenCalledTimes(
+      finallyBlockCalls + initialCall,
+    );
   });
 
   it('should log the failure to call updateDocketEntryPendingServiceStatus in the finally block', async () => {
@@ -233,9 +239,8 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
 
     const innerError = new Error('something else');
 
-    applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus.mockResolvedValueOnce(undefined)
+    updateDocketEntryPendingServiceStatus
+      .mockImplementationOnce(async () => {})
       .mockRejectedValueOnce(innerError);
 
     await serveCourtIssuedDocumentInteractor(

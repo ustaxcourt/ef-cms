@@ -1,27 +1,27 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
+} from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import {
   calculateDate,
   createISODateAtStartOfDayEST,
-} from '../../../../../shared/src/business/utilities/DateHandler';
+} from '@shared/business/utilities/DateHandler';
 import { getDocumentQCServedForSection } from '@web-api/persistence/postgres/workitems/getDocumentQCServedForSection';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 export const getDocumentQCServedForSectionInteractor = async (
   applicationContext: ServerApplicationContext,
   { section }: { section: typeof DOCKET_SECTION | typeof PETITIONS_SECTION },
   authorizedUser: UnknownAuthUser,
-): Promise<WorkItemWithCaseInfo[]> => {
+): Promise<RawWorkItemWithCaseAndDocketEntryInfo[]> => {
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
     throw new UnauthorizedError(
       'Unauthorized for getting completed work items',

@@ -40,7 +40,6 @@ export const generateStandingPretrialOrderInteractor = async (
   }
 
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 
@@ -58,7 +57,6 @@ export const generateStandingPretrialOrderInteractor = async (
   );
 
   const formattedJudgeName = await getJudgeWithTitle({
-    applicationContext,
     judgeUserName: trialSession.judge?.name,
   });
 

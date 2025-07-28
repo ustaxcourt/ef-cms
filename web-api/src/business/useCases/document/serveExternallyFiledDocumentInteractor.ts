@@ -3,10 +3,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
-  asyncHandleLockError,
-  withLocking,
-} from '@web-api/business/useCaseHelper/acquireLock';
-import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '@shared/authorization/authorizationClientService';
@@ -18,8 +14,14 @@ import {
   DOCUMENT_SERVED_MESSAGES,
 } from '@shared/business/entities/EntityConstants';
 import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
+import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
+import {
+  asyncHandleLockError,
+  withLocking,
+} from '@web-api/persistence/postgres/utils/mutex';
 
 export const serveExternallyFiledDocument = async (
   applicationContext: ServerApplicationContext,
@@ -49,7 +51,6 @@ export const serveExternallyFiledDocument = async (
   }
 
   const subjectCase = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber: subjectCaseDocketNumber,
   });
 
@@ -73,18 +74,19 @@ export const serveExternallyFiledDocument = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocketEntryPendingServiceStatus({
-      applicationContext,
-      docketEntryId,
-      docketNumber: subjectCaseDocketNumber,
-      status: true,
-    });
+  await updateDocketEntryPendingServiceStatus({
+    docketEntryId,
+    docketNumber: subjectCaseDocketNumber,
+    status: true,
+  });
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   let paperServiceResult;
   let caseEntities: Case[] = [];
@@ -145,6 +147,12 @@ export const serveExternallyFiledDocument = async (
     const updatedSubjectDocketEntry =
       updatedSubjectCaseEntity!.getDocketEntryById({ docketEntryId });
 
+    if (!updatedSubjectDocketEntry) {
+      throw new NotFoundError(
+        `Could not find docket entry with id ${docketEntryId} on case ${updatedSubjectCaseEntity?.docketNumber}`,
+      );
+    }
+
     await applicationContext.getUseCases().addCoversheetInteractor(
       applicationContext,
       {
@@ -163,14 +171,11 @@ export const serveExternallyFiledDocument = async (
         docketEntryId,
       });
   } finally {
-    await applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
-        applicationContext,
-        docketEntryId,
-        docketNumber: subjectCaseDocketNumber,
-        status: false,
-      });
+    await updateDocketEntryPendingServiceStatus({
+      docketEntryId,
+      docketNumber: subjectCaseDocketNumber,
+      status: false,
+    });
   }
 
   const successMessage =

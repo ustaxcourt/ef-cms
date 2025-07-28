@@ -2,6 +2,7 @@ import {
   AMICUS_BRIEF_DOCUMENT_TYPE,
   AMICUS_BRIEF_EVENT_CODE,
   AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES,
+  AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS,
   BRIEF_EVENTCODES,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   COURT_ISSUED_EVENT_CODES,
@@ -34,9 +35,11 @@ import {
 } from '@shared/business/entities/cases/Case';
 import { DOCKET_ENTRY_VALIDATION_RULES } from './EntityValidationConstants';
 import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEntity';
-import { AuthUser, UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import {
+  AuthUser,
+  UnknownAuthUser,
+} from '@shared/business/entities/authUser/AuthUser';
 import { User } from './User';
-import { WorkItem } from './WorkItem';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
@@ -82,7 +85,7 @@ export class DocketEntry extends JoiValidationEntity {
   public additionalInfo2?: string;
   public addToCoversheet?: boolean;
   public archived?: boolean;
-  public attachments?: string;
+  public attachments?: boolean;
   public caseType?: string;
   public taxYear?: string;
   public noticeIssuedDate?: string;
@@ -96,13 +99,12 @@ export class DocketEntry extends JoiValidationEntity {
   public documentContentsId?: string;
   public documentIdBeforeSignature?: string;
   public documentTitle: string;
-  public documentType: string;
-  public eventCode: string;
+  public documentType?: string;
+  public eventCode: string; // technically optional as draft docketEntry does not require it
   public filedBy?: string;
   public filedByRole?: string;
   public filingDate: string;
   public freeText?: string;
-  public freeText2?: string;
   public hasOtherFilingParty?: boolean;
   public hasSupportingDocuments?: boolean;
   public index?: number;
@@ -133,7 +135,7 @@ export class DocketEntry extends JoiValidationEntity {
   public scenario?: string;
   public secondaryDocument?: {
     secondaryDocumentInfo: string;
-  };
+  } & any;
   public servedAt?: string;
   public servedPartiesCode?: string;
   public serviceDate?: string;
@@ -142,7 +144,10 @@ export class DocketEntry extends JoiValidationEntity {
   public trialLocation?: string;
   public supportingDocument?: string;
   public userId?: string;
-  public privatePractitioners?: any[];
+  public privatePractitioners?: {
+    name: string;
+    partyPrivatePractitioner?: boolean;
+  }[];
   public servedParties?: any[];
   public signedAt?: string;
   public draftOrderState?: {
@@ -167,25 +172,25 @@ export class DocketEntry extends JoiValidationEntity {
     statusReportIndex?: string;
     strickenFromTrialSessions?: boolean;
   };
-  public stampData!: object;
+  public stampData!: Record<string, any>;
   public isDraft?: boolean;
   public redactionAcknowledgement?: boolean;
   public judge?: string;
-  public judgeUserId?: string;
   public pending?: boolean;
   public previousDocument?: {
-    docketEntryId: string;
+    docketEntryId?: string;
     documentTitle: string;
     documentType: string;
   };
-  public qcAt?: string;
-  public qcByUserId?: string;
   public signedByUserId?: string;
   public signedJudgeName?: string;
-  public signedJudgeUserId?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
-  public workItem?: any;
+
+  // These are optional fields set solely for the UI in certain cases.
+  public qcComplete?: boolean;
+  public qcViewed?: boolean;
+  public workItemId?: string;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -232,7 +237,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.filedByRole = rawDocketEntry.filedByRole;
     this.filingDate = rawDocketEntry.filingDate || createISODateString();
     this.freeText = rawDocketEntry.freeText;
-    this.freeText2 = rawDocketEntry.freeText2;
     this.hasOtherFilingParty = rawDocketEntry.hasOtherFilingParty;
     this.hasSupportingDocuments = rawDocketEntry.hasSupportingDocuments;
     this.index = rawDocketEntry.index;
@@ -317,7 +321,6 @@ export class DocketEntry extends JoiValidationEntity {
     this.stampData = rawDocketEntry.stampData || {};
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
-    this.judgeUserId = rawDocketEntry.judgeUserId;
     this.pending =
       rawDocketEntry.pending === undefined
         ? DocketEntry.isPendingOnCreation(rawDocketEntry)
@@ -329,26 +332,16 @@ export class DocketEntry extends JoiValidationEntity {
         documentType: rawDocketEntry.previousDocument.documentType,
       };
     }
-    this.qcAt = rawDocketEntry.qcAt;
-    this.qcByUserId = rawDocketEntry.qcByUserId;
     this.signedAt = rawDocketEntry.signedAt;
     this.signedByUserId = rawDocketEntry.signedByUserId;
     this.signedJudgeName = rawDocketEntry.signedJudgeName;
-    this.signedJudgeUserId = rawDocketEntry.signedJudgeUserId;
     this.strickenBy = rawDocketEntry.strickenBy;
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
-    this.workItem = rawDocketEntry.workItem
-      ? new WorkItem(rawDocketEntry.workItem)
-      : undefined;
-  }
 
-  /**
-   *
-   * @param {WorkItem} workItem the work item to add to the document
-   */
-  setWorkItem(workItem) {
-    this.workItem = workItem;
+    this.qcViewed = rawDocketEntry.qcViewed;
+    this.qcComplete = rawDocketEntry.qcComplete;
+    this.workItemId = rawDocketEntry.workItemId;
   }
 
   /**
@@ -392,9 +385,10 @@ export class DocketEntry extends JoiValidationEntity {
    * @returns {Boolean} true or false if the deadline should be auto-generated
    */
   shouldAutoGenerateDeadline() {
-    return AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES.some(
+    const inAutoGenDeadlineDocType = AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES.some(
       item => item.eventCode === this.eventCode,
     );
+    return inAutoGenDeadlineDocType || this.isStatusReport();
   }
 
   /**
@@ -402,6 +396,9 @@ export class DocketEntry extends JoiValidationEntity {
    * @returns {String} the deadline description
    */
   getAutoGeneratedDeadlineDescription() {
+    if(this.isStatusReport()) {
+      return AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS[this.draftOrderState?.orderType || 'statusReport'] // if this doesn't exist, default to the basic status report
+    }
     return AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES.find(
       item => item.eventCode === this.eventCode,
     )?.deadlineDescription;
@@ -419,21 +416,11 @@ export class DocketEntry extends JoiValidationEntity {
   }
 
   /**
-   * attaches a qc date and a user to the document
-   * @param {object} user the user completing QC process
-   */
-  setQCed(user) {
-    this.qcByUserId = user.userId;
-    this.qcAt = createISODateString();
-  }
-
-  /**
    * Unsets signature related fields on the docket entry
    */
   unsignDocument() {
     this.signedAt = undefined;
     this.signedJudgeName = undefined;
-    this.signedJudgeUserId = undefined;
     this.signedByUserId = undefined;
   }
 
@@ -473,6 +460,15 @@ export class DocketEntry extends JoiValidationEntity {
 
   isCourtIssued(): boolean {
     return DocketEntry.isCourtIssued({ eventCode: this.eventCode });
+  }
+
+  isStatusReport(): boolean {
+    if(!this.draftOrderState) return false;
+    return this.draftOrderState.orderType === 'statusReport' || this.draftOrderState.orderType === 'statusReportStipulatedDecision';
+  }
+      
+  static hasWorkItemInfo(docketEntry: RawDocketEntry) {
+    return !!docketEntry.workItemId;
   }
 
   static TRANSCRIPT_AGE_DAYS_MIN = 90;
@@ -703,7 +699,7 @@ export class DocketEntry extends JoiValidationEntity {
   ): boolean => {
     if (!entry.isFileAttached) return false;
 
-    const petitionDocketEntry = getPetitionDocketEntry(rawCase);
+    const petitionDocketEntry = getPetitionDocketEntry(rawCase)!;
 
     //Only allow STIN download if:
     //  - role Petition Clerk & entry not served, or
@@ -741,6 +737,10 @@ export class DocketEntry extends JoiValidationEntity {
       return DocketEntry.isTranscriptOldEnoughToUnseal(entry);
     return true;
   };
+  
+  setDraftOrderState(draftOrderState) {
+    this.draftOrderState = draftOrderState;
+  }
 
   /**
    * sets the number of pages for the docket entry

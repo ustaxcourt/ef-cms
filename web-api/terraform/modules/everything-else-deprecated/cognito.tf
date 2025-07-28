@@ -91,7 +91,7 @@ resource "aws_cognito_user_pool" "pool" {
     source_arn             = aws_ses_email_identity.ses_sender.arn
     email_sending_account  = "DEVELOPER"
     reply_to_email_address = "noreply@${var.dns_domain}"
-    from_email_address     = "U.S. Tax Court <noreply@${var.dns_domain}>"
+    from_email_address     = "\"U.S. Tax Court\" <noreply@${var.dns_domain}>"
   }
 
   schema {

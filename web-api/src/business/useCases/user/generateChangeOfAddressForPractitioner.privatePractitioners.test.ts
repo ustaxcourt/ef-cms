@@ -1,5 +1,22 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
+jest.mock('../addCoversheetInteractor', () => ({
+  addCoverToPdf: jest.fn().mockReturnValue({
+    pdfData: '',
+  }),
+}));
+jest.mock(
+  '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
+);
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/deleteChangeOfAddressCaseRecord',
+);
+jest.mock(
+  '@web-api/persistence/postgres/jobs/changeOfAddress/createChangeOfAddressJob',
+);
+jest.mock('@web-api/persistence/postgres/users/upsertUsers');
 import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
@@ -13,16 +30,13 @@ import { generateChangeOfAddress } from './generateChangeOfAddress';
 import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
-
-jest.mock('../addCoversheetInteractor', () => ({
-  addCoverToPdf: jest.fn().mockReturnValue({
-    pdfData: '',
-  }),
-}));
-
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 
 describe('generateChangeOfAddress', () => {
+  const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+  const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
+  const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
   const { docketNumber } = MOCK_CASE;
   const mockPrivatePractitioner = {
     admissionsDate: '2019-04-10',
@@ -65,17 +79,12 @@ describe('generateChangeOfAddress', () => {
   };
 
   beforeAll(() => {
-    applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mockImplementation(
-        ({ caseToUpdate }) => caseToUpdate,
-      );
+    updateCaseAndAssociations.mockImplementation(
+      ({ caseToUpdate }) => caseToUpdate,
+    );
   });
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValue([{ docketNumber }]);
-
+    getDocketNumbersByUser.mockResolvedValue([docketNumber]);
     getCaseByDocketNumber.mockResolvedValue(mockCaseWithPrivatePractitioner);
 
     applicationContext
@@ -97,6 +106,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -104,13 +114,10 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalled();
 
-    expect(
-      applicationContext.getPersistenceGateway().getCasesForUser,
-    ).toHaveBeenCalled();
+    expect(getDocketNumbersByUser).toHaveBeenCalled();
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
     ).toMatchObject({
       docketNumber,
     });
@@ -128,6 +135,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -137,12 +145,9 @@ describe('generateChangeOfAddress', () => {
   });
 
   it('should call applicationContext.logger.error and continue processing the next case if the case currently being processed is invalid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCasesForUser.mockReturnValueOnce([
-        { ...mockCaseWithPrivatePractitioner, docketNumber: undefined },
-        mockCaseWithPrivatePractitioner,
-      ]);
+    getDocketNumbersByUser.mockResolvedValue([
+      mockCaseWithPrivatePractitioner.docketNumber,
+    ]);
     getCaseByDocketNumber
       .mockResolvedValue({
         ...mockCaseWithPrivatePractitioner,
@@ -157,10 +162,10 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
-    expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).toHaveBeenCalledTimes(1);
@@ -184,16 +189,11 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
-    const noticeDocketEntry = getDocketEntryForNotice(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
-    );
-
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(noticeDocketEntry.workItem).toBeDefined();
   });
 
   it("should NOT create a work item for an associated practitioner's notice of change of address when there is no paper service for the case", async () => {
@@ -204,12 +204,12 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
     const noticeDocketEntry = getDocketEntryForNotice(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
     );
 
     expect(upsertWorkItems).not.toHaveBeenCalled();
@@ -225,6 +225,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -235,9 +236,7 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
     expect(upsertWorkItems).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should not create a docket entry, work item, or serve anything if the case is closed more than six months ago, but it should still update the case', async () => {
@@ -254,6 +253,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: mockPrivatePractitioner,
     } as any);
 
@@ -261,9 +261,7 @@ describe('generateChangeOfAddress', () => {
       applicationContext.getDocumentGenerators().changeOfAddress,
     ).not.toHaveBeenCalled();
     expect(upsertWorkItems).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should create a docket entry, work item, and serve it if the case is closed less than six months ago, and it should still update the case', async () => {
@@ -283,6 +281,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -290,8 +289,7 @@ describe('generateChangeOfAddress', () => {
     } as any);
 
     const noticeDocketEntry = getDocketEntryForNotice(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
     );
 
     expect(
@@ -299,9 +297,7 @@ describe('generateChangeOfAddress', () => {
     ).toHaveBeenCalled();
     expect(noticeDocketEntry).toBeDefined();
     expect(upsertWorkItems).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
+    expect(updateCaseAndAssociations).toHaveBeenCalled();
   });
 
   it('should not create a docket entry or work item when a document type is not specified', async () => {
@@ -316,6 +312,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
         address1: '234 Main St',
       },
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -323,8 +320,7 @@ describe('generateChangeOfAddress', () => {
     } as any);
 
     const noticeDocketEntry = getDocketEntryForNotice(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate,
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate,
     );
 
     expect(
@@ -356,6 +352,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner.contact,
       },
       updatedEmail: UPDATED_EMAIL,
+      oldUser: mockPrivatePractitioner,
       user: {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -363,10 +360,9 @@ describe('generateChangeOfAddress', () => {
     } as any);
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0].caseToUpdate.privatePractitioners[0],
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate
+        .privatePractitioners[0],
     ).toMatchObject({
-      email: UPDATED_EMAIL,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
     expect(

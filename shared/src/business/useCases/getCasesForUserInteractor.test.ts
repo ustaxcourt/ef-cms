@@ -1,19 +1,20 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { AuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { MOCK_CASE } from '@shared/test/mockCase';
-import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 import { mockPetitionerUser } from '@shared/test/mockAuthUsers';
-import { getCasesMetadataByDocketNumbers as getCasesMetadataByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesMetadataByDocketNumbers';
-import { getCasesMetadataWithCounselByLeadDocketNumber as getCasesMetadataWithCounselByLeadDocketNumberMock } from '@web-api/persistence/postgres/cases/getCasesMetadataWithCounselByLeadDocketNumber';
+import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
+import { getConsolidatedCases as getConsolidatedCasesMock } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
+import { getDocketNumbersByUser as getDocketNumbersByUserMock } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+
+const getDocketNumbersByUser = jest.mocked(getDocketNumbersByUserMock);
 
 describe('getCasesForUserInteractor', () => {
-  const getCasesMetadataByDocketNumbers =
-    getCasesMetadataByDocketNumbersMock as jest.Mock;
-  const getCasesMetadataWithCounselByLeadDocketNumber =
-    getCasesMetadataWithCounselByLeadDocketNumberMock as jest.Mock;
+  const getCasesByDocketNumbers = getCasesByDocketNumbersMock as jest.Mock;
+  const getConsolidatedCases = getConsolidatedCasesMock as jest.Mock;
   const mockPetitioner: AuthUser = {
     ...mockPetitionerUser,
     userId: MOCK_CASE.petitioners[0].contactId,
@@ -82,18 +83,18 @@ describe('getCasesForUserInteractor', () => {
       memberCase1.petitioners = [];
       leadCase.petitioners = [];
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([
+      getDocketNumbersByUser.mockResolvedValue(
+        [
           unconsolidatedCase1,
           unconsolidatedCase2,
           unconsolidatedCase3,
           unconsolidatedClosedCase1,
           unconsolidatedClosedCase2,
           memberCase2,
-        ]);
+        ].map(c => c.docketNumber),
+      );
 
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+      getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedCase3,
@@ -102,14 +103,9 @@ describe('getCasesForUserInteractor', () => {
         memberCase2,
       ]);
 
-      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
-        consolidatedGroupLeadCase11119,
-      );
+      getConsolidatedCases.mockResolvedValue(consolidatedGroupLeadCase11119);
 
-      const userCases = await getCasesForUserInteractor(
-        applicationContext,
-        mockPetitioner,
-      );
+      const userCases = await getCasesForUserInteractor(mockPetitioner);
 
       expect(userCases).toMatchObject({
         closedCaseList: [
@@ -160,18 +156,13 @@ describe('getCasesForUserInteractor', () => {
         },
         memberCase1,
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue(consolidatedGroup);
-      getCasesMetadataByDocketNumbers.mockResolvedValue(consolidatedGroup);
-      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
-        consolidatedGroup,
+      getDocketNumbersByUser.mockResolvedValue(
+        consolidatedGroup.map(c => c.docketNumber),
       );
+      getCasesByDocketNumbers.mockResolvedValue(consolidatedGroup);
+      getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
-      const userCases = await getCasesForUserInteractor(
-        applicationContext,
-        mockPetitioner,
-      );
+      const userCases = await getCasesForUserInteractor(mockPetitioner);
 
       const expectedCaseList = [
         expect.objectContaining({
@@ -195,18 +186,13 @@ describe('getCasesForUserInteractor', () => {
         { ...leadCase, petitioners: [], status: CASE_STATUS_TYPES.closed },
         memberCase1,
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([memberCase1]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([memberCase1]);
-      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
-        consolidatedGroup,
+      getDocketNumbersByUser.mockResolvedValue(
+        [memberCase1].map(c => c.docketNumber),
       );
+      getCasesByDocketNumbers.mockResolvedValue([memberCase1]);
+      getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
-      const userCases = await getCasesForUserInteractor(
-        applicationContext,
-        mockPetitioner,
-      );
+      const userCases = await getCasesForUserInteractor(mockPetitioner);
 
       const expectedCaseList = [
         expect.objectContaining({
@@ -230,18 +216,13 @@ describe('getCasesForUserInteractor', () => {
         leadCase,
         { ...memberCase1, petitioners: [], status: CASE_STATUS_TYPES.closed },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([leadCase]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([leadCase]);
-      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
-        consolidatedGroup,
+      getDocketNumbersByUser.mockResolvedValue(
+        [leadCase].map(c => c.docketNumber),
       );
+      getCasesByDocketNumbers.mockResolvedValue([leadCase]);
+      getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
-      const userCases = await getCasesForUserInteractor(
-        applicationContext,
-        mockPetitioner,
-      );
+      const userCases = await getCasesForUserInteractor(mockPetitioner);
 
       const expectedCaseList = [
         expect.objectContaining({
@@ -287,21 +268,16 @@ describe('getCasesForUserInteractor', () => {
           closedDate: '2045-08-16T17:29:10.132Z',
         },
       ];
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([leadCase, ...unconsolidatedCases]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+      getDocketNumbersByUser.mockResolvedValue(
+        [leadCase, ...unconsolidatedCases].map(c => c.docketNumber),
+      );
+      getCasesByDocketNumbers.mockResolvedValue([
         leadCase,
         ...unconsolidatedCases,
       ]);
-      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
-        consolidatedGroup,
-      );
+      getConsolidatedCases.mockResolvedValue(consolidatedGroup);
 
-      const userCases = await getCasesForUserInteractor(
-        applicationContext,
-        mockPetitioner,
-      );
+      const userCases = await getCasesForUserInteractor(mockPetitioner);
 
       const actualOrder = userCases.closedCaseList.map(
         aCase => aCase.docketNumber,
@@ -318,17 +294,17 @@ describe('getCasesForUserInteractor', () => {
       memberCase1.petitioners = [];
       leadCase.petitioners = [];
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([
+      getDocketNumbersByUser.mockResolvedValue(
+        [
           unconsolidatedCase1,
           unconsolidatedCase2,
           unconsolidatedCase3,
           unconsolidatedClosedCase1,
           unconsolidatedClosedCase2,
           memberCase2,
-        ]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+        ].map(c => c.docketNumber),
+      );
+      getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedCase3,
@@ -336,14 +312,9 @@ describe('getCasesForUserInteractor', () => {
         unconsolidatedClosedCase2,
         memberCase2,
       ]);
-      getCasesMetadataWithCounselByLeadDocketNumber.mockResolvedValue(
-        consolidatedGroupLeadCase11119,
-      );
+      getConsolidatedCases.mockResolvedValue(consolidatedGroupLeadCase11119);
 
-      const userCases = await getCasesForUserInteractor(
-        applicationContext,
-        mockPetitioner,
-      );
+      const userCases = await getCasesForUserInteractor(mockPetitioner);
 
       expect(unconsolidatedCase1.docketEntries).toBeDefined();
       expect(unconsolidatedCase2.docketEntries).toBeDefined();
@@ -366,23 +337,20 @@ describe('getCasesForUserInteractor', () => {
 
   describe('Non Consolidated Cases', () => {
     it('should return the expected associated cases with NO consolidated groups or lead cases', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([
+      getDocketNumbersByUser.mockResolvedValue(
+        [
           unconsolidatedCase1,
           unconsolidatedCase2,
           unconsolidatedClosedCase1,
-        ]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+        ].map(c => c.docketNumber),
+      );
+      getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedClosedCase1,
       ]);
 
-      const userCases = await getCasesForUserInteractor(
-        applicationContext,
-        mockPetitioner,
-      );
+      const userCases = await getCasesForUserInteractor(mockPetitioner);
 
       expect(userCases.closedCaseList).toEqual([
         expect.objectContaining({
@@ -409,15 +377,15 @@ describe('getCasesForUserInteractor', () => {
       };
 
       //construct list of cases w/ at least one bogus/corrupted record
-      applicationContext
-        .getPersistenceGateway()
-        .getCasesForUser.mockResolvedValue([
+      getDocketNumbersByUser.mockResolvedValue(
+        [
           unconsolidatedCase1,
           unconsolidatedCase2,
           unconsolidatedClosedCase1,
           corruptedCase,
-        ]);
-      getCasesMetadataByDocketNumbers.mockResolvedValue([
+        ].map(c => c.docketNumber),
+      );
+      getCasesByDocketNumbers.mockResolvedValue([
         unconsolidatedCase1,
         unconsolidatedCase2,
         unconsolidatedClosedCase1,
@@ -427,7 +395,7 @@ describe('getCasesForUserInteractor', () => {
       //call validate to ensure that, yes, the case fails validation (todo)
       //call getCasesForUser and expect that no exceptions were thrown
       await expect(
-        getCasesForUserInteractor(applicationContext, mockPetitioner),
+        getCasesForUserInteractor(mockPetitioner),
       ).resolves.not.toThrow();
     });
   });
