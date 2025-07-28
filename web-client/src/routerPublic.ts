@@ -96,6 +96,11 @@ const router = {
       });
     });
 
+    route('/daw-ui-components', () => {
+      setPageTitle('UI Components');
+      return app.getSequence('goToDawUIComponentSequence')();
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({
