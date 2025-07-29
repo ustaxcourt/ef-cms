@@ -169,8 +169,7 @@ resource "aws_iam_role_policy" "lambda_policy" {
         {
             "Action": [
                 "ses:SendBulkTemplatedEmail",
-                "ses:SendEmail",
-                "ses:GetSuppressedDestination"
+                "ses:SendEmail"
             ],
             "Resource": [
                 "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}",
@@ -180,7 +179,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
         },
         {
             "Action": [
-                "ses:GetSendStatistics"
+                "ses:GetSendStatistics",
+                "ses:GetSuppressedDestination"
             ],
             "Resource": [
                 "*"
