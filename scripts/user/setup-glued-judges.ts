@@ -3,7 +3,6 @@
 import { AwsSigv4Signer } from '@opensearch-project/opensearch/aws-v3';
 import { Client } from '@opensearch-project/opensearch';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
-import { DeleteItemCommand, DynamoDBClient } from '@aws-sdk/client-dynamodb';
 import { MAX_ELASTICSEARCH_PAGINATION } from '@shared/business/entities/EntityConstants';
 import {
   type ScriptConfig,
@@ -14,26 +13,24 @@ import {
   formatResults,
 } from '@web-api/persistence/elasticsearch/searchClient';
 import { defaultProvider } from '@aws-sdk/credential-provider-node';
+import { pgDeleteFrom } from '@web-api/persistence/postgres/utils/operation/pgDeleteFrom';
 
 const scriptConfig: ScriptConfig = {
   description:
     'setup-glued-judges - Creates cognito accounts for Judge users that were copied via a glue job.',
   environment: {
     Password: 'DEFAULT_ACCOUNT_PASS',
-    TableName: 'DESTINATION_TABLE',
     UserPoolId: 'USER_POOL_ID',
     elasticsearchEndpoint: 'ELASTICSEARCH_ENDPOINT',
     env: 'ENV',
   },
   requireActiveAwsSession: true,
 };
-const { elasticsearchEndpoint, Password, TableName, UserPoolId } =
-  parseArgsAndEnvVars(scriptConfig) as { [k: string]: string };
+const { elasticsearchEndpoint, Password, UserPoolId } = parseArgsAndEnvVars(
+  scriptConfig,
+) as { [k: string]: string };
 
 const cognito = new CognitoIdentityProvider({ region: 'us-east-1' });
-const dynamoClient = new DynamoDBClient({
-  region: 'us-east-1',
-});
 const esClient = new Client({
   ...AwsSigv4Signer({
     getCredentials: () => {
@@ -116,39 +113,15 @@ const createOrUpdateCognitoUser = async ({
 const deleteDuplicateImportedJudgeUser = async ({
   bulkImportedUserId,
   name,
-  section,
 }: {
   bulkImportedUserId: string;
   name: string;
-  section: string;
 }): Promise<void> => {
-  const sectionMappingKey = {
-    pk: { S: `section|${section}` },
-    sk: { S: `user|${bulkImportedUserId}` },
-  };
-  const deleteMappingItemCommand = new DeleteItemCommand({
-    Key: sectionMappingKey,
-    TableName,
-  });
   try {
-    await dynamoClient.send(deleteMappingItemCommand);
-  } catch (err) {
-    console.error(
-      `ERROR deleting duplicate chambers section mapping for ${name}:`,
-      err,
-    );
-  }
-
-  const userKey = {
-    pk: { S: `user|${bulkImportedUserId}` },
-    sk: { S: `user|${bulkImportedUserId}` },
-  };
-  const deleteUserItemCommand = new DeleteItemCommand({
-    Key: userKey,
-    TableName,
-  });
-  try {
-    await dynamoClient.send(deleteUserItemCommand);
+    await pgDeleteFrom({
+      table: 'dwUser',
+      where: db => db.where('userId', '=', bulkImportedUserId),
+    });
   } catch (err) {
     console.error(`ERROR deleting duplicate ${name}:`, err);
   }
@@ -248,14 +221,13 @@ const updateCognitoUserId = async ({
       continue;
     }
 
-    const { bulkImportedUserId, email, gluedUserId, name, role, section } =
+    const { bulkImportedUserId, email, gluedUserId, name, role } =
       judgeUsers[judge];
 
     if (bulkImportedUserId) {
       await deleteDuplicateImportedJudgeUser({
         bulkImportedUserId,
         name,
-        section,
       });
     }
 

@@ -9,6 +9,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { formatCase } from '@shared/business/utilities/getFormattedCaseDetail';
 import { partition } from 'lodash';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 
 export const getPractitionerCasesInteractor = async (
@@ -22,12 +23,9 @@ export const getPractitionerCasesInteractor = async (
     throw new UnauthorizedError('Unauthorized to view practitioners cases');
   }
 
-  const docketNumbers = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({
-      applicationContext,
-      userId,
-    });
+  const docketNumbers = await getDocketNumbersByUser({
+    userId,
+  });
 
   const cases = await getCasesByDocketNumbers({
     docketNumbers,

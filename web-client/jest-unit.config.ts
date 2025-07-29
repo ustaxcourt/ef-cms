@@ -49,6 +49,9 @@ const config: Config = {
     '/node_modules/(?!uuid|sinon|aws-sdk-client-mock|export-to-csv)',
   ],
   verbose: false,
+  setupFilesAfterEnv: [
+    '<rootDir>../web-api/src/persistence/postgres/featureFlag/mocks.jest.ts',
+  ],
 };
 
 export default config;

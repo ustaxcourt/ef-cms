@@ -108,17 +108,20 @@ export const OpinionSearchForm = connect(
                       endDateErrorText={validationErrors.endDate}
                       endLabel="End date"
                       endName="endDate"
-                      endPickerCls={'grid-col-6'}
+                      endPickerCls={
+                        'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                      }
                       endValue={advancedSearchForm.opinionSearch.endDate}
                       formGroupCls="margin-bottom-0"
                       maxDate={advancedDocumentSearchHelper.maxDate}
                       rangePickerCls={'grid-row grid-gap'}
-
                       startDateErrorText={validationErrors.startDate}
                       startLabel="Start date"
                       startName="startDate"
                       showDateHint={true}
-                      startPickerCls={'grid-col-6'}
+                      startPickerCls={
+                        'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                      }
                       startValue={advancedSearchForm.opinionSearch.startDate}
                       onChangeEnd={e => {
                         updateAdvancedOpinionSearchFormValueSequence({
@@ -255,7 +258,9 @@ export const OpinionSearchForm = connect(
                             endDateErrorText={validationErrors.endDate}
                             endLabel="End date"
                             endName="endDate"
-                            endPickerCls={'grid-col-6'}
+                            endPickerCls={
+                              'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
+                            }
                             endValue={advancedSearchForm.opinionSearch.endDate}
                             formGroupCls="margin-bottom-0"
                             maxDate={advancedDocumentSearchHelper.maxDate}
@@ -264,7 +269,9 @@ export const OpinionSearchForm = connect(
                             startLabel="Start date"
                             startName="startDate"
                             showDateHint={true}
-                            startPickerCls={'grid-col-6'}
+                            startPickerCls={
+                              'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                            }
                             startValue={
                               advancedSearchForm.opinionSearch.startDate
                             }

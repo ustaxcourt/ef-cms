@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -8,6 +9,9 @@ import {
   mockPetitionerUser,
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
+import { getPractitionerByBarNumber as getPractitionerByBarNumberMock } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
+
+const getPractitionerByBarNumber = jest.mocked(getPractitionerByBarNumberMock);
 
 describe('getPractitionerByBarNumberInteractor', () => {
   describe('Logged in User', () => {
@@ -24,26 +28,24 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('calls the persistence method to get a private practitioner with the given bar number', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockReturnValue({
-          admissionsDate: '2019-03-01',
-          admissionsStatus: 'Active',
-          barNumber: 'PP1234',
-          birthYear: '1983',
-          firmName: 'GW Law Offices',
-          firstName: 'Private',
-          lastName: 'Practitioner',
+      getPractitionerByBarNumber.mockResolvedValue({
+        admissionsDate: '2019-03-01',
+        admissionsStatus: 'Active',
+        barNumber: 'PP1234',
+        birthYear: 1983,
+        firmName: 'GW Law Offices',
+        firstName: 'Private',
+        lastName: 'Practitioner',
 
-          name: 'Private Practitioner',
-          originalBarState: 'IL',
-          practiceType: 'Private',
-          practitionerType: 'Attorney',
-          role: ROLES.privatePractitioner,
-          section: ROLES.privatePractitioner,
+        name: 'Private Practitioner',
+        originalBarState: 'IL',
+        practiceType: 'Private',
+        practitionerType: 'Attorney',
+        role: ROLES.privatePractitioner,
+        section: ROLES.privatePractitioner,
 
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      });
 
       const practitioner = await getPractitionerByBarNumberInteractor(
         applicationContext,
@@ -58,7 +60,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PP1234',
-        birthYear: '1983',
+        birthYear: 1983,
         email: undefined,
         entityName: 'Practitioner',
         // we return all practitioner search results as a Practitioner user.
@@ -82,24 +84,22 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('calls the persistence method to get an IRS practitioner with the given bar number', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockReturnValue({
-          admissionsDate: '2019-03-01',
-          admissionsStatus: 'Active',
-          barNumber: 'PI5678',
-          birthYear: '1983',
-          firmName: 'GW Law Offices',
-          firstName: 'IRS',
-          lastName: 'Practitioner',
-          name: 'IRS Practitioner',
-          originalBarState: 'IL',
-          practiceType: 'Private',
-          practitionerType: 'Attorney',
-          role: ROLES.irsPractitioner,
-          section: ROLES.privatePractitioner,
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
+      getPractitionerByBarNumber.mockResolvedValue({
+        admissionsDate: '2019-03-01',
+        admissionsStatus: 'Active',
+        barNumber: 'PI5678',
+        birthYear: 1983,
+        firmName: 'GW Law Offices',
+        firstName: 'IRS',
+        lastName: 'Practitioner',
+        name: 'IRS Practitioner',
+        originalBarState: 'IL',
+        practiceType: 'Private',
+        practitionerType: 'Attorney',
+        role: ROLES.irsPractitioner,
+        section: ROLES.privatePractitioner,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      });
 
       const practitioner = await getPractitionerByBarNumberInteractor(
         applicationContext,
@@ -114,7 +114,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
         barNumber: 'PI5678',
-        birthYear: '1983',
+        birthYear: 1983,
         email: undefined,
         entityName: 'Practitioner',
         firmName: 'GW Law Offices',
@@ -136,9 +136,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
     });
 
     it('throws a not found error if no practitioner is found with the given bar number', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockReturnValue(undefined);
+      getPractitionerByBarNumber.mockResolvedValue(undefined);
 
       const practitioner = await getPractitionerByBarNumberInteractor(
         applicationContext,
@@ -154,25 +152,23 @@ describe('getPractitionerByBarNumberInteractor', () => {
 
   describe('Public User', () => {
     beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockReturnValue({
-          admissionsDate: '2019-03-01',
-          admissionsStatus: 'Active',
-          barNumber: 'PP1234',
-          birthYear: '1983',
-          firmName: 'GW Law Offices',
-          firstName: 'Private',
-          lastName: 'Practitioner',
-          name: 'Private Practitioner',
-          originalBarState: 'IL',
-          practiceType: 'Private',
-          practitionerType: 'Attorney',
-          role: ROLES.privatePractitioner,
-          section: ROLES.privatePractitioner,
+      getPractitionerByBarNumber.mockResolvedValue({
+        admissionsDate: '2019-03-01',
+        admissionsStatus: 'Active',
+        barNumber: 'PP1234',
+        birthYear: 1983,
+        firmName: 'GW Law Offices',
+        firstName: 'Private',
+        lastName: 'Practitioner',
+        name: 'Private Practitioner',
+        originalBarState: 'IL',
+        practiceType: 'Private',
+        practitionerType: 'Attorney',
+        role: ROLES.privatePractitioner,
+        section: ROLES.privatePractitioner,
 
-          userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        });
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      });
     });
 
     it('should not throw an error when a public user access interactor', async () => {

@@ -1,15 +1,26 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { CaseDeadline } from '@shared/business/entities/CaseDeadline';
-import { Correspondence } from '@shared/business/entities/Correspondence';
+import {
+  CaseDeadline,
+  RawCaseDeadline,
+} from '@shared/business/entities/CaseDeadline';
+import {
+  Correspondence,
+  RawCorrespondence,
+} from '@shared/business/entities/Correspondence';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
-import { IrsPractitioner } from '@shared/business/entities/IrsPractitioner';
-import { Message } from '@shared/business/entities/Message';
-import { PrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
+import {
+  IrsPractitioner,
+  RawIrsPractitioner,
+} from '@shared/business/entities/IrsPractitioner';
+import { Message, RawMessage } from '@shared/business/entities/Message';
+import {
+  PrivatePractitioner,
+  RawPrivatePractitioner,
+} from '@shared/business/entities/PrivatePractitioner';
 import { applicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getMessagesByDocketNumber } from '@web-api/persistence/postgres/messages/getMessagesByDocketNumber';
-import { updateMessage } from '@web-api/persistence/postgres/messages/updateMessage';
 import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { isEmpty, omit } from 'lodash';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
@@ -19,14 +30,10 @@ import { upsertDocketEntries } from '@web-api/persistence/postgres/docketEntries
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
 import { removeCaseFromHearing } from '@web-api/persistence/dynamo/trialSessions/removeCaseFromHearing';
-import {
-  removeIrsPractitionerOnCase,
-  removePrivatePractitionerOnCase,
-} from '@web-api/persistence/dynamo/cases/removePractitionerOnCase';
-import {
-  updateIrsPractitionerOnCase,
-  updatePrivatePractitionerOnCase,
-} from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
+import { upsertMessages } from '@web-api/persistence/postgres/messages/upsertMessages';
+import { associateUsersWithCases } from '@web-api/persistence/postgres/cases/userOnCase/associateUsersWithCases';
+import { disassociateUsersFromCases } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
+import { Role, ROLES } from '@shared/business/entities/EntityConstants';
 
 // Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
 // In the future, it would be good to avoid doing so by leveraging SQL more effectively.
@@ -48,6 +55,7 @@ export const updateCaseAndAssociations = async ({
 
   const oldCaseEntity = await getCaseByDocketNumber({
     docketNumber: caseToUpdate.docketNumber,
+    includeConsolidatedCases: false,
   });
 
   const validNewRawCaseEntity = newCaseEntity.validate().toRawObject();
@@ -66,6 +74,7 @@ export const updateCaseAndAssociations = async ({
     deletedHearings,
     { irsPractitionersToDelete, irsPractitionersToUpdate },
     { privatePractitionersToDelete, privatePractitionersToUpdate },
+    { petitionersToDelete, petitionersToUpdate },
     correspondences,
   ] = await Promise.all([
     getCaseDeadlinesToUpdate({
@@ -93,6 +102,10 @@ export const updateCaseAndAssociations = async ({
       caseToUpdate: validNewRawCaseEntity,
       oldCase: validRawOldCaseEntity,
     }),
+    getPetitionersToDeleteAndUpdate({
+      caseToUpdate: validNewRawCaseEntity,
+      oldCase: validRawOldCaseEntity,
+    }),
     includeCorrespondence
       ? getCorrespondencesToUpdate({
           caseToUpdate: validNewRawCaseEntity,
@@ -107,7 +120,7 @@ export const updateCaseAndAssociations = async ({
   // Then persist all related case data
   await settlePromises([
     upsertDocketEntries(docketEntries),
-    ...messages.map(message => updateMessage(message)),
+    upsertMessages(messages),
     upsertCaseCorrespondences(correspondences),
     ...deletedHearings.map(({ trialSessionId }) =>
       removeCaseFromHearing({
@@ -116,39 +129,16 @@ export const updateCaseAndAssociations = async ({
         trialSessionId,
       }),
     ),
-    ...irsPractitionersToDelete.map(practitioner =>
-      removeIrsPractitionerOnCase({
-        applicationContext,
-        docketNumber: caseToUpdate.docketNumber,
-        userId: practitioner.userId,
-      }),
-    ),
-    ...irsPractitionersToUpdate.map(practitioner =>
-      updateIrsPractitionerOnCase({
-        applicationContext,
-        docketNumber: caseToUpdate.docketNumber,
-        leadDocketNumber: caseToUpdate.leadDocketNumber,
-        practitioner,
-        userId: practitioner.userId,
-      }),
-    ),
-    ...privatePractitionersToDelete.map(practitioner =>
-      removePrivatePractitionerOnCase({
-        applicationContext,
-        docketNumber: caseToUpdate.docketNumber,
-        userId: practitioner.userId,
-      }),
-    ),
-    ...privatePractitionersToUpdate.map(practitioner =>
-      updatePrivatePractitionerOnCase({
-        applicationContext,
-        docketNumber: caseToUpdate.docketNumber,
-        leadDocketNumber: caseToUpdate.leadDocketNumber,
-        // @ts-ignore
-        practitioner,
-        userId: practitioner.userId,
-      }),
-    ),
+    associateUsersWithCases([
+      ...irsPractitionersToUpdate,
+      ...privatePractitionersToUpdate,
+      ...petitionersToUpdate,
+    ]),
+    disassociateUsersFromCases([
+      ...irsPractitionersToDelete,
+      ...privatePractitionersToDelete,
+      ...petitionersToDelete,
+    ]),
     upsertCaseDeadlines(deadlines),
   ]);
 
@@ -163,8 +153,9 @@ const getDocketEntriesToUpdate = ({
   authorizedUser: UnknownAuthUser;
   caseToUpdate: RawCase;
   oldCase: RawCase;
-}) => {
+}): RawDocketEntry[] => {
   const fieldsToIgnore = ['workItemId', 'qcViewed', 'qcComplete']; // These are bits of work-item data irrelevant to docket entry persistence
+  // We are not comparing work item changes as we do not save the work item on the docket entry in persistence
   const { added: addedDocketEntries, updated: updatedDocketEntries } = diff(
     oldCase.docketEntries.map(d => omit(d, fieldsToIgnore)),
     caseToUpdate.docketEntries.map(d => omit(d, fieldsToIgnore)),
@@ -199,7 +190,7 @@ const getMessagesToUpdate = async ({
 }: {
   caseToUpdate: RawCase;
   oldCase: RawCase;
-}) => {
+}): Promise<RawMessage[]> => {
   const messageUpdatesNecessary =
     oldCase.docketNumberSuffix !== caseToUpdate.docketNumberSuffix;
 
@@ -230,7 +221,7 @@ const getCorrespondencesToUpdate = ({
 }: {
   caseToUpdate: RawCase;
   oldCase: RawCase;
-}) => {
+}): RawCorrespondence[] => {
   const {
     added: addedArchivedCorrespondences,
     updated: updatedArchivedCorrespondences,
@@ -266,7 +257,7 @@ const getHearingsToDelete = ({
 }: {
   caseToUpdate: RawCase;
   oldCase: RawCase;
-}) => {
+}): any[] => {
   const { removed: deletedHearings } = diff(
     oldCase.hearings,
     caseToUpdate.hearings,
@@ -282,11 +273,19 @@ const getIrsPractitionersToDeleteAndUpdate = ({
 }: {
   caseToUpdate: RawCase;
   oldCase: RawCase;
-}) => {
+}): {
+  irsPractitionersToDelete: (RawIrsPractitioner & {
+    docketNumber: string;
+    actingAsRole: Role;
+  })[];
+  irsPractitionersToUpdate: (RawIrsPractitioner & {
+    docketNumber: string;
+    actingAsRole: Role;
+  })[];
+} => {
   const {
     added: addedIrsPractitioners,
     removed: deletedIrsPractitioners,
-    same: unchangedIrsPractitioners,
     updated: updatedIrsPractitioners,
   } = diff(oldCase.irsPractitioners, caseToUpdate.irsPractitioners, 'userId');
 
@@ -295,17 +294,21 @@ const getIrsPractitionersToDeleteAndUpdate = ({
     ...updatedIrsPractitioners,
   ];
 
-  if (caseToUpdate.leadDocketNumber && unchangedIrsPractitioners.length) {
-    currentIrsPractitioners.push(...unchangedIrsPractitioners);
-  }
-
   const validIrsPractitioners = IrsPractitioner.validateRawCollection(
     currentIrsPractitioners,
   );
 
   return {
-    irsPractitionersToDelete: deletedIrsPractitioners,
-    irsPractitionersToUpdate: validIrsPractitioners,
+    irsPractitionersToDelete: deletedIrsPractitioners.map(irs => ({
+      ...irs,
+      docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.irsPractitioner,
+    })),
+    irsPractitionersToUpdate: validIrsPractitioners.map(irs => ({
+      ...irs,
+      docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.irsPractitioner,
+    })),
   };
 };
 
@@ -315,11 +318,19 @@ const getPrivatePractitionersToDeleteAndUpdate = ({
 }: {
   caseToUpdate: RawCase;
   oldCase: RawCase;
-}) => {
+}): {
+  privatePractitionersToDelete: (RawPrivatePractitioner & {
+    docketNumber: string;
+    actingAsRole: Role;
+  })[];
+  privatePractitionersToUpdate: (RawPrivatePractitioner & {
+    docketNumber: string;
+    actingAsRole: Role;
+  })[];
+} => {
   const {
     added: addedPrivatePractitioners,
     removed: deletedPrivatePractitioners,
-    same: unchangedPrivatePractitioners,
     updated: updatedPrivatePractitioners,
   } = diff(
     oldCase.privatePractitioners,
@@ -332,17 +343,63 @@ const getPrivatePractitionersToDeleteAndUpdate = ({
     ...updatedPrivatePractitioners,
   ];
 
-  if (caseToUpdate.leadDocketNumber && unchangedPrivatePractitioners.length) {
-    currentPrivatePractitioners.push(...unchangedPrivatePractitioners);
-  }
-
   const validPrivatePractitioners = PrivatePractitioner.validateRawCollection(
     currentPrivatePractitioners,
   );
 
   return {
-    privatePractitionersToDelete: deletedPrivatePractitioners,
-    privatePractitionersToUpdate: validPrivatePractitioners,
+    privatePractitionersToDelete: deletedPrivatePractitioners.map(pp => ({
+      ...pp,
+      docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.privatePractitioner,
+    })),
+    privatePractitionersToUpdate: validPrivatePractitioners.map(pp => ({
+      ...pp,
+      docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.privatePractitioner,
+    })),
+  };
+};
+
+const getPetitionersToDeleteAndUpdate = ({
+  caseToUpdate,
+  oldCase,
+}: {
+  caseToUpdate: RawCase;
+  oldCase: RawCase;
+}): {
+  petitionersToDelete: (TPetitioner & {
+    docketNumber: string;
+    userId: string;
+    actingAsRole: Role;
+  })[];
+  petitionersToUpdate: (TPetitioner & {
+    docketNumber: string;
+    userId: string;
+    actingAsRole: Role;
+  })[];
+} => {
+  const {
+    added: addedPetitioners,
+    removed: deletedPetitioners,
+    updated: updatedPetitioners,
+  } = diff(oldCase.petitioners, caseToUpdate.petitioners, 'contactId');
+
+  const currentPetitioners = [...addedPetitioners, ...updatedPetitioners];
+
+  return {
+    petitionersToDelete: deletedPetitioners.map(petitioner => ({
+      ...petitioner,
+      userId: petitioner.contactId,
+      docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.petitioner,
+    })),
+    petitionersToUpdate: currentPetitioners.map(petitioner => ({
+      ...petitioner,
+      userId: petitioner.contactId,
+      docketNumber: caseToUpdate.docketNumber,
+      actingAsRole: ROLES.petitioner,
+    })),
   };
 };
 
@@ -352,7 +409,7 @@ const getCaseDeadlinesToUpdate = async ({
 }: {
   caseToUpdate: RawCase;
   oldCase: RawCase;
-}) => {
+}): Promise<RawCaseDeadline[]> => {
   if (oldCase.associatedJudge === caseToUpdate.associatedJudge) {
     return [];
   }
