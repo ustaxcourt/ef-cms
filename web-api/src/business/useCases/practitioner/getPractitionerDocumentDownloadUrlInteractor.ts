@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getPractitionerDocumentByFileId } from '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocumentByFileId';
 
 /**
  *
@@ -30,12 +31,10 @@ export const getPractitionerDocumentDownloadUrlInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const practitionerDocument = await applicationContext
-    .getPersistenceGateway()
-    .getPractitionerDocumentByFileId({
-      barNumber,
-      fileId: practitionerDocumentFileId,
-    });
+  const practitionerDocument = await getPractitionerDocumentByFileId({
+    barNumber,
+    fileId: practitionerDocumentFileId,
+  });
 
   const policyUrl = await applicationContext
     .getPersistenceGateway()
