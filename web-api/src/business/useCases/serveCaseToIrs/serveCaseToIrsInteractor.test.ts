@@ -39,6 +39,7 @@ import {
   mockPetitionsClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
@@ -47,6 +48,7 @@ import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web
 import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 
 describe('serveCaseToIrsInteractor', () => {
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
     getWorkItemByDocketNumberAndDocketEntryIdMock,
@@ -115,6 +117,18 @@ describe('serveCaseToIrsInteractor', () => {
     getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
       new WorkItem(MOCK_WORK_ITEM),
     );
+
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: {
+            name: 'James Bond',
+            title: 'Clerk of the Court (Interim)',
+          },
+        },
+      },
+    ]);
 
     applicationContext
       .getUseCases()
@@ -1529,6 +1543,15 @@ describe('serveCaseToIrsInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: true,
+        },
+      },
+    ]);
+
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
     ]);

@@ -1,27 +1,8 @@
-import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
-import { DynamoDBDocumentClient, GetCommand } from '@aws-sdk/lib-dynamodb';
-const ddbClient = new DynamoDBClient({ region: 'us-east-1' });
-
-const docClient = DynamoDBDocumentClient.from(ddbClient, {
-  marshallOptions: {
-    removeUndefinedValues: true,
-  },
-  unmarshallOptions: {
-    wrapNumbers: false,
-  },
-});
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 const getWhiteListIps = async () => {
-  const { Item: whiteListIps } = await docClient.send(
-    new GetCommand({
-      Key: {
-        pk: 'allowed-terminal-ips',
-        sk: 'allowed-terminal-ips',
-      },
-      TableName: `efcms-deploy-${process.env.STAGE}`,
-    }),
-  );
-  return whiteListIps?.ips ?? [];
+  const [IPS_RECORD] = await getFeatureFlagValues(['allowed-terminal-ips']);
+  return IPS_RECORD ? (IPS_RECORD.value.current as string[]) : [];
 };
 
 export const createAuthorizer = ({ getWhiteListIpsFunction }) => {

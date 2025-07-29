@@ -118,14 +118,10 @@ When our CI/CD process runs the migration process, it keeps track of which migra
 }
 ```
 
-If this record exists, we know the migration script ran successfully in the past.  When a deployment is running on Circle, one of the tasks we run is called `Setup Blue Green Migration If Needed`, which will set a `migrate` flag in the deploy table.  This flag is set to `true` when a migration is pending.  This flag is also used in other parts of the deployment process.
+If this record exists, we know the migration script ran successfully in the past.  When a deployment is running on Circle, one of the tasks we run is called `Setup Blue Green Migration If Needed`, which will set a `migrate` flag in the SSM Paramter store.  This flag is set to `true` when a migration is pending.  This flag is also used in other parts of the deployment process.
 
 ```javascript
-{
-  "current": false,
-  "pk": "migrate",
-  "sk": "migrate"
-}
+const SSM_Parameter = "/DAWSON/${ENV}/migrate"
 ```
 
 Additionally, during our deployment process, there are a couple of other records we use to keep track of the current state of the environment.  Understanding these will help the next section of this documentation.  
@@ -134,22 +130,13 @@ Additionally, during our deployment process, there are a couple of other records
 We use this to keep track of which color the environment is currently on:
 
 ```javascript
-{
-  "current": "blue",
-  "pk": "current-color",
-  "sk": "current-color"
-}
+const SSM_Parameter = "/DAWSON/${ENV}/current-color"
 ```
 
 #### source-table-version
 we use this to keep track of which table is the migration going to read records from:
-
 ```javascript
-{
-  "current": "alpha",
-  "pk": "source-table-version",
-  "sk": "source-table-version"
-}
+const SSM_Parameter = "source-table-version"
 ```
 
 #### destination-table-version

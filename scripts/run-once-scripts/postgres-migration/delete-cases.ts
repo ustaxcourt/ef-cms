@@ -27,9 +27,6 @@ const casePageSize = 10000;
 const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
-// We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
-environment.nodeEnv = 'production';
-
 const getCasesToDelete = async (offset: number) => {
   return await getDbReader(reader =>
     reader
