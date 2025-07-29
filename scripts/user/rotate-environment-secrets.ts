@@ -35,7 +35,7 @@ const cognitoClient = new CognitoIdentityProvider({
 
 const isDevelopmentEnvironment = !['prod', 'test'].includes(env);
 
-export const loadSecrets = async (environmentName: string): Promise<any> => {
+const loadSecrets = async (environmentName: string): Promise<any> => {
   const getSecretValueCommand = new GetSecretValueCommand({
     SecretId: `${environmentName}_deploy`,
   });

@@ -4,10 +4,10 @@ import {
   type ScriptConfig,
   parseArgsAndEnvVars,
 } from '../helpers/parseArgsAndEnvVars';
-import { loadSecrets } from 'scripts/user/rotate-environment-secrets';
 import { CognitoIdentityProvider } from '@aws-sdk/client-cognito-identity-provider';
 import { makeNewPassword } from 'scripts/user/make-new-password';
 import {
+  GetSecretValueCommand,
   PutSecretValueCommand,
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
@@ -29,12 +29,25 @@ const cognitoClient = new CognitoIdentityProvider({
 });
 const secretsClient = new SecretsManagerClient({ region: 'us-east-1' });
 
+const loadSecrets = async (environmentName: string): Promise<any> => {
+  const getSecretValueCommand = new GetSecretValueCommand({
+    SecretId: `${environmentName}_deploy`,
+  });
+  const { SecretString } = await secretsClient.send(getSecretValueCommand);
+  if (!SecretString) {
+    throw new Error(`could not load secrets for ${environmentName}_deploy`);
+  }
+  const secrets = JSON.parse(SecretString);
+  console.log('✅ Retrieved secrets');
+  return secrets;
+};
+
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
   const secrets = await loadSecrets(env);
 
   const USTC_ZENDESK_USER = 'ustczendesk@dawson.ustaxcourt.gov';
-
+  // NEED USER ID?????
   await cognitoClient.adminCreateUser({
     UserAttributes: [
       {

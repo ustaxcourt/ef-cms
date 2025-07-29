@@ -4,10 +4,11 @@ import { getRegStatusInteractor } from '@shared/business/useCases/automations/ge
 
 export const regStatusLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(event, async ({ applicationContext }) => {
+    const { userEmail } = event.queryStringParameters;
     return await getRegStatusInteractor(
       applicationContext,
       {
-        userEmail: event.pathParameters.userEmail,
+        userEmail,
       },
       authorizedUser,
     );
