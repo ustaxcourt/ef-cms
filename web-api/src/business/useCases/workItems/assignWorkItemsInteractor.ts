@@ -9,8 +9,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
 import { getWorkItemById } from '@web-api/persistence/postgres/workitems/getWorkItemById';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 /**
  * getWorkItem
@@ -83,7 +83,7 @@ export const assignWorkItemsInteractor = async (
 
   if (!docketEntry) {
     throw new NotFoundError(
-      `Docket entry associated with work item ${workItemId} was not found.`,
+      `Docket entry associated with work ${workItemId} was not found.`,
     );
   }
 
@@ -104,12 +104,12 @@ export const assignWorkItemsInteractor = async (
   workItemEntity.assignToUser({
     assigneeId,
     assigneeName,
-    section: sectionToAssignTo,
-    sentBy: user.name,
-    sentBySection: WorkItem.getWorkItemSectionFromUserSection({
-      section: user.section,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: sectionToAssignTo,
       documentTitle: docketEntry.documentTitle,
     }),
+    sentBy: user.name,
+    sentBySection: user.section,
     sentByUserId: user.userId,
   });
 
