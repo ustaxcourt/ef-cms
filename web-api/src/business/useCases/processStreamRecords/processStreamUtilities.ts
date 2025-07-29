@@ -48,8 +48,16 @@ export const partitionRecords = (
       record.dynamodb.NewImage.entityName.S === 'Message',
   );
 
+  const [practitionerDocumentRecords, nonPractitionerDocumentRecords] =
+    partition(
+      nonMessageRecords,
+      record =>
+        record.dynamodb?.NewImage?.entityName &&
+        record.dynamodb.NewImage.entityName.S === 'Document',
+    );
+
   const [userCaseNoteRecords, nonUserCaseNoteRecords] = partition(
-    nonMessageRecords,
+    nonPractitionerDocumentRecords,
     record =>
       record.dynamodb?.NewImage?.entityName &&
       record.dynamodb.NewImage.entityName.S === 'UserCaseNote',
@@ -93,6 +101,7 @@ export const partitionRecords = (
     messageRecords,
     otherRecords,
     practitionerMappingRecords,
+    practitionerDocumentRecords,
     removeRecords,
     userCaseNoteRecords,
     workItemRecords,

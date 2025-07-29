@@ -5,6 +5,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { deletePractitionerDocument } from '@web-api/persistence/postgres/practitionerDocuments/deletePractitionerDocument';
 
 /**
  * deletePractitionerDocumentInteractor
@@ -38,10 +39,8 @@ export const deletePractitionerDocumentInteractor = async (
     key: practitionerDocumentFileId,
   });
 
-  return await applicationContext
-    .getPersistenceGateway()
-    .deletePractitionerDocument({
-      barNumber,
-      practitionerDocumentFileId,
-    });
+  return await deletePractitionerDocument({
+    barNumber,
+    practitionerDocumentFileId,
+  });
 };
