@@ -2,6 +2,8 @@ import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
+  INITIAL_DOCUMENT_TYPES,
+  PETITIONS_SECTION,
 } from './EntityConstants';
 import { WorkItem } from './WorkItem';
 
@@ -138,6 +140,37 @@ describe('WorkItem', () => {
       expect(
         WorkItem.isHighPriority({ status: CASE_STATUS_TYPES.assignedCase }),
       ).toEqual(false);
+    });
+  });
+
+  describe('getWorkItemSectionFromUserSection', () => {
+    it('should return docket section when section is docket', () => {
+      const result = WorkItem.getWorkItemSectionFromUserSection({
+        section: DOCKET_SECTION,
+        documentTitle: 'N/A',
+      });
+      expect(result).toEqual(DOCKET_SECTION);
+    });
+    it('should return petitions section when section is petitions', () => {
+      const result = WorkItem.getWorkItemSectionFromUserSection({
+        section: PETITIONS_SECTION,
+        documentTitle: 'N/A',
+      });
+      expect(result).toEqual(PETITIONS_SECTION);
+    });
+    it('should return petitions section when section is not petitions or docket and document is a petition', () => {
+      const result = WorkItem.getWorkItemSectionFromUserSection({
+        section: 'some other user section',
+        documentTitle: INITIAL_DOCUMENT_TYPES.petition.documentTitle,
+      });
+      expect(result).toEqual(PETITIONS_SECTION);
+    });
+    it('should return docket section when section is not petitions or docket and document is not a petition', () => {
+      const result = WorkItem.getWorkItemSectionFromUserSection({
+        section: 'some other user section',
+        documentTitle: 'This is a good document',
+      });
+      expect(result).toEqual(DOCKET_SECTION);
     });
   });
 });

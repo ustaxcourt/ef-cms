@@ -2,7 +2,12 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { createISODateString } from '../utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  DOCKET_SECTION,
+  INITIAL_DOCUMENT_TYPES,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import joi from 'joi';
 
 export class WorkItem extends JoiValidationEntity {
@@ -139,20 +144,23 @@ export class WorkItem extends JoiValidationEntity {
   }: {
     section?: string;
     documentTitle: string;
-  }) {
+  }): typeof PETITIONS_SECTION | typeof DOCKET_SECTION | undefined {
     if (!section) {
       return undefined;
     }
-    // We have sections for caseServicesSupervisor and clerkofcourt, but as far as we can tell, they aren't used.
-    // Instead, we need to translate these into either the petitions section or the docket section depending
-    // on the document type.
-    if (!['caseServicesSupervisor', 'clerkofcourt'].includes(section)) {
-      return section;
+    // A work item is assigned to either the petitions section or the docket section.
+    // If the section we are passing in is either of those, just return it.
+    if ([DOCKET_SECTION, PETITIONS_SECTION].includes(section)) {
+      return section as typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
     }
-    if (documentTitle?.toLocaleLowerCase() == 'petition') {
-      return 'petitions';
+    // Otherwise, we will assign a petition to the petitions section and anything else to the docket section.
+    if (
+      documentTitle?.toLocaleLowerCase() ==
+      INITIAL_DOCUMENT_TYPES.petition.documentTitle.toLocaleLowerCase()
+    ) {
+      return PETITIONS_SECTION;
     }
-    return 'docket';
+    return DOCKET_SECTION;
   }
 }
 
