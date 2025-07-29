@@ -62,7 +62,7 @@ export const updateCasesAndSetNoticeOfChange = async ({
   shouldSetNoticeOfTrialSessionLocationChange,
   updatedTrialSessionEntity,
 }: UpdateCasesAndSetNoticeOfChangeParams): Promise<PDFDocumentType> => {
-  const { calendaredCaseEntities, casesThatShouldReceiveNotices } =
+  const { casesThatShouldReceiveNotices } =
     await getCasesInTrialSession({
       trialSession: currentTrialSession,
       authorizedUser,
@@ -145,22 +145,6 @@ export const updateCasesAndSetNoticeOfChange = async ({
     .getUtilities()
     .combineAllPdfDocuments(applicationContext, casePdfDocuments);
 
-  const updatedHearingPromises = calendaredCaseEntities.map(async aCase => {
-    const matchingHearing = aCase.hearings.find(
-      hearing =>
-        hearing.trialSessionId == updatedTrialSessionEntity.trialSessionId,
-    );
-
-    if (matchingHearing) {
-      await applicationContext.getPersistenceGateway().updateCaseHearing({
-        applicationContext,
-        docketNumber: aCase.docketNumber,
-        hearingToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
-      });
-    }
-  });
-
-  await settlePromises(updatedHearingPromises);
   return paperServicePdfsCombined;
 };
 

@@ -14,6 +14,7 @@ import { CaseKysely } from '@web-api/persistence/postgres/cases/schema';
 import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntries/mapper';
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
+import { TrialSessionKysely } from '../trialSessions/schema';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
@@ -312,24 +313,30 @@ async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
 
 async function getHearings(
   docketNumbers: string[],
-): Promise<{ docketNumber: string; hearings: any[] }[]> {
-  const hearingsInfo = await Promise.all(
-    docketNumbers.map(async docketNumber => {
-      const hearings = await queryFull({
-        ExpressionAttributeNames: {
-          '#pk': 'pk',
-          '#sk': 'sk',
-        },
-        ExpressionAttributeValues: {
-          ':pk': `case|${docketNumber}`,
-          ':prefix': 'hearing|',
-        },
-        KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
-        applicationContext,
-      });
-      return { docketNumber, hearings };
-    }),
+): Promise<{ docketNumber: string; hearings: TrialSessionKysely[] }[]> {
+  const hearingsInfo = await getDbReader(reader => 
+    reader
+    .selectFrom('dwCaseHearing as ch')
+    .fullJoin('dwTrialSession as ts', 'ch.trialSessionId', 'ts.trialSessionId')
+    .selectAll('ts')
+    .select('ch.docketNumber')
+    .where('ch.docketNumber', 'in', docketNumbers)
+    .execute()
   );
+
+  if(isEmpty(hearingsInfo)) return [];
+
+  _.reduce(hearingsInfo, (acc, hearing) => {
+    const { docketNumber } = hearing;
+    if (!acc[docketNumber]) {
+      acc[docketNumber] = [];
+    }
+    acc[docketNumber].push(hearing);
+    return acc;
+  
+  }, 
+  {}
+);
 
   return hearingsInfo;
 }

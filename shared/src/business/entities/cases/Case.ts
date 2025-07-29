@@ -66,6 +66,7 @@ import { Petitioner } from '../contacts/Petitioner';
 import { PrivatePractitioner } from '../PrivatePractitioner';
 import { PublicCase } from '@shared/business/entities/cases/PublicCase';
 import { RawStatistic, Statistic } from '../Statistic';
+import { TrialSession } from '../trialSessions/TrialSession';
 import { UnprocessableEntityError } from '../../../../../web-api/src/errors/errors';
 import { User } from '../User';
 import { clone, compact, includes, startCase } from 'lodash';
@@ -137,7 +138,7 @@ export class Case extends JoiValidationEntity {
   public archivedDocketEntries?: RawDocketEntry[];
   public docketEntries: any[];
   public isSealed?: boolean;
-  public hearingIds: string[];
+  public hearings: any[];
   public privatePractitioners?: any[];
   public initialCaption?: string;
   public irsPractitioners?: any[];
@@ -181,7 +182,7 @@ export class Case extends JoiValidationEntity {
       filtered,
       rawCase,
     });
-    this.assignHearingIds({
+    this.assignHearings({
       rawCase,
     });
     this.assignPractitioners({
@@ -858,13 +859,13 @@ export class Case extends JoiValidationEntity {
     }
   }
 
-  private assignHearingIds({ rawCase }) {
-    if (Array.isArray(rawCase.hearingIds)) {
-      this.hearingIds = rawCase.hearingIds
-        // .map(hearing => new TrialSession(hearing))
-        // .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
+  private assignHearings({ rawCase }) {
+    if (Array.isArray(rawCase.hearings)) {
+      this.hearings = rawCase.hearings
+        .map(hearing => new TrialSession(hearing))
+        .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
     } else {
-      this.hearingIds = [];
+      this.hearings = [];
     }
   }
 
@@ -1487,18 +1488,22 @@ export class Case extends JoiValidationEntity {
    * @param {string} trialSessionId trial session id to check
    * @returns {boolean} whether or not the trial session id associated is a hearing or not
    */
-  isHearing(trialSessionId:string) {
-    return this.hearingIds.some(
-      hearingId => hearingId === trialSessionId,
+  isHearing(trialSessionId) {
+    return this.hearings.some(
+      trialSession => trialSession.trialSessionId === trialSessionId,
     );
   }
 
- 
-  removeFromHearing(trialSessionId:string) {
-    const removeIndex = this.hearingIds
+  /**
+   * removes a hearing from the case.hearings array
+   * @param {string} trialSessionId trial session id associated with hearing to remove
+   */
+  removeFromHearing(trialSessionId) {
+    const removeIndex = this.hearings
+      .map(trialSession => trialSession.trialSessionId)
       .indexOf(trialSessionId);
 
-    this.hearingIds.splice(removeIndex, 1);
+    this.hearings.splice(removeIndex, 1);
   }
 
   removeFromTrialWithAssociatedJudge(judgeData?: {

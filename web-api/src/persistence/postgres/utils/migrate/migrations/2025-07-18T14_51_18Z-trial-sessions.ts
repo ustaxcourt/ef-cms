@@ -76,6 +76,16 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('status', 'varchar')
     .addColumn('unfinishedCases', 'integer')
     .execute();
+
+  await db.schema
+    .createTable('dwCaseHearing')
+    .addColumn('docketNumber', 'varchar', col => col.notNull())
+    .addColumn('trialSessionId', 'uuid', col => col.notNull())
+        .addPrimaryKeyConstraint('dwCaseHearingPk', [
+      'docketNumber',
+      'trialSessionId',
+    ])
+    .execute();
 }
 
 export async function down(db: Kysely<any>): Promise<void> {
@@ -86,4 +96,6 @@ export async function down(db: Kysely<any>): Promise<void> {
   await db.schema.dropTable('dwTrialSessionPaperPdf').execute();
 
   await db.schema.dropTable('dwTrialSessionNoticeProcessing').execute();
+
+  await db.schema.dropTable('dwCaseHearing').execute();
 }

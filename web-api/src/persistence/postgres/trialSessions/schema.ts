@@ -124,3 +124,19 @@ export type TrialSessionNotificationProcessingKysely =
   Selectable<TrialSessionNotificationProcessingTable>;
 export type NewTrialSessionNotificationProcessingKysely =
   Insertable<TrialSessionNotificationProcessingTable>;
+
+
+///////////////////////
+
+export const caseHearingTableDefinition = {
+  docketNumber: DEFAULT as string,
+  trialSessionId: DEFAULT as string,
+};
+export type CaseHearingTable = typeof caseHearingTableDefinition;
+
+export const DW_CASE_HEARING_COLUMNS = Object.keys(
+  caseHearingTableDefinition,
+) as Array<keyof CaseHearingTable>;
+
+export type CaseHearingKysely = Selectable<CaseHearingTable>;
+export type NewCaseHearingKysely = Insertable<CaseHearingTable>;

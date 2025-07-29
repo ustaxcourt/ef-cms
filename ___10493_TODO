@@ -6,9 +6,10 @@
 - [ ] Why do some records in dynamo trial-session-working-copy have userCaseNotes??
 - [ ] Deal with SpecialTrialSession type
 - [ ] Add typing to return type on insert and update functions
-- [ ] Figure out differences between trial sessions and hearings
+- [x] Figure out differences between trial sessions and hearings
 - [ ] Maybe come back and refactor the mapping table for cases and trial hearings
 - [ ] Ensure the hearings are sorted just as there were in the case entity (.sort((a, b) => compareStrings(a.createdAt, b.createdAt));)
+- [ ] Check usages of _applicationContext for any that should be removed
 
 
 # NOTES

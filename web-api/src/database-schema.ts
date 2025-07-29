@@ -60,6 +60,8 @@ import {
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
 import {
+  CaseHearingTable,
+  DW_CASE_HEARING_COLUMNS,
   DW_TRIAL_SESSION_COLUMNS,
   DW_TRIAL_SESSION_NOTIFICATION_PROCESSING,
   DW_TRIAL_SESSION_PAPER_PDF_COLUMNS,
@@ -76,6 +78,7 @@ interface DatabaseSchemaType {
   dwCase: DatabaseTableMetadata<CaseTable>;
   dwCaseCorrespondence: DatabaseTableMetadata<CaseCorrespondenceTable>;
   dwCaseDeadline: DatabaseTableMetadata<CaseDeadlineTable>;
+  dwCaseHearing: DatabaseTableMetadata<CaseHearingTable>;
   dwCaseWorksheet: DatabaseTableMetadata<CaseWorksheetTable>;
   dwChangeOfAddress: DatabaseTableMetadata<ChangeOfAddressTable>;
   dwConnection: DatabaseTableMetadata<ConnectionTable>;
@@ -120,6 +123,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwCaseDeadline: {
     table: DEFAULT as CaseDeadlineTable,
     columns: DW_CASE_DEADLINE_COLUMNS,
+  },
+  dwCaseHearing: {
+    table: DEFAULT as CaseHearingTable,
+    columns: DW_CASE_HEARING_COLUMNS,
   },
   dwCaseWorksheet: {
     table: DEFAULT as CaseWorksheetTable,

@@ -1,4 +1,4 @@
-import { addCaseToHearing } from './addCaseToHearing';
+import { addCaseToHearing } from '../../postgres/trialSessions/addCaseToHearing';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { updateTrialSession } from './updateTrialSession';
 

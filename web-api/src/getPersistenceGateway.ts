@@ -60,7 +60,6 @@ import { isEmailAvailable } from './persistence/cognito/isEmailAvailable';
 import { isFileExists } from './persistence/s3/isFileExists';
 import { persistUser } from './persistence/dynamo/users/persistUser';
 import { refreshConfirmationCodeExpiration } from '@web-api/persistence/dynamo/users/refreshConfirmationCodeExpiration';
-import { removeCaseFromHearing } from './persistence/dynamo/trialSessions/removeCaseFromHearing';
 import {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
@@ -69,7 +68,6 @@ import { saveDispatchNotification } from '@web-api/persistence/postgres/notifica
 import { saveDocumentFromLambda } from './persistence/s3/saveDocumentFromLambda';
 import { saveUserConnection } from '@web-api/persistence/postgres/connections/saveUserConnection';
 import { setChangeOfAddressCaseAsDone } from './persistence/postgres/jobs/changeOfAddress/setChangeOfAddressCaseAsDone';
-import { updateCaseHearing } from './persistence/dynamo/trialSessions/updateCaseHearing';
 import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
@@ -136,11 +134,9 @@ const gatewayMethods = {
     editPractitionerDocument,
     incrementCounter,
     persistUser,
-    removeCaseFromHearing,
     saveDispatchNotification,
     saveDocumentFromLambda,
     saveUserConnection,
-    updateCaseHearing,
     updateIrsPractitionerOnCase,
     updateMaintenanceMode,
     updatePractitionerUser,
