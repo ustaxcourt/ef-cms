@@ -58,7 +58,7 @@ export const assignWorkItemsInteractor = async (
     throw new NotFoundError(`User not found with user id ${assigneeId}`);
   }
 
-  let workItemEntity;
+  let workItemEntity: WorkItem | undefined;
   if (!workItem && workItemId) {
     workItemEntity = await getWorkItemById({
       workItemId,
@@ -107,7 +107,7 @@ export const assignWorkItemsInteractor = async (
     section: WorkItem.getWorkItemSectionFromUserSection({
       section: sectionToAssignTo,
       documentTitle: docketEntry.documentTitle,
-    }),
+    })!,
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
