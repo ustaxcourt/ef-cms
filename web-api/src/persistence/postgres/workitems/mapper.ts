@@ -9,25 +9,6 @@ import {
   WorkItemWithCaseInfoKysely,
 } from '@web-api/persistence/postgres/workitems/schema';
 
-function getWorkItemSection({
-  section,
-  documentTitle,
-}: {
-  section: string;
-  documentTitle?: string;
-}) {
-  // We have sections for caseServicesSupervisor and clerkofcourt, but as far as we can tell, they aren't used.
-  // Instead, we need to translate these into either the petitions section or the docket section depending
-  // on the document type.
-  if (!['caseServicesSupervisor', 'clerkofcourt'].includes(section)) {
-    return section;
-  }
-  if (documentTitle?.toLocaleLowerCase() == 'petition') {
-    return 'petitions';
-  }
-  return 'docket';
-}
-
 export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
   return {
     assigneeId: workItem.assigneeId,
@@ -43,9 +24,7 @@ export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
     docketNumber: workItem.docketNumber,
     inProgress: workItem.inProgress,
     isRead: workItem.isRead,
-    section: getWorkItemSection({
-      section: workItem.section,
-    }),
+    section: workItem.section,
     sentBy: workItem.sentBy,
     sentBySection: workItem.sentBySection,
     sentByUserId: workItem.sentByUserId,

@@ -58,6 +58,7 @@ export const fileAndServeDocumentOnOneCase = async ({
   await completeWorkItem({
     user,
     workItemToUpdate: workItem,
+    docketEntryEntity,
   });
 
   docketEntryEntity.validate();
@@ -87,11 +88,18 @@ export const fileAndServeDocumentOnOneCase = async ({
   });
 };
 
-const completeWorkItem = async ({ user, workItemToUpdate }) => {
+const completeWorkItem = async ({
+  user,
+  workItemToUpdate,
+  docketEntryEntity,
+}) => {
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: user.section,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: user.section,
+      documentTitle: docketEntryEntity.documentTitle,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
