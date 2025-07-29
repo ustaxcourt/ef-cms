@@ -28,6 +28,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 interface IEditPaperFilingRequest {
   documentMetadata: any;
@@ -460,7 +461,10 @@ const updateAndSaveWorkItem = async ({
   workItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: user.section!,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: user.section,
+      documentTitle: docketEntry.documentTitle,
+    })!,
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
