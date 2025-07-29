@@ -1,4 +1,4 @@
-import { JudgeTitle, Role } from '@shared/business/entities/EntityConstants';
+import { AccountStatus, JudgeTitle, Role } from '@shared/business/entities/EntityConstants';
 import { UserContact } from '@shared/business/entities/User';
 import { Selectable, Insertable, Updateable, ColumnType } from 'kysely';
 
@@ -36,6 +36,7 @@ const userTableDefinition = {
   practitionerType: DEFAULT as string | null,
   suffix: DEFAULT as string | null,
   updatedEmail: DEFAULT as string | null,
+  accountStatus: DEFAULT as AccountStatus
 };
 
 export type UserTable = typeof userTableDefinition;
