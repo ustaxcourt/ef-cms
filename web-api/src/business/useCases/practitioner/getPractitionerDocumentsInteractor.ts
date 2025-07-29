@@ -6,6 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getPractitionerDocuments } from '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocuments';
 
 /**
  * getPractitionerDocumentsInteractor
@@ -32,11 +33,9 @@ export const getPractitionerDocumentsInteractor = async (
     );
   }
 
-  const practitionerDocuments = await applicationContext
-    .getPersistenceGateway()
-    .getPractitionerDocuments({
-      barNumber,
-    });
+  const practitionerDocuments = await getPractitionerDocuments({
+    barNumber,
+  });
 
   return PractitionerDocument.validateRawCollection(practitionerDocuments, {
     applicationContext,
