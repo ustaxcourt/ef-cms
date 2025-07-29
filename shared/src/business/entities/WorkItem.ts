@@ -132,6 +132,28 @@ export class WorkItem extends JoiValidationEntity {
   getValidationRules() {
     return WorkItem.VALIDATION_RULES;
   }
+
+  static getWorkItemSectionFromUserSection({
+    section,
+    documentTitle,
+  }: {
+    section?: string;
+    documentTitle: string;
+  }) {
+    if (!section) {
+      return undefined;
+    }
+    // We have sections for caseServicesSupervisor and clerkofcourt, but as far as we can tell, they aren't used.
+    // Instead, we need to translate these into either the petitions section or the docket section depending
+    // on the document type.
+    if (!['caseServicesSupervisor', 'clerkofcourt'].includes(section)) {
+      return section;
+    }
+    if (documentTitle?.toLocaleLowerCase() == 'petition') {
+      return 'petitions';
+    }
+    return 'docket';
+  }
 }
 
 export type RawWorkItem = ExcludeMethods<WorkItem>;
