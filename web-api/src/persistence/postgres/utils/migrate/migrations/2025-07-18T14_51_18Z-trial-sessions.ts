@@ -8,7 +8,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('address2', 'varchar')
     .addColumn('alternateTrialClerkName', 'varchar')
     .addColumn('caseOrder', 'jsonb')
-    .addColumn('chambersPhoneNumber', 'integer')
+    .addColumn('chambersPhoneNumber', 'varchar')
     .addColumn('city', 'varchar')
     .addColumn('courthouseName', 'varchar')
     .addColumn('courtReporter', 'varchar')

@@ -12,7 +12,7 @@ import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/tri
  * @returns {object} the created trial session
  */
 export const createTrialSessionAndWorkingCopy = async ({
-  applicationContext,
+  _applicationContext,
   trialSessionToAdd,
 }) => {
   const createdTrialSession = await createTrialSession({
@@ -38,14 +38,11 @@ export const createTrialSessionAndWorkingCopy = async ({
       userId: trialSessionToAdd.trialClerk.userId,
     });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .createTrialSessionWorkingCopy({
-        applicationContext,
-        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
-          .validate()
-          .toRawObject(),
-      });
+    await createTrialSessionWorkingCopy({
+      trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+        .validate()
+        .toRawObject(),
+    });
   }
 
   return new TrialSession(createdTrialSession).validate().toRawObject();
