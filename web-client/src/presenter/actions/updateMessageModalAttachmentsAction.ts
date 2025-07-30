@@ -29,7 +29,11 @@ export const updateMessageModalAttachmentsAction = ({
         documentTitle,
         index: document.index,
       });
-      if (showModal === 'CreateMessageModal') {
+
+      if (
+        showModal === 'CreateMessageModal' &&
+        !get(state.modal.form.subject)
+      ) {
         store.set(state.modal.form.subject, documentTitle.slice(0, 250));
       }
     } else if (props.action === 'remove') {
@@ -37,19 +41,6 @@ export const updateMessageModalAttachmentsAction = ({
         attachment => attachment.documentId == props.documentId,
       );
       draftAttachments.splice(foundIndex, 1);
-
-      if (showModal === 'CreateMessageModal') {
-        if (draftAttachments.length === 0) {
-          store.unset(state.modal.form.subject);
-        } else {
-          const latestAttachment =
-            draftAttachments[draftAttachments.length - 1];
-          store.set(
-            state.modal.form.subject,
-            latestAttachment.documentTitle.slice(0, 250),
-          );
-        }
-      }
     }
 
     store.set(state.modal.form.draftAttachments, draftAttachments);
