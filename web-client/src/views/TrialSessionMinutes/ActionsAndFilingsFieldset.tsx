@@ -76,7 +76,7 @@ export const ActionsAndFilingsFieldset = ({
   const getFieldsByRow = (row: KeyedActionFilingFormFields, rowIndex) => {
     return (
       <>
-        <div className="grid-col-2">
+        <div className="grid-col-1">
           <FormGroup className="margin-bottom-0 display-flex align-items-center maxw-full">
             <input
               className="usa-input display-inline-block maxw-full"
@@ -112,7 +112,7 @@ export const ActionsAndFilingsFieldset = ({
             'filedBy',
           )}
         </div>
-        <div className="grid-col-2">
+        <div className="grid-col-4">
           <SelectSearch
             aria-label={`actionsAndFilingsDocumentType-label-${rowIndex}`}
             data-testid={`actionsAndFilingsDocumentType-search-${rowIndex}`}
@@ -244,9 +244,9 @@ export const ActionsAndFilingsFieldset = ({
     <fieldset className="border-0 padding-0">
       <div className="usa-label">Actions & Filings</div>
       <div className="grid-row grid-gap-2">
-        <div className="grid-col-2 usa-label">Date</div>
+        <div className="grid-col-1 usa-label">Date</div>
         <div className="grid-col-2 usa-label">Filed By</div>
-        <div className="grid-col-2 usa-label">Document Type</div>
+        <div className="grid-col-4 usa-label">Document Type</div>
         <div className="grid-col-2 usa-label">Status</div>
         <div className="grid-col-fill usa-label">Description/Note</div>
       </div>

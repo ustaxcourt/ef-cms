@@ -205,11 +205,24 @@ export const getBriefDetails = (briefDetails: BriefDetailsType) => {
 
 export const getConsolidatedDocketNumbers = (aCase: RawCase): string => {
   if (aCase.consolidatedCases.length === 0) {
-    return aCase.docketNumber;
+    return aCase.docketNumberWithSuffix;
   }
   return aCase.consolidatedCases
-    .map(consolidatedCase => consolidatedCase.docketNumber)
+    .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix) // [123-45, 123-46A, 123-47B]
+    .sort((a, b) => {
+      if(aCase.docketNumberWithSuffix === a) return Number.MIN_SAFE_INTEGER;
+      if(aCase.docketNumberWithSuffix === b) return Number.MAX_SAFE_INTEGER;
+
+      const parsedA = removeTrailingLetters(a);
+      const parsedB = removeTrailingLetters(b);
+
+      return Case.docketNumberSort(parsedA, parsedB);
+    })
     .join(', ');
+};
+
+const removeTrailingLetters = (str) => {
+  return str.replace(/^(\d+-\d+)[a-zA-Z]*$/, '$1');
 };
 
 export const formatWitnesses = (
