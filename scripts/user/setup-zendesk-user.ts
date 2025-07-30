@@ -11,6 +11,7 @@ import {
   PutSecretValueCommand,
   SecretsManagerClient,
 } from '@aws-sdk/client-secrets-manager';
+import { getUniqueId } from '@shared/sharedAppContext';
 
 const scriptConfig: ScriptConfig = {
   description: 'sets up zendesk user for automations integration',
@@ -47,7 +48,8 @@ const loadSecrets = async (environmentName: string): Promise<any> => {
   const secrets = await loadSecrets(env);
 
   const USTC_ZENDESK_USER = 'ustczendesk@dawson.ustaxcourt.gov';
-  // NEED USER ID?????
+  const arbitraryUserId = getUniqueId();
+
   await cognitoClient.adminCreateUser({
     UserAttributes: [
       {
@@ -57,6 +59,10 @@ const loadSecrets = async (environmentName: string): Promise<any> => {
       {
         Name: 'email',
         Value: USTC_ZENDESK_USER,
+      },
+      {
+        Name: 'custom:userId',
+        Value: arbitraryUserId,
       },
       {
         Name: 'custom:role',
