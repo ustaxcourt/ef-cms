@@ -36,11 +36,8 @@ export const getUsersInSectionInteractor = async (
 
   const users = await getUsersInSections({
     sections: sectionsToSearch,
+    accountStatus: ACCOUNT_STATUS.active,
   });
 
-  const onlyActiveUsers = users.filter(user =>
-    section === 'judge' ? true : user.accountStatus === ACCOUNT_STATUS.active,
-  );
-
-  return User.validateRawCollection(onlyActiveUsers);
+  return User.validateRawCollection(users);
 };

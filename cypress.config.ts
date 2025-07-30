@@ -13,6 +13,7 @@ import {
   getEmailVerificationToken,
   getNewAccountVerificationCode,
 } from './cypress/helpers/cypressTasks/postgres/postgres-helpers';
+import { changeUserAccountStatus } from './cypress/helpers/cypressTasks/postgres/changeUserAccountStatus';
 import {
   getFeatureFlagValue,
   toggleFeatureFlag,
@@ -55,6 +56,15 @@ export default defineConfig({
         },
         getNewAccountVerificationCode({ email }) {
           return getNewAccountVerificationCode({ email });
+        },
+        changeUserAccountStatus({
+          email,
+          accountStatus,
+        }: {
+          email: string;
+          accountStatus: string;
+        }) {
+          return changeUserAccountStatus({ email, accountStatus });
         },
         getUserByEmail(email: string) {
           return getUserByEmail(email);
