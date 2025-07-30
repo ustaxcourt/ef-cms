@@ -8,7 +8,6 @@ import {
   parseArgsAndEnvVars,
   ScriptConfig,
 } from 'scripts/helpers/parseArgsAndEnvVars';
-import { getConnection } from '@web-api/getConnection';
 import { toKyselyNewUserOnCase } from '@web-api/persistence/postgres/cases/userOnCase/mapper';
 import { toKyselyNewUser } from '@web-api/persistence/postgres/users/mapper';
 import { getColumnsForTable } from '@web-api/persistence/postgres/utils/getColumnsForTable';
@@ -20,6 +19,7 @@ import { ROLES } from '@shared/business/entities/EntityConstants';
 import { UserOnCaseAssociation } from '@web-api/persistence/postgres/cases/userOnCase/schema';
 import { BarNumberKysely } from '@web-api/persistence/postgres/users/barNumber/schema';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
+import { runQuery } from '@web-api/persistence/postgres/databaseConnection';
 
 const scriptConfig: ScriptConfig = {
   description: 'Move users and case associations from dynamo to postgres ',
@@ -62,7 +62,7 @@ async function associateUsersWithCases(
   const dbUsers = userOnCaseRecords.map(toKyselyNewUserOnCase);
 
   // We are specifically not using pgInsertInto because we do not want to trigger openSearch. We do not want to trigger openSearch because not all users have been moved yet.
-  await getConnection({
+  await runQuery({
     cb: db =>
       db
         .insertInto('dwUserOnCase')
@@ -88,7 +88,7 @@ const upsertUsers = async (
   const dbUsers = users.map(toKyselyNewUser);
 
   // We are specifically not using pgInsertInto because we do not want to trigger openSearch. We do not want to trigger openSearch because not all users have been moved yet.
-  await getConnection({
+  await runQuery({
     cb: db =>
       db
         .insertInto('dwUser')
