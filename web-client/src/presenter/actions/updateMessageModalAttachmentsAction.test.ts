@@ -125,7 +125,7 @@ describe('updateMessageModalAttachmentsAction', () => {
     expect(result.state.modal.form.draftAttachments).toEqual([]);
   });
 
-  it('sets the form subject field if creating message', async () => {
+  it('sets the form subject field if creating message and subject line is empty', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
