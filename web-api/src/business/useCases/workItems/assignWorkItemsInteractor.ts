@@ -100,7 +100,7 @@ export const assignWorkItemsInteractor = async (
     section: WorkItem.getWorkItemSectionFromUserSection({
       section: sectionToAssignTo,
       documentTitle: docketEntry.documentTitle,
-    })!,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,

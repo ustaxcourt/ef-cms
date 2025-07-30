@@ -464,7 +464,7 @@ const updateAndSaveWorkItem = async ({
     section: WorkItem.getWorkItemSectionFromUserSection({
       section: user.section,
       documentTitle: docketEntry.documentTitle,
-    })!,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,

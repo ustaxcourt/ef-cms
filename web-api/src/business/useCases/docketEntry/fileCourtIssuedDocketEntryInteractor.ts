@@ -146,7 +146,7 @@ export const fileCourtIssuedDocketEntry = async (
         section: WorkItem.getWorkItemSectionFromUserSection({
           section: user.section,
           documentTitle: docketEntryEntity.documentTitle,
-        })!,
+        }),
         sentBy: user.name,
         sentBySection: user.section,
         sentByUserId: user.userId,

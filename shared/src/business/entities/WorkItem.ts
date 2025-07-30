@@ -144,13 +144,10 @@ export class WorkItem extends JoiValidationEntity {
   }: {
     section?: string;
     documentTitle: string;
-  }): typeof PETITIONS_SECTION | typeof DOCKET_SECTION | undefined {
-    if (!section) {
-      return undefined;
-    }
+  }): typeof PETITIONS_SECTION | typeof DOCKET_SECTION {
     // A work item is assigned to either the petitions section or the docket section.
     // If the section we are passing in is either of those, just return it.
-    if ([DOCKET_SECTION, PETITIONS_SECTION].includes(section)) {
+    if (section && [DOCKET_SECTION, PETITIONS_SECTION].includes(section)) {
       return section as typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
     }
     // Otherwise, we will assign a petition to the petitions section and anything else to the docket section.
