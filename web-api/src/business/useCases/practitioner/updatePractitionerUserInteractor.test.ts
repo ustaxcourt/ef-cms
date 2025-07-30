@@ -456,6 +456,7 @@ describe('updatePractitionerUser', () => {
       expect(generateChangeOfAddress).toHaveBeenCalled();
     });
   });
+
   describe('update practiceType', () => {
     it('should throw error when practitioner has open cases and practice type has been changed', async () => {
       applicationContext
