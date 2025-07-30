@@ -4,9 +4,8 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { tryGetLocks } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { sleep } from '@shared/tools/helpers';
-import { acquireOneDbConnection } from '@web-api/persistence/postgres/acquireOneDbConnection';
+import { getLockingDbConnection } from '@web-api/persistence/postgres/getLockingDbConnection';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
-import { tryReleaseLocks } from '@web-api/persistence/postgres/utils/operation/tryReleaseLocks';
 
 /**
  * Converts a string into a consistent 32-bit integer to use as an advisory lock ID.
@@ -43,8 +42,8 @@ export const acquireLock = async ({
     return async () => {}; // No-op since we never need to create the scoped connection
   }
 
-  // We get a single connection and use that for the lifetime of the lock since pg_advisory_lock needs to be opened/closed by the same connection
-  const connection = await acquireOneDbConnection();
+  // using a scoped connection ensures that the pg_try_advisory_locks are created and released on the same db connection
+  const { db, destroy } = await getLockingDbConnection();
 
   let attempts = 0;
   let lockedItems: string[] = [];
@@ -56,6 +55,7 @@ export const acquireLock = async ({
       } else if (typeof onLockError === 'function') {
         await onLockError(applicationContext, options, authorizedUser);
       }
+      await destroy();
       throw new ServiceUnavailableError(
         `One of the items you are trying to update is being updated by someone else: ${lockedItems.join(', ')}`,
       );
@@ -65,7 +65,7 @@ export const acquireLock = async ({
       await sleep(waitTime);
     }
 
-    const results = await tryGetLocks({ connection, identifiers });
+    const results = await tryGetLocks({ db, identifiers });
 
     lockedItems = results
       .filter(r => !r.successfullyLocked)
@@ -75,7 +75,7 @@ export const acquireLock = async ({
   } while (lockedItems.length);
 
   const removeLockFunction = async () => {
-    return tryReleaseLocks({ connection, identifiers });
+    await destroy(); // Destroying connection releases all locks
   };
 
   return removeLockFunction;

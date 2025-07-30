@@ -95,7 +95,7 @@ let tokenPromise: Promise<string> | null = null; // So parallel processes don't 
 let token: string | null = null;
 let tokenExpirationTime = 0;
 async function getToken(): Promise<string> {
-  if (environment.nodeEnv !== 'production') {
+  if (environment.nodeEnv === 'local') {
     return environment.rds.pool.password;
   }
   // Unset the token if we are past the expiration time
