@@ -98,7 +98,7 @@ describe('WorkItem', () => {
     const assignment = {
       assigneeId: '111cd447-6278-461b-b62b-d9e357eea62c',
       assigneeName: 'Joe',
-      section: 'Some Section',
+      section: DOCKET_SECTION as typeof DOCKET_SECTION,
       sentBy: 'Sender Name',
       sentBySection: 'Sender Section',
       sentByUserId: '222cd447-6278-461b-b62b-d9e357eea62c',
