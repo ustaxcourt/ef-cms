@@ -216,7 +216,7 @@ const completeDocketEntryQC = async (
     section: WorkItem.getWorkItemSectionFromUserSection({
       section: sectionToAssignTo,
       documentTitle: updatedDocketEntry.documentTitle,
-    })!,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
