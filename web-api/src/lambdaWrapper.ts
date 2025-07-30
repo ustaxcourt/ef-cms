@@ -13,8 +13,6 @@ export const headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-export const CHUNK_SIZE = 4000;
-
 const defaultOptions: {
   isAsync?: boolean;
   isAsyncSync?: boolean;
@@ -76,20 +74,13 @@ export const lambdaWrapper = (
           body: response.body ? JSON.parse(response.body) : response.body,
         };
         const responseString = JSON.stringify(fullResponse);
-        const chunks = chunkString(responseString);
-        const totalNumberOfChunks = chunks.length;
-        for (let index = 0; index < totalNumberOfChunks; index++) {
-          await applicationContext
+        await applicationContext
             .getNotificationGateway()
             .saveRequestResponse({
-              applicationContext,
-              chunk: chunks[index],
-              index,
+              responseString,
               requestId: asyncsyncid,
-              totalNumberOfChunks,
               userId: user.userId,
             });
-        }
       } catch (errorAsyncSync) {
         console.log('Error: async sync if condition', errorAsyncSync);
       }
@@ -125,14 +116,3 @@ export const lambdaWrapper = (
     }
   };
 };
-
-function chunkString(str) {
-  const chunkedArray: string[] = [];
-  let index = 0;
-  while (index < str.length) {
-    chunkedArray.push(str.substring(index, index + CHUNK_SIZE));
-    index += CHUNK_SIZE;
-  }
-
-  return chunkedArray;
-}
