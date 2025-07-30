@@ -455,15 +455,15 @@ describe('updatePractitionerUser', () => {
 
       expect(generateChangeOfAddress).toHaveBeenCalled();
     });
+  });
+  describe('update practiceType', () => {
     it('should throw error when practitioner has open cases and practice type has been changed', async () => {
-      //mock oldUser and user object oth w/keys practiceType with different values
       applicationContext
         .getPersistenceGateway()
         .getPractitionerByBarNumber.mockResolvedValue({
           userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
           practiceType: 'DOJ',
         });
-      //practitionerCases obj w/ openCases array
       applicationContext
         .getUseCases()
         .getPractitionerCasesInteractor.mockReturnValue({
@@ -492,7 +492,6 @@ describe('updatePractitionerUser', () => {
       );
     });
     it('should not throw an error when the practice type changed and there are no open cases', async () => {
-      //mock oldUser and user object oth w/keys practiceType with different values
       applicationContext
         .getPersistenceGateway()
         .getPractitionerByBarNumber.mockResolvedValue({
@@ -500,7 +499,6 @@ describe('updatePractitionerUser', () => {
           userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
           practiceType: 'DOJ',
         });
-      //practitionerCases obj w/ openCases array
       applicationContext
         .getUseCases()
         .getPractitionerCasesInteractor.mockReturnValue({
