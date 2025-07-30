@@ -30,7 +30,7 @@ export const getTrialSessionWorkingCopyInteractor = async (
   }
 
   const rawUser = await getUserById({
-    userId: authorizedUser?.userId || '',
+    userId: authorizedUser.userId,
   });
 
   const userEntity = new User(rawUser);
