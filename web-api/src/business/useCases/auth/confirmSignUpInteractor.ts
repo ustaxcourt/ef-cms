@@ -1,5 +1,5 @@
 import { InvalidRequest, NotFoundError } from '@web-api/errors/errors';
-import { ROLES } from '@shared/business/entities/EntityConstants';
+import { ACCOUNT_STATUS, ROLES } from '@shared/business/entities/EntityConstants';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { User } from '@shared/business/entities/User';
 import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
@@ -58,6 +58,7 @@ const createPetitionerUser = async (
     name: user.name,
     role: ROLES.petitioner,
     userId,
+    accountStatus: ACCOUNT_STATUS.active
   });
 
   await upsertUsers([userEntity.validate().toRawObject()]);
