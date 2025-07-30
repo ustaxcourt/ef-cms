@@ -158,6 +158,7 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
         caseServicesSupervisorId,
       );
       const messageTitle = `${faker.word.adjective()} ${faker.word.noun()}`;
+      //cy.log(`Message title: ${messageTitle}`, `title: ${title}`);
       cy.get('[data-testid="message-subject"]').type(messageTitle);
       cy.get('[data-testid="message-body"]').type('This is a message.');
       cy.get('[data-testid="select-document"]')
@@ -177,7 +178,7 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       cy.get('[data-testid="upload-description"]').type(newTitle);
       cy.get('[data-testid="save-edited-pdf-button"]').click();
 
-      // Assert: the new description should display for the edited docket entry
+      // // Assert: the new description should display for the edited docket entry
       cy.contains('Draft saved.').should('exist');
       cy.contains('.attachment-viewer-button', newTitle).should('exist');
     });
