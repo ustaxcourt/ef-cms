@@ -177,7 +177,7 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
       cy.get('[data-testid="upload-description"]').type(newTitle);
       cy.get('[data-testid="save-edited-pdf-button"]').click();
 
-      // // Assert: the new description should display for the edited docket entry
+      // Assert: the new description should display for the edited docket entry
       cy.contains('Draft saved.').should('exist');
       cy.contains('.attachment-viewer-button', newTitle).should('exist');
     });
