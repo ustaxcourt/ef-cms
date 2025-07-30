@@ -1,3 +1,4 @@
+import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 import { validateUserContactInteractor } from './validateUserContactInteractor';
 
 describe('validateUserContactInteractor', () => {
@@ -9,6 +10,7 @@ describe('validateUserContactInteractor', () => {
     expect(errors).toEqual({
       name: 'Enter name',
       userId: '"userId" is required',
+      accountStatus: '"accountStatus" is required',
     });
   });
 
@@ -17,6 +19,7 @@ describe('validateUserContactInteractor', () => {
       user: {
         name: 'Saul Goodman',
         userId: '8675309b-18d0-43ec-bafb-654e83405411',
+        accountStatus: ACCOUNT_STATUS.active,
       },
     });
 

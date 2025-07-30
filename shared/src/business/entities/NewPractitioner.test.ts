@@ -1,4 +1,5 @@
 import {
+  ACCOUNT_STATUS,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -31,6 +32,10 @@ describe('NewPractitioner', () => {
     practiceType: 'Private',
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
+    accountStatus: ACCOUNT_STATUS.active,
+    barNumber: 'BT4392',
+    name: 'Bob',
+    userId: '5ed76c7b-eac4-4da6-a860-c3b334fba175',
     serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
   };
 

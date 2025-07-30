@@ -1,6 +1,7 @@
 jest.mock('@shared/business/utilities/createPractitionerUser');
 jest.mock('@web-api/persistence/postgres/users/upsertPractitioner')
 import {
+  ACCOUNT_STATUS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
@@ -15,6 +16,7 @@ import { createPractitionerUser as createPractitionerUserMock } from '@shared/bu
 
 describe('createPractitionerUserInteractor', () => {
   const mockUser: RawPractitioner = {
+    accountStatus: ACCOUNT_STATUS.active,
     admissionsDate: '2019-03-01',
     admissionsStatus: 'Active',
     barNumber: 'AT5678',
