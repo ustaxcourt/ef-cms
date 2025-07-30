@@ -632,6 +632,7 @@ import { gotoTrialSessionTermBuilderSequence } from '@web-client/presenter/seque
 import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
 import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/sequences/showRemovePetitionerEmailModalSequence';
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
+import { saveMinuteSheetToDraftsSequence } from './sequences/TrialSessionMinutes/saveMinuteSheetToDraftsSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -802,6 +803,7 @@ export const presenterSequences = {
   handleEditedTrialSessionSequence,
   downloadCsvFileSequence: downloadCsvFileSequence as unknown as Function,
   downloadMinuteSheetFormPdfSequence,
+  saveMinuteSheetToDraftsSequence,
   editCorrespondenceDocumentSequence:
     editCorrespondenceDocumentSequence as unknown as Function,
   editUnsignedDraftDocumentSequence,

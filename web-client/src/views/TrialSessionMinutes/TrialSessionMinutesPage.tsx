@@ -5,15 +5,19 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
+import { SuccessNotification } from '../SuccessNotification';
+import { ErrorNotification } from '../ErrorNotification';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 export const TrialSessionMinutesPage = connect(
   {
     downloadMinuteSheetFormPdfSequence:
       sequences.downloadMinuteSheetFormPdfSequence,
-
+    saveMinuteSheetToDraftsSequence:
+      sequences.saveMinuteSheetToDraftsSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   },
-  ({ downloadMinuteSheetFormPdfSequence, formattedTrialSessionDetails }) => {
+  ({ downloadMinuteSheetFormPdfSequence, saveMinuteSheetToDraftsSequence, formattedTrialSessionDetails }) => {
     return (
       <>
         <CaseDetailHeader hideActionButtons openCaseInNewTab />
@@ -21,6 +25,15 @@ export const TrialSessionMinutesPage = connect(
           className="grid-container"
           data-testid="trial-session-minutes-page"
         >
+          <Button
+            link
+            href={`/trial-session-detail/${formattedTrialSessionDetails.trialSessionId}`}
+          >
+            <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
+            Back to Session Information
+          </Button>
+          <SuccessNotification />
+          <ErrorNotification />
           <div className="grid-row">
             <h1 className="grid-col-fill">
               Minutes: {formattedTrialSessionDetails.trialLocation} -{' '}
@@ -28,26 +41,46 @@ export const TrialSessionMinutesPage = connect(
             </h1>
             <div className="grid-col-auto">
               <Button
-                data-testid="download-pdf-button"
+                data-testid="save-to-drafts-button"
+                onClick={e => {
+                  e.preventDefault();
+                  saveMinuteSheetToDraftsSequence();
+                }}
+              >
+                Save to Drafts
+              </Button>
+              <button
+                className="usa-button usa-button--outline"
+                data-testid="preview-pdf-button"
                 onClick={e => {
                   e.preventDefault();
                   downloadMinuteSheetFormPdfSequence();
                 }}
               >
-                Download PDF
-              </Button>
+                Preview PDF
+              </button>
             </div>
           </div>
           <TrialSessionMinutesForm />
           <Button
-            className="margin-top-2"
+            data-testid="save-to-drafts-button"
+            onClick={e => {
+              e.preventDefault();
+              saveMinuteSheetToDraftsSequence();
+            }}
+          >
+            Save to Drafts
+          </Button>
+          <button
+            className="usa-button usa-button--outline"
+            data-testid="preview-pdf-button"
             onClick={e => {
               e.preventDefault();
               downloadMinuteSheetFormPdfSequence();
             }}
           >
-            Download PDF
-          </Button>
+            Preview PDF
+          </button>
         </div>
       </>
     );
