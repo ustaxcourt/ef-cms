@@ -208,6 +208,7 @@ import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
+import { saveMinuteSheetToDraftsLambda } from './lambdas/trialSessionMinutes/saveMinuteSheetToDraftsLambda';
 
 export const app = express();
 
@@ -897,6 +898,10 @@ app.delete(
   app.post(
     '/trial-sessions/:trialSessionId/case/:docketNumber/minutes',
     lambdaWrapper(generateTrialSessionMinutesPdfLambda),
+  );
+  app.post(
+    '/trial-sessions/:trialSessionId/case/:docketNumber/minutes-draft',
+    lambdaWrapper(saveMinuteSheetToDraftsLambda),
   );
   app.get(
     '/trial-sessions/paper-service-pdf/:fileId',
