@@ -1,6 +1,7 @@
 import { createBarNumber } from '@web-api/persistence/postgres/users/createBarNumber';
 import { Practitioner, RawPractitioner } from '../entities/Practitioner';
 import { getUniqueId } from '@shared/sharedAppContext';
+import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 
 export const createPractitionerUser = async ({
   user,
@@ -19,6 +20,7 @@ export const createPractitionerUser = async ({
     ...user,
     barNumber,
     userId: getUniqueId(),
+    accountStatus: ACCOUNT_STATUS.active,
   })
     .validate()
     .toRawObject();
