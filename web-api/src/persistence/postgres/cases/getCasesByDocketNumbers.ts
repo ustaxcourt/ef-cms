@@ -6,7 +6,7 @@ import { NotFoundError } from '@web-api/errors/errors';
 import { purgeDynamoKeys } from '@web-api/persistence/dynamo/helpers/purgeDynamoKeys';
 import { getIrsPractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getIrsPractitionersOnCase';
 import { getPrivatePractitionersOnCase } from '@web-api/persistence/dynamo/practitioners/getPrivatePractitionersOnCase';
-import { queryFull } from '@web-api/persistence/dynamodbClientService';
+import { jsonArrayFrom } from 'kysely/helpers/postgres'
 import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { CaseCorrespondenceKysely } from '@web-api/persistence/postgres/caseCorrespondences/schema';
 import { fromKyselyCase } from '@web-api/persistence/postgres/cases/mapper';
@@ -317,26 +317,18 @@ async function getHearings(
   const hearingsInfo = await getDbReader(reader => 
     reader
     .selectFrom('dwCaseHearing as ch')
-    .fullJoin('dwTrialSession as ts', 'ch.trialSessionId', 'ts.trialSessionId')
-    .selectAll('ts')
-    .select('ch.docketNumber')
+    .innerJoin('dwTrialSession as ts', 'ch.trialSessionId', 'ts.trialSessionId')
+    .select(eb => [
+      'docketNumber',
+      jsonArrayFrom( // This could be lying about type, specifically dates
+        eb.selectFrom('ts')
+        .selectAll('ts')
+      ).as('hearings')
+    ])
     .where('ch.docketNumber', 'in', docketNumbers)
+    .groupBy('ch.docketNumber')
     .execute()
   );
-
-  if(isEmpty(hearingsInfo)) return [];
-
-  _.reduce(hearingsInfo, (acc, hearing) => {
-    const { docketNumber } = hearing;
-    if (!acc[docketNumber]) {
-      acc[docketNumber] = [];
-    }
-    acc[docketNumber].push(hearing);
-    return acc;
-  
-  }, 
-  {}
-);
 
   return hearingsInfo;
 }
