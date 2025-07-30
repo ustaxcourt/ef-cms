@@ -40,8 +40,8 @@ variable "prod_env_account_id" {
   type = string
 }
 
-variable "lower_env_account_id" {
-  type = string
+variable "lower_env_principal_identifiers" {
+  type = set(string)
 }
 
 variable "should_es_alpha_exist" {

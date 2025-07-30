@@ -112,3 +112,12 @@ resource "aws_route53_record" "public_www_redirect" {
     evaluate_target_health = false
   }
 }
+
+resource "aws_s3_bucket_public_access_block" "unblock_public_www_redirect" {
+  bucket = aws_s3_bucket.public_redirect.id
+
+  block_public_acls       = false
+  block_public_policy     = false
+  ignore_public_acls      = false
+  restrict_public_buckets = false
+}
