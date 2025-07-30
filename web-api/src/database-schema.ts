@@ -1,8 +1,8 @@
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
-import {
-  transformOpenSearchCase,
-  indexOpenSearchCase,
-} from '../elasticsearch/index-cases';
+import { indexOpenSearchCases } from '../elasticsearch/cases/indexOpenSearchCases';
+import { transformOpenSearchCases } from '../elasticsearch/cases/transformOpenSearchCases';
+import { transformOpenSearchDocketEntries } from '../elasticsearch/docketEntries/transformOpenSearchDocketEntries';
+import { indexOpenSearchDocketEntries } from '../elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 import {
   DW_USER_CASE_NOTE_COLUMNS,
   UserCaseNoteTable,
@@ -31,6 +31,10 @@ import {
   MessageTable,
   DW_MESSAGE_COLUMNS,
 } from '@web-api/persistence/postgres/messages/schema';
+import {
+  ResponseStringTable,
+  DW_RESPONSE_STRING_COLUMNS,
+} from '@web-api/persistence/postgres/polling/schema';
 import {
   WorkItemTable,
   DW_WORK_ITEM_COLUMNS,
@@ -70,6 +74,7 @@ interface DatabaseSchemaType {
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
   dwUserCaseNote: DatabaseTableMetadata<UserCaseNoteTable>;
   dwWorkItem: DatabaseTableMetadata<WorkItemTable>;
 }
@@ -91,8 +96,8 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwCase: {
     table: DEFAULT as CaseTable,
     columns: DW_CASE_COLUMNS,
-    transformOpenSearchMessage: transformOpenSearchCase,
-    indexOpenSearchMessage: indexOpenSearchCase,
+    transformOpenSearchMessage: transformOpenSearchCases,
+    indexOpenSearchMessage: indexOpenSearchCases,
   },
   dwCaseCorrespondence: {
     table: DEFAULT as CaseCorrespondenceTable,
@@ -117,6 +122,8 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwDocketEntry: {
     table: DEFAULT as DocketEntryTable,
     columns: DW_DOCKET_ENTRY_COLUMNS,
+    transformOpenSearchMessage: transformOpenSearchDocketEntries,
+    indexOpenSearchMessage: indexOpenSearchDocketEntries,
   },
   dwDocketEntryWorksheet: {
     table: DEFAULT as DocketEntryWorksheetTable,
@@ -133,6 +140,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMinuteSheet: {
     table: DEFAULT as MinuteSheetTable,
     columns: DW_MINUTE_SHEET_COLUMNS,
+  },
+  dwResponseString: {
+    table: DEFAULT as ResponseStringTable,
+    columns: DW_RESPONSE_STRING_COLUMNS,
   },
   dwUserCaseNote: {
     table: DEFAULT as UserCaseNoteTable,
