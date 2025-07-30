@@ -93,7 +93,7 @@ export const mockCaseServicesSupervisorUser: AuthUser = {
 };
 
 export const mockClerkOfTheCourtUser: AuthUser = {
-  email: 'mcokClerkOfTheCourt@example.com',
+  email: 'mockClerkOfTheCourt@example.com',
   name: 'Balthasar Leclerk',
   role: ROLES.clerkOfCourt,
   userId: '48da1916-4b0b-44e5-bef7-68cac4d5b358',

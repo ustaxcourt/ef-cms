@@ -22,7 +22,7 @@ export class WorkItem extends JoiValidationEntity {
   public docketNumber: string;
   public inProgress?: boolean;
   public isRead?: boolean;
-  public section: string;
+  public section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
   public sentBy: string;
   public sentBySection?: string;
   public sentByUserId?: string;
