@@ -40,7 +40,7 @@ describe('getDb', () => {
     expect(new Set([db1, db2, db3]).size).toBe(1);
   });
   it('should not generate multiple rds tokens at the same time', async () => {
-    environment.nodeEnv = 'production';
+    environment.stage = 'production';
     mockGetAuthToken.mockResolvedValue('12346789');
     await Promise.all([getToken(), getToken(), getToken()]);
     expect(mockGetAuthToken).toHaveBeenCalledTimes(1);
