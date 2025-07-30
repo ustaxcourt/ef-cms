@@ -7,13 +7,8 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getPractitionerDocumentByFileId } from '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocumentByFileId';
 
-/**
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.practitionerDocumentFileId the key of the document
- * @returns {Array<string>} the filing type options based on user role
- */
+type PractitionerDocumentDownloadUrl = { url: string; };
+
 export const getPractitionerDocumentDownloadUrlInteractor = async (
   applicationContext: ServerApplicationContext,
   {
@@ -24,7 +19,7 @@ export const getPractitionerDocumentDownloadUrlInteractor = async (
     practitionerDocumentFileId: string;
   },
   authorizedUser: UnknownAuthUser,
-) => {
+): Promise<PractitionerDocumentDownloadUrl> => {
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPLOAD_PRACTITIONER_DOCUMENT)
   ) {
