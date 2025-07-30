@@ -158,7 +158,6 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
         caseServicesSupervisorId,
       );
       const messageTitle = `${faker.word.adjective()} ${faker.word.noun()}`;
-      //cy.log(`Message title: ${messageTitle}`, `title: ${title}`);
       cy.get('[data-testid="message-subject"]').type(messageTitle);
       cy.get('[data-testid="message-body"]').type('This is a message.');
       cy.get('[data-testid="select-document"]')
