@@ -2,7 +2,12 @@ import { JoiValidationEntity } from '@shared/business/entities/JoiValidationEnti
 import { createISODateString } from '../utilities/DateHandler';
 import { getUniqueId } from '@shared/sharedAppContext';
 import { JoiValidationConstants } from '@shared/business/entities/JoiValidationConstants';
-import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  DOCKET_SECTION,
+  INITIAL_DOCUMENT_TYPES,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import joi from 'joi';
 
 export class WorkItem extends JoiValidationEntity {
@@ -17,7 +22,7 @@ export class WorkItem extends JoiValidationEntity {
   public docketNumber: string;
   public inProgress?: boolean;
   public isRead?: boolean;
-  public section: string;
+  public section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
   public sentBy: string;
   public sentBySection?: string;
   public sentByUserId?: string;
@@ -87,7 +92,7 @@ export class WorkItem extends JoiValidationEntity {
   }: {
     assigneeId?: string;
     assigneeName?: string;
-    section: string;
+    section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
     sentBy: string;
     sentBySection?: string;
     sentByUserId?: string;
@@ -131,6 +136,28 @@ export class WorkItem extends JoiValidationEntity {
 
   getValidationRules() {
     return WorkItem.VALIDATION_RULES;
+  }
+
+  static getWorkItemSectionFromUserSection({
+    section,
+    documentTitle,
+  }: {
+    section?: string;
+    documentTitle: string;
+  }): typeof PETITIONS_SECTION | typeof DOCKET_SECTION {
+    // A work item is assigned to either the petitions section or the docket section.
+    // If the section we are passing in is either of those, just return it.
+    if (section && [DOCKET_SECTION, PETITIONS_SECTION].includes(section)) {
+      return section as typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
+    }
+    // Otherwise, we will assign a petition to the petitions section and anything else to the docket section.
+    if (
+      documentTitle?.toLocaleLowerCase() ==
+      INITIAL_DOCUMENT_TYPES.petition.documentTitle.toLocaleLowerCase()
+    ) {
+      return PETITIONS_SECTION;
+    }
+    return DOCKET_SECTION;
   }
 }
 

@@ -36,6 +36,7 @@ import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
@@ -212,7 +213,10 @@ const completeDocketEntryQC = async (
   workItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: sectionToAssignTo,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: sectionToAssignTo,
+      documentTitle: updatedDocketEntry.documentTitle,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,

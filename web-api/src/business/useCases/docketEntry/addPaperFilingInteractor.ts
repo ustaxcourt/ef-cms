@@ -123,7 +123,10 @@ export const addPaperFiling = async (
       docketEntryId: docketEntryEntity.docketEntryId,
       inProgress: isSavingForLater,
       isRead: user.role !== ROLES.privatePractitioner,
-      section: user.section,
+      section: WorkItem.getWorkItemSectionFromUserSection({
+        section: user.section,
+        documentTitle: docketEntryEntity.documentTitle,
+      }),
       sentBy: user.name,
       sentBySection: user.section,
       sentByUserId: user.userId,

@@ -1,21 +1,36 @@
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/users/mocks.jest';
-import { DOCKET_SECTION } from '@shared/business/entities/EntityConstants';
+import '@web-api/persistence/postgres/docketEntries/mocks.jest';
+import {
+  CASE_SERVICES_SUPERVISOR_SECTION,
+  CLERK_OF_COURT_SECTION,
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { applicationContext } from '@shared/business/test/createTestApplicationContext';
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
 import { caseServicesSupervisorUser } from '@shared/test/mockUsers';
 import { getWorkItemById as getWorkItemByIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemById';
-import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
+import {
+  mockCaseServicesSupervisorUser,
+  mockClerkOfTheCourtUser,
+  mockDocketClerkUser,
+  mockPetitionsClerkUser,
+} from '@shared/test/mockAuthUsers';
 import { upsertWorkItems as upsertWorkItemsMock } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { getDocketEntriesByDocketNumberAndDocketEntryId as getDocketEntriesByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
 
 const getUserById = jest.mocked(getUserByIdMock);
 
 describe('assignWorkItemsInteractor', () => {
   const upsertWorkItems = upsertWorkItemsMock as jest.Mock;
   const getWorkItemById = getWorkItemByIdMock as jest.Mock;
+  const getDocketEntriesByDocketNumberAndDocketEntryId = jest.mocked(
+    getDocketEntriesByDocketNumberAndDocketEntryIdMock,
+  );
 
   const options = { assigneeId: 'ss', assigneeName: 'ss', workItemId: '' };
   let mockWorkItem: RawWorkItem;
@@ -39,6 +54,9 @@ describe('assignWorkItemsInteractor', () => {
     } as DbUser);
 
     getWorkItemById.mockResolvedValue(new WorkItem(mockWorkItem));
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      { documentTitle: 'Something' },
+    ] as RawDocketEntry[]);
   });
 
   it('should throw an unauthorized error when the user does not have permission to assign work items', async () => {
@@ -83,7 +101,11 @@ describe('assignWorkItemsInteractor', () => {
     ).rejects.toThrow();
   });
 
-  it('should assign work item to current user when given work item', async () => {
+  it('should assign work item to current docket clerk user when given work item', async () => {
+    getUserById.mockResolvedValue({
+      ...mockDocketClerkUser,
+      section: DOCKET_SECTION,
+    } as DbUser);
     await assignWorkItemsInteractor(
       applicationContext,
       {
@@ -104,23 +126,139 @@ describe('assignWorkItemsInteractor', () => {
     ]);
   });
 
-  it('assigns a work item to the current user', async () => {
+  it('should assign work item to current petitions clerk user when given work item', async () => {
+    getUserById.mockResolvedValue({
+      ...mockPetitionsClerkUser,
+      section: PETITIONS_SECTION,
+    } as DbUser);
     await assignWorkItemsInteractor(
       applicationContext,
       {
-        assigneeId: mockDocketClerkUser.userId,
-        assigneeName: 'Ted Docket',
-        workItemId: mockWorkItem.workItemId,
+        assigneeId: mockPetitionsClerkUser.userId,
+        assigneeName: mockPetitionsClerkUser.name,
+        workItem: mockWorkItem,
+        workItemId: undefined,
       },
-      mockDocketClerkUser,
+      mockPetitionsClerkUser,
     );
+    await expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        section: PETITIONS_SECTION,
+        sentBy: mockPetitionsClerkUser.name,
+        sentBySection: PETITIONS_SECTION,
+        sentByUserId: mockPetitionsClerkUser.userId,
+      },
+    ]);
+  });
 
-    expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+  it('should assign work item for a petition docket entry to the petitions section when filed by case services supervisor', async () => {
+    getUserById.mockResolvedValue({
+      ...mockCaseServicesSupervisorUser,
+      section: CASE_SERVICES_SUPERVISOR_SECTION,
+    } as DbUser);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      { documentTitle: 'Petition' },
+    ] as RawDocketEntry[]);
+    await assignWorkItemsInteractor(
+      applicationContext,
+      {
+        assigneeId: mockCaseServicesSupervisorUser.userId,
+        assigneeName: mockCaseServicesSupervisorUser.name,
+        workItem: mockWorkItem,
+        workItemId: undefined,
+      },
+      mockCaseServicesSupervisorUser,
+    );
+    await expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        section: PETITIONS_SECTION,
+        sentBy: mockCaseServicesSupervisorUser.name,
+        sentBySection: CASE_SERVICES_SUPERVISOR_SECTION,
+        sentByUserId: mockCaseServicesSupervisorUser.userId,
+      },
+    ]);
+  });
+
+  it('should assign work item for a petition docket entry to the petitions section when filed by clerk of the court', async () => {
+    getUserById.mockResolvedValue({
+      ...mockClerkOfTheCourtUser,
+      section: CLERK_OF_COURT_SECTION,
+    } as DbUser);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      { documentTitle: 'Petition' },
+    ] as RawDocketEntry[]);
+    await assignWorkItemsInteractor(
+      applicationContext,
+      {
+        assigneeId: mockClerkOfTheCourtUser.userId,
+        assigneeName: mockClerkOfTheCourtUser.name,
+        workItem: mockWorkItem,
+        workItemId: undefined,
+      },
+      mockClerkOfTheCourtUser,
+    );
+    await expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        section: PETITIONS_SECTION,
+        sentBy: mockClerkOfTheCourtUser.name,
+        sentBySection: CLERK_OF_COURT_SECTION,
+        sentByUserId: mockClerkOfTheCourtUser.userId,
+      },
+    ]);
+  });
+
+  it('should assign work item for a non-petition docket entry to the petitions section when filed by case services supervisor', async () => {
+    getUserById.mockResolvedValue({
+      ...mockCaseServicesSupervisorUser,
+      section: CASE_SERVICES_SUPERVISOR_SECTION,
+    } as DbUser);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      { documentTitle: 'Something' },
+    ] as RawDocketEntry[]);
+    await assignWorkItemsInteractor(
+      applicationContext,
+      {
+        assigneeId: mockCaseServicesSupervisorUser.userId,
+        assigneeName: mockCaseServicesSupervisorUser.name,
+        workItem: mockWorkItem,
+        workItemId: undefined,
+      },
+      mockCaseServicesSupervisorUser,
+    );
+    await expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
       {
         section: DOCKET_SECTION,
-        sentBy: mockDocketClerkUser.name,
-        sentBySection: DOCKET_SECTION,
-        sentByUserId: mockDocketClerkUser.userId,
+        sentBy: mockCaseServicesSupervisorUser.name,
+        sentBySection: CASE_SERVICES_SUPERVISOR_SECTION,
+        sentByUserId: mockCaseServicesSupervisorUser.userId,
+      },
+    ]);
+  });
+
+  it('should assign work item for a non-petition docket entry to the petitions section when filed by clerk of the court', async () => {
+    getUserById.mockResolvedValue({
+      ...mockClerkOfTheCourtUser,
+      section: CLERK_OF_COURT_SECTION,
+    } as DbUser);
+    getDocketEntriesByDocketNumberAndDocketEntryId.mockResolvedValue([
+      { documentTitle: 'Something' },
+    ] as RawDocketEntry[]);
+    await assignWorkItemsInteractor(
+      applicationContext,
+      {
+        assigneeId: mockClerkOfTheCourtUser.userId,
+        assigneeName: mockClerkOfTheCourtUser.name,
+        workItem: mockWorkItem,
+        workItemId: undefined,
+      },
+      mockClerkOfTheCourtUser,
+    );
+    await expect(upsertWorkItems.mock.calls[0][0].workItems).toMatchObject([
+      {
+        section: DOCKET_SECTION,
+        sentBy: mockClerkOfTheCourtUser.name,
+        sentBySection: CLERK_OF_COURT_SECTION,
+        sentByUserId: mockClerkOfTheCourtUser.userId,
       },
     ]);
   });

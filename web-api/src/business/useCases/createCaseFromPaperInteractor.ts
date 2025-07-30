@@ -42,7 +42,10 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
     docketEntryId: docketEntryEntity.docketEntryId,
     docketNumber: caseToAdd.docketNumber,
     inProgress: true,
-    section: user.section,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: user.section,
+      documentTitle: docketEntryEntity.documentTitle,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
