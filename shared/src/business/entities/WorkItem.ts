@@ -92,7 +92,7 @@ export class WorkItem extends JoiValidationEntity {
   }: {
     assigneeId?: string;
     assigneeName?: string;
-    section: string;
+    section: typeof PETITIONS_SECTION | typeof DOCKET_SECTION;
     sentBy: string;
     sentBySection?: string;
     sentByUserId?: string;
