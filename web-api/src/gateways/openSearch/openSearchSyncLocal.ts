@@ -1,4 +1,4 @@
-import { DatabaseSchema } from '@web-api/database-schema';
+import { DatabaseSchema } from '@web-api/persistence/postgres/database-schema';
 import { OpenSearchSyncMessage } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 
 export const openSearchSyncLocal = async ({

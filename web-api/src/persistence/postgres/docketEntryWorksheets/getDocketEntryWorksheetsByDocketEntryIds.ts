@@ -1,6 +1,6 @@
 import { RawDocketEntryWorksheet } from '@shared/business/entities/docketEntryWorksheet/DocketEntryWorksheet';
-import { getDbReader } from '@web-api/database';
 import { fromKyselyDocketEntryWorksheet } from '@web-api/persistence/postgres/docketEntryWorksheets/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getDocketEntryWorksheetsByDocketEntryIds = async ({
   docketEntryIds,

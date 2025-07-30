@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { ConnectionKysely } from '@web-api/persistence/postgres/connections/schema';
 
 export const getAllWebSocketConnections = async (): Promise<

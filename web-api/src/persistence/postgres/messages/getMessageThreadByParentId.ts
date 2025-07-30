@@ -1,6 +1,6 @@
 import { Message } from '@shared/business/entities/Message';
-import { getDbReader } from '@web-api/database';
 import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getMessageThreadByParentId = async ({
   parentMessageId,

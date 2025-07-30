@@ -1,6 +1,6 @@
 import { RawPractitioner } from '@shared/business/entities/Practitioner';
-import { getDbReader } from '@web-api/database';
 import { rawUser } from './mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getPractitionerByBarNumber = async ({
   barNumber,

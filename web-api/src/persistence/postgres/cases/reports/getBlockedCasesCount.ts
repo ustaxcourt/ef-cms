@@ -1,4 +1,4 @@
-import { getDbReader } from '@web-api/database';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { DEFAULT_FILTERED_BLOCKED_CASE_STATUSES } from '@shared/business/entities/EntityConstants';
 import { blockedCasesQuery } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
 

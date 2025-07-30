@@ -1,6 +1,6 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
-import { getDbReader } from '@web-api/database';
 import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getMessagesByDocketNumber = async ({
   docketNumber,

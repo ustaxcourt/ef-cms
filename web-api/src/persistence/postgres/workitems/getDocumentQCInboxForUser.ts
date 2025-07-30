@@ -1,12 +1,12 @@
-import { getDbReader } from '@web-api/database';
 import { fromKyselyWorkItemAndCase } from '@web-api/persistence/postgres/workitems/mapper';
-import { Database } from '@web-api/database-schema';
 import { Kysely } from 'kysely';
 import {
   RawWorkItemWithCaseAndDocketEntryInfo,
   WorkItemWithCaseInfoKysely,
 } from '@web-api/persistence/postgres/workitems/schema';
 import { getDocketEntriesByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/docketEntries/getDocketEntriesByDocketNumberAndDocketEntryId';
+import { getDbReader } from '@web-api/persistence/postgres/database';
+import { Database } from '@web-api/persistence/postgres/database-schema';
 
 export const getDocumentQCInboxForUser = async ({
   userId,

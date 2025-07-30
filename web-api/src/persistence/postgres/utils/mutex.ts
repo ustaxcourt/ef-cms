@@ -4,7 +4,7 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { tryGetLocks } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { ServiceUnavailableError } from '@web-api/errors/errors';
 import { sleep } from '@shared/tools/helpers';
-import { getLockingDbConnection } from '@web-api/getLockingConnection';
+import { getLockingDbConnection } from '@web-api/persistence/postgres/getLockingDbConnection';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 
 /**

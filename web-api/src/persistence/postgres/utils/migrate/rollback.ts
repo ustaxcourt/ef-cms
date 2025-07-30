@@ -1,7 +1,7 @@
 import * as path from 'path';
 import { FileMigrationProvider, Migrator } from 'kysely';
 import { promises as fs } from 'fs';
-import { getDbWriter } from '../../../../database';
+import { getDbWriter } from '../../database';
 
 async function rollbackLastMigration() {
   await getDbWriter({

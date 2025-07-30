@@ -1,6 +1,6 @@
 import { WorkItem } from '@shared/business/entities/WorkItem';
-import { getDbReader } from '@web-api/database';
 import { fromKyselyWorkItem } from '@web-api/persistence/postgres/workitems/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getWorkItemById = async ({
   workItemId,

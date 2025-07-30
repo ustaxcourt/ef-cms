@@ -4,7 +4,6 @@ import {
   parseArgsAndEnvVars,
   type ScriptConfig,
 } from '../../../helpers/parseArgsAndEnvVars';
-import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
 import {
   OPENSEARCH_SYNC_ACTIONS,
@@ -12,6 +11,7 @@ import {
 } from '@web-api/lambdas/openSearch/openSearchSyncHandler';
 import { indexOpenSearchDocketEntries } from 'web-api/elasticsearch/docketEntries/indexOpenSearchDocketEntries';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:

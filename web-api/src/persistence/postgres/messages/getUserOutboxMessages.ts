@@ -1,7 +1,7 @@
 import { MessageResult } from '@shared/business/entities/MessageResult';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
-import { getDbReader } from '@web-api/database';
 import { fromKyselyMessage } from '@web-api/persistence/postgres/messages/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getUserOutboxMessages = async ({
   userId,

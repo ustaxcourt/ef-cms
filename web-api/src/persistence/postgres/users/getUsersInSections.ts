@@ -1,5 +1,5 @@
-import { getDbReader } from '@web-api/database';
 import { ROLES } from '@shared/business/entities/EntityConstants';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 import { DbUser, rawUser } from '@web-api/persistence/postgres/users/mapper';
 
 export const getUsersInSections = async ({

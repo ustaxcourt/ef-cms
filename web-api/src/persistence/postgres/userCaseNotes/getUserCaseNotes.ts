@@ -1,5 +1,5 @@
-import { getDbReader } from '@web-api/database';
 import { fromKyselyUserCaseNote } from '@web-api/persistence/postgres/userCaseNotes/mapper';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getUserCaseNotes = async ({
   docketNumbers,

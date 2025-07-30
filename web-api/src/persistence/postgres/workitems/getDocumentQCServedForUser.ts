@@ -1,4 +1,3 @@
-import { getDbReader } from '@web-api/database';
 import {
   attachDocketEntriesToWorkItemQC,
   workItemQCQueryBase,
@@ -7,6 +6,7 @@ import {
   RawWorkItemWithCaseAndDocketEntryInfo,
   WorkItemWithCaseInfoKysely,
 } from '@web-api/persistence/postgres/workitems/schema';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 export const getDocumentQCServedForUser = async ({
   afterDate,
