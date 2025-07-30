@@ -6,9 +6,10 @@ export const updateMessageModalAttachmentsAction = ({
   props,
   store,
 }: ActionProps) => {
-  const { attachments, draftAttachments, subject } = get(state.modal.form);
+  const { draftAttachments } = get(state.modal.form);
   const caseDetail = get(state.caseDetail);
   const documentId = props.documentId || get(state.docketEntryId);
+  const showModal = get(state.modal.showModal);
 
   if (documentId) {
     const document = applicationContext
@@ -22,16 +23,19 @@ export const updateMessageModalAttachmentsAction = ({
       .getUtilities()
       .getDescriptionDisplay(document);
 
-    const isSubjectEmpty = !subject || subject.trim() === '';
-    if (isSubjectEmpty && attachments.length + draftAttachments.length === 0) {
-      store.set(state.modal.form.subject, documentTitle.slice(0, 250));
-    }
     if (props.action === 'add') {
       draftAttachments.push({
         documentId,
         documentTitle,
         index: document.index,
       });
+
+      if (
+        showModal === 'CreateMessageModal' &&
+        !get(state.modal.form.subject)
+      ) {
+        store.set(state.modal.form.subject, documentTitle.slice(0, 250));
+      }
     } else if (props.action === 'remove') {
       const foundIndex = draftAttachments.findIndex(
         attachment => attachment.documentId == props.documentId,
