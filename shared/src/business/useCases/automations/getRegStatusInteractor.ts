@@ -21,6 +21,7 @@ import {
 import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
+// This interactor is for Zendesk use only, and should never by called by DAWSON
 export const getRegStatusInteractor = async (
   applicationContext: ServerApplicationContext,
   { userEmail }: { userEmail: string },
