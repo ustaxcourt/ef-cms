@@ -70,7 +70,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .execute();
 
   await db.schema
-    .createTable('dwTrialSessionNoticeProcessing')
+    .createTable('dwTrialSessionNotificationProcessing')
     .addColumn('trialSessionId', 'uuid', col => col.primaryKey())
     .addColumn('caseStatuses', 'jsonb')
     .addColumn('status', 'varchar')
