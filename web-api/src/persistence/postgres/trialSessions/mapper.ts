@@ -115,6 +115,7 @@ export function fromKyselyNewTrialSessionWorkingCopy(
 ): RawTrialSessionWorkingCopy {
   return transformNullToUndefined({
     ...trialSessionWorkingCopy,
-    sortOrder: trialSessionWorkingCopy.sortOrder as 'asc' | 'desc' | undefined,
+    sortOrder: (trialSessionWorkingCopy.sortOrder || 'asc') as 'asc' | 'desc',
+    sort: trialSessionWorkingCopy.sort || 'docket'
   });
 }

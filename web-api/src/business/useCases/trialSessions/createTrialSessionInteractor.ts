@@ -41,7 +41,6 @@ export const createTrialSessionInteractor = async (
   return await applicationContext
     .getUseCaseHelpers()
     .createTrialSessionAndWorkingCopy({
-      applicationContext,
       trialSessionToAdd,
     });
 };

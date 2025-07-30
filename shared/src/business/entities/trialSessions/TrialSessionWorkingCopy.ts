@@ -23,8 +23,8 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
     submittedCAV: boolean;
   };
   public sessionNotes?: string;
-  public sort?: string;
-  public sortOrder?: 'asc' | 'desc';
+  public sort: string;
+  public sortOrder: 'asc' | 'desc';
   public trialSessionId: string;
   public userId: string;
 
@@ -49,8 +49,8 @@ export class TrialSessionWorkingCopy extends JoiValidationEntity {
       submittedCAV: true,
     };
     this.sessionNotes = rawSession.sessionNotes;
-    this.sort = rawSession.sort;
-    this.sortOrder = rawSession.sortOrder;
+    this.sort = rawSession.sort || 'docket';
+    this.sortOrder = rawSession.sortOrder || 'asc';
     this.trialSessionId = rawSession.trialSessionId;
     this.userId = rawSession.userId;
   }

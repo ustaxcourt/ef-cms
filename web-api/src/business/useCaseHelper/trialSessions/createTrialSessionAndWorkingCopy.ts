@@ -12,7 +12,6 @@ import { createTrialSessionWorkingCopy } from '@web-api/persistence/postgres/tri
  * @returns {object} the created trial session
  */
 export const createTrialSessionAndWorkingCopy = async ({
-  _applicationContext,
   trialSessionToAdd,
 }) => {
   const createdTrialSession = await createTrialSession({
