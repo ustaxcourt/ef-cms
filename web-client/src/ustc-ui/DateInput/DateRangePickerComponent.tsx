@@ -38,8 +38,8 @@ export const DateRangePickerComponent = ({
   endPickerCls?: string;
   endValue: string;
   formGroupCls?: string;
-  formGroupStartCls?: string,
-  formGroupEndCls?: string,
+  formGroupStartCls?: string;
+  formGroupEndCls?: string;
   rangePickerCls?: string;
   onBlurEnd?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlurStart?: (event: React.ChangeEvent<HTMLInputElement>) => void;
