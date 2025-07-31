@@ -16,6 +16,7 @@ import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase
 import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprioritizesCase';
 import { removePendingItemFromCase } from './journey/removePendingItemFromCase';
 import { updateACaseCaption } from './journey/updateACaseCaption';
+import { docketClerkRemovesCaseFromTrial } from './journey/docketClerkRemovesCaseFromTrial';
 
 describe('Docket Clerk verifies Consolidated Cases', () => {
   const cerebralTest = setupTest();
@@ -53,10 +54,13 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
     docketClerkAddsCaseToHearing(cerebralTest, 'Low blast radius', 0);
     docketClerkVerifiesConsolidatedCases(cerebralTest);
 
-    docketClerkRemovesCaseFromHearing(cerebralTest);
+    docketClerkRemovesCaseFromHearing(cerebralTest, 0);
     docketClerkVerifiesConsolidatedCases(cerebralTest);
 
     manuallyAddCaseToTrial(cerebralTest);
+    docketClerkVerifiesConsolidatedCases(cerebralTest);
+
+    docketClerkRemovesCaseFromTrial(cerebralTest);
     docketClerkVerifiesConsolidatedCases(cerebralTest);
 
     loginAs(cerebralTest, 'petitionsclerk@example.com');

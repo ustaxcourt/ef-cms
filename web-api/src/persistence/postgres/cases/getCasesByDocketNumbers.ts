@@ -332,7 +332,7 @@ async function getHearings(
   //     .execute(),
   // );
 
-  // TODO 10493: this is a hack to make the the fromTrialSessionKysely functionality work; rethink this
+  // TODO 10493: this is a hack to make the the fromKyselyTrialSession functionality work; rethink this
   const hearingsInfoRaw = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseHearing as ch')
