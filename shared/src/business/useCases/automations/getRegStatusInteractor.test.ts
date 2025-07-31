@@ -230,6 +230,25 @@ describe('getRegStatusInteractor', () => {
     );
   });
 
+  it('returns user status if it is unexpected', async () => {
+    const disabledUser = {
+      ...baseCognitoUser,
+      UserStatus: UserStatusType.ARCHIVED,
+    };
+
+    getCognito.mockReturnValueOnce({
+      send: jest.fn().mockResolvedValue({ Users: [disabledUser] }),
+    });
+
+    const result = await getRegStatusInteractor(
+      applicationContext,
+      { userEmail },
+      mockZendeskUser,
+    );
+
+    expect(result).toContain(`Found status: ${UserStatusType.ARCHIVED}`);
+  });
+
   it('does not mark user as suppressed if email is not suppressed', async () => {
     mockSend.mockRejectedValueOnce({
       name: 'NotFoundException',
