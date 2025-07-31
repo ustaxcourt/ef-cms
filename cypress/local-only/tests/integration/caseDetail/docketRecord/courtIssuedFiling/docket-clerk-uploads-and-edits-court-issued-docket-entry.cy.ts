@@ -118,7 +118,7 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
         });
       cy.get('[data-testid="modal-confirm"]').click();
       cy.get('#tab-case-messages').click();
-      cy.contains('a', title).click();
+      cy.contains('a', messageTitle).click();
 
       // Act: edit the docket entry from the messages view
       cy.get('[data-testid="edit-signed-document-button"]').click();
@@ -168,7 +168,7 @@ describe('Docket clerk uploads and edits court-issued docket entries', () => {
         });
       cy.get('[data-testid="modal-confirm"]').click();
       cy.get('#tab-case-messages').click();
-      cy.contains('a', title).click();
+      cy.contains('a', messageTitle).click();
 
       // Act: edit the docket entry from the messages view
       cy.get('[data-testid="edit-unsigned-document-button"]').click();
