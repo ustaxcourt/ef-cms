@@ -25,6 +25,7 @@ jest.mock('@aws-sdk/client-sesv2', () => {
 import { send as mockSend } from '@aws-sdk/client-sesv2';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
+import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 jest.mock('@web-api/persistence/cognito/getCognito');
 jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock('@web-api/persistence/postgres/users/getUserById');
@@ -45,7 +46,7 @@ describe('getRegStatusInteractor', () => {
       { Name: 'custom:role', Value: ROLES.privatePractitioner },
     ],
     Enabled: true,
-    UserStatus: 'CONFIRMED',
+    UserStatus: UserStatusType.CONFIRMED,
     Username: 'abc-123',
   };
 
@@ -208,6 +209,27 @@ describe('getRegStatusInteractor', () => {
     expect(result).toContain('❗ User is disabled');
   });
 
+  it('marks status as unconfirmed if user has not yet verified their email address', async () => {
+    const disabledUser = {
+      ...baseCognitoUser,
+      UserStatus: UserStatusType.UNCONFIRMED,
+    };
+
+    getCognito.mockReturnValueOnce({
+      send: jest.fn().mockResolvedValue({ Users: [disabledUser] }),
+    });
+
+    const result = await getRegStatusInteractor(
+      applicationContext,
+      { userEmail },
+      mockZendeskUser,
+    );
+
+    expect(result).toContain(
+      'Current status is UNCONFIRMED; they have not yet verified their email address',
+    );
+  });
+
   it('does not mark user as suppressed if email is not suppressed', async () => {
     mockSend.mockRejectedValueOnce({
       name: 'NotFoundException',
@@ -220,5 +242,29 @@ describe('getRegStatusInteractor', () => {
     );
 
     expect(result).not.toContain('Suppression');
+  });
+
+  it('logs and rethrows error if SES suppression check fails unexpectedly', async () => {
+    const unexpectedError = new Error('Unexpected SES failure');
+    mockSend.mockRejectedValueOnce(unexpectedError);
+
+    const consoleErrorSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    await expect(
+      getRegStatusInteractor(
+        applicationContext,
+        { userEmail },
+        mockZendeskUser,
+      ),
+    ).rejects.toThrow('Unexpected SES failure');
+
+    expect(consoleErrorSpy).toHaveBeenCalledWith(
+      'Failed to check suppression list:',
+      unexpectedError,
+    );
+
+    consoleErrorSpy.mockRestore();
   });
 });
