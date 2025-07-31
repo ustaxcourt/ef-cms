@@ -127,9 +127,7 @@ function getPoolConfig(): PoolConfig {
   if (!poolConfig) {
     poolConfig = {
       ...environment.rds.pool,
-      password: async () => {
-        return await getToken();
-      },
+      password: () => getToken(),
       ssl: environment.rds.useGlobalCert
         ? {
             ca: fs.readFileSync('global-bundle.pem').toString(),
