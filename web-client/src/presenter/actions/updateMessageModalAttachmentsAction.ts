@@ -24,6 +24,7 @@ export const updateMessageModalAttachmentsAction = ({
       .getDescriptionDisplay(document);
 
     const isSubjectEmpty = !subject || subject.trim() === '';
+
     if (
       isSubjectEmpty &&
       attachments?.length + draftAttachments?.length === 0
