@@ -17,7 +17,7 @@ export type AddRowHandler = ({
   name,
   section,
 }: {
-  index: number;
+  index?: number;
   name: string;
   section: string;
 }) => void;
