@@ -7,7 +7,6 @@ import { processOtherEntries } from './processOtherEntries';
 import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
 import { processRemoveEntries } from './processRemoveEntries';
 import type { DynamoDBRecord } from 'aws-lambda';
-import { processPractitionerDocumentsEntries } from '@web-api/business/useCases/processStreamRecords/processPractitionerDocumentsEntries';
 
 export const processStreamRecordsInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -18,7 +17,6 @@ export const processStreamRecordsInteractor = async (
     docketEntryRecords,
     otherRecords,
     practitionerMappingRecords,
-    practitionerDocumentRecords,
     removeRecords,
   } = partitionRecords(recordsToProcess);
 
@@ -39,18 +37,6 @@ export const processStreamRecordsInteractor = async (
       getDawsonLogger().error('failed to processDocketEntries', {
         err,
       });
-      throw err;
-    });
-
-    await processPractitionerDocumentsEntries({
-      practitionerDocumentRecords,
-    }).catch(err => {
-      getDawsonLogger().error(
-        'failed to process practitioner documents records',
-        {
-          err,
-        },
-      );
       throw err;
     });
 
