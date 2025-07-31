@@ -56,6 +56,10 @@ export const indexOpenSearchUser = async ({
     practitionerIndexCommands.push(marshalledPractitioner);
   });
 
+  if (!practitionerIndexCommands.length) {
+    return;
+  }
+
   await getSearchClient().bulk({
     refresh: false,
     body: practitionerIndexCommands,

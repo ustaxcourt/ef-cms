@@ -209,6 +209,7 @@ import cors from 'cors';
 import express from 'express';
 import { getTrialSessionOpenCasesCountLambda } from '@web-api/lambdas/trialSessions/getTrialSessionOpenCasesCountLambda';
 import { removePetitionerEmailLambda } from '@web-api/lambdas/cases/removePetitionerEmailLambda';
+import { deactiveUserLambda } from '@web-api/lambdas/automations/deactivateUserLambda';
 
 export const app = express();
 
@@ -1085,7 +1086,8 @@ app.delete(
  * ZenDesk Automations
  */
 app.post('/users', lambdaWrapper(createUserLambda)); // NOTE: These are meant for admins and zendesk automations. Not meant for regular application use.
-app.get('/users/userSummary', lambdaWrapper(regStatusLambda));
+app.get('/users/userSummary', lambdaWrapper(regStatusLambda)); //10495 update userSummary to user-summary
+app.post('/users/deactivate', lambdaWrapper(deactiveUserLambda))
 
 /**
  * work-items

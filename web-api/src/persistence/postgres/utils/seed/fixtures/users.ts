@@ -48,6 +48,14 @@ export const users: NewUserKysely[] = [
     accountStatus: ACCOUNT_STATUS.active,
   },
   {
+    role: 'docketclerk',
+    name: 'User Who Will Be Disabled',
+    section: 'docketclerk',
+    userId: '2588602c-101b-41ef-8d33-84715fc0e643',
+    email: 'disablemedocketclerk@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
+  },
+  {
     role: 'clerkofcourt',
     name: 'Test Clerk of Court',
     section: 'clerkofcourt',
