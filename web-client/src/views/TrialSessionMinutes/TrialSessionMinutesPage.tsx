@@ -13,11 +13,18 @@ export const TrialSessionMinutesPage = connect(
   {
     downloadMinuteSheetFormPdfSequence:
       sequences.downloadMinuteSheetFormPdfSequence,
-    saveMinuteSheetToDraftsSequence:
-      sequences.saveMinuteSheetToDraftsSequence,
+    saveMinuteSheetToDraftsSequence: sequences.saveMinuteSheetToDraftsSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
   },
-  ({ downloadMinuteSheetFormPdfSequence, saveMinuteSheetToDraftsSequence, formattedTrialSessionDetails }) => {
+  ({
+    downloadMinuteSheetFormPdfSequence,
+    saveMinuteSheetToDraftsSequence,
+    formattedTrialSessionDetails,
+  }: {
+    downloadMinuteSheetFormPdfSequence: (props: { forceAutosave?: boolean }) => void;
+    saveMinuteSheetToDraftsSequence: (props: { forceAutosave?: boolean }) => void;
+    formattedTrialSessionDetails: any;
+  }) => {
     return (
       <>
         <CaseDetailHeader hideActionButtons openCaseInNewTab />
@@ -44,7 +51,7 @@ export const TrialSessionMinutesPage = connect(
                 data-testid="save-to-drafts-button"
                 onClick={e => {
                   e.preventDefault();
-                  saveMinuteSheetToDraftsSequence();
+                  saveMinuteSheetToDraftsSequence({ forceAutosave: true });
                 }}
               >
                 Save to Drafts
@@ -54,7 +61,7 @@ export const TrialSessionMinutesPage = connect(
                 data-testid="preview-pdf-button"
                 onClick={e => {
                   e.preventDefault();
-                  downloadMinuteSheetFormPdfSequence();
+                  downloadMinuteSheetFormPdfSequence({ forceAutosave: true });;
                 }}
               >
                 Preview PDF
@@ -66,7 +73,7 @@ export const TrialSessionMinutesPage = connect(
             data-testid="save-to-drafts-button"
             onClick={e => {
               e.preventDefault();
-              saveMinuteSheetToDraftsSequence();
+              saveMinuteSheetToDraftsSequence({ forceAutosave: true });
             }}
           >
             Save to Drafts
@@ -76,7 +83,7 @@ export const TrialSessionMinutesPage = connect(
             data-testid="preview-pdf-button"
             onClick={e => {
               e.preventDefault();
-              downloadMinuteSheetFormPdfSequence();
+              downloadMinuteSheetFormPdfSequence({ forceAutosave: true });;
             }}
           >
             Preview PDF
@@ -86,5 +93,3 @@ export const TrialSessionMinutesPage = connect(
     );
   },
 );
-
-TrialSessionMinutesPage.displayName = 'TrialSessionMinutesPage';

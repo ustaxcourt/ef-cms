@@ -5,18 +5,11 @@ import { saveMinuteSheetToDraftsAction } from '@web-client/presenter/actions/Tri
 import { setAlertSuccessAction } from '@web-client/presenter/actions/setAlertSuccessAction';
 import { setAlertErrorAction } from '@web-client/presenter/actions/setAlertErrorAction';
 
-export const saveMinuteSheetToDraftsSequence = showProgressSequenceDecorator(
-  [
-    () => ({ forceAutosave: true }),
-    autosaveTrialSessionMinuteSheetAction,
-    saveMinuteSheetToDraftsAction,
-    {
-      success: [
-        setAlertSuccessAction,
-      ],
-      error: [
-        setAlertErrorAction,
-      ],
-    }
-  ],
-) as unknown as DownloadPdfHandler;
+export const saveMinuteSheetToDraftsSequence = showProgressSequenceDecorator([
+  autosaveTrialSessionMinuteSheetAction,
+  saveMinuteSheetToDraftsAction,
+  {
+    success: [setAlertSuccessAction],
+    error: [setAlertErrorAction],
+  },
+]) as unknown as DownloadPdfHandler;

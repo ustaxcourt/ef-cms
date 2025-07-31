@@ -16,6 +16,6 @@ export const saveMinuteSheetToDraftsLambda = (
       {
         ...lambdaArguments,
       },
-      authorizedUser
-    )
+      authorizedUser,
+    );
   });

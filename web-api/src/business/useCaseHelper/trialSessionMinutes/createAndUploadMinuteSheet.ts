@@ -1,13 +1,13 @@
-import { ServerApplicationContext } from "@web-api/applicationContext";
-import { NotFoundError } from "@web-api/errors/errors";
-import { getMinuteSheet } from "@web-api/persistence/postgres/minuteSheets/getMinuteSheet";
-import { formatMinuteSheet } from "./formatMinuteSheet";
+import { ServerApplicationContext } from '@web-api/applicationContext';
+import { NotFoundError } from '@web-api/errors/errors';
+import { getMinuteSheet } from '@web-api/persistence/postgres/minuteSheets/getMinuteSheet';
+import { formatMinuteSheet } from './formatMinuteSheet';
 import { minuteSheet as minuteSheetDocumentGenerator } from '@shared/business/utilities/documentGenerators/minuteSheet';
-import { uploadDocument } from "@web-api/persistence/s3/uploadDocument";
+import { uploadDocument } from '@web-api/persistence/s3/uploadDocument';
 
 export const createAndUploadMinuteSheet = async (
   applicationContext: ServerApplicationContext,
-  {docketNumber, trialSessionId, aCase, trialSession, docketEntryId}
+  { docketNumber, trialSessionId, aCase, trialSession, docketEntryId },
 ) => {
   const minuteSheet = await getMinuteSheet({ docketNumber, trialSessionId });
 
@@ -36,4 +36,4 @@ export const createAndUploadMinuteSheet = async (
   });
 
   return pdf;
-}
+};

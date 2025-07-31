@@ -13,13 +13,13 @@ export const saveMinuteSheetToDraftsAction = async ({ get, path }) => {
     return path.success({
       alertSuccess: {
         message: 'Minutes PDF saved to case Drafts.',
-      }
+      },
     });
   } catch (error) {
     return path.error({
       alertError: {
         message: 'Minutes PDF failed to save to case Drafts.',
-      }
+      },
     });
   }
 };

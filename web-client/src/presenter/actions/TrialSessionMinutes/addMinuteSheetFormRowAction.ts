@@ -2,21 +2,26 @@ import { state } from '@web-client/presenter/app.cerebral';
 import { v4 as uuidv4 } from 'uuid';
 
 export const addMinuteSheetFormRowAction = ({ get, props, store }) => {
-  const { index, name, section } = props;
+  const { name, section } = props;
   const rows = get(state.minuteSheetForm[section][name]);
   const newEmptyFormRow = getEmptyFormRowByName(name);
-  const newObj = {};
-  const entries = Object.entries(rows); // Object.keys, Object.values
 
-  for(let i = 0; i < entries.length; i++) {
-    const [key, value] = entries[i];
-    newObj[key] = value;
-    if (i === index) {
-      newObj[newEmptyFormRow.renderKey] = newEmptyFormRow;
+  if (props.name === 'exhibits' && props.index !== undefined) {
+    const newObj = {};
+    const entries = Object.entries(rows);
+
+    for (let i = 0; i < entries.length; i++) {
+      const [key, value] = entries[i];
+      newObj[key] = value;
+      if (i === props.index) {
+        newObj[newEmptyFormRow.renderKey] = newEmptyFormRow;
+      }
     }
+    store.set(state.minuteSheetForm[section][name], newObj);
+  } else {
+    rows[newEmptyFormRow.renderKey] = newEmptyFormRow;
+    store.set(state.minuteSheetForm[section][name], rows);
   }
-  
-  store.set(state.minuteSheetForm[section][name], newObj);
 };
 
 const getEmptyFormRowByName = (name: string) => {

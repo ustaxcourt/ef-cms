@@ -38,10 +38,13 @@ export const saveMinuteSheetToDraftsInteractor = async (
 
   const docketEntryId = getUniqueId();
 
-  const pdf = await createAndUploadMinuteSheet(
-    applicationContext,
-    {docketNumber, trialSessionId, aCase, trialSession, docketEntryId}
-  )
+  const pdf = await createAndUploadMinuteSheet(applicationContext, {
+    docketNumber,
+    trialSessionId,
+    aCase,
+    trialSession,
+    docketEntryId,
+  });
 
   const documentTitle = `Minutes`;
 
@@ -73,4 +76,4 @@ export const saveMinuteSheetToDraftsInteractor = async (
     authorizedUser,
     caseToUpdate: caseEntity,
   });
-}
+};

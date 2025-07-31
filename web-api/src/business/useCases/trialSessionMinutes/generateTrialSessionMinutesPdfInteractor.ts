@@ -36,10 +36,13 @@ export const generateTrialSessionMinutesPdfInteractor = async (
 
   const docketEntryId = getUniqueId();
 
-  await createAndUploadMinuteSheet(
-    applicationContext, 
-    {docketNumber, trialSessionId, aCase, trialSession, docketEntryId}
-  );
+  await createAndUploadMinuteSheet(applicationContext, {
+    docketNumber,
+    trialSessionId,
+    aCase,
+    trialSession,
+    docketEntryId,
+  });
 
   const { url } = await getDownloadPolicyUrl({
     applicationContext,
