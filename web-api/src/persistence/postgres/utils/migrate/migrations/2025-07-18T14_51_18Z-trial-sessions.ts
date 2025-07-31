@@ -12,10 +12,10 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('city', 'varchar')
     .addColumn('courthouseName', 'varchar')
     .addColumn('courtReporter', 'varchar')
-    .addColumn('createdAt', 'date') //should likely be timestamptz
+    .addColumn('createdAt', 'timestamptz')
     .addColumn('dismissedAlertForNOTT', 'boolean')
     .addColumn('hasNOTTBeenServed', 'boolean')
-    .addColumn('estimatedEndDate', 'date') //should likely be timestamptz
+    .addColumn('estimatedEndDate', 'timestamptz')
     .addColumn('irsCalendarAdministrator', 'varchar')
     .addColumn('irsCalendarAdministratorInfo', 'jsonb') //COME BACK
     .addColumn('isCalendared', 'boolean')
@@ -24,14 +24,14 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('maxCases', 'integer')
     .addColumn('meetingId', 'varchar')
     .addColumn('notes', 'varchar')
-    .addColumn('noticeIssuedDate', 'date') //should likely be timestamptz
+    .addColumn('noticeIssuedDate', 'timestamptz')
     .addColumn('password', 'varchar')
     .addColumn('postalCode', 'varchar')
     .addColumn('proceedingType', 'varchar')
     .addColumn('sessionScope', 'varchar')
     .addColumn('sessionStatus', 'varchar')
     .addColumn('sessionType', 'varchar')
-    .addColumn('startDate', 'date') //should likely be timestamptz
+    .addColumn('startDate', 'timestamptz')
     .addColumn('startTime', 'varchar')
     .addColumn('state', 'varchar')
     .addColumn('swingSession', 'boolean')
@@ -81,7 +81,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .createTable('dwCaseHearing')
     .addColumn('docketNumber', 'varchar', col => col.notNull())
     .addColumn('trialSessionId', 'uuid', col => col.notNull())
-        .addPrimaryKeyConstraint('dwCaseHearingPk', [
+    .addPrimaryKeyConstraint('dwCaseHearingPk', [
       'docketNumber',
       'trialSessionId',
     ])
