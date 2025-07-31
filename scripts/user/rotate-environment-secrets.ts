@@ -75,16 +75,51 @@ const rotateSecrets = async (environmentName: string): Promise<void> => {
   });
   console.log('✅ USTC_ADMIN_USER Cognito Password updated');
 
-  const putSecretValueCommand = new PutSecretValueCommand({
-    SecretId: `${env}_deploy`,
-    SecretString: JSON.stringify({
-      ...secrets,
-      DEFAULT_ACCOUNT_PASS,
-      USTC_ADMIN_PASS,
-    }),
-  });
-  await secretsClient.send(putSecretValueCommand);
-  console.log('✅ Secrets updated');
+  // for zendesk-compatible environments only
+  if (['prod', 'dev'].includes(env)) {
+    const USTC_ZENDESK_PASS = makeNewPassword();
+
+    // for local use only!
+    if (!ci || !ci.length) {
+      console.log({
+        USTC_ZENDESK_PASS,
+      });
+    }
+
+    await cognitoClient.adminSetUserPassword({
+      Password: USTC_ZENDESK_PASS,
+      Permanent: true,
+      UserPoolId,
+      Username: secrets.USTC_ZENDESK_USER,
+    });
+
+    console.log('✅ USTC_ZENDESK_USER Cognito Password updated');
+
+    const putSecretValueCommand = new PutSecretValueCommand({
+      SecretId: `${env}_deploy`,
+      SecretString: JSON.stringify({
+        ...secrets,
+        USTC_ZENDESK_PASS,
+        DEFAULT_ACCOUNT_PASS,
+        USTC_ADMIN_PASS,
+      }),
+    });
+
+    await secretsClient.send(putSecretValueCommand);
+    console.log('✅ Secrets updated');
+  } else {
+    const putSecretValueCommand = new PutSecretValueCommand({
+      SecretId: `${env}_deploy`,
+      SecretString: JSON.stringify({
+        ...secrets,
+        DEFAULT_ACCOUNT_PASS,
+        USTC_ADMIN_PASS,
+      }),
+    });
+
+    await secretsClient.send(putSecretValueCommand);
+    console.log('✅ Secrets updated');
+  }
 };
 
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
