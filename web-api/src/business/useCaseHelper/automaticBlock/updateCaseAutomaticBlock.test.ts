@@ -4,6 +4,7 @@ jest.mock(
 import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
+  SIGNED_DOCUMENT_TYPES,
 } from '@shared/business/entities/EntityConstants';
 import { Case } from '@shared/business/entities/cases/Case';
 import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '@shared/test/mockCase';
@@ -77,11 +78,51 @@ describe('updateCaseAutomaticBlock', () => {
         authorizedUser: mockDocketClerkUser,
       },
     );
+
+    const updateAutomaticBlockedSpy = jest.spyOn(
+      caseEntity,
+      'updateAutomaticBlocked',
+    );
+
     const updatedCase = await updateCaseAutomaticBlock({
       caseEntity,
     });
 
     expect(updatedCase.automaticBlocked).toBeFalsy();
+    expect(updateAutomaticBlockedSpy).not.toHaveBeenCalled();
+  });
+
+  it('should call updateAutomaticBlocked when the case has a trial date and also has a docketed stipulated decision', async () => {
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([]);
+
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE_WITHOUT_PENDING,
+        highPriority: false,
+        trialDate: '2021-03-01T21:40:46.415Z',
+        docketEntries: [
+          {
+            docketNumber: MOCK_CASE_WITHOUT_PENDING.docketNumber,
+            eventCode: SIGNED_DOCUMENT_TYPES.signedStipulatedDecision.eventCode,
+            isOnDocketRecord: true,
+          },
+        ],
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    const updateAutomaticBlockedSpy = jest.spyOn(
+      caseEntity,
+      'updateAutomaticBlocked',
+    );
+
+    await updateCaseAutomaticBlock({
+      caseEntity,
+    });
+
+    expect(updateAutomaticBlockedSpy).toHaveBeenCalled();
   });
 
   it('sets the case to not automaticBlocked if the case does not have deadlines or pending items and the case is not generalDocketReadyForTrial status', async () => {

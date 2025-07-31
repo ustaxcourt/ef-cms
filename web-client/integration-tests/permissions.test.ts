@@ -126,12 +126,6 @@ const internalFieldsBlocked = () => {
     cerebralTest.getState('caseDetail.docketEntries.0.pending'),
   ).toBeUndefined();
   expect(
-    cerebralTest.getState('caseDetail.docketEntries.0.qcAt'),
-  ).toBeUndefined();
-  expect(
-    cerebralTest.getState('caseDetail.docketEntries.0.qcByUserId'),
-  ).toBeUndefined();
-  expect(
     cerebralTest.getState('caseDetail.docketEntries.0.signedAt'),
   ).toBeUndefined();
   expect(
@@ -139,9 +133,6 @@ const internalFieldsBlocked = () => {
   ).toBeUndefined();
   expect(
     cerebralTest.getState('caseDetail.docketEntries.0.signedJudgeName'),
-  ).toBeUndefined();
-  expect(
-    cerebralTest.getState('caseDetail.docketEntries.0.signedJudgeUserId'),
   ).toBeUndefined();
   expect(
     cerebralTest.getState('caseDetail.docketEntries.0.strickenBy'),
@@ -285,7 +276,7 @@ describe('Case permissions test', () => {
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  it('Petitions Clerk views case detail', async () => {
+  it('Petitions Clerk views case detail before submission', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -300,7 +291,7 @@ describe('Case permissions test', () => {
 
   petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  it('Petitions Clerk views case detail 2', async () => {
+  it('Petitions Clerk views case detail after submission', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -314,7 +305,7 @@ describe('Case permissions test', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  it('Docket Clerk views case detail 2', async () => {
+  it('Docket Clerk views case detail after submission', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,

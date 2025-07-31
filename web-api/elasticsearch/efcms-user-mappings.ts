@@ -24,9 +24,6 @@ export const efcmsUserMappings: Property = {
     'firmName.S': {
       type: 'text',
     },
-    'indexedTimestamp.N': {
-      type: 'text',
-    },
     'lastName.S': {
       type: 'keyword',
     },
