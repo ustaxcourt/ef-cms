@@ -1,4 +1,4 @@
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { getDbReader } from '@web-api/database';
 import { fromKyselyTrialSession } from './mapper';
 import { jsonArrayFrom } from 'kysely/helpers/postgres';

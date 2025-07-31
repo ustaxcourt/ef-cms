@@ -6,7 +6,7 @@ export const getTrialSessionNotificationProcessing = async ({
 }: {
   trialSessionId: string;
 }): Promise<TrialSessionNotificationProcessingKysely | undefined> => {
-  return getDbReader(reader =>
+  return await getDbReader(reader =>
     reader
       .selectFrom('dwTrialSessionNotificationProcessing')
       .selectAll()

@@ -1,7 +1,7 @@
 import {
   RawTrialSession,
   TrialSession,
-} from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+} from '@shared/business/entities/trialSessions/TrialSession';
 import { pgInsertInto } from '@web-api/persistence/postgres/utils/operation/pgInsertInto';
 import { toKyselyNewTrialSession } from '@web-api/persistence/postgres/trialSessions/mapper';
 import { omit } from 'lodash';
@@ -12,7 +12,6 @@ export const updateTrialSession = async ({
 }: {
   trialSessionToUpdate: RawTrialSession;
 }): Promise<void> => {
-  const promises: Promise<any>[] = [];
   const THREE_DAYS =
     Math.floor(Date.now() / 1000) + TrialSession.PAPER_SERVICE_PDF_TTL;
 
@@ -22,7 +21,7 @@ export const updateTrialSession = async ({
     trialSessionId: trialSessionToUpdate.trialSessionId,
   }));
 
-  promises.push(
+  await settlePromises([
     pgInsertInto({
       table: 'dwTrialSession',
       values: [
@@ -30,15 +29,10 @@ export const updateTrialSession = async ({
       ],
       onConflictColumns: ['trialSessionId'],
     }),
-  );
-
-  promises.push(
     pgInsertInto({
       table: 'dwTrialSessionPaperPdf',
       values: paperPdfs,
       onConflictColumns: ['fileId', 'trialSessionId'],
     }),
-  );
-
-  await settlePromises(promises);
+  ]);
 };

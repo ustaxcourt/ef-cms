@@ -11,14 +11,6 @@ import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionWorkingCopies } from '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies';
 import { upsertTrialSessionWorkingCopy } from '@web-api/persistence/postgres/trialSessions/upsertTrialSessionWorkingCopy';
 
-/**
- * updateTrialSessionWorkingCopyInteractor
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.trialSessionWorkingCopyToUpdate the trial session working copy data to update
- * @returns {TrialSessionWorkingCopy} the updated trial session working copy returned from persistence
- */
 export const updateTrialSessionWorkingCopyInteractor = async (
   {
     trialSessionWorkingCopyToUpdate,
@@ -31,14 +23,16 @@ export const updateTrialSessionWorkingCopyInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const oldWorkingCopy = (await getTrialSessionWorkingCopies({
-    tsWorkingCopyIds: [
-      {
-        trialSessionId: trialSessionWorkingCopyToUpdate.trialSessionId,
-        userId: trialSessionWorkingCopyToUpdate.userId,
-      },
-    ],
-  })).at(0);
+  const oldWorkingCopy = (
+    await getTrialSessionWorkingCopies({
+      tsWorkingCopyIds: [
+        {
+          trialSessionId: trialSessionWorkingCopyToUpdate.trialSessionId,
+          userId: trialSessionWorkingCopyToUpdate.userId,
+        },
+      ],
+    })
+  ).at(0);
 
   const editableFields = {
     caseMetadata: trialSessionWorkingCopyToUpdate.caseMetadata,
