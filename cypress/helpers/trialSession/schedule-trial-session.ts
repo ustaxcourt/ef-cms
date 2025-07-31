@@ -1,7 +1,10 @@
-import { loginAsDocketClerk } from "../authentication/login-as-helpers";
-import { goToCase } from "../caseDetail/go-to-case";
+import { loginAsDocketClerk } from '../authentication/login-as-helpers';
+import { goToCase } from '../caseDetail/go-to-case';
 
-export const scheduleTrialSession = (docketNumber: string, trialSessionId: string) => {
+export const scheduleTrialSession = (
+  docketNumber: string,
+  trialSessionId: string,
+) => {
   loginAsDocketClerk();
   goToCase(docketNumber);
   cy.get('[data-testid="tab-case-information"]').click();
