@@ -116,6 +116,6 @@ export function fromKyselyNewTrialSessionWorkingCopy(
   return transformNullToUndefined({
     ...trialSessionWorkingCopy,
     sortOrder: (trialSessionWorkingCopy.sortOrder || 'asc') as 'asc' | 'desc',
-    sort: trialSessionWorkingCopy.sort || 'docket'
+    sort: trialSessionWorkingCopy.sort || 'docket',
   });
 }

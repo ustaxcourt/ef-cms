@@ -14,6 +14,7 @@ import { fromKyselyDocketEntry } from '@web-api/persistence/postgres/docketEntri
 import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/schema';
 import { difference, isEmpty, sortBy } from 'lodash';
 import { TrialSessionKysely } from '../trialSessions/schema';
+import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessions/mapper';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
@@ -218,6 +219,7 @@ function convertDbCaseToRawCase(
     archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
       fromKyselyDocketEntry(aD),
     ),
+    hearings: dbCase.hearings.map(hi => fromKyselyTrialSession(hi, [])),
   };
 
   return purgeDynamoKeys(appCase);
@@ -313,7 +315,25 @@ async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
 async function getHearings(
   docketNumbers: string[],
 ): Promise<{ docketNumber: string; hearings: TrialSessionKysely[] }[]> {
-  const hearingsInfo = await getDbReader(reader =>
+  // const hearingsInfo = await getDbReader(reader =>
+  //   reader
+  //     .selectFrom('dwCaseHearing as ch')
+  //     .innerJoin(
+  //       'dwTrialSession as ts',
+  //       'ch.trialSessionId',
+  //       'ts.trialSessionId',
+  //     )
+  //     .select(({ fn }) => [
+  //       'ch.docketNumber',
+  //       fn.jsonAgg('ts').as('hearings'), // This IS lying about types
+  //     ])
+  //     .where('ch.docketNumber', 'in', docketNumbers)
+  //     .groupBy('ch.docketNumber')
+  //     .execute(),
+  // );
+
+  // TODO 10493: this is a hack to make the the fromTrialSessionKysely functionality work; rethink this
+  const hearingsInfoRaw = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseHearing as ch')
       .innerJoin(
@@ -321,13 +341,20 @@ async function getHearings(
         'ch.trialSessionId',
         'ts.trialSessionId',
       )
-      .select(({ fn }) => [
-        'ch.docketNumber',
-        fn.jsonAgg('ts').as('hearings'), // This IS lying about types
-      ])
+      .selectAll()
       .where('ch.docketNumber', 'in', docketNumbers)
-      .groupBy('ch.docketNumber')
       .execute(),
+  );
+  // refactor all of this, it is not good
+  const hearingsInfo = Object.values(
+    hearingsInfoRaw.reduce((acc, item) => {
+      const { docketNumber, ...rest } = item;
+      if (!acc[docketNumber]) {
+        acc[docketNumber] = { docketNumber, hearings: [] };
+      }
+      acc[docketNumber].hearings.push(rest);
+      return acc;
+    }, {}),
   );
 
   return hearingsInfo;
