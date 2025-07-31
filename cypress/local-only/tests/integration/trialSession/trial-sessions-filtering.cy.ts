@@ -33,6 +33,8 @@ describe('trial sessions filtering', () => {
       trialLocation,
     }).then(({ trialSessionId }) => {
       // see that that trial session shows in new trial session tab
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(5000);
       cy.get('[data-testid="trial-session-link"]').click();
       setTrialSessionFilters({
         judge,
