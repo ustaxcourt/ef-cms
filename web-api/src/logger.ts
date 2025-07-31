@@ -31,7 +31,7 @@ export const expressLogger = (req, res, next) => {
     });
   }
 
-  logger.debug(`Request started: ${req.method} ${req.url}`);
+  logger.info(`Request started: ${req.method} ${req.url}`);
 
   req.locals = req.locals || {};
   req.locals.logger = logger;
