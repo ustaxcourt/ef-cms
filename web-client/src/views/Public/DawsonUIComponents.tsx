@@ -1,4 +1,5 @@
 import React from 'react';
-export const DawUIComponents = () => {
+
+export const DawsonUIComponents = () => {
   return <h3>Test</h3>;
 };
