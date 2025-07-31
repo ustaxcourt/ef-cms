@@ -1,5 +1,6 @@
 jest.mock('@web-api/persistence/postgres/users/createNewPetitionerUser');
 import {
+  ACCOUNT_STATUS,
   CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
@@ -68,6 +69,7 @@ describe('createUserForContact', () => {
       pendingEmail: UPDATED_EMAIL,
       role: ROLES.petitioner,
       userId: USER_ID,
+      accountStatus: ACCOUNT_STATUS.active
     });
   });
 

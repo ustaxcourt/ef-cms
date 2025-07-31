@@ -1,6 +1,9 @@
 jest.mock('@web-api/persistence/postgres/users/getUsersById');
 import { getUsersByIds as getUsersByIdsMock } from '@web-api/persistence/postgres/users/getUsersById';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import { getUsersPendingEmailInteractor } from './getUsersPendingEmailInteractor';
 import {
   mockAdminUser,
@@ -34,12 +37,14 @@ describe('getUsersPendingEmailInteractor', () => {
         pendingEmail: PENDING_EMAIL,
         role: ROLES.petitioner,
         userId: USER_IDS[0],
+        accountStatus: ACCOUNT_STATUS.active,
       } as DbUser,
       {
         name: 'Lori Fieri',
         pendingEmail: PENDING_EMAIL,
         role: ROLES.petitioner,
         userId: USER_IDS[1],
+        accountStatus: ACCOUNT_STATUS.active,
       } as DbUser,
     ]);
 
@@ -62,11 +67,13 @@ describe('getUsersPendingEmailInteractor', () => {
         name: 'Roslindis Angelino',
         role: ROLES.petitioner,
         userId: USER_IDS[0],
+        accountStatus: ACCOUNT_STATUS.active,
       } as DbUser,
       {
         name: 'Lori Fieri',
         role: ROLES.petitioner,
         userId: USER_IDS[1],
+        accountStatus: ACCOUNT_STATUS.active,
       } as DbUser,
     ]);
 

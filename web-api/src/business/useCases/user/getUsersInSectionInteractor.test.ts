@@ -1,6 +1,7 @@
 jest.mock('@web-api/persistence/postgres/users/getUsersInSections');
 import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
+  ACCOUNT_STATUS,
   CASE_SERVICES_SUPERVISOR_SECTION,
   PETITIONS_SECTION,
 } from '../../../../../shared/src/business/entities/EntityConstants';
@@ -17,11 +18,12 @@ import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 describe('Get users in section', () => {
   const getUsersInSections = jest.mocked(getUsersInSectionsMock);
   const MOCK_SECTION = [
-    mockPetitionerUser as DbUser,
+    { ...mockPetitionerUser, accountStatus: ACCOUNT_STATUS.active } as DbUser,
     {
       ...mockPetitionerUser,
       name: 'Tax Payer 2',
       userId: 'a79d2fac-aa2c-4183-9877-01ab1cdff127',
+      accountStatus: ACCOUNT_STATUS.active,
     } as DbUser,
   ];
 
@@ -32,6 +34,7 @@ describe('Get users in section', () => {
       judgeFullName: 'Test Judge 1',
       judgeTitle: 'Judge',
       name: 'Test Judge 1',
+      accountStatus: ACCOUNT_STATUS.active,
     } as DbUser,
     {
       ...mockJudgeUser,
@@ -40,6 +43,7 @@ describe('Get users in section', () => {
       judgeTitle: 'Judge',
       name: 'Test Judge 2',
       userId: 'ea83cea2-5ce9-451d-b3d6-1e7c0e51d311',
+      accountStatus: ACCOUNT_STATUS.active,
     } as DbUser,
   ];
 

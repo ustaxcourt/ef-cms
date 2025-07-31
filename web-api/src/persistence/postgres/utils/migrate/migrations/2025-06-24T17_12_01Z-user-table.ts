@@ -1,4 +1,3 @@
-import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 import { Kysely } from 'kysely';
 
 export async function up(db: Kysely<any>): Promise<void> {
@@ -36,9 +35,7 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('practitionerType', 'varchar')
     .addColumn('suffix', 'varchar')
     .addColumn('updatedEmail', 'varchar')
-    .addColumn('accountStatus', 'varchar', col =>
-      col.defaultTo(ACCOUNT_STATUS.active).notNull(),
-    )
+    .addColumn('accountStatus', 'varchar', col => col.notNull())
     .execute();
 
   await db.schema

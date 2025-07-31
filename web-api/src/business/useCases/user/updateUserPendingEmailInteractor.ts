@@ -5,7 +5,7 @@ import {
   isAuthorized,
 } from '../../../../../shared/src/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../../../../../shared/src/business/entities/User';
 import { createISODateString } from '@shared/business/utilities/DateHandler';
@@ -30,7 +30,11 @@ export const updateUserPendingEmailInteractor = async (
     throw new UnauthorizedError('Unauthorized to manage emails.');
   }
 
-  const user: any = await getUserById({ userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   await updateUserPendingEmail({ applicationContext, pendingEmail, user });
 

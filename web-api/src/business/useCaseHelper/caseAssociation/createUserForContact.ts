@@ -1,5 +1,8 @@
 import { Case } from '@shared/business/entities/cases/Case';
-import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  ROLES,
+} from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
@@ -35,6 +38,7 @@ export const createUserForContact = async ({
     pendingEmail: email,
     role: ROLES.petitioner,
     userId: contactId,
+    accountStatus: ACCOUNT_STATUS.active,
   });
 
   const userRaw = userEntity.validate().toRawObject();

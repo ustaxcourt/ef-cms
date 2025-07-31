@@ -20,7 +20,7 @@ export type UserContact = {
   address2?: string;
   address3?: string;
   city: string;
-  country: string;
+  country?: string;
   countryType: string;
   phone: string;
   postalCode: string;
