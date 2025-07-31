@@ -36,7 +36,7 @@ export const TrialSessionMinutesPage = connect(
             link
             href={`/trial-session-detail/${formattedTrialSessionDetails.trialSessionId}`}
           >
-            <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
+            <FontAwesomeIcon icon={['fas', 'arrow-alt-circle-left']} />
             Back to Session Information
           </Button>
           <SuccessNotification />
