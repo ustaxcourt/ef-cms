@@ -9,6 +9,17 @@ jest.mock('@aws-sdk/rds-signer', () => {
     Signer,
   };
 });
+jest.mock('pg', () => {
+  class Pool {
+    options = {};
+    connect() {
+      return { release() {} };
+    }
+  }
+  return {
+    Pool,
+  };
+});
 import { getConnection } from '@web-api/getConnection';
 import { environment } from '@web-api/environment';
 

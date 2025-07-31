@@ -42,6 +42,41 @@ table,
   }
 }
 
+.min-width-150 {
+  min-width: 150px;
+}
+
+.usa-table.todays-orders-mobile {
+  button {
+    padding: 0;
+  }
+
+  th {
+    padding: 24px 0 8px 16px;
+  }
+
+  td {
+    padding: 0 0 24px 16px;
+  }
+
+  tr:hover {
+    background: inherit;
+    box-shadow: none;
+  }
+
+  td.docket-number-head {
+    padding: 16px;
+    border-top: 3px solid color($theme-color-base-darkest);
+    border-bottom: 2px solid color($theme-color-base-light);
+    background-color: color($theme-color-base-lighter);
+    font-weight: bold;
+  }
+
+  td.divider {
+    border-bottom: 2px solid color($theme-color-base-light);
+  }
+}
+
 .usa-table.ustc-table table {
   td {
     padding: 0;
@@ -491,6 +526,17 @@ table.row-border-only {
   thead tr,
   tbody tr {
     border: 1px solid color($theme-color-base-lighter);
+  }
+}
+
+table.row-only {
+  th {
+    background-color: inherit;
+  }
+
+  th,
+  td {
+    border: none;
   }
 }
 
