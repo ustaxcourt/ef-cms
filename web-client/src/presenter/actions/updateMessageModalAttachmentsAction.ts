@@ -24,7 +24,11 @@ export const updateMessageModalAttachmentsAction = ({
       .getDescriptionDisplay(document);
 
     const isSubjectEmpty = !subject || subject.trim() === '';
-    if (isSubjectEmpty && attachments.length + draftAttachments.length === 0) {
+
+    if (
+      isSubjectEmpty &&
+      attachments?.length + draftAttachments?.length === 0
+    ) {
       store.set(state.modal.form.subject, documentTitle.slice(0, 250));
     }
     if (props.action === 'add') {

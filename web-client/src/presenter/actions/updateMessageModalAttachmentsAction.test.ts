@@ -136,6 +136,7 @@ describe('updateMessageModalAttachmentsAction', () => {
         caseDetail,
         modal: {
           form: {
+            attachments: [],
             draftAttachments: [],
           },
           showModal: 'CreateMessageModal',
@@ -265,6 +266,7 @@ describe('updateMessageModalAttachmentsAction', () => {
         caseDetail,
         modal: {
           form: {
+            attachments: [],
             draftAttachments: [],
           },
           showModal: 'CreateMessageModal',
