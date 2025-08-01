@@ -263,9 +263,9 @@ export const StatusReportOrder = connect(
                         htmlFor="stricken-from-trial-sessions"
                         id="stricken-from-trial-sessions-label"
                         style={
-                          !statusReportOrderHelper.isCalendared
-                            ? { color: '#757575' }
-                            : {}
+                          statusReportOrderHelper.isCalendared
+                            ? {}
+                            : { color: '#757575' }
                         }
                         title={
                           statusReportOrderHelper.isCalendared
