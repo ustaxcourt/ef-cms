@@ -2,7 +2,5 @@ import { setCaseDeadlineReportJudgeFilterAction } from '../actions/CaseDeadline/
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const filterCaseDeadlinesByJudgeSequence = showProgressSequenceDecorator(
-  [
-    setCaseDeadlineReportJudgeFilterAction, 
-  ],
+  [setCaseDeadlineReportJudgeFilterAction],
 );
