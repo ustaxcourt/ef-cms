@@ -1,5 +1,9 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { CASE_STATUS_TYPES, SESSION_TYPES, STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  SESSION_TYPES,
+  STATUS_REPORT_ORDER_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { prepareStatusReportOrderAction } from './prepareStatusReportOrderAction';
 import { presenter } from '@web-client/presenter/presenter-mock';
@@ -47,7 +51,7 @@ describe('prepareStatusReportOrderAction,', () => {
           statusReportIndex,
         },
         trialSession: {
-          sessionType: 'abc'
+          sessionType: 'abc',
         },
       },
     });
@@ -83,7 +87,7 @@ describe('prepareStatusReportOrderAction,', () => {
           statusReportIndex,
         },
         trialSession: {
-          sessionType: 'abc'
+          sessionType: 'abc',
         },
       },
     });
@@ -120,7 +124,7 @@ describe('prepareStatusReportOrderAction,', () => {
             statusReportIndex,
           },
           trialSession: {
-            sessionType: 'abc'
+            sessionType: 'abc',
           },
         },
       });
@@ -155,7 +159,7 @@ describe('prepareStatusReportOrderAction,', () => {
             statusReportIndex,
           },
           trialSession: {
-            sessionType: 'abc'
+            sessionType: 'abc',
           },
         },
       });
@@ -189,7 +193,7 @@ describe('prepareStatusReportOrderAction,', () => {
           statusReportIndex,
         },
         trialSession: {
-          sessionType: 'abc'
+          sessionType: 'abc',
         },
       },
     });
@@ -205,7 +209,7 @@ describe('prepareStatusReportOrderAction,', () => {
         caseDetail: {
           status: CASE_STATUS_TYPES.calendared,
           trialLocation,
-          trialDate
+          trialDate,
         },
         form: {
           docketEntryDescription: 'Order',
@@ -215,11 +219,13 @@ describe('prepareStatusReportOrderAction,', () => {
           statusReportIndex,
         },
         trialSession: {
-          sessionType: 'abc'
+          sessionType: 'abc',
         },
       },
     });
-    expect(result.state.form.richText).toContain(`This case is set for trial at the session of the Court commencing on ${trialDateFormatted} in ${trialLocation}.`);
+    expect(result.state.form.richText).toContain(
+      `This case is set for trial at the session of the Court commencing on ${trialDateFormatted} in ${trialLocation}.`,
+    );
   });
   it('should not list the time and place of the trial if it is calendared and a motion/hearing', async () => {
     const result = await runAction(prepareStatusReportOrderAction, {
@@ -238,10 +244,10 @@ describe('prepareStatusReportOrderAction,', () => {
           statusReportIndex,
         },
         trialSession: {
-          sessionType: SESSION_TYPES.motionHearing
+          sessionType: SESSION_TYPES.motionHearing,
         },
       },
     });
     expect(result.state.form.richText).toEqual(expectedFiledLine);
-  })
+  });
 });
