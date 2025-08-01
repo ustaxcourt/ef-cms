@@ -2,12 +2,26 @@ import { applicationContextForClient as applicationContext } from '@web-client/t
 import { formattedCaseDeadlines as formattedCaseDeadlinesComputed } from './formattedCaseDeadlines';
 import { runCompute } from '@web-client/presenter/test.cerebral';
 import { withAppContextDecorator } from '../../withAppContext';
+import {
+  createISODateString,
+  formatDateString,
+  FORMATS,
+  getBusinessDateInFuture,
+} from '@shared/business/utilities/DateHandler';
 
 describe('formattedCaseDeadlines', () => {
   const formattedCaseDeadlines = withAppContextDecorator(
     formattedCaseDeadlinesComputed,
     applicationContext,
   );
+
+  const oneMonthFromNowISO = getBusinessDateInFuture({
+    numberOfDays: 30,
+    outputFormat: FORMATS.ISO,
+    startDate: createISODateString(),
+  });
+
+  const oneMonthFromNowMMDDYY = formatDateString(oneMonthFromNowISO, 'MMDDYY');
 
   it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
     const caseDeadlines = [
@@ -18,7 +32,7 @@ describe('formattedCaseDeadlines', () => {
         deadlineDate: '2019-01-30T05:00:00.000Z',
       },
       {
-        deadlineDate: '2025-07-30T04:00:00.000Z',
+        deadlineDate: oneMonthFromNowISO,
       },
     ];
 
@@ -40,8 +54,8 @@ describe('formattedCaseDeadlines', () => {
         overdue: true,
       },
       {
-        deadlineDate: '2025-07-30T04:00:00.000Z',
-        deadlineDateFormatted: '07/30/25',
+        deadlineDate: oneMonthFromNowISO,
+        deadlineDateFormatted: oneMonthFromNowMMDDYY,
       },
     ]);
   });

@@ -16,7 +16,6 @@ export class EligibleCase extends JoiValidationEntity {
   public docketNumber: string;
   public docketNumberSuffix?: string;
   public docketNumberWithSuffix: string;
-  public highPriority?: boolean;
   public leadDocketNumber?: string;
   public procedureType: string;
   public irsPractitioners?: IrsPractitioner[];
@@ -36,7 +35,6 @@ export class EligibleCase extends JoiValidationEntity {
       docketNumberSuffix: rawProps.docketNumberSuffix,
     });
     this.procedureType = rawProps.procedureType;
-    this.highPriority = rawProps.highPriority;
     this.caseType = rawProps.caseType;
     this.qcCompleteForTrial = rawProps.qcCompleteForTrial || {};
     this.isSealed = isSealedCase(rawProps);
@@ -71,10 +69,6 @@ export class EligibleCase extends JoiValidationEntity {
       JoiValidationConstants.STRING.optional().description(
         'Auto-generated from docket number and the suffix.',
       ),
-    highPriority: joi
-      .boolean()
-      .optional()
-      .meta({ tags: ['Restricted'] }),
     irsPractitioners: joi
       .array()
       .items(IrsPractitioner.VALIDATION_RULES)
