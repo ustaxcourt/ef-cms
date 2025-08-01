@@ -101,6 +101,8 @@ export const petitionsClerkViewsDeadlineReport = (
       selectedJudgeId: buchUserId,
     });
 
+    await cerebralTest.runSequence('updateDateRangeForDeadlinesSequence');
+
     deadlines = cerebralTest.getState(
       'caseDeadlineReport.caseDeadlinesForCurrentPage',
     );
