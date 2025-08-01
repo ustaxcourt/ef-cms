@@ -14,7 +14,6 @@ export const addGroupSymbol = (object, value) => {
 export const getPriorityGroups = eligibleCases => {
   const groups = {
     default: [] as FormattedTrialSessionCase[],
-    highPriority: [] as FormattedTrialSessionCase[],
     manuallyAdded: [] as FormattedTrialSessionCase[],
     suffixHighPriority: [] as FormattedTrialSessionCase[],
   };
@@ -23,9 +22,6 @@ export const getPriorityGroups = eligibleCases => {
     if (theCase.isManuallyAdded) {
       addGroupSymbol(theCase, 'manuallyAdded');
       groups.manuallyAdded.push(theCase);
-    } else if (theCase.highPriority) {
-      addGroupSymbol(theCase, 'highPriority');
-      groups.highPriority.push(theCase);
     } else if (theCase.isDocketSuffixHighPriority) {
       addGroupSymbol(theCase, 'suffixHighPriority');
       groups.suffixHighPriority.push(theCase);
