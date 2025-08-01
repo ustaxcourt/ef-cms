@@ -1,6 +1,7 @@
 import { ClientApplicationContext } from '@web-client/applicationContext';
 import { ExternalDocumentFactory } from '@shared/business/entities/externalDocument/ExternalDocumentFactory';
 import { cloneDeep } from 'lodash';
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '@shared/business/entities/EntityConstants';
 
 /**
  * generateExternalDocumentTitle
@@ -14,6 +15,11 @@ export const generateExternalDocumentTitle = (
   applicationContext: ClientApplicationContext,
   { documentMetadata },
 ) => {
+  const entry = Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).find(
+    entry => entry.eventCode === documentMetadata.eventCode,
+  );
+  if (entry) return entry.documentTitle;
+
   documentMetadata = cloneDeep(documentMetadata);
 
   if (documentMetadata.previousDocument) {

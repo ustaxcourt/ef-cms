@@ -22,7 +22,6 @@ export type CustomCaseReportFilters = {
   startDate?: string;
   filingMethod: CustomCaseFilingMethods;
   preferredTrialCities: string[];
-  highPriority?: boolean;
   procedureType: CustomCaseProcedureTypes;
   judges: string[];
 };
@@ -50,7 +49,6 @@ export type CaseInventory = Pick<
   | 'preferredTrialCity'
   | 'receivedAt'
   | 'status'
-  | 'highPriority'
 >;
 
 export const getCustomCaseReportInteractor = async (
