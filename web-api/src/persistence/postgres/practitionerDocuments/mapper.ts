@@ -25,7 +25,13 @@ export function toKyselyNewPractitionerDocument(
   return pickFields(practitionerDocument, barNumber);
 }
 
-export function practitionerDocumentEntity(practitionerDocument) {
+export function practitionerDocumentEntity(
+  practitionerDocument,
+): RawPractitionerDocument[] | RawPractitionerDocument {
+  if (!practitionerDocument) {
+    // Always return an empty array if no document is found
+    return [];
+  }
   if (isArray(practitionerDocument)) {
     const practitionerDocuments = practitionerDocument.map(doc => {
       return {
