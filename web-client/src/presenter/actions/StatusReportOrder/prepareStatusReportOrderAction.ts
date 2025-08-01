@@ -1,5 +1,9 @@
 import { FORMATS } from '@shared/business/utilities/DateHandler';
-import { CASE_STATUS_TYPES, SESSION_TYPES, STATUS_REPORT_ORDER_OPTIONS } from '@shared/business/entities/EntityConstants';
+import {
+  CASE_STATUS_TYPES,
+  SESSION_TYPES,
+  STATUS_REPORT_ORDER_OPTIONS,
+} from '@shared/business/entities/EntityConstants';
 import { state } from '@web-client/presenter/app.cerebral';
 
 export const prepareStatusReportOrderAction = ({
@@ -17,13 +21,14 @@ export const prepareStatusReportOrderAction = ({
   } = get(state.form);
   const caseDetail = get(state.caseDetail);
   const trialSession = get(state.trialSession);
-  
+
   const { statusReportFilingDate, statusReportIndex } = get(
     state.statusReportOrder,
   );
 
   const isCalendared = caseDetail.status === CASE_STATUS_TYPES.calendared;
-  const isMotionOrHearing = trialSession.sessionType === SESSION_TYPES.motionHearing;
+  const isMotionOrHearing =
+    trialSession.sessionType === SESSION_TYPES.motionHearing;
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
   const hasOrderType = !!orderType;
   const hasStrickenFromTrialSessions = !!strickenFromTrialSessions;
@@ -38,8 +43,8 @@ export const prepareStatusReportOrderAction = ({
     .getUtilities()
     .formatDateString(statusReportFilingDate, FORMATS.MONTH_DAY_YEAR);
 
-  let calendaredLine = ''
-  if(isCalendared && !isMotionOrHearing) {
+  let calendaredLine = '';
+  if (isCalendared && !isMotionOrHearing) {
     const formattedTrialDate = applicationContext
       .getUtilities()
       .formatDateString(caseDetail.trialDate, FORMATS.MONTH_DAY_YEAR);

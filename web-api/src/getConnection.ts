@@ -31,8 +31,9 @@ export async function getConnection<T>({
 
 // Only 1 process should be calling this function at a time.
 async function establishConnection(): Promise<Kysely<Database>> {
+  const maxAttempts = 3;
   let attempt = 0;
-  while (attempt < 3) {
+  while (attempt < maxAttempts) {
     try {
       poolConfig = getPoolConfig();
       const token = await getToken();
@@ -62,7 +63,9 @@ async function establishConnection(): Promise<Kysely<Database>> {
   }
 
   dbInstance = null;
-  throw new Error(`Failed to connect to database after 3 attempts`);
+  throw new Error(
+    `Failed to connect to database after ${maxAttempts} attempts`,
+  );
 }
 
 async function generateRDSAuthToken() {
