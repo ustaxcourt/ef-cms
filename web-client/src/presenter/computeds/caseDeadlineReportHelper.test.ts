@@ -71,9 +71,9 @@ describe('caseDeadlineReportHelper', () => {
     it('should return the selected judge', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
-          caseDeadlineReport: { 
+          caseDeadlineReport: {
             caseDeadlinesForCurrentPage: caseDeadlines,
-            judgeIdFilter: '123456'
+            judgeIdFilter: '123456',
           },
           judges: [
             { userId: '123456', name: 'Carluzzo' },
@@ -86,14 +86,17 @@ describe('caseDeadlineReportHelper', () => {
           },
         },
       });
-      expect(result.selectedJudgeFilterValue).toEqual({ id: '123456', name: 'Carluzzo' });
+      expect(result.selectedJudgeFilterValue).toEqual({
+        id: '123456',
+        name: 'Carluzzo',
+      });
     });
     it('should return all judges the default value if judge is not found', () => {
       const result = runCompute(caseDeadlineReportHelper, {
         state: {
-          caseDeadlineReport: { 
+          caseDeadlineReport: {
             caseDeadlinesForCurrentPage: caseDeadlines,
-            judgeIdFilter: 'abc'
+            judgeIdFilter: 'abc',
           },
           judges: [
             { userId: '123456', name: 'Carluzzo' },
@@ -106,9 +109,12 @@ describe('caseDeadlineReportHelper', () => {
           },
         },
       });
-      expect(result.selectedJudgeFilterValue).toEqual({ id: '', name: '- All Judges -'})
+      expect(result.selectedJudgeFilterValue).toEqual({
+        id: '',
+        name: '- All Judges -',
+      });
     });
-  })
+  });
 
   it('should format the associated judge name to remove title so only the last name is returned', () => {
     const result = runCompute(caseDeadlineReportHelper, {
