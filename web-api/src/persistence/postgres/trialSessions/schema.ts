@@ -1,6 +1,7 @@
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopyCaseMetadata } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { Selectable, Insertable, ColumnType } from 'kysely';
+import { add } from 'lodash';
 
 const DEFAULT = {};
 
@@ -128,9 +129,16 @@ export type NewTrialSessionNotificationProcessingKysely =
 
 ///////////////////////
 
+
 export const caseHearingTableDefinition = {
   docketNumber: DEFAULT as string,
   trialSessionId: DEFAULT as string,
+  addedToSessionAt: DEFAULT as Date | null,
+  calendarNotes: DEFAULT as string | null,
+  disposition: DEFAULT as string | null,
+  isManuallyAdded: DEFAULT as boolean,
+  removedFromTrial: DEFAULT as boolean,
+  removedFromTrialDate: DEFAULT as Date | null,
 };
 export type CaseHearingTable = typeof caseHearingTableDefinition;
 
