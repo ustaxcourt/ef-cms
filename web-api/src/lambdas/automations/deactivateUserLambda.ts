@@ -4,7 +4,6 @@ import { deactivateUserInteractor } from '@shared/business/useCases/automations/
 
 export const deactiveUserLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(event, async () => {
-    console.log({ authorizedUser });
     return await deactivateUserInteractor(
       JSON.parse(event.body),
       authorizedUser,
