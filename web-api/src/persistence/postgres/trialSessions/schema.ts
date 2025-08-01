@@ -2,6 +2,7 @@ import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession
 import { TrialSessionWorkingCopyCaseMetadata } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { Selectable, Insertable, ColumnType } from 'kysely';
 import { add } from 'lodash';
+import { is } from 'o';
 
 const DEFAULT = {};
 
@@ -130,7 +131,7 @@ export type NewTrialSessionNotificationProcessingKysely =
 ///////////////////////
 
 
-export const caseHearingTableDefinition = {
+const trialSessionCaseTableDefinition = {
   docketNumber: DEFAULT as string,
   trialSessionId: DEFAULT as string,
   addedToSessionAt: DEFAULT as Date | null,
@@ -139,12 +140,13 @@ export const caseHearingTableDefinition = {
   isManuallyAdded: DEFAULT as boolean,
   removedFromTrial: DEFAULT as boolean,
   removedFromTrialDate: DEFAULT as Date | null,
+  isHearing: DEFAULT as boolean,
 };
-export type CaseHearingTable = typeof caseHearingTableDefinition;
+export type TrialSessionCaseTable = typeof trialSessionCaseTableDefinition;
 
-export const DW_CASE_HEARING_COLUMNS = Object.keys(
-  caseHearingTableDefinition,
-) as Array<keyof CaseHearingTable>;
+export const DW_TRIAL_SESSION_CASE_COLUMNS = Object.keys(
+  trialSessionCaseTableDefinition,
+) as Array<keyof TrialSessionCaseTable>;
 
-export type CaseHearingKysely = Selectable<CaseHearingTable>;
-export type NewCaseHearingKysely = Insertable<CaseHearingTable>;
+export type TrialSessionCaseKysely = Selectable<TrialSessionCaseTable>;
+export type NewTrialSessionCaseKysely = Insertable<TrialSessionCaseTable>;

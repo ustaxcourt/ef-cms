@@ -1,6 +1,6 @@
 import { pgDeleteFrom } from '../utils/operation/pgDeleteFrom';
 
-export const removeCaseFromHearing = async ({
+export const removeCaseFromTrialSession = async ({
   docketNumber,
   trialSessionId,
 }: {
@@ -8,7 +8,7 @@ export const removeCaseFromHearing = async ({
   trialSessionId: string;
 }): Promise<void> => {
   await pgDeleteFrom({
-    table: 'dwCaseHearing',
+    table: 'dwTrialSessionCase',
     where: cb =>
       cb
         .where('trialSessionId', '=', trialSessionId)

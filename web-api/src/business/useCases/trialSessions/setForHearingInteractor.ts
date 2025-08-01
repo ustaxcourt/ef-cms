@@ -10,7 +10,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
-import { addCaseToHearing } from '@web-api/persistence/postgres/trialSessions/addCaseToHearing';
+import { addCaseToTrialSession } from '@web-api/persistence/postgres/trialSessions/addCaseToTrialSession';
 
 export const setForHearingInteractor = async (
   _applicationContext: ServerApplicationContext,
@@ -57,7 +57,7 @@ export const setForHearingInteractor = async (
     .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
     .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
 
-  await addCaseToHearing({
+  await addCaseToTrialSession({
     docketNumber,
     trialSession: trialSessionEntity.validate().toRawObject(),
   });

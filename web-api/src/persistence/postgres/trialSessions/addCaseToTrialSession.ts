@@ -3,17 +3,19 @@ import { RawTrialSession } from '../../../../../shared/src/business/entities/tri
 import { pgInsertInto } from '../utils/operation/pgInsertInto';
 import { updateTrialSession } from './updateTrialSession';
 
-export const addCaseToHearing = ({
+export const addCaseToTrialSession = ({
   docketNumber,
   trialSession,
+  isHearing
 }: {
   docketNumber: string;
   trialSession: RawTrialSession;
+  isHearing: boolean;
 }) =>
   settlePromises([
     pgInsertInto({
-      table: 'dwCaseHearing',
-      values: { trialSessionId: trialSession.trialSessionId, docketNumber },
+      table: 'dwTrialSessionCase',
+      values: { trialSessionId: trialSession.trialSessionId, docketNumber, isHearing },
     }),
 
     updateTrialSession({

@@ -88,7 +88,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('isManuallyAdded', 'boolean', col => col.notNull().defaultTo(false))
     .addColumn('removedFromTrial', 'boolean', col => col.notNull().defaultTo(false))
     .addColumn('removedFromTrialDate', 'timestamptz')
-    .addPrimaryKeyConstraint('dwCaseHearingPk', [
+    .addColumn('isHearing', 'boolean', col => col.notNull().defaultTo(false))
+    .addPrimaryKeyConstraint('dwTrialSessionCasePk', [
       'docketNumber',
       'trialSessionId',
     ])
@@ -104,5 +105,5 @@ export async function down(db: Kysely<any>): Promise<void> {
 
   await db.schema.dropTable('dwTrialSessionNoticeProcessing').execute();
 
-  await db.schema.dropTable('dwCaseHearing').execute();
+  await db.schema.dropTable('dwTrialSessionCase').execute();
 }
