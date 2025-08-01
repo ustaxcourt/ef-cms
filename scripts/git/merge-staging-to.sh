@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 SOURCE="staging"
-[[ -z "$1" ]] && TARGET="$1" || TARGET=$(git branch --show-current)
+[[ -n "$1" ]] && TARGET="$1" || TARGET=$(git branch --show-current)
 [[ "$TARGET" == "$SOURCE" ]] && echo "Source and target branches are the same" && exit 1
 [[ -n $(git diff) ]] && echo "Stash or commit local changes first" && exit 1
 
