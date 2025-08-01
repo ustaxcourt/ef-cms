@@ -12,6 +12,7 @@ import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
+import { goToDawsonUIComponentSequence } from './sequences/Public/goToDawsonUIComponentSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
@@ -41,7 +42,6 @@ import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequ
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTableSequence } from '@web-client/presenter/sequences/sortTableSequence';
-import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { submitLoginSequence } from '@web-client/presenter/sequences/Login/submitLoginSequence';
 import { submitPractitionerBarNumberSearchSequence } from '@web-client/presenter/sequences/submitPractitionerBarNumberSearchSequence';
 import { submitPractitionerNameSearchSequence } from '@web-client/presenter/sequences/submitPractitionerNameSearchSequence';
@@ -78,6 +78,7 @@ export const presenterSequences = {
   displayProgressSpinnerSequence,
   goToCreatePetitionerAccountSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
+  goToDawsonUIComponentSequence,
   gotoHealthCheckSequence: showMaintenancePageDecorator(
     gotoHealthCheckSequence,
   ),
@@ -116,7 +117,6 @@ export const presenterSequences = {
   resetPublicTrialSessionsDataSequence,
   showMoreResultsSequence,
   sortTableSequence,
-  sortTodaysOrdersSequence,
   submitLoginSequence,
   submitPractitionerBarNumberSearchSequence,
   submitPractitionerNameSearchSequence,
