@@ -27,6 +27,7 @@ describe('status report order helper', () => {
     expect(result).toEqual({
       dueDateErrorClass: 'status-report-order-form-group',
       dueDateErrorText: undefined,
+      isCalendared: false,
       isLeadCase: true,
       jurisdictionErrorClass: 'status-report-order-form-group',
       jurisdictionErrorText: undefined,
@@ -47,6 +48,7 @@ describe('status report order helper', () => {
     expect(result).toEqual({
       dueDateErrorClass: 'status-report-order-form-group',
       dueDateErrorText: undefined,
+      isCalendared: false,
       isLeadCase,
       jurisdictionErrorClass: 'status-report-order-form-group',
       jurisdictionErrorText: undefined,
@@ -70,6 +72,7 @@ describe('status report order helper', () => {
     expect(result).toEqual({
       dueDateErrorClass: 'status-report-order-form-group-error',
       dueDateErrorText: 'Select due date',
+      isCalendared: false,
       isLeadCase,
       jurisdictionErrorClass: 'status-report-order-form-group-error',
       jurisdictionErrorText: 'Select jurisdiction',
@@ -92,6 +95,7 @@ describe('status report order helper', () => {
     expect(result).toEqual({
       dueDateErrorClass: 'status-report-order-form-group-error',
       dueDateErrorText: 'an error occurred',
+      isCalendared: false,
       isLeadCase,
       jurisdictionErrorClass: 'status-report-order-form-group',
       jurisdictionErrorText: undefined,
