@@ -61,7 +61,7 @@ export const updateTrialSession = async (
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
-    dismissedAlertForNOTT: trialSession.dismissedAlertForNOTT,
+    dismissedAlertForNott: trialSession.dismissedAlertForNott,
     estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
     irsCalendarAdministratorInfo: trialSession.irsCalendarAdministratorInfo,

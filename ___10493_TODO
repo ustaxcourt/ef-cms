@@ -1,6 +1,6 @@
 # TODOS FOR 10493
 
-- [ ] hasNOTTBeenServed will have a casing issue
+- [ ] hasNottBeenServed will have a casing issue
 - [ ] Determine what columns are actually nullable
 - [ ] TrialClerk and Judge are both still any in the schema.ts file
 - [x] Need to update mapper from kysley object

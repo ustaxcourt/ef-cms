@@ -25,7 +25,7 @@ export const initialTrialSessionState: TrialSessionState = {
   caseOrder: [],
   eligibleCases: [],
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: false,
   judge: {
     name: '',

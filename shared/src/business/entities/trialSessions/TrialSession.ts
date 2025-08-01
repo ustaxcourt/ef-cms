@@ -80,8 +80,8 @@ export class TrialSession extends JoiValidationEntity {
   public courthouseName?: string;
   public courtReporter?: string;
   public createdAt?: string;
-  public dismissedAlertForNOTT?: boolean;
-  public hasNOTTBeenServed: boolean;
+  public dismissedAlertForNott?: boolean;
+  public hasNottBeenServed: boolean;
   public estimatedEndDate?: string;
   public irsCalendarAdministrator?: string;
   public irsCalendarAdministratorInfo?: RawIrsCalendarAdministratorInfo;
@@ -150,7 +150,7 @@ export class TrialSession extends JoiValidationEntity {
     this.courtReporter = rawSession.courtReporter;
     this.courthouseName = rawSession.courthouseName;
     this.createdAt = rawSession.createdAt || createISODateString();
-    this.dismissedAlertForNOTT = rawSession.dismissedAlertForNOTT || false;
+    this.dismissedAlertForNott = rawSession.dismissedAlertForNott || false;
     this.sessionStatus = rawSession.sessionStatus || SESSION_STATUS_TYPES.new;
     this.estimatedEndDate = rawSession.estimatedEndDate || null;
     this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
@@ -163,7 +163,7 @@ export class TrialSession extends JoiValidationEntity {
     this.noticeIssuedDate = rawSession.noticeIssuedDate;
     this.password = rawSession.password;
     this.postalCode = rawSession.postalCode;
-    this.hasNOTTBeenServed = rawSession.hasNOTTBeenServed || false;
+    this.hasNottBeenServed = rawSession.hasNottBeenServed || false;
     this.sessionScope =
       rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
     this.sessionType = rawSession.sessionType;
@@ -253,7 +253,7 @@ export class TrialSession extends JoiValidationEntity {
         .allow('')
         .optional(),
       createdAt: JoiValidationConstants.ISO_DATE.optional(),
-      dismissedAlertForNOTT: joi.boolean().optional(),
+      dismissedAlertForNott: joi.boolean().optional(),
       entityName:
         JoiValidationConstants.STRING.valid('TrialSession').required(),
       estimatedEndDate: joi
@@ -268,7 +268,7 @@ export class TrialSession extends JoiValidationEntity {
           '*': 'Enter a valid estimated end date',
           'date.max': 'Enter a valid estimated end date',
         }),
-      hasNOTTBeenServed: joi.boolean().required(),
+      hasNottBeenServed: joi.boolean().required(),
       irsCalendarAdministrator:
         JoiValidationConstants.STRING.max(100).optional(),
       irsCalendarAdministratorInfo: joi

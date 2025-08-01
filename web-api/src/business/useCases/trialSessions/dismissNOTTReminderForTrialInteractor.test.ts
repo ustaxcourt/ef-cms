@@ -38,7 +38,7 @@ describe('dismissNOTTReminderForTrialInteractor', () => {
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
-      dismissedAlertForNOTT: true,
+      dismissedAlertForNott: true,
       trialSessionId: MOCK_TRIAL_REGULAR.trialSessionId,
     });
   });

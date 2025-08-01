@@ -12,7 +12,7 @@ export const MOCK_TRIAL_REMOTE: RawTrialSession = {
   caseOrder: [],
   chambersPhoneNumber: '1111111',
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: true,
   joinPhoneNumber: '0987654321',
   judge: {
@@ -37,7 +37,7 @@ export const MOCK_TRIAL_REMOTE: RawTrialSession = {
 export const MOCK_TRIAL_REGULAR: RawTrialSession = {
   caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: false,
   judge: {
     name: 'Judge Yggdrasil',
@@ -66,7 +66,7 @@ export const MOCK_TRIAL_INPERSON: RawTrialSession = {
   chambersPhoneNumber: '3609087782',
   city: 'Scottsburg',
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: false,
   judge: {
     name: 'A Judge',
@@ -91,7 +91,7 @@ export const MOCK_TRIAL_STANDALONE_REMOTE: RawTrialSession = {
   caseOrder: [],
   chambersPhoneNumber: '1111111',
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: true,
   joinPhoneNumber: '0987654321',
   judge: {
@@ -116,7 +116,7 @@ export const MOCK_NEW_TRIAL_REMOTE: RawNewTrialSession = {
   caseOrder: [],
   chambersPhoneNumber: '4509876612',
   entityName: 'TrialSession',
-  hasNOTTBeenServed: false,
+  hasNottBeenServed: false,
   isCalendared: false,
   joinPhoneNumber: '8737762291',
   judge: {

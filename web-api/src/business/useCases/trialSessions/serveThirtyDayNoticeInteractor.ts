@@ -263,7 +263,7 @@ export const serveThirtyDayNotice = async (
     );
   }
 
-  trialSessionEntity.hasNOTTBeenServed = true;
+  trialSessionEntity.hasNottBeenServed = true;
 
   await updateTrialSession({
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),

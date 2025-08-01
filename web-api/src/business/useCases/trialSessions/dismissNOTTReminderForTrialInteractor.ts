@@ -33,7 +33,7 @@ export const dismissNOTTReminderForTrialInteractor = async (
 
   const updatedTrialSessionEntity: TrialSession = new TrialSession({
     ...currentTrialSession,
-    dismissedAlertForNOTT: true,
+    dismissedAlertForNott: true,
   });
 
   await updateTrialSession({

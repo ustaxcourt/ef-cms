@@ -13,8 +13,8 @@ export async function up(db: Kysely<any>): Promise<void> {
     .addColumn('courthouseName', 'varchar')
     .addColumn('courtReporter', 'varchar')
     .addColumn('createdAt', 'timestamptz')
-    .addColumn('dismissedAlertForNOTT', 'boolean')
-    .addColumn('hasNOTTBeenServed', 'boolean')
+    .addColumn('dismissedAlertForNott', 'boolean')
+    .addColumn('hasNottBeenServed', 'boolean')
     .addColumn('estimatedEndDate', 'timestamptz')
     .addColumn('irsCalendarAdministrator', 'varchar')
     .addColumn('irsCalendarAdministratorInfo', 'jsonb') //COME BACK

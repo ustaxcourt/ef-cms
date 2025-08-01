@@ -34,8 +34,8 @@ export function toKyselyNewTrialSession(
     createdAt: rawTrialSession.createdAt
       ? calculateDate({ dateString: rawTrialSession.createdAt })
       : calculateDate({ dateString: formatNow() }),
-    dismissedAlertForNOTT: rawTrialSession.dismissedAlertForNOTT,
-    hasNOTTBeenServed: rawTrialSession.hasNOTTBeenServed,
+    dismissedAlertForNott: rawTrialSession.dismissedAlertForNott,
+    hasNottBeenServed: rawTrialSession.hasNottBeenServed,
     estimatedEndDate: rawTrialSession.estimatedEndDate
       ? calculateDate({ dateString: rawTrialSession.estimatedEndDate })
       : null,
