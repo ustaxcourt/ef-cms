@@ -6,6 +6,7 @@ import { environment } from './environment';
 import fs from 'fs';
 import { sleep } from '@shared/tools/helpers';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { IsoDatePlugin } from '@web-api/datePlugin';
 
 let dbInstance: Promise<Kysely<Database>> | null = null;
 let tokenExpirationTime: number = 0;
@@ -50,7 +51,7 @@ async function establishConnection(): Promise<Kysely<Database>> {
         dialect: new PostgresDialect({
           pool,
         }),
-        plugins: [new CamelCasePlugin()],
+        plugins: [new CamelCasePlugin(), new IsoDatePlugin()],
       });
     } catch (e) {
       attempt++;

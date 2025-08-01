@@ -103,8 +103,12 @@ export type NewTrialSessionPaperPdfKysely =
 
 ////////////////////////////
 
-export type trialSessionNotificationProcessingStatusType = 'complete' | 'processing';
-export type trialSessionNotificationProcessingCaseStatusType = 'processing' | 'processed';
+export type trialSessionNotificationProcessingStatusType =
+  | 'complete'
+  | 'processing';
+export type trialSessionNotificationProcessingCaseStatusType =
+  | 'processing'
+  | 'processed';
 
 export const trialSessionNotificationProcessingTableDefinition = {
   trialSessionId: DEFAULT as string,
@@ -124,7 +128,6 @@ export type TrialSessionNotificationProcessingKysely =
   Selectable<TrialSessionNotificationProcessingTable>;
 export type NewTrialSessionNotificationProcessingKysely =
   Insertable<TrialSessionNotificationProcessingTable>;
-
 
 ///////////////////////
 

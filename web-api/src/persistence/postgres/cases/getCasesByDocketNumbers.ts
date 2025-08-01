@@ -16,6 +16,66 @@ import { difference, isEmpty, sortBy } from 'lodash';
 import { TrialSessionKysely } from '../trialSessions/schema';
 import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessions/mapper';
 
+// import { types } from 'pg';
+// import { WorkItemKysely } from '@web-api/persistence/postgres/workitems/schema';
+
+// // Ew.
+// // 1) We use the the CamelCasePlugin in Kysely, so the column names at this point are still snake_case.
+// // 2) raw: any :/
+// function parseWorkItem(raw: any): WorkItemKysely {
+//   console.log('HERE!');
+//   return {
+//     assigneeId: raw.assignee_id ?? undefined,
+//     assigneeName: raw.assignee_name ?? undefined,
+//     // eslint-disable-next-line custom-rules-plugin/no-new-dates
+//     completedAt: raw.completed_at ? new Date(raw.completed_at) : undefined,
+//     completedBy: raw.completed_by ?? undefined,
+//     completedByUserId: raw.completed_by_user_id ?? undefined,
+//     completedMessage: raw.complete_message ?? undefined,
+//     // eslint-disable-next-line custom-rules-plugin/no-new-dates
+//     createdAt: new Date(raw.created_at),
+//     docketEntry: raw.docket_entry,
+//     docketNumber: raw.docket_number,
+//     inProgress: raw.in_progress ?? undefined,
+//     isRead: raw.is_read ?? undefined,
+//     section: raw.section,
+//     sentBy: raw.sent_by,
+//     sentBySection: raw.sent_by_section ?? undefined,
+//     sentByUserId: raw.sent_by_user_id ?? undefined,
+//     // eslint-disable-next-line custom-rules-plugin/no-new-dates
+//     updatedAt: new Date(raw.updated_at),
+//     workItemId: raw.work_item_id,
+//   };
+// }
+
+// // This will override the built‐in JSON parser from node postgres
+// types.setTypeParser(types.builtins.JSON, (val: string) => {
+//   let raw: any;
+//   try {
+//     raw = JSON.parse(val);
+//   } catch (e) {
+//     console.error('Failed to parse JSON:', e);
+//     return null;
+//   }
+
+//   // Just testing on a work item
+//   if (
+//     Array.isArray(raw) &&
+//     raw.every(
+//       item => item && typeof item === 'object' && 'work_item_id' in item,
+//     )
+//   ) {
+//     return raw.map(parseWorkItem);
+//   }
+
+//   if (raw && typeof raw === 'object' && 'work_item_id' in raw) {
+//     return parseWorkItem(raw);
+//   }
+
+//   // Fallback for any other JSON shape
+//   return raw;
+// });
+
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
   'privatePractitioners',
@@ -44,6 +104,24 @@ export async function getCasesByDocketNumbers<
   if (isEmpty(docketNumbers)) {
     return [];
   }
+
+  const testInfo = await getDbReader(reader =>
+    reader
+      .selectFrom('dwCase as c')
+      .innerJoin('dwWorkItem as w', 'c.docketNumber', 'w.docketNumber')
+      .select(({ fn }) => [
+        fn.jsonAgg('w').as('workItems'), // This IS lying about types
+      ])
+      .where('c.docketNumber', 'in', docketNumbers)
+      .groupBy('c.docketNumber')
+      .execute(),
+  );
+
+  console.log('TESTINFO', testInfo);
+  console.log(testInfo[0].workItems);
+  console.log(testInfo[0].workItems?.[0].createdAt);
+  console.log(typeof testInfo[0].workItems?.[0].createdAt);
+
   const casesData = await getAllCaseData({ docketNumbers, excludeFields });
   const casesDataSorted = sortCaseFields({ cases: casesData, docketNumbers });
   const rawCases = casesDataSorted.map(c => convertDbCaseToRawCase(c));
@@ -345,6 +423,7 @@ async function getHearings(
       .where('ch.docketNumber', 'in', docketNumbers)
       .execute(),
   );
+
   // refactor all of this, it is not good
   const hearingsInfo = Object.values(
     hearingsInfoRaw.reduce((acc, item) => {
