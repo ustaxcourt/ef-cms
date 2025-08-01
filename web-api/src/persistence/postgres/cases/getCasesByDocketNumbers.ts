@@ -345,7 +345,6 @@ async function getHearings(
       .where('ch.docketNumber', 'in', docketNumbers)
       .execute(),
   );
-  // refactor all of this, it is not good
   const hearingsInfo = Object.values(
     hearingsInfoRaw.reduce((acc, item) => {
       const { docketNumber, ...rest } = item;
@@ -354,7 +353,7 @@ async function getHearings(
       }
       acc[docketNumber].hearings.push(rest);
       return acc;
-    }, {}),
+    }, {} as Record<string, { docketNumber: string; hearings: TrialSessionKysely[] }>),
   );
 
   return hearingsInfo;
