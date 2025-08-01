@@ -75,7 +75,6 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `CLIENT_STAGE` | The `process.env.STAGE` for the React application |
   | `BOUNCED_EMAIL_RECIPIENT`* | An email to which email bounced should be sent (defaults to noreply@`EFCMS_DOMAIN`) |
   | `PROD_ENV_ACCOUNT_ID` | The account ID of the AWS account with Production Data |
-  | `LOWER_ENV_ACCOUNT_ID` | The account ID of the AWS account where copies of Production Data might live |
   | `SLACK_WEBHOOK_URL` | Optional URL to send POST requests to notify a Slack App |
   | `BOUNCE_ALERT_RECIPIENTS` | Optional comma separated list of Email addresses to be notified when email bounces to the `IRS_SUPERUSER_EMAIL` |
 
@@ -217,8 +216,15 @@ Sometimes you'll find the need to remove an environment to start from a fresh st
 npm run destroy:env <ENV>
 npm run destroy:client <ENV>
 npm run destroy:api <ENV>
+npm run destroy:allColors <ENV>
+npm run destroy:blue <ENV>
+npm run destroy:green <ENV>
 npm run destroy:migration <ENV>
 npm run destroy:migration-cron <ENV>
+npm run destroy:reindex-cron <ENV>
+npm run destroy:stale-cases-email-cron <ENV>
+npm run destroy:switch-colors-cron <ENV>
+npm run destroy:wait-for-workflow-cron <ENV>
 ```
 
 See [the troubleshooting guide](/additional-resources/troubleshooting) for solutions to problems that may arise during the teardown process.

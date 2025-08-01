@@ -44,8 +44,6 @@ export function toKyselyNewCase(rawCase: RawCase): NewCaseKysely {
     filingType: rawCase.filingType,
     hasPendingItems: rawCase.hasPendingItems,
     hasVerifiedIrsNotice: rawCase.hasVerifiedIrsNotice,
-    highPriority: rawCase.highPriority,
-    highPriorityReason: rawCase.highPriorityReason,
     initialCaption: rawCase.initialCaption,
     initialDocketNumberSuffix: rawCase.initialDocketNumberSuffix,
     irsNoticeDate: rawCase.irsNoticeDate
