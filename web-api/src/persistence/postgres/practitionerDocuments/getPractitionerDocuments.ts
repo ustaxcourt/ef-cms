@@ -6,7 +6,7 @@ export const getPractitionerDocuments = async ({
   barNumber,
 }: {
   barNumber: string;
-}): Promise<RawPractitionerDocument[] | RawPractitionerDocument> => {
+}): Promise<RawPractitionerDocument[]> => {
   barNumber = barNumber.toLowerCase();
 
   return practitionerDocumentEntity(
@@ -17,5 +17,5 @@ export const getPractitionerDocuments = async ({
         .selectAll('p')
         .execute(),
     ),
-  );
+  ) as RawPractitionerDocument[];
 };
