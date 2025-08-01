@@ -4,14 +4,12 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { upsertCaseCorrespondences } from '@web-api/persistence/postgres/caseCorrespondences/upsertCaseCorrespondences';
 
 export const updateCorrespondenceDocumentInteractor = async (
-  applicationContext: ServerApplicationContext,
   { documentMetadata }: { documentMetadata: TDocumentMetaData },
   authorizedUser: UnknownAuthUser,
 ) => {
@@ -22,7 +20,6 @@ export const updateCorrespondenceDocumentInteractor = async (
   }
 
   const caseToUpdate = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

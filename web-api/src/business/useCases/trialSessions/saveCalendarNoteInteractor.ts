@@ -61,7 +61,6 @@ export const saveCalendarNoteInteractor = async (
   });
 
   const caseDetail = await getCaseByDocketNumber({
-    applicationContext,
     docketNumber,
   });
 

@@ -473,4 +473,74 @@ describe('trial session working copy computed', () => {
       expect(casesShownCount).toEqual(7);
     });
   });
+  describe('trialStatusCounts', () => {
+    const calendaredCases = [
+        {
+          ...MOCK_CASE,
+          docketNumber: '111-11'
+        },
+        {
+          ...MOCK_CASE,
+          docketNumber: '222-22'
+        },
+        {
+          ...MOCK_CASE,
+          docketNumber: '333-33'
+        },
+      ]
+    it('should add to statusUnassigned counts if the caseMetadata key field is blank', () => {
+      const { trialStatusCounts } = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          trialSession: {
+            ...MOCK_TRIAL_SESSION,
+            calendaredCases,
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {},
+          },
+        },
+      });
+      expect(trialStatusCounts.statusUnassigned).toEqual(3);
+    });
+    it('should add to statusUnassigned counts if the caseMetadata exists and the trialStatus has an empty string value', () => {
+      const { trialStatusCounts } = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          trialSession: {
+            ...MOCK_TRIAL_SESSION,
+            calendaredCases,
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {
+              '111-11': { trialStatus: ''},
+              '222-22': { trialStatus: ''},
+              '333-33': { trialStatus: 'basisReached'},
+            },
+          },
+        },
+      });
+      expect(trialStatusCounts.statusUnassigned).toEqual(2);
+    });
+    it('should count the number of statuses based on caseMetadata', () => {
+      const { trialStatusCounts } = runCompute(trialSessionWorkingCopyHelper, {
+        state: {
+          trialSession: {
+            ...MOCK_TRIAL_SESSION,
+            calendaredCases,
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {
+              '111-11': { trialStatus: 'statusUnassigned'},
+              '222-22': { trialStatus: 'submittedCAV'},
+              '333-33': { trialStatus: 'basisReached'},
+            },
+          },
+        },
+      });
+      expect(trialStatusCounts).toEqual({
+        statusUnassigned: 1,
+        submittedCAV: 1,
+        basisReached: 1
+      });
+    })
+  })
 });

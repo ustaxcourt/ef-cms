@@ -449,23 +449,6 @@ describe('getFormattedCaseDetail', () => {
       expect(result.showScheduled).toBeTruthy();
     });
 
-    it('should set defaults for formattedTrialDate and formattedAssociatedJudge and show the prioritized section if case is high priority', () => {
-      const result = formatCase(
-        applicationContext,
-        {
-          ...MOCK_CASE,
-          highPriority: true,
-        },
-        mockDocketClerkUser,
-      );
-
-      expect(result).toMatchObject({
-        formattedAssociatedJudge: 'Not assigned',
-        formattedTrialDate: 'Not scheduled',
-        showPrioritized: true,
-      });
-    });
-
     it("should set lead case attributes when the leadDocketNumber matches the current case's docketNumber", () => {
       const result = formatCase(
         applicationContext,

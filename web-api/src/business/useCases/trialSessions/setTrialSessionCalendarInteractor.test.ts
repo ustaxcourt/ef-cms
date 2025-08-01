@@ -1,14 +1,14 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
+import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
   '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils',
 );
-jest.mock('@web-api/business/useCaseHelper/acquireLock');
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-import { acquireLock as acquireLockMock } from '@web-api/business/useCaseHelper/acquireLock';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import {
   HIGH_PRIORITY_SUFFIXES,
@@ -24,9 +24,9 @@ import {
 import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getEligibleCasesForTrialSession as getEligibleCasesForTrialSessionMock } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
-import { removeLock as removeLockMock } from '@web-api/business/useCaseHelper/acquireLock';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 
 describe('setTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -35,8 +35,7 @@ describe('setTrialSessionCalendarInteractor', () => {
   );
   const upsertCases = jest.mocked(upsertCasesMock);
   const updateCaseAndAssociations = jest.mocked(updateCaseAndAssociationsMock);
-  const acquireLock = jest.mocked(acquireLockMock);
-  const removeLock = jest.mocked(removeLockMock);
+  const tryGetLocks = jest.mocked(tryGetLocksMock);
   const MOCK_TRIAL = {
     chambersPhoneNumber: '1111111',
     joinPhoneNumber: '0987654321',
@@ -235,7 +234,9 @@ describe('setTrialSessionCalendarInteractor', () => {
   });
 
   it('should throw a ServiceUnavailableError if the Case is currently locked', async () => {
-    acquireLock.mockRejectedValueOnce(new Error('Could not get lock'));
+    tryGetLocks.mockResolvedValueOnce([
+      { successfullyLocked: false, identifier: 'abc' },
+    ]);
 
     await setTrialSessionCalendarInteractor(
       applicationContext,
@@ -253,7 +254,7 @@ describe('setTrialSessionCalendarInteractor', () => {
     expect(getCaseByDocketNumber).not.toHaveBeenCalled();
   });
 
-  it('should acquire and remove the lock on the case', async () => {
+  it('should acquire a lock on the case', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockResolvedValueOnce([]);
@@ -275,23 +276,17 @@ describe('setTrialSessionCalendarInteractor', () => {
       mockPetitionsClerkUser,
     );
 
-    expect(acquireLock).toHaveBeenCalledWith({
-      applicationContext,
-      authorizedUser: mockPetitionsClerkUser,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-      ttl: 900,
-    });
-
-    expect(removeLock).toHaveBeenCalledWith({
-      applicationContext,
-      identifiers: [`case|${MOCK_CASE.docketNumber}`],
-    });
+    expect(tryGetLocks).toHaveBeenCalledWith(
+      expect.objectContaining({
+        identifiers: [`case|${MOCK_CASE.docketNumber}`],
+      }),
+    );
   });
 
   it('should sort eligible cases in the correct priority order (highPriority, docketNumberSuffix) before calendaring them', async () => {
     const hpSuffixDocketNumber = '101-20';
-    const highPriorityDocketNumber = '103-20';
-    const regularDocketNumber = '104-20';
+    const regularDocketNumber1 = '103-20';
+    const regularDocketNumber2 = '104-20';
 
     applicationContext
       .getPersistenceGateway()
@@ -302,26 +297,22 @@ describe('setTrialSessionCalendarInteractor', () => {
         ...MOCK_CASE,
         docketNumber: hpSuffixDocketNumber,
         docketNumberSuffix: HIGH_PRIORITY_SUFFIXES[0],
-        highPriority: false,
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
       },
       {
         ...MOCK_CASE,
-        docketNumber: highPriorityDocketNumber,
+        docketNumber: regularDocketNumber1,
         docketNumberSuffix: 'NotHighPriority',
-        highPriority: true,
-        highPriorityReason: 'When the going gets weird, the weird turn pro',
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
       },
       {
         ...MOCK_CASE,
-        docketNumber: regularDocketNumber,
+        docketNumber: regularDocketNumber2,
         docketNumberSuffix: 'AlsoNotHighPriority',
-        highPriority: false,
         qcCompleteForTrial: {
           '6805d1ab-18d0-43ec-bafb-654e83405416': true,
         },
@@ -342,9 +333,9 @@ describe('setTrialSessionCalendarInteractor', () => {
     );
 
     expect(updatedDocketNumbers).toEqual([
-      highPriorityDocketNumber,
       hpSuffixDocketNumber,
-      regularDocketNumber,
+      regularDocketNumber1,
+      regularDocketNumber2,
     ]);
   });
 });

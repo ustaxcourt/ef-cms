@@ -31,6 +31,7 @@ rm new-receipt-rule.json
 
 # verify email
 aws ses verify-email-identity --email-address "noreply@${EFCMS_DOMAIN}"
+sleep 20
 
 VERIFICATION_OBJECT_KEY=$(aws s3api list-objects --bucket "${BUCKET}" --query "Contents[?Key != 'AMAZON_SES_SETUP_NOTIFICATION'].Key | [0]" --output text)
 aws s3api get-object --bucket "${BUCKET}" --key "${VERIFICATION_OBJECT_KEY}" verification-email.txt
