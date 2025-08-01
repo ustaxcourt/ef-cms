@@ -1,4 +1,3 @@
-
 import { CASE_STATUS_TYPES } from '@shared/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '@web-client/test/createClientTestApplicationContext';
 import { isCaseCalendaredAction } from './isCaseCalendaredAction';

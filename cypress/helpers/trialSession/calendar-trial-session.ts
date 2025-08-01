@@ -1,4 +1,4 @@
-import { loginAsPetitionsClerk1 } from "../authentication/login-as-helpers";
+import { loginAsPetitionsClerk1 } from '../authentication/login-as-helpers';
 
 export const calendarTrialSession = (trialSessionId: string) => {
   loginAsPetitionsClerk1();
