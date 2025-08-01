@@ -16,7 +16,6 @@ export const initialCustomCaseReportState: CustomCaseReportState = {
     caseTypes: [],
     endDate: '',
     filingMethod: 'all',
-    highPriority: false,
     judges: [],
     preferredTrialCities: [],
     procedureType: 'All',

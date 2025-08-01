@@ -544,47 +544,6 @@ describe('formattedEligibleCasesHelper', () => {
     ]);
   });
 
-  it('should not group the consolidated cases when the lead case is high priority', () => {
-    const result = runCompute(formattedEligibleCasesHelper, {
-      state: {
-        trialSession: {
-          eligibleCases: [
-            {
-              docketNumber: '103-22',
-              highPriority: true,
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '104-22',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '106-22',
-              leadDocketNumber: '103-22',
-            },
-            {
-              docketNumber: '105-22',
-            },
-          ],
-        },
-      },
-    });
-    expect(result).toEqual([
-      expect.objectContaining({
-        docketNumber: '103-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '104-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '105-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-    ]);
-  });
-
   it('should not group the consolidated cases when the lead case is manually added', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
@@ -682,7 +641,6 @@ describe('formattedEligibleCasesHelper', () => {
             },
             {
               docketNumber: '105-22',
-              highPriority: true,
             },
             {
               docketNumber: '102-22',
@@ -692,7 +650,6 @@ describe('formattedEligibleCasesHelper', () => {
             },
             {
               docketNumber: '106-22',
-              highPriority: true,
               leadDocketNumber: '103-22',
             },
             {
@@ -722,12 +679,6 @@ describe('formattedEligibleCasesHelper', () => {
         docketNumber: '114-23',
       }),
       expect.objectContaining({
-        docketNumber: '105-22',
-      }),
-      expect.objectContaining({
-        docketNumber: '106-22',
-      }),
-      expect.objectContaining({
         docketNumber: '101-22',
       }),
       expect.objectContaining({
@@ -739,6 +690,12 @@ describe('formattedEligibleCasesHelper', () => {
       expect.objectContaining({
         docketNumber: '104-22',
       }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
     ]);
   });
 
@@ -749,7 +706,7 @@ describe('formattedEligibleCasesHelper', () => {
           eligibleCases: [
             {
               docketNumber: '30535-15',
-              highPriority: true,
+              isManuallyAdded: true,
               leadDocketNumber: '30533-15',
             },
             {
