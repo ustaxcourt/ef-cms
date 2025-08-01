@@ -1,6 +1,6 @@
 @use '../variables' as *;
 
-.Daw_heading_1 {
+.Dawson_heading_1 {
     font-family: $font-serif;
     font-size: 32px;
     src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
@@ -14,7 +14,7 @@
       }
 }
 
-.Daw_heading_2 {
+.Dawson_heading_2 {
     font-family: $font-serif;
     font-size: 24px;
     src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
@@ -28,7 +28,7 @@
       }
 }
 
-.Daw_heading_3 {
+.Dawson_heading_3 {
     font-family: $font-serif;
     font-size: 20px;
     src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
@@ -42,7 +42,7 @@
       }
 }
 
-.Daw_body {
+.Dawson_body {
     font-family: $font-source-san;
     font-size: 18px;
     src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
@@ -56,7 +56,7 @@
       }
 }
 
-.Daw_body_secondary {
+.Dawson_body_secondary {
     font-family: $font-source-san;
     font-size: 16px;
     src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
@@ -70,7 +70,7 @@
       }
 }
 
-.Daw_field_label {
+.Dawson_field_label {
     font-family: $font-source-san;
     font-size: 18px;
     src: url('fonts/noto-serif-jp/noto-serif-jp-v4-latin-400.woff2')
