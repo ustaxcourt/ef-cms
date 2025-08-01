@@ -7,12 +7,12 @@ jest.mock(
 
 jest.mock(
   '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocumentByField.ts',
-  () => mockFactory('getPractitionerDocumentByField'),
+  () => mockFactory('getPractitionerDocumentByField', []),
 );
 
 jest.mock(
   '@web-api/persistence/postgres/practitionerDocuments/getPractitionerDocuments.ts',
-  () => mockFactory('getPractitionerDocuments'),
+  () => mockFactory('getPractitionerDocuments', []),
 );
 
 jest.mock(
