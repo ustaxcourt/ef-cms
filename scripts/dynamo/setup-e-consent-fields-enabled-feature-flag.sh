@@ -5,6 +5,7 @@
 # Usage
 #   ENV=dev ./setup-e-consent-fields-enabled-feature-flag.sh
 
+# TODO: migrate to typescript
 ./check-env-variables.sh \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \

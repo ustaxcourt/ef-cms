@@ -12,10 +12,14 @@ import {
   Practitioner,
 } from '@shared/business/entities/Practitioner';
 import { generateChangeOfAddress } from '@web-api/business/useCases/user/generateChangeOfAddress';
+import { getDocketNumbersByUser } from '@web-api/persistence/postgres/users/getDocketNumbersByUser';
+import { upsertPractitioner } from '@web-api/persistence/postgres/users/upsertPractitioner';
+import { getPractitionerByBarNumber } from '@web-api/persistence/postgres/users/getPractitionerByBarNumber';
 import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { upsertUsers } from '@web-api/persistence/postgres/users/upsertUsers';
 
 export const updatePractitionerUser = async (
   applicationContext: ServerApplicationContext,
@@ -42,9 +46,7 @@ export const updatePractitionerUser = async (
     throw new UnauthorizedError('Unauthorized for updating practitioner user');
   }
 
-  const oldUser = await applicationContext
-    .getPersistenceGateway()
-    .getPractitionerByBarNumber({ applicationContext, barNumber });
+  const oldUser = await getPractitionerByBarNumber({ barNumber });
 
   if (!oldUser) {
     throw new NotFoundError('Could not find user');
@@ -55,6 +57,20 @@ export const updatePractitionerUser = async (
 
   if (oldUser.userId !== user.userId) {
     throw new Error('Bar number does not match user data.');
+  }
+
+  if (oldUser.practiceType !== user.practiceType) {
+    const practitionerCases = await applicationContext
+      .getUseCases()
+      .getPractitionerCasesInteractor(
+        applicationContext,
+        { userId: oldUser.userId },
+        authorizedUser,
+      );
+    if (practitionerCases.openCases.length !== 0)
+      throw new Error(
+        'Practitioner is associated with one or more open cases. Practitioner has to be withdrawn from all open cases to change practice type.',
+      );
   }
 
   if (userHasAccount && userIsUpdatingEmail) {
@@ -80,24 +96,16 @@ export const updatePractitionerUser = async (
       .getPersistenceGateway()
       .updatePractitionerUser({ applicationContext, user: validatedUserData });
   } else if (!oldUser.email && user.updatedEmail) {
-    updatedUser = await applicationContext
-      .getPersistenceGateway()
-      .createNewPractitionerUser({
-        applicationContext,
-        user: new Practitioner({
-          ...validatedUserData,
-          pendingEmail: user.updatedEmail,
-        })
-          .validate()
-          .toRawObject(),
-      });
-  } else {
-    await applicationContext.getPersistenceGateway().updateUserRecords({
-      applicationContext,
-      oldUser: new Practitioner(oldUser).validate().toRawObject(),
-      updatedUser: validatedUserData,
-      userId: oldUser.userId,
+    updatedUser = await upsertPractitioner({
+      user: new Practitioner({
+        ...validatedUserData,
+        pendingEmail: user.updatedEmail,
+      })
+        .validate()
+        .toRawObject(),
     });
+  } else {
+    await upsertUsers([validatedUserData]);
   }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -138,11 +146,11 @@ export const updatePractitionerUser = async (
       authorizedUser,
       bypassDocketEntry,
       contactInfo: validatedUserData.contact,
-      firmName: validatedUserData.firmName,
       requestUserId: authorizedUser.userId,
       updatedEmail: validatedUserData.email,
       updatedName: validatedUserData.name,
-      user: oldUser,
+      user: validatedUserData,
+      oldUser,
       websocketMessagePrefix: 'admin',
     });
   } else {
@@ -188,12 +196,12 @@ const getUpdatedFieldNames = ({
 };
 
 export const determineEntitiesToLock = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   { user }: { user: Practitioner },
 ) => {
-  const docketNumbers: string[] = await applicationContext
-    .getPersistenceGateway()
-    .getDocketNumbersByUser({ applicationContext, userId: user.userId });
+  const docketNumbers: string[] = await getDocketNumbersByUser({
+    userId: user.userId,
+  });
 
   return { identifiers: docketNumbers.map(item => `case|${item}`), ttl: 900 };
 };

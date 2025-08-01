@@ -43,7 +43,7 @@ export const TodaysOrders = connect(
             {todaysOrdersHelper.formattedCurrentDate}
           </h1>
 
-          <div className="grid-row margin-bottom-105">
+          <div className="grid-row">
             <div className="tablet:grid-col-10">
               <p>Note: Orders in sealed cases will not be displayed.</p>
             </div>

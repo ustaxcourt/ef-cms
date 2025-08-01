@@ -6,6 +6,7 @@ import {
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import {
+  NotFoundError,
   UnauthorizedError,
   UnprocessableEntityError,
 } from '@web-api/errors/errors';
@@ -14,6 +15,8 @@ import { WorkItem } from '@shared/business/entities/WorkItem';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { isEmpty } from 'lodash';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
@@ -34,9 +37,13 @@ export const saveCaseDetailInternalEdit = async (
     throw new UnauthorizedError('Unauthorized for update case');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   if (!caseToUpdate || docketNumber !== caseToUpdate.docketNumber) {
     throw new UnprocessableEntityError();
@@ -123,7 +130,6 @@ export const saveCaseDetailInternalEdit = async (
     await applicationContext
       .getUseCaseHelpers()
       .removeCounselFromRemovedPetitioner({
-        applicationContext,
         authorizedUser,
         caseEntity: caseEntityWithFormEdits,
         petitionerContactId: originalSecondaryContactId,
@@ -144,10 +150,25 @@ export const saveCaseDetailInternalEdit = async (
   } else {
     const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
 
-    const initializeCaseWorkItem = petitionDocketEntry.workItem;
+    if (!petitionDocketEntry) {
+      throw new NotFoundError(
+        `Could not find petition docket entry on case ${petitionDocketEntry}`,
+      );
+    }
 
+    const petitionWorkItem = await getWorkItemByDocketNumberAndDocketEntryId({
+      docketNumber,
+      docketEntryId: petitionDocketEntry?.docketEntryId,
+    });
+
+    if (!petitionWorkItem) {
+      throw new NotFoundError(
+        `Could not find work item associated with petition on case ${petitionDocketEntry}`,
+      );
+    }
     const workItemEntity = new WorkItem({
-      ...initializeCaseWorkItem,
+      ...petitionWorkItem,
+      docketEntryId: petitionDocketEntry.docketEntryId,
       assigneeId: user.userId,
       assigneeName: user.name,
       inProgress: true,

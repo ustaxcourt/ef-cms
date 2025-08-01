@@ -11,6 +11,7 @@ import { getNewPasswordForEnvironment } from './make-new-password';
 import { judgeUser } from '@shared/test/mockUsers';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import joi from 'joi';
+import { getUsersInSectionInteractor } from '@web-api/business/useCases/user/getUsersInSectionInteractor';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -153,13 +154,10 @@ export const sendWelcomeEmail = async ({
     scriptConfig,
   ) as { [k: string]: string };
 
-  const judgeUsers: RawUser[] = await applicationContext
-    .getUseCases()
-    .getUsersInSectionInteractor(
-      applicationContext,
-      { section: 'judge' },
-      mockJudgeUser,
-    );
+  const judgeUsers: RawUser[] = await getUsersInSectionInteractor(
+    { section: 'judge' },
+    mockJudgeUser,
+  );
   const validChambersSections = judgeUsers.map(user => user.section!);
   const params: UserParamsInterface = {
     email,

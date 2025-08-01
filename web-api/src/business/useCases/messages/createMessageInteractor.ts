@@ -5,10 +5,10 @@ import {
   ROLE_PERMISSIONS,
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
-import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createMessage } from '@web-api/persistence/postgres/messages/createMessage';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 
 export type MessageType = {
   attachments: {
@@ -30,7 +30,6 @@ export type ReplyMessageType = MessageType & {
 };
 
 export const createMessageInteractor = async (
-  applicationContext: ServerApplicationContext,
   {
     attachments,
     docketNumber,
@@ -55,13 +54,21 @@ export const createMessageInteractor = async (
 
   const { caseCaption, status } = associatedCase;
 
-  const fromUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const fromUser = await getUserById({ userId: authorizedUser.userId });
 
-  const toUser = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: toUserId });
+  if (!fromUser) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
+
+  const toUser = await getUserById({ userId: toUserId });
+
+  if (!toUser) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const validatedRawMessage = new Message({
     attachments,

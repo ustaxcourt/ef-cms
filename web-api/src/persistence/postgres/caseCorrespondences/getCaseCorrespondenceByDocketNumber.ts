@@ -1,5 +1,5 @@
 import { Correspondence } from '@shared/business/entities/Correspondence';
-import { caseCorrespondenceEntity } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
+import { fromKyselyCaseCorrespondence } from '@web-api/persistence/postgres/caseCorrespondences/mapper';
 import { getDbReader } from '@web-api/database';
 
 export const getCaseCorrespondenceByDocketNumber = async ({
@@ -16,5 +16,5 @@ export const getCaseCorrespondenceByDocketNumber = async ({
       .execute(),
   );
 
-  return correspondence.map(c => caseCorrespondenceEntity(c));
+  return correspondence.map(c => fromKyselyCaseCorrespondence(c));
 };

@@ -15,6 +15,7 @@ import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertW
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 /**
@@ -71,9 +72,13 @@ export const fileCourtIssuedDocketEntry = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const isUnservable = DocketEntry.isUnservable(documentMeta);
 
@@ -118,10 +123,7 @@ export const fileCourtIssuedDocketEntry = async (
       const workItem = new WorkItem({
         assigneeId: null,
         assigneeName: null,
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
+        docketEntryId: docketEntryEntity.docketEntryId,
         docketNumber: caseEntity.docketNumber,
         inProgress: true,
         section: DOCKET_SECTION,
@@ -132,8 +134,6 @@ export const fileCourtIssuedDocketEntry = async (
       if (isUnservable) {
         workItem.setAsCompleted({ message: 'completed', user });
       }
-
-      docketEntryEntity.setWorkItem(workItem);
 
       const isDocketEntryAlreadyOnCase = !!caseEntity.getDocketEntryById({
         docketEntryId,
@@ -148,7 +148,10 @@ export const fileCourtIssuedDocketEntry = async (
       workItem.assignToUser({
         assigneeId: user.userId,
         assigneeName: user.name,
-        section: user.section,
+        section: WorkItem.getWorkItemSectionFromUserSection({
+          section: user.section,
+          documentTitle: docketEntryEntity.documentTitle,
+        }),
         sentBy: user.name,
         sentBySection: user.section,
         sentByUserId: user.userId,

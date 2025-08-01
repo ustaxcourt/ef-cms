@@ -71,7 +71,8 @@ describe('setQCWorkItemIdToMarkAsReadIfNeededAction', () => {
           docketEntries: [
             {
               docketEntryId: '123-abc-123-abc',
-              workItem: { isRead: false, workItemId: 'ThisIsAnId' },
+              qcViewed: false,
+              workItemId: 'ThisIsAnId',
             },
           ],
         },

@@ -32,9 +32,9 @@ We need to delete the destination tables (if they exist) in order to perform a b
 1. Identify the **destination table**. For example, if we're performing a deployment to `dev`:
 
     ```bash
-    $ ./scripts/dynamo/get-source-table.sh dev
+    $ ./scripts/ssm/get-source-table.sh dev
     efcms-dev-beta
-    $ ./scripts/dynamo/get-destination-table.sh dev
+    $ ./scripts/ssm/get-destination-table.sh dev
     efcms-dev-beta
     ```
 

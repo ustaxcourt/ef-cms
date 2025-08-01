@@ -166,8 +166,8 @@ import { userContactEditProgressHelper } from './computeds/userContactEditProgre
 import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { BlockedCaseData } from '@web-api/persistence/postgres/cases/reports/getBlockedCasesForTrialLocation';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import { RawGenerateSuggestedTermForm } from '@shared/business/entities/trialSessions/GenerateSuggestedTermForm';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS } = getConstants();
 
@@ -604,6 +604,10 @@ export const baseState = {
     sortField: string;
     sortOrder: 'asc' | 'desc';
   },
+  [STATE_KEYS.CONSOLIDATED_CASE_DEADLINES]: [] as {
+    docketNumber: string;
+    caseCaption: string;
+  }[],
   advancedSearchForm: {} as any,
   // form for advanced search screen, TODO: replace with state.form
   advancedSearchTab: 'case',
@@ -924,7 +928,7 @@ export const baseState = {
   workItem: {},
   workItemActions: {},
   workItemMetadata: {},
-  workQueue: [] as WorkItemWithCaseInfo[],
+  workQueue: [] as RawWorkItemWithCaseAndDocketEntryInfo[],
   workQueueToDisplay: { box: 'inbox', queue: 'my', section: '' },
   workitemAllCheckbox: false,
 };

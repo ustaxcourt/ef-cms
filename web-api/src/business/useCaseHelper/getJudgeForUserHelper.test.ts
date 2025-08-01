@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getJudgeForUserHelper } from './getJudgeForUserHelper';
@@ -7,6 +8,7 @@ import {
   mockJudgeUser,
 } from '@shared/test/mockAuthUsers';
 import { validUser } from '@shared/test/mockUsers';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('getJudgeForUserHelper', () => {
   const judgeUser = {
@@ -30,10 +32,10 @@ describe('getJudgeForUserHelper', () => {
 
   let mockFoundUser;
 
+  const getUserById = jest.mocked(getUserByIdMock);
+
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockFoundUser);
+    getUserById.mockImplementation(() => mockFoundUser);
   });
 
   describe('Judge User', () => {
@@ -44,10 +46,7 @@ describe('getJudgeForUserHelper', () => {
     it('retrieves the specified user from the database by its userId', async () => {
       await getJudgeForUserHelper(applicationContext, { user: mockJudgeUser });
 
-      expect(
-        applicationContext.getPersistenceGateway().getUserById,
-      ).toHaveBeenCalledWith({
-        applicationContext,
+      expect(getUserById).toHaveBeenCalledWith({
         userId: mockFoundUser.userId,
       });
     });
@@ -75,7 +74,7 @@ describe('getJudgeForUserHelper', () => {
 
       expect(
         applicationContext.getUseCaseHelpers().getJudgeInSectionHelper,
-      ).toHaveBeenCalledWith(applicationContext, {
+      ).toHaveBeenCalledWith({
         section: chambersUser.section,
       });
     });

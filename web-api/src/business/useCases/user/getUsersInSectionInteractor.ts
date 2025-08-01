@@ -1,17 +1,18 @@
 import {
   ROLE_PERMISSIONS,
   isAuthorized,
-} from '../../../../../shared/src/authorization/authorizationClientService';
-import {
-  RawUser,
-  User,
-} from '../../../../../shared/src/business/entities/User';
-import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '../../../errors/errors';
+} from '@shared/authorization/authorizationClientService';
+import { RawUser, User } from '@shared/business/entities/User';
+import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
+import { getUsersInSections } from '@web-api/persistence/postgres/users/getUsersInSections';
+import {
+  CASE_SERVICES_SUPERVISOR_SECTION,
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+} from '@shared/business/entities/EntityConstants';
 
 export const getUsersInSectionInteractor = async (
-  applicationContext: ServerApplicationContext,
   { section }: { section: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<RawUser[]> => {
@@ -27,12 +28,14 @@ export const getUsersInSectionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const rawUsers = await applicationContext
-    .getPersistenceGateway()
-    .getUsersInSection({
-      applicationContext,
-      section,
-    });
+  const sectionsToSearch = [section];
+  if (section === DOCKET_SECTION || section === PETITIONS_SECTION) {
+    sectionsToSearch.push(CASE_SERVICES_SUPERVISOR_SECTION);
+  }
 
-  return User.validateRawCollection(rawUsers);
+  const users = await getUsersInSections({
+    sections: sectionsToSearch,
+  });
+
+  return User.validateRawCollection(users);
 };

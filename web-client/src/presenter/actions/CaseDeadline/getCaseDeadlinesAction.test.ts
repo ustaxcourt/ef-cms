@@ -24,12 +24,10 @@ describe('getCaseDeadlinesAction', () => {
         presenter,
       },
       state: {
-        caseDeadlineReport: {
-          judgeIdFilter: judgeId,
-        },
         screenMetadata: {
           filterEndDate: END_DATE,
           filterStartDate: START_DATE,
+          judgeId,
         },
       },
     });
