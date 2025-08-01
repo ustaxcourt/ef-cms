@@ -393,25 +393,7 @@ async function getCaseCorrespondenceByDocketNumber(docketNumbers: string[]) {
 async function getHearings(
   docketNumbers: string[],
 ): Promise<{ docketNumber: string; hearings: TrialSessionKysely[] }[]> {
-  // const hearingsInfo = await getDbReader(reader =>
-  //   reader
-  //     .selectFrom('dwCaseHearing as ch')
-  //     .innerJoin(
-  //       'dwTrialSession as ts',
-  //       'ch.trialSessionId',
-  //       'ts.trialSessionId',
-  //     )
-  //     .select(({ fn }) => [
-  //       'ch.docketNumber',
-  //       fn.jsonAgg('ts').as('hearings'), // This IS lying about types
-  //     ])
-  //     .where('ch.docketNumber', 'in', docketNumbers)
-  //     .groupBy('ch.docketNumber')
-  //     .execute(),
-  // );
-
-  // TODO 10493: this is a hack to make the the fromKyselyTrialSession functionality work; rethink this
-  const hearingsInfoRaw = await getDbReader(reader =>
+  const hearingsInfo = await getDbReader(reader =>
     reader
       .selectFrom('dwCaseHearing as ch')
       .innerJoin(
@@ -419,22 +401,40 @@ async function getHearings(
         'ch.trialSessionId',
         'ts.trialSessionId',
       )
-      .selectAll()
+      .select(({ fn }) => [
+        'ch.docketNumber',
+        fn.jsonAgg('ts').as('hearings'), // This IS lying about types
+      ])
       .where('ch.docketNumber', 'in', docketNumbers)
+      .groupBy('ch.docketNumber')
       .execute(),
   );
 
-  // refactor all of this, it is not good
-  const hearingsInfo = Object.values(
-    hearingsInfoRaw.reduce((acc, item) => {
-      const { docketNumber, ...rest } = item;
-      if (!acc[docketNumber]) {
-        acc[docketNumber] = { docketNumber, hearings: [] };
-      }
-      acc[docketNumber].hearings.push(rest);
-      return acc;
-    }, {}),
-  );
+  // // TODO 10493: this is a hack to make the the fromKyselyTrialSession functionality work; rethink this
+  // const hearingsInfoRaw = await getDbReader(reader =>
+  //   reader
+  //     .selectFrom('dwCaseHearing as ch')
+  //     .innerJoin(
+  //       'dwTrialSession as ts',
+  //       'ch.trialSessionId',
+  //       'ts.trialSessionId',
+  //     )
+  //     .selectAll()
+  //     .where('ch.docketNumber', 'in', docketNumbers)
+  //     .execute(),
+  // );
+
+  // // refactor all of this, it is not good
+  // const hearingsInfo = Object.values(
+  //   hearingsInfoRaw.reduce((acc, item) => {
+  //     const { docketNumber, ...rest } = item;
+  //     if (!acc[docketNumber]) {
+  //       acc[docketNumber] = { docketNumber, hearings: [] };
+  //     }
+  //     acc[docketNumber].hearings.push(rest);
+  //     return acc;
+  //   }, {}),
+  // );
 
   return hearingsInfo;
 }
