@@ -8,13 +8,11 @@ import { getUserGateway } from '@web-api/getUserGateway';
 import { applicationContext } from '@web-api/applicationContext';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { deactivateUser } from '@web-api/persistence/postgres/users/deactivateUser';
-import { pinkLog } from '@shared/tools/pinkLog';
 
 export const deactivateUserInteractor = async (
   { email }: { email: string },
   authorizedUser: UnknownAuthUser,
 ): Promise<void> => {
-  pinkLog(authorizedUser);
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DEACTIVATE_USER)) {
     throw new UnauthorizedError(`Unauthorized`);
   }
