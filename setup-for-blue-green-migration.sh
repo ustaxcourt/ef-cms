@@ -10,7 +10,6 @@ set -e
 ./check-env-variables.sh \
   "ENV" \
   "EFCMS_DOMAIN" \
-  "ZONE_NAME" \
   "AWS_ACCOUNT_ID" \
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"

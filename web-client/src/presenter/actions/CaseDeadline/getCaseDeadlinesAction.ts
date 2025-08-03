@@ -15,7 +15,7 @@ export const getCaseDeadlinesAction = async ({
 }: ActionProps) => {
   const startDate = get(state.screenMetadata.filterStartDate);
   const endDate = get(state.screenMetadata.filterEndDate);
-  const judgeIdFilter = get(state.caseDeadlineReport.judgeIdFilter);
+  const judgeIdFilter = get(state.screenMetadata.judgeId);
   const from = props.selectedPage
     ? props.selectedPage * CASE_DEADLINES_REPORT_PAGE_SIZE
     : 0;

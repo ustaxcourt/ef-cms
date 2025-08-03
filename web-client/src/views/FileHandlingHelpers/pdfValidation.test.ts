@@ -4,6 +4,7 @@ import { ErrorTypes } from '@web-client/views/FileHandlingHelpers/fileValidation
 import {
   PDF_CORRUPTED_ERROR_MESSAGE,
   PDF_PASSWORD_PROTECTED_ERROR_MESSAGE,
+  UNSUPPORTED_BROWSER_ERROR_MESSAGE,
   validatePdf,
 } from './pdfValidation';
 import { validatePdfHeader } from '@web-client/views/FileHandlingHelpers/pdfValidationHelpers';
@@ -59,6 +60,31 @@ describe('validatePdf', () => {
       getDocument: jest.fn(),
     };
     getPdfJs.mockResolvedValue(mockPdfJs);
+  });
+
+  it('should return error message for unsupported browser', async () => {
+    const unsupportedBrowserError = new Error(
+      UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+    );
+    unsupportedBrowserError.name = 'UnsupportedBrowserException';
+    getPdfJs.mockRejectedValueOnce(unsupportedBrowserError);
+
+    const resultPromise = validatePdf({ file: mockFile });
+    mockFileReader.onload();
+    const result = await resultPromise;
+    
+    expect(result).toMatchObject({
+      isValid: false,
+      errorInformation: {
+        errorMessageToLog: expect.stringContaining(
+          `${UNSUPPORTED_BROWSER_ERROR_MESSAGE}`,
+        ),
+        errorMessageToDisplay: expect.stringContaining(
+          UNSUPPORTED_BROWSER_ERROR_MESSAGE,
+        ),
+        errorType: ErrorTypes.UNSUPPORTED_BROWSER,
+      },
+    });
   });
 
   it('should resolve as valid when the PDF is valid', async () => {

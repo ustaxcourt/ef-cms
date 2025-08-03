@@ -7,12 +7,12 @@ import { HowToSearch } from './AdvancedDocumentSearch/HowToSearch';
 import { JudgeSelect } from './AdvancedDocumentSearch/JudgeSelect';
 import { KeywordSearchField } from './AdvancedDocumentSearch/KeywordSearchField';
 import { Mobile, NonMobile } from '../../ustc-ui/Responsive/Responsive';
-import { SearchDateRangePickerComponent } from './SearchDateRangePickerComponent';
 import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React from 'react';
 import classNames from 'classnames';
+import { DateRangePickerComponent } from '@web-client/ustc-ui/DateInput/DateRangePickerComponent';
 
 export const OrderSearchForm = connect(
   {
@@ -35,13 +35,7 @@ export const OrderSearchForm = connect(
   }) {
     return (
       <>
-        <form
-          data-testid="order-search-container"
-          onSubmit={e => {
-            e.preventDefault();
-            submitAdvancedSearchSequence();
-          }}
-        >
+        <form data-testid="order-search-container">
           <Mobile>
             <div className="margin-bottom-3">
               <HowToSearch />
@@ -98,12 +92,37 @@ export const OrderSearchForm = connect(
 
                 {advancedDocumentSearchHelper.showDateRangePicker && (
                   <div className="margin-top-4">
-                    <SearchDateRangePickerComponent
-                      formType="orderSearch"
-                      updateSequence={
-                        updateAdvancedOrderSearchFormValueSequence
+                    <DateRangePickerComponent
+                      endDateErrorText={validationErrors.endDate}
+                      endLabel="End date"
+                      endName="endDate"
+                      endPickerCls={
+                        'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
                       }
-                      validateSequence={validateOrderSearchSequence}
+                      endValue={advancedSearchForm.orderSearch.endDate}
+                      formGroupCls="margin-bottom-0"
+                      maxDate={advancedDocumentSearchHelper.maxDate}
+                      rangePickerCls={'grid-row grid-gap'}
+                      startDateErrorText={validationErrors.startDate}
+                      startLabel="Start date"
+                      startName="startDate"
+                      showDateHint={true}
+                      startPickerCls={
+                        'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                      }
+                      startValue={advancedSearchForm.orderSearch.startDate}
+                      onChangeEnd={e => {
+                        updateAdvancedOrderSearchFormValueSequence({
+                          key: 'endDate',
+                          value: e.target.value,
+                        });
+                      }}
+                      onChangeStart={e => {
+                        updateAdvancedOrderSearchFormValueSequence({
+                          key: 'startDate',
+                          value: e.target.value,
+                        });
+                      }}
                     />
                   </div>
                 )}
@@ -186,12 +205,39 @@ export const OrderSearchForm = connect(
                     <div className="grid-gap-3 tablet:margin-top-0 margin-top-4">
                       {advancedDocumentSearchHelper.showDateRangePicker && (
                         <div className="grid-row no-flex-wrap">
-                          <SearchDateRangePickerComponent
-                            formType="orderSearch"
-                            updateSequence={
-                              updateAdvancedOrderSearchFormValueSequence
+                          <DateRangePickerComponent
+                            endDateErrorText={validationErrors.endDate}
+                            endLabel="End date"
+                            endName="endDate"
+                            endPickerCls={
+                              'desktop:grid-col-6  phone:grid-col-12 desktop:padding-left-2'
                             }
-                            validateSequence={validateOrderSearchSequence}
+                            endValue={advancedSearchForm.orderSearch.endDate}
+                            formGroupCls="margin-bottom-0"
+                            rangePickerCls={'grid-row grid-gap'}
+                            startDateErrorText={validationErrors.startDate}
+                            maxDate={advancedDocumentSearchHelper.maxDate}
+                            startLabel="Start date"
+                            startName="startDate"
+                            showDateHint={true}
+                            startPickerCls={
+                              'desktop:grid-col-6  phone:grid-col-12 padding-right-2'
+                            }
+                            startValue={
+                              advancedSearchForm.orderSearch.startDate
+                            }
+                            onChangeEnd={e => {
+                              updateAdvancedOrderSearchFormValueSequence({
+                                key: 'endDate',
+                                value: e.target.value,
+                              });
+                            }}
+                            onChangeStart={e => {
+                              updateAdvancedOrderSearchFormValueSequence({
+                                key: 'startDate',
+                                value: e.target.value,
+                              });
+                            }}
                           />
                         </div>
                       )}
@@ -213,6 +259,10 @@ export const OrderSearchForm = connect(
                 data-testid="submit-order-advanced-search-button"
                 id="advanced-search-button"
                 type="submit"
+                onClick={e => {
+                  e.preventDefault();
+                  submitAdvancedSearchSequence();
+                }}
               >
                 Search
               </Button>
