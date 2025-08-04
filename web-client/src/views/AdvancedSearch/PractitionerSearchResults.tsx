@@ -124,7 +124,7 @@ export const PractitionerSearchResults = connect(
                       <div>
                         <b>Original Bar State</b>
                         <p className="margin-top-1 margin-bottom-1">
-                          {result.contact?.stateFullName}
+                          {result.originalBarStateFullName}
                         </p>
                       </div>
                       <div>
@@ -144,7 +144,10 @@ export const PractitionerSearchResults = connect(
                       <div>
                         <b>Bar No.</b>
                         <p className="margin-top-1 margin-bottom-1">
-                          {result.barNumber}
+                          {practitionerSearchHelper.isPublicUser ?
+                            (<span>{result.barNumber}</span>) :
+                            (<a href={`/practitioner-detail/${result.barNumber}`}> {result.barNumber} </a>)
+                          }
                         </p>
                       </div>
                       <div>
