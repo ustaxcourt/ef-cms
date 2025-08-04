@@ -31,7 +31,7 @@ jest.mock('@web-api/persistence/cognito/getCognito');
 jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock('@web-api/persistence/postgres/users/getUserById');
 
-const mockSend = (sesv2 as unknown as SESv2Client).send
+const mockSend = (sesv2 as unknown as SESv2Client).send as jest.Mock;
 
 describe('getRegStatusInteractor', () => {
   const userEmail = 'user@example.com';
@@ -272,7 +272,7 @@ describe('getRegStatusInteractor', () => {
 
     const consoleErrorSpy = jest
       .spyOn(console, 'error')
-      .mockImplementation(() => { });
+      .mockImplementation(() => {});
 
     await expect(
       getRegStatusInteractor(
