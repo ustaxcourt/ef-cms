@@ -442,6 +442,7 @@ describe('updatePractitionerUser', () => {
       expect(generateChangeOfAddress).toHaveBeenCalled();
     });
   });
+
   describe('update practiceType', () => {
     it('should throw error when practitioner has open cases and practice type has been changed', async () => {
       getPractitionerByBarNumber.mockResolvedValue({
@@ -483,6 +484,7 @@ describe('updatePractitionerUser', () => {
         userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
         practiceType: 'DOJ',
       });
+
       applicationContext
         .getUseCases()
         .getPractitionerCasesInteractor.mockReturnValue({
