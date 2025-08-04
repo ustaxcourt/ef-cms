@@ -127,7 +127,7 @@ export const createTestApplicationContext = () => {
     getDocument: jest.fn().mockReturnValue({
       promise: Promise.resolve({
         getPage: () => ({
-          cleanup: () => {},
+          cleanup: () => { },
           getViewport: () => ({
             height: 100,
             width: 100,
@@ -488,7 +488,7 @@ export const createTestApplicationContext = () => {
 
   const mockGetMessagingClient = {
     send: jest.fn().mockReturnValue({
-      promise: () => {},
+      promise: () => { },
     }),
   };
 
@@ -537,6 +537,7 @@ export const createTestApplicationContext = () => {
       adminCreateUser: jest.fn(),
       adminUpdateUserAttributes: jest.fn(),
       initiateAuth: jest.fn(),
+      adminDisableUser: jest.fn(),
     }),
     getConstants: jest.fn().mockImplementation(() => {
       return {
@@ -596,7 +597,7 @@ export const createTestApplicationContext = () => {
     getUtilities: mockGetUtilities,
     getWorkerGateway: appContextProxy({
       initialize: jest.fn().mockReturnValue({
-        promise: () => {},
+        promise: () => { },
       }),
     }),
     isFeatureEnabled: jest.fn(),

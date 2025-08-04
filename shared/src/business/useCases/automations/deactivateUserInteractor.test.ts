@@ -1,7 +1,9 @@
 import { ROLES } from '@shared/business/entities/EntityConstants';
 import { deactivateUserInteractor } from '@shared/business/useCases/automations/deactivateUserInteractor';
-import { getUserGateway } from '@web-api/getUserGateway';
+import { getUserGateway as getUserGatewayMock } from '@web-api/getUserGateway';
 import { deactivateUser } from '@web-api/persistence/postgres/users/deactivateUser';
+
+const getUserGateway = getUserGatewayMock as jest.Mock;
 
 jest.mock('@web-api/getUserGateway', () => ({
   getUserGateway: jest.fn(() => ({
