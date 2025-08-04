@@ -445,12 +445,11 @@ describe('updatePractitionerUser', () => {
 
   describe('update practiceType', () => {
     it('should throw error when practitioner has open cases and practice type has been changed', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockResolvedValue({
-          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
-          practiceType: 'DOJ',
-        });
+      getPractitionerByBarNumber.mockResolvedValue({
+        ...mockPractitioner,
+        userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
+        practiceType: 'DOJ',
+      });
       applicationContext
         .getUseCases()
         .getPractitionerCasesInteractor.mockReturnValue({
@@ -468,7 +467,7 @@ describe('updatePractitionerUser', () => {
               ...mockPractitioner,
               barNumber: 'AB1111',
               updatedEmail: 'bc@example.com',
-              userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+              userId: 'dabbad03-18d0-43ec-bafb-654e83405416',
               practiceType: 'IRS',
             },
           },
@@ -479,13 +478,11 @@ describe('updatePractitionerUser', () => {
       );
     });
     it('should not throw an error when the practice type changed and there are no open cases', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getPractitionerByBarNumber.mockResolvedValue({
-          ...mockPractitioner,
-          userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
-          practiceType: 'DOJ',
-        });
+      getPractitionerByBarNumber.mockResolvedValue({
+        ...mockPractitioner,
+        userId: '9ea9732c-9751-4159-9619-bd27556eb9bc',
+        practiceType: 'DOJ',
+      });
       applicationContext
         .getUseCases()
         .getPractitionerCasesInteractor.mockReturnValue({
