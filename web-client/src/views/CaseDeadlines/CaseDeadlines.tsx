@@ -50,7 +50,7 @@ export const CaseDeadlines = connect(
         key: 'filterStartDateState',
         value: caseDeadlineReportHelper.filterStartDate,
       });
-    })
+    }, [])
 
     return (
       <>
