@@ -21,7 +21,7 @@ export const statusReportOrderPdfPreviewSequence =
         getTrialSessionDetailsAction,
         setTrialSessionDetailsAction,
       ],
-      no: []
+      no: [],
     },
     prepareStatusReportOrderAction,
     createOrderAction,

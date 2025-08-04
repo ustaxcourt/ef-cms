@@ -2,9 +2,7 @@ import {
   FORMATS,
   formatNow,
 } from '../../../../../shared/src/business/utilities/DateHandler';
-import {
-  getLastDraftOrderElementFromDrafts,
-} from '../../../support/statusReportOrder';
+import { getLastDraftOrderElementFromDrafts } from '../../../support/statusReportOrder';
 import {
   loginAsColvin,
   loginAsColvinChambers,
@@ -36,15 +34,15 @@ describe('should default status report order descriptions', () => {
         updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
         calendarTrialSession(trialSessionId);
         scheduleTrialSession(docketNumber, trialSessionId);
-      })
-    })
+      });
+    });
 
     // create unscheduled case
     createAndServePaperPetition().then(({ docketNumber }) => {
       unscheduledCaseDocketNumber = docketNumber;
       createStatusReport(docketNumber);
       updateCaseStatus(CASE_STATUS_TYPES.generalDocketReadyForTrial);
-    })
+    });
   });
 
   it('should display default description when document type is an Order', () => {
@@ -69,7 +67,10 @@ describe('should default status report order descriptions', () => {
   });
 
   it('should set event code to OJR when case is stricken from trial session and jurisdiction is retained and display default description', () => {
-    judgeOrChambersCreatesStatusReportOrder(today, scheduledCaseDocketNumber, { jurisdictionRetained: true, isCalendared: true });
+    judgeOrChambersCreatesStatusReportOrder(today, scheduledCaseDocketNumber, {
+      jurisdictionRetained: true,
+      isCalendared: true,
+    });
     loginAsDocketClerk();
     cy.visit(`/case-detail/${scheduledCaseDocketNumber}`);
     cy.get('#tab-drafts').click();
@@ -91,7 +92,11 @@ describe('should default status report order descriptions', () => {
   });
 
   it('should continue to handle OJR and set correct signing judge when status order report is signed by chambers user', () => {
-    judgeOrChambersCreatesStatusReportOrder(today, scheduledCaseDocketNumber, { jurisdictionRetained: true, chambersUser: true, isCalendared: true });
+    judgeOrChambersCreatesStatusReportOrder(today, scheduledCaseDocketNumber, {
+      jurisdictionRetained: true,
+      chambersUser: true,
+      isCalendared: true,
+    });
     loginAsDocketClerk();
     cy.visit(`/case-detail/${scheduledCaseDocketNumber}`);
     cy.get('#tab-drafts').click();
@@ -117,17 +122,17 @@ function judgeOrChambersCreatesStatusReportOrder(
   today: string,
   docketNumber: string,
   options: {
-    jurisdictionRetained?: boolean,
-    jurisdictionRestored?: boolean,
-    chambersUser?: boolean,
-    isCalendared?: boolean,
-  } = {}
+    jurisdictionRetained?: boolean;
+    jurisdictionRestored?: boolean;
+    chambersUser?: boolean;
+    isCalendared?: boolean;
+  } = {},
 ) {
   const {
     jurisdictionRetained = false,
     jurisdictionRestored = false,
     chambersUser = false,
-    isCalendared = false
+    isCalendared = false,
   } = options;
 
   if (chambersUser) {

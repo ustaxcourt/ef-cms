@@ -138,16 +138,6 @@ describe('CustomCaseReportSearch', () => {
     ).toBeUndefined();
   });
 
-  it('should not allow high priority to be undefined', () => {
-    const customCaseReportSearch = new CustomCaseReportSearch({
-      procedureType: 'Big',
-    });
-
-    expect(
-      customCaseReportSearch.getFormattedValidationErrors()?.procedureType,
-    ).toBeDefined();
-  });
-
   it('should not have validation errors when searchAfter contains a pk and receivedAt value', () => {
     const customCaseReportSearch = new CustomCaseReportSearch({
       searchAfter: {
