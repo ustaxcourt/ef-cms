@@ -1,89 +1,83 @@
-import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+jest.mock('@web-api/persistence/postgres/featureFlag/getFeatureFlagValues');
+import { ALLOWLIST_FEATURE_FLAGS } from '@shared/business/entities/EntityConstants';
+import { applicationContext } from '@shared/business/test/createTestApplicationContext';
+import { getAllFeatureFlagsInteractor } from '@web-api/business/useCases/featureFlag/getAllFeatureFlagsInteractor';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 
 describe('getAllFeatureFlagsInteractor', () => {
-  const mockFeatureFlagKey = 'chief-judge-name';
+  const getFeatureFlagValues = getFeatureFlagValuesMock as jest.Mock;
   beforeEach(() => {
-    jest.resetModules();
-    applicationContext.environment = { stage: 'prod' };
+    applicationContext.environment.stage = 'production';
   });
 
-  it('should retrieve the value of the feature flag from persistence when the feature flag is included in the allowlist', async () => {
-    const { getAllFeatureFlagsInteractor } = await import(
-      './getAllFeatureFlagsInteractor'
-    );
-    const mockFeatureFlagValue = {
-      current: true,
-    };
-    applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
-
-    const result = await getAllFeatureFlagsInteractor(applicationContext);
-
-    expect(
-      applicationContext.getPersistenceGateway().getFeatureFlagValue,
-    ).toHaveBeenCalled();
-    expect(result[mockFeatureFlagKey]).toBe(true);
+  afterEach(() => {
+    jest.resetAllMocks();
   });
 
-  it('should return false if the persistence method returns undefined', async () => {
-    const { getAllFeatureFlagsInteractor } = await import(
-      './getAllFeatureFlagsInteractor'
-    );
-    const mockFeatureFlagValue = undefined;
-    applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
+  it('should return the value of the feature flag', async () => {
+    const FEATURE_FLAG_KEY =
+      ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
 
-    const result = await getAllFeatureFlagsInteractor(applicationContext);
+    getFeatureFlagValues.mockResolvedValueOnce([
+      {
+        name: FEATURE_FLAG_KEY,
+        value: { current: 50 },
+      },
+    ]);
 
-    expect(
-      applicationContext.getPersistenceGateway().getFeatureFlagValue,
-    ).toHaveBeenCalled();
-    expect(result[mockFeatureFlagKey]).toBe(false);
+    const RESULT = await getAllFeatureFlagsInteractor(applicationContext, true);
+
+    expect(RESULT).toMatchObject({
+      [FEATURE_FLAG_KEY]: 50,
+    });
+
+    const getFeatureFlagValuesCalls = getFeatureFlagValues.mock.calls;
+    expect(getFeatureFlagValuesCalls.length).toEqual(1);
   });
 
-  it('should return a string if the feature flag is a string', async () => {
-    const { getAllFeatureFlagsInteractor } = await import(
-      './getAllFeatureFlagsInteractor'
-    );
-    const mockFeatureFlagValue = {
-      current: 'Judge Kerrigan',
-    };
+  it('should return the default value if the feature flag is not set in postgres', async () => {
+    const FEATURE_FLAG_KEY =
+      ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
 
-    applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
+    getFeatureFlagValues.mockResolvedValueOnce([]);
 
-    const result = await getAllFeatureFlagsInteractor(applicationContext);
+    const RESULT = await getAllFeatureFlagsInteractor(applicationContext, true);
 
-    expect(result[mockFeatureFlagKey]).toBe(mockFeatureFlagValue.current);
+    expect(RESULT).toMatchObject({
+      [FEATURE_FLAG_KEY]: false,
+    });
+
+    const getFeatureFlagValuesCalls = getFeatureFlagValues.mock.calls;
+    expect(getFeatureFlagValuesCalls.length).toEqual(1);
   });
 
-  it('should cache the feature flag values when they have already been fetched', async () => {
-    const { getAllFeatureFlagsInteractor } = await import(
-      './getAllFeatureFlagsInteractor'
-    );
-    const mockFeatureFlagValue = {
-      current: true,
-    };
-    applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
-    // First call to populate feature flag cache
-    await getAllFeatureFlagsInteractor(applicationContext);
-    expect(
-      applicationContext.getPersistenceGateway().getFeatureFlagValue,
-    ).toHaveBeenCalled();
+  it('should not call persistence if feature flags already populated', async () => {
+    const FEATURE_FLAG_KEY =
+      ALLOWLIST_FEATURE_FLAGS.AWS_BATCH_ZIPPER_MINIMUM_COUNT.key;
 
-    (
-      applicationContext.getPersistenceGateway()
-        .getFeatureFlagValue as jest.Mock
-    ).mockClear();
-    // Second call when feature flags have been cached
-    await getAllFeatureFlagsInteractor(applicationContext);
-    expect(
-      applicationContext.getPersistenceGateway().getFeatureFlagValue,
-    ).not.toHaveBeenCalled();
+    getFeatureFlagValues.mockResolvedValueOnce([
+      {
+        name: FEATURE_FLAG_KEY,
+        value: { current: 50 },
+      },
+    ]);
+
+    const RESULT1 = await getAllFeatureFlagsInteractor(
+      applicationContext,
+      true,
+    );
+
+    expect(RESULT1).toMatchObject({
+      [FEATURE_FLAG_KEY]: 50,
+    });
+
+    const RESULT2 = await getAllFeatureFlagsInteractor(applicationContext);
+
+    expect(RESULT2).toMatchObject({
+      [FEATURE_FLAG_KEY]: 50,
+    });
+
+    const getFeatureFlagValuesCalls = getFeatureFlagValues.mock.calls;
+    expect(getFeatureFlagValuesCalls.length).toEqual(1);
   });
 });

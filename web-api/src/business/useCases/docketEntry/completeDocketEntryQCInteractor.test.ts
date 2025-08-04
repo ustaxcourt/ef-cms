@@ -23,7 +23,10 @@ import {
   mockPetitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
+import { getFeatureFlagValues as getFeatureFlagValuesMock } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getWorkItemByDocketNumberAndDocketEntryId as getWorkItemByDocketNumberAndDocketEntryIdMock } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
 import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
@@ -32,6 +35,8 @@ const getUserById = jest.mocked(getUserByIdMock);
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
+  const getFeatureFlagValues = jest.mocked(getFeatureFlagValuesMock);
+
   const mockPrimaryId = MOCK_CASE.petitioners[0].contactId;
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
 
@@ -39,6 +44,9 @@ describe('completeDocketEntryQCInteractor', () => {
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const getWorkItemByDocketNumberAndDocketEntryId = jest.mocked(
+    getWorkItemByDocketNumberAndDocketEntryIdMock,
+  );
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeAll(() => {
@@ -51,13 +59,19 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   beforeEach(() => {
-    const workItem = {
-      docketEntry: {
-        docketEntryId: mockDocketEntryId,
-        docketNumber: MOCK_CASE.docketNumber,
-        documentType: 'Answer',
-        eventCode: 'A',
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'clerk-of-court-configuration',
+        value: {
+          current: {
+            name: 'bob',
+            title: 'clerk of court',
+          },
+        },
       },
+    ]);
+    const workItem = {
+      docketEntryId: mockDocketEntryId,
       docketNumber: '45678-18',
       section: DOCKET_SECTION,
       sentBy: 'Test User',
@@ -65,6 +79,10 @@ describe('completeDocketEntryQCInteractor', () => {
       updatedAt: applicationContext.getUtilities().createISODateString(),
       workItemId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
+
+    getWorkItemByDocketNumberAndDocketEntryId.mockResolvedValue(
+      new WorkItem(workItem),
+    );
 
     caseRecord = {
       ...MOCK_CASE,
@@ -83,7 +101,6 @@ describe('completeDocketEntryQCInteractor', () => {
           receivedAt: '2019-08-25T05:00:00.000Z',
           servedAt: '2019-08-25T05:00:00.000Z',
           servedParties: [{ name: 'Bernard Lowe' }],
-          workItem,
         },
       ],
     };
@@ -610,6 +627,15 @@ describe('completeDocketEntryQCInteractor', () => {
   });
 
   it('throws the expected error if the lock is already acquired by another process', async () => {
+    getFeatureFlagValues.mockResolvedValue([
+      {
+        name: 'entity-locking-feature-flag',
+        value: {
+          current: true,
+        },
+      },
+    ]);
+
     tryGetLocks.mockResolvedValueOnce([
       { successfullyLocked: false, identifier: 'abc' },
     ]);

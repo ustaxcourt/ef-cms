@@ -7,14 +7,15 @@ import {
   Role,
 } from '@shared/business/entities/EntityConstants';
 import { getWorkQueueFilters } from '@shared/business/utilities/getWorkQueueFilters';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
+import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 
 describe('getWorkQueueFilters', () => {
-  const aWorkItem: WorkItemWithCaseInfo = {
+  const aWorkItem: RawWorkItemWithCaseAndDocketEntryInfo = {
     assigneeId: '123',
     docketEntry: {
       isFileAttached: false,
-    },
+    } as RawDocketEntry,
+    docketEntryId: 'anId',
     inProgress: false,
     section: DOCKET_SECTION,
     workItemId: '1',
@@ -364,15 +365,16 @@ describe('getWorkQueueFilters', () => {
     });
 
     it('returns an object containing a filter map for my work queues and boxes', () => {
-      const myWorkItems: WorkItemWithCaseInfo[] = [
+      const myWorkItems: RawWorkItemWithCaseAndDocketEntryInfo[] = [
         {
           ...aWorkItem,
           // my in progress
           assigneeId: '123',
+          docketEntryId: 'anId',
           docketEntry: {
             isFileAttached: false,
-          },
-          section: CASE_SERVICES_SUPERVISOR_SECTION,
+          } as RawDocketEntry,
+          section: DOCKET_SECTION,
           workItemId: '1',
         },
         {
@@ -381,19 +383,21 @@ describe('getWorkQueueFilters', () => {
           assigneeId: '123',
           caseStatus: CASE_STATUS_TYPES.new,
           inProgress: true,
-          docketEntry: {},
-          section: CASE_SERVICES_SUPERVISOR_SECTION,
+          docketEntryId: 'anId',
+          docketEntry: {} as RawDocketEntry,
+          section: DOCKET_SECTION,
           workItemId: '2',
         },
         {
           ...aWorkItem,
           // my inbox
           assigneeId: '123',
+          docketEntryId: 'anId',
           docketEntry: {
             isFileAttached: true,
-          },
+          } as RawDocketEntry,
           inProgress: false,
-          section: CASE_SERVICES_SUPERVISOR_SECTION,
+          section: DOCKET_SECTION,
           workItemId: '3',
         },
         {
@@ -402,11 +406,12 @@ describe('getWorkQueueFilters', () => {
           assigneeId: '123',
           completedAt: '2019-06-17T15:27:55.801Z',
           completedByUserId: '123',
+          docketEntryId: 'anId',
           docketEntry: {
             isFileAttached: true,
-          },
+          } as RawDocketEntry,
           inProgress: false,
-          section: CASE_SERVICES_SUPERVISOR_SECTION,
+          section: DOCKET_SECTION,
           workItemId: '4',
         },
       ];
@@ -431,17 +436,23 @@ describe('getWorkQueueFilters', () => {
       ]);
     });
 
-    [PETITIONS_SECTION, DOCKET_SECTION].forEach(sectionToTest => {
+    (
+      [PETITIONS_SECTION, DOCKET_SECTION] as (
+        | typeof PETITIONS_SECTION
+        | typeof DOCKET_SECTION
+      )[]
+    ).forEach(sectionToTest => {
       it(`returns an object containing a filter map for ${sectionToTest} section work queues and boxes`, () => {
-        const sectionWorkItems: WorkItemWithCaseInfo[] = [
+        const sectionWorkItems: RawWorkItemWithCaseAndDocketEntryInfo[] = [
           {
             ...aWorkItem,
             // section in progress
             assigneeId: '234',
             caseStatus: CASE_STATUS_TYPES.new,
+            docketEntryId: 'anId',
             docketEntry: {
               isFileAttached: false,
-            },
+            } as RawDocketEntry,
             section: `${sectionToTest}`,
             workItemId: '5',
             inProgress: true,
@@ -451,7 +462,8 @@ describe('getWorkQueueFilters', () => {
             // section in progress
             assigneeId: '234',
             caseStatus: CASE_STATUS_TYPES.new,
-            docketEntry: {},
+            docketEntryId: 'anId',
+            docketEntry: {} as RawDocketEntry,
             section: `${sectionToTest}`,
             inProgress: true,
             workItemId: '6',
@@ -461,9 +473,10 @@ describe('getWorkQueueFilters', () => {
             // section inbox
             assigneeId: '234',
             caseStatus: CASE_STATUS_TYPES.new,
+            docketEntryId: 'anId',
             docketEntry: {
               isFileAttached: true,
-            },
+            } as RawDocketEntry,
             inProgress: false,
             section: `${sectionToTest}`,
             workItemId: '7',
@@ -474,9 +487,10 @@ describe('getWorkQueueFilters', () => {
             assigneeId: '234',
             completedAt: '2019-06-17T15:27:55.801Z',
             completedByUserId: '234',
+            docketEntryId: 'anId',
             docketEntry: {
               isFileAttached: true,
-            },
+            } as RawDocketEntry,
             inProgress: false,
             section: `${sectionToTest}`,
             workItemId: '8',

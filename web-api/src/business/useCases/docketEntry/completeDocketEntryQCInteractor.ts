@@ -23,7 +23,6 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '@shared/business/entities/User';
-import { WorkItem } from '@shared/business/entities/WorkItem';
 import { addServedStampToDocument } from '@web-api/business/useCases/courtIssuedDocument/addServedStampToDocument';
 import { aggregatePartiesForService } from '@shared/business/utilities/aggregatePartiesForService';
 import { generateNoticeOfDocketChangePdf } from '@web-api/business/useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
@@ -32,9 +31,12 @@ import { getCaseCaptionMeta } from '@shared/business/utilities/getCaseCaptionMet
 import { getDocumentTitleForNoticeOfChange } from '@shared/business/utilities/getDocumentTitleForNoticeOfChange';
 import { replaceBracketed } from '@shared/business/utilities/replaceBracketed';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
+import { getWorkItemByDocketNumberAndDocketEntryId } from '@web-api/persistence/postgres/workitems/getWorkItemByDocketNumberAndDocketEntryId';
 import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
+import { WorkItem } from '@shared/business/entities/WorkItem';
 
 const completeDocketEntryQC = async (
   applicationContext: ServerApplicationContext,
@@ -50,7 +52,6 @@ const completeDocketEntryQC = async (
   const {
     docketEntryId,
     docketNumber,
-    leadDocketNumber,
     overridePaperServiceAddress,
     selectedSection,
   } = entryMetadata;
@@ -63,20 +64,36 @@ const completeDocketEntryQC = async (
     );
   }
 
-  const caseToUpdate = await getCaseByDocketNumber({
-    docketNumber,
-  });
+  const [caseToUpdate, workItem] = await Promise.all([
+    getCaseByDocketNumber({
+      docketNumber,
+    }),
+    getWorkItemByDocketNumberAndDocketEntryId({
+      docketNumber,
+      docketEntryId,
+    }),
+  ]);
+
+  if (!workItem) {
+    throw new NotFoundError(
+      `Could not find work item associated with ${docketNumber} document ${docketEntryId}`,
+    );
+  }
 
   let caseEntity = new Case(caseToUpdate, { authorizedUser });
-  const { index: docketRecordIndexUpdated } = caseEntity.docketEntries.find(
-    record => record.docketEntryId === docketEntryId,
-  );
-
   const currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (currentDocketEntry.workItem.isCompleted()) {
+  if (!currentDocketEntry) {
+    throw new NotFoundError(
+      `Could not find docket entry with id ${docketEntryId} on case ${docketNumber}`,
+    );
+  }
+
+  const { index: docketRecordIndexUpdated } = currentDocketEntry;
+
+  if (workItem.isCompleted()) {
     throw new InvalidRequest('The work item was already completed');
   }
 
@@ -117,12 +134,6 @@ const completeDocketEntryQC = async (
       documentTitle: editableFields.documentTitle,
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
-      workItem: {
-        ...currentDocketEntry.workItem,
-        leadDocketNumber,
-        trialDate: caseEntity.trialDate,
-        trialLocation: caseEntity.trialLocation,
-      },
     },
     { authorizedUser, petitioners: caseToUpdate.petitioners },
   ).validate();
@@ -149,13 +160,17 @@ const completeDocketEntryQC = async (
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
+
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
 
   const docketChangeInfo = {
     caseCaptionExtension,
@@ -183,16 +198,7 @@ const completeDocketEntryQC = async (
     .getUseCaseHelpers()
     .updateCaseAutomaticBlock({ caseEntity });
 
-  const workItemToUpdate = updatedDocketEntry.workItem as WorkItem;
-
-  Object.assign(workItemToUpdate, {
-    docketEntry: {
-      ...updatedDocketEntry.toRawObject(),
-      createdAt: updatedDocketEntry.createdAt,
-    },
-  });
-
-  workItemToUpdate.setAsCompleted({
+  workItem.setAsCompleted({
     message: 'completed',
     user,
   });
@@ -204,17 +210,20 @@ const completeDocketEntryQC = async (
   const sectionToAssignTo =
     userIsCaseServices && selectedSection ? selectedSection : user.section;
 
-  workItemToUpdate.assignToUser({
+  workItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
-    section: sectionToAssignTo,
+    section: WorkItem.getWorkItemSectionFromUserSection({
+      section: sectionToAssignTo,
+      documentTitle: updatedDocketEntry.documentTitle,
+    }),
     sentBy: user.name,
     sentBySection: user.section,
     sentByUserId: user.userId,
   });
 
   await upsertWorkItems({
-    workItems: [workItemToUpdate.validate().toRawObject()],
+    workItems: [workItem.validate().toRawObject()],
   });
 
   const servedParties = aggregatePartiesForService(caseEntity);
@@ -272,6 +281,7 @@ const completeDocketEntryQC = async (
     const noticeDocketEntryId = await generateNoticeOfDocketChangePdf({
       applicationContext,
       authorizedUser,
+      // @ts-ignore
       docketChangeInfo,
     });
 
@@ -281,6 +291,7 @@ const completeDocketEntryQC = async (
         docketEntryId: noticeDocketEntryId,
         documentTitle: replaceBracketed(
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfDocketChange.documentTitle,
+          // @ts-ignore
           docketChangeInfo.docketEntryIndex,
         ),
         isFileAttached: true,

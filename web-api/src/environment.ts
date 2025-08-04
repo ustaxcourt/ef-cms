@@ -46,7 +46,6 @@ export const environment = {
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   emailFromAddress,
   isRunningOnLambda,
-  nodeEnv: process.env.NODE_ENV,
   rds: {
     pool: {
       database: process.env.DATABASE_NAME || 'postgres',
