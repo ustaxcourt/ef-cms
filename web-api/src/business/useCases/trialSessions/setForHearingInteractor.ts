@@ -53,13 +53,16 @@ export const setForHearingInteractor = async (
     throw new Error('That Hearing is already assigned to the Case');
   }
 
-  trialSessionEntity
+  const caseOrder = trialSessionEntity
     .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
     .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
 
+
   await addCaseToTrialSession({
     docketNumber,
-    trialSession: trialSessionEntity.validate().toRawObject(),
+    caseOrder,
+    trialSessionId,
+    isHearing: true,
   });
 
   // retrieve the case again since we've added the mapped hearing record :)

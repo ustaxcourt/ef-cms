@@ -61,12 +61,12 @@ export type TTrialClerk = {
 };
 
 export type TCaseOrder = {
-  addedToSessionAt?: string;
+  addedToSessionAt: string;
   calendarNotes?: string;
   disposition?: string;
   docketNumber: string;
-  isManuallyAdded?: boolean;
-  removedFromTrial?: boolean;
+  isManuallyAdded: boolean;
+  removedFromTrial: boolean;
   removedFromTrialDate?: string;
 };
 
@@ -439,21 +439,28 @@ export class TrialSession extends JoiValidationEntity {
     );
 
     if (!caseExists) {
-      this.caseOrder.push({ docketNumber });
+      this.caseOrder.push({
+        docketNumber,
+        isManuallyAdded: false,
+        removedFromTrial: false,
+        addedToSessionAt: createISODateString(),
+      });
     }
 
     return this;
   }
 
-  manuallyAddCaseToCalendar({ calendarNotes, caseEntity }) {
+  manuallyAddCaseToCalendar({ calendarNotes, caseEntity }): TCaseOrder {
     const { docketNumber } = caseEntity;
-    this.caseOrder.push({
+    const caseOrderObject = {
       addedToSessionAt: createISODateString(),
       calendarNotes,
       docketNumber,
       isManuallyAdded: true,
-    });
-    return this;
+      removedFromTrial: false,
+    };
+    this.caseOrder.push(caseOrderObject);
+    return caseOrderObject;
   }
 
   isCaseAlreadyCalendared(caseEntity) {

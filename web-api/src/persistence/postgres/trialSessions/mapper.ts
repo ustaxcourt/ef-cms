@@ -1,9 +1,13 @@
-import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import {
+  RawTrialSession,
+  TCaseOrder,
+} from '@shared/business/entities/trialSessions/TrialSession';
 import {
   calculateDate,
   formatNow,
 } from '@shared/business/utilities/DateHandler';
 import {
+  NewTrialSessionCaseKysely,
   NewTrialSessionKysely,
   NewTrialSessionWorkingCopyKysely,
   TrialSessionKysely,
@@ -94,6 +98,23 @@ export function fromKyselyTrialSession(
       title: pdf.title,
     })),
   });
+}
+
+export function toKyselyNewTrialSessionCase(
+  trialSessionCase: TCaseOrder & {
+    trialSessionId: string;
+    isHearing: boolean;
+  },
+): NewTrialSessionCaseKysely {
+  return {
+    ...trialSessionCase,
+    removedFromTrialDate: trialSessionCase.removedFromTrialDate
+      ? calculateDate({ dateString: trialSessionCase.removedFromTrialDate })
+      : null,
+    addedToSessionAt: calculateDate({
+      dateString: trialSessionCase.addedToSessionAt,
+    }),
+  };
 }
 
 export function toKyselyNewTrialSessionWorkingCopy(

@@ -1,24 +1,30 @@
 import { settlePromises } from '@web-api/utilities/settlePromises';
-import { RawTrialSession } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { TCaseOrder } from '../../../../../shared/src/business/entities/trialSessions/TrialSession';
 import { pgInsertInto } from '../utils/operation/pgInsertInto';
-import { updateTrialSession } from './updateTrialSession';
+
+import { toKyselyNewTrialSessionCase } from './mapper';
 
 export const addCaseToTrialSession = ({
   docketNumber,
-  trialSession,
-  isHearing
+  caseOrder,
+  isHearing,
+  trialSessionId,
 }: {
   docketNumber: string;
-  trialSession: RawTrialSession;
+  caseOrder: TCaseOrder;
   isHearing: boolean;
+  trialSessionId: string;
 }) =>
   settlePromises([
     pgInsertInto({
       table: 'dwTrialSessionCase',
-      values: { trialSessionId: trialSession.trialSessionId, docketNumber, isHearing },
-    }),
-
-    updateTrialSession({
-      trialSessionToUpdate: trialSession,
+      values: toKyselyNewTrialSessionCase({
+        ...caseOrder,
+        isManuallyAdded: caseOrder.isManuallyAdded ?? false,
+        removedFromTrial: caseOrder.removedFromTrial ?? false,
+        docketNumber,
+        isHearing,
+        trialSessionId,
+      }),
     }),
   ]);

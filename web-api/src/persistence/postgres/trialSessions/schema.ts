@@ -1,8 +1,6 @@
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopyCaseMetadata } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { Selectable, Insertable, ColumnType } from 'kysely';
-import { add } from 'lodash';
-import { is } from 'o';
 
 const DEFAULT = {};
 
@@ -105,8 +103,12 @@ export type NewTrialSessionPaperPdfKysely =
 
 ////////////////////////////
 
-export type trialSessionNotificationProcessingStatusType = 'complete' | 'processing';
-export type trialSessionNotificationProcessingCaseStatusType = 'processing' | 'processed';
+export type trialSessionNotificationProcessingStatusType =
+  | 'complete'
+  | 'processing';
+export type trialSessionNotificationProcessingCaseStatusType =
+  | 'processing'
+  | 'processed';
 
 export const trialSessionNotificationProcessingTableDefinition = {
   trialSessionId: DEFAULT as string,
@@ -127,9 +129,7 @@ export type TrialSessionNotificationProcessingKysely =
 export type NewTrialSessionNotificationProcessingKysely =
   Insertable<TrialSessionNotificationProcessingTable>;
 
-
 ///////////////////////
-
 
 const trialSessionCaseTableDefinition = {
   docketNumber: DEFAULT as string,
