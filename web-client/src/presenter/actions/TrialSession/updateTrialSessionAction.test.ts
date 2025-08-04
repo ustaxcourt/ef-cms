@@ -10,7 +10,6 @@ describe('updateTrialSessionAction', () => {
     maxCases: 100,
     sessionType: SESSION_TYPES.regular,
     startDate: '2019-12-01T00:00:00.000Z',
-    swingSession: true,
     swingSessionId: '456',
     term: 'Fall',
     trialLocation: 'Birmingham, Alabama',

@@ -77,7 +77,6 @@ export const updateTrialSession = async (
     startDate: trialSession.startDate,
     startTime: trialSession.startTime,
     state: trialSession.state,
-    swingSession: trialSession.swingSession,
     swingSessionId: trialSession.swingSessionId,
     term: trialSession.term,
     termYear: trialSession.termYear,
@@ -175,7 +174,7 @@ export const updateTrialSession = async (
     }
   }
 
-  if (trialSession.swingSession && trialSession.swingSessionId) {
+  if (trialSession.swingSessionId) {
     await associateSwingTrialSessions(
       {
         swingSessionId: trialSession.swingSessionId,
@@ -208,8 +207,8 @@ export const determineEntitiesToLock = async (
   { trialSession }: { trialSession: TrialSession },
 ) => {
   const currentTrialSession = await getTrialSessionById({
-      trialSessionId: trialSession.trialSessionId || '',
-    });
+    trialSessionId: trialSession.trialSessionId || '',
+  });
 
   if (!currentTrialSession) {
     throw new NotFoundError(

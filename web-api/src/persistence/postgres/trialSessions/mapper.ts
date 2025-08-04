@@ -61,7 +61,6 @@ export function toKyselyNewTrialSession(
     startDate: calculateDate({ dateString: rawTrialSession.startDate }),
     startTime: rawTrialSession.startTime,
     state: rawTrialSession.state,
-    swingSession: rawTrialSession.swingSession,
     swingSessionId: rawTrialSession.swingSessionId,
     term: rawTrialSession.term,
     termYear: rawTrialSession.termYear,

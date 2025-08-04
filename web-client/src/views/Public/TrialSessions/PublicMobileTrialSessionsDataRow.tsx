@@ -7,7 +7,7 @@ type PublicMobileTrialSessionsDataRowProps = {
   judgeName: string;
   proceedingType: string;
   sessionType: string;
-  swingSession: boolean;
+  isSwingSession: boolean;
   trialLocation: string;
 };
 
@@ -16,7 +16,7 @@ export const PublicMobileTrialSessionsDataRow = function ({
   proceedingType,
   sessionType,
   startDate,
-  swingSession,
+  isSwingSession,
   trialLocation,
   trialSessionId,
 }: PublicMobileTrialSessionsDataRowProps) {
@@ -36,7 +36,7 @@ export const PublicMobileTrialSessionsDataRow = function ({
         <div className="grid-col-6 padding-bottom-1">
           <div className="text-semibold">Location</div>
           <div className="padding-bottom-2">
-            {swingSession && (
+            {isSwingSession && (
               <span className="padding-right-1">
                 <FontAwesomeIcon
                   className="fa-icon-blue"

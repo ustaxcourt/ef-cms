@@ -279,7 +279,7 @@ export const formatTrialSessions = ({
         sessionType: trialSession.sessionType,
         showAlertForNOTTReminder,
         startDate: trialSession.startDate,
-        swingSession: !!trialSession.swingSession,
+        isSwingSession: !!trialSession.isSwingSession,
         trialLocation: trialSession.trialLocation || '',
         trialSessionId: trialSession.trialSessionId || '',
         userIsAssignedToSession,
@@ -330,7 +330,7 @@ export type TrialSessionRow = {
   alertMessageForNOTT: string;
   formattedStartDate: string; //MM/DD/YYYY
   formattedEstimatedEndDate: string;
-  swingSession: boolean;
+  isSwingSession: boolean;
   userIsAssignedToSession: boolean;
   trialLocation: string;
   proceedingType: string;

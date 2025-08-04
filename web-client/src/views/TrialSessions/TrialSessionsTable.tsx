@@ -127,7 +127,7 @@ export const TrialSessionsTable = connect(
                           </td>
                           <td>{row.formattedEstimatedEndDate}</td>
                           <td>
-                            {row.swingSession && (
+                            {row.isSwingSession && (
                               <FontAwesomeIcon
                                 className="fa-icon-blue"
                                 icon="link"

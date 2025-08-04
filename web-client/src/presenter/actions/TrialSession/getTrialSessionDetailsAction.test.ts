@@ -39,7 +39,6 @@ describe('getTrialSessionDetailsAction', () => {
     applicationContext
       .getUseCases()
       .getTrialSessionDetailsInteractor.mockResolvedValue({
-        swingSession: true,
         swingSessionId: '234',
         trialSessionId: '123',
       });

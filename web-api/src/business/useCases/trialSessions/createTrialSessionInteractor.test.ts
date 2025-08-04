@@ -123,7 +123,6 @@ describe('createTrialSessionInteractor', () => {
       {
         trialSession: {
           ...MOCK_TRIAL,
-          swingSession: true,
           swingSessionId: '1234',
         } as RawTrialSession,
       },

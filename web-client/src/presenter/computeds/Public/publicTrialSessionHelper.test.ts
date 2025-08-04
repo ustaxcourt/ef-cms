@@ -222,7 +222,7 @@ describe('publicTrialSessionsHelper', () => {
       const TEST_PROCEEDING_TYPE = 'TEST_PROCEEDING_TYPE';
       const TEST_TRIAL_SESSIONS: TrialSessionInfoDTO[] = [
         createTrialSessionObject({ proceedingType: TEST_PROCEEDING_TYPE }),
-        createTrialSessionObject({ essionType: SESSION_TYPES.small }),
+        createTrialSessionObject({ sessionType: SESSION_TYPES.small }),
         createTrialSessionObject({ trialLocation: 'Mobile, Alabama' }),
         createTrialSessionObject({
           judge: {
@@ -266,7 +266,7 @@ describe('publicTrialSessionsHelper', () => {
           sessionType: SESSION_TYPES.regular,
           showAlertForNOTTReminder: false,
           startDate: '2020-11-25T05:00:00.000Z',
-          swingSession: false,
+          isSwingSession: false,
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '',
           userIsAssignedToSession: false,
@@ -326,7 +326,7 @@ describe('publicTrialSessionsHelper', () => {
           sessionType: SESSION_TYPES.regular,
           showAlertForNOTTReminder: false,
           startDate: '2020-11-25T05:00:00.000Z',
-          swingSession: false,
+          isSwingSession: false,
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '',
           userIsAssignedToSession: false,
@@ -386,7 +386,7 @@ describe('publicTrialSessionsHelper', () => {
           sessionType: SESSION_TYPES.regular,
           showAlertForNOTTReminder: false,
           startDate: '2020-11-25T05:00:00.000Z',
-          swingSession: false,
+          isSwingSession: false,
           trialLocation: TEST_LOCATION,
           trialSessionId: '',
           userIsAssignedToSession: false,
@@ -446,7 +446,7 @@ describe('publicTrialSessionsHelper', () => {
           sessionType: TEST_SESSION_TYPE,
           showAlertForNOTTReminder: false,
           startDate: '2020-11-25T05:00:00.000Z',
-          swingSession: false,
+          isSwingSession: false,
           trialLocation: 'Birmingham, Alabama',
           trialSessionId: '',
           userIsAssignedToSession: false,

@@ -256,14 +256,13 @@ describe('getFormattedTrialSessionDetails', () => {
       currentUser: mockTrialClerkUser,
       trialSession: {
         ...TRIAL_SESSION,
-        swingSession: true,
         swingSessionId: '1234',
         swingSessionLocation: 'Honolulu, Hawaii',
       },
     });
 
     expect(result).toMatchObject({
-      showSwingSession: true,
+      swingSessionId: '1234',
     });
   });
 

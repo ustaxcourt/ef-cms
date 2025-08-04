@@ -19,7 +19,7 @@ export class TrialSessionInfoDTO {
   public noticeIssuedDate?: string;
   public sessionScope: string;
   public sessionStatus: string;
-  public swingSession?: boolean;
+  public isSwingSession?: boolean;
   public dismissedAlertForNott?: boolean;
 
   constructor(rawTrialSession: RawTrialSession) {
@@ -37,7 +37,7 @@ export class TrialSessionInfoDTO {
     this.trialSessionId = rawTrialSession.trialSessionId;
     this.noticeIssuedDate = rawTrialSession.noticeIssuedDate;
     this.sessionStatus = rawTrialSession.sessionStatus;
-    this.swingSession = rawTrialSession.swingSession;
+    this.isSwingSession = !!rawTrialSession.swingSessionId;
     this.dismissedAlertForNott = rawTrialSession.dismissedAlertForNott;
   }
 }

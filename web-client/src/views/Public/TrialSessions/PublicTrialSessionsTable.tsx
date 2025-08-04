@@ -74,7 +74,7 @@ export const PublicTrialSessionsTable = connect<
                       {row.formattedStartDate}
                     </td>
                     <td>
-                      {row.swingSession && (
+                      {row.isSwingSession && (
                         <FontAwesomeIcon
                           aria-label="Swing session: will be held in two cities"
                           className="fa-icon-blue"

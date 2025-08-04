@@ -27,7 +27,6 @@ describe('formattedDashboardTrialSessions', () => {
         judge: { name: '1', userId: '1' },
         sessionStatus: SESSION_STATUS_TYPES.open,
         startDate: '2017-11-25T15:00:00.000Z',
-        swingSession: true,
         trialLocation: 'Hartford, Connecticut',
       },
       {
@@ -35,7 +34,6 @@ describe('formattedDashboardTrialSessions', () => {
         judge: { name: '2', userId: '1' },
         sessionStatus: SESSION_STATUS_TYPES.open,
         startDate: `${nextYear}-02-17T15:00:00.000Z`,
-        swingSession: true,
         trialLocation: 'Knoxville, TN',
       },
       {
@@ -43,7 +41,6 @@ describe('formattedDashboardTrialSessions', () => {
         judge: { name: '3', userId: '1' },
         sessionStatus: SESSION_STATUS_TYPES.closed,
         startDate: '2017-11-27T15:00:00.000Z',
-        swingSession: true,
         trialLocation: 'Jacksonville, FL',
       },
       {
@@ -51,7 +48,6 @@ describe('formattedDashboardTrialSessions', () => {
         judge: { name: '3', userId: '1' },
         sessionStatus: SESSION_STATUS_TYPES.new,
         startDate: '2017-11-27T15:00:00.000Z',
-        swingSession: true,
         trialLocation: 'Jacksonville, FL',
       },
     ];

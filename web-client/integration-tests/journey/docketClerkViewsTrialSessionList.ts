@@ -19,7 +19,7 @@ export const docketClerkViewsTrialSessionList = (
     expect(trialSession).toBeDefined();
 
     if (overrides.expectSwingSession) {
-      expect(trialSession.swingSession).toEqual(true);
+      expect(trialSession.swingSessionId).toBeTruthy();
     }
 
     cerebralTest.trialSessionId = trialSession && trialSession.trialSessionId;

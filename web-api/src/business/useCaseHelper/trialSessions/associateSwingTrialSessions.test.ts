@@ -85,7 +85,6 @@ describe('associateSwingTrialSessions', () => {
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
       ...MOCK_TRIAL_SESSION_FOR_ASSOCIATION,
-      swingSession: true,
       swingSessionId: mockCurrentTrialSessionEntity.trialSessionId,
     });
   });

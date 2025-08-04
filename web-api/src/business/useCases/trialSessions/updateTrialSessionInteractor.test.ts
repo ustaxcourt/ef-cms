@@ -286,7 +286,6 @@ describe('updateTrialSessionInteractor', () => {
               userId: TEST_TRIAL_CLERK_ID,
               name: 'TEST_TRIAL_CLERK_NAME',
             },
-            swingSession: true,
             swingSessionId: SWING_ID,
           } as unknown as RawTrialSession,
           clientConnectionId: TEST_CLIENT_CONNECTION_ID,

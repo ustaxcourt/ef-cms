@@ -330,7 +330,6 @@ export const getFormattedTrialSessionDetails = ({
     !formattedCityStateZip;
 
   const showSwingSession =
-    !!trialSession.swingSession &&
     !!trialSession.swingSessionId &&
     !!trialSession.swingSessionLocation;
 

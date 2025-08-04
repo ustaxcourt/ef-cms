@@ -101,7 +101,6 @@ export class TrialSession extends JoiValidationEntity {
   public startDate: string;
   public startTime?: string;
   public state?: string;
-  public swingSession?: boolean;
   public swingSessionId?: string;
   public term: string;
   public termYear: string;
@@ -174,7 +173,6 @@ export class TrialSession extends JoiValidationEntity {
       this.startTime = rawSession.startTime || '10:00';
     }
     this.state = rawSession.state;
-    this.swingSession = rawSession.swingSession;
     this.swingSessionId = rawSession.swingSessionId;
     this.term = rawSession.term;
     this.termYear = rawSession.termYear;
@@ -335,11 +333,10 @@ export class TrialSession extends JoiValidationEntity {
       )
         .allow('')
         .optional(),
-      swingSession: joi.boolean().optional(),
+      // 10493 TODO: shoot, this will be tricky
       swingSessionId: JoiValidationConstants.UUID.when('swingSession', {
         is: true,
         otherwise: JoiValidationConstants.STRING.optional(),
-        then: joi.required(),
       }).messages({ '*': 'You must select a swing session' }),
       term: JoiValidationConstants.STRING.valid(...SESSION_TERMS)
         .required()
@@ -408,7 +405,6 @@ export class TrialSession extends JoiValidationEntity {
 
   setAsSwingSession(swingSessionId) {
     this.swingSessionId = swingSessionId;
-    this.swingSession = true;
     return this;
   }
 

@@ -1,4 +1,4 @@
-import { RawTrialSession } from "@shared/business/entities/trialSessions/TrialSession";
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 /**
  * Fetches the details about a trial session
@@ -15,13 +15,14 @@ export const getTrialSessionDetailsAction = async ({
 }>) => {
   const { trialSessionId } = props;
   // 10493 TODO: This action is terrible. Can we refactor? Should be consistent with getPublicTrialSessionDetails
-  const trialSession: RawTrialSession & {swingSessionLocation?: string} = await applicationContext
-    .getUseCases()
-    .getTrialSessionDetailsInteractor(applicationContext, {
-      trialSessionId,
-    });
+  const trialSession: RawTrialSession & { swingSessionLocation?: string } =
+    await applicationContext
+      .getUseCases()
+      .getTrialSessionDetailsInteractor(applicationContext, {
+        trialSessionId,
+      });
 
-  if (trialSession.swingSession && trialSession.swingSessionId) {
+  if (trialSession.swingSessionId) {
     const swingSession = await applicationContext
       .getUseCases()
       .getTrialSessionDetailsInteractor(applicationContext, {
