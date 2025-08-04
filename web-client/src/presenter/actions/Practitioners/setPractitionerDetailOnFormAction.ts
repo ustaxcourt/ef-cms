@@ -13,4 +13,8 @@ export const setPractitionerDetailOnFormAction = ({
 }: ActionProps) => {
   store.set(state.form, props.practitionerDetail);
   store.set(state.form.originalEmail, props.practitionerDetail.email);
+  store.set(
+    state.form.originalPracticeType,
+    props.practitionerDetail.practiceType,
+  );
 };
