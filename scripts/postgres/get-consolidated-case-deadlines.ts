@@ -10,12 +10,15 @@ function log(): void {
   console.log(CONSOLE_INFO.join('\n'));
 }
 
+type CaseDeadlineDTO = Pick<
+  RawCaseDeadline,
+  'docketNumber' | 'caseDeadlineId' | 'description' | 'deadlineDate'
+>;
+
 type PotentialConsolidatedCaseDeadlineInfo = {
   leadDocketNumber: string;
-  countOfCasesInGroup: number;
-  consolidatedCaseDeadlineId: string;
-  childrenDeadline: RawCaseDeadline[];
-  leadCaseDeadlineInfo: RawCaseDeadline;
+  childrenDeadline: CaseDeadlineDTO[];
+  leadCaseDeadlineInfo: CaseDeadlineDTO;
 };
 
 async function getAllLeadCaseDeadlines() {
@@ -72,9 +75,9 @@ async function getMatchingChildrenCaseDeadlinesWithMatchingInfo(
   )
     .map(cd => ({
       ...cd,
-      description: cd.description.trim(),
+      descriptionTrimed: cd.description.trim(),
     }))
-    .filter(cd => cd.description === description.trim());
+    .filter(cd => cd.descriptionTrimed === description.trim());
 }
 
 async function getPotentialConsolidatedCaseDeadlineInfo(): Promise<
@@ -115,20 +118,20 @@ async function getPotentialConsolidatedCaseDeadlineInfo(): Promise<
     const potentialConsolidatedCaseDeadlineInfo: PotentialConsolidatedCaseDeadlineInfo =
       {
         leadDocketNumber: leadDocketNumber!,
-        countOfCasesInGroup: CHILDREN_CASE_IN_GROUP.length,
-        consolidatedCaseDeadlineId: caseDeadlineId,
-        childrenDeadline: CHILDREN_CASEDEADLINE.map(cc => ({
-          ...cc,
-          createdAt: cc.createdAt.toString(),
-          deadlineDate: cc.deadlineDate.toString(),
-        })) as RawCaseDeadline[],
         leadCaseDeadlineInfo: {
-          ...LEAD_CASE_DEADLINE,
-          createdAt: LEAD_CASE_DEADLINE.createdAt.toString(),
-          deadlineDate: LEAD_CASE_DEADLINE.deadlineDate.toString(),
+          docketNumber: LEAD_CASE_DEADLINE.docketNumber,
           caseDeadlineId,
-        } as RawCaseDeadline,
+          description: LEAD_CASE_DEADLINE.description,
+          deadlineDate: LEAD_CASE_DEADLINE.deadlineDate.toString(),
+        },
+        childrenDeadline: CHILDREN_CASEDEADLINE.map(cc => ({
+          docketNumber: cc.docketNumber,
+          caseDeadlineId: cc.caseDeadlineId,
+          description: cc.description,
+          deadlineDate: cc.deadlineDate.toString(),
+        })),
       };
+
     if (potentialConsolidatedCaseDeadlineInfo.childrenDeadline.length)
       CASE_DEADLINE_GROUP_INFO.push(potentialConsolidatedCaseDeadlineInfo);
 
