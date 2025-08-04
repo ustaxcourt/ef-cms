@@ -20,15 +20,6 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
-/**
- * removeConsolidatedCases
- *
- * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {object} providers.docketNumber the docket number of the case to consolidate
- * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
- * @returns {object} the updated case data
- */
 const removeConsolidatedCases = async (
   _applicationContext: ServerApplicationContext,
   {

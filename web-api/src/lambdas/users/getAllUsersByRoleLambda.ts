@@ -8,9 +8,8 @@ export const getAllUsersByRoleLambda = (
 ) =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
+    async () => {
       return await getAllUsersByRoleInteractor(
-        applicationContext,
         event.queryStringParameters,
         authorizedUser,
       );

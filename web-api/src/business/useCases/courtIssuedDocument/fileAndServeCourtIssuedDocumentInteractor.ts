@@ -18,6 +18,7 @@ import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/d
 import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import {
   asyncHandleLockError,
   withLocking,
@@ -55,9 +56,11 @@ export const fileAndServeCourtIssuedDocument = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   const subjectCase = await getCaseByDocketNumber({
     docketNumber: subjectCaseDocketNumber,
@@ -69,16 +72,7 @@ export const fileAndServeCourtIssuedDocument = async (
     docketEntryId,
   });
 
-  let error: Error | undefined;
-
-  if (!docketEntryToServe) {
-    error = new NotFoundError(`Docket entry ${docketEntryId} was not found.`);
-  } else if (docketEntryToServe.servedAt) {
-    error = new Error('Docket entry has already been served');
-  } else if (docketEntryToServe.isPendingService) {
-    error = new Error('Docket entry is already being served');
-  }
-  if (error) {
+  const throwError = async error => {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
       applicationContext,
       clientConnectionId,
@@ -87,6 +81,18 @@ export const fileAndServeCourtIssuedDocument = async (
     });
 
     throw error;
+  };
+
+  if (!docketEntryToServe) {
+    return await throwError(
+      new NotFoundError(`Docket entry ${docketEntryId} was not found.`),
+    );
+  }
+
+  if (docketEntryToServe.servedAt) {
+    await throwError(new Error('Docket entry has already been served'));
+  } else if (docketEntryToServe.isPendingService) {
+    await throwError(new Error('Docket entry is already being served'));
   }
 
   const stampedPdf = await applicationContext
@@ -115,9 +121,7 @@ export const fileAndServeCourtIssuedDocument = async (
   let serviceResults;
   let documentContentsId;
   try {
-    const shouldScrapePDFContents =
-      !docketEntryToServe.documentContents &&
-      DocketEntry.isSearchable(form.eventCode);
+    const shouldScrapePDFContents = DocketEntry.isSearchable(form.eventCode);
 
     if (shouldScrapePDFContents) {
       let documentContents: string = await applicationContext

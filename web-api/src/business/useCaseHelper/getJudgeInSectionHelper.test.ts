@@ -1,8 +1,11 @@
+jest.mock('@web-api/persistence/postgres/users/getUsersInSections');
+import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getJudgeInSectionHelper } from './getJudgeInSectionHelper';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('getJudgeInSectionHelper', () => {
+  const getUsersInSections = jest.mocked(getUsersInSectionsMock);
   it('Fetches the judge associated with a given section', async () => {
     const expectedJudgeUser = {
       isSeniorJudge: false,
@@ -14,40 +17,34 @@ describe('getJudgeInSectionHelper', () => {
       userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockResolvedValue([
-        expectedJudgeUser,
-        {
-          name: 'some other petitioner that should not be returned',
-          role: ROLES.petitioner,
-          section: 'judgesChambers',
-          userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
-        },
-      ]);
+    getUsersInSections.mockResolvedValue([
+      expectedJudgeUser as DbUser,
+      {
+        name: 'some other petitioner that should not be returned',
+        role: ROLES.petitioner,
+        section: 'judgesChambers',
+        userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
+      } as DbUser,
+    ]);
 
-    const result = await getJudgeInSectionHelper(applicationContext, {
+    const result = await getJudgeInSectionHelper({
       section: 'judgesChambers2',
     });
 
     expect(result).toMatchObject(expectedJudgeUser);
-    expect(
-      applicationContext.getPersistenceGateway().getUsersInSection,
-    ).toHaveBeenCalled();
+    expect(getUsersInSections).toHaveBeenCalled();
   });
 
   it('Returns no user if the given user is not associated with any chambers section', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockResolvedValue([
-        {
-          name: 'petitioner',
-          role: ROLES.petitioner,
-          section: 'judgesChambers',
-          userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
-        },
-      ]);
-    const result = await getJudgeInSectionHelper(applicationContext, {
+    getUsersInSections.mockResolvedValue([
+      {
+        name: 'petitioner',
+        role: ROLES.petitioner,
+        section: 'judgesChambers',
+        userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
+      } as DbUser,
+    ]);
+    const result = await getJudgeInSectionHelper({
       section: 'colvinChambers',
     });
 

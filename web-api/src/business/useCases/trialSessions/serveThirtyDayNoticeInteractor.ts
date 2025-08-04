@@ -28,6 +28,7 @@ import {
   asyncHandleLockError,
   withLocking,
 } from '@web-api/persistence/postgres/utils/mutex';
+import { getFeatureFlagValues } from '@web-api/persistence/postgres/featureFlag/getFeatureFlagValues';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 
 export const serveThirtyDayNotice = async (
@@ -49,13 +50,17 @@ export const serveThirtyDayNotice = async (
     throw new InvalidRequest('No trial Session Id provided');
   }
 
-  const { name, title } = await applicationContext
-    .getPersistenceGateway()
-    .getConfigurationItemValue({
-      applicationContext,
-      configurationItemKey:
-        applicationContext.getConstants().CLERK_OF_THE_COURT_CONFIGURATION,
-    });
+  const { CLERK_OF_THE_COURT_CONFIGURATION } =
+    applicationContext.getConstants();
+
+  const [CLERK_OF_THE_COURT_RECORD] = await getFeatureFlagValues([
+    CLERK_OF_THE_COURT_CONFIGURATION,
+  ]);
+
+  const { name, title } = CLERK_OF_THE_COURT_RECORD.value.current as {
+    name: string;
+    title: string;
+  };
 
   const trialSession = await applicationContext
     .getPersistenceGateway()

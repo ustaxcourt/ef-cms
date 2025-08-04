@@ -6,9 +6,7 @@ import {
 import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getSsmClient } from '@web-api/persistence/ssm/getSsmClient';
 
-const LOCAL_SSM_DATA: Record<string, string> = {
-  'maintenance-mode': 'false',
-};
+const LOCAL_SSM_DATA: Record<string, string> = {};
 
 export async function getSsmParameter({
   applicationContext,

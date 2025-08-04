@@ -40,7 +40,6 @@ import {
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
 import { User } from './User';
-import { WorkItem } from './WorkItem';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
@@ -187,7 +186,11 @@ export class DocketEntry extends JoiValidationEntity {
   public signedJudgeName?: string;
   public strickenBy?: string;
   public strickenByUserId?: string;
-  public workItem?: any;
+
+  // These are optional fields set solely for the UI in certain cases.
+  public qcComplete?: boolean;
+  public qcViewed?: boolean;
+  public workItemId?: string;
 
   // Keeping this constructor setup like this so we get the typescript safety, but the
   // joi validation proxy invokes init on behalf of the constructor, so we keep these unused arguments.
@@ -335,17 +338,10 @@ export class DocketEntry extends JoiValidationEntity {
     this.strickenBy = rawDocketEntry.strickenBy;
     this.strickenByUserId = rawDocketEntry.strickenByUserId;
     this.userId = rawDocketEntry.userId;
-    this.workItem = rawDocketEntry.workItem
-      ? new WorkItem(rawDocketEntry.workItem)
-      : undefined;
-  }
 
-  /**
-   *
-   * @param {WorkItem} workItem the work item to add to the document
-   */
-  setWorkItem(workItem) {
-    this.workItem = workItem;
+    this.qcViewed = rawDocketEntry.qcViewed;
+    this.qcComplete = rawDocketEntry.qcComplete;
+    this.workItemId = rawDocketEntry.workItemId;
   }
 
   /**
@@ -469,6 +465,10 @@ export class DocketEntry extends JoiValidationEntity {
   isStatusReport(): boolean {
     if(!this.draftOrderState) return false;
     return this.draftOrderState.orderType === 'statusReport' || this.draftOrderState.orderType === 'statusReportStipulatedDecision';
+  }
+      
+  static hasWorkItemInfo(docketEntry: RawDocketEntry) {
+    return !!docketEntry.workItemId;
   }
 
   static TRANSCRIPT_AGE_DAYS_MIN = 90;
@@ -699,7 +699,7 @@ export class DocketEntry extends JoiValidationEntity {
   ): boolean => {
     if (!entry.isFileAttached) return false;
 
-    const petitionDocketEntry = getPetitionDocketEntry(rawCase);
+    const petitionDocketEntry = getPetitionDocketEntry(rawCase)!;
 
     //Only allow STIN download if:
     //  - role Petition Clerk & entry not served, or

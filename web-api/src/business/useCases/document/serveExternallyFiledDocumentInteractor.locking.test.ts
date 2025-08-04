@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 jest.mock('../addCoverToPdf');
 jest.mock(
   '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase',
@@ -19,10 +20,13 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
-const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
+const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
 const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
 const tryGetLocks = jest.mocked(tryGetLocksMock);
+const getUserById = jest.mocked(getUserByIdMock);
 
 describe('determineEntitiesToLock', () => {
   let mockParams;
@@ -62,7 +66,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   const mockCase = {
     ...MOCK_CASE,
     docketEntries: [
-      { docketEntryId: mockDocketEntryId, isOnDocketRecord: false },
+      {
+        docketEntryId: mockDocketEntryId,
+        isOnDocketRecord: false,
+      } as RawDocketEntry,
     ],
   };
   const mockRequest = {
@@ -92,10 +99,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         pdfUrl: mockPdfUrl,
       });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(mockDocketClerkUser);
-
+    getUserById.mockResolvedValue(mockDocketClerkUser as DbUser);
     getCaseByDocketNumber.mockResolvedValue(mockCase);
     getCasesByDocketNumbers.mockResolvedValue([mockCase]);
   });

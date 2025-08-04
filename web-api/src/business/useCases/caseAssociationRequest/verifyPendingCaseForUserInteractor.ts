@@ -1,4 +1,4 @@
-import { ServerApplicationContext } from '@web-api/applicationContext';
+import { verifyPendingCaseForUser } from '@web-api/persistence/postgres/cases/pendingCases/verifyPendingCaseForUser';
 
 /**
  *
@@ -9,14 +9,10 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
  * @returns {Promise<*>} the promise of the pending case verification
  */
 export const verifyPendingCaseForUserInteractor = async (
-  applicationContext: ServerApplicationContext,
   { docketNumber, userId }: { docketNumber: string; userId: string },
 ) => {
-  return await applicationContext
-    .getPersistenceGateway()
-    .verifyPendingCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId,
-    });
+  return await verifyPendingCaseForUser({
+    docketNumber,
+    userId,
+  });
 };

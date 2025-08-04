@@ -12,19 +12,20 @@ import {
   isAuthorized,
 } from '@shared/authorization/authorizationClientService';
 import { ServerApplicationContext } from '@web-api/applicationContext';
-import { UnauthorizedError } from '@web-api/errors/errors';
+import { NotFoundError, UnauthorizedError } from '@web-api/errors/errors';
 import {
   AuthUser,
   UnknownAuthUser,
 } from '@shared/business/entities/authUser/AuthUser';
-import { UserCase } from '@shared/business/entities/UserCase';
-import { UserRecord } from '@web-api/persistence/dynamo/dynamoTypes';
 import { WorkItem } from '@shared/business/entities/WorkItem';
 import { generateDocketNumber } from '@web-api/persistence/postgres/cases/generateDocketNumber';
 import { setServiceIndicatorsForPetitionersOnCase } from '@shared/business/utilities/setServiceIndicatorsForPetitionersOnCase';
 import { upsertWorkItems } from '@web-api/persistence/postgres/workitems/upsertWorkItems';
-import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
+import { RawUser } from '@shared/business/entities/User';
+import { cloneDeep } from 'lodash';
+import { RawPrivatePractitioner } from '@shared/business/entities/PrivatePractitioner';
 
 export type ElectronicCreatedCaseType = Omit<CreatedCaseType, 'trialCitiies'>;
 export const CREATE_CASE_LOCK_IDENTIFIER = 'CREATE_CASE_LOCK_IDENTIFIER';
@@ -34,22 +35,16 @@ const addPetitionDocketEntryToCase = ({
   docketEntryEntity,
   user,
 }) => {
-  const workItemEntity = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
-      docketNumber: caseToAdd.docketNumber,
-      section: PETITIONS_SECTION,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-    }
-  );
+  const workItemEntity = new WorkItem({
+    assigneeId: null,
+    assigneeName: null,
+    docketEntryId: docketEntryEntity.docketEntryId,
+    docketNumber: caseToAdd.docketNumber,
+    section: PETITIONS_SECTION,
+    sentBy: user.name,
+    sentByUserId: user.userId,
+  });
 
-  docketEntryEntity.setWorkItem(workItemEntity);
   caseToAdd.addDocketEntry(docketEntryEntity);
 
   return workItemEntity;
@@ -72,9 +67,9 @@ const createCaseMetadata = async (
     petitionEntity: ElectronicPetition;
     petitionFileId: string;
     petitionMetadata: any;
-    privatePractitioners: UserRecord[];
+    privatePractitioners: RawUser[];
     stinFileId: string;
-    user: UserRecord;
+    user: RawUser;
   },
   authorizedUser: AuthUser,
 ) => {
@@ -241,7 +236,6 @@ const createCaseMetadata = async (
   }
 
   await applicationContext.getUseCaseHelpers().createCaseAndAssociations({
-    applicationContext,
     authorizedUser,
     caseToCreate: caseToAdd.validate().toRawObject(),
   });
@@ -270,20 +264,21 @@ export const createCaseInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(
+      `User not found with user id ${authorizedUser.userId}`,
+    );
+  }
 
   const petitionEntity = new ElectronicPetition(petitionMetadata).validate();
 
-  let privatePractitioners: UserRecord[] = [];
+  let privatePractitioners: RawUser[] = [];
   if (user.role === ROLES.privatePractitioner) {
-    const practitionerUser = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({
-        applicationContext,
-        userId: user.userId,
-      });
+    const practitionerUser = cloneDeep(
+      user,
+    ) as unknown as RawPrivatePractitioner; // Doing a type conversion because we know in this instance their role is a private practitioner
 
     practitionerUser.representing = [
       petitionEntity.getContactPrimary().contactId,
@@ -337,21 +332,9 @@ export const createCaseInteractor = async (
     await removeLockFunction();
   }
 
-  const userCaseEntity = new UserCase(caseToAdd);
-
-  const caseAssociationUpdates = [
-    upsertWorkItems({
-      workItems: [workItem.validate().toRawObject()],
-    }),
-    applicationContext.getPersistenceGateway().associateUserWithCase({
-      applicationContext,
-      docketNumber: caseToAdd.docketNumber,
-      userCase: userCaseEntity.validate().toRawObject(),
-      userId: user.userId,
-    }),
-  ];
-
-  await settlePromises(caseAssociationUpdates);
+  await upsertWorkItems({
+    workItems: [workItem.validate().toRawObject()],
+  });
 
   applicationContext.logger.info('filed a new petition', {
     docketNumber: caseToAdd.docketNumber,

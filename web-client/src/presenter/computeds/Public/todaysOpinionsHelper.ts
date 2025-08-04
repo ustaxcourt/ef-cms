@@ -24,5 +24,5 @@ export const todaysOpinionsHelper = (
     numberOfPagesFormatted: opinion.numberOfPages ?? 'n/a',
   }));
 
-  return { formattedCurrentDate, formattedOpinions };
+  return { formattedCurrentDate, formattedOpinions, totalCount: todaysOpinions.length };
 };

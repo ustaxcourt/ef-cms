@@ -125,7 +125,7 @@ describe('updateMessageModalAttachmentsAction', () => {
     expect(result.state.modal.form.draftAttachments).toEqual([]);
   });
 
-  it('sets the form subject field if this is the first attachment to be added', async () => {
+  it('sets the form subject field if creating message and subject line is empty', async () => {
     const result = await runAction(updateMessageModalAttachmentsAction, {
       modules: { presenter },
       props: {
@@ -139,6 +139,7 @@ describe('updateMessageModalAttachmentsAction', () => {
             attachments: [],
             draftAttachments: [],
           },
+          showModal: 'CreateMessageModal',
         },
       },
     });
@@ -268,6 +269,7 @@ describe('updateMessageModalAttachmentsAction', () => {
             attachments: [],
             draftAttachments: [],
           },
+          showModal: 'CreateMessageModal',
         },
       },
     });
