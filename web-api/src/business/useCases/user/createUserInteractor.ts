@@ -8,6 +8,7 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { UnauthorizedError } from '../../../errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { createOrUpdateUser } from '../../../../../shared/admin-tools/user/admin';
+import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 
 export const createUserInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -32,6 +33,6 @@ export const createUserInteractor = async (
   return await createOrUpdateUser(applicationContext, {
     password,
     setPasswordAsPermanent: false,
-    user: everyThingElse,
+    user: { ...everyThingElse, accountStatus: ACCOUNT_STATUS.active },
   });
 };

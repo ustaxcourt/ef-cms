@@ -1,4 +1,5 @@
 /* eslint-disable max-lines */
+import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { NewUserKysely } from '@web-api/persistence/postgres/users/schema';
 
@@ -9,6 +10,7 @@ export const users: NewUserKysely[] = [
     section: 'irsSuperuser',
     userId: '02c9b614-e498-4dae-b0f5-751b9ab5e8b3',
     email: 'irssuperuser@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Judge',
@@ -19,6 +21,7 @@ export const users: NewUserKysely[] = [
     userId: '09b7c6c9-2d9e-43a5-83a4-096ae5362725',
     isSeniorJudge: false,
     email: 'judgemowry@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'general',
@@ -26,6 +29,7 @@ export const users: NewUserKysely[] = [
     section: 'general',
     userId: '0a03718f-595e-4e2e-bde0-e0b3c3c5ae16',
     email: 'general@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'chambers',
@@ -33,6 +37,7 @@ export const users: NewUserKysely[] = [
     section: 'cohensChambers',
     userId: '0bd3bc49-4e46-4caa-adeb-4960c56e17c8',
     email: 'cohenschambers@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'docketclerk',
@@ -40,6 +45,15 @@ export const users: NewUserKysely[] = [
     section: 'docket',
     userId: '1805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'docketclerk@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
+  },
+  {
+    role: 'docketclerk',
+    name: 'User Who Will Be Disabled',
+    section: 'docketclerk',
+    userId: '2588602c-101b-41ef-8d33-84715fc0e643',
+    email: 'disablemedocketclerk@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'clerkofcourt',
@@ -47,6 +61,7 @@ export const users: NewUserKysely[] = [
     section: 'clerkofcourt',
     userId: '23dd8806-c0c7-4265-81f0-5f264ef78248',
     email: 'clerkofcourt@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'reportersOffice',
@@ -54,6 +69,7 @@ export const users: NewUserKysely[] = [
     section: 'reportersOffice',
     userId: '27fc1b7c-5386-4dd1-bfbe-c2b4ae8d459f',
     email: 'reportersoffice@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'docketclerk',
@@ -61,6 +77,7 @@ export const users: NewUserKysely[] = [
     section: 'docket',
     userId: '2805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'docketclerk1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -88,6 +105,7 @@ export const users: NewUserKysely[] = [
     firmName: 'Law Offices of Rivas and Kathy Gee',
     originalBarState: 'FL',
     email: 'privatePractitioner4@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -114,6 +132,7 @@ export const users: NewUserKysely[] = [
     name: 'Nero West',
     originalBarState: 'CO',
     email: 'irspractitioner2@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'caseServicesSupervisor',
@@ -121,6 +140,7 @@ export const users: NewUserKysely[] = [
     section: 'caseServicesSupervisor',
     userId: '35959d1a-0981-40b2-a93d-f65c7977db52',
     email: 'caseservicessupervisor@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'petitionsclerk',
@@ -128,6 +148,7 @@ export const users: NewUserKysely[] = [
     section: 'petitions',
     userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'petitionsclerk@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'chambers',
@@ -135,6 +156,7 @@ export const users: NewUserKysely[] = [
     section: 'gustafsonsChambers',
     userId: '3ce1dad5-87ee-4b00-a4fb-f7f80296a5c2',
     email: 'gustafsonschambers@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'chambers',
@@ -142,6 +164,7 @@ export const users: NewUserKysely[] = [
     section: 'urdasChambers',
     userId: '44f02385-e4c6-49f9-a554-ecf93531d8a3',
     email: 'urdaschambers@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'petitionsclerk',
@@ -149,6 +172,7 @@ export const users: NewUserKysely[] = [
     section: 'petitions',
     userId: '4805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'petitionsclerk1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'chambers',
@@ -156,6 +180,7 @@ export const users: NewUserKysely[] = [
     section: 'buchsChambers',
     userId: '49421c68-0c09-4b4b-b32c-a535279be8d0',
     email: 'buchschambers@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -183,6 +208,7 @@ export const users: NewUserKysely[] = [
     middleName: 'IRS',
     originalBarState: 'MD',
     email: 'irspractitioner@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -210,6 +236,7 @@ export const users: NewUserKysely[] = [
     middleName: 'DOJ',
     originalBarState: 'MD',
     email: 'dojpractitioner1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -236,6 +263,7 @@ export const users: NewUserKysely[] = [
     name: 'Stuart Morrison',
     originalBarState: 'NV',
     email: 'irspractitioner3@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'floater',
@@ -243,6 +271,7 @@ export const users: NewUserKysely[] = [
     section: 'floater',
     userId: '5dffc4d8-423d-4de9-bca0-585c7b6627f7',
     email: 'floater1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -270,6 +299,7 @@ export const users: NewUserKysely[] = [
     middleName: 'IRS',
     originalBarState: 'AR',
     email: 'irspractitioner1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Chief Judge',
@@ -281,6 +311,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgefoley@example.com',
     judgePhoneNumber: '(202) 521-0681',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'adc',
@@ -288,6 +319,7 @@ export const users: NewUserKysely[] = [
     section: 'adc',
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'adc@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -305,6 +337,7 @@ export const users: NewUserKysely[] = [
     name: 'Jaquelyn Lane',
     originalBarState: 'TN',
     email: 'irspractitioner4@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'petitioner',
@@ -312,6 +345,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     email: 'petitioner@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'petitioner',
@@ -319,6 +353,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405417',
     email: 'petitioner2@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'petitioner',
@@ -326,6 +361,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: '7805d1ab-18d0-43ec-bafb-654e83405418',
     email: 'petitioner3@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'chambers',
@@ -333,6 +369,7 @@ export const users: NewUserKysely[] = [
     section: 'ashfordsChambers',
     userId: '817b48c5-d4e5-4544-9e11-9ba0102918f4',
     email: 'ashfordschambers@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'admin',
@@ -340,6 +377,7 @@ export const users: NewUserKysely[] = [
     section: 'admin',
     userId: '86c3f87b-350b-477d-92c3-43bd095cb006',
     email: 'admin@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'chambers',
@@ -347,6 +385,7 @@ export const users: NewUserKysely[] = [
     section: 'carluzzosChambers',
     userId: '8c0902ab-d156-4cca-b80d-43f595aa5ab0',
     email: 'carluzzoschambers@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -374,6 +413,7 @@ export const users: NewUserKysely[] = [
     firmName: 'Lilah, Lilah',
     originalBarState: 'N/A',
     email: 'privatePractitioner2@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'caseServicesSupervisor',
@@ -391,6 +431,7 @@ export const users: NewUserKysely[] = [
     section: 'caseServicesSupervisor',
     userId: '91bae3e8-3079-43a6-920d-b74ed9c649d4',
     email: 'caseServicesSupervisor1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -420,6 +461,7 @@ export const users: NewUserKysely[] = [
     firmName: 'GW Law Offices',
     originalBarState: 'MD',
     email: 'privatePractitioner@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'chambers',
@@ -427,6 +469,7 @@ export const users: NewUserKysely[] = [
     section: 'colvinsChambers',
     userId: '9c9292a4-2d5d-45b1-b67f-ac0e1c9b5df5',
     email: 'colvinschambers@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'admissionsclerk',
@@ -434,6 +477,7 @@ export const users: NewUserKysely[] = [
     section: 'admissions',
     userId: '9d7d63a3-d7a5-4905-ba89-ef71bf30057f',
     email: 'admissionsclerk1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'admissionsclerk',
@@ -441,6 +485,7 @@ export const users: NewUserKysely[] = [
     section: 'admissions',
     userId: '9d7d63b7-d7a5-4905-ba89-ef71bf30057f',
     email: 'admissionsclerk@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'floater',
@@ -448,6 +493,7 @@ export const users: NewUserKysely[] = [
     section: 'floater',
     userId: '9ef02385-e4c6-49f9-a554-ecf93531d8a4',
     email: 'floater@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -475,6 +521,7 @@ export const users: NewUserKysely[] = [
     firmName: 'Iron Law',
     originalBarState: 'TX',
     email: 'privatePractitioner3@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'chambers',
@@ -482,6 +529,7 @@ export const users: NewUserKysely[] = [
     section: 'pughsChambers',
     userId: '9fbae83a-a55b-4132-96df-e04a8ee675e3',
     email: 'pughschambers@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -510,6 +558,7 @@ export const users: NewUserKysely[] = [
     firmName: 'Bogus Barristers',
     originalBarState: 'OR',
     email: 'privatePractitioner99@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -538,6 +587,7 @@ export const users: NewUserKysely[] = [
     firmName: 'Bogus Barristers',
     originalBarState: 'OR',
     email: 'privatePractitioner1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Active',
@@ -565,6 +615,7 @@ export const users: NewUserKysely[] = [
     name: 'Ronald Buch Jr.',
     firmName: 'Firmly Grasped, LLP',
     originalBarState: 'MI',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'petitioner',
@@ -572,6 +623,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'b2d1941f-230a-47bb-80ec-6b561c1765cd',
     email: 'petitioner9@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'petitioner',
@@ -579,6 +631,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'b3e1941f-230a-47bb-80ec-6b561c1765cd',
     email: 'petitioner4@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'petitioner',
@@ -586,6 +639,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'b84acb19-008f-4911-bfb6-773ca4020464',
     email: 'petitioner1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     admissionsStatus: 'Inactive',
@@ -613,6 +667,7 @@ export const users: NewUserKysely[] = [
     middleName: 'Inactive',
     originalBarState: 'CA',
     email: 'inactivepractitioner@example.com',
+    accountStatus: ACCOUNT_STATUS.inactive,
   },
   {
     role: 'trialclerk',
@@ -620,6 +675,7 @@ export const users: NewUserKysely[] = [
     section: 'trialClerks',
     userId: 'd1f8a729-cbfa-4d22-a09b-73743a12f188',
     email: 'trialclerk1@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'petitioner',
@@ -627,6 +683,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'd3e1941f-230a-47bb-80ec-6b561c1765cd',
     email: 'petitioner7@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Judge',
@@ -638,6 +695,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: true,
     email: 'judgecolvin@example.com',
     judgePhoneNumber: '(202) 521-0662',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Judge',
@@ -649,6 +707,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgeashford@example.com',
     judgePhoneNumber: '(202) 521-0822',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Judge',
@@ -660,6 +719,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgebuch@example.com',
     judgePhoneNumber: '(202) 521-0810',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Chief Special Trial Judge',
@@ -671,6 +731,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgecarluzzo@example.com',
     judgePhoneNumber: '(202) 521-3339',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Judge',
@@ -682,6 +743,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: true,
     email: 'judgecohen@example.com',
     judgePhoneNumber: '(202) 521-0655',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Judge',
@@ -693,6 +755,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: true,
     email: 'judgegustafson@example.com',
     judgePhoneNumber: '(202) 521-0850',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Judge',
@@ -704,6 +767,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgepugh@example.com',
     judgePhoneNumber: '(202) 521-0824',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Judge',
@@ -715,6 +779,7 @@ export const users: NewUserKysely[] = [
     isSeniorJudge: false,
     email: 'judgeurda@example.com',
     judgePhoneNumber: '(202) 521-0800',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     judgeTitle: 'Judge',
@@ -724,6 +789,7 @@ export const users: NewUserKysely[] = [
     section: 'legacyJudgesChambers',
     userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
     email: 'judgefieri@example.com',
+    accountStatus: ACCOUNT_STATUS.inactive,
   },
   {
     role: 'petitioner',
@@ -731,6 +797,7 @@ export const users: NewUserKysely[] = [
     section: 'petitioner',
     userId: 'e3e1941f-230a-47bb-80ec-6b561c1765cd',
     email: 'petitioner8@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
   {
     role: 'trialclerk',
@@ -738,5 +805,6 @@ export const users: NewUserKysely[] = [
     section: 'trialClerks',
     userId: 'f0a1e52a-876f-4c03-853c-f66e407e5a1e',
     email: 'trialclerk@example.com',
+    accountStatus: ACCOUNT_STATUS.active,
   },
 ];

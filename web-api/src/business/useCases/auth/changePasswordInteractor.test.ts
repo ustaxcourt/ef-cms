@@ -9,6 +9,7 @@ import '@web-api/persistence/postgres/users/mocks.jest';
 import { MESSAGE_TYPES } from '@web-api/gateways/worker/workerRouter';
 import { MOCK_PRACTITIONER, petitionerUser } from '@shared/test/mockUsers';
 import {
+  ACCOUNT_STATUS,
   ROLES,
   Role,
   SERVICE_INDICATOR_TYPES,
@@ -69,6 +70,7 @@ describe('changePasswordInteractor', () => {
         pendingEmail: mockEmail,
         role: ROLES.petitioner,
         userId: mockUserId,
+        accountStatus: ACCOUNT_STATUS.active,
       };
 
       applicationContext

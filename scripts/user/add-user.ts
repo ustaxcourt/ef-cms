@@ -12,6 +12,7 @@ import { judgeUser } from '@shared/test/mockUsers';
 import { mockJudgeUser } from '@shared/test/mockAuthUsers';
 import joi from 'joi';
 import { getUsersInSectionInteractor } from '@web-api/business/useCases/user/getUsersInSectionInteractor';
+import { ACCOUNT_STATUS } from '@shared/business/entities/EntityConstants';
 
 const scriptConfig: ScriptConfig = {
   description:
@@ -169,7 +170,7 @@ export const sendWelcomeEmail = async ({
   await createOrUpdateUser(applicationContext, {
     password: getNewPasswordForEnvironment(),
     setPasswordAsPermanent: true,
-    user: { ...params } as RawUser,
+    user: { ...params, accountStatus: ACCOUNT_STATUS.active } as RawUser,
   });
   await sendWelcomeEmail({ email, userPoolId });
 })();

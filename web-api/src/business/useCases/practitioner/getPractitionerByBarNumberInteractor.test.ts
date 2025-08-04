@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/users/mocks.jest';
 import {
+  ACCOUNT_STATUS,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
@@ -36,7 +37,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         firmName: 'GW Law Offices',
         firstName: 'Private',
         lastName: 'Practitioner',
-
+        accountStatus: ACCOUNT_STATUS.active,
         name: 'Private Practitioner',
         originalBarState: 'IL',
         practiceType: 'Private',
@@ -56,6 +57,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       );
 
       expect(practitioner).toEqual({
+        accountStatus: ACCOUNT_STATUS.active,
         additionalPhone: undefined,
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
@@ -99,6 +101,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         role: ROLES.irsPractitioner,
         section: ROLES.privatePractitioner,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        accountStatus: ACCOUNT_STATUS.active,
       });
 
       const practitioner = await getPractitionerByBarNumberInteractor(
@@ -110,6 +113,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
       );
 
       expect(practitioner).toEqual({
+        accountStatus: ACCOUNT_STATUS.active,
         additionalPhone: undefined,
         admissionsDate: '2019-03-01',
         admissionsStatus: 'Active',
@@ -166,7 +170,7 @@ describe('getPractitionerByBarNumberInteractor', () => {
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
         section: ROLES.privatePractitioner,
-
+        accountStatus: ACCOUNT_STATUS.active,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
     });

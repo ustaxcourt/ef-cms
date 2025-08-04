@@ -140,7 +140,7 @@ export async function createOrUpdateUser(
   }
 
   if (user.role === ROLES.legacyJudge) {
-    await applicationContext.getUserGateway().disableUser(applicationContext, {
+    await applicationContext.getUserGateway().disableUser({
       email: user.email!,
     });
   }
