@@ -12,12 +12,36 @@ import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 import { updatePractitionerUserAction } from '../actions/updatePractitionerUserAction';
 import { validatePractitionerAction } from '../actions/validatePractitionerAction';
+import { hasUpdatedPracticeTypeFactoryAction } from '../actions/hasUpdatedPracticeTypeFactoryAction';
+import { validatePracticeTypeChangeAction } from '../actions/validatePracticeTypeChangeAction';
 
 const afterSuccess = [
   updatePractitionerUserAction,
   {
     error: [setAlertErrorAction, unsetWaitingForResponseAction],
     success: [clearScreenMetadataAction],
+  },
+];
+
+const validateEmailTasks = [
+  setWaitingForResponseAction,
+  hasUpdatedEmailFactoryAction('updatedEmail'),
+  {
+    no: afterSuccess,
+    yes: [
+      checkEmailAvailabilityAction,
+      {
+        emailAvailable: afterSuccess,
+        emailInUse: [
+          unsetWaitingForResponseAction,
+          clearAlertsAction,
+          setValidationErrorsAction,
+          setScrollToErrorNotificationAction,
+          setValidationAlertErrorsAction,
+          stopShowValidationAction,
+        ],
+      },
+    ],
   },
 ];
 
@@ -32,24 +56,20 @@ export const submitUpdatePractitionerUserSequence = [
       setValidationAlertErrorsAction,
     ],
     success: [
-      setWaitingForResponseAction,
-      hasUpdatedEmailFactoryAction('updatedEmail'),
+      hasUpdatedPracticeTypeFactoryAction('practiceType'),
       {
-        no: afterSuccess,
         yes: [
-          checkEmailAvailabilityAction,
+          validatePracticeTypeChangeAction,
           {
-            emailAvailable: afterSuccess,
-            emailInUse: [
-              unsetWaitingForResponseAction,
-              clearAlertsAction,
+            success: validateEmailTasks,
+            error: [
               setValidationErrorsAction,
               setScrollToErrorNotificationAction,
               setValidationAlertErrorsAction,
-              stopShowValidationAction,
             ],
           },
         ],
+        no: validateEmailTasks,
       },
     ],
   },
