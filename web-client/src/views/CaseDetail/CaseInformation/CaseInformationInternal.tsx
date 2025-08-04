@@ -26,14 +26,11 @@ export const CaseInformationInternal = connect(
     openAddToTrialModalSequence: sequences.openAddToTrialModalSequence,
     openBlockFromTrialModalSequence: sequences.openBlockFromTrialModalSequence,
     openCleanModalSequence: sequences.openCleanModalSequence,
-    openPrioritizeCaseModalSequence: sequences.openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence:
       sequences.openRemoveFromTrialSessionModalSequence,
     openSetForHearingModalSequence: sequences.openSetForHearingModalSequence,
     openUnblockFromTrialModalSequence:
       sequences.openUnblockFromTrialModalSequence,
-    openUnprioritizeCaseModalSequence:
-      sequences.openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence: sequences.openUpdateCaseModalSequence,
     resetCaseMenuSequence: sequences.resetCaseMenuSequence,
     showModal: state.modal.showModal,
@@ -52,11 +49,9 @@ export const CaseInformationInternal = connect(
     openAddToTrialModalSequence,
     openBlockFromTrialModalSequence,
     openCleanModalSequence,
-    openPrioritizeCaseModalSequence,
     openRemoveFromTrialSessionModalSequence,
     openSetForHearingModalSequence,
     openUnblockFromTrialModalSequence,
-    openUnprioritizeCaseModalSequence,
     openUpdateCaseModalSequence,
     resetCaseMenuSequence,
     showModal,
@@ -140,17 +135,11 @@ export const CaseInformationInternal = connect(
                     openBlockFromTrialModalSequence={
                       openBlockFromTrialModalSequence
                     }
-                    openPrioritizeCaseModalSequence={
-                      openPrioritizeCaseModalSequence
-                    }
                     openRemoveFromTrialSessionModalSequence={
                       openRemoveFromTrialSessionModalSequence
                     }
                     openUnblockFromTrialModalSequence={
                       openUnblockFromTrialModalSequence
-                    }
-                    openUnprioritizeCaseModalSequence={
-                      openUnprioritizeCaseModalSequence
                     }
                     trialSessionJudge={trialSessionJudge}
                   />

@@ -96,6 +96,11 @@ const router = {
       });
     });
 
+    route('/dawson-ui-components', () => {
+      setPageTitle('UI Components');
+      return app.getSequence('goToDawsonUIComponentSequence')();
+    });
+
     route('..', () => {
       setPageTitle('Error');
       return app.getSequence('notFoundErrorSequence')({
