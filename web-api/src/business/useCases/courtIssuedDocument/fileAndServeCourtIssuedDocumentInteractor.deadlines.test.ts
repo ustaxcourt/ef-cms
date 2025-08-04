@@ -6,12 +6,9 @@ jest.mock(
 jest.mock(
   '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus',
 );
-jest.mock(
-  '@web-api/persistence/postgres/cases/getConsolidatedCases',
-);
-jest.mock(
-  '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines',
-)
+jest.mock('@web-api/persistence/postgres/cases/getConsolidatedCases');
+jest.mock('@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines');
+jest.mock('@web-api/persistence/postgres/users/getUserById');
 import {
   CaseStatus,
   CaseType,
@@ -29,6 +26,8 @@ import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api
 import { fileAndServeDocumentOnOneCase as fileAndServeDocumentOnOneCaseMock } from '@web-api/business/useCaseHelper/docketEntry/fileAndServeDocumentOnOneCase';
 import { getConsolidatedCases } from '@web-api/persistence/postgres/cases/getConsolidatedCases';
 import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 let MOCK_DATE;
 
@@ -44,6 +43,7 @@ jest.mock('@shared/business/utilities/DateHandler', () => {
 });
 
 describe('fileAndServeCourtIssuedDocumentInteractor.deadlines', () => {
+  const getUserById = jest.mocked(getUserByIdMock);
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const fileAndServeDocumentOnOneCase = jest.mocked(
@@ -131,12 +131,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor.deadlines', () => {
       hearings: [],
       correspondence: [],
       consolidatedCases: [],
-      docketNumberWithSuffix: ''
-    }
+      docketNumberWithSuffix: '',
+    };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     getCaseByDocketNumber.mockResolvedValue(caseRecord);
     getCasesByDocketNumbers.mockResolvedValue([caseRecord]);
@@ -171,7 +169,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor.deadlines', () => {
       eventCode: 'O',
       date: '2030-01-20T00:00:00.000Z',
       orderType: 'statusReport',
-    }
+    };
     await fileAndServeCourtIssuedDocumentInteractor(
       applicationContext,
       {
@@ -201,14 +199,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor.deadlines', () => {
       associatedJudge: judgeUser.name,
       docketEntries: [
         {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          documentTitle: 'Order',
-          documentType: 'Order',
-          eventCode: 'O',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: docketClerkUser.userId,
-          signedJudgeName: 'consolidated judge',
-          userId: docketClerkUser.userId,
+          ...MOCK_CASE.docketEntries[0],
         },
       ],
     };
@@ -220,8 +211,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor.deadlines', () => {
       eventCode: 'O',
       date: '2030-01-20T00:00:00.000Z',
       orderType: 'statusReport',
-    }
-    
+    };
+
     const mockGetConsolidatedCases = jest.mocked(getConsolidatedCases);
 
     mockGetConsolidatedCases.mockResolvedValue([
@@ -239,7 +230,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor.deadlines', () => {
         ...consolidatedCaseExample,
         docketNumber: '999-99',
         leadDocketNumber: '999-99',
-      }
+      },
     ]);
 
     const mockUpsertCaseDeadlines = jest.mocked(upsertCaseDeadlines);
@@ -256,7 +247,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor.deadlines', () => {
       mockDocketClerkUser,
     );
 
-    expect(mockGetConsolidatedCases).toHaveBeenCalledWith({ leadDocketNumber: '999-99' });
+    expect(mockGetConsolidatedCases).toHaveBeenCalledWith({
+      leadDocketNumber: '999-99',
+    });
     expect(mockUpsertCaseDeadlines).toHaveBeenCalled();
   });
 });
