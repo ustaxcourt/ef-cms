@@ -11,7 +11,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { focusPaginatorTop } from '@web-client/presenter/utilities/focusPaginatorTop';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 export const CaseDeadlines = connect(
   {
@@ -40,6 +40,17 @@ export const CaseDeadlines = connect(
   }) {
     const paginatorTop = useRef(null);
     const [activePage, setActivePage] = useState(0);
+
+    useEffect(() => {
+      updateScreenMetadataSequence({
+        key: 'filterEndDateState',
+        value: caseDeadlineReportHelper.filterEndDate,
+      });
+      updateScreenMetadataSequence({
+        key: 'filterStartDateState',
+        value: caseDeadlineReportHelper.filterStartDate,
+      });
+    })
 
     return (
       <>
@@ -71,16 +82,6 @@ export const CaseDeadlines = connect(
               onChangeStart={e => {
                 selectDateRangeFromCalendarSequence({
                   startDate: e.target.value,
-                });
-              }}
-              onLoad={() => {
-                updateScreenMetadataSequence({
-                  key: 'filterEndDateState',
-                  value: caseDeadlineReportHelper.filterEndDate,
-                });
-                updateScreenMetadataSequence({
-                  key: 'filterStartDateState',
-                  value: caseDeadlineReportHelper.filterStartDate,
                 });
               }}
             />

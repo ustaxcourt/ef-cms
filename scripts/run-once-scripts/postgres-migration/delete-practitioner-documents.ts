@@ -27,7 +27,7 @@ const dynamoDbClient = new DynamoDBClient({ region: 'us-east-1' });
 const dynamoDbDocClient = DynamoDBDocumentClient.from(dynamoDbClient);
 
 // We set the environment as 'production' (= "a deployed environment") to get the RDS connection to work properly
-environment.nodeEnv = 'production';
+environment['nodeEnv'] = 'production';
 
 const getPractitionerDocumentsToDelete = async (offset: number) => {
   const caseNotes = await getDbReader(reader =>
@@ -37,6 +37,7 @@ const getPractitionerDocumentsToDelete = async (offset: number) => {
       .orderBy(['barNumber', 'practitionerDocumentFileId'])
       .limit(practitionerDocumentPageSize)
       .offset(offset)
+      
       .execute(),
   );
   return caseNotes;

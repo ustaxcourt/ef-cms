@@ -24,9 +24,9 @@ export const caseDeadlineReportHelper = (
   filterStartDate: string;
   filterEndDate: string;
   formattedFilterDateHeader: string;
-  judgeOptions: Array<{ id: string, name: string }>;
+  judgeOptions: Array<{ id: string; name: string }>;
   pageCount: number;
-  selectedJudgeFilterValue: { id: string, name: string };
+  selectedJudgeFilterValue: { id: string; name: string };
   showJudgeSelect: boolean;
   showNoDeadlines: boolean;
 } => {
@@ -41,17 +41,19 @@ export const caseDeadlineReportHelper = (
   const judgeOptions = (get(state.judges) || [])
     .map(judge => ({
       name: applicationContext.getUtilities().formatJudgeName(judge.name),
-      id: judge.userId
+      id: judge.userId,
     }))
     .concat({
       name: CHIEF_JUDGE,
-      id: CHIEF_JUDGE
+      id: CHIEF_JUDGE,
     })
     .sort((a, b) => a.name.localeCompare(b.name));
-  const allJudges = { name: '- All Judges -', id: '' }
+  const allJudges = { name: '- All Judges -', id: '' };
   judgeOptions.unshift(allJudges);
-  const selectedJudgeFilterValue = judgeOptions.find(judge => judge.id === get(state.caseDeadlineReport.judgeIdFilter))
-    || allJudges;
+  const selectedJudgeFilterValue =
+    judgeOptions.find(
+      judge => judge.id === get(state.caseDeadlineReport.judgeIdFilter),
+    ) || allJudges;
 
   let filterStartDate = get(state.screenMetadata.filterStartDate);
   let filterEndDate = get(state.screenMetadata.filterEndDate);
@@ -62,10 +64,10 @@ export const caseDeadlineReportHelper = (
 
   const formattedFilterEndDateHeader = applicationContext
     .getUtilities()
-    .formatDateString(filterEndDate, DATE_FORMATS.MONTH_DAY_YEAR)
-  
+    .formatDateString(filterEndDate, DATE_FORMATS.MONTH_DAY_YEAR);
+
   let formattedFilterDateHeader = '';
-  if(formattedFilterStartDateHeader && formattedFilterEndDateHeader) {
+  if (formattedFilterStartDateHeader && formattedFilterEndDateHeader) {
     formattedFilterDateHeader = `${formattedFilterStartDateHeader} - ${formattedFilterEndDateHeader}`;
   }
 
@@ -79,7 +81,7 @@ export const caseDeadlineReportHelper = (
 
   const pageCount = Math.ceil(
     get(state.caseDeadlineReport.caseDeadlinesTotalCount) /
-    CASE_DEADLINES_REPORT_PAGE_SIZE,
+      CASE_DEADLINES_REPORT_PAGE_SIZE,
   );
 
   const formattedCaseDeadlines = caseDeadlinesForCurrentPage.map(d => {
