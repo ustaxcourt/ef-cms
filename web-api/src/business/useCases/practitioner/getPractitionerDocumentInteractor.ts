@@ -28,12 +28,11 @@ export const getPractitionerDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let practitionerDocument:
-    | RawPractitionerDocument[]
-    | RawPractitionerDocument = await getPractitionerDocumentByFileId({
-    barNumber,
-    fileId: practitionerDocumentFileId,
-  });
+  let practitionerDocument: RawPractitionerDocument =
+    await getPractitionerDocumentByFileId({
+      barNumber,
+      fileId: practitionerDocumentFileId,
+    });
 
   practitionerDocument = new PractitionerDocument(practitionerDocument, {
     applicationContext,
