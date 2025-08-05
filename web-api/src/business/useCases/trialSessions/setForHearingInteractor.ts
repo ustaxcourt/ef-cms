@@ -10,7 +10,7 @@ import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
-import { addCaseToTrialSession } from '@web-api/persistence/postgres/trialSessions/addCaseToTrialSession';
+import { createTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createTrialSessionCases';
 
 export const setForHearingInteractor = async (
   _applicationContext: ServerApplicationContext,
@@ -53,17 +53,16 @@ export const setForHearingInteractor = async (
     throw new Error('That Hearing is already assigned to the Case');
   }
 
-  const caseOrder = trialSessionEntity
-    .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-    .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
+  // TODO Check if we need deleteCaseFromCalnder
+  trialSessionEntity.deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
+  const caseOrder = trialSessionEntity.manuallyAddCaseToCalendar({ calendarNotes, caseEntity, isHearing: true });
 
-
-  await addCaseToTrialSession({
+  await createTrialSessionCases({trialSessionCases: [{
     docketNumber,
     caseOrder,
     trialSessionId,
     isHearing: true,
-  });
+  }]});
 
   // retrieve the case again since we've added the mapped hearing record :)
   const updatedCase = await getCaseByDocketNumber({

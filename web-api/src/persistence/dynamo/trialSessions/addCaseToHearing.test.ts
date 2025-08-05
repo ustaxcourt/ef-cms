@@ -1,4 +1,4 @@
-import { addCaseToTrialSession } from '../../postgres/trialSessions/addCaseToTrialSession';
+import { createTrialSessionCases } from '../../postgres/trialSessions/createTrialSessionCases';
 import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { updateTrialSession } from './updateTrialSession';
 
@@ -10,7 +10,7 @@ const mockTrialSession = {
 
 describe('addCaseToHearing', () => {
   it('adds a mapping record for the case / hearing', async () => {
-    await addCaseToTrialSession({
+    await createTrialSessionCases({
       applicationContext,
       docketNumber: '123-20',
       trialSession: mockTrialSession as any,
@@ -28,7 +28,7 @@ describe('addCaseToHearing', () => {
   });
 
   it('attempts to persist the trial session', async () => {
-    await addCaseToTrialSession({
+    await createTrialSessionCases({
       applicationContext,
       docketNumber: '123-20',
       trialSession: mockTrialSession as any,

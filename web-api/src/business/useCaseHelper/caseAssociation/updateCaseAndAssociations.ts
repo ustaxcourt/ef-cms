@@ -26,7 +26,7 @@ import {
   updateIrsPractitionerOnCase,
   updatePrivatePractitionerOnCase,
 } from '@web-api/persistence/dynamo/cases/updatePractitionerOnCase';
-import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
+import { removeCasesFromHearings } from '@web-api/persistence/postgres/trialSessions/removeCasesFromHearings';
 
 // Because we used to rely on Dynamo, we needed to manually maintain relations in app code.
 // In the future, it would be good to avoid doing so by leveraging SQL more effectively.
@@ -109,12 +109,12 @@ export const updateCaseAndAssociations = async ({
     upsertDocketEntries(docketEntries),
     ...messages.map(message => updateMessage(message)),
     upsertCaseCorrespondences(correspondences),
-    ...deletedHearings.map(({ trialSessionId }) =>
-      removeCaseFromTrialSession({
-        docketNumber: caseToUpdate.docketNumber,
-        trialSessionId,
-      }),
-    ),
+    removeCasesFromHearings({
+      trialSessionCases: deletedHearings.map(dh => ({
+        trialSessionId: dh.trialSessionId,
+        docketNumber: dh.docketNumber
+      }))
+    }),
     ...irsPractitionersToDelete.map(practitioner =>
       removeIrsPractitionerOnCase({
         applicationContext,

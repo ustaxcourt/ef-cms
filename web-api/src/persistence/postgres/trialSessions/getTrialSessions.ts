@@ -16,8 +16,16 @@ export const getTrialSessions = async (): Promise<RawTrialSession[]> => {
             .whereRef('tspdf.trialSessionId', '=', 'ts.trialSessionId'),
         ).as('pdfs'),
       )
+      .select(eb =>
+        jsonArrayFrom(
+          eb
+            .selectFrom('dwTrialSessionCase as tsc')
+            .selectAll() // Types WILL lie to us
+            .whereRef('tsc.trialSessionId', '=', 'ts.trialSessionId'),
+        ).as('caseOrders'),
+      )
       .execute(),
   );
 
-  return dbTrialSessions.map(ts => fromKyselyTrialSession(ts, ts.pdfs));
+  return dbTrialSessions.map(ts => fromKyselyTrialSession(ts, ts.pdfs, ts.caseOrders));
 };

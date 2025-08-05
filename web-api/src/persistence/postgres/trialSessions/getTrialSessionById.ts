@@ -21,6 +21,14 @@ export const getTrialSessionById = async ({
             .whereRef('tspdf.trialSessionId', '=', 'ts.trialSessionId'),
         ).as('pdfs'),
       )
+      .select(eb =>
+        jsonArrayFrom(
+          eb
+            .selectFrom('dwTrialSessionCase as tsc')
+            .selectAll() // Types WILL lie to us
+            .whereRef('tsc.trialSessionId', '=', 'ts.trialSessionId'),
+        ).as('caseOrders'),
+      )
       .where('trialSessionId', '=', trialSessionId)
       .executeTakeFirst(),
   );
@@ -29,5 +37,5 @@ export const getTrialSessionById = async ({
     return undefined;
   }
 
-  return fromKyselyTrialSession(dbTrialSession, dbTrialSession.pdfs);
+  return fromKyselyTrialSession(dbTrialSession, dbTrialSession.pdfs, dbTrialSession.caseOrders);
 };

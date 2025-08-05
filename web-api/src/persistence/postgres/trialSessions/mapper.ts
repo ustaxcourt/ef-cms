@@ -10,6 +10,7 @@ import {
   NewTrialSessionCaseKysely,
   NewTrialSessionKysely,
   NewTrialSessionWorkingCopyKysely,
+  TrialSessionCaseKysely,
   TrialSessionKysely,
   TrialSessionWorkingCopyKysely,
 } from './schema';
@@ -30,7 +31,6 @@ export function toKyselyNewTrialSession(
     address1: rawTrialSession.address1,
     address2: rawTrialSession.address2,
     alternateTrialClerkName: rawTrialSession.alternateTrialClerkName,
-    caseOrder: JSON.stringify(rawTrialSession.caseOrder),
     chambersPhoneNumber: rawTrialSession.chambersPhoneNumber,
     city: rawTrialSession.city,
     courthouseName: rawTrialSession.courthouseName,
@@ -82,6 +82,7 @@ export function fromKyselyTrialSession(
     trialSessionId?: string;
     ttl?: string;
   }[],
+  caseOrder: TrialSessionCaseKysely[]
 ): RawTrialSession {
   return transformNullToUndefined({
     ...record,
@@ -92,7 +93,7 @@ export function fromKyselyTrialSession(
     proceedingType: record.proceedingType as TrialSessionProceedingType,
     sessionScope: record.sessionScope as TrialSessionScope,
     sessionType: record.sessionType as TrialSessionTypes,
-    caseOrder: record.caseOrder || [],
+    caseOrder: caseOrder.map(co => fromKyselyTrialSessionCase(co)) || [],
     paperServicePdfs: paperPdfs.map(pdf => ({
       fileId: pdf.fileId,
       title: pdf.title,
@@ -138,5 +139,15 @@ export function fromKyselyNewTrialSessionWorkingCopy(
     ...trialSessionWorkingCopy,
     sortOrder: (trialSessionWorkingCopy.sortOrder || 'asc') as 'asc' | 'desc',
     sort: trialSessionWorkingCopy.sort || 'docket',
+  });
+}
+
+export function fromKyselyTrialSessionCase (
+  caseOrder: TrialSessionCaseKysely
+): TCaseOrder {
+  return transformNullToUndefined({
+    ...caseOrder,
+    addedToSessionAt: caseOrder.addedToSessionAt.toISOString(),
+    removedFromTrialDate: caseOrder.removedFromTrialDate?.toISOString()
   });
 }

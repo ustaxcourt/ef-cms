@@ -1,4 +1,3 @@
-import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
 import { TrialSessionWorkingCopyCaseMetadata } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 import { Selectable, Insertable, ColumnType } from 'kysely';
 
@@ -9,7 +8,6 @@ export const trialSessionTableDefinition = {
   address1: DEFAULT as string | null,
   address2: DEFAULT as string | null,
   alternateTrialClerkName: DEFAULT as string | null,
-  caseOrder: DEFAULT as ColumnType<TCaseOrder[], string, string>,
   chambersPhoneNumber: DEFAULT as string | null,
   city: DEFAULT as string | null,
   courthouseName: DEFAULT as string | null,
@@ -134,7 +132,7 @@ export type NewTrialSessionNotificationProcessingKysely =
 const trialSessionCaseTableDefinition = {
   docketNumber: DEFAULT as string,
   trialSessionId: DEFAULT as string,
-  addedToSessionAt: DEFAULT as Date | null,
+  addedToSessionAt: DEFAULT as Date,
   calendarNotes: DEFAULT as string | null,
   disposition: DEFAULT as string | null,
   isManuallyAdded: DEFAULT as boolean,

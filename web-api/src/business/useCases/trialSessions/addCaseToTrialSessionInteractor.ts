@@ -12,7 +12,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
-import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { createTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createTrialSessionCases';
 
 /**
  * addCaseToTrialSession
@@ -66,9 +66,9 @@ const addCaseToTrialSession = async (
     throw new Error('The case is already part of this trial session.');
   }
 
-  trialSessionEntity
-    .deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-    .manuallyAddCaseToCalendar({ calendarNotes, caseEntity });
+  // TODO Check if we need deleteCaseFromCalnder
+  trialSessionEntity.deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
+  const caseOrder = trialSessionEntity.manuallyAddCaseToCalendar({ calendarNotes, caseEntity, isHearing: false });
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
@@ -77,8 +77,13 @@ const addCaseToTrialSession = async (
     caseToUpdate: caseEntity,
   });
 
-  await updateTrialSession({
-    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  await createTrialSessionCases({
+    trialSessionCases: [{
+      caseOrder,
+      docketNumber,
+      isHearing: false,
+      trialSessionId
+    }]
   });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();

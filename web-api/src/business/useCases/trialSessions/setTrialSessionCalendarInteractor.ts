@@ -10,7 +10,7 @@ import {
   HIGH_PRIORITY_SUFFIXES,
   TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
 } from '@shared/business/entities/EntityConstants';
-import { TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { TCaseOrder, TrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { isEmpty, flatten, partition, uniq } from 'lodash';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
@@ -20,6 +20,8 @@ import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/c
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { createTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createTrialSessionCases';
+import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
 
 export const setTrialSessionCalendarInteractor = async (
   applicationContext: ServerApplicationContext,
@@ -59,7 +61,7 @@ export const setTrialSessionCalendarInteractor = async (
 
     // Manually added cases are already on the caseOrder, so if they have not been QCed we have to remove them
     const [manuallyAddedQcCompleteCases, manuallyAddedQcIncompleteCases] =
-      partition(
+      partition( // TODO Add extra filter here for hearings for data safety
         manuallyAddedCases,
         manualCase =>
           manualCase.qcCompleteForTrial &&
@@ -131,22 +133,22 @@ export const setTrialSessionCalendarInteractor = async (
         return theCase.validate().toRawObject();
       });
 
-    const eligibleCaseEntities = eligibleCases.map(c => {
+    const [eligibleCaseEntities, caseOrdersToAdd] = eligibleCases.map(c => {
       const theCase = new Case(c, { authorizedUser });
       theCase.setAsCalendared(trialSessionEntity);
-      trialSessionEntity.addCaseToCalendar(theCase);
-      return theCase.validate().toRawObject();
-    });
+      const caseOrderObject = trialSessionEntity.addCaseToCalendar(theCase);
+      return [theCase.validate().toRawObject(), caseOrderObject];
+    }) as [ExcludeMethods<Case>[], TCaseOrder[]];
 
-    const manuallyAddedQcIncompleteCaseEntities =
+    const [manuallyAddedQcIncompleteCaseEntities, caseOrdersToDelete] =
       manuallyAddedQcIncompleteCases.map(c => {
         const theCase = new Case(c, { authorizedUser });
         theCase.removeFromTrialWithAssociatedJudge();
-        trialSessionEntity.deleteCaseFromCalendar({
+        const caseOrderObject = trialSessionEntity.deleteCaseFromCalendar({
           docketNumber: theCase.docketNumber,
         });
-        return theCase.validate().toRawObject();
-      });
+        return [theCase.validate().toRawObject(), caseOrderObject];
+      }) as [ExcludeMethods<Case>[], TCaseOrder[]];
 
     const caseEntitiesToCalendar = [
       ...manuallyAddedQcCompleteCaseEntities,
@@ -160,6 +162,18 @@ export const setTrialSessionCalendarInteractor = async (
 
     const updatesToPersist: Promise<any>[] = [
       upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
+      createTrialSessionCases({
+        trialSessionCases: caseOrdersToAdd.map(TCO => ({
+          caseOrder: TCO,
+          trialSessionId,
+          docketNumber: TCO.docketNumber,
+          isHearing: false,
+        })),
+      }),
+      deleteCasesFromTrialSession({
+        trialSessionId,
+        docketNumbers: caseOrdersToDelete.map(CO => CO.docketNumber),
+      }),
     ];
 
     if (!isEmpty(caseEntitiesToCalendar)) {

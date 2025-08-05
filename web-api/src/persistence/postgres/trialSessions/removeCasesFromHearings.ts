@@ -4,14 +4,13 @@ import {
 } from '@shared/business/utilities/DateHandler';
 import { pgUpdateTable } from '../utils/operation/pgUpdateTable';
 
-export const removeCaseFromTrialSession = async ({
-  docketNumber,
-  trialSessionId,
-  disposition,
+export const removeCasesFromHearings = async ({
+  trialSessionCases,
 }: {
-  docketNumber: string;
-  trialSessionId: string;
-  disposition: string;
+  trialSessionCases: {
+    docketNumber: string;
+    trialSessionId: string;
+  }[];
 }): Promise<void> => {
   await pgUpdateTable({
     table: 'dwTrialSessionCase',
@@ -20,11 +19,17 @@ export const removeCaseFromTrialSession = async ({
       removedFromTrialDate: calculateDate({
         dateString: createISODateString(),
       }),
-      disposition,
     },
     where: qb =>
-      qb
-        .where('trialSessionId', '=', trialSessionId)
-        .where('docketNumber', '=', docketNumber),
+      qb.where(eb =>
+        eb.or(
+          trialSessionCases.map(pair =>
+            eb.and([
+              eb('trialSessionId', '=', pair.trialSessionId),
+              eb('docketNumber', '=', pair.docketNumber),
+            ]),
+          ),
+        ),
+      ),
   });
 };

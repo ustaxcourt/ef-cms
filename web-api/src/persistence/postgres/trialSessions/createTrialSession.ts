@@ -36,5 +36,5 @@ export const createTrialSession = async ({
     });
   }
 
-  return fromKyselyTrialSession(result, paperPdfs);
+  return fromKyselyTrialSession(result, paperPdfs, []);
 };

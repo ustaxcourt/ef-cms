@@ -6,6 +6,12 @@ export const deleteTrialSession = async ({
   trialSessionId: string;
 }) => {
   await pgDeleteFrom({
+    table: 'dwTrialSessionCase',
+    where: cb =>
+      cb.where('trialSessionId', '=', trialSessionId),
+  });
+
+  await pgDeleteFrom({
     table: 'dwTrialSession',
     where: cb =>
       cb.where('trialSessionId', '=', trialSessionId),

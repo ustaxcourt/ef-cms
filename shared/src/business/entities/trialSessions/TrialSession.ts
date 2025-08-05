@@ -68,6 +68,7 @@ export type TCaseOrder = {
   isManuallyAdded: boolean;
   removedFromTrial: boolean;
   removedFromTrialDate?: string;
+  isHearing: boolean;
 };
 
 export class TrialSession extends JoiValidationEntity {
@@ -434,23 +435,25 @@ export class TrialSession extends JoiValidationEntity {
   addCaseToCalendar(caseEntity) {
     const { docketNumber } = caseEntity;
 
-    const caseExists = (this.caseOrder || []).find(
+    let caseOrderObject = (this.caseOrder || []).find(
       _caseOrder => _caseOrder.docketNumber === docketNumber,
     );
 
-    if (!caseExists) {
-      this.caseOrder.push({
+    if (!caseOrderObject) {
+      caseOrderObject = {
         docketNumber,
         isManuallyAdded: false,
         removedFromTrial: false,
+        isHearing: false,
         addedToSessionAt: createISODateString(),
-      });
+      };
+      this.caseOrder.push(caseOrderObject);
     }
 
-    return this;
+    return caseOrderObject;
   }
 
-  manuallyAddCaseToCalendar({ calendarNotes, caseEntity }): TCaseOrder {
+  manuallyAddCaseToCalendar({ calendarNotes, caseEntity, isHearing }): TCaseOrder {
     const { docketNumber } = caseEntity;
     const caseOrderObject = {
       addedToSessionAt: createISODateString(),
@@ -458,6 +461,7 @@ export class TrialSession extends JoiValidationEntity {
       docketNumber,
       isManuallyAdded: true,
       removedFromTrial: false,
+      isHearing
     };
     this.caseOrder.push(caseOrderObject);
     return caseOrderObject;
@@ -494,20 +498,21 @@ export class TrialSession extends JoiValidationEntity {
       this.sessionStatus = SESSION_STATUS_GROUPS.closed;
     }
 
-    return this;
+    return caseToUpdate;
   }
 
   /**
    * removes the case totally from the trial session
    */
-  deleteCaseFromCalendar({ docketNumber }) {
+  deleteCaseFromCalendar({ docketNumber }): TCaseOrder | undefined {
     const index = (this.caseOrder || []).findIndex(
       trialCase => trialCase.docketNumber === docketNumber,
     );
+    let caseOrderObject: TCaseOrder | undefined = undefined;
     if (index >= 0) {
-      this.caseOrder!.splice(index, 1);
+      caseOrderObject = this.caseOrder!.splice(index, 1)[0];
     }
-    return this;
+    return caseOrderObject;
   }
 
   /**

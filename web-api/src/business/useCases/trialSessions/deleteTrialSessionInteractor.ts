@@ -78,15 +78,16 @@ export const deleteTrialSessionInteractor = async (
     await removeLockFunction();
   }
 
-  await deleteTrialSession({
-    trialSessionId,
-  });
-
   if (trialSessionEntity.judge) {
     await deleteTrialSessionWorkingCopy({
         trialSessionId,
         userId: trialSessionEntity.judge.userId,
       });
   }
+
+  await deleteTrialSession({
+    trialSessionId,
+  });
+
   return trialSessionEntity.toRawObject();
 };
