@@ -3,7 +3,7 @@ import { getDbReader } from '@web-api/database';
 import { RawCaseDeadline } from '@shared/business/entities/CaseDeadline';
 
 export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
-  consolidatedCaseDeadlineId: string,
+  consolidatedCaseDeadlineIds: string | string[],
   leadDocketNumber?: string,
 ): Promise<RawCaseDeadline[]> => {
   const RECORDS = await getDbReader(reader => {
@@ -11,12 +11,16 @@ export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
       .selectFrom('dwCaseDeadline as cd')
       .innerJoin('dwCase as c', 'c.docketNumber', 'cd.docketNumber')
       .selectAll('cd')
-      .where(q =>
-        q.or([
-          q('cd.caseDeadlineId', '=', consolidatedCaseDeadlineId),
-          q('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineId),
-        ]),
-      );
+      .where(q => {
+        const IDS = Array.isArray(consolidatedCaseDeadlineIds)
+          ? consolidatedCaseDeadlineIds
+          : [consolidatedCaseDeadlineIds];
+
+        return q.or([
+          q('cd.caseDeadlineId', 'in', IDS),
+          q('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineIds),
+        ]);
+      });
 
     if (!leadDocketNumber) return query.execute();
     return query.where('c.leadDocketNumber', '=', leadDocketNumber).execute();
