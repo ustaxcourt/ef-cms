@@ -4,7 +4,7 @@ import { pgInsertInto } from '../utils/operation/pgInsertInto';
 
 import { toKyselyNewTrialSessionCase } from './mapper';
 
-export const createTrialSessionCases = async ({
+export const createOrUpdateTrialSessionCases = async ({
   trialSessionCases,
 }: {
   trialSessionCases: {

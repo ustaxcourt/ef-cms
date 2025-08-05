@@ -12,7 +12,7 @@ import { getCaseByDocketNumber } from '@web-api/persistence/postgres/cases/getCa
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
-import { createTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createTrialSessionCases';
+import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 
 /**
  * addCaseToTrialSession
@@ -77,7 +77,7 @@ const addCaseToTrialSession = async (
     caseToUpdate: caseEntity,
   });
 
-  await createTrialSessionCases({
+  await createOrUpdateTrialSessionCases({
     trialSessionCases: [{
       caseOrder,
       docketNumber,

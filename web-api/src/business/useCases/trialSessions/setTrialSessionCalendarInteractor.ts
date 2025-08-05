@@ -20,7 +20,7 @@ import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/c
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { getCalendaredCasesForTrialSession } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
-import { createTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createTrialSessionCases';
+import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 import { deleteCasesFromTrialSession } from '@web-api/persistence/postgres/trialSessions/deleteCasesFromTrialSession';
 
 export const setTrialSessionCalendarInteractor = async (
@@ -162,7 +162,7 @@ export const setTrialSessionCalendarInteractor = async (
 
     const updatesToPersist: Promise<any>[] = [
       upsertCases([...caseEntitiesToCalendar, ...caseEntitiesToNotCalendar]),
-      createTrialSessionCases({
+      createOrUpdateTrialSessionCases({
         trialSessionCases: caseOrdersToAdd.map(TCO => ({
           caseOrder: TCO,
           trialSessionId,

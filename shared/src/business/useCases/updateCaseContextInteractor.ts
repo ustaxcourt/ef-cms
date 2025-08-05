@@ -17,6 +17,7 @@ import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { removeCaseFromTrialSession } from '@web-api/persistence/postgres/trialSessions/removeCaseFromTrialSession';
 
 const updateCaseContext = async (
   _applicationContext: ServerApplicationContext,
@@ -74,8 +75,8 @@ const updateCaseContext = async (
       }
 
       const trialSession = await getTrialSessionById({
-          trialSessionId: oldCase.trialSessionId,
-        });
+        trialSessionId: oldCase.trialSessionId,
+      });
 
       if (!trialSession) {
         throw new NotFoundError(
@@ -88,6 +89,12 @@ const updateCaseContext = async (
       trialSessionEntity.removeCaseFromCalendar({
         disposition,
         docketNumber: oldCase.docketNumber,
+      });
+
+      await removeCaseFromTrialSession({
+        disposition,
+        docketNumber: oldCase.docketNumber,
+        trialSessionId: trialSessionEntity.trialSessionId,
       });
 
       await updateTrialSession({

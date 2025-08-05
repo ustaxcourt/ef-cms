@@ -8,7 +8,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { getTrialSessionById } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
-import { updateTrialSession } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
+import { createOrUpdateTrialSessionCases } from '@web-api/persistence/postgres/trialSessions/createOrUpdateTrialSessionCases';
 
 /**
  * saveCalendarNoteInteractor
@@ -36,8 +36,8 @@ export const saveCalendarNoteInteractor = async (
   }
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -52,10 +52,15 @@ export const saveCalendarNoteInteractor = async (
   const rawTrialSessionEntity = new TrialSession(trialSession)
     .validate()
     .toRawObject();
-
-  await updateTrialSession({
-    trialSessionToUpdate: rawTrialSessionEntity,
+  await createOrUpdateTrialSessionCases({
+    trialSessionCases: rawTrialSessionEntity.caseOrder.map(caseOrder => ({
+      docketNumber: caseOrder.docketNumber,
+      caseOrder,
+      isHearing: caseOrder.isHearing,
+      trialSessionId: rawTrialSessionEntity.trialSessionId,
+    })),
   });
+
 
   return rawTrialSessionEntity;
 };
