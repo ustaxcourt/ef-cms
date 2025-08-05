@@ -15,6 +15,8 @@ import { getCaseDeadlinesByDocketNumber } from '@web-api/persistence/postgres/ca
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { updateCaseAndAssociations } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
+import { upsertCaseDeadlines } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
 
 export const updateCaseContext = async (
   applicationContext: ServerApplicationContext,
@@ -106,13 +108,36 @@ export const updateCaseContext = async (
       const caseDeadlines = await getCaseDeadlinesByDocketNumber({
         docketNumber,
       });
-      await settlePromises(
-        caseDeadlines.map(async deadline => {
+
+      const DEADLINE_TASKS: Promise<any>[] = caseDeadlines.map(
+        async deadline => {
           return deleteCaseDeadline({
             caseDeadlineId: deadline.caseDeadlineId,
           });
-        }),
+        },
       );
+
+      if (oldCase.docketNumber === oldCase.leadDocketNumber) {
+        const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
+        const CHILDREN_DEADLINES =
+          await getCaseDeadlinesByConsolidatedCaseDeadlineId(
+            LEAD_CASE_DEADLINES,
+            oldCase.leadDocketNumber,
+          );
+
+        DEADLINE_TASKS.push(
+          ...CHILDREN_DEADLINES.map(async childCaseDeadline => {
+            return upsertCaseDeadlines([
+              {
+                ...childCaseDeadline,
+                consolidatedCaseDeadlineId: undefined,
+              },
+            ]);
+          }),
+        );
+      }
+
+      await settlePromises(DEADLINE_TASKS);
       newCase.updateAutomaticBlocked({ hasCaseDeadline: false });
     }
   }
