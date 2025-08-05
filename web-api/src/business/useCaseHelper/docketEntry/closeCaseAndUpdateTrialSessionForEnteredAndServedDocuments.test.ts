@@ -14,6 +14,8 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { upsertCaseDeadlines as upsertCaseDeadlinesMock } from '@web-api/persistence/postgres/caseDeadlines/upsertCaseDeadlines';
+import { getCaseDeadlinesByConsolidatedCaseDeadlineId as getCaseDeadlinesByConsolidatedCaseDeadlineIdMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByConsolidatedCaseDeadlineId';
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;
@@ -28,11 +30,17 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   const getCaseDeadlinesByDocketNumber = jest.mocked(
     getCaseDeadlinesByDocketNumberMock,
   );
+  const upsertCaseDeadlines = jest.mocked(upsertCaseDeadlinesMock);
+  const getCaseDeadlinesByConsolidatedCaseDeadlineId = jest.mocked(
+    getCaseDeadlinesByConsolidatedCaseDeadlineIdMock,
+  );
 
   beforeEach(() => {
     mockCaseEntity = new Case(MOCK_CASE, {
       authorizedUser: mockDocketClerkUser,
     });
+    upsertCaseDeadlines.mockImplementation(deadlines => deadlines as any);
+    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([]);
   });
 
   CASE_DISMISSAL_ORDER_TYPES.forEach(orderEventCode => {
@@ -209,6 +217,69 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     expect(deleteCaseDeadline).toHaveBeenCalledWith({
       caseDeadlineId: '123',
     });
+
+    expect(mockCaseEntity.automaticBlocked).toEqual(false);
+    expect(mockCaseEntity.automaticBlockedReason).toBeUndefined();
+    expect(mockCaseEntity.automaticBlockedDate).toBeUndefined();
+  });
+
+  it('should delete any case deadlines, unlink child case deadlines and automatic block information when closing a lead case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        ...MOCK_TRIAL_REGULAR,
+        isCalendared: true,
+      });
+
+    const LEAD_CASE_DEADLINE_ID = 'LEAD_CASE_DEADLINE_ID';
+    getCaseDeadlinesByDocketNumber.mockResolvedValue([
+      { caseDeadlineId: LEAD_CASE_DEADLINE_ID } as any,
+    ]);
+
+    const CHILD_CASE_DEADLINE_ID = 'CHILD_CASE_DEADLINE_ID';
+    getCaseDeadlinesByConsolidatedCaseDeadlineId.mockResolvedValue([
+      {
+        caseDeadlineId: CHILD_CASE_DEADLINE_ID,
+        consolidatedCaseDeadlineId: 'TEST_CONSOLIDATED_CASE_DEADLINE_ID',
+      } as any,
+    ]);
+
+    deleteCaseDeadline.mockResolvedValue({} as any);
+
+    mockCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        leadDocketNumber: MOCK_CASE.docketNumber,
+        docketEntries: MOCK_DOCUMENTS[0],
+        automaticBlocked: true,
+        automaticBlockedReason: 'something, something',
+        automaticBlockedDate: 'yesterday',
+      },
+      {
+        authorizedUser: mockDocketClerkUser,
+      },
+    );
+
+    await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+      applicationContext,
+      caseEntity: mockCaseEntity,
+      eventCode,
+    });
+
+    const deleteCaseDeadlineCalls = deleteCaseDeadline.mock.calls;
+    expect(deleteCaseDeadlineCalls.length).toEqual(1);
+    expect(deleteCaseDeadlineCalls[0][0]).toEqual({
+      caseDeadlineId: LEAD_CASE_DEADLINE_ID,
+    });
+
+    const upsertCaseDeadlinesCalls = upsertCaseDeadlines.mock.calls;
+    expect(upsertCaseDeadlinesCalls.length).toEqual(1);
+    expect(upsertCaseDeadlinesCalls[0][0]).toEqual([
+      {
+        caseDeadlineId: CHILD_CASE_DEADLINE_ID,
+        consolidatedCaseDeadlineId: undefined,
+      },
+    ]);
 
     expect(mockCaseEntity.automaticBlocked).toEqual(false);
     expect(mockCaseEntity.automaticBlockedReason).toBeUndefined();
