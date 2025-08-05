@@ -2,31 +2,12 @@ import { Case } from '@shared/business/entities/cases/Case';
 import { RawWorkItem, WorkItem } from '@shared/business/entities/WorkItem';
 import { calculateDate } from '@shared/business/utilities/DateHandler';
 import { transformNullToUndefined } from '@web-api/persistence/postgres/utils/transformNullToUndefined';
-import { WorkItemWithCaseInfo } from '@web-api/persistence/postgres/workitems/getDocumentQCInboxForUser';
 import {
   NewWorkItemKysely,
   WorkItemKysely,
-  WorkItemWithAssociatedCaseDataKysely,
+  RawWorkItemWithCaseInfo,
+  WorkItemWithCaseInfoKysely,
 } from '@web-api/persistence/postgres/workitems/schema';
-
-function getWorkItemSection({
-  section,
-  documentTitle,
-}: {
-  section: string;
-  documentTitle?: string;
-}) {
-  // We have sections for caseServicesSupervisor and clerkofcourt, but as far as we can tell, they aren't used.
-  // Instead, we need to translate these into either the petitions section or the docket section depending
-  // on the document type.
-  if (!['caseServicesSupervisor', 'clerkofcourt'].includes(section)) {
-    return section;
-  }
-  if (documentTitle?.toLocaleLowerCase() == 'petition') {
-    return 'petitions';
-  }
-  return 'docket';
-}
 
 export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
   return {
@@ -39,14 +20,11 @@ export function toKyselyNewWorkItem(workItem: RawWorkItem): NewWorkItemKysely {
     completedByUserId: workItem.completedByUserId,
     completedMessage: workItem.completedMessage,
     createdAt: calculateDate({ dateString: workItem.createdAt }),
-    docketEntry: JSON.stringify(workItem.docketEntry),
+    docketEntryId: workItem.docketEntryId,
     docketNumber: workItem.docketNumber,
     inProgress: workItem.inProgress,
     isRead: workItem.isRead,
-    section: getWorkItemSection({
-      section: workItem.section,
-      documentTitle: workItem.docketEntry?.documentTitle,
-    }),
+    section: workItem.section,
     sentBy: workItem.sentBy,
     sentBySection: workItem.sentBySection,
     sentByUserId: workItem.sentByUserId,
@@ -69,9 +47,9 @@ export function fromKyselyWorkItem(workItem: WorkItemKysely) {
 
 // Sometimes we need to augment WorkItem data with data from the associated case
 export function fromKyselyWorkItemAndCase(
-  dbWorkItem: WorkItemWithAssociatedCaseDataKysely,
-): WorkItemWithCaseInfo {
-  const workItemWithCaseInfo: WorkItemWithCaseInfo = {
+  dbWorkItem: WorkItemWithCaseInfoKysely,
+): RawWorkItemWithCaseInfo {
+  const workItemWithCaseInfo: RawWorkItemWithCaseInfo = {
     ...new WorkItem({
       ...dbWorkItem,
       completedAt: dbWorkItem.completedAt?.toISOString(),

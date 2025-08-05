@@ -14,8 +14,7 @@ export const docketClerkViewsQCOutbox = (cerebralTest, shouldExist) => {
 
     const outboxQueue = cerebralTest.getState('workQueue');
     const outboxWorkItem = outboxQueue.find(
-      workItem =>
-        workItem.docketEntry.docketEntryId === cerebralTest.docketEntryId,
+      workItem => workItem.docketEntryId === cerebralTest.docketEntryId,
     );
     if (shouldExist) {
       expect(outboxWorkItem).toBeTruthy();
