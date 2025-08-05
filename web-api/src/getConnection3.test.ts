@@ -9,6 +9,17 @@ jest.mock('@aws-sdk/rds-signer', () => {
     Signer,
   };
 });
+jest.mock('pg', () => {
+  class Pool {
+    options = {};
+    connect() {
+      return { release() {} };
+    }
+  }
+  return {
+    Pool,
+  };
+});
 import { getConnection } from '@web-api/getConnection';
 import { environment } from '@web-api/environment';
 import { sleep } from '@shared/tools/helpers';
@@ -32,9 +43,7 @@ describe('getConnection', () => {
     mockGetAuthToken.mockImplementation(async () => {
       await sleep(20);
       hasResetPassword = true;
-      return Promise.resolve(resolve => {
-        return resolve('123456789');
-      });
+      return Promise.resolve('123456789');
     });
 
     const result = await Promise.all([

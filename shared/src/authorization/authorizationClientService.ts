@@ -31,6 +31,7 @@ export const ROLE_PERMISSIONS = {
   CREATE_ORDER_DOCKET_ENTRY: 'CREATE_ORDER_DOCKET_ENTRY',
   CREATE_TRIAL_SESSION: 'CREATE_TRIAL_SESSION',
   CREATE_USER: 'CREATE_USER',
+  DEACTIVATE_USER: 'DEACTIVATE_USER',
   DELETE_DOCKET_ENTRY_WORKSHEET: 'DELETE_DOCKET_ENTRY_WORKSHEET',
   DISMISS_NOTT_REMINDER: 'DISMISS_NOTT_REMINDER',
   DOCKET_ENTRY: 'DOCKET_ENTRY',
@@ -138,7 +139,7 @@ const adcPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.STAMP_MOTION,
 ];
 
-const adminPermissions: RolePermission[] = [
+const adminPermissions: RolePermission[] = [ // TODO 10495 should this be merged with zendesk?
   ROLE_PERMISSIONS.ADD_EDIT_JUDGE_USER,
   ROLE_PERMISSIONS.ADD_EDIT_PRACTITIONER_USER,
   ROLE_PERMISSIONS.CREATE_USER,
@@ -302,7 +303,10 @@ const trialClerkPermissions: RolePermission[] = [
   ROLE_PERMISSIONS.MANAGE_MINUTE_SHEET,
 ];
 
-const zendeskPermissions: RolePermission[] = [ROLE_PERMISSIONS.GET_REG_STATUS];
+const zendeskPermissions: RolePermission[] = [
+  ROLE_PERMISSIONS.GET_REG_STATUS,
+  ROLE_PERMISSIONS.DEACTIVATE_USER,
+];
 
 export const AUTHORIZATION_MAP = {
   adc: adcPermissions,
