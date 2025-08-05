@@ -1,6 +1,5 @@
 import { RawPractitionerDocument } from '@shared/business/entities/PractitionerDocument';
 import { NewPractitionerDocumentKysely } from '@web-api/persistence/postgres/practitionerDocuments/schema';
-import { isArray } from 'lodash';
 
 function pickFields(
   practitionerDocument,
@@ -27,23 +26,9 @@ export function toKyselyNewPractitionerDocument(
 
 export function practitionerDocumentEntity(
   practitionerDocument,
-): RawPractitionerDocument[] | RawPractitionerDocument {
-  if (!practitionerDocument) {
-    // Always return an empty array if no document is found
-    return [];
-  }
-  if (isArray(practitionerDocument)) {
-    const practitionerDocuments = practitionerDocument.map(doc => {
-      return {
-        ...doc,
-        uploadDate: doc.uploadDate?.toISOString(),
-      };
-    });
-    return practitionerDocuments;
-  } else {
-    return {
-      ...practitionerDocument,
-      uploadDate: practitionerDocument.uploadDate?.toISOString(),
-    };
-  }
+): RawPractitionerDocument {
+  return {
+    ...practitionerDocument,
+    uploadDate: practitionerDocument.uploadDate?.toISOString(),
+  };
 }

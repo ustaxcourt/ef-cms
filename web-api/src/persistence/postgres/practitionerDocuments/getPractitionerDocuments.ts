@@ -9,13 +9,15 @@ export const getPractitionerDocuments = async ({
 }): Promise<RawPractitionerDocument[] | RawPractitionerDocument> => {
   barNumber = barNumber.toLowerCase();
 
-  return practitionerDocumentEntity(
-    await getDbReader(reader =>
-      reader
-        .selectFrom('dwPractitionerDocuments as p')
-        .where('p.barNumber', '=', barNumber)
-        .selectAll('p')
-        .execute(),
-    ),
+  const practitionerDocuments = await getDbReader(reader =>
+    reader
+      .selectFrom('dwPractitionerDocuments as p')
+      .where('p.barNumber', '=', barNumber)
+      .selectAll('p')
+      .execute(),
+  );
+
+  return practitionerDocuments.map(practitionerDocument =>
+    practitionerDocumentEntity(practitionerDocument),
   );
 };

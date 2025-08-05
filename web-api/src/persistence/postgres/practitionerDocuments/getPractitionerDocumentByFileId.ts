@@ -10,14 +10,15 @@ export const getPractitionerDocumentByFileId = async ({
   fileId: string;
 }): Promise<RawPractitionerDocument> => {
   barNumber = barNumber.toLowerCase();
-  return practitionerDocumentEntity(
-    await getDbReader(reader =>
-      reader
-        .selectFrom('dwPractitionerDocuments as p')
-        .where('p.barNumber', '=', barNumber)
-        .where('p.practitionerDocumentFileId', '=', fileId)
-        .selectAll('p')
-        .executeTakeFirst(),
-    ),
-  ) as RawPractitionerDocument;
+
+  const practitionerDocument = await getDbReader(reader =>
+    reader
+      .selectFrom('dwPractitionerDocuments as p')
+      .where('p.barNumber', '=', barNumber)
+      .where('p.practitionerDocumentFileId', '=', fileId)
+      .selectAll('p')
+      .executeTakeFirst(),
+  );
+
+  return practitionerDocumentEntity(practitionerDocument);
 };
