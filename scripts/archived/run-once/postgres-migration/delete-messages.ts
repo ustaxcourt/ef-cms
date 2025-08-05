@@ -16,7 +16,7 @@ import { batchDeleteDynamoItems } from '../../../run-once-scripts/postgres-migra
 
 const scriptConfig: ScriptConfig = {
   description:
-    'delete-messages - Delete from dynamodb Message entities that have been migrated to postes',
+    'delete-messages - Delete from dynamodb Message entities that have been migrated to postgres',
   environment: {
     env: 'ENV',
     tableNameInput: 'TABLE_NAME',
