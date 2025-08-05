@@ -88,7 +88,7 @@ export const dojPractitionerUser: RawPractitioner = {
   admissionsDate: '',
   admissionsStatus: '',
   barNumber: 'BN2345',
-  birthYear: '',
+  birthYear: 1970,
   contact: {
     address1: '234 Main St',
     address2: 'Apartment 4',
@@ -251,7 +251,7 @@ export const MOCK_PRACTITIONER: RawPractitioner = {
   admissionsDate: '2019-03-01',
   admissionsStatus: 'Active',
   barNumber: 'AB1111',
-  birthYear: '2019',
+  birthYear: 2019,
   contact: {
     address1: '234 Main St',
     address2: 'Apartment 4',

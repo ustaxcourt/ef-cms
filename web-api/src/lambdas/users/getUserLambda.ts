@@ -11,8 +11,8 @@ import { getUserInteractor } from '@shared/business/useCases/getUserInteractor';
 export const getUserLambda = (event, authorizedUser: UnknownAuthUser) =>
   genericHandler(
     event,
-    async ({ applicationContext }) => {
-      return await getUserInteractor(applicationContext, authorizedUser);
+    async () => {
+      return await getUserInteractor(authorizedUser);
     },
     {
       bypassMaintenanceCheck: true,

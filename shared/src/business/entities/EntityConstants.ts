@@ -119,6 +119,9 @@ export const ALLOWLIST_FEATURE_FLAGS = {
   },
 };
 
+type FeatureFlags = typeof ALLOWLIST_FEATURE_FLAGS;
+export type FeatureFlagKeys = FeatureFlags[keyof FeatureFlags]['key'];
+
 export const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {
     key: 'section-outbox-number-of-days',
@@ -782,6 +785,11 @@ export const SPTO_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
 export const SPOS_DOCUMENT = COURT_ISSUED_EVENT_CODES.find(
   doc => doc.eventCode === 'SPOS',
 )!;
+
+export const AUTO_GENERATED_STATUS_REPORT_ORDER_DESCRIPTIONS = {
+  statusReport: 'Status Report Due',
+  statusReportStipulatedDecision: 'Status Report or Proposed Stipulated Decision Due'
+};
 
 const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES = {
   orderForFilingFee: {

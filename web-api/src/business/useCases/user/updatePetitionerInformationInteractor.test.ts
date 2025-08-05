@@ -1,5 +1,6 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 jest.mock('@web-api/business/useCases/addCoverToPdf');
@@ -38,6 +39,8 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { generateAndServeDocketEntry as generateAndServeDocketEntryMock } from '@web-api/business/useCaseHelper/service/createChangeItems';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockCase;
@@ -45,6 +48,7 @@ describe('updatePetitionerInformationInteractor', () => {
   const generateAndServeDocketEntry = jest.mocked(
     generateAndServeDocketEntryMock,
   );
+  const getUserById = jest.mocked(getUserByIdMock);
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
@@ -514,9 +518,7 @@ describe('updatePetitionerInformationInteractor', () => {
       email: undefined,
       userId: applicationContext.getUniqueId(),
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(unverifiedNewPetitioner);
+    getUserById.mockResolvedValue(unverifiedNewPetitioner as DbUser);
 
     await updatePetitionerInformationInteractor(
       applicationContext,
@@ -580,9 +582,7 @@ describe('updatePetitionerInformationInteractor', () => {
         .getUserGateway()
         .getUserByEmail.mockReturnValue('someMockId');
 
-      applicationContext
-        .getPersistenceGateway()
-        .getUserById.mockReturnValue(foundMockVerifiedPetitioner);
+      getUserById.mockResolvedValue(foundMockVerifiedPetitioner as DbUser);
 
       applicationContext
         .getUseCaseHelpers()

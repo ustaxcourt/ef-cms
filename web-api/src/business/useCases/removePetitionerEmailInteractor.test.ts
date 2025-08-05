@@ -1,6 +1,6 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
-jest.mock('@web-api/persistence/dynamo/cases/deleteUserFromCase');
 jest.mock('@shared/sharedAppContext');
+jest.mock('@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases')
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import {
@@ -8,14 +8,14 @@ import {
   mockDocketClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { removePetitionerEmailInteractor } from '@web-api/business/useCases/removePetitionerEmailInteractor';
-import { deleteUserFromCase as deleteUserFromCaseMock } from '@web-api/persistence/dynamo/cases/deleteUserFromCase';
 import { SERVICE_INDICATOR_TYPES } from '@shared/business/entities/EntityConstants';
 import { getUniqueId as getUniqueIdMock } from '@shared/sharedAppContext';
 import { upsertCases as upsertCasesMock } from '@web-api/persistence/postgres/cases/upsertCases';
+import { disassociateUsersFromCases as disassociateUsersFromCasesMock } from '@web-api/persistence/postgres/cases/userOnCase/disassociateUsersFromCases';
 
 describe('removePetitionerEmailInteractor', () => {
   const getCaseByDocketNumber = jest.mocked(getCaseByDocketNumberMock);
-  const deleteUserFromCase = jest.mocked(deleteUserFromCaseMock);
+  const disassociateUsersFromCases = jest.mocked(disassociateUsersFromCasesMock);
   const upsertCases = jest.mocked(upsertCasesMock);
   const mockedUniqueId = 'f87136a7-0d4c-4051-9501-b035f4f13e7e';
   jest.mocked(getUniqueIdMock).mockReturnValue(mockedUniqueId);
@@ -50,10 +50,10 @@ describe('removePetitionerEmailInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       email: undefined,
     });
-    expect(deleteUserFromCase.mock.calls[0][0].docketNumber).toEqual(
+    expect(disassociateUsersFromCases.mock.calls[0][0][0].docketNumber).toEqual(
       MOCK_CASE.docketNumber,
     );
-    expect(deleteUserFromCase.mock.calls[0][0].userId).toEqual(oldContactId);
+    expect(disassociateUsersFromCases.mock.calls[0][0][0].userId).toEqual(oldContactId);
     expect(result).toBeDefined();
     expect(result).toEqual({ ...updatedPetitioner, contactId: mockedUniqueId });
   });

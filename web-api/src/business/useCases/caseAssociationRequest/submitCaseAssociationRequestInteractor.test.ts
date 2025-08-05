@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 import {
   COUNTRY_TYPES,
@@ -12,16 +13,16 @@ import {
   mockPrivatePractitionerUser,
 } from '@shared/test/mockAuthUsers';
 import { submitCaseAssociationRequestInteractor } from './submitCaseAssociationRequestInteractor';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
 
 describe('submitCaseAssociationRequest', () => {
   const mockContactId = getContactPrimary(MOCK_CASE).contactId;
+  const getUserById = jest.mocked(getUserByIdMock);
 
   let mockGetUserById;
 
   beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockImplementation(() => mockGetUserById);
+    getUserById.mockImplementation(() => mockGetUserById);
 
     applicationContext
       .getPersistenceGateway()

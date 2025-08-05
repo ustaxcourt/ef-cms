@@ -10,7 +10,6 @@ jest.mock(
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
-
 import {
   CaseDeadline,
   RawCaseDeadline,
@@ -40,7 +39,10 @@ describe('createCaseDeadlineInteractor - Consolidated Cases', () => {
       // eslint-disable-next-line @typescript-eslint/require-await
       async params => params.caseEntity,
     );
-    updateCaseAndAssociations.mockResolvedValue(MOCK_CASE);
+
+    updateCaseAndAssociations.mockImplementation(({ caseToUpdate }) =>
+      Promise.resolve(caseToUpdate),
+    );
   });
 
   it('should create a case deadline for all the cases in the consolidated group', async () => {
