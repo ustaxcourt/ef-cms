@@ -13,7 +13,7 @@ import { isEmpty } from 'lodash';
 
 const scriptConfig: ScriptConfig = {
   description:
-    'delete-practitioner-documents - Delete from dynamodb practitioner document entities that have been migrated to postes',
+    'delete-practitioner-documents - Delete from dynamodb practitioner document entities that have been migrated to postgres',
   environment: {
     env: 'ENV',
     sourceTable: 'SOURCE_TABLE',
@@ -37,7 +37,7 @@ const getPractitionerDocumentsToDelete = async (offset: number) => {
       .orderBy(['barNumber', 'practitionerDocumentFileId'])
       .limit(practitionerDocumentPageSize)
       .offset(offset)
-      
+
       .execute(),
   );
   return caseNotes;
