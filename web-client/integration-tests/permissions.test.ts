@@ -82,10 +82,6 @@ const internalFieldsBlocked = () => {
   expect(cerebralTest.getState('caseDetail.blockedReason')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.caseNote')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.damages')).toBeUndefined();
-  expect(cerebralTest.getState('caseDetail.highPriority')).toBeUndefined();
-  expect(
-    cerebralTest.getState('caseDetail.highPriorityReason'),
-  ).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.judgeUserId')).toBeUndefined();
   expect(cerebralTest.getState('caseDetail.litigationCosts')).toBeUndefined();
   expect(

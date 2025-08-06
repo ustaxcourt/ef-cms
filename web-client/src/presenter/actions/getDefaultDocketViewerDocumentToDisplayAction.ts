@@ -1,4 +1,6 @@
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
+import { getDocketEntriesByFilter } from '@shared/business/utilities/getDocketEntriesByFilter';
+import { applicationContext } from '@web-client/applicationContext';
 import { state } from '@web-client/presenter/app.cerebral';
 
 /**
@@ -11,17 +13,24 @@ export const getDefaultDocketViewerDocumentToDisplayAction = ({
   get,
 }: ActionProps) => {
   const { docketEntries } = get(state.caseDetail);
+  const docketRecordFilter = get(state.sessionMetadata.docketRecordFilter);
   const docketEntryId = get(state.docketEntryId);
   const entriesWithDocument = docketEntries.filter(
     entry => !DocketEntry.isMinuteEntry(entry) && entry.isFileAttached,
   );
+
+  const docketEntriesByFilter = getDocketEntriesByFilter(applicationContext, {
+    docketEntries: entriesWithDocument,
+    docketRecordFilter,
+  });
+
   const viewerDocumentToDisplayInState = get(state.viewerDocumentToDisplay);
 
   let viewerDocumentToDisplay;
 
-  if (entriesWithDocument && entriesWithDocument.length) {
-    viewerDocumentToDisplay = entriesWithDocument[0];
-    const foundDocketEntry = entriesWithDocument.find(
+  if (docketEntriesByFilter?.length) {
+    viewerDocumentToDisplay = docketEntriesByFilter[0];
+    const foundDocketEntry = docketEntriesByFilter.find(
       d => d.docketEntryId === docketEntryId,
     );
     if (!docketEntryId && viewerDocumentToDisplayInState) {

@@ -20,6 +20,7 @@ export const STATE_KEYS = {
   TERM_BUILDER_INFORMATION: 'TERM_BUILDER_INFORMATION',
   PENDING_REPORT_TABLE_SORT: 'PENDING_REPORT_TABLE_SORT',
   RECENT_FILINGS_TABLE_SORT: 'RECENT_FILINGS_TABLE_SORT',
+  CONSOLIDATED_CASE_DEADLINES: 'CONSOLIDATED_CASE_DEADLINES',
 } as const;
 
 export const DEBOUNCE_TIME_MILLISECONDS = 500;
@@ -908,6 +909,19 @@ export const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   },
   ...AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES,
 };
+
+export const SYSTEM_AND_INTERNAL_DOCUMENT_TYPES = [
+  ...Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).map(doc => ({
+    ...doc,
+    label: doc.documentTitle,
+    value: doc.eventCode,
+  })),
+  ...INTERNAL_DOCUMENTS_ARRAY.map(doc => ({
+    ...doc,
+    label: doc.documentTitle,
+    value: doc.eventCode,
+  })),
+];
 
 export const AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES = flatten(
   Object.values(AUTO_GENERATED_DEADLINE_DOCUMENT_TYPES_WITH_NAMES),

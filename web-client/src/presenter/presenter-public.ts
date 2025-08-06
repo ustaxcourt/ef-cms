@@ -12,6 +12,7 @@ import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { displayProgressSpinnerSequence } from '@web-client/presenter/sequences/displayProgressSpinnerSequence';
 import { goToCreatePetitionerAccountSequence } from '@web-client/presenter/sequences/Public/goToCreatePetitionerAccountSequence';
 import { gotoContactSequence } from './sequences/gotoContactSequence';
+import { goToDawsonUIComponentSequence } from './sequences/Public/goToDawsonUIComponentSequence';
 import { gotoHealthCheckSequence } from './sequences/gotoHealthCheckSequence';
 import { gotoMaintenanceSequence } from './sequences/gotoMaintenanceSequence';
 import { gotoPrivacySequence } from './sequences/gotoPrivacySequence';
@@ -77,6 +78,7 @@ export const presenterSequences = {
   displayProgressSpinnerSequence,
   goToCreatePetitionerAccountSequence,
   gotoContactSequence: showMaintenancePageDecorator(gotoContactSequence),
+  goToDawsonUIComponentSequence,
   gotoHealthCheckSequence: showMaintenancePageDecorator(
     gotoHealthCheckSequence,
   ),
