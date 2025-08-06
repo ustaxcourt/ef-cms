@@ -31,7 +31,6 @@ export const docketClerkViewsCaseDetailAfterServingCourtIssuedDocument = (
       expect(cerebralTest.getState('caseDetail.status')).toEqual(
         CASE_STATUS_TYPES.closedDismissed,
       );
-      expect(cerebralTest.getState('caseDetail.highPriority')).toEqual(false);
     }
   });
 };

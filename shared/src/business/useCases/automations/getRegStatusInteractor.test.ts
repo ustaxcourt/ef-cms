@@ -22,13 +22,16 @@ jest.mock('@aws-sdk/client-sesv2', () => {
     send: mockSend,
   };
 });
-import { send as mockSend } from '@aws-sdk/client-sesv2';
+import * as sesv2 from '@aws-sdk/client-sesv2';
+import type { SESv2Client } from '@aws-sdk/client-sesv2';
 import { MOCK_PRACTITIONER } from '@shared/test/mockUsers';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 import { UserStatusType } from '@aws-sdk/client-cognito-identity-provider';
 jest.mock('@web-api/persistence/cognito/getCognito');
 jest.mock('@web-api/persistence/postgres/users/getDocketNumbersByUser');
 jest.mock('@web-api/persistence/postgres/users/getUserById');
+
+const mockSend = (sesv2 as unknown as SESv2Client).send as jest.Mock;
 
 describe('getRegStatusInteractor', () => {
   const userEmail = 'user@example.com';
