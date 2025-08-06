@@ -13,6 +13,22 @@ export function sortRecentFilings(
 ): RecentFiling[] {
   const filings = [...(recentFilings || [])];
 
+  const validSortFields: SortableField[] = [
+    'docketNumber',
+    'filedDate',
+    'document',
+    'caseTitle',
+  ];
+  const validSortOrders = ['asc', 'desc'];
+
+  if (!validSortFields.includes(sortField as SortableField)) {
+    sortField = 'filedDate';
+  }
+
+  if (!validSortOrders.includes(sortOrder)) {
+    sortOrder = 'desc';
+  }
+
   if (sortField === 'filedDate' && sortOrder === 'desc') {
     return filings.sort((a, b) => b.filedDate.localeCompare(a.filedDate));
   }
@@ -35,11 +51,18 @@ export function sortRecentFilings(
       case 'filedDate':
         comparison = a.filedDate.localeCompare(b.filedDate);
         break;
-      case 'document':
-        comparison = a.document
-          .toLowerCase()
-          .localeCompare(b.document.toLowerCase());
+      case 'document': {
+        const aDoc = a.document || '';
+        const bDoc = b.document || '';
+        if (a.document === null && b.document !== null) {
+          comparison = 1;
+        } else if (a.document !== null && b.document === null) {
+          comparison = -1;
+        } else {
+          comparison = aDoc.toLowerCase().localeCompare(bDoc.toLowerCase());
+        }
         break;
+      }
       case 'caseTitle':
         comparison = a.caseTitle
           .toLowerCase()
