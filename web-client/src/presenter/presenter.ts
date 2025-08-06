@@ -627,6 +627,7 @@ import { gotoTrialSessionTermBuilderSequence } from '@web-client/presenter/seque
 import { asyncServiceUnavailablrHandlerSequence } from '@web-client/presenter/sequences/asyncServiceUnavailablrHandlerSequence';
 import { showRemovePetitionerEmailModalSequence } from '@web-client/presenter/sequences/showRemovePetitionerEmailModalSequence';
 import { removePetitionerEmailSequence } from '@web-client/presenter/sequences/removePetitionerEmailSequence';
+import { updateDocumentSearchResultsSequence } from './sequences/updateDocumentSearchResultsSequence';
 
 export const presenterSequences = {
   addAnotherIrsNoticeToFormSequence,
@@ -1468,6 +1469,8 @@ export const presenterSequences = {
     updateDocketEntryWorksheetSequence as unknown as Function,
   updateDocketNumberSearchFormSequence:
     updateDocketNumberSearchFormSequence as unknown as Function,
+  updateDocumentSearchResultsSequence:
+    updateDocumentSearchResultsSequence as unknown as Function,
   updateFileDocumentWizardFormValueSequence:
     updateFileDocumentWizardFormValueSequence as unknown as Function,
   updateFilePetitionSequence,

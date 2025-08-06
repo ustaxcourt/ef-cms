@@ -707,6 +707,10 @@ export const baseState = {
   docketRecordIndex: 0,
   documentToEdit: {} as any,
   documentsSelectedForDownload: [] as { docketEntryId: string }[],
+  documentSearchSort: {
+    sortColumn: 'formattedFiledDate',
+    sortDirection: 'asc',
+  },
   draftDocumentViewerDocketEntryId: null,
   featureFlags: undefined as unknown as { [key: string]: string },
   fileUploadProgress: {

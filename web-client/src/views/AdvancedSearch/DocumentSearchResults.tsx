@@ -7,6 +7,14 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 import React, { useState } from 'react';
+import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
+import {
+  ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+  ASCENDING,
+  SORT_ASCENDING_TEXT,
+  SORT_DESCENDING_TEXT,
+} from '@shared/business/entities/EntityConstants';
+// import { updateDocumentSearchResultsSequence } from '@web-client/presenter/sequences/updateDocumentSearchResultsSequence';
 
 // const COLUMN_MAP = [
 //   { key: 'formattedFiledDate', label: 'Filed Date' },
@@ -25,70 +33,62 @@ export const DocumentSearchResults = connect(
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
+    updateDocumentSearchResultsSequence:
+      sequences.updateDocumentSearchResultsSequence,
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
     isPublic,
     MAX_SEARCH_RESULTS,
     openCaseDocumentDownloadUrlSequence,
-    //showMoreResultsSequence,
+    updateDocumentSearchResultsSequence,
   }) {
     // Pagination state
-    const [currentPageIndex, setCurrentPageIndex] = useState(0);
-    const pageSize = 5;
-
-    // Sorting state
-    const [sortColumn, setSortColumn] = useState('formattedFiledDate');
-    const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
+    const [currentPaginationPage, setcurrentPaginationPage] = useState(0);
+    // const pageSize = 5;
 
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
 
-    // Sorting logic
-    const sortedResults = [...results].sort((a, b) => {
-      let aValue = a[sortColumn];
-      let bValue = b[sortColumn];
-
-      // Try to parse as numbers if possible
-      if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
-        aValue = Number(aValue);
-        bValue = Number(bValue);
-      }
-
-      if (aValue < bValue) return sortDirection === 'asc' ? -1 : 1;
-      if (aValue > bValue) return sortDirection === 'asc' ? 1 : -1;
-      return 0;
-    });
-
-    const totalPages = Math.ceil(sortedResults.length / pageSize);
-
-    // Slice results for current page
-    const pagedResults = sortedResults.slice(
-      currentPageIndex * pageSize,
-      currentPageIndex * pageSize + pageSize,
+    const totalPages = Math.ceil(
+      results.length / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
     );
+    console.log('totalPages', totalPages);
+    // // Slice results for current page
+    // const pagedResults = sortedResults.slice(
+    //   currentPageIndex * pageSize,
+    //   currentPageIndex * pageSize + pageSize,
+    // );
 
     // Reset to first page if results change and current page is out of bounds
-    React.useEffect(() => {
-      if (currentPageIndex > 0 && currentPageIndex >= totalPages) {
-        setCurrentPageIndex(0);
-      }
-    }, [sortedResults.length, totalPages, currentPageIndex]);
+    // React.useEffect(() => {
+    //   if (currentPageIndex > 0 && currentPageIndex >= totalPages) {
+    //     setCurrentPageIndex(0);
+    //   }
+    // }, [sortedResults.length, totalPages, currentPageIndex]);
 
     // Handle column header click
     const handleSort = (columnKey: string) => {
-      if (sortColumn === columnKey) {
-        setSortDirection(sortDirection === 'asc' ? 'desc' : 'asc');
-      } else {
-        setSortColumn(columnKey);
-        setSortDirection('asc');
-      }
-      setCurrentPageIndex(0);
-    };
+      console.log('adv sort Column: ', advancedDocumentSearchHelper.sortColumn);
+      console.log(
+        'sort direction: ',
+        advancedDocumentSearchHelper.sortDirection,
+      );
 
-    // Helper for sort indicator
-    const renderSortIndicator = (columnKey: string) => {
-      if (sortColumn !== columnKey) return null;
-      return sortDirection === 'asc' ? ' ▲' : ' ▼';
+      if (advancedDocumentSearchHelper.sortColumn === columnKey) {
+        updateDocumentSearchResultsSequence({
+          sortColumn: columnKey,
+          sortDirection:
+            advancedDocumentSearchHelper.sortDirection === 'asc'
+              ? 'desc'
+              : 'asc',
+        });
+      } else {
+        updateDocumentSearchResultsSequence({
+          sortColumn: columnKey,
+          sortDirection: 'asc',
+        });
+      }
+      // setCurrentPageIndex(0);
     };
 
     return (
@@ -123,55 +123,128 @@ export const DocumentSearchResults = connect(
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
-                  <th
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleSort('formattedFiledDate')}
-                  >
-                    Filed Date{renderSortIndicator('formattedFiledDate')}
+                  <th>
+                    <SortableColumn
+                      ascText={SORT_ASCENDING_TEXT.string}
+                      currentlySortedField={
+                        advancedDocumentSearchHelper.sortColumn
+                      }
+                      currentlySortedOrder={
+                        advancedDocumentSearchHelper.sortDirection
+                      }
+                      defaultSortOrder={ASCENDING}
+                      descText={SORT_DESCENDING_TEXT.string}
+                      hasRows={true}
+                      sortField="formattedFiledDate"
+                      title="Filed Date"
+                      onClickSequence={() => {
+                        handleSort('formattedFiledDate');
+                        updateDocumentSearchResultsSequence({
+                          currentPaginationPage,
+                        });
+                      }}
+                    />
                   </th>
                   <th aria-hidden="true" className="small-column"></th>
-                  <th
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleSort('documentTitle')}
-                  >
-                    {advancedDocumentSearchHelper.documentTypeVerbiage}
-                    {renderSortIndicator('documentTitle')}
+                  <th>
+                    <SortableColumn
+                      ascText={SORT_ASCENDING_TEXT.string}
+                      currentlySortedField={
+                        advancedDocumentSearchHelper.sortColumn
+                      }
+                      currentlySortedOrder={
+                        advancedDocumentSearchHelper.sortDirection
+                      }
+                      defaultSortOrder={ASCENDING}
+                      descText={SORT_DESCENDING_TEXT.string}
+                      hasRows={true}
+                      sortField="documentTitle"
+                      title={advancedDocumentSearchHelper.documentTypeVerbiage}
+                      onClickSequence={() => handleSort('documentTitle')}
+                    />
                   </th>
-                  <th
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleSort('caseTitle')}
-                  >
-                    Case Title{renderSortIndicator('caseTitle')}
+                  <th>
+                    <SortableColumn
+                      ascText={SORT_ASCENDING_TEXT.string}
+                      currentlySortedField={
+                        advancedDocumentSearchHelper.sortColumn
+                      }
+                      currentlySortedOrder={
+                        advancedDocumentSearchHelper.sortDirection
+                      }
+                      defaultSortOrder={ASCENDING}
+                      descText={SORT_DESCENDING_TEXT.string}
+                      hasRows={true}
+                      sortField="caseTitle"
+                      title="Case Title"
+                      onClickSequence={() => handleSort('caseTitle')}
+                    />
                   </th>
-                  <th
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleSort('formattedJudgeName')}
-                  >
-                    Judge{renderSortIndicator('formattedJudgeName')}
+                  <th>
+                    <SortableColumn
+                      ascText={SORT_ASCENDING_TEXT.string}
+                      currentlySortedField={
+                        advancedDocumentSearchHelper.sortColumn
+                      }
+                      currentlySortedOrder={
+                        advancedDocumentSearchHelper.sortDirection
+                      }
+                      defaultSortOrder={ASCENDING}
+                      descText={SORT_DESCENDING_TEXT.string}
+                      hasRows={true}
+                      sortField="formattedJudgeName"
+                      title="Judge"
+                      onClickSequence={() => handleSort('formattedJudgeName')}
+                    />
                   </th>
-                  <th
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleSort('numberOfPagesFormatted')}
-                  >
-                    Pages{renderSortIndicator('numberOfPagesFormatted')}
+                  <th>
+                    <SortableColumn
+                      ascText={SORT_ASCENDING_TEXT.date}
+                      currentlySortedField={
+                        advancedDocumentSearchHelper.sortColumn
+                      }
+                      currentlySortedOrder={
+                        advancedDocumentSearchHelper.sortDirection
+                      }
+                      defaultSortOrder={ASCENDING}
+                      descText={SORT_DESCENDING_TEXT.date}
+                      hasRows={true}
+                      sortField="numberOfPagesFormatted"
+                      title="Pages"
+                      onClickSequence={() =>
+                        handleSort('numberOfPagesFormatted')
+                      }
+                    />
                   </th>
-                  <th
-                    style={{ cursor: 'pointer' }}
-                    onClick={() => handleSort('docketNumber')}
-                    aria-label="docket number"
-                  >
-                    Docket No.{renderSortIndicator('docketNumber')}
+                  <th>
+                    <SortableColumn
+                      ascText={SORT_ASCENDING_TEXT.string}
+                      currentlySortedField={
+                        advancedDocumentSearchHelper.sortColumn
+                      }
+                      currentlySortedOrder={
+                        advancedDocumentSearchHelper.sortDirection
+                      }
+                      defaultSortOrder={ASCENDING}
+                      descText={SORT_DESCENDING_TEXT.string}
+                      hasRows={true}
+                      sortField="docketNumber"
+                      title="Docket No."
+                      onClickSequence={() => handleSort('docketNumber')}
+                    />
                   </th>
                 </tr>
               </thead>
               <tbody>
-                {pagedResults.map((result, idx) => (
+                {results.map((result, idx) => (
                   <tr
                     className="search-result"
                     key={`${result.docketEntryId}-${result.docketNumber}`}
                   >
                     <td aria-hidden="true" className="small-column">
-                      {currentPageIndex * pageSize + idx + 1}
+                      {currentPageIndex * ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE +
+                        idx +
+                        1}
                     </td>
                     <td>{result.formattedFiledDate}</td>
                     <td aria-hidden="true" className="small-column">
@@ -220,12 +293,16 @@ export const DocumentSearchResults = connect(
               </tbody>
             </table>
 
-            {/* Paginator */}
-            {totalPages > 1 && (
+            {totalPages >= 1 && (
               <Paginator
                 currentPageIndex={currentPageIndex}
                 totalPages={totalPages}
-                onPageChange={setCurrentPageIndex}
+                onPageChange={currentPage => {
+                  setcurrentPaginationPage(currentPage);
+                  updateDocumentSearchResultsSequence({
+                    currentPaginationPage: currentPage,
+                  });
+                }}
               />
             )}
           </>

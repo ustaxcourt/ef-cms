@@ -14,6 +14,8 @@ export const advancedDocumentSearchHelper = (
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
+  const sortColumn = get(state.documentSearchSort.sortColumn);
+  const sortDirection = get(state.documentSearchSort.sortDirection);
 
   const {
     ADVANCED_SEARCH_TABS,
@@ -46,6 +48,7 @@ export const advancedDocumentSearchHelper = (
   }
 
   if (searchResults) {
+    // formatted;
     paginatedResults = paginationHelper(
       searchResults,
       get(state.advancedSearchForm.currentPage),
@@ -58,15 +61,49 @@ export const advancedDocumentSearchHelper = (
           applicationContext,
         }),
       );
+    console.log('Search results: ', paginatedResults.formattedSearchResults);
+    // Sorting logic
+    // paginatedResults.formattedSearchResults =
+    //   paginatedResults.formattedSearchResults.sort((a, b) => {
+    //     let aValue = a[sortColumn] || '';
+    //     let bValue = b[sortColumn] || '';
+
+    //     const direction = sortDirection === 'asc' ? 1 : -1;
+
+    //     if (sortColumn === 'docketNumber') {
+    //       // Use custom docket number sorting
+    //       return Case.docketNumberSort(aValue, bValue) * direction;
+    //     }
+
+    //     if (sortColumn === 'formattedFiledDate') {
+    //       // Use date comparison for filingDate
+    //       return dateStringsCompared(a.filingDate, b.filingDate) * direction;
+    //     }
+
+    //     // Try to parse as numbers if both values are numeric
+    //     if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
+    //       return (Number(aValue) - Number(bValue)) * direction;
+    //     }
+
+    //     // Fallback to string comparison
+    //     aValue = String(aValue).toLowerCase();
+    //     bValue = String(bValue).toLowerCase();
+
+    //     if (aValue < bValue) return -1 * direction;
+    //     if (aValue > bValue) return 1 * direction;
+
+    //     return 0; // Values are equal
+    //   });
   }
 
   const showManyResultsMessage = !!(
     searchResults && searchResults.length >= MAX_SEARCH_RESULTS
   );
-
+  console.log('searchResults: ', searchResults);
   return {
     numberOfResults: searchResults?.length,
     ...paginatedResults,
+    formattedSearchResults: searchResults.results,
     documentTypeVerbiage,
     formattedJudges,
     isInternalUser,
@@ -78,6 +115,8 @@ export const advancedDocumentSearchHelper = (
       howMuch: 0,
       units: 'days',
     }),
+    sortColumn,
+    sortDirection,
   };
 };
 
