@@ -15,7 +15,6 @@ import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/s
 import { difference, isEmpty, sortBy } from 'lodash';
 import { TrialSessionKysely } from '../trialSessions/schema';
 import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessions/mapper';
-import { jsonArrayFrom } from 'kysely/helpers/postgres';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
@@ -344,23 +343,6 @@ async function getHearings(
         'ts.trialSessionId',
       )
       .selectAll('ts')
-      .select(eb =>
-        jsonArrayFrom(
-          eb
-            .selectFrom('dwTrialSessionPaperPdf as tspdf')
-            .select('title')
-            .select('fileId')
-            .whereRef('tspdf.trialSessionId', '=', 'ts.trialSessionId'),
-        ).as('pdfs'),
-      )
-      .select(eb =>
-        jsonArrayFrom(
-          eb
-            .selectFrom('dwTrialSessionCase as tsc')
-            .selectAll() // Types WILL lie to us
-            .whereRef('tsc.trialSessionId', '=', 'ts.trialSessionId'),
-        ).as('caseOrders'),
-      )
       .where('ch.docketNumber', 'in', docketNumbers)
       .where('ch.isHearing', 'is', true)
       .execute(),

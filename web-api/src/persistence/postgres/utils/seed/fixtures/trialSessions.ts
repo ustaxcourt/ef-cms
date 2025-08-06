@@ -1,6 +1,8 @@
 /* eslint-disable max-lines */
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
+import { calculateDate } from '@shared/business/utilities/DateHandler';
+import { TrialSessionCaseKysely } from '@web-api/persistence/postgres/trialSessions/schema';
 
 export const trialSessions: RawTrialSession[] = [
   {
@@ -308,11 +310,7 @@ export const trialSessions: RawTrialSession[] = [
     state: 'CA',
     isCalendared: true,
     trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-    caseOrder: [
-      { docketNumber: '108-19' },
-      { docketNumber: '101-20' },
-      { docketNumber: '103-20', isManuallyAdded: true },
-    ],
+    caseOrder: [],
     address1: '123 Main St',
     sessionStatus: 'Open',
     proceedingType: 'In Person',
@@ -612,7 +610,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '0d943468-bc2e-4631-84e3-b084cf5b1fbb',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -635,7 +633,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     caseMetadata: {},
     trialSessionId: '111ac21b-99f9-4321-98c8-b95db00af96b',
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -658,7 +656,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '149159ca-f4a1-4b2b-bc24-bd1fbe6defdc',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -681,7 +679,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -704,7 +702,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '259159ca-f4a1-4b2b-bc24-bd1fbe6defee',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -727,7 +725,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '259159ca-f4a1-4b2b-bc24-bd1fbe6defef',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -750,7 +748,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '5b18af9e-4fbd-459b-8db7-7b15108c7fa5',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -773,7 +771,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '6b6975cf-2b10-4e84-bcae-91e162d2f9d1',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -796,7 +794,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '7c6975cf-2b10-4e84-bcae-91e162d2f9ee',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -819,7 +817,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '10001338-0fac-42eb-b0eb-d15b8d0195cc',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -842,7 +840,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     caseMetadata: {},
     trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -865,7 +863,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     caseMetadata: {},
     trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195fb',
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -888,7 +886,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: '9c943468-bc2e-4631-84e3-b084cf5b1faa',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -911,7 +909,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: 'a3bee7c0-bd98-4504-890b-b00eb398e547',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -934,7 +932,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: 'b4bee7c0-bd98-4504-890b-b00eb398e547',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -957,7 +955,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -980,7 +978,7 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: 'c7220f03-e46e-4d5e-8e1d-a640e64df552',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
   },
   {
     filters: {
@@ -1003,6 +1001,42 @@ export const trialSessionWorkingCopies: RawTrialSessionWorkingCopy[] = [
     trialSessionId: 'f3b04943-8ea8-422b-8990-dec3ca644c83',
     caseMetadata: {},
     sort: 'docket',
-    sortOrder: 'asc'
+    sortOrder: 'asc',
+  },
+];
+
+export const trialSessionCase: TrialSessionCaseKysely[] = [
+  {
+    docketNumber: '108-19',
+    addedToSessionAt: calculateDate({ dateString: '2020-06-05T18:02:25.280Z' }),
+    isManuallyAdded: false,
+    trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    removedFromTrial: false,
+    isHearing: false,
+    calendarNotes: null,
+    disposition: null,
+    removedFromTrialDate: null
+  },
+  {
+    docketNumber: '101-20',
+    addedToSessionAt: calculateDate({ dateString: '2020-06-05T18:02:25.280Z' }),
+    isManuallyAdded: false,
+    trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    removedFromTrial: false,
+    isHearing: false,
+    calendarNotes: null,
+    disposition: null,
+    removedFromTrialDate: null
+  },
+  {
+    docketNumber: '103-20',
+    isManuallyAdded: true,
+    addedToSessionAt: calculateDate({ dateString: '2020-06-05T18:02:25.280Z' }),
+    removedFromTrial: false,
+    trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+    isHearing: false,
+    calendarNotes: null,
+    disposition: null,
+    removedFromTrialDate: null
   },
 ];

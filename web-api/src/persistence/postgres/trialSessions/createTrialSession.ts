@@ -3,7 +3,7 @@ import {
   TrialSession,
 } from '@shared/business/entities/trialSessions/TrialSession';
 import { pgInsertInto } from '../utils/operation/pgInsertInto';
-import { fromKyselyTrialSession, toKyselyNewTrialSession } from './mapper';
+import { fromKyselyTrialSession, toKyselyNewTrialSession, toKyselyNewTrialSessionCase } from './mapper';
 
 export const createTrialSession = async ({
   trialSession,
@@ -19,7 +19,7 @@ export const createTrialSession = async ({
 
   if (!result) throw Error('CreateTrialSession failed to create a record!!');
   let paperPdfs: any[] = [];
-  if (trialSession.paperServicePdfs) {
+  if (trialSession.paperServicePdfs.length) {
     const THREE_DAYS =
       Math.floor(Date.now() / 1000) + TrialSession.PAPER_SERVICE_PDF_TTL;
 
@@ -33,6 +33,19 @@ export const createTrialSession = async ({
       table: 'dwTrialSessionPaperPdf',
       values: paperPdfs,
       onConflictColumns: ['fileId', 'trialSessionId'],
+    });
+  }
+
+  if (trialSession.caseOrder.length) {
+    await pgInsertInto({
+      table: 'dwTrialSessionCase',
+      values: trialSession.caseOrder.map(co =>
+        toKyselyNewTrialSessionCase({
+          ...co,
+          trialSessionId: trialSession.trialSessionId,
+        }),
+      ),
+      onConflictColumns: ['trialSessionId', 'docketNumber'],
     });
   }
 
