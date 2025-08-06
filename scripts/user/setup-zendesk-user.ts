@@ -30,22 +30,24 @@ const cognitoClient = new CognitoIdentityProvider({
 });
 const secretsClient = new SecretsManagerClient({ region: 'us-east-1' });
 
-const loadSecrets = async (environmentName: string): Promise<any> => {
+const loadSecrets = async (secretsName: string): Promise<any> => {
   const getSecretValueCommand = new GetSecretValueCommand({
-    SecretId: `${environmentName}_deploy`,
+    SecretId: secretsName,
   });
   const { SecretString } = await secretsClient.send(getSecretValueCommand);
   if (!SecretString) {
-    throw new Error(`could not load secrets for ${environmentName}_deploy`);
+    throw new Error(`could not load secrets for ${secretsName}`);
   }
   const secrets = JSON.parse(SecretString);
   console.log('✅ Retrieved secrets');
   return secrets;
 };
 
+// only to be run in prod or dev which have need for a zendesk user
 // eslint-disable-next-line @typescript-eslint/no-floating-promises
 (async () => {
-  const secrets = await loadSecrets(env);
+  const secrets = await loadSecrets(`${env}_deploy`);
+  const zendeskSecrets = await loadSecrets(`${env}/ZendeskDawson`);
 
   const USTC_ZENDESK_USER = 'ustczendesk@dawson.ustaxcourt.gov';
   const arbitraryUserId = getUniqueId();
@@ -95,7 +97,17 @@ const loadSecrets = async (environmentName: string): Promise<any> => {
     }),
   });
 
+  const putZendeskSecretValueCommand = new PutSecretValueCommand({
+    SecretId: `${env}/ZendeskDawson`,
+    SecretString: JSON.stringify({
+      ...zendeskSecrets,
+      USTC_ZENDESK_USER,
+      USTC_ZENDESK_PASS,
+    }),
+  });
+
   await secretsClient.send(putSecretValueCommand);
+  await secretsClient.send(putZendeskSecretValueCommand);
 
   console.log('Done!');
 })();
