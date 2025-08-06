@@ -133,22 +133,27 @@ export const setTrialSessionCalendarInteractor = async (
         return theCase.validate().toRawObject();
       });
 
-    const [eligibleCaseEntities, caseOrdersToAdd] = eligibleCases.map(c => {
+    const caseOrdersToAdd: TCaseOrder[] = [];
+    const caseOrdersToDelete: TCaseOrder[] = [];
+
+    const eligibleCaseEntities = eligibleCases.map(c => {
       const theCase = new Case(c, { authorizedUser });
       theCase.setAsCalendared(trialSessionEntity);
-      const caseOrderObject = trialSessionEntity.addCaseToCalendar(theCase);
-      return [theCase.validate().toRawObject(), caseOrderObject];
-    }) as [ExcludeMethods<Case>[], TCaseOrder[]];
+      caseOrdersToAdd.push( trialSessionEntity.addCaseToCalendar(theCase));
+      return theCase.validate().toRawObject();
+    });
 
-    const [manuallyAddedQcIncompleteCaseEntities, caseOrdersToDelete] =
+    const manuallyAddedQcIncompleteCaseEntities =
       manuallyAddedQcIncompleteCases.map(c => {
         const theCase = new Case(c, { authorizedUser });
         theCase.removeFromTrialWithAssociatedJudge();
-        const caseOrderObject = trialSessionEntity.deleteCaseFromCalendar({
-          docketNumber: theCase.docketNumber,
-        });
-        return [theCase.validate().toRawObject(), caseOrderObject];
-      }) as [ExcludeMethods<Case>[], TCaseOrder[]];
+        caseOrdersToDelete.push(
+          trialSessionEntity.deleteCaseFromCalendar({
+            docketNumber: theCase.docketNumber,
+          })!,
+        );
+        return theCase.validate().toRawObject();
+      });
 
     const caseEntitiesToCalendar = [
       ...manuallyAddedQcCompleteCaseEntities,
