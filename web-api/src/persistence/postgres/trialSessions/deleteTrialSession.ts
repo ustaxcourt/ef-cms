@@ -5,7 +5,7 @@ export const deleteTrialSession = async ({
   trialSessionId,
 }: {
   trialSessionId: string;
-}) => {
+}): Promise<void>  => {
   await settlePromises([
     pgDeleteFrom({
       table: 'dwTrialSessionCase',

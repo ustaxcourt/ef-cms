@@ -6,11 +6,11 @@ export const upsertTrialSessionWorkingCopy = async ({
   trialSessionWorkingCopyToUpdate,
 }: {
   trialSessionWorkingCopyToUpdate: RawTrialSessionWorkingCopy;
-}): Promise<any> =>
+}): Promise<void> =>{
   await pgInsertInto({
     table: 'dwTrialSessionWorkingCopy',
     values: [
       toKyselyNewTrialSessionWorkingCopy(trialSessionWorkingCopyToUpdate),
     ],
     onConflictColumns: ['trialSessionId', 'userId'],
-  });
+  });};

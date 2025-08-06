@@ -16,7 +16,7 @@ export const updateTrialSessionNotificationProcessing = async ({
   caseStatus?: {
     [index: string]: trialSessionNotificationProcessingCaseStatusType;
   };
-}) => {
+}): Promise<void>  => {
   await pgUpdateTable({
     table: 'dwTrialSessionNotificationProcessing',
     values: eb => ({

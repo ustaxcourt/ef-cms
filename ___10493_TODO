@@ -1,15 +1,15 @@
 # TODOS FOR 10493
 
-- [ ] hasNottBeenServed will have a casing issue
-- [ ] Determine what columns are actually nullable
+- [X] hasNottBeenServed will have a casing issue
+- [X] Determine what columns are actually nullable
 - [ ] TrialClerk and Judge are both still any in the schema.ts file
 - [x] Need to update mapper from kysley object
-- [ ] Why do some records in dynamo trial-session-working-copy have userCaseNotes??
-- [ ] Deal with SpecialTrialSession type
-- [ ] Add typing to return type on insert and update functions
+- [X] Why do some records in dynamo trial-session-working-copy have userCaseNotes??
+- [x] Deal with SpecialTrialSession type
+- [x] Add typing to return type on insert and update functions
 - [x] Figure out differences between trial sessions and hearings
-- [ ] Maybe come back and refactor the mapping table for cases and trial hearings
-- [ ] Ensure the hearings are sorted just as there were in the case entity (.sort((a, b) => compareStrings(a.createdAt, b.createdAt));)
+- [x] Maybe come back and refactor the mapping table for cases and trial hearings
+- [x] Ensure the hearings are sorted just as there were in the case entity (.sort((a, b) => compareStrings(a.createdAt, b.createdAt));)
 - [ ] Check usages of \_applicationContext for any that should be removed
 - [ ] Determine if we want to add an onConflictIgnore for pgInsertInto (or else maybe a devex ticket?)
 

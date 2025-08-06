@@ -345,6 +345,7 @@ async function getHearings(
       .selectAll('ts')
       .where('ch.docketNumber', 'in', docketNumbers)
       .where('ch.isHearing', 'is', true)
+      .orderBy('ts.createdAt', 'asc')
       .execute(),
   );
   const hearingsInfo = Object.values(

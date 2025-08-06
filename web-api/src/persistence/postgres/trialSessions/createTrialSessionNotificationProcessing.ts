@@ -7,7 +7,7 @@ export const createTrialSessionNotificationProcessing = async ({
 }: {
   unfinishedCasesCount: number,
   trialSessionId: string;
-}) => {
+}): Promise<void> => {
   const status: trialSessionNotificationProcessingStatusType = 'processing';
 
   await pgInsertInto({

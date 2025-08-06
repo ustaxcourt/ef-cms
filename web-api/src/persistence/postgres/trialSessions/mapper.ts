@@ -93,11 +93,11 @@ export function fromKyselyTrialSession(
     proceedingType: record.proceedingType as TrialSessionProceedingType,
     sessionScope: record.sessionScope as TrialSessionScope,
     sessionType: record.sessionType as TrialSessionTypes,
-    caseOrder: caseOrder.map(co => fromKyselyTrialSessionCase(co)) || [],
-    paperServicePdfs: paperPdfs.map(pdf => ({
+    caseOrder: caseOrder?.map(co => fromKyselyTrialSessionCase(co)) || [],
+    paperServicePdfs: paperPdfs?.map(pdf => ({
       fileId: pdf.fileId,
       title: pdf.title,
-    })),
+    })) || [],
   });
 }
 
