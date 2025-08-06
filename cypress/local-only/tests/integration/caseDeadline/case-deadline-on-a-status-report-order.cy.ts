@@ -1,4 +1,9 @@
-import { formatNow, FORMATS } from '@shared/business/utilities/DateHandler';
+import {
+  createISODateString,
+  formatNow,
+  FORMATS,
+  getBusinessDateInFuture,
+} from '@shared/business/utilities/DateHandler';
 import {
   loginAsColvin,
   loginAsDocketClerk,
@@ -11,10 +16,18 @@ import { createTrialSession } from 'cypress/helpers/trialSession/create-trial-se
 import { getLastDraftOrderElementFromDrafts } from 'cypress/local-only/support/statusReportOrder';
 
 describe('Case Deadline Auto Generation from Status Report Order', () => {
-  const today = formatNow(FORMATS.MMDDYYYY);
-  const todayDate = formatNow(FORMATS.MMDDYY);
-  const futureDate = '01/01/2050';
-  const futureDateFormatted = '01/01/50';
+  const todayDate = formatNow(FORMATS.MMDDYYYY);
+  const todayDateFormatted = formatNow(FORMATS.MMDDYY);
+  const futureDate = getBusinessDateInFuture({
+    numberOfDays: 30,
+    outputFormat: FORMATS.MMDDYYYY,
+    startDate: createISODateString(todayDate, FORMATS.MMDDYYYY),
+  });
+  const futureDateFormatted = getBusinessDateInFuture({
+    numberOfDays: 30,
+    outputFormat: FORMATS.MMDDYY,
+    startDate: createISODateString(todayDate, FORMATS.MMDDYYYY),
+  });
   const editDescriptionText = 'test from alex';
 
   let docketNumber: string;
@@ -46,7 +59,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
     cy.contains('button span', 'Status Report').closest('button').click();
     cy.get('[data-testid="status-report-order-button"]').click();
     cy.get('[data-testid="order-type-status-report"]').check({ force: true });
-    cy.get('#status-report-due-date-picker').type(today);
+    cy.get('#status-report-due-date-picker').type(todayDate);
     cy.get('[data-testid="save-draft-button"]').click();
     cy.get('[data-testid="sign-pdf-canvas"]').click();
     cy.get('[data-testid="save-signature-button"]').click();
@@ -62,7 +75,10 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
       'contain',
       'Status Report Due',
     );
-    cy.get('[data-testid="case-deadline-date"]').should('contain', todayDate);
+    cy.get('[data-testid="case-deadline-date"]').should(
+      'contain',
+      todayDateFormatted,
+    );
 
     // check if edit functionality works
     cy.get('[data-testid="case-deadline-edit-button"]').click();
@@ -98,7 +114,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
     cy.get(
       '[data-testid="order-type-status-report-or-stipulated-decision"]',
     ).check({ force: true });
-    cy.get('#status-report-due-date-picker').type(today);
+    cy.get('#status-report-due-date-picker').type(todayDate);
     cy.get('[data-testid="save-draft-button"]').click();
     cy.get('[data-testid="sign-pdf-canvas"]').click();
     cy.get('[data-testid="save-signature-button"]').click();
@@ -114,7 +130,10 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
       'contain',
       'Status Report or Proposed Stipulated Decision Due',
     );
-    cy.get('[data-testid="case-deadline-date"]').should('contain', todayDate);
+    cy.get('[data-testid="case-deadline-date"]').should(
+      'contain',
+      todayDateFormatted,
+    );
 
     // delete the case deadline
     cy.get('[data-testid="delete-case-deadline-button"]').click();
@@ -130,7 +149,7 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
     cy.contains('button span', 'Status Report').closest('button').click();
     cy.get('[data-testid="status-report-order-button"]').click();
     cy.get('[data-testid="order-type-status-report"]').check({ force: true });
-    cy.get('#status-report-due-date-picker').type(today);
+    cy.get('#status-report-due-date-picker').type(todayDate);
     cy.get('[data-testid="save-draft-button"]').click();
     cy.get('[data-testid="sign-pdf-canvas"]').click();
     cy.get('[data-testid="save-signature-button"]').click();
@@ -146,7 +165,10 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
       'contain',
       'Status Report Due',
     );
-    cy.get('[data-testid="case-deadline-date"]').should('contain', todayDate);
+    cy.get('[data-testid="case-deadline-date"]').should(
+      'contain',
+      todayDateFormatted,
+    );
 
     for (const child of memberDocketNumbers) {
       cy.visit(`/case-detail/${child}`);
@@ -155,7 +177,10 @@ describe('Case Deadline Auto Generation from Status Report Order', () => {
         'contain',
         'Status Report Due',
       );
-      cy.get('[data-testid="case-deadline-date"]').should('contain', todayDate);
+      cy.get('[data-testid="case-deadline-date"]').should(
+        'contain',
+        todayDateFormatted,
+      );
     }
   });
 });
