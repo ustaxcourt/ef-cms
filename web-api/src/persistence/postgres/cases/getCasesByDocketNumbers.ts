@@ -15,6 +15,7 @@ import { DocketEntryKysely } from '@web-api/persistence/postgres/docketEntries/s
 import { difference, isEmpty, sortBy } from 'lodash';
 import { TrialSessionKysely } from '../trialSessions/schema';
 import { fromKyselyTrialSession } from '@web-api/persistence/postgres/trialSessions/mapper';
+import { jsonArrayFrom } from 'kysely/helpers/postgres';
 
 export const ALL_OMITTABLE_CASE_FIELDS = [
   'docketEntries',
@@ -219,7 +220,7 @@ function convertDbCaseToRawCase(
     archivedDocketEntries: dbCase.archivedDocketEntries.map(aD =>
       fromKyselyDocketEntry(aD),
     ),
-    hearings: dbCase.hearings.map(hi => fromKyselyTrialSession(hi, [])),
+    hearings: dbCase.hearings.map(hi => fromKyselyTrialSession(hi, hi.pdf, hi.caseOrders)),
   };
 
   return purgeDynamoKeys(appCase);
@@ -336,24 +337,49 @@ async function getHearings(
   const hearingsInfoRaw = await getDbReader(reader =>
     reader
       .selectFrom('dwTrialSessionCase as ch')
+      .select(['ch.trialSessionId', 'ch.docketNumber'])
       .innerJoin(
         'dwTrialSession as ts',
         'ch.trialSessionId',
         'ts.trialSessionId',
       )
-      .selectAll()
+      .selectAll('ts')
+      .select(eb =>
+        jsonArrayFrom(
+          eb
+            .selectFrom('dwTrialSessionPaperPdf as tspdf')
+            .select('title')
+            .select('fileId')
+            .whereRef('tspdf.trialSessionId', '=', 'ts.trialSessionId'),
+        ).as('pdfs'),
+      )
+      .select(eb =>
+        jsonArrayFrom(
+          eb
+            .selectFrom('dwTrialSessionCase as tsc')
+            .selectAll() // Types WILL lie to us
+            .whereRef('tsc.trialSessionId', '=', 'ts.trialSessionId'),
+        ).as('caseOrders'),
+      )
       .where('ch.docketNumber', 'in', docketNumbers)
+      .where('ch.isHearing', 'is', true)
       .execute(),
   );
   const hearingsInfo = Object.values(
-    hearingsInfoRaw.reduce((acc, item) => {
-      const { docketNumber, ...rest } = item;
-      if (!acc[docketNumber]) {
-        acc[docketNumber] = { docketNumber, hearings: [] };
-      }
-      acc[docketNumber].hearings.push(rest);
-      return acc;
-    }, {} as Record<string, { docketNumber: string; hearings: TrialSessionKysely[] }>),
+    hearingsInfoRaw.reduce(
+      (acc, item) => {
+        const { docketNumber, ...rest } = item;
+        if (!acc[docketNumber]) {
+          acc[docketNumber] = { docketNumber, hearings: [] };
+        }
+        acc[docketNumber].hearings.push(rest);
+        return acc;
+      },
+      {} as Record<
+        string,
+        { docketNumber: string; hearings: TrialSessionKysely[] }
+      >,
+    ),
   );
 
   return hearingsInfo;

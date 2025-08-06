@@ -43,8 +43,8 @@ const addCaseToTrialSession = async (
   }
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -66,9 +66,15 @@ const addCaseToTrialSession = async (
     throw new Error('The case is already part of this trial session.');
   }
 
-  // TODO Check if we need deleteCaseFromCalnder
-  trialSessionEntity.deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-  const caseOrder = trialSessionEntity.manuallyAddCaseToCalendar({ calendarNotes, caseEntity, isHearing: false });
+  // Removing and adding the case in memory to match the change we will make in the DB
+  trialSessionEntity.deleteCaseFromCalendar({
+    docketNumber: caseEntity.docketNumber,
+  });
+  const caseOrder = trialSessionEntity.manuallyAddCaseToCalendar({
+    calendarNotes,
+    caseEntity,
+    isHearing: false,
+  });
 
   caseEntity.setAsCalendared(trialSessionEntity);
 
@@ -78,12 +84,14 @@ const addCaseToTrialSession = async (
   });
 
   await createOrUpdateTrialSessionCases({
-    trialSessionCases: [{
-      caseOrder,
-      docketNumber,
-      isHearing: false,
-      trialSessionId
-    }]
+    trialSessionCases: [
+      {
+        caseOrder,
+        docketNumber,
+        isHearing: false,
+        trialSessionId,
+      },
+    ],
   });
 
   return new Case(updatedCase, { authorizedUser }).validate().toRawObject();

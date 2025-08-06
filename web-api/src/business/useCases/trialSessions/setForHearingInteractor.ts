@@ -26,8 +26,8 @@ export const setForHearingInteractor = async (
   }
 
   const trialSession = await getTrialSessionById({
-      trialSessionId,
-    });
+    trialSessionId,
+  });
 
   if (!trialSession) {
     throw new NotFoundError(`Trial session ${trialSessionId} was not found.`);
@@ -53,16 +53,26 @@ export const setForHearingInteractor = async (
     throw new Error('That Hearing is already assigned to the Case');
   }
 
-  // TODO Check if we need deleteCaseFromCalnder
-  trialSessionEntity.deleteCaseFromCalendar({ docketNumber: caseEntity.docketNumber }) // we delete because it might have been manually removed
-  const caseOrder = trialSessionEntity.manuallyAddCaseToCalendar({ calendarNotes, caseEntity, isHearing: true });
-
-  await createOrUpdateTrialSessionCases({trialSessionCases: [{
-    docketNumber,
-    caseOrder,
-    trialSessionId,
+  // Removing and adding the case in memory to match the change we will make in the DB
+  trialSessionEntity.deleteCaseFromCalendar({
+    docketNumber: caseEntity.docketNumber,
+  });
+  const caseOrder = trialSessionEntity.manuallyAddCaseToCalendar({
+    calendarNotes,
+    caseEntity,
     isHearing: true,
-  }]});
+  });
+
+  await createOrUpdateTrialSessionCases({
+    trialSessionCases: [
+      {
+        docketNumber,
+        caseOrder,
+        trialSessionId,
+        isHearing: true,
+      },
+    ],
+  });
 
   // retrieve the case again since we've added the mapped hearing record :)
   const updatedCase = await getCaseByDocketNumber({
