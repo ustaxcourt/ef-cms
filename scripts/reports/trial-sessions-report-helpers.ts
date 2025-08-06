@@ -39,11 +39,9 @@ const getTrialSessionsCache = async (): Promise<RawTrialSession[]> => {
 };
 
 const getTrialSessionsInTimeframe = async ({
-  applicationContext,
   end,
   start,
 }: {
-  applicationContext: ServerApplicationContext;
   end: string;
   start: string;
 }): Promise<RawTrialSession[]> => {
@@ -126,7 +124,6 @@ const outputTrialSessionsStats = ({
 };
 
 export const trialSessionsReport = async ({
-  applicationContext,
   end,
   filename,
   start,
@@ -139,7 +136,6 @@ export const trialSessionsReport = async ({
   stats: boolean;
 }): Promise<void> => {
   const trialSessions = await getTrialSessionsInTimeframe({
-    applicationContext,
     end,
     start,
   });
