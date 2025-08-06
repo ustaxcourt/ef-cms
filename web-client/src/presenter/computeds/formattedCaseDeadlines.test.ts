@@ -23,7 +23,7 @@ describe('formattedCaseDeadlines', () => {
 
   const oneMonthFromNowMMDDYY = formatDateString(oneMonthFromNowISO, 'MMDDYY');
 
-  it('formats deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
+  it('should format deadline dates, sorts them by date, and sets overdue to true if date is before today', () => {
     const caseDeadlines = [
       {
         deadlineDate: '2019-06-30T04:00:00.000Z',
@@ -57,9 +57,9 @@ describe('formattedCaseDeadlines', () => {
         displayEditAndDeleteLink: true,
       },
       {
-        displayEditAndDeleteLink: true,
         deadlineDate: oneMonthFromNowISO,
         deadlineDateFormatted: oneMonthFromNowMMDDYY,
+        displayEditAndDeleteLink: true,
       },
     ]);
   });

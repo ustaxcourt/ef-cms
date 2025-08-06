@@ -15,7 +15,7 @@ import { getCaseDeadlinesByConsolidatedCaseDeadlineId } from '@web-api/persisten
 import { withLocking } from '@web-api/persistence/postgres/utils/mutex';
 
 export const deleteCaseDeadline = async (
-  applicationContext: ServerApplicationContext,
+  _applicationContext: ServerApplicationContext,
   {
     caseDeadlineId,
     docketNumber,
@@ -70,7 +70,7 @@ export const deleteCaseDeadline = async (
         ({ docketNumber: ccDocketNumber }) => ccDocketNumber !== docketNumber,
       ).map(({ docketNumber: ccDocketNumber, caseDeadlineId }) => {
         return deleteCaseDeadline(
-          applicationContext,
+          _applicationContext,
           {
             caseDeadlineId,
             docketNumber: ccDocketNumber,
