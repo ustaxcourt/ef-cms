@@ -366,6 +366,10 @@ jobs:
           command: |
             ./scripts/env/env-for-circle.sh
       - run:
+          name: Migrate Practitioner Documents from Dynamo to Postgres
+          command: |
+            ./scripts/run-once-scripts/postgres-migration/migrateAllPractitionerDocumentsIntoPostgres.ts
+      - run:
           name: Migrate Feature Flags from Dynamo to Postgres
           command: |
             ./scripts/run-once-scripts/postgres-migration/migrate-feature-flags-dynamo-to-postgres.ts

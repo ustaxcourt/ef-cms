@@ -64,6 +64,10 @@ import {
   MinuteSheetTable,
 } from '@web-api/persistence/postgres/minuteSheets/schema';
 import {
+  DW_PRACTITIONER_DOCUMENT_COLUMNS,
+  PractitionerDocumentTable,
+} from '@web-api/persistence/postgres/practitionerDocuments/schema';
+import {
   DW_USER_COLUMNS,
   UserTable,
 } from '@web-api/persistence/postgres/users/schema';
@@ -104,6 +108,7 @@ interface DatabaseSchemaType {
   dwDocketEntryWorksheet: DatabaseTableMetadata<DocketEntryWorksheetTable>;
   dwMessage: DatabaseTableMetadata<MessageTable>;
   dwMinuteSheet: DatabaseTableMetadata<MinuteSheetTable>;
+  dwPractitionerDocuments: DatabaseTableMetadata<PractitionerDocumentTable>;
   dwNotification: DatabaseTableMetadata<NotificationTable>;
   dwUser: DatabaseTableMetadata<UserTable>;
   dwResponseString: DatabaseTableMetadata<ResponseStringTable>;
@@ -179,6 +184,10 @@ export const DatabaseSchema: DatabaseSchemaType = {
   dwMinuteSheet: {
     table: DEFAULT as MinuteSheetTable,
     columns: DW_MINUTE_SHEET_COLUMNS,
+  },
+  dwPractitionerDocuments: {
+    table: DEFAULT as PractitionerDocumentTable,
+    columns: DW_PRACTITIONER_DOCUMENT_COLUMNS,
   },
   dwNotification: {
     table: DEFAULT as NotificationTable,
