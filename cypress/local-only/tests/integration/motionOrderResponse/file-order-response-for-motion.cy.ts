@@ -184,7 +184,7 @@ describe('file motion response order', function () {
     describe('Consolidated Cases', () => {
       before(() => {
         // create another case to add to our initial case as a consolidated case));
-        createAndServeConsolidatedGroup().then(({ leadDocketNumber }) => {
+        createAndServeConsolidatedGroup({}).then(({ leadDocketNumber }) => {
           loginAsCaseServicesSupervisor();
           cy.visit(`/case-detail/${leadDocketNumber}`);
 
