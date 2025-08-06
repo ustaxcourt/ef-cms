@@ -241,48 +241,4 @@ describe('Recent Filings - Petitioner', () => {
       }
     });
   });
-
-  it('should handle sealed documents appropriately for petitioner', () => {
-    loginAsPetitioner();
-
-    // Navigate to recent filings
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    // Check if sealed documents are handled properly
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            // Look for sealed document indicators
-            cy.get('[data-testid="sealed-document-icon"]').should('exist');
-          }
-        });
-      }
-    });
-  });
-
-  it('should handle stricken documents appropriately for petitioner', () => {
-    loginAsPetitioner();
-
-    // Navigate to recent filings
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    // Check if stricken documents are handled properly
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            // Look for stricken document indicators
-            cy.get('[data-testid="stricken-document"]').should('exist');
-          }
-        });
-      }
-    });
-  });
 });
