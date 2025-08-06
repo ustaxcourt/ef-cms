@@ -105,7 +105,7 @@ export const orderAdvancedSearchInteractor = async (
     results,
     authorizedUser,
   ).slice(from, from + ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE);
-
+  console.log('FILTEREDRESULTS:', filteredResults);
   return {
     results:
       InternalDocumentSearchResult.validateRawCollection(filteredResults),

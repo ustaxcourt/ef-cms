@@ -61,7 +61,7 @@ export const advancedDocumentSearchHelper = (
           applicationContext,
         }),
       );
-    console.log('Search results: ', paginatedResults.formattedSearchResults);
+    console.log('Formatted results: ', paginatedResults.formattedSearchResults);
     // Sorting logic
     // paginatedResults.formattedSearchResults =
     //   paginatedResults.formattedSearchResults.sort((a, b) => {
@@ -103,7 +103,7 @@ export const advancedDocumentSearchHelper = (
   return {
     numberOfResults: searchResults?.length,
     ...paginatedResults,
-    formattedSearchResults: searchResults.results,
+    formattedSearchResults: searchResults,
     documentTypeVerbiage,
     formattedJudges,
     isInternalUser,
