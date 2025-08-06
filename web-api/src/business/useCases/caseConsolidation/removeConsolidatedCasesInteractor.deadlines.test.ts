@@ -72,7 +72,7 @@ describe('removeConsolidatedCasesInteractor deadlines', () => {
     });
   });
 
-  it('should update the the "consolidatedCaseDeadlineId" for all the deadlines from the lead being removed if there is only one case left in the group', async () => {
+  it('should update the the "consolidatedCaseDeadlineId" for all the deadlines if the lead is removed and is the only case left in the group', async () => {
     getCaseDeadlinesByDocketNumber.mockResolvedValue([
       {
         caseDeadlineId: 'TEST_CASE_DEADLINE_ID',
