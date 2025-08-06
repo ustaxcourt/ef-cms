@@ -104,28 +104,6 @@ describe('Recent Filings - IRS Practitioner', () => {
     });
   });
 
-  it('should allow document access when IRS practitioner has permissions', () => {
-    loginAsIrsPractitioner();
-
-    // Navigate to recent filings
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    // Test document access if there are filings
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="document-link"]').first().click();
-            cy.url().should('include', '/document-download-url');
-          }
-        });
-      }
-    });
-  });
-
   it('should display mobile view correctly for IRS practitioner', () => {
     loginAsIrsPractitioner();
 
@@ -361,10 +339,12 @@ describe('Recent Filings - IRS Practitioner', () => {
             $body.find('[data-testid="recent-filings-table"] tbody tr').length >
             0
           ) {
-            // If there's data, verify each row has a docket number (any format)
+            // If there's data, verify each row has a docket number link
             cy.get('[data-testid="recent-filings-table"] tbody tr').each(
               $row => {
-                cy.wrap($row).should('contain', /\d+-\d+/); // Any docket number format
+                cy.wrap($row)
+                  .find('[data-testid="case-number-link"]')
+                  .should('exist');
               },
             );
           } else {

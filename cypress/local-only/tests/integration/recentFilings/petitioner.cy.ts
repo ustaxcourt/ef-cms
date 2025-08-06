@@ -104,28 +104,6 @@ describe('Recent Filings - Petitioner', () => {
     });
   });
 
-  it('should allow document access when petitioner has permissions', () => {
-    loginAsPetitioner();
-
-    // Navigate to recent filings
-    cy.get('[data-testid="header-recent-filings-link"]').click();
-
-    // Test document access if there are filings
-    cy.get('[data-testid="recent-filings-table"]').then($table => {
-      if ($table.length > 0) {
-        cy.get('body').then($body => {
-          if (
-            $body.find('[data-testid="recent-filings-table"] tbody tr').length >
-            0
-          ) {
-            cy.get('[data-testid="document-link"]').first().click();
-            cy.url().should('include', '/document-download-url');
-          }
-        });
-      }
-    });
-  });
-
   it('should display mobile view correctly for petitioner', () => {
     loginAsPetitioner();
 

@@ -204,10 +204,12 @@ describe('Recent Filings - Private Practitioner', () => {
             $body.find('[data-testid="recent-filings-table"] tbody tr').length >
             0
           ) {
-            // If there's data, verify each row has a docket number (any format)
+            // If there's data, verify each row has a docket number link
             cy.get('[data-testid="recent-filings-table"] tbody tr').each(
               $row => {
-                cy.wrap($row).should('contain', /\d+-\d+/); // Any docket number format
+                cy.wrap($row)
+                  .find('[data-testid="case-number-link"]')
+                  .should('exist');
               },
             );
           } else {
