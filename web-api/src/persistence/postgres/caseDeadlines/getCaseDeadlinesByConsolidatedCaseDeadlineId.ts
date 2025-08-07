@@ -18,7 +18,7 @@ export const getCaseDeadlinesByConsolidatedCaseDeadlineId = async (
 
         return q.or([
           q('cd.caseDeadlineId', 'in', IDS),
-          q('cd.consolidatedCaseDeadlineId', '=', consolidatedCaseDeadlineIds),
+          q('cd.consolidatedCaseDeadlineId', 'in', IDS),
         ]);
       });
 

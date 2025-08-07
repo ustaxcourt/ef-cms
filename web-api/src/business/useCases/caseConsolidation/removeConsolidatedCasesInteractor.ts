@@ -81,6 +81,11 @@ const removeConsolidatedCases = async (
       );
     }
 
+		// TODO: POTENTIALLY A BUG (INVESTIGATE)..... 
+		// down below we remove the parent id, 
+		// this metod updates it.... 
+		// if this runs second (in the Promise.all)
+		// it has a parent even though it is not in a group no more
     updateCasePromises.push(
       updateConsolidatedCaseDeadlineReferenceId(
         leadDocketNumber,

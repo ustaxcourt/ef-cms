@@ -117,7 +117,10 @@ export const updateCaseContext = async (
         },
       );
 
-      if (oldCase.docketNumber === oldCase.leadDocketNumber) {
+      if (
+        oldCase.docketNumber === oldCase.leadDocketNumber &&
+        caseDeadlines.length
+      ) {
         const LEAD_CASE_DEADLINES = caseDeadlines.map(cd => cd.caseDeadlineId);
         const CHILDREN_DEADLINES =
           await getCaseDeadlinesByConsolidatedCaseDeadlineId(
