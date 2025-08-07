@@ -67,6 +67,14 @@ const removeConsolidatedCases = async (
     newConsolidatedCases.length > 1
   ) {
     const newLeadCase = Case.findLeadCaseForCases(newConsolidatedCases)!;
+
+    // the query contained in this function needs the case table to have the original leadDocketNumber,
+    // and therefore should be run before other updates are made
+    await updateConsolidatedCaseDeadlineReferenceId(
+      leadDocketNumber,
+      newLeadCase.docketNumber,
+    );
+
     for (const newConsolidatedCaseToUpdate of newConsolidatedCases) {
       const caseEntity = new Case(newConsolidatedCaseToUpdate, {
         authorizedUser,
@@ -80,18 +88,6 @@ const removeConsolidatedCases = async (
         }),
       );
     }
-
-		// TODO: POTENTIALLY A BUG (INVESTIGATE)..... 
-		// down below we remove the parent id, 
-		// this metod updates it.... 
-		// if this runs second (in the Promise.all)
-		// it has a parent even though it is not in a group no more
-    updateCasePromises.push(
-      updateConsolidatedCaseDeadlineReferenceId(
-        leadDocketNumber,
-        newLeadCase.docketNumber,
-      ),
-    );
   } else if (newConsolidatedCases.length == 1) {
     // a case cannot be consolidated with itself
     const caseEntity = new Case(newConsolidatedCases[0], {
