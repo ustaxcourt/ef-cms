@@ -2,7 +2,6 @@ import { ServerApplicationContext } from '@web-api/applicationContext';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
 import { partitionRecords } from './processStreamUtilities';
 import { processCompletionMarkers } from './processCompletionMarkers';
-import { processDocketEntries } from './processDocketEntries';
 import { processOtherEntries } from './processOtherEntries';
 import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
 import { processRemoveEntries } from './processRemoveEntries';
@@ -14,7 +13,6 @@ export const processStreamRecordsInteractor = async (
 ): Promise<void> => {
   const {
     completionMarkers,
-    docketEntryRecords,
     otherRecords,
     practitionerMappingRecords,
     removeRecords,
@@ -26,15 +24,6 @@ export const processStreamRecordsInteractor = async (
       removeRecords,
     }).catch(err => {
       getDawsonLogger().error('failed to processRemoveEntries', {
-        err,
-      });
-      throw err;
-    });
-
-    await processDocketEntries({
-      docketEntryRecords,
-    }).catch(err => {
-      getDawsonLogger().error('failed to processDocketEntries', {
         err,
       });
       throw err;
