@@ -10,8 +10,6 @@ describe('Trial Session Eligible Cases Journey', () => {
     const trialLocation = `Phoenix, Arizona`;
     let trialSessionId: string;
     const createdDocketNumbers: string[] = [];
-    let calendaredDocketNumbers: string[] = [];
-    let uncalendaredDocketNumbers: string[] = [];
 
     it('should create trial session and cases, then verify eligible cases are properly assigned', () => {
         // Step 1: Create trial session with Small session type
@@ -31,6 +29,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createAndServePaperPetition({
             procedureType: 'Small',
             trialLocation,
+            caseType: 'Other',
             yearReceived: '2019',
         }).then(({ docketNumber }) => {
             createdDocketNumbers.push(docketNumber);
@@ -46,6 +45,7 @@ describe('Trial Session Eligible Cases Journey', () => {
             procedureType: 'Small',
             trialLocation,
             yearReceived: '2019',
+            caseType: 'Other'
         }).then(({ docketNumber }) => {
             createdDocketNumbers.push(docketNumber);
 
@@ -73,6 +73,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createAndServePaperPetition({
             procedureType: 'Small',
             trialLocation,
+            caseType: 'CDP (Lien/Levy)',
             yearReceived: '2019',
         }).then(({ docketNumber }) => {
             createdDocketNumbers.push(docketNumber);
@@ -87,6 +88,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         createAndServePaperPetition({
             procedureType: 'Small',
             trialLocation,
+            caseType: 'Passport',
             yearReceived: '2019',
         }).then(({ docketNumber }) => {
             createdDocketNumbers.push(docketNumber);
@@ -140,67 +142,45 @@ describe('Trial Session Eligible Cases Journey', () => {
             // Verify that 3 cases are calendared (Case #4, #5, #1)
             cy.get('[data-testid="open-cases-count"]').should('contain', '3');
 
-            // Verify the specific cases are calendared (without assuming order)
-            const qcDocketNumbers = [
-                createdDocketNumbers[3],
-                createdDocketNumbers[4],
-                createdDocketNumbers[0],
-                createdDocketNumbers[1]
-            ].sort((a, b) => {
-                // Sort by ascending docket number, e.g., '104-5', '106-25', '109-25'
-                const [aNum, aYear] = a.split('-').map(Number);
-                const [bNum, bYear] = b.split('-').map(Number);
-                if (aYear !== bYear) return aYear - bYear;
-                return aNum - bNum;
-            });
-            calendaredDocketNumbers = [
-                qcDocketNumbers[0],
-                qcDocketNumbers[1],
-                qcDocketNumbers[2],
-            ]
-            // Get the non-calendared docket numbers
-            uncalendaredDocketNumbers = createdDocketNumbers.filter(
-                dn => !calendaredDocketNumbers.includes(dn)
-            );
             cy.get('table#open-cases').within(() => {
-                cy.get('tr').should('contain', calendaredDocketNumbers[0]);
-                cy.get('tr').should('contain', calendaredDocketNumbers[1]);
-                cy.get('tr').should('contain', calendaredDocketNumbers[2]);
+                cy.get('tr').should('contain', createdDocketNumbers[0]);
+                cy.get('tr').should('contain', createdDocketNumbers[3]);
+                cy.get('tr').should('contain', createdDocketNumbers[4]);
             });
         });
 
         // Step 11: Verify case statuses are updated correctly
         cy.then(() => {
             // Case #1 - should be calendared
-            goToCase(calendaredDocketNumbers[0]);
+            goToCase(createdDocketNumbers[0]);
             cy.get('[data-testid="case-status"]').should('contain', CASE_STATUS_TYPES.calendared);
             cy.get('[data-testid="tab-case-information"]').click()
             cy.get('[data-testid="trial-session-location-link"]').should('contain', trialLocation);
 
             // Case #2 - should NOT be calendared
-            goToCase(calendaredDocketNumbers[1]);
+            goToCase(createdDocketNumbers[3]);
             cy.get('[data-testid="case-status"]').should('contain', CASE_STATUS_TYPES.calendared);
             cy.get('[data-testid="tab-case-information"]').click()
             cy.get('[data-testid="trial-session-location-link"]').should('contain', trialLocation);
 
             // Case #3 - should NOT be calendared
-            goToCase(calendaredDocketNumbers[2]);
+            goToCase(createdDocketNumbers[4]);
             cy.get('[data-testid="case-status"]').should('contain', CASE_STATUS_TYPES.calendared);
             cy.get('[data-testid="tab-case-information"]').click()
             cy.get('[data-testid="trial-session-location-link"]').should('contain', trialLocation);
 
             // Case #4 - should be calendared
-            goToCase(uncalendaredDocketNumbers[0]);
+            goToCase(createdDocketNumbers[1]);
             cy.get('[data-testid="case-status"]').should('contain', CASE_STATUS_TYPES.generalDocketReadyForTrial);
 
             // Case #5 - should be calendared
-            goToCase(uncalendaredDocketNumbers[1]);
+            goToCase(createdDocketNumbers[2]);
             cy.get('[data-testid="case-status"]').should('contain', CASE_STATUS_TYPES.generalDocketReadyForTrial);
         });
 
         // // Step 12: Test removing and re-adding a case from trial session
         cy.then(() => {
-            goToCase(calendaredDocketNumbers[0]);
+            goToCase(createdDocketNumbers[0]);
 
             // Remove case from trial session
             cy.get('[data-testid="tab-case-information"]').click()
