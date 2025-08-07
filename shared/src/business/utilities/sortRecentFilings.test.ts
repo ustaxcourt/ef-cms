@@ -689,5 +689,34 @@ describe('sortRecentFilings', () => {
       expect(result[1].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
       expect(result[2].docketNumber).toBe('102-20');
     });
+
+    it('should handle unknown sort field with default case', () => {
+      const filings = [
+        {
+          docketNumber: TEST_DOCKET_NUMBERS.VALID,
+          filedDate: TEST_DATES.MIDDLE,
+          document: TEST_DOCUMENTS.PETITION,
+          caseTitle: TEST_CASE_TITLES.CASE_1,
+          docketEntryId: '1',
+        },
+        {
+          docketNumber: '102-20',
+          filedDate: TEST_DATES.EARLY,
+          document: TEST_DOCUMENTS.ANSWER,
+          caseTitle: TEST_CASE_TITLES.CASE_2,
+          docketEntryId: '2',
+        },
+      ];
+
+      const result = sortRecentFilings(
+        filings,
+        'unknownField' as any,
+        'asc',
+      );
+
+      // Should fall back to filedDate sorting when unknown field is provided
+      expect(result[0].filedDate).toBe(TEST_DATES.EARLY);
+      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
+    });
   });
 });
