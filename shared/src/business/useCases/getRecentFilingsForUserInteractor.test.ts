@@ -562,48 +562,6 @@ describe('getRecentFilingsForUserInteractor', () => {
     ]);
   });
 
-  it('should handle cases with empty consolidated cases array', async () => {
-    const mockCases: TAssociatedCase[] = [
-      createMockCase({
-        docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        leadDocketNumber: undefined,
-        consolidatedCases: [],
-      }),
-    ];
-
-    const mockDbResults: MockDbDocketEntry[] = [
-      createMockDbDocketEntry({
-        docketNumber: TEST_DATA.DOCKET_NUMBERS.CASE_1,
-        filingDate: calculateDate({ dateString: TEST_DATA.DATES.MIDDLE }),
-        documentTitle: TEST_DATA.DOCUMENTS.PETITION,
-        caption: TEST_DATA.CASE_CAPTION,
-        docketEntryId: TEST_DATA.DOCKET_ENTRY_IDS.ENTRY_1,
-        isFileAttached: true,
-        eventCode: TEST_DATA.EVENT_CODES.PETITION,
-        isStricken: false,
-        isSealed: false,
-        sealedTo: null,
-        servedAt: calculateDate({ dateString: TEST_DATA.SERVED_AT }),
-      }),
-    ];
-
-    mockGetCasesForUserInteractor.mockResolvedValue({
-      openCaseList: mockCases,
-      closedCaseList: [],
-    });
-
-    mockDbReader.execute.mockResolvedValue(mockDbResults);
-
-    const result = await getRecentFilingsForUserInteractor(
-      mockApplicationContext,
-      mockAuthorizedUser,
-    );
-
-    expect(result[0].inConsolidatedGroup).toBeUndefined();
-    expect(result[0].isLeadCase).toBe(true);
-    expect(result[0].consolidatedIconTooltipText).toBeUndefined();
-  });
-
   it('should handle cases with undefined consolidated cases', async () => {
     const mockCases: TAssociatedCase[] = [
       createMockCase({

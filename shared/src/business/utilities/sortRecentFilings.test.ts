@@ -554,5 +554,140 @@ describe('sortRecentFilings', () => {
       );
       expect((result[1] as ExtendedRecentFiling).extraField).toBeUndefined();
     });
+
+
+  });
+
+  describe('FiledDate sorting optimization', () => {
+    it('should use optimized sorting for filedDate descending', () => {
+      const filings = [
+        {
+          docketNumber: TEST_DOCKET_NUMBERS.VALID,
+          filedDate: TEST_DATES.MIDDLE,
+          document: TEST_DOCUMENTS.PETITION,
+          caseTitle: TEST_CASE_TITLES.CASE_1,
+          docketEntryId: '1',
+        },
+        {
+          docketNumber: '102-20',
+          filedDate: TEST_DATES.EARLY,
+          document: TEST_DOCUMENTS.ANSWER,
+          caseTitle: TEST_CASE_TITLES.CASE_2,
+          docketEntryId: '2',
+        },
+        {
+          docketNumber: '103-20',
+          filedDate: TEST_DATES.LATE,
+          document: TEST_DOCUMENTS.MOTION,
+          caseTitle: TEST_CASE_TITLES.CASE_3,
+          docketEntryId: '3',
+        },
+      ];
+
+      const result = sortRecentFilings(filings, 'filedDate', 'desc');
+
+      expect(result[0].filedDate).toBe(TEST_DATES.LATE);
+      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
+      expect(result[2].filedDate).toBe(TEST_DATES.EARLY);
+    });
+
+    it('should not use optimized sorting for filedDate ascending', () => {
+      const filings = [
+        {
+          docketNumber: TEST_DOCKET_NUMBERS.VALID,
+          filedDate: TEST_DATES.MIDDLE,
+          document: TEST_DOCUMENTS.PETITION,
+          caseTitle: TEST_CASE_TITLES.CASE_1,
+          docketEntryId: '1',
+        },
+        {
+          docketNumber: '102-20',
+          filedDate: TEST_DATES.EARLY,
+          document: TEST_DOCUMENTS.ANSWER,
+          caseTitle: TEST_CASE_TITLES.CASE_2,
+          docketEntryId: '2',
+        },
+        {
+          docketNumber: '103-20',
+          filedDate: TEST_DATES.LATE,
+          document: TEST_DOCUMENTS.MOTION,
+          caseTitle: TEST_CASE_TITLES.CASE_3,
+          docketEntryId: '3',
+        },
+      ];
+
+      const result = sortRecentFilings(filings, 'filedDate', 'asc');
+
+      expect(result[0].filedDate).toBe(TEST_DATES.EARLY);
+      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
+      expect(result[2].filedDate).toBe(TEST_DATES.LATE);
+    });
+
+    it('should use optimized sorting for default filedDate descending', () => {
+      const filings = [
+        {
+          docketNumber: TEST_DOCKET_NUMBERS.VALID,
+          filedDate: TEST_DATES.MIDDLE,
+          document: TEST_DOCUMENTS.PETITION,
+          caseTitle: TEST_CASE_TITLES.CASE_1,
+          docketEntryId: '1',
+        },
+        {
+          docketNumber: '102-20',
+          filedDate: TEST_DATES.EARLY,
+          document: TEST_DOCUMENTS.ANSWER,
+          caseTitle: TEST_CASE_TITLES.CASE_2,
+          docketEntryId: '2',
+        },
+        {
+          docketNumber: '103-20',
+          filedDate: TEST_DATES.LATE,
+          document: TEST_DOCUMENTS.MOTION,
+          caseTitle: TEST_CASE_TITLES.CASE_3,
+          docketEntryId: '3',
+        },
+      ];
+
+      const result = sortRecentFilings(filings);
+
+      expect(result[0].filedDate).toBe(TEST_DATES.LATE);
+      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
+      expect(result[2].filedDate).toBe(TEST_DATES.EARLY);
+    });
+
+    it('should handle identical filedDate values in optimized sorting', () => {
+      const filings = [
+        {
+          docketNumber: TEST_DOCKET_NUMBERS.VALID,
+          filedDate: TEST_DATES.MIDDLE,
+          document: TEST_DOCUMENTS.PETITION,
+          caseTitle: TEST_CASE_TITLES.CASE_1,
+          docketEntryId: '1',
+        },
+        {
+          docketNumber: '102-20',
+          filedDate: TEST_DATES.MIDDLE, // Same date
+          document: TEST_DOCUMENTS.ANSWER,
+          caseTitle: TEST_CASE_TITLES.CASE_2,
+          docketEntryId: '2',
+        },
+        {
+          docketNumber: '103-20',
+          filedDate: TEST_DATES.LATE,
+          document: TEST_DOCUMENTS.MOTION,
+          caseTitle: TEST_CASE_TITLES.CASE_3,
+          docketEntryId: '3',
+        },
+      ];
+
+      const result = sortRecentFilings(filings, 'filedDate', 'desc');
+
+      expect(result[0].filedDate).toBe(TEST_DATES.LATE);
+      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
+      expect(result[2].filedDate).toBe(TEST_DATES.MIDDLE);
+      // Should maintain original order for identical dates
+      expect(result[1].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
+      expect(result[2].docketNumber).toBe('102-20');
+    });
   });
 });
