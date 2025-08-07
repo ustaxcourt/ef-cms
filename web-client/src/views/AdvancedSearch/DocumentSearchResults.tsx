@@ -131,9 +131,6 @@ export const DocumentSearchResults = connect(
                       title="Filed Date"
                       onClickSequence={() => {
                         handleSort('formattedFiledDate');
-                        updateDocumentSearchResultsSequence({
-                          currentPaginationPage,
-                        });
                       }}
                     />
                   </th>

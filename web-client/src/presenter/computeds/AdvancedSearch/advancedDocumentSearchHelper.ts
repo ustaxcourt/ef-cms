@@ -5,6 +5,8 @@ import { capitalize } from 'lodash';
 import { paginationHelper } from './advancedSearchHelper';
 import { state } from '@web-client/presenter/app.cerebral';
 import { calculateISODate } from '@shared/business/utilities/DateHandler';
+import { dateStringsCompared } from '@shared/business/utilities/DateHandler';
+import { Case } from '@shared/business/entities/cases/Case';
 
 export const advancedDocumentSearchHelper = (
   get: Get,
@@ -48,11 +50,20 @@ export const advancedDocumentSearchHelper = (
   }
 
   if (searchResults) {
+    console.log(
+      'advancedDocumentSearchHelper : searchResults: ',
+      searchResults,
+    );
     // formatted;
     paginatedResults = paginationHelper(
       searchResults,
       get(state.advancedSearchForm.currentPage),
       applicationContext.getConstants().CASE_SEARCH_PAGE_SIZE,
+    );
+
+    console.log(
+      'advancedDocumentSearchHelper : Paginated results: ',
+      paginatedResults,
     );
 
     paginatedResults.formattedSearchResults =
@@ -63,47 +74,51 @@ export const advancedDocumentSearchHelper = (
       );
     console.log('Formatted results: ', paginatedResults.formattedSearchResults);
     // Sorting logic
-    // paginatedResults.formattedSearchResults =
-    //   paginatedResults.formattedSearchResults.sort((a, b) => {
-    //     let aValue = a[sortColumn] || '';
-    //     let bValue = b[sortColumn] || '';
+    paginatedResults.formattedSearchResults =
+      paginatedResults.formattedSearchResults.sort((a, b) => {
+        let aValue = a[sortColumn] || '';
+        let bValue = b[sortColumn] || '';
 
-    //     const direction = sortDirection === 'asc' ? 1 : -1;
+        const direction = sortDirection === 'asc' ? 1 : -1;
 
-    //     if (sortColumn === 'docketNumber') {
-    //       // Use custom docket number sorting
-    //       return Case.docketNumberSort(aValue, bValue) * direction;
-    //     }
+        if (sortColumn === 'docketNumber') {
+          // Use custom docket number sorting
+          return Case.docketNumberSort(aValue, bValue) * direction;
+        }
 
-    //     if (sortColumn === 'formattedFiledDate') {
-    //       // Use date comparison for filingDate
-    //       return dateStringsCompared(a.filingDate, b.filingDate) * direction;
-    //     }
+        if (sortColumn === 'formattedFiledDate') {
+          // Use date comparison for filingDate
+          return dateStringsCompared(a.filingDate, b.filingDate) * direction;
+        }
 
-    //     // Try to parse as numbers if both values are numeric
-    //     if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
-    //       return (Number(aValue) - Number(bValue)) * direction;
-    //     }
+        // Try to parse as numbers if both values are numeric
+        if (!isNaN(Number(aValue)) && !isNaN(Number(bValue))) {
+          return (Number(aValue) - Number(bValue)) * direction;
+        }
 
-    //     // Fallback to string comparison
-    //     aValue = String(aValue).toLowerCase();
-    //     bValue = String(bValue).toLowerCase();
+        // Fallback to string comparison
+        aValue = String(aValue).toLowerCase();
+        bValue = String(bValue).toLowerCase();
 
-    //     if (aValue < bValue) return -1 * direction;
-    //     if (aValue > bValue) return 1 * direction;
+        if (aValue < bValue) return -1 * direction;
+        if (aValue > bValue) return 1 * direction;
 
-    //     return 0; // Values are equal
-    //   });
+        return 0; // Values are equal
+      });
   }
-
+  console.log(
+    'advancedDocumentSearchHelper : Paginated results after sorting: ',
+    paginatedResults,
+  );
   const showManyResultsMessage = !!(
     searchResults && searchResults.length >= MAX_SEARCH_RESULTS
   );
-  console.log('searchResults: ', searchResults);
+  //console.log('searchResults: ', searchResults);
   return {
     numberOfResults: searchResults?.length,
     ...paginatedResults,
-    formattedSearchResults: searchResults,
+    //formattedSearchResults: searchResults,
+    formattedSearchResults: paginatedResults.formattedSearchResults,
     documentTypeVerbiage,
     formattedJudges,
     isInternalUser,
