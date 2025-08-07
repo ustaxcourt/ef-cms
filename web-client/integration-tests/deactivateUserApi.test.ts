@@ -1,4 +1,3 @@
-import { getDbReader } from '@web-api/database';
 import {
   ACCOUNT_STATUS,
   ROLES,
@@ -7,6 +6,7 @@ import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 import { pgUpdateTable } from '@web-api/persistence/postgres/utils/operation/pgUpdateTable';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 describe('verifies that the deactivate user endpoint works', () => {
   let userToken;

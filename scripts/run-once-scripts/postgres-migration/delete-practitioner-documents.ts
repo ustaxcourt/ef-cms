@@ -8,8 +8,8 @@ import {
 } from '../../helpers/parseArgsAndEnvVars';
 import { batchDeleteDynamoItems } from './batch-delete-dynamo-items';
 import { environment } from '@web-api/environment';
-import { getDbReader } from '@web-api/database';
 import { isEmpty } from 'lodash';
+import { getDbReader } from '@web-api/persistence/postgres/database';
 
 const scriptConfig: ScriptConfig = {
   description:
