@@ -1,7 +1,6 @@
 import { marshall } from '@aws-sdk/util-dynamodb';
 import { DocketEntry } from '@shared/business/entities/DocketEntry';
 import { applicationContext } from '@web-api/applicationContext';
-import { getSearchClient } from '@web-api/getSearchClient';
 import {
   OPENSEARCH_SYNC_ACTIONS,
   OpenSearchSyncMessage,
@@ -11,6 +10,7 @@ import { getDocument } from '@web-api/persistence/s3/getDocument';
 import { chunk } from 'lodash';
 import { efcmsDocketEntryIndex } from '../efcms-docket-entry-mappings';
 import { getDawsonLogger } from '@web-api/utilities/logger/getDawsonLogger';
+import { getSearchClient } from '@web-api/persistence/elasticsearch/searchClient/getSearchClient';
 
 // Our indexing in OpenSearch is based on the pk/sk that existed in Dynamo.
 function getPk<T extends RawDocketEntry>(docketEntry: T): string {

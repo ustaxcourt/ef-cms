@@ -14,7 +14,7 @@ import { TrialSession } from '@shared/business/entities/trialSessions/TrialSessi
 import { isEmpty, flatten, partition, uniq } from 'lodash';
 import { settlePromises } from '@web-api/utilities/settlePromises';
 import { upsertCases } from '@web-api/persistence/postgres/cases/upsertCases';
-import { updateDeadlinesForCasesToCalendar } from '@web-api/business/useCases/trialSessions/trialSessionCalendarInteractorUtils';
+import { updateDeadlinesForCasesToCalendar } from '@web-api/persistence/postgres/caseDeadlines/trialSessionCalendarInteractorUtils';
 import { acquireLock } from '@web-api/persistence/postgres/utils/mutex';
 import { getEligibleCasesForTrialSession } from '@web-api/persistence/postgres/cases/getEligibleCasesForTrialSession';
 

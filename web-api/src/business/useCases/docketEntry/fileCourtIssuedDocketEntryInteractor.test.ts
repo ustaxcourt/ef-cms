@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/users/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
 jest.mock(
@@ -25,6 +26,8 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getUserById as getUserByIdMock } from '@web-api/persistence/postgres/users/getUserById';
+import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -35,7 +38,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     section: DOCKET_SECTION,
     userId: mockUserId,
   };
-
+  const getUserById = jest.mocked(getUserByIdMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
   const updateCaseAndAssociations = jest
@@ -44,9 +47,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   const tryGetLocks = jest.mocked(tryGetLocksMock);
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(docketClerkUser);
+    getUserById.mockResolvedValue(docketClerkUser as DbUser);
 
     caseRecord = {
       ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
@@ -250,7 +251,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const updatedDocketEntry = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+    const updatedDocketEntry =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         d => d.docketEntryId === docketEntryToUpdate.docketEntryId,
       );
 
@@ -301,14 +303,16 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       mockDocketClerkUser,
     );
 
-    const docketEntryOnNonLead = updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+    const docketEntryOnNonLead =
+      updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'TE',
       );
     expect(docketEntryOnNonLead).toMatchObject({
       docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
       freeText: 'free text testing',
     });
-    const docketEntryOnLead = updateCaseAndAssociations.mock.calls[1][0].caseToUpdate.docketEntries.find(
+    const docketEntryOnLead =
+      updateCaseAndAssociations.mock.calls[1][0].caseToUpdate.docketEntries.find(
         entry => entry.eventCode === 'TE',
       );
     expect(docketEntryOnLead).toMatchObject({

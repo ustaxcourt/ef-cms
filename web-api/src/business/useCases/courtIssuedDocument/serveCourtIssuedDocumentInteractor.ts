@@ -14,6 +14,7 @@ import { fileAndServeDocumentOnOneCase } from '@web-api/business/useCaseHelper/d
 import { updateDocketEntryPendingServiceStatus } from '@web-api/persistence/postgres/docketEntries/updateDocketEntryPendingServiceStatus';
 import { getCasesByDocketNumbers } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { settlePromises } from '@web-api/utilities/settlePromises';
+import { getUserById } from '@web-api/persistence/postgres/users/getUserById';
 import {
   asyncHandleLockError,
   withLocking,
@@ -99,9 +100,11 @@ export const serveCourtIssuedDocument = async (
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await getUserById({ userId: authorizedUser.userId });
+
+  if (!user) {
+    throw new NotFoundError(`Could not find user ${authorizedUser.userId}`);
+  }
 
   let serviceResults;
   let caseEntities = [subjectCaseEntity];

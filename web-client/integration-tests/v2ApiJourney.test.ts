@@ -199,16 +199,14 @@ describe('View and manage the deadlines of a case', () => {
     const getDocketEntryData = () => {
       const docketEntries = new Array<DocketEntry>();
       for (const item of docketEntrySeeds) {
-        if (item.entityName === 'DocketEntry') {
-          const de = new DocketEntry(item, { authorizedUser: undefined });
-          if (
-            [PARTIES_CODES.BOTH, PARTIES_CODES.RESPONDENT].includes(
-              de.servedPartiesCode ?? '',
-            ) &&
-            de.servedAt
-          )
-            docketEntries.push(de);
-        }
+        const de = new DocketEntry(item, { authorizedUser: undefined });
+        if (
+          [PARTIES_CODES.BOTH, PARTIES_CODES.RESPONDENT].includes(
+            de.servedPartiesCode ?? '',
+          ) &&
+          de.servedAt
+        )
+          docketEntries.push(de);
       }
       return docketEntries;
     };
