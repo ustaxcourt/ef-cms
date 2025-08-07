@@ -7,15 +7,15 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import {
-  ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
   ASCENDING,
   SORT_ASCENDING_TEXT,
   SORT_DESCENDING_TEXT,
 } from '@shared/business/entities/EntityConstants';
-// import { updateDocumentSearchResultsSequence } from '@web-client/presenter/sequences/updateDocumentSearchResultsSequence';
+
+const PAGE_SIZE = 5;
 
 export const DocumentSearchResults = connect(
   {
@@ -35,37 +35,29 @@ export const DocumentSearchResults = connect(
     openCaseDocumentDownloadUrlSequence,
     updateDocumentSearchResultsSequence,
   }) {
-    // Pagination state
-    const [currentPaginationPage, setcurrentPaginationPage] = useState(0);
-    // const pageSize = 5;
+    // Pagination state: zero-based page index
+    const [currentPaginationPage, setCurrentPaginationPage] = useState(0);
 
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
 
-    const totalPages = Math.ceil(
-      results.length / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+    // Calculate total pages based on PAGE_SIZE
+    const totalPages = Math.ceil(results.length / PAGE_SIZE);
+
+    // If results change and current page is out of range, reset page to 0
+    useEffect(() => {
+      if (currentPaginationPage >= totalPages && totalPages > 0) {
+        setCurrentPaginationPage(0);
+      }
+    }, [results.length, currentPaginationPage, totalPages]);
+
+    // Slice results for current page
+    const pagedResults = results.slice(
+      currentPaginationPage * PAGE_SIZE,
+      currentPaginationPage * PAGE_SIZE + PAGE_SIZE,
     );
-    console.log('totalPages', totalPages);
-    // // Slice results for current page
-    // const pagedResults = sortedResults.slice(
-    //   currentPageIndex * pageSize,
-    //   currentPageIndex * pageSize + pageSize,
-    // );
 
-    // Reset to first page if results change and current page is out of bounds
-    // React.useEffect(() => {
-    //   if (currentPageIndex > 0 && currentPageIndex >= totalPages) {
-    //     setCurrentPageIndex(0);
-    //   }
-    // }, [sortedResults.length, totalPages, currentPageIndex]);
-
-    // Handle column header click
+    // Handle sorting column header click
     const handleSort = (columnKey: string) => {
-      console.log('adv sort Column: ', advancedDocumentSearchHelper.sortColumn);
-      console.log(
-        'sort direction: ',
-        advancedDocumentSearchHelper.sortDirection,
-      );
-
       if (advancedDocumentSearchHelper.sortColumn === columnKey) {
         updateDocumentSearchResultsSequence({
           sortColumn: columnKey,
@@ -80,7 +72,7 @@ export const DocumentSearchResults = connect(
           sortDirection: 'asc',
         });
       }
-      // setCurrentPageIndex(0);
+      setCurrentPaginationPage(0); // reset page on sort
     };
 
     return (
@@ -114,7 +106,6 @@ export const DocumentSearchResults = connect(
             >
               <thead>
                 <tr>
-                  {/* <th aria-hidden="true" className="small-column"></th> */}
                   <th>
                     <SortableColumn
                       ascText={SORT_ASCENDING_TEXT.string}
@@ -225,17 +216,11 @@ export const DocumentSearchResults = connect(
                 </tr>
               </thead>
               <tbody>
-                {results.map(result => (
+                {pagedResults.map(result => (
                   <tr
                     className="search-result"
                     key={`${result.docketEntryId}-${result.docketNumber}`}
                   >
-                    {/* <td aria-hidden="true" className="small-column">
-                      {currentPaginationPage *
-                        ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE +
-                        idx +
-                        1}
-                    </td> */}
                     <td>{result.formattedFiledDate}</td>
                     <td aria-hidden="true" className="small-column">
                       {result.showSealedIcon && (
@@ -283,15 +268,12 @@ export const DocumentSearchResults = connect(
               </tbody>
             </table>
 
-            {totalPages >= 1 && (
+            {totalPages > 1 && (
               <Paginator
                 currentPageIndex={currentPaginationPage}
                 totalPages={totalPages}
                 onPageChange={currentPage => {
-                  setcurrentPaginationPage(currentPage);
-                  updateDocumentSearchResultsSequence({
-                    currentPaginationPage: currentPage,
-                  });
+                  setCurrentPaginationPage(currentPage);
                 }}
               />
             )}
