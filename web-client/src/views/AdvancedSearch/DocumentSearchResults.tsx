@@ -13,9 +13,8 @@ import {
   ASCENDING,
   SORT_ASCENDING_TEXT,
   SORT_DESCENDING_TEXT,
+  ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
 } from '@shared/business/entities/EntityConstants';
-
-const PAGE_SIZE = 5;
 
 export const DocumentSearchResults = connect(
   {
@@ -43,7 +42,9 @@ export const DocumentSearchResults = connect(
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
 
     // Calculate total pages based on PAGE_SIZE
-    const totalPages = Math.ceil(results.length / PAGE_SIZE);
+    const totalPages = Math.ceil(
+      results.length / ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+    );
 
     // If results change and current page is out of range, reset page to 0
     useEffect(() => {
@@ -54,8 +55,9 @@ export const DocumentSearchResults = connect(
 
     // Slice results for current page
     const pagedResults = results.slice(
-      currentPaginationPage * PAGE_SIZE,
-      currentPaginationPage * PAGE_SIZE + PAGE_SIZE,
+      currentPaginationPage * ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+      currentPaginationPage * ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE +
+        ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
     );
 
     // Handle sorting column header click

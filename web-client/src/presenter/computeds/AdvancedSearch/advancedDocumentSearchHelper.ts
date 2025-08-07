@@ -58,7 +58,7 @@ export const advancedDocumentSearchHelper = (
     paginatedResults = paginationHelper(
       searchResults,
       get(state.advancedSearchForm.currentPage),
-      applicationContext.getConstants().CASE_SEARCH_PAGE_SIZE,
+      applicationContext.getConstants().MAX_ELASTICSEARCH_PAGINATION,
     );
 
     console.log(
