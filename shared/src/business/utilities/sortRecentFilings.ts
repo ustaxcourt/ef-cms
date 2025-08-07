@@ -68,10 +68,6 @@ export function sortRecentFilings(
           .toLowerCase()
           .localeCompare(b.caseTitle.toLowerCase());
         break;
-      default:
-        comparison = String(a[sortField] || '')
-          .toLowerCase()
-          .localeCompare(String(b[sortField] || '').toLowerCase());
     }
 
     if (comparison === 0 && sortField !== 'filedDate') {

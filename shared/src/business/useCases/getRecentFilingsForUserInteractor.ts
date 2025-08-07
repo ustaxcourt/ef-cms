@@ -68,13 +68,13 @@ export const getRecentFilingsForUserInteractor = async (
     filingDate: d.filingDate?.toISOString(),
     documentTitle: d.documentTitle,
     docketEntryId: d.docketEntryId,
-    isFileAttached: d.isFileAttached ?? undefined,
+    isFileAttached: d.isFileAttached,
     eventCode: d.eventCode,
-    isStricken: d.isStricken ?? undefined,
-    isSealed: d.isSealed ?? undefined,
-    sealedTo: d.sealedTo ?? undefined,
+    isStricken: d.isStricken,
+    isSealed: d.isSealed,
+    sealedTo: d.sealedTo,
     servedAt: d.servedAt?.toISOString(),
-    caseCaption: (d as any).caption,
+    caseCaption: d.caption,
   }));
 
   // Build case info map for consolidated case handling
@@ -102,20 +102,28 @@ export const getRecentFilingsForUserInteractor = async (
   });
 
   return results.map(entry => {
-    const caseInfo = caseInfoMap.get(entry.docketNumber) || {};
+    const caseInfo = caseInfoMap.get(entry.docketNumber) || {
+      inConsolidatedGroup: false,
+      isLeadCase: true,
+      consolidatedIconTooltipText: undefined,
+    };
+    const documentTitle = entry.documentTitle || 'Document';
+    const caseCaptionMeta = getCaseCaptionMeta({
+      caseCaption: entry.caseCaption,
+    });
+    const caseTitle = caseCaptionMeta?.caseTitle || 'Unknown Case';
+
     return {
       docketNumber: entry.docketNumber,
       filedDate: entry.filingDate,
-      document: entry.documentTitle || 'Document',
-      caseTitle:
-        getCaseCaptionMeta({ caseCaption: entry.caseCaption })?.caseTitle ||
-        'Unknown Case',
+      document: documentTitle,
+      caseTitle,
       docketEntryId: entry.docketEntryId,
-      isFileAttached: entry.isFileAttached,
+      isFileAttached: entry.isFileAttached ?? undefined,
       eventCode: entry.eventCode,
-      isStricken: entry.isStricken,
-      isSealed: entry.isSealed,
-      sealedTo: entry.sealedTo,
+      isStricken: entry.isStricken ?? undefined,
+      isSealed: entry.isSealed ?? undefined,
+      sealedTo: entry.sealedTo ?? undefined,
       servedAt: entry.servedAt,
       inConsolidatedGroup: caseInfo.inConsolidatedGroup,
       isLeadCase: caseInfo.isLeadCase,

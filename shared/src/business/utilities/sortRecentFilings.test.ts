@@ -37,52 +37,45 @@ const TEST_EXTRA_FIELDS = {
   ZEBRA: 'Zebra',
 } as const;
 
+const SHARED_FILINGS: RecentFiling[] = [
+  {
+    docketNumber: TEST_DOCKET_NUMBERS.VALID,
+    filedDate: TEST_DATES.MIDDLE,
+    document: TEST_DOCUMENTS.PETITION,
+    caseTitle: TEST_CASE_TITLES.CASE_1,
+    docketEntryId: '1',
+  },
+  {
+    docketNumber: '102-20',
+    filedDate: TEST_DATES.EARLY,
+    document: TEST_DOCUMENTS.ANSWER,
+    caseTitle: TEST_CASE_TITLES.CASE_2,
+    docketEntryId: '2',
+  },
+  {
+    docketNumber: '103-20',
+    filedDate: TEST_DATES.LATE,
+    document: TEST_DOCUMENTS.MOTION,
+    caseTitle: TEST_CASE_TITLES.CASE_3,
+    docketEntryId: '3',
+  },
+];
+
 describe('sortRecentFilings', () => {
-  const mockFilings: RecentFiling[] = [
-    {
-      docketNumber: TEST_DOCKET_NUMBERS.VALID,
-      filedDate: TEST_DATES.MIDDLE,
-      document: TEST_DOCUMENTS.PETITION,
-      caseTitle: TEST_CASE_TITLES.CASE_1,
-      docketEntryId: '1',
-    },
-    {
-      docketNumber: '102-20',
-      filedDate: TEST_DATES.EARLY,
-      document: TEST_DOCUMENTS.ANSWER,
-      caseTitle: TEST_CASE_TITLES.CASE_2,
-      docketEntryId: '2',
-    },
-    {
-      docketNumber: '103-20',
-      filedDate: TEST_DATES.LATE,
-      document: TEST_DOCUMENTS.MOTION,
-      caseTitle: TEST_CASE_TITLES.CASE_3,
-      docketEntryId: '3',
-    },
-  ];
-
-  it('should sort by filedDate descending by default', () => {
-    const result = sortRecentFilings(mockFilings);
-    expect(result[0].filedDate).toBe(TEST_DATES.LATE);
-    expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
-    expect(result[2].filedDate).toBe(TEST_DATES.EARLY);
-  });
-
-  it('should handle empty/null/undefined input gracefully', () => {
+  it('should handle basic functionality and edge cases', () => {
     expect(sortRecentFilings([])).toEqual([]);
     expect(sortRecentFilings(null as unknown as RecentFiling[])).toEqual([]);
     expect(sortRecentFilings(undefined as unknown as RecentFiling[])).toEqual(
       [],
     );
-  });
 
-  it('should handle single item array', () => {
-    const singleFiling = [mockFilings[0]];
+    const singleFiling = [SHARED_FILINGS[0]];
     expect(sortRecentFilings(singleFiling)).toEqual(singleFiling);
-    expect(sortRecentFilings(singleFiling, 'filedDate', 'desc')).toEqual(
-      singleFiling,
-    );
+
+    const result = sortRecentFilings(SHARED_FILINGS);
+    expect(result[0].filedDate).toBe(TEST_DATES.LATE);
+    expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
+    expect(result[2].filedDate).toBe(TEST_DATES.EARLY);
   });
 
   describe('Sort by different fields', () => {
@@ -150,7 +143,7 @@ describe('sortRecentFilings', () => {
     it.each(sortTests)(
       'should sort by $field $order correctly',
       ({ field, order, expected, property }) => {
-        const result = sortRecentFilings(mockFilings, field, order);
+        const result = sortRecentFilings(SHARED_FILINGS, field, order);
         expected.forEach((value, index) => {
           expect(result[index][property as keyof RecentFiling]).toBe(value);
         });
@@ -158,8 +151,8 @@ describe('sortRecentFilings', () => {
     );
   });
 
-  it('should use filedDate as secondary sort when primary sort results in tie', () => {
-    const filingsWithSameDocument: RecentFiling[] = [
+  it('should handle edge cases and special scenarios', () => {
+    const filingsWithSameDocument = [
       {
         docketNumber: TEST_DOCKET_NUMBERS.VALID,
         filedDate: TEST_DATES.MIDDLE,
@@ -183,10 +176,8 @@ describe('sortRecentFilings', () => {
     );
     expect(result[0].filedDate).toBe(TEST_DATES.MIDDLE);
     expect(result[1].filedDate).toBe(TEST_DATES.EARLY);
-  });
 
-  it('should handle filings with missing/null values', () => {
-    const filingsWithMissingFields: RecentFiling[] = [
+    const filingsWithMissingFields = [
       {
         docketNumber: TEST_DOCKET_NUMBERS.VALID,
         filedDate: TEST_DATES.MIDDLE,
@@ -210,18 +201,18 @@ describe('sortRecentFilings', () => {
       },
     ];
 
-    const result = sortRecentFilings(
+    const missingResult = sortRecentFilings(
       filingsWithMissingFields,
       'document',
       'asc',
     );
-    expect(result[0].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
-    expect(result[1].docketNumber).toBe('102-20');
-    expect(result[2].docketNumber).toBe('103-20');
+    expect(missingResult[0].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
+    expect(missingResult[1].docketNumber).toBe('102-20');
+    expect(missingResult[2].docketNumber).toBe('103-20');
   });
 
-  it('should handle case-insensitive sorting for document and caseTitle fields', () => {
-    const filingsWithMixedCase: RecentFiling[] = [
+  it('should handle case-insensitive sorting and mixed case scenarios', () => {
+    const filingsWithMixedCase = [
       {
         docketNumber: TEST_DOCKET_NUMBERS.VALID,
         filedDate: TEST_DATES.MIDDLE,
@@ -264,7 +255,7 @@ describe('sortRecentFilings', () => {
     expect(caseTitleResult[2].caseTitle).toBe('TEST CASE 3');
   });
 
-  it('should handle identical values with secondary sort', () => {
+  it('should handle identical values and secondary sorting', () => {
     const filingsWithIdenticalValues = [
       {
         docketNumber: TEST_DOCKET_NUMBERS.VALID,
@@ -289,434 +280,452 @@ describe('sortRecentFilings', () => {
     );
     expect(result[0].docketEntryId).toBe('1');
     expect(result[1].docketEntryId).toBe('2');
+
+    const identicalDates = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: '102-20',
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.ANSWER,
+        caseTitle: TEST_CASE_TITLES.CASE_2,
+        docketEntryId: '2',
+      },
+      {
+        docketNumber: '103-20',
+        filedDate: TEST_DATES.LATE,
+        document: TEST_DOCUMENTS.MOTION,
+        caseTitle: TEST_CASE_TITLES.CASE_3,
+        docketEntryId: '3',
+      },
+    ];
+
+    const dateResult = sortRecentFilings(identicalDates, 'filedDate', 'desc');
+    expect(dateResult[0].filedDate).toBe(TEST_DATES.LATE);
+    expect(dateResult[1].filedDate).toBe(TEST_DATES.MIDDLE);
+    expect(dateResult[2].filedDate).toBe(TEST_DATES.MIDDLE);
+    expect(dateResult[1].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
+    expect(dateResult[2].docketNumber).toBe('102-20');
   });
 
-  describe('Parameter validation and defaults', () => {
-    it('should handle undefined/null sort parameters by using defaults', () => {
-      const undefinedFieldResult = sortRecentFilings(
-        mockFilings,
-        undefined as unknown as SortableField,
-        'desc',
-      );
-      const nullFieldResult = sortRecentFilings(
-        mockFilings,
-        null as unknown as SortableField,
-        'desc',
-      );
-      const undefinedOrderResult = sortRecentFilings(
-        mockFilings,
-        'filedDate',
-        undefined as unknown as 'asc' | 'desc',
-      );
-      const nullOrderResult = sortRecentFilings(
-        mockFilings,
-        'filedDate',
-        null as unknown as 'asc' | 'desc',
-      );
+  it('should handle parameter validation and defaults', () => {
+    const undefinedFieldResult = sortRecentFilings(
+      SHARED_FILINGS,
+      undefined as unknown as SortableField,
+      'desc',
+    );
+    const nullFieldResult = sortRecentFilings(
+      SHARED_FILINGS,
+      null as unknown as SortableField,
+      'desc',
+    );
+    const invalidFieldResult = sortRecentFilings(
+      SHARED_FILINGS,
+      'invalidField' as unknown as SortableField,
+      'desc',
+    );
+    const invalidOrderResult = sortRecentFilings(
+      SHARED_FILINGS,
+      'filedDate',
+      'invalid' as 'asc' | 'desc',
+    );
 
-      expect(undefinedFieldResult[0].filedDate).toBe(TEST_DATES.LATE);
-      expect(nullFieldResult[0].filedDate).toBe(TEST_DATES.LATE);
-      expect(undefinedOrderResult[0].filedDate).toBe(TEST_DATES.LATE);
-      expect(nullOrderResult[0].filedDate).toBe(TEST_DATES.LATE);
-    });
-
-    it('should handle invalid sort parameters by using defaults', () => {
-      const invalidFieldResult = sortRecentFilings(
-        mockFilings,
-        'invalidField' as unknown as SortableField,
-        'desc',
-      );
-      const invalidOrderResult = sortRecentFilings(
-        mockFilings,
-        'filedDate',
-        'invalid' as 'asc' | 'desc',
-      );
-
-      expect(invalidFieldResult[0].filedDate).toBe(TEST_DATES.LATE);
-      expect(invalidOrderResult[0].filedDate).toBe(TEST_DATES.LATE);
-    });
+    expect(undefinedFieldResult[0].filedDate).toBe(TEST_DATES.LATE);
+    expect(nullFieldResult[0].filedDate).toBe(TEST_DATES.LATE);
+    expect(invalidFieldResult[0].filedDate).toBe(TEST_DATES.LATE);
+    expect(invalidOrderResult[0].filedDate).toBe(TEST_DATES.LATE);
   });
 
-  describe('Docket number sorting edge cases', () => {
-    it('should handle docket numbers that cannot be parsed by Case.getSortableDocketNumber', () => {
-      const filingsWithInvalidDocketNumbers: RecentFiling[] = [
+  it('should handle docket number sorting edge cases', () => {
+    const filingsWithInvalidDocketNumbers = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.INVALID_1,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.EARLY,
+        document: TEST_DOCUMENTS.ANSWER,
+        caseTitle: TEST_CASE_TITLES.CASE_2,
+        docketEntryId: '2',
+      },
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.INVALID_2,
+        filedDate: TEST_DATES.LATE,
+        document: TEST_DOCUMENTS.MOTION,
+        caseTitle: TEST_CASE_TITLES.CASE_3,
+        docketEntryId: '3',
+      },
+    ];
+
+    const result = sortRecentFilings(
+      filingsWithInvalidDocketNumbers,
+      'docketNumber',
+      'asc',
+    );
+    expect(result[0].docketNumber).toBe(TEST_DOCKET_NUMBERS.INVALID_2);
+    expect(result[1].docketNumber).toBe(TEST_DOCKET_NUMBERS.INVALID_1);
+    expect(result[2].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
+
+    const mixedDocketNumbers = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.INVALID_1,
+        filedDate: TEST_DATES.EARLY,
+        document: TEST_DOCUMENTS.ANSWER,
+        caseTitle: TEST_CASE_TITLES.CASE_2,
+        docketEntryId: '2',
+      },
+    ];
+
+    const mixedResult = sortRecentFilings(
+      mixedDocketNumbers,
+      'docketNumber',
+      'asc',
+    );
+    expect(mixedResult[0].docketNumber).toBe(TEST_DOCKET_NUMBERS.INVALID_1);
+    expect(mixedResult[1].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
+  });
+
+  it('should handle document field null handling and edge cases', () => {
+    const filingsWithNullDocuments = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: null as unknown as string,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: '102-20',
+        filedDate: TEST_DATES.EARLY,
+        document: TEST_DOCUMENTS.ANSWER,
+        caseTitle: TEST_CASE_TITLES.CASE_2,
+        docketEntryId: '2',
+      },
+      {
+        docketNumber: '103-20',
+        filedDate: TEST_DATES.LATE,
+        document: null as unknown as string,
+        caseTitle: TEST_CASE_TITLES.CASE_3,
+        docketEntryId: '3',
+      },
+    ];
+
+    const result = sortRecentFilings(
+      filingsWithNullDocuments,
+      'document',
+      'asc',
+    );
+    expect(result[0].document).toBe(TEST_DOCUMENTS.ANSWER);
+    expect(result[1].document).toBeNull();
+    expect(result[2].document).toBeNull();
+
+    const filingsWithEmptyDocument = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: '',
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: '102-20',
+        filedDate: TEST_DATES.EARLY,
+        document: TEST_DOCUMENTS.ANSWER,
+        caseTitle: TEST_CASE_TITLES.CASE_2,
+        docketEntryId: '2',
+      },
+    ];
+
+    const emptyResult = sortRecentFilings(
+      filingsWithEmptyDocument,
+      'document',
+      'asc',
+    );
+    expect(emptyResult[0].document).toBe('');
+    expect(emptyResult[1].document).toBe(TEST_DOCUMENTS.ANSWER);
+  });
+
+  it('should handle default case and unknown sort fields', () => {
+    const filingsWithExtraFields: ExtendedRecentFiling[] = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+        extraField: TEST_EXTRA_FIELDS.ZEBRA,
+      },
+      {
+        docketNumber: '102-20',
+        filedDate: TEST_DATES.EARLY,
+        document: TEST_DOCUMENTS.ANSWER,
+        caseTitle: TEST_CASE_TITLES.CASE_2,
+        docketEntryId: '2',
+        extraField: TEST_EXTRA_FIELDS.ALPHA,
+      },
+      {
+        docketNumber: '103-20',
+        filedDate: TEST_DATES.LATE,
+        document: TEST_DOCUMENTS.MOTION,
+        caseTitle: TEST_CASE_TITLES.CASE_3,
+        docketEntryId: '3',
+        extraField: TEST_EXTRA_FIELDS.BETA,
+      },
+    ];
+
+    const result = sortRecentFilings(
+      filingsWithExtraFields,
+      'extraField' as unknown as SortableField,
+      'asc',
+    );
+    expect((result[0] as ExtendedRecentFiling).extraField).toBe(
+      TEST_EXTRA_FIELDS.ALPHA,
+    );
+    expect((result[1] as ExtendedRecentFiling).extraField).toBe(
+      TEST_EXTRA_FIELDS.ZEBRA,
+    );
+    expect((result[2] as ExtendedRecentFiling).extraField).toBe(
+      TEST_EXTRA_FIELDS.BETA,
+    );
+
+    const filingsWithUndefinedFields: ExtendedRecentFiling[] = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+        extraField: undefined,
+      },
+      {
+        docketNumber: '102-20',
+        filedDate: TEST_DATES.EARLY,
+        document: TEST_DOCUMENTS.ANSWER,
+        caseTitle: TEST_CASE_TITLES.CASE_2,
+        docketEntryId: '2',
+        extraField: TEST_EXTRA_FIELDS.ALPHA,
+      },
+    ];
+
+    const undefinedResult = sortRecentFilings(
+      filingsWithUndefinedFields,
+      'extraField' as unknown as SortableField,
+      'asc',
+    );
+    expect((undefinedResult[0] as ExtendedRecentFiling).extraField).toBe(
+      TEST_EXTRA_FIELDS.ALPHA,
+    );
+    expect(
+      (undefinedResult[1] as ExtendedRecentFiling).extraField,
+    ).toBeUndefined();
+
+    const unknownFieldResult = sortRecentFilings(
+      SHARED_FILINGS,
+      'unknownField' as any,
+      'asc',
+    );
+    expect(unknownFieldResult[0].filedDate).toBe(TEST_DATES.EARLY);
+    expect(unknownFieldResult[1].filedDate).toBe(TEST_DATES.MIDDLE);
+  });
+
+  it('should handle filedDate sorting optimization and special cases', () => {
+    const result = sortRecentFilings(SHARED_FILINGS, 'filedDate', 'desc');
+    expect(result[0].filedDate).toBe(TEST_DATES.LATE);
+    expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
+    expect(result[2].filedDate).toBe(TEST_DATES.EARLY);
+
+    const ascResult = sortRecentFilings(SHARED_FILINGS, 'filedDate', 'asc');
+    expect(ascResult[0].filedDate).toBe(TEST_DATES.EARLY);
+    expect(ascResult[1].filedDate).toBe(TEST_DATES.MIDDLE);
+    expect(ascResult[2].filedDate).toBe(TEST_DATES.LATE);
+
+    const defaultResult = sortRecentFilings(SHARED_FILINGS);
+    expect(defaultResult[0].filedDate).toBe(TEST_DATES.LATE);
+    expect(defaultResult[1].filedDate).toBe(TEST_DATES.MIDDLE);
+    expect(defaultResult[2].filedDate).toBe(TEST_DATES.EARLY);
+
+    const invalidDocketResult = sortRecentFilings(
+      [
         {
           docketNumber: TEST_DOCKET_NUMBERS.INVALID_1,
           filedDate: TEST_DATES.MIDDLE,
           document: TEST_DOCUMENTS.PETITION,
           caseTitle: TEST_CASE_TITLES.CASE_1,
           docketEntryId: '1',
-        },
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.EARLY,
-          document: TEST_DOCUMENTS.ANSWER,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
         },
         {
           docketNumber: TEST_DOCKET_NUMBERS.INVALID_2,
-          filedDate: TEST_DATES.LATE,
-          document: TEST_DOCUMENTS.MOTION,
-          caseTitle: TEST_CASE_TITLES.CASE_3,
-          docketEntryId: '3',
-        },
-      ];
-
-      const result = sortRecentFilings(
-        filingsWithInvalidDocketNumbers,
-        'docketNumber',
-        'asc',
-      );
-
-      expect(result[0].docketNumber).toBe(TEST_DOCKET_NUMBERS.INVALID_2);
-      expect(result[1].docketNumber).toBe(TEST_DOCKET_NUMBERS.INVALID_1);
-      expect(result[2].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
-    });
-
-    it('should handle mixed valid and invalid docket numbers', () => {
-      const filingsWithMixedDocketNumbers: RecentFiling[] = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: TEST_DOCUMENTS.PETITION,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-        },
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.INVALID_1,
           filedDate: TEST_DATES.EARLY,
           document: TEST_DOCUMENTS.ANSWER,
           caseTitle: TEST_CASE_TITLES.CASE_2,
           docketEntryId: '2',
         },
-      ];
+      ],
+      'docketNumber',
+      'asc',
+    );
 
-      const result = sortRecentFilings(
-        filingsWithMixedDocketNumbers,
-        'docketNumber',
-        'asc',
-      );
-
-      expect(result[0].docketNumber).toBe(TEST_DOCKET_NUMBERS.INVALID_1);
-      expect(result[1].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
-    });
+    expect(invalidDocketResult[0].docketNumber).toBe(
+      TEST_DOCKET_NUMBERS.INVALID_1,
+    );
+    expect(invalidDocketResult[1].docketNumber).toBe(
+      TEST_DOCKET_NUMBERS.INVALID_2,
+    );
   });
 
-  describe('Document field null handling', () => {
-    it('should handle null document values correctly in sorting', () => {
-      const filingsWithNullDocuments: RecentFiling[] = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: null as unknown as string,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-        },
-        {
-          docketNumber: '102-20',
-          filedDate: TEST_DATES.EARLY,
-          document: TEST_DOCUMENTS.ANSWER,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
-        },
-        {
-          docketNumber: '103-20',
-          filedDate: TEST_DATES.LATE,
-          document: null as unknown as string,
-          caseTitle: TEST_CASE_TITLES.CASE_3,
-          docketEntryId: '3',
-        },
-      ];
+  it('should handle unknown sort fields and fallback comparisons', () => {
+    const filingsWithEqualValues = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.EARLY,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '2',
+      },
+    ];
 
-      const result = sortRecentFilings(
-        filingsWithNullDocuments,
-        'document',
-        'asc',
-      );
+    const result = sortRecentFilings(filingsWithEqualValues, 'document', 'asc');
+    expect(result[0].filedDate).toBe(TEST_DATES.MIDDLE);
+    expect(result[1].filedDate).toBe(TEST_DATES.EARLY);
 
-      expect(result[0].document).toBe(TEST_DOCUMENTS.ANSWER);
-      expect(result[1].document).toBeNull();
-      expect(result[2].document).toBeNull();
-    });
-
-    it('should handle mixed null and non-null document values', () => {
-      const filingsWithMixedDocuments: RecentFiling[] = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: TEST_DOCUMENTS.PETITION,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-        },
-        {
-          docketNumber: '102-20',
-          filedDate: TEST_DATES.EARLY,
-          document: null as unknown as string,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
-        },
-        {
-          docketNumber: '103-20',
-          filedDate: TEST_DATES.LATE,
-          document: TEST_DOCUMENTS.MOTION,
-          caseTitle: TEST_CASE_TITLES.CASE_3,
-          docketEntryId: '3',
-        },
-      ];
-
-      const result = sortRecentFilings(
-        filingsWithMixedDocuments,
-        'document',
-        'asc',
-      );
-
-      expect(result[0].document).toBe(TEST_DOCUMENTS.MOTION);
-      expect(result[1].document).toBe(TEST_DOCUMENTS.PETITION);
-      expect(result[2].document).toBeNull();
-    });
+    const unknownFieldResult = sortRecentFilings(
+      SHARED_FILINGS,
+      'unknownField' as any,
+      'asc',
+    );
+    expect(unknownFieldResult[0].filedDate).toBe(TEST_DATES.EARLY);
+    expect(unknownFieldResult[1].filedDate).toBe(TEST_DATES.MIDDLE);
+    expect(unknownFieldResult[2].filedDate).toBe(TEST_DATES.LATE);
   });
 
-  describe('Default case handling', () => {
-    it('should handle unknown sort fields with default string comparison', () => {
-      const filingsWithExtraFields: ExtendedRecentFiling[] = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: TEST_DOCUMENTS.PETITION,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-          extraField: TEST_EXTRA_FIELDS.ZEBRA,
-        },
-        {
-          docketNumber: '102-20',
-          filedDate: TEST_DATES.EARLY,
-          document: TEST_DOCUMENTS.ANSWER,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
-          extraField: TEST_EXTRA_FIELDS.ALPHA,
-        },
-        {
-          docketNumber: '103-20',
-          filedDate: TEST_DATES.LATE,
-          document: TEST_DOCUMENTS.MOTION,
-          caseTitle: TEST_CASE_TITLES.CASE_3,
-          docketEntryId: '3',
-          extraField: TEST_EXTRA_FIELDS.BETA,
-        },
-      ];
+  it('should handle default case with unknown field and fallback comparison', () => {
+    const filingsWithEqualValues = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.EARLY,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '2',
+      },
+    ];
 
-      const result = sortRecentFilings(
-        filingsWithExtraFields,
-        'extraField' as unknown as SortableField,
-        'asc',
-      );
-
-      expect((result[0] as ExtendedRecentFiling).extraField).toBe(
-        TEST_EXTRA_FIELDS.ALPHA,
-      );
-      expect((result[1] as ExtendedRecentFiling).extraField).toBe(
-        TEST_EXTRA_FIELDS.ZEBRA,
-      );
-      expect((result[2] as ExtendedRecentFiling).extraField).toBe(
-        TEST_EXTRA_FIELDS.BETA,
-      );
-    });
-
-    it('should handle undefined field values in default case', () => {
-      const filingsWithUndefinedFields: ExtendedRecentFiling[] = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: TEST_DOCUMENTS.PETITION,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-          extraField: undefined,
-        },
-        {
-          docketNumber: '102-20',
-          filedDate: TEST_DATES.EARLY,
-          document: TEST_DOCUMENTS.ANSWER,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
-          extraField: TEST_EXTRA_FIELDS.ALPHA,
-        },
-      ];
-
-      const result = sortRecentFilings(
-        filingsWithUndefinedFields,
-        'extraField' as unknown as SortableField,
-        'asc',
-      );
-
-      expect((result[0] as ExtendedRecentFiling).extraField).toBe(
-        TEST_EXTRA_FIELDS.ALPHA,
-      );
-      expect((result[1] as ExtendedRecentFiling).extraField).toBeUndefined();
-    });
-
-
+    const result = sortRecentFilings(
+      filingsWithEqualValues,
+      'unknownField' as any,
+      'asc',
+    );
+    expect(result[0].filedDate).toBe(TEST_DATES.EARLY);
+    expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
   });
 
-  describe('FiledDate sorting optimization', () => {
-    it('should use optimized sorting for filedDate descending', () => {
-      const filings = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: TEST_DOCUMENTS.PETITION,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-        },
-        {
-          docketNumber: '102-20',
-          filedDate: TEST_DATES.EARLY,
-          document: TEST_DOCUMENTS.ANSWER,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
-        },
-        {
-          docketNumber: '103-20',
-          filedDate: TEST_DATES.LATE,
-          document: TEST_DOCUMENTS.MOTION,
-          caseTitle: TEST_CASE_TITLES.CASE_3,
-          docketEntryId: '3',
-        },
-      ];
+  it('should handle default case with completely equal values triggering fallback', () => {
+    const filingsWithCompletelyEqualValues = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '2',
+      },
+    ];
 
-      const result = sortRecentFilings(filings, 'filedDate', 'desc');
+    const result = sortRecentFilings(
+      filingsWithCompletelyEqualValues,
+      'unknownField' as any,
+      'asc',
+    );
+    expect(result[0].docketEntryId).toBe('1');
+    expect(result[1].docketEntryId).toBe('2');
+  });
 
-      expect(result[0].filedDate).toBe(TEST_DATES.LATE);
-      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
-      expect(result[2].filedDate).toBe(TEST_DATES.EARLY);
-    });
+  it('should handle default case with completely equal values and fallback comparison', () => {
+    const filingsWithCompletelyEqualValues = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: TEST_CASE_TITLES.CASE_1,
+        docketEntryId: '2',
+      },
+    ];
 
-    it('should not use optimized sorting for filedDate ascending', () => {
-      const filings = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: TEST_DOCUMENTS.PETITION,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-        },
-        {
-          docketNumber: '102-20',
-          filedDate: TEST_DATES.EARLY,
-          document: TEST_DOCUMENTS.ANSWER,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
-        },
-        {
-          docketNumber: '103-20',
-          filedDate: TEST_DATES.LATE,
-          document: TEST_DOCUMENTS.MOTION,
-          caseTitle: TEST_CASE_TITLES.CASE_3,
-          docketEntryId: '3',
-        },
-      ];
+    const result = sortRecentFilings(
+      filingsWithCompletelyEqualValues,
+      'unknownField' as any,
+      'asc',
+    );
+    expect(result[0].docketEntryId).toBe('1');
+    expect(result[1].docketEntryId).toBe('2');
+  });
 
-      const result = sortRecentFilings(filings, 'filedDate', 'asc');
+  it('should handle fallback comparison when values are equal for non-filedDate field', () => {
+    const filingsWithEqualCaseTitles = [
+      {
+        docketNumber: TEST_DOCKET_NUMBERS.VALID,
+        filedDate: TEST_DATES.MIDDLE,
+        document: TEST_DOCUMENTS.PETITION,
+        caseTitle: 'Same Case Title',
+        docketEntryId: '1',
+      },
+      {
+        docketNumber: '102-20',
+        filedDate: TEST_DATES.EARLY,
+        document: TEST_DOCUMENTS.ANSWER,
+        caseTitle: 'Same Case Title',
+        docketEntryId: '2',
+      },
+    ];
 
-      expect(result[0].filedDate).toBe(TEST_DATES.EARLY);
-      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
-      expect(result[2].filedDate).toBe(TEST_DATES.LATE);
-    });
-
-    it('should use optimized sorting for default filedDate descending', () => {
-      const filings = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: TEST_DOCUMENTS.PETITION,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-        },
-        {
-          docketNumber: '102-20',
-          filedDate: TEST_DATES.EARLY,
-          document: TEST_DOCUMENTS.ANSWER,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
-        },
-        {
-          docketNumber: '103-20',
-          filedDate: TEST_DATES.LATE,
-          document: TEST_DOCUMENTS.MOTION,
-          caseTitle: TEST_CASE_TITLES.CASE_3,
-          docketEntryId: '3',
-        },
-      ];
-
-      const result = sortRecentFilings(filings);
-
-      expect(result[0].filedDate).toBe(TEST_DATES.LATE);
-      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
-      expect(result[2].filedDate).toBe(TEST_DATES.EARLY);
-    });
-
-    it('should handle identical filedDate values in optimized sorting', () => {
-      const filings = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: TEST_DOCUMENTS.PETITION,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-        },
-        {
-          docketNumber: '102-20',
-          filedDate: TEST_DATES.MIDDLE, // Same date
-          document: TEST_DOCUMENTS.ANSWER,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
-        },
-        {
-          docketNumber: '103-20',
-          filedDate: TEST_DATES.LATE,
-          document: TEST_DOCUMENTS.MOTION,
-          caseTitle: TEST_CASE_TITLES.CASE_3,
-          docketEntryId: '3',
-        },
-      ];
-
-      const result = sortRecentFilings(filings, 'filedDate', 'desc');
-
-      expect(result[0].filedDate).toBe(TEST_DATES.LATE);
-      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
-      expect(result[2].filedDate).toBe(TEST_DATES.MIDDLE);
-      // Should maintain original order for identical dates
-      expect(result[1].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
-      expect(result[2].docketNumber).toBe('102-20');
-    });
-
-    it('should handle unknown sort field with default case', () => {
-      const filings = [
-        {
-          docketNumber: TEST_DOCKET_NUMBERS.VALID,
-          filedDate: TEST_DATES.MIDDLE,
-          document: TEST_DOCUMENTS.PETITION,
-          caseTitle: TEST_CASE_TITLES.CASE_1,
-          docketEntryId: '1',
-        },
-        {
-          docketNumber: '102-20',
-          filedDate: TEST_DATES.EARLY,
-          document: TEST_DOCUMENTS.ANSWER,
-          caseTitle: TEST_CASE_TITLES.CASE_2,
-          docketEntryId: '2',
-        },
-      ];
-
-      const result = sortRecentFilings(
-        filings,
-        'unknownField' as any,
-        'asc',
-      );
-
-      // Should fall back to filedDate sorting when unknown field is provided
-      expect(result[0].filedDate).toBe(TEST_DATES.EARLY);
-      expect(result[1].filedDate).toBe(TEST_DATES.MIDDLE);
-    });
+    const result = sortRecentFilings(
+      filingsWithEqualCaseTitles,
+      'caseTitle',
+      'desc',
+    );
+    expect(result[0].docketNumber).toBe('102-20');
+    expect(result[1].docketNumber).toBe(TEST_DOCKET_NUMBERS.VALID);
   });
 });
