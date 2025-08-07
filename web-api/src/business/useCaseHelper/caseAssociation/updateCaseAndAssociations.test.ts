@@ -45,7 +45,7 @@ describe('updateCaseAndAssociations', () => {
   let validMockCase;
 
   const upsertDocketEntries = jest.mocked(upsertDocketEntriesMock);
-  const removeCasesFromHearings = jest.mocked(removeCasesFromHearingsMock)
+  const removeCasesFromHearings = jest.mocked(removeCasesFromHearingsMock);
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const upsertCases = jest.mocked(upsertCasesMock);
   const getMessagesByDocketNumber = getMessagesByDocketNumberMock as jest.Mock;
@@ -212,11 +212,15 @@ describe('updateCaseAndAssociations', () => {
     });
 
     expect(upsertCases.mock.calls[0][0]).toMatchObject([caseToUpdate]);
-    expect(removeCasesFromHearings).toHaveBeenCalledTimes(2);
-    expect(removeCasesFromHearings.mock.calls).toMatchObject([
-      [{ docketNumber, trialSessionId: trialSessionIds[1] }],
-      [{ docketNumber, trialSessionId: trialSessionIds[2] }],
-    ]);
+    expect(removeCasesFromHearings).toHaveBeenCalled();
+    expect(removeCasesFromHearings.mock.calls[0][0]).toMatchObject(
+      {
+        trialSessionCases: [
+          { docketNumber, trialSessionId: trialSessionIds[1] },
+          { docketNumber, trialSessionId: trialSessionIds[2] },
+        ],
+      },
+    );
   });
 
   describe('docket entries', () => {

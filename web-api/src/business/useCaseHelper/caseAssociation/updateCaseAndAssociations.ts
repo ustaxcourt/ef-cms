@@ -112,7 +112,7 @@ export const updateCaseAndAssociations = async ({
     removeCasesFromHearings({
       trialSessionCases: deletedHearings.map(dh => ({
         trialSessionId: dh.trialSessionId,
-        docketNumber: dh.docketNumber
+        docketNumber: caseToUpdate.docketNumber
       }))
     }),
     ...irsPractitionersToDelete.map(practitioner =>

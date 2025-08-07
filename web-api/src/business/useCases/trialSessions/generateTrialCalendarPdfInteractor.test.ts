@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { MOCK_CASE } from '@shared/test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '@shared/test/mockTrial';
 import { TCaseOrder } from '@shared/business/entities/trialSessions/TrialSession';
@@ -8,8 +9,15 @@ import {
   irsPractitionerUser,
   privatePractitionerUser,
 } from '@shared/test/mockUsers';
+import { getCalendaredCasesForTrialSession as getCalendaredCasesForTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/getCalendaredCasesForTrialSession';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
 
 describe('generateTrialCalendarPdfInteractor', () => {
+  const getCalendaredCasesForTrialSession = jest.mocked(
+    getCalendaredCasesForTrialSessionMock,
+  );
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+
   // deliberately *not* automatically sorted by docket number for test purposes
   const mockCases: (RawCase & TCaseOrder)[] = [
     {
@@ -65,24 +73,20 @@ describe('generateTrialCalendarPdfInteractor', () => {
   const mockPdfUrl = { url: 'www.example.com' };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        ...MOCK_TRIAL_INPERSON,
-        chambersPhoneNumber: '1234567890',
-        irsCalendarAdministratorInfo: {
-          email: 'emailbond@me.com',
-          name: 'James Bond',
-          phone: '1234567890',
-        },
-        joinPhoneNumber: '1234567890',
-        meetingId: 'meetingid',
-        password: 'pass1',
-      });
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_INPERSON,
+      chambersPhoneNumber: '1234567890',
+      irsCalendarAdministratorInfo: {
+        email: 'emailbond@me.com',
+        name: 'James Bond',
+        phone: '1234567890',
+      },
+      joinPhoneNumber: '1234567890',
+      meetingId: 'meetingid',
+      password: 'pass1',
+    });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue(mockCases);
+    getCalendaredCasesForTrialSession.mockResolvedValue(mockCases);
 
     applicationContext
       .getPersistenceGateway()
@@ -98,11 +102,10 @@ describe('generateTrialCalendarPdfInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
+      getTrialSessionById,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway()
-        .getCalendaredCasesForTrialSession,
+      getCalendaredCasesForTrialSession,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().trialCalendar,
@@ -236,12 +239,10 @@ describe('generateTrialCalendarPdfInteractor', () => {
   });
 
   it('should format trial session start time when it has been set', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        ...MOCK_TRIAL_INPERSON,
-        startTime: '15:00',
-      });
+    getTrialSessionById.mockResolvedValue({
+      ...MOCK_TRIAL_INPERSON,
+      startTime: '15:00',
+    });
 
     await generateTrialCalendarPdfInteractor(applicationContext, {
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,

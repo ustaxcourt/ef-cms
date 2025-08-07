@@ -375,6 +375,7 @@ export const createTestApplicationContext = () => {
       .fn()
       .mockImplementation(updateCaseAutomaticBlock),
     updateUserRecords: jest.fn().mockImplementation(updateUserRecords),
+    associateSwingTrialSessions: jest.fn()
   });
 
   const getDocumentGeneratorsReturnMock = {

@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import { JudgeActivityStatisticsRequest } from '@web-api/business/useCases/judgeActivityReport/getCountOfCaseDocumentsFiledByJudgesInteractor';
 import { MOCK_TRIAL_REGULAR } from '@shared/test/mockTrial';
 import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
@@ -6,8 +7,11 @@ import { applicationContext } from '../../../../../shared/src/business/test/crea
 import { getTrialSessionsForJudgeActivityReportInteractor } from './getTrialSessionsForJudgeActivityReportInteractor';
 import { judgeUser } from '@shared/test/mockUsers';
 import { mockDocketClerkUser, mockJudgeUser } from '@shared/test/mockAuthUsers';
+import { getTrialSessions as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
 
 describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
+  const getTrialSessions = jest.mocked(getTrialSessionsMock);
+
   const mockJudges = [
     judgeUser,
     { ...judgeUser, name: 'Colvin', userId: '1234' },
@@ -119,9 +123,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
   };
 
   beforeEach(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockReturnValue(mockTrialSessionsForAllJudges);
+    getTrialSessions.mockReturnValue(mockTrialSessionsForAllJudges);
   });
 
   it('should throw an error when user is unauthorized to retrieve the judge activity report', async () => {
@@ -151,9 +153,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
       mockJudgeUser,
     );
 
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessions,
-    ).toHaveBeenCalled();
+    expect(getTrialSessions).toHaveBeenCalled();
   });
 
   it('should return for each trial session type, the weighted count of sessions held in the date range for the judge provided', async () => {
@@ -203,9 +203,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
       sessionType: SESSION_TYPES.special,
       startDate: '2020-03-01T00:00:00.000Z',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue([unassignedTrialSession]);
+    getTrialSessions.mockResolvedValue([unassignedTrialSession]);
 
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
@@ -235,9 +233,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
       ...MOCK_TRIAL_REGULAR,
       startDate: '2020-03-03T00:00:00.000-05:00',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue([dayAfterTrialSession]);
+    getTrialSessions.mockResolvedValue([dayAfterTrialSession]);
 
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,
@@ -267,9 +263,7 @@ describe('getTrialSessionsForJudgeActivityReportInteractor', () => {
       ...MOCK_TRIAL_REGULAR,
       startDate: '2020-03-02T04:59:59.000Z',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue([dayAfterTrialSession]);
+    getTrialSessions.mockResolvedValue([dayAfterTrialSession]);
 
     const result = await getTrialSessionsForJudgeActivityReportInteractor(
       applicationContext,

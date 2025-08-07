@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import * as excelModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/writeTrialSessionDataToExcel';
 import * as generateCalendarModule from '@web-api/business/useCaseHelper/trialSessions/trialSessionCalendaring/generateCalendar';
 import {
@@ -26,16 +27,18 @@ import {
 import mockCases from '@shared/test/mockReadyForTrialCases.json';
 import mockSpecialSessions from '@shared/test/mockTrialSessions.json';
 import { getSuggestedCalendarCases as getSuggestedCalendarCasesMock } from '@web-api/persistence/postgres/cases/reports/getSuggestedCalendarCases';
+import { getTrialSessions as getTrialSessionsMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessions';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
 
 const getSuggestedCalendarCases = getSuggestedCalendarCasesMock as jest.Mock;
 
 describe('generateSuggestedTrialSessionCalendar', () => {
+  const getTrialSessions = jest.mocked(getTrialSessionsMock);
+
   beforeAll(() => {
     getSuggestedCalendarCases.mockResolvedValue(mockCases);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue(mockSpecialSessions);
+    getTrialSessions.mockResolvedValue(mockSpecialSessions as RawTrialSession[]);
   });
 
   it('should generate a trial term when valid date range is provided and sufficient data is present in the system', async () => {
@@ -204,9 +207,7 @@ describe('generateSuggestedTrialSessionCalendar', () => {
     const mockEndDate = '2019-09-22T00:00:00.000Z';
     getSuggestedCalendarCases.mockResolvedValue([]);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions.mockResolvedValue([]);
+    getTrialSessions.mockResolvedValue([]);
 
     // Act
     const { bufferArray, message } =

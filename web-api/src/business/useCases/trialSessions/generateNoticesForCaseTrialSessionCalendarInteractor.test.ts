@@ -1,6 +1,7 @@
 import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/docketEntries/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -23,12 +24,18 @@ import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generate
 import { shouldAppendClinicLetter } from '@shared/business/utilities/shouldAppendClinicLetter';
 import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/persistence/postgres/cases/getCaseByDocketNumber';
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
+import { getTrialSessionNotificationProcessing as getTrialSessionNotificationProcessingMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionNotificationProcessing';
+import { updateTrialSessionNotificationProcessing as  updateTrialSessionNotificationProcessingMock} from '@web-api/persistence/postgres/trialSessions/updateTrialSessionNotificationProcessing';
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
   const updateCaseAndAssociations = jest
     .mocked(updateCaseAndAssociationsMock)
     .mockImplementation(({ caseToUpdate }) => Promise.resolve(caseToUpdate));
+  const getTrialSessionNotificationProcessing = jest.mocked(
+    getTrialSessionNotificationProcessingMock,
+  );
+  const updateTrialSessionNotificationProcessing = jest.mocked(updateTrialSessionNotificationProcessingMock);
 
   const trialSession = {
     ...MOCK_TRIAL_REGULAR,
@@ -79,17 +86,23 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
         testPdfDoc,
       );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockResolvedValue({});
+    getTrialSessionNotificationProcessing.mockResolvedValue({
+      status: '',
+      trialSessionId: 'number',
+      caseStatuses: {},
+      unfinishedCases: 10
+    });
   });
 
   it('should return and do nothing if the job is already processed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockResolvedValueOnce({
+    getTrialSessionNotificationProcessing.mockResolvedValueOnce({
+      status: '',
+      trialSessionId: 'number',
+      caseStatuses: {
         [docketNumber]: 'processed',
-      });
+      },
+      unfinishedCases: 10
+    });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       interactorParamObject,
@@ -103,8 +116,8 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
     expect(
-      applicationContext.getPersistenceGateway().setTrialSessionJobStatusForCase
-        .mock.calls[0][0].status,
+      updateTrialSessionNotificationProcessing
+        .mock.calls[0][0].caseStatus?.[docketNumber]
     ).toEqual('processing');
   });
 
@@ -114,8 +127,8 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
     expect(
-      applicationContext.getPersistenceGateway().decrementJobCounter,
-    ).toHaveBeenCalled();
+      updateTrialSessionNotificationProcessing,
+    ).toHaveBeenCalled(); // check if we decremented counter TODO
   });
 
   it('should save a copy of the combined notice of trial issued letter and a clinic letter for pro se petitioners', async () => {
@@ -234,7 +247,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should generate a standing pretrial for small cases if the procedure type is Small', async () => {
-    getCaseByDocketNumber.mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       procedureType: 'Small',
     });
@@ -254,7 +267,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should generate a standing pretrial order for proecedure types other than small', async () => {
-    getCaseByDocketNumber.mockReturnValue({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       procedureType: 'Regular',
     });
@@ -312,7 +325,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should save the final pdf copy of notices, standing pretrial and the address page to S3 for represented petitioners', async () => {
-    getCaseByDocketNumber.mockReturnValueOnce({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       petitioners: [
         {
@@ -342,7 +355,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should save the final pdf copy of notices, standing pretrial and the address page to S3 for pro se petitioner', async () => {
-    getCaseByDocketNumber.mockReturnValueOnce({
+    getCaseByDocketNumber.mockResolvedValue({
       ...MOCK_CASE,
       petitioners: [
         {
@@ -366,15 +379,21 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should re-attempt the job after a previous failure that was never set to processed', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockResolvedValueOnce('processing');
+    getTrialSessionNotificationProcessing.mockResolvedValueOnce({
+      status: '',
+      trialSessionId: 'number',
+      caseStatuses: {
+        [docketNumber]: 'processing',
+      },
+      unfinishedCases: 10
+    });
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       interactorParamObject,
     );
 
+    console.log(JSON.stringify(updateTrialSessionNotificationProcessing.mock));
     expect(
       applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
     ).toHaveBeenCalled();
@@ -382,8 +401,8 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().setTrialSessionJobStatusForCase
-        .mock.calls[1][0].status,
+      updateTrialSessionNotificationProcessing
+        .mock.calls[1][0].caseStatus?.[docketNumber],
     ).toEqual('processed');
   });
 

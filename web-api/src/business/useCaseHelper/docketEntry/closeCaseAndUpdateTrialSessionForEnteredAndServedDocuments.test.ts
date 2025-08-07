@@ -1,4 +1,5 @@
 import '@web-api/persistence/postgres/caseDeadlines/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import {
   CASE_DISMISSAL_ORDER_TYPES,
   CASE_STATUS_TYPES,
@@ -14,6 +15,8 @@ import { mockDocketClerkUser } from '@shared/test/mockAuthUsers';
 import { deleteCaseDeadline as deleteCaseDeadlineMock } from '@web-api/persistence/postgres/caseDeadlines/deleteCaseDeadline';
 import { getCaseDeadlinesByDocketNumber as getCaseDeadlinesByDocketNumberMock } from '@web-api/persistence/postgres/caseDeadlines/getCaseDeadlinesByDocketNumber';
 import { MOCK_DOCUMENTS } from '@shared/test/mockDocketEntry';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   let mockCaseEntity;
@@ -23,6 +26,8 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   jest.spyOn(TrialSession.prototype, 'removeCaseFromCalendar');
   jest.spyOn(TrialSession.prototype, 'deleteCaseFromCalendar');
   jest.spyOn(TrialSession.prototype, 'validate');
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
 
   const deleteCaseDeadline = jest.mocked(deleteCaseDeadlineMock);
   const getCaseDeadlinesByDocketNumber = jest.mocked(
@@ -76,17 +81,15 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
+      getTrialSessionById,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
+      updateTrialSession,
     ).not.toHaveBeenCalled();
   });
 
   it('should remove the case from the calendar when the trialSession it`s scheduled on is already calendared', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
+    getTrialSessionById.mockResolvedValue({
         ...MOCK_TRIAL_REGULAR,
         isCalendared: true,
       });
@@ -107,9 +110,7 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   });
 
   it('should delete the case from the calendar when the trialSession it`s scheduled on is NOT already calendared', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
+    getTrialSessionById.mockResolvedValue({
         ...MOCK_TRIAL_REGULAR,
         isCalendared: false,
       });
@@ -129,10 +130,10 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
   });
 
   it('should not persist the trial session changes when it`s not valid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
+    getTrialSessionById.mockResolvedValue({
         ...MOCK_TRIAL_REGULAR,
+        isCalendared: true,
+        //@ts-expect-error This is intentionally breaking the type
         proceedingType: null, // Required on TrialSession entity
       });
 
@@ -148,16 +149,14 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     ).rejects.toThrow();
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
+      updateTrialSession,
     ).not.toHaveBeenCalled();
   });
 
-  it('should make a call to persist the changes to the trial session', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
+  it('should make a call to persist the changes to the trial session when isCalendared is true', async () => {
+    getTrialSessionById.mockResolvedValue({
         ...MOCK_TRIAL_REGULAR,
-        isCalendared: false,
+        isCalendared: true,
       });
 
     await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
@@ -170,14 +169,12 @@ describe('closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
+      updateTrialSession,
     ).toHaveBeenCalled();
   });
 
   it('should delete any case deadlines and automatic block information', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
+    getTrialSessionById.mockResolvedValue({
         ...MOCK_TRIAL_REGULAR,
         isCalendared: true,
       });

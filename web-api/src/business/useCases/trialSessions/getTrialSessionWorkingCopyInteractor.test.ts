@@ -1,3 +1,4 @@
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 import {
   ROLES,
   SESSION_TYPES,
@@ -12,16 +13,46 @@ import {
   mockTrialClerkUser,
 } from '@shared/test/mockAuthUsers';
 import { omit } from 'lodash';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { createTrialSessionWorkingCopy as createTrialSessionWorkingCopyMock } from '@web-api/persistence/postgres/trialSessions/createTrialSessionWorkingCopy';
+import { getTrialSessionWorkingCopies as getTrialSessionWorkingCopiesMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionWorkingCopies';
+import { RawTrialSession } from '@shared/business/entities/trialSessions/TrialSession';
+import { RawTrialSessionWorkingCopy } from '@shared/business/entities/trialSessions/TrialSessionWorkingCopy';
 
-const MOCK_WORKING_COPY = {
+const MOCK_WORKING_COPY: RawTrialSessionWorkingCopy = {
   sort: 'practitioner',
   sortOrder: 'desc',
   trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+  caseMetadata: {},
+  filters: {
+    basisReached: false,
+    continued: false,
+    definiteTrial: false,
+    dismissed: false,
+    motionToDismiss: false,
+    probableSettlement: false,
+    probableTrial: false,
+    recall: false,
+    rule122: false,
+    setForTrial: false,
+    settled: false,
+    showAll: false,
+    statusUnassigned: false,
+    submittedCAV: false,
+  },
 };
 
 describe('Get trial session working copy', () => {
   let user;
+
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
+  const createTrialSessionWorkingCopy = jest.mocked(
+    createTrialSessionWorkingCopyMock,
+  );
+  const getTrialSessionWorkingCopies = jest.mocked(
+    getTrialSessionWorkingCopiesMock,
+  );
 
   beforeEach(() => {
     user = {
@@ -29,33 +60,29 @@ describe('Get trial session working copy', () => {
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        judge: {
-          name: 'Jake',
-          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-        },
-        maxCases: 100,
-        sessionType: SESSION_TYPES.regular,
-        startDate: '2025-03-01T00:00:00.000Z',
-        term: 'Fall',
-        termYear: '2025',
-        trialClerk: {
-          name: 'Joe',
-          userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
-        },
-        trialLocation: 'Birmingham, Alabama',
-      });
+    getTrialSessionById.mockResolvedValue({
+      judge: {
+        name: 'Jake',
+        userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+      },
+      maxCases: 100,
+      sessionType: SESSION_TYPES.regular,
+      startDate: '2025-03-01T00:00:00.000Z',
+      term: 'Fall',
+      termYear: '2025',
+      trialClerk: {
+        name: 'Joe',
+        userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
+      },
+      trialLocation: 'Birmingham, Alabama',
+    } as RawTrialSession);
 
     applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
       ...user,
       section: 'colvinsChambers',
     });
 
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionWorkingCopy.mockResolvedValue(MOCK_WORKING_COPY);
+    getTrialSessionWorkingCopies.mockResolvedValue([MOCK_WORKING_COPY]);
 
     applicationContext
       .getUseCaseHelpers()
@@ -78,11 +105,10 @@ describe('Get trial session working copy', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionWorkingCopy.mockResolvedValue(
-        omit(MOCK_WORKING_COPY, 'userId'),
-      );
+    getTrialSessionWorkingCopies.mockResolvedValue(
+      //@ts-expect-error
+      [omit(MOCK_WORKING_COPY, 'userId')],
+    );
 
     await expect(
       getTrialSessionWorkingCopyInteractor(
@@ -113,9 +139,7 @@ describe('Get trial session working copy', () => {
       role: ROLES.judge,
       userId: 'something else',
     };
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionWorkingCopy.mockImplementation(() => {});
+    getTrialSessionWorkingCopies.mockResolvedValue([]);
     applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper.mockReturnValue(null);
@@ -144,62 +168,58 @@ describe('Get trial session working copy', () => {
       },
       user,
     );
-    expect(
-      applicationContext.getPersistenceGateway().getTrialSessionWorkingCopy.mock
-        .calls[0][0],
-    ).toMatchObject({
-      userId: mockTrialClerkUser.userId,
+    expect(getTrialSessionWorkingCopies.mock.calls[0][0]).toMatchObject({
+      tsWorkingCopyIds: [
+        {
+          userId: mockTrialClerkUser.userId,
+          trialSessionId: MOCK_WORKING_COPY.trialSessionId,
+        },
+      ],
     });
     expect(result).toMatchObject(MOCK_WORKING_COPY);
   });
 
   describe('conditionally creates a trial session working copy if it does not exist', () => {
     beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionWorkingCopy.mockResolvedValue(undefined);
+      getTrialSessionWorkingCopies.mockResolvedValue([]);
       applicationContext
         .getUseCaseHelpers()
         .getJudgeInSectionHelper.mockReturnValue({
           role: ROLES.judge,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         });
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockReturnValue({
-          judge: {
-            name: 'Jake',
-            userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-          },
-          maxCases: 100,
-          sessionType: SESSION_TYPES.regular,
-          startDate: '2025-03-01T00:00:00.000Z',
-          term: 'Fall',
-          termYear: '2025',
-          trialClerk: {
-            name: 'Joe',
-            userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
-          },
-          trialLocation: 'Birmingham, Alabama',
-        });
+      getTrialSessionById.mockResolvedValue({
+        judge: {
+          name: 'Jake',
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        },
+        maxCases: 100,
+        sessionType: SESSION_TYPES.regular,
+        startDate: '2025-03-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialClerk: {
+          name: 'Joe',
+          userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
+        },
+        trialLocation: 'Birmingham, Alabama',
+      } as RawTrialSession);
     });
 
     it('for current user who is a judge on this trial session with no assigned trial clerk', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockReturnValueOnce({
-          judge: {
-            name: 'Jake',
-            userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
-          },
-          maxCases: 100,
-          sessionType: SESSION_TYPES.regular,
-          startDate: '2025-03-01T00:00:00.000Z',
-          term: 'Fall',
-          termYear: '2025',
-          trialClerk: undefined,
-          trialLocation: 'Birmingham, Alabama',
-        });
+      getTrialSessionById.mockResolvedValue({
+        judge: {
+          name: 'Jake',
+          userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
+        },
+        maxCases: 100,
+        sessionType: SESSION_TYPES.regular,
+        startDate: '2025-03-01T00:00:00.000Z',
+        term: 'Fall',
+        termYear: '2025',
+        trialClerk: undefined,
+        trialLocation: 'Birmingham, Alabama',
+      } as RawTrialSession);
       const result = await getTrialSessionWorkingCopyInteractor(
         applicationContext,
         {
@@ -210,13 +230,8 @@ describe('Get trial session working copy', () => {
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         },
       );
-      expect(
-        applicationContext.getPersistenceGateway().getTrialSessionById,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .createTrialSessionWorkingCopy,
-      ).toHaveBeenCalled();
+      expect(getTrialSessionById).toHaveBeenCalled();
+      expect(createTrialSessionWorkingCopy).toHaveBeenCalled();
       expect(result).toMatchObject({
         entityName: 'TrialSessionWorkingCopy',
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -238,13 +253,8 @@ describe('Get trial session working copy', () => {
           userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
         },
       );
-      expect(
-        applicationContext.getPersistenceGateway().getTrialSessionById,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .createTrialSessionWorkingCopy,
-      ).toHaveBeenCalled();
+      expect(getTrialSessionById).toHaveBeenCalled();
+      expect(createTrialSessionWorkingCopy).toHaveBeenCalled();
       expect(result).toMatchObject({
         entityName: 'TrialSessionWorkingCopy',
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
@@ -263,13 +273,8 @@ describe('Get trial session working copy', () => {
           userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',
         },
       );
-      expect(
-        applicationContext.getPersistenceGateway().getTrialSessionById,
-      ).toHaveBeenCalled();
-      expect(
-        applicationContext.getPersistenceGateway()
-          .createTrialSessionWorkingCopy,
-      ).toHaveBeenCalled();
+      expect(getTrialSessionById).toHaveBeenCalled();
+      expect(createTrialSessionWorkingCopy).toHaveBeenCalled();
       expect(result).toMatchObject({
         entityName: 'TrialSessionWorkingCopy',
         trialSessionId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',

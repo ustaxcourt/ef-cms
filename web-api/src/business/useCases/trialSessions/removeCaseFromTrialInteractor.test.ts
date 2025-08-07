@@ -3,6 +3,7 @@ import '@web-api/persistence/postgres/cases/mocks.jest';
 import '@web-api/persistence/postgres/messages/mocks.jest';
 import '@web-api/persistence/postgres/workitems/mocks.jest';
 import '@web-api/persistence/postgres/utils/mocks.jest';
+import '@web-api/persistence/postgres/trialSessions/mocks.jest';
 jest.mock(
   '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations',
 );
@@ -28,9 +29,13 @@ import { getCaseByDocketNumber as getCaseByDocketNumberMock } from '@web-api/per
 import { updateCaseAndAssociations as updateCaseAndAssociationsMock } from '@web-api/business/useCaseHelper/caseAssociation/updateCaseAndAssociations';
 import { getCasesByDocketNumbers as getCasesByDocketNumbersMock } from '@web-api/persistence/postgres/cases/getCasesByDocketNumbers';
 import { tryGetLocks as tryGetLocksMock } from '@web-api/persistence/postgres/utils/operation/tryGetLocks';
+import { getTrialSessionById as getTrialSessionByIdMock } from '@web-api/persistence/postgres/trialSessions/getTrialSessionById';
+import { updateTrialSession as updateTrialSessionMock } from '@web-api/persistence/postgres/trialSessions/updateTrialSession';
 
 describe('removeCaseFromTrialInteractor', () => {
   const getCasesByDocketNumbers = jest.mocked(getCasesByDocketNumbersMock);
+  const updateTrialSession = jest.mocked(updateTrialSessionMock);
+  const getTrialSessionById = jest.mocked(getTrialSessionByIdMock);
   let mockTrialSession: RawTrialSession;
 
   const getCaseByDocketNumber = getCaseByDocketNumberMock as jest.Mock;
@@ -41,9 +46,7 @@ describe('removeCaseFromTrialInteractor', () => {
 
   beforeEach(() => {
     mockTrialSession = cloneDeep(MOCK_TRIAL_INPERSON);
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockResolvedValue(mockTrialSession);
+    getTrialSessionById.mockResolvedValue(mockTrialSession);
 
     const mockCase = {
       ...MOCK_CASE,
@@ -91,17 +94,17 @@ describe('removeCaseFromTrialInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
+      getTrialSessionById,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById.mock
+      getTrialSessionById.mock
         .calls[0][0].trialSessionId,
     ).toEqual(mockTrialSession.trialSessionId);
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
+      updateTrialSession,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
+      updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
       ...mockTrialSession,
@@ -148,11 +151,11 @@ describe('removeCaseFromTrialInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById.mock
+      getTrialSessionById.mock
         .calls[0][0].trialSessionId,
     ).toEqual(MOCK_TRIAL_INPERSON.trialSessionId);
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
+      updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
       ...MOCK_TRIAL_INPERSON,
@@ -203,17 +206,17 @@ describe('removeCaseFromTrialInteractor', () => {
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById,
+      getTrialSessionById,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().getTrialSessionById.mock
+      getTrialSessionById.mock
         .calls[0][0].trialSessionId,
     ).toEqual(MOCK_TRIAL_INPERSON.trialSessionId);
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
+      updateTrialSession,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
+      updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
       ...MOCK_TRIAL_INPERSON,
