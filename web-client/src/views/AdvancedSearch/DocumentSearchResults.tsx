@@ -7,7 +7,7 @@ import { connect } from '@web-client/presenter/shared.cerebral';
 import { sequences } from '@web-client/presenter/app.cerebral';
 import { state } from '@web-client/presenter/app.cerebral';
 
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { SortableColumn } from '../../ustc-ui/Table/SortableColumn';
 import {
   ASCENDING,
@@ -27,6 +27,9 @@ export const DocumentSearchResults = connect(
     showMoreResultsSequence: sequences.showMoreResultsSequence,
     updateDocumentSearchResultsSequence:
       sequences.updateDocumentSearchResultsSequence,
+    setCurrentPaginationPageSequence:
+      sequences.setCurrentPaginationPageSequence,
+    currentPaginationPage: state.currentPaginationPage,
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
@@ -34,10 +37,9 @@ export const DocumentSearchResults = connect(
     MAX_SEARCH_RESULTS,
     openCaseDocumentDownloadUrlSequence,
     updateDocumentSearchResultsSequence,
+    setCurrentPaginationPageSequence,
+    currentPaginationPage,
   }) {
-    // Pagination state: zero-based page index
-    const [currentPaginationPage, setCurrentPaginationPage] = useState(0);
-
     const results = advancedDocumentSearchHelper.formattedSearchResults || [];
 
     // Calculate total pages based on PAGE_SIZE
@@ -46,7 +48,7 @@ export const DocumentSearchResults = connect(
     // If results change and current page is out of range, reset page to 0
     useEffect(() => {
       if (currentPaginationPage >= totalPages && totalPages > 0) {
-        setCurrentPaginationPage(0);
+        setCurrentPaginationPageSequence({ currentPaginationPage: 0 });
       }
     }, [results.length, currentPaginationPage, totalPages]);
 
@@ -72,7 +74,7 @@ export const DocumentSearchResults = connect(
           sortDirection: 'asc',
         });
       }
-      setCurrentPaginationPage(0); // reset page on sort
+      setCurrentPaginationPageSequence({ currentPaginationPage: 0 }); // reset page on sort
     };
 
     return (
@@ -273,7 +275,9 @@ export const DocumentSearchResults = connect(
                 currentPageIndex={currentPaginationPage}
                 totalPages={totalPages}
                 onPageChange={currentPage => {
-                  setCurrentPaginationPage(currentPage);
+                  setCurrentPaginationPageSequence({
+                    currentPaginationPage: currentPage,
+                  });
                 }}
               />
             )}

@@ -388,6 +388,7 @@ import { setCaseDetailPrimaryTabSequence } from './sequences/setCaseDetailPrimar
 import { setCaseTypeToDisplaySequence } from './sequences/setCaseTypeToDisplaySequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
 import { setCurrentPageIndexSequence } from './sequences/setCurrentPageIndexSequence';
+import { setCurrentPaginationPageSequence } from './sequences/setCurrentPaginationPageSequence';
 import { setCurrentTabSequence } from '@web-client/presenter/sequences/setCurrentTabSequence';
 import { setCustomCaseReportFiltersSequence } from './sequences/setCustomCaseReportFiltersSequence';
 import { setDocumentForPreviewSequence } from './sequences/setDocumentForPreviewSequence';
@@ -1245,6 +1246,9 @@ export const presenterSequences = {
   setCurrentPageIndexSequence:
     setCurrentPageIndexSequence as unknown as Function,
   setCurrentTabSequence,
+  setCurrentPaginationPageSequence:
+    setCurrentPaginationPageSequence as unknown as Function,
+
   setCustomCaseReportFiltersSequence,
   setDocumentForPreviewSequence:
     setDocumentForPreviewSequence as unknown as Function,
