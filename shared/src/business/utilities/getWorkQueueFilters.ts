@@ -1,9 +1,9 @@
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
+  Role,
   ROLES,
 } from '@shared/business/entities/EntityConstants';
-import { RawUser } from '@shared/business/entities/User';
 import { getDocQcSectionForUser } from '@shared/business/utilities/getDocQcSectionForUser';
 import { RawWorkItemWithCaseAndDocketEntryInfo } from '@web-api/persistence/postgres/workitems/schema';
 export const getWorkQueueFilters = ({
@@ -11,7 +11,7 @@ export const getWorkQueueFilters = ({
   user,
 }: {
   section?: string;
-  user: RawUser;
+  user: { userId: string; section?: string; role: Role };
 }) => {
   const sectionToDisplay = section || getDocQcSectionForUser(user);
   const isCaseServicesSupervisor = user.role === ROLES.caseServicesSupervisor;

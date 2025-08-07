@@ -42,6 +42,7 @@ function pickUserFields(
     role: user.role,
     section: user.section,
     token: user.token,
+    accountStatus: user.accountStatus,
     additionalPhone: rawPractitioner.additionalPhone ?? null,
     admissionsDate: rawPractitioner.admissionsDate
       ? calculateDate({

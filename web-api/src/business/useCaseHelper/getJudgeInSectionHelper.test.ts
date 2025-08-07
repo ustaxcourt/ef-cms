@@ -1,6 +1,9 @@
 jest.mock('@web-api/persistence/postgres/users/getUsersInSections');
 import { getUsersInSections as getUsersInSectionsMock } from '@web-api/persistence/postgres/users/getUsersInSections';
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  ACCOUNT_STATUS,
+  ROLES,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { getJudgeInSectionHelper } from './getJudgeInSectionHelper';
 import { DbUser } from '@web-api/persistence/postgres/users/mapper';
 
@@ -15,6 +18,7 @@ describe('getJudgeInSectionHelper', () => {
       role: ROLES.judge,
       section: 'judgesChambers',
       userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
+      accountStatus: ACCOUNT_STATUS.active,
     };
 
     getUsersInSections.mockResolvedValue([
@@ -23,6 +27,7 @@ describe('getJudgeInSectionHelper', () => {
         name: 'some other petitioner that should not be returned',
         role: ROLES.petitioner,
         section: 'judgesChambers',
+        accountStatus: ACCOUNT_STATUS.active,
         userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
       } as DbUser,
     ]);
@@ -42,6 +47,7 @@ describe('getJudgeInSectionHelper', () => {
         role: ROLES.petitioner,
         section: 'judgesChambers',
         userId: 'dadbad42-18d0-43ec-bafb-654e83405416',
+        accountStatus: ACCOUNT_STATUS.active,
       } as DbUser,
     ]);
     const result = await getJudgeInSectionHelper({
