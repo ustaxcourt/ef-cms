@@ -17,15 +17,6 @@ import {
 } from '@shared/business/entities/EntityConstants';
 // import { updateDocumentSearchResultsSequence } from '@web-client/presenter/sequences/updateDocumentSearchResultsSequence';
 
-// const COLUMN_MAP = [
-//   { key: 'formattedFiledDate', label: 'Filed Date' },
-//   { key: 'documentTitle', label: 'Document Title' },
-//   { key: 'caseTitle', label: 'Case Title' },
-//   { key: 'formattedJudgeName', label: 'Judge' },
-//   { key: 'numberOfPagesFormatted', label: 'Pages' },
-//   { key: 'docketNumber', label: 'Docket No.' },
-// ];
-
 export const DocumentSearchResults = connect(
   {
     MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
@@ -123,7 +114,7 @@ export const DocumentSearchResults = connect(
             >
               <thead>
                 <tr>
-                  <th aria-hidden="true" className="small-column"></th>
+                  {/* <th aria-hidden="true" className="small-column"></th> */}
                   <th>
                     <SortableColumn
                       ascText={SORT_ASCENDING_TEXT.string}
@@ -237,16 +228,17 @@ export const DocumentSearchResults = connect(
                 </tr>
               </thead>
               <tbody>
-                {results.map((result, idx) => (
+                {results.map(result => (
                   <tr
                     className="search-result"
                     key={`${result.docketEntryId}-${result.docketNumber}`}
                   >
-                    <td aria-hidden="true" className="small-column">
-                      {currentPageIndex * ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE +
+                    {/* <td aria-hidden="true" className="small-column">
+                      {currentPaginationPage *
+                        ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE +
                         idx +
                         1}
-                    </td>
+                    </td> */}
                     <td>{result.formattedFiledDate}</td>
                     <td aria-hidden="true" className="small-column">
                       {result.showSealedIcon && (
@@ -296,7 +288,7 @@ export const DocumentSearchResults = connect(
 
             {totalPages >= 1 && (
               <Paginator
-                currentPageIndex={currentPageIndex}
+                currentPageIndex={currentPaginationPage}
                 totalPages={totalPages}
                 onPageChange={currentPage => {
                   setcurrentPaginationPage(currentPage);

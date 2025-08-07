@@ -1,8 +1,8 @@
 import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
 import { FORMATS, formatNow } from '../../business/utilities/DateHandler';
-import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
+// import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
 import {
-  ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
+  // ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE,
   // MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
 } from '../entities/EntityConstants';
@@ -13,7 +13,7 @@ import {
 import { UnauthorizedError } from '@web-api/errors/errors';
 import { UnknownAuthUser } from '@shared/business/entities/authUser/AuthUser';
 import { User } from '../entities/User';
-import { filterCaseSearchResultsNotAccessibleToUser } from '../utilities/caseFilter';
+// import { filterCaseSearchResultsNotAccessibleToUser } from '../utilities/caseFilter';
 import { omit } from 'lodash';
 import { ServerApplicationContext } from '@web-api/applicationContext';
 // import { advancedDocumentSearch } from '@web-api/persistence/elasticsearch/advancedDocumentSearch';
@@ -30,7 +30,7 @@ export const orderAdvancedSearchInteractor = async (
     startDate,
     columnName,
     direction,
-    currentPaginationPage,
+    // currentPaginationPage,
   }: {
     caseTitleOrPetitioner: string;
     dateRange: string;
@@ -51,6 +51,8 @@ export const orderAdvancedSearchInteractor = async (
   },
   authorizedUser: UnknownAuthUser,
 ) => {
+  columnName = columnName || 'formattedFiledDate';
+  direction = direction || 'asc';
   console.log('ColumnName: ', columnName);
   console.log('Direction: ', direction);
 
@@ -79,7 +81,7 @@ export const orderAdvancedSearchInteractor = async (
     docketNumber: 'docketNumber',
   };
 
-  const from = (currentPaginationPage - 1) * ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE;
+  // const from = (currentPaginationPage - 1) * ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE;
 
   const { results, totalCount } = await applicationContext
     .getPersistenceGateway()
@@ -92,7 +94,10 @@ export const orderAdvancedSearchInteractor = async (
       sortField: sortingColumnMapping[columnName],
     });
 
+  console.log('OpenSearch Results: ', results.length);
+
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+
   applicationContext.logger.info('private order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
@@ -101,14 +106,15 @@ export const orderAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
-  const filteredResults = filterCaseSearchResultsNotAccessibleToUser(
-    results,
-    authorizedUser,
-  ).slice(from, from + ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE);
-  console.log('FILTEREDRESULTS:', filteredResults);
+  // const filteredResults = filterCaseSearchResultsNotAccessibleToUser(
+  //   results,
+  //   authorizedUser,
+  // ).slice(from, from + ADVANCED_DOCUMENT_SEARCH_PAGE_SIZE);
+
   return {
-    results:
-      InternalDocumentSearchResult.validateRawCollection(filteredResults),
+    results,
+    // results:
+    // InternalDocumentSearchResult.validateRawCollection(filteredResults),
     totalCount, // if total count is > 10k, only return 10k results
   };
 };
